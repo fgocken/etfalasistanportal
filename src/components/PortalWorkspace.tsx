@@ -9,10 +9,12 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
-  AlertCircle
+  AlertCircle,
+  Syringe
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
+import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -137,7 +139,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   isDark,
   onToggleTheme
 }) => {
-  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'contacts'>('tools');
+  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'contacts'>('tools');
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
 
   // Calculator inputs
@@ -210,6 +212,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             { id: 'tools', label: 'Genel Bakış', icon: Activity },
             { id: 'calculator', label: 'Kilo, MV Volüm, İdame Sıvı', icon: Calculator },
             { id: 'intraop', label: 'İntraop Sıvı', icon: Droplet },
+            { id: 'infusion', label: 'İnfüzyon Hızı Çevirici/Hesaplayıcı', icon: Syringe },
             { id: 'contacts', label: 'Dahili Numaralar', icon: Phone },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -254,7 +257,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Card 1: Kilo & MV Volüm */}
               <button
                 onClick={() => setActiveTab('calculator')}
@@ -287,16 +290,16 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 onClick={() => setActiveTab('intraop')}
                 className={`text-left p-5 rounded-xl border transition-all space-y-2 group cursor-pointer ${
                   isDark
-                    ? 'bg-slate-900 border-slate-800 hover:border-cyan-500/40 text-slate-100 ring-1 ring-cyan-500/20'
-                    : 'bg-white border-slate-200 hover:border-cyan-400 text-slate-900 shadow-xs ring-1 ring-cyan-500/10'
+                    ? 'bg-slate-900 border-slate-800 hover:border-cyan-500/40 text-slate-100'
+                    : 'bg-white border-slate-200 hover:border-cyan-400 text-slate-900 shadow-xs'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className={`p-2 rounded-lg ${isDark ? 'bg-cyan-500/10 text-cyan-400' : 'bg-cyan-50 text-cyan-700'}`}>
                     <Droplet className="w-5 h-5" />
                   </div>
-                  <span className={`text-[11px] font-mono ${isDark ? 'text-cyan-400' : 'text-cyan-600 font-semibold'}`}>
-                    Yeni Araç
+                  <span className={`text-[11px] font-mono ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                    İntraop Sıvı
                   </span>
                 </div>
                 <h3 className={`text-sm font-bold transition-colors ${
@@ -309,7 +312,34 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 </p>
               </button>
 
-              {/* Card 3: Dahili Numaralar */}
+              {/* Card 3: İnfüzyon Hızı Hesaplama */}
+              <button
+                onClick={() => setActiveTab('infusion')}
+                className={`text-left p-5 rounded-xl border transition-all space-y-2 group cursor-pointer ${
+                  isDark
+                    ? 'bg-slate-900 border-slate-800 hover:border-teal-500/40 text-slate-100 ring-1 ring-teal-500/20'
+                    : 'bg-white border-slate-200 hover:border-teal-400 text-slate-900 shadow-xs ring-1 ring-teal-500/10'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className={`p-2 rounded-lg ${isDark ? 'bg-teal-500/15 text-teal-400' : 'bg-teal-50 text-teal-700'}`}>
+                    <Syringe className="w-5 h-5" />
+                  </div>
+                  <span className={`text-[11px] font-mono ${isDark ? 'text-teal-400' : 'text-teal-600 font-semibold'}`}>
+                    Yeni Araç
+                  </span>
+                </div>
+                <h3 className={`text-sm font-bold transition-colors ${
+                  isDark ? 'text-white group-hover:text-teal-300' : 'text-slate-900 group-hover:text-teal-800'
+                }`}>
+                  İnfüzyon Hızı Çevirici/Hesaplayıcı
+                </h3>
+                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  İlaç konsantrasyonu, 11 birimde otomatik dönüşüm (mcg/kg/dk, mL/saat) ve canlı sayaç.
+                </p>
+              </button>
+
+              {/* Card 4: Dahili Numaralar */}
               <button
                 onClick={() => setActiveTab('contacts')}
                 className={`text-left p-5 rounded-xl border transition-all space-y-2 group cursor-pointer ${
@@ -718,7 +748,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <IntraopFluidCalculator isDark={isDark} />
         )}
 
-        {/* 4. Contacts */}
+        {/* 4. Infusion Rate Calculator */}
+        {activeTab === 'infusion' && (
+          <InfusionRateCalculator isDark={isDark} />
+        )}
+
+        {/* 5. Contacts */}
         {activeTab === 'contacts' && (
           <div className={`rounded-xl border p-6 space-y-4 transition-colors ${
             isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'

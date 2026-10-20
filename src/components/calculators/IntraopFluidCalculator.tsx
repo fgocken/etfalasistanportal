@@ -150,6 +150,16 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
               <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 İdame (4-2-1), Açlık Defisiti ve İnvaziv Cerrahi Kayıp Esaslı Perioperatif İnfüzyon Protokolü
               </p>
+              
+              {/* Cerrahi Kanama Uyarı Rozeti / Bildirimi */}
+              <div className={`inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-md text-xs font-medium border ${
+                isDark 
+                  ? 'bg-amber-950/40 border-amber-600/40 text-amber-300' 
+                  : 'bg-amber-50 border-amber-200 text-amber-900'
+              }`}>
+                <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span><strong>Önemli Uyarı:</strong> Bu hesaplamaya <u>cerrahi kanama</u> dahil edilmemiştir; kanama ve kan kaybı ayrıca kristaloid/kolloid/kan ürünü ile replase edilmelidir.</span>
+              </div>
             </div>
           </div>
 
