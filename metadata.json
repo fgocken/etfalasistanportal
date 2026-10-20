@@ -1,0 +1,8 @@
+{
+  "name": "KlinikAsistan - Klinik Asistan & İntern Hekim Portalı",
+  "description": "Lokal klinik asistan öğrencileri ve intern hekimler için hızlı hesaplayıcılar, ilaç doz ve infüzyon rehberi, laboratuvar değerleri, SOAP ve SBAR nöbet devir notları ile acil klinik protokoller aracı.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
