@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Stethoscope } from 'lucide-react';
+import { ArrowRight, Stethoscope, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
 interface WelcomeScreenProps {
@@ -9,7 +9,7 @@ interface WelcomeScreenProps {
   onToggleTheme: () => void;
 }
 
-// User iconic artwork
+// User iconic artwork album - 5 photos
 const CLINIC_ALBUM = [
   {
     id: 1,
@@ -20,6 +20,21 @@ const CLINIC_ALBUM = [
     id: 2,
     src: '/assets/aistudio/ahahahahaha_1f9e8339.jpg',
     alt: 'Şişli Etfal Anestezi Asistan Portalı Portre'
+  },
+  {
+    id: 3,
+    src: '/assets/aistudio/ahahahahaha3_2d69811d.jpg',
+    alt: 'Şişli Etfal Anestezi Kliniği Neşeli Anlar ve Dayanışma'
+  },
+  {
+    id: 4,
+    src: '/assets/aistudio/ahahahahaha4_e87cbffc.jpg',
+    alt: 'Şişli Etfal Nöbetçi Asistan Hekim Çift Telefon Konsültasyon'
+  },
+  {
+    id: 5,
+    src: '/assets/aistudio/ahahahahaha5_cb5f8baf.jpg',
+    alt: 'Şişli Etfal Ameliyathane Anestezi İntraoperatif Takip'
   }
 ];
 
@@ -32,21 +47,33 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
+  const prevIdx = (activePhotoIdx - 1 + CLINIC_ALBUM.length) % CLINIC_ALBUM.length;
+  const nextIdx = (activePhotoIdx + 1) % CLINIC_ALBUM.length;
+  const prevPhoto = CLINIC_ALBUM[prevIdx];
+  const nextPhoto = CLINIC_ALBUM[nextIdx];
+
   // Automatic smooth transition between photos
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
       setActivePhotoIdx((prev) => (prev + 1) % CLINIC_ALBUM.length);
-    }, 4200);
+    }, 4000);
     return () => clearInterval(timer);
   }, [isHovered]);
 
-  const togglePhoto = () => {
-    setActivePhotoIdx((prev) => (prev + 1) % CLINIC_ALBUM.length);
+  const handlePrev = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setActivePhotoIdx(prevIdx);
   };
+
+  const handleNext = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setActivePhotoIdx(nextIdx);
+  };
+
   return (
-    <div className={`min-h-screen w-full flex flex-col justify-between p-6 sm:p-10 relative overflow-hidden select-none transition-colors duration-200 ${
-      isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-900'
+    <div className={`min-h-screen w-full flex flex-col justify-between p-6 sm:p-10 relative overflow-hidden select-none transition-colors duration-200 bg-transparent ${
+      isDark ? 'text-slate-100' : 'text-slate-900'
     }`}>
       {/* Subtle ambient lighting */}
       <div 
@@ -73,39 +100,114 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
       {/* Center Welcome Content */}
       <div className="w-full max-w-xl mx-auto my-auto py-8 sm:py-12 flex flex-col items-center text-center z-10 space-y-5 sm:space-y-6">
-        {/* User Iconic Photo / Automatic Filmstrip Viewport - No text, smooth auto-transition */}
+        {/* User Iconic Photo Deck - Stack effect with left/right visible layers and arrow controls */}
         <div 
-          className="relative group flex flex-col items-center cursor-pointer"
+          className="relative flex flex-col items-center w-full"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={togglePhoto}
         >
-          {/* Main Visual Frame with smooth cross-fade */}
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-teal-500/40 ring-4 ring-teal-500/10 transition-all duration-300 group-hover:scale-[1.01] group-hover:border-teal-400 bg-slate-900/60 max-h-[240px] sm:max-h-[268px] flex items-center justify-center">
-            {CLINIC_ALBUM.map((photo, idx) => (
-              <img
-                key={photo.id}
-                src={photo.src}
-                alt={photo.alt}
-                referrerPolicy="no-referrer"
-                className={`max-h-[240px] sm:max-h-[268px] w-auto h-auto object-contain block mx-auto transition-opacity duration-700 ease-in-out ${
-                  activePhotoIdx === idx 
-                    ? 'opacity-100 relative' 
-                    : 'opacity-0 absolute inset-0 pointer-events-none'
-                }`}
+          {/* Stack Container Flanked by Navigation Arrows */}
+          <div className="relative flex items-center justify-center w-full max-w-md mx-auto">
+            {/* Left Arrow Button */}
+            <button
+              type="button"
+              onClick={handlePrev}
+              aria-label="Önceki fotoğraf"
+              title="Önceki fotoğraf"
+              className={`relative z-30 -mr-2 sm:-mr-3 p-2 sm:p-2.5 rounded-full border shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95 ${
+                isDark 
+                  ? 'bg-slate-900/90 hover:bg-slate-800 text-teal-400 border-teal-500/30 hover:border-teal-400 shadow-black/50' 
+                  : 'bg-white/95 hover:bg-white text-teal-700 border-teal-600/30 hover:border-teal-600 shadow-slate-300/70'
+              }`}
+            >
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
+            </button>
+
+            {/* Photo Deck Stack Viewport */}
+            <div 
+              className="relative group cursor-pointer flex-shrink-0"
+              onClick={handleNext}
+              title="Tıklayarak sonraki fotoğrafa geçebilirsiniz"
+            >
+              {/* Ambient luminous glow behind image stack */}
+              <div 
+                aria-hidden="true"
+                className="absolute -inset-4 bg-gradient-to-tr from-cyan-500/25 via-teal-500/20 to-blue-500/25 rounded-3xl blur-xl -z-10 opacity-70 group-hover:opacity-95 transition-opacity pointer-events-none"
               />
-            ))}
+
+              {/* Left Stack Card (Previous Photo - Tilted left under main) */}
+              <div 
+                aria-hidden="true"
+                className="absolute inset-0 -translate-x-3.5 sm:-translate-x-5 -rotate-[3.5deg] scale-[0.93] rounded-2xl overflow-hidden border border-teal-500/30 bg-slate-900/90 shadow-xl pointer-events-none z-0 transition-transform duration-500 group-hover:-translate-x-5 sm:group-hover:-translate-x-7 group-hover:-rotate-[5deg]"
+              >
+                <img
+                  src={prevPhoto.src}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-contain p-2 opacity-40 grayscale-[25%] blur-[0.2px]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/20 via-slate-950/40 to-slate-950/70" />
+              </div>
+
+              {/* Right Stack Card (Next Photo - Tilted right under main) */}
+              <div 
+                aria-hidden="true"
+                className="absolute inset-0 translate-x-3.5 sm:translate-x-5 rotate-[3.5deg] scale-[0.93] rounded-2xl overflow-hidden border border-teal-500/30 bg-slate-900/90 shadow-xl pointer-events-none z-0 transition-transform duration-500 group-hover:translate-x-5 sm:group-hover:translate-x-7 group-hover:rotate-[5deg]"
+              >
+                <img
+                  src={nextPhoto.src}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-contain p-2 opacity-40 grayscale-[25%] blur-[0.2px]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-l from-slate-950/20 via-slate-950/40 to-slate-950/70" />
+              </div>
+
+              {/* Main Active Card (Top of the Stack) */}
+              <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-2 border-teal-500/50 ring-4 ring-teal-500/15 transition-all duration-300 group-hover:scale-[1.01] group-hover:border-teal-400 bg-slate-950/95 backdrop-blur-md h-[230px] sm:h-[268px] w-[240px] sm:w-[310px] max-w-[68vw] sm:max-w-[78vw] flex items-center justify-center p-1.5">
+                {CLINIC_ALBUM.map((photo, idx) => (
+                  <img
+                    key={photo.id}
+                    src={photo.src}
+                    alt={photo.alt}
+                    referrerPolicy="no-referrer"
+                    className={`absolute inset-0 w-full h-full object-contain p-1.5 block mx-auto transition-all duration-700 ease-in-out ${
+                      activePhotoIdx === idx 
+                        ? 'opacity-100 scale-100 z-10 pointer-events-auto' 
+                        : 'opacity-0 scale-95 z-0 pointer-events-none'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Right Arrow Button */}
+            <button
+              type="button"
+              onClick={handleNext}
+              aria-label="Sonraki fotoğraf"
+              title="Sonraki fotoğraf"
+              className={`relative z-30 -ml-2 sm:-ml-3 p-2 sm:p-2.5 rounded-full border shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95 ${
+                isDark 
+                  ? 'bg-slate-900/90 hover:bg-slate-800 text-teal-400 border-teal-500/30 hover:border-teal-400 shadow-black/50' 
+                  : 'bg-white/95 hover:bg-white text-teal-700 border-teal-600/30 hover:border-teal-600 shadow-slate-300/70'
+              }`}
+            >
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
+            </button>
           </div>
 
-          {/* Minimalist dot indicators - Pure dots, zero text */}
-          <div className="mt-2.5 flex items-center justify-center gap-1.5 z-20">
+          {/* Minimalist dot indicators - Pure dots for all 5 photos */}
+          <div className="mt-3.5 flex items-center justify-center gap-1.5 z-20">
             {CLINIC_ALBUM.map((_, idx) => (
               <button
                 key={idx}
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   setActivePhotoIdx(idx);
                 }}
+                aria-label={`Fotoğraf ${idx + 1}`}
                 className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
                   activePhotoIdx === idx
                     ? 'w-6 bg-teal-400'
@@ -116,12 +218,6 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               />
             ))}
           </div>
-
-          {/* Ambient luminous glow behind image */}
-          <div 
-            aria-hidden="true"
-            className="absolute -inset-3 bg-gradient-to-tr from-cyan-500/25 via-teal-500/20 to-blue-500/25 rounded-3xl blur-lg -z-10 opacity-75 group-hover:opacity-100 transition-opacity pointer-events-none"
-          />
         </div>
 
         {/* Minimalist medical emblem */}

@@ -165,8 +165,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   ];
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
-      isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
+    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-200 bg-transparent ${
+      isDark ? 'text-slate-100' : 'text-slate-900'
     }`}>
       {/* Top Header */}
       <header className={`border-b sticky top-0 z-30 transition-colors ${
