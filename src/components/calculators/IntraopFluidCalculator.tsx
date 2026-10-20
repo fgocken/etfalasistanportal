@@ -10,14 +10,16 @@ import {
   Layers, 
   HelpCircle,
   Activity,
-  ArrowRight
+  ArrowRight,
+  Sliders,
+  Sparkles
 } from 'lucide-react';
 
 interface IntraopFluidCalculatorProps {
   isDark: boolean;
 }
 
-export type SurgicalInvasiveness = 'superficial' | 'low' | 'moderate' | 'high';
+export type SurgicalInvasiveness = 'superficial' | 'low' | 'moderate' | 'high' | 'custom';
 
 interface SurgicalOption {
   id: SurgicalInvasiveness;
@@ -66,6 +68,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
   const [isMale, setIsMale] = useState<boolean>(true);
   const [fastingHours, setFastingHours] = useState<string>('8');
   const [surgicalLossType, setSurgicalLossType] = useState<SurgicalInvasiveness>('low');
+  const [customSurgicalRate, setCustomSurgicalRate] = useState<string>('3.0');
   const [showFormulaDetails, setShowFormulaDetails] = useState<boolean>(false);
 
   // Parse values
@@ -110,8 +113,15 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
   const fastingDeficit = fastingNum * hourlyMaintenance;
 
   // 3) Surgical Loss Rate
-  const selectedSurgOption = SURGICAL_OPTIONS.find(opt => opt.id === surgicalLossType) || SURGICAL_OPTIONS[1];
-  const surgicalLossRate = selectedSurgOption.factor * calcWeight;
+  const customRateNum = Math.max(0, parseFloat(customSurgicalRate.replace(',', '.')) || 0);
+  const selectedSurgOption = SURGICAL_OPTIONS.find(opt => opt.id === surgicalLossType);
+  
+  // Effective factor in mL/kg/saat
+  const effectiveSurgicalFactor = surgicalLossType === 'custom' 
+    ? customRateNum 
+    : (selectedSurgOption ? selectedSurgOption.factor : 3.0);
+
+  const surgicalLossRate = effectiveSurgicalFactor * calcWeight;
 
   // 4) Hourly Fluid Schedule
   // 1. saat: 1/2 Açlık defisiti + Saatlik idame
@@ -395,12 +405,20 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
             </div>
           </div>
 
-          {/* Row 3: Surgical Loss Classification (4 Options) */}
-          <div className="space-y-2.5">
-            <label className={`block text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              Cerrahi Doku Travması & Üçüncü Boşluk Kaybı Sınıflaması
-            </label>
+          {/* Row 3: Surgical Loss Classification (4 Standard Options + Custom Manual Option) */}
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+              <label className={`block text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                Cerrahi Doku Travması & Üçüncü Boşluk Kaybı Sınıflaması
+              </label>
+              <span className={`text-[11px] font-mono ${isDark ? 'text-cyan-400' : 'text-cyan-700'}`}>
+                {surgicalLossType === 'custom' 
+                  ? `Özel Giriş: ${customRateNum} mL/kg/saat` 
+                  : `Seçili: ${selectedSurgOption?.label} (${effectiveSurgicalFactor} mL/kg/saat)`}
+              </span>
+            </div>
 
+            {/* Standard 4 presets */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {SURGICAL_OPTIONS.map((opt) => {
                 const isSelected = surgicalLossType === opt.id;
@@ -452,6 +470,103 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                   </div>
                 );
               })}
+            </div>
+
+            {/* Custom Manual Surgical Rate Option Card / Input */}
+            <div className={`p-4 rounded-xl border transition-all ${
+              surgicalLossType === 'custom'
+                ? isDark
+                  ? 'bg-cyan-500/10 border-cyan-400/80 ring-2 ring-cyan-500/20'
+                  : 'bg-cyan-50/70 border-cyan-500 ring-2 ring-cyan-500/20'
+                : isDark
+                  ? 'bg-slate-800/25 border-slate-800 hover:border-slate-700'
+                  : 'bg-slate-50/70 border-slate-200 hover:border-slate-300'
+            }`}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div 
+                  className="flex items-start sm:items-center gap-3 cursor-pointer select-none"
+                  onClick={() => setSurgicalLossType('custom')}
+                >
+                  <div className={`p-2 rounded-lg shrink-0 ${
+                    surgicalLossType === 'custom'
+                      ? 'bg-cyan-500 text-white shadow-xs'
+                      : isDark
+                        ? 'bg-slate-800 text-slate-400'
+                        : 'bg-white border border-slate-200 text-slate-600'
+                  }`}>
+                    <Sliders className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs font-bold ${
+                        surgicalLossType === 'custom'
+                          ? isDark ? 'text-cyan-300' : 'text-cyan-900'
+                          : isDark ? 'text-slate-300' : 'text-slate-700'
+                      }`}>
+                        Manuel / Özel Cerrahi Kayıp Hızı Gir
+                      </span>
+                      {surgicalLossType === 'custom' && (
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-cyan-500/20 text-cyan-500 border border-cyan-500/30">
+                          Aktif
+                        </span>
+                      )}
+                    </div>
+                    <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Klinik karara göre 4 standart kategori dışındaki spesifik bir üçüncü boşluk hızını serbestçe belirleyin.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Input Field */}
+                <div className="flex items-center gap-2 pl-9 sm:pl-0">
+                  <div className="relative w-36">
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="30"
+                      value={customSurgicalRate}
+                      onFocus={() => setSurgicalLossType('custom')}
+                      onChange={(e) => {
+                        setCustomSurgicalRate(e.target.value);
+                        setSurgicalLossType('custom');
+                      }}
+                      placeholder="Örn: 3.5"
+                      className={`w-full pr-14 pl-3 py-2 rounded-lg border font-mono text-sm font-bold transition-all outline-none text-right ${
+                        surgicalLossType === 'custom'
+                          ? isDark
+                            ? 'bg-slate-900 border-cyan-400 text-white focus:ring-2 focus:ring-cyan-500/40'
+                            : 'bg-white border-cyan-500 text-slate-900 focus:ring-2 focus:ring-cyan-500/30 shadow-xs'
+                          : isDark
+                            ? 'bg-slate-800/80 border-slate-700 text-slate-300'
+                            : 'bg-white border-slate-300 text-slate-700'
+                      }`}
+                    />
+                    <span className={`absolute right-2.5 top-2.5 text-[10px] font-mono font-medium pointer-events-none ${
+                      surgicalLossType === 'custom'
+                        ? isDark ? 'text-cyan-300' : 'text-cyan-700'
+                        : isDark ? 'text-slate-400' : 'text-slate-500'
+                    }`}>
+                      mL/kg/sa
+                    </span>
+                  </div>
+
+                  {surgicalLossType === 'custom' && (
+                    <button
+                      type="button"
+                      onClick={() => setSurgicalLossType('low')}
+                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+                        isDark 
+                          ? 'border-slate-700 text-slate-400 hover:text-slate-200 hover:bg-slate-800' 
+                          : 'border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                      }`}
+                      title="Standart kategorilere geri dön"
+                    >
+                      Kategorilere Dön
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -543,7 +658,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                 {Math.round(surgicalLossRate)} <span className="text-xs font-normal">mL/sa</span>
               </div>
               <div className="text-[10px] font-medium text-slate-500 mt-0.5">
-                {selectedSurgOption.factor} mL/kg/saat
+                {effectiveSurgicalFactor} mL/kg/saat {surgicalLossType === 'custom' ? '(Özel)' : ''}
               </div>
             </div>
           </div>
