@@ -84,7 +84,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       />
 
       {/* Top institution marker and Top-Right Theme Toggle */}
-      <div className="w-full max-w-2xl mx-auto pt-2 sm:pt-4 flex items-center justify-between z-10 gap-3">
+      <div className="w-full max-w-3xl mx-auto pt-2 sm:pt-4 flex flex-wrap items-center justify-between z-10 gap-2.5">
         <div className="flex items-center gap-2.5 text-xs font-medium tracking-wide">
           <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-teal-400' : 'bg-teal-600'}`} />
           <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>Şişli Hamidiye Etfal EAH</span>

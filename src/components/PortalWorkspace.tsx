@@ -1,20 +1,134 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   ArrowLeft, 
   Activity, 
   Phone, 
-  Calculator,
-  Droplet,
-  BookOpen,
-  Info,
-  ChevronDown,
-  ChevronUp,
-  AlertCircle,
-  Syringe
+  Calculator, 
+  Droplet, 
+  BookOpen, 
+  Info, 
+  ChevronDown, 
+  ChevronUp, 
+  ChevronLeft,
+  ChevronRight,
+  AlertCircle, 
+  Syringe,
+  ShieldAlert,
+  GripVertical,
+  RotateCcw
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
+import { AsaClassification } from './asa/AsaClassification';
+
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'contacts';
+
+export interface ToolItemDef {
+  id: ToolTabId;
+  title: string;
+  badge: string;
+  badgeHighlight?: boolean;
+  desc: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconBgDark: string;
+  iconBgLight: string;
+  iconColorDark: string;
+  iconColorLight: string;
+  borderHoverDark: string;
+  borderHoverLight: string;
+  titleHoverDark: string;
+  titleHoverLight: string;
+  ringClassDark?: string;
+  ringClassLight?: string;
+}
+
+export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
+  calculator: {
+    id: 'calculator',
+    title: 'Kilo, MV Volüm, İdame Sıvı',
+    badge: 'IBW · PBW · TV',
+    desc: 'Devine İdeal Kilo (IBW), Öngörülen Kilo (PBW), VKİ, Düzeltilmiş Kilo (AdjBW) ve koruyucu tidal volüm.',
+    icon: Calculator,
+    iconBgDark: 'bg-teal-500/10',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800'
+  },
+  intraop: {
+    id: 'intraop',
+    title: 'İntraop Sıvı Hesaplaması',
+    badge: 'İntraop Sıvı',
+    desc: 'Açlık süresi, obezite (AdjBW) ve 4 farklı cerrahi doku travma kaybına göre saat saat infüzyon planı.',
+    icon: Droplet,
+    iconBgDark: 'bg-cyan-500/10',
+    iconBgLight: 'bg-cyan-50',
+    iconColorDark: 'text-cyan-400',
+    iconColorLight: 'text-cyan-700',
+    borderHoverDark: 'hover:border-cyan-500/40',
+    borderHoverLight: 'hover:border-cyan-400',
+    titleHoverDark: 'group-hover:text-cyan-300',
+    titleHoverLight: 'group-hover:text-cyan-800'
+  },
+  infusion: {
+    id: 'infusion',
+    title: 'İnfüzyon Hızı Çevirici/Hesaplayıcı',
+    badge: 'Yeni Araç',
+    badgeHighlight: true,
+    desc: 'İlaç konsantrasyonu, 11 birimde otomatik dönüşüm (mcg/kg/dk, mL/saat) ve canlı sayaç.',
+    icon: Syringe,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800',
+    ringClassDark: 'ring-1 ring-teal-500/20',
+    ringClassLight: 'ring-1 ring-teal-500/10'
+  },
+  asa: {
+    id: 'asa',
+    title: 'ASA Fiziksel Durum Sınıflaması',
+    badge: '2025/2026 Güncel',
+    badgeHighlight: true,
+    desc: 'En güncel resmi ASA sınıflama tablosu. Resmi tanımlar, açılışta erişkin örnekleri ile pediatrik ve obstetrik gruplar.',
+    icon: ShieldAlert,
+    iconBgDark: 'bg-emerald-500/15',
+    iconBgLight: 'bg-emerald-50',
+    iconColorDark: 'text-emerald-400',
+    iconColorLight: 'text-emerald-700',
+    borderHoverDark: 'hover:border-emerald-500/40',
+    borderHoverLight: 'hover:border-emerald-400',
+    titleHoverDark: 'group-hover:text-emerald-300',
+    titleHoverLight: 'group-hover:text-emerald-800',
+    ringClassDark: 'ring-1 ring-emerald-500/20',
+    ringClassLight: 'ring-1 ring-emerald-500/10'
+  },
+  contacts: {
+    id: 'contacts',
+    title: 'Klinik ve Dahili Hatlar',
+    badge: 'Dahili Hatlar',
+    desc: 'Ameliyathane koordinasyon, ARYB yoğun bakım, kıdemli hekim odası ve kan merkezi telefonları.',
+    icon: Phone,
+    iconBgDark: 'bg-indigo-500/10',
+    iconBgLight: 'bg-indigo-50',
+    iconColorDark: 'text-indigo-400',
+    iconColorLight: 'text-indigo-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800'
+  }
+};
+
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'contacts'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v2';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -139,8 +253,94 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   isDark,
   onToggleTheme
 }) => {
-  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'contacts'>('tools');
+  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'asa' | 'contacts'>('tools');
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
+
+  // Tool Order state with localStorage persistence
+  const [toolOrder, setToolOrder] = useState<ToolTabId[]>(() => {
+    try {
+      const saved = localStorage.getItem(TOOL_ORDER_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length === DEFAULT_TOOL_ORDER.length) {
+          const isValid = DEFAULT_TOOL_ORDER.every(id => parsed.includes(id));
+          if (isValid) return parsed as ToolTabId[];
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return DEFAULT_TOOL_ORDER;
+  });
+
+  const [draggedToolId, setDraggedToolId] = useState<ToolTabId | null>(null);
+  const [dragOverToolId, setDragOverToolId] = useState<ToolTabId | null>(null);
+
+  const saveToolOrder = (newOrder: ToolTabId[]) => {
+    setToolOrder(newOrder);
+    try {
+      localStorage.setItem(TOOL_ORDER_STORAGE_KEY, JSON.stringify(newOrder));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const moveTool = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= toolOrder.length || fromIndex === toIndex) return;
+    const updated = [...toolOrder];
+    const [removed] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, removed);
+    saveToolOrder(updated);
+  };
+
+  const resetToolOrder = () => {
+    saveToolOrder(DEFAULT_TOOL_ORDER);
+  };
+
+  const isCustomOrder = JSON.stringify(toolOrder) !== JSON.stringify(DEFAULT_TOOL_ORDER);
+
+  // Top navigation bar scroll & drag states
+  const navTabsRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [isJustDragged, setIsJustDragged] = useState(false);
+
+  const checkNavScroll = () => {
+    const el = navTabsRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 6);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 6);
+  };
+
+  useEffect(() => {
+    checkNavScroll();
+    const el = navTabsRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', checkNavScroll, { passive: true });
+    window.addEventListener('resize', checkNavScroll);
+    return () => {
+      el.removeEventListener('scroll', checkNavScroll);
+      window.removeEventListener('resize', checkNavScroll);
+    };
+  }, [toolOrder]);
+
+  const handleNavScroll = (direction: 'left' | 'right') => {
+    const el = navTabsRef.current;
+    if (!el) return;
+    const scrollAmount = 240;
+    el.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleNavWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = navTabsRef.current;
+    if (!el) return;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && el.scrollWidth > el.clientWidth) {
+      el.scrollLeft += e.deltaY;
+    }
+  };
 
   // Calculator inputs
   const [calcHeight, setCalcHeight] = useState<string>('175');
@@ -194,8 +394,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           </div>
 
           {/* Top-Right: Date & Theme Switch */}
-          <div className="flex items-center gap-3">
-            <div className={`text-xs font-mono hidden md:block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className={`text-xs font-mono hidden lg:block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
@@ -203,43 +403,190 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         </div>
       </header>
 
-      {/* Navigation Sub-bar */}
-      <div className={`border-b transition-colors ${
+      {/* Navigation Sub-bar (Follows custom tool ordering, draggable & scrollable) */}
+      <div className={`border-b transition-colors relative ${
         isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'
       }`}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center gap-1 overflow-x-auto py-2 no-scrollbar">
-          {[
-            { id: 'tools', label: 'Genel Bakış', icon: Activity },
-            { id: 'calculator', label: 'Kilo, MV Volüm, İdame Sıvı', icon: Calculator },
-            { id: 'intraop', label: 'İntraop Sıvı', icon: Droplet },
-            { id: 'infusion', label: 'İnfüzyon Hızı Çevirici/Hesaplayıcı', icon: Syringe },
-            { id: 'contacts', label: 'Dahili Numaralar', icon: Phone },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
+        <div className="max-w-5xl mx-auto px-2 sm:px-6 relative flex items-center">
+          {/* Scroll Left Button */}
+          {canScrollLeft && (
+            <div className={`absolute left-0 top-0 bottom-0 z-20 flex items-center pl-1 sm:pl-2 pr-3 bg-gradient-to-r pointer-events-auto ${
+              isDark ? 'from-slate-900 via-slate-900/90 to-transparent' : 'from-white via-white/90 to-transparent'
+            }`}>
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                  isActive
-                    ? isDark 
-                      ? 'bg-slate-800 text-teal-300 font-semibold border border-teal-500/20' 
-                      : 'bg-teal-50 text-teal-800 font-semibold'
-                    : isDark
-                      ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                type="button"
+                onClick={() => handleNavScroll('left')}
+                className={`p-1.5 rounded-lg border transition-all cursor-pointer shadow-xs ${
+                  isDark 
+                    ? 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 hover:text-white' 
+                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:text-slate-900'
                 }`}
+                title="Sola kaydır"
+                aria-label="Sola kaydır"
               >
-                <Icon className={`w-3.5 h-3.5 ${
-                  isActive 
-                    ? isDark ? 'text-teal-400' : 'text-teal-700' 
-                    : isDark ? 'text-slate-500' : 'text-slate-400'
-                }`} />
-                <span>{tab.label}</span>
+                <ChevronLeft className="w-3.5 h-3.5" />
               </button>
-            );
-          })}
+            </div>
+          )}
+
+          {/* Scrolling Tabs Container */}
+          <div 
+            ref={navTabsRef}
+            onWheel={handleNavWheel}
+            className="flex-1 flex items-center gap-1 overflow-x-auto py-2 no-scrollbar scroll-smooth"
+          >
+            {/* Fixed First Tab: Genel Bakış */}
+            <button
+              key="tools"
+              onClick={() => {
+                if (isJustDragged) return;
+                setActiveTab('tools');
+              }}
+              onDragOver={(e) => {
+                if (draggedToolId) {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'move';
+                  if (dragOverToolId !== ('tools' as any)) {
+                    setDragOverToolId('tools' as any);
+                  }
+                }
+              }}
+              onDragLeave={() => {
+                if (dragOverToolId === ('tools' as any)) {
+                  setDragOverToolId(null);
+                }
+              }}
+              onDrop={(e) => {
+                if (draggedToolId) {
+                  e.preventDefault();
+                  setDragOverToolId(null);
+                  const fromIdx = toolOrder.indexOf(draggedToolId);
+                  if (fromIdx !== -1) {
+                    moveTool(fromIdx, 0);
+                  }
+                  setDraggedToolId(null);
+                }
+              }}
+              title="Genel Bakış paneli"
+              className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0 transition-all cursor-pointer border ${
+                dragOverToolId === ('tools' as any)
+                  ? 'ring-2 ring-teal-500 ring-offset-1 bg-teal-500/10 border-teal-500 text-teal-600 dark:text-teal-400'
+                  : activeTab === 'tools'
+                    ? isDark 
+                      ? 'bg-slate-800 text-teal-300 font-semibold border-teal-500/30' 
+                      : 'bg-teal-50 text-teal-800 font-semibold border-teal-200/80 shadow-xs'
+                    : isDark
+                      ? 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                      : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              <Activity className={`w-3.5 h-3.5 shrink-0 ${
+                activeTab === 'tools' 
+                  ? isDark ? 'text-teal-400' : 'text-teal-700' 
+                  : isDark ? 'text-slate-500' : 'text-slate-400'
+              }`} />
+              <span>Genel Bakış</span>
+            </button>
+
+            {/* Draggable & Reorderable Tool Tabs */}
+            {toolOrder.map((toolId) => {
+              const t = ALL_CLINICAL_TOOLS[toolId];
+              if (!t) return null;
+              const Icon = t.icon;
+              const isActive = activeTab === t.id;
+              const isDragging = draggedToolId === t.id;
+              const isOver = dragOverToolId === t.id;
+
+              return (
+                <button
+                  key={t.id}
+                  draggable
+                  onDragStart={(e) => {
+                    setIsJustDragged(true);
+                    setDraggedToolId(t.id);
+                    e.dataTransfer.setData('text/plain', t.id);
+                    e.dataTransfer.effectAllowed = 'move';
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (dragOverToolId !== t.id) {
+                      setDragOverToolId(t.id);
+                    }
+                  }}
+                  onDragLeave={() => {
+                    if (dragOverToolId === t.id) {
+                      setDragOverToolId(null);
+                    }
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setDragOverToolId(null);
+                    if (draggedToolId && draggedToolId !== t.id) {
+                      const fromIdx = toolOrder.indexOf(draggedToolId);
+                      const toIdx = toolOrder.indexOf(t.id);
+                      if (fromIdx !== -1 && toIdx !== -1) {
+                        moveTool(fromIdx, toIdx);
+                      }
+                    }
+                    setDraggedToolId(null);
+                  }}
+                  onDragEnd={() => {
+                    setDraggedToolId(null);
+                    setDragOverToolId(null);
+                    setTimeout(() => setIsJustDragged(false), 150);
+                  }}
+                  onClick={() => {
+                    if (isJustDragged) return;
+                    setActiveTab(t.id as any);
+                  }}
+                  title={`${t.title} — Sürükleyip bırakarak sekmelerin sırasını değiştirebilirsiniz`}
+                  className={`group flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0 transition-all cursor-grab active:cursor-grabbing select-none border ${
+                    isDragging
+                      ? 'opacity-30 scale-95 border-dashed border-teal-500 bg-teal-500/5'
+                      : isOver
+                        ? 'ring-2 ring-teal-500 ring-offset-1 scale-[1.02] border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-400'
+                        : isActive
+                          ? isDark 
+                            ? 'bg-slate-800 text-teal-300 font-semibold border-teal-500/30' 
+                            : 'bg-teal-50 text-teal-800 font-semibold border-teal-200/80 shadow-xs'
+                          : isDark
+                            ? 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                            : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <GripVertical className="w-3 h-3 text-slate-400/60 group-hover:text-slate-400 opacity-40 group-hover:opacity-100 transition-opacity shrink-0 -mr-0.5" />
+                  <Icon className={`w-3.5 h-3.5 shrink-0 ${
+                    isActive 
+                      ? isDark ? 'text-teal-400' : 'text-teal-700' 
+                      : isDark ? 'text-slate-500' : 'text-slate-400'
+                  }`} />
+                  <span>{t.title}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Scroll Right Button */}
+          {canScrollRight && (
+            <div className={`absolute right-0 top-0 bottom-0 z-20 flex items-center pr-1 sm:pr-2 pl-3 bg-gradient-to-l pointer-events-auto ${
+              isDark ? 'from-slate-900 via-slate-900/90 to-transparent' : 'from-white via-white/90 to-transparent'
+            }`}>
+              <button
+                type="button"
+                onClick={() => handleNavScroll('right')}
+                className={`p-1.5 rounded-lg border transition-all cursor-pointer shadow-xs ${
+                  isDark 
+                    ? 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 hover:text-white' 
+                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:text-slate-900'
+                }`}
+                title="Sağa kaydır"
+                aria-label="Sağa kaydır"
+              >
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -248,123 +595,180 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 1. Overview */}
         {activeTab === 'tools' && (
           <div className="space-y-6">
-            <div className={`border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
-              <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Şişli Etfal Dashboard
-              </h2>
-              <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                Şişli Etfal EAH Anesteziyoloji ve Reanimasyon Kliniği Asistanları için klinik araçlar
-              </p>
+            <div className={`border-b pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${
+              isDark ? 'border-slate-800' : 'border-slate-200'
+            }`}>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Şişli Etfal Dashboard
+                  </h2>
+                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                    isDark ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30' : 'bg-teal-50 text-teal-800 border border-teal-200'
+                  }`}>
+                    🖐️ Sürüklenebilir Sıralama
+                  </span>
+                </div>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Kartları sürükleyip bırakarak veya yön butonlarıyla en sık kullandığınız sıraya göre dizebilirsiniz.
+                </p>
+              </div>
+
+              {isCustomOrder && (
+                <button
+                  onClick={resetToolOrder}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
+                    isDark
+                      ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
+                  }`}
+                  title="Varsayılan araç sıralamasına geri dön"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Sıralamayı Sıfırla</span>
+                </button>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Card 1: Kilo & MV Volüm */}
-              <button
-                onClick={() => setActiveTab('calculator')}
-                className={`text-left p-5 rounded-xl border transition-all space-y-2 group cursor-pointer ${
-                  isDark
-                    ? 'bg-slate-900 border-slate-800 hover:border-teal-500/40 text-slate-100'
-                    : 'bg-white border-slate-200 hover:border-teal-400 text-slate-900 shadow-xs'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className={`p-2 rounded-lg ${isDark ? 'bg-teal-500/10 text-teal-400' : 'bg-teal-50 text-teal-700'}`}>
-                    <Calculator className="w-5 h-5" />
-                  </div>
-                  <span className={`text-[11px] font-mono ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                    IBW · PBW · TV
-                  </span>
-                </div>
-                <h3 className={`text-sm font-bold transition-colors ${
-                  isDark ? 'text-white group-hover:text-teal-300' : 'text-slate-900 group-hover:text-teal-800'
-                }`}>
-                  Kilo, MV Volüm, İdame Sıvı
-                </h3>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Devine İdeal Kilo (IBW), Öngörülen Kilo (PBW), VKİ, Düzeltilmiş Kilo (AdjBW) ve koruyucu tidal volüm.
-                </p>
-              </button>
+              {toolOrder.map((toolId, index) => {
+                const tool = ALL_CLINICAL_TOOLS[toolId];
+                if (!tool) return null;
+                const Icon = tool.icon;
+                const isDragging = draggedToolId === toolId;
+                const isOver = dragOverToolId === toolId;
 
-              {/* Card 2: İntraop Sıvı Hesaplaması */}
-              <button
-                onClick={() => setActiveTab('intraop')}
-                className={`text-left p-5 rounded-xl border transition-all space-y-2 group cursor-pointer ${
-                  isDark
-                    ? 'bg-slate-900 border-slate-800 hover:border-cyan-500/40 text-slate-100'
-                    : 'bg-white border-slate-200 hover:border-cyan-400 text-slate-900 shadow-xs'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className={`p-2 rounded-lg ${isDark ? 'bg-cyan-500/10 text-cyan-400' : 'bg-cyan-50 text-cyan-700'}`}>
-                    <Droplet className="w-5 h-5" />
-                  </div>
-                  <span className={`text-[11px] font-mono ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                    İntraop Sıvı
-                  </span>
-                </div>
-                <h3 className={`text-sm font-bold transition-colors ${
-                  isDark ? 'text-white group-hover:text-cyan-300' : 'text-slate-900 group-hover:text-cyan-800'
-                }`}>
-                  İntraop Sıvı Hesaplaması
-                </h3>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Açlık süresi, obezite (AdjBW) ve 4 farklı cerrahi doku travma kaybına göre saat saat infüzyon planı.
-                </p>
-              </button>
+                return (
+                  <div
+                    key={tool.id}
+                    draggable
+                    onDragStart={(e) => {
+                      setDraggedToolId(tool.id);
+                      e.dataTransfer.setData('text/plain', tool.id);
+                      e.dataTransfer.effectAllowed = 'move';
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.dataTransfer.dropEffect = 'move';
+                      if (dragOverToolId !== tool.id) {
+                        setDragOverToolId(tool.id);
+                      }
+                    }}
+                    onDragLeave={() => {
+                      if (dragOverToolId === tool.id) {
+                        setDragOverToolId(null);
+                      }
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setDragOverToolId(null);
+                      if (draggedToolId && draggedToolId !== tool.id) {
+                        const fromIdx = toolOrder.indexOf(draggedToolId);
+                        const toIdx = toolOrder.indexOf(tool.id);
+                        if (fromIdx !== -1 && toIdx !== -1) {
+                          moveTool(fromIdx, toIdx);
+                        }
+                      }
+                      setDraggedToolId(null);
+                    }}
+                    onDragEnd={() => {
+                      setDraggedToolId(null);
+                      setDragOverToolId(null);
+                    }}
+                    onClick={() => setActiveTab(tool.id)}
+                    className={`relative text-left p-5 rounded-xl border transition-all space-y-2 group flex flex-col justify-between cursor-pointer select-none ${
+                      isDragging 
+                        ? 'opacity-35 scale-95 border-dashed border-teal-500 bg-teal-500/5' 
+                        : isOver 
+                          ? 'ring-2 ring-teal-500 ring-offset-2 scale-[1.02] border-teal-500 shadow-lg' 
+                          : isDark
+                            ? `bg-slate-900 border-slate-800 ${tool.borderHoverDark} text-slate-100 ${tool.ringClassDark || ''}`
+                            : `bg-white border-slate-200 ${tool.borderHoverLight} text-slate-900 shadow-xs ${tool.ringClassLight || ''}`
+                    }`}
+                  >
+                    <div>
+                      {/* Top Action Row: Icon, Badge, Grip Handle & Reorder arrows */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className={`p-2 rounded-lg ${
+                          isDark ? `${tool.iconBgDark} ${tool.iconColorDark}` : `${tool.iconBgLight} ${tool.iconColorLight}`
+                        }`}>
+                          <Icon className="w-5 h-5" />
+                        </div>
 
-              {/* Card 3: İnfüzyon Hızı Hesaplama */}
-              <button
-                onClick={() => setActiveTab('infusion')}
-                className={`text-left p-5 rounded-xl border transition-all space-y-2 group cursor-pointer ${
-                  isDark
-                    ? 'bg-slate-900 border-slate-800 hover:border-teal-500/40 text-slate-100 ring-1 ring-teal-500/20'
-                    : 'bg-white border-slate-200 hover:border-teal-400 text-slate-900 shadow-xs ring-1 ring-teal-500/10'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className={`p-2 rounded-lg ${isDark ? 'bg-teal-500/15 text-teal-400' : 'bg-teal-50 text-teal-700'}`}>
-                    <Syringe className="w-5 h-5" />
-                  </div>
-                  <span className={`text-[11px] font-mono ${isDark ? 'text-teal-400' : 'text-teal-600 font-semibold'}`}>
-                    Yeni Araç
-                  </span>
-                </div>
-                <h3 className={`text-sm font-bold transition-colors ${
-                  isDark ? 'text-white group-hover:text-teal-300' : 'text-slate-900 group-hover:text-teal-800'
-                }`}>
-                  İnfüzyon Hızı Çevirici/Hesaplayıcı
-                </h3>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  İlaç konsantrasyonu, 11 birimde otomatik dönüşüm (mcg/kg/dk, mL/saat) ve canlı sayaç.
-                </p>
-              </button>
+                        <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                          <span className={`text-[11px] font-mono ${
+                            tool.badgeHighlight 
+                              ? isDark ? 'text-teal-400 font-semibold' : 'text-teal-600 font-semibold' 
+                              : isDark ? 'text-slate-500' : 'text-slate-400'
+                          }`}>
+                            {tool.badge}
+                          </span>
 
-              {/* Card 4: Dahili Numaralar */}
-              <button
-                onClick={() => setActiveTab('contacts')}
-                className={`text-left p-5 rounded-xl border transition-all space-y-2 group cursor-pointer ${
-                  isDark
-                    ? 'bg-slate-900 border-slate-800 hover:border-teal-500/40 text-slate-100'
-                    : 'bg-white border-slate-200 hover:border-teal-400 text-slate-900 shadow-xs'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className={`p-2 rounded-lg ${isDark ? 'bg-indigo-500/10 text-indigo-400' : 'bg-indigo-50 text-indigo-700'}`}>
-                    <Phone className="w-5 h-5" />
+                          {/* Quick Mobile / Button Reorder Controls */}
+                          <div className="flex items-center bg-slate-100 dark:bg-slate-800/80 rounded-md p-0.5 ml-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <button
+                              type="button"
+                              disabled={index === 0}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                moveTool(index, index - 1);
+                              }}
+                              title="Sola / Başa taşı"
+                              className={`p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors ${
+                                index === 0 ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer text-slate-600 dark:text-slate-300'
+                              }`}
+                            >
+                              <ChevronLeft className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={index === toolOrder.length - 1}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                moveTool(index, index + 1);
+                              }}
+                              title="Sağa / Sona taşı"
+                              className={`p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors ${
+                                index === toolOrder.length - 1 ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer text-slate-600 dark:text-slate-300'
+                              }`}
+                            >
+                              <ChevronRight className="w-3 h-3" />
+                            </button>
+                          </div>
+
+                          {/* Drag Grip Handle */}
+                          <div
+                            title="Sıralamayı değiştirmek için sürükleyin"
+                            className="p-1 text-slate-400 hover:text-teal-500 dark:hover:text-teal-400 cursor-grab active:cursor-grabbing"
+                          >
+                            <GripVertical className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <h3 className={`text-sm font-bold transition-colors ${
+                        isDark ? `text-white ${tool.titleHoverDark}` : `text-slate-900 ${tool.titleHoverLight}`
+                      }`}>
+                        {tool.title}
+                      </h3>
+                      <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        {tool.desc}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-between text-xs">
+                      <span className={`text-[10px] font-mono ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                        #{index + 1}. Sıra
+                      </span>
+                      <span className={`font-semibold ${
+                        isDark ? 'text-teal-400 group-hover:underline' : 'text-teal-700 group-hover:underline'
+                      }`}>
+                        Aracı Aç →
+                      </span>
+                    </div>
                   </div>
-                  <span className={`text-[11px] font-mono ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                    Dahili Hatlar
-                  </span>
-                </div>
-                <h3 className={`text-sm font-bold transition-colors ${
-                  isDark ? 'text-white group-hover:text-teal-300' : 'text-slate-900 group-hover:text-teal-800'
-                }`}>
-                  Klinik ve Dahili Hatlar
-                </h3>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Ameliyathane koordinasyon, ARYB yoğun bakım, kıdemli hekim odası ve kan merkezi telefonları.
-                </p>
-              </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -753,7 +1157,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <InfusionRateCalculator isDark={isDark} />
         )}
 
-        {/* 5. Contacts */}
+        {/* 5. ASA Physical Status Classification (Latest Statement) */}
+        {activeTab === 'asa' && (
+          <AsaClassification isDark={isDark} />
+        )}
+
+        {/* 6. Contacts */}
         {activeTab === 'contacts' && (
           <div className={`rounded-xl border p-6 space-y-4 transition-colors ${
             isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
