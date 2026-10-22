@@ -17,14 +17,18 @@ import {
   GripVertical,
   RotateCcw,
   ClipboardCheck,
-  BarChart3
+  BarChart3,
+  Instagram
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import { LiveClock } from './LiveClock';
 import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 import { AsaClassification } from './asa/AsaClassification';
 import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
 import { InfographicsView } from './infographics/InfographicsView';
+import { ClinicContactsView } from './directory/ClinicContactsView';
+import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 
 export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts';
 
@@ -154,7 +158,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     id: 'contacts',
     title: 'Klinik ve Dahili Hatlar',
     badge: 'Dahili Hatlar',
-    desc: 'Ameliyathane koordinasyon, ARYB yoğun bakım, kıdemli hekim odası ve kan merkezi telefonları.',
+    badgeHighlight: true,
+    desc: 'Seyrantepe ve Çayırbaşı yerleşkeleri dahili numaraları, iç ve dış hat arama kuralları (şifre korumalı).',
     icon: Phone,
     iconBgDark: 'bg-indigo-500/10',
     iconBgLight: 'bg-indigo-50',
@@ -416,16 +421,6 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     isMetric: calcIsMetric
   });
 
-  // Clinic Extensions
-  const clinicContacts = [
-    { title: 'Ameliyathane Koordinasyon & Danışma', ext: '2100', loc: 'Merkez Ameliyathane' },
-    { title: 'Anestezi ve Reanimasyon Yoğun Bakım (ARYB)', ext: '3250', loc: '3. Kat Yoğun Bakım' },
-    { title: 'Kıdemli Asistan & Nöbetçi Hekim Odası', ext: '2105', loc: 'Ameliyathane İçi' },
-    { title: 'Merkez Kan Transfüzyon Ünitesi', ext: '3150', loc: '1. Kat' },
-    { title: 'Klinik Eczanesi', ext: '4200', loc: 'Eczacılık Birimi' },
-    { title: 'Mavi Kod / Acil Çağrı Merkezi', ext: '1111', loc: 'Güvenlik & Kriz' },
-  ];
-
   return (
     <div className={`min-h-screen flex flex-col font-sans transition-colors duration-200 bg-transparent ${
       isDark ? 'text-slate-100' : 'text-slate-900'
@@ -453,15 +448,16 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             </h1>
           </div>
 
-          {/* Top-Right: Date & Theme Switch */}
+          {/* Top-Right: Live Clock & Theme Switch */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className={`text-xs font-mono hidden lg:block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
-            </div>
+            <LiveClock isDark={isDark} />
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
           </div>
         </div>
       </header>
+
+      {/* Top Campus Weather & Distance Bar [MODULAR_CAMPUS_WIDGET] */}
+      <CampusWeatherBar isDark={isDark} />
 
       {/* Navigation Sub-bar (Follows custom tool ordering, draggable & scrollable) */}
       <div className={`border-b transition-colors relative ${
@@ -1234,36 +1230,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
         {/* 8. Contacts */}
         {activeTab === 'contacts' && (
-          <div className={`rounded-xl border p-6 space-y-4 transition-colors ${
-            isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-          }`}>
-            <div className={`border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-              <h3 className={`text-base font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Klinik & Ameliyathane Dahili Numaraları
-              </h3>
-              <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                Şişli Etfal EAH bünyesinde sık aranan kritik birimler.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {clinicContacts.map((c) => (
-                <div key={c.title} className={`p-4 rounded-xl border flex items-center justify-between transition-colors ${
-                  isDark ? 'bg-slate-800/60 border-slate-800' : 'bg-slate-50/70 border-slate-200'
-                }`}>
-                  <div>
-                    <div className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{c.title}</div>
-                    <div className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{c.loc}</div>
-                  </div>
-                  <div className="text-right">
-                    <span className={`font-mono text-base font-bold tabular-nums ${
-                      isDark ? 'text-teal-400' : 'text-teal-900'
-                    }`}>{c.ext}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ClinicContactsView isDark={isDark} />
         )}
       </main>
 
@@ -1271,8 +1238,25 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       <footer className={`mt-auto border-t py-4 px-4 sm:px-6 transition-colors ${
         isDark ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-white border-slate-200 text-slate-500'
       }`}>
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
           <span>Şişli Hamidiye Etfal EAH · Anestezi ve Reanimasyon Kliniği Asistan Portalı</span>
+          
+          {/* Instagram Account Link */}
+          <a
+            href="https://www.instagram.com/etfalanestezi/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Şişli Etfal Anestezi Resmi Instagram Hesabı: @etfalanestezi"
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-medium transition-all group cursor-pointer ${
+              isDark 
+                ? 'bg-slate-800/80 border-slate-700 text-slate-300 hover:text-pink-400 hover:border-pink-500/50 hover:bg-slate-800' 
+                : 'bg-slate-50 border-slate-200 text-slate-700 hover:text-pink-600 hover:border-pink-300 hover:shadow-2xs'
+            }`}
+          >
+            <Instagram className="w-3.5 h-3.5 text-pink-500 group-hover:scale-110 transition-transform" />
+            <span>@etfalanestezi</span>
+          </a>
+
           <button
             onClick={onOpenDisclaimer}
             className={`transition-colors underline underline-offset-4 cursor-pointer ${

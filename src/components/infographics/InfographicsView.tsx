@@ -4,105 +4,211 @@ import {
   ExternalLink, 
   Info, 
   BookOpen, 
-  Layers, 
-  CheckCircle2, 
-  AlertTriangle, 
-  ShieldAlert,
-  Sparkles
+  ArrowLeft,
+  ChevronRight,
+  Heart,
+  Activity,
+  Layers,
+  Sparkles,
+  ShieldCheck,
+  PlusCircle
 } from 'lucide-react';
 
 interface InfographicsViewProps {
   isDark: boolean;
 }
 
-export interface InfographicTopic {
+export interface InfographicCardItem {
   id: string;
   title: string;
+  source: string;
   category: string;
-  tag: string;
+  shortDesc: string;
+  riskPills: { label: string; rate: string; colorClass: string; bgClass: string; borderClass: string }[];
+  accentColor: string;
 }
 
-const INFOGRAPHIC_TOPICS: InfographicTopic[] = [
+const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
   {
     id: 'surgical-risk',
     title: 'Cerrahilere Göre Cerrahi Risk Sınıflaması',
-    category: 'Preoperatif & Kardiyoloji',
-    tag: 'ESC Kılavuzu'
+    source: 'ESC 2022 Kılavuzu (European Heart Journal)',
+    category: 'Perioperatif Kardiyoloji',
+    shortDesc: '30 günlük majör kardiyovasküler olay (MACE: ölüm, MI ve inme) riskine göre non-kardiyak cerrahilerin 3 kademeli sınıflaması.',
+    riskPills: [
+      { label: 'Düşük', rate: '< %1', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Orta', rate: '%1 – %5', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Yüksek', rate: '> %5', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'violet'
   }
 ];
 
 export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) => {
-  const [selectedTopicId, setSelectedTopicId] = useState<string>('surgical-risk');
+  // null = mini cards gallery view, string = open infographic view
+  const [activeInfographicId, setActiveInfographicId] = useState<string | null>(null);
+
+  const selectedInfographic = INFOGRAPHIC_COLLECTION.find(item => item.id === activeInfographicId);
 
   return (
     <div className={`rounded-xl border p-6 space-y-6 transition-colors ${
       isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
     }`}>
-      {/* Module Header - Generic Library Header */}
+      {/* Top Header */}
       <div className={`border-b pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${
         isDark ? 'border-slate-800' : 'border-slate-100'
       }`}>
         <div className="flex items-center gap-3">
-          <div className={`p-2.5 rounded-xl ${
-            isDark ? 'bg-violet-500/15 text-violet-400 border border-violet-500/20' : 'bg-violet-50 text-violet-700 border border-violet-200'
-          }`}>
-            <BarChart3 className="w-6 h-6" />
-          </div>
+          {activeInfographicId ? (
+            <button
+              type="button"
+              onClick={() => setActiveInfographicId(null)}
+              className={`p-2 rounded-xl border transition-colors cursor-pointer flex items-center justify-center ${
+                isDark 
+                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700' 
+                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+              }`}
+              title="İnfografik galerisine geri dön"
+            >
+              <ArrowLeft className="w-5 h-5 text-violet-500" />
+            </button>
+          ) : (
+            <div className={`p-2.5 rounded-xl ${
+              isDark ? 'bg-violet-500/15 text-violet-400 border border-violet-500/20' : 'bg-violet-50 text-violet-700 border border-violet-200'
+            }`}>
+              <BarChart3 className="w-6 h-6" />
+            </div>
+          )}
+
           <div>
             <div className="flex items-center gap-2">
               <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Klinik İnfografikler
+                {activeInfographicId ? selectedInfographic?.title : 'Klinik İnfografikler'}
               </h3>
               <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                 isDark ? 'bg-violet-500/15 text-violet-300 border border-violet-500/30' : 'bg-violet-50 text-violet-700 border border-violet-200'
               }`}>
-                İnfografik Kütüphanesi
+                {activeInfographicId ? 'İnfografik İnceleme' : 'İnfografik Koleksiyonu'}
               </span>
             </div>
             <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              Anestezi ve Reanimasyon Kliniği görsel kılavuzlar, sınıflamalar ve hızlı referans infografikleri
+              {activeInfographicId 
+                ? 'İnfografiği kapatıp listeye dönmek için sol üstteki geri butonuna tıklayabilirsiniz.'
+                : 'Anestezi ve Reanimasyon Kliniği görsel kılavuzlar ve infografik kartları.'
+              }
             </p>
           </div>
         </div>
 
-        {/* Topic Counter */}
-        <div className="flex items-center gap-2 self-start sm:self-auto text-xs font-mono text-slate-500 dark:text-slate-400">
-          <span>{INFOGRAPHIC_TOPICS.length} İnfografik Yayında</span>
+        {activeInfographicId && (
+          <button
+            type="button"
+            onClick={() => setActiveInfographicId(null)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
+              isDark 
+                ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700' 
+                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
+            }`}
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-violet-500" />
+            <span>Tüm İnfografiklere Dön</span>
+          </button>
+        )}
+      </div>
+
+      {/* VIEW 1: Mini Cards Gallery (When no infographic is opened) */}
+      {!activeInfographicId && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span>İncelemek istediğiniz infografiğin üzerine tıklayın:</span>
+            <span className="font-mono text-[11px]">{INFOGRAPHIC_COLLECTION.length} İnfografik</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {INFOGRAPHIC_COLLECTION.map((card) => (
+              <div
+                key={card.id}
+                onClick={() => setActiveInfographicId(card.id)}
+                className={`group relative p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between cursor-pointer select-none ${
+                  isDark 
+                    ? 'bg-slate-900/90 border-slate-800 hover:border-violet-500/50 hover:bg-slate-800/60 shadow-xs' 
+                    : 'bg-white border-slate-200 hover:border-violet-400 hover:shadow-md'
+                }`}
+              >
+                <div>
+                  {/* Top Badge & Category */}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold bg-violet-500/15 text-violet-600 dark:text-violet-300">
+                      {card.category}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      ESC 2022
+                    </span>
+                  </div>
+
+                  {/* Title & Description */}
+                  <h4 className={`text-sm font-bold transition-colors group-hover:text-violet-500 dark:group-hover:text-violet-400 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    {card.title}
+                  </h4>
+                  <p className={`text-xs mt-1.5 leading-relaxed line-clamp-2 ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
+                    {card.shortDesc}
+                  </p>
+
+                  {/* Visual Mini Preview Strip (3 Risk Levels) */}
+                  <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                    <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
+                      <Activity className="w-3 h-3 text-violet-500" />
+                      <span>30 Günlük MACE Riski Kademeleri:</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5 text-center">
+                      {card.riskPills.map((pill, idx) => (
+                        <div
+                          key={idx}
+                          className={`px-1.5 py-1 rounded-lg border text-[10px] font-mono ${pill.bgClass} ${pill.borderClass}`}
+                        >
+                          <div className={`font-semibold ${pill.colorClass}`}>{pill.label}</div>
+                          <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400">{pill.rate}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Action */}
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    Oxford Academic (OUP)
+                  </span>
+                  <span className="font-bold text-violet-600 dark:text-violet-400 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                    <span>İnfografiği Aç</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+            ))}
+
+            {/* Future Slot Placeholder Card */}
+            <div className={`p-5 rounded-2xl border border-dashed flex flex-col items-center justify-center text-center p-6 transition-colors ${
+              isDark ? 'border-slate-800 bg-slate-900/30 text-slate-500' : 'border-slate-200 bg-slate-50/50 text-slate-400'
+            }`}>
+              <div className={`p-3 rounded-xl mb-2 ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-white text-slate-400 shadow-xs'}`}>
+                <PlusCircle className="w-6 h-6 stroke-[1.5]" />
+              </div>
+              <div className="text-xs font-bold text-slate-600 dark:text-slate-400">Yeni İnfografikler</div>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 max-w-[200px]">
+                Gelecekte eklenecek kılavuz ve infografikler bu alanda mini kart olarak listelenecektir.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Topic Selector Tabs (Ready for future topics) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar border-b border-slate-200 dark:border-slate-800">
-        {INFOGRAPHIC_TOPICS.map((topic, index) => {
-          const isActive = selectedTopicId === topic.id;
-          return (
-            <button
-              key={topic.id}
-              type="button"
-              onClick={() => setSelectedTopicId(topic.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-t-lg transition-all cursor-pointer border-b-2 -mb-px whitespace-nowrap ${
-                isActive
-                  ? isDark 
-                    ? 'border-violet-500 text-violet-300 bg-violet-500/10' 
-                    : 'border-violet-600 text-violet-900 bg-violet-50'
-                  : isDark 
-                    ? 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/40' 
-                    : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-              }`}
-            >
-              <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${
-                isActive ? 'bg-violet-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-              }`}>
-                {index + 1}
-              </span>
-              <span>{topic.title}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* TOPIC 1: Cerrahilere Göre Cerrahi Risk Sınıflaması (ESC Kılavuzu) */}
-      {selectedTopicId === 'surgical-risk' && (
+      {/* VIEW 2: Open Infographic Detail (Opened by clicking the mini card) */}
+      {activeInfographicId === 'surgical-risk' && (
         <div className="space-y-5">
           {/* Infographic Banner */}
           <div className={`p-4 sm:p-5 rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-4 ${

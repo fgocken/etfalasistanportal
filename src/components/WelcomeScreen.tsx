@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Stethoscope, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Stethoscope, ChevronLeft, ChevronRight, Instagram } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import { LiveClock } from './LiveClock';
+import { CampusWeatherBar } from './campus/CampusWeatherBar';
 
 interface WelcomeScreenProps {
   onProceed: () => void;
@@ -92,10 +94,16 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>İstanbul</span>
         </div>
 
-        {/* Top-Right Controls: Theme Toggle */}
-        <div className="flex items-center gap-2">
+        {/* Top-Right Controls: Live Clock & Theme Toggle */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          <LiveClock isDark={isDark} />
           <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
         </div>
+      </div>
+
+      {/* Campus Weather & Inter-Campus Drive Time Bar */}
+      <div className="w-full max-w-3xl mx-auto z-10 mt-3 rounded-xl overflow-hidden border shadow-xs">
+        <CampusWeatherBar isDark={isDark} />
       </div>
 
       {/* Center Welcome Content */}
@@ -281,6 +289,23 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         <p>
           Şişli Hamidiye Etfal EAH · Anestezi ve Reanimasyon Kliniği
         </p>
+
+        {/* Instagram Account Link */}
+        <a
+          href="https://www.instagram.com/etfalanestezi/"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Şişli Etfal Anestezi Resmi Instagram Hesabı: @etfalanestezi"
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium transition-all group cursor-pointer ${
+            isDark 
+              ? 'bg-slate-800/80 border-slate-700 text-slate-300 hover:text-pink-400 hover:border-pink-500/50 hover:bg-slate-800' 
+              : 'bg-white border-slate-200 text-slate-700 hover:text-pink-600 hover:border-pink-300 hover:shadow-2xs'
+          }`}
+        >
+          <Instagram className="w-3.5 h-3.5 text-pink-500 group-hover:scale-110 transition-transform" />
+          <span>@etfalanestezi</span>
+        </a>
+
         <button
           onClick={onOpenDisclaimer}
           className={`transition-colors underline underline-offset-4 cursor-pointer ${
