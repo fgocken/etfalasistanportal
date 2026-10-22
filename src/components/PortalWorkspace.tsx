@@ -15,14 +15,18 @@ import {
   Syringe,
   ShieldAlert,
   GripVertical,
-  RotateCcw
+  RotateCcw,
+  ClipboardCheck,
+  BarChart3
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 import { AsaClassification } from './asa/AsaClassification';
+import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
+import { InfographicsView } from './infographics/InfographicsView';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'contacts';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -110,6 +114,42 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     ringClassDark: 'ring-1 ring-emerald-500/20',
     ringClassLight: 'ring-1 ring-emerald-500/10'
   },
+  preop: {
+    id: 'preop',
+    title: 'Preoperatif Değerlendirme',
+    badge: 'Preoperatif',
+    badgeHighlight: true,
+    desc: 'Preoperatif hasta viziti, anestezi hazırlık ve sistemik değerlendirme protokolü.',
+    icon: ClipboardCheck,
+    iconBgDark: 'bg-blue-500/15',
+    iconBgLight: 'bg-blue-50',
+    iconColorDark: 'text-blue-400',
+    iconColorLight: 'text-blue-700',
+    borderHoverDark: 'hover:border-blue-500/40',
+    borderHoverLight: 'hover:border-blue-400',
+    titleHoverDark: 'group-hover:text-blue-300',
+    titleHoverLight: 'group-hover:text-blue-800',
+    ringClassDark: 'ring-1 ring-blue-500/20',
+    ringClassLight: 'ring-1 ring-blue-500/10'
+  },
+  infographics: {
+    id: 'infographics',
+    title: 'Klinik İnfografikler',
+    badge: 'İnfografikler',
+    badgeHighlight: true,
+    desc: 'Anestezi ve cerrahi kılavuzlar, risk sınıflamaları ve hızlı referans infografik şemaları.',
+    icon: BarChart3,
+    iconBgDark: 'bg-violet-500/15',
+    iconBgLight: 'bg-violet-50',
+    iconColorDark: 'text-violet-400',
+    iconColorLight: 'text-violet-700',
+    borderHoverDark: 'hover:border-violet-500/40',
+    borderHoverLight: 'hover:border-violet-400',
+    titleHoverDark: 'group-hover:text-violet-300',
+    titleHoverLight: 'group-hover:text-violet-800',
+    ringClassDark: 'ring-1 ring-violet-500/20',
+    ringClassLight: 'ring-1 ring-violet-500/10'
+  },
   contacts: {
     id: 'contacts',
     title: 'Klinik ve Dahili Hatlar',
@@ -127,8 +167,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'contacts'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v2';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'preop', 'infographics', 'contacts'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v6';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -253,7 +293,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   isDark,
   onToggleTheme
 }) => {
-  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'asa' | 'contacts'>('tools');
+  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts'>('tools');
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
 
   // Tool Order state with localStorage persistence
@@ -265,6 +305,26 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         if (Array.isArray(parsed) && parsed.length === DEFAULT_TOOL_ORDER.length) {
           const isValid = DEFAULT_TOOL_ORDER.every(id => parsed.includes(id));
           if (isValid) return parsed as ToolTabId[];
+        }
+      }
+
+      // Check previous storage versions and insert infographics if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4', 'etfal_clinical_tools_order_v3']) {
+        const prevSaved = localStorage.getItem(oldKey);
+        if (prevSaved) {
+          const parsedOld = JSON.parse(prevSaved);
+          if (Array.isArray(parsedOld)) {
+            const updated = parsedOld.filter(id => id in ALL_CLINICAL_TOOLS && id !== 'infographics');
+            const contactsIdx = updated.indexOf('contacts');
+            if (contactsIdx !== -1) {
+              updated.splice(contactsIdx, 0, 'infographics');
+            } else {
+              updated.push('infographics');
+            }
+            if (updated.length === DEFAULT_TOOL_ORDER.length && DEFAULT_TOOL_ORDER.every(id => updated.includes(id))) {
+              return updated as ToolTabId[];
+            }
+          }
         }
       }
     } catch (e) {
@@ -1162,7 +1222,17 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <AsaClassification isDark={isDark} />
         )}
 
-        {/* 6. Contacts */}
+        {/* 6. Preoperative Evaluation */}
+        {activeTab === 'preop' && (
+          <PreoperativeEvaluation isDark={isDark} />
+        )}
+
+        {/* 7. Clinical Infographics (ESC 2022 Guidelines) */}
+        {activeTab === 'infographics' && (
+          <InfographicsView isDark={isDark} />
+        )}
+
+        {/* 8. Contacts */}
         {activeTab === 'contacts' && (
           <div className={`rounded-xl border p-6 space-y-4 transition-colors ${
             isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
