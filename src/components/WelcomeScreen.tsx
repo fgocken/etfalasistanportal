@@ -3,6 +3,8 @@ import { ArrowRight, Stethoscope, ChevronLeft, ChevronRight, Instagram } from 'l
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
 import { CampusWeatherBar } from './campus/CampusWeatherBar';
+import { DutyRosterTickerBar } from './roster/DutyRosterTickerBar'; /* [MODULAR_DUTY_ROSTER: Slim Ticker] */
+import { DutyRosterModal } from './roster/DutyRosterModal'; /* [MODULAR_DUTY_ROSTER] */
 
 interface WelcomeScreenProps {
   onProceed: () => void;
@@ -48,6 +50,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 }) => {
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isRosterModalOpen, setIsRosterModalOpen] = useState<boolean>(false);
 
   const prevIdx = (activePhotoIdx - 1 + CLINIC_ALBUM.length) % CLINIC_ALBUM.length;
   const nextIdx = (activePhotoIdx + 1) % CLINIC_ALBUM.length;
@@ -104,6 +107,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       {/* Campus Weather & Inter-Campus Drive Time Bar */}
       <div className="w-full max-w-3xl mx-auto z-10 mt-3 rounded-xl overflow-hidden border shadow-xs">
         <CampusWeatherBar isDark={isDark} />
+      </div>
+
+      {/* Broadcast News Ticker Strip: On-Duty Residents [MODULAR_DUTY_ROSTER] */}
+      <div className="w-full max-w-3xl mx-auto z-10 mt-2">
+        <DutyRosterTickerBar 
+          isDark={isDark} 
+          onOpenDetail={() => setIsRosterModalOpen(true)} 
+        />
       </div>
 
       {/* Center Welcome Content */}
@@ -315,6 +326,13 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           Sorumluluk Reddi
         </button>
       </div>
+
+      {/* Monthly Duty Roster Modal [MODULAR_DUTY_ROSTER] */}
+      <DutyRosterModal
+        isOpen={isRosterModalOpen}
+        onClose={() => setIsRosterModalOpen(false)}
+        isDark={isDark}
+      />
     </div>
   );
 };

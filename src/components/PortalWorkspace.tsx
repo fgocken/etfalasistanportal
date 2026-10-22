@@ -18,19 +18,23 @@ import {
   RotateCcw,
   ClipboardCheck,
   BarChart3,
-  Instagram
+  Instagram,
+  Calendar,
+  FileSpreadsheet
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
+import { DutyRosterModal } from './roster/DutyRosterModal'; /* [MODULAR_DUTY_ROSTER] */
 import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 import { AsaClassification } from './asa/AsaClassification';
 import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
 import { InfographicsView } from './infographics/InfographicsView';
 import { ClinicContactsView } from './directory/ClinicContactsView';
+import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts' | 'roster';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -169,11 +173,29 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     borderHoverLight: 'hover:border-teal-400',
     titleHoverDark: 'group-hover:text-teal-300',
     titleHoverLight: 'group-hover:text-teal-800'
+  },
+  roster: {
+    id: 'roster',
+    title: 'Asistan Nöbet Çizelgesi',
+    badge: 'Ekim 2026',
+    badgeHighlight: true,
+    desc: 'Seyrantepe ve Çayırbaşı yerleşkeleri aylık nöbet listesi, Excel (.xlsx) yükleme & indirme ve hekim nöbet takas yönetimi.',
+    icon: Calendar,
+    iconBgDark: 'bg-emerald-500/15',
+    iconBgLight: 'bg-emerald-50',
+    iconColorDark: 'text-emerald-400',
+    iconColorLight: 'text-emerald-700',
+    borderHoverDark: 'hover:border-emerald-500/40',
+    borderHoverLight: 'hover:border-emerald-400',
+    titleHoverDark: 'group-hover:text-emerald-300',
+    titleHoverLight: 'group-hover:text-emerald-800',
+    ringClassDark: 'ring-1 ring-emerald-500/20',
+    ringClassLight: 'ring-1 ring-emerald-500/10'
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'preop', 'infographics', 'contacts'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v6';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'preop', 'infographics', 'contacts', 'roster'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v7';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -298,7 +320,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   isDark,
   onToggleTheme
 }) => {
-  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts'>('tools');
+  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts' | 'roster'>('tools');
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
 
   // Tool Order state with localStorage persistence
@@ -313,18 +335,15 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert infographics if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4', 'etfal_clinical_tools_order_v3']) {
+      // Check previous storage versions and insert roster if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
           if (Array.isArray(parsedOld)) {
-            const updated = parsedOld.filter(id => id in ALL_CLINICAL_TOOLS && id !== 'infographics');
-            const contactsIdx = updated.indexOf('contacts');
-            if (contactsIdx !== -1) {
-              updated.splice(contactsIdx, 0, 'infographics');
-            } else {
-              updated.push('infographics');
+            const updated = parsedOld.filter(id => id in ALL_CLINICAL_TOOLS);
+            if (!updated.includes('roster')) {
+              updated.push('roster');
             }
             if (updated.length === DEFAULT_TOOL_ORDER.length && DEFAULT_TOOL_ORDER.every(id => updated.includes(id))) {
               return updated as ToolTabId[];
@@ -340,6 +359,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
   const [draggedToolId, setDraggedToolId] = useState<ToolTabId | null>(null);
   const [dragOverToolId, setDragOverToolId] = useState<ToolTabId | null>(null);
+  const [isRosterModalOpen, setIsRosterModalOpen] = useState<boolean>(false);
 
   const saveToolOrder = (newOrder: ToolTabId[]) => {
     setToolOrder(newOrder);
@@ -448,8 +468,23 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             </h1>
           </div>
 
-          {/* Top-Right: Live Clock & Theme Switch */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Top-Right: Duty Roster, Live Clock & Theme Switch */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            <button
+              type="button"
+              onClick={() => setActiveTab('roster')}
+              title="Aylık Nöbet Çizelgesi Aracını Aç"
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold transition-all cursor-pointer shadow-2xs ${
+                activeTab === 'roster'
+                  ? 'bg-teal-600 text-white border-teal-600 shadow-teal-500/20'
+                  : isDark 
+                    ? 'bg-teal-500/15 hover:bg-teal-500/25 border-teal-500/30 text-teal-300' 
+                    : 'bg-teal-50 hover:bg-teal-100 border-teal-200 text-teal-800'
+              }`}
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-teal-500" />
+              <span className="hidden sm:inline">Nöbet Listesi</span>
+            </button>
             <LiveClock isDark={isDark} />
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
           </div>
@@ -1232,6 +1267,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {activeTab === 'contacts' && (
           <ClinicContactsView isDark={isDark} />
         )}
+
+        {/* 9. Duty Roster Tool */}
+        {activeTab === 'roster' && (
+          <DutyRosterToolView isDark={isDark} />
+        )}
       </main>
 
       {/* Footer */}
@@ -1267,6 +1307,13 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           </button>
         </div>
       </footer>
+
+      {/* Monthly Duty Roster Modal [MODULAR_DUTY_ROSTER] */}
+      <DutyRosterModal
+        isOpen={isRosterModalOpen}
+        onClose={() => setIsRosterModalOpen(false)}
+        isDark={isDark}
+      />
     </div>
   );
 };
