@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { PortalWorkspace } from './components/PortalWorkspace';
 import { DisclaimerView } from './components/DisclaimerView';
@@ -97,6 +98,7 @@ export default function App() {
           />
         )}
       </div>
+      <Analytics />
     </div>
   );
 }
