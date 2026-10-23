@@ -55,6 +55,9 @@ export default function App() {
     <div className={`min-h-screen font-sans antialiased selection:bg-teal-500 selection:text-slate-950 relative overflow-x-hidden ${
       isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
     }`}>
+      {/* Vercel Web Analytics */}
+      <Analytics />
+
       {/* Background Institutional Watermark (Şişli Etfal 1899 Emblem) */}
       <div 
         aria-hidden="true" 

@@ -20,7 +20,8 @@ import {
   saveRoster, 
   downloadExcelTemplate, 
   parseExcelRoster, 
-  resetToDefaultRoster
+  resetToDefaultRoster,
+  getCurrentShiftStatus
 } from './DutyRosterService';
 
 interface DutyRosterModalProps {
@@ -37,7 +38,8 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
   onRosterUpdated
 }) => {
   const [roster, setRoster] = useState<MonthDutyRoster>(() => getSavedRoster());
-  const [selectedDateKey, setSelectedDateKey] = useState<string>('2026-10-22');
+  const [selectedDateKey, setSelectedDateKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster()).activeDateKey);
+  const [activeShiftKey, setActiveShiftKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster()).activeDateKey);
 
   const [activeTab, setActiveTab] = useState<'table' | 'calendar'>('table');
   const [searchDoctor, setSearchDoctor] = useState<string>('');
@@ -46,6 +48,17 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // When modal is opened, sync with latest roster and active shift
+  React.useEffect(() => {
+    if (isOpen) {
+      const freshRoster = getSavedRoster();
+      setRoster(freshRoster);
+      const curShift = getCurrentShiftStatus(freshRoster);
+      setSelectedDateKey(curShift.activeDateKey);
+      setActiveShiftKey(curShift.activeDateKey);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -337,7 +350,7 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
                   {filteredDates.map((dateKey) => {
                     const day = roster.days[dateKey];
                     const isSelected = dateKey === selectedDateKey;
-                    const isToday = dateKey === '2026-10-22';
+                    const isToday = dateKey === activeShiftKey;
                     const isWeekend = day.isWeekend;
 
                     const getSeySlot = (num: number) => 
@@ -413,6 +426,7 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
                     const isSelected = dateKey === selectedDateKey;
                     const matchesFilter = filteredDates.includes(dateKey);
                     const isWeekend = day.isWeekend;
+                    const isToday = dateKey === activeShiftKey;
 
                     return (
                       <button
@@ -429,6 +443,11 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
                               : 'opacity-30 border-transparent bg-slate-100 dark:bg-slate-800/30'
                         }`}
                       >
+                        {isToday && (
+                          <span className="absolute top-1 right-1 px-1 py-0.2 rounded text-[7px] font-bold bg-emerald-600 text-white leading-none">
+                            Bugün
+                          </span>
+                        )}
                         <span className="text-[10px] uppercase font-bold opacity-75">
                           {day.dayName.substring(0, 3)}
                         </span>

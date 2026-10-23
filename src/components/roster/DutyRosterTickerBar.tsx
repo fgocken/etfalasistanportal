@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
-import { MonthDutyRoster, DayDutySchedule } from './DutyRosterTypes';
-import { getSavedRoster } from './DutyRosterService';
+import React, { useState, useEffect } from 'react';
+import { ChevronRight, Clock } from 'lucide-react';
+import { MonthDutyRoster } from './DutyRosterTypes';
+import { getSavedRoster, getCurrentShiftStatus, CurrentShiftStatus } from './DutyRosterService';
 
 interface DutyRosterTickerBarProps {
   isDark: boolean;
@@ -14,27 +14,41 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
   onOpenDetail,
   className = ''
 }) => {
-  const [roster] = useState<MonthDutyRoster>(() => getSavedRoster());
+  const [roster, setRoster] = useState<MonthDutyRoster>(() => getSavedRoster());
   
-  // Format date helper: YYYY-MM-DD
-  const formatKey = (d: Date) => {
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
+  // Real-time clinical shift status that accounts for hospital handover hours:
+  // Weekdays (Mon-Fri): 08:00 AM
+  // Weekends (Sat-Sun): 09:00 AM
+  const [shiftStatus, setShiftStatus] = useState<CurrentShiftStatus>(() => getCurrentShiftStatus(roster));
 
-  const today = new Date();
-  const todayKey = formatKey(today);
+  // Live periodic check (every 30 seconds) so when 08:00/09:00 handover or midnight passes,
+  // the on-duty roster updates automatically without needing to refresh the page.
+  useEffect(() => {
+    const checkShift = () => {
+      const currentRoster = getSavedRoster();
+      setRoster(currentRoster);
+      setShiftStatus(getCurrentShiftStatus(currentRoster));
+    };
 
-  // If today's key exists in the October 2026 roster, use it; otherwise fallback to 2026-10-22
-  const activeKey = roster.days[todayKey] ? todayKey : '2026-10-22';
-  const schedule: DayDutySchedule | undefined = roster.days[activeKey];
+    // Initial check
+    checkShift();
 
-  // Date label (e.g., "22 Ekim Perşembe")
-  const dateLabel = schedule 
-    ? `${schedule.dayNumber} Ekim ${schedule.dayName}`
-    : '22 Ekim';
+    // Check every 30 seconds for handover transitions
+    const timer = setInterval(checkShift, 30000);
+
+    // Also listen to storage/roster updates (e.g. if Excel is uploaded in another tab or modal)
+    const handleStorageChange = () => checkShift();
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('focus', checkShift);
+
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', checkShift);
+    };
+  }, []);
+
+  const schedule = shiftStatus.schedule;
 
   // Extract staff names
   const seyrantepeText = schedule?.seyrantepeStaff && schedule.seyrantepeStaff.length > 0
@@ -104,14 +118,14 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
             ? 'bg-slate-900/95 border-slate-800 text-slate-200' 
             : 'bg-white/95 border-slate-200 text-slate-800 shadow-slate-100'
         } ${className}`}
-        title="Nöbetçileri duraklatmak için fareyi üzerine getirin"
+        title={`Nöbet Değişimi: Hafta içi 08:00, Hafta sonu 09:00. (${shiftStatus.shiftNote}) - Nöbetçileri duraklatmak için fareyi üzerine getirin`}
       >
         {/* Left Section: Interactive NÖBET Button */}
         {/* Clicking NÖBET opens the full monthly roster modal */}
         <button
           type="button"
           onClick={onOpenDetail}
-          title="Tüm Aylık Nöbet Çizelgesini Görüntüle"
+          title={`${shiftStatus.displayDateText} Nöbet Listesi (${shiftStatus.shiftNote}). Tüm aylık çizelgeyi görmek için tıklayın.`}
           className={`shrink-0 z-20 flex items-center gap-1.5 px-3 py-2 font-bold text-xs transition-all cursor-pointer border-r shadow-xs group ${
             isDark
               ? 'bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border-teal-500/30 hover:border-teal-500/50'
@@ -126,9 +140,19 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
 
           <span className="tracking-wider uppercase font-extrabold text-[11px]">NÖBET</span>
           
-          <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 hidden xs:inline">
-            ({dateLabel})
+          <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300 hidden xs:inline">
+            ({shiftStatus.displayDateText})
           </span>
+
+          {shiftStatus.isBeforeHandover && (
+            <span 
+              title={`0${shiftStatus.handoverHour}:00 devir-teslimine kadar dünkü nöbet ekibi görevdedir`}
+              className="hidden md:inline-flex items-center gap-0.5 text-[9px] px-1 py-0.2 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-semibold"
+            >
+              <Clock className="w-2.5 h-2.5" />
+              0{shiftStatus.handoverHour}:00'a kadar
+            </span>
+          )}
 
           <ChevronRight className="w-3.5 h-3.5 text-teal-500/70 group-hover:translate-x-0.5 transition-transform" />
         </button>

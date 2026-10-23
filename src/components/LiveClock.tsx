@@ -12,7 +12,7 @@ export const LiveClock: React.FC<LiveClockProps> = ({
   showDate = true,
   className = '' 
 }) => {
-  const [time, setTime] = useState<Date>(new Date());
+  const [time, setTime] = useState<Date>(() => new Date());
 
   useEffect(() => {
     // Synchronize to the nearest second
@@ -23,26 +23,41 @@ export const LiveClock: React.FC<LiveClockProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  const hours = String(time.getHours()).padStart(2, '0');
-  const minutes = String(time.getMinutes()).padStart(2, '0');
-  const seconds = String(time.getSeconds()).padStart(2, '0');
+  // Format with Turkey timezone (Europe/Istanbul)
+  const timeFormatter = new Intl.DateTimeFormat('tr-TR', {
+    timeZone: 'Europe/Istanbul',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
 
-  const dateString = time.toLocaleDateString('tr-TR', {
+  const dateFormatter = new Intl.DateTimeFormat('tr-TR', {
+    timeZone: 'Europe/Istanbul',
     day: 'numeric',
     month: 'long',
     weekday: 'short'
   });
 
-  const fullDateTooltip = time.toLocaleDateString('tr-TR', {
+  const fullDateFormatter = new Intl.DateTimeFormat('tr-TR', {
+    timeZone: 'Europe/Istanbul',
     day: 'numeric',
     month: 'long',
     year: 'numeric',
     weekday: 'long'
   });
 
+  const parts = timeFormatter.formatToParts(time);
+  const hours = parts.find(p => p.type === 'hour')?.value || String(time.getHours()).padStart(2, '0');
+  const minutes = parts.find(p => p.type === 'minute')?.value || String(time.getMinutes()).padStart(2, '0');
+  const seconds = parts.find(p => p.type === 'second')?.value || String(time.getSeconds()).padStart(2, '0');
+
+  const dateString = dateFormatter.format(time);
+  const fullDateTooltip = fullDateFormatter.format(time);
+
   return (
     <div
-      title={`Canlı Sistem Saati: ${fullDateTooltip}`}
+      title={`Canlı Sistem Saati & Güncel Tarih (Türkiye): ${fullDateTooltip}`}
       className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 rounded-lg border text-xs transition-all select-none shadow-2xs ${
         isDark 
           ? 'bg-slate-800/90 border-slate-700/80 text-slate-200 hover:border-teal-500/50' 
@@ -67,16 +82,16 @@ export const LiveClock: React.FC<LiveClockProps> = ({
         </span>
       </div>
 
-      {/* Date badge on medium/large screens */}
+      {/* Date badge: Always visible on all screens (mobile, tablet, desktop) */}
       {showDate && (
-        <>
-          <span className={`hidden md:inline-block w-px h-3 ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`} />
-          <span className={`hidden md:inline-block text-[11px] font-medium tracking-normal ${
-            isDark ? 'text-slate-400' : 'text-slate-500'
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className={`w-px h-3.5 ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`} />
+          <span className={`text-[11px] font-medium tracking-normal whitespace-nowrap ${
+            isDark ? 'text-slate-300' : 'text-slate-700'
           }`}>
             {dateString}
           </span>
-        </>
+        </div>
       )}
     </div>
   );

@@ -334,3 +334,148 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
     reader.readAsArrayBuffer(file);
   });
 }
+
+export interface CurrentShiftStatus {
+  activeDateKey: string;
+  schedule?: DayDutySchedule;
+  dayNumber: number;
+  dayName: string;
+  displayDateText: string;
+  badgeLabel: string;
+  isBeforeHandover: boolean;
+  handoverHour: number;
+  shiftNote: string;
+}
+
+export function getTurkeyTimeComponents(d: Date = new Date()): {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  dayOfWeek: number;
+} {
+  try {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Istanbul',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false
+    });
+    const parts = formatter.formatToParts(d);
+    let year = d.getFullYear();
+    let month = d.getMonth() + 1;
+    let day = d.getDate();
+    let hour = d.getHours();
+    let minute = d.getMinutes();
+
+    parts.forEach((p) => {
+      if (p.type === 'year') year = parseInt(p.value, 10);
+      if (p.type === 'month') month = parseInt(p.value, 10);
+      if (p.type === 'day') day = parseInt(p.value, 10);
+      if (p.type === 'hour') hour = parseInt(p.value, 10);
+      if (p.type === 'minute') minute = parseInt(p.value, 10);
+    });
+
+    const turkeyDate = new Date(year, month - 1, day);
+    return {
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      dayOfWeek: turkeyDate.getDay()
+    };
+  } catch {
+    return {
+      year: d.getFullYear(),
+      month: d.getMonth() + 1,
+      day: d.getDate(),
+      hour: d.getHours(),
+      minute: d.getMinutes(),
+      dayOfWeek: d.getDay()
+    };
+  }
+}
+
+/**
+ * Calculates currently active hospital shift based on clinical handover rules:
+ * - Weekdays (Monday through Friday): Handover occurs at 08:00 AM.
+ * - Weekends (Saturday and Sunday): Handover occurs at 09:00 AM.
+ * - If current time is BEFORE the handover hour, yesterday's on-duty team is still active in hospital!
+ * - If current time is AT or AFTER the handover hour, today's on-duty team has taken over.
+ * 
+ * Also dynamically resolves into roster:
+ * 1. Checks direct date match (YYYY-MM-DD)
+ * 2. If user device year/month is different, matches by day-of-month (1..31)
+ * 3. Gracefully defaults to latest available date
+ */
+export function getCurrentShiftStatus(roster: MonthDutyRoster, referenceDate: Date = new Date()): CurrentShiftStatus {
+  const { year, month, day, hour, dayOfWeek } = getTurkeyTimeComponents(referenceDate);
+
+  // 0 = Sunday, 6 = Saturday
+  const isWeekendToday = dayOfWeek === 0 || dayOfWeek === 6;
+  const handoverHour = isWeekendToday ? 9 : 8;
+
+  const isBeforeHandover = hour < handoverHour;
+
+  // Determine target calendar date for the active shift
+  // If before handover, active shift started yesterday
+  const targetDate = new Date(year, month - 1, day);
+  if (isBeforeHandover) {
+    targetDate.setDate(targetDate.getDate() - 1);
+  }
+
+  const targetYear = targetDate.getFullYear();
+  const targetMonth = targetDate.getMonth() + 1;
+  const targetDayNum = targetDate.getDate();
+
+  const directKey = `${targetYear}-${String(targetMonth).padStart(2, '0')}-${String(targetDayNum).padStart(2, '0')}`;
+
+  const sortedKeys = Object.keys(roster.days).sort();
+  let resolvedKey: string = directKey;
+  let schedule: DayDutySchedule | undefined = roster.days[directKey];
+
+  // If direct key not found (e.g. current year is 2025 or different month from roster),
+  // match by day of month (e.g. 23rd day -> 2026-10-23)
+  if (!schedule) {
+    const matchedKey = sortedKeys.find((k) => roster.days[k].dayNumber === targetDayNum);
+    if (matchedKey) {
+      resolvedKey = matchedKey;
+      schedule = roster.days[matchedKey];
+    } else {
+      // Clamped fallback to closest day in roster
+      const clampedDay = Math.min(Math.max(targetDayNum, 1), sortedKeys.length);
+      resolvedKey = sortedKeys[clampedDay - 1] || sortedKeys[0] || '2026-10-22';
+      schedule = roster.days[resolvedKey];
+    }
+  }
+
+  const displayDayNum = schedule ? schedule.dayNumber : targetDayNum;
+  const displayDayName = schedule ? schedule.dayName : ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'][targetDate.getDay()];
+  const displayMonthName = roster.monthName.includes('EKİM') ? 'Ekim' : '';
+
+  const displayDateText = `${displayDayNum} ${displayMonthName} ${displayDayName}`.trim();
+
+  let shiftNote = '';
+  if (isBeforeHandover) {
+    shiftNote = `Sabah 0${handoverHour}:00 nöbet değişimine kadar dünkü nöbet ekibi görevdedir`;
+  } else {
+    shiftNote = `Nöbet değişimi 0${handoverHour}:00'da tamamlandı`;
+  }
+
+  return {
+    activeDateKey: resolvedKey,
+    schedule,
+    dayNumber: displayDayNum,
+    dayName: displayDayName,
+    displayDateText,
+    badgeLabel: isBeforeHandover ? `${displayDayNum} Ekim (0${handoverHour}:00'a kadar)` : `${displayDayNum} Ekim`,
+    isBeforeHandover,
+    handoverHour,
+    shiftNote
+  };
+}
