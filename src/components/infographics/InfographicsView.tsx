@@ -14,6 +14,8 @@ import {
   PlusCircle
 } from 'lucide-react';
 
+import { SurgicalUrgency2024Infographic } from './SurgicalUrgency2024Infographic';
+
 interface InfographicsViewProps {
   isDark: boolean;
 }
@@ -22,19 +24,42 @@ export interface InfographicCardItem {
   id: string;
   title: string;
   source: string;
+  sourceBadge: string;
   category: string;
   shortDesc: string;
+  pillsHeader: string;
+  publisher: string;
   riskPills: { label: string; rate: string; colorClass: string; bgClass: string; borderClass: string }[];
   accentColor: string;
 }
 
 const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
   {
+    id: 'surgical-urgency-2024',
+    title: 'Cerrahilerin Zamanlama ve Aciliyet Sınıflaması',
+    source: '2024 AHA/ACC/ACS/ASNC/HRS/SCA Noncardiac Surgery Guideline',
+    sourceBadge: 'AHA/ACC 2024',
+    category: 'Zamanlama & Preop Yönetim',
+    shortDesc: 'Cerrahi operasyonların zaman penceresine, yaşam/uzuv tehdidine ve MACE riskini azaltacak preoperatif müdahale olanağına göre 4 kademeli sınıflaması.',
+    pillsHeader: '4 Kademeli Cerrahi Zaman Ufku:',
+    publisher: 'Circulation (AHA / ACC)',
+    riskPills: [
+      { label: 'Acil', rate: '< 2 sa', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'İvedi', rate: '2 – 24 sa', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Zamana Duyarlı', rate: '≤ 3 ay', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Elektif', rate: 'Planlı', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+    ],
+    accentColor: 'teal'
+  },
+  {
     id: 'surgical-risk',
     title: 'Cerrahilere Göre Cerrahi Risk Sınıflaması',
     source: 'ESC 2022 Kılavuzu (European Heart Journal)',
+    sourceBadge: 'ESC 2022',
     category: 'Perioperatif Kardiyoloji',
     shortDesc: '30 günlük majör kardiyovasküler olay (MACE: ölüm, MI ve inme) riskine göre non-kardiyak cerrahilerin 3 kademeli sınıflaması.',
+    pillsHeader: '30 Günlük MACE Riski Kademeleri:',
+    publisher: 'Oxford Academic (OUP)',
     riskPills: [
       { label: 'Düşük', rate: '< %1', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
       { label: 'Orta', rate: '%1 – %5', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
@@ -138,18 +163,24 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                 <div>
                   {/* Top Badge & Category */}
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold bg-violet-500/15 text-violet-600 dark:text-violet-300">
+                    <span className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
+                      card.accentColor === 'teal'
+                        ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
+                        : 'bg-violet-500/15 text-violet-600 dark:text-violet-300'
+                    }`}>
                       {card.category}
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono">
-                      ESC 2022
+                    <span className="text-[10px] text-slate-400 font-mono font-bold">
+                      {card.sourceBadge}
                     </span>
                   </div>
 
                   {/* Title & Description */}
-                  <h4 className={`text-sm font-bold transition-colors group-hover:text-violet-500 dark:group-hover:text-violet-400 ${
-                    isDark ? 'text-white' : 'text-slate-900'
-                  }`}>
+                  <h4 className={`text-sm font-bold transition-colors ${
+                    card.accentColor === 'teal'
+                      ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
+                      : 'group-hover:text-violet-500 dark:group-hover:text-violet-400'
+                  } ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {card.title}
                   </h4>
                   <p className={`text-xs mt-1.5 leading-relaxed line-clamp-2 ${
@@ -158,20 +189,20 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                     {card.shortDesc}
                   </p>
 
-                  {/* Visual Mini Preview Strip (3 Risk Levels) */}
+                  {/* Visual Mini Preview Strip */}
                   <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
                     <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
-                      <Activity className="w-3 h-3 text-violet-500" />
-                      <span>30 Günlük MACE Riski Kademeleri:</span>
+                      <Activity className={`w-3 h-3 ${card.accentColor === 'teal' ? 'text-teal-500' : 'text-violet-500'}`} />
+                      <span>{card.pillsHeader}</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-1.5 text-center">
+                    <div className={`grid gap-1.5 text-center ${card.riskPills.length === 4 ? 'grid-cols-4' : 'grid-cols-3'}`}>
                       {card.riskPills.map((pill, idx) => (
                         <div
                           key={idx}
-                          className={`px-1.5 py-1 rounded-lg border text-[10px] font-mono ${pill.bgClass} ${pill.borderClass}`}
+                          className={`px-1 py-1 rounded-lg border text-[10px] font-mono ${pill.bgClass} ${pill.borderClass}`}
                         >
-                          <div className={`font-semibold ${pill.colorClass}`}>{pill.label}</div>
-                          <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400">{pill.rate}</div>
+                          <div className={`font-semibold text-[9px] sm:text-[10px] truncate ${pill.colorClass}`}>{pill.label}</div>
+                          <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400 truncate">{pill.rate}</div>
                         </div>
                       ))}
                     </div>
@@ -181,9 +212,13 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                 {/* Bottom Action */}
                 <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
                   <span className="text-[11px] text-slate-400 font-medium">
-                    Oxford Academic (OUP)
+                    {card.publisher}
                   </span>
-                  <span className="font-bold text-violet-600 dark:text-violet-400 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                  <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform ${
+                    card.accentColor === 'teal'
+                      ? 'text-teal-600 dark:text-teal-400'
+                      : 'text-violet-600 dark:text-violet-400'
+                  }`}>
                     <span>İnfografiği Aç</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </span>
@@ -207,7 +242,12 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
         </div>
       )}
 
-      {/* VIEW 2: Open Infographic Detail (Opened by clicking the mini card) */}
+      {/* VIEW 2A: 2024 AHA/ACC Surgical Urgency Infographic */}
+      {activeInfographicId === 'surgical-urgency-2024' && (
+        <SurgicalUrgency2024Infographic isDark={isDark} />
+      )}
+
+      {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}
       {activeInfographicId === 'surgical-risk' && (
         <div className="space-y-5">
           {/* Infographic Banner */}

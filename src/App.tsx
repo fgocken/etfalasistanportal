@@ -101,7 +101,6 @@ export default function App() {
           />
         )}
       </div>
-      <Analytics />
     </div>
   );
 }

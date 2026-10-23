@@ -20,11 +20,15 @@ import {
   BarChart3,
   Instagram,
   Calendar,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Search
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
 import { DutyRosterModal } from './roster/DutyRosterModal'; /* [MODULAR_DUTY_ROSTER] */
+import { PortalSearchModal } from './search/PortalSearchModal';
+import { DashboardSearchBar } from './search/DashboardSearchBar';
+import { PortalSearchItem } from '../data/portalSearchIndex';
 import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 import { AsaClassification } from './asa/AsaClassification';
@@ -360,6 +364,34 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [draggedToolId, setDraggedToolId] = useState<ToolTabId | null>(null);
   const [dragOverToolId, setDragOverToolId] = useState<ToolTabId | null>(null);
   const [isRosterModalOpen, setIsRosterModalOpen] = useState<boolean>(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
+
+  // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsSearchModalOpen(prev => !prev);
+      } else if (e.key === '/' && !isSearchModalOpen) {
+        const target = e.target as HTMLElement;
+        if (target && target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          setIsSearchModalOpen(true);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSearchModalOpen]);
+
+  const handleSelectSearchResult = (item: PortalSearchItem) => {
+    if (item.tabId === 'disclaimer') {
+      onOpenDisclaimer();
+    } else {
+      setActiveTab(item.tabId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const saveToolOrder = (newOrder: ToolTabId[]) => {
     setToolOrder(newOrder);
@@ -468,8 +500,23 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             </h1>
           </div>
 
-          {/* Top-Right: Duty Roster, Live Clock & Theme Switch */}
+          {/* Top-Right: Search, Duty Roster, Live Clock & Theme Switch */}
           <div className="flex items-center gap-2 sm:gap-2.5">
+            <button
+              type="button"
+              onClick={() => setIsSearchModalOpen(true)}
+              title="Uygulamadaki tüm içerikleri ara (Kısayol: ⌘K veya Ctrl+K)"
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold transition-all cursor-pointer shadow-2xs ${
+                isDark 
+                  ? 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300 hover:text-white' 
+                  : 'bg-slate-100/90 hover:bg-slate-200/90 border-slate-200 text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Search className="w-3.5 h-3.5 text-teal-500" />
+              <span className="hidden md:inline">Ara</span>
+              <kbd className="hidden lg:inline text-[9px] font-mono opacity-60">⌘K</kbd>
+            </button>
+
             <button
               type="button"
               onClick={() => setActiveTab('roster')}
@@ -686,7 +733,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 1. Overview */}
         {activeTab === 'tools' && (
           <div className="space-y-6">
-            <div className={`border-b pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${
+            <div className={`border-b pb-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3.5 ${
               isDark ? 'border-slate-800' : 'border-slate-200'
             }`}>
               <div>
@@ -705,20 +752,28 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 </p>
               </div>
 
-              {isCustomOrder && (
-                <button
-                  onClick={resetToolOrder}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
-                    isDark
-                      ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                  }`}
-                  title="Varsayılan araç sıralamasına geri dön"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Sıralamayı Sıfırla</span>
-                </button>
-              )}
+              {/* Sleek, Non-Intrusive Quick Search Bar & Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 self-stretch md:self-auto">
+                <DashboardSearchBar 
+                  onClick={() => setIsSearchModalOpen(true)}
+                  isDark={isDark}
+                />
+
+                {isCustomOrder && (
+                  <button
+                    onClick={resetToolOrder}
+                    className={`flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer shrink-0 ${
+                      isDark
+                        ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                        : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
+                    }`}
+                    title="Varsayılan araç sıralamasına geri dön"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Sıralamayı Sıfırla</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1312,6 +1367,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       <DutyRosterModal
         isOpen={isRosterModalOpen}
         onClose={() => setIsRosterModalOpen(false)}
+        isDark={isDark}
+      />
+
+      {/* Global Quick Search Modal */}
+      <PortalSearchModal
+        isOpen={isSearchModalOpen}
+        onClose={() => setIsSearchModalOpen(false)}
+        onSelectItem={handleSelectSearchResult}
         isDark={isDark}
       />
     </div>

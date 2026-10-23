@@ -1,0 +1,282 @@
+import { ToolTabId } from '../components/PortalWorkspace';
+
+export type SearchCategory = 
+  | 'Hesaplayıcılar' 
+  | 'Kılavuzlar & Protokoller' 
+  | 'Klinik İnfografikler' 
+  | 'Rehber & Nöbet' 
+  | 'Yerleşkeler & Bilgi';
+
+export interface PortalSearchItem {
+  id: string;
+  title: string;
+  category: SearchCategory;
+  badge: string;
+  description: string;
+  keywords: string[];
+  tabId: ToolTabId | 'tools' | 'disclaimer';
+  popular?: boolean;
+}
+
+export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
+  // 1. Hesaplayıcılar
+  {
+    id: 'calc-ibw-devine',
+    title: 'Devine İdeal Kilo (IBW) ve Öngörülen Kilo (PBW)',
+    category: 'Hesaplayıcılar',
+    badge: 'IBW · PBW',
+    description: 'Devine formülü ile boy ve cinsiyete göre ideal vücut ağırlığı ve ARDSnet öngörülen kilo.',
+    keywords: ['ideal kilo', 'ibw', 'devine', 'pbw', 'predicted body weight', 'boy kilo', 'kilo hesabı', 'cinsiyet'],
+    tabId: 'calculator',
+    popular: true
+  },
+  {
+    id: 'calc-bmi-vki',
+    title: 'Vücut Kitle İndeksi (VKİ / BMI) ve Obezite Kademeleri',
+    category: 'Hesaplayıcılar',
+    badge: 'VKİ · BMI',
+    description: 'DSÖ standartlarına göre zayıf, normal, fazla kilolu ve Sınıf 1-3 morbid obezite değerlendirmesi.',
+    keywords: ['vki', 'bmi', 'vücut kitle indeksi', 'obezite', 'morbid obez', 'zayıf', 'kilo', 'boy'],
+    tabId: 'calculator',
+    popular: true
+  },
+  {
+    id: 'calc-adjbw',
+    title: 'Düzeltilmiş Kilo (AdjBW - Adjusted Body Weight)',
+    category: 'Hesaplayıcılar',
+    badge: 'AdjBW',
+    description: 'Obez hastalarda (kilo > %120 IBW) aşırı hidrasyon ve toksisiteyi önleyen düzeltilmiş ağırlık.',
+    keywords: ['adjbw', 'düzeltilmiş kilo', 'adjusted body weight', 'obezitede ilaç dozu', 'obezite sıvı', 'aşırı hidrasyon'],
+    tabId: 'calculator'
+  },
+  {
+    id: 'calc-protective-tv',
+    title: 'Akciğer Koruyucu Ventilasyon Tidal Volümü (6-8 mL/kg)',
+    category: 'Hesaplayıcılar',
+    badge: '6-8 mL/kg',
+    description: 'Öngörülen kilo (PBW) üzerinden barotravmayı önleyen akciğer koruyucu ventilasyon tidal hacmi.',
+    keywords: ['tidal volüm', 'tv', 'akciğer koruyucu ventilasyon', 'mekanik ventilasyon', 'pbw', 'volütravma', 'barotravma', 'ventilatör'],
+    tabId: 'calculator',
+    popular: true
+  },
+  {
+    id: 'calc-ards-tv',
+    title: 'ARDS Düşük Tidal Volüm Hesabı (4-6 mL/kg)',
+    category: 'Hesaplayıcılar',
+    badge: '4-6 mL/kg',
+    description: 'Şiddetli akciğer hasarı ve ARDS olgularında ultra-koruyucu ventilasyon hedefi.',
+    keywords: ['ards', 'düşük tidal volüm', 'ardsnet', '4 ml/kg', 'atelektotravma', 'solunum yetmezliği', 'yoğun bakım'],
+    tabId: 'calculator'
+  },
+  {
+    id: 'calc-maintenance-fluids',
+    title: 'İdame Sıvı Hesabı (“4-2-1” Kuralı / Holliday-Segar)',
+    category: 'Hesaplayıcılar',
+    badge: '4-2-1 Kuralı',
+    description: '0-10 kg, 10-20 kg ve >20 kg kademeli saatlik parenteral idame sıvı hızı (mL/saat).',
+    keywords: ['4-2-1', 'holliday segar', 'idame sıvı', 'saatlik sıvı', 'sıvı hesabı', 'infüzyon hızı', 'hidrasyon', 'ml saat'],
+    tabId: 'calculator',
+    popular: true
+  },
+  {
+    id: 'calc-intraop-npo',
+    title: 'İntraoperatif Açlık Sıvısı Açığı (NPO Deficit)',
+    category: 'Hesaplayıcılar',
+    badge: 'NPO Açığı',
+    description: 'Açlık süresi ile bazal idamenin çarpımı; 1. saatte %50, 2. ve 3. saatte %25 kümülatif karşılama.',
+    keywords: ['intraop sıvı', 'açlık sıvısı', 'npo açığı', 'npo deficit', 'ameliyathane sıvı', 'kristaloid'],
+    tabId: 'intraop',
+    popular: true
+  },
+  {
+    id: 'calc-tissue-trauma',
+    title: 'Cerrahi Doku Travması Kayıpları (Üçüncü Boşluk Kaybı)',
+    category: 'Hesaplayıcılar',
+    badge: 'Travma Sıvısı',
+    description: 'Minimal (0-2 mL/kg), hafif-orta (2-4 mL/kg), orta-şiddetli (4-6 mL/kg) ve şiddetli (6-8 mL/kg/saat) doku kaybı.',
+    keywords: ['doku travması', 'üçüncü boşluk', 'fıtık', 'laparoskopi', 'apandisit', 'kolesistit', 'açık batın', 'vasküler cerrahi', 'kristaloid infüzyon'],
+    tabId: 'intraop'
+  },
+  {
+    id: 'calc-infusion-rate',
+    title: 'İnfüzyon Hızı Çevirici / Hesaplayıcı (mcg/kg/dk ↔ mL/saat)',
+    category: 'Hesaplayıcılar',
+    badge: 'İnfüzyon Çevirici',
+    description: 'Dozajdan infüzyon pompası hızına veya pompa akışından hastaya giden doza anlık çeviri ve canlı sayaç.',
+    keywords: ['infüzyon hızı', 'çevirici', 'pompa hızı', 'perfüzör', 'mcg kg dk', 'ml saat', 'doz hesabı', 'hız hesabı'],
+    tabId: 'infusion',
+    popular: true
+  },
+  {
+    id: 'calc-vasoactive-infusions',
+    title: 'Vazoaktif & İnotrop İlaç İnfüzyonları',
+    category: 'Hesaplayıcılar',
+    badge: 'Vazopresör & İnotrop',
+    description: 'Noradrenalin, Adrenalin, Dopamin, Dobutamin, Nitrogliserin, Propofol ve Remifentanil infüzyon parametreleri.',
+    keywords: ['noradrenalin', 'adrenalin', 'dopamin', 'dobutamin', 'nitrogliserin', 'propofol', 'remifentanil', 'vazopresör', 'inotrop', 'aritmi', 'şok'],
+    tabId: 'infusion'
+  },
+
+  // 2. Kılavuzlar & Protokoller
+  {
+    id: 'guideline-asa',
+    title: 'ASA Fiziksel Durum Sınıflaması (2025/2026)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'ASA I - VI',
+    description: 'Resmi tanımlar, erişkin, pediatrik ve obstetrik klinik örneklerle güncel ASA risk derecelendirmesi.',
+    keywords: ['asa', 'asa sınıflaması', 'asa 1', 'asa 2', 'asa 3', 'asa 4', 'asa 5', 'asa 6', 'fiziksel durum', 'sigara', 'diyabet', 'koah', 'gebe'],
+    tabId: 'asa',
+    popular: true
+  },
+  {
+    id: 'guideline-asa-e',
+    title: 'ASA-E Acil Cerrahi Sınıflama Eki',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'ASA-E',
+    description: 'Gecikmenin yaşamı veya uzvu tehdit ettiği durumlarda ASA skoruna eklenen acil cerrahi (E) kodu.',
+    keywords: ['asa e', 'acil eki', 'emergency modifier', 'acil cerrahi asa skoru', 'uzuv tehdidi'],
+    tabId: 'asa'
+  },
+  {
+    id: 'guideline-mallampati',
+    title: 'Mallampati Sınıflaması ve Zor Havayolu Kriterleri',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Zor Havayolu',
+    description: 'Sınıf 1-4 Mallampati, tiromental mesafe, boyun hareketleri ve zor entübasyon prediktörleri.',
+    keywords: ['mallampati', 'zor havayolu', 'entübasyon', 'tiromental', 'ağız açıklığı', 'cormack lehane', 'hava yolu güvenliği'],
+    tabId: 'preop',
+    popular: true
+  },
+  {
+    id: 'guideline-npo-fasting',
+    title: 'Preoperatif Açlık Süreleri (ASA NPO Kılavuzu)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Açlık Kılavuzu',
+    description: 'Berrak sıvılar (2 saat), anne sütü (4 saat), bebek maması (6 saat), hafif yemek (6 saat), katı/yağlı gıdalar (8 saat).',
+    keywords: ['açlık süreleri', 'npo', 'açlık kılavuzu', 'berrak sıvılar', 'su', 'anne sütü', 'bebek maması', 'katı gıda', 'aspirasyon profilaksisi'],
+    tabId: 'preop',
+    popular: true
+  },
+  {
+    id: 'guideline-anticoagulants',
+    title: 'Antikoagülan ve Antitrombositer Kesilme Süreleri',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Antikoagülan',
+    description: 'Aspirin, Klopidogrel (Plavix), Ticagrelor, Varfarin (Coumadin), DOAK (Xarelto, Eliquis, Pradaxa), DMAH (Clexane).',
+    keywords: ['antikoagülan', 'aspirin', 'klopidogrel', 'plavix', 'ticagrelor', 'brilinta', 'prasugrel', 'varfarin', 'coumadin', 'doak', 'noak', 'xarelto', 'rivaroksaban', 'eliquis', 'apiksaban', 'pradaxa', 'dabigatran', 'clexane', 'enoksaparin', 'dmah', 'kan sulandırıcı'],
+    tabId: 'preop',
+    popular: true
+  },
+  {
+    id: 'guideline-preop-labs',
+    title: 'Preoperatif Rutin Laboratuvar & Tetkik Endikasyonları',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Preop Tetkik',
+    description: 'Yaş, komorbidite ve cerrahi büyüklüğüne göre EKG, PA Akciğer Grafisi, Hemogram, Koagülasyon ve EKO istem kriterleri.',
+    keywords: ['preop tetkik', 'laboratuvar', 'ekg istemi', 'pa akciğer grafisi', 'hemogram', 'inr', 'aptt', 'eko', 'böbrek fonksiyonu', 'preoperatif vizit'],
+    tabId: 'preop'
+  },
+
+  // 3. Klinik İnfografikler
+  {
+    id: 'info-surgical-urgency-2024',
+    title: '2024 AHA/ACC Cerrahilerin Aciliyet ve Zamanlama Sınıflaması',
+    category: 'Klinik İnfografikler',
+    badge: 'AHA/ACC 2024',
+    description: 'Acil (<2 sa), İvedi (2-24 sa), Zamana Duyarlı (≤3 ay) ve Elektif (>3 ay) cerrahiler; MACE ve preop strateji yönetimi.',
+    keywords: ['acil cerrahi', 'ivedi cerrahi', 'zamana duyarlı cerrahi', 'elektif cerrahi', 'aha acc 2024', 'cerrahi aciliyet', 'mace', 'zamanlama', 'aort anevrizması', 'apandisit', 'kolesistit', 'kanser cerrahisi', 'katarakt', 'protez'],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
+    id: 'info-esc-surgical-risk',
+    title: 'ESC 2022 Cerrahilere Göre Cerrahi Risk Sınıflaması',
+    category: 'Klinik İnfografikler',
+    badge: 'ESC 2022',
+    description: '30 günlük kardiyovasküler olay (MACE) riskine göre Düşük (<%1), Orta (%1-5) ve Yüksek (>%5) riskli cerrahi operasyonlar.',
+    keywords: ['esc 2022', 'cerrahi risk', 'düşük risk', 'orta risk', 'yüksek risk', '30 günlük mace', 'kardiyak risk', 'cerrahi operasyonlar'],
+    tabId: 'infographics',
+    popular: true
+  },
+
+  // 4. Rehber & Nöbet
+  {
+    id: 'contacts-directory',
+    title: 'Klinik ve Dahili Hatlar Rehberi (Seyrantepe & Çayırbaşı)',
+    category: 'Rehber & Nöbet',
+    badge: 'Dahili Hatlar',
+    description: 'Seyrantepe ve Çayırbaşı ameliyathaneler, yoğun bakımlar, anestezi odaları ve santral dahili hatları.',
+    keywords: ['dahili hatlar', 'telefon rehberi', 'seyrantepe ameliyathane', 'çayırbaşı ameliyathane', 'yoğun bakım dahili', 'anestezi odası', 'santral', 'iç hat', 'dış hat', 'iletişim'],
+    tabId: 'contacts',
+    popular: true
+  },
+  {
+    id: 'roster-monthly',
+    title: 'Asistan Nöbet Çizelgesi (Ekim 2026)',
+    category: 'Rehber & Nöbet',
+    badge: 'Nöbet Çizelgesi',
+    description: 'Seyrantepe ve Çayırbaşı aylık nöbet listesi, bugünün nöbetçileri, takvim, takas yönetimi ve Excel indirme.',
+    keywords: ['nöbet', 'nöbet listesi', 'ekim 2026', 'bugün kim nöbetçi', 'asistan nöbet', 'nöbet takas', 'excel nöbet', 'seyrantepe nöbet', 'sarıyer nöbet', 'devir teslim'],
+    tabId: 'roster',
+    popular: true
+  },
+
+  // 5. Yerleşkeler & Bilgi
+  {
+    id: 'campus-weather-info',
+    title: 'Yerleşkeler Canlı Hava Durumu ve Mesafe Bilgisi',
+    category: 'Yerleşkeler & Bilgi',
+    badge: 'Kampüs & Hava',
+    description: 'Seyrantepe Hamidiye Etfal ve Sarıyer Çayırbaşı yerleşkeleri anlık hava durumu ve yerleşkeler arası rota.',
+    keywords: ['hava durumu', 'seyrantepe hava', 'çayırbaşı hava', 'yerleşke mesafesi', 'yol tarifi', 'sıcaklık', 'kampüs'],
+    tabId: 'tools'
+  },
+  {
+    id: 'disclaimer-info',
+    title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
+    category: 'Yerleşkeler & Bilgi',
+    badge: 'Yasal Bilgi',
+    description: 'Tıbbi karar destek ilkeleri, klinik bağımsızlık ve kullanım koşulları bilgilendirmesi.',
+    keywords: ['aydınlatma metni', 'sorumluluk reddi', 'yasal uyarı', 'disclaimer', 'kullanım koşulları', 'etik'],
+    tabId: 'disclaimer'
+  }
+];
+
+/**
+ * Turkish-aware lowercase normalization
+ */
+export function normalizeTurkish(text: string): string {
+  return text
+    .toLocaleLowerCase('tr-TR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
+}
+
+/**
+ * Search items matching query string
+ */
+export function searchPortalItems(query: string): PortalSearchItem[] {
+  const cleanQuery = normalizeTurkish(query);
+  if (!cleanQuery) return [];
+
+  const queryTerms = cleanQuery.split(/\s+/).filter(Boolean);
+
+  return PORTAL_SEARCH_ITEMS.filter((item) => {
+    const titleNorm = normalizeTurkish(item.title);
+    const descNorm = normalizeTurkish(item.description);
+    const badgeNorm = normalizeTurkish(item.badge);
+    const categoryNorm = normalizeTurkish(item.category);
+    const keywordsNorm = item.keywords.map(normalizeTurkish);
+
+    // Each query term should match somewhere in title, desc, badge, category or keywords
+    return queryTerms.every((term) => {
+      if (titleNorm.includes(term)) return true;
+      if (descNorm.includes(term)) return true;
+      if (badgeNorm.includes(term)) return true;
+      if (categoryNorm.includes(term)) return true;
+      if (keywordsNorm.some((k) => k.includes(term))) return true;
+      return false;
+    });
+  });
+}
