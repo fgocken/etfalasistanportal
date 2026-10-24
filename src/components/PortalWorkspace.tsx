@@ -21,7 +21,9 @@ import {
   Instagram,
   Calendar,
   FileSpreadsheet,
-  Search
+  Search,
+  Wind,
+  Pill
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -33,12 +35,14 @@ import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 import { AsaClassification } from './asa/AsaClassification';
 import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
+import { AirwayManagementView } from './airway/AirwayManagementView';
+import { TreatmentsWorkspace } from './treatments/TreatmentsWorkspace';
 import { InfographicsView } from './infographics/InfographicsView';
 import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts' | 'roster';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'airway' | 'treatments' | 'infographics' | 'contacts' | 'roster';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -144,6 +148,42 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     ringClassDark: 'ring-1 ring-blue-500/20',
     ringClassLight: 'ring-1 ring-blue-500/10'
   },
+  airway: {
+    id: 'airway',
+    title: 'Havayolu',
+    badge: 'Yeni Bölüm',
+    badgeHighlight: true,
+    desc: 'Zor havayolu algoritmaları, entübasyon kriterleri, videolaringoskopi, SGA/LMA ve acil cerrahi havayolu protokolleri.',
+    icon: Wind,
+    iconBgDark: 'bg-cyan-500/15',
+    iconBgLight: 'bg-cyan-50',
+    iconColorDark: 'text-cyan-400',
+    iconColorLight: 'text-cyan-700',
+    borderHoverDark: 'hover:border-cyan-500/40',
+    borderHoverLight: 'hover:border-cyan-400',
+    titleHoverDark: 'group-hover:text-cyan-300',
+    titleHoverLight: 'group-hover:text-cyan-800',
+    ringClassDark: 'ring-1 ring-cyan-500/20',
+    ringClassLight: 'ring-1 ring-cyan-500/10'
+  },
+  treatments: {
+    id: 'treatments',
+    title: 'Tedaviler ve İlaçlar',
+    badge: 'Yeni Modül',
+    badgeHighlight: true,
+    desc: 'Magnezyum replasmanı (Mathews et al. 2022 eGFR kademeli hesaplayıcı), elektrolit protokolleri ve klinik infografikler.',
+    icon: Pill,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800',
+    ringClassDark: 'ring-1 ring-teal-500/20',
+    ringClassLight: 'ring-1 ring-teal-500/10'
+  },
   infographics: {
     id: 'infographics',
     title: 'Klinik İnfografikler',
@@ -198,8 +238,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'preop', 'infographics', 'contacts', 'roster'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v7';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'preop', 'airway', 'treatments', 'infographics', 'contacts', 'roster'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v9';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -324,7 +364,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   isDark,
   onToggleTheme
 }) => {
-  const [activeTab, setActiveTab] = useState<'tools' | 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'infographics' | 'contacts' | 'roster'>('tools');
+  const [activeTab, setActiveTab] = useState<'tools' | ToolTabId>('tools');
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
 
   // Tool Order state with localStorage persistence
@@ -339,13 +379,21 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert roster if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert airway & roster if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
           if (Array.isArray(parsedOld)) {
             const updated = parsedOld.filter(id => id in ALL_CLINICAL_TOOLS);
+            if (!updated.includes('airway')) {
+              const preopIdx = updated.indexOf('preop');
+              if (preopIdx !== -1) {
+                updated.splice(preopIdx + 1, 0, 'airway');
+              } else {
+                updated.push('airway');
+              }
+            }
             if (!updated.includes('roster')) {
               updated.push('roster');
             }
@@ -1313,7 +1361,17 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <PreoperativeEvaluation isDark={isDark} />
         )}
 
-        {/* 7. Clinical Infographics (ESC 2022 Guidelines) */}
+        {/* 7. Havayolu Yönetimi */}
+        {activeTab === 'airway' && (
+          <AirwayManagementView isDark={isDark} />
+        )}
+
+        {/* 8. Tedaviler ve İlaçlar */}
+        {activeTab === 'treatments' && (
+          <TreatmentsWorkspace isDark={isDark} />
+        )}
+
+        {/* 9. Clinical Infographics (ESC 2022 Guidelines) */}
         {activeTab === 'infographics' && (
           <InfographicsView isDark={isDark} />
         )}

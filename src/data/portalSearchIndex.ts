@@ -4,6 +4,7 @@ export type SearchCategory =
   | 'Hesaplayıcılar' 
   | 'Kılavuzlar & Protokoller' 
   | 'Klinik İnfografikler' 
+  | 'Tedaviler & İlaçlar'
   | 'Rehber & Nöbet' 
   | 'Yerleşkeler & Bilgi';
 
@@ -176,6 +177,15 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     keywords: ['preop tetkik', 'laboratuvar', 'ekg istemi', 'pa akciğer grafisi', 'hemogram', 'inr', 'aptt', 'eko', 'böbrek fonksiyonu', 'preoperatif vizit'],
     tabId: 'preop'
   },
+  {
+    id: 'airway-management-module',
+    title: 'Havayolu Yönetimi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Havayolu',
+    description: 'Havayolu yönetimi araç ve içerikleri için hazırlık aşamasında olan bölüm.',
+    keywords: ['havayolu', 'havayolu yönetimi', 'entübasyon', 'lma', 'laringoskop'],
+    tabId: 'airway'
+  },
 
   // 3. Klinik İnfografikler
   {
@@ -230,6 +240,36 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Seyrantepe Hamidiye Etfal ve Sarıyer Çayırbaşı yerleşkeleri anlık hava durumu ve yerleşkeler arası rota.',
     keywords: ['hava durumu', 'seyrantepe hava', 'çayırbaşı hava', 'yerleşke mesafesi', 'yol tarifi', 'sıcaklık', 'kampüs'],
     tabId: 'tools'
+  },
+  {
+    id: 'treatment-magnesium-replacement',
+    title: 'Magnezyum Replasmanı Hesaplayıcısı (Türkiye %15 10 mL Ampul)',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'MgSO₄ Doz Hesabı',
+    description: 'Mathews et al. 2022 eGFR kademeli modelle 10 mL %15 (1.5g) MgSO4 ampul dozu, infüzyon süresi ve flebit güvenliği.',
+    keywords: ['magnezyum', 'mgso4', 'magnezyum sülfat', 'replasman', 'hipomagnezemi', 'egfr', 'böbrek', 'ampul hesabı', 'flebit', 'infüzyon süresi', 'mathews', 'elektrolit', 'tedavi'],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
+    id: 'treatment-hypomagnesemia-infographic',
+    title: 'Hipomagnezemi Klinik Bulguları, EKG & Refrakter Elektrolitler',
+    category: 'Klinik İnfografikler',
+    badge: 'EKG & Klinik',
+    description: 'Torsades de Pointes, QT uzaması, Chvostek & Trousseau belirtileri, ROMK refrakter hipokalemi ve PTH refrakter hipokalsemi mekanizmaları.',
+    keywords: ['hipomagnezemi', 'torsades', 'torsades de pointes', 'qt uzaması', 'ekg', 'chvostek', 'trousseau', 'tetani', 'romk', 'refrakter hipokalemi', 'refrakter hipokalsemi', 'st çökmesi', 'u dalgası', 'magnezyum'],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
+    id: 'airway-management-search',
+    title: 'Havayolu Yönetimi & Algoritmalar',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Havayolu',
+    description: 'Zor havayolu yönetimi, videolaringoskopi, laringeal maske (LMA / i-gel) ve acil havayolu algoritmaları.',
+    keywords: ['havayolu', 'airway', 'entübasyon', 'zor havayolu', 'lma', 'i-gel', 'videolaringoskop', 'krikotiroidotomi'],
+    tabId: 'airway',
+    popular: true
   },
   {
     id: 'disclaimer-info',
