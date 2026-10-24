@@ -282,6 +282,26 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-potassium-replacement',
+    title: 'Potasyum & Kaliphos Replasmanı Hesaplayıcısı (%7.5 KCl & Potasyum Fosfat)',
+    category: 'Tedaviler & İlaçlar',
+    badge: '%7.5 KCl · Kaliphos',
+    description: '%7.5 KCl (10 mL = 10 mEq) ve Kaliphos (10 mL = 30 mEq K⁺ + 60 mEq Fosfat) ampul dozu, periferik/SVK derişim sınırları ve infüzyon hızı.',
+    keywords: ['potasyum', 'kcl', 'kaliphos', 'potasyum fosfat', 'fosfat', 'replasman', 'hipokalemi', 'flebit', 'svk', 'periferik damar yolu', 'egfr', 'romk', 'infüzyon hızı'],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
+    id: 'treatment-hypokalemia-infographic',
+    title: 'Hipokalemi Klinik Bulguları, EKG & U Dalgası Matriksi',
+    category: 'Klinik İnfografikler',
+    badge: 'Hipokalemi EKG',
+    description: 'U dalgası, ST depresyonu, T düzleşmesi, asendan flask paralizi, paralitik ileus ve metabolik alkaloz patofizyolojisi.',
+    keywords: ['hipokalemi', 'potasyum', 'u dalgası', 'ekg', 'paralitik ileus', 'asendan felç', 'paralizi', 'rabdomiyoliz', 'metabolik alkaloz', 'kardiyak arrest'],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',

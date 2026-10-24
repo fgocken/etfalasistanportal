@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { MagnesiumCalculator } from './MagnesiumCalculator';
 import { HypomagnesemiaInfographic } from './HypomagnesemiaInfographic';
+import { PotassiumCalculator } from './PotassiumCalculator';
+import { HypokalemiaInfographic } from './HypokalemiaInfographic';
 
 interface Props {
   isDark: boolean;
@@ -26,6 +28,7 @@ interface Props {
 
 type TreatmentCategory = 'electrolyte' | 'vasoactive' | 'sedation' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
+type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 
 interface ProtocolCardItem {
   id: string;
@@ -62,16 +65,17 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'potassium',
     category: 'electrolyte',
     categoryLabel: 'Elektrolit Replasmanı',
-    badge: 'Klinik Rehber',
-    title: 'Potasyum Klorür (KCl) İnfüzyonu ve Hipokalemi Protokolü',
-    shortDesc: 'Serum K⁺ düzeyine göre saatlik güvenli infüzyon hızları (periferik ≤ 10–20 mEq/saat, SVK santral ≤ 40 mEq/saat), EKG U dalgası ve refrakter hipokalemi yönetimi.',
-    status: 'upcoming',
+    badge: '%7.5 KCl & Kaliphos',
+    title: 'Potasyum & Kaliphos (Potasyum Fosfat) Replasmanı',
+    shortDesc: '%7.5 KCl (10 mL = 10 mEq) ve Kaliphos (10 mL = 30 mEq K⁺ + 60 mEq Fosfat) ampul hesabı, periferik/SVK derişim sınırları, infüzyon hızı ve EKG bulguları.',
+    status: 'active',
     accentColor: 'teal',
-    highlightsHeader: 'Planlanan Parametreler:',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
-      { label: 'Periferik Hız', value: 'Maks 10-20 mEq/sa', colorClass: 'text-slate-600 dark:text-slate-400', bgClass: 'bg-slate-500/10', borderClass: 'border-slate-500/20' },
-      { label: 'SVK Hız', value: 'Maks 40 mEq/sa', colorClass: 'text-slate-600 dark:text-slate-400', bgClass: 'bg-slate-500/10', borderClass: 'border-slate-500/20' },
-      { label: 'Mg Bağımlılığı', value: 'Refrakter Hipokalemi', colorClass: 'text-slate-600 dark:text-slate-400', bgClass: 'bg-slate-500/10', borderClass: 'border-slate-500/20' }
+      { label: '%7.5 KCl Ampul', value: '10 mL = 10 mEq K⁺', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Kaliphos Ampul', value: '30 mEq K + 60 mEq P', colorClass: 'text-purple-700 dark:text-purple-300', bgClass: 'bg-purple-500/10', borderClass: 'border-purple-500/30' },
+      { label: 'Periferik Sınır', value: '≤ 40 mEq/L (≤ 10 mEq/sa)', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'SVK / YB Sınırı', value: 'Sıvı Kısıtında ≤ 400 mEq/L', colorClass: 'text-indigo-700 dark:text-indigo-300', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30' }
     ]
   },
   {
@@ -93,9 +97,10 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
 
 export const TreatmentsWorkspace: React.FC<Props> = ({ isDark }) => {
   const [activeCategory, setActiveCategory] = useState<TreatmentCategory>('electrolyte');
-  // null = kartlar galerisi, 'magnesium' = ayrıntılı hesaplayıcı & infografik görünümü
+  // null = kartlar galerisi, 'magnesium' veya 'potassium' = ayrıntılı hesaplayıcı & infografik görünümü
   const [activeProtocolId, setActiveProtocolId] = useState<string | null>(null);
   const [mgViewMode, setMgViewMode] = useState<MagnesiumViewMode>('all');
+  const [kViewMode, setKViewMode] = useState<PotassiumViewMode>('all');
 
   const filteredCards = PROTOCOL_CARDS.filter(card => card.category === activeCategory);
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === activeProtocolId);
@@ -400,6 +405,68 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark }) => {
           {/* Hipomagnezemi Klinik Bulguları ve EKG İnfografiği */}
           {(mgViewMode === 'all' || mgViewMode === 'infographic') && (
             <HypomagnesemiaInfographic isDark={isDark} />
+          )}
+        </div>
+      )}
+
+      {/* GÖRÜNÜM 2B: SEÇİLİ PROTOKOLÜN DETAYI (activeProtocolId === 'potassium') */}
+      {activeProtocolId === 'potassium' && (
+        <div className="space-y-6">
+          {/* Alt Görünüm Modu Filtresi */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border bg-slate-50/80 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                Görünüm Seçimi:
+              </span>
+            </div>
+
+            <div className={`inline-flex p-1 rounded-lg border text-xs font-medium self-start sm:self-auto ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+            }`}>
+              <button
+                type="button"
+                onClick={() => setKViewMode('all')}
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                  kViewMode === 'all'
+                    ? isDark ? 'bg-slate-800 text-teal-400 font-bold shadow-xs' : 'bg-teal-50 text-teal-800 font-bold shadow-xs'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                }`}
+              >
+                Tam Görünüm (Tümü)
+              </button>
+              <button
+                type="button"
+                onClick={() => setKViewMode('calc')}
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                  kViewMode === 'calc'
+                    ? isDark ? 'bg-slate-800 text-teal-400 font-bold shadow-xs' : 'bg-teal-50 text-teal-800 font-bold shadow-xs'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                }`}
+              >
+                Hesaplayıcı &amp; Protokol
+              </button>
+              <button
+                type="button"
+                onClick={() => setKViewMode('infographic')}
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                  kViewMode === 'infographic'
+                    ? isDark ? 'bg-slate-800 text-teal-400 font-bold shadow-xs' : 'bg-teal-50 text-teal-800 font-bold shadow-xs'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                }`}
+              >
+                Klinik &amp; EKG İnfografiği
+              </button>
+            </div>
+          </div>
+
+          {/* Potasyum & Kaliphos Hesaplayıcısı */}
+          {(kViewMode === 'all' || kViewMode === 'calc') && (
+            <PotassiumCalculator isDark={isDark} />
+          )}
+
+          {/* Hipokalemi Klinik Bulguları ve EKG İnfografiği */}
+          {(kViewMode === 'all' || kViewMode === 'infographic') && (
+            <HypokalemiaInfographic isDark={isDark} />
           )}
         </div>
       )}
