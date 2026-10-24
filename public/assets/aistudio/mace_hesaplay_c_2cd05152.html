@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-op MACE Risk Hesaplayıcı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Özelleştirilmiş scrollbar ve geçiş efektleri */
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; }
+        .tab-active { border-bottom-width: 2px; border-color: #2563eb; color: #2563eb; font-weight: 600; }
+        .tab-inactive { border-bottom-width: 2px; border-color: transparent; color: #64748b; }
+        .tab-inactive:hover { color: #334155; border-color: #cbd5e1; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center py-6 px-4 sm:px-6 lg:px-8">
+
+    <!-- Ana Konteyner -->
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col h-full">
+        
+        <!-- Başlık -->
+        <div class="bg-blue-600 px-6 py-5 text-white">
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                MACE Risk Hesaplayıcı
+            </h1>
+            <p class="text-blue-100 text-sm mt-1">Preoperatif Kardiyak Değerlendirme Aracı</p>
+        </div>
+
+        <!-- Sekmeler (Tabs) -->
+        <div class="flex w-full border-b border-gray-200">
+            <button onclick="switchTab('rcri')" id="btn-rcri" class="flex-1 py-4 text-center tab-active focus:outline-none text-sm sm:text-base transition-all">
+                RCRI (Lee Skoru)
+            </button>
+            <button onclick="switchTab('nsqip')" id="btn-nsqip" class="flex-1 py-4 text-center tab-inactive focus:outline-none text-sm sm:text-base transition-all">
+                NSQIP MICA (Gupta)
+            </button>
+        </div>
+
+        <!-- İçerik Alanı -->
+        <div class="p-6 flex-grow overflow-y-auto">
+            
+            <!-- RCRI Formu -->
+            <div id="tab-rcri" class="block space-y-4">
+                <p class="text-sm text-gray-500 mb-4 pb-2 border-b">Revised Cardiac Risk Index, cerrahi dışı kardiyak riskin değerlendirilmesinde kullanılır.</p>
+                
+                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <div class="flex-shrink-0 h-5 w-5 mt-0.5">
+                        <input type="checkbox" onchange="calculateRCRI()" class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 rcri-cb">
+                    </div>
+                    <div class="ml-3">
+                        <span class="block text-sm font-medium text-gray-900">Yüksek Riskli Cerrahi</span>
+                        <span class="block text-xs text-gray-500">İntraperitoneal, intratorasik veya suprainguinal vasküler cerrahi</span>
+                    </div>
+                </label>
+
+                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <div class="flex-shrink-0 h-5 w-5 mt-0.5">
+                        <input type="checkbox" onchange="calculateRCRI()" class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 rcri-cb">
+                    </div>
+                    <div class="ml-3">
+                        <span class="block text-sm font-medium text-gray-900">İskemik Kalp Hastalığı Öyküsü</span>
+                        <span class="block text-xs text-gray-500">Geçirilmiş MI, pozitif efor testi, anjina öyküsü veya nitrat kullanımı</span>
+                    </div>
+                </label>
+
+                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <div class="flex-shrink-0 h-5 w-5 mt-0.5">
+                        <input type="checkbox" onchange="calculateRCRI()" class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 rcri-cb">
+                    </div>
+                    <div class="ml-3">
+                        <span class="block text-sm font-medium text-gray-900">Konjestif Kalp Yetmezliği Öyküsü</span>
+                        <span class="block text-xs text-gray-500">Pulmoner ödem, S3 gallop, bilateral raller veya KKY öyküsü</span>
+                    </div>
+                </label>
+
+                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <div class="flex-shrink-0 h-5 w-5 mt-0.5">
+                        <input type="checkbox" onchange="calculateRCRI()" class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 rcri-cb">
+                    </div>
+                    <div class="ml-3">
+                        <span class="block text-sm font-medium text-gray-900">Serebrovasküler Hastalık Öyküsü</span>
+                        <span class="block text-xs text-gray-500">Geçirilmiş inme (Stroke) veya GİA (TIA) öyküsü</span>
+                    </div>
+                </label>
+
+                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <div class="flex-shrink-0 h-5 w-5 mt-0.5">
+                        <input type="checkbox" onchange="calculateRCRI()" class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 rcri-cb">
+                    </div>
+                    <div class="ml-3">
+                        <span class="block text-sm font-medium text-gray-900">İnsülin Tedavisi Gerektiren Diyabet</span>
+                        <span class="block text-xs text-gray-500">Preoperatif dönemde insülin kullanma zorunluluğu</span>
+                    </div>
+                </label>
+
+                <label class="flex items-start p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <div class="flex-shrink-0 h-5 w-5 mt-0.5">
+                        <input type="checkbox" onchange="calculateRCRI()" class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 rcri-cb">
+                    </div>
+                    <div class="ml-3">
+                        <span class="block text-sm font-medium text-gray-900">Preoperatif Serum Kreatinin > 2.0 mg/dL</span>
+                        <span class="block text-xs text-gray-500">Böbrek yetmezliği bulgusu</span>
+                    </div>
+                </label>
+            </div>
+
+            <!-- NSQIP Formu -->
+            <div id="tab-nsqip" class="hidden space-y-5">
+                <p class="text-sm text-gray-500 mb-4 pb-2 border-b">Gupta Perioperatif Kardiyak Risk Skorlaması, spesifik hasta değişkenlerine dayalı MACE tahminidir (Örneklem modelidir).</p>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Yaş Aralığı</label>
+                    <select id="nsqip-age" onchange="calculateNSQIP()" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5 bg-white border focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option value="0">&lt; 65 Yaş</option>
+                        <option value="0.5">65 - 74 Yaş</option>
+                        <option value="1.0">75 - 84 Yaş</option>
+                        <option value="1.5">&ge; 85 Yaş</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Fonksiyonel Kapasite (Günlük Yaşam Akt.)</label>
+                    <select id="nsqip-func" onchange="calculateNSQIP()" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5 bg-white border focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option value="0">Bağımsız (Independent)</option>
+                        <option value="0.6">Kısmen Bağımlı (Partially Dependent)</option>
+                        <option value="1.2">Tam Bağımlı (Totally Dependent)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ASA Sınıflandırması</label>
+                    <select id="nsqip-asa" onchange="calculateNSQIP()" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5 bg-white border focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option value="0">ASA I - Normal sağlıklı hasta</option>
+                        <option value="0">ASA II - Hafif sistemik hastalığı olan hasta</option>
+                        <option value="0.8">ASA III - Şiddetli sistemik hastalığı olan hasta</option>
+                        <option value="1.5">ASA IV - Hayatı sürekli tehdit eden hastalığı olan</option>
+                        <option value="2.2">ASA V - Ameliyatsız yaşam beklentisi olmayan moribund hasta</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Preoperatif Kreatinin &gt; 1.5 mg/dL</label>
+                    <div class="flex gap-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="nsqip-cre" value="0" onchange="calculateNSQIP()" checked class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                            <span class="ml-2 text-sm text-gray-700">Hayır</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="nsqip-cre" value="0.5" onchange="calculateNSQIP()" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                            <span class="ml-2 text-sm text-gray-700">Evet</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Cerrahi Prosedür Grubu</label>
+                    <select id="nsqip-proc" onchange="calculateNSQIP()" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5 bg-white border focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option value="0">Endoskopik / Yüzeyel (Düşük Risk)</option>
+                        <option value="0.8">Genel / Abdominal / Göğüs (Orta Risk)</option>
+                        <option value="1.5">Vasküler / Aortik (Yüksek Risk)</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sonuç Paneli -->
+        <div id="result-panel" class="bg-gray-100 p-6 border-t border-gray-200 transition-colors duration-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-1">Hesaplanan MACE Riski</p>
+                    <div id="result-score-text" class="text-xs text-gray-500 font-medium h-4">RCRI Skoru: 0</div>
+                </div>
+                <div class="text-right">
+                    <span id="result-percentage" class="text-4xl font-bold text-gray-800">0.4%</span>
+                </div>
+            </div>
+            
+            <div id="result-alert" class="mt-4 p-3 rounded-md flex items-start gap-3 bg-green-100 text-green-800 border border-green-200 transition-all">
+                <svg id="icon-green" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <svg id="icon-red" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 mt-0.5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div>
+                    <h4 id="result-title" class="font-bold text-sm">Düşük Risk Kategorisi</h4>
+                    <p id="result-desc" class="text-xs mt-1">Hastanın perioperatif majör kardiyak olay riski %1'in altındadır. Kılavuzlara göre genellikle ileri kardiyak tetkik (örn. stres testi) gerekmeden operasyona proceed edilebilir.</p>
+                </div>
+            </div>
+            
+            <p class="text-[10px] text-gray-400 mt-4 text-center">Bu hesaplayıcı klinik karar destek amaçlıdır ve profesyonel tıbbi değerlendirmenin yerine geçemez.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'rcri';
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            const btnRcri = document.getElementById('btn-rcri');
+            const btnNsqip = document.getElementById('btn-nsqip');
+            const tabRcri = document.getElementById('tab-rcri');
+            const tabNsqip = document.getElementById('tab-nsqip');
+            const scoreText = document.getElementById('result-score-text');
+
+            if (tab === 'rcri') {
+                btnRcri.className = "flex-1 py-4 text-center tab-active focus:outline-none text-sm sm:text-base transition-all";
+                btnNsqip.className = "flex-1 py-4 text-center tab-inactive focus:outline-none text-sm sm:text-base transition-all";
+                tabRcri.classList.remove('hidden');
+                tabNsqip.classList.add('hidden');
+                scoreText.style.display = 'block';
+                calculateRCRI();
+            } else {
+                btnNsqip.className = "flex-1 py-4 text-center tab-active focus:outline-none text-sm sm:text-base transition-all";
+                btnRcri.className = "flex-1 py-4 text-center tab-inactive focus:outline-none text-sm sm:text-base transition-all";
+                tabNsqip.classList.remove('hidden');
+                tabRcri.classList.add('hidden');
+                scoreText.style.display = 'none';
+                calculateNSQIP();
+            }
+        }
+
+        function updateResultUI(riskPercent, isHighRisk, scoreMsg) {
+            const panel = document.getElementById('result-panel');
+            const percentageText = document.getElementById('result-percentage');
+            const alertBox = document.getElementById('result-alert');
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-desc');
+            const iconGreen = document.getElementById('icon-green');
+            const iconRed = document.getElementById('icon-red');
+            const scoreText = document.getElementById('result-score-text');
+
+            percentageText.innerText = riskPercent + '%';
+            if (scoreMsg) {
+                scoreText.innerText = scoreMsg;
+            }
+
+            if (isHighRisk) {
+                // Yüksek Risk UI
+                percentageText.className = "text-4xl font-bold text-red-600";
+                alertBox.className = "mt-4 p-3 rounded-md flex items-start gap-3 bg-red-50 text-red-800 border border-red-200 transition-all";
+                title.innerText = "Yüksek / Artmış Risk Kategorisi";
+                desc.innerText = "Hastanın perioperatif majör kardiyak olay riski %1 ve üzerindedir. Kılavuzlara göre, hastanın fonksiyonel kapasitesine göre ileri kardiyak değerlendirme (Ekokardiyografi, farmakolojik stres testi vb.) gerekebilir.";
+                iconGreen.classList.add('hidden');
+                iconRed.classList.remove('hidden');
+            } else {
+                // Düşük Risk UI
+                percentageText.className = "text-4xl font-bold text-green-600";
+                alertBox.className = "mt-4 p-3 rounded-md flex items-start gap-3 bg-green-50 text-green-800 border border-green-200 transition-all";
+                title.innerText = "Düşük Risk Kategorisi";
+                desc.innerText = "Hastanın perioperatif majör kardiyak olay riski %1'in altındadır. Genellikle ileri kardiyak tetkik gerekmeden cerrahiye alınması güvenlidir.";
+                iconGreen.classList.remove('hidden');
+                iconRed.classList.add('hidden');
+            }
+        }
+
+        function calculateRCRI() {
+            const checkboxes = document.querySelectorAll('.rcri-cb');
+            let score = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) score++;
+            });
+
+            let riskPercent = 0.4;
+            if (score === 1) riskPercent = 0.9;
+            else if (score === 2) riskPercent = 6.6;
+            else if (score >= 3) riskPercent = 11.0;
+
+            const isHighRisk = score >= 2; // >= %1 threshold
+            updateResultUI(riskPercent, isHighRisk, `RCRI Skoru: ${score}`);
+        }
+
+        function calculateNSQIP() {
+            // NSQIP MICA Logistic Regression (Mock/Simplified Formula for Calculation Demo)
+            // Lojistik regresyon Log-Odds denklemi
+            const intercept = -5.5; 
+            
+            const ageVal = parseFloat(document.getElementById('nsqip-age').value);
+            const funcVal = parseFloat(document.getElementById('nsqip-func').value);
+            const asaVal = parseFloat(document.getElementById('nsqip-asa').value);
+            
+            let creVal = 0;
+            const creRadios = document.getElementsByName('nsqip-cre');
+            for(let i=0; i<creRadios.length; i++) {
+                if(creRadios[i].checked) {
+                    creVal = parseFloat(creRadios[i].value);
+                    break;
+                }
+            }
+            
+            const procVal = parseFloat(document.getElementById('nsqip-proc').value);
+
+            // Logit hesaplaması
+            const logit = intercept + ageVal + funcVal + asaVal + creVal + procVal;
+            
+            // Olasılığa (Probability) dönüştürme ( 1 / 1 + e^-x )
+            const probability = 1 / (1 + Math.exp(-logit));
+            
+            // Yüzdeye çevirme ve formatlama
+            let riskPercent = (probability * 100).toFixed(2);
+            
+            // Risk %1 ve üzerindeyse kırmızı (Yüksek Risk)
+            const isHighRisk = (probability * 100) >= 1.0;
+            
+            updateResultUI(riskPercent, isHighRisk, null);
+        }
+
+        // Sayfa yüklendiğinde varsayılanı hesapla
+        window.onload = () => {
+            calculateRCRI();
+        };
+
+    </script>
+</body>
+</html>

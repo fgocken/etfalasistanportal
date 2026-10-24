@@ -33,7 +33,6 @@ import { DashboardSearchBar } from './search/DashboardSearchBar';
 import { PortalSearchItem } from '../data/portalSearchIndex';
 import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
-import { AsaClassification } from './asa/AsaClassification';
 import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
 import { AirwayManagementView } from './airway/AirwayManagementView';
 import { TreatmentsWorkspace } from './treatments/TreatmentsWorkspace';
@@ -42,7 +41,7 @@ import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'asa' | 'preop' | 'airway' | 'treatments' | 'infographics' | 'contacts' | 'roster';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'infographics' | 'contacts' | 'roster';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -112,30 +111,12 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     ringClassDark: 'ring-1 ring-teal-500/20',
     ringClassLight: 'ring-1 ring-teal-500/10'
   },
-  asa: {
-    id: 'asa',
-    title: 'ASA Fiziksel Durum Sınıflaması',
-    badge: '2025/2026 Güncel',
-    badgeHighlight: true,
-    desc: 'En güncel resmi ASA sınıflama tablosu. Resmi tanımlar, açılışta erişkin örnekleri ile pediatrik ve obstetrik gruplar.',
-    icon: ShieldAlert,
-    iconBgDark: 'bg-emerald-500/15',
-    iconBgLight: 'bg-emerald-50',
-    iconColorDark: 'text-emerald-400',
-    iconColorLight: 'text-emerald-700',
-    borderHoverDark: 'hover:border-emerald-500/40',
-    borderHoverLight: 'hover:border-emerald-400',
-    titleHoverDark: 'group-hover:text-emerald-300',
-    titleHoverLight: 'group-hover:text-emerald-800',
-    ringClassDark: 'ring-1 ring-emerald-500/20',
-    ringClassLight: 'ring-1 ring-emerald-500/10'
-  },
   preop: {
     id: 'preop',
     title: 'Preoperatif Değerlendirme',
-    badge: 'Preoperatif',
+    badge: 'MACE · ASA · NPO',
     badgeHighlight: true,
-    desc: 'Preoperatif hasta viziti, anestezi hazırlık ve sistemik değerlendirme protokolü.',
+    desc: 'MACE kardiyak risk hesaplayıcı (RCRI & Gupta), 2025/2026 ASA fiziksel durum sınıflaması, açlık süreleri ve havayolu muayenesi.',
     icon: ClipboardCheck,
     iconBgDark: 'bg-blue-500/15',
     iconBgLight: 'bg-blue-50',
@@ -238,8 +219,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'asa', 'preop', 'airway', 'treatments', 'infographics', 'contacts', 'roster'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v9';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'infographics', 'contacts', 'roster'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v10';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -1351,14 +1332,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <InfusionRateCalculator isDark={isDark} />
         )}
 
-        {/* 5. ASA Physical Status Classification (Latest Statement) */}
-        {activeTab === 'asa' && (
-          <AsaClassification isDark={isDark} />
-        )}
-
-        {/* 6. Preoperative Evaluation */}
-        {activeTab === 'preop' && (
-          <PreoperativeEvaluation isDark={isDark} />
+        {/* 5. Preoperative Evaluation (contains MACE, ASA, NPO, Airway) */}
+        {(activeTab === 'preop' || (activeTab as string) === 'asa') && (
+          <PreoperativeEvaluation isDark={isDark} initialTool={(activeTab as string) === 'asa' ? 'asa' : null} />
         )}
 
         {/* 7. Havayolu Yönetimi */}

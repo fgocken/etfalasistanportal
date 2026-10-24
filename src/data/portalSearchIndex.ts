@@ -126,7 +126,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'ASA I - VI',
     description: 'Resmi tanımlar, erişkin, pediatrik ve obstetrik klinik örneklerle güncel ASA risk derecelendirmesi.',
     keywords: ['asa', 'asa sınıflaması', 'asa 1', 'asa 2', 'asa 3', 'asa 4', 'asa 5', 'asa 6', 'fiziksel durum', 'sigara', 'diyabet', 'koah', 'gebe'],
-    tabId: 'asa',
+    tabId: 'preop',
     popular: true
   },
   {
@@ -136,7 +136,27 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'ASA-E',
     description: 'Gecikmenin yaşamı veya uzvu tehdit ettiği durumlarda ASA skoruna eklenen acil cerrahi (E) kodu.',
     keywords: ['asa e', 'acil eki', 'emergency modifier', 'acil cerrahi asa skoru', 'uzuv tehdidi'],
-    tabId: 'asa'
+    tabId: 'preop'
+  },
+  {
+    id: 'calc-mace-rcri',
+    title: 'Pre-op MACE Kardiyak Risk Hesaplayıcı (RCRI - Lee Skoru)',
+    category: 'Hesaplayıcılar',
+    badge: 'MACE · RCRI',
+    description: 'Revised Cardiac Risk Index ile yüksek riskli cerrahi, KAH, KKY, SVO, diyabet ve kreatinin üzerinden MACE riski tahmini.',
+    keywords: ['mace', 'rcri', 'lee skoru', 'kardiyak risk', 'preoperatif kardiyak', 'kalp riski', 'kky', 'iskemi', 'kreatinin', 'cerrahi risk', 'acc aha'],
+    tabId: 'preop',
+    popular: true
+  },
+  {
+    id: 'calc-mace-gupta',
+    title: 'NSQIP MICA Kardiyak Risk Hesaplayıcı (Gupta Modeli)',
+    category: 'Hesaplayıcılar',
+    badge: 'NSQIP MICA',
+    description: 'Gupta perioperatif kardiyak risk indeksi: Yaş, fonksiyonel durum, ASA ve prosedür riski ile lojistik regresyon MACE tahmini.',
+    keywords: ['gupta', 'nsqip', 'mica', 'mace', 'kardiyak risk', 'fonksiyonel kapasite', 'asa skoru', 'cerrahi prosedür', 'lojistik regresyon'],
+    tabId: 'preop',
+    popular: true
   },
   {
     id: 'guideline-mallampati',
