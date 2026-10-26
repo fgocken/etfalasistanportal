@@ -1,6 +1,6 @@
 {
-  "summary":  "Klinik Araçlar altına 'Tedaviler ve İlaçlar' modülünün eklenmesi, Türkiye standartlarındaki %15 10 mL MgSO4 ampulüne ve Mathews et al. 2022 eGFR kademelerine göre Magnezyum Replasmanı Hesaplayıcısı ve interaktif Hipomagnezemi EKG/Klinik İnfografiğinin uygulama planı.",
-  "updatedAt":  "2026-10-24T13:16:19.593532504Z",
+  "summary":  "Deep linking and section-sharing implementation plan allowing direct sharing of any clinical tool or infographic (e.g. #infografik=rsi-vs-elective, #arac=intraop) with 1-click clipboard copy buttons, toast feedback, and direct landing.",
+  "updatedAt":  "2026-10-26T19:53:54.741429859Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

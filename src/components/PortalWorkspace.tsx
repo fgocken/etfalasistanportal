@@ -40,6 +40,8 @@ import { InfographicsView } from './infographics/InfographicsView';
 import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
+import { ShareLinkButton } from './common/ShareLinkButton';
+import { ParsedHashRoute, updateHashRoute } from '../utils/deepLink';
 
 export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'infographics' | 'contacts' | 'roster';
 
@@ -227,6 +229,7 @@ interface PortalWorkspaceProps {
   onOpenDisclaimer: () => void;
   isDark: boolean;
   onToggleTheme: () => void;
+  initialRoute?: ParsedHashRoute;
 }
 
 /**
@@ -343,9 +346,37 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   onBackToWelcome, 
   onOpenDisclaimer,
   isDark,
-  onToggleTheme
+  onToggleTheme,
+  initialRoute
 }) => {
-  const [activeTab, setActiveTab] = useState<'tools' | ToolTabId>('tools');
+  const [activeTab, setActiveTab] = useState<'tools' | ToolTabId>(() => {
+    if (initialRoute?.type === 'infografik') {
+      return 'infographics';
+    }
+    if (initialRoute?.type === 'arac' && initialRoute.id && initialRoute.id in ALL_CLINICAL_TOOLS) {
+      return initialRoute.id as ToolTabId;
+    }
+    return 'tools';
+  });
+
+  // Keep activeTab synced if initialRoute changes via hash
+  useEffect(() => {
+    if (initialRoute?.type === 'infografik') {
+      setActiveTab('infographics');
+    } else if (initialRoute?.type === 'arac' && initialRoute.id && initialRoute.id in ALL_CLINICAL_TOOLS) {
+      setActiveTab(initialRoute.id as ToolTabId);
+    }
+  }, [initialRoute]);
+
+  const handleSelectTab = (tabId: 'tools' | ToolTabId) => {
+    setActiveTab(tabId);
+    if (tabId === 'tools') {
+      updateHashRoute(null, null);
+    } else if (tabId !== 'infographics') {
+      updateHashRoute('arac', tabId);
+    }
+  };
+
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
 
   // Tool Order state with localStorage persistence
@@ -417,7 +448,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     if (item.tabId === 'disclaimer') {
       onOpenDisclaimer();
     } else {
-      setActiveTab(item.tabId);
+      handleSelectTab(item.tabId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -607,7 +638,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               key="tools"
               onClick={() => {
                 if (isJustDragged) return;
-                setActiveTab('tools');
+                handleSelectTab('tools');
               }}
               onDragOver={(e) => {
                 if (draggedToolId) {
@@ -705,7 +736,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                   }}
                   onClick={() => {
                     if (isJustDragged) return;
-                    setActiveTab(t.id as any);
+                    handleSelectTab(t.id as any);
                   }}
                   title={`${t.title} — Sürükleyip bırakarak sekmelerin sırasını değiştirebilirsiniz`}
                   className={`group flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0 transition-all cursor-grab active:cursor-grabbing select-none border ${
@@ -850,7 +881,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                       setDraggedToolId(null);
                       setDragOverToolId(null);
                     }}
-                    onClick={() => setActiveTab(tool.id)}
+                    onClick={() => handleSelectTab(tool.id)}
                     className={`relative text-left p-5 rounded-xl border transition-all space-y-2 group flex flex-col justify-between cursor-pointer select-none ${
                       isDragging 
                         ? 'opacity-35 scale-95 border-dashed border-teal-500 bg-teal-500/5' 
@@ -945,6 +976,33 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 );
               })}
             </div>
+          </div>
+        )}
+
+        {/* Active Tool Navigation & Direct Share Bar */}
+        {activeTab !== 'tools' && (
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <button
+              type="button"
+              onClick={() => handleSelectTab('tools')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800' 
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs'
+              }`}
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-teal-500" />
+              <span>← Tüm Bölümlere Dön</span>
+            </button>
+
+            {activeTab !== 'infographics' && (
+              <ShareLinkButton
+                type="arac"
+                id={activeTab}
+                isDark={isDark}
+                title={`${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`}
+              />
+            )}
           </div>
         )}
 
@@ -1347,9 +1405,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <TreatmentsWorkspace isDark={isDark} />
         )}
 
-        {/* 9. Clinical Infographics (ESC 2022 Guidelines) */}
+        {/* 9. Clinical Infographics */}
         {activeTab === 'infographics' && (
-          <InfographicsView isDark={isDark} />
+          <InfographicsView 
+            isDark={isDark} 
+            initialInfographicId={initialRoute?.type === 'infografik' ? initialRoute.id : null}
+          />
         )}
 
         {/* 8. Contacts */}

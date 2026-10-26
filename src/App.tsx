@@ -3,9 +3,18 @@ import { Analytics } from '@vercel/analytics/react';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { PortalWorkspace } from './components/PortalWorkspace';
 import { DisclaimerView } from './components/DisclaimerView';
+import { parseHashRoute, ParsedHashRoute, updateHashRoute } from './utils/deepLink';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'welcome' | 'portal' | 'disclaimer'>('welcome');
+  const [initialRoute, setInitialRoute] = useState<ParsedHashRoute>(() => parseHashRoute());
+  const [currentView, setCurrentView] = useState<'welcome' | 'portal' | 'disclaimer'>(() => {
+    const route = parseHashRoute();
+    // If a direct hash link exists (#infografik=... or #arac=...), land directly on portal
+    if (route.type !== null && route.id !== null) {
+      return 'portal';
+    }
+    return 'welcome';
+  });
   const [previousView, setPreviousView] = useState<'welcome' | 'portal'>('welcome');
 
   // Theme state: defaults to dark or stored preference
@@ -38,6 +47,19 @@ export default function App() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
+  // Listen for hash changes (e.g. user navigation, browser back/forward, or clicked deep link)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const route = parseHashRoute();
+      if (route.type !== null && route.id !== null) {
+        setInitialRoute(route);
+        setCurrentView('portal');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const openDisclaimer = () => {
     if (currentView !== 'disclaimer') {
       setPreviousView(currentView);
@@ -49,6 +71,11 @@ export default function App() {
   const closeDisclaimer = () => {
     setCurrentView(previousView);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackToWelcome = () => {
+    updateHashRoute(null, null);
+    setCurrentView('welcome');
   };
 
   return (
@@ -86,10 +113,11 @@ export default function App() {
 
         {currentView === 'portal' && (
           <PortalWorkspace
-            onBackToWelcome={() => setCurrentView('welcome')}
+            onBackToWelcome={handleBackToWelcome}
             onOpenDisclaimer={openDisclaimer}
             isDark={isDark}
             onToggleTheme={toggleTheme}
+            initialRoute={initialRoute}
           />
         )}
 

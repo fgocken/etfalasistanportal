@@ -22,6 +22,7 @@ import {
   Thermometer,
   Zap
 } from 'lucide-react';
+import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface ModifiedAldreteInfographicProps {
   isDark: boolean;
@@ -289,6 +290,13 @@ export const ModifiedAldreteInfographic: React.FC<ModifiedAldreteInfographicProp
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
+          <ShareLinkButton
+            type="infografik"
+            id="modified-aldrete"
+            isDark={isDark}
+            title="Modifiye Aldrete Skoru Bağlantısını Kopyala"
+          />
+
           <a
             href="https://pubmed.ncbi.nlm.nih.gov/7772368/"
             target="_blank"

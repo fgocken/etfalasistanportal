@@ -1,120 +1,117 @@
-# Uygulama Planı: "Tedaviler ve İlaçlar" Modülü & Magnezyum Replasmanı Hesaplayıcısı
+# Bölüm ve İnfografik Doğrudan Paylaşım (Deep Linking & Hash Routing)
 
-Bu plan, Şişli Hamidiye Etfal Anesteziyoloji & Reanimasyon Asistan Portalı bünyesinde **"Tedaviler ve İlaçlar"** ana modülünün oluşturulmasını, gelecekte eklenecek protokoller için modüler bir mimari kurulmasını ve ilk klinik araç olarak **Magnezyum Replasmanı Hesaplayıcısı** ile **Hipomagnezemi Klinik & EKG İnfografiği**nin geliştirilmesini kapsamaktadır.
+Klinisyenlerin ve asistanların portaldeki herhangi bir infografiği (örneğin **Hızlı Seri Entübasyon vs Elektif Entübasyon**) veya klinik hesaplama aracını doğrudan tek tıkla kopyalayıp meslektaşlarıyla paylaşabilmesini sağlayan, tarayıcı geçmişiyle tam uyumlu temiz URL Hash rotalama sistemi.
 
----
+## User Review & Critical Decisions
 
-## 1. Mimari ve Modüler Yapı ("Tedaviler ve İlaçlar")
+> [!IMPORTANT]
+> Kullanıcının netleştirdiği 3 kritik mimari ve kullanıcı deneyimi kararı plana işlenmiştir:
 
-### 1.1 Modül Navigasyonu ve Kategori Mimarisi
-Gelecekte yeni ilaç ve tedavi protokollerinin (örneğin Potasyum/Kalsiyum replasmanları, Sedoanaljezi infüzyonları, İnotrop/Vazoaktif titrasyonu, Antikoagülasyon reversal vb.) kolaylıkla eklenebilmesi amacıyla modüler bir kategori sekmesi tasarlanacaktır:
-- **Kategoriler:**
-  - ⚡ **Elektrolit & Sıvı Replasmanı** (İlk aktif araç: *Magnezyum Replasmanı*)
-  - 💉 **İnfüzyon & Vazoaktif Protokolleri** *(Gelecek eklemeler için hazır modüler sekme)*
-  - 🧠 **Sedoanaljezi & Nöromüsküler Blokaj** *(Gelecek eklemeler için hazır modüler sekme)*
-  - 🩸 **Hemostaz & Kan Transfüzyonu** *(Gelecek eklemeler için hazır modüler sekme)*
-- **Arama ve Entegrasyon:**
-  - `PortalWorkspace.tsx` menüsüne `treatments` sekmesi ("Tedaviler ve İlaçlar", `Pill` / `FlaskConical` ikonu).
-  - Global arama indeksine (`portalSearchIndex.ts`) Magnezyum replasmanı, ampul hesabı, eGFR, hipomagnezemi, Torsades de Pointes, MgSO4 terimleri eklenecektir.
+- **Doğrulanmış Karar 1 (URL Yapısı)**: Temiz ve sezgisel URL Hash formatı kullanılacak (`#infografik=rsi-vs-elective` veya `#arac=intraop`). Sayfa yenilenmesine gerek kalmadan SPA içinde anında senkronize olur.
+- **Doğrulanmış Karar 2 (Arayüz Butonu)**: Her infografik ve klinik aracın üst başlık çubuğuna şık bir **"Bağlantıyı Kopyala" (Share/Copy Link)** butonu eklenecek; tıklandığında panoya kopyalayıp görsel onay bildirimi ("Bağlantı Kopyalandı!") verecek.
+- **Doğrulanmış Karar 3 (Açılış Davranışı)**: Paylaşılan linke tıklayan bir hekim uygulamayı açtığında karşılama ekranını atlayarak **doğrudan ilgili infografiğe veya araca** yönlendirilecek; sol üstteki "← Portale Dön" butonuyla ana panele geçebilecek.
 
 ---
 
-## 2. Magnezyum Replasmanı Hesaplayıcısı
+## 1. Overview & Core Concept
 
-### 2.1 Klinik ve Farmakolojik Parametreler (Türkiye Standardı)
-- **Standart Formülasyon:** Türkiye klinik pratiğindeki 10 mL'lik **%15 Magnezyum Sülfat ($MgSO_4$) ampulü**:
-  - Hacim: **10 mL (10 cc)**
-  - $MgSO_4$ Miktarı: **1.5 gram (1500 mg)**
-  - Elementel Magnezyum: **~12 mEq** veya **~6 mmol** (146 mg elementel Mg)
-
-### 2.2 Mathews et al. (2022) eGFR Kademeli Artış Modeli
-*Kaynak: Mathews V, Paul J, Paul C, et al. A prospective observational study to identify the effectiveness of intravenous magnesium replacement in an intensive care setting. J Anaesthesiol Clin Pharmacol. 2022.*
-
-Böbrek fonksiyonuna göre 1 Ampul (1.5 g) ve 1 Gram $MgSO_4$ artış katsayıları:
-1. **Normal Renal Fonksiyon ($eGFR \ge 90\text{ mL/min}$):**
-   - 1 Gram $MgSO_4$ $\rightarrow$ **+0.10 mg/dL** artış
-   - 1 Ampul (1.5 g $MgSO_4$) $\rightarrow$ **+0.15 mg/dL** artış
-2. **Hafif / Orta Böbrek Yetmezliği ($eGFR\ 30 - 89\text{ mL/min}$):**
-   - 1 Gram $MgSO_4$ $\rightarrow$ **+0.15 mg/dL** artış
-   - 1 Ampul (1.5 g $MgSO_4$) $\rightarrow$ **+0.22 mg/dL** artış
-3. **Ağır Böbrek Yetmezliği ($eGFR < 30\text{ mL/min}$):**
-   - 1 Gram $MgSO_4$ $\rightarrow$ **+0.19 mg/dL** artış
-   - 1 Ampul (1.5 g $MgSO_4$) $\rightarrow$ **+0.28 mg/dL** artış
-
-### 2.3 Hesaplama Akışı ve Kullanıcı Girdileri
-- **Girdiler:**
-  - **Mevcut Serum Mg:** $mg/dL$ (birim dönüşüm seçeneği: $mmol/L$ ve $mEq/L$).
-  - **Hedef Serum Mg:** $mg/dL$ (hızlı hedef butonları: *2.0 mg/dL*, *2.2 mg/dL*, *2.5 mg/dL* ve serbest giriş).
-  - **Böbrek Fonksiyonu / eGFR Kademesi:** 3 seviyeli seçim (Normal, Hafif/Orta, Ağır).
-- **Çıktılar & Hesaplama:**
-  - $\Delta Mg = \text{Hedef Mg} - \text{Mevcut Mg}$
-  - **Gereken Ampul Sayısı:** $\Delta Mg / \text{Ampul Başı Artış}$ (Örn: $0.6\text{ mg/dL} / 0.15 = 4\text{ ampul}$)
-  - **Toplam $MgSO_4$ Dozu:** $\text{Ampul Sayısı} \times 1.5\text{ gram}$ ($mg$ ve $g$ cinsinden)
-  - **Toplam Elementel Magnezyum:** $mEq$ ve $mmol$ değerleri
-  - **Önerilen Klinik Doz:** Güvenli tam ampule yuvarlama ve seans bölme uyarısı (örn. 4 ampulden fazla dozlarda 2 ayrı seansa bölme tavsiyesi).
-
-### 2.4 Hazırlama, Sıvı Seçimi ve Damar Yolu Güvenliği (Flebit Koruması)
-- **Taşıyıcı Sıvı:** %0.9 NaCl (SF) veya %5 Dextroz (100 mL, 250 mL, 500 mL torba seçimi).
-- **Derişim Güvenlik Kontrolü:**
-  - Periferik Venöz Yol Sınırı: **Maksimum %20 (200 mg/mL)** (Klinik pratikte flebiti önlemek için %1-3 civarında seyreltme hedeflenir).
-  - Santral Venöz Yol (CVP) Sınırı: **Maksimum %50 (500 mg/mL)**.
-  - Hesaplanan derişim otomatik kontrol edilir ve güvenli yeşil/uyarı göstergesi verilir.
-- **İnfüzyon Hızı ve Süresi:**
-  - Kural: 1 ampul (1.5 g) için **en az 1.5 - 2 saat** yavaş infüzyon.
-  - Otomatik infüzyon pompası hızı hesaplayıcısı ($mL/\text{saat}$).
-
-### 2.5 Yoğun Bakım ve Reanimasyon Pratik İpuçları Kutusu
-- **a) İntraselüler Şift:** Vücut magnezyumunun %99'u hücre içi ve kemikte yer alır. İnfüzyondan hemen sonra bakılan kan gazında "yalancı yüksek pik" görülür. Gerçek bazal düzeyi görmek için kontrol kanı **12-24 saat sonra (veya ertesi sabah)** alınmalıdır.
-- **b) Uygulama Hızı ve Renal Klirens:** Hızlı bolus verilmesi böbreklerden hızla atılmasına yol açar. Hücresel dolum için yavaş infüzyon şarttır (preeklampsi krizleri hariç).
-- **c) Magnezyum Düşüklüğünün Eşlikçileri:** Dirençli hipokalemi (ROMK kanal inhibisyonunun kalkması) ve dirençli hipokalsemi (PTH salınım baskılanması) bağlantısı.
+- **Ne Sağlar**: Kullanıcı tek bir butona tıklayarak o an açık olan infografiğin veya aracın doğrudan linkini panoya kopyalar (örn. `https://ais-...run.app/#infografik=rsi-vs-elective`). Bu link WhatsApp, e-posta veya klinik mesajlaşma gruplarında paylaşıldığında, linki açan meslektaş karşılama ekranı veya menüler arasında kaybolmadan doğrudan hedef klinik kılavuzu görür.
+- **Hedef Kitle**: Şişli Etfal Anesteziyoloji ve Reanimasyon Kliniği hekimleri, asistanlar, ameliyathane ekibi ve konsültasyon hekimleri.
+- **Sağlanan Temel Fayda**: Ameliyathanede veya acil nöbetinde saniyeler içinde doğru klinik infografiğe doğrudan erişim ve meslektaşlar arası zahmetsiz bilgi aktarımı.
 
 ---
 
-## 3. Hipomagnezemi Klinik Bulguları ve EKG İnfografiği
+## 2. User Experience & Visual Design
 
-Kullanıcının paylaştığı klinik referans şemasına (`https://share.gemini.google/MLIWWEui1Kkk`) ve güncel yoğun bakım literatürüne uygun olarak tasarlanacak interaktif infografik:
+### Temel Kullanıcı Akışları
+1. **Bağlantı Kopyalama (Paylaşan Kullanıcı)**:
+   - Kullanıcı "Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon" infografiğini inceler.
+   - Başlık alanındaki `Bağlantıyı Kopyala` butonuna (Share2 / Link ikonu) tıklar.
+   - Buton mikro animasyonla 2 saniyeliğine yeşil renk alarak `Kopyalandı! ✓` durumuna geçer; eş zamanlı olarak alt köşede zarif bir toast bildirim belirir.
+   - Pano içeriği: `https://[alan-adi]/#infografik=rsi-vs-elective`
+2. **Doğrudan Erişim (Bağlantıyı Açan Meslektaş)**:
+   - Meslektaş gelen bağlantıya tıklar.
+   - Uygulama açılışta hash parametresini (`#infografik=rsi-vs-elective`) algılar.
+   - Karşılama ekranı bypass edilerek doğrudan Hızlı Seri Entübasyon infografiği ekrana gelir.
+   - Sayfa başında `← Tüm İnfografikler` ve `← Ana Portale Dön` navigasyon seçenekleri yer alır.
+3. **Tarayıcı Geçmişi (Geri / İleri Entegrasyonu)**:
+   - Tarayıcının "Geri" butonuna basıldığında infografik galerisine, oradan ana portale doğal olarak dönülür (`popstate` / `hashchange` desteği).
 
-### 3.1 Vücut Sistemleri Kartları (İnteraktif & Filtrelenebilir)
-1. **Kardiyovasküler Sistem:**
-   - Aritmi riski (VT, VF, Prematür ventriküler atımlar - PVC)
-   - Torsades de Pointes (Polimorfik VT) duyarlılığı
-   - Dijital / Digoksin toksisitesine artmış miyokardiyal hassasiyet
-   - Vazospazm ve hipertansiyon eğilimi
-2. **Elektrokardiyografi (EKG) Bulguları İnfografiği:**
-   - Dinamik EKG dalga çizimi:
-     - **PR Uzaması**
-     - **QT / QTc Uzaması** (Torsades tetikleyicisi)
-     - **ST Depresyonu**
-     - **T Dalga Düzleşmesi veya İnversiyonu**
-     - Şiddetli vakalarda genişlemiş QRS
-3. **Nöromüsküler & Santral Sinir Sistemi:**
-   - Kas seğirmeleri, tremor, fasikülasyonlar
-   - Karpopedal spazm, tetani
-   - **Chvostek Belirtisi** (Fasiyal sinir vurusuyla yüz kaslarında kasılma)
-   - **Trousseau Belirtisi** (Tansiyon manşonu şişirilince elde ebe eli spazmı)
-   - Hiperaktif derin tendon refleksleri (Hiperrefleksi)
-   - İleri evrede jeneralize konvülsiyonlar, ajitasyon, deliryum veya letarji
-4. **Metabolik & Elektrolit Bağlantıları (Klinik Tuzaklar):**
-   - **Refrakter Hipokalemi:** Magnezyum eksikliği ROMK böbrek potasyum kanallarının fizyolojik inhibisyonunu bozar, potasyum idrarla kaybedilir. Magnezyum düzeltilmeden potasyum yükseltilemez!
-   - **Refrakter Hipokalsemi:** Magnezyum eksikliğinde Paratiroid Hormon (PTH) sentez/salınımı azalır ve hedef kemik/böbrek dokusu PTH'ya yanıtsızlaşır. Magnezyum verilmedikçe kalsiyum düzelmez.
-5. **Solunum & Gastrointestinal Sistem:**
-   - Solunum kas güçsüzlüğü (weaning başarısızlığı ve hipoventilasyon riski)
-   - Disfaji, anoreksi, bulantı ve kusma
+### Görsel Tasarım & Stil
+- **Buton Tasarımı**:
+  - Karanlık mod: `bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700`
+  - Aydınlık mod: `bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-xs`
+  - Aktif / Kopyalandı durumu: `bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30`
+- **Konumlandırma**: Her infografik sayfasının ve her klinik aracın sağ üst başlık aksiyonları arasına (PubMed butonunun yanına) yerleştirilir.
 
 ---
 
-## 4. Dosya Değişiklikleri ve Yol Haritası
+## 3. Key Product Decisions & Trade-Offs
 
-1. **Yeni Bileşenler:**
-   - `/src/components/treatments/TreatmentsWorkspace.tsx`: Tedaviler ana paneli, kategori tabları ve modül seçici.
-   - `/src/components/treatments/MagnesiumCalculator.tsx`: Mathews et al. eGFR modelli, Türkiye %15 10 mL ampul hesaplayıcısı, taşıyıcı sıvı ve flebit koruması.
-   - `/src/components/treatments/HypomagnesemiaInfographic.tsx`: İnteraktif vücut sistemleri, EKG görselleştirmesi ve refrakter elektrolit mekanizmaları.
-2. **Mevcut Dosya Güncellemeleri:**
-   - `/src/components/PortalWorkspace.tsx`: `treatments` sekmesini araç menüsüne entegre etme.
-   - `/src/data/portalSearchIndex.ts`: Arama indeksine magnezyum replasmanı ve tedaviler anahtar kelimelerini ekleme.
-3. **Doğrulama:**
-   - `lint_applet` ve `compile_applet` ile sıfır TypeScript/Vite hatası doğrulama.
+- **Hash-Based Routing (`#infografik=...`) vs Path-Based Routing (`/infografik/...`)**:
+  - *Seçilen*: Hash tabanlı rotalama.
+  - *Neden*: Statik SPA ve Docker/Vite hosting ortamlarında sunucu tarafı URL rewrite gerektirmeden, 404 hatası riski olmaksızın her ortamda garantili çalışır.
+- **Otomatik Hash Senkronizasyonu**:
+  - Kullanıcı sekme veya infografik değiştirdiğinde `window.location.hash` arka planda `history.replaceState` ile güncellenir; böylece kullanıcı butona basmasa bile adres çubuğundaki linki elle kopyaladığında da doğru bölüm paylaşılmış olur.
 
 ---
 
-Bu planı onayladığınızda kodlama aşamasına geçilecek ve "Tedaviler ve İlaçlar" modülü hemen kullanıma hazır hale getirilecektir.
+## 4. Technical Architecture & Data Strategy
+
+### Mimari & Veri Akış Diyagramı
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                          Tarayıcı URL Hash                             │
+│                  #infografik=rsi-vs-elective                           │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ window.location.hash
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                               App.tsx                                  │
+│  - İlk yüklemede hash parse edilir                                     │
+│  - Hash doluysa: currentView = 'portal' (Welcome Screen atlanır)        │
+│  - Hash dinleyicisi (window.addEventListener('hashchange'))            │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ activeTab, activeInfographicId
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                        PortalWorkspace.tsx                             │
+│  - activeTab state'i hash ile senkronize tutulur                       │
+│  - Her araç başlığında evrensel ShareButton bileşeni                   │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ initialInfographicId
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                       InfographicsView.tsx                             │
+│  - activeInfographicId (#infografik=...) ile eşleşen kartı açar        │
+│  - Geri dönüldüğünde hash temizlenir (#arac=infographics)              │
+│  - İnfografik başlığında "Bağlantıyı Kopyala" aksiyonu                 │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Desteklenecek Bölüm Kimlikleri (ID Haritası)
+
+1. **İnfografikler (`#infografik=<id>`)**:
+   - `rsi-vs-elective`: Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon
+   - `adult-fasting`: Erişkin Preoperatif Açlık Rehberi (2-6-8)
+   - `pediatric-fasting`: Pediatrik Preoperatif Açlık Rehberi (6-4-3-1)
+   - `modified-aldrete`: Modifiye Aldrete Skoru (Faz 1 PACU)
+   - `padss`: PADSS Skoru (Faz 2 Günübirlik Taburculuk)
+   - `surgical-urgency`: 2024 AHA/ACC Cerrahi Aciliyet ve Zamanlama
+
+2. **Klinik Araçlar (`#arac=<id>`)**:
+   - `calculator`: Kilo, MV Volüm, İdame Sıvı Hesaplayıcı
+   - `intraop`: İntraoperatif Sıvı Hesaplayıcı
+   - `infusion`: İnfüzyon Hızı Çevirici
+   - `preop`: Preoperatif Değerlendirme (ASA/Mallampati vb.)
+   - `airway`: Zor Havayolu Kılavuzu & Algoritması
+   - `treatments`: Klinik Protokoller & Tedavi Rehberleri
+   - `infographics`: İnfografik Koleksiyonu Ana Ekranı
+   - `contacts`: Klinik Dahili Telefon Rehberi
+   - `roster`: Nöbet Listesi
+
+### Uygulama Bileşenleri
+1. **`src/utils/deepLink.ts`**: URL hash okuma, oluşturma ve clipboard kopyalama yardımcı fonksiyonları.
+2. **`src/components/common/ShareLinkButton.tsx`**: Her sayfada kullanılabilir, kopyalama geri bildirimi veren kompakt buton.
+3. **`App.tsx`, `PortalWorkspace.tsx`, `InfographicsView.tsx`**: Hash parametrelerini okuyup doğru sekmeyi ve alt içeriği açan reaktif durum yönetimi.

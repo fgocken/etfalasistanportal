@@ -16,6 +16,7 @@ import {
   Activity, 
   HelpCircle
 } from 'lucide-react';
+import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface RSIvsElectiveInfographicProps {
   isDark: boolean;
@@ -261,6 +262,13 @@ export const RSIvsElectiveInfographic: React.FC<RSIvsElectiveInfographicProps> =
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
+          <ShareLinkButton
+            type="infografik"
+            id="rsi-vs-elective"
+            isDark={isDark}
+            title="RSI vs Elektif İnfografiği Bağlantısını Kopyala"
+          />
+
           <a
             href="https://pubmed.ncbi.nlm.nih.gov/20237045/"
             target="_blank"

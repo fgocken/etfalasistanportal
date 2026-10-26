@@ -20,6 +20,7 @@ import {
   Zap,
   ArrowRight
 } from 'lucide-react';
+import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface AdultFastingInfographicProps {
   isDark: boolean;
@@ -187,6 +188,13 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
               <span>Pediatrik Açlık Rehberi (6-4-3-1) →</span>
             </button>
           )}
+
+          <ShareLinkButton
+            type="infografik"
+            id="adult-fasting"
+            isDark={isDark}
+            title="Erişkin Açlık Rehberi Bağlantısını Kopyala"
+          />
 
           <a
             href="https://pubmed.ncbi.nlm.nih.gov/36629465/"

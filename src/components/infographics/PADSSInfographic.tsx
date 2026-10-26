@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Info
 } from 'lucide-react';
+import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface PADSSInfographicProps {
   isDark: boolean;
@@ -296,6 +297,13 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
               <span>← Aldrete Skoru (Faz 1)</span>
             </button>
           )}
+
+          <ShareLinkButton
+            type="infografik"
+            id="padss"
+            isDark={isDark}
+            title="PADSS Skoru Bağlantısını Kopyala"
+          />
 
           <a
             href="https://pubmed.ncbi.nlm.nih.gov/8534468/"

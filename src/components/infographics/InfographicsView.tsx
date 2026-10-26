@@ -20,9 +20,12 @@ import { PADSSInfographic } from './PADSSInfographic';
 import { AdultFastingInfographic } from './AdultFastingInfographic';
 import { PediatricFastingInfographic } from './PediatricFastingInfographic';
 import { RSIvsElectiveInfographic } from './RSIvsElectiveInfographic';
+import { ShareLinkButton } from '../common/ShareLinkButton';
+import { updateHashRoute } from '../../utils/deepLink';
 
 interface InfographicsViewProps {
   isDark: boolean;
+  initialInfographicId?: string | null;
 }
 
 export interface InfographicCardItem {
@@ -157,9 +160,33 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
   }
 ];
 
-export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) => {
+export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, initialInfographicId }) => {
+  const normalizeId = (id: string | null | undefined): string | null => {
+    if (!id) return null;
+    if (id === 'surgical-urgency') return 'surgical-urgency-2024';
+    return id;
+  };
+
   // null = mini cards gallery view, string = open infographic view
-  const [activeInfographicId, setActiveInfographicId] = useState<string | null>(null);
+  const [activeInfographicId, setActiveInfographicId] = useState<string | null>(() => {
+    return normalizeId(initialInfographicId);
+  });
+
+  // Sync state if initialInfographicId changes (e.g. hash navigation)
+  React.useEffect(() => {
+    if (initialInfographicId) {
+      setActiveInfographicId(normalizeId(initialInfographicId));
+    }
+  }, [initialInfographicId]);
+
+  const handleSelectInfographic = (id: string | null) => {
+    setActiveInfographicId(id);
+    if (id) {
+      updateHashRoute('infografik', id);
+    } else {
+      updateHashRoute('arac', 'infographics');
+    }
+  };
 
   const selectedInfographic = INFOGRAPHIC_COLLECTION.find(item => item.id === activeInfographicId);
 
@@ -175,7 +202,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
           {activeInfographicId ? (
             <button
               type="button"
-              onClick={() => setActiveInfographicId(null)}
+              onClick={() => handleSelectInfographic(null)}
               className={`p-2 rounded-xl border transition-colors cursor-pointer flex items-center justify-center ${
                 isDark 
                   ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700' 
@@ -214,18 +241,26 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
         </div>
 
         {activeInfographicId && (
-          <button
-            type="button"
-            onClick={() => setActiveInfographicId(null)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
-              isDark 
-                ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700' 
-                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
-            }`}
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-violet-500" />
-            <span>Tüm İnfografiklere Dön</span>
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <ShareLinkButton
+              type="infografik"
+              id={activeInfographicId}
+              isDark={isDark}
+              title="Bu İnfografiğin Bağlantısını Kopyala"
+            />
+            <button
+              type="button"
+              onClick={() => handleSelectInfographic(null)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700' 
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
+              }`}
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-violet-500" />
+              <span>Tüm İnfografiklere Dön</span>
+            </button>
+          </div>
         )}
       </div>
 
@@ -241,7 +276,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
             {INFOGRAPHIC_COLLECTION.map((card) => (
               <div
                 key={card.id}
-                onClick={() => setActiveInfographicId(card.id)}
+                onClick={() => handleSelectInfographic(card.id)}
                 className={`group relative p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between cursor-pointer select-none ${
                   isDark 
                     ? 'bg-slate-900/90 border-slate-800 hover:border-violet-500/50 hover:bg-slate-800/60 shadow-xs' 
@@ -321,9 +356,18 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
 
                 {/* Bottom Action */}
                 <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    {card.publisher}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-400 font-medium truncate max-w-[120px] sm:max-w-none">
+                      {card.publisher}
+                    </span>
+                    <ShareLinkButton
+                      variant="compact"
+                      type="infografik"
+                      id={card.id}
+                      isDark={isDark}
+                      title={`${card.title} bağlantısını kopyala`}
+                    />
+                  </div>
                   <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform ${
                     card.accentColor === 'rose'
                       ? 'text-rose-600 dark:text-rose-400'
