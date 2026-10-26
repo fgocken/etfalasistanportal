@@ -1,6 +1,6 @@
 {
-  "summary":  "Deep linking and section-sharing implementation plan allowing direct sharing of any clinical tool or infographic (e.g. #infografik=rsi-vs-elective, #arac=intraop) with 1-click clipboard copy buttons, toast feedback, and direct landing.",
-  "updatedAt":  "2026-10-26T19:53:54.741429859Z",
+  "summary":  "Kapsamlı Bölgesel/Periferik Sinir Blokları Klinik Aracı uygulama planı: Üst ekstremite, alt ekstremite ve gövde fasya plan blokları (ESP, TAP vb.), interaktif duyu/dermatom haritası, kilo bazlı maksimum lokal anestezik doz ve ASRA/ESRA uyumlu %20 İntralipid LAST kurtarma hesaplayıcısı, portal arama ve deep-link paylaşım entegrasyonu.",
+  "updatedAt":  "2026-10-26T20:17:12.883463462Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

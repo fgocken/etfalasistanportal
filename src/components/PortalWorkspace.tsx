@@ -23,7 +23,8 @@ import {
   FileSpreadsheet,
   Search,
   Wind,
-  Pill
+  Pill,
+  Compass
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -36,6 +37,7 @@ import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
 import { AirwayManagementView } from './airway/AirwayManagementView';
 import { TreatmentsWorkspace } from './treatments/TreatmentsWorkspace';
+import { NerveBlocksWorkspace } from './nerve-blocks/NerveBlocksWorkspace';
 import { InfographicsView } from './infographics/InfographicsView';
 import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
@@ -43,7 +45,7 @@ import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'infographics' | 'contacts' | 'roster';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'infographics' | 'contacts' | 'roster';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -167,6 +169,24 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     ringClassDark: 'ring-1 ring-teal-500/20',
     ringClassLight: 'ring-1 ring-teal-500/10'
   },
+  'nerve-blocks': {
+    id: 'nerve-blocks',
+    title: 'Sinir Blokları & LAST',
+    badge: 'Yeni Bölüm',
+    badgeHighlight: true,
+    desc: 'USG eşliğinde periferik ve fasya plan blokları (ESP, TAP, ACB vb.), duyu haritası, kilo bazlı LA dozu ve acil %20 İntralipid LAST kurtarma protokolü.',
+    icon: Compass,
+    iconBgDark: 'bg-indigo-500/15',
+    iconBgLight: 'bg-indigo-50',
+    iconColorDark: 'text-indigo-400',
+    iconColorLight: 'text-indigo-700',
+    borderHoverDark: 'hover:border-indigo-500/40',
+    borderHoverLight: 'hover:border-indigo-400',
+    titleHoverDark: 'group-hover:text-indigo-300',
+    titleHoverLight: 'group-hover:text-indigo-800',
+    ringClassDark: 'ring-1 ring-indigo-500/20',
+    ringClassLight: 'ring-1 ring-indigo-500/10'
+  },
   infographics: {
     id: 'infographics',
     title: 'Klinik İnfografikler',
@@ -221,8 +241,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'infographics', 'contacts', 'roster'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v10';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'infographics', 'contacts', 'roster'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v11';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -391,8 +411,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert airway & roster if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert nerve-blocks, airway & roster if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
@@ -404,6 +424,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 updated.splice(preopIdx + 1, 0, 'airway');
               } else {
                 updated.push('airway');
+              }
+            }
+            if (!updated.includes('nerve-blocks')) {
+              const treatIdx = updated.indexOf('treatments');
+              if (treatIdx !== -1) {
+                updated.splice(treatIdx + 1, 0, 'nerve-blocks');
+              } else {
+                updated.push('nerve-blocks');
               }
             }
             if (!updated.includes('roster')) {
@@ -1403,6 +1431,18 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 8. Tedaviler ve İlaçlar */}
         {activeTab === 'treatments' && (
           <TreatmentsWorkspace isDark={isDark} />
+        )}
+
+        {/* 9. Sinir Blokları & LAST */}
+        {activeTab === 'nerve-blocks' && (
+          <NerveBlocksWorkspace 
+            isDark={isDark}
+            initialBlockId={
+              initialRoute?.type === 'arac' && initialRoute.id?.includes('blok=')
+                ? initialRoute.id.split('blok=')[1]
+                : null
+            }
+          />
         )}
 
         {/* 9. Clinical Infographics */}

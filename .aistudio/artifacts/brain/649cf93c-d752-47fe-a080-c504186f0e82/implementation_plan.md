@@ -1,117 +1,75 @@
-# Bölüm ve İnfografik Doğrudan Paylaşım (Deep Linking & Hash Routing)
+# Uygulama Planı: Bölgesel & Periferik Sinir Blokları Klinik Aracı (`nerve-blocks`)
 
-Klinisyenlerin ve asistanların portaldeki herhangi bir infografiği (örneğin **Hızlı Seri Entübasyon vs Elektif Entübasyon**) veya klinik hesaplama aracını doğrudan tek tıkla kopyalayıp meslektaşlarıyla paylaşabilmesini sağlayan, tarayıcı geçmişiyle tam uyumlu temiz URL Hash rotalama sistemi.
-
-## User Review & Critical Decisions
-
-> [!IMPORTANT]
-> Kullanıcının netleştirdiği 3 kritik mimari ve kullanıcı deneyimi kararı plana işlenmiştir:
-
-- **Doğrulanmış Karar 1 (URL Yapısı)**: Temiz ve sezgisel URL Hash formatı kullanılacak (`#infografik=rsi-vs-elective` veya `#arac=intraop`). Sayfa yenilenmesine gerek kalmadan SPA içinde anında senkronize olur.
-- **Doğrulanmış Karar 2 (Arayüz Butonu)**: Her infografik ve klinik aracın üst başlık çubuğuna şık bir **"Bağlantıyı Kopyala" (Share/Copy Link)** butonu eklenecek; tıklandığında panoya kopyalayıp görsel onay bildirimi ("Bağlantı Kopyalandı!") verecek.
-- **Doğrulanmış Karar 3 (Açılış Davranışı)**: Paylaşılan linke tıklayan bir hekim uygulamayı açtığında karşılama ekranını atlayarak **doğrudan ilgili infografiğe veya araca** yönlendirilecek; sol üstteki "← Portale Dön" butonuyla ana panele geçebilecek.
+Şişli Etfal Anesteziyoloji & Reanimasyon Portalı için modern USG rehberliğinde bölgesel anestezi, fasya plan blokları, interaktif duyu/dermatom anatomisi ve acil LAST (Lokal Anestezik Sistemik Toksisitesi) kurtarma protokolünü kapsayan yeni bir klinik araç geliştirilmesi.
 
 ---
 
-## 1. Overview & Core Concept
-
-- **Ne Sağlar**: Kullanıcı tek bir butona tıklayarak o an açık olan infografiğin veya aracın doğrudan linkini panoya kopyalar (örn. `https://ais-...run.app/#infografik=rsi-vs-elective`). Bu link WhatsApp, e-posta veya klinik mesajlaşma gruplarında paylaşıldığında, linki açan meslektaş karşılama ekranı veya menüler arasında kaybolmadan doğrudan hedef klinik kılavuzu görür.
-- **Hedef Kitle**: Şişli Etfal Anesteziyoloji ve Reanimasyon Kliniği hekimleri, asistanlar, ameliyathane ekibi ve konsültasyon hekimleri.
-- **Sağlanan Temel Fayda**: Ameliyathanede veya acil nöbetinde saniyeler içinde doğru klinik infografiğe doğrudan erişim ve meslektaşlar arası zahmetsiz bilgi aktarımı.
-
----
-
-## 2. User Experience & Visual Design
-
-### Temel Kullanıcı Akışları
-1. **Bağlantı Kopyalama (Paylaşan Kullanıcı)**:
-   - Kullanıcı "Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon" infografiğini inceler.
-   - Başlık alanındaki `Bağlantıyı Kopyala` butonuna (Share2 / Link ikonu) tıklar.
-   - Buton mikro animasyonla 2 saniyeliğine yeşil renk alarak `Kopyalandı! ✓` durumuna geçer; eş zamanlı olarak alt köşede zarif bir toast bildirim belirir.
-   - Pano içeriği: `https://[alan-adi]/#infografik=rsi-vs-elective`
-2. **Doğrudan Erişim (Bağlantıyı Açan Meslektaş)**:
-   - Meslektaş gelen bağlantıya tıklar.
-   - Uygulama açılışta hash parametresini (`#infografik=rsi-vs-elective`) algılar.
-   - Karşılama ekranı bypass edilerek doğrudan Hızlı Seri Entübasyon infografiği ekrana gelir.
-   - Sayfa başında `← Tüm İnfografikler` ve `← Ana Portale Dön` navigasyon seçenekleri yer alır.
-3. **Tarayıcı Geçmişi (Geri / İleri Entegrasyonu)**:
-   - Tarayıcının "Geri" butonuna basıldığında infografik galerisine, oradan ana portale doğal olarak dönülür (`popstate` / `hashchange` desteği).
-
-### Görsel Tasarım & Stil
-- **Buton Tasarımı**:
-  - Karanlık mod: `bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700`
-  - Aydınlık mod: `bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-xs`
-  - Aktif / Kopyalandı durumu: `bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30`
-- **Konumlandırma**: Her infografik sayfasının ve her klinik aracın sağ üst başlık aksiyonları arasına (PubMed butonunun yanına) yerleştirilir.
+## 1. Kullanıcı İhtiyacı ve Klinik Hedefler
+- **Kapsam:** Tüm majör anestezi blok grupları (Üst Ekstremite, Alt Ekstremite ve Gövde/Fasya Plan Blokları).
+- **LAST & LA Güvenliği:** Hastanın kilosuna göre seçilen lokal anesteziklerin (bupivakain, levobupivakain, ropivakain, lidokain ± adrenalin) maksimum güvenli dozlarının hesaplanması ve acil durumda hayat kurtarıcı **%20 İntralipid bolus + infüzyon** dozlarının anında görüntülenmesi.
+- **İnteraktif Görselleştirme:** Blok seçildiğinde uyuşacak duyusal bölgelerin (dermatomlar, periferik kutanöz sinir alanları) ve motor etkilerin interaktif harita üzerinde gösterilmesi.
+- **Entegrasyon:** Portal dashboard araç kartı, deep linking (`#arac=nerve-blocks`), 1-tıkla bağlantı paylaşımı ve portal arama motoru dizini.
 
 ---
 
-## 3. Key Product Decisions & Trade-Offs
+## 2. Mimari ve Bileşen Yapısı
 
-- **Hash-Based Routing (`#infografik=...`) vs Path-Based Routing (`/infografik/...`)**:
-  - *Seçilen*: Hash tabanlı rotalama.
-  - *Neden*: Statik SPA ve Docker/Vite hosting ortamlarında sunucu tarafı URL rewrite gerektirmeden, 404 hatası riski olmaksızın her ortamda garantili çalışır.
-- **Otomatik Hash Senkronizasyonu**:
-  - Kullanıcı sekme veya infografik değiştirdiğinde `window.location.hash` arka planda `history.replaceState` ile güncellenir; böylece kullanıcı butona basmasa bile adres çubuğundaki linki elle kopyaladığında da doğru bölüm paylaşılmış olur.
+### A. Veri Modeli ve Blok Kütüphanesi (`src/data/nerveBlocksData.ts`)
+Her blok için yapılandırılmış tıp literatürü (NYSORA, ESRA, ASRA yönergeleri) kaynaklı veri modeli:
+- **Kimlik & Başlık:** `id`, `name`, `trName`, `region` (`upper` | `lower` | `trunk`), `targetNerves`
+- **Ultrasonografi (USG) Rehberliği:** Prob tipi (Lineer / Konveks), hasta pozisyonu, prob oryantasyonu, iğne yönü (In-plane / Out-of-plane)
+- **Hedef ve Anatomi:** Sonoanatomi belirteçleri (fasya, damarlar, kaslar), yayılım deseni
+- **Önerilen İlaç & Hacim:** LA volüm aralığı (örn. ESP için 20-30 mL %0.25 bupivakain, ACB için 15-20 mL), konsantrasyon önerileri
+- **Duyusal & Cerrahi Kapsam:** Hangi cerrahiler için uygun olduğu, uyuşan dermatomlar/kutanöz alanlar (omuz, ön kol, diz, toraks, batın ön duvarı vb.)
+- **Klinik İpuçları & Tuzaklar ("Pearls & Pitfalls"):** Motor blok riski, plevra/damar ponksiyonu uyarısı, Horner sendromu riski, hemidiyafram paralizisi (frenik sinir) notları
+- **Dahil Edilecek Bloklar:**
+  1. **Üst Ekstremite:** İnterskalen (ISB), Supraklaviküler (SCB), İnfraklaviküler (ICB), Aksiller, Periferik bilek/el blokları (Median, Ulnar, Radial)
+  2. **Alt Ekstremite:** Femoral, Adduktor Kanal (ACB), Popliteal Siyatik, Subgluteal Siyatik, PENG (Pericapsular Nerve Group), Fascia Iliaca (FICB)
+  3. **Gövde & Fasya Plan Blokları:** Erector Spinae Plane (ESP - torasik ve lomber), Transversus Abdominis Plane (TAP), Rektus Kılıfı (Rectus Sheath), Quadratus Lumborum (QL), PECS I/II ve Serratus Anterior (SAP)
+
+### B. Lokal Anestezik & LAST İntralipid Hesaplayıcısı (`src/components/nerve-blocks/LastCalculator.tsx`)
+- **Kilo Girişi:** Yetişkin veya pediatrik hasta ağırlığı (kg)
+- **Maksimum Güvenli Doz Tablosu:**
+  - Bupivakain / Levobupivakain: 2 mg/kg (maks 150-175 mg)
+  - Ropivakain: 3 mg/kg (maks 200-250 mg)
+  - Lidokain (adrenalinsiz): 4.5 mg/kg (maks 300 mg)
+  - Lidokain + Adrenalin: 7 mg/kg (maks 500 mg)
+  - Prilokain: 6 mg/kg (maks 400 mg)
+- **%20 İntralipid (Lipid Rescue) Acil Protokolü:**
+  - **Bolus:** 1.5 mL/kg İV (2-3 dakikada hızlı infüzyon)
+  - **İdame İnfüzyonu:** 0.25 mL/kg/dk (kardiyovasküler stabilite sağlanana kadar)
+  - **Dirençli Durum:** Bolus tekrarı (maks 2 kez) ve infüzyon hızının 0.5 mL/kg/dk'ya yükseltilmesi
+  - **Maksimum Kümülatif Doz:** İlk 30-45 dakikada 10-12 mL/kg üst limit uyarısı
+  - **Acil Müdahale Adımları:** FiO2 1.0, hiperventilasyondan kaçınma (asidoz ve PaCO2 artışı LAST toksisitesini artırır), düşük doz epinefrin (<1 mcg/kg), propofol ve vazopressinden kaçınma.
+
+### C. İnteraktif Duyu & Kapsama Haritası (`src/components/nerve-blocks/SensoryMapViewer.tsx`)
+- Seçilen bloğa göre anatomik vücut bölgelerinin (omuz, kol, ön kol, el, kalça, uyluk, diz, bacak, ayak, göğüs, batın) kutanöz/dermatom dağılımının renkli ve interaktif vurgulanması.
+- Tersine arama: Kullanıcı cerrahi bölgeyi (örn. "Diz Artroplastisi" veya "Omuz Artroskopisi") seçtiğinde uygun sinir bloklarının otomatik önerilmesi.
+
+### D. Ana Çalışma Alanı (`src/components/nerve-blocks/NerveBlocksWorkspace.tsx`)
+- Üst filtre çubuğu: Kategori seçimi (Tümü, Üst Ekstremite, Alt Ekstremite, Gövde Blokları), cerrahi arama kutusu.
+- İki panelli düzen:
+  - Sol/Orta Panel: Detaylı blok kartları, USG görüntüleme rehberi, teknik adımlar, volüm ve ilaç önerileri.
+  - Sağ Panel / Açılır Sekme: Hızlı LAST & LA Doz Hesaplayıcısı ve İnteraktif Duyu Kapsama Haritası.
+- Her blok kartında **"Bağlantıyı Kopyala"** (`ShareLinkButton`) desteği (`#arac=nerve-blocks&blok=isb`).
 
 ---
 
-## 4. Technical Architecture & Data Strategy
+## 3. Sistem Entegrasyonu & Yönlendirme
+1. **`src/utils/deepLink.ts`:**
+   - `VALID_TOOL_IDS` listesine `'nerve-blocks'` eklenmesi.
+   - Hash ayrıştırma ve güncelleme mantığının desteklenmesi.
+2. **`src/components/PortalWorkspace.tsx`:**
+   - `ToolTabId` tipine `'nerve-blocks'` eklenmesi.
+   - `ALL_CLINICAL_TOOLS` nesnesine yeni araç kartının tanımlanması (Özel ikon, mor/indigo tema rengi, "Yeni Araç" rozeti).
+   - Çalışma alanı görünümünde `NerveBlocksWorkspace` bileşeninin render edilmesi.
+3. **`src/data/portalSearchIndex.ts`:**
+   - Tüm bloklar, LAST protokolü, USG terimleri ve cerrahi endikasyonların global hızlı arama motoruna (CommandPalette / Dashboard Search) dizinlenmesi.
 
-### Mimari & Veri Akış Diyagramı
+---
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                          Tarayıcı URL Hash                             │
-│                  #infografik=rsi-vs-elective                           │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ window.location.hash
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                               App.tsx                                  │
-│  - İlk yüklemede hash parse edilir                                     │
-│  - Hash doluysa: currentView = 'portal' (Welcome Screen atlanır)        │
-│  - Hash dinleyicisi (window.addEventListener('hashchange'))            │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ activeTab, activeInfographicId
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                        PortalWorkspace.tsx                             │
-│  - activeTab state'i hash ile senkronize tutulur                       │
-│  - Her araç başlığında evrensel ShareButton bileşeni                   │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ initialInfographicId
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                       InfographicsView.tsx                             │
-│  - activeInfographicId (#infografik=...) ile eşleşen kartı açar        │
-│  - Geri dönüldüğünde hash temizlenir (#arac=infographics)              │
-│  - İnfografik başlığında "Bağlantıyı Kopyala" aksiyonu                 │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-### Desteklenecek Bölüm Kimlikleri (ID Haritası)
-
-1. **İnfografikler (`#infografik=<id>`)**:
-   - `rsi-vs-elective`: Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon
-   - `adult-fasting`: Erişkin Preoperatif Açlık Rehberi (2-6-8)
-   - `pediatric-fasting`: Pediatrik Preoperatif Açlık Rehberi (6-4-3-1)
-   - `modified-aldrete`: Modifiye Aldrete Skoru (Faz 1 PACU)
-   - `padss`: PADSS Skoru (Faz 2 Günübirlik Taburculuk)
-   - `surgical-urgency`: 2024 AHA/ACC Cerrahi Aciliyet ve Zamanlama
-
-2. **Klinik Araçlar (`#arac=<id>`)**:
-   - `calculator`: Kilo, MV Volüm, İdame Sıvı Hesaplayıcı
-   - `intraop`: İntraoperatif Sıvı Hesaplayıcı
-   - `infusion`: İnfüzyon Hızı Çevirici
-   - `preop`: Preoperatif Değerlendirme (ASA/Mallampati vb.)
-   - `airway`: Zor Havayolu Kılavuzu & Algoritması
-   - `treatments`: Klinik Protokoller & Tedavi Rehberleri
-   - `infographics`: İnfografik Koleksiyonu Ana Ekranı
-   - `contacts`: Klinik Dahili Telefon Rehberi
-   - `roster`: Nöbet Listesi
-
-### Uygulama Bileşenleri
-1. **`src/utils/deepLink.ts`**: URL hash okuma, oluşturma ve clipboard kopyalama yardımcı fonksiyonları.
-2. **`src/components/common/ShareLinkButton.tsx`**: Her sayfada kullanılabilir, kopyalama geri bildirimi veren kompakt buton.
-3. **`App.tsx`, `PortalWorkspace.tsx`, `InfographicsView.tsx`**: Hash parametrelerini okuyup doğru sekmeyi ve alt içeriği açan reaktif durum yönetimi.
+## 4. Doğrulama ve Test Adımları
+1. **Kod Bütünlüğü & TypeScript Derlemesi:** `compile_applet` ile sıfır derleme hatası kontrolü.
+2. **LAST Hesaplama Doğruluğu:** Kilo bazlı LA dozları ve İntralipid bolus/infüzyon değerlerinin tıp kılavuzlarıyla birebir matematiksel doğrulanması.
+3. **İnteraktivite:** Blok seçimi, anatomik bölge vurgulaması, filtreleme ve arama testleri.
+4. **Deep Linking:** `#arac=nerve-blocks` ve `#arac=nerve-blocks&blok=adductor-canal` gibi URL paylaşımlarının doğrudan hedeflenen bloğa sorunsuz açılmasının testi.

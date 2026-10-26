@@ -380,6 +380,83 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'airway',
     popular: true
   },
+  // Sinir Blokları ve LAST Modülü
+  {
+    id: 'tool-nerve-blocks-main',
+    title: 'Bölgesel ve Periferik Sinir Blokları Rehberi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Rejyonel Anestezi',
+    description: 'USG eşliğinde üst ekstremite, alt ekstremite ve gövde/fasya plan blokları, sonoanatomi ve cerrahi endikasyonlar.',
+    keywords: ['sinir bloğu', 'rejyonel anestezi', 'periferik sinir', 'blok', 'usg blok', 'ultrason', 'anestezi', 'fasya plan', 'bölgesel anestezi', 'nysora'],
+    tabId: 'nerve-blocks',
+    popular: true
+  },
+  {
+    id: 'calc-last-intralipid',
+    title: 'Lokal Anestezik Doz ve LAST %20 İntralipid Kurtarma Hesaplayıcısı',
+    category: 'Hesaplayıcılar',
+    badge: 'LAST · İntralipid',
+    description: 'Kilo bazlı maksimum güvenli LA dozu (bupivakain, ropivakain, lidokain) ve ASRA/ESRA %20 İntralipid bolus + infüzyon kurtarma dozu.',
+    keywords: ['last', 'intralipid', 'lipid rescue', 'lokal anestezik toksisitesi', 'toksisite', 'bupivakain dozu', 'marcaine', 'ropivakain', 'lidokain', 'kardiyotoksisite', 'kurtarma'],
+    tabId: 'nerve-blocks',
+    popular: true
+  },
+  {
+    id: 'block-esp',
+    title: 'Erector Spinae Plan Bloğu (ESP) - Torakal ve Lomber',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'ESP Bloğu',
+    description: 'VATS, torakotomi, kosta kırıkları, meme cerrahisi ve omurga cerrahilerinde geniş kraniyokaudal yayılımlı fasya plan analjezisi.',
+    keywords: ['esp', 'erector spinae', 'torakal esp', 'kosta kırığı', 'vats', 'toraks cerrahisi', 'meme cerrahisi', 'lomber esp', 'fasya plan'],
+    tabId: 'nerve-blocks',
+    popular: true
+  },
+  {
+    id: 'block-acb-adductor',
+    title: 'Adduktor Kanal Bloğu (ACB) - Motor Koruyucu Diz Analjezisi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'ACB · Safen',
+    description: 'Total diz artroplastisinde kuadriseps motor gücünü koruyarak düşme riskini azaltan ve erken mobilizasyon sağlayan subsartoryal blok.',
+    keywords: ['adduktor kanal', 'acb', 'safen sinir', 'diz protezi', 'total diz artroplastisi', 'motor koruyucu', 'erken mobilizasyon', 'kuadriseps koruma'],
+    tabId: 'nerve-blocks',
+    popular: true
+  },
+  {
+    id: 'block-peng',
+    title: 'PENG Bloğu (Pericapsular Nerve Group) - Kalça Kırığı ve Artroplastisi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'PENG Bloğu',
+    description: 'Kalça kırıklarında motor zaaf yapmaksızın derin eklem analjezisi sağlayan yenilikçi perikapsüler blok tekniği.',
+    keywords: ['peng bloğu', 'peng', 'kalça kırığı', 'femur boyun kırığı', 'total kalça', 'artroplasti', 'motor koruyucu kalça'],
+    tabId: 'nerve-blocks'
+  },
+  {
+    id: 'block-tap',
+    title: 'Transversus Abdominis Plan Bloğu (TAP) - Batın & Sezaryen Analjezisi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'TAP Bloğu',
+    description: 'Sezaryen, apendektomi ve alt karın cerrahilerinde somatik karın duvarı ağrısını kesen fasyal blokaj.',
+    keywords: ['tap bloğu', 'tap', 'sezaryen analjezi', 'apendektomi', 'alt batın', 'karın duvarı', 'internal oblik', 'transversus abdominis'],
+    tabId: 'nerve-blocks'
+  },
+  {
+    id: 'block-isb-interskalen',
+    title: 'İnterskalen Brakiyal Pleksus Bloğu (ISB) - Omuz Cerrahisi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'ISB · Omuz',
+    description: 'Omuz artroskopisi ve artroplastisi için C5-C7 düzeyinde altın standart brakiyal pleksus bloğu.',
+    keywords: ['interskalen', 'isb', 'omuz artroskopisi', 'omuz protezi', 'brakiyal pleksus', 'frenik sinir', 'c5 c6'],
+    tabId: 'nerve-blocks'
+  },
+  {
+    id: 'block-popliteal-siyatik',
+    title: 'Popliteal Siyatik Sinir Bloğu - Ayak ve Ayak Bileği Cerrahisi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Popliteal Siyatik',
+    description: 'Ayak bileği kırıkları, aşil tendon onarımı ve diyabetik ayak cerrahisinde derin ve uzun süreli anestezi.',
+    keywords: ['popliteal siyatik', 'siyatik blok', 'ayak cerrahisi', 'ayak bileği kırığı', 'aşil tendon', 'tibial sinir', 'peroneal sinir'],
+    tabId: 'nerve-blocks'
+  },
   {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',

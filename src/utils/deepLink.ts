@@ -37,6 +37,7 @@ export const VALID_TOOL_IDS = [
   'preop',
   'airway',
   'treatments',
+  'nerve-blocks',
   'infographics',
   'contacts',
   'roster'
