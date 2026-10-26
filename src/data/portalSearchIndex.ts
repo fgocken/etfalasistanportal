@@ -209,6 +209,20 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
 
   // 3. Klinik İnfografikler
   {
+    id: 'info-rsi-vs-elective',
+    title: 'Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon',
+    category: 'Klinik İnfografikler',
+    badge: 'RSI · DAS',
+    description: 'Dolu mide aspirasyon profilaksisi (RSI) ile elektif indüksiyonun 10 kritik farkı (BMV yasağı, 1.2 mg/kg Rokuronyum, Sellick, NODESAT, Sugammadeks).',
+    keywords: [
+      'rsi', 'hızlı seri entübasyon', 'rapid sequence induction', 'elektif entübasyon', 'dolu mide', 
+      'mendelson', 'aspirasyon', 'sellick', 'krikoid bası', 'rokuronyum 1.2', 'süksinilkolin', 
+      'nodesat', 'apneik oksijenasyon', 'bmv yasağı', 'sugammadeks 16', 'cico', 'zor havayolu'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
     id: 'info-adult-fasting',
     title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
     category: 'Klinik İnfografikler',

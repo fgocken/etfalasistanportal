@@ -189,7 +189,7 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
           )}
 
           <a
-            href="https://pubmed.ncbi.nlm.nih.gov/36629396/"
+            href="https://pubmed.ncbi.nlm.nih.gov/36629465/"
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
@@ -199,7 +199,7 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
             }`}
           >
             <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-            <span>ASA 2023 Kılavuzu (PMID: 36629396)</span>
+            <span>ASA 2023 Kılavuzu (PMID: 36629465)</span>
             <ExternalLink className="w-3 h-3 text-slate-400" />
           </a>
         </div>
@@ -496,7 +496,7 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
           <span>Literatür ve Kılavuz Referansları</span>
         </div>
         <p className="leading-relaxed">
-          1. <strong>ASA 2023 Update:</strong> Joshi GP, et al. <em>Practice Guidelines for Preoperative Fasting: Carbohydrate-Containing Clear Liquids with or without Protein, Chewing Gum, and Pediatric Fasting Duration—A Modular Update of the American Society of Anesthesiologists Practice Guidelines.</em> Anesthesiology. 2023 Feb;138(2):132-151. PMID: 36629396.
+          1. <strong>ASA 2023 Update:</strong> Joshi GP, et al. <em>Practice Guidelines for Preoperative Fasting: Carbohydrate-Containing Clear Liquids with or without Protein, Chewing Gum, and Pediatric Fasting Duration—A Modular Update of the American Society of Anesthesiologists Practice Guidelines.</em> Anesthesiology. 2023 Feb;138(2):132-151. PMID: 36629465.
         </p>
         <p className="leading-relaxed">
           2. <strong>GLP-1 RA Consensus:</strong> Joshi GP, et al. <em>American Society of Anesthesiologists consensus-based guidance on preoperative management of patients on glucagon-like peptide-1 (GLP-1) receptor agonists.</em> ASA Practice Guidance, 2023.

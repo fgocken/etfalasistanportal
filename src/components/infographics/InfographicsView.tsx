@@ -19,6 +19,7 @@ import { ModifiedAldreteInfographic } from './ModifiedAldreteInfographic';
 import { PADSSInfographic } from './PADSSInfographic';
 import { AdultFastingInfographic } from './AdultFastingInfographic';
 import { PediatricFastingInfographic } from './PediatricFastingInfographic';
+import { RSIvsElectiveInfographic } from './RSIvsElectiveInfographic';
 
 interface InfographicsViewProps {
   isDark: boolean;
@@ -38,6 +39,23 @@ export interface InfographicCardItem {
 }
 
 const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
+  {
+    id: 'rsi-vs-elective',
+    title: 'Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon',
+    source: 'Difficult Airway Society (DAS) & Anesth Analg Kılavuzları',
+    sourceBadge: 'DAS / ASA',
+    category: 'Havayolu & Aspirasyon',
+    shortDesc: 'Dolu mide aspirasyon profilaksisi (RSI) ile elektif indüksiyonun 10 kritik parametrede karşılaştırması: BMV yasağı, 1.2 mg/kg Rokuronyum, Sellick manevrası ve apneik oksijenasyon.',
+    pillsHeader: 'Kritik RSI Farkları:',
+    publisher: 'Anesth Analg / DAS Guidelines',
+    riskPills: [
+      { label: 'BMV', rate: 'YASAK', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Rokuronyum', rate: '1.2 mg/kg', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Oksijen', rate: 'NODESAT', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Kurtarma', rate: '16 mg/kg', colorClass: 'text-purple-600 dark:text-purple-400', bgClass: 'bg-purple-500/10', borderClass: 'border-purple-500/30' },
+    ],
+    accentColor: 'rose'
+  },
   {
     id: 'adult-fasting',
     title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
@@ -234,13 +252,15 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                   {/* Top Badge & Category */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
-                      card.accentColor === 'amber'
-                        ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
-                        : card.accentColor === 'emerald'
-                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
-                          : card.accentColor === 'teal'
-                            ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
-                            : 'bg-violet-500/15 text-violet-600 dark:text-violet-300'
+                      card.accentColor === 'rose'
+                        ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300'
+                        : card.accentColor === 'amber'
+                          ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
+                          : card.accentColor === 'emerald'
+                            ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                            : card.accentColor === 'teal'
+                              ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
+                              : 'bg-violet-500/15 text-violet-600 dark:text-violet-300'
                     }`}>
                       {card.category}
                     </span>
@@ -251,13 +271,15 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
 
                   {/* Title & Description */}
                   <h4 className={`text-sm font-bold transition-colors ${
-                    card.accentColor === 'amber'
-                      ? 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
-                      : card.accentColor === 'emerald'
-                        ? 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
-                        : card.accentColor === 'teal'
-                          ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
-                          : 'group-hover:text-violet-500 dark:group-hover:text-violet-400'
+                    card.accentColor === 'rose'
+                      ? 'group-hover:text-rose-600 dark:group-hover:text-rose-400'
+                      : card.accentColor === 'amber'
+                        ? 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
+                        : card.accentColor === 'emerald'
+                          ? 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                          : card.accentColor === 'teal'
+                            ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
+                            : 'group-hover:text-violet-500 dark:group-hover:text-violet-400'
                   } ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {card.title}
                   </h4>
@@ -271,13 +293,15 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                   <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
                     <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
                       <Activity className={`w-3 h-3 ${
-                        card.accentColor === 'amber'
-                          ? 'text-amber-500'
-                          : card.accentColor === 'emerald'
-                            ? 'text-emerald-500'
-                            : card.accentColor === 'teal'
-                              ? 'text-teal-500'
-                              : 'text-violet-500'
+                        card.accentColor === 'rose'
+                          ? 'text-rose-500'
+                          : card.accentColor === 'amber'
+                            ? 'text-amber-500'
+                            : card.accentColor === 'emerald'
+                              ? 'text-emerald-500'
+                              : card.accentColor === 'teal'
+                                ? 'text-teal-500'
+                                : 'text-violet-500'
                       }`} />
                       <span>{card.pillsHeader}</span>
                     </div>
@@ -301,13 +325,15 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                     {card.publisher}
                   </span>
                   <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform ${
-                    card.accentColor === 'amber'
-                      ? 'text-amber-600 dark:text-amber-400'
-                      : card.accentColor === 'emerald'
-                        ? 'text-emerald-600 dark:text-emerald-400'
-                        : card.accentColor === 'teal'
-                          ? 'text-teal-600 dark:text-teal-400'
-                          : 'text-violet-600 dark:text-violet-400'
+                    card.accentColor === 'rose'
+                      ? 'text-rose-600 dark:text-rose-400'
+                      : card.accentColor === 'amber'
+                        ? 'text-amber-600 dark:text-amber-400'
+                        : card.accentColor === 'emerald'
+                          ? 'text-emerald-600 dark:text-emerald-400'
+                          : card.accentColor === 'teal'
+                            ? 'text-teal-600 dark:text-teal-400'
+                            : 'text-violet-600 dark:text-violet-400'
                   }`}>
                     <span>İnfografiği Aç</span>
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -332,7 +358,12 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
         </div>
       )}
 
-      {/* VIEW 2A: Adult Preoperative Fasting Infographic */}
+      {/* VIEW 2A: RSI vs Elective Intubation Infographic */}
+      {activeInfographicId === 'rsi-vs-elective' && (
+        <RSIvsElectiveInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW 2B: Adult Preoperative Fasting Infographic */}
       {activeInfographicId === 'adult-fasting' && (
         <AdultFastingInfographic 
           isDark={isDark} 
