@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 
 import { SurgicalUrgency2024Infographic } from './SurgicalUrgency2024Infographic';
+import { ModifiedAldreteInfographic } from './ModifiedAldreteInfographic';
+import { PADSSInfographic } from './PADSSInfographic';
 
 interface InfographicsViewProps {
   isDark: boolean;
@@ -34,6 +36,38 @@ export interface InfographicCardItem {
 }
 
 const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
+  {
+    id: 'modified-aldrete',
+    title: 'Modifiye Aldrete Derlenme ve PACU Taburculuk Skoru',
+    source: 'Aldrete JA (1995 Revizyonu) & ASA PACU Kılavuzu',
+    sourceBadge: 'Aldrete 1995',
+    category: 'Postop & Derlenme (PACU)',
+    shortDesc: 'Genel ve rejyonal anestezi sonrası PACU’dan servise transfer güvenliğini belirleyen 5 parametreli altın standart Faz 1 derlenme skoru (0-10).',
+    pillsHeader: 'Klinik Karar Eşikleri:',
+    publisher: 'J Clin Anesth / ASA Guidelines',
+    riskPills: [
+      { label: 'Servis Onayı', rate: 'Skor ≥ 9', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'PACU Takip', rate: 'Skor 7 – 8', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Kritik / Alarm', rate: 'Skor < 7', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'emerald'
+  },
+  {
+    id: 'padss',
+    title: 'PADSS Günübirlik Cerrahi & Eve Taburculuk Skoru',
+    source: 'Frances Chung (1995) & SAMBA Kılavuzları',
+    sourceBadge: 'Chung 1995',
+    category: 'Günübirlik & Eve Taburculuk (Faz 2)',
+    shortDesc: 'Ayaktan cerrahi hastalarının ameliyat sonrası aynı gün eve güvenle taburcu edilebilmesini (Home-Readiness) sağlayan 5 parametreli altın standart Faz 2 derlenme skoru.',
+    pillsHeader: 'Eve Taburculuk Eşiği:',
+    publisher: 'J Clin Anesth / SAMBA',
+    riskPills: [
+      { label: 'Eve Taburcu', rate: 'PADSS ≥ 9', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Gözlem Uzat', rate: 'Skor 7 – 8', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Yatış Gerekir', rate: 'Skor < 7', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'teal'
+  },
   {
     id: 'surgical-urgency-2024',
     title: 'Cerrahilerin Zamanlama ve Aciliyet Sınıflaması',
@@ -164,9 +198,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                   {/* Top Badge & Category */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
-                      card.accentColor === 'teal'
-                        ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
-                        : 'bg-violet-500/15 text-violet-600 dark:text-violet-300'
+                      card.accentColor === 'emerald'
+                        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                        : card.accentColor === 'teal'
+                          ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
+                          : 'bg-violet-500/15 text-violet-600 dark:text-violet-300'
                     }`}>
                       {card.category}
                     </span>
@@ -177,9 +213,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
 
                   {/* Title & Description */}
                   <h4 className={`text-sm font-bold transition-colors ${
-                    card.accentColor === 'teal'
-                      ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
-                      : 'group-hover:text-violet-500 dark:group-hover:text-violet-400'
+                    card.accentColor === 'emerald'
+                      ? 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                      : card.accentColor === 'teal'
+                        ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
+                        : 'group-hover:text-violet-500 dark:group-hover:text-violet-400'
                   } ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {card.title}
                   </h4>
@@ -192,7 +230,13 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                   {/* Visual Mini Preview Strip */}
                   <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
                     <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
-                      <Activity className={`w-3 h-3 ${card.accentColor === 'teal' ? 'text-teal-500' : 'text-violet-500'}`} />
+                      <Activity className={`w-3 h-3 ${
+                        card.accentColor === 'emerald'
+                          ? 'text-emerald-500'
+                          : card.accentColor === 'teal'
+                            ? 'text-teal-500'
+                            : 'text-violet-500'
+                      }`} />
                       <span>{card.pillsHeader}</span>
                     </div>
                     <div className={`grid gap-1.5 text-center ${card.riskPills.length === 4 ? 'grid-cols-4' : 'grid-cols-3'}`}>
@@ -215,9 +259,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                     {card.publisher}
                   </span>
                   <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform ${
-                    card.accentColor === 'teal'
-                      ? 'text-teal-600 dark:text-teal-400'
-                      : 'text-violet-600 dark:text-violet-400'
+                    card.accentColor === 'emerald'
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : card.accentColor === 'teal'
+                        ? 'text-teal-600 dark:text-teal-400'
+                        : 'text-violet-600 dark:text-violet-400'
                   }`}>
                     <span>İnfografiği Aç</span>
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -242,7 +288,23 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
         </div>
       )}
 
-      {/* VIEW 2A: 2024 AHA/ACC Surgical Urgency Infographic */}
+      {/* VIEW 2A: Modified Aldrete Score Infographic */}
+      {activeInfographicId === 'modified-aldrete' && (
+        <ModifiedAldreteInfographic 
+          isDark={isDark} 
+          onOpenPADSS={() => setActiveInfographicId('padss')}
+        />
+      )}
+
+      {/* VIEW 2B: PADSS Outpatient Recovery Infographic */}
+      {activeInfographicId === 'padss' && (
+        <PADSSInfographic 
+          isDark={isDark} 
+          onBackToAldrete={() => setActiveInfographicId('modified-aldrete')}
+        />
+      )}
+
+      {/* VIEW 2C: 2024 AHA/ACC Surgical Urgency Infographic */}
       {activeInfographicId === 'surgical-urgency-2024' && (
         <SurgicalUrgency2024Infographic isDark={isDark} />
       )}

@@ -209,6 +209,33 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
 
   // 3. Klinik İnfografikler
   {
+    id: 'info-modified-aldrete',
+    title: 'Modifiye Aldrete Derlenme ve PACU Taburculuk Skoru',
+    category: 'Klinik İnfografikler',
+    badge: 'Aldrete 1995',
+    description: 'PACU’dan (Derlenme Odası) servise transfer uygunluğunu belirleyen 5 parametreli interaktif skor (Aktivite, Solunum, Dolaşım, Bilinç, SpO2).',
+    keywords: [
+      'aldrete', 'modifiye aldrete', 'aldrete skoru', 'derlenme', 'pacu', 'uyandırma odası', 
+      'taburculuk kriteri', 'postop takip', 'post-anesthesia recovery', 'pars', 'derlenme skoru', 
+      'servise transfer', 'motor aktivite', 'spo2', 'solunum', 'dolaşım', 'rezidüel blok', 'faz 1'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
+    id: 'info-padss',
+    title: 'PADSS Günübirlik Cerrahi & Eve Taburculuk Skoru',
+    category: 'Klinik İnfografikler',
+    badge: 'PADSS · Chung',
+    description: 'Ayaktan cerrahide Faz 2 derlenme ve eve güvenli taburculuk kriterleri (Vital bulgular, mobilizasyon, PONV, ağrı, cerrahi kanama).',
+    keywords: [
+      'padss', 'chung', 'günübirlik cerrahi', 'ayaktan cerrahi', 'eve taburculuk', 'faz 2 derlenme', 
+      'home readiness', 'ponv', 'taburculuk skoru', 'ambulatory surgery', 'mobilizasyon', 'postoperatif ağrı', 'idrar çıkışı', 'refakatçi'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
     id: 'info-surgical-urgency-2024',
     title: '2024 AHA/ACC Cerrahilerin Aciliyet ve Zamanlama Sınıflaması',
     category: 'Klinik İnfografikler',
