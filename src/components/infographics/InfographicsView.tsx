@@ -17,6 +17,8 @@ import {
 import { SurgicalUrgency2024Infographic } from './SurgicalUrgency2024Infographic';
 import { ModifiedAldreteInfographic } from './ModifiedAldreteInfographic';
 import { PADSSInfographic } from './PADSSInfographic';
+import { AdultFastingInfographic } from './AdultFastingInfographic';
+import { PediatricFastingInfographic } from './PediatricFastingInfographic';
 
 interface InfographicsViewProps {
   isDark: boolean;
@@ -36,6 +38,40 @@ export interface InfographicCardItem {
 }
 
 const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
+  {
+    id: 'adult-fasting',
+    title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
+    source: 'ASA 2023 Güncellemesi & ESAIC Perioperatif Kılavuzları',
+    sourceBadge: 'ASA 2023',
+    category: 'Preop Açlık & Aspirasyon',
+    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez) ve GLP-1 (Ozempic/Wegovy) yönetimi.',
+    pillsHeader: 'Açlık Pencereleri:',
+    publisher: 'Anesthesiology / ESAIC',
+    riskPills: [
+      { label: 'Berrak Sıvı', rate: '2 Saat', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Hafif Öğün', rate: '6 Saat', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Ağır / Et', rate: '8 Saat', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Sakız', rate: 'İptal Yok', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+    ],
+    accentColor: 'emerald'
+  },
+  {
+    id: 'pediatric-fasting',
+    title: 'Pediatrik Preoperatif Açlık Kılavuzu (6 - 4 - 3 - 1 Kuralı)',
+    source: 'ESAIC 2022 / ESPA / APA Pediatrik Kılavuzları',
+    sourceBadge: 'ESAIC 2022',
+    category: 'Pediatri & Preop Açlık',
+    shortDesc: 'Çocuklarda dehidratasyon, hipoglisemi ve ajitasyonu önleyen modern 6-4-3-1 açlık standardı: Berrak sıvılar 1 sa, anne sütü 3 sa, mama 4 sa, katı 6 sa.',
+    pillsHeader: 'Pediatrik 6-4-3-1:',
+    publisher: 'Eur J Anaesthesiol / ESPA',
+    riskPills: [
+      { label: 'Berrak Sıvı', rate: '1 Saat', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Anne Sütü', rate: '3 Saat', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Bebek Maması', rate: '4 Saat', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Katı / İnek Sütü', rate: '6 Saat', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'amber'
+  },
   {
     id: 'modified-aldrete',
     title: 'Modifiye Aldrete Derlenme ve PACU Taburculuk Skoru',
@@ -198,11 +234,13 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                   {/* Top Badge & Category */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
-                      card.accentColor === 'emerald'
-                        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
-                        : card.accentColor === 'teal'
-                          ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
-                          : 'bg-violet-500/15 text-violet-600 dark:text-violet-300'
+                      card.accentColor === 'amber'
+                        ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
+                        : card.accentColor === 'emerald'
+                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                          : card.accentColor === 'teal'
+                            ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
+                            : 'bg-violet-500/15 text-violet-600 dark:text-violet-300'
                     }`}>
                       {card.category}
                     </span>
@@ -213,11 +251,13 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
 
                   {/* Title & Description */}
                   <h4 className={`text-sm font-bold transition-colors ${
-                    card.accentColor === 'emerald'
-                      ? 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
-                      : card.accentColor === 'teal'
-                        ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
-                        : 'group-hover:text-violet-500 dark:group-hover:text-violet-400'
+                    card.accentColor === 'amber'
+                      ? 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
+                      : card.accentColor === 'emerald'
+                        ? 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                        : card.accentColor === 'teal'
+                          ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
+                          : 'group-hover:text-violet-500 dark:group-hover:text-violet-400'
                   } ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {card.title}
                   </h4>
@@ -231,11 +271,13 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                   <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
                     <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
                       <Activity className={`w-3 h-3 ${
-                        card.accentColor === 'emerald'
-                          ? 'text-emerald-500'
-                          : card.accentColor === 'teal'
-                            ? 'text-teal-500'
-                            : 'text-violet-500'
+                        card.accentColor === 'amber'
+                          ? 'text-amber-500'
+                          : card.accentColor === 'emerald'
+                            ? 'text-emerald-500'
+                            : card.accentColor === 'teal'
+                              ? 'text-teal-500'
+                              : 'text-violet-500'
                       }`} />
                       <span>{card.pillsHeader}</span>
                     </div>
@@ -259,11 +301,13 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
                     {card.publisher}
                   </span>
                   <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform ${
-                    card.accentColor === 'emerald'
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : card.accentColor === 'teal'
-                        ? 'text-teal-600 dark:text-teal-400'
-                        : 'text-violet-600 dark:text-violet-400'
+                    card.accentColor === 'amber'
+                      ? 'text-amber-600 dark:text-amber-400'
+                      : card.accentColor === 'emerald'
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : card.accentColor === 'teal'
+                          ? 'text-teal-600 dark:text-teal-400'
+                          : 'text-violet-600 dark:text-violet-400'
                   }`}>
                     <span>İnfografiği Aç</span>
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -288,7 +332,23 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
         </div>
       )}
 
-      {/* VIEW 2A: Modified Aldrete Score Infographic */}
+      {/* VIEW 2A: Adult Preoperative Fasting Infographic */}
+      {activeInfographicId === 'adult-fasting' && (
+        <AdultFastingInfographic 
+          isDark={isDark} 
+          onOpenPediatric={() => setActiveInfographicId('pediatric-fasting')}
+        />
+      )}
+
+      {/* VIEW 2B: Pediatric Preoperative Fasting Infographic */}
+      {activeInfographicId === 'pediatric-fasting' && (
+        <PediatricFastingInfographic 
+          isDark={isDark} 
+          onOpenAdult={() => setActiveInfographicId('adult-fasting')}
+        />
+      )}
+
+      {/* VIEW 2C: Modified Aldrete Score Infographic */}
       {activeInfographicId === 'modified-aldrete' && (
         <ModifiedAldreteInfographic 
           isDark={isDark} 
@@ -296,7 +356,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
         />
       )}
 
-      {/* VIEW 2B: PADSS Outpatient Recovery Infographic */}
+      {/* VIEW 2D: PADSS Outpatient Recovery Infographic */}
       {activeInfographicId === 'padss' && (
         <PADSSInfographic 
           isDark={isDark} 
@@ -304,7 +364,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark }) =>
         />
       )}
 
-      {/* VIEW 2C: 2024 AHA/ACC Surgical Urgency Infographic */}
+      {/* VIEW 2E: 2024 AHA/ACC Surgical Urgency Infographic */}
       {activeInfographicId === 'surgical-urgency-2024' && (
         <SurgicalUrgency2024Infographic isDark={isDark} />
       )}

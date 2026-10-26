@@ -209,6 +209,34 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
 
   // 3. Klinik İnfografikler
   {
+    id: 'info-adult-fasting',
+    title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
+    category: 'Klinik İnfografikler',
+    badge: 'ASA 2023',
+    description: 'Erişkinde berrak sıvılar (2 sa), hafif öğün (6 sa), yağlı/et (8 sa), sakız çiğneme (vaka ertelenmez) ve GLP-1 (Ozempic/Wegovy) yönetimi.',
+    keywords: [
+      'açlık', 'preoperatif açlık', 'açlık süreleri', 'aspirasyon', 'berrak sıvı', 'sakız', 'sakız çiğneme', 
+      'glp-1', 'ozempic', 'wegovy', 'mounjaro', 'semaglutid', 'gastrik pocus', 'mide ultrasonu', 'perlas skoru', 
+      'hafif öğün', 'katı gıda', 'süt', 'eras', 'maltodekstrin', 'karbonhidrat yüklemesi'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
+    id: 'info-pediatric-fasting',
+    title: 'Pediatrik Preoperatif Açlık Kılavuzu (6 - 4 - 3 - 1 Kuralı)',
+    category: 'Klinik İnfografikler',
+    badge: 'ESAIC 2022',
+    description: 'Çocuklarda modern açlık: Berrak sıvılar 1 sa, anne sütü 3 sa, bebek maması 4 sa, katı gıda & inek sütü 6 sa. Dehidratasyon ve hipoglisemi önlemleri.',
+    keywords: [
+      'pediatrik açlık', 'çocuk açlık', 'bebek açlık', 'anne sütü açlık', 'formül mama', 'bebek maması', 
+      '1 saat berrak sıvı', '6-4-3-1', 'esaic 2022', 'espa', 'çocuklarda dehidratasyon', 'ketotik hipoglisemi', 
+      'pediatrik aspirasyon', 'pediatrik anestezi'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
     id: 'info-modified-aldrete',
     title: 'Modifiye Aldrete Derlenme ve PACU Taburculuk Skoru',
     category: 'Klinik İnfografikler',
