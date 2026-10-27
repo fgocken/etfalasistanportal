@@ -1,6 +1,6 @@
 {
-  "summary":  "Sodyum bozuklukları (hiponatremi ve hipernatremi) klinik hesaplayıcısı, Adrogué-Madias formülü, Serbest Su Açığı (Free Water Deficit), Glukoz düzeltmeli sodyum, infüzyon hızı hesaplama ve Osmotik Demiyelinizasyon Sendromu (ODS) güvenlik sınırlarını Tedaviler ve İlaçlar bölümüne entegre eden kapsamlı uygulama planı.",
-  "updatedAt":  "2026-10-27T16:06:08.593974900Z",
+  "summary":  "Gelecekte eklenecek tüm ilaçlar için 'Altın Standart Klinik İlaç Monografisi ve Doz Hesaplayıcı Şablonu' olarak revize edilen Deksmedetomidin uygulama planı. En üstte farmakolojik kategori ve etki mekanizması, varsayılan kapalı farmakokinetik akordiyonu, kontrendikasyonlar, endikasyonlar ve off-label kullanımlar, uygulama yolları, erişkin ve pediatrik dozlar, böbrek yetmezliği tablosu (GFR, HD, PD, CRRT), karaciğer yetmezliği tablosu (Child-Pugh A/B/C), önemli olumsuz etkiler, klinik durumlara özel dikkat notları, IV sulandırma/hazırlama, ilaç güvenliği (High-Alert) ve ilaç etkileşim dış linki ile entegre interaktif infüzyon hesaplayıcısını içerir.",
+  "updatedAt":  "2026-10-27T18:16:21.235556745Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

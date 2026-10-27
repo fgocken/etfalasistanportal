@@ -23,6 +23,7 @@ import { PotassiumCalculator } from './PotassiumCalculator';
 import { HypokalemiaInfographic } from './HypokalemiaInfographic';
 import { SodiumCalculator, SodiumReferencesAccordion } from './SodiumCalculator';
 import { HyponatremiaInfographic } from './HyponatremiaInfographic';
+import { DexmedetomidineProtocol } from './DexmedetomidineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -44,7 +45,14 @@ interface ProtocolCardItem {
   status: 'active' | 'upcoming';
   accentColor: 'teal' | 'cyan' | 'purple' | 'rose';
   highlightsHeader: string;
-  highlights: { label: string; value: string; colorClass: string; bgClass: string; borderClass: string }[];
+  highlights: { 
+    label: string; 
+    value: string; 
+    subtext?: string;
+    colorClass: string; 
+    bgClass: string; 
+    borderClass: string;
+  }[];
 }
 
 const PROTOCOL_CARDS: ProtocolCardItem[] = [
@@ -59,10 +67,38 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     accentColor: 'teal',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
-      { label: 'Normal eGFR', value: '+0.15 mg/dL / amp', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
-      { label: 'eGFR 30–89', value: '+0.22 mg/dL / amp', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
-      { label: 'eGFR < 30', value: '+0.28 mg/dL / amp', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
-      { label: 'Periferik Sınır', value: '≤ %2.0 Derişim', colorClass: 'text-cyan-700 dark:text-cyan-300', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' }
+      { 
+        label: 'Ampul İçeriği', 
+        value: '10 mL %15 (1.5 g)', 
+        subtext: '~12.2 mEq Mg²⁺ / ampul',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'Klinik Hedef Düzey', 
+        value: '2.0 – 2.5 mg/dL', 
+        subtext: 'Aritmi & YB hedef aralığı',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Maks İnfüzyon Hızı', 
+        value: '≤ 1.0 g / saat', 
+        subtext: 'Rutin replasman (≥1.5 sa/amp)',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      },
+      { 
+        label: 'Periferik Sınır', 
+        value: '≤ %2.0 Derişim', 
+        subtext: '100 mL torbaya maks 1 ampul',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      }
     ]
   },
   {
@@ -76,10 +112,38 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     accentColor: 'teal',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
-      { label: '%7.5 KCl Ampul', value: '10 mL = 10 mEq K⁺', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
-      { label: 'Kaliphos Ampul', value: '30 mEq K + 60 mEq P', colorClass: 'text-purple-700 dark:text-purple-300', bgClass: 'bg-purple-500/10', borderClass: 'border-purple-500/30' },
-      { label: 'Periferik Sınır', value: '≤ 40 mEq/L (≤ 10 mEq/sa)', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
-      { label: 'SVK / YB Sınırı', value: 'Sıvı Kısıtında ≤ 400 mEq/L', colorClass: 'text-indigo-700 dark:text-indigo-300', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30' }
+      { 
+        label: 'Standart Ampuller', 
+        value: 'KCl: 10 mEq · K-Fos: 30 mEq', 
+        subtext: '10 mL ampul K⁺ içerikleri',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Klinik Hedef Düzey', 
+        value: '4.0 – 4.5 mEq/L', 
+        subtext: 'Kardiyak membran stabilitesi',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'Periferik Damar Yolu', 
+        value: '≤ 40 mEq/L · ≤ 10 mEq/sa', 
+        subtext: 'Flebit & venöz ağrı tavanı',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      },
+      { 
+        label: 'SVK / Santral Güvenlik', 
+        value: 'Maks ≤ 20 mEq/saat', 
+        subtext: 'Monitörizasyon & infüzyon pompası',
+        colorClass: 'text-indigo-700 dark:text-indigo-300', 
+        bgClass: 'bg-indigo-500/10', 
+        borderClass: 'border-indigo-500/30' 
+      }
     ]
   },
   {
@@ -93,10 +157,83 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     accentColor: 'teal',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
-      { label: '24 Sa Yükselme', value: 'Maks 6–8 mEq/L', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
-      { label: '%3 Hipertonik', value: '513 mEq/L Na⁺', colorClass: 'text-cyan-700 dark:text-cyan-300', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' },
-      { label: 'Yüksek ODS Riski', value: 'Maks 4–6 mEq/L', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
-      { label: 'Acil Bolus', value: '100–150 mL %3', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' }
+      { 
+        label: 'Hiponatremi 24 Sa Sınırı', 
+        value: 'Maks 6–8 mEq/L / 24 sa', 
+        subtext: 'ODS koruma (yüksek riskte 4-6)',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Hipernatremi Düşüş Hızı', 
+        value: 'Maks 10–12 mEq/L / 24 sa', 
+        subtext: 'Serebral ödem koruma (≤0.5/sa)',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      },
+      { 
+        label: 'Akut Şiddetli Semptom', 
+        value: '100–150 mL %3 NaCl', 
+        subtext: '10–20 dk IV bolus (nöbet/koma)',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      },
+      { 
+        label: 'Referans Sıvı Katyonları', 
+        value: '%3: 513 mEq · D5W: 0 mEq', 
+        subtext: 'Hipertonik SF vs Saf serbest su',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      }
+    ]
+  },
+  {
+    id: 'dexmedetomidine',
+    category: 'sedation',
+    categoryLabel: 'Sedoanaljezi Protokolü',
+    badge: 'Precedex · Alfa-2 Agonist',
+    title: 'Deksmedetomidin Protokolü & Doz Hesaplayıcısı',
+    shortDesc: 'Uyanabilir kooperatif sedasyon (RASS -1/-2), mekanik ventilasyon, deliryum kontrolü ve weaning için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
+    status: 'active',
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'YBÜ İdame Doz Aralığı', 
+        value: '0.2 – 1.4 mcg/kg/sa', 
+        subtext: 'RASS -1 / -2 kooperatif sedasyon',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Standart Çözelti', 
+        value: '4 mcg/mL (200 mcg / 50 mL)', 
+        subtext: 'Hazır flakon veya SF/D5W seyreltme',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      },
+      { 
+        label: 'Solunum Güvenliği', 
+        value: 'Solunum Depresyonu Yok', 
+        subtext: 'Spontan solunumu & weaningi korur',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'Kardiyovasküler Limit', 
+        value: 'Bradikardi & Hipotansiyon', 
+        subtext: 'KTA < 50 veya MAP < 60 mmHg izlemi',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      }
     ]
   }
 ];
@@ -219,7 +356,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             <button
               type="button"
               onClick={() => setActiveCategory('sedation')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer opacity-75 hover:opacity-100 ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeCategory === 'sedation'
                   ? isDark 
                     ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-xs' 
@@ -231,8 +368,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             >
               <Brain className="w-3.5 h-3.5 text-purple-500" />
               <span>Sedoanaljezi &amp; Nöromüsküler</span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 font-sans">
-                Modüler
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono">
+                Aktif
               </span>
             </button>
 
@@ -260,7 +397,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       </div>
 
       {/* GÖRÜNÜM 1: PROTOKOL KARTLARI GALERİSİ (activeProtocolId === null) */}
-      {!activeProtocolId && activeCategory === 'electrolyte' && (
+      {!activeProtocolId && filteredCards.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span>Uygulamak veya incelemek istediğiniz tedavi protokolünü seçin:</span>
@@ -309,22 +446,32 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
 
                     {/* Parametre Şeridi */}
                     <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
-                      <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
-                        <Activity className="w-3 h-3 text-teal-500" />
-                        <span>{card.highlightsHeader}</span>
+                      <div className="text-[10px] font-semibold text-slate-400 mb-2 flex items-center justify-between">
+                        <span className="flex items-center gap-1">
+                          <Activity className="w-3 h-3 text-teal-500" />
+                          <span>{card.highlightsHeader}</span>
+                        </span>
+                        <span className="text-[9px] text-slate-400 dark:text-slate-500 font-mono font-medium">4 Temel Eşik</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-1.5">
+                      <div className="grid grid-cols-2 gap-2">
                         {card.highlights.map((h, idx) => (
                           <div
                             key={idx}
-                            className={`p-1.5 rounded-lg border text-center ${h.bgClass} ${h.borderClass}`}
+                            className={`p-2 rounded-lg border flex flex-col justify-between text-left transition-colors ${h.bgClass} ${h.borderClass}`}
                           >
-                            <span className="block text-[9px] text-slate-500 dark:text-slate-400 font-medium">
-                              {h.label}
-                            </span>
-                            <span className={`block text-[10px] font-bold font-mono mt-0.5 ${h.colorClass}`}>
-                              {h.value}
-                            </span>
+                            <div>
+                              <span className="block text-[9px] text-slate-500 dark:text-slate-400 font-semibold tracking-wide uppercase">
+                                {h.label}
+                              </span>
+                              <span className={`block text-[10.5px] font-bold font-mono mt-0.5 leading-tight ${h.colorClass}`}>
+                                {h.value}
+                              </span>
+                            </div>
+                            {h.subtext && (
+                              <span className="block text-[8.5px] text-slate-400 dark:text-slate-400 mt-1 leading-tight font-sans">
+                                {h.subtext}
+                              </span>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -545,8 +692,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         </div>
       )}
 
-      {/* DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
-      {!activeProtocolId && activeCategory !== 'electrolyte' && (
+      {/* GÖRÜNÜM 5: DEKSMEDETOMİDİN PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'dexmedetomidine') */}
+      {activeProtocolId === 'dexmedetomidine' && (
+        <DexmedetomidineProtocol isDark={isDark} />
+      )}
+
+      {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
+      {!activeProtocolId && filteredCards.length === 0 && (
         <div className={`p-8 rounded-xl border text-center space-y-3 ${
           isDark ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-600'
         }`}>
