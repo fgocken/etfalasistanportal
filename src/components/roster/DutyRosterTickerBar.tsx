@@ -52,7 +52,7 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
 
   // Extract staff names
   const seyrantepeText = schedule?.seyrantepeStaff && schedule.seyrantepeStaff.length > 0
-    ? schedule.seyrantepeStaff.map((s, idx) => idx === 0 ? `${s.name} (Kıdemli)` : s.name).join(' · ')
+    ? schedule.seyrantepeStaff.map((s) => s.name).join(' · ')
     : 'Girilmedi';
 
   const cayirbasiText = schedule?.cayirbasiStaff && schedule.cayirbasiStaff.length > 0
@@ -105,7 +105,7 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
           display: flex;
           width: max-content;
           will-change: transform;
-          animation: dutyTickerMarquee 26s linear infinite;
+          animation: dutyTickerMarquee 15s linear infinite;
         }
         .duty-ticker-track:hover {
           animation-play-state: paused;

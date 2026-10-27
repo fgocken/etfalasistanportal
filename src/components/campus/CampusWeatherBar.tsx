@@ -7,7 +7,7 @@ import {
   CloudRain, 
   Snowflake, 
   CloudLightning,
-  Car, 
+  Car,
   Navigation,
   ExternalLink
 } from 'lucide-react';
@@ -181,25 +181,23 @@ export const CampusWeatherBar: React.FC<CampusWeatherBarProps> = ({ isDark }) =>
           </a>
         </div>
 
-        {/* Sağ Taraf: Yerleşkeler Arası Sürüş Süresi & Tek Tıkla Navigasyon Butonları */}
+        {/* Sağ Taraf: Tek Tıkla Navigasyon Butonları */}
         <div className="flex items-center gap-1.5 shrink-0">
-          {/* İki Yerleşke Arası Canlı Rota / Mesafe */}
+          {/* İki Yerleşke Arası Navigasyon Butonu */}
           <a
             href={BETWEEN_CAMPUS_NAV_URL}
             target="_blank"
             rel="noopener noreferrer"
-            title="Seyrantepe ⇄ Çayırbaşı Canlı Google Haritalar Rotası (~18 dk)"
-            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+            title="Seyrantepe ⇄ Çayırbaşı Canlı Google Haritalar Rota Navigasyonu"
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[11px] font-semibold transition-all cursor-pointer ${
               isDark 
-                ? 'bg-slate-800/60 border-slate-700 text-slate-300 hover:border-indigo-400' 
-                : 'bg-white border-slate-200 text-slate-700 hover:border-indigo-300 hover:shadow-2xs'
+                ? 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-indigo-400 hover:text-white' 
+                : 'bg-white border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-900 hover:shadow-2xs'
             }`}
           >
             <Car className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-            <span className="font-semibold hidden sm:inline">Yerleşkeler:</span>
-            <span className="font-mono font-bold text-slate-900 dark:text-white">~12 km</span>
-            <span className="text-slate-400">·</span>
-            <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">~18 dk</span>
+            <span className="hidden sm:inline">Yerleşkeler Arası Rota</span>
+            <span className="sm:hidden">Rota</span>
           </a>
 
           {/* Dikey İnce Ayırıcı */}

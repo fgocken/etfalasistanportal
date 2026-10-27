@@ -399,7 +399,7 @@ export const InfusionRateCalculator: React.FC<InfusionRateCalculatorProps> = ({ 
             </div>
           </div>
 
-          {/* Action Buttons: Save Template & Format Badge */}
+          {/* Action Buttons: Save Template */}
           <div className="flex items-center gap-2 flex-wrap self-start md:self-auto">
             <button
               type="button"
@@ -413,13 +413,6 @@ export const InfusionRateCalculator: React.FC<InfusionRateCalculatorProps> = ({ 
               <BookmarkPlus className="w-3.5 h-3.5 text-teal-500" />
               <span>Ayarları Şablon Olarak Kaydet</span>
             </button>
-
-            <div className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono border ${
-              isDark ? 'bg-slate-800/80 border-slate-700 text-teal-300' : 'bg-slate-50 border-slate-200 text-teal-800'
-            }`}>
-              <Sparkles className="w-3.5 h-3.5 text-teal-500" />
-              <span>Format: 1.423,52</span>
-            </div>
           </div>
         </div>
 
@@ -563,8 +556,12 @@ export const InfusionRateCalculator: React.FC<InfusionRateCalculatorProps> = ({ 
             </div>
           </div>
         ) : (
-          <div className="mt-3 pt-3 border-t border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <div className="mt-3 pt-3 border-t border-dashed border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
             <span>Sık kullandığınız ilaç, çözücü ve hız ayarlarını tekrar tekrar yazmamak için sağ üstteki butondan şablon olarak kaydedebilirsiniz.</span>
+            <span className="font-mono text-[11px] font-medium text-teal-700 dark:text-teal-400 shrink-0 inline-flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-teal-500 shrink-0" />
+              Sayı girdi formatı: 1.423,52 şeklindedir
+            </span>
           </div>
         )}
       </div>

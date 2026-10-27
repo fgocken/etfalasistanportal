@@ -3,8 +3,6 @@ import {
   ClipboardCheck, 
   Heart, 
   ShieldAlert, 
-  Coffee, 
-  Wind, 
   ArrowLeft, 
   ChevronRight, 
   Sparkles,
@@ -12,18 +10,17 @@ import {
   Layers,
   BookOpen,
   CheckCircle2,
-  Clock,
-  AlertTriangle
+  Clock
 } from 'lucide-react';
 import { MaceCalculator } from './MaceCalculator';
 import { AsaClassification } from '../asa/AsaClassification';
 
 interface PreoperativeEvaluationProps {
   isDark: boolean;
-  initialTool?: 'mace' | 'asa' | 'fasting' | 'airway' | null;
+  initialTool?: 'mace' | 'asa' | null;
 }
 
-type PreopToolId = 'mace' | 'asa' | 'fasting' | 'airway';
+type PreopToolId = 'mace' | 'asa';
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -83,48 +80,6 @@ const PREOP_CARDS: PreopCardItem[] = [
       { label: 'Örnek Gruplar', value: 'Erişkin · Pediatri · Gebe', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
       { label: 'Acil Eki', value: 'ASA-E Kriterleri', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
       { label: 'Geçerlilik', value: '2025/2026 Güncel', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' }
-    ]
-  },
-  {
-    id: 'fasting',
-    title: 'Preoperatif Açlık Süreleri (ASA NPO Kılavuzu)',
-    badge: '2-4-6-8 Saat Kuralı',
-    category: 'Hasta Hazırlığı & Açlık',
-    shortDesc: 'Elektif cerrahi öncesi pulmoner aspirasyon riskini minimize eden kanıta dayalı açlık süreleri, preoperatif sabah ilaçlarının yönetimi ve sakız çiğneme kuralları.',
-    icon: Coffee,
-    iconBgDark: 'bg-amber-500/15',
-    iconBgLight: 'bg-amber-50',
-    iconColorDark: 'text-amber-400',
-    iconColorLight: 'text-amber-600',
-    borderHoverDark: 'hover:border-amber-500/40',
-    borderHoverLight: 'hover:border-amber-400',
-    highlightsHeader: 'Temel Açlık Zamanları:',
-    highlights: [
-      { label: 'Berrak Sıvı', value: '2 Saat (Su/Çay/Kahve)', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
-      { label: 'Anne Sütü', value: '4 Saat (Bebek)', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
-      { label: 'Hafif Öğün', value: '6 Saat (Mama/Tost)', colorClass: 'text-indigo-700 dark:text-indigo-300', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30' },
-      { label: 'Ağır/Yağlı', value: '8 Saat (Et/Kızartma)', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' }
-    ]
-  },
-  {
-    id: 'airway',
-    title: 'Pre-op Havayolu Muayenesi & Mallampati',
-    badge: 'Zor Havayolu Kriterleri',
-    category: 'Havayolu Değerlendirmesi',
-    shortDesc: 'Zor maske havalandırması ve zor laringoskopi/entübasyon fizik muayene prediktörleri; Mallampati Sınıf 1–4, tiromental mesafe, ağız açıklığı ve boyun mobilitesi.',
-    icon: Wind,
-    iconBgDark: 'bg-cyan-500/15',
-    iconBgLight: 'bg-cyan-50',
-    iconColorDark: 'text-cyan-400',
-    iconColorLight: 'text-cyan-600',
-    borderHoverDark: 'hover:border-cyan-500/40',
-    borderHoverLight: 'hover:border-cyan-400',
-    highlightsHeader: 'Kritik Eşik Değerler:',
-    highlights: [
-      { label: 'Mallampati', value: 'Sınıf 1 – 4', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
-      { label: 'Ağız Açıklığı', value: '< 3 cm (Zor)', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
-      { label: 'Tiromental', value: '< 6 cm (Patil)', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
-      { label: 'Sternomental', value: '< 12.5 cm', colorClass: 'text-cyan-700 dark:text-cyan-300', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' }
     ]
   }
 ];
@@ -300,213 +255,6 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
       {activeToolId === 'asa' && (
         <div className="space-y-4">
           <AsaClassification isDark={isDark} />
-        </div>
-      )}
-
-      {activeToolId === 'fasting' && (
-        <div className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-xs'
-        }`}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4 border-slate-200 dark:border-slate-800">
-            <div>
-              <h3 className="text-lg font-bold flex items-center gap-2">
-                <Coffee className="w-5 h-5 text-amber-500" />
-                <span>ASA Preoperatif Açlık Kılavuzu (NPO Kuralları)</span>
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Elektif cerrahi öncesi pulmoner aspirasyon riskini minimize eden kanıta dayalı açlık süreleri
-              </p>
-            </div>
-            <span className={`text-xs font-mono font-semibold px-2.5 py-1 rounded-lg border self-start sm:self-auto ${
-              isDark ? 'bg-amber-500/10 text-amber-300 border-amber-500/30' : 'bg-amber-50 text-amber-800 border-amber-200'
-            }`}>
-              ASA Güncel Konsensüsü
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* 2 Saat */}
-            <div className={`p-4 rounded-xl border flex flex-col justify-between ${
-              isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl font-extrabold text-sky-600 dark:text-sky-400 font-mono">2 SAAT</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-sky-500/15 text-sky-700 dark:text-sky-300">Minimum</span>
-                </div>
-                <h4 className="text-xs font-bold mb-1">Berrak Sıvılar</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Su, posasız elma/üzüm suyu, berrak çay, sade filtre kahve (süt/krema İÇERMEYEN), berrak karbonhidratlı solüsyonlar.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400">
-                ⚠️ Alkol ve partiküllü sıvılar yasaktır.
-              </div>
-            </div>
-
-            {/* 4 Saat */}
-            <div className={`p-4 rounded-xl border flex flex-col justify-between ${
-              isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">4 SAAT</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300">Pediatrik</span>
-                </div>
-                <h4 className="text-xs font-bold mb-1">Anne Sütü</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Yalnızca doğal anne sütü alan yenidoğan ve bebekler içindir. Mide boşalması inek sütü ve mamaya göre belirgin hızlıdır.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400">
-                🍼 Ek mama katılmamış olmalıdır.
-              </div>
-            </div>
-
-            {/* 6 Saat */}
-            <div className={`p-4 rounded-xl border flex flex-col justify-between ${
-              isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 font-mono">6 SAAT</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">Hafif Gıda</span>
-                </div>
-                <h4 className="text-xs font-bold mb-1">Mama, Süt &amp; Hafif Öğün</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Bebek maması, inek sütü veya hafif kahvaltı (tost, bisküvi, reçel gibi yağsız/etsiz hafif gıdalar).
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400">
-                🥛 Sütlü kahveler bu grupta sayılır.
-              </div>
-            </div>
-
-            {/* 8 Saat */}
-            <div className={`p-4 rounded-xl border flex flex-col justify-between ${
-              isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl font-extrabold text-rose-600 dark:text-rose-400 font-mono">8 SAAT</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/15 text-rose-700 dark:text-rose-300">Ağır Öğün</span>
-                </div>
-                <h4 className="text-xs font-bold mb-1">Katı / Yağlı / Etli Yemekler</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Kızartmalar, yağlı besinler, kırmızı et veya tam porsiyon standart akşam yemekleri. Mide boşalması belirgin uzar.
-                </p>
-              </div>
-              <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400">
-                🥩 Yağ oranı arttıkça süre uzatılmalıdır.
-              </div>
-            </div>
-          </div>
-
-          {/* Özel Kurallar Notu */}
-          <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-            isDark ? 'bg-slate-800/80 border-slate-700 text-slate-300' : 'bg-blue-50/70 border-blue-200 text-blue-950'
-          }`}>
-            <Info className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-            <div className="text-xs space-y-1">
-              <div className="font-bold">Özel Durumlar (İlaç Alımı, Sakız ve Sigara):</div>
-              <p className="leading-relaxed">
-                • <strong>Sabah İlaçları:</strong> Antihipertansifler (Beta-bloker, KKB) ve tiroid hormon ilaçları cerrahiden 1–2 saat önce bir yudum su (en fazla 30 cc) ile alınabilir. ACE inhibitörleri / ARB'ler genellikle indüksiyonda dirençli hipotansiyonu önlemek için sabah kesilir.<br />
-                • <strong>Sakız Çiğneme:</strong> ASA kılavuzuna göre şekersiz sakız çiğnenmesi elektif cerrahinin iptal edilmesini gerektirmez, operasyon öncesi tükürülmesi istenir.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeToolId === 'airway' && (
-        <div className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-xs'
-        }`}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4 border-slate-200 dark:border-slate-800">
-            <div>
-              <h3 className="text-lg font-bold flex items-center gap-2">
-                <Wind className="w-5 h-5 text-cyan-500" />
-                <span>Preoperatif Havayolu Muayenesi &amp; Kriterler</span>
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Zor maske havalandırması ve zor laringoskopi/entübasyon fizik muayene belirteçleri
-              </p>
-            </div>
-            <span className={`text-xs font-mono font-semibold px-2.5 py-1 rounded-lg border self-start sm:self-auto ${
-              isDark ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30' : 'bg-cyan-50 text-cyan-800 border-cyan-200'
-            }`}>
-              Fizik Muayene
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Mallampati Kartı */}
-            <div className={`p-4 rounded-xl border ${
-              isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <h4 className="text-xs font-bold mb-3 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-cyan-500" />
-                <span>Mallampati Sınıflaması (Hasta Oturur, Dil Dışarıda, Fonasyon Yok)</span>
-              </h4>
-              <div className="space-y-2 text-xs">
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">Sınıf 1:</span> Yumuşak damak, uvula, plikalar ve farenks arka duvarı tam görünür.
-                </div>
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-                  <span className="font-bold text-teal-600 dark:text-teal-400">Sınıf 2:</span> Yumuşak damak, uvula ve farenks arka duvarı kısmen görünür; tonsil plikaları uvula arkasında kalır.
-                </div>
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-                  <span className="font-bold text-amber-600 dark:text-amber-400">Sınıf 3:</span> Yalnızca yumuşak damak ve uvula tabanı görünür (Zor havayolu kuşkusu).
-                </div>
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-                  <span className="font-bold text-rose-600 dark:text-rose-400">Sınıf 4:</span> Yumuşak damak dahi görünmez; yalnızca sert damak seçilebilir (Yüksek zor entübasyon riski).
-                </div>
-              </div>
-            </div>
-
-            {/* Anatomik Ölçümler */}
-            <div className={`p-4 rounded-xl border ${
-              isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <h4 className="text-xs font-bold mb-3 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-amber-500" />
-                <span>Kritik Anatomik Eşik Değerler</span>
-              </h4>
-              <div className="space-y-2 text-xs">
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 flex justify-between items-center">
-                  <div>
-                    <span className="font-bold">İnterinsizör Mesafe (Ağız Açıklığı):</span>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">3 parmak genişliği</div>
-                  </div>
-                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">&lt; 3.0 cm (Zor)</span>
-                </div>
-
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 flex justify-between items-center">
-                  <div>
-                    <span className="font-bold">Tiromental Mesafe (Patil Testi):</span>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Tiroid çentik ile çene ucu arası</div>
-                  </div>
-                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">&lt; 6.0 cm (Zor)</span>
-                </div>
-
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 flex justify-between items-center">
-                  <div>
-                    <span className="font-bold">Sternomental Mesafe:</span>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Sternum manubriumu ile çene ucu</div>
-                  </div>
-                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">&lt; 12.5 cm (Zor)</span>
-                </div>
-
-                <div className="p-2.5 rounded-lg border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 flex justify-between items-center">
-                  <div>
-                    <span className="font-bold">Boyun Ekstansiyonu:</span>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Atlanto-oksipital eklem hareket kısıtlılığı</div>
-                  </div>
-                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">&lt; 35° (Zor)</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       )}
 

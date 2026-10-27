@@ -234,7 +234,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
             <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               {activeInfographicId 
                 ? 'İnfografiği kapatıp listeye dönmek için sol üstteki geri butonuna tıklayabilirsiniz.'
-                : 'Anestezi ve Reanimasyon Kliniği görsel kılavuzlar ve infografik kartları.'
+                : 'İnteraktif İnfografik Kartları'
               }
             </p>
           </div>
@@ -356,18 +356,9 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
 
                 {/* Bottom Action */}
                 <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-slate-400 font-medium truncate max-w-[120px] sm:max-w-none">
-                      {card.publisher}
-                    </span>
-                    <ShareLinkButton
-                      variant="compact"
-                      type="infografik"
-                      id={card.id}
-                      isDark={isDark}
-                      title={`${card.title} bağlantısını kopyala`}
-                    />
-                  </div>
+                  <span className="text-[11px] text-slate-400 font-medium truncate max-w-[120px] sm:max-w-none">
+                    {card.publisher}
+                  </span>
                   <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform ${
                     card.accentColor === 'rose'
                       ? 'text-rose-600 dark:text-rose-400'

@@ -38,6 +38,7 @@ import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
 import { AirwayManagementView } from './airway/AirwayManagementView';
 import { TreatmentsWorkspace } from './treatments/TreatmentsWorkspace';
 import { NerveBlocksWorkspace } from './nerve-blocks/NerveBlocksWorkspace';
+import { AnesthesiaEmergenciesView } from './emergencies/AnesthesiaEmergenciesView';
 import { InfographicsView } from './infographics/InfographicsView';
 import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
@@ -45,12 +46,12 @@ import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'infographics' | 'contacts' | 'roster';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster';
 
 export interface ToolItemDef {
   id: ToolTabId;
   title: string;
-  badge: string;
+  badge?: string;
   badgeHighlight?: boolean;
   desc: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -70,8 +71,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   calculator: {
     id: 'calculator',
     title: 'Kilo, MV Volüm, İdame Sıvı',
-    badge: 'IBW · PBW · TV',
-    desc: 'Devine İdeal Kilo (IBW), Öngörülen Kilo (PBW), VKİ, Düzeltilmiş Kilo (AdjBW) ve koruyucu tidal volüm.',
+    desc: 'İdeal Kilo (IBW Devine), Öngörülen Kilo (PBW), VKİ, Düzeltilmiş Kilo (AdjBW), Koruyucu Ventilasyon Tidal Volümü ve İdame Sıvı Hızı.',
     icon: Calculator,
     iconBgDark: 'bg-teal-500/10',
     iconBgLight: 'bg-teal-50',
@@ -100,8 +100,6 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   infusion: {
     id: 'infusion',
     title: 'İnfüzyon Hızı Çevirici/Hesaplayıcı',
-    badge: 'Yeni Araç',
-    badgeHighlight: true,
     desc: 'İlaç konsantrasyonu, 11 birimde otomatik dönüşüm (mcg/kg/dk, mL/saat) ve canlı sayaç.',
     icon: Syringe,
     iconBgDark: 'bg-teal-500/15',
@@ -118,9 +116,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   preop: {
     id: 'preop',
     title: 'Preoperatif Değerlendirme',
-    badge: 'MACE · ASA · NPO',
-    badgeHighlight: true,
-    desc: 'MACE kardiyak risk hesaplayıcı (RCRI & Gupta), 2025/2026 ASA fiziksel durum sınıflaması, açlık süreleri ve havayolu muayenesi.',
+    desc: 'MACE kardiyak risk hesaplayıcı (RCRI & Gupta), 2025/2026 ASA fiziksel durum sınıflaması ve klinik kardiyovasküler kılavuzlar.',
     icon: ClipboardCheck,
     iconBgDark: 'bg-blue-500/15',
     iconBgLight: 'bg-blue-50',
@@ -136,8 +132,6 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   airway: {
     id: 'airway',
     title: 'Havayolu',
-    badge: 'Yeni Bölüm',
-    badgeHighlight: true,
     desc: 'Zor havayolu algoritmaları, entübasyon kriterleri, videolaringoskopi, SGA/LMA ve acil cerrahi havayolu protokolleri.',
     icon: Wind,
     iconBgDark: 'bg-cyan-500/15',
@@ -154,8 +148,6 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   treatments: {
     id: 'treatments',
     title: 'Tedaviler ve İlaçlar',
-    badge: 'Yeni Modül',
-    badgeHighlight: true,
     desc: 'Magnezyum replasmanı (Mathews et al. 2022 eGFR kademeli hesaplayıcı), elektrolit protokolleri ve klinik infografikler.',
     icon: Pill,
     iconBgDark: 'bg-teal-500/15',
@@ -172,8 +164,6 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   'nerve-blocks': {
     id: 'nerve-blocks',
     title: 'Sinir Blokları & LAST',
-    badge: 'Yeni Bölüm',
-    badgeHighlight: true,
     desc: 'USG eşliğinde periferik ve fasya plan blokları (ESP, TAP, ACB vb.), duyu haritası, kilo bazlı LA dozu ve acil %20 İntralipid LAST kurtarma protokolü.',
     icon: Compass,
     iconBgDark: 'bg-indigo-500/15',
@@ -186,6 +176,22 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-indigo-800',
     ringClassDark: 'ring-1 ring-indigo-500/20',
     ringClassLight: 'ring-1 ring-indigo-500/10'
+  },
+  emergencies: {
+    id: 'emergencies',
+    title: 'Anestezi Acilleri',
+    desc: 'Malign hipertermi, arrest & CPR/ACLS, şiddetli anafilaksi, LAST ve perioperatif kriz yönetimi.',
+    icon: ShieldAlert,
+    iconBgDark: 'bg-red-500/15',
+    iconBgLight: 'bg-red-50',
+    iconColorDark: 'text-red-400',
+    iconColorLight: 'text-red-700',
+    borderHoverDark: 'hover:border-red-500/40',
+    borderHoverLight: 'hover:border-red-400',
+    titleHoverDark: 'group-hover:text-red-300',
+    titleHoverLight: 'group-hover:text-red-800',
+    ringClassDark: 'ring-1 ring-red-500/20',
+    ringClassLight: 'ring-1 ring-red-500/10'
   },
   infographics: {
     id: 'infographics',
@@ -241,8 +247,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'infographics', 'contacts', 'roster'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v11';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics', 'contacts', 'roster'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v12';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -411,8 +417,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert nerve-blocks, airway & roster if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert emergencies, nerve-blocks, airway & roster if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
@@ -432,6 +438,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 updated.splice(treatIdx + 1, 0, 'nerve-blocks');
               } else {
                 updated.push('nerve-blocks');
+              }
+            }
+            if (!updated.includes('emergencies')) {
+              const nbIdx = updated.indexOf('nerve-blocks');
+              if (nbIdx !== -1) {
+                updated.splice(nbIdx + 1, 0, 'emergencies');
+              } else {
+                updated.push('emergencies');
               }
             }
             if (!updated.includes('roster')) {
@@ -551,14 +565,13 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [calcHeight, setCalcHeight] = useState<string>('175');
   const [calcWeight, setCalcWeight] = useState<string>('75');
   const [calcIsMale, setCalcIsMale] = useState<boolean>(true);
-  const [calcIsMetric, setCalcIsMetric] = useState<boolean>(true);
 
-  // Compute results using user's exact function
+  // Compute results using user's exact function (always Metric)
   const calcResults = calculateWeightAndVentilation({
     height: calcHeight,
     weight: calcWeight,
     isMale: calcIsMale,
-    isMetric: calcIsMetric
+    isMetric: true
   });
 
   return (
@@ -584,7 +597,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             </button>
             <div className={`h-4 w-px hidden sm:block ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`} />
             <h1 className={`text-sm font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Şişli Etfal EAH Anestezi & Reanimasyon
+              DASHBOARD
             </h1>
           </div>
 
@@ -593,7 +606,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             <button
               type="button"
               onClick={() => setIsSearchModalOpen(true)}
-              title="Uygulamadaki tüm içerikleri ara (Kısayol: ⌘K veya Ctrl+K)"
+              title="Hızlı ara (Kısayol: ⌘K veya Ctrl+K)"
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold transition-all cursor-pointer shadow-2xs ${
                 isDark 
                   ? 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300 hover:text-white' 
@@ -825,19 +838,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               isDark ? 'border-slate-800' : 'border-slate-200'
             }`}>
               <div>
-                <div className="flex items-center gap-2">
-                  <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    Şişli Etfal Dashboard
-                  </h2>
-                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
-                    isDark ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30' : 'bg-teal-50 text-teal-800 border border-teal-200'
-                  }`}>
-                    🖐️ Sürüklenebilir Sıralama
-                  </span>
-                </div>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Kartları sürükleyip bırakarak veya yön butonlarıyla en sık kullandığınız sıraya göre dizebilirsiniz.
-                </p>
+                <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Şişli Etfal Dashboard
+                </h2>
               </div>
 
               {/* Sleek, Non-Intrusive Quick Search Bar & Action Buttons */}
@@ -930,13 +933,15 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                         </div>
 
                         <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                          <span className={`text-[11px] font-mono ${
-                            tool.badgeHighlight 
-                              ? isDark ? 'text-teal-400 font-semibold' : 'text-teal-600 font-semibold' 
-                              : isDark ? 'text-slate-500' : 'text-slate-400'
-                          }`}>
-                            {tool.badge}
-                          </span>
+                          {tool.badge && (
+                            <span className={`text-[11px] font-mono ${
+                              tool.badgeHighlight 
+                                ? isDark ? 'text-teal-400 font-semibold' : 'text-teal-600 font-semibold' 
+                                : isDark ? 'text-slate-500' : 'text-slate-400'
+                            }`}>
+                              {tool.badge}
+                            </span>
+                          )}
 
                           {/* Quick Mobile / Button Reorder Controls */}
                           <div className="flex items-center bg-slate-100 dark:bg-slate-800/80 rounded-md p-0.5 ml-1 opacity-80 group-hover:opacity-100 transition-opacity">
@@ -985,16 +990,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                       }`}>
                         {tool.title}
                       </h3>
-                      <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                        {tool.desc}
-                      </p>
                     </div>
 
-                    <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-between text-xs">
-                      <span className={`text-[10px] font-mono ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                        #{index + 1}. Sıra
-                      </span>
-                      <span className={`font-semibold ${
+                    <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-end text-xs">
+                      <span className={`font-semibold text-xs ${
                         isDark ? 'text-teal-400 group-hover:underline' : 'text-teal-700 group-hover:underline'
                       }`}>
                         Aracı Aç →
@@ -1047,34 +1046,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                   Kilo, MV Volüm, İdame Sıvı Hesaplayıcısı
                 </h3>
                 <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  İdeal Kilo (IBW Devine), Öngörülen Kilo (PBW), VKİ, Düzeltilmiş Kilo (AdjBW), Koruyucu Ventilasyon Tidal Volümü ve 4-2-1 İdame Sıvı Hızı.
+                  İdeal Kilo (IBW Devine), Öngörülen Kilo (PBW), VKİ, Düzeltilmiş Kilo (AdjBW), Koruyucu Ventilasyon Tidal Volümü ve İdame Sıvı Hızı.
                 </p>
-              </div>
-
-              {/* Metric / Imperial Unit Selector */}
-              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg self-start sm:self-auto">
-                <button
-                  type="button"
-                  onClick={() => setCalcIsMetric(true)}
-                  className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-                    calcIsMetric 
-                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold' 
-                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                  }`}
-                >
-                  Metrik (cm, kg)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCalcIsMetric(false)}
-                  className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
-                    !calcIsMetric 
-                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold' 
-                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                  }`}
-                >
-                  İmperial (inç, lb)
-                </button>
               </div>
             </div>
 
@@ -1112,14 +1085,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
               <div>
                 <label className={`block text-xs font-medium mb-1.5 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  Boy ({calcIsMetric ? 'cm' : 'inç'})
+                  Boy (cm)
                 </label>
                 <input
                   type="number"
                   step="any"
                   value={calcHeight}
                   onChange={(e) => setCalcHeight(e.target.value)}
-                  placeholder={calcIsMetric ? '175' : '69'}
+                  placeholder="175"
                   className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 font-mono tabular-nums ${
                     isDark ? 'bg-slate-800 border-slate-700 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
                   }`}
@@ -1128,14 +1101,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
               <div>
                 <label className={`block text-xs font-medium mb-1.5 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  Kilo ({calcIsMetric ? 'kg' : 'lb'})
+                  Kilo (kg)
                 </label>
                 <input
                   type="number"
                   step="any"
                   value={calcWeight}
                   onChange={(e) => setCalcWeight(e.target.value)}
-                  placeholder={calcIsMetric ? '75' : '165'}
+                  placeholder="75"
                   className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 font-mono tabular-nums ${
                     isDark ? 'bg-slate-800 border-slate-700 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
                   }`}
@@ -1445,7 +1418,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           />
         )}
 
-        {/* 9. Clinical Infographics */}
+        {/* 10. Anestezi Acilleri */}
+        {activeTab === 'emergencies' && (
+          <AnesthesiaEmergenciesView isDark={isDark} />
+        )}
+
+        {/* 11. Clinical Infographics */}
         {activeTab === 'infographics' && (
           <InfographicsView 
             isDark={isDark} 

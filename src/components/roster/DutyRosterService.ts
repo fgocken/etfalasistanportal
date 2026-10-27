@@ -65,7 +65,7 @@ export function buildOfficialOctoberRoster(): MonthDutyRoster {
       id: `sey-${dateKey}-${idx + 1}`,
       name,
       slot: `SEYRANTEPE ${idx + 1}`,
-      role: idx === 0 ? 'Kıdemli / 1. Nöbetçi' : `${idx + 1}. Nöbetçi`
+      role: `${idx + 1}. Nöbetçi`
     }));
 
     const cayirbasiStaff: StaffDuty[] = item.sar.map((name, idx) => ({

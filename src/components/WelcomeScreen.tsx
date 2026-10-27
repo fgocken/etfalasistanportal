@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Stethoscope, ChevronLeft, ChevronRight, Instagram } from 'lucide-react';
+import { 
+  ArrowRight, 
+  Stethoscope, 
+  ChevronLeft, 
+  ChevronRight, 
+  Instagram, 
+  Maximize2, 
+  X 
+} from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
 import { CampusWeatherBar } from './campus/CampusWeatherBar';
@@ -13,32 +21,57 @@ interface WelcomeScreenProps {
   onToggleTheme: () => void;
 }
 
-// User iconic artwork album - 5 photos
-const CLINIC_ALBUM = [
+export interface ClinicPhoto {
+  id: number;
+  src: string;
+  title: string;
+  subtitle: string;
+  alt: string;
+}
+
+// User iconic artwork album - 6 photos including new operating room staff artwork
+const CLINIC_ALBUM: ClinicPhoto[] = [
   {
     id: 1,
     src: '/assets/aistudio/ahahahahaha2_c735fba3.jpg',
+    title: 'Kıdemli & Asistan Masası',
+    subtitle: 'Vaka öncesi preoperatif planlama ve anestezi stratejisi',
     alt: 'Şişli Etfal Anestezi Asistanı ve Kıdemli Hoca Masada'
   },
   {
     id: 2,
     src: '/assets/aistudio/ahahahahaha_1f9e8339.jpg',
+    title: 'Şişli Etfal Portalı',
+    subtitle: 'Klinik hafıza, kılavuzlar ve asistan eğitim platformu',
     alt: 'Şişli Etfal Anestezi Asistan Portalı Portre'
   },
   {
     id: 3,
     src: '/assets/aistudio/ahahahahaha3_2d69811d.jpg',
+    title: 'Klinik Neşesi & Dayanışma',
+    subtitle: 'Nöbet sonrası dinlenme ve ekip içi motivasyon anları',
     alt: 'Şişli Etfal Anestezi Kliniği Neşeli Anlar ve Dayanışma'
   },
   {
     id: 4,
     src: '/assets/aistudio/ahahahahaha4_e87cbffc.jpg',
+    title: 'Nöbetçi Hekim & Konsültasyon',
+    subtitle: 'Çift telefon acil servis ve yoğun bakım konsültasyon trafiği',
     alt: 'Şişli Etfal Nöbetçi Asistan Hekim Çift Telefon Konsültasyon'
   },
   {
     id: 5,
     src: '/assets/aistudio/ahahahahaha5_cb5f8baf.jpg',
+    title: 'İntraoperatif Takip & Salon',
+    subtitle: 'Hemodinami, mekanik ventilasyon ve anestezi derinliği takibi',
     alt: 'Şişli Etfal Ameliyathane Anestezi İntraoperatif Takip'
+  },
+  {
+    id: 6,
+    src: '/assets/aistudio/Gemini_Generated_Image_qp07isqp07isqp07_016f594f.jpg',
+    title: 'Ameliyathane Ekibi (Salon 8 & 9)',
+    subtitle: 'I ❤️ people (under general anesthesia) - Ortopedi Salonları',
+    alt: 'Şişli Etfal Ameliyathane Ekibi - I ❤️ people (under general anesthesia) - Salon 8 ve 9 Ortopedi'
   }
 ];
 
@@ -48,56 +81,64 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   isDark,
   onToggleTheme
 }) => {
-  const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isRosterModalOpen, setIsRosterModalOpen] = useState<boolean>(false);
+  const [lightboxPhotoIdx, setLightboxPhotoIdx] = useState<number | null>(null);
 
-  const prevIdx = (activePhotoIdx - 1 + CLINIC_ALBUM.length) % CLINIC_ALBUM.length;
-  const nextIdx = (activePhotoIdx + 1) % CLINIC_ALBUM.length;
-  const prevPhoto = CLINIC_ALBUM[prevIdx];
-  const nextPhoto = CLINIC_ALBUM[nextIdx];
-
-  // Automatic smooth transition between photos
+  // Keyboard controls for lightbox (Escape to close, Arrows to navigate)
   useEffect(() => {
-    if (isHovered) return;
-    const timer = setInterval(() => {
-      setActivePhotoIdx((prev) => (prev + 1) % CLINIC_ALBUM.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [isHovered]);
+    if (lightboxPhotoIdx === null) return;
 
-  const handlePrev = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setActivePhotoIdx(prevIdx);
-  };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLightboxPhotoIdx(null);
+      } else if (e.key === 'ArrowLeft') {
+        setLightboxPhotoIdx((prev) => (prev !== null ? (prev - 1 + CLINIC_ALBUM.length) % CLINIC_ALBUM.length : null));
+      } else if (e.key === 'ArrowRight') {
+        setLightboxPhotoIdx((prev) => (prev !== null ? (prev + 1) % CLINIC_ALBUM.length : null));
+      }
+    };
 
-  const handleNext = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setActivePhotoIdx(nextIdx);
-  };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxPhotoIdx]);
+
+  const activeLightboxPhoto = lightboxPhotoIdx !== null ? CLINIC_ALBUM[lightboxPhotoIdx] : null;
 
   return (
-    <div className={`min-h-screen w-full flex flex-col justify-between p-6 sm:p-10 relative overflow-hidden select-none transition-colors duration-200 bg-transparent ${
+    <div className={`min-h-screen w-full flex flex-col justify-between p-4 sm:p-8 md:p-10 relative overflow-hidden select-none transition-colors duration-200 bg-transparent ${
       isDark ? 'text-slate-100' : 'text-slate-900'
     }`}>
+      {/* Dynamic Keyframes for the continuous film strip scroll */}
+      <style>{`
+        @keyframes filmStripMarquee {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+        .film-strip-track {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          animation: filmStripMarquee 34s linear infinite;
+        }
+        .film-strip-container:hover .film-strip-track {
+          animation-play-state: paused !important;
+        }
+      `}</style>
+
       {/* Subtle ambient lighting */}
       <div 
         aria-hidden="true" 
-        className={`absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none transition-opacity ${
+        className={`absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full blur-3xl pointer-events-none transition-opacity ${
           isDark ? 'bg-teal-500/10' : 'bg-teal-500/5'
         }`}
       />
 
-      {/* Top institution marker and Top-Right Theme Toggle */}
-      <div className="w-full max-w-3xl mx-auto pt-2 sm:pt-4 flex flex-wrap items-center justify-between z-10 gap-2.5">
-        <div className="flex items-center gap-2.5 text-xs font-medium tracking-wide">
-          <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-teal-400' : 'bg-teal-600'}`} />
-          <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>Şişli Hamidiye Etfal EAH</span>
-          <span className={isDark ? 'text-slate-600' : 'text-slate-400'}>·</span>
-          <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>İstanbul</span>
-        </div>
-
-        {/* Top-Right Controls: Live Clock & Theme Toggle */}
+      {/* Top-Right Controls: Live Clock & Theme Toggle */}
+      <div className="w-full max-w-4xl mx-auto pt-1 sm:pt-2 flex flex-wrap items-center justify-end z-10 gap-2.5">
         <div className="flex items-center gap-2 sm:gap-2.5">
           <LiveClock isDark={isDark} />
           <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
@@ -105,151 +146,113 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       </div>
 
       {/* Campus Weather & Inter-Campus Drive Time Bar */}
-      <div className="w-full max-w-3xl mx-auto z-10 mt-3 rounded-xl overflow-hidden border shadow-xs">
+      <div className="w-full max-w-4xl mx-auto z-10 mt-2.5 rounded-xl overflow-hidden border shadow-xs">
         <CampusWeatherBar isDark={isDark} />
       </div>
 
       {/* Broadcast News Ticker Strip: On-Duty Residents [MODULAR_DUTY_ROSTER] */}
-      <div className="w-full max-w-3xl mx-auto z-10 mt-2">
+      <div className="w-full max-w-4xl mx-auto z-10 mt-2">
         <DutyRosterTickerBar 
           isDark={isDark} 
           onOpenDetail={() => setIsRosterModalOpen(true)} 
         />
       </div>
 
-      {/* Center Welcome Content */}
-      <div className="w-full max-w-xl mx-auto my-auto py-8 sm:py-12 flex flex-col items-center text-center z-10 space-y-5 sm:space-y-6">
-        {/* User Iconic Photo Deck - Stack effect with left/right visible layers and arrow controls */}
-        <div 
-          className="relative flex flex-col items-center w-full"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          {/* Stack Container Flanked by Navigation Arrows */}
-          <div className="relative flex items-center justify-center w-full max-w-md mx-auto">
-            {/* Left Arrow Button */}
-            <button
-              type="button"
-              onClick={handlePrev}
-              aria-label="Önceki fotoğraf"
-              title="Önceki fotoğraf"
-              className={`relative z-30 -mr-2 sm:-mr-3 p-2 sm:p-2.5 rounded-full border shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95 ${
-                isDark 
-                  ? 'bg-slate-900/90 hover:bg-slate-800 text-teal-400 border-teal-500/30 hover:border-teal-400 shadow-black/50' 
-                  : 'bg-white/95 hover:bg-white text-teal-700 border-teal-600/30 hover:border-teal-600 shadow-slate-300/70'
-              }`}
-            >
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
-            </button>
-
-            {/* Photo Deck Stack Viewport */}
-            <div 
-              className="relative group cursor-pointer flex-shrink-0"
-              onClick={handleNext}
-              title="Tıklayarak sonraki fotoğrafa geçebilirsiniz"
-            >
-              {/* Ambient luminous glow behind image stack */}
-              <div 
-                aria-hidden="true"
-                className="absolute -inset-4 bg-gradient-to-tr from-cyan-500/25 via-teal-500/20 to-blue-500/25 rounded-3xl blur-xl -z-10 opacity-70 group-hover:opacity-95 transition-opacity pointer-events-none"
-              />
-
-              {/* Left Stack Card (Previous Photo - Tilted left under main) */}
-              <div 
-                aria-hidden="true"
-                className="absolute inset-0 -translate-x-3.5 sm:-translate-x-5 -rotate-[3.5deg] scale-[0.93] rounded-2xl overflow-hidden border border-teal-500/30 bg-slate-900/90 shadow-xl pointer-events-none z-0 transition-transform duration-500 group-hover:-translate-x-5 sm:group-hover:-translate-x-7 group-hover:-rotate-[5deg]"
-              >
-                <img
-                  src={prevPhoto.src}
-                  alt=""
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-contain p-2 opacity-40 grayscale-[25%] blur-[0.2px]"
+      {/* Center Welcome Content with Film Strip */}
+      <div className="w-full max-w-5xl mx-auto my-auto py-6 sm:py-8 flex flex-col items-center text-center z-10 space-y-5 sm:space-y-6">
+        
+        {/* 🎞️ CONTINUOUS CINEMA FILM STRIP CONTAINER */}
+        <div className="relative w-full max-w-4xl mx-auto film-strip-container overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/90 shadow-2xl p-1.5 sm:p-2 backdrop-blur-md">
+          {/* Top Sprocket Perforations Bar */}
+          <div className="w-full flex items-center justify-between px-3 py-1 bg-slate-900/90 border-b border-slate-800/80 rounded-t-xl select-none overflow-hidden">
+            <div className="flex items-center gap-2.5 w-full justify-around opacity-75">
+              {[...Array(24)].map((_, i) => (
+                <div 
+                  key={i} 
+                  className="w-3.5 h-2 rounded-[2px] bg-slate-950 border border-slate-700/50 shrink-0" 
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/20 via-slate-950/40 to-slate-950/70" />
-              </div>
-
-              {/* Right Stack Card (Next Photo - Tilted right under main) */}
-              <div 
-                aria-hidden="true"
-                className="absolute inset-0 translate-x-3.5 sm:translate-x-5 rotate-[3.5deg] scale-[0.93] rounded-2xl overflow-hidden border border-teal-500/30 bg-slate-900/90 shadow-xl pointer-events-none z-0 transition-transform duration-500 group-hover:translate-x-5 sm:group-hover:translate-x-7 group-hover:rotate-[5deg]"
-              >
-                <img
-                  src={nextPhoto.src}
-                  alt=""
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-contain p-2 opacity-40 grayscale-[25%] blur-[0.2px]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-l from-slate-950/20 via-slate-950/40 to-slate-950/70" />
-              </div>
-
-              {/* Main Active Card (Top of the Stack) */}
-              <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-2 border-teal-500/50 ring-4 ring-teal-500/15 transition-all duration-300 group-hover:scale-[1.01] group-hover:border-teal-400 bg-slate-950/95 backdrop-blur-md h-[230px] sm:h-[268px] w-[240px] sm:w-[310px] max-w-[68vw] sm:max-w-[78vw] flex items-center justify-center p-1.5">
-                {CLINIC_ALBUM.map((photo, idx) => (
-                  <img
-                    key={photo.id}
-                    src={photo.src}
-                    alt={photo.alt}
-                    referrerPolicy="no-referrer"
-                    className={`absolute inset-0 w-full h-full object-contain p-1.5 block mx-auto transition-all duration-700 ease-in-out ${
-                      activePhotoIdx === idx 
-                        ? 'opacity-100 scale-100 z-10 pointer-events-auto' 
-                        : 'opacity-0 scale-95 z-0 pointer-events-none'
-                    }`}
-                  />
-                ))}
-              </div>
+              ))}
             </div>
-
-            {/* Right Arrow Button */}
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Sonraki fotoğraf"
-              title="Sonraki fotoğraf"
-              className={`relative z-30 -ml-2 sm:-ml-3 p-2 sm:p-2.5 rounded-full border shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95 ${
-                isDark 
-                  ? 'bg-slate-900/90 hover:bg-slate-800 text-teal-400 border-teal-500/30 hover:border-teal-400 shadow-black/50' 
-                  : 'bg-white/95 hover:bg-white text-teal-700 border-teal-600/30 hover:border-teal-600 shadow-slate-300/70'
-              }`}
-            >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
-            </button>
           </div>
 
-          {/* Minimalist dot indicators - Pure dots for all 5 photos */}
-          <div className="mt-3.5 flex items-center justify-center gap-1.5 z-20">
-            {CLINIC_ALBUM.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActivePhotoIdx(idx);
-                }}
-                aria-label={`Fotoğraf ${idx + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
-                  activePhotoIdx === idx
-                    ? 'w-6 bg-teal-400'
-                    : isDark 
-                      ? 'w-1.5 bg-slate-700 hover:bg-slate-500' 
-                      : 'w-1.5 bg-slate-300 hover:bg-slate-400'
-                }`}
-              />
-            ))}
+          {/* Film Strip Viewport with Edge Fade Gradients */}
+          <div className="relative w-full overflow-hidden py-3">
+            {/* Left Vignette Shadow Fade */}
+            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 z-20 pointer-events-none bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+            
+            {/* Right Vignette Shadow Fade */}
+            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 z-20 pointer-events-none bg-gradient-to-l from-slate-950 via-slate-950/80 to-transparent" />
+
+            {/* Seamless Infinite Rolling Track (Duplicated twice for flawless loop) */}
+            <div className="film-strip-track">
+              {[...CLINIC_ALBUM, ...CLINIC_ALBUM].map((photo, index) => {
+                const originalIndex = index % CLINIC_ALBUM.length;
+                return (
+                  <div
+                    key={`${photo.id}-${index}`}
+                    onClick={() => setLightboxPhotoIdx(originalIndex)}
+                    className="group relative mx-2.5 cursor-pointer shrink-0 rounded-xl overflow-hidden border border-slate-700/60 bg-slate-900/90 transition-all duration-300 hover:scale-[1.03] hover:border-teal-400 hover:shadow-xl hover:shadow-teal-500/20"
+                    title="Büyütmek için tıklayın"
+                  >
+                    {/* Top frame tape indicator */}
+                    <div className="px-2.5 py-1 bg-slate-950/90 border-b border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400 select-none">
+                      <span className="text-teal-400/90 font-bold">ETFAL #{originalIndex + 1}</span>
+                      <span className="text-slate-500 text-[9px]">35mm ISO 400</span>
+                    </div>
+
+                    {/* Image Canvas */}
+                    <div className="relative w-[170px] sm:w-[205px] h-[225px] sm:h-[260px] bg-slate-950 flex items-center justify-center p-1.5 overflow-hidden">
+                      <img
+                        src={photo.src}
+                        alt={photo.alt}
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-contain rounded-md transition-transform duration-500 group-hover:scale-105"
+                      />
+
+                      {/* Hover Overlay Zoom Indicator */}
+                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <div className="p-2.5 rounded-full bg-slate-900/90 text-teal-400 border border-teal-500/40 shadow-lg">
+                          <Maximize2 className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom frame film badge */}
+                    <div className="px-2.5 py-0.5 bg-slate-950/90 border-t border-slate-800/80 flex items-center justify-between text-[9px] font-mono text-slate-500 select-none">
+                      <span>KODAK VISION3</span>
+                      <span className="text-slate-400">EXP {(originalIndex + 1) * 6}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Bottom Sprocket Perforations Bar */}
+          <div className="w-full flex items-center justify-between px-3 py-1 bg-slate-900/90 border-t border-slate-800/80 rounded-b-xl select-none overflow-hidden">
+            <div className="flex items-center gap-2.5 w-full justify-around opacity-75">
+              {[...Array(24)].map((_, i) => (
+                <div 
+                  key={i} 
+                  className="w-3.5 h-2 rounded-[2px] bg-slate-950 border border-slate-700/50 shrink-0" 
+                />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Minimalist medical emblem */}
-        <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl border flex items-center justify-center shadow-md transition-colors ${
+        <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl border flex items-center justify-center shadow-md transition-colors ${
           isDark 
             ? 'bg-slate-800/90 border-slate-700 text-teal-400 shadow-black/30' 
             : 'bg-white border-slate-200 text-teal-700 shadow-slate-200/50'
         }`}>
-          <Stethoscope className="w-6 h-6 sm:w-7 sm:h-7 stroke-[1.75]" />
+          <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]" />
         </div>
 
         {/* Headlines */}
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <div className={`text-xl sm:text-2xl md:text-3xl font-extrabold uppercase tracking-tight leading-snug ${
             isDark ? 'text-teal-400' : 'text-teal-700'
           }`}>
@@ -263,7 +266,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           </h1>
 
           {/* Important Clinical Warning Box */}
-          <div className={`p-4 rounded-xl border text-xs leading-relaxed max-w-lg mx-auto text-left sm:text-center space-y-1.5 transition-colors ${
+          <div className={`p-3.5 sm:p-4 rounded-xl border text-xs leading-relaxed max-w-lg mx-auto text-left sm:text-center space-y-1.5 transition-colors ${
             isDark 
               ? 'bg-amber-500/10 border-amber-500/25 text-amber-200' 
               : 'bg-amber-50 border-amber-200 text-amber-900'
@@ -278,7 +281,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         </div>
 
         {/* Primary Click to Proceed Action Button */}
-        <div className="pt-2 w-full sm:w-auto">
+        <div className="pt-1 sm:pt-2 w-full sm:w-auto">
           <button
             onClick={onProceed}
             className={`w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 active:scale-[0.98] group cursor-pointer ${
@@ -294,7 +297,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       </div>
 
       {/* Bottom Footer Information */}
-      <div className={`w-full max-w-2xl mx-auto pb-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left z-10 text-[11px] ${
+      <div className={`w-full max-w-3xl mx-auto pb-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left z-10 text-[11px] ${
         isDark ? 'text-slate-500' : 'text-slate-500'
       }`}>
         <p>
@@ -327,6 +330,82 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         </button>
       </div>
 
+      {/* 🔍 LIGHTBOX MODAL (Enlarged Artwork Inspector) */}
+      {activeLightboxPhoto && lightboxPhotoIdx !== null && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200"
+          onClick={() => setLightboxPhotoIdx(null)}
+        >
+          <div 
+            className="relative max-w-4xl w-full max-h-[92vh] flex flex-col items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Lightbox Bar */}
+            <div className="w-full flex items-center justify-between py-2 text-white/90 px-1">
+              <div className="flex items-center gap-2 text-xs font-mono">
+                <span className="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30 font-bold">
+                  {lightboxPhotoIdx + 1} / {CLINIC_ALBUM.length}
+                </span>
+              </div>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setLightboxPhotoIdx(null)}
+                aria-label="Kapat (ESC)"
+                title="Kapat (ESC)"
+                className="p-1.5 rounded-full bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 cursor-pointer transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Main Image Stage */}
+            <div className="relative w-full flex items-center justify-center overflow-hidden my-2">
+              {/* Left Arrow */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxPhotoIdx((prev) => (prev !== null ? (prev - 1 + CLINIC_ALBUM.length) % CLINIC_ALBUM.length : null));
+                }}
+                aria-label="Önceki görsel"
+                className="absolute left-2 sm:left-4 z-30 p-2 sm:p-3 rounded-full bg-black/70 hover:bg-black/90 text-teal-400 border border-teal-500/40 hover:border-teal-400 cursor-pointer backdrop-blur-md transition-all hover:scale-110"
+              >
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+
+              {/* Photo Display */}
+              <img
+                src={activeLightboxPhoto.src}
+                alt={activeLightboxPhoto.alt}
+                className="max-h-[68vh] sm:max-h-[74vh] max-w-full object-contain rounded-xl border border-slate-700/80 shadow-2xl shadow-black select-none"
+              />
+
+              {/* Right Arrow */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxPhotoIdx((prev) => (prev !== null ? (prev + 1) % CLINIC_ALBUM.length : null));
+                }}
+                aria-label="Sonraki görsel"
+                className="absolute right-2 sm:right-4 z-30 p-2 sm:p-3 rounded-full bg-black/70 hover:bg-black/90 text-teal-400 border border-teal-500/40 hover:border-teal-400 cursor-pointer backdrop-blur-md transition-all hover:scale-110"
+              >
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            </div>
+
+            {/* Bottom Navigation Hint */}
+            <div className="w-full text-center px-4 py-2 text-xs">
+              <p className="text-[11px] text-slate-400 font-mono">
+                Geçiş için klavyedeki yön tuşlarını (← / →), kapatmak için ESC tuşunu kullanabilirsiniz.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Monthly Duty Roster Modal [MODULAR_DUTY_ROSTER] */}
       <DutyRosterModal
         isOpen={isRosterModalOpen}
@@ -336,3 +415,4 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
     </div>
   );
 };
+

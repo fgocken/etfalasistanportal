@@ -165,7 +165,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Zor Havayolu',
     description: 'Sınıf 1-4 Mallampati, tiromental mesafe, boyun hareketleri ve zor entübasyon prediktörleri.',
     keywords: ['mallampati', 'zor havayolu', 'entübasyon', 'tiromental', 'ağız açıklığı', 'cormack lehane', 'hava yolu güvenliği'],
-    tabId: 'preop',
+    tabId: 'airway',
     popular: true
   },
   {
@@ -175,7 +175,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Açlık Kılavuzu',
     description: 'Berrak sıvılar (2 saat), anne sütü (4 saat), bebek maması (6 saat), hafif yemek (6 saat), katı/yağlı gıdalar (8 saat).',
     keywords: ['açlık süreleri', 'npo', 'açlık kılavuzu', 'berrak sıvılar', 'su', 'anne sütü', 'bebek maması', 'katı gıda', 'aspirasyon profilaksisi'],
-    tabId: 'preop',
+    tabId: 'infographics',
     popular: true
   },
   {
@@ -456,6 +456,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Ayak bileği kırıkları, aşil tendon onarımı ve diyabetik ayak cerrahisinde derin ve uzun süreli anestezi.',
     keywords: ['popliteal siyatik', 'siyatik blok', 'ayak cerrahisi', 'ayak bileği kırığı', 'aşil tendon', 'tibial sinir', 'peroneal sinir'],
     tabId: 'nerve-blocks'
+  },
+  {
+    id: 'anesthesia-emergencies',
+    title: 'Anestezi Acilleri ve Kriz Yönetimi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Acil Protokol',
+    description: 'Perioperatif kriz yönetimi, malign hipertermi, arrest/ACLS, anafilaksi, LAST ve acil eylem algoritmaları.',
+    keywords: ['anestezi acilleri', 'acil', 'kriz', 'malign hipertermi', 'arrest', 'acls', 'cpr', 'anafilaksi', 'last', 'cico', 'mavi kod'],
+    tabId: 'emergencies',
+    popular: true
   },
   {
     id: 'disclaimer-info',

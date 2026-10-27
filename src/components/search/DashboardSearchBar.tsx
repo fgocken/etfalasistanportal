@@ -16,12 +16,12 @@ export const DashboardSearchBar: React.FC<DashboardSearchBarProps> = ({ onClick,
           ? 'bg-slate-900/80 hover:bg-slate-800/90 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-teal-500/40 shadow-slate-950/20' 
           : 'bg-white hover:bg-slate-50/90 text-slate-500 hover:text-slate-800 border-slate-200/90 hover:border-teal-400/80 shadow-slate-100'
       }`}
-      title="Uygulamadaki tüm içerikleri ara (Kısayol: ⌘K veya Ctrl+K)"
+      title="Hızlı ara (Kısayol: ⌘K veya Ctrl+K)"
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <Search className="w-4 h-4 text-slate-400 group-hover:text-teal-500 transition-colors shrink-0" />
         <span className="text-xs truncate text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 font-normal">
-          Uygulamadaki tüm içeriklerde hızlı ara...
+          Hızlı ara...
         </span>
       </div>
 

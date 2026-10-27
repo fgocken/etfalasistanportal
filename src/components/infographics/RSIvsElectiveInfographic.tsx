@@ -16,7 +16,6 @@ import {
   Activity, 
   HelpCircle
 } from 'lucide-react';
-import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface RSIvsElectiveInfographicProps {
   isDark: boolean;
@@ -237,50 +236,42 @@ export const RSIvsElectiveInfographic: React.FC<RSIvsElectiveInfographicProps> =
   return (
     <div className="space-y-6">
       {/* 1. Header Banner */}
-      <div className={`p-5 rounded-2xl border flex flex-col lg:flex-row lg:items-center justify-between gap-4 ${
+      <div className={`p-5 rounded-2xl border space-y-3 ${
         isDark 
           ? 'bg-gradient-to-r from-rose-950/30 via-slate-900 to-slate-900 border-rose-500/30' 
           : 'bg-gradient-to-r from-rose-50 via-white to-slate-50 border-rose-200 shadow-xs'
       }`}>
-        <div className="space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30">
-              HAVAYOLU YÖNETİMİ & ASPİRASYON PROFİLAKSİSİ
-            </span>
-            <span className="text-xs text-slate-400">·</span>
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-              Difficult Airway Society (DAS) & ASA Standartları
-            </span>
-          </div>
-
-          <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon
-          </h3>
-          <p className={`text-xs sm:text-sm max-w-3xl leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-            Dolu mide aspirasyonunu önleyen <strong>Hızlı Seri İndüksiyon (RSI)</strong> ile standart elektif indüksiyonun ilaç sıralaması, BMV tutumu, Sellick tartışması ve şoktaki dozaj farklılıkları.
-          </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30">
+            HAVAYOLU YÖNETİMİ & ASPİRASYON PROFİLAKSİSİ
+          </span>
+          <span className="text-xs text-slate-400">·</span>
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+            Difficult Airway Society (DAS) & ASA Standartları
+          </span>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
-          <ShareLinkButton
-            type="infografik"
-            id="rsi-vs-elective"
-            isDark={isDark}
-            title="RSI vs Elektif İnfografiği Bağlantısını Kopyala"
-          />
+        <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon
+        </h3>
 
+        <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+          Dolu mide aspirasyonunu önleyen <strong>Hızlı Seri İndüksiyon (RSI)</strong> ile standart elektif indüksiyonun ilaç sıralaması, BMV tutumu, Sellick tartışması ve şoktaki dozaj farklılıkları.
+        </p>
+
+        <div className="pt-1 flex items-center">
           <a
             href="https://pubmed.ncbi.nlm.nih.gov/20237045/"
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all cursor-pointer ${
               isDark 
-                ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700' 
-                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
+                ? 'bg-slate-800/80 hover:bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600 hover:text-white' 
+                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300 shadow-2xs'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5 text-rose-500" />
-            <span>PubMed (El-Orbany Review: PMID 20237045)</span>
+            <BookOpen className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+            <span>Kaynak: PubMed (El-Orbany Review: PMID 20237045)</span>
             <ExternalLink className="w-3 h-3 text-slate-400" />
           </a>
         </div>
