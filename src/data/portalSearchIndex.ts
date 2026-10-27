@@ -371,6 +371,26 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-sodium-correction-calculator',
+    title: 'Sodyum Bozuklukları & Adrogué-Madias Hesaplayıcısı (%3 NaCl & ODS Sınırı)',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Adrogué-Madias',
+    description: 'MDCalc standardında Adrogué-Madias formülüyle %3 NaCl hipertonik salin infüzyon hızı, Serbest Su Açığı, Glukoz düzeltmeli Na ve ODS güvenlik eşikleri.',
+    keywords: ['sodyum', 'sodium', 'hiponatremi', 'hipernatremi', 'adrogue', 'madias', 'adrogue madias', 'mdcalc', 'hipertonik salin', '%3 nacl', 'ods', 'osmotik demiyelinizasyon', 'serbest su açığı', 'free water deficit', 'glukoz düzeltmeli sodyum', 'katz', 'hillier', 'elektrolit'],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
+    id: 'treatment-hyponatremia-infographic',
+    title: 'Sodyum Bozuklukları İnfografiği (Hiponatremi ODS & Hipernatremi DI)',
+    category: 'Klinik İnfografikler',
+    badge: 'Hipo & Hipernatremi',
+    description: 'Hiponatremi (beyin ödemi, nöbet, %3 acil bolus, ODS, dDAVP geri indirme) ve Hipernatremi (serebral büzüşme, damar yırtılması, etyolojik hacim yaklaşımları, serebral ödemden korunma, Santral DI dDAVP) protokolleri.',
+    keywords: ['sodyum', 'hiponatremi', 'hipernatremi', 'ods', 'santral pontin miyelinozis', 'beyin ödemi', 'acil bolus', '%3 salin', 'ddavp', 'desmopressin', 'diabetes insipidus', 'santral di', 'serbest su açığı', 'overcorrection', 'aşırı düzeltme', 'serebral ödem'],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',

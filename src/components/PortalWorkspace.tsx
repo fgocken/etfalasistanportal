@@ -148,7 +148,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   treatments: {
     id: 'treatments',
     title: 'Tedaviler ve İlaçlar',
-    desc: 'Magnezyum replasmanı (Mathews et al. 2022 eGFR kademeli hesaplayıcı), elektrolit protokolleri ve klinik infografikler.',
+    desc: 'Sodyum bozuklukları (Adrogué-Madias & ODS), Magnezyum (Mathews 2022) ve Potasyum/Kaliphos elektrolit hesaplayıcıları ve klinik infografikleri.',
     icon: Pill,
     iconBgDark: 'bg-teal-500/15',
     iconBgLight: 'bg-teal-50',
@@ -1403,7 +1403,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
         {/* 8. Tedaviler ve İlaçlar */}
         {activeTab === 'treatments' && (
-          <TreatmentsWorkspace isDark={isDark} />
+          <TreatmentsWorkspace 
+            isDark={isDark} 
+            initialProtocolId={
+              initialRoute?.type === 'arac' && initialRoute.id?.includes('tedavi=')
+                ? initialRoute.id.split('tedavi=')[1]
+                : null
+            }
+          />
         )}
 
         {/* 9. Sinir Blokları & LAST */}

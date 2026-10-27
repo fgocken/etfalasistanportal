@@ -21,14 +21,18 @@ import { MagnesiumCalculator } from './MagnesiumCalculator';
 import { HypomagnesemiaInfographic } from './HypomagnesemiaInfographic';
 import { PotassiumCalculator } from './PotassiumCalculator';
 import { HypokalemiaInfographic } from './HypokalemiaInfographic';
+import { SodiumCalculator, SodiumReferencesAccordion } from './SodiumCalculator';
+import { HyponatremiaInfographic } from './HyponatremiaInfographic';
 
 interface Props {
   isDark: boolean;
+  initialProtocolId?: string | null;
 }
 
 type TreatmentCategory = 'electrolyte' | 'vasoactive' | 'sedation' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
+type SodiumViewMode = 'all' | 'calc' | 'infographic';
 
 interface ProtocolCardItem {
   id: string;
@@ -82,25 +86,28 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'sodium',
     category: 'electrolyte',
     categoryLabel: 'Elektrolit Replasmanı',
-    badge: 'Adrogué-Madias',
-    title: 'Sodyum Bozuklukları ve Hiponatremi (%3 NaCl Protokolü)',
-    shortDesc: 'Adrogué-Madias formülüyle hipertonik salin hesabı ve Osmotik Demiyelinizasyon Sendromu (ODS) önleme hız kısıtlamaları (maks 8 mmol/L / 24 saat).',
-    status: 'upcoming',
+    badge: 'Adrogué-Madias & MDCalc',
+    title: 'Sodyum Bozuklukları (Hiponatremi & Hipernatremi Protokolü)',
+    shortDesc: 'Adrogué-Madias formülüyle hipertonik/hipotonik sıvı hesabı, saatlik debi, Serbest Su Açığı, Glukoz düzeltmeli Na, ODS ve Serebral Ödem koruma eşikleri.',
+    status: 'active',
     accentColor: 'teal',
-    highlightsHeader: 'Planlanan Parametreler:',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
-      { label: '24 Sa Yükselme', value: 'Maks 8 mmol/L', colorClass: 'text-slate-600 dark:text-slate-400', bgClass: 'bg-slate-500/10', borderClass: 'border-slate-500/20' },
-      { label: '%3 Hipertonik', value: '513 mEq/L Na⁺', colorClass: 'text-slate-600 dark:text-slate-400', bgClass: 'bg-slate-500/10', borderClass: 'border-slate-500/20' }
+      { label: '24 Sa Yükselme', value: 'Maks 6–8 mEq/L', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: '%3 Hipertonik', value: '513 mEq/L Na⁺', colorClass: 'text-cyan-700 dark:text-cyan-300', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' },
+      { label: 'Yüksek ODS Riski', value: 'Maks 4–6 mEq/L', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Acil Bolus', value: '100–150 mL %3', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' }
     ]
   }
 ];
 
-export const TreatmentsWorkspace: React.FC<Props> = ({ isDark }) => {
+export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId }) => {
   const [activeCategory, setActiveCategory] = useState<TreatmentCategory>('electrolyte');
-  // null = kartlar galerisi, 'magnesium' veya 'potassium' = ayrıntılı hesaplayıcı & infografik görünümü
-  const [activeProtocolId, setActiveProtocolId] = useState<string | null>(null);
+  // null = kartlar galerisi, 'magnesium', 'potassium' veya 'sodium'
+  const [activeProtocolId, setActiveProtocolId] = useState<string | null>(initialProtocolId || null);
   const [mgViewMode, setMgViewMode] = useState<MagnesiumViewMode>('all');
   const [kViewMode, setKViewMode] = useState<PotassiumViewMode>('all');
+  const [naViewMode, setNaViewMode] = useState<SodiumViewMode>('all');
 
   const filteredCards = PROTOCOL_CARDS.filter(card => card.category === activeCategory);
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === activeProtocolId);
@@ -467,6 +474,73 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark }) => {
           {/* Hipokalemi Klinik Bulguları ve EKG İnfografiği */}
           {(kViewMode === 'all' || kViewMode === 'infographic') && (
             <HypokalemiaInfographic isDark={isDark} />
+          )}
+        </div>
+      )}
+
+      {/* GÖRÜNÜM 2C: SEÇİLİ PROTOKOLÜN DETAYI (activeProtocolId === 'sodium') */}
+      {activeProtocolId === 'sodium' && (
+        <div className="space-y-6">
+          {/* Alt Görünüm Modu Filtresi */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border bg-slate-50/80 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                Görünüm Seçimi:
+              </span>
+            </div>
+
+            <div className={`inline-flex p-1 rounded-lg border text-xs font-medium self-start sm:self-auto ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+            }`}>
+              <button
+                type="button"
+                onClick={() => setNaViewMode('all')}
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                  naViewMode === 'all'
+                    ? isDark ? 'bg-slate-800 text-teal-400 font-bold shadow-xs' : 'bg-teal-50 text-teal-800 font-bold shadow-xs'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                }`}
+              >
+                Tam Görünüm (Tümü)
+              </button>
+              <button
+                type="button"
+                onClick={() => setNaViewMode('calc')}
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                  naViewMode === 'calc'
+                    ? isDark ? 'bg-slate-800 text-teal-400 font-bold shadow-xs' : 'bg-teal-50 text-teal-800 font-bold shadow-xs'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                }`}
+              >
+                Hesaplayıcı &amp; Protokol
+              </button>
+              <button
+                type="button"
+                onClick={() => setNaViewMode('infographic')}
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                  naViewMode === 'infographic'
+                    ? isDark ? 'bg-slate-800 text-teal-400 font-bold shadow-xs' : 'bg-teal-50 text-teal-800 font-bold shadow-xs'
+                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                }`}
+              >
+                Klinik &amp; İnfografik Rehberi (Hipo/Hiper)
+              </button>
+            </div>
+          </div>
+
+          {/* 1. Sodyum Hesaplayıcısı */}
+          {(naViewMode === 'all' || naViewMode === 'calc') && (
+            <SodiumCalculator isDark={isDark} hideReferences />
+          )}
+
+          {/* 2. Sodyum Bozuklukları Klinik Bulguları ve Algoritmaları (YUKARI ALINDI) */}
+          {(naViewMode === 'all' || naViewMode === 'infographic') && (
+            <HyponatremiaInfographic isDark={isDark} />
+          )}
+
+          {/* 3. Klinik Kılavuzlar ve Kanıta Dayalı Kaynakça (EN AŞAĞIYA ALINDI) */}
+          {(naViewMode === 'all' || naViewMode === 'calc') && (
+            <SodiumReferencesAccordion isDark={isDark} />
           )}
         </div>
       )}

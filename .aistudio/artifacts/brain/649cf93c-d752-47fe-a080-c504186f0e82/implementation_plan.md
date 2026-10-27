@@ -1,75 +1,110 @@
-# Uygulama Planı: Bölgesel & Periferik Sinir Blokları Klinik Aracı (`nerve-blocks`)
+# Sodyum Bozuklukları (Hipo / Hipernatremi) Klinik Hesaplayıcı & Protokolü
 
-Şişli Etfal Anesteziyoloji & Reanimasyon Portalı için modern USG rehberliğinde bölgesel anestezi, fasya plan blokları, interaktif duyu/dermatom anatomisi ve acil LAST (Lokal Anestezik Sistemik Toksisitesi) kurtarma protokolünü kapsayan yeni bir klinik araç geliştirilmesi.
+Güncel klinik kılavuzlara ve MDCalc metodolojisine (Adrogué-Madias, Serbest Su Açığı, Glukoz Düzeltmeli Na, ODS güvenlik eşikleri) dayalı, "Tedaviler ve İlaçlar" modülüyle tam entegre klinik hesaplayıcı ve infografik kılavuzunun mimari planı.
 
----
-
-## 1. Kullanıcı İhtiyacı ve Klinik Hedefler
-- **Kapsam:** Tüm majör anestezi blok grupları (Üst Ekstremite, Alt Ekstremite ve Gövde/Fasya Plan Blokları).
-- **LAST & LA Güvenliği:** Hastanın kilosuna göre seçilen lokal anesteziklerin (bupivakain, levobupivakain, ropivakain, lidokain ± adrenalin) maksimum güvenli dozlarının hesaplanması ve acil durumda hayat kurtarıcı **%20 İntralipid bolus + infüzyon** dozlarının anında görüntülenmesi.
-- **İnteraktif Görselleştirme:** Blok seçildiğinde uyuşacak duyusal bölgelerin (dermatomlar, periferik kutanöz sinir alanları) ve motor etkilerin interaktif harita üzerinde gösterilmesi.
-- **Entegrasyon:** Portal dashboard araç kartı, deep linking (`#arac=nerve-blocks`), 1-tıkla bağlantı paylaşımı ve portal arama motoru dizini.
+> [!IMPORTANT]
+> **Kullanıcı Tercihleri ve Doğrulanan Kararlar:**
+> - **Klinik Formüller**: Adrogué-Madias 1 Litrelik $\Delta\text{Na}$ formülü, Hipernatremi Serbest Su Açığı (Free Water Deficit) ve Hiperglisemide Glukoz Düzeltmeli Na (Katz ve Hillier) birlikte yer alacaktır.
+> - **Güvenlik Sınırları & Uyarılar**: 24 saatlik güvenli düzeltme tavanı (6–8 mEq/L/gün) ile Osmotik Demiyelinizasyon Sendromu (ODS / Santral Pontin Miyelinozis) risk analizleri ve saatlik infüzyon hızı (mL/saat) canlı hesaplanacaktır.
+> - **Yerleşim**: Hesaplayıcı, kullanıcının talebi doğrultusunda **sadece "Tedaviler ve İlaçlar"** bölümü içerisinde Magnezyum ve Potasyum protokollerinin yanındaki üçüncü aktif kart olarak konumlandırılacaktır.
 
 ---
 
-## 2. Mimari ve Bileşen Yapısı
+## 1. Genel Bakış ve Klinik Amaç
 
-### A. Veri Modeli ve Blok Kütüphanesi (`src/data/nerveBlocksData.ts`)
-Her blok için yapılandırılmış tıp literatürü (NYSORA, ESRA, ASRA yönergeleri) kaynaklı veri modeli:
-- **Kimlik & Başlık:** `id`, `name`, `trName`, `region` (`upper` | `lower` | `trunk`), `targetNerves`
-- **Ultrasonografi (USG) Rehberliği:** Prob tipi (Lineer / Konveks), hasta pozisyonu, prob oryantasyonu, iğne yönü (In-plane / Out-of-plane)
-- **Hedef ve Anatomi:** Sonoanatomi belirteçleri (fasya, damarlar, kaslar), yayılım deseni
-- **Önerilen İlaç & Hacim:** LA volüm aralığı (örn. ESP için 20-30 mL %0.25 bupivakain, ACB için 15-20 mL), konsantrasyon önerileri
-- **Duyusal & Cerrahi Kapsam:** Hangi cerrahiler için uygun olduğu, uyuşan dermatomlar/kutanöz alanlar (omuz, ön kol, diz, toraks, batın ön duvarı vb.)
-- **Klinik İpuçları & Tuzaklar ("Pearls & Pitfalls"):** Motor blok riski, plevra/damar ponksiyonu uyarısı, Horner sendromu riski, hemidiyafram paralizisi (frenik sinir) notları
-- **Dahil Edilecek Bloklar:**
-  1. **Üst Ekstremite:** İnterskalen (ISB), Supraklaviküler (SCB), İnfraklaviküler (ICB), Aksiller, Periferik bilek/el blokları (Median, Ulnar, Radial)
-  2. **Alt Ekstremite:** Femoral, Adduktor Kanal (ACB), Popliteal Siyatik, Subgluteal Siyatik, PENG (Pericapsular Nerve Group), Fascia Iliaca (FICB)
-  3. **Gövde & Fasya Plan Blokları:** Erector Spinae Plane (ESP - torasik ve lomber), Transversus Abdominis Plane (TAP), Rektus Kılıfı (Rectus Sheath), Quadratus Lumborum (QL), PECS I/II ve Serratus Anterior (SAP)
-
-### B. Lokal Anestezik & LAST İntralipid Hesaplayıcısı (`src/components/nerve-blocks/LastCalculator.tsx`)
-- **Kilo Girişi:** Yetişkin veya pediatrik hasta ağırlığı (kg)
-- **Maksimum Güvenli Doz Tablosu:**
-  - Bupivakain / Levobupivakain: 2 mg/kg (maks 150-175 mg)
-  - Ropivakain: 3 mg/kg (maks 200-250 mg)
-  - Lidokain (adrenalinsiz): 4.5 mg/kg (maks 300 mg)
-  - Lidokain + Adrenalin: 7 mg/kg (maks 500 mg)
-  - Prilokain: 6 mg/kg (maks 400 mg)
-- **%20 İntralipid (Lipid Rescue) Acil Protokolü:**
-  - **Bolus:** 1.5 mL/kg İV (2-3 dakikada hızlı infüzyon)
-  - **İdame İnfüzyonu:** 0.25 mL/kg/dk (kardiyovasküler stabilite sağlanana kadar)
-  - **Dirençli Durum:** Bolus tekrarı (maks 2 kez) ve infüzyon hızının 0.5 mL/kg/dk'ya yükseltilmesi
-  - **Maksimum Kümülatif Doz:** İlk 30-45 dakikada 10-12 mL/kg üst limit uyarısı
-  - **Acil Müdahale Adımları:** FiO2 1.0, hiperventilasyondan kaçınma (asidoz ve PaCO2 artışı LAST toksisitesini artırır), düşük doz epinefrin (<1 mcg/kg), propofol ve vazopressinden kaçınma.
-
-### C. İnteraktif Duyu & Kapsama Haritası (`src/components/nerve-blocks/SensoryMapViewer.tsx`)
-- Seçilen bloğa göre anatomik vücut bölgelerinin (omuz, kol, ön kol, el, kalça, uyluk, diz, bacak, ayak, göğüs, batın) kutanöz/dermatom dağılımının renkli ve interaktif vurgulanması.
-- Tersine arama: Kullanıcı cerrahi bölgeyi (örn. "Diz Artroplastisi" veya "Omuz Artroskopisi") seçtiğinde uygun sinir bloklarının otomatik önerilmesi.
-
-### D. Ana Çalışma Alanı (`src/components/nerve-blocks/NerveBlocksWorkspace.tsx`)
-- Üst filtre çubuğu: Kategori seçimi (Tümü, Üst Ekstremite, Alt Ekstremite, Gövde Blokları), cerrahi arama kutusu.
-- İki panelli düzen:
-  - Sol/Orta Panel: Detaylı blok kartları, USG görüntüleme rehberi, teknik adımlar, volüm ve ilaç önerileri.
-  - Sağ Panel / Açılır Sekme: Hızlı LAST & LA Doz Hesaplayıcısı ve İnteraktif Duyu Kapsama Haritası.
-- Her blok kartında **"Bağlantıyı Kopyala"** (`ShareLinkButton`) desteği (`#arac=nerve-blocks&blok=isb`).
+- **Amaç:** Yoğun bakım, ameliyathane ve perioperatif servislerde sodyum bozukluğu (akut/kronik hiponatremi ve hipernatremi) olan olgularda, seçilen IV infüzyon sıvısına göre serum sodyumundaki değişimi, hedeflenen düzeltme süresine göre saatlik infüzyon hızını (mL/saat) ve nörolojik komplikasyonları (ODS veya serebral ödem) önleyici güvenlik parametrelerini saniyeler içinde hesaplamak.
+- **Kullanıcı Profili:** Anesteziyoloji ve Reanimasyon uzmanları, asistan hekimler ve yoğun bakım klinik ekipleri.
+- **Kazanım:** Karmaşık manuel formülleri (Adrogué-Madias, TBW, Serbest Su Açığı) standardize etmek, %3 NaCl hipertonik salin infüzyonlarında olası aşırı hızlı düzeltme (overcorrection) ve demiyelinizasyon riskini renk kodlu ve sesli/görsel klinik uyarılarla önlemek.
 
 ---
 
-## 3. Sistem Entegrasyonu & Yönlendirme
-1. **`src/utils/deepLink.ts`:**
-   - `VALID_TOOL_IDS` listesine `'nerve-blocks'` eklenmesi.
-   - Hash ayrıştırma ve güncelleme mantığının desteklenmesi.
-2. **`src/components/PortalWorkspace.tsx`:**
-   - `ToolTabId` tipine `'nerve-blocks'` eklenmesi.
-   - `ALL_CLINICAL_TOOLS` nesnesine yeni araç kartının tanımlanması (Özel ikon, mor/indigo tema rengi, "Yeni Araç" rozeti).
-   - Çalışma alanı görünümünde `NerveBlocksWorkspace` bileşeninin render edilmesi.
-3. **`src/data/portalSearchIndex.ts`:**
-   - Tüm bloklar, LAST protokolü, USG terimleri ve cerrahi endikasyonların global hızlı arama motoruna (CommandPalette / Dashboard Search) dizinlenmesi.
+## 2. Kullanıcı Deneyimi ve Görsel Tasarım
+
+- **Tasarım Dili & Estetik:**
+  - Mevcut portal mimarisine ve `references/8_science_space_biotech.md` klinik kılavuzuna uygun; temiz beyaz/slate zemin üzerinde camgöbeği/teal ve amber güvenlik vurguları.
+  - Sodyum moleküler/elektrolit kimliğine uygun turkuaz/mavi ve amber uyarı rozetleri.
+  - Bütün sayısal verilerde ve hız göstergelerinde `tabular-nums` ve `font-mono` kullanımı.
+- **Görünüm Modları (Segmented Controls):**
+  - **Tümü (Tam Görünüm)**: Hesaplayıcı ve klinik infografik/algoritma kartları bir arada.
+  - **Hesaplayıcı & Protokol**: Parametre girişleri, sıvı seçimi, saatlik infüzyon debisi, ODS koruma eşikleri.
+  - **Klinik Bulgular & Algoritma**: Hiponatremi semptom ağırlık skalası, akut semptomatik %3 NaCl bolus protokolü (100–150 mL IV 10–20 dk), ODS patogenezi ve hipernatremi kademeleri.
+- **İnteraktif Akış:**
+  1. *Hasta Parametreleri*: Güncel Serum Na⁺, Hedef Serum Na⁺, Kilo (kg), Cinsiyet & Yaş Grubu (Çocuk 0.6, Genç Erkek 0.6, Genç Kadın 0.5, Yaşlı Erkek 0.5, Yaşlı Kadın 0.45).
+  2. *İnfüzyon Sıvısı Seçimi*:
+     - %3 NaCl Hipertonik Salin (513 mEq/L Na⁺)
+     - %0.9 NaCl Serum Fizyolojik (154 mEq/L Na⁺)
+     - Ringer Laktat / Dengeli Elektrolit (130 mEq/L Na⁺ + 4 mEq/L K⁺)
+     - %0.45 NaCl Yarım Salin (77 mEq/L Na⁺)
+     - %0.2 NaCl + %5 Dextroz (34 mEq/L Na⁺)
+     - %5 Dextroz (D5W) (0 mEq/L Na⁺)
+     - Ek potasyum katkısı opsiyonu (+10, +20, +40 mEq/L KCl).
+  3. *Özel Modüller*:
+     - **Hiperglisemi Glukoz Düzeltmeli Na**: Glukoz (mg/dL) girildiğinde Katz (+0.016) ve Hillier (+0.024) düzeltmeli gerçek Na değeri.
+     - **Hipernatremi Serbest Su Açığı**: $\text{TBW} \times [(\text{Serum Na} / 140) - 1]$ ile toplam serbest su açığı ve oral/IV D5W karşılığı.
+  4. *ODS Güvenlik Monitörü*:
+     - Hedeflenen 24 saatlik değişim $\le 6\text{--}8\text{ mEq/L}$ aralığında yeşil/güvenli bildirim.
+     - $> 8\text{ mEq/L/gün}$ durumunda amber, $> 10\text{--}12\text{ mEq/L/gün}$ durumunda kırmızı aşırı düzeltme (overcorrection) ve desmopressin (dDAVP) kurtarma hatırlatması.
 
 ---
 
-## 4. Doğrulama ve Test Adımları
-1. **Kod Bütünlüğü & TypeScript Derlemesi:** `compile_applet` ile sıfır derleme hatası kontrolü.
-2. **LAST Hesaplama Doğruluğu:** Kilo bazlı LA dozları ve İntralipid bolus/infüzyon değerlerinin tıp kılavuzlarıyla birebir matematiksel doğrulanması.
-3. **İnteraktivite:** Blok seçimi, anatomik bölge vurgulaması, filtreleme ve arama testleri.
-4. **Deep Linking:** `#arac=nerve-blocks` ve `#arac=nerve-blocks&blok=adductor-canal` gibi URL paylaşımlarının doğrudan hedeflenen bloğa sorunsuz açılmasının testi.
+## 3. Sistem Mimarisi ve Bileşen Hiyerarşisi
+
+```
+src/components/treatments/
+│
+├── TreatmentsWorkspace.tsx           (Sekme yönetimi, Sodium kartının 'active' yapılması)
+│   ├── SodiumCalculator.tsx          (Yeni: Ana hesaplayıcı bileşeni)
+│   │   ├── Formula Engine            (Adrogué-Madias, TBW, Infusate Na+K, Infusion Rate)
+│   │   ├── Hyperglycemia Module      (Katz & Hillier Glukoz düzeltmeli Na)
+│   │   ├── FreeWaterDeficit Module   (Hipernatremi su açığı hesabı)
+│   │   └── ODS Safety Banner         (Osmotik Demiyelinizasyon Sendromu risk analizi)
+│   │
+│   └── HyponatremiaInfographic.tsx   (Yeni: Akut/Kronik hiponatremi semptomları ve infografik)
+```
+
+---
+
+## 4. Teknik Formüller ve Matematiksel Mantık
+
+1. **Toplam Vücut Suyu (TBW - Total Body Water):**
+   - Genç Erkek / Çocuk: $\text{Kilo} \times 0.60$
+   - Genç Kadın / Yaşlı Erkek ($\ge 65$ yaş): $\text{Kilo} \times 0.50$
+   - Yaşlı Kadın ($\ge 65$ yaş): $\text{Kilo} \times 0.45$
+
+2. **Adrogué-Madias 1 Litre Sıvı Değişim Formülü:**
+   $$\Delta \text{Serum Na}^+ \text{ (mEq/L per 1L)} = \frac{(\text{İnfüzat Na}^+ + \text{İnfüzat K}^+) - \text{Serum Na}^+}{\text{TBW} + 1}$$
+
+3. **Gerekli Sıvı Hacmi ve Saatlik İnfüzyon Hızı (mL/saat):**
+   $$\text{Gereken Toplam Sıvı (Litre)} = \frac{\text{Hedeflenen } \Delta\text{Na (mEq/L)}}{\Delta\text{Na (1 Litre İnfüzat)}}$$
+   $$\text{Saatlik İnfüzyon Hızı (mL/saat)} = \frac{\text{Gereken Toplam Sıvı (mL)}}{\text{Hedef Süre (saat)}}$$
+
+4. **Hipernatremi Serbest Su Açığı (Free Water Deficit):**
+   $$\text{Su Açığı (Litre)} = \text{TBW} \times \left( \frac{\text{Serum Na}^+}{140} - 1 \right)$$
+
+5. **Glukoz Düzeltmeli Sodyum:**
+   - $\text{Katz Formülü} = \text{Ölçülen Na} + 0.016 \times (\text{Glukoz} - 100)$
+   - $\text{Hillier Formülü} = \text{Ölçülen Na} + 0.024 \times (\text{Glukoz} - 100)$
+
+---
+
+## 5. Uygulama Adımları
+
+1. **`SodiumCalculator.tsx` Bileşeninin Oluşturulması:**
+   - İnteraktif form parametreleri (yaş/cinsiyet/kilo, serum Na, hedef Na, süre, infüzyon sıvısı ve ilave K⁺).
+   - Canlı sonuç kartları: 1 Litre infüzyon ile Na değişimi, toplam gereken sıvı hacmi, saatlik infüzyon debisi (mL/saat ve damla/dakika).
+   - Glukoz düzeltme ve Serbest su açığı alt akordeonları / araçları.
+   - ODS güvenlik sınır göstergesi (6-8 mEq/L/gün kuralı).
+   - Literatür ve kaynakça referansı (Adrogué HJ, Madias NE. NEJM 2000; Spasovski G et al. Eur J Endocrinol 2014; Sterns RH. NEJM 2015).
+
+2. **`HyponatremiaInfographic.tsx` Bileşeninin Oluşturulması:**
+   - Hiponatremi klinik şiddet sınıflaması (Hafif: 130–134, Orta: 125–129, Derin: <125 mEq/L).
+   - Akut semptomatik hiponatremide acil %3 NaCl 100–150 mL IV bolus protokolü.
+   - Osmotik Demiyelinizasyon Sendromu (ODS) risk faktörleri tablosu.
+
+3. **`TreatmentsWorkspace.tsx` Entegrasyonu:**
+   - `PROTOCOL_CARDS` içindeki `sodium` kartının `status: 'active'` haline getirilmesi.
+   - Görünüm filtreleri (Tümü, Hesaplayıcı, İnfografik) ve kart tıklamasıyla `activeProtocolId === 'sodium'` yönlendirmesinin bağlanması.
+   - Hızlı arama ve derin bağlantı (`#arac=treatments&tedavi=sodium`) uyumluluğu.
+
+4. **Doğrulama ve Derleme Kontrolleri:**
+   - `compile_applet` ve `lint_applet` ile tip ve derleme testlerinin tamamlanması.
