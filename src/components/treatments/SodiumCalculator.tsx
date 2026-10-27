@@ -886,36 +886,98 @@ export const SodiumCalculator: React.FC<Props> = ({ isDark, hideReferences = fal
           </button>
 
           {showCalculationSteps && (
-            <div className="p-4 pt-0 border-t border-slate-100 dark:border-slate-800 text-xs space-y-3 mt-3">
-              <div className="p-3 rounded-lg border bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 font-mono text-[12px] space-y-2">
-                <div className="text-teal-600 dark:text-teal-400 font-bold">
-                  1. Toplam Vücut Suyu (TBW):
+            <div className="p-4 pt-0 border-t border-slate-100 dark:border-slate-800 text-xs space-y-4 mt-3">
+              {/* 1. Matematiksel Genel Formül Kutusu */}
+              <div className="p-3 rounded-lg border bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <Calculator className="w-4 h-4 text-teal-500" />
+                  <span>Adrogué-Madias Orijinal Matematiksel Formülü:</span>
                 </div>
+                <div className="p-2.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 font-mono text-center text-xs sm:text-sm font-bold text-teal-700 dark:text-teal-300">
+                  ΔSerum Na⁺ (1 Litre İnfüzat) = [ (İnfüzat Na⁺ + İnfüzat K⁺) - Mevcut Serum Na⁺ ] / ( TBW + 1 )
+                </div>
+              </div>
+
+              {/* 2. Potasyumun (K+) Rolü ve Edelman İlkesi Açıklaması */}
+              <div className={`p-3.5 rounded-lg border space-y-2 ${
+                isDark ? 'bg-amber-950/20 border-amber-800/70 text-amber-200' : 'bg-amber-50/80 border-amber-200 text-amber-950'
+              }`}>
+                <div className="font-bold text-xs flex items-center gap-2">
+                  <Info className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                  <span>Formüldeki (Na⁺ + K⁺) Toplam Katyonunun Klinik Önemi (Edelman İlkesi):</span>
+                </div>
+                <p className="leading-relaxed text-[11px] opacity-95">
+                  Serum sodyum konsantrasyonu tek başına sodyumla belirlenmez; <strong>Edelman formülüne</strong> göre serum osmolalitesi toplam değişebilir sodyum ve potasyumun vücut suyuna oranıdır: <code>Serum [Na⁺] ≈ (Na_e + K_e) / TBW</code>.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1 text-[11px]">
+                  <div className="p-2.5 rounded bg-white/70 dark:bg-slate-900/70 border border-amber-300/40 dark:border-amber-700/40">
+                    <strong>Hücresel Katyon Takası:</strong> İnfüzyonla verilen her potasyum ($K^+$) iyonu $Na^+/K^+$ ATPaz pompasıyla hücre içine girerken, elektriksel dengeyi korumak için hücre içindeki sodyum ($Na^+$) ekstraselüler alana çıkar. <em>Yani verilen potasyum, tıpkı sodyum verilmiş gibi serum sodyumunu artırır.</em>
+                  </div>
+                  <div className="p-2.5 rounded bg-white/70 dark:bg-slate-900/70 border border-amber-300/40 dark:border-amber-700/40">
+                    <strong>ODS Tehlikesi (Potasyum Hesaplanmazsa):</strong> Hiponatremi hastasına hipokalemi için torba içine KCl veya Kaliphos eklendiğinde bu potasyum hesaba katılmazsa, serum sodyumu hekimin tahmininden <strong>2 kat daha hızlı fırlayabilir</strong> ve fatal <strong>Osmotik Demiyelinizasyon Sendromuna (ODS)</strong> yol açar.
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Hastaya Özel Adım Adım Sayısal Çözüm */}
+              <div className="p-3.5 rounded-lg border bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 font-mono text-[11px] sm:text-[12px] space-y-3">
                 <div>
-                  TBW = Kilo ({ptWeight} kg) × Katsayı ({tbwFactor}) = <strong className="text-slate-900 dark:text-white">{tbwLitres.toFixed(1)} Litre</strong>
+                  <div className="text-teal-600 dark:text-teal-400 font-bold">
+                    Adım 1: Toplam Vücut Suyu (TBW) Hesabı:
+                  </div>
+                  <div className="text-slate-700 dark:text-slate-300 mt-0.5">
+                    TBW = Hasta Kilosu ({ptWeight} kg) × Faktör ({tbwFactor}) = <strong className="text-slate-900 dark:text-white">{tbwLitres.toFixed(1)} Litre</strong>
+                  </div>
                 </div>
 
-                <div className="text-teal-600 dark:text-teal-400 font-bold pt-1">
-                  2. 1 Litre İnfüzat ile Beklenen Serum Na⁺ Değişimi:
-                </div>
-                <div>
-                  ΔNa (1L) = [({infusateNa} mEq Na + {infusateK} mEq K) - {curNa} mEq] / ({tbwLitres.toFixed(1)} + 1)
-                  = <strong className="text-slate-900 dark:text-white">{deltaNaPerLiter > 0 ? `+${deltaNaPerLiter.toFixed(3)}` : deltaNaPerLiter.toFixed(3)} mEq/L / Litre</strong>
-                </div>
-
-                <div className="text-teal-600 dark:text-teal-400 font-bold pt-1">
-                  3. Hedef Değişim için Gereken Toplam İnfüzyon Sıvısı:
-                </div>
-                <div>
-                  Gereken Hacim = Hedef ΔNa ({desiredDeltaNa.toFixed(1)} mEq/L) / ΔNa per Litre ({deltaNaPerLiter.toFixed(3)})
-                  = <strong className="text-slate-900 dark:text-white">{requiredLiters.toFixed(3)} Litre ({Math.round(requiredMl)} mL)</strong>
+                <div className="pt-1 border-t border-slate-200 dark:border-slate-700">
+                  <div className="text-teal-600 dark:text-teal-400 font-bold">
+                    Adım 2: İnfüzat Katyon İçeriği &amp; Pay [(Na⁺ + K⁺) - Serum Na⁺]:
+                  </div>
+                  <div className="text-slate-700 dark:text-slate-300 space-y-0.5 mt-0.5">
+                    <div>• Sıvıdaki Sodyum (İnfüzat Na⁺): <strong className="text-slate-900 dark:text-white">{infusateNa} mEq/L</strong></div>
+                    <div>• Sıvıdaki / Eklenen Potasyum (İnfüzat K⁺): <strong className="text-slate-900 dark:text-white">{infusateK} mEq/L</strong> {addedKcl > 0 ? `(Seçilen +${addedKcl} mEq/L KCl dahil)` : '(İlave K⁺ yok)'}</div>
+                    <div>• Toplam Efektif Katyon (Na⁺ + K⁺): <strong className="text-teal-600 dark:text-teal-400">{(infusateNa + infusateK)} mEq/L</strong></div>
+                    <div>• Mevcut Serum Na⁺: <strong className="text-slate-900 dark:text-white">{curNa} mEq/L</strong></div>
+                    <div>• Formül Payı: ({(infusateNa + infusateK)} mEq) - ({curNa} mEq) = <strong className="text-slate-900 dark:text-white">{((infusateNa + infusateK) - curNa).toFixed(1)} mEq/L</strong></div>
+                  </div>
                 </div>
 
-                <div className="text-teal-600 dark:text-teal-400 font-bold pt-1">
-                  4. Saatlik İnfüzyon Hızı:
+                <div className="pt-1 border-t border-slate-200 dark:border-slate-700">
+                  <div className="text-teal-600 dark:text-teal-400 font-bold">
+                    Adım 3: Formül Paydası (TBW + 1):
+                  </div>
+                  <div className="text-slate-700 dark:text-slate-300 mt-0.5">
+                    Payda = {tbwLitres.toFixed(1)} Litre (TBW) + 1 Litre (Verilen Sıvı) = <strong className="text-slate-900 dark:text-white">{(tbwLitres + 1).toFixed(1)} Litre</strong>
+                  </div>
                 </div>
-                <div>
-                  Hız = {Math.round(requiredMl)} mL / {hours} saat = <strong className="text-teal-600 dark:text-teal-400">{hourlyRateMl.toFixed(1)} mL/saat</strong>
+
+                <div className="pt-1 border-t border-slate-200 dark:border-slate-700">
+                  <div className="text-teal-600 dark:text-teal-400 font-bold">
+                    Adım 4: 1 Litre İnfüzat ile Beklenen ΔSerum Na⁺:
+                  </div>
+                  <div className="text-slate-700 dark:text-slate-300 mt-0.5">
+                    ΔNa (1L) = {((infusateNa + infusateK) - curNa).toFixed(1)} / {(tbwLitres + 1).toFixed(1)} = <strong className="text-teal-600 dark:text-teal-400">{deltaNaPerLiter > 0 ? `+${deltaNaPerLiter.toFixed(3)}` : deltaNaPerLiter.toFixed(3)} mEq/L / Litre</strong>
+                  </div>
+                </div>
+
+                <div className="pt-1 border-t border-slate-200 dark:border-slate-700">
+                  <div className="text-teal-600 dark:text-teal-400 font-bold">
+                    Adım 5: Hedef Değişim için Gereken Toplam Sıvı:
+                  </div>
+                  <div className="text-slate-700 dark:text-slate-300 mt-0.5">
+                    Gereken Hacim = Hedef ΔNa ({desiredDeltaNa.toFixed(1)} mEq) / 1L ile ΔNa ({deltaNaPerLiter.toFixed(3)}) = <strong className="text-slate-900 dark:text-white">{requiredLiters.toFixed(2)} Litre ({Math.round(requiredMl)} mL)</strong>
+                  </div>
+                </div>
+
+                <div className="pt-1 border-t border-slate-200 dark:border-slate-700">
+                  <div className="text-teal-600 dark:text-teal-400 font-bold">
+                    Adım 6: Saatlik İnfüzyon Hızı (mL/saat &amp; damla/dk):
+                  </div>
+                  <div className="text-slate-700 dark:text-slate-300 mt-0.5">
+                    Saatlik Hız = {Math.round(requiredMl)} mL / {hours} saat = <strong className="text-teal-600 dark:text-teal-400">{hourlyRateMl.toFixed(1)} mL/saat</strong> 
+                    <span className="text-slate-500 ml-2">(≈ {dropsPerMin > 0 ? Math.round(dropsPerMin) : 0} damla/dk)</span>
+                  </div>
                 </div>
               </div>
             </div>
