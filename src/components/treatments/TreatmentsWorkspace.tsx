@@ -26,6 +26,7 @@ import { HyponatremiaInfographic } from './HyponatremiaInfographic';
 import { DexmedetomidineProtocol } from './DexmedetomidineProtocol';
 import { RemifentanilProtocol } from './RemifentanilProtocol';
 import { FentanylProtocol } from './FentanylProtocol';
+import { PropofolProtocol } from './PropofolProtocol';
 
 interface Props {
   isDark: boolean;
@@ -334,6 +335,52 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-amber-500/30' 
       }
     ]
+  },
+  {
+    id: 'propofol',
+    category: 'medications',
+    categories: ['medications', 'sedation'],
+    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    badge: 'Diprivan · GABA-A Hipnotik',
+    title: 'Propofol',
+    shortDesc: 'Genel anestezi indüksiyonu ve idamesi (TIVA), YBÜ sedasyonu, PRIS risk monitörizasyonu ve 24 saatlik lipid kalori yönetimi için 13 basamaklı altın standart ilaç monografisi.',
+    status: 'active',
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'YBÜ İdame Dozu', 
+        value: '0.3 – 3.0 mg/kg/sa', 
+        subtext: 'RASS -1 / -2; PRIS tavanı ≤ 4.0',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Formülasyonlar', 
+        value: '%1 (10 mg/mL) & %2', 
+        subtext: '1.1 kcal / mL lipid enerji yükü',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      },
+      { 
+        label: 'İndüksiyon Dozu', 
+        value: '1.5 – 2.5 mg/kg IV', 
+        subtext: 'Yaşlıda 0.8–1.5; Obezitede LBW!',
+        colorClass: 'text-indigo-700 dark:text-indigo-300', 
+        bgClass: 'bg-indigo-500/10', 
+        borderClass: 'border-indigo-500/30' 
+      },
+      { 
+        label: 'Kritik Güvenlik', 
+        value: '12 Saatlik Flakon Kuralı', 
+        subtext: 'Koruyucusuz lipid; asepsi şart',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      }
+    ]
   }
 ];
 
@@ -434,7 +481,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <Pill className="w-3.5 h-3.5 text-rose-500" />
               <span>İlaçlar (Monografiler)</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-mono">
-                3 İlaç
+                4 İlaç
               </span>
             </button>
 
@@ -455,7 +502,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <Brain className="w-3.5 h-3.5 text-purple-500" />
               <span>Sedoanaljezi &amp; Nöromüsküler</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono">
-                3 İlaç
+                4 İlaç
               </span>
             </button>
 
@@ -834,6 +881,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 7: FENTANİL PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'fentanyl') */}
       {activeProtocolId === 'fentanyl' && (
         <FentanylProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 8: PROPOFOL PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'propofol') */}
+      {activeProtocolId === 'propofol' && (
+        <PropofolProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
