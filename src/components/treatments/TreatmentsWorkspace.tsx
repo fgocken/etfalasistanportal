@@ -24,13 +24,15 @@ import { HypokalemiaInfographic } from './HypokalemiaInfographic';
 import { SodiumCalculator, SodiumReferencesAccordion } from './SodiumCalculator';
 import { HyponatremiaInfographic } from './HyponatremiaInfographic';
 import { DexmedetomidineProtocol } from './DexmedetomidineProtocol';
+import { RemifentanilProtocol } from './RemifentanilProtocol';
+import { FentanylProtocol } from './FentanylProtocol';
 
 interface Props {
   isDark: boolean;
   initialProtocolId?: string | null;
 }
 
-type TreatmentCategory = 'electrolyte' | 'vasoactive' | 'sedation' | 'hemostasis';
+type TreatmentCategory = 'medications' | 'electrolyte' | 'vasoactive' | 'sedation' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 type SodiumViewMode = 'all' | 'calc' | 'infographic';
@@ -38,6 +40,7 @@ type SodiumViewMode = 'all' | 'calc' | 'infographic';
 interface ProtocolCardItem {
   id: string;
   category: TreatmentCategory;
+  categories?: TreatmentCategory[];
   categoryLabel: string;
   badge: string;
   title: string;
@@ -59,6 +62,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'magnesium',
     category: 'electrolyte',
+    categories: ['electrolyte'],
     categoryLabel: 'Elektrolit Replasmanı',
     badge: 'Mathews et al. 2022',
     title: 'Magnezyum Sülfat (MgSO₄) Replasmanı ve Hipomagnezemi',
@@ -104,6 +108,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'potassium',
     category: 'electrolyte',
+    categories: ['electrolyte'],
     categoryLabel: 'Elektrolit Replasmanı',
     badge: '%7.5 KCl & Kaliphos',
     title: 'Potasyum & Kaliphos (Potasyum Fosfat) Replasmanı',
@@ -149,6 +154,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'sodium',
     category: 'electrolyte',
+    categories: ['electrolyte'],
     categoryLabel: 'Elektrolit Replasmanı',
     badge: 'Adrogué-Madias & MDCalc',
     title: 'Sodyum Bozuklukları (Hiponatremi & Hipernatremi Protokolü)',
@@ -193,10 +199,11 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   },
   {
     id: 'dexmedetomidine',
-    category: 'sedation',
-    categoryLabel: 'Sedoanaljezi Protokolü',
+    category: 'medications',
+    categories: ['medications', 'sedation'],
+    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
     badge: 'Precedex · Alfa-2 Agonist',
-    title: 'Deksmedetomidin Protokolü & Doz Hesaplayıcısı',
+    title: 'Deksmedetomidin',
     shortDesc: 'Uyanabilir kooperatif sedasyon (RASS -1/-2), mekanik ventilasyon, deliryum kontrolü ve weaning için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
     status: 'active',
     accentColor: 'teal',
@@ -235,18 +242,115 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-amber-500/30' 
       }
     ]
+  },
+  {
+    id: 'remifentanil',
+    category: 'medications',
+    categories: ['medications', 'sedation'],
+    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    badge: 'Ultiva · Ultra-Kısa Opioid',
+    title: 'Remifentanil',
+    shortDesc: 'Organ-bağımsız esteraz metabolizması, 3-4 dk sabit bağlam duyarlı yarı ömür, anestezi ve YBÜ analgosedasyonu için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
+    status: 'active',
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'İdame Doz Aralığı', 
+        value: '0.05 – 0.5 mcg/kg/dk', 
+        subtext: 'Cerrahi idame & analgosedasyon',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      },
+      { 
+        label: 'Standart Çözelti', 
+        value: '20 – 40 mcg/mL', 
+        subtext: '1–2 mg / 50 mL SF veya D5W',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Eliminasyon Yolağı', 
+        value: 'Doku & Plazma Esterazları', 
+        subtext: 'Karaciğer/böbrek yetmezliğinden bağımsız',
+        colorClass: 'text-indigo-700 dark:text-indigo-300', 
+        bgClass: 'bg-indigo-500/10', 
+        borderClass: 'border-indigo-500/30' 
+      },
+      { 
+        label: 'Bağlam Duyarlı t½', 
+        value: '3 – 4 Dakika (Sabit)', 
+        subtext: 'Akümülasyon yapmaz, anında uyanma',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      }
+    ]
+  },
+  {
+    id: 'fentanyl',
+    category: 'medications',
+    categories: ['medications', 'sedation'],
+    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    badge: 'Sublimaze · Sentetik Opioid',
+    title: 'Fentanil',
+    shortDesc: 'Yüksek potensli lipofilik μ-agonist, CYP3A4 metabolizması, kümülasyon sayacı, cerrahi ve YBÜ analgosedasyonu için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
+    status: 'active',
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'YBÜ İdame Dozu', 
+        value: '0.7 – 2.0 mcg/kg/saat', 
+        subtext: '25 – 150 mcg/saat (CPOT/BPS hedefli)',
+        colorClass: 'text-purple-700 dark:text-purple-300', 
+        bgClass: 'bg-purple-500/10', 
+        borderClass: 'border-purple-500/30' 
+      },
+      { 
+        label: 'Standart Çözelti', 
+        value: '10 – 20 mcg/mL', 
+        subtext: '500–1000 mcg / 50 mL SF veya D5W',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Eliminasyon Yolağı', 
+        value: 'Hepatik CYP3A4 (İnaktif)', 
+        subtext: 'Norfentanil oluşur; böbreğe güvenli',
+        colorClass: 'text-indigo-700 dark:text-indigo-300', 
+        bgClass: 'bg-indigo-500/10', 
+        borderClass: 'border-indigo-500/30' 
+      },
+      { 
+        label: 'Bağlam Duyarlı t½', 
+        value: '30 dk ➔ 300 dk!', 
+        subtext: 'Uzayan infüzyonda yağda kümülasyon',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      }
+    ]
   }
 ];
 
 export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId }) => {
-  const [activeCategory, setActiveCategory] = useState<TreatmentCategory>('electrolyte');
-  // null = kartlar galerisi, 'magnesium', 'potassium' veya 'sodium'
+  const [activeCategory, setActiveCategory] = useState<TreatmentCategory>('medications');
+  // null = kartlar galerisi, 'magnesium', 'potassium', 'sodium', 'dexmedetomidine', 'remifentanil', 'fentanyl'
   const [activeProtocolId, setActiveProtocolId] = useState<string | null>(initialProtocolId || null);
   const [mgViewMode, setMgViewMode] = useState<MagnesiumViewMode>('all');
   const [kViewMode, setKViewMode] = useState<PotassiumViewMode>('all');
   const [naViewMode, setNaViewMode] = useState<SodiumViewMode>('all');
 
-  const filteredCards = PROTOCOL_CARDS.filter(card => card.category === activeCategory);
+  const filteredCards = PROTOCOL_CARDS.filter(card => {
+    if (card.categories && card.categories.length > 0) {
+      return card.categories.includes(activeCategory);
+    }
+    return card.category === activeCategory;
+  });
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === activeProtocolId);
 
   return (
@@ -312,7 +416,50 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
 
         {/* Kategoriler (Sadece liste görünümündeyken göster) */}
         {!activeProtocolId && (
-          <div className="flex items-center gap-2 pt-3 overflow-x-auto pb-1 scrollbar-none">
+          <div className="flex flex-wrap items-center gap-2 pt-3">
+            {/* 1. İlaçlar (Yeni Eklenen Bölüm) */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('medications')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'medications'
+                  ? isDark 
+                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/50 shadow-xs' 
+                    : 'bg-rose-50 text-rose-800 border border-rose-400 shadow-xs'
+                  : isDark 
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent' 
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <Pill className="w-3.5 h-3.5 text-rose-500" />
+              <span>İlaçlar (Monografiler)</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-mono">
+                3 İlaç
+              </span>
+            </button>
+
+            {/* 2. Sedoanaljezi & Nöromüsküler */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('sedation')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'sedation'
+                  ? isDark 
+                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-xs' 
+                    : 'bg-purple-50 text-purple-800 border border-purple-400 shadow-xs'
+                  : isDark 
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent' 
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <Brain className="w-3.5 h-3.5 text-purple-500" />
+              <span>Sedoanaljezi &amp; Nöromüsküler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono">
+                3 İlaç
+              </span>
+            </button>
+
+            {/* 3. Elektrolit & Sıvı Replasmanı */}
             <button
               type="button"
               onClick={() => setActiveCategory('electrolyte')}
@@ -329,10 +476,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <Zap className="w-3.5 h-3.5 text-teal-500" />
               <span>Elektrolit &amp; Sıvı Replasmanı</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-teal-500/20 text-teal-600 dark:text-teal-400 font-mono">
-                Aktif
+                3 Protokol
               </span>
             </button>
 
+            {/* 4. İnfüzyon & Vazoaktif Protokolleri */}
             <button
               type="button"
               onClick={() => setActiveCategory('vasoactive')}
@@ -353,30 +501,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               </span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveCategory('sedation')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                activeCategory === 'sedation'
-                  ? isDark 
-                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-xs' 
-                    : 'bg-purple-50 text-purple-800 border border-purple-400 shadow-xs'
-                  : isDark 
-                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent' 
-                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
-              }`}
-            >
-              <Brain className="w-3.5 h-3.5 text-purple-500" />
-              <span>Sedoanaljezi &amp; Nöromüsküler</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono">
-                Aktif
-              </span>
-            </button>
-
+            {/* 5. Hemostaz & Kan Transfüzyon Yönetimi */}
             <button
               type="button"
               onClick={() => setActiveCategory('hemostasis')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer opacity-75 hover:opacity-100 ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer opacity-85 hover:opacity-100 ${
                 activeCategory === 'hemostasis'
                   ? isDark 
                     ? 'bg-rose-500/20 text-rose-300 border border-rose-500/50 shadow-xs' 
@@ -387,7 +516,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               }`}
             >
               <Droplet className="w-3.5 h-3.5 text-rose-500" />
-              <span>Hemostaz &amp; Transfüzyon</span>
+              <span>Hemostaz &amp; Kan Transfüzyon Yönetimi</span>
               <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 font-sans">
                 Modüler
               </span>
@@ -697,6 +826,16 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <DexmedetomidineProtocol isDark={isDark} />
       )}
 
+      {/* GÖRÜNÜM 6: REMİFENTANİL PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'remifentanil') */}
+      {activeProtocolId === 'remifentanil' && (
+        <RemifentanilProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 7: FENTANİL PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'fentanyl') */}
+      {activeProtocolId === 'fentanyl' && (
+        <FentanylProtocol isDark={isDark} />
+      )}
+
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
       {!activeProtocolId && filteredCards.length === 0 && (
         <div className={`p-8 rounded-xl border text-center space-y-3 ${
@@ -715,10 +854,10 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
           </p>
           <button
             type="button"
-            onClick={() => setActiveCategory('electrolyte')}
-            className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white cursor-pointer transition-colors"
+            onClick={() => setActiveCategory('medications')}
+            className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white cursor-pointer transition-colors"
           >
-            Elektrolit Protokollerine Dön
+            İlaçlar Bölümüne Dön
           </button>
         </div>
       )}
