@@ -27,6 +27,7 @@ import { DexmedetomidineProtocol } from './DexmedetomidineProtocol';
 import { RemifentanilProtocol } from './RemifentanilProtocol';
 import { FentanylProtocol } from './FentanylProtocol';
 import { PropofolProtocol } from './PropofolProtocol';
+import { MidazolamProtocol } from './MidazolamProtocol';
 
 interface Props {
   isDark: boolean;
@@ -383,6 +384,56 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30' 
       }
     ]
+  },
+  {
+    id: 'midazolam',
+    category: 'medications',
+    categories: ['medications', 'sedation'],
+    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    badge: 'Dormicum · Benzodiazepin',
+    title: 'Midazolam',
+    shortDesc: 'Suda çözünür imidazobenzodiazepin; akut nöbet (IM/IN/IV), akut ciddi ajitasyon, sempatomimetik intoksikasyonlar (kokain/amfetamin), alkol yoksunluğu / DT, YBÜ sedasyon infüzyonu ve flumazenil antidot takibi için 13 basamaklı ilaç monografisi.',
+    status: 'active',
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'YBÜ İdame Dozu', 
+        value: '0.02 – 0.10 mg/kg/sa', 
+        subtext: 'RASS -1/-2; 1 – 7 mg/saat',
+        tooltip: '0.02 – 0.10 mg/kg/saat = 1.4 – 7.0 mg/saat (70 kg için; Maks: ≤ 14 mg/saat)',
+        colorClass: 'text-purple-700 dark:text-purple-300', 
+        bgClass: 'bg-purple-500/10', 
+        borderClass: 'border-purple-500/30' 
+      },
+      { 
+        label: 'Akut Nöbet (IM/IN)', 
+        value: '10 mg IM / 0.2 mg/kg IN', 
+        subtext: 'Hastane öncesi acil 1. basamak',
+        tooltip: 'Damar yolu yoksa 10 mg IM (erişkin) veya 0.2 mg/kg İntranazal MAD',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      },
+      { 
+        label: 'Spesifik Antidot', 
+        value: 'Flumazenil (Anexate)', 
+        subtext: '0.2 mg IV yavaş (Re-sedasyon uyarısı!)',
+        tooltip: 'Flumazenil t½ (50 dk) < Midazolam t½ (2 saat); re-sedasyon riski!',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'Eliminasyon & Kümülasyon', 
+        value: 'CYP3A4 & Renal 1-OH', 
+        subtext: 'Böbrek yetmezliğinde aktif metabolit birikir',
+        tooltip: '1-OH-midazolam glukuronid böbrekle atılır; renal yetmezlikte sedasyon uzar',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      }
+    ]
   }
 ];
 
@@ -483,7 +534,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <Pill className="w-3.5 h-3.5 text-rose-500" />
               <span>İlaçlar (Monografiler)</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-mono">
-                4 İlaç
+                5 İlaç
               </span>
             </button>
 
@@ -504,7 +555,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <Brain className="w-3.5 h-3.5 text-purple-500" />
               <span>Sedoanaljezi &amp; Nöromüsküler</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono">
-                4 İlaç
+                5 İlaç
               </span>
             </button>
 
@@ -889,6 +940,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 8: PROPOFOL PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'propofol') */}
       {activeProtocolId === 'propofol' && (
         <PropofolProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 9: MİDAZOLAM PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'midazolam') */}
+      {activeProtocolId === 'midazolam' && (
+        <MidazolamProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
