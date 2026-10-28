@@ -53,6 +53,7 @@ interface ProtocolCardItem {
     label: string; 
     value: string; 
     subtext?: string;
+    tooltip?: string;
     colorClass: string; 
     bgClass: string; 
     borderClass: string;
@@ -352,6 +353,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         label: 'YBÜ İdame Dozu', 
         value: '0.3 – 3.0 mg/kg/sa', 
         subtext: 'RASS -1 / -2; PRIS tavanı ≤ 4.0',
+        tooltip: '0.3 – 3.0 mg/kg/saat = 5.0 – 50.0 mcg/kg/dk (PRIS tavanı: ≤ 66.7 mcg/kg/dk)',
         colorClass: 'text-teal-700 dark:text-teal-300', 
         bgClass: 'bg-teal-500/10', 
         borderClass: 'border-teal-500/30' 
@@ -633,7 +635,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
                         {card.highlights.map((h, idx) => (
                           <div
                             key={idx}
-                            className={`p-2 rounded-lg border flex flex-col justify-between text-left transition-colors ${h.bgClass} ${h.borderClass}`}
+                            title={h.tooltip}
+                            className={`p-2 rounded-lg border flex flex-col justify-between text-left transition-colors ${h.bgClass} ${h.borderClass} ${h.tooltip ? 'cursor-help' : ''}`}
                           >
                             <div>
                               <span className="block text-[9px] text-slate-500 dark:text-slate-400 font-semibold tracking-wide uppercase">

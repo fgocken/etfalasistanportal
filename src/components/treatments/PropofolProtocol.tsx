@@ -33,6 +33,68 @@ interface Props {
   isDark: boolean;
 }
 
+interface DoseHoverProps {
+  mgText: string;
+  mcgText: string;
+  explanation?: string;
+  className?: string;
+  badge?: boolean;
+}
+
+export const DoseHover: React.FC<DoseHoverProps> = ({
+  mgText,
+  mcgText,
+  explanation = '1 mg/kg/saat = 16.67 mcg/kg/dk',
+  className = '',
+  badge = false
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <span
+      className={`relative inline-flex items-center gap-1 group cursor-help select-none ${className}`}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsOpen((prev) => !prev);
+      }}
+      title={`${mgText} = ${mcgText} (${explanation})`}
+    >
+      <span
+        className={`transition-colors font-mono ${
+          badge
+            ? 'px-2 py-0.5 rounded-md bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold border border-teal-500/30'
+            : 'font-semibold underline decoration-dotted decoration-teal-500 underline-offset-4 hover:text-teal-600 dark:hover:text-teal-400'
+        }`}
+      >
+        {mgText}
+      </span>
+      <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500 group-hover:text-white transition-all font-semibold">
+        mcg?
+      </span>
+
+      {/* Popover Hover Balonu */}
+      {isOpen && (
+        <span
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs px-3 py-2 rounded-xl text-left shadow-2xl border z-50 pointer-events-none transition-all duration-150 bg-slate-900 border-teal-500/60 text-slate-100 dark:bg-slate-950 dark:border-teal-400 shadow-teal-950/60 animate-in fade-in zoom-in-95"
+        >
+          <span className="block text-[9.5px] font-bold uppercase tracking-wider text-teal-400">
+            Doz Karşılığı (mcg/kg/dk):
+          </span>
+          <span className="block text-xs font-black font-mono text-white mt-0.5">
+            {mcgText}
+          </span>
+          <span className="block text-[9px] text-slate-400 mt-0.5 font-sans">
+            Formül: {explanation}
+          </span>
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-slate-950" />
+        </span>
+      )}
+    </span>
+  );
+};
+
 type ActiveCalcTool = 'continuous_tiva' | 'induction_rsi' | 'procedural_sedation' | 'pris_monitor' | 'ponv_rescue';
 
 export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
@@ -518,7 +580,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
               <span>6. Refrakter Status Epileptikus</span>
             </div>
             <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
-              Benzodiazepin ve standart antiepileptiklere yanıtsız refrakter status epileptikusta EEG'de burst-supresyon hedefiyle 3. basamak tedavi (Off-label).
+              Benzodiazepin ve standart antiepileptiklere yanıtsız refrakter status epileptikusta EEG burst-supresyon hedefiyle 3. basamak idame infüzyon: <DoseHover mgText="2.0 – 8.0 mg/kg/saat" mcgText="33.3 – 133.3 mcg/kg/dk" /> (Off-label).
             </p>
           </div>
 
@@ -555,9 +617,14 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
             <Stethoscope className="w-5 h-5" />
             <h2 className="text-base sm:text-lg font-bold">Uygulama Yolları, Erişkin ve Pediatrik Doz Rejimleri</h2>
           </div>
-          <span className="text-xs px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 font-semibold">
-            Yalnızca İntravenöz (IV) Kullanım
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-slate-500 font-semibold italic">
+              (Dozların üzerine gelerek mcg/kg/dk karşılığını görebilirsiniz)
+            </span>
+            <span className="text-xs px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 font-semibold">
+              Yalnızca İntravenöz (IV) Kullanım
+            </span>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -613,7 +680,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
               <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
                 <span className="font-bold text-teal-700 dark:text-teal-300 block mb-1">Genel Anestezi İdamesi (TIVA)</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  • <strong>4 – 12 mg/kg/saat</strong> (67 – 200 mcg/kg/dk)<br />
+                  • <DoseHover mgText="4 – 12 mg/kg/saat" mcgText="67 – 200 mcg/kg/dk" /><br />
                   • TCI Hedef Ce: <strong>3.0 – 5.0 mcg/mL</strong><br />
                   • Cerrahi gevşeme ve analjezi için remifentanil infüzyonu eklenir.
                 </p>
@@ -622,9 +689,9 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
               <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
                 <span className="font-bold text-indigo-700 dark:text-indigo-300 block mb-1">YBÜ Sedasyonu (Mekanik Ventilasyon)</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  • Başlangıç: <strong>0.3 – 0.5 mg/kg/saat</strong><br />
-                  • İdame: <strong>0.3 – 3.0 mg/kg/saat</strong> (5–50 mcg/kg/dk)<br />
-                  • PRIS Güvenlik Tavanı: <strong>Maks ≤ 4.0 mg/kg/saat</strong>, &lt;48 saat!
+                  • Başlangıç: <DoseHover mgText="0.3 – 0.5 mg/kg/saat" mcgText="5.0 – 8.3 mcg/kg/dk" /><br />
+                  • İdame: <DoseHover mgText="0.3 – 3.0 mg/kg/saat" mcgText="5.0 – 50.0 mcg/kg/dk" /><br />
+                  • PRIS Güvenlik Tavanı: Maks ≤ <DoseHover mgText="4.0 mg/kg/saat" mcgText="66.7 mcg/kg/dk" />, &lt;48 saat!
                 </p>
               </div>
 
@@ -633,7 +700,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                 <p className="text-slate-600 dark:text-slate-300">
                   • Başlangıç bolus: <strong>0.5 – 1.0 mg/kg</strong> (1-5 dakikada)<br />
                   • İdame bolus: <strong>10 – 20 mg</strong> ihtiyaç duyuldukça<br />
-                  • İnfüzyon alternatifi: <strong>1.5 – 4.5 mg/kg/saat</strong>
+                  • İnfüzyon alternatifi: <DoseHover mgText="1.5 – 4.5 mg/kg/saat" mcgText="25.0 – 75.0 mcg/kg/dk" />
                 </p>
               </div>
             </div>
@@ -855,6 +922,25 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                     <option value="status_epilepticus">Refrakter Status Epileptikus İdamesi (2.0 - 8.0 mg/kg/sa)</option>
                     <option value="custom">Özel Titrasyon Rejimi</option>
                   </select>
+
+                  <div className="flex items-center gap-2 mt-1.5 text-[11px] text-slate-500 dark:text-slate-400 flex-wrap">
+                    <span className="font-semibold">Önerilen Hedef Aralık:</span>
+                    {indication === 'icu_sedation' && (
+                      <DoseHover mgText="0.3 – 3.0 mg/kg/saat" mcgText="5.0 – 50.0 mcg/kg/dk" badge />
+                    )}
+                    {indication === 'tiva_maintenance' && (
+                      <DoseHover mgText="4.0 – 10.0 mg/kg/saat" mcgText="66.7 – 166.7 mcg/kg/dk" badge />
+                    )}
+                    {indication === 'procedural_maint' && (
+                      <DoseHover mgText="1.5 – 4.5 mg/kg/saat" mcgText="25.0 – 75.0 mcg/kg/dk" badge />
+                    )}
+                    {indication === 'status_epilepticus' && (
+                      <DoseHover mgText="2.0 – 8.0 mg/kg/saat" mcgText="33.3 – 133.3 mcg/kg/dk" badge />
+                    )}
+                    {indication === 'custom' && (
+                      <DoseHover mgText={`${targetDoseMgKgHr.toFixed(2)} mg/kg/saat`} mcgText={`${calculatedDoseMcgKgMin.toFixed(1)} mcg/kg/dk`} badge />
+                    )}
+                  </div>
                 </div>
 
                 {/* Doz Birimi ve İnput */}
@@ -909,17 +995,31 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                         isDark ? 'bg-slate-900 border-slate-700 text-teal-400' : 'bg-white border-slate-300 text-teal-700'
                       }`}
                     />
-                    <span className="text-xs font-semibold font-mono text-slate-500 whitespace-nowrap">
-                      {infusionUnit === 'mg_kg_hr' ? 'mg/kg/sa' : 'mcg/kg/dk'}
-                    </span>
+                    <div className="shrink-0">
+                      {infusionUnit === 'mg_kg_hr' ? (
+                        <DoseHover
+                          mgText={`${targetDoseMgKgHr.toFixed(1)} mg/kg/sa`}
+                          mcgText={`${calculatedDoseMcgKgMin.toFixed(1)} mcg/kg/dk`}
+                          badge
+                        />
+                      ) : (
+                        <span className="text-xs font-semibold font-mono text-slate-500 whitespace-nowrap">
+                          mcg/kg/dk
+                        </span>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Çift Yönlü Karşılık Bilgisi */}
-                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-                    <span>Otomatik Dönüşüm:</span>
-                    <span className="font-bold text-teal-600 dark:text-teal-400">
-                      {calculatedDoseMgKgHr.toFixed(2)} mg/kg/saat = {calculatedDoseMcgKgMin.toFixed(1)} mcg/kg/dk
+                  {/* Çift Yönlü Karşılık Bilgisi ve Canlı Hover Barı */}
+                  <div className="mt-2 p-2 rounded-lg bg-teal-500/10 border border-teal-500/25 flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-700 dark:text-slate-300 font-sans font-medium">
+                      mcg/kg/dk Karşılığı (Üzerine gelin):
                     </span>
+                    <DoseHover
+                      mgText={`${calculatedDoseMgKgHr.toFixed(2)} mg/kg/saat`}
+                      mcgText={`${calculatedDoseMcgKgMin.toFixed(1)} mcg/kg/dk`}
+                      badge
+                    />
                   </div>
                 </div>
 
@@ -964,8 +1064,12 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                   <div className="text-3xl sm:text-4xl font-black font-mono text-teal-600 dark:text-teal-400 my-1">
                     {infusionRateMlHr.toFixed(1)} <span className="text-lg font-bold">mL / saat</span>
                   </div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400 font-mono">
-                    Saatlik İlaç: <strong>{hourlyDoseMg.toFixed(1)} mg / saat</strong> · ~{dropsPerMin.toFixed(0)} gtt/dk
+                  <div className="text-xs text-slate-600 dark:text-slate-400 font-mono flex items-center justify-center gap-1.5 flex-wrap">
+                    <span>Saatlik İlaç: <strong>{hourlyDoseMg.toFixed(1)} mg / saat</strong></span>
+                    <span>·</span>
+                    <span>Doz: <DoseHover mgText={`${calculatedDoseMgKgHr.toFixed(2)} mg/kg/sa`} mcgText={`${calculatedDoseMcgKgMin.toFixed(1)} mcg/kg/dk`} /></span>
+                    <span>·</span>
+                    <span>~{dropsPerMin.toFixed(0)} gtt/dk</span>
                   </div>
                 </div>
 
@@ -1273,9 +1377,16 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor={prisRateInputId} className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                    Uygulanan İnfüzyon Hızı (mg/kg/saat):
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label htmlFor={prisRateInputId} className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                      Uygulanan İnfüzyon Hızı:
+                    </label>
+                    <DoseHover
+                      mgText={`${prisInfusionRate.toFixed(1)} mg/kg/saat`}
+                      mcgText={`${(prisInfusionRate * 16.6667).toFixed(1)} mcg/kg/dk`}
+                      badge
+                    />
+                  </div>
                   <input
                     id={prisRateInputId}
                     type="number"
@@ -1292,9 +1403,10 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                         : 'border-slate-300 dark:border-slate-700 text-teal-600 dark:text-teal-400 bg-white dark:bg-slate-900'
                     }`}
                   />
-                  <span className="text-[11px] text-slate-500 block mt-1">
-                    PRIS Eşik Değeri: <strong>&gt; 4.0 – 5.0 mg/kg/saat</strong>
-                  </span>
+                  <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5 flex-wrap">
+                    <span>PRIS Kritik Eşik:</span>
+                    <DoseHover mgText="> 4.0 – 5.0 mg/kg/saat" mcgText="> 66.7 – 83.3 mcg/kg/dk" />
+                  </div>
                 </div>
 
                 <div>
@@ -1568,7 +1680,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
               4. PRIS (Propofol İnfüzyon Sendromu)
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Yüksek doz (&gt;4 mg/kg/saat) ve uzun süre (&gt;48 saat) kullanımda mitokondriyal yağ asidi oksidasyonunu bloke eder; refrakter laktik asidoz, hiperkalemi, rabdomiyoliz, hepatomegali ve kardiyak arreste yol açar.
+              Yüksek doz (<DoseHover mgText="> 4.0 mg/kg/saat" mcgText="> 66.7 mcg/kg/dk" />) ve uzun süre (&gt;48 saat) kullanımda mitokondriyal yağ asidi oksidasyonunu bloke eder; refrakter laktik asidoz, hiperkalemi, rabdomiyoliz, hepatomegali ve kardiyak arreste yol açar.
             </p>
           </div>
 
