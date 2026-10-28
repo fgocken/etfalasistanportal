@@ -28,6 +28,7 @@ import { RemifentanilProtocol } from './RemifentanilProtocol';
 import { FentanylProtocol } from './FentanylProtocol';
 import { PropofolProtocol } from './PropofolProtocol';
 import { MidazolamProtocol } from './MidazolamProtocol';
+import { LidocaineProtocol } from './LidocaineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -429,6 +430,56 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         value: 'CYP3A4 & Renal 1-OH', 
         subtext: 'Böbrek yetmezliğinde aktif metabolit birikir',
         tooltip: '1-OH-midazolam glukuronid böbrekle atılır; renal yetmezlikte sedasyon uzar',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      }
+    ]
+  },
+  {
+    id: 'lidocaine',
+    category: 'medications',
+    categories: ['medications', 'vasoactive'],
+    categoryLabel: 'İlaç Monografisi & Lokal / Antiaritmik',
+    badge: 'Aritmal · Jetokain · Sınıf Ib',
+    title: 'Lidokain',
+    shortDesc: 'Amid yapılı prototip lokal anestezik ve Sınıf Ib antiaritmik; lokal infiltrasyon, sinir blokları, RSI KİB premedikasyonu, perioperatif IV opioid koruyucu analjezi, ACLS VF/VT resüsitasyonu ve ASRA LAST İntralipid acil kurtarma için 13 basamaklı ilaç monografisi.',
+    status: 'active',
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'Maks Doz (Saf)', 
+        value: '4.5 mg/kg', 
+        subtext: 'Maksimum tavan: 300 mg',
+        tooltip: '70 kg için maksimum 300 mg (30 mL %1 veya 15 mL %2)',
+        colorClass: 'text-blue-700 dark:text-blue-300', 
+        bgClass: 'bg-blue-500/10', 
+        borderClass: 'border-blue-500/30' 
+      },
+      { 
+        label: 'Maks Doz (+Adrenalin)', 
+        value: '7.0 mg/kg', 
+        subtext: '1:200k Adrenalin; Maks: 500 mg',
+        tooltip: 'Vazokonstriksiyon ile sistemik emilim yavaşlar; 70 kg için maksimum 500 mg (50 mL %1)',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'ACLS Arrest (VF/pVT)', 
+        value: '1.0 – 1.5 mg/kg', 
+        subtext: 'Ek doz: 0.5–0.75; Maks: 3 mg/kg',
+        tooltip: '3. şok sonrası refrakter VF/pVT için IV/IO bolus; Amiodaron alternatifi',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      },
+      { 
+        label: 'Spesifik Antidot (LAST)', 
+        value: '%20 İntralipid', 
+        subtext: '1.5 mL/kg bolus + 0.25 mL/kg/dk',
+        tooltip: 'ASRA LAST Kurtarma Kılavuzu: 1 dakikada 1.5 mL/kg IV bolus + 15 mL/kg/saat infüzyon',
         colorClass: 'text-amber-700 dark:text-amber-300', 
         bgClass: 'bg-amber-500/10', 
         borderClass: 'border-amber-500/30' 
@@ -945,6 +996,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 9: MİDAZOLAM PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'midazolam') */}
       {activeProtocolId === 'midazolam' && (
         <MidazolamProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 10: LİDOKAİN PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'lidocaine') */}
+      {activeProtocolId === 'lidocaine' && (
+        <LidocaineProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
