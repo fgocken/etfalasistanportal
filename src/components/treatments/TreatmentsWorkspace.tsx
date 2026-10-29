@@ -207,7 +207,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'dexmedetomidine',
     category: 'medications',
     categories: ['medications', 'sedation'],
-    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    categoryLabel: 'Sedoanaljezi',
     badge: 'Precedex · Alfa-2 Agonist',
     title: 'Deksmedetomidin',
     shortDesc: 'Uyanabilir kooperatif sedasyon (RASS -1/-2), mekanik ventilasyon, deliryum kontrolü ve weaning için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
@@ -253,7 +253,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'remifentanil',
     category: 'medications',
     categories: ['medications', 'sedation'],
-    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    categoryLabel: 'Sedoanaljezi',
     badge: 'Ultiva · Ultra-Kısa Opioid',
     title: 'Remifentanil',
     shortDesc: 'Organ-bağımsız esteraz metabolizması, 3-4 dk sabit bağlam duyarlı yarı ömür, anestezi ve YBÜ analgosedasyonu için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
@@ -299,8 +299,8 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'fentanyl',
     category: 'medications',
     categories: ['medications', 'sedation'],
-    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
-    badge: 'Sublimaze · Sentetik Opioid',
+    categoryLabel: 'Sedoanaljezi',
+    badge: 'Talinat · Sentetik Opioid',
     title: 'Fentanil',
     shortDesc: 'Yüksek potensli lipofilik μ-agonist, CYP3A4 metabolizması, kümülasyon sayacı, cerrahi ve YBÜ analgosedasyonu için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
     status: 'active',
@@ -345,7 +345,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'propofol',
     category: 'medications',
     categories: ['medications', 'sedation'],
-    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    categoryLabel: 'Sedoanaljezi',
     badge: 'Diprivan · GABA-A Hipnotik',
     title: 'Propofol',
     shortDesc: 'Genel anestezi indüksiyonu ve idamesi (TIVA), YBÜ sedasyonu, PRIS risk monitörizasyonu ve 24 saatlik lipid kalori yönetimi için 13 basamaklı altın standart ilaç monografisi.',
@@ -392,7 +392,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'midazolam',
     category: 'medications',
     categories: ['medications', 'sedation'],
-    categoryLabel: 'İlaç Monografisi & Sedoanaljezi',
+    categoryLabel: 'Sedoanaljezi',
     badge: 'Dormicum · Benzodiazepin',
     title: 'Midazolam',
     shortDesc: 'Suda çözünür imidazobenzodiazepin; akut nöbet (IM/IN/IV), akut ciddi ajitasyon, sempatomimetik intoksikasyonlar (kokain/amfetamin), alkol yoksunluğu / DT, YBÜ sedasyon infüzyonu ve flumazenil antidot takibi için 13 basamaklı ilaç monografisi.',
@@ -442,7 +442,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'lidocaine',
     category: 'medications',
     categories: ['medications', 'vasoactive'],
-    categoryLabel: 'İlaç Monografisi & Lokal / Antiaritmik',
+    categoryLabel: 'Lokal / Antiaritmik',
     badge: 'Aritmal · Jetokain · Sınıf Ib',
     title: 'Lidokain',
     shortDesc: 'Amid yapılı prototip lokal anestezik ve Sınıf Ib antiaritmik; lokal infiltrasyon, sinir blokları, RSI KİB premedikasyonu, perioperatif IV opioid koruyucu analjezi, ACLS VF/VT resüsitasyonu ve ASRA LAST İntralipid acil kurtarma için 13 basamaklı ilaç monografisi.',
@@ -492,7 +492,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     id: 'ketamine',
     category: 'medications',
     categories: ['medications', 'sedation'],
-    categoryLabel: 'İlaç Monografisi & Disosiyatif Sedoanaljezi',
+    categoryLabel: 'Disosiyatif Sedoanaljezi',
     badge: 'Ketalar · NMDA Antagonisti',
     title: 'Ketamin',
     shortDesc: 'NMDA reseptör blokajı ile disosiyatif anestezi ve analjezi; RSI şok indüksiyonu, Ketofol protokolü, akut ağrı sub-dissosiyatif dozu, refrakter bronkospazm, deliryum yönetimi ve YBÜ infüzyonu için 13 basamaklı altın standart ilaç monografisi.',
@@ -632,13 +632,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
                   {activeProtocolId ? selectedProtocol?.title : 'Tedaviler ve İlaçlar'}
                 </h1>
-                {activeProtocolId !== 'dexmedetomidine' && (
+                {!['dexmedetomidine', 'remifentanil'].includes(activeProtocolId || '') && (
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 font-mono">
                     {activeProtocolId ? 'Protokol Detayı' : 'Klinik Protokoller'}
                   </span>
                 )}
               </div>
-              {activeProtocolId !== 'dexmedetomidine' && (
+              {!['dexmedetomidine', 'remifentanil'].includes(activeProtocolId || '') && (
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   {activeProtocolId
                     ? 'Protokolü kapatıp listeye dönmek için geri butonunu kullanabilir veya alt sekmelerle görünümü özelleştirebilirsiniz.'
@@ -683,7 +683,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               }`}
             >
               <Pill className="w-3.5 h-3.5 text-rose-500" />
-              <span>İlaçlar (Monografiler)</span>
+              <span>İlaçlar</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-mono font-bold">
                 {medCount} İlaç
               </span>

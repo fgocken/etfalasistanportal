@@ -32,54 +32,24 @@ interface Props {
   isDark: boolean;
 }
 
-type ActiveCalcTool = 'continuous_infusion' | 'rsi_bolus' | 'intranasal' | 'iv_pca' | 'transdermal_neuraxial';
-
 export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
-  // --- AKTİF HESAPLAYICI / REJİM SEÇİCİ ---
-  const [activeCalcTool, setActiveCalcTool] = useState<ActiveCalcTool>('continuous_infusion');
-
-  // --- GENEL HASTA VE DOZ STATE'LERİ ---
+  // --- HASTA VE İNFÜZYON STATE'LERİ ---
   const [weightKg, setWeightKg] = useState<number>(70);
-  const [indication, setIndication] = useState<
-    | 'acute_postop'
-    | 'acute_nonop'
-    | 'chronic_cancer'
-    | 'icu_analgosedation'
-    | 'light_procedural'
-    | 'rsi_premed'
-    | 'anesthesia_maint'
-    | 'neuraxial'
-    | 'custom'
-  >('icu_analgosedation');
 
-  // 1. Sürekli İnfüzyon Parametreleri
+  // Çözelti Hazırlama Parametreleri
   const [prepType, setPrepType] = useState<'standard_10' | 'standard_20' | 'undiluted_50' | 'custom_prep'>('standard_10');
   const [customVialMcg, setCustomVialMcg] = useState<number>(500); // mcg
   const [customDiluentVolume, setCustomDiluentVolume] = useState<number>(50); // mL
-  const [customConcInput, setCustomConcInput] = useState<number>(10); // mcg/mL
+
+  // Doz Girişi Parametreleri (mcg/kg/saat, mcg/saat veya mcg/kg/dk)
   const [doseUnit, setDoseUnit] = useState<'mcg_kg_hr' | 'mcg_hr' | 'mcg_kg_min'>('mcg_kg_hr');
   const [customDoseValue, setCustomDoseValue] = useState<number>(1.0); // girilen değer
+
+  // İsteğe Bağlı Yükleme Bolus Parametreleri
   const [giveBolus, setGiveBolus] = useState<boolean>(false);
   const [bolusDoseMcgKg, setBolusDoseMcgKg] = useState<number>(1.0); // mcg/kg
-  const [bolusDurationMin, setBolusDurationMin] = useState<number>(2); // dakika (en az 1-2 dk)
+  const [bolusDurationMin, setBolusDurationMin] = useState<number>(2); // dakika (en az 1-2 dk yavaş)
   const [infusionDurationHours, setInfusionDurationHours] = useState<number>(12); // saat
-
-  // 2. RSI & IV Bolus Parametreleri
-  const [rsiDoseMcgKg, setRsiDoseMcgKg] = useState<number>(2.0); // mcg/kg (1.5 - 3.0)
-  const [rsiVialConc, setRsiVialConc] = useState<number>(50); // mcg/mL (standart ampul)
-
-  // 3. İntranazal (IN) Parametreleri
-  const [inDoseMcgKg, setInDoseMcgKg] = useState<number>(1.5); // mcg/kg (1.5 - 2.0)
-  const [inConcentration, setInConcentration] = useState<number>(50); // mcg/mL saf ampul
-
-  // 4. IV-PCA Parametreleri
-  const [pcaBolusMcg, setPcaBolusMcg] = useState<number>(15); // mcg (10-20 mcg)
-  const [pcaLockoutMin, setPcaLockoutMin] = useState<number>(6); // dakika (5-8 dk)
-  const [pcaBasalMcgHr, setPcaBasalMcgHr] = useState<number>(0); // mcg/saat (opioid-naif hastada 0!)
-  const [pcaMax4HrMcg, setPcaMax4HrMcg] = useState<number>(300); // mcg 4 saatlik limit
-
-  // 5. Transdermal TTS & Nöroaksiyel Parametreleri
-  const [oralMorphineDailyMg, setOralMorphineDailyMg] = useState<number>(60); // mg/gün
 
   // UI Durumları
   const [pkOpen, setPkOpen] = useState<boolean>(false);
@@ -87,153 +57,31 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
 
   // Benzersiz id'ler
   const weightInputId = useId();
-  const indicationSelectId = useId();
   const prepSelectId = useId();
   const doseInputId = useId();
   const bolusCheckboxId = useId();
   const bolusDoseInputId = useId();
   const bolusDurationInputId = useId();
   const durationInputId = useId();
-  const rsiDoseInputId = useId();
-  const inDoseInputId = useId();
-  const pcaBolusInputId = useId();
-  const pcaLockoutInputId = useId();
-  const pcaBasalInputId = useId();
-  const morphineInputId = useId();
+  const customVialInputId = useId();
+  const customVolumeInputId = useId();
 
   // --- KONSANTRASYON HESABI (mcg/mL) ---
   let concentrationMcgMl = 10;
   if (prepType === 'standard_10') {
-    concentrationMcgMl = 10; // 500 mcg / 50 mL
+    concentrationMcgMl = 10; // 500 mcg (10 mL) + 40 mL SF = 10 mcg/mL
   } else if (prepType === 'standard_20') {
-    concentrationMcgMl = 20; // 1000 mcg / 50 mL
+    concentrationMcgMl = 20; // 1000 mcg (20 mL) + 30 mL SF = 20 mcg/mL
   } else if (prepType === 'undiluted_50') {
-    concentrationMcgMl = 50; // Saf ampul
+    concentrationMcgMl = 50; // Saf ampul 50 mcg/mL
   } else {
     concentrationMcgMl =
       customDiluentVolume > 0 && customVialMcg > 0
         ? customVialMcg / customDiluentVolume
-        : customConcInput > 0
-        ? customConcInput
         : 10;
   }
 
-  // --- 8 AYRI KLİNİK ENDİKASYON PRESETLERİ ---
-  const INDICATION_PRESETS = {
-    acute_postop: {
-      title: 'Akut Post-Operatif Ağrı',
-      target: 'PACU ayılma ünitesinde veya serviste cerrahi sonrası orta-şiddetli ağrı kontrolü',
-      route: 'IV Bolus Titrasyonu / IV-PCA',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 0.5,
-      minDose: 0.3,
-      maxDose: 1.0,
-      bolusDefault: 0.5,
-      note: '25-50 mcg aralıklı IV bolus veya IV-PCA (10-20 mcg/bolus, 6 dk lockout). Spontan solunum ve sedasyon skoru izlenir.'
-    },
-    acute_nonop: {
-      title: 'Akut Non-Operatif Ağrı (Acil Servis / Travma)',
-      target: 'Kırık, dislokasyon, yanık, politravma veya renal kolik ağrısında hızlı analjezi',
-      route: 'IV Yavaş Bolus / İntranazal (IN)',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 0.5,
-      minDose: 0.2,
-      maxDose: 0.8,
-      bolusDefault: 0.7,
-      note: 'Damaryolu yoksa İntranazal (1.5-2 mcg/kg) hızlı uygulanabilir; damaryolu varsa 25-50 mcg yavaş IV titre edilir.'
-    },
-    chronic_cancer: {
-      title: 'Kronik Ağrı & Kanser Ağrısı',
-      target: 'Opioid-toleran onkoloji hastalarında sürekli bazal analjezi ve ani alevlenen ağrı yönetimi',
-      route: 'Transdermal Flaster (TTS) & Oral Transmukozal (OTFC)',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 0.5,
-      minDose: 0.2,
-      maxDose: 1.5,
-      bolusDefault: 0.5,
-      note: 'YALNIZCA opioid-toleran olgularda 72 saatlik TTS flaster (12.5-100 mcg/sa). Alevlenen kanser ağrısında bukkal/sublingual pastil.'
-    },
-    icu_analgosedation: {
-      title: 'Kritik Hastalarda Yoğun Bakımda Analjezi ve Sedasyon (ePAD)',
-      target: 'Mekanik ventilatördeki kritik hastada konfor, adaptasyon ve analjezi (CPOT < 2, BPS < 5)',
-      route: 'Sürekli IV İnfüzyon + Kurtarma Bolusları',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 1.0,
-      minDose: 0.7,
-      maxDose: 2.0,
-      bolusDefault: 0.5,
-      note: 'Önce analjezi (analgesia-first). Uzayan infüzyonda (>48 sa) yağda kümülasyon ve uyanma gecikmesi izlenmelidir.'
-    },
-    light_procedural: {
-      title: 'Prosedüral Sedasyon ve Analjezi (PSA)',
-      target: 'Kolonoskopi, bronkoskopi, kardiyoversiyon, redüksiyon veya girişimsel radyoloji',
-      route: 'Aralıklı IV Bolus Titrasyonu',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 0.5,
-      minDose: 0.3,
-      maxDose: 0.8,
-      bolusDefault: 0.5,
-      note: 'Spontan solunumu koruyarak 25-50 mcg yavaş IV. Propofol veya midazolam ile sinerjiye dikkat, kapnografi şart.'
-    },
-    rsi_premed: {
-      title: 'Hızlı Seri Entübasyonda (RSI) Premedikasyon',
-      target: 'Laringoskopiye bağlı sempatik refleks taşikardi, hipertansiyon ve KİBAS fırlamasını baskılama',
-      route: 'İndüksiyondan 3 Dk Önce Tek Doz IV Bolus',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 2.0,
-      minDose: 1.5,
-      maxDose: 3.0,
-      bolusDefault: 2.0,
-      note: 'İndüksiyon ajanı ve nöromüsküler blokerden 3 dakika önce 1.5 - 3.0 mcg/kg yavaş IV uygulanır (en az 1 dk).'
-    },
-    anesthesia_maint: {
-      title: 'Genel Anestezi (İndüksiyon & İdame)',
-      target: 'Dengeli anestezi veya TIVA protokolünde cerrahi stres yanıtını kesme',
-      route: 'IV İndüksiyon Bolusu + Sürekli İnfüzyon / Ek Dozlar',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 2.0,
-      minDose: 1.0,
-      maxDose: 3.5,
-      bolusDefault: 2.5,
-      note: 'İndüksiyonda 2-5 mcg/kg IV; idame olarak 1-3.5 mcg/kg/saat infüzyon veya her 30-45 dakikada 25-50 mcg ek doz.'
-    },
-    neuraxial: {
-      title: 'Nöroaksiyel Anestezi & Analjezi',
-      target: 'Doğum eylemi epidural analjezisi, sezaryen ve ortopedik cerrahi spinal analjezisi',
-      route: 'İntratekal (Spinal) / Epidural (PCEA)',
-      unit: 'mcg_kg_hr' as const,
-      defaultDose: 0.5,
-      minDose: 0.2,
-      maxDose: 1.0,
-      bolusDefault: 0.3,
-      note: 'İntratekal 10-25 mcg bupivakain ile; epidural 2 mcg/mL konsantrasyonda lokal anestezikle kombine PCEA.'
-    },
-    custom: {
-      title: 'Özel / Titrasyon Rejimi',
-      target: 'Klinisyenin belirlediği özel klinik protokol ve doğrudan doz girişi',
-      route: 'Kullanıcı Tercihli',
-      unit: doseUnit,
-      defaultDose: customDoseValue,
-      minDose: 0.1,
-      maxDose: 10.0,
-      bolusDefault: 1.0,
-      note: 'Girdiğiniz değer doğrultusunda debi ve hesaplamalar anlık olarak oluşturulur.'
-    }
-  };
-
-  const currentIndication = INDICATION_PRESETS[indication];
-
-  const handleIndicationChange = (newInd: typeof indication) => {
-    setIndication(newInd);
-    if (newInd !== 'custom') {
-      const preset = INDICATION_PRESETS[newInd];
-      setDoseUnit(preset.unit);
-      setCustomDoseValue(preset.defaultDose);
-      setBolusDoseMcgKg(preset.bolusDefault);
-    }
-  };
-
-  // --- İNFÜZYON HESAPLARI (mcg/kg/saat bazlı) ---
+  // --- EŞZAMANLI BİRİM DÖNÜŞÜMLERİ VE İNFÜZYON HESAPLARI ---
   let doseMcgKgHr = 1.0;
   if (doseUnit === 'mcg_kg_hr') {
     doseMcgKgHr = customDoseValue;
@@ -252,13 +100,14 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
   const totalBolusDoseMcg = giveBolus ? bolusDoseMcgKg * weightKg : 0;
   const totalBolusVolumeMl = concentrationMcgMl > 0 ? totalBolusDoseMcg / concentrationMcgMl : 0;
   const bolusPumpRateMlHr = bolusDurationMin > 0 ? (totalBolusVolumeMl / bolusDurationMin) * 60 : 0;
+  const bolusEquivalentRateMcgKgHr = bolusDurationMin > 0 ? (bolusDoseMcgKg / (bolusDurationMin / 60)) : 0;
 
   // Tüketim Hesapları
   const consumption24HrMcg = doseMcgHr * 24 + (giveBolus ? totalBolusDoseMcg : 0);
   const consumption24HrMg = consumption24HrMcg / 1000;
   const vialsNeeded500mcg = consumption24HrMcg / 500;
 
-  // Kümülasyon / CSHT
+  // Kümülasyon / CSHT (Bağlam Duyarlı Yarı Ömür)
   let cshtEstimateMinutes = 30;
   let cshtWarningLevel: 'low' | 'moderate' | 'high' = 'low';
   let cshtWarningText = '';
@@ -277,58 +126,22 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
     cshtWarningText = 'Uzamış infüzyon (>8-12 saat): Fentanil yüksek oranda yağ dokusunda kümüle olmuştur. Bağlam duyarlı yarı ömür 200-300+ dakikaya (4-6 saat) ulaşır. İnfüzyon kesildikten sonra ekstübasyon için saatlerce beklenmesi gerekebilir!';
   }
 
-  // --- 2. RSI PREMEDİKASYON HESAPLARI ---
-  const totalRsiDoseMcg = weightKg * rsiDoseMcgKg;
-  const totalRsiVolumeMl = rsiVialConc > 0 ? totalRsiDoseMcg / rsiVialConc : 0;
-
-  // --- 3. İNTRANAZAL (IN) HESAPLARI ---
-  const totalInDoseMcg = weightKg * inDoseMcgKg;
-  const totalInVolumeMl = inConcentration > 0 ? totalInDoseMcg / inConcentration : 0;
-  const inVolumePerNostrilMl = totalInVolumeMl / 2;
-
-  // --- 4. IV-PCA HESAPLARI ---
-  const pcaBolusMcgKg = weightKg > 0 ? pcaBolusMcg / weightKg : 0;
-  const maxPossibleBolusPerHour = Math.floor(60 / pcaLockoutMin);
-  const maxDosePerHourWithBasal = maxPossibleBolusPerHour * pcaBolusMcg + pcaBasalMcgHr;
-
-  // --- 5. TRANSDERMAL (TTS) ÇEVRİMİ ---
-  let estimatedTtsMcgHr = 25;
-  if (oralMorphineDailyMg < 45) {
-    estimatedTtsMcgHr = 12.5;
-  } else if (oralMorphineDailyMg <= 90) {
-    estimatedTtsMcgHr = 25;
-  } else if (oralMorphineDailyMg <= 150) {
-    estimatedTtsMcgHr = 50;
-  } else if (oralMorphineDailyMg <= 210) {
-    estimatedTtsMcgHr = 75;
-  } else {
-    estimatedTtsMcgHr = 100;
-  }
-
   const handleCopySummary = () => {
-    let summaryText = `KLİNİK FENTANİL DOZ PROTOKOLÜ ÖZETİ\n─────────────────────────────────────────────\n• Hasta Ağırlığı: ${weightKg} kg\n• Seçilen Endikasyon: ${currentIndication.title}\n• Uygulama Yolu: ${currentIndication.route}\n`;
+    let summaryText = `KLİNİK FENTANİL İNFÜZYON DOZ PROTOKOLÜ ÖZETİ\n─────────────────────────────────────────────\n• Hasta Ağırlığı: ${weightKg} kg\n• Çözelti Hazırlama: ${
+      prepType === 'standard_10'
+        ? '500 mcg / 50 mL SF (10 mcg/mL)'
+        : prepType === 'standard_20'
+        ? '1000 mcg / 50 mL SF (20 mcg/mL)'
+        : prepType === 'undiluted_50'
+        ? '50 mcg/mL (Saf Ampul)'
+        : `${concentrationMcgMl.toFixed(1)} mcg/mL (${customVialMcg} mcg / ${customDiluentVolume} mL)`
+    }\n• İdame Dozu: ${doseMcgKgHr.toFixed(2)} mcg/kg/saat | ${doseMcgHr.toFixed(1)} mcg/saat | ${doseMcgKgMin.toFixed(3)} mcg/kg/dk\n• Pompa Akış Hızı: ${infusionRateMlHr.toFixed(2)} mL/saat (~${microDropsPerMinute.toFixed(1)} damla/dk)\n`;
 
-    if (activeCalcTool === 'continuous_infusion') {
-      summaryText += `• Mod: SÜREKLİ IV İNFÜZYON\n• Çözelti: ${
-        prepType === 'standard_10'
-          ? '500 mcg / 50 mL SF (10 mcg/mL)'
-          : prepType === 'standard_20'
-          ? '1000 mcg / 50 mL SF (20 mcg/mL)'
-          : prepType === 'undiluted_50'
-          ? '50 mcg/mL (Saf)'
-          : `${concentrationMcgMl.toFixed(1)} mcg/mL`
-      }\n• İdame Dozu: ${doseMcgKgHr.toFixed(2)} mcg/kg/saat (${doseMcgHr.toFixed(1)} mcg/saat)\n• Pompa Hızı: ${infusionRateMlHr.toFixed(2)} mL/saat\n• Öngörülen Süre: ${infusionDurationHours} saat (~${Math.round(cshtEstimateMinutes)} dk CSHT)\n• 24 Sa Tüketim: ~${consumption24HrMg.toFixed(2)} mg (~${Math.ceil(vialsNeeded500mcg)} ampul 500 mcg)\n`;
-    } else if (activeCalcTool === 'rsi_bolus') {
-      summaryText += `• Mod: HIZLI SERİ ENTÜBASYON (RSI) PREMEDİKASYONU\n• Doz: ${rsiDoseMcgKg} mcg/kg\n• Toplam Bolus: ${totalRsiDoseMcg.toFixed(1)} mcg (${totalRsiVolumeMl.toFixed(2)} mL - 50 mcg/mL ampul)\n• Uygulama Zamanı: İndüksiyon ajanından 3 dakika önce, en az 1-2 dakikaya yayılarak yavaş IV puşe.\n`;
-    } else if (activeCalcTool === 'intranasal') {
-      summaryText += `• Mod: İNTRANAZAL (IN) ANALJEZİ (MAD İLE)\n• Doz: ${inDoseMcgKg} mcg/kg\n• Toplam Doz: ${totalInDoseMcg.toFixed(1)} mcg\n• Uygulama Hacmi: ${totalInVolumeMl.toFixed(2)} mL (Her burun deliğine: ${inVolumePerNostrilMl.toFixed(2)} mL)\n• Cihaz: Mukozal Atomizasyon Cihazı (MAD) ile 50 mcg/mL saf ampul.\n`;
-    } else if (activeCalcTool === 'iv_pca') {
-      summaryText += `• Mod: İNTRAVENÖZ HASTA KONTROLLÜ ANALJEZİ (IV-PCA)\n• Talep Edilen Bolus: ${pcaBolusMcg} mcg (${pcaBolusMcgKg.toFixed(2)} mcg/kg)\n• Kilitli Kalma Süresi: ${pcaLockoutMin} dakika\n• Bazal İnfüzyon: ${pcaBasalMcgHr} mcg/saat ${pcaBasalMcgHr === 0 ? '(Opioid-naif için güvenli: Yok)' : ''}\n• 4 Saatlik Limit: ${pcaMax4HrMcg} mcg\n`;
-    } else {
-      summaryText += `• Mod: TRANSDERMAL (TTS) & NÖROAKSİYEL REHBERİ\n• Günlük Oral Morfin Eşdeğeri: ${oralMorphineDailyMg} mg/gün\n• Önerilen Başlangıç TTS Flaster: ${estimatedTtsMcgHr} mcg/saat (72 saatte bir değişim)\n• Spinal Doz: 10 - 25 mcg intratekal / Epidural: 2 mcg/mL solüsyon\n`;
+    if (giveBolus) {
+      summaryText += `• Yükleme Bolusu: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(2)} mL) ${bolusDurationMin} dakikada (Pompa Hızı: ${bolusPumpRateMlHr.toFixed(1)} mL/saat | Eşdeğer: ${bolusEquivalentRateMcgKgHr.toFixed(1)} mcg/kg/saat)\n`;
     }
 
-    summaryText += `─────────────────────────────────────────────\nUYARI: Fentanil yüksek potensli bir opioiddir (morfinden 80-100 kat güçlü). Hızlı puşede göğüs rijiditesi riski vardır; yatak başında her zaman Nalokson hazır bulundurulmalıdır.`;
+    summaryText += `• Öngörülen İnfüzyon Süresi: ${infusionDurationHours} saat (Tahmini CSHT: ~${Math.round(cshtEstimateMinutes)} dk)\n• 24 Saatlik Toplam Tüketim: ~${consumption24HrMg.toFixed(2)} mg (~${Math.ceil(vialsNeeded500mcg)} ampul [500 mcg/10 mL])\n─────────────────────────────────────────────\nUYARI: Fentanil yüksek potensli bir opioiddir (morfinden 80-100 kat güçlü). Hızlı puşede toraks rijiditesi (wooden chest) riski vardır. Yatak başında her zaman Nalokson hazır bulundurulmalıdır.`;
 
     navigator.clipboard.writeText(summaryText).then(() => {
       setCopiedSummary(true);
@@ -349,18 +162,18 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-                Altın Standart İlaç Monografisi
-              </span>
               <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
                 Yüksek Potensli Sentetik Opioid
               </span>
               <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                 Kırmızı Reçete · ISMP High-Alert
               </span>
+              <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">
+                Talinat · Fentanyl Janssen · Durogesic
+              </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              Fentanil Sitrat (Fentanyl / Sublimaze)
+              Fentanil Sitrat (Talinat, Fentanyl Janssen, Fentanyl Hameln, Durogesic)
             </h1>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-4xl">
               <strong className="text-slate-900 dark:text-white font-semibold">Farmakolojik Kategori:</strong> Yüksek
@@ -546,7 +359,6 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
           <div>
             <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">Kontrendikasyonlar</h2>
-            <p className="text-xs text-slate-500">Mutlak ve rölatif kontrendikasyonlar, MAOI ve opioid-naif riskleri</p>
           </div>
         </div>
 
@@ -616,245 +428,235 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 4: ENDİKASYONLAR VE OFF-LABEL KULLANIMLAR (8 KLİNİK ALAN) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* BÖLÜM 4: ENDİKASYONLAR VE OFF-LABEL KULLANIMLAR                     */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-teal-500/10 text-teal-500">
-            <Stethoscope className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Endikasyonlar ve Klinik Kullanım Alanları (8 Temel Alan)
-            </h2>
-            <p className="text-xs text-slate-500">
-              Akut postoperatif, akut non-operatif, kronik/kanser ağrısı, YBÜ, PSA, RSI, genel anestezi ve nöroaksiyel analjezi
-            </p>
-          </div>
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <CheckCircle2 className="w-5 h-5 text-teal-500" />
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+            Endikasyonlar ve Off-Label Kullanımlar
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
-          {/* 1. Akut Post-operatif Ağrı */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-[10px]">1</span>
-              <span>Akut Post-Operatif Ağrı</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+          {/* Ruhsatlı Endikasyonlar */}
+          <div className="p-4 rounded-xl border border-teal-500/30 bg-teal-500/5 space-y-2">
+            <span className="font-bold text-teal-700 dark:text-teal-300 text-sm block">
+              FDA / EMA / TİTCK Onaylı Ruhsatlı Endikasyonlar
+            </span>
+            <div className="space-y-2 text-slate-700 dark:text-slate-300">
+              <p>
+                <strong>1. Genel Anestezi İndüksiyonu ve İdamesi:</strong> Majör cerrahi ve dengeli inhalasyon anestezisinde analjezik omurga olarak (erişkin ve pediatrik hastalarda).
+              </p>
+              <p>
+                <strong>2. Kritik Yoğun Bakım Hastalarında Analgosedasyon:</strong> Mekanik ventilasyon uygulanan yoğun bakım hastalarında "önce analjezi" (analgesia-first) yaklaşımıyla sürekli IV infüzyon veya hedef tabanlı aralıklı bolus.
+              </p>
+              <p>
+                <strong>3. Nöroaksiyel Analjezi (Spinal ve Epidural):</strong> Doğum eylemi analjezisi, sezaryen ve postoperatif cerrahi ağrıda lokal anesteziklerle kombine derin viseral analjezi.
+              </p>
+              <p>
+                <strong>4. Prosedürel Sedasyon ve Analjezi (PSA):</strong> Günübirlik cerrahi, kolonoskopi, bronkoskopi, kardiyoversiyon, kırık redüksiyonu ve girişimsel radyolojide sedoanaljezi.
+              </p>
+              <p>
+                <strong>5. Kronik Şiddetli Kanser Ağrısı:</strong> Yalnızca opioid toleran hastalarda transdermal flaster (TTS) veya oral transmukozal formülasyonlarla sürekli bazal ve alevlenen ağrı kontrolü.
+              </p>
             </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              PACU ayılma ünitesinde cerrahi sonrası orta-şiddetli ağrının hızlı titrasyonu (25-50 mcg aralıklı IV bolus)
-              veya yataklı serviste Hasta Kontrollü Analjezi (IV-PCA: 10-20 mcg/talep).
-            </p>
           </div>
 
-          {/* 2. Akut Non-operatif Ağrı */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-[10px]">2</span>
-              <span>Akut Non-Operatif Ağrı</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Acil servis ve prehospital alanda politravma, kemik kırıkları, yanık yaralanmaları ve şiddetli renal kolikte
-              hızlı analjezi. Damaryolu yoksa Mukozal Atomizer (IN: 1.5-2 mcg/kg) ile iğnesiz uygulanır.
-            </p>
-          </div>
-
-          {/* 3. Kronik Ağrı & Kanser Ağrısı */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-[10px]">3</span>
-              <span>Kronik Ağrı &amp; Kanser Ağrısı</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              YALNIZCA opioid-toleran hastalarda 72 saatte bir değiştirilen Transdermal (TTS) flaster (12.5-100 mcg/saat) ile
-              bazal kontrol; ani alevlenen kanser ağrısında (BTcP) oral transmukozal (OTFC) pastil/film kullanımı.
-            </p>
-          </div>
-
-          {/* 4. Kritik Hastalarda YBÜ Analgosedasyonu */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center text-[10px]">4</span>
-              <span>Kritik Hastalarda YBÜ Analjezi &amp; Sedasyon</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Mekanik ventilasyondaki kritik hastalarda ePAD kılavuzları doğrultusunda "önce analjezi" (analgesia-first)
-              hedefiyle sürekli IV infüzyon (0.7-2 mcg/kg/saat) veya hedef tabanlı aralıklı bolus protokolü.
-            </p>
-          </div>
-
-          {/* 5. Prosedürel Sedasyon ve Analjezi */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-[10px]">5</span>
-              <span>Prosedüral Sedasyon ve Analjezi (PSA)</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Günübirlik cerrahi, kolonoskopi, bronkoskopi, kardiyoversiyon, kırık redüksiyonu ve girişimsel radyolojide
-              propofol veya midazolam ile sinerjistik kombinasyonda 0.5-1 mcg/kg IV bolus titrasyonu.
-            </p>
-          </div>
-
-          {/* 6. Hızlı Seri Entübasyonda Premedikasyon */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-[10px]">6</span>
-              <span>Hızlı Seri Entübasyonda Premedikasyon</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              RSI indüksiyonu öncesi laringoskopi ve trakeal entübasyona bağlı sempatik deşarjı, taşikardi fırlamasını,
-              akut tansiyon yükselmesini ve KİBAS artışını önlemek için 1.5-3.0 mcg/kg IV premedikasyon.
-            </p>
-          </div>
-
-          {/* 7. Genel Anestezi */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-[10px]">7</span>
-              <span>Genel Anestezi (İndüksiyon &amp; İdame)</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Dengeli anestezi indüksiyonunda 2-5 mcg/kg IV bolus; idamesinde 1-3.5 mcg/kg/saat infüzyon veya her 30-45 dk
-              25-50 mcg ek doz. Kardiyak cerrahide 20-50 mcg/kg yüksek doz opioid anestezisi.
-            </p>
-          </div>
-
-          {/* 8. Nöroaksiyel Anestezi */}
-          <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
-              <span className="w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-[10px]">8</span>
-              <span>Nöroaksiyel Anestezi &amp; Analjezi</span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Spinal/intratekal blokta bupivakaine eklenen 10-25 mcg fentanil ile derin viseral analjezi; epidural doğum
-              analjezisinde lokal anestezikle kombine 2 mcg/mL derişimde PCEA infüzyonu.
-            </p>
+          {/* Off-Label Kullanımlar */}
+          <div className="p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/5 space-y-2">
+            <span className="font-bold text-indigo-700 dark:text-indigo-300 text-sm block">
+              Off-Label / Kanıta Dayalı Klinik Kullanım Alanları
+            </span>
+            <ul className="space-y-1.5 list-disc list-inside text-slate-700 dark:text-slate-300">
+              <li>
+                <strong>Hızlı Seri Entübasyonda (RSI) Premedikasyon:</strong> Laringoskopi ve entübasyonun tetiklediği sempatik refleks taşikardi, hipertansiyon ve KİBAS fırlamasını baskılamak amacıyla indüksiyondan 3 dakika önce 1.5–3.0 mcg/kg yavaş IV bolus.
+              </li>
+              <li>
+                <strong>İntranazal (IN) Acil Ağrı Kontrolü:</strong> Damar yolu bulunmayan veya ajite travma, yanık ve kırık olgularında (özellikle pediatrik acillerde) Mukozal Atomizasyon Cihazı (MAD) ile hızlı ve etkili non-invaziv analjezi (1.5–2.0 mcg/kg).
+              </li>
+              <li>
+                <strong>Postoperatif Hasta Kontrollü Analjezi (IV-PCA):</strong> Cerrahi sonrası akut orta-şiddetli ağrıda hastanın talep ettiği aralıklı bolus titrasyonu (10–20 mcg/talep, kilit süresi 5–8 dk; opioid-naif olguda bazal açılmaz).
+              </li>
+              <li>
+                <strong>Kardiyak Cerrahi Yüksek Doz Opioid Tekniği:</strong> Koroner arter bypass ve kapak replasmanı cerrahisinde hemodinamik miyokardiyal stabilite için 20–50 mcg/kg yüksek doz tekniği.
+              </li>
+              <li>
+                <strong>Postoperatif Titreme (Shivering) Tedavisi:</strong> Ayılma ünitesinde 25–50 mcg IV yavaş bolus ile titremenin hızlıca sonlandırılması.
+              </li>
+            </ul>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 5: UYGULAMA YOLLARI, ERİŞKİN VE PEDİATRİK DOZ REJİMLERİ */}
-      {/* (Sürekli İnfüzyon Dışı Tüm Yollar Detaylandırılmıştır) */}
+      {/* BÖLÜM 5: UYGULAMA YOLLARI VE DOZ REJİMLERİ (ERİŞKİN & PEDİATRİK)   */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-500/10 text-indigo-500">
-            <Syringe className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Uygulama Yolları ve Kapsamlı Doz Rejimleri (İnfüzyon Dışı Dahil)
-            </h2>
-            <p className="text-xs text-slate-500">
-              IV bolus, IV-PCA, sürekli infüzyon, intranazal, transdermal flaster, transmukozal ve nöroaksiyel kılavuzları
-            </p>
-          </div>
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <Syringe className="w-5 h-5 text-indigo-500" />
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+            Uygulama Yolları ve Doz Rejimleri (Erişkin &amp; Pediatrik)
+          </h2>
         </div>
 
         <div className="space-y-4 text-xs sm:text-sm">
-          {/* Çok Yollu Uygulama Kılavuz Kartları */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {/* 1. IV Bolus */}
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-              <span className="font-bold text-rose-600 dark:text-rose-400 block text-xs uppercase tracking-wider">
-                1. İntravenöz (IV) Bolus &amp; Titrasyon
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Erişkin Doz Rejimleri */}
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2.5">
+              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                <span>Erişkin Doz Rejimleri</span>
               </span>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-xs list-disc list-inside">
-                <li><strong>Akut Postop / PACU:</strong> 25 – 50 mcg IV (0.5 – 1 mcg/kg), her 5-10 dk titre edilir.</li>
-                <li><strong>Prosedürel Sedasyon (PSA):</strong> 0.5 – 1.0 mcg/kg (25 – 50 mcg) yavaş IV.</li>
-                <li><strong>RSI Premedikasyonu:</strong> 1.5 – 3.0 mcg/kg IV (entübasyondan 3 dk önce, en az 1-2 dk yavaş puşe).</li>
-                <li><strong>Pediatrik IV Bolus:</strong> 1.0 – 2.0 mcg/kg yavaş IV (yenidoğanda 0.5-1 mcg/kg).</li>
-              </ul>
+
+              <div className="space-y-2 text-slate-700 dark:text-slate-300">
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Genel Anestezi İndüksiyonu:
+                  </span>
+                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+                    2.0 – 5.0 mcg/kg IV Yavaş Bolus
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Göğüs rijiditesini önlemek için en az 1 – 2 dakikaya yayılarak yavaşça enjekte edilir.
+                  </p>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Genel Anestezi İdamesi:
+                  </span>
+                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+                    1.0 – 3.5 mcg/kg/saat (veya her 30-45 dk 25 – 50 mcg IV ek doz)
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Cerrahi stres yanıtına ve hemodinamiye göre titre edilir.
+                  </p>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Yoğun Bakım Analgosedasyonu (Sürekli İnfüzyon):
+                  </span>
+                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+                    0.7 – 2.0 mcg/kg/saat (25 – 150 mcg/saat)
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    CPOT / BPS ağrı skorlarına göre titre edilir; uzayan infüzyonlarda (&gt;48 saat) yağ dokusunda kümülasyona dikkat edilmelidir.
+                  </p>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Hızlı Seri Entübasyonda (RSI) Premedikasyon:
+                  </span>
+                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+                    1.5 – 3.0 mcg/kg IV (entübasyondan 3 dk önce)
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Laringoskopi sempatik deşarjını ve KİBAS yükselmesini baskılar.
+                  </p>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    PACU / Postoperatif Akut Ağrı Bolus Titrasyonu:
+                  </span>
+                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+                    25 – 50 mcg IV (0.5 – 1.0 mcg/kg), her 5 – 10 dakikada bir
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Spontan solunum hızı ve sedasyon derinliği izlenerek titre edilir.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* 2. IV-PCA */}
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-              <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-xs uppercase tracking-wider">
-                2. İntravenöz Hasta Kontrollü Analjezi (IV-PCA)
+            {/* Pediatrik Doz Rejimleri */}
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2.5">
+              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-teal-500" />
+                <span>Pediatrik Doz Rejimleri (Kanıta Dayalı)</span>
               </span>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-xs list-disc list-inside">
-                <li><strong>Talep (Bolus) Dozu:</strong> 10 – 20 mcg (0.2 – 0.4 mL [50 mcg/mL]).</li>
-                <li><strong>Kilit Süresi (Lockout):</strong> 5 – 8 dakika.</li>
-                <li><strong>Bazal İnfüzyon:</strong> 0 mcg/saat (Opioid-naif olguda BAZAL AÇILMAZ! Yalnızca opioid-toleran olguda 10-20 mcg/sa).</li>
-                <li><strong>4 Saatlik Maksimum Sınır:</strong> 300 – 400 mcg.</li>
-              </ul>
-            </div>
 
-            {/* 3. İntranazal (IN) */}
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-              <span className="font-bold text-teal-600 dark:text-teal-400 block text-xs uppercase tracking-wider">
-                3. İntranazal (IN) Mukozal Atomizasyon (MAD)
-              </span>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-xs list-disc list-inside">
-                <li><strong>Pediatrik Acil Analjezi:</strong> 1.5 – 2.0 mcg/kg tek doz (yanık, kırık, damaryolu yokluğu).</li>
-                <li><strong>Erişkin Acil Ağrı:</strong> 50 – 100 mcg tek doz (konsantre 50 mcg/mL ampul ile).</li>
-                <li><strong>Hacim Sınırı:</strong> Her burun deliğine maksimum 1.0 mL (yutulmayı önlemek için dozu iki deliğe bölün).</li>
-              </ul>
-            </div>
+              <div className="space-y-2 text-slate-700 dark:text-slate-300">
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Pediatrik Genel Anestezi İdamesi:
+                  </span>
+                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
+                    1.0 – 3.0 mcg/kg/saat IV sürekli infüzyon
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    İnhalasyon anestezikleri ile kombine idame dozu.
+                  </p>
+                </div>
 
-            {/* 4. Transdermal TTS */}
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-              <span className="font-bold text-amber-600 dark:text-amber-400 block text-xs uppercase tracking-wider">
-                4. Transdermal Flaster (TTS - Durogesic)
-              </span>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-xs list-disc list-inside">
-                <li><strong>Dozajlar:</strong> 12.5, 25, 50, 75, 100 mcg/saat salınımlı flasterler.</li>
-                <li><strong>Değişim Periyodu:</strong> 72 saatte bir (3 günde bir) temiz, kılsız cilde yapıştırılır.</li>
-                <li><strong>Önemli Kural:</strong> Yalnızca Opiyoid-Toleran kronik kanser ağrısında! Akut ağrıda KESİNLİKLE KONTRENDİKE.</li>
-                <li><strong>Isı/Ateş Uyarısı:</strong> Sıcak banyo, sauna ve yüksek ateş salınımı 3-4 katına çıkarıp apne yapabilir.</li>
-              </ul>
-            </div>
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Pediatrik YBÜ Sürekli İnfüzyon:
+                  </span>
+                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
+                    1.0 – 3.0 mcg/kg/saat IV
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Mekanik ventilasyon altındaki entübe çocuklarda sürekli analgosedasyon.
+                  </p>
+                </div>
 
-            {/* 5. Transmukozal / Bukkal */}
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-              <span className="font-bold text-purple-600 dark:text-purple-400 block text-xs uppercase tracking-wider">
-                5. Oral Transmukozal &amp; Bukkal (OTFC)
-              </span>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-xs list-disc list-inside">
-                <li><strong>Endikasyon:</strong> Ani Alevlenen Kanser Ağrısı (Breakthrough Pain - BTcP).</li>
-                <li><strong>Dozajlar:</strong> 100, 200, 400, 600, 800 mcg bukkal pastil / film.</li>
-                <li><strong>Uygulama:</strong> Yanak mukozasına temas ettirilerek 15 dakikada emdirilir; çiğnenmez, yutulmaz.</li>
-              </ul>
-            </div>
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    İntranazal (IN) Acil Analjezi (MAD İle):
+                  </span>
+                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
+                    1.5 – 2.0 mcg/kg tek doz (Maksimum: 100 mcg)
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Damaryolu bulunmayan pediatrik kırık ve yanık olgularında saf 50 mcg/mL ampul ile burun deliklerine paylaştırılarak uygulanır.
+                  </p>
+                </div>
 
-            {/* 6. Nöroaksiyel */}
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-              <span className="font-bold text-emerald-600 dark:text-emerald-400 block text-xs uppercase tracking-wider">
-                6. Nöroaksiyel (Spinal &amp; Epidural)
-              </span>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-300 text-xs list-disc list-inside">
-                <li><strong>İntratekal (Spinal):</strong> 10 – 25 mcg (0.2 – 0.5 mL) bupivakaine eklenir. Viseral analjezi ve 4-6 sa konfor sağlar.</li>
-                <li><strong>Epidural / PCEA:</strong> 2 mcg/mL konsantrasyonda bupivakain/levobupivakain içinde doğum ve postop analjezisi.</li>
-                <li><strong>Geç Solunum Depresyonu:</strong> Morfine göre lipofilik olduğu için rostral yayılımı azdır; ancak 4-12 saat takip gerekir.</li>
-              </ul>
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Pediatrik IV Bolus &amp; Girişimsel Sedasyon:
+                  </span>
+                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
+                    1.0 – 2.0 mcg/kg yavaş IV (Yenidoğanda 0.5 – 1.0 mcg/kg)
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Yenidoğan ve infantlarda bradikardi riski nedeniyle atropin hazır bulundurulmalıdır.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Geriatrik ve Obezite Kılavuzu */}
+          {/* Geriatrik ve Obezite Kılavuzları */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
             <div className="p-3 rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50/40 dark:bg-amber-950/20">
               <span className="font-bold text-xs text-amber-700 dark:text-amber-300 block mb-1">
                 Geriatrik Popülasyon (&gt;65 Yaş):
               </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-                Karaciğer klerensi %30-50 düşer, beyin hassasiyeti belirgin artar. Tüm bolus ve infüzyon dozları{' '}
-                <strong>%50 oranında azaltılmalı</strong>, aralıklar uzatılmalıdır.
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Karaciğer klerensi %30-50 düşer, santral sinir sistemi duyarlılığı belirgin artar. Tüm bolus ve idame infüzyon dozları{' '}
+                <strong>%50 oranında azaltılmalı</strong>, titrasyon aralıkları uzatılmalıdır.
               </p>
             </div>
             <div className="p-3 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-50/40 dark:bg-indigo-950/20">
               <span className="font-bold text-xs text-indigo-700 dark:text-indigo-300 block mb-1">
                 Obezite ve Kilo Hesabı:
               </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-                Fentanil yüksek lipofilik olsa da klerens santral kompartmanla ilişkilidir. Aşırı doz ve kümülasyonu önlemek için{' '}
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Fentanil yüksek lipofilik olsa da klerens santral kompartman hacmi ile ilişkilidir. Aşırı doz ve kümülasyonu önlemek için{' '}
                 <strong>İdeal Vücut Ağırlığı (IBW)</strong> veya <strong>Yağsız Vücut Ağırlığı (LBW)</strong> esas alınmalıdır.
               </p>
             </div>
@@ -863,8 +665,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 6: ⚡ ÇOK YOLLU İNTERAKTİF DOZ & HESAPLAYICI MODÜLÜ */}
-      {/* (Kullanıcı Kuralı: Yalnızca IV infüzyon değil, çoklu klinik yollar) */}
+      {/* BÖLÜM 6: ⚡ FENTANİL İNFÜZYON POMPASI & DOZ HESAPLAYICISI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-7 rounded-2xl border transition-all ${
@@ -881,14 +682,14 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                  Çok Yollu İnteraktif Fentanil Doz &amp; İnfüzyon Hesaplayıcısı
+                  Fentanil İnfüzyon Pompası &amp; Doz Hesaplayıcısı
                 </h2>
                 <span className="text-[11px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-600 dark:text-rose-400">
-                  Çoklu Uygulama Yolu
+                  IV İnfüzyon &amp; Birim Dönüştürücü
                 </span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Sürekli IV infüzyon, RSI premedikasyonu, İntranazal acil analjezi, IV-PCA ve Transdermal/Nöroaksiyel hesaplayıcı
+                Sürekli IV infüzyon hızı (mL/saat), eşzamanlı birim dönüşümleri (mcg/kg/saat, mcg/saat, mcg/kg/dk) ve isteğe bağlı yükleme bolus hesabı
               </p>
             </div>
           </div>
@@ -912,13 +713,13 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
               type="button"
               onClick={() => {
                 setWeightKg(70);
-                handleIndicationChange('icu_analgosedation');
                 setPrepType('standard_10');
+                setDoseUnit('mcg_kg_hr');
+                setCustomDoseValue(1.0);
                 setGiveBolus(false);
+                setBolusDoseMcgKg(1.0);
+                setBolusDurationMin(10);
                 setInfusionDurationHours(12);
-                setRsiDoseMcgKg(2.0);
-                setInDoseMcgKg(1.5);
-                setPcaBolusMcg(15);
               }}
               className="p-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer transition-colors"
               title="Varsayılan Değerlere Sıfırla"
@@ -928,224 +729,146 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
 
-        {/* Çoklu Uygulama Yolu Sekmeleri */}
-        <div className="pt-4 flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('continuous_infusion')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'continuous_infusion'
-                ? 'bg-rose-600 text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Syringe className="w-3.5 h-3.5" />
-            <span>1. Sürekli IV İnfüzyon Pompası</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('rsi_bolus')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'rsi_bolus'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Zap className="w-3.5 h-3.5" />
-            <span>2. RSI Premedikasyon &amp; IV Bolus</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('intranasal')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'intranasal'
-                ? 'bg-teal-600 text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Wind className="w-3.5 h-3.5" />
-            <span>3. İntranazal (IN) Acil &amp; Pediatri</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('iv_pca')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'iv_pca'
-                ? 'bg-purple-600 text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5" />
-            <span>4. Postop IV-PCA Parametreleri</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('transdermal_neuraxial')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'transdermal_neuraxial'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>5. Transdermal TTS &amp; Nöroaksiyel</span>
-          </button>
-        </div>
-
-        {/* Ortak Parametre: Hasta Vücut Ağırlığı ve Klinik Endikasyon */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 text-xs sm:text-sm">
-          <div className="space-y-1.5">
-            <label htmlFor={weightInputId} className="block font-semibold text-slate-700 dark:text-slate-300">
-              Hasta Vücut Ağırlığı (kg):
-            </label>
-            <div className="relative">
+        {/* İNFÜZYON VE HESAPLAMA GİRİŞLERİ */}
+        <div className="pt-5 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Hasta Ağırlığı */}
+            <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor={weightInputId} className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Hasta Vücut Ağırlığı (kg)
+                </label>
+                <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">
+                  {weightKg} kg
+                </span>
+              </div>
               <input
                 id={weightInputId}
                 type="number"
-                min={3}
-                max={250}
-                step={1}
+                min="3"
+                max="250"
+                step="1"
                 value={weightKg}
                 onChange={(e) => setWeightKg(Math.max(1, parseFloat(e.target.value) || 0))}
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-sm font-semibold transition-all focus:outline-hidden focus:ring-2 focus:ring-rose-500 ${
-                  isDark ? 'bg-slate-800/80 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
-                }`}
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-transparent text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500"
               />
-              <span className="absolute right-3.5 top-2.5 text-xs font-semibold text-slate-400">kg</span>
-            </div>
-            <p className="text-[11px] text-slate-500">Obez olgularda İdeal Vücut Ağırlığı (IBW) kullanınız.</p>
-          </div>
-
-          <div className="space-y-1.5">
-            <label htmlFor={indicationSelectId} className="block font-semibold text-slate-700 dark:text-slate-300">
-              Klinik Endikasyon (8 Seçenek):
-            </label>
-            <select
-              id={indicationSelectId}
-              value={indication}
-              onChange={(e) => handleIndicationChange(e.target.value as typeof indication)}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-medium transition-all focus:outline-hidden focus:ring-2 focus:ring-rose-500 cursor-pointer ${
-                isDark ? 'bg-slate-800/80 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
-              }`}
-            >
-              <option value="acute_postop">1. Akut Post-Operatif Ağrı (PACU / Servis)</option>
-              <option value="acute_nonop">2. Akut Non-Operatif Ağrı (Acil Servis / Travma)</option>
-              <option value="chronic_cancer">3. Kronik Ağrı &amp; Kanser Ağrısı (TTS / OTFC)</option>
-              <option value="icu_analgosedation">4. Kritik Hastalarda YBÜ Analgosedasyonu (ePAD)</option>
-              <option value="light_procedural">5. Prosedüral Sedasyon ve Analjezi (PSA)</option>
-              <option value="rsi_premed">6. Hızlı Seri Entübasyonda (RSI) Premedikasyon</option>
-              <option value="anesthesia_maint">7. Genel Anestezi (İndüksiyon &amp; İdame)</option>
-              <option value="neuraxial">8. Nöroaksiyel Anestezi (Spinal &amp; Epidural)</option>
-              <option value="custom">Özel Rejim / Doğrudan Doz Girişi</option>
-            </select>
-            <p className="text-[11px] text-slate-500 truncate" title={currentIndication.note}>
-              {currentIndication.note}
-            </p>
-          </div>
-        </div>
-
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {/* MODÜL 1: SÜREKLİ IV İNFÜZYON POMPASI VE KÜMÜLASYON SAYACI */}
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {activeCalcTool === 'continuous_infusion' && (
-          <div className="mt-5 space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div className="space-y-1.5">
-                <label htmlFor={prepSelectId} className="block font-semibold text-slate-700 dark:text-slate-300">
-                  Çözelti Hazırlama Modeli:
-                </label>
-                <select
-                  id={prepSelectId}
-                  value={prepType}
-                  onChange={(e) => setPrepType(e.target.value as typeof prepType)}
-                  className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-medium transition-all focus:outline-hidden focus:ring-2 focus:ring-rose-500 cursor-pointer ${
-                    isDark ? 'bg-slate-800/80 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
-                  }`}
-                >
-                  <option value="standard_10">500 mcg (10 mL) + 40 mL SF ➔ 10 mcg/mL (Standart)</option>
-                  <option value="standard_20">1000 mcg (20 mL) + 30 mL SF ➔ 20 mcg/mL (Konsantre)</option>
-                  <option value="undiluted_50">Saf Flakon 50 mcg/mL (Seyreltilmemiş - Sıvı Kısıtlı)</option>
-                  <option value="custom_prep">Özel Flakon ve Hacim Girişi...</option>
-                </select>
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
-                  <Droplet className="w-3 h-3" />
-                  <span>Etkin Konsantrasyon: {concentrationMcgMl.toFixed(1)} mcg/mL</span>
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor={durationInputId} className="block font-semibold text-slate-700 dark:text-slate-300">
-                  Öngörülen İnfüzyon Süresi:
-                </label>
-                <div className="relative">
-                  <input
-                    id={durationInputId}
-                    type="number"
-                    min={0.5}
-                    max={168}
-                    step={1}
-                    value={infusionDurationHours}
-                    onChange={(e) => setInfusionDurationHours(Math.max(0.1, parseFloat(e.target.value) || 1))}
-                    className={`w-full px-3.5 py-2.5 rounded-xl border text-sm font-semibold transition-all focus:outline-hidden focus:ring-2 focus:ring-rose-500 ${
-                      isDark ? 'bg-slate-800/80 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+              <div className="flex gap-1.5 mt-2">
+                {[50, 60, 70, 80, 90, 100].map((w) => (
+                  <button
+                    key={w}
+                    type="button"
+                    onClick={() => setWeightKg(w)}
+                    className={`flex-1 py-1 text-[11px] font-semibold rounded border transition-colors ${
+                      weightKg === w
+                        ? 'bg-rose-500 text-white border-rose-500'
+                        : isDark
+                        ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                        : 'border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
-                  />
-                  <span className="absolute right-3.5 top-2.5 text-xs font-semibold text-slate-400">saat</span>
-                </div>
-                <p className="text-[11px] text-slate-500">Bağlam duyarlı t½ kümülasyonunu belirler.</p>
+                  >
+                    {w}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Doz Girişi ve Birim Seçimi */}
-            <div className="p-4 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-white/60 dark:bg-slate-900/60">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-                <label htmlFor={doseInputId} className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-rose-500" />
-                  <span>İdame İnfüzyon Dozu:</span>
+            {/* Çözelti / Konsantrasyon Seçimi */}
+            <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor={prepSelectId} className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  İnfüzyon Çözeltisi &amp; Seyreltme
                 </label>
-                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">
+                  {concentrationMcgMl.toFixed(1)} mcg/mL
+                </span>
+              </div>
+              <select
+                id={prepSelectId}
+                value={prepType}
+                onChange={(e) => setPrepType(e.target.value as typeof prepType)}
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500"
+              >
+                <option value="standard_10">500 mcg (10 mL) + 40 mL SF = 50 mL (10 mcg/mL - Standart YBÜ)</option>
+                <option value="standard_20">1000 mcg (20 mL) + 30 mL SF = 50 mL (20 mcg/mL - Konsantre)</option>
+                <option value="undiluted_50">Saf Ampul (50 mcg/mL - Konsantre / Akut)</option>
+                <option value="custom_prep">Özel Seyreltme (Serbest Belirle)</option>
+              </select>
+
+              {prepType === 'custom_prep' && (
+                <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <div>
+                    <label htmlFor={customVialInputId} className="text-[10px] text-slate-500">
+                      Toplam Doz (mcg)
+                    </label>
+                    <input
+                      id={customVialInputId}
+                      type="number"
+                      value={customVialMcg}
+                      onChange={(e) => setCustomVialMcg(parseFloat(e.target.value) || 0)}
+                      className="w-full px-2 py-1 text-xs rounded border border-slate-300 dark:border-slate-700 bg-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor={customVolumeInputId} className="text-[10px] text-slate-500">
+                      Toplam Hacim (mL)
+                    </label>
+                    <input
+                      id={customVolumeInputId}
+                      type="number"
+                      value={customDiluentVolume}
+                      onChange={(e) => setCustomDiluentVolume(parseFloat(e.target.value) || 1)}
+                      className="w-full px-2 py-1 text-xs rounded border border-slate-300 dark:border-slate-700 bg-transparent"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Doz Birimi ve Doz Miktarı */}
+            <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor={doseInputId} className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  İstenen İdame Dozu
+                </label>
+                <div className="flex rounded-lg p-0.5 bg-slate-200 dark:bg-slate-800 text-[10px] font-bold">
                   <button
                     type="button"
                     onClick={() => {
-                      if (doseUnit !== 'mcg_kg_hr') {
-                        setCustomDoseValue(Number(doseMcgKgHr.toFixed(2)));
-                        setDoseUnit('mcg_kg_hr');
-                      }
+                      setDoseUnit('mcg_kg_hr');
+                      setCustomDoseValue(1.0);
                     }}
-                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                      doseUnit === 'mcg_kg_hr' ? 'bg-rose-500 text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
+                    className={`px-2 py-0.5 rounded transition-colors ${
+                      doseUnit === 'mcg_kg_hr'
+                        ? 'bg-rose-500 text-white shadow-2xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    mcg/kg/saat
+                    mcg/kg/sa
                   </button>
                   <button
                     type="button"
                     onClick={() => {
-                      if (doseUnit !== 'mcg_hr') {
-                        setCustomDoseValue(Number(doseMcgHr.toFixed(1)));
-                        setDoseUnit('mcg_hr');
-                      }
+                      setDoseUnit('mcg_hr');
+                      setCustomDoseValue(Math.round(weightKg * 1.0));
                     }}
-                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                      doseUnit === 'mcg_hr' ? 'bg-rose-500 text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
+                    className={`px-2 py-0.5 rounded transition-colors ${
+                      doseUnit === 'mcg_hr'
+                        ? 'bg-rose-500 text-white shadow-2xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    mcg/saat
+                    mcg/sa
                   </button>
                   <button
                     type="button"
                     onClick={() => {
-                      if (doseUnit !== 'mcg_kg_min') {
-                        setCustomDoseValue(Number(doseMcgKgMin.toFixed(3)));
-                        setDoseUnit('mcg_kg_min');
-                      }
+                      setDoseUnit('mcg_kg_min');
+                      setCustomDoseValue(0.02);
                     }}
-                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                      doseUnit === 'mcg_kg_min' ? 'bg-rose-500 text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
+                    className={`px-2 py-0.5 rounded transition-colors ${
+                      doseUnit === 'mcg_kg_min'
+                        ? 'bg-rose-500 text-white shadow-2xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     mcg/kg/dk
@@ -1153,408 +876,281 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
-                <div className="relative col-span-2">
-                  <input
-                    id={doseInputId}
-                    type="number"
-                    min={0.01}
-                    max={50}
-                    step={doseUnit === 'mcg_kg_min' ? 0.005 : doseUnit === 'mcg_hr' ? 5 : 0.1}
-                    value={customDoseValue}
-                    onChange={(e) => setCustomDoseValue(parseFloat(e.target.value) || 0)}
-                    className={`w-full px-4 py-2.5 rounded-xl border text-base font-bold font-mono transition-all focus:outline-hidden focus:ring-2 focus:ring-rose-500 ${
-                      isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+              <input
+                id={doseInputId}
+                type="number"
+                min="0.01"
+                max="5000"
+                step={doseUnit === 'mcg_kg_min' ? '0.005' : '0.1'}
+                value={customDoseValue}
+                onChange={(e) => setCustomDoseValue(Math.max(0, parseFloat(e.target.value) || 0))}
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-transparent text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500"
+              />
+
+              {/* Hızlı Doz Kısayolları */}
+              <div className="flex gap-1.5 mt-2">
+                {(doseUnit === 'mcg_kg_hr'
+                  ? [0.5, 0.7, 1.0, 1.5, 2.0, 3.0]
+                  : doseUnit === 'mcg_hr'
+                  ? [30, 50, 70, 100, 150, 200]
+                  : [0.01, 0.02, 0.03, 0.05, 0.08, 0.1]
+                ).map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setCustomDoseValue(val)}
+                    className={`flex-1 py-1 text-[11px] font-semibold rounded border transition-colors ${
+                      customDoseValue === val
+                        ? 'bg-rose-500 text-white border-rose-500'
+                        : isDark
+                        ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                        : 'border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
+                  >
+                    {val}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* EŞZAMANLI BİRİM DÖNÜŞÜMLERİ & POMPA AKIŞ HIZI GÖSTERGE KARTLARI */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                Eşzamanlı Birim Dönüşümleri &amp; İnfüzyon Hızı
+              </span>
+              <span className="text-[11px] text-slate-400">Tüm birimler senkronize çevrilir</span>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {/* mcg/kg/saat */}
+              <div
+                className={`p-4 rounded-xl border relative overflow-hidden transition-all ${
+                  doseUnit === 'mcg_kg_hr'
+                    ? 'border-rose-500 bg-rose-500/10 ring-1 ring-rose-500/30'
+                    : isDark
+                    ? 'bg-slate-900 border-slate-800'
+                    : 'bg-white border-slate-200'
+                }`}
+              >
+                <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                  <span>mcg / kg / saat</span>
+                  {doseUnit === 'mcg_kg_hr' && (
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500 text-white font-medium">Seçili</span>
+                  )}
+                </div>
+                <div className="mt-1 text-2xl font-black font-mono text-rose-600 dark:text-rose-400">
+                  {doseMcgKgHr.toFixed(2)}
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Standart YBÜ birimi
+                </div>
+              </div>
+
+              {/* mcg/saat */}
+              <div
+                className={`p-4 rounded-xl border relative overflow-hidden transition-all ${
+                  doseUnit === 'mcg_hr'
+                    ? 'border-rose-500 bg-rose-500/10 ring-1 ring-rose-500/30'
+                    : isDark
+                    ? 'bg-slate-900 border-slate-800'
+                    : 'bg-white border-slate-200'
+                }`}
+              >
+                <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                  <span>mcg / saat</span>
+                  {doseUnit === 'mcg_hr' && (
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500 text-white font-medium">Seçili</span>
+                  )}
+                </div>
+                <div className="mt-1 text-2xl font-black font-mono text-rose-600 dark:text-rose-400">
+                  {doseMcgHr.toFixed(1)}
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Toplam saatlik miktar
+                </div>
+              </div>
+
+              {/* mcg/kg/dk */}
+              <div
+                className={`p-4 rounded-xl border relative overflow-hidden transition-all ${
+                  doseUnit === 'mcg_kg_min'
+                    ? 'border-rose-500 bg-rose-500/10 ring-1 ring-rose-500/30'
+                    : isDark
+                    ? 'bg-slate-900 border-slate-800'
+                    : 'bg-white border-slate-200'
+                }`}
+              >
+                <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                  <span>mcg / kg / dk</span>
+                  {doseUnit === 'mcg_kg_min' && (
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500 text-white font-medium">Seçili</span>
+                  )}
+                </div>
+                <div className="mt-1 text-2xl font-black font-mono text-rose-600 dark:text-rose-400">
+                  {doseMcgKgMin.toFixed(3)}
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Anestezi / OR hızı
+                </div>
+              </div>
+
+              {/* Pompa Akış Hızı mL/saat */}
+              <div className="p-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 relative overflow-hidden">
+                <div className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 flex items-center justify-between">
+                  <span>Pompa Akış Hızı</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-600 text-white font-medium">İnfüzyon</span>
+                </div>
+                <div className="mt-1 text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+                  {infusionRateMlHr.toFixed(2)}{' '}
+                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">mL/saat</span>
+                </div>
+                <div className="text-[11px] text-emerald-800 dark:text-emerald-300 mt-0.5 font-medium">
+                  ~{microDropsPerMinute.toFixed(1)} mikro-damla/dk
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* YÜKLEME BOLUSU & KÜMÜLASYON / TÜKETİM BİLGİSİ */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Yükleme Bolus Ayarları & Hız Karşılığı */}
+            <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <label htmlFor={bolusCheckboxId} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    id={bolusCheckboxId}
+                    type="checkbox"
+                    checked={giveBolus}
+                    onChange={(e) => setGiveBolus(e.target.checked)}
+                    className="w-4 h-4 rounded text-rose-600 focus:ring-rose-500"
                   />
-                  <span className="absolute right-4 top-3 text-xs font-bold text-slate-400">
-                    {doseUnit === 'mcg_kg_hr' ? 'mcg/kg/saat' : doseUnit === 'mcg_hr' ? 'mcg/saat' : 'mcg/kg/dk'}
+                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                    Yükleme Dozu (Bolus) Uygula
                   </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[11px] text-slate-400 font-medium mr-1">Kısayol:</span>
-                  {[0.5, 1.0, 1.5, 2.0, 3.0].map((quickDose) => (
-                    <button
-                      key={quickDose}
-                      type="button"
-                      onClick={() => {
-                        setDoseUnit('mcg_kg_hr');
-                        setCustomDoseValue(quickDose);
-                      }}
-                      className={`px-2 py-1 rounded-md text-xs font-semibold font-mono border transition-all cursor-pointer ${
-                        doseUnit === 'mcg_kg_hr' && customDoseValue === quickDose
-                          ? 'bg-rose-600 text-white border-rose-600'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
-                      }`}
-                    >
-                      {quickDose}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* İnfüzyon Sonuç Kartları */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5">
-              <div className="p-3.5 rounded-xl border bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60">
-                <span className="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider block mb-1">
-                  İnfüzyon Hızı
-                </span>
-                <div className="text-2xl font-extrabold font-mono text-rose-600 dark:text-rose-300">
-                  {infusionRateMlHr.toFixed(2)} <span className="text-xs font-semibold">mL/sa</span>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-1">{microDropsPerMinute.toFixed(1)} mikrodamla/dk</p>
-              </div>
-
-              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block mb-1">
-                  Saatlik Doz
-                </span>
-                <div className="text-2xl font-extrabold font-mono text-slate-900 dark:text-slate-100">
-                  {doseMcgHr.toFixed(1)} <span className="text-xs font-semibold">mcg/sa</span>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-1">{doseMcgKgHr.toFixed(2)} mcg/kg/saat</p>
-              </div>
-
-              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block mb-1">
-                  Tahmini CSHT
-                </span>
-                <div className="text-2xl font-extrabold font-mono text-slate-900 dark:text-slate-100">
-                  ~{Math.round(cshtEstimateMinutes)} <span className="text-xs font-semibold">dk</span>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-1">{infusionDurationHours} sa sonra uyanma gecikmesi</p>
-              </div>
-
-              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-                <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider block mb-1">
-                  24 Sa Tüketim
-                </span>
-                <div className="text-2xl font-extrabold font-mono text-teal-600 dark:text-teal-400">
-                  ~{consumption24HrMg.toFixed(2)} <span className="text-xs font-semibold">mg</span>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-1">~{Math.ceil(vialsNeeded500mcg)} ampul (500 mcg)</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {/* MODÜL 2: HIZLI SERİ ENTÜBASYON (RSI) PREMEDİKASYON & IV BOLUS */}
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {activeCalcTool === 'rsi_bolus' && (
-          <div className="mt-5 space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-            <div className="p-4 rounded-xl border border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/50 dark:bg-indigo-950/20">
-              <span className="font-bold text-xs uppercase tracking-wider text-indigo-700 dark:text-indigo-300 block mb-1">
-                RSI Premedikasyonunun Klinik Prensibi:
-              </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                Hızlı seri entübasyonda laringoskopi uyarısı yoğun sempatik deşarja yol açarak intrakraniyal basınçta (KİBAS),
-                intraoküler basınçta ve kardiyovasküler parametrelerde (KTA, OAB) tehlikeli fırlamalara neden olur.
-                İndüksiyon ajanından <strong>3 dakika önce</strong> uygulanan fentanil, sempatik refleks arkını söndürür.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <label htmlFor={rsiDoseInputId} className="font-semibold text-xs text-slate-700 dark:text-slate-300 block">
-                  RSI Bolus Dozu (mcg/kg):
                 </label>
-                <div className="relative">
-                  <input
-                    id={rsiDoseInputId}
-                    type="number"
-                    min={0.5}
-                    max={5.0}
-                    step={0.5}
-                    value={rsiDoseMcgKg}
-                    onChange={(e) => setRsiDoseMcgKg(Math.max(0.5, parseFloat(e.target.value) || 1.5))}
-                    className="w-full px-3.5 py-2 rounded-xl border text-sm font-bold bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                  />
-                  <span className="absolute right-3.5 top-2.5 text-xs text-slate-400">mcg/kg</span>
-                </div>
-                <p className="text-[11px] text-slate-500">Standart RSI: 1.5 – 3.0 mcg/kg (KİBAS/KV riskte 3 mcg/kg)</p>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-semibold text-xs text-slate-700 dark:text-slate-300 block">
-                  Ampul Konsantrasyonu:
-                </label>
-                <select
-                  value={rsiVialConc}
-                  onChange={(e) => setRsiVialConc(parseFloat(e.target.value) || 50)}
-                  className="w-full px-3.5 py-2 rounded-xl border text-xs font-semibold bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                >
-                  <option value={50}>50 mcg/mL (Saf Standart Ampul)</option>
-                  <option value={10}>10 mcg/mL (500 mcg / 50 mL Seyreltilmiş)</option>
-                  <option value={20}>20 mcg/mL (1000 mcg / 50 mL Seyreltilmiş)</option>
-                </select>
-                <p className="text-[11px] text-slate-500">Ampulden doğrudan veya seyreltilerek çekim</p>
-              </div>
-
-              <div className="p-3.5 rounded-xl border border-indigo-300 dark:border-indigo-800 bg-white dark:bg-slate-900 space-y-1">
-                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 block uppercase tracking-wider">
-                  Hesaplanan RSI Dozu:
-                </span>
-                <div className="text-2xl font-extrabold font-mono text-slate-900 dark:text-slate-100">
-                  {totalRsiDoseMcg.toFixed(1)} <span className="text-xs font-semibold">mcg</span>
-                </div>
-                <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
-                  Hacim: {totalRsiVolumeMl.toFixed(2)} mL
-                </div>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-rose-50/40 dark:bg-rose-950/20 text-xs flex items-start gap-2 text-rose-900 dark:text-rose-200">
-              <ShieldAlert className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-              <span>
-                <strong>Hızlı Enjeksiyondan Kaçınma:</strong> RSI premedikasyonunda bu doz kesinlikle hızlı şok puşe yapılmamalıdır.
-                En az <strong>1 – 2 dakikaya yayılarak</strong> yavaşça enjekte edilmeli, indüksiyon ajanına (örn. propofol/etomidat)
-                tam 3 dakika sonra geçilmelidir.
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {/* MODÜL 3: İNTRANAZAL (IN) MUKOZAL ATOMİZASYON DOZLAYICI */}
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {activeCalcTool === 'intranasal' && (
-          <div className="mt-5 space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-            <div className="p-4 rounded-xl border border-teal-200 dark:border-teal-900/50 bg-teal-50/50 dark:bg-teal-950/20">
-              <span className="font-bold text-xs uppercase tracking-wider text-teal-700 dark:text-teal-300 block mb-1">
-                İntranazal (IN) Fentanil Analjezisinin Avantajı:
-              </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                Damaryolu açılamayan veya ajite olan pediatrik ve erişkin hastalarda (travma, kırık, yanık, acil servis)
-                Mukozal Atomizasyon Cihazı (MAD) ile nazal mukozadan uygulanır. Karaciğer ilk geçiş etkisinden kaçarak
-                <strong> 5 – 10 dakikada IV'ye yakın hızda</strong> güçlü analjezi sağlar.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <label htmlFor={inDoseInputId} className="font-semibold text-xs text-slate-700 dark:text-slate-300 block">
-                  İntranazal Doz (mcg/kg):
-                </label>
-                <div className="relative">
-                  <input
-                    id={inDoseInputId}
-                    type="number"
-                    min={0.5}
-                    max={2.5}
-                    step={0.1}
-                    value={inDoseMcgKg}
-                    onChange={(e) => setInDoseMcgKg(Math.max(0.5, parseFloat(e.target.value) || 1.5))}
-                    className="w-full px-3.5 py-2 rounded-xl border text-sm font-bold bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                  />
-                  <span className="absolute right-3.5 top-2.5 text-xs text-slate-400">mcg/kg</span>
-                </div>
-                <p className="text-[11px] text-slate-500">Standart Doz: 1.5 – 2.0 mcg/kg (Maksimum tek doz: 100 mcg)</p>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-semibold text-xs text-slate-700 dark:text-slate-300 block">
-                  Çözelti Konsantrasyonu:
-                </label>
-                <div className="px-3.5 py-2 rounded-xl border font-mono text-xs font-bold bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700">
-                  50 mcg/mL (Saf Ampul - Seyreltilmez)
-                </div>
-                <p className="text-[11px] text-slate-500">Mukozal emilim için seyreltilmemiş konsantre ampul şarttır.</p>
-              </div>
-
-              <div className="p-3.5 rounded-xl border border-teal-300 dark:border-teal-800 bg-white dark:bg-slate-900 space-y-1">
-                <span className="text-xs font-bold text-teal-600 dark:text-teal-400 block uppercase tracking-wider">
-                  Hesaplanan IN Dozu:
-                </span>
-                <div className="text-2xl font-extrabold font-mono text-slate-900 dark:text-slate-100">
-                  {Math.min(100, totalInDoseMcg).toFixed(1)} <span className="text-xs font-semibold">mcg</span>
-                </div>
-                <div className="text-xs font-bold text-teal-600 dark:text-teal-400">
-                  Toplam Hacim: {Math.min(2.0, totalInVolumeMl).toFixed(2)} mL
-                </div>
-                <p className="text-[10px] text-slate-500">
-                  Her burun deliğine: <strong>{Math.min(1.0, inVolumePerNostrilMl).toFixed(2)} mL</strong>
-                </p>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-xl border border-teal-200 dark:border-teal-900/40 bg-teal-50/40 dark:bg-teal-950/20 text-xs">
-              <span className="font-bold text-teal-800 dark:text-teal-200 block mb-0.5">Uygulama İpucu:</span>
-              <p className="text-slate-600 dark:text-slate-300">
-                1 mL'den fazla sıvı nazal mukozadan yutağa akarak yutulabilir ve etkisi gecikebilir. Bu nedenle toplam hacim
-                1 mL'yi aştığında doz iki burun deliğine bölünerek (örneğin 0.7 mL sağ, 0.7 mL sol) uygulanmalıdır.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {/* MODÜL 4: POSTOPERATİF IV-PCA PROTOKOLÜ */}
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {activeCalcTool === 'iv_pca' && (
-          <div className="mt-5 space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-            <div className="p-4 rounded-xl border border-purple-200 dark:border-purple-900/50 bg-purple-50/50 dark:bg-purple-950/20">
-              <span className="font-bold text-xs uppercase tracking-wider text-purple-700 dark:text-purple-300 block mb-1">
-                Hasta Kontrollü Analjezi (IV-PCA) Güvenlik İlkeleri:
-              </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                Hasta yataklı serviste kendi ağrı kontrolünü buton aracılığıyla sağlar. Opioid-naif hastalarda
-                <strong> bazal sürekli infüzyon verilmemelidir</strong> (uyku sırasında ölümcül apne riski).
-                Yalnızca hastanın talep ettiği bolus dozu ve güvenli kilit süresi programlanmalıdır.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <div className="space-y-1.5">
-                <label htmlFor={pcaBolusInputId} className="font-semibold text-xs text-slate-700 dark:text-slate-300 block">
-                  Talep (Bolus) Dozu (mcg):
-                </label>
-                <div className="relative">
-                  <input
-                    id={pcaBolusInputId}
-                    type="number"
-                    min={5}
-                    max={50}
-                    step={5}
-                    value={pcaBolusMcg}
-                    onChange={(e) => setPcaBolusMcg(parseFloat(e.target.value) || 10)}
-                    className="w-full px-3.5 py-2 rounded-xl border text-sm font-bold bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                  />
-                  <span className="absolute right-3.5 top-2.5 text-xs text-slate-400">mcg</span>
-                </div>
-                <p className="text-[11px] text-slate-500">Standart: 10 – 20 mcg ({pcaBolusMcgKg.toFixed(2)} mcg/kg)</p>
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor={pcaLockoutInputId} className="font-semibold text-xs text-slate-700 dark:text-slate-300 block">
-                  Kilit Süresi (Lockout dk):
-                </label>
-                <div className="relative">
-                  <input
-                    id={pcaLockoutInputId}
-                    type="number"
-                    min={5}
-                    max={20}
-                    step={1}
-                    value={pcaLockoutMin}
-                    onChange={(e) => setPcaLockoutMin(Math.max(5, parseInt(e.target.value, 10) || 6))}
-                    className="w-full px-3.5 py-2 rounded-xl border text-sm font-bold bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                  />
-                  <span className="absolute right-3.5 top-2.5 text-xs text-slate-400">dakika</span>
-                </div>
-                <p className="text-[11px] text-slate-500">Fentanil için önerilen: 5 – 8 dakika</p>
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor={pcaBasalInputId} className="font-semibold text-xs text-slate-700 dark:text-slate-300 block">
-                  Bazal İnfüzyon (mcg/saat):
-                </label>
-                <div className="relative">
-                  <input
-                    id={pcaBasalInputId}
-                    type="number"
-                    min={0}
-                    max={50}
-                    step={5}
-                    value={pcaBasalMcgHr}
-                    onChange={(e) => setPcaBasalMcgHr(parseFloat(e.target.value) || 0)}
-                    className="w-full px-3.5 py-2 rounded-xl border text-sm font-bold bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                  />
-                  <span className="absolute right-3.5 top-2.5 text-xs text-slate-400">mcg/sa</span>
-                </div>
-                <p className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">
-                  {pcaBasalMcgHr === 0 ? '✓ 0 mcg/sa (Opioid-naif güvenli)' : '⚠ Yalnızca toleran hastada!'}
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl border border-purple-300 dark:border-purple-800 bg-white dark:bg-slate-900 space-y-1">
-                <span className="text-xs font-bold text-purple-600 dark:text-purple-400 block uppercase tracking-wider">
-                  Maksimum Saatlik Kapasite:
-                </span>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-slate-100">
-                  {maxDosePerHourWithBasal} <span className="text-xs font-semibold">mcg/saat</span>
-                </div>
-                <p className="text-[10px] text-slate-500">
-                  4 Sa Sınırı: <strong>{pcaMax4HrMcg} mcg</strong> (Saatte maks {maxPossibleBolusPerHour} bolus)
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {/* MODÜL 5: TRANSDERMAL (TTS) & NÖROAKSİYEL REHBERİ */}
-        {/* ───────────────────────────────────────────────────────────────── */}
-        {activeCalcTool === 'transdermal_neuraxial' && (
-          <div className="mt-5 space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Transdermal Flaster Eşdeğerlik Hesaplayıcı */}
-              <div className="p-4 rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-amber-950/20 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs uppercase tracking-wider text-amber-800 dark:text-amber-300">
-                    Oral Morfinden TTS Flastere Geçiş:
+                {giveBolus && (
+                  <span className="text-[11px] px-2 py-0.5 rounded font-mono font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                    Aktif
                   </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-700 dark:text-amber-300">
-                    Yalnızca Toleran
-                  </span>
-                </div>
+                )}
+              </div>
 
-                <div className="space-y-1.5">
-                  <label htmlFor={morphineInputId} className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">
-                    Mevcut Günlük Oral Morfin Tüketimi (mg/gün):
-                  </label>
-                  <input
-                    id={morphineInputId}
-                    type="number"
-                    min={30}
-                    max={600}
-                    step={10}
-                    value={oralMorphineDailyMg}
-                    onChange={(e) => setOralMorphineDailyMg(parseFloat(e.target.value) || 60)}
-                    className="w-full px-3 py-1.5 rounded-lg border text-xs font-bold bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                  />
-                </div>
-
-                <div className="p-3 rounded-lg border border-amber-300 dark:border-amber-800 bg-white dark:bg-slate-900">
-                  <span className="text-[11px] font-semibold text-slate-500 block">Önerilen Başlangıç TTS Flasteri:</span>
-                  <div className="text-xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">
-                    {estimatedTtsMcgHr} mcg/saat (72 Saatte Bir Flaster Değişimi)
+              {giveBolus ? (
+                <div className="space-y-3 pt-1">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label htmlFor={bolusDoseInputId} className="text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+                        Bolus Dozu (mcg/kg)
+                      </label>
+                      <input
+                        id={bolusDoseInputId}
+                        type="number"
+                        min="0.2"
+                        max="5.0"
+                        step="0.1"
+                        value={bolusDoseMcgKg}
+                        onChange={(e) => setBolusDoseMcgKg(Math.max(0, parseFloat(e.target.value) || 0))}
+                        className="w-full mt-1 px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-transparent font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={bolusDurationInputId} className="text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+                        Bolus Süresi (dakika)
+                      </label>
+                      <input
+                        id={bolusDurationInputId}
+                        type="number"
+                        min="1"
+                        max="60"
+                        step="1"
+                        value={bolusDurationMin}
+                        onChange={(e) => setBolusDurationMin(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="w-full mt-1 px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-transparent font-semibold"
+                      />
+                    </div>
                   </div>
-                  <p className="text-[10px] text-slate-500 mt-1">
-                    İlk flaster yapıştırıldıktan sonra kararlı plazma düzeyine 12-24 saatte ulaşılır; bu sürede geçiş analjezisi sürdürülmelidir.
+
+                  <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-xs space-y-1.5">
+                    <div className="flex justify-between items-center text-amber-900 dark:text-amber-300 font-bold">
+                      <span>Bolus Pompa Akış Hızı ({bolusDurationMin} dk):</span>
+                      <span className="font-mono text-sm">{bolusPumpRateMlHr.toFixed(1)} mL/saat</span>
+                    </div>
+                    <div className="flex justify-between items-center text-amber-800 dark:text-amber-400">
+                      <span>Bolus Esnasındaki Eşdeğer Hız:</span>
+                      <span className="font-mono font-bold">{bolusEquivalentRateMcgKgHr.toFixed(1)} mcg/kg/saat</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 text-[11px] pt-1 border-t border-amber-500/20">
+                      <span>Toplam Verilecek Bolus:</span>
+                      <span className="font-mono font-bold text-slate-900 dark:text-slate-100">
+                        {totalBolusDoseMcg.toFixed(1)} mcg ({totalBolusVolumeMl.toFixed(2)} mL)
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 italic">
+                    Kronometre tutarak {bolusDurationMin} dakika sonunda pompayı idame hızına ({infusionRateMlHr.toFixed(2)} mL/saat) düşebilirsiniz.
                   </p>
                 </div>
+              ) : (
+                <p className="text-xs text-slate-500 dark:text-slate-400 italic py-2">
+                  Yükleme bolusu kapalı. Doğrudan idame infüzyon hızıyla ({infusionRateMlHr.toFixed(2)} mL/saat) başlanacaktır.
+                </p>
+              )}
+            </div>
+
+            {/* Kümülasyon (CSHT) ve 24 Saatlik İhtiyaç */}
+            <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                  Bağlam Duyarlı Yarı Ömür (CSHT) &amp; Tüketim
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <label htmlFor={durationInputId} className="text-[11px] text-slate-500">
+                    Süre:
+                  </label>
+                  <input
+                    id={durationInputId}
+                    type="number"
+                    min="1"
+                    max="168"
+                    value={infusionDurationHours}
+                    onChange={(e) => setInfusionDurationHours(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="w-14 px-1.5 py-0.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-transparent font-semibold font-mono text-center"
+                  />
+                  <span className="text-[11px] text-slate-500">saat</span>
+                </div>
               </div>
 
-              {/* Nöroaksiyel Doz Parametreleri */}
-              <div className="p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-950/20 space-y-3">
-                <span className="font-bold text-xs uppercase tracking-wider text-emerald-800 dark:text-emerald-300 block">
-                  Nöroaksiyel Doz Parametreleri Kılavuzu:
-                </span>
-
-                <div className="space-y-2 text-xs">
-                  <div className="p-2.5 rounded-lg border border-emerald-300 dark:border-emerald-800 bg-white dark:bg-slate-900">
-                    <span className="font-bold text-slate-900 dark:text-slate-100 block">Spinal / İntratekal:</span>
-                    <p className="text-slate-600 dark:text-slate-300 mt-0.5">
-                      <strong>10 – 25 mcg (0.2 – 0.5 mL)</strong> tek doz hiperbarik bupivakaine eklenir. Sezaryen ve alt ekstremite
-                      cerrahisinde visceral ağrıyı keser ve 4-6 saat postop analjezi sağlar.
-                    </p>
+              <div className="space-y-2 text-xs">
+                <div className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-slate-600 dark:text-slate-400">Tahmini CSHT:</span>
+                    <span
+                      className={`font-mono font-bold ${
+                        cshtWarningLevel === 'high'
+                          ? 'text-rose-600 dark:text-rose-400'
+                          : cshtWarningLevel === 'moderate'
+                          ? 'text-amber-600 dark:text-amber-400'
+                          : 'text-emerald-600 dark:text-emerald-400'
+                      }`}
+                    >
+                      ~{Math.round(cshtEstimateMinutes)} dakika
+                    </span>
                   </div>
+                  <p className="text-[11px] text-slate-500 leading-relaxed">{cshtWarningText}</p>
+                </div>
 
-                  <div className="p-2.5 rounded-lg border border-emerald-300 dark:border-emerald-800 bg-white dark:bg-slate-900">
-                    <span className="font-bold text-slate-900 dark:text-slate-100 block">Epidural / PCEA:</span>
-                    <p className="text-slate-600 dark:text-slate-300 mt-0.5">
-                      Bupivakain %0.0625 - %0.125 içine <strong>2 mcg/mL fentanil</strong> katılır.
-                      Bolus 5-10 mL (10-20 mcg), kilit 10-15 dk, bazal 4-8 mL/saat.
-                    </p>
-                  </div>
+                <div className="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-800/60 font-mono text-xs">
+                  <span className="text-slate-600 dark:text-slate-400 font-sans">24 Saatlik Fentanil İhtiyacı:</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100">
+                    {consumption24HrMg.toFixed(2)} mg (~{Math.ceil(vialsNeeded500mcg)} ampul [500 mcg/10 mL])
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}

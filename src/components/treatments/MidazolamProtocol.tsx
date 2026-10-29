@@ -367,9 +367,6 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30">
                   GABA-A Allosterik Modülatörü
                 </span>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-mono">
-                  13 Basamaklı Monografi
-                </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                 Kısa etkili suda çözünür imidazobenzodiazepin; sedasyon, anterograd amnezi, akut nöbet, akut ciddi ajitasyon, toksikolojik intoksikasyonlar (kokain/amfetamin) ve alkol yoksunluğu (deliryum tremens) yönetimi.

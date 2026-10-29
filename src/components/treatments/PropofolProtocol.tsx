@@ -312,9 +312,6 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/30">
                   Sedatif / Genel Anestezik
                 </span>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-mono">
-                  13 Basamaklı Monografi
-                </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                 Kısa etkili intravenöz hipnotik ajan; anestezi indüksiyonu ve idamesi (TIVA), mekanik ventilatörlü yoğun bakım sedasyonu, prosedürel sedasyon ve PRIS / lipid kalori yönetimi.
