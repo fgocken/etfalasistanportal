@@ -8,8 +8,6 @@ import {
   Info,
   CheckCircle2,
   ExternalLink,
-  Copy,
-  Check,
   RotateCcw,
   Activity,
   HeartPulse,
@@ -142,7 +140,6 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
 
   // UI Durumları
   const [pkOpen, setPkOpen] = useState<boolean>(false);
-  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
 
   // Benzersiz ID'ler
   const weightInputId = useId();
@@ -247,45 +244,6 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
   const totalBolusesMl = intralipidBolusMl * lastRefractoryArrests;
   const remainingSafetyBudgetMl = Math.max(0, intralipidMaxCeilingMl - totalBolusesMl);
 
-  const copyDoseSummary = () => {
-    let summaryText = '';
-    if (activeCalcTool === 'local_infiltration') {
-      summaryText = `LİDOKAİN GÜVENLİ LOKAL DOZ PLANI:
-Hasta Kilosu: ${weightKg} kg (${patientProfile})
-Solüsyon: ${solutionType === 'with_epinephrine' ? 'Adrenalinli (1:200.000)' : 'Saf Lidokain'} %${concentrationPercent}
-Maksimum İzin Verilen Doz: ${calculatedMaxDoseMg.toFixed(1)} mg (${maxVolumeMl.toFixed(1)} mL)
-Planlanan Hacim: ${plannedVolumeMl} mL (${plannedDoseMg} mg - Güvenlik Limiti: %${plannedDosePercent})
-Tamponlama Formülü: ${bufferLidoMl} mL Lidokain + ${bufferBicarbMl} mL %8.4 NaHCO3`;
-    } else if (activeCalcTool === 'acls_arrhythmia') {
-      summaryText = `LİDOKAİN ACLS / ARİTMİ PROTOKOLÜ:
-Hasta Kilosu: ${weightKg} kg
-Arrest VF/pVT 1. Bolus: ${arrestInitialMg.toFixed(1)} mg (${arrestInitialMl_2pct.toFixed(1)} mL %2 Aritmal) IV/IO
-Arrest Refrakter Ek Bolus: ${arrestRepeatMg.toFixed(1)} mg (${arrestRepeatMl_2pct.toFixed(1)} mL %2 Aritmal)
-Maksimum Kümülatif Doz: ${arrestMaxCumulativeMg.toFixed(1)} mg
-RSI KİB Premedikasyonu: ${rsiPremedMg.toFixed(1)} mg (${rsiPremedMl_2pct.toFixed(1)} mL) indüksiyondan 2-3 dk önce
-Nabızlı VT İdame İnfüzyon: ${vtInfusionMgMin} mg/dk = ${vtMgHr} mg/saat (2 mg/mL solüsyonda ${vtPumpMlHr_2mgml.toFixed(1)} mL/saat)`;
-    } else if (activeCalcTool === 'systemic_infusion') {
-      summaryText = `LİDOKAİN SİSTEMİK PERİOPERATİF İNFÜZYON (OPİOİD KORUYUCU):
-Hasta Kilosu: ${weightKg} kg
-Yükleme Bolusu: ${ivLoadTotalMg} mg (${ivLoadMl_2pct} mL %2 Aritmal) 10-15 dakikada
-İdame Dozu: ${ivMaintMgKgHr} mg/kg/saat (${ivMaintTotalMgHr} mg/saat)
-İnfüzyon Hazırlığı: ${ivBagPrep === '500ml_1000mg' ? '500 mL SF + 1000 mg (2 mg/mL)' : ivBagPrep === '500ml_2000mg' ? '500 mL SF + 2000 mg (4 mg/mL)' : 'Saf %2 Ampul (20 mg/mL)'}
-İnfüzyon Pompası Hızı: ${ivPumpRateMlHr} mL/saat
-24 Saatlik Tahmini Doz: ${iv24HourCumulativeMg} mg`;
-    } else {
-      summaryText = `ASRA LAST (%20 İNTRALİPİD) ACİL KURTARMA PROTOKOLÜ:
-Hasta Kilosu: ${weightKg} kg
-İlk Bolus: ${intralipidBolusMl} mL %20 Lipid Emülsiyonu 1 dakikada IV puşe
-Refrakter Arrest: 1-2 kez daha ${intralipidBolusMl} mL bolus tekrarlanabilir
-Sürekli İnfüzyon: ${intralipidInfusionRateMlHr} mL/saat (${intralipidInfusionRateMlMin} mL/dk)
-Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sınır)`;
-    }
-
-    navigator.clipboard.writeText(summaryText);
-    setCopiedSummary(true);
-    setTimeout(() => setCopiedSummary(false), 2500);
-  };
-
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* =========================================================================
@@ -305,40 +263,24 @@ Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sın�
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                  Lidokain
-                </h2>
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/40 font-mono">
-                  Lidocaine · Lignocaine
+                  Amid Tipi Lokal Anestezik · Sınıf Ib Antiaritmik
+                </span>
+                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/30">
+                  ATC: C01BB01 / N01BB02
                 </span>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/30">
-                  Aritmal · Jetokain · Lidonest
+                  ARITMAL · JETMONAL · JETOKAİN · VEMCAINE · ANESTOL
                 </span>
               </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
+                Lidokain (ARITMAL, JETMONAL, JETOKAİN, VEMCAINE, ANESTOL)
+              </h1>
               <p className="text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
                 Amid yapılı prototip lokal anestezik ve Vaughan Williams Sınıf Ib antiaritmik ajan.
                 Voltaj kapılı hızlı sodyum kanallarının (Nav1.5) faz 0 blokajıyla etki gösterir;
                 lokal infiltrasyon, rejyonel sinir blokları, RSI KİB premedikasyonu, postop opioid koruyucu sistemik IV analjezi ve refrakter VF/VT ACLS resüsitasyonunda kullanılır.
               </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={copyDoseSummary}
-              className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer border ${
-                copiedSummary
-                  ? 'bg-emerald-600 border-emerald-500 text-white'
-                  : 'bg-blue-600 hover:bg-blue-700 border-blue-500 text-white shadow-md shadow-blue-600/30'
-              }`}
-            >
-              {copiedSummary ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              <span>{copiedSummary ? 'Protokol Kopyalandı' : 'Hesaplanan Protokolü Kopyala'}</span>
-            </button>
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
-              <span>ASRA LAST &amp; AHA/ERC Kılavuz Onaylı</span>
             </div>
           </div>
         </div>
@@ -408,58 +350,7 @@ Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sın�
       </div>
 
       {/* =========================================================================
-          BÖLÜM 2: HIZLI ERİŞİM VE İÇİNDEKİLER
-          ========================================================================= */}
-      <div
-        className={`p-4 rounded-xl border flex flex-wrap items-center justify-between gap-3 text-xs ${
-          isDark ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-        }`}
-      >
-        <span className="font-bold flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
-          <BookOpen className="w-4 h-4" />
-          <span>13 Bölümlük Tam Monografi:</span>
-        </span>
-        <div className="flex flex-wrap items-center gap-1.5 font-medium">
-          <a href="#sec-etki" className="px-2.5 py-1 rounded-md hover:bg-blue-500/15 hover:text-blue-500 transition-colors">
-            3. Farmakoloji
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-endikasyon" className="px-2.5 py-1 rounded-md hover:bg-blue-500/15 hover:text-blue-500 transition-colors">
-            4. Endikasyonlar
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-dozaj" className="px-2.5 py-1 rounded-md hover:bg-blue-500/15 hover:text-blue-500 transition-colors">
-            5. Dozaj Tablosu
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-hesaplayici" className="px-2.5 py-1 rounded-md bg-blue-500/15 text-blue-600 dark:text-blue-300 font-bold border border-blue-500/30">
-            6. Akıllı Hesaplayıcı
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-tamponlama" className="px-2.5 py-1 rounded-md hover:bg-blue-500/15 hover:text-blue-500 transition-colors">
-            7. Tamponlama
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-kontrendikasyon" className="px-2.5 py-1 rounded-md hover:bg-blue-500/15 hover:text-blue-500 transition-colors">
-            8. Kontrendikasyonlar
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-last" className="px-2.5 py-1 rounded-md text-rose-600 dark:text-rose-400 font-bold hover:bg-rose-500/15 transition-colors">
-            9. LAST Toksisitesi
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-pearls" className="px-2.5 py-1 rounded-md hover:bg-blue-500/15 hover:text-blue-500 transition-colors">
-            10. Klinik İpuçları
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-kaynaklar" className="px-2.5 py-1 rounded-md hover:bg-blue-500/15 hover:text-blue-500 transition-colors">
-            13. Kaynakça
-          </a>
-        </div>
-      </div>
-
-      {/* =========================================================================
-          BÖLÜM 3: FARMAKOLOJİK PROFİL VE ETKİ MEKANİZMASI
+          BÖLÜM 2: FARMAKODİNAMİK VE ETKİ MEKANİZMASI
           ========================================================================= */}
       <section
         id="sec-etki"
@@ -473,10 +364,10 @@ Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sın�
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              3. Farmakolojik Profil &amp; Moleküler Etki Mekanizması
+              Farmakodinamik ve Moleküler Etki Mekanizması
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Hızlı voltaj bağımlı sodyum kanal blokajı, faz 0 depolarizasyon inhibisyonu ve nosiseptif iletimin durdurulması
+              Nav1.5 voltaj kapılı sodyum kanal blokajı, faz 0 inhibisyonu, antiaritmik ve sistemik anti-enflamatuar etki
             </p>
           </div>
         </div>
@@ -532,6 +423,124 @@ Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sın�
             </p>
           </div>
         </div>
+      </section>
+
+      {/* =========================================================================
+          BÖLÜM 3: FARMAKOKİNETİK PROFİLİ
+          ========================================================================= */}
+      <section
+        className={`rounded-2xl border transition-all overflow-hidden ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setPkOpen(!pkOpen)}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-blue-500/10 text-blue-500">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100">
+                  Farmakokinetik Profili
+                </span>
+                <span className="text-[11px] px-2 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                  {pkOpen ? 'Gizle' : 'Genişletmek için tıklayın'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Onset, peak, doku difüzyonu, protein bağlanması (AAG), hepatik CYP1A2/3A4 metabolizması ve aktif MEGX
+              </p>
+            </div>
+          </div>
+          <div className="text-slate-400">
+            {pkOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </div>
+        </button>
+
+        {pkOpen && (
+          <div className="p-5 sm:p-6 border-t border-slate-200 dark:border-slate-800 space-y-4 text-xs sm:text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Etki Başlangıcı (Onset)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">1 – 2 Dakika (Lokal) / 45-90 sn (IV)</span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Topikal mukozal: 2–5 dk; Epidural: 5–15 dk; Sinir bloğu: 5–10 dk.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Pik Etki (Peak)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">1 – 3 Dakika (IV)</span>
+                <p className="text-[11px] text-slate-500 mt-1">Lokal infiltrasyonda tam anestezi 5 dakikada yerleşir.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Etki Süresi
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">30 – 60 Dakika (Saf) / 2–4 Saat (+Adrenalin)</span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Damarsal absorbsiyon hızı bölgenin vaskülaritesine bağlıdır (interkostal &gt; kaudal &gt; epidural &gt; brakial &gt; cilt altı).
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Dağılım Hacmi (Vd)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">1.3 – 1.5 L/kg</span>
+                <p className="text-[11px] text-slate-500 mt-1">Hızla vasküler organlara (beyin, kalp, akciğer) ve ardından kas/yağa dağılır.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Protein Bağlanması
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">%60 – %80</span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Esas olarak α₁-asit glikoproteine (AAG) ve sekonder albümine bağlanır. Asidozda serbest fraksiyon katlanır.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Eliminasyon Yarı Ömrü (t½β)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
+                  1.5 – 2.0 Saat
+                </span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Karaciğer sirozunda veya kalp yetmezliğinde yarı ömür 4–10 saate kadar uzayabilir.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 space-y-2">
+              <span className="font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                Hepatik Biyotransformasyon &amp; Toksik MEGX Metaboliti:
+              </span>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>Hepatik CYP1A2 ve CYP3A4 Dealkilasyonu:</strong> Lidokain karaciğerde mikrozomal enzimler tarafından <em>monoetilglisinksilidid (MEGX)</em> ve ardından <em>glisinksilidid (GX)</em>'e dönüştürülür.
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>MEGX Toksisitesi:</strong> MEGX, lidokainin yaklaşık %80'i kadar antiaritmik ve konvülzan potansiyele sahiptir. Böbrek yetmezliğinde veya 24 saatten uzun süren sistemik IV infüzyonlarda MEGX birikerek santral sinir sistemi toksisitesini (sedasyon, nöbet) presipite eder.
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>Ekskresyon:</strong> Dozun %90'ından fazlası karaciğerde metabolize edildikten sonra metabolitler halinde idrarla atılır; &lt;%10 değişmemiş ilaç olarak böbreklerden atılır.
+              </p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* =========================================================================
@@ -810,6 +819,15 @@ Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sın�
                 <td className="p-3 font-mono text-amber-600 dark:text-amber-400 font-bold">4 mg/dk</td>
                 <td className="p-3">1–1.5 mg/kg IV yükleme bolusu sonrasında ventriküler ektopi nüksünü önlemek için infüze edilir.</td>
               </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">Oral / Mukozal Analjezi (Mukozit / Farenjit)</td>
+                <td className="p-3 font-mono">%2 Visköz Oral Solüsyon</td>
+                <td className="p-3 font-mono font-bold text-sky-600 dark:text-sky-400">
+                  <DoseHover doseText="5 – 15 mL gargara / yutma" equivText="100 – 300 mg lidokain (her 3–4 saatte bir, max 8 doz/gün)" explanation="Yutulacaksa aspirasyon ve faringeal duyu kaybı riski gözetilmelidir" />
+                </td>
+                <td className="p-3 font-mono text-sky-600 dark:text-sky-400 font-bold">2.4 g / gün</td>
+                <td className="p-3">Ağız ve boğaz ağrısı, radyasyon mukoziti. Uygulamadan sonra en az 60 dk yeme/içme yasaktır (faringeal hissizlik ve aspirasyon riski).</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -844,21 +862,6 @@ Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sın�
                 Lokal güvenli hacim, ACLS resüsitasyonu, perioperatif infüzyon pompası ve ASRA LAST İntralipid acil kurtarma
               </p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={copyDoseSummary}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
-                copiedSummary
-                  ? 'bg-emerald-600 text-white border-emerald-500'
-                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-700'
-              }`}
-            >
-              {copiedSummary ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedSummary ? 'Kopyalandı' : 'Hesabı Kopyala'}</span>
-            </button>
           </div>
         </div>
 
@@ -1790,87 +1793,87 @@ Maksimum Güvenli Toplam Doz: ${intralipidMaxCeilingMl} mL (12 mL/kg tavan sın�
       {/* =========================================================================
           BÖLÜM 10: KRİTİK KLİNİK İPUÇLARI VE "PEARL"LER
           ========================================================================= */}
+      {/* =========================================================================
+          BÖLÜM 10: GEBELİK VE LAKTASYON KILAVUZU
+          ========================================================================= */}
       <section
-        id="sec-pearls"
+        id="sec-pregnancy"
         className={`p-6 rounded-2xl border space-y-6 ${
           isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
         <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-            <Sparkles className="w-5 h-5" />
+          <div className="p-2 rounded-lg bg-pink-500/15 text-pink-600 dark:text-pink-400">
+            <HeartPulse className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              10. Kritik Klinik İpuçları &amp; "Pearl"ler
+              10. Gebelik ve Laktasyon Kılavuzu
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Anestezi ve acil pratiğinde hayat kurtaran pratik kurallar
+              Obstetrik anestezi, plasental transfer, fetal iyon tuzağı ve emzirme güvenliği
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+            <span className="font-bold text-pink-600 dark:text-pink-400 flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4" />
+              <span>FDA Gebelik Kategorisi B</span>
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Hayvan çalışmalarında teratojenite veya fetal zarar gösterilmemiştir. İnsanlarda lokal infiltrasyon, periferik blok ve epidural/spinal obstetrik uygulamalarda uzun yıllara dayanan güvenlik profiline sahiptir.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 space-y-2">
+            <span className="font-bold text-rose-700 dark:text-rose-400 flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4" />
+              <span>Fetal İyon Tuzağı (Ion Trapping)</span>
+            </span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              Lidokain zayıf bazik bir moleküldür (pKa 7.9) ve plasentayı hızla geçer. Fetal asidoz durumunda (ör. fetal distres, asfiksi), fötus tarafında molekül iyonize forma döner ve maternal dolaşıma geri dönemez (iyon tuzağı). Fetal asidozda yüksek maternal dozlardan kaçınılmalıdır.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
               <Syringe className="w-4 h-4" />
-              <span>Propofol Enjeksiyon Ağrısını Önleme</span>
+              <span>Obstetrik &amp; Sezaryen Anestezisi</span>
             </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Propofol öncesinde kola turnike uygulanıp <strong>0.5 mg/kg (20–40 mg) lidokain</strong> IV verilir ve 30–60 saniye venöz oklüzyonda tutulduktan sonra turnike açılıp propofol verilirse enjeksiyon yanması %80–90 oranında engellenir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-              <Wind className="w-4 h-4" />
-              <span>%10 Sprey Aşırı Doz Tuzağı</span>
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Vemcaine %10 spreyin her bir basımı (pufu) tam <strong>10 mg lidokain</strong> fışkırtır.
-              Örneğin 20 puf sıkan hekim hastaya 200 mg lidokaini mukozadan emdirmiştir. 50 kg'lık bir hastada 25 puf maksimum doza ulaşır!
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
-              <Droplet className="w-4 h-4" />
-              <span>Bier Bloku (IVRA) Turnike Emniyeti</span>
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Cerrahi 10 dakikada bitse dahi turnike kesinlikle açılmamalıdır! Minimum <strong>20–25 dakika</strong> beklenmeli, ardından deflasyon-enflasyon (intermittan gevşetme) yapılarak sistemik dolaşıma kademeli salınmalıdır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
-              <Zap className="w-4 h-4" />
-              <span>Doku Asidozunda Neden Tutmaz?</span>
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Abse drenajında lokal anestezi yetersiz kalır; çünkü asit pH (5.5) lidokaini iyonize forma çevirir. Çözüm: Absenin içine değil, <strong>çevresindeki sağlıklı dokuya infiltrasyon</strong> yapmak veya alanı sodyum bikarbonatla tamponlamaktır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-              <HeartPulse className="w-4 h-4" />
-              <span>Amiodaron mu Lidokain mi?</span>
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              AHA 2020 ACLS güncellemesinde refrakter VF/pVT resüsitasyonunda Lidokain ve Amiodaron denk etkinlikte kabul edilmiştir.
-              Lidokain özellikle iskemik miyokard zeminindeki aritmilerde ve uzamış QT intervali olan olgularda daha güvenlidir.
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Epidural doğum analjezisinde veya acil sezaryen cerrahi bloğu genişletmesinde (%2 Lidokain + Adrenalin + Bikarbonat) hızlı başlangıç için güvenle kullanılır. Paraservikal blokta ise fetal bradikardi riski nedeniyle tercih edilmemelidir.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
             <span className="font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
-              <Flame className="w-4 h-4" />
-              <span>LAST'ta Nöbet Yönetimi</span>
+              <Droplet className="w-4 h-4" />
+              <span>Laktasyon &amp; Emzirme Güvenliği</span>
             </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Lokal anestezik nöbetinde birinci tercih <strong>Benzodiazepinlerdir (Midazolam 2.5–5 mg IV)</strong>.
-              Propofol miyokard depresyonunu artırabileceği için hemodinamik stabil olmayan veya şüpheli arrest hastalarında tercih edilmemelidir.
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Anne sütüne geçiş düşüktür (Süt/Plazma oranı ~0.4; Relatif İnfant Dozu [RID] &lt; %1.5). Maternal lokal veya kısa süreli sistemik uygulamadan sonra sütü sağmaya ("pump and dump") gerek yoktur; anne bebeği güvenle emzirebilir.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+              <Eye className="w-4 h-4" />
+              <span>Neonatal Toksisite İzlemi</span>
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Yüksek maternal dozlarda veya acil doğum öncesi boluslarda yenidoğanda geçici hipotoni, apne ve bradikardi görülebilir. Doğumda Apgar skoru ve yenidoğan vital parametreleri yakından izlenmelidir.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+              <Activity className="w-4 h-4" />
+              <span>Sistemik IV İnfüzyonda Önlem</span>
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Opioid koruyucu sürekli IV lidokain infüzyonu gebelikte yeterli güvenlik kanıtı bulunmadığından rutin obstetrik analjezide önerilmez. Rejyonel nöroaksiyel teknikler her zaman birinci basamaktır.
             </p>
           </div>
         </div>

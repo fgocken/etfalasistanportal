@@ -300,7 +300,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     category: 'medications',
     categories: ['medications', 'sedation'],
     categoryLabel: 'Sedoanaljezi',
-    badge: 'Talinat · Sentetik Opioid',
+    badge: 'TALINAT · FENTAVER · DUROGESIC',
     title: 'Fentanil',
     shortDesc: 'Yüksek potensli lipofilik μ-agonist, CYP3A4 metabolizması, kümülasyon sayacı, cerrahi ve YBÜ analgosedasyonu için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
     status: 'active',
@@ -632,13 +632,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
                   {activeProtocolId ? selectedProtocol?.title : 'Tedaviler ve İlaçlar'}
                 </h1>
-                {!['dexmedetomidine', 'remifentanil'].includes(activeProtocolId || '') && (
+                {!['dexmedetomidine', 'remifentanil', 'fentanyl'].includes(activeProtocolId || '') && (
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 font-mono">
                     {activeProtocolId ? 'Protokol Detayı' : 'Klinik Protokoller'}
                   </span>
                 )}
               </div>
-              {!['dexmedetomidine', 'remifentanil'].includes(activeProtocolId || '') && (
+              {!['dexmedetomidine', 'remifentanil', 'fentanyl'].includes(activeProtocolId || '') && (
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   {activeProtocolId
                     ? 'Protokolü kapatıp listeye dönmek için geri butonunu kullanabilir veya alt sekmelerle görünümü özelleştirebilirsiniz.'

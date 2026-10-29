@@ -8,8 +8,6 @@ import {
   Info,
   CheckCircle2,
   ExternalLink,
-  Copy,
-  Check,
   RotateCcw,
   Activity,
   HeartPulse,
@@ -136,7 +134,6 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
 
   // UI Durumları
   const [pkOpen, setPkOpen] = useState<boolean>(false);
-  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
 
   // Benzersiz ID'ler
   const weightInputId = useId();
@@ -233,41 +230,6 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
   const asthmaBolusMg = Math.round(weightKg * 1.5 * 10) / 10;
   const asthmaInfusionMgHr = Math.round(weightKg * 1.5 * 10) / 10;
 
-  const copyDoseSummary = () => {
-    let summaryText = '';
-    if (activeCalcTool === 'rsi_and_procedural') {
-      summaryText = `KETAMİN RSI & PROSEDÜREL SEDASYON PLANI:
-Hasta Kilosu: ${weightKg} kg (${patientProfile})
-RSI İndüksiyon Dozu: ${rsiTotalMg} mg (${rsiTotalMl_50mgml} mL Ketalar %5) IV
-Prosedürel IV Sedasyon: ${procIvTotalMg} mg (${procIvTotalMl_50mgml} mL) IV (0.5–1.0 mg/kg)
-Prosedürel IM Sedasyon: ${procImTotalMg} mg (${procImTotalMl_50mgml} mL) IM (3–5 mg/kg)
-Klinik Amaç: Spontan solunum ve hava yolu refleksleri korunarak dissosiyatif anestezi.`;
-    } else if (activeCalcTool === 'ketofol_mix') {
-      summaryText = `KETOFOL (KETAMİN + PROPOFOL) KARIŞIM PROTOKOLÜ:
-Oran: ${ketofolRatio === '1_to_1' ? '1:1 (Eşit Potens)' : ketofolRatio === '1_to_2' ? '1:2 Oranı' : '1:4 Oranı'}
-Hazırlık Formülü: ${ketofolPrepDescription}
-Uygulanan Doz (${ketofolTargetDoseMl} mL): ${ketofolDeliveredKetaminMg} mg Ketamin + ${ketofolDeliveredPropofolMg} mg Propofol
-Klinik Avantaj: Propofol kaynaklı hipotansiyonu ve ketamin kaynaklı halüsinasyonları dengeler.`;
-    } else if (activeCalcTool === 'subdissociative_pain_and_infusion') {
-      summaryText = `KETAMİN SUB-DİSSOSİYATİF AĞRI & İNFÜZYON PLANI:
-Hasta Kilosu: ${weightKg} kg
-Akut Ağrı Yükleme Bolusu: ${subdissociativeTotalMg} mg (${subdissociativeBolusMgKg} mg/kg) 100 mL SF içinde 15 dakikada
-İdame İnfüzyon Hızı: ${infusionHourlyMg} mg/saat (${infusionRateMgKgHr} mg/kg/saat)
-İnfüzyon Pompası Hızı: ${infusionPumpRateMlHr} mL/saat (${infusionConcMgMl} mg/mL çözelti)
-24 Saatlik Kümülatif Doz: ${infusion24HrMg} mg`;
-    } else {
-      summaryText = `KETAMİN AKUT AJİTASYON & ASTIM ACİL MÜDAHALE:
-Hasta Kilosu: ${weightKg} kg
-Acil IM Sedasyon (Deliryum): ${agitationImTotalMg} mg (${agitationImTotalMl} mL Ketalar %5 IM)
-Acil IV Sedasyon: ${agitationIvTotalMg} mg (${agitationIvTotalMl} mL Ketalar %5 IV)
-Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr} mg/saat infüzyon`;
-    }
-
-    navigator.clipboard.writeText(summaryText);
-    setCopiedSummary(true);
-    setTimeout(() => setCopiedSummary(false), 2500);
-  };
-
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* =========================================================================
@@ -287,40 +249,24 @@ Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr}
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                  Ketamin
-                </h2>
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/40 font-mono">
-                  Ketamine Hydrochloride · S(+) &amp; Rasemik
+                  NMDA Antagonisti · Disosiyatif Anestezik
+                </span>
+                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/30">
+                  ATC: N01AX03
                 </span>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30">
-                  Ketalar · Ketanest · Spravato
+                  KETALAR · KETANEST · SPRAVATO
                 </span>
               </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
+                Ketamin (KETALAR, KETANEST, SPRAVATO)
+              </h1>
               <p className="text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
                 NMDA reseptör antagonisti, fenilpiperazin türevi disosiyatif anestezi ve analjezik ajan.
                 Talamokortikal ve limbik sistem disosiasyonu yaratarak hasta uyanık görünürken derin analjezi ve amnezi sağlar;
                 faringeal-laringeal refleksleri ve spontan solunumu korur, sempatik deşarj ile bronkodilatasyon ve hemodinamik stabilite sağlar.
               </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={copyDoseSummary}
-              className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer border ${
-                copiedSummary
-                  ? 'bg-emerald-600 border-emerald-500 text-white'
-                  : 'bg-indigo-600 hover:bg-indigo-700 border-indigo-500 text-white shadow-md shadow-indigo-600/30'
-              }`}
-            >
-              {copiedSummary ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              <span>{copiedSummary ? 'Protokol Kopyalandı' : 'Hesaplanan Protokolü Kopyala'}</span>
-            </button>
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
-              <span>ACEP, ASA &amp; SCCM PADIS Kılavuz Onaylı</span>
             </div>
           </div>
         </div>
@@ -390,58 +336,7 @@ Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr}
       </div>
 
       {/* =========================================================================
-          BÖLÜM 2: HIZLI ERİŞİM VE İÇİNDEKİLER
-          ========================================================================= */}
-      <div
-        className={`p-4 rounded-xl border flex flex-wrap items-center justify-between gap-3 text-xs ${
-          isDark ? 'bg-slate-900/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-        }`}
-      >
-        <span className="font-bold flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400">
-          <BookOpen className="w-4 h-4" />
-          <span>13 Bölümlük Tam Monografi:</span>
-        </span>
-        <div className="flex flex-wrap items-center gap-1.5 font-medium">
-          <a href="#sec-etki" className="px-2.5 py-1 rounded-md hover:bg-indigo-500/15 hover:text-indigo-500 transition-colors">
-            3. Farmakoloji
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-endikasyon" className="px-2.5 py-1 rounded-md hover:bg-indigo-500/15 hover:text-indigo-500 transition-colors">
-            4. Endikasyonlar
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-dozaj" className="px-2.5 py-1 rounded-md hover:bg-indigo-500/15 hover:text-indigo-500 transition-colors">
-            5. Dozaj Tablosu
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-hesaplayici" className="px-2.5 py-1 rounded-md bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-bold border border-indigo-500/30">
-            6. Akıllı Hesaplayıcı (Ketofol Dahil)
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-hazirlama" className="px-2.5 py-1 rounded-md hover:bg-indigo-500/15 hover:text-indigo-500 transition-colors">
-            7. Hazırlama &amp; Ketofol
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-kontrendikasyon" className="px-2.5 py-1 rounded-md hover:bg-indigo-500/15 hover:text-indigo-500 transition-colors">
-            8. Kontrendikasyonlar
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-emergence" className="px-2.5 py-1 rounded-md text-purple-600 dark:text-purple-400 font-bold hover:bg-purple-500/15 transition-colors">
-            9. Uyanma Deliryumu
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-pearls" className="px-2.5 py-1 rounded-md hover:bg-indigo-500/15 hover:text-indigo-500 transition-colors">
-            10. Klinik İpuçları
-          </a>
-          <span className="text-slate-300 dark:text-slate-700">·</span>
-          <a href="#sec-kaynaklar" className="px-2.5 py-1 rounded-md hover:bg-indigo-500/15 hover:text-indigo-500 transition-colors">
-            13. Kaynakça
-          </a>
-        </div>
-      </div>
-
-      {/* =========================================================================
-          BÖLÜM 3: FARMAKOLOJİK PROFİL VE ETKİ MEKANİZMASI
+          BÖLÜM 2: FARMAKODİNAMİK VE ETKİ MEKANİZMASI
           ========================================================================= */}
       <section
         id="sec-etki"
@@ -455,7 +350,7 @@ Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr}
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              3. Farmakolojik Profil &amp; Disosiyatif Etki Mekanizması
+              Farmakodinamik ve Disosiyatif Etki Mekanizması
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               NMDA reseptör blokajı, talamokortikal disosiasyon, santral sensitizasyon inhibisyonu ve sempatik deşarj
@@ -512,6 +407,124 @@ Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr}
             </p>
           </div>
         </div>
+      </section>
+
+      {/* =========================================================================
+          BÖLÜM 3: FARMAKOKİNETİK PROFİLİ
+          ========================================================================= */}
+      <section
+        className={`rounded-2xl border transition-all overflow-hidden ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setPkOpen(!pkOpen)}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-indigo-500/10 text-indigo-500">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100">
+                  Farmakokinetik Profili
+                </span>
+                <span className="text-[11px] px-2 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                  {pkOpen ? 'Gizle' : 'Genişletmek için tıklayın'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Onset, peak, redistribüsyon, Vd, hepatik CYP2B6/3A4 metabolizması ve aktif norketamin eliminasyonu
+              </p>
+            </div>
+          </div>
+          <div className="text-slate-400">
+            {pkOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </div>
+        </button>
+
+        {pkOpen && (
+          <div className="p-5 sm:p-6 border-t border-slate-200 dark:border-slate-800 space-y-4 text-xs sm:text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Etki Başlangıcı (Onset)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">30 – 60 Saniye (IV)</span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  IM: 3–5 dk; İntranazal: 5–10 dk; Oral: 15–30 dk.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Pik Etki (Peak)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">1 – 2 Dakika (IV)</span>
+                <p className="text-[11px] text-slate-500 mt-1">IM: 5–15 dk; Oral: 30–45 dk.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Klinik Etki Süresi
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">10 – 15 Dakika (Tek IV Bolus)</span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Hızlı redistribüsyon ile sonlanır. IM: 30–60 dk; Oral: 2–4 saat.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Dağılım Hacmi (Vd)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">2.5 – 3.5 L/kg</span>
+                <p className="text-[11px] text-slate-500 mt-1">Yüksek lipid çözünürlüğü ile beyne saniyeler içinde geçer.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Protein Bağlanması
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">%12 – %35 (Düşük)</span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Düşük bağlanma oranı sayesinde hipoalbüminemiden belirgin etkilenmez.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+                  Eliminasyon Yarı Ömrü (t½β)
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
+                  2 – 3 Saat
+                </span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Karaciğerde yüksek hepatik klerens (12–17 mL/kg/dk).
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 space-y-2">
+              <span className="font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                Hepatik Biyotransformasyon &amp; Aktif Norketamin Metaboliti:
+              </span>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>CYP2B6 ve CYP3A4 N-Demetilasyonu:</strong> Ketamin karaciğerde mikrozomal enzimlerle aktif metaboliti olan <strong>Norketamin</strong>e dönüştürülür.
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>Norketamin Potensi:</strong> Norketamin, ana ketamin molekülünün yaklaşık 1/3 ila 1/5'i kadar analjezik aktiviteye sahiptir. YBÜ'de uzamış infüzyonlarda veya oral kullanımda norketamin birikir ve analjezik etkinin uzamasına katkıda bulunur.
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>Ekskresyon:</strong> Hidroksilasyon ve glukuronid konjugasyonu sonrasında metabolitlerin %90'ı böbrekler yoluyla idrarla atılır; &lt;%4 değişmemiş ana ilaç olarak atılır.
+              </p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* =========================================================================
@@ -783,6 +796,24 @@ Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr}
                 <td className="p-3 font-mono">Sürekli</td>
                 <td className="p-3">Entübe astım hastalarında plato basıncını ve tepe inspiratuar basıncı düşürür; gaz hapsini (auto-PEEP) azaltır.</td>
               </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">Pediatrik Premedikasyon &amp; Sedasyon (Oral)</td>
+                <td className="p-3 font-mono text-orange-600 dark:text-orange-400">Oral (PO)</td>
+                <td className="p-3 font-mono font-bold text-orange-600 dark:text-orange-400">
+                  <DoseHover doseText="3.0 – 5.0 mg/kg Oral" equivText="Tatlandırıcı şurup / meyve suyu ile" explanation="Biyoyararlanım %16-20 (ilk geçiş)" />
+                </td>
+                <td className="p-3 font-mono">15 – 30 dk / 1 – 2 saat</td>
+                <td className="p-3">Damaryolu olmayan çocuklarda girişim öncesi anksiyoliz ve ayrılık anksiyetesi kontrolü.</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">Kronik Nöropatik Ağrı / Allodini (Oral)</td>
+                <td className="p-3 font-mono text-orange-600 dark:text-orange-400">Oral (PO)</td>
+                <td className="p-3 font-mono font-bold text-orange-600 dark:text-orange-400">
+                  <DoseHover doseText="0.5 – 1.0 mg/kg" equivText="Günde 3–4 kez oral solüsyon" explanation="Norketamin birikimiyle sürekli analjezi" />
+                </td>
+                <td className="p-3 font-mono">30 dk / 3 – 4 saat</td>
+                <td className="p-3">Opioid toleranslı kanser ve dirençli CRPS ağrılarında santral sensitizasyonu söndürme.</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -817,21 +848,6 @@ Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr}
                 RSI şok indüksiyonu, Ketofol karışım oranı, sub-dissosiyatif ağrı infüzyonu ve acil IM sedasyon
               </p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={copyDoseSummary}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
-                copiedSummary
-                  ? 'bg-emerald-600 text-white border-emerald-500'
-                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-700'
-              }`}
-            >
-              {copiedSummary ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedSummary ? 'Kopyalandı' : 'Hesabı Kopyala'}</span>
-            </button>
           </div>
         </div>
 
@@ -1573,86 +1589,58 @@ Status Asthmaticus Bolusu: ${asthmaBolusMg} mg IV, İdame: ${asthmaInfusionMgHr}
       </section>
 
       {/* =========================================================================
-          BÖLÜM 10: KRİTİK KLİNİK İPUÇLARI VE "PEARL"LER
+          BÖLÜM 10: GEBELİK VE LAKTASYON KILAVUZU
           ========================================================================= */}
       <section
-        id="sec-pearls"
+        id="sec-gebelik"
         className={`p-6 rounded-2xl border space-y-6 ${
           isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
         <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
-            <Sparkles className="w-5 h-5" />
+          <div className="p-2 rounded-lg bg-pink-500/15 text-pink-600 dark:text-pink-400">
+            <HeartPulse className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              10. Kritik Klinik İpuçları &amp; "Pearl"ler
+              10. Gebelik ve Laktasyon Kılavuzu
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Ketamin uygulamasında tecrübeli anestezist ve acil hekimlerinin hayat kurtaran kuralları
+              FDA / TGA gebelik kategorisi, uterin tonus, plasental geçiş ve emzirme güvenliği
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
-              <Eye className="w-4 h-4" />
-              <span>Gözler Açık ve Nistagmus Normaldir</span>
+            <span className="font-bold text-slate-900 dark:text-white block text-xs">
+              1. FDA / TGA Gebelik Sınıfı &amp; Uterin Etkiler
             </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Ketamin dissosiasyonundaki hasta gözleri açık ve boşluğa bakar şekilde kalabilir, yavaş nistagmus görülür. Bu durum hastanın uyanık olduğu anlamına gelmez; cerrahi ağrıyı hissetmez. Ekstra sedatif yüklemesi yapmayınız!
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Kategori:</strong> FDA Kategori B (uzamış kullanımda veya terme yakın yüksek dozlarda Kategori D).<br />
+              • <strong>Uterin Tonus ve Kontraktilite:</strong> Düşük analjezik dozlarda (0.2–0.5 mg/kg) uterin tonusu bozmaz ve uterin kan akımını korur. Ancak yüksek indüksiyon dozlarında (&gt;2 mg/kg) uterin bazal tonusunu tetikleyerek fetal distres riski oluşturabilir.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
-              <Wind className="w-4 h-4" />
-              <span>"Apnesiz İndüksiyon" Avantajı</span>
+            <span className="font-bold text-slate-900 dark:text-white block text-xs">
+              2. Plasental Geçiş &amp; Doğum Eylemi / Sezaryen
             </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Zor hava yolu veya "awake" entübasyonda ketamin, spontan ventilasyonu ve fonksiyonel rezidüel kapasiteyi (FRK) koruyarak desatürasyonu önler. Laringoskopi esnasında hipoksiye girme riskini en aza indirir.
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Hızlı Plasental Geçiş:</strong> Lipofilik yapısıyla saniyeler içinde plasentayı geçer (fetal/maternal oranı ~0.8–1.0).<br />
+              • <strong>Maternal Şokta Sezaryen İndüksiyonu:</strong> Maternal kanama, dekompanse hipovolemi veya şiddetli astımı olan gebelerde acil genel anestezi indüksiyonunda (1.0 mg/kg IV) sempatik destek sağlayarak hayat kurtarıcı bir alternatiftir.<br />
+              • <strong>Fetal İzlem:</strong> Yüksek dozlarda neonatal solunum depresyonu ve hipertonisite yapabilir.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              <span>IV Puşe Hızına Dikkat!</span>
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              3. Laktasyon, Anne Sütü &amp; Emzirme Güvenliği
             </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Ketamin asla 5-10 saniyede hızlı puşe edilmemelidir. Hızlı bolus santral solunum merkezini şoke ederek 1–2 dakikalık geçici apneye ve laringeal spazma yol açabilir. Enjektör en az 60 saniyede titre edilmelidir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
-              <ShieldAlert className="w-4 h-4" />
-              <span>Excited Delirium'da Kas İçi Kurtarıcı</span>
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              PCP, sentetik kannabinoid veya amfetamin intoksikasyonuna bağlı şiddetli saldırgan hastalarda IV damar yolu açmaya çalışmak personeli tehlikeye atar. <strong>4–5 mg/kg IM ketamin</strong> 3 dakikada hastayı güvene alır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4" />
-              <span>Ketofol Enjektöründe Çökelme Olmaz</span>
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Propofol ve ketamin aynı enjektörde 1:1 karıştırıldığında lipid emülsiyon stabilitesi 4 saat boyunca mükemmel kalır. Ayrı damar yolları veya karmaşık pompa ayarları gerektirmeden tek enjektörden sedasyon konforu sunar.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Sub-dissosiyatif Dozda Halüsinasyon Yok</span>
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              0.15–0.3 mg/kg subanestetik dozlarda NMDA reseptör blokajı analjezi üretir fakat kortikal dissosiasyon yaratmaz. Hasta tamamen oryante kalır; disfori yaşamadan morfin eşdeğeri analjezi elde edilir.
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Süte Minimum Geçiş:</strong> Anne sütüne geçen ketamin ve norketamin miktarı düşüktür (relatif infant dozu RID &lt; %2).<br />
+              • <strong>Emzirmeye Dönüş:</strong> Anne işlem veya anesteziden tamamen uyanıp koopere olduğunda bebeği güvenle emzirebilir.<br />
+              • <strong>"Pump &amp; Dump" Gerekmez:</strong> Tek doz uygulamalarda sütün sağılıp dökülmesine gerek yoktur.
             </p>
           </div>
         </div>

@@ -8,8 +8,6 @@ import {
   Info,
   CheckCircle2,
   ExternalLink,
-  Copy,
-  Check,
   RotateCcw,
   Activity,
   HeartPulse,
@@ -142,7 +140,6 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
   // UI Durumları
   const [pkOpen, setPkOpen] = useState<boolean>(false);
-  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
 
   // Benzersiz ID'ler
   const weightInputId = useId();
@@ -266,26 +263,6 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
     setTargetDoseMgKgHr(Number((val * 0.06).toFixed(2)));
   };
 
-  const copyClinicalSummary = () => {
-    const summaryText = `[PROPOFOL KLİNİK PROTOKOLÜ & POMPA DOZ ÖZETİ]
-• Hasta: ${weightKg} kg (${patientProfile})
-• Formülasyon: ${emulsionType === 'propofol_1' ? '%1 Propofol (10 mg/mL)' : '%2 Propofol (20 mg/mL)'}
-• Seçilen Endikasyon: ${INDICATION_PRESETS[indication].title}
-• Hedef Doz: ${calculatedDoseMgKgHr.toFixed(2)} mg/kg/saat (${calculatedDoseMcgKgMin.toFixed(1)} mcg/kg/dk)
-• İnfüzyon Pompası Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat (~${dropsPerMin.toFixed(0)} damla/dk)
-• Saatlik İlaç Miktarı: ${hourlyDoseMg.toFixed(1)} mg/saat
-• 24 Saatlik Emülsiyon Hacmi: ${dailyVolumeMl.toFixed(0)} mL/gün
-• 24 Saatlik Ek Lipid Kalorisi: ${dailyCaloriesKcal.toFixed(0)} kcal/gün (${dailyFatGrams.toFixed(1)} g yağ/gün)
-• Anestezi İndüksiyon Dozu: ${inductionMg.toFixed(0)} mg (${inductionMl.toFixed(1)} mL)
-• Lidokain Enjeksiyon Ağrısı Profilaksisi: ${lidocaineDoseMg} mg (%2 Lidokain: ${lidocaineMl2Percent.toFixed(1)} mL)
-• PRIS Güvenlik Sınırı: Maks 4.0-4.5 mg/kg/saat ve <48 saat kesintisiz infüzyon.
-• Asepsi Kuralı: Açılan flakon ve infüzyon hattı en geç 12 saatte imha edilmelidir (koruyucusuz lipid).`;
-
-    navigator.clipboard.writeText(summaryText);
-    setCopiedSummary(true);
-    setTimeout(() => setCopiedSummary(false), 2500);
-  };
-
   return (
     <div className="space-y-6">
       {/* 1. ÜST BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI (EN YUKARIDA) */}
@@ -303,37 +280,26 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-                  Propofol (Diprivan)
-                </h1>
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/30">
                   GABA-A Allosterik Modülatörü
                 </span>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/30">
-                  Sedatif / Genel Anestezik
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/30">
+                  Sedatif / Genel Anestezik · High-Alert
+                </span>
+                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30">
+                  ATC: N01AX10
+                </span>
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30">
+                  PROPOFOL FRESENIUS · DIPRIVAN · PROPOFOL-LIPURO · PREDAPOL
                 </span>
               </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 mt-1">
+                Propofol (PROPOFOL FRESENIUS, DIPRIVAN, PROPOFOL-LIPURO, PREDAPOL)
+              </h1>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                 Kısa etkili intravenöz hipnotik ajan; anestezi indüksiyonu ve idamesi (TIVA), mekanik ventilatörlü yoğun bakım sedasyonu, prosedürel sedasyon ve PRIS / lipid kalori yönetimi.
               </p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start lg:self-auto">
-            <button
-              type="button"
-              onClick={copyClinicalSummary}
-              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
-                copiedSummary
-                  ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/40'
-                  : isDark
-                  ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
-              }`}
-            >
-              {copiedSummary ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-teal-500" />}
-              <span>{copiedSummary ? 'Özet Kopyalandı' : 'Klinik Özeti Kopyala'}</span>
-            </button>
           </div>
         </div>
 
@@ -618,9 +584,44 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
             <span className="text-[10px] text-slate-500 font-semibold italic">
               (Dozların üzerine gelerek mcg/kg/dk karşılığını görebilirsiniz)
             </span>
-            <span className="text-xs px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 font-semibold">
-              Yalnızca İntravenöz (IV) Kullanım
-            </span>
+          </div>
+        </div>
+
+        {/* KLİNİK UYGULAMA YOLLARI */}
+        <div className="mb-6 space-y-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+            Klinik Uygulama Yolları
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* 1. IV */}
+            <div className="p-3.5 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-rose-50/40 dark:bg-rose-950/20">
+              <span className="font-bold text-xs text-rose-600 dark:text-rose-400 block mb-1">
+                1. İntravenöz (IV) Bolus &amp; İnfüzyon
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Tek standart uygulama yoludur. Onset: 30-45 sn, pik: 1-2 dk, etki süresi: 4-8 dk. İndüksiyon, TIVA ve YBÜ sürekli infüzyonu için geniş damaryolundan (tercihen antekübital) uygulanmalıdır.
+              </p>
+            </div>
+
+            {/* 2. TCI */}
+            <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-50/40 dark:bg-indigo-950/20">
+              <span className="font-bold text-xs text-indigo-600 dark:text-indigo-400 block mb-1">
+                2. Hedef Kontrollü İnfüzyon (TCI)
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Farmakokinetik modellere (Marsh ve Schnider) dayalı hedef plazma/etki bölgesi konsantrasyonu (Ce). Genel anestezide 3.0–5.0 mcg/mL, prosedürel sedasyonda 1.0–2.0 mcg/mL Ce hedeflenir.
+              </p>
+            </div>
+
+            {/* 3. Oral */}
+            <div className="p-3.5 rounded-xl border border-orange-200 dark:border-orange-900/40 bg-orange-50/40 dark:bg-orange-950/20">
+              <span className="font-bold text-xs text-orange-600 dark:text-orange-400 block mb-1">
+                3. Oral / Enteral Yol
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                <strong className="text-orange-700 dark:text-orange-300">KONTRENDİKE &amp; ETKİSİZDİR (Biyoyararlanım %0):</strong> Masif hepatik ilk geçiş metabolizması ve GIS yıkımı nedeniyle emilmez. Yalnızca intravenöz formda kullanılabilir.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -1633,7 +1634,54 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 9. O İLACA ÖZEL ÖNEMLİ OLUMSUZ ETKİLER */}
+      {/* 9. GEBELİK VE LAKTASYON KILAVUZU */}
+      <div
+        className={`p-5 rounded-2xl border transition-all ${
+          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 mb-4 text-pink-600 dark:text-pink-400">
+          <HeartPulse className="w-5 h-5" />
+          <h2 className="text-base sm:text-lg font-bold">Gebelik ve Laktasyon Kılavuzu</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
+          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              1. FDA / TGA Gebelik Sınıfı &amp; Teratojenite
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Kategori:</strong> FDA Kategori B (Avustralya TGA Kategori C).<br />
+              • <strong>Teratojenite:</strong> İnsanlarda direkt konjenital malformasyon bildirilmemiştir; 1. trimesterde elektif girişimlerde genel anesteziden kaçınılmalıdır.<br />
+              • <strong>Uterin Tonus:</strong> Terapötik dozlarda miyometriyal kontraktiliteyi ve oksitosin yanıtını baskılamaz; postpartum atoni riskini artırmaz.
+            </p>
+          </div>
+
+          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              2. Plasental Geçiş &amp; Sezaryen Anestezisi
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Hızlı Plasental Geçiş:</strong> Lipofilik yapısı sebebiyle saniyeler içinde plasentayı geçer (fetal/maternal oranı ~0.7).<br />
+              • <strong>Genel Anestezi ile Sezaryen:</strong> Rejyonelin kontrendike olduğu acil sezaryenlerde hızlı seri indüksiyon (2.0–2.5 mg/kg IV) için birinci tercihtir.<br />
+              • <strong>Neonatal Apgar:</strong> İndüksiyon-doğum aralığı makul tutulduğunda bebek hızla yeniden dağılım gösterir; Apgar skorları genellikle korunur.
+            </p>
+          </div>
+
+          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              3. Laktasyon, Anne Sütü &amp; Emzirme Güvenliği
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Süte Minimum Geçiş:</strong> Anne sütüne geçen propofol miktarı son derece düşüktür (relatif infant dozu RID &lt; %0.5).<br />
+              • <strong>Emzirmeye Hemen Dönüş:</strong> Cerrahi sonrasında anne anesteziden uyanıp bebeği tutabilecek kadar ayıldığında doğrudan emzirebilir.<br />
+              • <strong>"Pump &amp; Dump" Gerekmez:</strong> Sütün sağılıp dökülmesine veya 24 saat beklenmesine gerek yoktur (ASA ve AAGBI önerisi).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 10. O İLACA ÖZEL ÖNEMLİ OLUMSUZ ETKİLER */}
       <div
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'

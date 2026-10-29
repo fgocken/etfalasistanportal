@@ -8,8 +8,6 @@ import {
   Info,
   CheckCircle2,
   ExternalLink,
-  Copy,
-  Check,
   RotateCcw,
   Activity,
   HeartPulse,
@@ -37,7 +35,9 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
   const [weightKg, setWeightKg] = useState<number>(70);
 
   // Çözelti Hazırlama Parametreleri
-  const [prepType, setPrepType] = useState<'standard_10' | 'standard_20' | 'undiluted_50' | 'custom_prep'>('standard_10');
+  const [prepType, setPrepType] = useState<
+    'standard_10' | 'standard_20' | 'pediatric_2' | 'undiluted_50' | 'custom_prep'
+  >('standard_10');
   const [customVialMcg, setCustomVialMcg] = useState<number>(500); // mcg
   const [customDiluentVolume, setCustomDiluentVolume] = useState<number>(50); // mL
 
@@ -53,7 +53,6 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
 
   // UI Durumları
   const [pkOpen, setPkOpen] = useState<boolean>(false);
-  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
 
   // Benzersiz id'ler
   const weightInputId = useId();
@@ -67,13 +66,16 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
   const customVolumeInputId = useId();
 
   // --- KONSANTRASYON HESABI (mcg/mL) ---
+  // Türkiye'de ticari formlar: 500 mcg / 10 mL ve 100 mcg / 2 mL (her ikisi de 50 mcg/mL)
   let concentrationMcgMl = 10;
   if (prepType === 'standard_10') {
-    concentrationMcgMl = 10; // 500 mcg (10 mL) + 40 mL SF = 10 mcg/mL
+    concentrationMcgMl = 10; // 1 ampul 500 mcg (10 mL) + 40 mL SF = 50 mL'de 10 mcg/mL
   } else if (prepType === 'standard_20') {
-    concentrationMcgMl = 20; // 1000 mcg (20 mL) + 30 mL SF = 20 mcg/mL
+    concentrationMcgMl = 20; // 2 ampul 500 mcg (20 mL) + 30 mL SF = 50 mL'de 20 mcg/mL
+  } else if (prepType === 'pediatric_2') {
+    concentrationMcgMl = 2; // 1 ampul 100 mcg (2 mL) + 48 mL SF = 50 mL'de 2 mcg/mL
   } else if (prepType === 'undiluted_50') {
-    concentrationMcgMl = 50; // Saf ampul 50 mcg/mL
+    concentrationMcgMl = 50; // Saf ampul 50 mcg/mL (500 mcg/10 mL veya 100 mcg/2 mL)
   } else {
     concentrationMcgMl =
       customDiluentVolume > 0 && customVialMcg > 0
@@ -102,10 +104,11 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
   const bolusPumpRateMlHr = bolusDurationMin > 0 ? (totalBolusVolumeMl / bolusDurationMin) * 60 : 0;
   const bolusEquivalentRateMcgKgHr = bolusDurationMin > 0 ? (bolusDoseMcgKg / (bolusDurationMin / 60)) : 0;
 
-  // Tüketim Hesapları
+  // Tüketim Hesapları (Türkiye ampulleri: 500 mcg / 10 mL ve 100 mcg / 2 mL)
   const consumption24HrMcg = doseMcgHr * 24 + (giveBolus ? totalBolusDoseMcg : 0);
   const consumption24HrMg = consumption24HrMcg / 1000;
   const vialsNeeded500mcg = consumption24HrMcg / 500;
+  const vialsNeeded100mcg = consumption24HrMcg / 100;
 
   // Kümülasyon / CSHT (Bağlam Duyarlı Yarı Ömür)
   let cshtEstimateMinutes = 30;
@@ -126,29 +129,6 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
     cshtWarningText = 'Uzamış infüzyon (>8-12 saat): Fentanil yüksek oranda yağ dokusunda kümüle olmuştur. Bağlam duyarlı yarı ömür 200-300+ dakikaya (4-6 saat) ulaşır. İnfüzyon kesildikten sonra ekstübasyon için saatlerce beklenmesi gerekebilir!';
   }
 
-  const handleCopySummary = () => {
-    let summaryText = `KLİNİK FENTANİL İNFÜZYON DOZ PROTOKOLÜ ÖZETİ\n─────────────────────────────────────────────\n• Hasta Ağırlığı: ${weightKg} kg\n• Çözelti Hazırlama: ${
-      prepType === 'standard_10'
-        ? '500 mcg / 50 mL SF (10 mcg/mL)'
-        : prepType === 'standard_20'
-        ? '1000 mcg / 50 mL SF (20 mcg/mL)'
-        : prepType === 'undiluted_50'
-        ? '50 mcg/mL (Saf Ampul)'
-        : `${concentrationMcgMl.toFixed(1)} mcg/mL (${customVialMcg} mcg / ${customDiluentVolume} mL)`
-    }\n• İdame Dozu: ${doseMcgKgHr.toFixed(2)} mcg/kg/saat | ${doseMcgHr.toFixed(1)} mcg/saat | ${doseMcgKgMin.toFixed(3)} mcg/kg/dk\n• Pompa Akış Hızı: ${infusionRateMlHr.toFixed(2)} mL/saat (~${microDropsPerMinute.toFixed(1)} damla/dk)\n`;
-
-    if (giveBolus) {
-      summaryText += `• Yükleme Bolusu: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(2)} mL) ${bolusDurationMin} dakikada (Pompa Hızı: ${bolusPumpRateMlHr.toFixed(1)} mL/saat | Eşdeğer: ${bolusEquivalentRateMcgKgHr.toFixed(1)} mcg/kg/saat)\n`;
-    }
-
-    summaryText += `• Öngörülen İnfüzyon Süresi: ${infusionDurationHours} saat (Tahmini CSHT: ~${Math.round(cshtEstimateMinutes)} dk)\n• 24 Saatlik Toplam Tüketim: ~${consumption24HrMg.toFixed(2)} mg (~${Math.ceil(vialsNeeded500mcg)} ampul [500 mcg/10 mL])\n─────────────────────────────────────────────\nUYARI: Fentanil yüksek potensli bir opioiddir (morfinden 80-100 kat güçlü). Hızlı puşede toraks rijiditesi (wooden chest) riski vardır. Yatak başında her zaman Nalokson hazır bulundurulmalıdır.`;
-
-    navigator.clipboard.writeText(summaryText).then(() => {
-      setCopiedSummary(true);
-      setTimeout(() => setCopiedSummary(false), 2500);
-    });
-  };
-
   return (
     <div className="space-y-6">
       {/* ─────────────────────────────────────────────────────────────────── */}
@@ -168,16 +148,20 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
               <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                 Kırmızı Reçete · ISMP High-Alert
               </span>
-              <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">
-                Talinat · Fentanyl Janssen · Durogesic
+              <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 font-mono">
+                ATC: N01AH01 / N02AB03
+              </span>
+              <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                TALINAT · FENTAVER · FENTANYL-PF · FENTANEST · DUROGESIC · ABSTRAL
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              Fentanil Sitrat (Talinat, Fentanyl Janssen, Fentanyl Hameln, Durogesic)
+              Fentanil Sitrat (TALINAT, FENTAVER, FENTANYL-PF, FENTANEST, DUROGESIC, ABSTRAL)
             </h1>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-4xl">
               <strong className="text-slate-900 dark:text-white font-semibold">Farmakolojik Kategori:</strong> Yüksek
               potensli, lipofilik, sentetik <strong>μ-opioid (MOR) reseptör agonistidir</strong> (4-anilinopiperidin derivesi).
+              ATC kodları: <strong>N01AH01</strong> (Genel anestezikler / opioid anestezikler) ve <strong>N02AB03</strong> (Analjezikler / fenilpiperidin türevleri).
               Analjezik gücü morfine göre yaklaşık <strong>80 – 100 kat</strong> daha yüksektir. Yüksek lipid çözünürlüğü
               sayesinde kan-beyin bariyerini saniyeler içinde aşar.
             </p>
@@ -509,6 +493,143 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
           </h2>
         </div>
 
+        {/* 8 TEMEL UYGULAMA YOLU */}
+        <div className="mb-6 space-y-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+            Klinik Uygulama Yolları
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* 1. IV */}
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+              <span className="font-bold text-xs text-rose-600 dark:text-rose-400 block mb-1">
+                1. İntravenöz (IV) Bolus &amp; İnfüzyon
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Anestezi indüksiyonu/idamesi ve YBÜ infüzyonu için temel yoldur. Onset: 1-2 dk, pik: 3-5 dk. Hızlı puşeler toraks rijiditesi yapabileceğinden <strong>en az 1-2 dakikada</strong> yavaşça uygulanmalıdır.
+              </p>
+            </div>
+
+            {/* 2. IV-PCA */}
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+              <span className="font-bold text-xs text-indigo-600 dark:text-indigo-400 block mb-1">
+                2. Hasta Kontrollü Analjezi (IV-PCA)
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Postoperatif akut ağrıda hastanın talep ettiği aralıklı bolus titrasyonu (10–20 mcg/talep, kilit 5–10 dk). <em>Opioid-naif olgularda bazal infüzyon kesinlikle açılmaz!</em>
+              </p>
+            </div>
+
+            {/* 3. IM */}
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+              <span className="font-bold text-xs text-cyan-600 dark:text-cyan-400 block mb-1">
+                3. İntramüsküler (IM)
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Damaryolu gecikmesi olan akut ciddi ağrılı veya preoperatif premedikasyon gereken olgularda (50–100 mcg IM). Onset: 7–15 dk, etki süresi: 1–2 saat.
+              </p>
+            </div>
+
+            {/* 4. SUBQ */}
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+              <span className="font-bold text-xs text-teal-600 dark:text-teal-400 block mb-1">
+                4. Subkutan (SUBQ / SC)
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Palyatif bakım ve onkoloji hastalarında sürekli veya aralıklı subkutan infüzyon. Vasküler erişimi tükenmiş olgularda stabil emilim sağlar.
+              </p>
+            </div>
+
+            {/* 5. Transdermal Patch */}
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+              <span className="font-bold text-xs text-amber-600 dark:text-amber-400 block mb-1">
+                5. Transdermal Flaster (TTS - Patch)
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                <strong>YALNIZCA KRONİK OPİOİD TOLERAN</strong> kanser ve persistan ağrıda (72 saatte bir flaster). Kararlı duruma 12–24 saatte ulaşır. <em>Akut/postop ağrıda KESİNLİKLE KONTRENDİKEDİR!</em>
+              </p>
+            </div>
+
+            {/* 6. Intranasal */}
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+              <span className="font-bold text-xs text-purple-600 dark:text-purple-400 block mb-1">
+                6. İntranazal (IN - MAD İle)
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Mukozal Atomizasyon Cihazı (MAD) ile hızlı non-invaziv analjezi. Damaryolu bulunmayan akut travma, yanık ve kırıklarda saf 50 mcg/mL ampulle uygulanır.
+              </p>
+            </div>
+
+            {/* 7. Epidural */}
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+              <span className="font-bold text-xs text-emerald-600 dark:text-emerald-400 block mb-1">
+                7. Epidural (Kurumsal Protokol)
+              </span>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Doğum eylemi ve torasik/abdominal postoperatif analjezide lokal anesteziklerle kombine. <strong>ZORUNLU KURAL: Mutlaka koruyucu içermeyen (PF) solüsyon kullanılmalıdır!</strong>
+              </p>
+            </div>
+
+            {/* 8. İntratekal */}
+            <div className="p-3.5 rounded-xl border border-rose-300 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20">
+              <span className="font-bold text-xs text-rose-700 dark:text-rose-300 block mb-1">
+                8. İntratekal (Spinal)
+              </span>
+              <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+                Spinal anesteziye adjuvan derin viseral analjezi. Tek başına 15–25 mcg, lokal anestezikle kombine 10–15 mcg. <strong>MUTLAKA Koruyucu İçermeyen (PF) Ampul (FENTANYL-PF) kullanılmalıdır!</strong>
+              </p>
+            </div>
+
+            {/* 9. Oral / Transmukozal */}
+            <div className="p-3.5 rounded-xl border border-orange-300 dark:border-orange-900/50 bg-orange-50/40 dark:bg-orange-950/20">
+              <span className="font-bold text-xs text-orange-700 dark:text-orange-300 block mb-1">
+                9. Oral / Transmukozal (Dilaltı / Bukkal - ABSTRAL)
+              </span>
+              <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+                <strong>YALNIZCA KRONİK OPİOİD TOLERAN</strong> kanser ağrısında alevlenen (breakthrough) ataklarda dilaltı (ABSTRAL) veya bukkal pastil. Biyoyararlanım: ~%50 (mukozal emilim + hepatik first-pass). Onset: 10-15 dk. <em>Opioid-naif olguda kontrendikedir!</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ───────────────────────────────────────────────────────────────── */}
+        {/* NALOKSON REVERSAL & AKUT OPİOİD TOKSİSİTESİ YÖNETİMİ UYARISI      */}
+        {/* ───────────────────────────────────────────────────────────────── */}
+        <div
+          className={`mb-6 p-4 rounded-xl border ${
+            isDark
+              ? 'bg-rose-950/25 border-rose-800/60 text-rose-200'
+              : 'bg-rose-50 border-rose-300 text-rose-950 shadow-xs'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-rose-500 text-white shrink-0 mt-0.5">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <div className="space-y-1.5 flex-1">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <span className="font-bold text-sm text-rose-800 dark:text-rose-200">
+                  Nalokson Reversal ve Akut Opioid Solunum Depresyonu / Toksisite Yönetimi
+                </span>
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-rose-500 text-white">
+                  Acil Antidot
+                </span>
+              </div>
+              <p className="text-xs leading-relaxed">
+                • <strong>Spontan Soluyan Hastada Aşırı Sedasyon &amp; Solunum Depresyonu:</strong> <strong>0.04 – 0.1 mg IV</strong> (40 – 100 mcg) yavaş titrasyonla 2-3 dakikada bir tekrarlanır. Amaç tüm analjeziyi silmeden yeterli spontan solunumu ve havayolu refleksini kazanmaktır (yüksek ani doz akut sempatik fırtınaya, şiddetli cerrahi ağrı krizine ve non-kardiyojenik akciğer ödemine yol açabilir).
+              </p>
+              <p className="text-xs leading-relaxed">
+                • <strong>Ağır Apne, Solunum Durması veya Kardiyak Arrest:</strong> <strong>0.4 – 2.0 mg IV</strong> (veya IM/IO) hızlı puşe uygulanır. 2-3 dakikada bir yanıt alınıncaya dek tekrarlanır (maksimum 10 mg&apos;a kadar).
+              </p>
+              <p className="text-xs leading-relaxed font-semibold text-rose-900 dark:text-rose-100">
+                ⚠️ <strong>Kritik Re-Narkotizasyon Uyarısı:</strong> Naloksonun eliminasyon yarı ömrü kısadır (t½ ~30-90 dk); fentanilin etkisi ve doku redistribüsyonu ise çok daha uzun sürer (t½ ~2-4 saat, uzamış infüzyonda doku kümülasyonu ile daha da uzar). Nalokson etkisi bittiğinde hasta tekrar apne ve komaya girebilir! Hasta <strong>en az 2 – 4 saat yakın monitörizasyonda tutulmalı</strong>, gerekirse sürekli nalokson IV infüzyonu (saatte uyanmayı sağlayan başlangıç dozunun 2/3&apos;ü) başlanmalıdır.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ───────────────────────────────────────────────────────────────── */}
+        {/* DOZ REJİMLERİ: ERİŞKİN & PEDİATRİK                               */}
+        {/* ───────────────────────────────────────────────────────────────── */}
         <div className="space-y-4 text-xs sm:text-sm">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Erişkin Doz Rejimleri */}
@@ -518,65 +639,149 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
                 <span>Erişkin Doz Rejimleri</span>
               </span>
 
-              <div className="space-y-2 text-slate-700 dark:text-slate-300">
+              <div className="space-y-2.5 text-slate-700 dark:text-slate-300">
+                {/* a) Akut Ağrı IV-PCA */}
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Akut Ağrı IV-PCA (Hasta Kontrollü Analjezi):
+                  </span>
+                  <div className="font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold space-y-0.5 mt-0.5">
+                    <div>Talep Bolusu: 10 – 20 mcg IV | Kilit Süresi (Lockout): 5 – 10 dakika</div>
+                    <div>Konsantrasyon: 10 – 20 mcg/mL | 4 Saatlik Limit: 200 – 300 mcg</div>
+                  </div>
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    <strong>Güvenlik Kuralı:</strong> Opioid-naif hastalarda bazal infüzyon KESİNLİKLE açılmamalıdır (apne ve mortalite riski). Yalnızca seçilmiş opioid-toleran olgularda düşük bazal hız düşünülebilir.
+                  </p>
+                </div>
+
+                {/* b) PACU Akut Postoperatif Ağrı */}
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    PACU / Akut Postoperatif Ağrı Titrasyonu:
+                  </span>
+                  <div className="space-y-1 mt-1 font-mono text-xs">
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>IM Dozu:</strong> <span className="font-bold text-cyan-600 dark:text-cyan-400">50 – 100 mcg IM</span> (damaryolu sorunu veya stabil derlenmede; onset 10-15 dk)
+                    </div>
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>Orta Şiddette Ağrı (IV):</strong> <span className="font-bold text-rose-600 dark:text-rose-400">25 – 50 mcg IV (0.5 – 1.0 mcg/kg)</span> yavaş puşe, her 5-10 dk titre edilir
+                    </div>
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>Ciddi Şiddette Ağrı (IV):</strong> <span className="font-bold text-rose-600 dark:text-rose-400">50 – 100 mcg IV (1.0 – 2.0 mcg/kg)</span> yavaş puşe (≥1-2 dk), yakın solunum takibi ile
+                    </div>
+                  </div>
+                </div>
+
+                {/* c) Akut Non-Operatif Ciddi Ağrı */}
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Akut Non-Operatif Ciddi Ağrı (Acil / Travma / Yanık):
+                  </span>
+                  <div className="space-y-1 mt-1 font-mono text-xs">
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>IV Dozu:</strong> <span className="font-bold text-rose-600 dark:text-rose-400">25 – 50 mcg IV (0.5 – 1.0 mcg/kg)</span> yavaş puşe, her 5-10 dk yanıta göre titre edilir
+                    </div>
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>IM Dozu:</strong> <span className="font-bold text-cyan-600 dark:text-cyan-400">50 – 100 mcg IM</span> (damaryolu açılamayan veya geciken olgularda)
+                    </div>
+                  </div>
+                </div>
+
+                {/* d) Kronik Ağrı - Transdermal Patch */}
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Kronik Ağrı &amp; Kanser Ağrısı (Transdermal Patch - TTS):
+                  </span>
+                  <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
+                    25 – 100 mcg/saat flaster (Her 72 saatte bir flaster değişimi)
+                  </span>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
+                    <strong>KESİNLİKLE SADECE OPİOİD TOLERAN HASTALARDA:</strong> Günde en az 60 mg oral morfin eşdeğerini en az 1 haftadır alan hastalar içindir. Opioid-naif olguda ölümcül apneye yol açar. Kararlı düzeye 12–24 saatte ulaşır. Flaster üzerine sıcak kompres/ısıtıcı uygulanmaz (letal hızlı salınım riski).
+                  </p>
+                </div>
+
+                {/* e) Yoğun Bakım Analgosedasyonu */}
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Yoğun Bakım Analgosedasyonu (Sürekli İnfüzyon):
+                  </span>
+                  <div className="space-y-0.5 mt-0.5 font-mono text-xs">
+                    <div className="text-rose-600 dark:text-rose-400 font-bold">
+                      Yükleme Dozu: 0.5 – 1.5 mcg/kg IV Yavaş Bolus (≥ 2-3 dakikada)
+                    </div>
+                    <div className="text-rose-600 dark:text-rose-400 font-bold">
+                      İdame İnfüzyonu: 0.5 – 2.0 mcg/kg/saat (25 – 150 mcg/saat)
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    Hemodinamik instabilite veya şokta yükleme dozu 0.25-0.5 mcg/kg&apos;a düşürülür. Uzayan infüzyonlarda (&gt;48 saat) yağ dokusunda kümülasyona ve ekstübasyon gecikmesine dikkat edilmelidir.
+                  </p>
+                </div>
+
+                {/* f) Prosedürel Sedasyon ve Analjezi */}
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                    Prosedürel Sedasyon ve Analjezi (PSA):
+                  </span>
+                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+                    0.5 – 1.0 mcg/kg IV (25 – 50 mcg) yavaş puşe (1-2 dk)
+                  </span>
+                  <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 space-y-0.5">
+                    <p>
+                      • <strong>Sedatif Kombinasyonu Uyarısı:</strong> Propofol veya Midazolam ile kombine edildiğinde sinerjistik apne riski nedeniyle fentanil ve sedatif ajan dozu <strong>%30 – 50 oranında azaltılmalıdır</strong>.
+                    </p>
+                    <p>
+                      • <strong>Total Doz Uyarısı:</strong> Entübe olmayan spontan soluyan hastada işlem boyu kümülatif doz <strong>2 – 3 mcg/kg veya 150 – 200 mcg tavanını aşmamalıdır</strong>.
+                    </p>
+                  </div>
+                </div>
+
+                {/* g) Genel Anestezi İndüksiyonu */}
                 <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                   <span className="font-semibold block text-slate-900 dark:text-slate-100">
                     Genel Anestezi İndüksiyonu:
                   </span>
                   <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
-                    2.0 – 5.0 mcg/kg IV Yavaş Bolus
+                    25 ile 100 mcg IV (ya da 0.5 – 1.0 mcg/kg)
                   </span>
                   <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    Göğüs rijiditesini önlemek için en az 1 – 2 dakikaya yayılarak yavaşça enjekte edilir.
+                    Hemodinamik instabiliteyi ve göğüs duvarı rijiditesini önlemek için en az 30 – 60 saniyede yavaşça enjekte edilir.
                   </p>
                 </div>
 
+                {/* h) Genel Anestezi İdamesi */}
                 <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                   <span className="font-semibold block text-slate-900 dark:text-slate-100">
                     Genel Anestezi İdamesi:
                   </span>
                   <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
-                    1.0 – 3.5 mcg/kg/saat (veya her 30-45 dk 25 – 50 mcg IV ek doz)
+                    Her 30-45 dk 25 – 50 mcg IV ek doz
                   </span>
                   <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    Cerrahi stres yanıtına ve hemodinamiye göre titre edilir.
+                    Cerrahi uyarana, kan basıncı ve nabız yanıtına göre titre edilir.
                   </p>
                 </div>
 
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                {/* i) Nöroaksiyel Analjezi */}
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-rose-300 dark:border-rose-900/60 bg-rose-50/20 dark:bg-rose-950/20">
                   <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                    Yoğun Bakım Analgosedasyonu (Sürekli İnfüzyon):
+                    Nöroaksiyel Analjezi (Epidural &amp; İntratekal):
                   </span>
-                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
-                    0.7 – 2.0 mcg/kg/saat (25 – 150 mcg/saat)
-                  </span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    CPOT / BPS ağrı skorlarına göre titre edilir; uzayan infüzyonlarda (&gt;48 saat) yağ dokusunda kümülasyona dikkat edilmelidir.
-                  </p>
-                </div>
-
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                    Hızlı Seri Entübasyonda (RSI) Premedikasyon:
-                  </span>
-                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
-                    1.5 – 3.0 mcg/kg IV (entübasyondan 3 dk önce)
-                  </span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    Laringoskopi sempatik deşarjını ve KİBAS yükselmesini baskılar.
-                  </p>
-                </div>
-
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                    PACU / Postoperatif Akut Ağrı Bolus Titrasyonu:
-                  </span>
-                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
-                    25 – 50 mcg IV (0.5 – 1.0 mcg/kg), her 5 – 10 dakikada bir
-                  </span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    Spontan solunum hızı ve sedasyon derinliği izlenerek titre edilir.
-                  </p>
+                  <div className="space-y-1 mt-1 font-mono text-xs">
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>Epidural:</strong> <span className="font-bold text-emerald-600 dark:text-emerald-400">Kurumsal protokollere göre</span> (genellikle 1-2 mcg/mL derişimde lokal anestezikle kombine)
+                    </div>
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>İntratekal (Spinal):</strong>
+                      <div className="pl-3 space-y-0.5 mt-0.5">
+                        <div>- Tek Başına: <span className="font-bold text-rose-700 dark:text-rose-300">15 – 25 mcg</span></div>
+                        <div>- Lokal Anestezik ile Kombine: <span className="font-bold text-rose-700 dark:text-rose-300">10 – 15 mcg</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2 p-2 rounded bg-rose-500/10 border border-rose-500/30 text-[11px] text-rose-800 dark:text-rose-200 font-semibold leading-relaxed">
+                    🛡️ <strong>KORUYUCU İÇERMEYEN (PF) SOLÜSYON ŞARTI:</strong> Nöroaksiyel (epidural ve intratekal) uygulamalarda MUTLAKA koruyucu madde içermeyen formülasyon (örn. FENTANYL-PF veya koruyucusuz ampul) kullanılmalıdır. Benzil alkol veya paraben gibi koruyucular nörotoksiktir ve kalıcı araknoidite yol açar!
+                  </div>
                 </div>
               </div>
             </div>
@@ -585,55 +790,62 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2.5">
               <span className="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-teal-500" />
-                <span>Pediatrik Doz Rejimleri (Kanıta Dayalı)</span>
+                <span>Pediatrik Doz Rejimleri</span>
               </span>
 
-              <div className="space-y-2 text-slate-700 dark:text-slate-300">
+              <div className="space-y-2.5 text-slate-700 dark:text-slate-300">
+                {/* a) Pediatrik IV-PCA */}
                 <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                   <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                    Pediatrik Genel Anestezi İdamesi:
+                    Pediatrik IV-PCA (Hasta Kontrollü Analjezi):
                   </span>
-                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
-                    1.0 – 3.0 mcg/kg/saat IV sürekli infüzyon
-                  </span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    İnhalasyon anestezikleri ile kombine idame dozu.
+                  <div className="font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold space-y-0.5 mt-0.5">
+                    <div>Talep Bolusu: 0.25 – 0.5 mcg/kg IV</div>
+                    <div>Kilit Süresi (Lockout): 5 – 10 dakika</div>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
+                    Pediatrik olguda solunum depresyonu riskini en aza indirmek için bazal infüzyon rutin olarak uygulanmaz.
                   </p>
                 </div>
 
+                {/* b) RSI Öncesi Premedikasyon */}
                 <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                   <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                    Pediatrik YBÜ Sürekli İnfüzyon:
+                    Hızlı Seri Entübasyon (RSI) Premedikasyonu:
                   </span>
-                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
-                    1.0 – 3.0 mcg/kg/saat IV
+                  <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+                    1.0 – 2.0 mcg/kg IV Yavaş Puşe
                   </span>
                   <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    Mekanik ventilasyon altındaki entübe çocuklarda sürekli analgosedasyon.
+                    Laringoskopi ve entübasyonun tetiklediği sempatik hipertansiyon, taşikardi ve KİBAS fırlamasını baskılamak için entübasyondan 2–3 dakika önce verilir.
                   </p>
                 </div>
 
+                {/* e) Pediatrik Genel Anestezi */}
                 <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                   <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                    İntranazal (IN) Acil Analjezi (MAD İle):
+                    Pediatrik Genel Anestezi (İndüksiyon &amp; İdame):
                   </span>
-                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
-                    1.5 – 2.0 mcg/kg tek doz (Maksimum: 100 mcg)
-                  </span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    Damaryolu bulunmayan pediatrik kırık ve yanık olgularında saf 50 mcg/mL ampul ile burun deliklerine paylaştırılarak uygulanır.
+                  <div className="space-y-1 mt-1 font-mono text-xs">
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>İndüksiyon:</strong> <span className="font-bold text-rose-600 dark:text-rose-400">1.0 – 2.0 mcg/kg IV yavaş puşe</span>
+                    </div>
+                    <div className="text-slate-700 dark:text-slate-200">
+                      • <strong>İdame:</strong> <span className="font-bold text-rose-600 dark:text-rose-400">1.0 – 2.0 mcg/kg/saat IV sürekli infüzyon</span> (veya gereğinde 0.5 – 1.0 mcg/kg IV PRN ek boluslar)
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
+                    İnhalasyonel ajanlarla (sevofluran) dengeli anestezide cerrahi uyarana göre titre edilir.
                   </p>
                 </div>
 
-                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                  <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                    Pediatrik IV Bolus &amp; Girişimsel Sedasyon:
+                {/* Yenidoğan ve İnfant Uyarısı */}
+                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-300">
+                  <span className="font-bold text-xs block mb-0.5">
+                    Yenidoğan ve Küçük İnfantlar (&lt; 1 Yaş) İçin Dikkat:
                   </span>
-                  <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
-                    1.0 – 2.0 mcg/kg yavaş IV (Yenidoğanda 0.5 – 1.0 mcg/kg)
-                  </span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    Yenidoğan ve infantlarda bradikardi riski nedeniyle atropin hazır bulundurulmalıdır.
+                  <p className="text-[11px] leading-relaxed">
+                    Opioid kaynaklı vagal bradikardiye çok duyarlıdırlar; kalp debileri atım hacmine değil hızına bağımlıdır. Doz <strong>0.5 – 1.0 mcg/kg</strong> ile sınırlandırılmalı ve <strong>Atropin (0.02 mg/kg)</strong> hazır bulundurulmalıdır.
                   </p>
                 </div>
               </div>
@@ -695,20 +907,6 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleCopySummary}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
-                copiedSummary
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : isDark
-                  ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
-                  : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300 shadow-2xs'
-              }`}
-            >
-              {copiedSummary ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedSummary ? 'Protokol Kopyalandı' : 'Klinik Özeti Kopyala'}</span>
-            </button>
             <button
               type="button"
               onClick={() => {
@@ -788,9 +986,10 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
                 onChange={(e) => setPrepType(e.target.value as typeof prepType)}
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500"
               >
-                <option value="standard_10">500 mcg (10 mL) + 40 mL SF = 50 mL (10 mcg/mL - Standart YBÜ)</option>
-                <option value="standard_20">1000 mcg (20 mL) + 30 mL SF = 50 mL (20 mcg/mL - Konsantre)</option>
-                <option value="undiluted_50">Saf Ampul (50 mcg/mL - Konsantre / Akut)</option>
+                <option value="standard_10">1 ampul (500 mcg / 10 mL) + 40 mL SF = 50 mL (10 mcg/mL - Standart YBÜ)</option>
+                <option value="standard_20">2 ampul (500 mcg / 10 mL x2) + 30 mL SF = 50 mL (20 mcg/mL - Konsantre)</option>
+                <option value="pediatric_2">1 ampul (100 mcg / 2 mL) + 48 mL SF = 50 mL (2 mcg/mL - Pediatrik / Düşük Doz)</option>
+                <option value="undiluted_50">Saf Ampul (50 mcg/mL - 500 mcg/10 mL veya 100 mcg/2 mL)</option>
                 <option value="custom_prep">Özel Seyreltme (Serbest Belirle)</option>
               </select>
 
@@ -1141,10 +1340,10 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
                   <p className="text-[11px] text-slate-500 leading-relaxed">{cshtWarningText}</p>
                 </div>
 
-                <div className="flex justify-between items-center p-2 rounded-lg bg-slate-100 dark:bg-slate-800/60 font-mono text-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2 rounded-lg bg-slate-100 dark:bg-slate-800/60 font-mono text-xs">
                   <span className="text-slate-600 dark:text-slate-400 font-sans">24 Saatlik Fentanil İhtiyacı:</span>
-                  <span className="font-bold text-slate-900 dark:text-slate-100">
-                    {consumption24HrMg.toFixed(2)} mg (~{Math.ceil(vialsNeeded500mcg)} ampul [500 mcg/10 mL])
+                  <span className="font-bold text-slate-900 dark:text-slate-100 text-right">
+                    {consumption24HrMg.toFixed(2)} mg (~{Math.ceil(vialsNeeded500mcg)} ampul [500 mcg/10 mL] veya ~{Math.ceil(vialsNeeded100mcg)} ampul [100 mcg/2 mL])
                   </span>
                 </div>
               </div>
@@ -1334,7 +1533,64 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 9: ÖNEMLİ OLUMSUZ ETKİLER */}
+      {/* BÖLÜM 9: GEBELİK VE LAKTASYON KILAVUZU                             */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-pink-500/10 text-pink-500">
+            <HeartPulse className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+              Gebelik ve Laktasyon Kılavuzu
+            </h2>
+            <p className="text-xs text-slate-500">
+              FDA / TGA gebelik kategorisi, plasental geçiş, neonatal solunum depresyonu ve emzirme yönetimi
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
+          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              1. FDA / TGA Gebelik Sınıfı &amp; Teratojenite
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Kategori:</strong> FDA Kategori C (Uzamış kullanımda veya terme yakın yüksek dozlarda Kategori D).<br />
+              • <strong>Teratojenite:</strong> İnsanlarda direkt majör konjenital malformasyon riski saptanmamıştır; ancak gebelikte kronik kullanım fetal büyüme geriliği, erken doğum ve neonatal yoksunluk sendromu (NOWS) riski taşır.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              2. Plasental Geçiş &amp; Doğum Eylemi (L&amp;D)
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Hızlı Plasental Geçiş:</strong> Yüksek lipofilisitesi nedeniyle saniyeler içinde plasentayı geçer (fetal/maternal oranı ~0.8-1.0).<br />
+              • <strong>Nöroaksiyel Kullanım (Güvenli):</strong> Doğum eyleminde epidural veya kombine spinal-epidural (CSE) ile 10-25 mcg fentanil lokal anesteziklerle kombine edildiğinde maternal-fetal hemodinamik stabilite mükemmeldir.<br />
+              • <strong>Sistemik IV Risk:</strong> Doğumdan hemen önce (&lt;2 saat) yüksek doz sistemik IV fentanil uygulanırsa yenidoğanda solunum depresyonu (düşük Apgar) ve toraks rijiditesi gelişebilir. Doğumhanede neonatal <strong>Nalokson</strong> hazır olmalıdır.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              3. Laktasyon, Anne Sütü &amp; Emzirme Güvenliği
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Süte Geçiş Düşüktür:</strong> Relatif infant dozu (RID) &lt;%3 düzeyindedir (klinik güvenlilik eşiği olan %10'un çok altındadır).<br />
+              • <strong>Emzirmeye Dönüş:</strong> Cerrahi veya doğum sonrası tek bir anestezi indüksiyon/bolus dozunun ardından anne tamamen uyanıp koopere olduğunda doğrudan emzirmeye başlayabilir; sütü sağıp dökme ("pump &amp; dump") rutini önerilmez.<br />
+              • <strong>Tekrarlayan Doz Uyarısı:</strong> YBÜ'de veya postop IV-PCA'de tekrarlayan yüksek dozlarda bebeğin aşırı sedasyon, emme güçlüğü ve apne açısından izlenmesi gerekir.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* BÖLÜM 10: ÖNEMLİ OLUMSUZ ETKİLER */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
@@ -1533,8 +1789,8 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
               1. Standart İnfüzyon Seyreltmesi (10 mcg/mL)
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Hazırlanışı:</strong> 1 adet 500 mcg (10 mL) Fentanil ampul çekilir ve 40 mL %0.9 NaCl (SF) veya %5 Dekstroz
-              eklenerek 50 mL'lik perfuzör enjektöründe tamamlanır.<br />
+              • <strong>Ticari Form:</strong> Türkiye'de 500 mcg / 10 mL ve 100 mcg / 2 mL ampuller bulunur (her ikisi de 50 mcg/mL derişimdedir; 1000 mcg/20 mL formu yoktur).<br />
+              • <strong>Hazırlanışı:</strong> 1 adet 500 mcg (10 mL) Fentanil ampul çekilir ve 40 mL %0.9 NaCl (SF) eklenerek 50 mL'lik perfuzör enjektöründe tamamlanır.<br />
               • <strong>Son Konsantrasyon:</strong> 10 mcg/mL.<br />
               • Genel cerrahi ve standart yoğun bakım infüzyonları için en güvenli ve önerilen protokoldür.
             </p>
@@ -1542,12 +1798,12 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
 
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
             <span className="font-bold text-slate-900 dark:text-slate-100 block">
-              2. Konsantre İnfüzyon (20 – 50 mcg/mL)
+              2. Konsantre &amp; Pediatrik Seyreltmeler
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>20 mcg/mL:</strong> 2 adet 500 mcg (20 mL) ampul + 30 mL SF ile 50 mL tamamlanır.<br />
-              • <strong>50 mcg/mL (Seyreltilmemiş):</strong> Ampul doğrudan perfuzöre çekilerek titre edilir.<br />
-              • Ciddi sıvı kısıtlaması olan (KY, ARDS, oligürik ABY) olgularda ve yüksek doz kardiyak anestezi protokollerinde tercih edilir.
+              • <strong>Konsantre (20 mcg/mL):</strong> 2 adet 500 mcg (20 mL) ampul + 30 mL SF ile 50 mL'ye tamamlanır.<br />
+              • <strong>Pediatrik / Düşük Doz (2 mcg/mL):</strong> 1 adet 100 mcg (2 mL) ampul + 48 mL SF ile 50 mL perfuzöre tamamlanır.<br />
+              • <strong>50 mcg/mL (Seyreltilmemiş):</strong> Saf ampul (500 mcg/10 mL veya 100 mcg/2 mL) çekilerek titre edilir (sıvı kısıtlamalı ARDS/KY olgularında).
             </p>
           </div>
 
