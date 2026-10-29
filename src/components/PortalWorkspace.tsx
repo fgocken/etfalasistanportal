@@ -379,6 +379,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     if (initialRoute?.type === 'infografik') {
       return 'infographics';
     }
+    if (initialRoute?.type === 'tedavi') {
+      return 'treatments';
+    }
+    if (initialRoute?.type === 'blok') {
+      return 'nerve-blocks';
+    }
     if (initialRoute?.type === 'arac' && initialRoute.id && initialRoute.id in ALL_CLINICAL_TOOLS) {
       return initialRoute.id as ToolTabId;
     }
@@ -389,6 +395,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   useEffect(() => {
     if (initialRoute?.type === 'infografik') {
       setActiveTab('infographics');
+    } else if (initialRoute?.type === 'tedavi') {
+      setActiveTab('treatments');
+    } else if (initialRoute?.type === 'blok') {
+      setActiveTab('nerve-blocks');
     } else if (initialRoute?.type === 'arac' && initialRoute.id && initialRoute.id in ALL_CLINICAL_TOOLS) {
       setActiveTab(initialRoute.id as ToolTabId);
     }
@@ -1406,9 +1416,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <TreatmentsWorkspace 
             isDark={isDark} 
             initialProtocolId={
-              initialRoute?.type === 'arac' && initialRoute.id?.includes('tedavi=')
-                ? initialRoute.id.split('tedavi=')[1]
-                : null
+              initialRoute?.type === 'tedavi'
+                ? initialRoute.id
+                : (initialRoute?.type === 'arac' && initialRoute.id?.includes('tedavi=')
+                    ? initialRoute.id.split('tedavi=')[1]
+                    : initialRoute?.subId || null)
             }
           />
         )}
@@ -1418,9 +1430,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <NerveBlocksWorkspace 
             isDark={isDark}
             initialBlockId={
-              initialRoute?.type === 'arac' && initialRoute.id?.includes('blok=')
-                ? initialRoute.id.split('blok=')[1]
-                : null
+              initialRoute?.type === 'blok'
+                ? initialRoute.id
+                : (initialRoute?.type === 'arac' && initialRoute.id?.includes('blok=')
+                    ? initialRoute.id.split('blok=')[1]
+                    : initialRoute?.subId || null)
             }
           />
         )}

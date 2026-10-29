@@ -8,8 +8,6 @@ import {
   Info,
   CheckCircle2,
   ExternalLink,
-  Copy,
-  Check,
   RotateCcw,
   Activity,
   HeartPulse,
@@ -31,10 +29,6 @@ interface Props {
 export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
   // --- HESAPLAYICI STATE'LERİ ---
   const [weightKg, setWeightKg] = useState<number>(70);
-  const [indication, setIndication] = useState<'icu_sedation' | 'weaning' | 'delirium' | 'procedural' | 'anesthesia'>(
-    'icu_sedation'
-  );
-  const [targetRass, setTargetRass] = useState<string>('-1 ila -2 (Hafif kooperatif sedasyon)');
   
   // Çözelti Hazırlama Modu
   const [prepType, setPrepType] = useState<'vial_50' | 'vial_100' | 'ampoule_custom' | 'custom_conc'>('vial_50');
@@ -46,20 +40,15 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
   const [bolusDoseMcgKg, setBolusDoseMcgKg] = useState<number>(1.0); // 0.5 - 1.0 mcg/kg
   const [bolusDurationMin, setBolusDurationMin] = useState<number>(10); // 10 - 20 dk
   
-  // İdame Dozu
+  // İdame Dozu (mcg/kg/saat)
   const [maintenanceDoseMcgKgHr, setMaintenanceDoseMcgKgHr] = useState<number>(0.7); // mcg/kg/saat
   
   // Akordiyon State: Farmakokinetik (Varsayılan KAPALI)
   const [pkOpen, setPkOpen] = useState<boolean>(false);
-  
-  // Kopyalama bildirimi
-  const [copied, setCopied] = useState<boolean>(false);
 
   // Benzersiz erişilebilirlik kimlikleri (ARIA)
   const weightInputId = useId();
   const prepSelectId = useId();
-  const indicationSelectId = useId();
-  const rassSelectId = useId();
   const bolusToggleId = useId();
   const bolusDoseInputId = useId();
   const bolusDurationInputId = useId();
@@ -101,78 +90,9 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
   // Bolus süresine göre saatlik pompa hızı (mL/saat)
   const bolusPumpRateMlHr =
     enableBolus && bolusDurationMin > 0 ? (totalBolusVolumeMl / bolusDurationMin) * 60 : 0;
-
-  // Endikasyona göre önerilen doz aralıkları ve açıklamaları
-  const getIndicationInfo = () => {
-    switch (indication) {
-      case 'icu_sedation':
-        return {
-          title: 'Yoğun Bakım Ünitesi Mekanik Ventilasyon Sedasyonu',
-          range: '0.2 – 1.4 mcg/kg/saat',
-          guidance:
-            'Başlangıç genellikle 0.2–0.7 mcg/kg/saat ile yapılır, RASS hedefine (-1 ila -2) göre titre edilir. Derin bradikardi ve hipotansiyonu önlemek için YBÜ’de yükleme bolusu ÖNERİLMEZ (Doğrudan idame başlanır).'
-        };
-      case 'weaning':
-        return {
-          title: 'Mekanik Ventilatörden Ayırma (Weaning) ve Ekstübasyon Süreci',
-          range: '0.2 – 0.7 mcg/kg/saat',
-          guidance:
-            'Solunum merkezini baskılamaz, spontan solunum sürücüsünü korur. Ekstübasyon anında ve ekstübasyon sonrasında da güvenle sürdürülebilir; re-entübasyon riskini ve ajitasyonu azaltır.'
-        };
-      case 'delirium':
-        return {
-          title: 'Yoğun Bakım Deliryumu Yönetimi & Önlenmesi (PADIS Kılavuzu)',
-          range: '0.15 – 0.7 mcg/kg/saat',
-          guidance:
-            'Hiperaktif veya karma deliryumda birinci tercih sedatiftir. Benzodiazepin kullanımını sınırlar ve mekanik ventilatör gün sayısını belirgin kısaltır.'
-        };
-      case 'procedural':
-        return {
-          title: 'Girişimsel / Prosedürel Sedasyon (Fiberoptik Bronkoskopi, Uyanık Girişimler)',
-          range: 'İsteğe bağlı 0.5–1.0 mcg/kg bolus (10 dk) + 0.2–1.0 mcg/kg/saat idame',
-          guidance:
-            'Hasta komutlara kooperatiftir ve havayolu refleksleri korunur. Girişim öncesi 10 dakikada yavaş yükleme bolusu uygulanabilir.'
-        };
-      case 'anesthesia':
-        return {
-          title: 'Genel Anestezi İdamesi & Opioid Koruyucu Adjuvant',
-          range: '0.2 – 0.8 mcg/kg/saat',
-          guidance:
-            'İntraoperatif inhalasyon anestezikleri ve opioid gereksinimini %30–50 azaltır. Cerrahi stres yanıtı ve postoperatif titremeyi (shivering) engeller.'
-        };
-    }
-  };
-
-  const currentIndication = getIndicationInfo();
-
-  // Reçete metni kopyalama
-  const handleCopyOrder = () => {
-    const text = `DEKSMEDETOMİDİN (PRECEDEX) İNFÜZYON EMİR ÖZETİ:
-• Hasta Ağırlığı: ${weightKg} kg
-• Endikasyon: ${currentIndication.title}
-• Hedef RASS: ${targetRass}
-• Çözelti Hazırlama: ${
-      prepType === 'vial_50'
-        ? '200 mcg / 50 mL Hazır Flakon (4 mcg/mL)'
-        : prepType === 'vial_100'
-        ? '400 mcg / 100 mL Hazır Flakon (4 mcg/mL)'
-        : prepType === 'ampoule_custom'
-        ? `200 mcg / 2 mL Ampul + SF/D5W ile ${customDiluentVolume} mL tamamlandı (${concentrationMcgMl.toFixed(2)} mcg/mL)`
-        : `Özel Konsantrasyon: ${concentrationMcgMl} mcg/mL`
-    }
-${
-  enableBolus
-    ? `• YÜKLEME (BOLUS) DOZU: ${bolusDoseMcgKg} mcg/kg -> Toplam ${totalBolusDoseMcg.toFixed(1)} mcg (${totalBolusVolumeMl.toFixed(1)} mL), ${bolusDurationMin} dakikada infüzyon pompası ile ${bolusPumpRateMlHr.toFixed(1)} mL/saat hızında verilecek.\n`
-    : '• YÜKLEME DOZU: Uygulanmayacak (Doğrudan İdame İnfüzyon).\n'
-}• İDAME İNFÜZYON DOZU: ${maintenanceDoseMcgKgHr.toFixed(2)} mcg/kg/saat
-• İNFÜZYON POMPASI HIZI: ${infusionRateMlHr.toFixed(2)} mL/saat
-• 24 Saatlik Tahmini Tüketim: ${dailyTotalMcg.toFixed(0)} mcg (${dailyTotalMl.toFixed(1)} mL / ~${dailyVialsNeeded.toFixed(1)} adet 200 mcg flakon)
-• Güvenlik Kriteri: KTA < 50/dk veya MAP < 60 mmHg durumunda hız %50 azaltılmalı / hekime haber verilmelidir.`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
+  // Bolus süresine göre eşdeğer saatlik hız (mcg/kg/saat) - Kronometre takibi için
+  const bolusRateMcgKgHr =
+    enableBolus && bolusDurationMin > 0 ? (bolusDoseMcgKg * 60) / bolusDurationMin : 0;
 
   return (
     <div className="space-y-8 font-sans">
@@ -451,6 +371,10 @@ ${
                 işlemler öncesinde ve/veya sırasında entübe edilmemiş erişkin hastaların uyanık sedasyonu (örn.
                 bronkoskopi, uyanık trakeostomi, kardiyak girişimler).
               </p>
+              <p>
+                <strong>3. Şizofreni ve Bipolar Bozukluk Akut Ajitasyonu:</strong> Hafif, orta ve şiddetli akut ajitasyon
+                epizotlarının kooperatif kontrolünde FDA onaylı sublingual film formülasyonu (Igalmi).
+              </p>
             </div>
           </div>
 
@@ -460,6 +384,11 @@ ${
               Off-Label / Kanıta Dayalı Klinik Kullanım Alanları
             </span>
             <ul className="space-y-1.5 list-disc list-inside text-slate-700 dark:text-slate-300">
+              <li>
+                <strong>Genel Anestezi İdamesi &amp; Opioid/MAC Koruyucu Adjuvan:</strong> İntraoperatif hemodinamik
+                stabilite, cerrahi stres yanıtının baskılanması, inhalasyonel anestezik (MAC) ve opioid tüketiminde
+                %30–50 azalma, postoperatif titreme ve uyanma deliryumunun önlenmesi.
+              </li>
               <li>
                 <strong>Yoğun Bakım Deliryumu:</strong> PADIS kılavuzlarında mekanik ventilasyondaki ajite deliryumda
                 benzodiazepinler yerine birinci basamak tedavi olarak önerilir.
@@ -559,6 +488,42 @@ ${
 
               <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                 <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                  Şizofreni ve Bipolar Bozukluk Akut Ajitasyonu:
+                </span>
+                <div className="mt-1 space-y-1">
+                  <div>
+                    <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
+                      Sublingual Film: 120 – 180 mcg (Tek Doz)
+                    </span>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Hafif-orta ajitasyonda 120 mcg SL; şiddetli ajitasyonda 180 mcg SL tek doz. Yanıt yetersizse ≥2 saat sonra 60–90 mcg ek doz (maks 360 mcg/24 saat). Uygulama sonrası 2 saat vital/ortostaz takibi.
+                    </p>
+                  </div>
+                  <div className="pt-1 border-t border-slate-100 dark:border-slate-700/60">
+                    <span className="font-mono font-semibold text-teal-600 dark:text-teal-400 text-xs">
+                      YBÜ / Klinik IV Titrasyon (Off-Label): 0.2 – 0.7 mcg/kg/saat
+                    </span>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Bolussuz IV sürekli infüzyon; solunumu baskılamadan kooperatif ve uyanabilir ajitasyon sedasyonu.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <span className="font-semibold block text-slate-900 dark:text-slate-100">
+                  Genel Anestezi İdamesi (Off-Label / Anestezi Adjuvanı):
+                </span>
+                <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
+                  0.2 – 0.7 mcg/kg/saat IV İnfüzyon
+                </span>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Opsiyonel yükleme: 0.5–1.0 mcg/kg (10–15 dk; hemodinamik labilitede bolus atlanabilir). İnhalasyon anestezik (MAC) ve opioid ihtiyacını %30–50 azaltır; cerrahi stres yanıtını baskılar; postoperatif titreme (shivering) ve uyanma deliryumunu önler; pürüzsüz ekstübasyon sağlar. Ameliyat bitiminden 15–30 dk önce infüzyon kapatılabilir.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <span className="font-semibold block text-slate-900 dark:text-slate-100">
                   Weaning ve Ekstübasyon Süreci:
                 </span>
                 <span className="font-mono font-bold text-teal-600 dark:text-teal-400">0.2 – 0.7 mcg/kg/saat</span>
@@ -577,21 +542,11 @@ ${
             <div className="space-y-2 text-slate-700 dark:text-slate-300">
               <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                 <span className="font-semibold block text-slate-900 dark:text-slate-100">
-                  Pediatrik YBÜ Sürekli İnfüzyon:
-                </span>
-                <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">0.2 – 1.4 mcg/kg/saat</span>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  Yenidoğan ve infantlarda karaciğer enzim matürasyonu yetersizdir; 0.1–0.2 mcg/kg/saat ile başlanır.
-                </p>
-              </div>
-
-              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                <span className="font-semibold block text-slate-900 dark:text-slate-100">
                   İntranazal Premedikasyon / Sedasyon:
                 </span>
                 <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">1.0 – 2.0 mcg/kg (Tek Doz)</span>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  İşlemden 30–45 dakika önce burun mukozasına atomizer ile verilir. Ağrısız, iğnesiz sedasyon sağlar.
+                  İşlemden 30–45 dakika önce burun mukozasına mukozal atomizer (MAD) ile verilir. Ağrısız, iğnesiz anksiyoliz ve uyanık sedasyon sağlar.
                 </p>
               </div>
 
@@ -602,6 +557,9 @@ ${
                 <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
                   0.3 – 0.5 mcg/kg IV Yavaş Bolus (5–10 dk)
                 </span>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Özellikle sevofluran veya desfluran anestezisi sonrası pediatrik uyanma ajitasyonunun önlenmesi ve tedavisinde etkilidir.
+                </p>
               </div>
             </div>
           </div>
@@ -639,7 +597,6 @@ ${
             type="button"
             onClick={() => {
               setWeightKg(70);
-              setIndication('icu_sedation');
               setPrepType('vial_50');
               setEnableBolus(false);
               setBolusDoseMcgKg(1.0);
@@ -761,66 +718,7 @@ ${
               </div>
             )}
 
-            {/* 2. Klinik Endikasyon Seçimi */}
-            <div>
-              <label htmlFor={indicationSelectId} className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                Klinik Endikasyon ve Protokol Rehberi
-              </label>
-              <select
-                id={indicationSelectId}
-                value={indication}
-                onChange={(e) => {
-                  const val = e.target.value as any;
-                  setIndication(val);
-                  if (val === 'icu_sedation') setMaintenanceDoseMcgKgHr(0.7);
-                  if (val === 'weaning') setMaintenanceDoseMcgKgHr(0.4);
-                  if (val === 'delirium') setMaintenanceDoseMcgKgHr(0.35);
-                  if (val === 'procedural') setMaintenanceDoseMcgKgHr(0.6);
-                  if (val === 'anesthesia') setMaintenanceDoseMcgKgHr(0.5);
-                }}
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all focus:outline-hidden focus:ring-2 focus:ring-teal-500 cursor-pointer ${
-                  isDark ? 'bg-slate-800/80 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                }`}
-              >
-                <option value="icu_sedation">1. YBÜ Mekanik Ventilasyon Sedasyonu (0.2 – 1.4 mcg/kg/saat)</option>
-                <option value="weaning">2. Mekanik Ventilatörden Ayırma / Weaning (0.2 – 0.7 mcg/kg/saat)</option>
-                <option value="delirium">3. Yoğun Bakım Deliryumu Yönetimi (0.15 – 0.7 mcg/kg/saat)</option>
-                <option value="procedural">4. Girişimsel / Prosedürel Sedasyon (0.2 – 1.0 mcg/kg/saat)</option>
-                <option value="anesthesia">5. Genel Anestezi İdamesi &amp; Opioid Koruyucu (0.2 – 0.8 mcg/kg/saat)</option>
-              </select>
-
-              <div className="mt-2 p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-xs">
-                <span className="font-bold text-teal-600 dark:text-teal-400 block mb-0.5">
-                  Önerilen Doz Aralığı: {currentIndication.range}
-                </span>
-                <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                  {currentIndication.guidance}
-                </p>
-              </div>
-            </div>
-
-            {/* Hedef RASS Skoru */}
-            <div>
-              <label htmlFor={rassSelectId} className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                Hedeflenen Sedasyon Derinliği (RASS Skoru)
-              </label>
-              <select
-                id={rassSelectId}
-                value={targetRass}
-                onChange={(e) => setTargetRass(e.target.value)}
-                className={`w-full px-3 py-2 rounded-xl border text-xs font-medium transition-all focus:outline-hidden focus:ring-2 focus:ring-teal-500 cursor-pointer ${
-                  isDark ? 'bg-slate-800/80 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                }`}
-              >
-                <option value="-1 ila -2 (Hafif kooperatif sedasyon)">
-                  RASS -1 ila -2: Uykulu / Hafif sedasyon (Önerilen YBÜ hedefi, sesle göz teması kurar)
-                </option>
-                <option value="0 (Sakin ve uyanık)">RASS 0: Sakin ve tamamen uyanık (Weaning / Ekstübasyon)</option>
-                <option value="-3 (Orta sedasyon)">RASS -3: Orta sedasyon (Sesle göz açar ancak göz teması kuramaz)</option>
-              </select>
-            </div>
-
-            {/* 3. Yükleme Dozu (Bolus) Anahtarı */}
+            {/* 2. Yükleme Dozu (Bolus) Anahtarı */}
             <div
               className={`p-4 rounded-xl border transition-all ${
                 enableBolus
@@ -837,13 +735,13 @@ ${
                   <label htmlFor={bolusToggleId} className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 flex items-center gap-1.5 cursor-pointer">
                     <span>Yükleme Dozu (Bolus) Uygula</span>
                     {enableBolus && (
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">
                         Aktif
                       </span>
                     )}
                   </label>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                    YBÜ’de hipotansiyon ve bradikardiyi önlemek için rutin bolus önerilmez. Prosedürel sedasyonda açılabilir.
+                    YBÜ mekanik ventilasyonda hipotansiyon ve bradikardiyi önlemek için rutin bolus önerilmez. Prosedürel sedasyonda veya hekim isteminde açılabilir.
                   </p>
                 </div>
 
@@ -899,17 +797,28 @@ ${
               )}
             </div>
 
-            {/* 4. İdame Dozu Ayarı (Slider & Butonlar) */}
-            <div className="space-y-2">
+            {/* 3. İdame Dozu Ayarı (Slider & Butonlar & Sayısal Giriş) */}
+            <div className="space-y-2 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
               <div className="flex items-center justify-between">
-                <label htmlFor={maintDoseRangeId} className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  İdame İnfüzyon Dozu:
-                </label>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-base font-extrabold text-teal-600 dark:text-teal-400">
-                    {maintenanceDoseMcgKgHr.toFixed(2)}
+                <div>
+                  <label htmlFor={maintDoseRangeId} className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+                    İstenen İnfüzyon Dozu (mcg/kg/saat):
+                  </label>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Önerilen standart aralık: 0.20 – 1.40 mcg/kg/saat
                   </span>
-                  <span className="text-xs text-slate-500">mcg/kg/saat</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="number"
+                    min={0.05}
+                    max={2.5}
+                    step={0.05}
+                    value={maintenanceDoseMcgKgHr}
+                    onChange={(e) => setMaintenanceDoseMcgKgHr(Math.max(0.05, Math.min(2.5, Number(e.target.value) || 0.7)))}
+                    className="w-20 px-2.5 py-1.5 rounded-lg border border-teal-500/40 text-center font-mono font-extrabold text-sm text-teal-600 dark:text-teal-400 bg-white dark:bg-slate-800"
+                  />
+                  <span className="text-xs text-slate-500 font-medium">mcg/kg/sa</span>
                 </div>
               </div>
 
@@ -933,7 +842,7 @@ ${
                       onClick={() => setMaintenanceDoseMcgKgHr(dose)}
                       className={`px-2 py-1 rounded text-[11px] font-mono font-medium border transition-colors cursor-pointer ${
                         maintenanceDoseMcgKgHr === dose
-                          ? 'bg-teal-600 text-white border-teal-600'
+                          ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
                           : isDark
                           ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                           : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200'
@@ -948,7 +857,7 @@ ${
                   <button
                     type="button"
                     onClick={() => setMaintenanceDoseMcgKgHr((prev) => Math.max(0.1, Number((prev - 0.05).toFixed(2))))}
-                    className="px-2 py-1 rounded border text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 cursor-pointer"
+                    className="px-2 py-1 rounded border text-xs font-bold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border-slate-300 dark:border-slate-700 cursor-pointer"
                     title="0.05 azalt"
                   >
                     -0.05
@@ -956,7 +865,7 @@ ${
                   <button
                     type="button"
                     onClick={() => setMaintenanceDoseMcgKgHr((prev) => Math.min(1.5, Number((prev + 0.05).toFixed(2))))}
-                    className="px-2 py-1 rounded border text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 cursor-pointer"
+                    className="px-2 py-1 rounded border text-xs font-bold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border-slate-300 dark:border-slate-700 cursor-pointer"
                     title="0.05 artır"
                   >
                     +0.05
@@ -1014,33 +923,57 @@ ${
             {/* Yükleme Dozu Çıktısı (Açıksa) */}
             {enableBolus && (
               <div
-                className={`p-4 rounded-xl border text-xs ${
+                className={`p-4 rounded-xl border text-xs space-y-3 ${
                   isDark
                     ? 'bg-amber-950/25 border-amber-800/60 text-amber-200'
                     : 'bg-amber-50 border-amber-300 text-amber-950'
                 }`}
               >
-                <div className="flex items-center gap-1.5 font-bold text-sm text-amber-700 dark:text-amber-300 mb-2">
-                  <Activity className="w-4 h-4" />
-                  <span>Yükleme Bolus Pompa Ayarı ({bolusDurationMin} dk)</span>
+                <div className="flex items-center justify-between pb-2 border-b border-amber-200/50 dark:border-amber-800/50">
+                  <div className="flex items-center gap-1.5 font-bold text-sm text-amber-700 dark:text-amber-300">
+                    <Activity className="w-4 h-4" />
+                    <span>Yükleme Bolus Pompa Ayarı ({bolusDurationMin} dk)</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200/60 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200">
+                    Hedef: {bolusDoseMcgKg} mcg/kg
+                  </span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block">Toplam Bolus Hacmi:</span>
-                    <span className="font-mono font-bold text-base">
-                      {totalBolusVolumeMl.toFixed(1)} mL ({totalBolusDoseMcg.toFixed(0)} mcg)
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-amber-200/60 dark:border-amber-800/40">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
+                      Eşdeğer Pompa Hızı:
+                    </span>
+                    <span className="font-mono font-bold text-base text-amber-600 dark:text-amber-400 block">
+                      {bolusRateMcgKgHr.toFixed(1)} mcg/kg/saat
+                    </span>
+                    <span className="text-[10px] text-slate-400 block">
+                      ({bolusDurationMin} dk boyunca)
                     </span>
                   </div>
-                  <div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block">Bolus Pompa Debisi:</span>
-                    <span className="font-mono font-bold text-base text-amber-600 dark:text-amber-400">
+
+                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-amber-200/60 dark:border-amber-800/40">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
+                      Bolus Pompa Debisi:
+                    </span>
+                    <span className="font-mono font-bold text-base text-amber-700 dark:text-amber-300 block">
                       {bolusPumpRateMlHr.toFixed(1)} mL/saat
                     </span>
+                    <span className="text-[10px] text-slate-400 block">
+                      Toplam: {totalBolusVolumeMl.toFixed(1)} mL ({totalBolusDoseMcg.toFixed(0)} mcg)
+                    </span>
                   </div>
                 </div>
-                <p className="text-[10px] opacity-80 mt-2">
-                  * İnfüzyon pompasını {bolusDurationMin} dakikaya ayarlayın, ardından otomatik olarak {infusionRateMlHr.toFixed(2)} mL/saat idameye geçin.
-                </p>
+
+                <div className="p-2.5 rounded-lg bg-amber-100/60 dark:bg-amber-900/30 text-[11px] leading-relaxed text-amber-900 dark:text-amber-200">
+                  <div className="font-semibold flex items-center gap-1 mb-1">
+                    <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 inline" />
+                    <span>Kronometre &amp; Uygulama Protokolü:</span>
+                  </div>
+                  <span>
+                    Pompayı <strong>{bolusRateMcgKgHr.toFixed(1)} mcg/kg/saat</strong> (veya <strong>{bolusPumpRateMlHr.toFixed(1)} mL/saat</strong>) hızına ayarlayın. {bolusDurationMin} dakika süreyle kronometre tutun. {bolusDurationMin} dakika dolduğunda pompayı doğrudan seçilen idame hızına (<strong>{maintenanceDoseMcgKgHr.toFixed(2)} mcg/kg/saat</strong> / {infusionRateMlHr.toFixed(1)} mL/saat) düşürün.
+                  </span>
+                </div>
               </div>
             )}
 
@@ -1077,25 +1010,6 @@ ${
                 </div>
               </div>
             </div>
-
-            {/* Reçete & Emir Kopyalama Butonu */}
-            <button
-              type="button"
-              onClick={handleCopyOrder}
-              className="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm active:scale-98"
-            >
-              {copied ? (
-                <>
-                  <Check className="w-4 h-4 text-white" />
-                  <span>İnfüzyon Emri Kopyalandı!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4" />
-                  <span>İnfüzyon Reçetesini / Emrini Kopyala</span>
-                </>
-              )}
-            </button>
           </div>
         </div>
       </section>
@@ -1318,6 +1232,97 @@ ${
               &gt; 48–72 saat yüksek doz alan hastalarda aniden kesilirse klonidin benzeri yoksunluk gelişir: Rebound
               hipertansiyon, taşikardi, ajitasyon. Doz 24–48 saatte kademeli azaltılmalıdır.
             </p>
+          </div>
+        </div>
+
+        {/* Detaylı Klinik Olumsuz Etkiler: AVP Eksikliği / Direnci ve Tolerans Gelişimi */}
+        <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs sm:text-sm">
+          {/* 1. Arginine Vasopressin (AVP) Eksikliği ve/veya Direnci */}
+          <div className="p-4 rounded-xl border border-cyan-300 dark:border-cyan-800/60 bg-cyan-50/40 dark:bg-cyan-950/20 space-y-2.5">
+            <div className="flex items-center justify-between pb-2 border-b border-cyan-200 dark:border-cyan-900/50">
+              <span className="font-bold text-sm text-cyan-900 dark:text-cyan-200 flex items-center gap-1.5">
+                <Droplet className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                <span>Arginine Vasopressin (AVP) Eksikliği ve Direnci</span>
+              </span>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-900/60 text-cyan-800 dark:text-cyan-300">
+                Santral &amp; Nefrojenik DI Benzeri Tablo
+              </span>
+            </div>
+
+            <div className="space-y-2 text-slate-700 dark:text-slate-300 leading-relaxed text-xs">
+              <div>
+                <strong className="text-cyan-950 dark:text-cyan-300 block mb-0.5">Patofizyolojik Mekanizma:</strong>
+                <p>
+                  Deksmedetomidin, hipotalamik supraoptik ve paraventriküler nükleuslardaki presinaptik α₂-adrenoseptörleri
+                  uyararak hipofizer <strong>Arginin Vazopressin (AVP / ADH)</strong> salınımını doğrudan baskılar.
+                  Eş zamanlı olarak toplayıcı tübüllerdeki α₂B reseptörleri üzerinden adenilat siklazı inhibe ederek renal
+                  V₂ reseptör cAMP yolağına karşı periferik direnç oluşturur ve <strong>Akuaporin-2 (AQP2)</strong> su kanallarının
+                  apikal membrana göçünü engeller. Böylece mikst tipte (santral + nefrojenik) diabetes insipidus benzeri serbest su kaybı ortaya çıkar.
+                </p>
+              </div>
+
+              <div>
+                <strong className="text-cyan-950 dark:text-cyan-300 block mb-0.5">Klinik Prezantasyon &amp; Laboratuvar:</strong>
+                <p>
+                  Özellikle yüksek doz (≥ 0.7–1.0 mcg/kg/saat) veya &gt; 24–48 saat uzamış infüzyon alan YBÜ hastalarında
+                  ani başlangıçlı masif poliüri (<strong>&gt; 4–5 mL/kg/saat</strong> veya <strong>&gt; 3–4 L/gün</strong>),
+                  idrar dansitesinde belirgin düşüş (&lt; 1.005), hipoozmolar idrar (&lt; 200–300 mOsm/kg) ve serbest su kaybına
+                  bağlı hızla gelişen <strong>hipernatremi (serum Na⁺ &gt; 145–155 mEq/L)</strong> ile dehidratasyon tablosu görülür.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-900/70 border border-cyan-200 dark:border-cyan-800/40">
+                <strong className="text-cyan-950 dark:text-cyan-200 block mb-1">Klinik Yönetim &amp; Eylem Protokolü:</strong>
+                <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-600 dark:text-slate-300">
+                  <li><strong>İzlem:</strong> Saatlik idrar debisi, serum sodyumu, plazma ve idrar ozmolaritesi sıkı takip edilir.</li>
+                  <li><strong>İlaç Kesilmesi:</strong> Belirgin poliüri veya hipernatremi geliştiğinde deksmedetomidin infüzyonu vakit kaybetmeden azaltılmalı veya sonlandırılmalıdır; ilaç kesilince diürez genellikle <strong>12–24 saat içinde normale döner</strong>.</li>
+                  <li><strong>Sıvı Replasmanı:</strong> Serbest su açığı hesaplanarak hipotonik sıvılarla (%5 Dekstroz) yerine konur (Na düşüşü &lt; 8–10 mEq/L/gün hedeflenir).</li>
+                  <li><strong>Medikal Tedavi:</strong> Masif veya inatçı tablolarda desmopressin (dDAVP 1–2 mcg IV/SC) denenebilir; asıl küratif tedavi infüzyonun kesilmesidir.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Tolerans Gelişimi ve Taşifilaksi */}
+          <div className="p-4 rounded-xl border border-amber-300 dark:border-amber-800/60 bg-amber-50/40 dark:bg-amber-950/20 space-y-2.5">
+            <div className="flex items-center justify-between pb-2 border-b border-amber-200 dark:border-amber-900/50">
+              <span className="font-bold text-sm text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+                <Activity className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <span>Tolerans Gelişimi, Taşifilaksi ve Tapering</span>
+              </span>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300">
+                Reseptör Desensitizasyonu &amp; Doz Eskalasyonu
+              </span>
+            </div>
+
+            <div className="space-y-2 text-slate-700 dark:text-slate-300 leading-relaxed text-xs">
+              <div>
+                <strong className="text-amber-950 dark:text-amber-300 block mb-0.5">Hücresel &amp; Moleküler Tolerans:</strong>
+                <p>
+                  Sürekli infüzyon 24–48 saati aştığında lokus seruleustaki presinaptik ve postsinaptik α₂-adrenoseptörlerde
+                  G-proteini kenet kaybı (uncoupling), G-proteini kenetli reseptör kinazları (GRK) ile fosforilasyon,
+                  reseptör internalizasyonu ve <strong>down-regülasyon (yoğunluk azalması)</strong> gelişir.
+                </p>
+              </div>
+
+              <div>
+                <strong className="text-amber-950 dark:text-amber-300 block mb-0.5">Klinik Görünüm &amp; Doz Eskalasyonu:</strong>
+                <p>
+                  Aynı sedasyon derinliğini (RASS -1/-2) sürdürebilmek için infüzyon hızının sürekli artırılması zorunluluğu
+                  (taşifilaksi) doğar. Yüksek dozlara rağmen sedatif ve opioid koruyucu analjezik yanıt körelir, hastada
+                  ajitasyon ve otonomik aktivasyon belirtileri görülebilir.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-900/70 border border-amber-200 dark:border-amber-800/40">
+                <strong className="text-amber-950 dark:text-amber-200 block mb-1">Çekilme Reboundu &amp; Tapering (Kademeli Kesme) Protokolü:</strong>
+                <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-600 dark:text-slate-300">
+                  <li><strong>Akut Kesilme Riski:</strong> &gt; 48 saat alan hastada aniden kesilirse şiddetli sempatik deşarj (hipertansif kriz, sinüs taşikardisi, tremor, ajitasyon) tetiklenir.</li>
+                  <li><strong>Kademeli Azaltma:</strong> İnfüzyon her 6–12 saatte bir <strong>%25–50 oranında kademeli olarak</strong> düşürülmeli, doğrudan stoplanmamalıdır.</li>
+                  <li><strong>Enteral Klonidin Köprüsü:</strong> YBÜ'den servise çıkışta veya deksmedetomidinden ayrılma esnasında oral/enteral <strong>klonidin (0.1–0.3 mg/gün oral veya transdermal flaster)</strong> başlanarak infüzyon güvenle sonlandırılır.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>

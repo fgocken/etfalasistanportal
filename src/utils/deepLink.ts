@@ -8,11 +8,12 @@
  *   #arac=calculator
  */
 
-export type HashRouteType = 'infografik' | 'arac';
+export type HashRouteType = 'infografik' | 'arac' | 'tedavi' | 'blok';
 
 export interface ParsedHashRoute {
   type: HashRouteType | null;
   id: string | null;
+  subId?: string | null;
 }
 
 // Bilinen infografik kimlikleri
@@ -59,19 +60,34 @@ export function parseHashRoute(): ParsedHashRoute {
     return { type: null, id: null };
   }
 
-  // 1. #infografik=xyz veya #infographic=xyz
+  // 1. #tedavi=xyz veya #ilac=xyz veya #protocol=xyz
+  const tedaviMatch = hash.match(/^(?:tedavi|ilac|ilaç|protocol)=([a-zA-Z0-9_-]+)/i);
+  if (tedaviMatch && tedaviMatch[1]) {
+    return { type: 'tedavi', id: tedaviMatch[1] };
+  }
+
+  // 2. #blok=xyz
+  const blokMatch = hash.match(/^(?:blok|block)=([a-zA-Z0-9_-]+)/i);
+  if (blokMatch && blokMatch[1]) {
+    return { type: 'blok', id: blokMatch[1] };
+  }
+
+  // 3. #infografik=xyz veya #infographic=xyz
   const infoMatch = hash.match(/^(?:infografik|infographic)=([a-zA-Z0-9_-]+)/i);
   if (infoMatch && infoMatch[1]) {
     return { type: 'infografik', id: infoMatch[1] };
   }
 
-  // 2. #arac=xyz veya #tool=xyz
-  const toolMatch = hash.match(/^(?:arac|araç|tool)=([a-zA-Z0-9_-]+)/i);
+  // 4. #arac=xyz veya #tool=xyz (veya #arac=treatments&tedavi=xyz)
+  const toolMatch = hash.match(/^(?:arac|araç|tool)=([a-zA-Z0-9_-]+)(?:&(?:tedavi|ilac|ilaç|sub)=([a-zA-Z0-9_-]+))?/i);
   if (toolMatch && toolMatch[1]) {
-    return { type: 'arac', id: toolMatch[1] };
+    if (toolMatch[1] === 'treatments' && toolMatch[2]) {
+      return { type: 'tedavi', id: toolMatch[2] };
+    }
+    return { type: 'arac', id: toolMatch[1], subId: toolMatch[2] || null };
   }
 
-  // 3. Doğrudan kısa ad ile fallback kontrolü (örn. #rsi-vs-elective)
+  // 5. Doğrudan kısa ad ile fallback kontrolü (örn. #rsi-vs-elective)
   if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {
     return { type: 'infografik', id: hash };
   }

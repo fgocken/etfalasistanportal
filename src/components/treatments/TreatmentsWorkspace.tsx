@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Pill, 
   FlaskConical, 
@@ -17,6 +17,7 @@ import {
   Clock,
   ExternalLink
 } from 'lucide-react';
+import { parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 import { MagnesiumCalculator } from './MagnesiumCalculator';
 import { HypomagnesemiaInfographic } from './HypomagnesemiaInfographic';
 import { PotassiumCalculator } from './PotassiumCalculator';
@@ -29,6 +30,7 @@ import { FentanylProtocol } from './FentanylProtocol';
 import { PropofolProtocol } from './PropofolProtocol';
 import { MidazolamProtocol } from './MidazolamProtocol';
 import { LidocaineProtocol } from './LidocaineProtocol';
+import { KetamineProtocol } from './KetamineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -485,16 +487,110 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-amber-500/30' 
       }
     ]
+  },
+  {
+    id: 'ketamine',
+    category: 'medications',
+    categories: ['medications', 'sedation'],
+    categoryLabel: 'İlaç Monografisi & Disosiyatif Sedoanaljezi',
+    badge: 'Ketalar · NMDA Antagonisti',
+    title: 'Ketamin',
+    shortDesc: 'NMDA reseptör blokajı ile disosiyatif anestezi ve analjezi; RSI şok indüksiyonu, Ketofol protokolü, akut ağrı sub-dissosiyatif dozu, refrakter bronkospazm, deliryum yönetimi ve YBÜ infüzyonu için 13 basamaklı altın standart ilaç monografisi.',
+    status: 'active',
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'RSI İndüksiyon (Şok/Astım)', 
+        value: '1.5 – 2.0 mg/kg IV', 
+        subtext: 'Şokta 1.0–1.2 mg/kg; Solunum (+)',
+        tooltip: 'Hemodinamik şok, travma ve ağır astım krizinde birinci tercih indüksiyon ajanı',
+        colorClass: 'text-indigo-700 dark:text-indigo-300', 
+        bgClass: 'bg-indigo-500/10', 
+        borderClass: 'border-indigo-500/30' 
+      },
+      { 
+        label: 'Sub-dissosiyatif Ağrı', 
+        value: '0.15 – 0.30 mg/kg', 
+        subtext: 'Opioid koruyucu; 15 dk infüzyon',
+        tooltip: 'Kortikal dissosiasyon yaratmadan derin analjezi; disfori yapmaz',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'Ketofol Kombinasyonu', 
+        value: '1:1 veya 1:4 Oranı', 
+        subtext: 'Propofol ile kombine; stabil',
+        tooltip: 'Propofolün hipotansiyon ve apnesini, ketaminin deliryumunu dengeler',
+        colorClass: 'text-purple-700 dark:text-purple-300', 
+        bgClass: 'bg-purple-500/10', 
+        borderClass: 'border-purple-500/30' 
+      },
+      { 
+        label: 'Acil Sedasyon (IM)', 
+        value: '4.0 – 5.0 mg/kg IM', 
+        subtext: 'Damar yolu yoksa 3-5 dk etki',
+        tooltip: 'Excited delirium ve şiddetli ajitasyonda hızlı ve güvenli kimyasal kısıtlama',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      }
+    ]
   }
 ];
 
 export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId }) => {
   const [activeCategory, setActiveCategory] = useState<TreatmentCategory>('medications');
-  // null = kartlar galerisi, 'magnesium', 'potassium', 'sodium', 'dexmedetomidine', 'remifentanil', 'fentanyl'
+  // null = kartlar galerisi, 'magnesium', 'potassium', 'sodium', 'dexmedetomidine', 'remifentanil', 'fentanyl', etc.
   const [activeProtocolId, setActiveProtocolId] = useState<string | null>(initialProtocolId || null);
   const [mgViewMode, setMgViewMode] = useState<MagnesiumViewMode>('all');
   const [kViewMode, setKViewMode] = useState<PotassiumViewMode>('all');
   const [naViewMode, setNaViewMode] = useState<SodiumViewMode>('all');
+
+  useEffect(() => {
+    if (initialProtocolId !== undefined && initialProtocolId !== null) {
+      setActiveProtocolId(initialProtocolId);
+    }
+  }, [initialProtocolId]);
+
+  useEffect(() => {
+    const handleHash = () => {
+      const route = parseHashRoute();
+      if (route.type === 'tedavi' && route.id) {
+        setActiveProtocolId(route.id);
+      } else if (route.type === 'arac' && route.id === 'treatments' && !route.subId) {
+        setActiveProtocolId(null);
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  const handleSelectProtocol = (id: string) => {
+    setActiveProtocolId(id);
+    updateHashRoute('tedavi', id);
+  };
+
+  const handleCloseProtocol = () => {
+    setActiveProtocolId(null);
+    updateHashRoute('arac', 'treatments');
+  };
+
+  const getCategoryCount = (cat: TreatmentCategory) => {
+    return PROTOCOL_CARDS.filter(card => {
+      if (card.categories && card.categories.length > 0) {
+        return card.categories.includes(cat);
+      }
+      return card.category === cat;
+    }).length;
+  };
+
+  const medCount = getCategoryCount('medications');
+  const sedationCount = getCategoryCount('sedation');
+  const electrolyteCount = getCategoryCount('electrolyte');
+  const vasoactiveCount = getCategoryCount('vasoactive');
+  const hemostasisCount = getCategoryCount('hemostasis');
 
   const filteredCards = PROTOCOL_CARDS.filter(card => {
     if (card.categories && card.categories.length > 0) {
@@ -515,7 +611,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             {activeProtocolId ? (
               <button
                 type="button"
-                onClick={() => setActiveProtocolId(null)}
+                onClick={handleCloseProtocol}
                 className={`p-2 rounded-xl border transition-colors cursor-pointer flex items-center justify-center ${
                   isDark 
                     ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700' 
@@ -536,23 +632,27 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
                   {activeProtocolId ? selectedProtocol?.title : 'Tedaviler ve İlaçlar'}
                 </h1>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 font-mono">
-                  {activeProtocolId ? 'Protokol Detayı' : 'Klinik Protokoller'}
-                </span>
+                {activeProtocolId !== 'dexmedetomidine' && (
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 font-mono">
+                    {activeProtocolId ? 'Protokol Detayı' : 'Klinik Protokoller'}
+                  </span>
+                )}
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                {activeProtocolId
-                  ? 'Protokolü kapatıp listeye dönmek için geri butonunu kullanabilir veya alt sekmelerle görünümü özelleştirebilirsiniz.'
-                  : 'Anestezi, reanimasyon ve yoğun bakımda kanıta dayalı ilaç hazırlama, doz hesaplayıcıları ve klinik replasman protokolleri'
-                }
-              </p>
+              {activeProtocolId !== 'dexmedetomidine' && (
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  {activeProtocolId
+                    ? 'Protokolü kapatıp listeye dönmek için geri butonunu kullanabilir veya alt sekmelerle görünümü özelleştirebilirsiniz.'
+                    : 'Anestezi, reanimasyon ve yoğun bakımda kanıta dayalı ilaç hazırlama, doz hesaplayıcıları ve klinik replasman protokolleri'
+                  }
+                </p>
+              )}
             </div>
           </div>
 
           {activeProtocolId && (
             <button
               type="button"
-              onClick={() => setActiveProtocolId(null)}
+              onClick={handleCloseProtocol}
               className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start md:self-auto ${
                 isDark 
                   ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700' 
@@ -584,8 +684,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             >
               <Pill className="w-3.5 h-3.5 text-rose-500" />
               <span>İlaçlar (Monografiler)</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-mono">
-                5 İlaç
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-mono font-bold">
+                {medCount} İlaç
               </span>
             </button>
 
@@ -605,8 +705,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             >
               <Brain className="w-3.5 h-3.5 text-purple-500" />
               <span>Sedoanaljezi &amp; Nöromüsküler</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono">
-                5 İlaç
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono font-bold">
+                {sedationCount} İlaç
               </span>
             </button>
 
@@ -626,8 +726,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             >
               <Zap className="w-3.5 h-3.5 text-teal-500" />
               <span>Elektrolit &amp; Sıvı Replasmanı</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-teal-500/20 text-teal-600 dark:text-teal-400 font-mono">
-                3 Protokol
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-teal-500/20 text-teal-600 dark:text-teal-400 font-mono font-bold">
+                {electrolyteCount} Protokol
               </span>
             </button>
 
@@ -647,8 +747,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             >
               <Syringe className="w-3.5 h-3.5 text-cyan-500" />
               <span>İnfüzyon &amp; Vazoaktif Protokolleri</span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 font-sans">
-                Modüler
+              <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-bold ${
+                vasoactiveCount > 0 
+                  ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400' 
+                  : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 font-sans'
+              }`}>
+                {vasoactiveCount > 0 ? `${vasoactiveCount} Protokol` : 'Modüler'}
               </span>
             </button>
 
@@ -668,8 +772,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             >
               <Droplet className="w-3.5 h-3.5 text-rose-500" />
               <span>Hemostaz &amp; Kan Transfüzyon Yönetimi</span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 font-sans">
-                Modüler
+              <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-bold ${
+                hemostasisCount > 0 
+                  ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400' 
+                  : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 font-sans'
+              }`}>
+                {hemostasisCount > 0 ? `${hemostasisCount} Protokol` : 'Modüler'}
               </span>
             </button>
           </div>
@@ -680,7 +788,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {!activeProtocolId && filteredCards.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span>Uygulamak veya incelemek istediğiniz tedavi protokolünü seçin:</span>
+            <span>Uygulamak veya incelemek istediğiniz ilaç ve tedavi protokolünü seçin:</span>
             <span className="font-mono text-[11px] font-semibold">{filteredCards.length} Protokol</span>
           </div>
 
@@ -688,12 +796,21 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             {filteredCards.map((card) => {
               const isActive = card.status === 'active';
               return (
-                <div
+                <a
                   key={card.id}
-                  onClick={() => {
-                    if (isActive) setActiveProtocolId(card.id);
+                  href={isActive ? `#tedavi=${card.id}` : undefined}
+                  onClick={(e) => {
+                    if (!isActive) {
+                      e.preventDefault();
+                      return;
+                    }
+                    // Standart sol tık yapıldıysa (Ctrl/Cmd/Shift tuşları basılı değilse) SPA içi hızlı geçiş
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                      e.preventDefault();
+                      handleSelectProtocol(card.id);
+                    }
                   }}
-                  className={`group relative p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between select-none ${
+                  className={`group relative p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between select-none block no-underline text-inherit ${
                     isActive 
                       ? isDark 
                         ? 'bg-slate-900/90 border-slate-800 hover:border-teal-500/60 hover:bg-slate-800/70 shadow-xs cursor-pointer' 
@@ -775,7 +892,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
                       </span>
                     )}
                   </div>
-                </div>
+                </a>
               );
             })}
           </div>
@@ -1001,6 +1118,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 10: LİDOKAİN PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'lidocaine') */}
       {activeProtocolId === 'lidocaine' && (
         <LidocaineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 11: KETAMİN PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'ketamine') */}
+      {activeProtocolId === 'ketamine' && (
+        <KetamineProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
