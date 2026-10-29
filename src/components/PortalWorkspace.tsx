@@ -54,6 +54,7 @@ export interface ToolItemDef {
   badge?: string;
   badgeHighlight?: boolean;
   desc: string;
+  clinicalKey?: string;
   icon: React.ComponentType<{ className?: string }>;
   iconBgDark: string;
   iconBgLight: string;
@@ -71,7 +72,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   calculator: {
     id: 'calculator',
     title: 'Kilo, MV Volüm, İdame Sıvı',
-    desc: 'İdeal Kilo (IBW Devine), Öngörülen Kilo (PBW), VKİ, Düzeltilmiş Kilo (AdjBW), Koruyucu Ventilasyon Tidal Volümü ve İdame Sıvı Hızı.',
+    desc: 'İdeal Kilo (IBW Devine), VKİ ve Düzeltilmiş Kilo (AdjBW). ARDSnet 6–8 mL/kg akciğer koruyucu tidal volüm ve Holliday-Segar (4-2-1) saatlik idame sıvı hesabı.',
+    clinicalKey: 'Akciğer koruyucu ventilasyonda gerçek kilo değil, mutlaka PBW (öngörülen kilo) baz alınmalıdır.',
     icon: Calculator,
     iconBgDark: 'bg-teal-500/10',
     iconBgLight: 'bg-teal-50',
@@ -86,7 +88,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     id: 'intraop',
     title: 'İntraop Sıvı Hesaplaması',
     badge: 'İntraop Sıvı',
-    desc: 'Açlık süresi, obezite (AdjBW) ve 4 farklı cerrahi doku travma kaybına göre saat saat infüzyon planı.',
+    desc: 'Preoperatif açlık sıvı açığı (%50 ilk saatte, kalanı sonraki 2 saatte) ve cerrahi doku travma kaybına (2–8 mL/kg/saat) göre saat saat infüzyon planı.',
+    clinicalKey: 'Obez hastada aşırı sıvı yükünü önlemek için cerrahi doku travma kaybı AdjBW üzerinden hesaplanır.',
     icon: Droplet,
     iconBgDark: 'bg-cyan-500/10',
     iconBgLight: 'bg-cyan-50',
@@ -100,7 +103,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   infusion: {
     id: 'infusion',
     title: 'İnfüzyon Hızı Çevirici/Hesaplayıcı',
-    desc: 'İlaç konsantrasyonu, 11 birimde otomatik dönüşüm (mcg/kg/dk, mL/saat) ve canlı sayaç.',
+    desc: 'İlaç konsantrasyonu, mL/saat debi ve mcg/kg/dk arasında anlık iki yönlü çevrim. Canlı damla sayacı ve vazoaktif/inotrop pompa ayarları.',
+    clinicalKey: '11 farklı doz birimi arasında hatasız dönüşüm ile pompa ayarlarında aritmetik hata riskini sıfırlar.',
     icon: Syringe,
     iconBgDark: 'bg-teal-500/15',
     iconBgLight: 'bg-teal-50',
@@ -116,7 +120,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   preop: {
     id: 'preop',
     title: 'Preoperatif Değerlendirme',
-    desc: 'MACE kardiyak risk hesaplayıcı (RCRI & Gupta), 2025/2026 ASA fiziksel durum sınıflaması ve klinik kardiyovasküler kılavuzlar.',
+    desc: 'Perioperatif MACE kardiyak risk analizi (RCRI & Gupta), güncel 2025/2026 ASA fiziksel durum sınıflaması ve metabolik kapasite (MET) kılavuzu.',
+    clinicalKey: 'Elektif cerrahi öncesi kardiyak morbidite öngörüsü ve hedef odaklı konsültasyon optimizasyonu sağlar.',
     icon: ClipboardCheck,
     iconBgDark: 'bg-blue-500/15',
     iconBgLight: 'bg-blue-50',
@@ -132,7 +137,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   airway: {
     id: 'airway',
     title: 'Havayolu',
-    desc: 'Zor havayolu algoritmaları, entübasyon kriterleri, videolaringoskopi, SGA/LMA ve acil cerrahi havayolu protokolleri.',
+    desc: 'Zor maske ve entübasyon öngörü kriterleri (Mallampati, Tiromental, ULBT), Videolaringoskopi / SGA basamakları ve acil cerrahi havayolu protokolü.',
+    clinicalKey: 'Entübe edilemez / havalandırılamaz (CICO) durumunda saniyeler içinde acil krikotiroidotomi eylem planı.',
     icon: Wind,
     iconBgDark: 'bg-cyan-500/15',
     iconBgLight: 'bg-cyan-50',
@@ -148,7 +154,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   treatments: {
     id: 'treatments',
     title: 'Tedaviler ve İlaçlar',
-    desc: 'Sodyum bozuklukları (Adrogué-Madias & ODS), Magnezyum (Mathews 2022) ve Potasyum/Kaliphos elektrolit hesaplayıcıları ve klinik infografikleri.',
+    desc: 'Akut hipo/hipernatremi (Adrogué-Madias & ODS güvenliği), Magnezyum (Mathews 2022), Potasyum protokolü ve Deksmedetomidin, Propofol, Midazolam monografları.',
+    clinicalKey: 'Hiponatremide aşırı hızlı düzeltmeden kaçınma (maksimum 8–10 mEq/L/gün) ve kanıta dayalı elektrolit replasmanı.',
     icon: Pill,
     iconBgDark: 'bg-teal-500/15',
     iconBgLight: 'bg-teal-50',
@@ -164,7 +171,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   'nerve-blocks': {
     id: 'nerve-blocks',
     title: 'Sinir Blokları & LAST',
-    desc: 'USG eşliğinde periferik ve fasya plan blokları (ESP, TAP, ACB vb.), duyu haritası, kilo bazlı LA dozu ve acil %20 İntralipid LAST kurtarma protokolü.',
+    desc: 'USG eşliğinde periferik ve fasya plan blokları (ESP, TAP, PENG, ACB vb.), sonogramlar, kilo bazlı LA toksik dozları ve %20 İntralipid LAST kurtarma kılavuzu.',
+    clinicalKey: 'Lokal anestezik sistemik toksisitesinde (LAST) nörolojik/kardiyovasküler kollapsta acil İntralipid bolus ve infüzyon basamakları.',
     icon: Compass,
     iconBgDark: 'bg-indigo-500/15',
     iconBgLight: 'bg-indigo-50',
@@ -180,7 +188,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   emergencies: {
     id: 'emergencies',
     title: 'Anestezi Acilleri',
-    desc: 'Malign hipertermi, arrest & CPR/ACLS, şiddetli anafilaksi, LAST ve perioperatif kriz yönetimi.',
+    desc: 'Malign hipertermi kriz yönetimi (Dantrolen hazırlığı & soğutma), perioperatif kardiyak arrest (ACLS), şiddetli anafilaksi (İM adrenalin) ve kriz algoritmaları.',
+    clinicalKey: 'Ameliyathane krizlerinde gecikmeksizin uygulanacak öncelikli adım adım medikal eylem kontrol listeleri.',
     icon: ShieldAlert,
     iconBgDark: 'bg-red-500/15',
     iconBgLight: 'bg-red-50',
@@ -198,7 +207,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     title: 'Klinik İnfografikler',
     badge: 'İnfografikler',
     badgeHighlight: true,
-    desc: 'Anestezi ve cerrahi kılavuzlar, risk sınıflamaları ve hızlı referans infografik şemaları.',
+    desc: 'Zor havayolu algoritmaları, preoperatif açlık süreleri (2-4-6-8 kuralı), masif transfüzyon protokolü ve perioperatif risk sınıflamaları görsel rehberi.',
+    clinicalKey: 'Hızlı görsel hafıza ve vaka öncesi hazırlık için yüksek çözünürlüklü asistan infografik arşivi.',
     icon: BarChart3,
     iconBgDark: 'bg-violet-500/15',
     iconBgLight: 'bg-violet-50',
@@ -216,7 +226,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     title: 'Klinik ve Dahili Hatlar',
     badge: 'Dahili Hatlar',
     badgeHighlight: true,
-    desc: 'Seyrantepe ve Çayırbaşı yerleşkeleri dahili numaraları, iç ve dış hat arama kuralları (şifre korumalı).',
+    desc: 'Seyrantepe ve Çayırbaşı yerleşkeleri ameliyathane salonları, anestezi odaları, YBÜ, kan merkezi, radyoloji ve nöbetçi kıdemli hızlı dahili rehberi.',
+    clinicalKey: 'Kritik vaka içi bildirimlerde ve acil konsültasyonlarda yerleşkeler arası tek tıkla dahili arama.',
     icon: Phone,
     iconBgDark: 'bg-indigo-500/10',
     iconBgLight: 'bg-indigo-50',
@@ -232,7 +243,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     title: 'Asistan Nöbet Çizelgesi',
     badge: 'Ekim 2026',
     badgeHighlight: true,
-    desc: 'Seyrantepe ve Çayırbaşı yerleşkeleri aylık nöbet listesi, Excel (.xlsx) yükleme & indirme ve hekim nöbet takas yönetimi.',
+    desc: 'Seyrantepe ve Çayırbaşı güncel aylık asistan nöbet listesi, salon dağılımları, hekim nöbet takas yönetimi ve Excel (.xlsx) dışa/içe aktarma desteği.',
+    clinicalKey: 'Klinik içi nöbet organizasyonu, günlük nöbetçi hekim listesi ve adil çalışma düzeni takibi.',
     icon: Calendar,
     iconBgDark: 'bg-emerald-500/15',
     iconBgLight: 'bg-emerald-50',
@@ -851,6 +863,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Şişli Etfal Dashboard
                 </h2>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Anesteziyoloji ve Reanimasyon Kliniği hızlı klinik karar destek ve hesaplama araçları
+                </p>
               </div>
 
               {/* Sleek, Non-Intrusive Quick Search Bar & Action Buttons */}
@@ -1000,13 +1015,24 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                       }`}>
                         {tool.title}
                       </h3>
+
+                      {/* Kısa Kritik Temel Açıklama */}
+                      <p className={`text-xs mt-2 leading-relaxed ${
+                        isDark ? 'text-slate-400 group-hover:text-slate-300' : 'text-slate-600 group-hover:text-slate-800'
+                      }`}>
+                        {tool.desc}
+                      </p>
                     </div>
 
-                    <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-end text-xs">
-                      <span className={`font-semibold text-xs ${
-                        isDark ? 'text-teal-400 group-hover:underline' : 'text-teal-700 group-hover:underline'
+                    <div className="pt-2.5 mt-3 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-between text-xs">
+                      <span className={`text-[11px] font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                        Klinik Protokol
+                      </span>
+                      <span className={`font-semibold text-xs flex items-center gap-1 ${
+                        isDark ? 'text-teal-400 group-hover:translate-x-0.5 transition-transform' : 'text-teal-700 group-hover:translate-x-0.5 transition-transform'
                       }`}>
-                        Aracı Aç →
+                        <span>Aracı Aç</span>
+                        <span>→</span>
                       </span>
                     </div>
                   </div>
