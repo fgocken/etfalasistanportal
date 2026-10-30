@@ -488,6 +488,26 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'weekly-work-schedule',
+    title: 'Haftalık Çalışma Programı (Salon & Birim Dağılımı)',
+    category: 'Rehber & Nöbet',
+    badge: 'Mesai Programı',
+    description: 'Haftalık ameliyathane salonları, yoğun bakımlar, poliklinik ve hekim yerleşimleri tablosu.',
+    keywords: ['haftalık çalışma programı', 'mesai programı', 'salon dağılımı', 'post-op', 'hekim nerede', 'ameliyathane salonu', 'seyrantepe post op', 'sarıyer post op'],
+    tabId: 'schedule',
+    popular: true
+  },
+  {
+    id: 'today-postop-doctors',
+    title: 'Günün Post-Op Hekimleri (Seyrantepe & Sarıyer)',
+    category: 'Rehber & Nöbet',
+    badge: 'Post-op',
+    description: 'Hafta içi mesai günlerinde Seyrantepe Post-op YBÜ ve Sarıyer -1 YBÜ görevli doktorları.',
+    keywords: ['post op', 'günün postopcusu', 'postop hekimi', 'post-op ybü', 'sarıyer post op', 'seyrantepe post op'],
+    tabId: 'schedule',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',

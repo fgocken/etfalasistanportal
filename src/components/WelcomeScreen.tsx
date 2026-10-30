@@ -13,6 +13,8 @@ import { LiveClock } from './LiveClock';
 import { CampusWeatherBar } from './campus/CampusWeatherBar';
 import { DutyRosterTickerBar } from './roster/DutyRosterTickerBar'; /* [MODULAR_DUTY_ROSTER: Slim Ticker] */
 import { DutyRosterModal } from './roster/DutyRosterModal'; /* [MODULAR_DUTY_ROSTER] */
+import { TodayPostOpBadgeBar } from './schedule/TodayPostOpBadgeBar';
+import { updateHashRoute } from '../utils/deepLink';
 
 interface WelcomeScreenProps {
   onProceed: () => void;
@@ -197,6 +199,17 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         <DutyRosterTickerBar 
           isDark={isDark} 
           onOpenDetail={() => setIsRosterModalOpen(true)} 
+        />
+      </div>
+
+      {/* Today's Post-Op Doctors Bar (Only visible on weekdays) */}
+      <div className="w-full max-w-4xl mx-auto z-10 mt-1.5">
+        <TodayPostOpBadgeBar 
+          isDark={isDark} 
+          onOpenSchedule={() => {
+            updateHashRoute('arac', 'schedule');
+            onProceed();
+          }}
         />
       </div>
 

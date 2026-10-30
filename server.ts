@@ -14,6 +14,7 @@ app.use(express.json({ limit: '15mb' }));
 // Persistent storage directory for rosters
 const DATA_DIR = path.join(__dirname, 'data');
 const ROSTERS_FILE = path.join(DATA_DIR, 'rosters.json');
+const SCHEDULE_FILE = path.join(DATA_DIR, 'weekly_schedule.json');
 
 // Ensure data folder exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -177,6 +178,49 @@ app.delete('/api/roster/:monthKey', (req, res) => {
     });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err?.message || 'Silinemedi' });
+  }
+});
+
+// Weekly Schedule API
+function readWeeklySchedule(): any | null {
+  try {
+    if (!fs.existsSync(SCHEDULE_FILE)) return null;
+    const content = fs.readFileSync(SCHEDULE_FILE, 'utf-8');
+    return JSON.parse(content);
+  } catch (err) {
+    console.error('Error reading weekly schedule:', err);
+    return null;
+  }
+}
+
+function saveWeeklySchedule(schedule: any): boolean {
+  try {
+    fs.writeFileSync(SCHEDULE_FILE, JSON.stringify(schedule, null, 2), 'utf-8');
+    return true;
+  } catch (err) {
+    console.error('Error saving weekly schedule:', err);
+    return false;
+  }
+}
+
+app.get('/api/schedule', (req, res) => {
+  const schedule = readWeeklySchedule();
+  res.json(schedule || null);
+});
+
+app.post('/api/schedule', (req, res) => {
+  try {
+    const schedule = req.body;
+    if (!schedule || !Array.isArray(schedule.days) || !Array.isArray(schedule.rows)) {
+      return res.status(400).json({ success: false, error: 'Geçersiz haftalık program verisi' });
+    }
+    const saved = saveWeeklySchedule(schedule);
+    if (!saved) {
+      return res.status(500).json({ success: false, error: 'Sunucuya haftalık program kaydedilemedi' });
+    }
+    res.json({ success: true, schedule });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err?.message || 'Bilinmeyen hata' });
   }
 });
 

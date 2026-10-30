@@ -42,11 +42,12 @@ import { AnesthesiaEmergenciesView } from './emergencies/AnesthesiaEmergenciesVi
 import { InfographicsView } from './infographics/InfographicsView';
 import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
+import { WeeklyScheduleToolView } from './schedule/WeeklyScheduleToolView';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -256,11 +257,30 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-emerald-800',
     ringClassDark: 'ring-1 ring-emerald-500/20',
     ringClassLight: 'ring-1 ring-emerald-500/10'
+  },
+  schedule: {
+    id: 'schedule',
+    title: 'Haftalık Çalışma Programı',
+    badge: '26-30 Ekim',
+    badgeHighlight: true,
+    desc: 'Haftalık ameliyathane salonları, yoğun bakımlar ve poliklinik hekim yerleşimleri. Günün Seyrantepe & Sarıyer post-op sorumluları ve hekim bazlı arama.',
+    clinicalKey: 'Haftalık ameliyathane salon dağılımı, günün post-op hekimleri ve hekim görev yeri sorgulama.',
+    icon: Calendar,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800',
+    ringClassDark: 'ring-1 ring-teal-500/20',
+    ringClassLight: 'ring-1 ring-teal-500/10'
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics', 'contacts', 'roster'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v12';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['schedule', 'roster', 'contacts', 'calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v13';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -1486,6 +1506,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 9. Duty Roster Tool */}
         {activeTab === 'roster' && (
           <DutyRosterToolView isDark={isDark} />
+        )}
+
+        {/* 10. Weekly Schedule Tool */}
+        {activeTab === 'schedule' && (
+          <WeeklyScheduleToolView isDark={isDark} />
         )}
       </main>
 

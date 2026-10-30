@@ -42,7 +42,8 @@ export const VALID_TOOL_IDS = [
   'emergencies',
   'infographics',
   'contacts',
-  'roster'
+  'roster',
+  'schedule'
 ] as const;
 
 export type ValidToolId = typeof VALID_TOOL_IDS[number];
