@@ -29,7 +29,7 @@ export interface ClinicPhoto {
   alt: string;
 }
 
-// User iconic artwork album - 6 photos including new operating room staff artwork
+// User iconic artwork album - 12 photos including new operating room, laboratory, morning visit, PACU and online seminar artworks
 const CLINIC_ALBUM: ClinicPhoto[] = [
   {
     id: 1,
@@ -72,6 +72,48 @@ const CLINIC_ALBUM: ClinicPhoto[] = [
     title: 'Ameliyathane Ekibi (Salon 8 & 9)',
     subtitle: 'I ❤️ people (under general anesthesia) - Ortopedi Salonları',
     alt: 'Şişli Etfal Ameliyathane Ekibi - I ❤️ people (under general anesthesia) - Salon 8 ve 9 Ortopedi'
+  },
+  {
+    id: 7,
+    src: '/assets/aistudio/1793347911650_32625068.jpg',
+    title: 'Salon Ekibi & Ameliyathane Dayanışması',
+    subtitle: 'Masa başında vaka hazırlığı, kardeşlik ve anestezi ekip ruhu',
+    alt: 'Şişli Etfal Ameliyathane Ekibi Masa Başı Dayanışması'
+  },
+  {
+    id: 8,
+    src: '/assets/aistudio/1793347584968_aecc76e6.jpg',
+    title: 'Deneysel Cerrahi & Araştırma Laboratuvarı',
+    subtitle: 'Mikrocerrahi teknikleri ve deneysel anestezi çalışmaları',
+    alt: 'Şişli Etfal Anestezi Deneysel Cerrahi ve Araştırma Laboratuvarı'
+  },
+  {
+    id: 9,
+    src: '/assets/aistudio/1793347697407_8f776ac5.jpg',
+    title: 'Klinik Kadrosu & Sabah Toplantısı',
+    subtitle: 'Hocalarımız ve asistan hekimlerimizle ortak klinik birliği',
+    alt: 'Şişli Etfal Anestezi Kliniği Sabah Viziti ve Ekip Birliği'
+  },
+  {
+    id: 10,
+    src: '/assets/aistudio/1793347731742_53fa5715.jpg',
+    title: 'Preoperatif Hazırlık & Damaryolu Ünitesi',
+    subtitle: 'Damaryolu açılışı, preop kan alma ve hasta başı moral desteği',
+    alt: 'Şişli Etfal Preoperatif Hazırlık ve Damaryolu Ünitesi'
+  },
+  {
+    id: 11,
+    src: '/assets/aistudio/1793347853244_d243e192.jpg',
+    title: 'Online Asistan Semineri & Olgu Konseyi',
+    subtitle: 'Ekran paylaşımıyla teorik eğitimler ve interaktif olgu sunumları',
+    alt: 'Şişli Etfal Anestezi Online Asistan Semineri ve Olgu Konseyi'
+  },
+  {
+    id: 12,
+    src: '/assets/aistudio/1793347847115_a2fbe784.jpg',
+    title: 'Uyandırma (PACU) & Taburculuk Sevinci',
+    subtitle: 'Başarılı ekstübasyon sonrası hastayı güven ve tebessümle servise uğurlama',
+    alt: 'Şişli Etfal Uyandırma Odası (PACU) Ekstübasyon ve Taburculuk'
   }
 ];
 
@@ -122,7 +164,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           display: flex;
           width: max-content;
           will-change: transform;
-          animation: filmStripMarquee 34s linear infinite;
+          animation: filmStripMarquee 24s linear infinite;
         }
         .film-strip-container:hover .film-strip-track {
           animation-play-state: paused !important;
@@ -342,8 +384,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           >
             {/* Top Lightbox Bar */}
             <div className="w-full flex items-center justify-between py-2 text-white/90 px-1">
-              <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30 font-bold">
+              <div className="flex items-center gap-2.5 text-xs font-mono">
+                <span className="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 font-bold">
                   {lightboxPhotoIdx + 1} / {CLINIC_ALBUM.length}
                 </span>
               </div>
@@ -379,7 +421,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               <img
                 src={activeLightboxPhoto.src}
                 alt={activeLightboxPhoto.alt}
-                className="max-h-[68vh] sm:max-h-[74vh] max-w-full object-contain rounded-xl border border-slate-700/80 shadow-2xl shadow-black select-none"
+                className="max-h-[75vh] sm:max-h-[82vh] max-w-full object-contain rounded-xl border border-slate-700/80 shadow-2xl shadow-black select-none"
               />
 
               {/* Right Arrow */}
@@ -396,10 +438,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               </button>
             </div>
 
-            {/* Bottom Navigation Hint */}
-            <div className="w-full text-center px-4 py-2 text-xs">
-              <p className="text-[11px] text-slate-400 font-mono">
-                Geçiş için klavyedeki yön tuşlarını (← / →), kapatmak için ESC tuşunu kullanabilirsiniz.
+            {/* Bottom Keyboard Hint Only */}
+            <div className="w-full text-center px-4 py-1 text-xs">
+              <p className="text-[10px] text-slate-500 font-mono">
+                ← / → yön tuşları ile geçiş yapabilir, ESC ile kapatabilirsiniz.
               </p>
             </div>
           </div>
