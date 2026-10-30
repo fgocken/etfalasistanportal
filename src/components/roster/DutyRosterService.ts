@@ -310,43 +310,72 @@ export function resetToDefaultRoster(monthKey: string = '2026-10'): MonthDutyRos
  * Downloads a clean .xlsx spreadsheet matching the clinic's EXACT official table columns:
  * [TARİH, GÜN, SEYRANTEPE 1, SEYRANTEPE 2, SEYRANTEPE 3, SEYRANTEPE 4, SEYRANTEPE 5, SEYRANTEPE 6, SARIYER-1, SARIYER-2, SARIYER-3, SARIYER-4]
  */
-export function downloadExcelTemplate(roster?: MonthDutyRoster): void {
+export function downloadExcelTemplate(roster?: MonthDutyRoster, forMonthKey?: string): void {
   const currentRoster = roster || getSavedRoster();
   const rows: any[] = [];
+  let exportFileName = `Sisli_Hamidiye_Etfal_Anestezi_Nobet_${currentRoster.monthKey}.xlsx`;
 
-  const sortedDates = Object.keys(currentRoster.days).sort();
-
-  for (const dateKey of sortedDates) {
-    const day = currentRoster.days[dateKey];
+  // If requesting November 2026 template specifically and not yet loaded
+  if (forMonthKey === '2026-11' || (!roster && forMonthKey === '2026-11')) {
+    exportFileName = 'Sisli_Hamidiye_Etfal_Anestezi_Nobet_2026-11_Kasim.xlsx';
+    const turkishDayNames = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
     
-    // Find Seyrantepe 1..6
-    const s1 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 1')?.name || day.seyrantepeStaff[0]?.name || '';
-    const s2 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 2')?.name || day.seyrantepeStaff[1]?.name || '';
-    const s3 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 3')?.name || day.seyrantepeStaff[2]?.name || '';
-    const s4 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 4')?.name || day.seyrantepeStaff[3]?.name || '';
-    const s5 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 5')?.name || day.seyrantepeStaff[4]?.name || '';
-    const s6 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 6')?.name || day.seyrantepeStaff[5]?.name || '';
+    for (let d = 1; d <= 30; d++) {
+      const dt = new Date(2026, 10, d); // Month index 10 = November
+      const dayStr = String(d).padStart(2, '0');
+      const formattedDate = `${dayStr}.11.2026`;
+      const dayName = turkishDayNames[dt.getDay()];
 
-    // Find Sarıyer 1..4 (Çayırbaşı)
-    const sar1 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-1')?.name || day.cayirbasiStaff[0]?.name || '';
-    const sar2 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-2')?.name || day.cayirbasiStaff[1]?.name || '';
-    const sar3 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-3')?.name || day.cayirbasiStaff[2]?.name || '';
-    const sar4 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-4')?.name || day.cayirbasiStaff[3]?.name || '';
+      rows.push({
+        'TARİH': formattedDate,
+        'GÜN': dayName,
+        'SEYRANTEPE 1': '',
+        'SEYRANTEPE 2': '',
+        'SEYRANTEPE 3': '',
+        'SEYRANTEPE 4': '',
+        'SEYRANTEPE 5': '',
+        'SEYRANTEPE 6': '',
+        'SARIYER-1': '',
+        'SARIYER-2': '',
+        'SARIYER-3': '',
+        'SARIYER-4': ''
+      });
+    }
+  } else {
+    const sortedDates = Object.keys(currentRoster.days).sort();
 
-    rows.push({
-      'TARİH': day.formattedDate,
-      'GÜN': day.dayName,
-      'SEYRANTEPE 1': s1,
-      'SEYRANTEPE 2': s2,
-      'SEYRANTEPE 3': s3,
-      'SEYRANTEPE 4': s4,
-      'SEYRANTEPE 5': s5,
-      'SEYRANTEPE 6': s6,
-      'SARIYER-1': sar1,
-      'SARIYER-2': sar2,
-      'SARIYER-3': sar3,
-      'SARIYER-4': sar4
-    });
+    for (const dateKey of sortedDates) {
+      const day = currentRoster.days[dateKey];
+      
+      // Find Seyrantepe 1..6
+      const s1 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 1')?.name || day.seyrantepeStaff[0]?.name || '';
+      const s2 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 2')?.name || day.seyrantepeStaff[1]?.name || '';
+      const s3 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 3')?.name || day.seyrantepeStaff[2]?.name || '';
+      const s4 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 4')?.name || day.seyrantepeStaff[3]?.name || '';
+      const s5 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 5')?.name || day.seyrantepeStaff[4]?.name || '';
+      const s6 = day.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 6')?.name || day.seyrantepeStaff[5]?.name || '';
+
+      // Find Sarıyer 1..4 (Çayırbaşı)
+      const sar1 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-1')?.name || day.cayirbasiStaff[0]?.name || '';
+      const sar2 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-2')?.name || day.cayirbasiStaff[1]?.name || '';
+      const sar3 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-3')?.name || day.cayirbasiStaff[2]?.name || '';
+      const sar4 = day.cayirbasiStaff.find(s => s.slot === 'SARIYER-4')?.name || day.cayirbasiStaff[3]?.name || '';
+
+      rows.push({
+        'TARİH': day.formattedDate,
+        'GÜN': day.dayName,
+        'SEYRANTEPE 1': s1,
+        'SEYRANTEPE 2': s2,
+        'SEYRANTEPE 3': s3,
+        'SEYRANTEPE 4': s4,
+        'SEYRANTEPE 5': s5,
+        'SEYRANTEPE 6': s6,
+        'SARIYER-1': sar1,
+        'SARIYER-2': sar2,
+        'SARIYER-3': sar3,
+        'SARIYER-4': sar4
+      });
+    }
   }
 
   const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -370,12 +399,40 @@ export function downloadExcelTemplate(roster?: MonthDutyRoster): void {
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'ASİSTAN NÖBET LİSTESİ');
 
-  const fileName = `Sisli_Hamidiye_Etfal_Anestezi_Nobet_${currentRoster.monthKey}.xlsx`;
-  XLSX.writeFile(workbook, fileName);
+  XLSX.writeFile(workbook, exportFileName);
 }
 
 /**
- * Parses uploaded Excel file conforming to the clinic's exact SEYRANTEPE 1..6 and SARIYER-1..4 columns
+ * Downloads a pre-formatted November 2026 blank template with dates 01.11.2026..30.11.2026
+ */
+export function downloadNovemberExcelTemplate(): void {
+  downloadExcelTemplate(undefined, '2026-11');
+}
+
+/**
+ * Helper to clean doctor names (removes academic/clinical titles like DR., UZM., etc., trims whitespace)
+ */
+export function sanitizeDoctorName(raw: string): string {
+  if (!raw) return '';
+  let str = String(raw).trim();
+  
+  // Remove common hospital title prefixes
+  str = str.replace(/^(DR\.|DR\s+|UZM\.\s*DR\.|UZM\.|AS[İI]S\.\s*DR\.|AS[İI]S\.|AR[ŞS]\.\s*G[ÖO]R\.|AS[İI]STAN)\s+/i, '');
+  
+  // Remove trailing punct / parenthesis notes if any (e.g. "AHMET (KIDEMLİ)" -> "AHMET (KIDEMLİ)" is kept, but stray dashes or stars removed)
+  str = str.replace(/^[*\-_/\s]+|[*\-_/\s]+$/g, '');
+  
+  return str.toLocaleUpperCase('tr-TR').trim();
+}
+
+/**
+ * Intelligent Excel parser for hospital duty rosters:
+ * - Detects correct sheet among multiple sheets (favors sheets named KASIM, NÖBET, etc.)
+ * - Resolves Excel merged cells (merges across SEYRANTEPE and SARIYER headers)
+ * - Auto-detects table header row (skips hospital title banner rows 1..4)
+ * - Identifies Seyrantepe (1..6) and Sarıyer/Çayırbaşı (1..4) columns under multiple header variations
+ * - Handles serial dates, DD.MM.YYYY, DD/MM/YYYY, or day-of-month integers
+ * - Cleans titles and validates staff presence with descriptive diagnostics
  */
 export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
   return new Promise((resolve, reject) => {
@@ -383,156 +440,421 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
 
     reader.onload = async (e) => {
       try {
-        const data = new Uint8Array(e.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+        const buffer = new Uint8Array(e.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(buffer, { type: 'array', cellDates: true });
         
-        const firstSheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[firstSheetName];
-        
-        const jsonData: any[] = XLSX.utils.sheet_to_json(sheet, { raw: false });
-
-        if (!jsonData || jsonData.length === 0) {
-          throw new Error('Excel dosyasında okunabilir veri satırı bulunamadı.');
+        if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+          throw new Error('Excel dosyasında herhangi bir çalışma sayfası (sheet) bulunamadı.');
         }
 
-        // Try detecting month and year from sheet name, file name, and cell headers
-        const searchScopeText = `${file.name} ${firstSheetName} ${JSON.stringify(jsonData.slice(0, 3))}`.toUpperCase();
+        // 1. Select the best sheet: inspect all sheets for roster keywords
+        let targetSheetName = workbook.SheetNames[0];
+        let bestScore = -1;
+
+        const sheetScores = workbook.SheetNames.map((sheetName) => {
+          let score = 0;
+          const upper = sheetName.toUpperCase();
+          if (upper.includes('KASIM') || upper.includes('NOVEMBER')) score += 100;
+          if (upper.includes('EKİM') || upper.includes('EKIM')) score += 40;
+          if (upper.includes('NÖBET') || upper.includes('NOBET') || upper.includes('ASİSTAN')) score += 60;
+          if (upper.includes('ÇİZELGE') || upper.includes('LİSTE')) score += 30;
+
+          // Quick sample peek of sheet contents
+          const sheet = workbook.Sheets[sheetName];
+          if (sheet && sheet['!ref']) {
+            const rawSample = XLSX.utils.sheet_to_json(sheet, { header: 1, range: 0, defval: '' }) as any[][];
+            const sampleText = JSON.stringify(rawSample.slice(0, 10)).toUpperCase();
+            if (sampleText.includes('SEYRANTEPE')) score += 50;
+            if (sampleText.includes('SARIYER') || sampleText.includes('ÇAYIRBAŞI') || sampleText.includes('CAYIRBASI')) score += 50;
+            if (sampleText.includes('TARİH') || sampleText.includes('TARIH')) score += 40;
+            if (sampleText.includes('KASIM')) score += 50;
+          }
+
+          if (score > bestScore) {
+            bestScore = score;
+            targetSheetName = sheetName;
+          }
+          return { sheetName, score };
+        });
+
+        const sheet = workbook.Sheets[targetSheetName];
+        if (!sheet) {
+          throw new Error(`'${targetSheetName}' çalışma sayfası açılamadı.`);
+        }
+
+        // 2. Convert sheet to 2D array (preserving all rows and cell coordinates)
+        const rawGrid: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+
+        if (!rawGrid || rawGrid.length === 0) {
+          throw new Error(`'${targetSheetName}' sayfasında veri satırı bulunamadı.`);
+        }
+
+        // 3. Resolve Merged Cells (!merges):
+        // In hospital Excels, "SEYRANTEPE" is often merged horizontally across columns C to H.
+        // Unmerged cells in XLSX have empty strings. We duplicate the master cell value across the merge range.
+        if (sheet['!merges'] && Array.isArray(sheet['!merges'])) {
+          sheet['!merges'].forEach((range: XLSX.Range) => {
+            const masterVal = rawGrid[range.s.r]?.[range.s.c];
+            if (masterVal !== undefined && masterVal !== '') {
+              for (let r = range.s.r; r <= range.e.r; r++) {
+                if (!rawGrid[r]) rawGrid[r] = [];
+                for (let c = range.s.c; c <= range.e.c; c++) {
+                  rawGrid[r][c] = masterVal;
+                }
+              }
+            }
+          });
+        }
+
+        // 4. Detect Month and Year from file name, sheet name, and banner rows (first 10 rows)
+        const bannerText = `${file.name} ${targetSheetName} ${JSON.stringify(rawGrid.slice(0, 10))}`.toUpperCase();
         
         let detectedYear = 2026;
-        let detectedMonth = 10; // default baseline
+        let detectedMonth = 11; // Default to November if triggered from current user request
 
-        // Check for 4-digit year in scope
-        const yearMatch = searchScopeText.match(/(202[4-9]|203[0-5])/);
+        // Match year (e.g. 2026, 2025, 2027)
+        const yearMatch = bannerText.match(/(202[4-9]|203[0-5])/);
         if (yearMatch) {
           detectedYear = parseInt(yearMatch[1], 10);
         }
 
-        // Check for Turkish month names
         const monthMatchers: Array<{ regex: RegExp; m: number }> = [
-          { regex: /OCAK/, m: 1 },
-          { regex: /ŞUBAT|SUBAT/, m: 2 },
-          { regex: /MART/, m: 3 },
-          { regex: /N[İI]SAN/, m: 4 },
-          { regex: /MAYIS/, m: 5 },
-          { regex: /HAZ[İI]RAN/, m: 6 },
-          { regex: /TEMMUZ/, m: 7 },
-          { regex: /A[ĞG]USTOS/, m: 8 },
-          { regex: /EYL[UÜ]L/, m: 9 },
-          { regex: /EK[İI]M/, m: 10 },
-          { regex: /KASIM/, m: 11 },
-          { regex: /ARALIK/, m: 12 }
+          { regex: /KASIM|NOVEMBER/, m: 11 },
+          { regex: /EK[İI]M|OCTOBER/, m: 10 },
+          { regex: /ARALIK|DECEMBER/, m: 12 },
+          { regex: /EYL[UÜ]L|SEPTEMBER/, m: 9 },
+          { regex: /A[ĞG]USTOS|AUGUST/, m: 8 },
+          { regex: /TEMMUZ|JULY/, m: 7 },
+          { regex: /HAZ[İI]RAN|JUNE/, m: 6 },
+          { regex: /MAYIS|MAY/, m: 5 },
+          { regex: /N[İI]SAN|APRIL/, m: 4 },
+          { regex: /MART|MARCH/, m: 3 },
+          { regex: /ŞUBAT|SUBAT|FEBRUARY/, m: 2 },
+          { regex: /OCAK|JANUARY/, m: 1 }
         ];
 
         for (const item of monthMatchers) {
-          if (item.regex.test(searchScopeText)) {
+          if (item.regex.test(bannerText)) {
             detectedMonth = item.m;
             break;
           }
         }
 
-        // Pre-scan first 5 rows to see if any cell contains an explicit date (e.g. DD.MM.YYYY or YYYY-MM-DD)
-        for (const row of jsonData.slice(0, 5)) {
-          const rawRowStr = Object.values(row).join(' ');
-          const ddmmyyyy = rawRowStr.match(/(\d{1,2})[./-](\d{1,2})[./-](202\d|203\d)/);
-          if (ddmmyyyy) {
-            const m = parseInt(ddmmyyyy[2], 10);
-            const y = parseInt(ddmmyyyy[3], 10);
-            if (m >= 1 && m <= 12) detectedMonth = m;
-            if (y >= 2024 && y <= 2035) detectedYear = y;
-            break;
+        // 5. Locate Header Row(s):
+        // Scan rows 0 to 15 to find the row that defines the table columns
+        let headerRowIdx = -1;
+        let maxHeaderScore = 0;
+
+        for (let r = 0; r < Math.min(15, rawGrid.length); r++) {
+          const rowVals = (rawGrid[r] || []).map((v: any) => String(v || '').trim().toUpperCase());
+          let score = 0;
+
+          const rowStr = rowVals.join(' ');
+          if (/TAR[Iİ]H|DATE/.test(rowStr)) score += 30;
+          if (/G[UÜ]N|DAY/.test(rowStr)) score += 15;
+          if (/SEYRANTEPE|SEY/.test(rowStr)) score += 35;
+          if (/SARIYER|ÇAYIRBAŞI|CAYIRBASI|SAR/.test(rowStr)) score += 35;
+          if (/NÖBET|NOBET/.test(rowStr)) score += 15;
+          if (rowVals.some(v => /^(SEYRANTEPE|SARIYER|ÇAYIRBAŞI)[\s_-]?\d+$/i.test(v))) score += 50;
+
+          if (score > maxHeaderScore) {
+            maxHeaderScore = score;
+            headerRowIdx = r;
           }
         }
 
-        const days: Record<string, DayDutySchedule> = {};
+        // If no header row explicitly found with high score, default to 0
+        if (headerRowIdx === -1 || maxHeaderScore < 20) {
+          headerRowIdx = 0;
+        }
 
-        jsonData.forEach((row, idx) => {
-          // Normalize column lookups (case-insensitive & whitespace trimmed)
-          const findCol = (pattern: RegExp) => {
-            const key = Object.keys(row).find(k => pattern.test(k.trim().toUpperCase()));
-            return key ? String(row[key] || '').trim() : '';
-          };
+        // Check if the immediate next row is a sub-header row (e.g. contains 1, 2, 3, 4, 5, 6 or SEY-1, SAR-1)
+        let subHeaderRowIdx = -1;
+        if (headerRowIdx + 1 < rawGrid.length) {
+          const nextRowVals = (rawGrid[headerRowIdx + 1] || []).map((v: any) => String(v || '').trim().toUpperCase());
+          const hasNumberedSubHeaders = nextRowVals.filter(v => /^(\d+|SEY[\s_-]?\d+|SAR[\s_-]?\d+|\d+\.\s*NÖBETÇİ)$/i.test(v)).length >= 2;
+          if (hasNumberedSubHeaders) {
+            subHeaderRowIdx = headerRowIdx + 1;
+          }
+        }
 
-          const rawDate = findCol(/^TAR[Iİ]H/) || findCol(/^DATE/) || findCol(/^G[UÜ]N$/);
-          let dateObj: Date | null = null;
+        const dataStartRowIdx = (subHeaderRowIdx !== -1 ? subHeaderRowIdx : headerRowIdx) + 1;
 
-          if (rawDate) {
-            if (/^\d{1,2}[./-]\d{1,2}[./-]\d{4}$/.test(rawDate)) {
-              // DD.MM.YYYY
-              const parts = rawDate.split(/[./-]/);
-              const d = parseInt(parts[0], 10);
-              const m = parseInt(parts[1], 10);
-              const y = parseInt(parts[2], 10);
-              dateObj = new Date(y, m - 1, d);
-              detectedMonth = m;
-              detectedYear = y;
-            } else if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(rawDate)) {
-              // YYYY-MM-DD
-              const parts = rawDate.split('-');
-              const y = parseInt(parts[0], 10);
-              const m = parseInt(parts[1], 10);
-              const d = parseInt(parts[2], 10);
-              dateObj = new Date(y, m - 1, d);
-              detectedMonth = m;
-              detectedYear = y;
-            } else if (!isNaN(Number(rawDate)) && Number(rawDate) >= 1 && Number(rawDate) <= 31) {
-              const d = Number(rawDate);
-              dateObj = new Date(detectedYear, detectedMonth - 1, d);
+        // 6. Map Columns to Roles
+        // Build combined column labels
+        const maxCols = Math.max(...rawGrid.slice(headerRowIdx, dataStartRowIdx + 5).map(r => r.length));
+        
+        let dateColIdx = -1;
+        let dayNameColIdx = -1;
+        const seyrantepeColIndices: number[] = [];
+        const cayirbasiColIndices: number[] = [];
+
+        // Track running section (Seyrantepe vs Sariyer)
+        let currentSection: 'seyrantepe' | 'sariyer' | 'unknown' = 'unknown';
+
+        for (let c = 0; c < maxCols; c++) {
+          const topLabel = String(rawGrid[headerRowIdx]?.[c] || '').trim().toUpperCase();
+          const subLabel = subHeaderRowIdx !== -1 ? String(rawGrid[subHeaderRowIdx]?.[c] || '').trim().toUpperCase() : '';
+          const combinedLabel = `${topLabel} ${subLabel}`.trim();
+
+          // Check section switch
+          if (/SEYRANTEPE|SEY\b/.test(topLabel) || /SEYRANTEPE|SEY\b/.test(subLabel)) {
+            currentSection = 'seyrantepe';
+          } else if (/SARIYER|ÇAYIRBAŞI|CAYIRBASI|SAR\b/.test(topLabel) || /SARIYER|ÇAYIRBAŞI|CAYIRBASI|SAR\b/.test(subLabel)) {
+            currentSection = 'sariyer';
+          }
+
+          // Date column
+          if (dateColIdx === -1 && (/^TAR[Iİ]H/.test(topLabel) || /^TAR[Iİ]H/.test(subLabel) || /^DATE/.test(topLabel))) {
+            dateColIdx = c;
+            continue;
+          }
+
+          // Day name column
+          if (dayNameColIdx === -1 && (/^G[UÜ]N$/.test(topLabel) || /^G[UÜ]N$/.test(subLabel) || /^DAY$/.test(topLabel))) {
+            dayNameColIdx = c;
+            continue;
+          }
+
+          // Explicit Seyrantepe column
+          if (/SEYRANTEPE[\s_-]?\d+/i.test(combinedLabel) || /SEY[\s_-]?\d+/i.test(combinedLabel)) {
+            seyrantepeColIndices.push(c);
+            continue;
+          }
+
+          // Explicit Sariyer column
+          if (/(SARIYER|ÇAYIRBAŞI|CAYIRBASI|SAR)[\s_-]?\d+/i.test(combinedLabel)) {
+            cayirbasiColIndices.push(c);
+            continue;
+          }
+
+          // Sub-header is a number (1..6) under current section
+          if (/^\d+$/.test(subLabel) || /^\d+\.?\s*NÖBETÇİ?$/i.test(subLabel) || /^\d+$/.test(topLabel)) {
+            if (currentSection === 'seyrantepe') {
+              seyrantepeColIndices.push(c);
+              continue;
+            } else if (currentSection === 'sariyer') {
+              cayirbasiColIndices.push(c);
+              continue;
             }
           }
 
-          if (!dateObj || isNaN(dateObj.getTime())) {
-            const fallbackDay = Math.min(idx + 1, 31);
-            dateObj = new Date(detectedYear, detectedMonth - 1, fallbackDay);
+          // Fallback based on current section
+          if (currentSection === 'seyrantepe' && seyrantepeColIndices.length < 6) {
+            seyrantepeColIndices.push(c);
+          } else if (currentSection === 'sariyer' && cayirbasiColIndices.length < 4) {
+            cayirbasiColIndices.push(c);
+          }
+        }
+
+        // If Date column was not found by header, find column that contains dates
+        if (dateColIdx === -1) {
+          for (let c = 0; c < Math.min(maxCols, 3); c++) {
+            const sampleVals = rawGrid.slice(dataStartRowIdx, dataStartRowIdx + 5).map(r => String(r[c] || '').trim());
+            const hasDates = sampleVals.some(v => /^\d{1,2}[./-]\d{1,2}/.test(v) || (!isNaN(Number(v)) && Number(v) >= 1 && Number(v) <= 31));
+            if (hasDates) {
+              dateColIdx = c;
+              break;
+            }
+          }
+        }
+
+        // If Day column not found, check next column after date
+        if (dayNameColIdx === -1 && dateColIdx !== -1) {
+          const checkCol = dateColIdx + 1;
+          const sampleVals = rawGrid.slice(dataStartRowIdx, dataStartRowIdx + 5).map(r => String(r[checkCol] || '').trim().toLowerCase());
+          if (sampleVals.some(v => /pazar|pazartesi|salı|sali|çarşamba|carsamba|perşembe|persembe|cuma|cumartesi/.test(v))) {
+            dayNameColIdx = checkCol;
+          }
+        }
+
+        // If no Seyrantepe or Sariyer columns were identified by name, use standard position heuristic:
+        // Starting after Date & DayName: first up to 6 columns are Seyrantepe, next up to 4 columns are Sarıyer
+        if (seyrantepeColIndices.length === 0 && cayirbasiColIndices.length === 0) {
+          const startCol = Math.max(dateColIdx, dayNameColIdx) + 1;
+          for (let c = startCol; c < maxCols; c++) {
+            if (seyrantepeColIndices.length < 6) {
+              seyrantepeColIndices.push(c);
+            } else if (cayirbasiColIndices.length < 4) {
+              cayirbasiColIndices.push(c);
+            }
+          }
+        }
+
+        // 7. Parse Data Rows
+        const days: Record<string, DayDutySchedule> = {};
+        let totalStaffParsed = 0;
+
+        for (let r = dataStartRowIdx; r < rawGrid.length; r++) {
+          const row = rawGrid[r];
+          if (!row || row.length === 0) continue;
+
+          // Skip signature or summary rows at bottom (e.g. "HAZIRLAYAN", "BAŞHEKİM", "TOPLAM", etc.)
+          const rowText = row.map((v: any) => String(v || '').trim()).join(' ').toUpperCase();
+          if (/TOPLAM|İMZA|IMZA|BAŞHEK[İI]M|ANAB[İI]L[İI]M|KL[İI]N[İI]K|HAZIRLAYAN/.test(rowText) && !/\d{1,2}[./-]\d{1,2}/.test(rowText)) {
+            continue;
+          }
+
+          // Extract date
+          const rawDateCell = dateColIdx !== -1 ? row[dateColIdx] : null;
+          let parsedDayNum: number | null = null;
+          let dateObj: Date | null = null;
+
+          if (rawDateCell !== null && rawDateCell !== undefined && rawDateCell !== '') {
+            if (rawDateCell instanceof Date && !isNaN(rawDateCell.getTime())) {
+              dateObj = rawDateCell;
+              parsedDayNum = dateObj.getDate();
+              detectedMonth = dateObj.getMonth() + 1;
+              detectedYear = dateObj.getFullYear();
+            } else if (typeof rawDateCell === 'number') {
+              if (rawDateCell > 1000) {
+                // Excel serial date code
+                try {
+                  const parsed = XLSX.SSF.parse_date_code(rawDateCell);
+                  if (parsed) {
+                    dateObj = new Date(parsed.y, parsed.m - 1, parsed.d);
+                    parsedDayNum = parsed.d;
+                    detectedMonth = parsed.m;
+                    detectedYear = parsed.y;
+                  }
+                } catch {
+                  // Fallback
+                  dateObj = new Date(Math.round((rawDateCell - 25569) * 86400 * 1000));
+                  parsedDayNum = dateObj.getDate();
+                }
+              } else if (rawDateCell >= 1 && rawDateCell <= 31) {
+                parsedDayNum = Math.floor(rawDateCell);
+                dateObj = new Date(detectedYear, detectedMonth - 1, parsedDayNum);
+              }
+            } else {
+              const strVal = String(rawDateCell).trim();
+              
+              // DD.MM.YYYY or DD/MM/YYYY
+              const fullMatch = strVal.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})$/);
+              if (fullMatch) {
+                const d = parseInt(fullMatch[1], 10);
+                const m = parseInt(fullMatch[2], 10);
+                let y = parseInt(fullMatch[3], 10);
+                if (y < 100) y += 2000;
+                dateObj = new Date(y, m - 1, d);
+                parsedDayNum = d;
+                detectedMonth = m;
+                detectedYear = y;
+              } else {
+                // DD.MM (e.g. 01.11, 02.11)
+                const partialMatch = strVal.match(/^(\d{1,2})[./-](\d{1,2})$/);
+                if (partialMatch) {
+                  const d = parseInt(partialMatch[1], 10);
+                  const m = parseInt(partialMatch[2], 10);
+                  dateObj = new Date(detectedYear, m - 1, d);
+                  parsedDayNum = d;
+                  detectedMonth = m;
+                } else {
+                  // Just day number 1..31
+                  const dayNumMatch = strVal.match(/^(\d{1,2})$/);
+                  if (dayNumMatch) {
+                    parsedDayNum = parseInt(dayNumMatch[1], 10);
+                    dateObj = new Date(detectedYear, detectedMonth - 1, parsedDayNum);
+                  }
+                }
+              }
+            }
+          }
+
+          // If no date found on this row, check if row has day number based on index
+          if (!dateObj || !parsedDayNum) {
+            const autoDay = Object.keys(days).length + 1;
+            if (autoDay <= 31) {
+              parsedDayNum = autoDay;
+              dateObj = new Date(detectedYear, detectedMonth - 1, parsedDayNum);
+            } else {
+              continue; // Exceeded month range
+            }
           }
 
           const yearStr = dateObj.getFullYear();
           const monthStr = String(detectedMonth).padStart(2, '0');
-          const dayStr = String(dateObj.getDate()).padStart(2, '0');
+          const dayStr = String(parsedDayNum).padStart(2, '0');
           const dateKey = `${yearStr}-${monthStr}-${dayStr}`;
           const formattedDate = `${dayStr}.${monthStr}.${yearStr}`;
 
           const dayOfWeek = dateObj.getDay();
-          const dayName = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'][dayOfWeek];
+          let dayName = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'][dayOfWeek];
+          
+          // If explicit day name column exists, use provided text if available
+          if (dayNameColIdx !== -1 && row[dayNameColIdx]) {
+            const rawDayName = String(row[dayNameColIdx]).trim();
+            if (rawDayName) dayName = rawDayName;
+          }
+
           const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
-          // Extract Seyrantepe columns (SEYRANTEPE 1..6)
+          // Extract Seyrantepe Staff
           const seyrantepeStaff: StaffDuty[] = [];
-          for (let i = 1; i <= 6; i++) {
-            const val = findCol(new RegExp(`^SEYRANTEPE[\\s_-]?${i}$`));
-            if (val) {
+          seyrantepeColIndices.forEach((colIdx, slotIdx) => {
+            const rawCell = row[colIdx];
+            const cleanName = sanitizeDoctorName(rawCell);
+            if (cleanName && cleanName !== '-' && cleanName !== '/' && cleanName !== 'BOŞ') {
+              const slotNumber = slotIdx + 1;
               seyrantepeStaff.push({
-                id: `sey-${dateKey}-${i}`,
-                name: val,
-                slot: `SEYRANTEPE ${i}`,
-                role: i === 1 ? 'Kıdemli / 1. Nöbetçi' : `${i}. Nöbetçi`
+                id: `sey-${dateKey}-${slotNumber}`,
+                name: cleanName,
+                slot: `SEYRANTEPE ${slotNumber}`,
+                role: slotNumber === 1 ? 'Kıdemli / 1. Nöbetçi' : `${slotNumber}. Nöbetçi`
               });
+              totalStaffParsed++;
             }
-          }
+          });
 
-          // Extract Sarıyer / Çayırbaşı columns (SARIYER-1..4 or SARIYER 1..4)
+          // Extract Sarıyer (Çayırbaşı) Staff
           const cayirbasiStaff: StaffDuty[] = [];
-          for (let i = 1; i <= 4; i++) {
-            const val = findCol(new RegExp(`^(SARIYER|ÇAYIRBAŞI|CAYIRBASI)[\\s_-]?${i}$`));
-            if (val) {
+          cayirbasiColIndices.forEach((colIdx, slotIdx) => {
+            const rawCell = row[colIdx];
+            const cleanName = sanitizeDoctorName(rawCell);
+            if (cleanName && cleanName !== '-' && cleanName !== '/' && cleanName !== 'BOŞ') {
+              const slotNumber = slotIdx + 1;
               cayirbasiStaff.push({
-                id: `sar-${dateKey}-${i}`,
-                name: val,
-                slot: `SARIYER-${i}`,
-                role: i === 1 ? 'Çayırbaşı 1. Nöbetçi' : `Çayırbaşı ${i}. Nöbetçi`
+                id: `sar-${dateKey}-${slotNumber}`,
+                name: cleanName,
+                slot: `SARIYER-${slotNumber}`,
+                role: slotNumber === 1 ? 'Çayırbaşı 1. Nöbetçi' : `Çayırbaşı ${slotNumber}. Nöbetçi`
               });
+              totalStaffParsed++;
             }
-          }
+          });
 
           days[dateKey] = {
             date: dateKey,
             formattedDate,
-            dayNumber: dateObj.getDate(),
+            dayNumber: parsedDayNum,
             dayName,
             isWeekend,
             seyrantepeStaff,
             cayirbasiStaff
           };
-        });
+        }
+
+        // Validate that we found at least some days
+        const totalDaysCount = Object.keys(days).length;
+        if (totalDaysCount === 0) {
+          throw new Error(
+            `'${targetSheetName}' sayfasında nöbet tarihi satırları tespit edilemedi. Lütfen dosyanızın tarih sütununu (TARİH) ve satırlarını kontrol ediniz.`
+          );
+        }
+
+        // Validate that we extracted at least some staff
+        if (totalStaffParsed === 0) {
+          const detectedColHeaders = [
+            ...seyrantepeColIndices.map(c => `Sütun ${c + 1} (${rawGrid[headerRowIdx]?.[c] || 'Seyrantepe'})`),
+            ...cayirbasiColIndices.map(c => `Sütun ${c + 1} (${rawGrid[headerRowIdx]?.[c] || 'Sarıyer'})`)
+          ].join(', ');
+
+          throw new Error(
+            `'${targetSheetName}' sayfasından ${totalDaysCount} takvim günü okundu, fakat hiçbir nöbetçi doktor ismi çekilemedi. ` +
+            `Taranan sütunlar: [${detectedColHeaders || 'Yok'}]. ` +
+            `Lütfen sütun başlıklarınızın 'SEYRANTEPE 1..6' ve 'SARIYER-1..4' şeklinde olduğunu veya isimlerin bu sütunların altında yer aldığını kontrol ediniz. Dilerseniz 'Excel Formatında İndir' butonuna tıklayarak resmi şablonu indirip verilerinizi yapıştırabilirsiniz.`
+          );
+        }
 
         const monthKey = `${detectedYear}-${String(detectedMonth).padStart(2, '0')}`;
         const monthTurkishName = TURKISH_MONTH_NAMES[detectedMonth - 1] || 'AY';
@@ -545,7 +867,7 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
           days
         };
 
-        // Save to registry and post to server
+        // Persist to multi-month registry and sync with backend server
         await saveRosterToServer(newRoster);
         resolve(newRoster);
       } catch (err: any) {
@@ -554,7 +876,7 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
     };
 
     reader.onerror = () => {
-      reject(new Error('Dosya okunamadı.'));
+      reject(new Error('Dosya okunamadı. Lütfen geçerli bir .xlsx veya .xls dosyası seçiniz.'));
     };
 
     reader.readAsArrayBuffer(file);

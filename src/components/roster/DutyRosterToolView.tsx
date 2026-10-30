@@ -19,6 +19,7 @@ import {
   getSavedRoster, 
   saveRoster, 
   downloadExcelTemplate, 
+  downloadNovemberExcelTemplate,
   parseExcelRoster, 
   resetToDefaultRoster,
   getCurrentShiftStatus,
@@ -152,9 +153,11 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
       if (keys.length > 0) {
         setSelectedDateKey(keys[0]);
       }
+      const seyCount = Object.values(updatedRoster.days).reduce((acc, d) => acc + d.seyrantepeStaff.length, 0);
+      const sarCount = Object.values(updatedRoster.days).reduce((acc, d) => acc + d.cayirbasiStaff.length, 0);
       setNotification({
         type: 'success',
-        message: `${updatedRoster.monthName} başarıyla işlendi ve sunucuya kaydedildi! (${keys.length} gün yüklendi, tüm klinik kullanıcılarına yansıtıldı)`
+        message: `${updatedRoster.monthName} başarıyla işlendi ve sunucuya kaydedildi! (${keys.length} gün, Seyrantepe: ${seyCount} nöbetçi, Sarıyer: ${sarCount} nöbetçi)`
       });
     } catch (err: any) {
       setNotification({
@@ -278,6 +281,20 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
             >
               <Download className="w-4 h-4 text-slate-400" />
               <span>Excel Formatında İndir</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => downloadNovemberExcelTemplate()}
+              title="Kasım 2026 için doldurmaya hazır resmi boş şablon (.xlsx) indirin"
+              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-teal-950/60 hover:bg-teal-900/60 border-teal-700/60 text-teal-300' 
+                  : 'bg-teal-50 hover:bg-teal-100 border-teal-200 text-teal-800'
+              }`}
+            >
+              <Download className="w-4 h-4 text-teal-500" />
+              <span>Kasım Şablonu (.xlsx)</span>
             </button>
 
             <button
