@@ -207,11 +207,6 @@ export const ClinicContactsView: React.FC<ClinicContactsViewProps> = ({ isDark }
               <span>{isVerifying ? 'Doğrulanıyor...' : 'Giriş Yap ve Numaraları Görüntüle'}</span>
             </button>
           </form>
-
-          <div className="text-[11px] text-slate-400 dark:text-slate-500 flex items-center justify-center gap-1.5 pt-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-teal-500" />
-            <span>Şişli Hamidiye Etfal EAH Dahili Ağ Protokolü</span>
-          </div>
         </div>
       </div>
     );

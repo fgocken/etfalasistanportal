@@ -24,6 +24,78 @@ if (!fs.existsSync(DATA_DIR)) {
   }
 }
 
+function sanitizeRoster(roster: any): any {
+  if (!roster || !roster.days) return roster;
+  const turkishDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+  const dateKeys = Object.keys(roster.days).sort();
+  const [expectedYearStr, expectedMonthStr] = String(roster.monthKey || '').split('-');
+  const expectedMonth = parseInt(expectedMonthStr, 10);
+  const expectedYear = parseInt(expectedYearStr, 10);
+
+  let needsShiftCorrection = false;
+  if (expectedMonth && expectedYear && dateKeys.length > 0) {
+    const prevMonth = expectedMonth === 1 ? 12 : expectedMonth - 1;
+    const hasPreviousMonthKeys = dateKeys.some(k => {
+      const parts = k.split('-');
+      return parseInt(parts[1], 10) === prevMonth;
+    });
+    if (hasPreviousMonthKeys) {
+      needsShiftCorrection = true;
+    }
+  }
+
+  const days: Record<string, any> = {};
+
+  if (needsShiftCorrection) {
+    dateKeys.forEach((oldKey, idx) => {
+      const dayNum = idx + 1;
+      const dayStr = String(dayNum).padStart(2, '0');
+      const monthStr = String(expectedMonth).padStart(2, '0');
+      const newKey = `${expectedYear}-${monthStr}-${dayStr}`;
+      const formattedDate = `${dayStr}.${monthStr}.${expectedYear}`;
+
+      const d = new Date(expectedYear, expectedMonth - 1, dayNum, 12, 0, 0);
+      const dow = d.getDay();
+      const dayName = turkishDays[dow];
+      const isWeekend = dow === 0 || dow === 6;
+
+      const oldDay = roster.days[oldKey];
+      days[newKey] = {
+        ...oldDay,
+        date: newKey,
+        formattedDate,
+        dayNumber: dayNum,
+        dayName,
+        isWeekend,
+        seyrantepeStaff: (oldDay.seyrantepeStaff || []).map((s: any) => ({
+          ...s,
+          id: String(s.id).replace(/sey-[^-]+-[^-]+-/, `sey-${newKey}-`)
+        })),
+        cayirbasiStaff: (oldDay.cayirbasiStaff || []).map((s: any) => ({
+          ...s,
+          id: String(s.id).replace(/sar-[^-]+-[^-]+-/, `sar-${newKey}-`)
+        }))
+      };
+    });
+  } else {
+    for (const dateKey of Object.keys(roster.days)) {
+      const day = { ...roster.days[dateKey] };
+      if (day && day.date) {
+        const parts = String(day.date).split('-');
+        if (parts.length === 3) {
+          const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 12, 0, 0);
+          const dow = d.getDay();
+          day.dayName = turkishDays[dow];
+          day.isWeekend = dow === 0 || dow === 6;
+        }
+      }
+      days[dateKey] = day;
+    }
+  }
+
+  return { ...roster, days };
+}
+
 // Read rosters from JSON file
 function readRosters(): Record<string, any> {
   try {
@@ -31,6 +103,9 @@ function readRosters(): Record<string, any> {
       const raw = fs.readFileSync(ROSTERS_FILE, 'utf-8');
       const parsed = JSON.parse(raw);
       if (parsed && typeof parsed === 'object') {
+        for (const k of Object.keys(parsed)) {
+          parsed[k] = sanitizeRoster(parsed[k]);
+        }
         return parsed;
       }
     }
@@ -68,8 +143,9 @@ app.post('/api/roster', (req, res) => {
       return res.status(400).json({ success: false, error: 'Geçersiz nöbet takvimi verisi' });
     }
 
+    const sanitized = sanitizeRoster(roster);
     const rosters = readRosters();
-    rosters[roster.monthKey] = roster;
+    rosters[sanitized.monthKey] = sanitized;
     const saved = saveRosters(rosters);
 
     if (!saved) {

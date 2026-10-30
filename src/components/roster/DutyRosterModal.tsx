@@ -1,33 +1,35 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   X, 
   Upload, 
   Download, 
-  Calendar as CalendarIcon, 
   RotateCcw, 
   Check, 
   AlertCircle, 
   FileSpreadsheet, 
-  Edit3, 
   Search,
-  FileText,
-  Sparkles,
-  ExternalLink
+  UserCheck,
+  ShieldCheck,
+  Lock,
+  Edit2
 } from 'lucide-react';
 import { MonthDutyRoster, DayDutySchedule, MonthOption } from './DutyRosterTypes';
 import { 
   getSavedRoster, 
   saveRoster, 
   downloadExcelTemplate, 
-  downloadNovemberExcelTemplate,
   parseExcelRoster, 
   resetToDefaultRoster,
   getCurrentShiftStatus,
   fetchServerRosters,
   getAvailableMonthOptions,
   getActiveMonthKey,
-  setActiveMonthKey
+  setActiveMonthKey,
+  isRosterAdminUnlocked,
+  setRosterAdminUnlocked
 } from './DutyRosterService';
+import { RosterAdminAuthModal } from './RosterAdminAuthModal';
+import { RosterDutyEditModal } from './RosterDutyEditModal';
 
 interface DutyRosterModalProps {
   isOpen: boolean;
@@ -45,20 +47,38 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
   const [activeMonth, setActiveMonth] = useState<string>(() => getActiveMonthKey());
   const [roster, setRoster] = useState<MonthDutyRoster>(() => getSavedRoster(getActiveMonthKey()));
   const [monthOptions, setMonthOptions] = useState<MonthOption[]>(() => getAvailableMonthOptions());
-  const [selectedDateKey, setSelectedDateKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster(getActiveMonthKey())).activeDateKey);
-  const [activeShiftKey, setActiveShiftKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster(getActiveMonthKey())).activeDateKey);
+  const [selectedDateKey, setSelectedDateKey] = useState<string>('');
+  const [activeShiftKey, setActiveShiftKey] = useState<string>('');
 
-  const [activeTab, setActiveTab] = useState<'table' | 'calendar'>('table');
   const [searchDoctor, setSearchDoctor] = useState<string>('');
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  // Admin authentication state
+  const [isAdminUnlocked, setIsAdminUnlocked] = useState<boolean>(() => isRosterAdminUnlocked());
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [showAdminAuthModal, setShowAdminAuthModal] = useState<boolean>(false);
+  const [pendingAdminAction, setPendingAdminAction] = useState<'upload' | 'edit' | null>(null);
+
+  // Cell editing modal state
+  const [editingCell, setEditingCell] = useState<{
+    dateKey: string;
+    campus: 'seyrantepe' | 'cayirbasi';
+    staffId: string;
+    slotLabel: string;
+    campusName: string;
+    currentName: string;
+    dateStr: string;
+    dayName: string;
+  } | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // When modal is opened, sync with latest roster and server
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
+      setIsEditMode(false);
+      setIsAdminUnlocked(isRosterAdminUnlocked());
       fetchServerRosters().then(() => {
         const currentKey = getActiveMonthKey();
         setActiveMonth(currentKey);
@@ -66,7 +86,8 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
         const freshRoster = getSavedRoster(currentKey);
         setRoster(freshRoster);
         const curShift = getCurrentShiftStatus(freshRoster);
-        setSelectedDateKey(curShift.activeDateKey);
+        const keys = Object.keys(freshRoster.days).sort();
+        setSelectedDateKey(curShift.activeDateKey || (keys.length > 0 ? keys[0] : ''));
         setActiveShiftKey(curShift.activeDateKey);
       });
     }
@@ -78,7 +99,11 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
     const selected = getSavedRoster(monthKey);
     setRoster(selected);
     const keys = Object.keys(selected.days).sort();
-    if (keys.length > 0) {
+    const curShift = getCurrentShiftStatus(selected);
+    setActiveShiftKey(curShift.activeDateKey);
+    if (curShift.activeDateKey && selected.days[curShift.activeDateKey]) {
+      setSelectedDateKey(curShift.activeDateKey);
+    } else if (keys.length > 0) {
       setSelectedDateKey(keys[0]);
     }
   };
@@ -86,9 +111,138 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
   if (!isOpen) return null;
 
   const sortedDates = Object.keys(roster.days).sort();
-  const activeDaySchedule: DayDutySchedule | undefined = roster.days[selectedDateKey] || roster.days[sortedDates[0]];
 
-  // Handlers
+  // Admin Trigger Handlers
+  const handleRequestUpload = () => {
+    if (isRosterAdminUnlocked()) {
+      fileInputRef.current?.click();
+    } else {
+      setPendingAdminAction('upload');
+      setShowAdminAuthModal(true);
+    }
+  };
+
+  const handleToggleEditMode = () => {
+    if (isEditMode) {
+      setIsEditMode(false);
+      setNotification({
+        type: 'success',
+        message: 'Nöbet düzenleme modu kapatıldı.'
+      });
+      return;
+    }
+
+    if (isRosterAdminUnlocked()) {
+      setIsEditMode(true);
+      setNotification({
+        type: 'success',
+        message: 'Nöbet düzenleme modu aktif. Değiştirmek istediğiniz hekim hücresine tıklayınız.'
+      });
+    } else {
+      setPendingAdminAction('edit');
+      setShowAdminAuthModal(true);
+    }
+  };
+
+  const handleAdminAuthSuccess = () => {
+    setIsAdminUnlocked(true);
+
+    if (pendingAdminAction === 'upload') {
+      setNotification({
+        type: 'success',
+        message: 'Admin yetkilendirmesi sağlandı. Dosya seçici açılıyor.'
+      });
+      setTimeout(() => fileInputRef.current?.click(), 100);
+    } else if (pendingAdminAction === 'edit') {
+      setIsEditMode(true);
+      setNotification({
+        type: 'success',
+        message: 'Admin yetkilendirmesi sağlandı. Nöbet düzenleme modu aktif! Değiştirmek istediğiniz hekime tıklayınız.'
+      });
+    }
+    setPendingAdminAction(null);
+  };
+
+  const handleCellClick = (
+    dateKey: string,
+    campus: 'seyrantepe' | 'cayirbasi',
+    staffId: string,
+    slotLabel: string,
+    campusName: string,
+    currentName: string,
+    dateStr: string,
+    dayName: string
+  ) => {
+    // 1. Her zaman tıklanan o günü seç
+    setSelectedDateKey(dateKey);
+
+    // 2. Edit modu açık değilse şifre sorma, başka hiçbir şey yapma
+    if (!isEditMode) {
+      return;
+    }
+
+    // 3. Yalnızca edit modu açıksa hekim değiştirme modalını aç
+    setEditingCell({
+      dateKey,
+      campus,
+      staffId,
+      slotLabel,
+      campusName,
+      currentName,
+      dateStr,
+      dayName
+    });
+  };
+
+  const handleSaveCellEdit = (newName: string) => {
+    if (!editingCell) return;
+    const { dateKey, campus, staffId, slotLabel, dateStr } = editingCell;
+
+    const updatedRoster = { ...roster };
+    const day = updatedRoster.days[dateKey];
+    if (!day) return;
+
+    if (campus === 'seyrantepe') {
+      const exists = day.seyrantepeStaff.some(s => s.id === staffId);
+      if (exists) {
+        day.seyrantepeStaff = day.seyrantepeStaff.map(s => 
+          s.id === staffId ? { ...s, name: newName } : s
+        );
+      } else if (newName) {
+        day.seyrantepeStaff.push({
+          id: staffId,
+          name: newName,
+          slot: slotLabel,
+          role: slotLabel
+        });
+      }
+    } else {
+      const exists = day.cayirbasiStaff.some(s => s.id === staffId);
+      if (exists) {
+        day.cayirbasiStaff = day.cayirbasiStaff.map(s => 
+          s.id === staffId ? { ...s, name: newName } : s
+        );
+      } else if (newName) {
+        day.cayirbasiStaff.push({
+          id: staffId,
+          name: newName,
+          slot: slotLabel,
+          role: slotLabel
+        });
+      }
+    }
+
+    setRoster(updatedRoster);
+    saveRoster(updatedRoster);
+    setNotification({
+      type: 'success',
+      message: `${dateStr} günü ${slotLabel} için nöbetçi '${newName || 'BOŞ'}' olarak güncellendi ve sunucuya kaydedildi.`
+    });
+    if (onRosterUpdated) onRosterUpdated();
+    setEditingCell(null);
+  };
+
+  // Handlers for Excel upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -102,7 +256,11 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
       setActiveMonth(updatedRoster.monthKey);
       setMonthOptions(getAvailableMonthOptions());
       const keys = Object.keys(updatedRoster.days).sort();
-      if (keys.length > 0) {
+      const curShift = getCurrentShiftStatus(updatedRoster);
+      setActiveShiftKey(curShift.activeDateKey);
+      if (curShift.activeDateKey && updatedRoster.days[curShift.activeDateKey]) {
+        setSelectedDateKey(curShift.activeDateKey);
+      } else if (keys.length > 0) {
         setSelectedDateKey(keys[0]);
       }
       const seyCount = Object.values(updatedRoster.days).reduce((acc, d) => acc + d.seyrantepeStaff.length, 0);
@@ -128,6 +286,12 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
   };
 
   const handleReset = () => {
+    if (!isRosterAdminUnlocked()) {
+      setPendingAdminAction('edit');
+      setShowAdminAuthModal(true);
+      return;
+    }
+
     if (window.confirm('Nöbet listesini Ekim 2026 resmi aslına sıfırlamak istiyor musunuz?')) {
       const fresh = resetToDefaultRoster();
       setRoster(fresh);
@@ -141,30 +305,28 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
     }
   };
 
-  const handleUpdateDoctorName = (
-    campus: 'seyrantepe' | 'cayirbasi',
-    staffId: string,
-    newName: string
-  ) => {
-    if (!activeDaySchedule) return;
-
-    const updatedRoster = { ...roster };
-    const day = updatedRoster.days[selectedDateKey];
-    if (!day) return;
-
-    if (campus === 'seyrantepe') {
-      day.seyrantepeStaff = day.seyrantepeStaff.map(s => 
-        s.id === staffId ? { ...s, name: newName.toUpperCase() } : s
-      );
-    } else {
-      day.cayirbasiStaff = day.cayirbasiStaff.map(s => 
-        s.id === staffId ? { ...s, name: newName.toUpperCase() } : s
-      );
+  const isWeekendDay = (day: DayDutySchedule) => {
+    if (day.date) {
+      const parts = day.date.split('-');
+      if (parts.length === 3) {
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 12, 0, 0);
+        const dow = d.getDay();
+        return dow === 0 || dow === 6;
+      }
     }
-
-    setRoster(updatedRoster);
-    saveRoster(updatedRoster);
-    if (onRosterUpdated) onRosterUpdated();
+    const name = (day.dayName || '').toLowerCase().trim();
+    if (name.includes('pazartesi') || name === 'pzt' || 
+        name.includes('salı') || name.includes('sali') || 
+        name.includes('çarşamba') || name.includes('carsamba') || 
+        name.includes('perşembe') || name.includes('persembe') || 
+        (name.includes('cuma') && !name.includes('cumartesi'))) {
+      return !!day.notes?.toLowerCase().includes('bayram');
+    }
+    if (name.includes('cumartesi') || name.startsWith('c.tesi') || name === 'cmt' ||
+        (name.includes('pazar') && !name.includes('pazartesi')) || name === 'paz') {
+      return true;
+    }
+    return !!day.isWeekend;
   };
 
   const filteredDates = sortedDates.filter(dateKey => {
@@ -196,19 +358,9 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
             }`}>
               <FileSpreadsheet className="w-5 h-5" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-extrabold tracking-tight">
-                  {roster.monthName}
-                </h2>
-                <span className="text-[11px] px-2 py-0.5 rounded-full font-mono bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">
-                  Seyrantepe & Sarıyer (Çayırbaşı)
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Aynı kişi ardışık veya gün aşırı tarihlerde görevlendirilirse ilgili hücreler otomatik kontrol edilir.
-              </p>
-            </div>
+            <h2 className="text-sm sm:text-base md:text-lg font-extrabold tracking-tight whitespace-nowrap overflow-x-auto py-0.5">
+              {roster.monthName}
+            </h2>
           </div>
 
           <div className="flex items-center gap-2">
@@ -225,11 +377,11 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
           </div>
         </div>
 
-        {/* Action Bar: Upload Excel, Download Excel, Open PDF, Search */}
+        {/* Action Bar: Upload Excel, Download Excel, Nöbet Değişimi, Search */}
         <div className={`px-4 sm:px-5 py-3 border-b flex flex-wrap items-center justify-between gap-2.5 ${
           isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-100'
         }`}>
-          {/* Left Buttons: Excel & PDF Tools */}
+          {/* Left Buttons: Excel & Edit Tools */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Hidden File Input */}
             <input
@@ -243,7 +395,8 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
             <button
               type="button"
               disabled={uploadLoading}
-              onClick={() => fileInputRef.current?.click()}
+              onClick={handleRequestUpload}
+              title={isAdminUnlocked ? 'Nöbet listesi yükle' : 'Nöbet listesi yüklemek için şifre gereklidir'}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-2xs ${
                 isDark 
                   ? 'bg-teal-600 hover:bg-teal-500 text-white' 
@@ -251,13 +404,35 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
               }`}
             >
               <Upload className="w-3.5 h-3.5" />
-              <span>{uploadLoading ? 'İşleniyor...' : 'Yeni Excel Yükle (.xlsx)'}</span>
+              <span>{uploadLoading ? 'İşleniyor...' : 'Nöbet Yükle'}</span>
+              {!isAdminUnlocked && <Lock className="w-3 h-3 opacity-70 ml-0.5" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleToggleEditMode}
+              title={isEditMode ? 'Nöbet düzenleme modunu kapat' : 'Nöbet değişimi için yönetici girişi yap'}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                isEditMode
+                  ? 'bg-amber-500 text-white border-amber-600 shadow-xs font-bold'
+                  : isDark 
+                    ? 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200' 
+                    : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'
+              }`}
+            >
+              {isEditMode ? <Check className="w-3.5 h-3.5" /> : <UserCheck className="w-3.5 h-3.5 text-amber-500" />}
+              <span>{isEditMode ? 'Düzenlemeyi Bitir' : 'Nöbet Değişimi'}</span>
+              {isEditMode ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+              ) : (
+                <Lock className="w-3 h-3 text-slate-400 ml-0.5" />
+              )}
             </button>
 
             <button
               type="button"
               onClick={handleDownloadTemplate}
-              title="Bu listenin birebir resmi Excel şablonunu (.xlsx) indirin"
+              title="Bu listenin resmi Excel tablosunu (.xlsx) indirin"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                 isDark 
                   ? 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200' 
@@ -265,36 +440,22 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
               }`}
             >
               <Download className="w-3.5 h-3.5 text-slate-400" />
-              <span>Excel Formatında İndir</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => downloadNovemberExcelTemplate()}
-              title="Kasım 2026 için doldurmaya hazır resmi boş şablon (.xlsx) indirin"
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
-                isDark 
-                  ? 'bg-teal-950/60 hover:bg-teal-900/60 border-teal-700/60 text-teal-300' 
-                  : 'bg-teal-50 hover:bg-teal-100 border-teal-200 text-teal-800'
-              }`}
-            >
-              <Download className="w-3.5 h-3.5 text-teal-500" />
-              <span>Kasım Şablonu (.xlsx)</span>
+              <span>Nöbet İndir</span>
             </button>
 
             <button
               type="button"
               onClick={handleReset}
-              title="Resmi Ekim 2026 aslına geri dön"
+              title="Resmi aslına geri dön"
               className={`p-1.5 rounded-lg border text-xs text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 border-slate-200 dark:border-slate-700 transition-colors cursor-pointer`}
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          {/* Right: Search Filter & View Switch */}
+          {/* Right: Search Filter */}
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="relative flex-1 sm:w-52">
+            <div className="relative flex-1 sm:w-56">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
@@ -308,31 +469,6 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
                 }`}
               />
             </div>
-
-            <div className="inline-flex rounded-lg border p-0.5 border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs">
-              <button
-                type="button"
-                onClick={() => setActiveTab('table')}
-                className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
-                  activeTab === 'table' 
-                    ? 'bg-white dark:bg-slate-700 text-teal-600 dark:text-teal-400 shadow-2xs font-bold' 
-                    : 'text-slate-500'
-                }`}
-              >
-                Resmi Tablo
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('calendar')}
-                className={`px-2.5 py-1 rounded font-medium transition-colors cursor-pointer ${
-                  activeTab === 'calendar' 
-                    ? 'bg-white dark:bg-slate-700 text-teal-600 dark:text-teal-400 shadow-2xs font-bold' 
-                    : 'text-slate-500'
-                }`}
-              >
-                Gün Detayı
-              </button>
-            </div>
           </div>
         </div>
 
@@ -341,10 +477,6 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
           isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50/80 border-slate-100'
         }`}>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-              <CalendarIcon className="w-3.5 h-3.5 text-teal-500" />
-              Aktif Takvim Ayı:
-            </span>
             <div className="inline-flex p-0.5 rounded-lg bg-slate-200/80 dark:bg-slate-800 border border-slate-300/50 dark:border-slate-700/60">
               {monthOptions.map((opt) => {
                 const isSelected = opt.key === activeMonth;
@@ -381,12 +513,36 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
           </div>
 
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+            {isEditMode && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                <Edit2 className="w-3 h-3 text-amber-500" />
+                Düzenleme Modu Açık
+              </span>
+            )}
             <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              Sunucu Senkronize
+              Senkronize
             </span>
           </div>
         </div>
+
+        {/* Active Edit Mode Banner */}
+        {isEditMode && (
+          <div className="mx-4 sm:mx-5 my-2.5 p-2.5 px-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-300 text-xs flex flex-wrap items-center justify-between gap-2 animate-in fade-in">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <span className="font-bold">Nöbet Düzenleme Modu Aktif:</span>
+              <span className="text-slate-600 dark:text-slate-300">Değiştirmek istediğiniz hekim hücresine tıklayarak yeni ismi kaydedebilirsiniz.</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsEditMode(false)}
+              className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-600 hover:bg-amber-700 text-white transition-colors cursor-pointer"
+            >
+              Düzenlemeyi Bitir
+            </button>
+          </div>
+        )}
 
         {/* Notifications (Success or Error) */}
         {notification && (
@@ -396,7 +552,7 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
               : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
           }`}>
             <div className="flex items-center gap-2">
-              {notification.type === 'success' ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+              {notification.type === 'success' ? <Check className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
               <span>{notification.message}</span>
             </div>
             <button 
@@ -409,305 +565,183 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
           </div>
         )}
 
-        {/* Body Content */}
-        <div className="p-4 sm:p-5 overflow-y-auto max-h-[calc(94vh-180px)]">
-          
-          {/* VIEW A: OFFICIAL TABLE VIEW MATCHING THE PDF */}
-          {activeTab === 'table' && (
-            <div className="border rounded-xl overflow-hidden overflow-x-auto border-slate-300 dark:border-slate-700 text-xs shadow-xs">
-              <table className="w-full text-center border-collapse">
-                <thead>
-                  {/* Top Super-headers: SEYRANTEPE (1-6) and SARIYER (1-4) */}
-                  <tr className="bg-slate-900 text-white font-bold text-[11px] tracking-wider uppercase border-b border-slate-700">
-                    <th colSpan={2} className="py-2 px-3 text-left bg-slate-950">TARİH & GÜN</th>
-                    <th colSpan={6} className="py-2 px-3 bg-teal-900 border-x border-teal-800 text-teal-100">
-                      SEYRANTEPE YERLEŞKESİ (1 - 6)
-                    </th>
-                    <th colSpan={4} className="py-2 px-3 bg-amber-900 text-amber-100">
-                      SARIYER ÇAYIRBAŞI YERLEŞKESİ (1 - 4)
-                    </th>
-                  </tr>
-                  {/* Column Slot Headers */}
-                  <tr className={`border-b text-[11px] font-bold uppercase tracking-wider ${
-                    isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-700 border-slate-300'
-                  }`}>
-                    <th className="py-2 px-3 text-left w-24">TARİH</th>
-                    <th className="py-2 px-3 text-left w-24">GÜN</th>
-                    <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-1</th>
-                    <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-2</th>
-                    <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-3</th>
-                    <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-4</th>
-                    <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-5</th>
-                    <th className="py-2 px-2 text-teal-700 dark:text-teal-300 border-r border-slate-300 dark:border-slate-700">SEY-6</th>
-                    <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-1</th>
-                    <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-2</th>
-                    <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-3</th>
-                    <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-4</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-medium">
-                  {filteredDates.map((dateKey) => {
-                    const day = roster.days[dateKey];
-                    const isSelected = dateKey === selectedDateKey;
-                    const isToday = dateKey === activeShiftKey;
-                    const isWeekend = day.isWeekend;
+        {/* Body Content: Official Table View */}
+        <div className="p-3 sm:p-5 overflow-y-auto flex-1">
+          <div className="border rounded-xl overflow-hidden overflow-x-auto border-slate-300 dark:border-slate-700 text-xs shadow-xs">
+            <table className="w-full text-center border-collapse">
+              <thead>
+                {/* Top Super-headers */}
+                <tr className="bg-slate-900 text-white font-bold text-[11px] tracking-wider uppercase border-b border-slate-700">
+                  <th colSpan={2} className="py-2 px-3 text-left bg-slate-950">TARİH &amp; GÜN</th>
+                  <th colSpan={6} className="py-2 px-3 bg-teal-900 border-x border-teal-800 text-teal-100">
+                    SEYRANTEPE YERLEŞKESİ (1 - 6)
+                  </th>
+                  <th colSpan={4} className="py-2 px-3 bg-amber-900 text-amber-100">
+                    SARIYER ÇAYIRBAŞI YERLEŞKESİ (1 - 4)
+                  </th>
+                </tr>
+                {/* Column Slot Headers */}
+                <tr className={`border-b text-[11px] font-bold uppercase tracking-wider ${
+                  isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-700 border-slate-300'
+                }`}>
+                  <th className="py-2 px-3 text-left w-24">TARİH</th>
+                  <th className="py-2 px-3 text-left w-24">GÜN</th>
+                  <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-1</th>
+                  <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-2</th>
+                  <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-3</th>
+                  <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-4</th>
+                  <th className="py-2 px-2 text-teal-700 dark:text-teal-300">SEY-5</th>
+                  <th className="py-2 px-2 text-teal-700 dark:text-teal-300 border-r border-slate-300 dark:border-slate-700">SEY-6</th>
+                  <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-1</th>
+                  <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-2</th>
+                  <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-3</th>
+                  <th className="py-2 px-2 text-amber-700 dark:text-amber-300">SAR-4</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-medium">
+                {filteredDates.map((dateKey) => {
+                  const day = roster.days[dateKey];
+                  const isSelected = dateKey === selectedDateKey;
+                  const isToday = dateKey === activeShiftKey;
+                  const isWeekend = isWeekendDay(day);
 
-                    const getSeySlot = (num: number) => 
-                      day.seyrantepeStaff.find(s => s.slot === `SEYRANTEPE ${num}`)?.name || day.seyrantepeStaff[num - 1]?.name || '';
+                  const getSeySlot = (num: number) => 
+                    day.seyrantepeStaff.find(s => s.slot === `SEYRANTEPE ${num}`)?.name || day.seyrantepeStaff[num - 1]?.name || '';
 
-                    const getSarSlot = (num: number) => 
-                      day.cayirbasiStaff.find(s => s.slot === `SARIYER-${num}`)?.name || day.cayirbasiStaff[num - 1]?.name || '';
+                  const getSarSlot = (num: number) => 
+                    day.cayirbasiStaff.find(s => s.slot === `SARIYER-${num}`)?.name || day.cayirbasiStaff[num - 1]?.name || '';
+
+                  const renderDoctorCell = (
+                    campus: 'seyrantepe' | 'cayirbasi',
+                    slotNum: number,
+                    name: string,
+                    isExtraBorder: boolean = false
+                  ) => {
+                    const slotLabel = campus === 'seyrantepe' ? `SEYRANTEPE ${slotNum}` : `SARIYER-${slotNum}`;
+                    const campusName = campus === 'seyrantepe' ? 'Seyrantepe Yerleşkesi' : 'Sarıyer (Çayırbaşı) Yerleşkesi';
+                    const staffId = `${campus.substring(0, 3)}-${dateKey}-${slotNum}`;
 
                     return (
-                      <tr 
-                        key={dateKey}
-                        onClick={() => {
-                          setSelectedDateKey(dateKey);
+                      <td 
+                        key={`${campus}-${slotNum}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCellClick(
+                            dateKey,
+                            campus,
+                            staffId,
+                            slotLabel,
+                            campusName,
+                            name,
+                            day.formattedDate,
+                            day.dayName
+                          );
                         }}
-                        className={`transition-colors cursor-pointer text-[11px] ${
-                          isSelected
-                            ? 'ring-2 ring-teal-500 font-bold bg-teal-500/10'
-                            : isWeekend
-                              ? isDark ? 'bg-amber-950/20 hover:bg-amber-950/30 text-amber-200' : 'bg-yellow-200/80 hover:bg-yellow-300/80 text-slate-900 font-bold'
-                              : isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+                        title={isEditMode ? `Nöbeti Değiştir: ${day.formattedDate} - ${slotLabel} (${name || 'Boş'})` : (name || undefined)}
+                        className={`py-1.5 px-2 transition-all cursor-pointer relative ${
+                          isExtraBorder ? 'border-r border-slate-300 dark:border-slate-700 ' : ''
+                        }${
+                          isEditMode 
+                            ? 'ring-1 ring-inset ring-amber-400/60 hover:bg-amber-400/30 dark:hover:bg-amber-900/60 ' 
+                            : ''
+                        }${
+                          isWeekend 
+                            ? 'text-amber-900 dark:text-amber-300 font-bold hover:bg-amber-300/60 dark:hover:bg-amber-900/50' 
+                            : 'text-slate-900 dark:text-slate-100 hover:bg-teal-500/15'
                         }`}
                       >
-                        {/* Tarih */}
-                        <td className="py-1.5 px-3 text-left font-mono font-semibold whitespace-nowrap">
-                          {day.formattedDate}
-                          {isToday && (
-                            <span className="ml-1.5 px-1 py-0.2 rounded text-[9px] font-bold bg-emerald-600 text-white">
-                              Bugün
-                            </span>
+                        <div className="flex items-center justify-center gap-1">
+                          <span className={name ? '' : 'text-slate-400 dark:text-slate-600 font-normal'}>
+                            {name || '-'}
+                          </span>
+                          {isEditMode && (
+                            <Edit2 className="w-2.5 h-2.5 text-amber-600 dark:text-amber-400 shrink-0" />
                           )}
-                        </td>
-
-                        {/* Gün */}
-                        <td className={`py-1.5 px-3 text-left whitespace-nowrap ${isWeekend ? 'font-extrabold' : ''}`}>
-                          {day.dayName}
-                        </td>
-
-                        {/* Seyrantepe 1..6 */}
-                        <td className="py-1.5 px-2 font-bold text-slate-900 dark:text-slate-100">{getSeySlot(1) || '-'}</td>
-                        <td className="py-1.5 px-2">{getSeySlot(2) || '-'}</td>
-                        <td className="py-1.5 px-2">{getSeySlot(3) || '-'}</td>
-                        <td className="py-1.5 px-2">{getSeySlot(4) || '-'}</td>
-                        <td className="py-1.5 px-2 text-slate-400">{getSeySlot(5) || '-'}</td>
-                        <td className="py-1.5 px-2 text-slate-400 border-r border-slate-300 dark:border-slate-700">{getSeySlot(6) || '-'}</td>
-
-                        {/* Sarıyer (Çayırbaşı) 1..4 */}
-                        <td className="py-1.5 px-2 font-bold text-slate-900 dark:text-slate-100">{getSarSlot(1) || '-'}</td>
-                        <td className="py-1.5 px-2">{getSarSlot(2) || '-'}</td>
-                        <td className="py-1.5 px-2">{getSarSlot(3) || '-'}</td>
-                        <td className="py-1.5 px-2 text-slate-400">{getSarSlot(4) || '-'}</td>
-                      </tr>
+                        </div>
+                      </td>
                     );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  };
 
-          {/* VIEW B: DAY INSPECTOR & INLINE SWAPPER */}
-          {activeTab === 'calendar' && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-              
-              {/* Left Column: Month Days Grid */}
-              <div className="lg:col-span-7 space-y-2">
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-500 px-1">
-                  <span>Ayın Günleri (Seçmek için tıklayın)</span>
-                  <span>{sortedDates.length} Gün</span>
-                </div>
-
-                <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
-                  {sortedDates.map((dateKey) => {
-                    const day = roster.days[dateKey];
-                    const isSelected = dateKey === selectedDateKey;
-                    const matchesFilter = filteredDates.includes(dateKey);
-                    const isWeekend = day.isWeekend;
-                    const isToday = dateKey === activeShiftKey;
-
-                    return (
-                      <button
-                        key={dateKey}
-                        type="button"
-                        onClick={() => setSelectedDateKey(dateKey)}
-                        className={`p-2 rounded-xl text-center border transition-all cursor-pointer relative flex flex-col items-center justify-center min-h-[58px] ${
-                          isSelected
-                            ? 'bg-teal-600 text-white border-teal-600 shadow-md ring-2 ring-teal-500/30'
-                            : matchesFilter
-                              ? isWeekend
-                                ? isDark ? 'bg-amber-950/40 border-amber-800/80 text-amber-200' : 'bg-yellow-200 border-yellow-300 text-slate-900 font-bold'
-                                : isDark ? 'bg-slate-800/50 border-slate-800 text-slate-200 hover:border-slate-600' : 'bg-white border-slate-200 text-slate-700 hover:border-teal-300'
-                              : 'opacity-30 border-transparent bg-slate-100 dark:bg-slate-800/30'
-                        }`}
-                      >
+                  return (
+                    <tr 
+                      key={dateKey}
+                      onClick={() => setSelectedDateKey(dateKey)}
+                      className={`transition-colors text-[11px] ${
+                        isSelected
+                          ? 'ring-2 ring-teal-500 font-bold bg-teal-500/10'
+                          : isWeekend
+                            ? isDark ? 'bg-amber-950/25 text-amber-300' : 'bg-yellow-200/90 text-amber-950 font-bold'
+                            : isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+                      }`}
+                    >
+                      {/* Tarih */}
+                      <td className={`py-1.5 px-3 text-left font-mono whitespace-nowrap ${isWeekend ? 'font-bold text-amber-900 dark:text-amber-300' : 'font-semibold'}`}>
+                        {day.formattedDate}
                         {isToday && (
-                          <span className="absolute top-1 right-1 px-1 py-0.2 rounded text-[7px] font-bold bg-emerald-600 text-white leading-none">
+                          <span className="ml-1.5 px-1 py-0.2 rounded text-[9px] font-bold bg-emerald-600 text-white">
                             Bugün
                           </span>
                         )}
-                        <span className="text-[10px] uppercase font-bold opacity-75">
-                          {day.dayName.substring(0, 3)}
-                        </span>
-                        <span className="text-base font-extrabold leading-tight">
-                          {day.dayNumber}
-                        </span>
+                      </td>
 
-                        <div className="flex items-center gap-1 mt-1">
-                          <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-teal-500'}`} />
-                          <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-amber-200' : 'bg-amber-500'}`} />
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+                      {/* Gün */}
+                      <td className={`py-1.5 px-3 text-left whitespace-nowrap ${isWeekend ? 'font-black text-amber-700 dark:text-amber-300' : ''}`}>
+                        {day.dayName}
+                      </td>
 
-              {/* Right Column: Selected Day Duty Inspector & Instant Shift Swapper */}
-              <div className="lg:col-span-5 flex flex-col">
-                {activeDaySchedule ? (
-                  <div className={`p-4 rounded-xl border flex flex-col h-full transition-colors ${
-                    isDark ? 'bg-slate-800/50 border-slate-700/80' : 'bg-slate-50/70 border-slate-200'
-                  }`}>
-                    
-                    {/* Day Card Header */}
-                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-700">
-                      <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                          Seçili Gün Nöbetçileri
-                        </span>
-                        <div className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                          <CalendarIcon className="w-3.5 h-3.5 text-teal-500" />
-                          <span>{activeDaySchedule.formattedDate} ({activeDaySchedule.dayName})</span>
-                        </div>
-                      </div>
+                      {/* Seyrantepe 1..6 */}
+                      {renderDoctorCell('seyrantepe', 1, getSeySlot(1))}
+                      {renderDoctorCell('seyrantepe', 2, getSeySlot(2))}
+                      {renderDoctorCell('seyrantepe', 3, getSeySlot(3))}
+                      {renderDoctorCell('seyrantepe', 4, getSeySlot(4))}
+                      {renderDoctorCell('seyrantepe', 5, getSeySlot(5))}
+                      {renderDoctorCell('seyrantepe', 6, getSeySlot(6), true)}
 
-                      <button
-                        type="button"
-                        onClick={() => setIsEditing(!isEditing)}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
-                          isEditing 
-                            ? 'bg-teal-600 text-white border-teal-600' 
-                            : isDark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white' : 'bg-white border-slate-200 text-slate-700 hover:text-black'
-                        }`}
-                      >
-                        {isEditing ? <Check className="w-3 h-3" /> : <Edit3 className="w-3 h-3" />}
-                        <span>{isEditing ? 'Tamamla' : 'Düzenle'}</span>
-                      </button>
-                    </div>
-
-                    {/* SEYRANTEPE EKİBİ */}
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-teal-700 dark:text-teal-400">
-                        <span className="w-2 h-2 rounded-full bg-teal-500" />
-                        <span>Seyrantepe Yerleşkesi</span>
-                      </div>
-                      <div className="space-y-1.5">
-                        {activeDaySchedule.seyrantepeStaff.map((staff) => (
-                          <div 
-                            key={staff.id}
-                            className={`p-2 rounded-lg border text-xs flex items-center justify-between gap-2 ${
-                              isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-                            }`}
-                          >
-                            <div className="flex-1 min-w-0">
-                              {isEditing ? (
-                                <input
-                                  type="text"
-                                  value={staff.name}
-                                  onChange={(e) => handleUpdateDoctorName('seyrantepe', staff.id, e.target.value)}
-                                  className={`w-full px-2 py-0.5 rounded border text-xs outline-none uppercase font-bold ${
-                                    isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                                  }`}
-                                />
-                              ) : (
-                                <span className="font-bold truncate block">
-                                  {staff.name}
-                                </span>
-                              )}
-                            </div>
-                            <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono font-bold">
-                              {staff.slot}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* SARIYER (ÇAYIRBAŞI) EKİBİ */}
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-400">
-                        <span className="w-2 h-2 rounded-full bg-amber-500" />
-                        <span>Sarıyer (Çayırbaşı) Yerleşkesi</span>
-                      </div>
-                      <div className="space-y-1.5">
-                        {activeDaySchedule.cayirbasiStaff.map((staff) => (
-                          <div 
-                            key={staff.id}
-                            className={`p-2 rounded-lg border text-xs flex items-center justify-between gap-2 ${
-                              isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-                            }`}
-                          >
-                            <div className="flex-1 min-w-0">
-                              {isEditing ? (
-                                <input
-                                  type="text"
-                                  value={staff.name}
-                                  onChange={(e) => handleUpdateDoctorName('cayirbasi', staff.id, e.target.value)}
-                                  className={`w-full px-2 py-0.5 rounded border text-xs outline-none uppercase font-bold ${
-                                    isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                                  }`}
-                                />
-                              ) : (
-                                <span className="font-bold truncate block">
-                                  {staff.name}
-                                </span>
-                              )}
-                            </div>
-                            <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono font-bold">
-                              {staff.slot}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {isEditing && (
-                      <div className="mt-3 p-2 rounded-lg bg-teal-500/10 border border-teal-500/20 text-[11px] text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
-                        <Check className="w-3.5 h-3.5 shrink-0" />
-                        <span>Nöbet değişimi anında kaydedildi ve ana ekrana yansıdı.</span>
-                      </div>
-                    )}
-
-                  </div>
-                ) : null}
-              </div>
-
-            </div>
-          )}
-
-        </div>
-
-        {/* Modal Footer */}
-        <div className={`p-4 border-t flex flex-wrap items-center justify-between gap-2 text-xs ${
-          isDark ? 'bg-slate-800/40 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
-        }`}>
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-teal-500" />
-            <span>Şişli Hamidiye Etfal EAH Anesteziyoloji ve Reanimasyon Kliniği Resmi Nöbet Çizelgesi</span>
+                      {/* Sarıyer (Çayırbaşı) 1..4 */}
+                      {renderDoctorCell('cayirbasi', 1, getSarSlot(1))}
+                      {renderDoctorCell('cayirbasi', 2, getSarSlot(2))}
+                      {renderDoctorCell('cayirbasi', 3, getSarSlot(3))}
+                      {renderDoctorCell('cayirbasi', 4, getSarSlot(4))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold cursor-pointer"
-          >
-            Kapat
-          </button>
         </div>
-
       </div>
 
+      {/* Admin Password Modal (furkan1825 SHA-256) */}
+      <RosterAdminAuthModal
+        isOpen={showAdminAuthModal}
+        onClose={() => {
+          setShowAdminAuthModal(false);
+          setPendingAdminAction(null);
+        }}
+        onSuccess={handleAdminAuthSuccess}
+        isDark={isDark}
+        actionTitle={pendingAdminAction === 'upload' ? 'Nöbet Yükleme Yetkisi' : 'Nöbet Değişimi Yetkisi'}
+        actionDescription={
+          pendingAdminAction === 'upload'
+            ? 'Yeni Excel nöbet çizelgesi yüklemek için lütfen klinik yönetici şifresini giriniz.'
+            : 'Hekim nöbet çizelgesinde değişiklik yapmak için lütfen klinik yönetici şifresini giriniz.'
+        }
+      />
+
+      {/* Duty Edit / Swap Modal */}
+      {editingCell && (
+        <RosterDutyEditModal
+          isOpen={true}
+          onClose={() => setEditingCell(null)}
+          onSave={handleSaveCellEdit}
+          isDark={isDark}
+          dateStr={editingCell.dateStr}
+          dayName={editingCell.dayName}
+          slotLabel={editingCell.slotLabel}
+          campusName={editingCell.campusName}
+          currentName={editingCell.currentName}
+        />
+      )}
     </div>
   );
 };

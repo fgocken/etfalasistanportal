@@ -4,6 +4,41 @@ import { MonthDutyRoster, DayDutySchedule, StaffDuty, RosterRegistry, MonthOptio
 const STORAGE_KEY = 'etfal_anestezi_duty_roster_v3';
 const REGISTRY_STORAGE_KEY = 'etfal_anestezi_rosters_registry_v2';
 const ACTIVE_MONTH_STORAGE_KEY = 'etfal_anestezi_active_month_key_v2';
+const ROSTER_ADMIN_STORAGE_KEY = 'etfal_roster_admin_unlocked_session_v1';
+
+// SHA-256 hash of 'furkan1825'
+export const ROSTER_ADMIN_PASSWORD_SHA256 = 'd573b859ce4ac0f94627b690c261f23a5fecc429ec4098dc80646c0ead8ccd8a';
+
+export async function computeSha256(text: string): Promise<string> {
+  const enc = new TextEncoder().encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', enc);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+export async function verifyRosterAdminPassword(password: string): Promise<boolean> {
+  if (!password) return false;
+  const hash = await computeSha256(password.trim());
+  return hash === ROSTER_ADMIN_PASSWORD_SHA256;
+}
+
+export function isRosterAdminUnlocked(): boolean {
+  try {
+    return sessionStorage.getItem(ROSTER_ADMIN_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+export function setRosterAdminUnlocked(unlocked: boolean): void {
+  try {
+    if (unlocked) {
+      sessionStorage.setItem(ROSTER_ADMIN_STORAGE_KEY, 'true');
+    } else {
+      sessionStorage.removeItem(ROSTER_ADMIN_STORAGE_KEY);
+    }
+  } catch {}
+}
 
 export const TURKISH_MONTH_NAMES = [
   'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
@@ -20,6 +55,85 @@ export function formatMonthKeyDisplay(monthKey: string): string {
     }
   }
   return monthKey;
+}
+
+/**
+ * Normalizes day names and weekend flags based on strict calendar math,
+ * preventing any ambiguity (such as 'Pazartesi' matching 'Pazar').
+ */
+export function normalizeRoster(roster: MonthDutyRoster): MonthDutyRoster {
+  if (!roster || !roster.days) return roster;
+  
+  const dateKeys = Object.keys(roster.days).sort();
+  const [expectedYearStr, expectedMonthStr] = (roster.monthKey || '').split('-');
+  const expectedMonth = parseInt(expectedMonthStr, 10);
+  const expectedYear = parseInt(expectedYearStr, 10);
+
+  // Detect if previous month dates leaked in due to timezone/serial parsing bug (e.g. 2026-10-30 in 2026-11)
+  let needsShiftCorrection = false;
+  if (expectedMonth && expectedYear && dateKeys.length > 0) {
+    const prevMonth = expectedMonth === 1 ? 12 : expectedMonth - 1;
+    const hasPreviousMonthKeys = dateKeys.some(k => {
+      const parts = k.split('-');
+      return parseInt(parts[1], 10) === prevMonth;
+    });
+    if (hasPreviousMonthKeys) {
+      needsShiftCorrection = true;
+    }
+  }
+
+  const days: Record<string, DayDutySchedule> = {};
+  const turkishDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+
+  if (needsShiftCorrection) {
+    // Re-anchor sequential days to the correct month starting at day 1
+    dateKeys.forEach((oldKey, idx) => {
+      const dayNum = idx + 1;
+      const dayStr = String(dayNum).padStart(2, '0');
+      const monthStr = String(expectedMonth).padStart(2, '0');
+      const newKey = `${expectedYear}-${monthStr}-${dayStr}`;
+      const formattedDate = `${dayStr}.${monthStr}.${expectedYear}`;
+
+      const d = new Date(expectedYear, expectedMonth - 1, dayNum, 12, 0, 0);
+      const dow = d.getDay();
+      const dayName = turkishDays[dow];
+      const isWeekend = dow === 0 || dow === 6;
+
+      const oldDay = roster.days[oldKey];
+      days[newKey] = {
+        ...oldDay,
+        date: newKey,
+        formattedDate,
+        dayNumber: dayNum,
+        dayName,
+        isWeekend,
+        seyrantepeStaff: (oldDay.seyrantepeStaff || []).map(s => ({
+          ...s,
+          id: s.id.replace(/sey-[^-]+-[^-]+-/, `sey-${newKey}-`)
+        })),
+        cayirbasiStaff: (oldDay.cayirbasiStaff || []).map(s => ({
+          ...s,
+          id: s.id.replace(/sar-[^-]+-[^-]+-/, `sar-${newKey}-`)
+        }))
+      };
+    });
+  } else {
+    for (const dateKey of Object.keys(roster.days)) {
+      const day = { ...roster.days[dateKey] };
+      if (day && day.date) {
+        const parts = day.date.split('-');
+        if (parts.length === 3) {
+          const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 12, 0, 0);
+          const dow = d.getDay();
+          day.dayName = turkishDays[dow];
+          day.isWeekend = dow === 0 || dow === 6;
+        }
+      }
+      days[dateKey] = day;
+    }
+  }
+
+  return { ...roster, days };
 }
 
 /**
@@ -43,6 +157,11 @@ export function getRosterRegistry(): RosterRegistry {
   if (!registry['2026-10'] || !registry['2026-10'].days || Object.keys(registry['2026-10'].days).length === 0) {
     registry['2026-10'] = buildOfficialOctoberRoster();
     saveRosterRegistry(registry);
+  }
+
+  // Normalize all rosters to ensure accurate day names and weekend flags
+  for (const key of Object.keys(registry)) {
+    registry[key] = normalizeRoster(registry[key]);
   }
 
   return registry;
@@ -69,7 +188,11 @@ export async function fetchServerRosters(): Promise<RosterRegistry> {
     if (res.ok) {
       const data = await res.json();
       if (data && data.rosters && typeof data.rosters === 'object') {
-        const merged: RosterRegistry = { ...localRegistry, ...data.rosters };
+        const rawMerged: RosterRegistry = { ...localRegistry, ...data.rosters };
+        const merged: RosterRegistry = {};
+        for (const k of Object.keys(rawMerged)) {
+          merged[k] = normalizeRoster(rawMerged[k]);
+        }
         // Ensure baseline October 2026 is kept if not in server
         if (!merged['2026-10']) {
           merged['2026-10'] = buildOfficialOctoberRoster();
@@ -93,25 +216,26 @@ export async function fetchServerRosters(): Promise<RosterRegistry> {
  * Saves a roster to both server API (/api/roster) and local storage
  */
 export async function saveRosterToServer(roster: MonthDutyRoster): Promise<void> {
+  const normalizedRoster = normalizeRoster(roster);
   // Update local registry immediately
   const registry = getRosterRegistry();
-  registry[roster.monthKey] = roster;
+  registry[normalizedRoster.monthKey] = normalizedRoster;
   saveRosterRegistry(registry);
-  setActiveMonthKey(roster.monthKey);
+  setActiveMonthKey(normalizedRoster.monthKey);
 
   // Send to server for global persistence across all clinic users
   try {
     await fetch('/api/roster', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(roster)
+      body: JSON.stringify(normalizedRoster)
     });
   } catch (err) {
     console.warn('Failed to send roster to server API:', err);
   }
 
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('etfal-rosters-updated', { detail: { monthKey: roster.monthKey, registry } }));
+    window.dispatchEvent(new CustomEvent('etfal-rosters-updated', { detail: { monthKey: normalizedRoster.monthKey, registry } }));
   }
 }
 
@@ -695,99 +819,156 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
             continue;
           }
 
-          // Extract date
+          // Extract date with timezone-safe methods
           const rawDateCell = dateColIdx !== -1 ? row[dateColIdx] : null;
           let parsedDayNum: number | null = null;
-          let dateObj: Date | null = null;
+          let parsedMonth: number = detectedMonth;
+          let parsedYear: number = detectedYear;
 
-          if (rawDateCell !== null && rawDateCell !== undefined && rawDateCell !== '') {
+          // Check if Excel has formatted display text in sheet cell (e.g. cell.w: "01.11.2026")
+          let formattedCellText = '';
+          if (dateColIdx !== -1 && sheet) {
+            const cellRef = XLSX.utils.encode_cell({ r, c: dateColIdx });
+            const cellObj = sheet[cellRef];
+            if (cellObj && cellObj.w) {
+              formattedCellText = String(cellObj.w).trim();
+            }
+          }
+
+          // 1. Try formatted text first if available (e.g. "01.11.2026", "1.11.2026")
+          if (formattedCellText) {
+            const fullMatch = formattedCellText.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})$/);
+            if (fullMatch) {
+              parsedDayNum = parseInt(fullMatch[1], 10);
+              parsedMonth = parseInt(fullMatch[2], 10);
+              let y = parseInt(fullMatch[3], 10);
+              if (y < 100) y += 2000;
+              parsedYear = y;
+            } else {
+              const partialMatch = formattedCellText.match(/^(\d{1,2})[./-](\d{1,2})$/);
+              if (partialMatch) {
+                parsedDayNum = parseInt(partialMatch[1], 10);
+                parsedMonth = parseInt(partialMatch[2], 10);
+              } else {
+                const dayMatch = formattedCellText.match(/^(\d{1,2})$/);
+                if (dayMatch) {
+                  parsedDayNum = parseInt(dayMatch[1], 10);
+                }
+              }
+            }
+          }
+
+          // 2. If not parsed yet, check raw cell value
+          if (!parsedDayNum && rawDateCell !== null && rawDateCell !== undefined && rawDateCell !== '') {
             if (rawDateCell instanceof Date && !isNaN(rawDateCell.getTime())) {
-              dateObj = rawDateCell;
-              parsedDayNum = dateObj.getDate();
-              detectedMonth = dateObj.getMonth() + 1;
-              detectedYear = dateObj.getFullYear();
+              // SheetJS creates dates at UTC midnight: ALWAYS use UTC getters to avoid local timezone offset rollback!
+              parsedDayNum = rawDateCell.getUTCDate();
+              parsedMonth = rawDateCell.getUTCMonth() + 1;
+              parsedYear = rawDateCell.getUTCFullYear();
             } else if (typeof rawDateCell === 'number') {
               if (rawDateCell > 1000) {
-                // Excel serial date code
                 try {
                   const parsed = XLSX.SSF.parse_date_code(rawDateCell);
                   if (parsed) {
-                    dateObj = new Date(parsed.y, parsed.m - 1, parsed.d);
                     parsedDayNum = parsed.d;
-                    detectedMonth = parsed.m;
-                    detectedYear = parsed.y;
+                    parsedMonth = parsed.m;
+                    parsedYear = parsed.y;
                   }
                 } catch {
                   // Fallback
-                  dateObj = new Date(Math.round((rawDateCell - 25569) * 86400 * 1000));
-                  parsedDayNum = dateObj.getDate();
+                  const d = new Date((rawDateCell - 25569) * 86400 * 1000);
+                  parsedDayNum = d.getUTCDate();
+                  parsedMonth = d.getUTCMonth() + 1;
+                  parsedYear = d.getUTCFullYear();
                 }
               } else if (rawDateCell >= 1 && rawDateCell <= 31) {
                 parsedDayNum = Math.floor(rawDateCell);
-                dateObj = new Date(detectedYear, detectedMonth - 1, parsedDayNum);
               }
             } else {
               const strVal = String(rawDateCell).trim();
-              
-              // DD.MM.YYYY or DD/MM/YYYY
               const fullMatch = strVal.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})$/);
               if (fullMatch) {
-                const d = parseInt(fullMatch[1], 10);
-                const m = parseInt(fullMatch[2], 10);
+                parsedDayNum = parseInt(fullMatch[1], 10);
+                parsedMonth = parseInt(fullMatch[2], 10);
                 let y = parseInt(fullMatch[3], 10);
                 if (y < 100) y += 2000;
-                dateObj = new Date(y, m - 1, d);
-                parsedDayNum = d;
-                detectedMonth = m;
-                detectedYear = y;
+                parsedYear = y;
               } else {
-                // DD.MM (e.g. 01.11, 02.11)
                 const partialMatch = strVal.match(/^(\d{1,2})[./-](\d{1,2})$/);
                 if (partialMatch) {
-                  const d = parseInt(partialMatch[1], 10);
-                  const m = parseInt(partialMatch[2], 10);
-                  dateObj = new Date(detectedYear, m - 1, d);
-                  parsedDayNum = d;
-                  detectedMonth = m;
+                  parsedDayNum = parseInt(partialMatch[1], 10);
+                  parsedMonth = parseInt(partialMatch[2], 10);
                 } else {
-                  // Just day number 1..31
                   const dayNumMatch = strVal.match(/^(\d{1,2})$/);
                   if (dayNumMatch) {
                     parsedDayNum = parseInt(dayNumMatch[1], 10);
-                    dateObj = new Date(detectedYear, detectedMonth - 1, parsedDayNum);
                   }
                 }
               }
             }
           }
 
-          // If no date found on this row, check if row has day number based on index
-          if (!dateObj || !parsedDayNum) {
-            const autoDay = Object.keys(days).length + 1;
-            if (autoDay <= 31) {
-              parsedDayNum = autoDay;
-              dateObj = new Date(detectedYear, detectedMonth - 1, parsedDayNum);
-            } else {
-              continue; // Exceeded month range
-            }
+          // Fallback sequential day number if day couldn't be parsed
+          if (!parsedDayNum || parsedDayNum < 1 || parsedDayNum > 31) {
+            parsedDayNum = Object.keys(days).length + 1;
           }
 
-          const yearStr = dateObj.getFullYear();
-          const monthStr = String(detectedMonth).padStart(2, '0');
+          // Prevent month bleed: all days in this roster sheet must strictly anchor to the detected roster month and year
+          parsedMonth = detectedMonth;
+          parsedYear = detectedYear;
+
+          // Safe midday Date object for day of week calculation
+          const dateObj = new Date(parsedYear, parsedMonth - 1, parsedDayNum, 12, 0, 0);
+          const yearStr = parsedYear;
+          const monthStr = String(parsedMonth).padStart(2, '0');
           const dayStr = String(parsedDayNum).padStart(2, '0');
           const dateKey = `${yearStr}-${monthStr}-${dayStr}`;
           const formattedDate = `${dayStr}.${monthStr}.${yearStr}`;
 
-          const dayOfWeek = dateObj.getDay();
-          let dayName = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'][dayOfWeek];
-          
-          // If explicit day name column exists, use provided text if available
+          const dayOfWeek = dateObj.getDay(); // 0: Pazar, 1: Pazartesi, ..., 6: Cumartesi
+          const calendarDayName = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'][dayOfWeek];
+          let dayName = calendarDayName;
+          let isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+          // If explicit day name column exists, parse Turkish day text safely (Pazartesi MUST precede Pazar)
           if (dayNameColIdx !== -1 && row[dayNameColIdx]) {
-            const rawDayName = String(row[dayNameColIdx]).trim();
-            if (rawDayName) dayName = rawDayName;
+            const rawDayText = String(row[dayNameColIdx]).trim();
+            const lowerDay = rawDayText.toLowerCase();
+
+            if (lowerDay.includes('pazartesi') || lowerDay === 'pzt' || lowerDay.startsWith('pzt')) {
+              dayName = 'Pazartesi';
+              isWeekend = false;
+            } else if (lowerDay.includes('cumartesi') || lowerDay === 'cmt' || lowerDay.startsWith('c.tesi') || lowerDay.startsWith('cmt')) {
+              dayName = 'Cumartesi';
+              isWeekend = true;
+            } else if ((lowerDay.includes('pazar') || lowerDay === 'paz' || lowerDay.startsWith('paz')) && !lowerDay.includes('pazartesi')) {
+              dayName = 'Pazar';
+              isWeekend = true;
+            } else if (lowerDay.includes('salı') || lowerDay.includes('sali')) {
+              dayName = 'Salı';
+              isWeekend = false;
+            } else if (lowerDay.includes('çarşamba') || lowerDay.includes('carsamba') || lowerDay.includes('çar')) {
+              dayName = 'Çarşamba';
+              isWeekend = false;
+            } else if (lowerDay.includes('perşembe') || lowerDay.includes('persembe') || lowerDay.includes('per')) {
+              dayName = 'Perşembe';
+              isWeekend = false;
+            } else if (lowerDay.includes('cuma') && !lowerDay.includes('cumartesi')) {
+              dayName = 'Cuma';
+              isWeekend = false;
+            } else if (rawDayText) {
+              dayName = rawDayText;
+            }
           }
 
-          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+          // Strict calendar date truth: dayOfWeek 1..5 is ALWAYS a weekday, 0 and 6 are weekend
+          if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+            isWeekend = false;
+            dayName = calendarDayName;
+          } else if (dayOfWeek === 0 || dayOfWeek === 6) {
+            isWeekend = true;
+            dayName = dayOfWeek === 6 ? 'Cumartesi' : 'Pazar';
+          }
 
           // Extract Seyrantepe Staff
           const seyrantepeStaff: StaffDuty[] = [];
@@ -982,38 +1163,66 @@ export function getCurrentShiftStatus(roster: MonthDutyRoster, referenceDate: Da
   const targetDayNum = targetDate.getDate();
 
   const directKey = `${targetYear}-${String(targetMonth).padStart(2, '0')}-${String(targetDayNum).padStart(2, '0')}`;
+  const targetMonthKey = `${targetYear}-${String(targetMonth).padStart(2, '0')}`;
 
-  const sortedKeys = Object.keys(roster.days).sort();
-  let resolvedKey: string = directKey;
-  let schedule: DayDutySchedule | undefined = roster.days[directKey];
+  const [rosterYearStr, rosterMonthStr] = (roster.monthKey || '').split('-');
+  const rosterYear = parseInt(rosterYearStr, 10);
+  const rosterMonth = parseInt(rosterMonthStr, 10);
 
-  // If direct key not found (e.g. current year is 2025 or different month from roster),
-  // match by day of month (e.g. 23rd day -> 2026-10-23)
-  if (!schedule) {
-    const matchedKey = sortedKeys.find((k) => roster.days[k].dayNumber === targetDayNum);
-    if (matchedKey) {
-      resolvedKey = matchedKey;
-      schedule = roster.days[matchedKey];
+  // A roster can only have an active "Today" shift if it matches the current calendar year & month
+  const isCurrentMonthRoster = (targetYear === rosterYear && targetMonth === rosterMonth);
+
+  const sortedKeys = Object.keys(roster.days || {}).sort();
+  let resolvedKey: string = '';
+  let schedule: DayDutySchedule | undefined = undefined;
+
+  if (isCurrentMonthRoster) {
+    if (roster.days[directKey]) {
+      resolvedKey = directKey;
+      schedule = roster.days[directKey];
     } else {
-      // Clamped fallback to closest day in roster
-      const clampedDay = Math.min(Math.max(targetDayNum, 1), sortedKeys.length);
-      resolvedKey = sortedKeys[clampedDay - 1] || sortedKeys[0] || '2026-10-22';
-      schedule = roster.days[resolvedKey];
+      const matchedKey = sortedKeys.find((k) => roster.days[k]?.dayNumber === targetDayNum);
+      if (matchedKey) {
+        resolvedKey = matchedKey;
+        schedule = roster.days[matchedKey];
+      }
     }
+  } else {
+    // If viewing a future/different month (e.g. November while in October):
+    // There is no "Today" in this future month!
+    resolvedKey = '';
+    
+    // For global ticker fallback, see if registry has the active current month's roster
+    try {
+      const registry = getRosterRegistry();
+      if (registry[targetMonthKey] && registry[targetMonthKey].days[directKey]) {
+        schedule = registry[targetMonthKey].days[directKey];
+      }
+    } catch {}
   }
 
   const displayDayNum = schedule ? schedule.dayNumber : targetDayNum;
   const displayDayName = schedule ? schedule.dayName : ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'][targetDate.getDay()];
-  const displayMonthName = roster.monthName.includes('EKİM') ? 'Ekim' : '';
+  const currentMonthTurkish = TURKISH_MONTH_NAMES[targetMonth - 1] || 'Ekim';
 
-  const displayDateText = `${displayDayNum} ${displayMonthName} ${displayDayName}`.trim();
+  const displayDateText = isCurrentMonthRoster
+    ? `${displayDayNum} ${currentMonthTurkish} ${displayDayName}`.trim()
+    : `${formatMonthKeyDisplay(roster.monthKey)}`;
 
   let shiftNote = '';
-  if (isBeforeHandover) {
-    shiftNote = `Sabah 0${handoverHour}:00 nöbet değişimine kadar dünkü nöbet ekibi görevdedir`;
+  if (isCurrentMonthRoster) {
+    if (isBeforeHandover) {
+      shiftNote = `Sabah 0${handoverHour}:00 nöbet değişimine kadar dünkü nöbet ekibi görevdedir`;
+    } else {
+      shiftNote = `Nöbet değişimi 0${handoverHour}:00'da tamamlandı`;
+    }
   } else {
-    shiftNote = `Nöbet değişimi 0${handoverHour}:00'da tamamlandı`;
+    shiftNote = `${formatMonthKeyDisplay(roster.monthKey)} Nöbet Çizelgesi`;
   }
+
+  const badgeLabel = isCurrentMonthRoster
+    ? (isBeforeHandover ? `${displayDayNum} ${currentMonthTurkish} (0${handoverHour}:00'a kadar)` : `${displayDayNum} ${currentMonthTurkish}`)
+    : formatMonthKeyDisplay(roster.monthKey);
 
   return {
     activeDateKey: resolvedKey,
@@ -1021,8 +1230,8 @@ export function getCurrentShiftStatus(roster: MonthDutyRoster, referenceDate: Da
     dayNumber: displayDayNum,
     dayName: displayDayName,
     displayDateText,
-    badgeLabel: isBeforeHandover ? `${displayDayNum} Ekim (0${handoverHour}:00'a kadar)` : `${displayDayNum} Ekim`,
-    isBeforeHandover,
+    badgeLabel,
+    isBeforeHandover: isCurrentMonthRoster ? isBeforeHandover : false,
     handoverHour,
     shiftNote
   };
