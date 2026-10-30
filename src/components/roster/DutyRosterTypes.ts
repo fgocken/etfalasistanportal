@@ -23,3 +23,14 @@ export interface MonthDutyRoster {
   lastUpdated: string;
   days: Record<string, DayDutySchedule>; // keyed by 'YYYY-MM-DD'
 }
+
+export type RosterRegistry = Record<string, MonthDutyRoster>;
+
+export interface MonthOption {
+  key: string; // '2026-10'
+  displayName: string; // 'Ekim 2026'
+  fullName: string; // '2026 YILI EKİM AYI ASİSTAN NÖBET LİSTESİ'
+  dayCount: number;
+  isOfficialDefault?: boolean;
+}
+

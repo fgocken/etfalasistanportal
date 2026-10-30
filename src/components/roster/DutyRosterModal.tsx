@@ -14,14 +14,18 @@ import {
   Sparkles,
   ExternalLink
 } from 'lucide-react';
-import { MonthDutyRoster, DayDutySchedule } from './DutyRosterTypes';
+import { MonthDutyRoster, DayDutySchedule, MonthOption } from './DutyRosterTypes';
 import { 
   getSavedRoster, 
   saveRoster, 
   downloadExcelTemplate, 
   parseExcelRoster, 
   resetToDefaultRoster,
-  getCurrentShiftStatus
+  getCurrentShiftStatus,
+  fetchServerRosters,
+  getAvailableMonthOptions,
+  getActiveMonthKey,
+  setActiveMonthKey
 } from './DutyRosterService';
 
 interface DutyRosterModalProps {
@@ -37,9 +41,11 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
   isDark,
   onRosterUpdated
 }) => {
-  const [roster, setRoster] = useState<MonthDutyRoster>(() => getSavedRoster());
-  const [selectedDateKey, setSelectedDateKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster()).activeDateKey);
-  const [activeShiftKey, setActiveShiftKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster()).activeDateKey);
+  const [activeMonth, setActiveMonth] = useState<string>(() => getActiveMonthKey());
+  const [roster, setRoster] = useState<MonthDutyRoster>(() => getSavedRoster(getActiveMonthKey()));
+  const [monthOptions, setMonthOptions] = useState<MonthOption[]>(() => getAvailableMonthOptions());
+  const [selectedDateKey, setSelectedDateKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster(getActiveMonthKey())).activeDateKey);
+  const [activeShiftKey, setActiveShiftKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster(getActiveMonthKey())).activeDateKey);
 
   const [activeTab, setActiveTab] = useState<'table' | 'calendar'>('table');
   const [searchDoctor, setSearchDoctor] = useState<string>('');
@@ -49,16 +55,32 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // When modal is opened, sync with latest roster and active shift
+  // When modal is opened, sync with latest roster and server
   React.useEffect(() => {
     if (isOpen) {
-      const freshRoster = getSavedRoster();
-      setRoster(freshRoster);
-      const curShift = getCurrentShiftStatus(freshRoster);
-      setSelectedDateKey(curShift.activeDateKey);
-      setActiveShiftKey(curShift.activeDateKey);
+      fetchServerRosters().then(() => {
+        const currentKey = getActiveMonthKey();
+        setActiveMonth(currentKey);
+        setMonthOptions(getAvailableMonthOptions());
+        const freshRoster = getSavedRoster(currentKey);
+        setRoster(freshRoster);
+        const curShift = getCurrentShiftStatus(freshRoster);
+        setSelectedDateKey(curShift.activeDateKey);
+        setActiveShiftKey(curShift.activeDateKey);
+      });
     }
   }, [isOpen]);
+
+  const handleSelectMonth = (monthKey: string) => {
+    setActiveMonthKey(monthKey);
+    setActiveMonth(monthKey);
+    const selected = getSavedRoster(monthKey);
+    setRoster(selected);
+    const keys = Object.keys(selected.days).sort();
+    if (keys.length > 0) {
+      setSelectedDateKey(keys[0]);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -76,9 +98,15 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
     try {
       const updatedRoster = await parseExcelRoster(file);
       setRoster(updatedRoster);
+      setActiveMonth(updatedRoster.monthKey);
+      setMonthOptions(getAvailableMonthOptions());
+      const keys = Object.keys(updatedRoster.days).sort();
+      if (keys.length > 0) {
+        setSelectedDateKey(keys[0]);
+      }
       setNotification({
         type: 'success',
-        message: `Excel başarıyla yüklendi! (${Object.keys(updatedRoster.days).length} günlük nöbet listesi güncellendi)`
+        message: `${updatedRoster.monthName} başarıyla işlendi ve sunucuya kaydedildi! (${keys.length} gün yüklendi, tüm klinik kullanıcılarına yansıtıldı)`
       });
       if (onRosterUpdated) onRosterUpdated();
     } catch (err: any) {
@@ -100,6 +128,8 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
     if (window.confirm('Nöbet listesini Ekim 2026 resmi aslına sıfırlamak istiyor musunuz?')) {
       const fresh = resetToDefaultRoster();
       setRoster(fresh);
+      setActiveMonth('2026-10');
+      setMonthOptions(getAvailableMonthOptions());
       setNotification({
         type: 'success',
         message: 'Nöbet listesi resmi Ekim 2026 klinik aslına sıfırlandı.'
@@ -286,6 +316,58 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
                 Gün Detayı
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Month Selector Strip */}
+        <div className={`px-4 sm:px-5 py-2.5 border-b flex flex-wrap items-center justify-between gap-2.5 ${
+          isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50/80 border-slate-100'
+        }`}>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <CalendarIcon className="w-3.5 h-3.5 text-teal-500" />
+              Aktif Takvim Ayı:
+            </span>
+            <div className="inline-flex p-0.5 rounded-lg bg-slate-200/80 dark:bg-slate-800 border border-slate-300/50 dark:border-slate-700/60">
+              {monthOptions.map((opt) => {
+                const isSelected = opt.key === activeMonth;
+                return (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => handleSelectMonth(opt.key)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isSelected
+                        ? 'bg-teal-600 text-white shadow-xs'
+                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>{opt.displayName}</span>
+                    {opt.isOfficialDefault && (
+                      <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${
+                        isSelected ? 'bg-teal-700 text-white' : 'bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                      }`}>
+                        Resmi
+                      </span>
+                    )}
+                    {opt.key !== '2026-10' && (
+                      <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${
+                        isSelected ? 'bg-teal-700 text-white' : 'bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20'
+                      }`}>
+                        {opt.key === '2026-11' ? 'Kasım' : 'Yüklendi'}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Sunucu Senkronize
+            </span>
           </div>
         </div>
 

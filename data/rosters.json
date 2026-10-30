@@ -1,0 +1,1719 @@
+{
+  "2026-10": {
+    "monthKey": "2026-10",
+    "monthName": "2026 YILI EKİM AYI ASİSTAN NÖBET LİSTESİ",
+    "lastUpdated": "2026-10-30T14:29:44.988Z",
+    "days": {
+      "2026-10-01": {
+        "date": "2026-10-01",
+        "formattedDate": "01.10.2026",
+        "dayNumber": 1,
+        "dayName": "Perşembe",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-01-1",
+            "name": "SÜLEYMAN",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-01-2",
+            "name": "FN GÜNLÜ",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-01-3",
+            "name": "BURÇAK",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-01-4",
+            "name": "CEYDA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-01-1",
+            "name": "HANİFE",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-01-2",
+            "name": "İNCİ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-01-3",
+            "name": "ZEHRA P.",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-02": {
+        "date": "2026-10-02",
+        "formattedDate": "02.10.2026",
+        "dayNumber": 2,
+        "dayName": "Cuma",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-02-1",
+            "name": "FATMA",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-02-2",
+            "name": "Z. EREN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-02-3",
+            "name": "NUMAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-02-4",
+            "name": "CELİL",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-02-5",
+            "name": "HAMİT",
+            "slot": "SEYRANTEPE 5",
+            "role": "5. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-02-1",
+            "name": "ORKUT",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-02-2",
+            "name": "FURKAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-02-3",
+            "name": "BERKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-03": {
+        "date": "2026-10-03",
+        "formattedDate": "03.10.2026",
+        "dayNumber": 3,
+        "dayName": "Cumartesi",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-03-1",
+            "name": "AYŞEGÜL",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-03-2",
+            "name": "ZEHRA E.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-03-3",
+            "name": "EMİR",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-03-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-03-1",
+            "name": "ŞEVKİ",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-03-2",
+            "name": "YAKUP",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-03-3",
+            "name": "ALPER",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-04": {
+        "date": "2026-10-04",
+        "formattedDate": "04.10.2026",
+        "dayNumber": 4,
+        "dayName": "Pazar",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-04-1",
+            "name": "SÜHEYLA O.",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-04-2",
+            "name": "ÇAĞATAY",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-04-3",
+            "name": "BURÇAK",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-04-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-04-1",
+            "name": "BATUHAN",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-04-2",
+            "name": "BETÜL",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-04-3",
+            "name": "YAĞMUR M.",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-05": {
+        "date": "2026-10-05",
+        "formattedDate": "05.10.2026",
+        "dayNumber": 5,
+        "dayName": "Pazartesi",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-05-1",
+            "name": "FATMA",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-05-2",
+            "name": "Z. EREN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-05-3",
+            "name": "NUMAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-05-4",
+            "name": "CELİL",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-05-5",
+            "name": "HAMİT",
+            "slot": "SEYRANTEPE 5",
+            "role": "5. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-05-1",
+            "name": "ZEYNEP",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-05-2",
+            "name": "FURKAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-05-3",
+            "name": "CEYDA",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-06": {
+        "date": "2026-10-06",
+        "formattedDate": "06.10.2026",
+        "dayNumber": 6,
+        "dayName": "Salı",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-06-1",
+            "name": "EBRU",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-06-2",
+            "name": "MERVE A.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-06-3",
+            "name": "ZEHRA P.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-06-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-06-1",
+            "name": "BÜŞRA",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-06-2",
+            "name": "CAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-06-3",
+            "name": "EMİR",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-07": {
+        "date": "2026-10-07",
+        "formattedDate": "07.10.2026",
+        "dayNumber": 7,
+        "dayName": "Çarşamba",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-07-1",
+            "name": "BERKAY",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-07-2",
+            "name": "ZEHRA E.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-07-3",
+            "name": "YAĞMUR M.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-07-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-07-1",
+            "name": "PELİN",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-07-2",
+            "name": "Y. DERTSİZ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-07-3",
+            "name": "BERKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-08": {
+        "date": "2026-10-08",
+        "formattedDate": "08.10.2026",
+        "dayNumber": 8,
+        "dayName": "Perşembe",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-08-1",
+            "name": "BATUHAN",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-08-2",
+            "name": "BETÜL",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-08-3",
+            "name": "ALPER",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-08-4",
+            "name": "CEYDA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-08-5",
+            "name": "HAMİT",
+            "slot": "SEYRANTEPE 5",
+            "role": "5. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-08-1",
+            "name": "SÜHEYLA O.",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-08-2",
+            "name": "YAKUP",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-08-3",
+            "name": "NUMAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-09": {
+        "date": "2026-10-09",
+        "formattedDate": "09.10.2026",
+        "dayNumber": 9,
+        "dayName": "Cuma",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-09-1",
+            "name": "FN GÜNLÜ",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-09-2",
+            "name": "MERVE A.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-09-3",
+            "name": "CAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-09-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-09-1",
+            "name": "RUHAT",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-09-2",
+            "name": "ZEHRA P.",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-09-3",
+            "name": "EMİR",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-10": {
+        "date": "2026-10-10",
+        "formattedDate": "10.10.2026",
+        "dayNumber": 10,
+        "dayName": "Cumartesi",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-10-1",
+            "name": "AYŞEGÜL",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-10-2",
+            "name": "ÇAĞATAY",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-10-3",
+            "name": "YAĞMUR M.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-10-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-10-1",
+            "name": "EBRU",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-10-2",
+            "name": "BURÇAK",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-10-3",
+            "name": "BERKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-11": {
+        "date": "2026-10-11",
+        "formattedDate": "11.10.2026",
+        "dayNumber": 11,
+        "dayName": "Pazar",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-11-1",
+            "name": "YAĞMUR",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-11-2",
+            "name": "Y. DERTSİZ",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-11-3",
+            "name": "ALPER",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-11-4",
+            "name": "CEYDA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-11-1",
+            "name": "ŞEVKİ",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-11-2",
+            "name": "FURKAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-11-3",
+            "name": "NUMAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-12": {
+        "date": "2026-10-12",
+        "formattedDate": "12.10.2026",
+        "dayNumber": 12,
+        "dayName": "Pazartesi",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-12-1",
+            "name": "HANİFE",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-12-2",
+            "name": "Z. EREN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-12-3",
+            "name": "CAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-12-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-12-1",
+            "name": "SÜLEYMAN",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-12-2",
+            "name": "FN GÜNLÜ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-12-3",
+            "name": "EMİR",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-13": {
+        "date": "2026-10-13",
+        "formattedDate": "13.10.2026",
+        "dayNumber": 13,
+        "dayName": "Salı",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-13-1",
+            "name": "AYŞEGÜL",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-13-2",
+            "name": "MERVE A.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-13-3",
+            "name": "İNCİ",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-13-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-13-1",
+            "name": "RUHAT",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-13-2",
+            "name": "ZEHRA P.",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-13-3",
+            "name": "YAKUP",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-14": {
+        "date": "2026-10-14",
+        "formattedDate": "14.10.2026",
+        "dayNumber": 14,
+        "dayName": "Çarşamba",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-14-1",
+            "name": "EBRU",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-14-2",
+            "name": "ÇAĞATAY",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-14-3",
+            "name": "YAĞMUR M.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-14-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-14-1",
+            "name": "BERKAY",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-14-2",
+            "name": "Y. DERTSİZ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-14-3",
+            "name": "ALPER",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-15": {
+        "date": "2026-10-15",
+        "formattedDate": "15.10.2026",
+        "dayNumber": 15,
+        "dayName": "Perşembe",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-15-1",
+            "name": "ORKUT",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-15-2",
+            "name": "CAN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-15-3",
+            "name": "EMİR",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-15-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-15-1",
+            "name": "YAĞMUR",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-15-2",
+            "name": "FURKAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-15-3",
+            "name": "CELİL",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-15-4",
+            "name": "HAMİT",
+            "slot": "SARIYER-4",
+            "role": "Çayırbaşı 4. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-16": {
+        "date": "2026-10-16",
+        "formattedDate": "16.10.2026",
+        "dayNumber": 16,
+        "dayName": "Cuma",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-16-1",
+            "name": "AYŞEGÜL",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-16-2",
+            "name": "İNCİ",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-16-3",
+            "name": "NUMAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-16-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-16-1",
+            "name": "BÜŞRA",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-16-2",
+            "name": "YAKUP",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-16-3",
+            "name": "CEYDA",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-17": {
+        "date": "2026-10-17",
+        "formattedDate": "17.10.2026",
+        "dayNumber": 17,
+        "dayName": "Cumartesi",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-17-1",
+            "name": "FN GÜNLÜ",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-17-2",
+            "name": "Y. DERTSİZ",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-17-3",
+            "name": "ALPER",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-17-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-17-1",
+            "name": "HANİFE",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-17-2",
+            "name": "BURÇAK",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-17-3",
+            "name": "BERKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-18": {
+        "date": "2026-10-18",
+        "formattedDate": "18.10.2026",
+        "dayNumber": 18,
+        "dayName": "Pazar",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-18-1",
+            "name": "SÜLEYMAN",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-18-2",
+            "name": "ÇAĞATAY",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-18-3",
+            "name": "YAĞMUR M.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-18-4",
+            "name": "CELİL",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-18-1",
+            "name": "EBRU",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-18-2",
+            "name": "ZEHRA P.",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-18-3",
+            "name": "EMİR",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-18-4",
+            "name": "HAMİT",
+            "slot": "SARIYER-4",
+            "role": "Çayırbaşı 4. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-19": {
+        "date": "2026-10-19",
+        "formattedDate": "19.10.2026",
+        "dayNumber": 19,
+        "dayName": "Pazartesi",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-19-1",
+            "name": "ORKUT",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-19-2",
+            "name": "MERVE A.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-19-3",
+            "name": "YAKUP",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-19-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-19-1",
+            "name": "SÜHEYLA O.",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-19-2",
+            "name": "BATUHAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-19-3",
+            "name": "ZEHRA E.",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-19-4",
+            "name": "CEYDA",
+            "slot": "SARIYER-4",
+            "role": "Çayırbaşı 4. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-20": {
+        "date": "2026-10-20",
+        "formattedDate": "20.10.2026",
+        "dayNumber": 20,
+        "dayName": "Salı",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-20-1",
+            "name": "AYŞEGÜL",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-20-2",
+            "name": "Z. EREN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-20-3",
+            "name": "CAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-20-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-20-1",
+            "name": "FN GÜNLÜ",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-20-2",
+            "name": "Y. DERTSİZ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-20-3",
+            "name": "BERKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-21": {
+        "date": "2026-10-21",
+        "formattedDate": "21.10.2026",
+        "dayNumber": 21,
+        "dayName": "Çarşamba",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-21-1",
+            "name": "FATMA",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-21-2",
+            "name": "ÇAĞATAY",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-21-3",
+            "name": "NUMAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-21-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-21-1",
+            "name": "ŞEVKİ",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-21-2",
+            "name": "FURKAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-21-3",
+            "name": "CELİL",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-22": {
+        "date": "2026-10-22",
+        "formattedDate": "22.10.2026",
+        "dayNumber": 22,
+        "dayName": "Perşembe",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-22-1",
+            "name": "BERKAY",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-22-2",
+            "name": "İNCİ",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-22-3",
+            "name": "BURÇAK",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-22-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-22-1",
+            "name": "SÜHEYLA O.",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-22-2",
+            "name": "ORKUT",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-22-3",
+            "name": "ZEHRA E.",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-22-4",
+            "name": "ALPER",
+            "slot": "SARIYER-4",
+            "role": "Çayırbaşı 4. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-23": {
+        "date": "2026-10-23",
+        "formattedDate": "23.10.2026",
+        "dayNumber": 23,
+        "dayName": "Cuma",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-23-1",
+            "name": "SÜLEYMAN",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-23-2",
+            "name": "MERVE A.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-23-3",
+            "name": "EMİR",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-23-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-23-1",
+            "name": "BATUHAN",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-23-2",
+            "name": "Y. DERTSİZ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-23-3",
+            "name": "BERKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-24": {
+        "date": "2026-10-24",
+        "formattedDate": "24.10.2026",
+        "dayNumber": 24,
+        "dayName": "Cumartesi",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-24-1",
+            "name": "FATMA",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-24-2",
+            "name": "Z. EREN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-24-3",
+            "name": "NUMAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-24-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-24-1",
+            "name": "FN GÜNLÜ",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-24-2",
+            "name": "ZEHRA P.",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-24-3",
+            "name": "CELİL",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-24-4",
+            "name": "HAMİT",
+            "slot": "SARIYER-4",
+            "role": "Çayırbaşı 4. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-25": {
+        "date": "2026-10-25",
+        "formattedDate": "25.10.2026",
+        "dayNumber": 25,
+        "dayName": "Pazar",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-25-1",
+            "name": "HANİFE",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-25-2",
+            "name": "CAN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-25-3",
+            "name": "YAKUP",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-25-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-25-1",
+            "name": "SÜHEYLA O.",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-25-2",
+            "name": "FURKAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-25-3",
+            "name": "CEYDA",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-26": {
+        "date": "2026-10-26",
+        "formattedDate": "26.10.2026",
+        "dayNumber": 26,
+        "dayName": "Pazartesi",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-26-1",
+            "name": "EBRU",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-26-2",
+            "name": "BETÜL",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-26-3",
+            "name": "ALPER",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-26-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-26-1",
+            "name": "ŞEVKİ",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-26-2",
+            "name": "BURÇAK",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-26-3",
+            "name": "YAĞMUR M.",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-27": {
+        "date": "2026-10-27",
+        "formattedDate": "27.10.2026",
+        "dayNumber": 27,
+        "dayName": "Salı",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-27-1",
+            "name": "BERKAY",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-27-2",
+            "name": "İNCİ",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-27-3",
+            "name": "ZEHRA E.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-27-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-27-1",
+            "name": "YAĞMUR",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-27-2",
+            "name": "BATUHAN",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-27-3",
+            "name": "BERKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-28": {
+        "date": "2026-10-28",
+        "formattedDate": "28.10.2026",
+        "dayNumber": 28,
+        "dayName": "Çarşamba",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-28-1",
+            "name": "AYŞEGÜL",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-28-2",
+            "name": "Z. EREN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-28-3",
+            "name": "YAKUP",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-28-4",
+            "name": "İBRAHİM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-28-5",
+            "name": "HAMİT",
+            "slot": "SEYRANTEPE 5",
+            "role": "5. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-28-1",
+            "name": "HANİFE",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-28-2",
+            "name": "ÇAĞATAY",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-28-3",
+            "name": "FURKAN",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-28-4",
+            "name": "CELİL",
+            "slot": "SARIYER-4",
+            "role": "Çayırbaşı 4. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-29": {
+        "date": "2026-10-29",
+        "formattedDate": "29.10.2026",
+        "dayNumber": 29,
+        "dayName": "Perşembe",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-29-1",
+            "name": "RUHAT",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-29-2",
+            "name": "MERVE A.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-29-3",
+            "name": "YAĞMUR M.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-29-4",
+            "name": "ECEM",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-29-1",
+            "name": "BÜŞRA",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-29-2",
+            "name": "Y. DERTSİZ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-29-3",
+            "name": "CEYDA",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ],
+        "notes": "29 Ekim Cumhuriyet Bayramı"
+      },
+      "2026-10-30": {
+        "date": "2026-10-30",
+        "formattedDate": "30.10.2026",
+        "dayNumber": 30,
+        "dayName": "Cuma",
+        "isWeekend": false,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-30-1",
+            "name": "FATMA",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-30-2",
+            "name": "ZEHRA E.",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-30-3",
+            "name": "NUMAN",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-30-4",
+            "name": "MUSTAFA",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-30-1",
+            "name": "ORKUT",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-30-2",
+            "name": "BURÇAK",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-30-3",
+            "name": "ALPER",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          }
+        ]
+      },
+      "2026-10-31": {
+        "date": "2026-10-31",
+        "formattedDate": "31.10.2026",
+        "dayNumber": 31,
+        "dayName": "Cumartesi",
+        "isWeekend": true,
+        "seyrantepeStaff": [
+          {
+            "id": "sey-2026-10-31-1",
+            "name": "SÜLEYMAN",
+            "slot": "SEYRANTEPE 1",
+            "role": "1. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-31-2",
+            "name": "CAN",
+            "slot": "SEYRANTEPE 2",
+            "role": "2. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-31-3",
+            "name": "ZEHRA P.",
+            "slot": "SEYRANTEPE 3",
+            "role": "3. Nöbetçi"
+          },
+          {
+            "id": "sey-2026-10-31-4",
+            "name": "CELİL",
+            "slot": "SEYRANTEPE 4",
+            "role": "4. Nöbetçi"
+          }
+        ],
+        "cayirbasiStaff": [
+          {
+            "id": "sar-2026-10-31-1",
+            "name": "YAĞMUR",
+            "slot": "SARIYER-1",
+            "role": "Çayırbaşı 1. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-31-2",
+            "name": "İNCİ",
+            "slot": "SARIYER-2",
+            "role": "Çayırbaşı 2. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-31-3",
+            "name": "EMİR",
+            "slot": "SARIYER-3",
+            "role": "Çayırbaşı 3. Nöbetçi"
+          },
+          {
+            "id": "sar-2026-10-31-4",
+            "name": "HAMİT",
+            "slot": "SARIYER-4",
+            "role": "Çayırbaşı 4. Nöbetçi"
+          }
+        ]
+      }
+    }
+  }
+}

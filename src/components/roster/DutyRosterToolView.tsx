@@ -14,14 +14,19 @@ import {
   ChevronRight,
   UserCheck
 } from 'lucide-react';
-import { MonthDutyRoster, DayDutySchedule } from './DutyRosterTypes';
+import { MonthDutyRoster, DayDutySchedule, MonthOption } from './DutyRosterTypes';
 import { 
   getSavedRoster, 
   saveRoster, 
   downloadExcelTemplate, 
   parseExcelRoster, 
   resetToDefaultRoster,
-  getCurrentShiftStatus
+  getCurrentShiftStatus,
+  fetchServerRosters,
+  getAvailableMonthOptions,
+  getActiveMonthKey,
+  setActiveMonthKey,
+  getRosterRegistry
 } from './DutyRosterService';
 
 interface DutyRosterToolViewProps {
@@ -29,9 +34,11 @@ interface DutyRosterToolViewProps {
 }
 
 export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }) => {
-  const [roster, setRoster] = useState<MonthDutyRoster>(() => getSavedRoster());
-  const [selectedDateKey, setSelectedDateKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster()).activeDateKey);
-  const [activeShiftKey, setActiveShiftKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster()).activeDateKey);
+  const [activeMonth, setActiveMonth] = useState<string>(() => getActiveMonthKey());
+  const [roster, setRoster] = useState<MonthDutyRoster>(() => getSavedRoster(getActiveMonthKey()));
+  const [monthOptions, setMonthOptions] = useState<MonthOption[]>(() => getAvailableMonthOptions());
+  const [selectedDateKey, setSelectedDateKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster(getActiveMonthKey())).activeDateKey);
+  const [activeShiftKey, setActiveShiftKey] = useState<string>(() => getCurrentShiftStatus(getSavedRoster(getActiveMonthKey())).activeDateKey);
 
   const [activeTab, setActiveTab] = useState<'table' | 'calendar'>('table');
   const [searchDoctor, setSearchDoctor] = useState<string>('');
@@ -40,6 +47,40 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync with server on initial mount and register event listeners
+  useEffect(() => {
+    fetchServerRosters().then(() => {
+      const currentKey = getActiveMonthKey();
+      setActiveMonth(currentKey);
+      setMonthOptions(getAvailableMonthOptions());
+      setRoster(getSavedRoster(currentKey));
+    });
+
+    const handleRostersUpdated = () => {
+      const currentKey = getActiveMonthKey();
+      setMonthOptions(getAvailableMonthOptions());
+      setRoster(getSavedRoster(currentKey));
+    };
+
+    const handleActiveMonthChanged = (e: any) => {
+      const newKey = e.detail?.monthKey || getActiveMonthKey();
+      setActiveMonth(newKey);
+      const updated = getSavedRoster(newKey);
+      setRoster(updated);
+      const keys = Object.keys(updated.days).sort();
+      if (keys.length > 0) {
+        setSelectedDateKey(keys[0]);
+      }
+    };
+
+    window.addEventListener('etfal-rosters-updated', handleRostersUpdated);
+    window.addEventListener('etfal-active-month-changed', handleActiveMonthChanged);
+    return () => {
+      window.removeEventListener('etfal-rosters-updated', handleRostersUpdated);
+      window.removeEventListener('etfal-active-month-changed', handleActiveMonthChanged);
+    };
+  }, []);
 
   // Live timer to keep current active shift up to date
   useEffect(() => {
@@ -54,6 +95,18 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
 
   const sortedDates = Object.keys(roster.days).sort();
   const activeDaySchedule: DayDutySchedule | undefined = roster.days[selectedDateKey] || roster.days[sortedDates[0]];
+
+  // Month selection switch
+  const handleSelectMonth = (monthKey: string) => {
+    setActiveMonthKey(monthKey);
+    setActiveMonth(monthKey);
+    const selected = getSavedRoster(monthKey);
+    setRoster(selected);
+    const keys = Object.keys(selected.days).sort();
+    if (keys.length > 0) {
+      setSelectedDateKey(keys[0]);
+    }
+  };
 
   // Keyboard navigation when this tool is active
   useEffect(() => {
@@ -93,9 +146,15 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
     try {
       const updatedRoster = await parseExcelRoster(file);
       setRoster(updatedRoster);
+      setActiveMonth(updatedRoster.monthKey);
+      setMonthOptions(getAvailableMonthOptions());
+      const keys = Object.keys(updatedRoster.days).sort();
+      if (keys.length > 0) {
+        setSelectedDateKey(keys[0]);
+      }
       setNotification({
         type: 'success',
-        message: `Excel başarıyla yüklendi! (${Object.keys(updatedRoster.days).length} günlük nöbet listesi güncellendi)`
+        message: `${updatedRoster.monthName} başarıyla işlendi ve sunucuya kaydedildi! (${keys.length} gün yüklendi, tüm klinik kullanıcılarına yansıtıldı)`
       });
     } catch (err: any) {
       setNotification({
@@ -116,6 +175,8 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
     if (window.confirm('Nöbet listesini Ekim 2026 resmi aslına sıfırlamak istiyor musunuz?')) {
       const fresh = resetToDefaultRoster();
       setRoster(fresh);
+      setActiveMonth('2026-10');
+      setMonthOptions(getAvailableMonthOptions());
       setNotification({
         type: 'success',
         message: 'Nöbet listesi resmi Ekim 2026 aslına sıfırlandı.'
@@ -227,6 +288,56 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
             >
               <RotateCcw className="w-4 h-4" />
             </button>
+          </div>
+        </div>
+
+        {/* Month Selector Strip */}
+        <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <CalendarIcon className="w-3.5 h-3.5 text-teal-500" />
+              Aktif Takvim Ayı:
+            </span>
+            <div className="inline-flex p-0.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/60">
+              {monthOptions.map((opt) => {
+                const isSelected = opt.key === activeMonth;
+                return (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => handleSelectMonth(opt.key)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isSelected
+                        ? 'bg-teal-600 text-white shadow-xs'
+                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>{opt.displayName}</span>
+                    {opt.isOfficialDefault && (
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                        isSelected ? 'bg-teal-700/60 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                      }`}>
+                        Resmi
+                      </span>
+                    )}
+                    {opt.key !== '2026-10' && (
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                        isSelected ? 'bg-teal-700/60 text-white' : 'bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20'
+                      }`}>
+                        {opt.key === '2026-11' ? 'Kasım' : 'Yüklendi'}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Sunucu Senkronize (Tüm Ziyaretçilerde Canlı)
+            </span>
           </div>
         </div>
 

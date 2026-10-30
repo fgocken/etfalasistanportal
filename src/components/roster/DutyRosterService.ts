@@ -1,7 +1,177 @@
 import * as XLSX from 'xlsx';
-import { MonthDutyRoster, DayDutySchedule, StaffDuty } from './DutyRosterTypes';
+import { MonthDutyRoster, DayDutySchedule, StaffDuty, RosterRegistry, MonthOption } from './DutyRosterTypes';
 
 const STORAGE_KEY = 'etfal_anestezi_duty_roster_v3';
+const REGISTRY_STORAGE_KEY = 'etfal_anestezi_rosters_registry_v2';
+const ACTIVE_MONTH_STORAGE_KEY = 'etfal_anestezi_active_month_key_v2';
+
+export const TURKISH_MONTH_NAMES = [
+  'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+  'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+];
+
+export function formatMonthKeyDisplay(monthKey: string): string {
+  const parts = monthKey.split('-');
+  if (parts.length === 2) {
+    const year = parts[0];
+    const monthIdx = parseInt(parts[1], 10) - 1;
+    if (monthIdx >= 0 && monthIdx < 12) {
+      return `${TURKISH_MONTH_NAMES[monthIdx]} ${year}`;
+    }
+  }
+  return monthKey;
+}
+
+/**
+ * Retrieves the multi-month roster registry from LocalStorage, ensuring default October 2026 exists
+ */
+export function getRosterRegistry(): RosterRegistry {
+  let registry: RosterRegistry = {};
+  try {
+    const raw = localStorage.getItem(REGISTRY_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        registry = parsed;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to parse roster registry:', e);
+  }
+
+  // Ensure baseline official October 2026 is always available
+  if (!registry['2026-10'] || !registry['2026-10'].days || Object.keys(registry['2026-10'].days).length === 0) {
+    registry['2026-10'] = buildOfficialOctoberRoster();
+    saveRosterRegistry(registry);
+  }
+
+  return registry;
+}
+
+/**
+ * Saves multi-month registry to LocalStorage
+ */
+export function saveRosterRegistry(registry: RosterRegistry): void {
+  try {
+    localStorage.setItem(REGISTRY_STORAGE_KEY, JSON.stringify(registry));
+  } catch (e) {
+    console.error('Failed to save roster registry:', e);
+  }
+}
+
+/**
+ * Fetches persisted rosters from server API (/api/roster) and merges with local storage
+ */
+export async function fetchServerRosters(): Promise<RosterRegistry> {
+  const localRegistry = getRosterRegistry();
+  try {
+    const res = await fetch('/api/roster');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.rosters && typeof data.rosters === 'object') {
+        const merged: RosterRegistry = { ...localRegistry, ...data.rosters };
+        // Ensure baseline October 2026 is kept if not in server
+        if (!merged['2026-10']) {
+          merged['2026-10'] = buildOfficialOctoberRoster();
+        }
+        saveRosterRegistry(merged);
+        
+        // Notify components of fresh data
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('etfal-rosters-updated', { detail: { registry: merged } }));
+        }
+        return merged;
+      }
+    }
+  } catch (err) {
+    console.warn('Server roster API unreachable, using local registry cache:', err);
+  }
+  return localRegistry;
+}
+
+/**
+ * Saves a roster to both server API (/api/roster) and local storage
+ */
+export async function saveRosterToServer(roster: MonthDutyRoster): Promise<void> {
+  // Update local registry immediately
+  const registry = getRosterRegistry();
+  registry[roster.monthKey] = roster;
+  saveRosterRegistry(registry);
+  setActiveMonthKey(roster.monthKey);
+
+  // Send to server for global persistence across all clinic users
+  try {
+    await fetch('/api/roster', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(roster)
+    });
+  } catch (err) {
+    console.warn('Failed to send roster to server API:', err);
+  }
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('etfal-rosters-updated', { detail: { monthKey: roster.monthKey, registry } }));
+  }
+}
+
+/**
+ * Returns available month options for month switchers
+ */
+export function getAvailableMonthOptions(): MonthOption[] {
+  const registry = getRosterRegistry();
+  const keys = Object.keys(registry).sort();
+  
+  return keys.map((key) => {
+    const r = registry[key];
+    return {
+      key,
+      displayName: formatMonthKeyDisplay(key),
+      fullName: r.monthName || `${formatMonthKeyDisplay(key)} Nöbet Listesi`,
+      dayCount: Object.keys(r.days || {}).length,
+      isOfficialDefault: key === '2026-10'
+    };
+  });
+}
+
+/**
+ * Gets currently active selected month key
+ */
+export function getActiveMonthKey(): string {
+  try {
+    const saved = localStorage.getItem(ACTIVE_MONTH_STORAGE_KEY);
+    const registry = getRosterRegistry();
+    if (saved && registry[saved]) {
+      return saved;
+    }
+  } catch {}
+
+  const registry = getRosterRegistry();
+  const keys = Object.keys(registry).sort();
+  
+  // Try to match Turkey time current year-month
+  const { year, month } = getTurkeyTimeComponents();
+  const currentCalKey = `${year}-${String(month).padStart(2, '0')}`;
+  if (registry[currentCalKey]) {
+    return currentCalKey;
+  }
+
+  // Otherwise pick latest month key or 2026-10
+  return keys[keys.length - 1] || '2026-10';
+}
+
+/**
+ * Sets active selected month key
+ */
+export function setActiveMonthKey(monthKey: string): void {
+  try {
+    localStorage.setItem(ACTIVE_MONTH_STORAGE_KEY, monthKey);
+  } catch {}
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('etfal-active-month-changed', { detail: { monthKey } }));
+  }
+}
 
 // Raw data directly transcribed from 2026 YILI EKİM AYI ASİSTAN NÖBET LİSTESİ official hospital document
 const RAW_OCTOBER_2026: Array<{
@@ -96,19 +266,20 @@ export function buildOfficialOctoberRoster(): MonthDutyRoster {
 }
 
 /**
- * Gets saved roster from LocalStorage or builds the official October 2026 roster
+ * Gets saved roster from multi-month registry or builds the official October 2026 roster
  */
-export function getSavedRoster(): MonthDutyRoster {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && parsed.days && Object.keys(parsed.days).length > 0) {
-        return parsed;
-      }
-    }
-  } catch (e) {
-    console.error('Failed to parse stored duty roster:', e);
+export function getSavedRoster(specificMonthKey?: string): MonthDutyRoster {
+  const registry = getRosterRegistry();
+  const targetKey = specificMonthKey || getActiveMonthKey();
+  
+  if (registry[targetKey] && registry[targetKey].days && Object.keys(registry[targetKey].days).length > 0) {
+    return registry[targetKey];
+  }
+
+  // Fallback to first available or baseline October 2026
+  const availableKeys = Object.keys(registry);
+  if (availableKeys.length > 0 && registry[availableKeys[0]]) {
+    return registry[availableKeys[0]];
   }
 
   const defaultRoster = buildOfficialOctoberRoster();
@@ -117,22 +288,21 @@ export function getSavedRoster(): MonthDutyRoster {
 }
 
 /**
- * Saves roster to LocalStorage
+ * Saves roster to multi-month registry and persists to server
  */
 export function saveRoster(roster: MonthDutyRoster): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(roster));
-  } catch (e) {
-    console.error('Failed to save duty roster:', e);
-  }
+  saveRosterToServer(roster).catch((err) => {
+    console.warn('Background save to server failed:', err);
+  });
 }
 
 /**
  * Resets roster back to the clinic's official October 2026 roster
  */
-export function resetToDefaultRoster(): MonthDutyRoster {
+export function resetToDefaultRoster(monthKey: string = '2026-10'): MonthDutyRoster {
   const fresh = buildOfficialOctoberRoster();
   saveRoster(fresh);
+  setActiveMonthKey('2026-10');
   return fresh;
 }
 
@@ -211,7 +381,7 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: 'array', cellDates: true });
@@ -225,9 +395,55 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
           throw new Error('Excel dosyasında okunabilir veri satırı bulunamadı.');
         }
 
-        const days: Record<string, DayDutySchedule> = {};
+        // Try detecting month and year from sheet name, file name, and cell headers
+        const searchScopeText = `${file.name} ${firstSheetName} ${JSON.stringify(jsonData.slice(0, 3))}`.toUpperCase();
+        
         let detectedYear = 2026;
-        let detectedMonth = 10; // 1-indexed
+        let detectedMonth = 10; // default baseline
+
+        // Check for 4-digit year in scope
+        const yearMatch = searchScopeText.match(/(202[4-9]|203[0-5])/);
+        if (yearMatch) {
+          detectedYear = parseInt(yearMatch[1], 10);
+        }
+
+        // Check for Turkish month names
+        const monthMatchers: Array<{ regex: RegExp; m: number }> = [
+          { regex: /OCAK/, m: 1 },
+          { regex: /ŞUBAT|SUBAT/, m: 2 },
+          { regex: /MART/, m: 3 },
+          { regex: /N[İI]SAN/, m: 4 },
+          { regex: /MAYIS/, m: 5 },
+          { regex: /HAZ[İI]RAN/, m: 6 },
+          { regex: /TEMMUZ/, m: 7 },
+          { regex: /A[ĞG]USTOS/, m: 8 },
+          { regex: /EYL[UÜ]L/, m: 9 },
+          { regex: /EK[İI]M/, m: 10 },
+          { regex: /KASIM/, m: 11 },
+          { regex: /ARALIK/, m: 12 }
+        ];
+
+        for (const item of monthMatchers) {
+          if (item.regex.test(searchScopeText)) {
+            detectedMonth = item.m;
+            break;
+          }
+        }
+
+        // Pre-scan first 5 rows to see if any cell contains an explicit date (e.g. DD.MM.YYYY or YYYY-MM-DD)
+        for (const row of jsonData.slice(0, 5)) {
+          const rawRowStr = Object.values(row).join(' ');
+          const ddmmyyyy = rawRowStr.match(/(\d{1,2})[./-](\d{1,2})[./-](202\d|203\d)/);
+          if (ddmmyyyy) {
+            const m = parseInt(ddmmyyyy[2], 10);
+            const y = parseInt(ddmmyyyy[3], 10);
+            if (m >= 1 && m <= 12) detectedMonth = m;
+            if (y >= 2024 && y <= 2035) detectedYear = y;
+            break;
+          }
+        }
+
+        const days: Record<string, DayDutySchedule> = {};
 
         jsonData.forEach((row, idx) => {
           // Normalize column lookups (case-insensitive & whitespace trimmed)
@@ -243,13 +459,24 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
             if (/^\d{1,2}[./-]\d{1,2}[./-]\d{4}$/.test(rawDate)) {
               // DD.MM.YYYY
               const parts = rawDate.split(/[./-]/);
-              dateObj = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+              const d = parseInt(parts[0], 10);
+              const m = parseInt(parts[1], 10);
+              const y = parseInt(parts[2], 10);
+              dateObj = new Date(y, m - 1, d);
+              detectedMonth = m;
+              detectedYear = y;
             } else if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(rawDate)) {
               // YYYY-MM-DD
               const parts = rawDate.split('-');
-              dateObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+              const y = parseInt(parts[0], 10);
+              const m = parseInt(parts[1], 10);
+              const d = parseInt(parts[2], 10);
+              dateObj = new Date(y, m - 1, d);
+              detectedMonth = m;
+              detectedYear = y;
             } else if (!isNaN(Number(rawDate)) && Number(rawDate) >= 1 && Number(rawDate) <= 31) {
-              dateObj = new Date(detectedYear, detectedMonth - 1, Number(rawDate));
+              const d = Number(rawDate);
+              dateObj = new Date(detectedYear, detectedMonth - 1, d);
             }
           }
 
@@ -257,9 +484,6 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
             const fallbackDay = Math.min(idx + 1, 31);
             dateObj = new Date(detectedYear, detectedMonth - 1, fallbackDay);
           }
-
-          detectedYear = dateObj.getFullYear();
-          detectedMonth = dateObj.getMonth() + 1;
 
           const yearStr = dateObj.getFullYear();
           const monthStr = String(detectedMonth).padStart(2, '0');
@@ -311,7 +535,8 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
         });
 
         const monthKey = `${detectedYear}-${String(detectedMonth).padStart(2, '0')}`;
-        const monthName = `${detectedYear} YILI NÖBET LİSTESİ`;
+        const monthTurkishName = TURKISH_MONTH_NAMES[detectedMonth - 1] || 'AY';
+        const monthName = `${detectedYear} YILI ${monthTurkishName.toUpperCase()} AYI ASİSTAN NÖBET LİSTESİ`;
 
         const newRoster: MonthDutyRoster = {
           monthKey,
@@ -320,7 +545,8 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
           days
         };
 
-        saveRoster(newRoster);
+        // Save to registry and post to server
+        await saveRosterToServer(newRoster);
         resolve(newRoster);
       } catch (err: any) {
         reject(new Error(`Excel dosyası işlenirken hata oluştu: ${err?.message || err}`));

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Clock } from 'lucide-react';
 import { MonthDutyRoster } from './DutyRosterTypes';
-import { getSavedRoster, getCurrentShiftStatus, CurrentShiftStatus } from './DutyRosterService';
+import { getSavedRoster, getCurrentShiftStatus, CurrentShiftStatus, fetchServerRosters, getActiveMonthKey } from './DutyRosterService';
 
 interface DutyRosterTickerBarProps {
   isDark: boolean;
@@ -30,7 +30,11 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
       setShiftStatus(getCurrentShiftStatus(currentRoster));
     };
 
-    // Initial check
+    // Initial server fetch
+    fetchServerRosters().then(() => {
+      checkShift();
+    });
+
     checkShift();
 
     // Check every 30 seconds for handover transitions
@@ -40,11 +44,15 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
     const handleStorageChange = () => checkShift();
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('focus', checkShift);
+    window.addEventListener('etfal-rosters-updated', handleStorageChange);
+    window.addEventListener('etfal-active-month-changed', handleStorageChange);
 
     return () => {
       clearInterval(timer);
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('focus', checkShift);
+      window.removeEventListener('etfal-rosters-updated', handleStorageChange);
+      window.removeEventListener('etfal-active-month-changed', handleStorageChange);
     };
   }, []);
 
