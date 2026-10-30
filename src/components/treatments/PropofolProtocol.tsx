@@ -37,6 +37,7 @@ interface DoseHoverProps {
   explanation?: string;
   className?: string;
   badge?: boolean;
+  color?: 'teal' | 'rose';
 }
 
 export const DoseHover: React.FC<DoseHoverProps> = ({
@@ -44,9 +45,11 @@ export const DoseHover: React.FC<DoseHoverProps> = ({
   mcgText,
   explanation = '1 mg/kg/saat = 16.67 mcg/kg/dk',
   className = '',
-  badge = false
+  badge = false,
+  color = 'rose'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const isRose = color === 'rose';
 
   return (
     <span
@@ -62,22 +65,34 @@ export const DoseHover: React.FC<DoseHoverProps> = ({
       <span
         className={`transition-colors font-mono ${
           badge
-            ? 'px-2 py-0.5 rounded-md bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold border border-teal-500/30'
+            ? isRose
+              ? 'px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-700 dark:text-rose-300 font-bold border border-rose-500/30'
+              : 'px-2 py-0.5 rounded-md bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold border border-teal-500/30'
+            : isRose
+            ? 'font-bold underline decoration-dotted decoration-rose-500 underline-offset-4 text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300'
             : 'font-semibold underline decoration-dotted decoration-teal-500 underline-offset-4 hover:text-teal-600 dark:hover:text-teal-400'
         }`}
       >
         {mgText}
       </span>
-      <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500 group-hover:text-white transition-all font-semibold">
+      <span
+        className={`text-[10px] font-mono px-1 py-0.2 rounded font-semibold transition-all ${
+          isRose
+            ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 group-hover:bg-rose-500 group-hover:text-white'
+            : 'bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500 group-hover:text-white'
+        }`}
+      >
         mcg?
       </span>
 
       {/* Popover Hover Balonu */}
       {isOpen && (
         <span
-          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs px-3 py-2 rounded-xl text-left shadow-2xl border z-50 pointer-events-none transition-all duration-150 bg-slate-900 border-teal-500/60 text-slate-100 dark:bg-slate-950 dark:border-teal-400 shadow-teal-950/60 animate-in fade-in zoom-in-95"
+          className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs px-3 py-2 rounded-xl text-left shadow-2xl border z-50 pointer-events-none transition-all duration-150 bg-slate-900 ${
+            isRose ? 'border-rose-500/60 shadow-rose-950/60' : 'border-teal-500/60 shadow-teal-950/60'
+          } text-slate-100 dark:bg-slate-950 animate-in fade-in zoom-in-95`}
         >
-          <span className="block text-[9.5px] font-bold uppercase tracking-wider text-teal-400">
+          <span className={`block text-[9.5px] font-bold uppercase tracking-wider ${isRose ? 'text-rose-400' : 'text-teal-400'}`}>
             Doz Karşılığı (mcg/kg/dk):
           </span>
           <span className="block text-xs font-black font-mono text-white mt-0.5">
@@ -93,7 +108,7 @@ export const DoseHover: React.FC<DoseHoverProps> = ({
   );
 };
 
-type ActiveCalcTool = 'continuous_tiva' | 'induction_rsi' | 'procedural_sedation' | 'pris_monitor' | 'ponv_rescue';
+type ActiveCalcTool = 'continuous_tiva' | 'pris_monitor';
 
 export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
   // --- AKTİF HESAPLAYICI MODÜL SEÇİCİ ---
@@ -118,25 +133,13 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
   const [targetDoseMcgKgMin, setTargetDoseMcgKgMin] = useState<number>(33.3); // mcg/kg/dk
   const [plannedDurationHours, setPlannedDurationHours] = useState<number>(24); // saat (lipid hesabı ve PRIS takibi için)
 
-  // 2. Anestezi İndüksiyon & RSI Parametreleri
-  const [inductionDoseMgKg, setInductionDoseMgKg] = useState<number>(2.0); // mg/kg
-  const [applyLidocainePretreatment, setApplyLidocainePretreatment] = useState<boolean>(true);
-
-  // 3. Prosedürel Sedasyon (PSA / MAC) Parametreleri
-  const [psaProcedureType, setPsaProcedureType] = useState<'endoscopy' | 'cardioversion' | 'interventional_rad'>('endoscopy');
-  const [psaInitialDoseMgKg, setPsaInitialDoseMgKg] = useState<number>(0.75); // mg/kg
-  const [psaRescueBolusMg, setPsaRescueBolusMg] = useState<number>(20); // mg
-
-  // 4. PRIS (Propofol İnfüzyon Sendromu) Parametreleri
+  // 2. PRIS (Propofol İnfüzyon Sendromu) Parametreleri
   const [prisInfusionRate, setPrisInfusionRate] = useState<number>(3.5); // mg/kg/saat
   const [prisDurationHours, setPrisDurationHours] = useState<number>(36); // saat
   const [hasLacticAcidosis, setHasLacticAcidosis] = useState<boolean>(false);
   const [hasHypertriglyceridemia, setHasHypertriglyceridemia] = useState<boolean>(false);
   const [hasRhabdomyolysis, setHasRhabdomyolysis] = useState<boolean>(false);
   const [hasBrugadaPattern, setHasBrugadaPattern] = useState<boolean>(false);
-
-  // 5. PONV Kurtarma Parametreleri
-  const [ponvBolusMg, setPonvBolusMg] = useState<number>(15); // mg
 
   // UI Durumları
   const [pkOpen, setPkOpen] = useState<boolean>(false);
@@ -148,8 +151,6 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
   const indicationSelectId = useId();
   const doseInputId = useId();
   const durationInputId = useId();
-  const inductionDoseInputId = useId();
-  const psaInitialInputId = useId();
   const prisRateInputId = useId();
   const prisDurationInputId = useId();
 
@@ -181,14 +182,6 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
   const dailyVolumeMl = infusionRateMlHr * 24;
   const dailyCaloriesKcal = dailyVolumeMl * 1.1;
   const dailyFatGrams = dailyVolumeMl * 0.1;
-
-  // İndüksiyon Bolus Hesabı
-  const inductionMg = inductionDoseMgKg * effectiveWeightKg;
-  const inductionMl = inductionMg / concentrationMgMl;
-
-  // Lidokain Enjeksiyon Ağrısı Koruma Dozu (0.5 mg/kg veya sabit 20-40 mg)
-  const lidocaineDoseMg = Math.min(40, Math.max(20, Math.round(effectiveWeightKg * 0.5)));
-  const lidocaineMl2Percent = lidocaineDoseMg / 20; // %2 Lidokain (20 mg/mL)
 
   // PRIS Risk Hesabı
   const prisRateRisk = prisInfusionRate >= 5.0 ? 'critical' : prisInfusionRate >= 4.0 ? 'high' : prisInfusionRate >= 3.0 ? 'moderate' : 'low';
@@ -626,15 +619,19 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
 
         <div className="space-y-4">
+          {/* 1. Genel Anestezi & RSI İndüksiyon Dozları */}
           <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700/60' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
-              1. Genel Anestezi İndüksiyon Dozları
+            <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center justify-between">
+              <span>1. Genel Anestezi &amp; RSI İndüksiyon Dozları (IV Bolus)</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold">
+                IV Yol: Kırmızı Doz Göstergesi
+              </span>
             </h4>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left">
                 <thead className="border-b border-slate-200 dark:border-slate-700 text-slate-500">
                   <tr>
-                    <th className="py-2 pr-4 font-semibold">Hasta Popülasyonu</th>
+                    <th className="py-2 pr-4 font-semibold">Hasta Popülasyonu / Endikasyon</th>
                     <th className="py-2 pr-4 font-semibold">İndüksiyon Dozu (IV Bolus)</th>
                     <th className="py-2 pr-4 font-semibold">Uygulama Şekli</th>
                     <th className="py-2 font-semibold">Özel Klinik Uyarılar</th>
@@ -643,64 +640,192 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-700/60 text-slate-700 dark:text-slate-300">
                   <tr>
                     <td className="py-2.5 pr-4 font-semibold text-slate-900 dark:text-slate-100">Sağlıklı Erişkin (&lt;55 yaş, ASA I-II)</td>
-                    <td className="py-2.5 pr-4 font-bold text-teal-600 dark:text-teal-400">1.5 – 2.5 mg/kg</td>
+                    <td className="py-2.5 pr-4 font-bold font-mono text-rose-600 dark:text-rose-400">1.5 – 2.5 mg/kg IV</td>
                     <td className="py-2.5 pr-4">Her 10 saniyede bir 20–40 mg titre edilerek</td>
-                    <td className="py-2.5">Kirpik refleksi kaybolana kadar titre edilir</td>
+                    <td className="py-2.5">Kirpik refleksi kaybolana ve hipnoz sağlanana kadar titre edilir</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 pr-4 font-semibold text-slate-900 dark:text-slate-100">Yaşlı / Kırılgan / ASA III-IV</td>
-                    <td className="py-2.5 pr-4 font-bold text-amber-600 dark:text-amber-400">0.8 – 1.5 mg/kg</td>
+                    <td className="py-2.5 pr-4 font-bold font-mono text-rose-600 dark:text-rose-400">0.5 – 1.5 mg/kg IV</td>
                     <td className="py-2.5 pr-4">Çok yavaş (10 sn'de 10-20 mg), fraksiyone</td>
-                    <td className="py-2.5">Şiddetli hipotansiyon riski; doz %50'ye kadar azaltılır</td>
+                    <td className="py-2.5">Şiddetli hipotansiyon ve bradikardi riski; doz %50'ye kadar azaltılır</td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 pr-4 font-semibold text-slate-900 dark:text-slate-100">Pediatrik (&gt;3 yaş)</td>
-                    <td className="py-2.5 pr-4 font-bold text-cyan-600 dark:text-cyan-400">2.5 – 3.5 mg/kg</td>
-                    <td className="py-2.5 pr-4">Yavaş IV bolus (20-30 saniyede)</td>
-                    <td className="py-2.5">Büyük Vd ve hızlı klerens nedeniyle kg başı doz daha yüksektir</td>
+                    <td className="py-2.5 pr-4 font-semibold text-slate-900 dark:text-slate-100">Hızlı Seri Entübasyon (RSI) / Acil Hava Yolu</td>
+                    <td className="py-2.5 pr-4 font-bold font-mono text-rose-600 dark:text-rose-400">1.5 – 2.0 mg/kg IV</td>
+                    <td className="py-2.5 pr-4">Hızlı IV bolus veya 10 mg fraksiyonlar</td>
+                    <td className="py-2.5 font-medium text-slate-800 dark:text-slate-200">
+                      Hemodinamik instabilite/şok halinde <strong>%50 azaltılmış doz (0.75–1.0 mg/kg)</strong> ya da hasta bilinç kaybı yaşayana kadar <strong>10 mg'lık dozlar ile</strong> titre edilir.
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2.5 pr-4 font-semibold text-slate-900 dark:text-slate-100">Morbid Obezite (BMI &gt; 35 kg/m²)</td>
-                    <td className="py-2.5 pr-4 font-bold text-indigo-600 dark:text-indigo-400">1.5 – 2.0 mg/kg (LBW!)</td>
+                    <td className="py-2.5 pr-4 font-bold font-mono text-rose-600 dark:text-rose-400">1.5 – 2.0 mg/kg (LBW!) IV</td>
                     <td className="py-2.5 pr-4">Yağsız Vücut Ağırlığına (LBW) göre hesaplanır</td>
-                    <td className="py-2.5">TBW üzerinden dozlama derin hipotansiyon ve kollaps yapar!</td>
+                    <td className="py-2.5">TBW üzerinden dozlama derin hipotansiyon ve kardiyak kollaps yapar!</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
+          {/* 2. Pediatrik Doz Rejimleri */}
+          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700/60' : 'bg-slate-50 border-slate-200'}`}>
+            <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center justify-between">
+              <span>2. Pediatrik Doz Rejimleri (İndüksiyon, TIVA ve Sedasyon)</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold">
+                Pediatri Kılavuzu
+              </span>
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
+                  Pediatrik İndüksiyon (1 ay – 3 yaş)
+                </span>
+                <div className="text-sm font-bold font-mono text-rose-600 dark:text-rose-400 mb-1">
+                  2.5 – 4.0 mg/kg IV
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                  Geniş santral dağılım hacmi (Vd) nedeniyle kg başına erişkinden daha yüksek doz gerekir. Yavaşça (20-30 sn) titre edilir.
+                </p>
+              </div>
+
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
+                  Pediatrik İndüksiyon (&gt;3 yaş – 16 yaş)
+                </span>
+                <div className="text-sm font-bold font-mono text-rose-600 dark:text-rose-400 mb-1">
+                  2.5 – 3.5 mg/kg IV
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                  Okul çağı çocuklarında 2.5–3.5 mg/kg IV bolus. İndüksiyonda laringeal refleksler körelene kadar titre edilir.
+                </p>
+              </div>
+
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
+                  Pediatrik Anestezi İdamesi (TIVA)
+                </span>
+                <div className="text-sm font-bold font-mono text-rose-600 dark:text-rose-400 mb-1">
+                  <DoseHover mgText="7.5 – 15 mg/kg/saat" mcgText="125 – 250 mcg/kg/dk" color="rose" />
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                  Hızlı metabolik klirens nedeniyle erişkinden yüksek infüzyon hızı gerekir; cerrahi uyaran ve BIS/entropiye göre titre edilir.
+                </p>
+              </div>
+
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
+                  Pediatrik Prosedürel Sedasyon (MAC)
+                </span>
+                <div className="text-sm font-bold font-mono text-rose-600 dark:text-rose-400 mb-1">
+                  1.0 – 2.0 mg/kg IV bolus
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                  MRI/tanısal işlemlerde başlangıç bolusu ardından <DoseHover mgText="1.0 – 3.0 mg/kg/saat" mcgText="16.7 – 50.0 mcg/kg/dk" color="rose" /> veya ihtiyaçta 0.5 mg/kg ek bolus.
+                </p>
+              </div>
+            </div>
+
+            {/* Pediatrik YBÜ Sedasyonu Mutlak Kontrendikasyon Uyarısı */}
+            <div className="mt-3 p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-xs text-rose-800 dark:text-rose-300 flex items-center gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+              <div>
+                <strong>Pediatrik YBÜ Sürekli Sedasyonu Uyarısı: </strong>
+                16 yaşından küçük çocuklarda yoğun bakımda uzamış mekanik ventilasyon sedasyonu için kullanımı <strong>fatal PRIS (Propofol İnfüzyon Sendromu), ağır metabolik asidoz ve kardiyak kollaps riski nedeniyle MUTLAK KONTRENDİKEDİR!</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. Erişkin Sürekli İnfüzyon, Yoğun Bakım ve Prosedürel Rejimler */}
           <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700/60' : 'bg-slate-50 border-slate-200'}`}>
             <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
-              2. Sürekli İnfüzyon, Yoğun Bakım ve Prosedürel Rejimler
+              3. Erişkin Sürekli İnfüzyon, Yoğun Bakım ve Prosedürel Rejimler
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
               <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold text-teal-700 dark:text-teal-300 block mb-1">Genel Anestezi İdamesi (TIVA)</span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">Genel Anestezi İdamesi (TIVA)</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  • <DoseHover mgText="4 – 12 mg/kg/saat" mcgText="67 – 200 mcg/kg/dk" /><br />
+                  • <DoseHover mgText="4 – 12 mg/kg/saat" mcgText="67 – 200 mcg/kg/dk" color="rose" /><br />
                   • TCI Hedef Ce: <strong>3.0 – 5.0 mcg/mL</strong><br />
                   • Cerrahi gevşeme ve analjezi için remifentanil infüzyonu eklenir.
                 </p>
               </div>
 
               <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold text-indigo-700 dark:text-indigo-300 block mb-1">YBÜ Sedasyonu (Mekanik Ventilasyon)</span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">YBÜ Sedasyonu (Mekanik Ventilasyon)</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  • Başlangıç: <DoseHover mgText="0.3 – 0.5 mg/kg/saat" mcgText="5.0 – 8.3 mcg/kg/dk" /><br />
-                  • İdame: <DoseHover mgText="0.3 – 3.0 mg/kg/saat" mcgText="5.0 – 50.0 mcg/kg/dk" /><br />
-                  • PRIS Güvenlik Tavanı: Maks ≤ <DoseHover mgText="4.0 mg/kg/saat" mcgText="66.7 mcg/kg/dk" />, &lt;48 saat!
+                  • Başlangıç: <DoseHover mgText="0.3 – 0.5 mg/kg/saat" mcgText="5.0 – 8.3 mcg/kg/dk" color="rose" /><br />
+                  • İdame: <DoseHover mgText="0.3 – 3.0 mg/kg/saat" mcgText="5.0 – 50.0 mcg/kg/dk" color="rose" /><br />
+                  • PRIS Güvenlik Tavanı: Maks ≤ <DoseHover mgText="4.0 mg/kg/saat" mcgText="66.7 mcg/kg/dk" color="rose" />, &lt;48 saat!
                 </p>
               </div>
 
               <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold text-cyan-700 dark:text-cyan-300 block mb-1">Prosedürel Sedasyon (PSA / MAC)</span>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">Prosedürel Sedasyon (PSA / MAC)</span>
                 <p className="text-slate-600 dark:text-slate-300">
-                  • Başlangıç bolus: <strong>0.5 – 1.0 mg/kg</strong> (1-5 dakikada)<br />
-                  • İdame bolus: <strong>10 – 20 mg</strong> ihtiyaç duyuldukça<br />
-                  • İnfüzyon alternatifi: <DoseHover mgText="1.5 – 4.5 mg/kg/saat" mcgText="25.0 – 75.0 mcg/kg/dk" />
+                  • Başlangıç bolus: <span className="font-bold font-mono text-rose-600 dark:text-rose-400">0.5 – 1.0 mg/kg IV</span> (1-5 dakikada)<br />
+                  • İdame bolus: <span className="font-bold font-mono text-rose-600 dark:text-rose-400">10 – 20 mg IV</span> ihtiyaç duyuldukça<br />
+                  • İnfüzyon alternatifi: <DoseHover mgText="1.5 – 4.5 mg/kg/saat" mcgText="25.0 – 75.0 mcg/kg/dk" color="rose" />
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* 4. Refrakter Status Epileptikus Dozaj Rejimi */}
+          <div className={`p-4 rounded-xl border border-rose-300 dark:border-rose-900/60 bg-rose-50/50 dark:bg-rose-950/20`}>
+            <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+              <h4 className="text-xs sm:text-sm font-bold text-rose-900 dark:text-rose-200 flex items-center gap-1.5">
+                <Zap className="w-4 h-4 text-rose-600" />
+                <span>4. Refrakter Status Epileptikus Dozaj Rejimi (3. Basamak Nörolojik Acil)</span>
+              </h4>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-600 text-white font-bold">
+                EEG Burst-Supresyon Hedefli
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs mb-3">
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/80 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
+                  1. Yükleme Bolusu
+                </span>
+                <div className="text-sm font-bold font-mono text-rose-600 dark:text-rose-400 mb-1">
+                  1.0 – 2.0 mg/kg IV
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                  5 dakika içinde yavaşça uygulanır. Nöbet durdurulamazsa 5 dakika sonra 1.0 mg/kg ek bolus tekrarlanabilir.
+                </p>
+              </div>
+
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/80 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
+                  2. İdame Sürekli İnfüzyon
+                </span>
+                <div className="text-sm font-bold font-mono text-rose-600 dark:text-rose-400 mb-1">
+                  <DoseHover mgText="2.0 – 8.0 mg/kg/saat" mcgText="33.3 – 133.3 mcg/kg/dk" color="rose" />
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                  Başlangıç 2.0 mg/kg/saat. Dirençli fokal veya jeneralize nöbetlerde kısa süreli maksimum <DoseHover mgText="10.0 mg/kg/saat" mcgText="166.7 mcg/kg/dk" color="rose" /> seviyesine çıkılabilir.
+                </p>
+              </div>
+
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/80 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
+                  3. Nöromonitörizasyon Hedefi
+                </span>
+                <div className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+                  cEEG Burst-Supresyon
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                  Sürekli EEG'de saatte 3–5 burst veya en az %50–70 supresyon oranı hedeflenir. Nöbet kontrolü sağlandıktan sonra 24-48 saat sürdürülür.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-rose-300 dark:border-rose-800 text-[11px] text-slate-700 dark:text-slate-300 space-y-1">
+              <span className="font-bold text-rose-700 dark:text-rose-300 block">Kritik PRIS &amp; Süre Sınırı Uyarısı:</span>
+              <p>
+                Status epileptikusta yüksek doz (&gt;4.0–5.0 mg/kg/saat) ve &gt;48 saat süren propofol infüzyonları <strong>ölümcül PRIS (Propofol İnfüzyon Sendromu), metabolik asidoz ve refrakter ventriküler aritmi</strong> riskini katlayarak artırır! Sık aralıklarla arteriyel kan gazı, laktat, kreatin kinaz (CK) ve serum trigliserit takibi zorunludur. Tedavi 48 saati aşacaksa ketamin veya diğer antiepileptik/anestezik rejimlere geçiş planlanmalıdır.
+              </p>
             </div>
           </div>
         </div>
@@ -720,17 +845,9 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
               <Zap className="w-6 h-6" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
-                  Propofol İnteraktif İnfüzyon Pompası & Çok Yollu Hesaplayıcı
-                </h2>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-500/20 text-teal-700 dark:text-teal-300 font-mono">
-                  Canlı Simülasyon
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                TIVA infüzyon pompası, indüksiyon ve RSI dozlayıcısı, prosedürel sedasyon titratörü ve 24 saatlik lipid kalori/PRIS risk monitörü
-              </p>
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
+                Propofol İnteraktif İnfüzyon Pompası &amp; Doz Hesaplayıcı
+              </h2>
             </div>
           </div>
         </div>
@@ -751,41 +868,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
             }`}
           >
             <Activity className="w-3.5 h-3.5" />
-            <span>1. Sürekli İnfüzyon / TIVA & Lipid Kalorisi</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('induction_rsi')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'induction_rsi'
-                ? isDark
-                  ? 'bg-teal-500 text-slate-950 shadow-md'
-                  : 'bg-teal-600 text-white shadow-md'
-                : isDark
-                ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            <Syringe className="w-3.5 h-3.5" />
-            <span>2. Anestezi İndüksiyon & RSI Dozlayıcısı</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('procedural_sedation')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'procedural_sedation'
-                ? isDark
-                  ? 'bg-teal-500 text-slate-950 shadow-md'
-                  : 'bg-teal-600 text-white shadow-md'
-                : isDark
-                ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>3. Prosedürel Sedasyon (PSA / MAC)</span>
+            <span>1. Sürekli İnfüzyon / TIVA &amp; Lipid Kalorisi</span>
           </button>
 
           <button
@@ -802,24 +885,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5" />
-            <span>4. PRIS Risk & Güvenlik Monitörü</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveCalcTool('ponv_rescue')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeCalcTool === 'ponv_rescue'
-                ? isDark
-                  ? 'bg-teal-500 text-slate-950 shadow-md'
-                  : 'bg-teal-600 text-white shadow-md'
-                : isDark
-                ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            <Flame className="w-3.5 h-3.5" />
-            <span>5. PONV Subhipnotik Kurtarma</span>
+            <span>2. PRIS Risk &amp; Güvenlik Monitörü</span>
           </button>
         </div>
 
@@ -1108,240 +1174,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         )}
 
-        {/* SEKME 2: ANESTEZİ İNDÜKSİYON & RSI DOZLAYICISI */}
-        {activeCalcTool === 'induction_rsi' && (
-          <div className="mt-4 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className={`p-4 rounded-xl border space-y-3 ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                  <Syringe className="w-4 h-4 text-teal-500" />
-                  <span>İndüksiyon Parametreleri ve Titrasyon</span>
-                </h4>
-
-                {patientProfile === 'morbid_obese' && (
-                  <div className={`p-2.5 rounded-lg border text-xs ${
-                    isDark ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300' : 'bg-indigo-50 border-indigo-200 text-indigo-900'
-                  }`}>
-                    <span className="font-bold">Obezite Dozlama Prensibi: </span>
-                    İndüksiyon dozu yağsız vücut ağırlığına (LBW / İdeal Kilo) göre verilmelidir. Toplam vücut ağırlığı (TBW) üzerinden verilirse aşırı doz ve şiddetli hipotansiyon gelişir!
-                  </div>
-                )}
-
-                <div>
-                  <label htmlFor={inductionDoseInputId} className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                    Hedef İndüksiyon Dozu (mg/kg):
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      id={inductionDoseInputId}
-                      type="number"
-                      min={0.5}
-                      max={4.0}
-                      step={0.1}
-                      value={inductionDoseMgKg}
-                      onChange={(e) => setInductionDoseMgKg(Number(e.target.value))}
-                      className={`w-full px-3 py-2 rounded-lg border font-mono font-bold text-base ${
-                        isDark ? 'bg-slate-900 border-slate-700 text-teal-400' : 'bg-white border-slate-300 text-teal-700'
-                      }`}
-                    />
-                    <span className="text-xs font-mono font-semibold text-slate-500">mg/kg</span>
-                  </div>
-                  <div className="flex gap-2 mt-2">
-                    <button
-                      type="button"
-                      onClick={() => setInductionDoseMgKg(patientProfile === 'elderly_frail' ? 1.0 : 2.0)}
-                      className="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[11px] font-semibold cursor-pointer"
-                    >
-                      Standart {patientProfile === 'elderly_frail' ? '1.0' : '2.0'} mg/kg
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setInductionDoseMgKg(2.5)}
-                      className="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[11px] font-semibold cursor-pointer"
-                    >
-                      Genç / Pediatrik 2.5 mg/kg
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setInductionDoseMgKg(1.2)}
-                      className="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[11px] font-semibold cursor-pointer"
-                    >
-                      Kırılgan / Kalp Hastası 1.2 mg/kg
-                    </button>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={applyLidocainePretreatment}
-                      onChange={(e) => setApplyLidocainePretreatment(e.target.checked)}
-                      className="rounded text-teal-600 focus:ring-teal-500"
-                    />
-                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                      Enjeksiyon Ağrısı Profilaksisi için Lidokain Ön Dozlaması
-                    </span>
-                  </label>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 pl-5">
-                    Propofol uygulamasından 30–60 saniye önce antekübital venden turnike ile venöz oklüzyon altında uygulanır.
-                  </p>
-                </div>
-              </div>
-
-              {/* Sağ: İndüksiyon Çıktısı */}
-              <div className="space-y-3">
-                <div className={`p-4 rounded-xl border text-center ${
-                  isDark ? 'bg-cyan-500/10 border-cyan-500/30' : 'bg-cyan-50 border-cyan-200'
-                }`}>
-                  <span className="text-xs font-bold text-cyan-700 dark:text-cyan-300 uppercase tracking-wider block">
-                    Toplam İndüksiyon Bolusu
-                  </span>
-                  <div className="text-3xl sm:text-4xl font-black font-mono text-cyan-600 dark:text-cyan-400 my-1">
-                    {inductionMg.toFixed(0)} <span className="text-lg font-bold">mg</span>
-                  </div>
-                  <div className="text-sm font-bold font-mono text-slate-700 dark:text-slate-300">
-                    Çözelti Karşılığı: <span className="text-cyan-600 dark:text-cyan-400">{inductionMl.toFixed(1)} mL</span> ({emulsionType === 'propofol_1' ? '%1' : '%2'} çözelti)
-                  </div>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                    Her 10 saniyede bir 20–40 mg (2–4 mL) yavaşça titre edilerek verilir.
-                  </p>
-                </div>
-
-                {applyLidocainePretreatment && (
-                  <div className={`p-4 rounded-xl border ${
-                    isDark ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                  }`}>
-                    <div className="flex items-center gap-2 font-bold text-xs mb-1 text-emerald-800 dark:text-emerald-300">
-                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                      <span>Lidokain Ön Tedavi Protokolü (Ağrısız İndüksiyon)</span>
-                    </div>
-                    <div className="text-base font-bold font-mono text-emerald-700 dark:text-emerald-300">
-                      {lidocaineDoseMg} mg IV (%2 Lidokain ampulden {lidocaineMl2Percent.toFixed(1)} mL)
-                    </div>
-                    <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
-                      Ön kola turnike sıkılır, lidokain verilir, 30–60 saniye venöz oklüzyonda tutulduktan sonra turnike açılır ve hemen propofol enjekte edilir. Ağrı hissini %80 oranında engeller.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SEKME 3: PROSEDÜREL SEDASYON (PSA / MAC) */}
-        {activeCalcTool === 'procedural_sedation' && (
-          <div className="mt-4 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className={`p-4 rounded-xl border space-y-3 ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                    Girişim / İşlem Türü:
-                  </label>
-                  <select
-                    value={psaProcedureType}
-                    onChange={(e) => {
-                      const val = e.target.value as any;
-                      setPsaProcedureType(val);
-                      if (val === 'endoscopy') {
-                        setPsaInitialDoseMgKg(0.75);
-                        setPsaRescueBolusMg(20);
-                      } else if (val === 'cardioversion') {
-                        setPsaInitialDoseMgKg(1.0);
-                        setPsaRescueBolusMg(20);
-                      } else {
-                        setPsaInitialDoseMgKg(0.5);
-                        setPsaRescueBolusMg(15);
-                      }
-                    }}
-                    className={`w-full px-3 py-2 rounded-lg border font-semibold text-xs ${
-                      isDark ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-white border-slate-300 text-slate-800'
-                    }`}
-                  >
-                    <option value="endoscopy">Gastrointestinal Endoskopi / Kolonoskopi</option>
-                    <option value="cardioversion">Senkronize Kardiyoversiyon (Kısa derin sedasyon)</option>
-                    <option value="interventional_rad">Girişimsel Radyoloji / Bronkoskopi / Biyopsi</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor={psaInitialInputId} className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                    Başlangıç Bolus Dozu (mg/kg):
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      id={psaInitialInputId}
-                      type="number"
-                      min={0.3}
-                      max={1.5}
-                      step={0.1}
-                      value={psaInitialDoseMgKg}
-                      onChange={(e) => setPsaInitialDoseMgKg(Number(e.target.value))}
-                      className={`w-full px-3 py-1.5 rounded-lg border font-mono font-bold text-sm ${
-                        isDark ? 'bg-slate-900 border-slate-700 text-teal-400' : 'bg-white border-slate-300 text-teal-700'
-                      }`}
-                    />
-                    <span className="text-xs font-mono text-slate-500">mg/kg</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500 mt-1">1–3 dakikada yavaşça uygulanır.</p>
-                </div>
-
-                <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                    Gerektiğinde Aralıklı Kurtarma Bolusu:
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min={10}
-                      max={50}
-                      step={5}
-                      value={psaRescueBolusMg}
-                      onChange={(e) => setPsaRescueBolusMg(Number(e.target.value))}
-                      className={`w-32 px-3 py-1.5 rounded-lg border font-mono font-bold text-sm ${
-                        isDark ? 'bg-slate-900 border-slate-700 text-teal-400' : 'bg-white border-slate-300 text-teal-700'
-                      }`}
-                    />
-                    <span className="text-xs font-mono text-slate-500">mg her 3–5 dakikada</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Çıktı */}
-              <div className="space-y-3">
-                <div className={`p-4 rounded-xl border text-center ${
-                  isDark ? 'bg-indigo-500/10 border-indigo-500/30' : 'bg-indigo-50 border-indigo-200'
-                }`}>
-                  <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider block">
-                    PSA Başlangıç Bolusu
-                  </span>
-                  <div className="text-3xl font-black font-mono text-indigo-600 dark:text-indigo-400 my-1">
-                    {(psaInitialDoseMgKg * weightKg).toFixed(0)} mg
-                  </div>
-                  <div className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                    Hacim: <strong>{((psaInitialDoseMgKg * weightKg) / concentrationMgMl).toFixed(1)} mL</strong> ({concentrationMgMl} mg/mL)
-                  </div>
-                </div>
-
-                <div className={`p-4 rounded-xl border text-center ${
-                  isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'
-                }`}>
-                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
-                    İdame Kurtarma Bolusu
-                  </span>
-                  <div className="text-2xl font-black font-mono text-teal-600 dark:text-teal-400 my-1">
-                    {psaRescueBolusMg} mg ({(psaRescueBolusMg / concentrationMgMl).toFixed(1)} mL)
-                  </div>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastada ajitasyon veya yüz buruşturma olduğunda 3–5 dk aralıklarla verilir.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SEKME 4: PRIS (PROPOFOL İNFÜZYON SENDROMU) RİSK & GÜVENLİK MONİTÖRÜ */}
+        {/* SEKME 2: PRIS (PROPOFOL İNFÜZYON SENDROMU) RİSK & GÜVENLİK MONİTÖRÜ */}
         {activeCalcTool === 'pris_monitor' && (
           <div className="mt-4 space-y-4">
             <div className={`p-4 rounded-xl border ${
@@ -1477,60 +1310,6 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                     <span>EKG: Brugada Benzeri ST Yükselmesi / Aritmi</span>
                   </label>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SEKME 5: PONV SUBHİPNOTİK KURTARMA DOZLAYICISI */}
-        {activeCalcTool === 'ponv_rescue' && (
-          <div className="mt-4 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className={`p-4 rounded-xl border space-y-3 ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold text-xs sm:text-sm">
-                  <Flame className="w-4 h-4" />
-                  <span>Subhipnotik Anti-Emetik Titrasyon</span>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Postoperatif derlenme ünitesinde (PACU) veya kemoterapi ilişkili refrakter bulantı ve kusmada propofolün subhipnotik mikro-dozları (10–20 mg IV) dopaminerjik ve serotoninerjik kemoreseptör tetikleme zonunu (CTZ) inhibe eder.
-                </p>
-                <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                    Subhipnotik Bolus Dozu (mg):
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min={5}
-                      max={30}
-                      step={5}
-                      value={ponvBolusMg}
-                      onChange={(e) => setPonvBolusMg(Number(e.target.value))}
-                      className={`w-32 px-3 py-1.5 rounded-lg border font-mono font-bold text-sm ${
-                        isDark ? 'bg-slate-900 border-slate-700 text-teal-400' : 'bg-white border-slate-300 text-teal-700'
-                      }`}
-                    />
-                    <span className="text-xs font-mono text-slate-500">mg IV</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Çıktı */}
-              <div className={`p-4 rounded-xl border text-center flex flex-col justify-center ${
-                isDark ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-emerald-50 border-emerald-200'
-              }`}>
-                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider block">
-                  Uygulanacak Subhipnotik Hacim
-                </span>
-                <div className="text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400 my-1">
-                  {(ponvBolusMg / concentrationMgMl).toFixed(1)} mL
-                </div>
-                <div className="text-xs text-slate-600 dark:text-slate-400">
-                  {ponvBolusMg} mg ({emulsionType === 'propofol_1' ? '%1' : '%2'} çözelti)
-                </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
-                  Sedasyon yapmadan birkaç dakikada bulantıyı keser. İhtiyaç halinde 15-20 dk sonra tekrarlanabilir.
-                </p>
               </div>
             </div>
           </div>
@@ -1692,7 +1471,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
           <h2 className="text-base sm:text-lg font-bold">Propofole Özel Önemli Olumsuz Etkiler (Adverse Effects)</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
             <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">
               1. Enjeksiyon Bölgesinde Şiddetli Ağrı (%70)
@@ -1707,13 +1486,33 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
               2. Kardiyovasküler Depresyon & Hipotansiyon
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Sistemik vasküler direnci (SVR) belirgin düşürür, venodilatasyon yapar ve miyokardiyal kontraktiliteyi baskılar. Baroreseptör refleksini körelttiği için hipotansiyona çoğu zaman taşikardi eşlik etmez!
+              Sistemik vasküler direnci (SVR) belirgin düşürür, venodilatasyon yapar ve miyokardiyal kontraktiliteyi baskılar. Baroreseptör refleksini körelttiği için hipotansiyona çoğu zaman kompanzatuvar taşikardi eşlik etmez!
+            </p>
+          </div>
+
+          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30' : 'bg-rose-50/70 border-rose-200'}`}>
+            <span className="font-bold text-rose-700 dark:text-rose-300 block mb-1 flex items-center gap-1">
+              <HeartPulse className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+              <span>3. Bradikardi, Asistoli & Aritmiler</span>
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>Vagal Hiperaktivite &amp; Asistoli Riski:</strong> SA ve AV nod iletimini yavaşlatır; sempatik tonusu baskılarken santral vagal tonusu artırır. Barorefleks duyarlılığı köreldiği için hipotansiyona derin bradikardi eşlik edebilir. Özellikle opioidler (remifentanil, fentanil) veya roküronyum ile indüksiyonda ani asistoli ve kardiyak arrest gelişebilir. Antikolinerjik (atropin/glikopirolat) hazır tutulmalıdır.
+            </p>
+          </div>
+
+          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30' : 'bg-rose-50/70 border-rose-200'}`}>
+            <span className="font-bold text-rose-700 dark:text-rose-300 block mb-1 flex items-center gap-1">
+              <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <span>4. Brugada Paterni & Fatal Ventriküler Aritmiler</span>
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>PRIS Zemininde Malign Aritmi:</strong> Yüksek doz veya uzamış infüzyonda kardiyak sodyum/kalsiyum kanallarını bloke ederek EKG'de V1-V3 derivasyonlarında "coved-type" Brugada tipi ST elevasyonuna neden olur. Bunu geniş QRS, polimorfik VT, VF ve resüsitasyona dirençli kardiyak arrest takip edebilir.
             </p>
           </div>
 
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
             <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">
-              3. Solunum Depresyonu ve Apne (%50-80)
+              5. Solunum Depresyonu ve Apne (%50-80)
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
               İndüksiyon dozunun ardından hastaların büyük çoğunluğunda 30–60 saniye süren apne gelişir. Karbondioksit duyarlılığını baskılar. Havayolu kontrolü daima hazır olmalıdır.
@@ -1722,16 +1521,16 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
             <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">
-              4. PRIS (Propofol İnfüzyon Sendromu)
+              6. PRIS (Propofol İnfüzyon Sendromu)
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Yüksek doz (<DoseHover mgText="> 4.0 mg/kg/saat" mcgText="> 66.7 mcg/kg/dk" />) ve uzun süre (&gt;48 saat) kullanımda mitokondriyal yağ asidi oksidasyonunu bloke eder; refrakter laktik asidoz, hiperkalemi, rabdomiyoliz, hepatomegali ve kardiyak arreste yol açar.
+              Yüksek doz (<DoseHover mgText="> 4.0 mg/kg/saat" mcgText="> 66.7 mcg/kg/dk" color="rose" />) ve uzun süre (&gt;48 saat) kullanımda mitokondriyal yağ asidi oksidasyonunu bloke eder; refrakter laktik asidoz, hiperkalemi, rabdomiyoliz, hepatomegali ve kardiyak arreste yol açar.
             </p>
           </div>
 
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
             <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">
-              5. Hipertrigliseridemi & Pankreatit
+              7. Hipertrigliseridemi & Pankreatit
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
               Taşıyıcı emülsiyon yoğun soya yağı içerir. Uzayan infüzyonlarda serum trigliseriti &gt;400 mg/dL olduğunda akut pankreatit riski nedeniyle ilaç derhal kesilmelidir.
@@ -1740,7 +1539,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
             <span className="font-bold text-teal-600 dark:text-teal-400 block mb-1">
-              6. Yeşil / Kahverengi İdrar (Benign)
+              8. Yeşil / Kahverengi İdrar (Benign)
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
               Karaciğerde oluşan inaktif fenol türevi kinol metabolitlerinin idrarla atılması sonucu idrar rengi yeşile veya kahverengiye dönebilir. Tamamen iyi huyludur, nefrotoksisite göstermez.
