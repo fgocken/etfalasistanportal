@@ -599,7 +599,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
                                   ? 'text-teal-700/90 dark:text-teal-300/90 bg-teal-500/15'
                                   : 'text-amber-700/90 dark:text-amber-300/90 bg-amber-500/15'
                               }`}>
-                                ({handoverDoc} Nöbetçiydi)
+                              ({handoverDoc})
                               </span>
                             )}
                           </div>

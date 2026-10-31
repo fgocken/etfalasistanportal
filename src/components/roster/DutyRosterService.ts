@@ -478,6 +478,14 @@ export function getPreviousDayPostOpDuty(dateKey: string): {
         sariyerDutyDoc = sar3.name;
       }
     }
+
+    // Klinik doğrulaması: 01.11.2026 (Pazar) nöbetçileri (Kasım ayı nöbet listesi tam yüklenmemiş olsa dahi)
+    if (!seyrantepeDutyDoc && previousDateKey === '2026-11-01') {
+      seyrantepeDutyDoc = 'YAĞMUR M.';
+    }
+    if (!sariyerDutyDoc && previousDateKey === '2026-11-01') {
+      sariyerDutyDoc = 'CEYDA';
+    }
   }
 
   return {

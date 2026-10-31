@@ -121,7 +121,7 @@ export const DutyRosterTickerBar: React.FC<DutyRosterTickerBarProps> = ({
       `}</style>
 
       <div 
-        className={`relative w-full rounded-xl border flex items-center overflow-hidden transition-all text-xs shadow-xs select-none ${
+        className={`relative w-full rounded-xl border flex items-center overflow-hidden transition-all text-xs shadow-xs ${
           isDark 
             ? 'bg-slate-900/95 border-slate-800 text-slate-200' 
             : 'bg-white/95 border-slate-200 text-slate-800 shadow-slate-100'

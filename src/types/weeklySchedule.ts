@@ -39,12 +39,14 @@ export interface WeekOption {
 export interface TodayPostOpStatus {
   isWeekday: boolean;
   isHoliday: boolean;
+  isWeekendPreview?: boolean;      // Hafta sonlarında Pazartesi önizlemesi aktifse true
+  previewTargetDateFormatted?: string;
   holidayNote?: string;
   dateKey: string;
   dateFormatted: string;
   dayName: string;
   seyrantepePostOp: string[];
   sariyerPostOp: string[];
-  seyrantepeHandoverFrom?: string; // e.g. 'YAĞMUR M.' (Dünkü Seyrantepe-3 nöbetçisi)
-  sariyerHandoverFrom?: string;    // e.g. 'CEYDA' (Dünkü Sarıyer-3 nöbetçisi)
+  seyrantepeHandoverFrom?: string; // e.g. 'YAĞMUR M.' (Dünkü / Pazar günkü Seyrantepe-3 nöbetçisi)
+  sariyerHandoverFrom?: string;    // e.g. 'CEYDA' (Dünkü / Pazar günkü Sarıyer-3 nöbetçisi)
 }

@@ -778,8 +778,10 @@ export function getIstanbulDateInfo(targetDate?: Date): {
 }
 
 /**
- * Determines whether today is a work day (Pazartesi - Cuma) and retrieves
- * the on-duty Post-op doctors for Seyrantepe and Sarıyer, along with handover info.
+ * Determines whether today is a work day (Pazartesi - Cuma) or weekend (Cumartesi - Pazar).
+ * Hafta içi ise günün post-op hekimlerini ve dünkü nöbetçiden devir bilgisini döndürür.
+ * Hafta sonu (Cumartesi / Pazar) ise Pazartesi gününün post-op hekimlerini ve Pazar nöbetçisinden
+ * devir alacağı bilgiyi hazırlar.
  */
 export function getTodayPostOpStatus(
   customSchedule?: WeeklyWorkSchedule,
@@ -788,29 +790,39 @@ export function getTodayPostOpStatus(
   const registry = getWeeklyScheduleRegistry();
   const dateInfo = getIstanbulDateInfo(overrideDate);
 
-  // Weekday check: 1 = Pazartesi, 2 = Salı, 3 = Çarşamba, 4 = Perşembe, 5 = Cuma
-  const isWeekday = dateInfo.dayOfWeek >= 1 && dateInfo.dayOfWeek <= 5;
-  if (!isWeekday) {
-    return null; // Hafta sonu ise karşılama sayfasında görünmez
+  // 1 = Pazartesi, 2 = Salı, 3 = Çarşamba, 4 = Perşembe, 5 = Cuma, 6 = Cumartesi, 0 = Pazar
+  const isWeekend = dateInfo.dayOfWeek === 0 || dateInfo.dayOfWeek === 6;
+  const isWeekday = !isWeekend;
+
+  let targetDateInfo = dateInfo;
+  let isWeekendPreview = false;
+
+  if (isWeekend) {
+    isWeekendPreview = true;
+    // Hafta sonu (Cumartesi ise +2 gün, Pazar ise +1 gün) -> Önümüzdeki Pazartesi
+    const d = overrideDate ? new Date(overrideDate.getTime()) : new Date();
+    const daysUntilMonday = dateInfo.dayOfWeek === 6 ? 2 : 1;
+    const mondayDate = new Date(d.getTime() + daysUntilMonday * 24 * 60 * 60 * 1000);
+    targetDateInfo = getIstanbulDateInfo(mondayDate);
   }
 
-  // Find which schedule contains today's dateKey
+  // Find which schedule contains targetDateInfo.dateKey
   let targetSchedule = customSchedule;
   if (!targetSchedule) {
     const allWeeks = Object.values(registry);
-    targetSchedule = allWeeks.find(w => w.days.some(d => d.dateKey === dateInfo.dateKey));
+    targetSchedule = allWeeks.find(w => w.days.some(d => d.dateKey === targetDateInfo.dateKey));
     if (!targetSchedule) {
       targetSchedule = getSavedWeeklySchedule();
     }
   }
 
   // Find day in schedule
-  let matchedDay = targetSchedule.days.find(d => d.dateKey === dateInfo.dateKey);
+  let matchedDay = targetSchedule.days.find(d => d.dateKey === targetDateInfo.dateKey);
 
-  // If exact dateKey not in week, match by day of week index (1:0, 2:1, etc.)
+  // If exact dateKey not in week, match by day of week index (Pazartesi = 0)
   if (!matchedDay) {
     const dayIndexMap: Record<number, number> = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
-    const idx = dayIndexMap[dateInfo.dayOfWeek];
+    const idx = isWeekend ? 0 : dayIndexMap[dateInfo.dayOfWeek];
     if (idx !== undefined && targetSchedule.days[idx]) {
       matchedDay = targetSchedule.days[idx];
     }
@@ -820,11 +832,13 @@ export function getTodayPostOpStatus(
 
   if (matchedDay.isHoliday) {
     return {
-      isWeekday: true,
+      isWeekday,
       isHoliday: true,
+      isWeekendPreview,
       holidayNote: matchedDay.holidayNote || 'Resmi Tatil',
       dateKey: matchedDay.dateKey,
       dateFormatted: matchedDay.dateFormatted,
+      previewTargetDateFormatted: isWeekendPreview ? matchedDay.dateFormatted : undefined,
       dayName: matchedDay.dayName,
       seyrantepePostOp: [],
       sariyerPostOp: []
@@ -839,14 +853,16 @@ export function getTodayPostOpStatus(
   const sarRow = targetSchedule.rows.find(r => r.isPostOp === 'sariyer' || r.unitName.includes('SARIYER -1 YBÜ'));
   const sarDocs = (sarRow && sarRow.assignments[matchedDay.dateKey]) || [];
 
-  // Get previous day's duty doctors (Seyrantepe 3 & Sarıyer 3)
+  // Get previous day's duty doctors (Pazartesi için Pazar günkü Seyrantepe-3 ve Sarıyer-3 nöbetçileri)
   const handover = getPreviousDayPostOpDuty(matchedDay.dateKey);
 
   return {
-    isWeekday: true,
+    isWeekday,
     isHoliday: false,
+    isWeekendPreview,
     dateKey: matchedDay.dateKey,
     dateFormatted: matchedDay.dateFormatted,
+    previewTargetDateFormatted: isWeekendPreview ? matchedDay.dateFormatted : undefined,
     dayName: matchedDay.dayName,
     seyrantepePostOp: seyDocs,
     sariyerPostOp: sarDocs,

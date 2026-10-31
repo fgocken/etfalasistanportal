@@ -36,8 +36,9 @@ export const TodayPostOpBadgeBar: React.FC<TodayPostOpBadgeBarProps> = ({
     };
   }, []);
 
-  // Mesai günleri dışında (hafta sonu veya veri yoksa) kesinlikle yer kaplamaz, gizlenir.
-  if (!postOpStatus || !postOpStatus.isWeekday || postOpStatus.isHoliday) {
+  // Hafta sonlarında da gizlenmez, Pazartesi önizlemesi olarak gösterilir!
+  // Sadece veri yoksa veya tatilse gizlenir.
+  if (!postOpStatus || postOpStatus.isHoliday) {
     return null;
   }
 
@@ -49,12 +50,24 @@ export const TodayPostOpBadgeBar: React.FC<TodayPostOpBadgeBarProps> = ({
     return null;
   }
 
+  const dateHeading = postOpStatus.isWeekendPreview 
+    ? `${postOpStatus.previewTargetDateFormatted || postOpStatus.dateFormatted} Pazartesi (Pazar Nöbet Devri)`
+    : `${postOpStatus.dateFormatted} ${postOpStatus.dayName} Post-op`;
+
+  const seyrantepeText = `${hasSeyrantepe ? postOpStatus.seyrantepePostOp.join(' · ') : 'Belirtilmedi'}${
+    postOpStatus.seyrantepeHandoverFrom ? ` (${postOpStatus.seyrantepeHandoverFrom})` : ''
+  }`;
+
+  const sariyerText = `${hasSariyer ? postOpStatus.sariyerPostOp.join(' · ') : 'Belirtilmedi'}${
+    postOpStatus.sariyerHandoverFrom ? ` (${postOpStatus.sariyerHandoverFrom})` : ''
+  }`;
+
   return (
     <div
       onClick={onOpenSchedule}
       role={onOpenSchedule ? 'button' : undefined}
       title="Haftalık Çalışma Programı ve Salon Dağılımlarını açmak için tıklayınız"
-      className={`relative w-full rounded-xl border flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-2 sm:px-3 sm:py-2 gap-2 transition-all shadow-xs select-none ${
+      className={`relative w-full rounded-xl border flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-2 sm:px-3 sm:py-2 gap-2 transition-all shadow-xs select-text ${
         onOpenSchedule ? 'cursor-pointer hover:border-teal-500/50' : ''
       } ${
         isDark
@@ -62,75 +75,59 @@ export const TodayPostOpBadgeBar: React.FC<TodayPostOpBadgeBarProps> = ({
           : 'bg-white/95 border-slate-200 text-slate-800 hover:bg-slate-50'
       } ${className}`}
     >
-      {/* Sol: Başlık & Gün Belirteci */}
-      <div className="flex items-center gap-2 shrink-0">
+      {/* Sol: Tarih & Başlık */}
+      <div className="flex items-center gap-2.5 shrink-0">
         <div className={`p-1.5 rounded-lg ${
-          isDark ? 'bg-teal-500/15 text-teal-400' : 'bg-teal-100 text-teal-800'
+          isDark 
+            ? postOpStatus.isWeekendPreview ? 'bg-amber-500/20 text-amber-300' : 'bg-teal-500/15 text-teal-400'
+            : postOpStatus.isWeekendPreview ? 'bg-amber-100 text-amber-800' : 'bg-teal-100 text-teal-800'
         }`}>
           <Stethoscope className="w-4 h-4" />
         </div>
         <div className="flex flex-col">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
-            GÜNÜN POST-OP HEKİMLERİ
+          <span className="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+            {dateHeading}
           </span>
-          <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-            {postOpStatus.dayName} Mesaisi
+          <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500">
+            {postOpStatus.isWeekendPreview ? 'Önümüzdeki Mesai Nöbet Devir Bilgisi' : 'Günün Post-Op Hekimleri'}
           </span>
         </div>
       </div>
 
-      {/* Orta/Sağ: Seyrantepe ve Sarıyer Yan Yana Rozetleri */}
+      {/* Orta/Sağ: Seyrantepe ve Sarıyer Sade Rozetleri */}
       <div className="flex flex-wrap items-center gap-2 sm:gap-3 flex-1 justify-start sm:justify-end">
         {/* Seyrantepe Post-op Rozeti */}
-        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs transition-colors ${
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs transition-colors ${
           isDark
             ? 'bg-teal-500/10 border-teal-500/25 text-teal-200'
             : 'bg-teal-50 border-teal-200 text-teal-900'
         }`}>
-          <div className="flex items-center gap-1 font-semibold text-teal-600 dark:text-teal-400 shrink-0">
+          <div className="flex items-center gap-1 font-semibold text-teal-700 dark:text-teal-400 shrink-0">
             <Building2 className="w-3.5 h-3.5" />
             <span className="text-[11px] font-bold">Seyrantepe Post-op:</span>
           </div>
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="font-extrabold tracking-wide text-teal-800 dark:text-teal-300">
-              {hasSeyrantepe ? postOpStatus.seyrantepePostOp.join(' · ') : 'Belirtilmedi'}
-            </span>
-            {postOpStatus.seyrantepeHandoverFrom && (
-              <span className={`text-[10px] font-semibold px-1.5 py-0.2 rounded ${
-                isDark ? 'bg-teal-500/20 text-teal-200 border border-teal-500/30' : 'bg-teal-100 text-teal-800 border border-teal-300'
-              }`}>
-                ({postOpStatus.seyrantepeHandoverFrom} Nöbetçiydi)
-              </span>
-            )}
-          </div>
+          <span className="font-extrabold tracking-wide text-teal-900 dark:text-teal-200 select-text">
+            {seyrantepeText}
+          </span>
         </div>
 
         {/* Sarıyer Post-op Rozeti */}
-        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs transition-colors ${
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs transition-colors ${
           isDark
             ? 'bg-amber-500/10 border-amber-500/25 text-amber-200'
             : 'bg-amber-50 border-amber-200 text-amber-900'
         }`}>
-          <div className="flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400 shrink-0">
+          <div className="flex items-center gap-1 font-semibold text-amber-700 dark:text-amber-400 shrink-0">
             <Activity className="w-3.5 h-3.5" />
             <span className="text-[11px] font-bold">Sarıyer Post-op:</span>
           </div>
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="font-extrabold tracking-wide text-amber-800 dark:text-amber-300">
-              {hasSariyer ? postOpStatus.sariyerPostOp.join(' · ') : 'Belirtilmedi'}
-            </span>
-            {postOpStatus.sariyerHandoverFrom && (
-              <span className={`text-[10px] font-semibold px-1.5 py-0.2 rounded ${
-                isDark ? 'bg-amber-500/20 text-amber-200 border border-amber-500/30' : 'bg-amber-100 text-amber-800 border border-amber-300'
-              }`}>
-                ({postOpStatus.sariyerHandoverFrom} Nöbetçiydi)
-              </span>
-            )}
-          </div>
+          <span className="font-extrabold tracking-wide text-amber-900 dark:text-amber-200 select-text">
+            {sariyerText}
+          </span>
         </div>
 
         {onOpenSchedule && (
-          <div className="hidden md:flex items-center text-slate-400 dark:text-slate-500 ml-1">
+          <div className="hidden md:flex items-center text-slate-400 dark:text-slate-500 ml-0.5">
             <ChevronRight className="w-4 h-4" />
           </div>
         )}

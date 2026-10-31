@@ -149,7 +149,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   const activeLightboxPhoto = lightboxPhotoIdx !== null ? CLINIC_ALBUM[lightboxPhotoIdx] : null;
 
   return (
-    <div className={`min-h-screen w-full flex flex-col justify-between p-4 sm:p-8 md:p-10 relative overflow-hidden select-none transition-colors duration-200 bg-transparent ${
+    <div className={`min-h-screen w-full flex flex-col justify-between p-4 sm:p-8 md:p-10 relative overflow-hidden transition-colors duration-200 bg-transparent ${
       isDark ? 'text-slate-100' : 'text-slate-900'
     }`}>
       {/* Dynamic Keyframes for the continuous film strip scroll */}
