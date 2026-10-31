@@ -18,12 +18,22 @@ export interface WorkDayInfo {
 }
 
 export interface WeeklyWorkSchedule {
-  weekKey: string;          // '2026-W44'
+  weekKey: string;          // '2026-W44', '2026-W45'
   title: string;            // '26 - 30 Ekim 2026 Haftalık Mesai Programı'
   dateRangeText: string;    // '26.10.2026 - 30.10.2026'
   days: WorkDayInfo[];      // 5 weekdays Monday to Friday
   rows: UnitAssignmentRow[];
   updatedAt?: string;
+}
+
+export type WeeklyScheduleRegistry = Record<string, WeeklyWorkSchedule>;
+
+export interface WeekOption {
+  key: string;              // '2026-W44', '2026-W45'
+  title: string;
+  dateRangeText: string;
+  displayName: string;
+  isCurrent?: boolean;
 }
 
 export interface TodayPostOpStatus {

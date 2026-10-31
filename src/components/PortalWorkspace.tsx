@@ -43,11 +43,12 @@ import { InfographicsView } from './infographics/InfographicsView';
 import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
 import { WeeklyScheduleToolView } from './schedule/WeeklyScheduleToolView';
+import { IcuWorkspace } from './icu/IcuWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -276,11 +277,30 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-teal-800',
     ringClassDark: 'ring-1 ring-teal-500/20',
     ringClassLight: 'ring-1 ring-teal-500/10'
+  },
+  icu: {
+    id: 'icu',
+    title: 'Yoğun Bakım',
+    badge: 'Kabul Kriterleri',
+    badgeHighlight: true,
+    desc: 'SCCM, ESICM ve T.C. Sağlık Bakanlığı Yoğun Bakım Endikasyonları (Kabul Kriterleri). 4 Model: Triyaj (Priority 1-4), 9 Organ Sistemi, Kritik Eşikler ve Basamaklar/Skorlama (SOFA, NEWS2).',
+    clinicalKey: 'Kritik hasta kabulünde reversibilite, organ yetmezliği basamakları ve objektif kritik eşik değerlerine dayalı YBÜ yatış protokolü.',
+    icon: Activity,
+    iconBgDark: 'bg-rose-500/15',
+    iconBgLight: 'bg-rose-50',
+    iconColorDark: 'text-rose-400',
+    iconColorLight: 'text-rose-700',
+    borderHoverDark: 'hover:border-rose-500/40',
+    borderHoverLight: 'hover:border-rose-400',
+    titleHoverDark: 'group-hover:text-rose-300',
+    titleHoverLight: 'group-hover:text-rose-800',
+    ringClassDark: 'ring-1 ring-rose-500/20',
+    ringClassLight: 'ring-1 ring-rose-500/10'
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['schedule', 'roster', 'contacts', 'calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v13';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['schedule', 'roster', 'icu', 'contacts', 'calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v14';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -1511,6 +1531,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 10. Weekly Schedule Tool */}
         {activeTab === 'schedule' && (
           <WeeklyScheduleToolView isDark={isDark} />
+        )}
+
+        {/* 11. Yoğun Bakım (ICU) Tool */}
+        {activeTab === 'icu' && (
+          <IcuWorkspace isDark={isDark} />
         )}
       </main>
 

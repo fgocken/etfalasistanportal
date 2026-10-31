@@ -508,6 +508,43 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'icu-admission-criteria',
+    title: 'Yoğun Bakım Endikasyonu (Kabul Kriterleri)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'YBÜ Kabul',
+    description: 'SCCM, ESICM ve Sağlık Bakanlığı rehberliğinde Yoğun Bakım Endikasyonları: Triyaj Modeli, 9 Organ Sistemi ve Kritik Eşikler.',
+    keywords: ['yoğun bakım', 'ybü', 'icu', 'kabul kriterleri', 'yatış endikasyonu', 'sccm', 'esicm', 'yoğun bakım endikasyonları', 'triyaj'],
+    tabId: 'icu',
+    popular: true
+  },
+  {
+    id: 'icu-sccm-priority',
+    title: 'SCCM Önceliklendirme Modeli (Priority 1, 2, 3, 4A, 4B)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Triyaj',
+    description: 'Maksimum reversibilite ve faydaya göre yoğun bakım yatış önceliklendirmesi ve DNR/DNI sınırları.',
+    keywords: ['priority 1', 'priority 2', 'priority 3', 'priority 4', 'öncelik 1', 'öncelik 2', 'sccm triyaj', 'reversibilite', 'dnr', 'dni'],
+    tabId: 'icu'
+  },
+  {
+    id: 'icu-objective-thresholds',
+    title: 'Yoğun Bakım Kritik Eşik Değerleri (Objektif Parametreler)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Kritik Eşikler',
+    description: 'Vital bulgular, kan gazı, laktat, PaO2/FiO2, elektrolitler ve EKG kritik eşik değer kontrol listesi.',
+    keywords: ['kritik eşikler', 'objektif parametreler', 'kan gazı', 'laktat', 'pao2 fio2', 'pf oranı', 'asidoz', 'vital eşikler', 'hipotansiyon'],
+    tabId: 'icu'
+  },
+  {
+    id: 'icu-levels-scoring',
+    title: 'Yoğun Bakım Basamakları (1., 2., 3. Basamak) & SOFA, NEWS2',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Basamak & Skorlama',
+    description: 'T.C. Sağlık Bakanlığı YBÜ basamak standartları ve SOFA, NEWS2, APACHE fizyolojik skorlama kılavuzu.',
+    keywords: ['1 basamak', '2 basamak', '3 basamak', 'sofa skoru', 'news2', 'apache', 'basamak standartları', 'organ yetmezliği'],
+    tabId: 'icu'
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',

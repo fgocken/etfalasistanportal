@@ -186,16 +186,30 @@ function readWeeklySchedule(): any | null {
   try {
     if (!fs.existsSync(SCHEDULE_FILE)) return null;
     const content = fs.readFileSync(SCHEDULE_FILE, 'utf-8');
-    return JSON.parse(content);
+    const parsed = JSON.parse(content);
+    if (!parsed) return null;
+    if (parsed.schedules && typeof parsed.schedules === 'object') {
+      return parsed;
+    }
+    // Backward compatibility: If it's a single week object
+    if (parsed.weekKey && Array.isArray(parsed.days)) {
+      return {
+        activeWeekKey: parsed.weekKey,
+        schedules: {
+          [parsed.weekKey]: parsed
+        }
+      };
+    }
+    return parsed;
   } catch (err) {
     console.error('Error reading weekly schedule:', err);
     return null;
   }
 }
 
-function saveWeeklySchedule(schedule: any): boolean {
+function saveWeeklySchedule(data: any): boolean {
   try {
-    fs.writeFileSync(SCHEDULE_FILE, JSON.stringify(schedule, null, 2), 'utf-8');
+    fs.writeFileSync(SCHEDULE_FILE, JSON.stringify(data, null, 2), 'utf-8');
     return true;
   } catch (err) {
     console.error('Error saving weekly schedule:', err);
@@ -204,21 +218,37 @@ function saveWeeklySchedule(schedule: any): boolean {
 }
 
 app.get('/api/schedule', (req, res) => {
-  const schedule = readWeeklySchedule();
-  res.json(schedule || null);
+  const data = readWeeklySchedule();
+  res.json(data || null);
 });
 
 app.post('/api/schedule', (req, res) => {
   try {
-    const schedule = req.body;
-    if (!schedule || !Array.isArray(schedule.days) || !Array.isArray(schedule.rows)) {
+    const payload = req.body;
+    if (!payload) {
+      return res.status(400).json({ success: false, error: 'Geçersiz veri' });
+    }
+
+    let existing = readWeeklySchedule() || { activeWeekKey: '2026-W45', schedules: {} };
+    if (!existing.schedules) existing.schedules = {};
+
+    if (payload.schedules && typeof payload.schedules === 'object') {
+      existing.schedules = { ...existing.schedules, ...payload.schedules };
+      if (payload.activeWeekKey) {
+        existing.activeWeekKey = payload.activeWeekKey;
+      }
+    } else if (payload.weekKey && Array.isArray(payload.days)) {
+      existing.schedules[payload.weekKey] = payload;
+      existing.activeWeekKey = payload.weekKey;
+    } else {
       return res.status(400).json({ success: false, error: 'Geçersiz haftalık program verisi' });
     }
-    const saved = saveWeeklySchedule(schedule);
+
+    const saved = saveWeeklySchedule(existing);
     if (!saved) {
       return res.status(500).json({ success: false, error: 'Sunucuya haftalık program kaydedilemedi' });
     }
-    res.json({ success: true, schedule });
+    res.json({ success: true, ...existing });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err?.message || 'Bilinmeyen hata' });
   }

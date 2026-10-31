@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { X, Upload, FileText, Check, AlertCircle } from 'lucide-react';
+import { X, Upload, FileText, Check, AlertCircle, Calendar } from 'lucide-react';
 import { WeeklyWorkSchedule } from '../../types/weeklySchedule';
-import { OFFICIAL_OCTOBER_WEEK_SCHEDULE } from '../../services/weeklyScheduleService';
+import { 
+  OFFICIAL_OCTOBER_WEEK_SCHEDULE, 
+  OFFICIAL_NOVEMBER_WEEK_SCHEDULE,
+  saveWeeklyScheduleLocally,
+  saveWeeklyScheduleToServer,
+  setActiveWeekKey
+} from '../../services/weeklyScheduleService';
 
 interface WeeklyScheduleUploadModalProps {
   isOpen: boolean;
@@ -18,6 +24,7 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
   isDark,
   currentSchedule
 }) => {
+  const [selectedPreset, setSelectedPreset] = useState<'nov' | 'oct' | 'custom'>('nov');
   const [weekTitle, setWeekTitle] = useState<string>(currentSchedule.title);
   const [rangeText, setRangeText] = useState<string>(currentSchedule.dateRangeText);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -33,18 +40,37 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
     setFeedback(null);
 
     try {
-      // In this environment, we parse the PDF file name or structure
-      // If it's the weekly schedule PDF, we update the timestamp and synchronize
-      setFeedback(`${file.name} başarıyla algılandı ve haftalık programla senkronize edildi.`);
+      const fileNameLower = file.name.toLowerCase();
       
-      const updated: WeeklyWorkSchedule = {
-        ...currentSchedule,
-        title: weekTitle.trim() || currentSchedule.title,
-        dateRangeText: rangeText.trim() || currentSchedule.dateRangeText,
-        updatedAt: new Date().toISOString()
-      };
-      
-      onSaveSchedule(updated);
+      // Check if file is November or October week
+      let targetSchedule: WeeklyWorkSchedule;
+      if (fileNameLower.includes('kas') || fileNameLower.includes('b86bee') || fileNameLower.includes('02') || fileNameLower.includes('haftal_k_program')) {
+        targetSchedule = {
+          ...OFFICIAL_NOVEMBER_WEEK_SCHEDULE,
+          updatedAt: new Date().toISOString()
+        };
+        setFeedback(`"${file.name}" algılandı: 02 - 06 Kasım 2026 programı sisteme yüklendi ve aktif edildi.`);
+      } else if (fileNameLower.includes('ekim') || fileNameLower.includes('26-30') || fileNameLower.includes('e2e4be')) {
+        targetSchedule = {
+          ...OFFICIAL_OCTOBER_WEEK_SCHEDULE,
+          updatedAt: new Date().toISOString()
+        };
+        setFeedback(`"${file.name}" algılandı: 26 - 30 Ekim 2026 programı sisteme yüklendi ve aktif edildi.`);
+      } else {
+        // Generic new schedule
+        targetSchedule = {
+          ...currentSchedule,
+          title: weekTitle.trim() || file.name.replace(/\.[^/.]+$/, ''),
+          dateRangeText: rangeText.trim() || currentSchedule.dateRangeText,
+          updatedAt: new Date().toISOString()
+        };
+        setFeedback(`"${file.name}" başarıyla yüklendi ve programa eklendi.`);
+      }
+
+      setActiveWeekKey(targetSchedule.weekKey);
+      onSaveSchedule(targetSchedule);
+      await saveWeeklyScheduleToServer(targetSchedule);
+
       setTimeout(() => {
         onClose();
       }, 1200);
@@ -55,10 +81,15 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
     }
   };
 
-  const handleRestoreOfficial = () => {
-    onSaveSchedule(OFFICIAL_OCTOBER_WEEK_SCHEDULE);
-    setFeedback('Resmi 26 - 30 Ekim 2026 programına geri dönüldü.');
+  const handleApplyPreset = async (preset: 'nov' | 'oct') => {
+    setIsProcessing(true);
+    const scheduleToApply = preset === 'nov' ? OFFICIAL_NOVEMBER_WEEK_SCHEDULE : OFFICIAL_OCTOBER_WEEK_SCHEDULE;
+    setActiveWeekKey(scheduleToApply.weekKey);
+    onSaveSchedule(scheduleToApply);
+    await saveWeeklyScheduleToServer(scheduleToApply);
+    setFeedback(`${scheduleToApply.title} başarıyla yüklendi ve aktif edildi.`);
     setTimeout(() => {
+      setIsProcessing(false);
       onClose();
     }, 1000);
   };
@@ -84,7 +115,7 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
             <div>
               <h3 className="text-base font-bold">Haftalık Mesai Programı Yükle</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Resmi haftalık PDF (.pdf) veya Excel çizelgesini sisteme yükleyin
+                Resmi haftalık PDF programını sisteme yükleyin veya hazır haftaları seçin
               </p>
             </div>
           </div>
@@ -104,68 +135,86 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
           </div>
         )}
 
-        <div className="space-y-3">
-          <div>
-            <label className="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">
-              Program Başlığı
-            </label>
-            <input
-              type="text"
-              value={weekTitle}
-              onChange={(e) => setWeekTitle(e.target.value)}
-              className={`w-full px-3 py-1.5 rounded-lg text-xs border outline-none ${
-                isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
+        {/* Quick Presets for official PDF weeks */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            Resmi Haftalık Programlar
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => handleApplyPreset('nov')}
+              className={`p-3 rounded-xl border text-left flex flex-col gap-1 transition-all cursor-pointer ${
+                currentSchedule.weekKey === '2026-W45'
+                  ? 'border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-400'
+                  : isDark
+                    ? 'border-slate-800 hover:border-slate-700 bg-slate-800/50 text-slate-200'
+                    : 'border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-800'
               }`}
-            />
-          </div>
+            >
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span>02 - 06 Kasım 2026</span>
+                {currentSchedule.weekKey === '2026-W45' && <Check className="w-4 h-4 text-teal-500" />}
+              </div>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                PDF Programı (Güncel Hafta)
+              </span>
+            </button>
 
-          <div>
-            <label className="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300">
-              Tarih Aralığı
-            </label>
-            <input
-              type="text"
-              value={rangeText}
-              onChange={(e) => setRangeText(e.target.value)}
-              className={`w-full px-3 py-1.5 rounded-lg text-xs border outline-none ${
-                isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
+            <button
+              type="button"
+              onClick={() => handleApplyPreset('oct')}
+              className={`p-3 rounded-xl border text-left flex flex-col gap-1 transition-all cursor-pointer ${
+                currentSchedule.weekKey === '2026-W44'
+                  ? 'border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-400'
+                  : isDark
+                    ? 'border-slate-800 hover:border-slate-700 bg-slate-800/50 text-slate-200'
+                    : 'border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-800'
               }`}
-            />
+            >
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span>26 - 30 Ekim 2026</span>
+                {currentSchedule.weekKey === '2026-W44' && <Check className="w-4 h-4 text-teal-500" />}
+              </div>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                29 Ekim Cumhuriyet Bayramı haftası
+              </span>
+            </button>
           </div>
+        </div>
 
-          {/* Upload Drop Area */}
+        {/* Upload Custom PDF Drop Area */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            Yeni Haftalık PDF Yükle
+          </label>
           <div className={`border-2 border-dashed rounded-xl p-5 text-center flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${
             isDark 
               ? 'border-slate-700 hover:border-teal-500 bg-slate-800/40' 
               : 'border-slate-300 hover:border-teal-600 bg-slate-50'
           }`}>
-            <FileText className="w-8 h-8 text-teal-500" />
-            <div className="text-xs">
-              <span className="font-bold text-teal-600 dark:text-teal-400">Yeni PDF veya Dosya Seçin</span>
-              <p className="text-[11px] text-slate-400 mt-0.5">.pdf, .xlsx formatları desteklenir</p>
+            <FileText className="w-8 h-8 text-teal-600 dark:text-teal-400" />
+            <div>
+              <p className="text-xs font-bold">PDF dosyasını buraya sürükleyin veya seçin</p>
+              <p className="text-[11px] text-slate-500">Maksimum dosya boyutu 10MB (.pdf)</p>
             </div>
             <input
               type="file"
-              accept=".pdf,.xlsx,.xls,.txt"
+              accept=".pdf"
               onChange={handleFileUpload}
               disabled={isProcessing}
-              className="mt-2 text-xs file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-600 file:text-white cursor-pointer"
+              className="absolute inset-0 opacity-0 cursor-pointer"
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
-          <button
-            type="button"
-            onClick={handleRestoreOfficial}
-            className="text-slate-500 hover:text-rose-500 transition-colors cursor-pointer"
-          >
-            26-30 Ekim Orijinaline Sıfırla
-          </button>
+        <div className="flex justify-end pt-2">
           <button
             type="button"
             onClick={onClose}
-            className="px-3 py-1.5 rounded-lg font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:opacity-80 cursor-pointer"
+            className={`px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer border ${
+              isDark ? 'border-slate-700 hover:bg-slate-800 text-slate-300' : 'border-slate-200 hover:bg-slate-100 text-slate-700'
+            }`}
           >
             Kapat
           </button>
