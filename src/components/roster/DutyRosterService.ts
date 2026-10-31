@@ -431,6 +431,64 @@ export function resetToDefaultRoster(monthKey: string = '2026-10'): MonthDutyRos
 }
 
 /**
+ * Retrieves previous day's duty post-op doctors:
+ * Seyrantepe: Seyrantepe-3 slotuna denk gelen hekim
+ * Sarıyer: Sarıyer-3 slotuna denk gelen hekim
+ */
+export function getPreviousDayPostOpDuty(dateKey: string): {
+  seyrantepeDutyDoc: string;
+  sariyerDutyDoc: string;
+  previousDateKey: string;
+  previousDateFormatted: string;
+} {
+  const parts = dateKey.split('-');
+  let previousDateKey = '';
+  let previousDateFormatted = '';
+  let seyrantepeDutyDoc = '';
+  let sariyerDutyDoc = '';
+
+  if (parts.length === 3) {
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    const d = parseInt(parts[2], 10);
+
+    // Compute previous day (d - 1)
+    const prevDate = new Date(Date.UTC(y, m - 1, d - 1, 12, 0, 0));
+    const prevYear = prevDate.getUTCFullYear();
+    const prevMonth = prevDate.getUTCMonth() + 1;
+    const prevDay = prevDate.getUTCDate();
+
+    const prevMonthKey = `${prevYear}-${String(prevMonth).padStart(2, '0')}`;
+    previousDateKey = `${prevYear}-${String(prevMonth).padStart(2, '0')}-${String(prevDay).padStart(2, '0')}`;
+    previousDateFormatted = `${String(prevDay).padStart(2, '0')}.${String(prevMonth).padStart(2, '0')}.${prevYear}`;
+
+    const roster = getSavedRoster(prevMonthKey);
+    if (roster && roster.days && roster.days[previousDateKey]) {
+      const daySchedule = roster.days[previousDateKey];
+      
+      // Seyrantepe 3. nöbetçi
+      const sey3 = daySchedule.seyrantepeStaff.find(s => s.slot === 'SEYRANTEPE 3') || daySchedule.seyrantepeStaff[2];
+      if (sey3 && sey3.name) {
+        seyrantepeDutyDoc = sey3.name;
+      }
+
+      // Sarıyer 3. nöbetçi
+      const sar3 = daySchedule.cayirbasiStaff.find(s => s.slot === 'SARIYER-3') || daySchedule.cayirbasiStaff[2];
+      if (sar3 && sar3.name) {
+        sariyerDutyDoc = sar3.name;
+      }
+    }
+  }
+
+  return {
+    seyrantepeDutyDoc,
+    sariyerDutyDoc,
+    previousDateKey,
+    previousDateFormatted
+  };
+}
+
+/**
  * Downloads a clean .xlsx spreadsheet matching the clinic's EXACT official table columns:
  * [TARİH, GÜN, SEYRANTEPE 1, SEYRANTEPE 2, SEYRANTEPE 3, SEYRANTEPE 4, SEYRANTEPE 5, SEYRANTEPE 6, SARIYER-1, SARIYER-2, SARIYER-3, SARIYER-4]
  */

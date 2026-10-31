@@ -1,4 +1,5 @@
 import { WeeklyWorkSchedule, TodayPostOpStatus, UnitAssignmentRow, WorkDayInfo } from '../types/weeklySchedule';
+import { getPreviousDayPostOpDuty } from '../components/roster/DutyRosterService';
 
 const STORAGE_KEY = 'etfal_weekly_schedule_v1';
 
@@ -479,6 +480,9 @@ export function getTodayPostOpStatus(
   const sarRow = schedule.rows.find(r => r.isPostOp === 'sariyer' || r.unitName.includes('SARIYER -1 YBÜ'));
   const sarDocs = (sarRow && sarRow.assignments[matchedDay.dateKey]) || [];
 
+  // Get previous day's duty doctors (Seyrantepe 3 & Sarıyer 3)
+  const handover = getPreviousDayPostOpDuty(matchedDay.dateKey);
+
   return {
     isWeekday: true,
     isHoliday: false,
@@ -486,6 +490,8 @@ export function getTodayPostOpStatus(
     dateFormatted: matchedDay.dateFormatted,
     dayName: matchedDay.dayName,
     seyrantepePostOp: seyDocs,
-    sariyerPostOp: sarDocs
+    sariyerPostOp: sarDocs,
+    seyrantepeHandoverFrom: handover.seyrantepeDutyDoc || undefined,
+    sariyerHandoverFrom: handover.sariyerDutyDoc || undefined
   };
 }

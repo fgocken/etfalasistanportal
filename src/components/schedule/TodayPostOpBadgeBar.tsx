@@ -87,13 +87,22 @@ export const TodayPostOpBadgeBar: React.FC<TodayPostOpBadgeBarProps> = ({
             ? 'bg-teal-500/10 border-teal-500/25 text-teal-200'
             : 'bg-teal-50 border-teal-200 text-teal-900'
         }`}>
-          <div className="flex items-center gap-1 font-semibold text-teal-600 dark:text-teal-400">
+          <div className="flex items-center gap-1 font-semibold text-teal-600 dark:text-teal-400 shrink-0">
             <Building2 className="w-3.5 h-3.5" />
             <span className="text-[11px] font-bold">Seyrantepe Post-op:</span>
           </div>
-          <span className="font-extrabold tracking-wide text-teal-800 dark:text-teal-300">
-            {hasSeyrantepe ? postOpStatus.seyrantepePostOp.join(' · ') : 'Belirtilmedi'}
-          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-extrabold tracking-wide text-teal-800 dark:text-teal-300">
+              {hasSeyrantepe ? postOpStatus.seyrantepePostOp.join(' · ') : 'Belirtilmedi'}
+            </span>
+            {postOpStatus.seyrantepeHandoverFrom && (
+              <span className={`text-[10px] font-semibold px-1.5 py-0.2 rounded ${
+                isDark ? 'bg-teal-500/20 text-teal-200 border border-teal-500/30' : 'bg-teal-100 text-teal-800 border border-teal-300'
+              }`}>
+                ({postOpStatus.seyrantepeHandoverFrom} Nöbetçiydi)
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Sarıyer Post-op Rozeti */}
@@ -102,13 +111,22 @@ export const TodayPostOpBadgeBar: React.FC<TodayPostOpBadgeBarProps> = ({
             ? 'bg-amber-500/10 border-amber-500/25 text-amber-200'
             : 'bg-amber-50 border-amber-200 text-amber-900'
         }`}>
-          <div className="flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
+          <div className="flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400 shrink-0">
             <Activity className="w-3.5 h-3.5" />
             <span className="text-[11px] font-bold">Sarıyer Post-op:</span>
           </div>
-          <span className="font-extrabold tracking-wide text-amber-800 dark:text-amber-300">
-            {hasSariyer ? postOpStatus.sariyerPostOp.join(' · ') : 'Belirtilmedi'}
-          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-extrabold tracking-wide text-amber-800 dark:text-amber-300">
+              {hasSariyer ? postOpStatus.sariyerPostOp.join(' · ') : 'Belirtilmedi'}
+            </span>
+            {postOpStatus.sariyerHandoverFrom && (
+              <span className={`text-[10px] font-semibold px-1.5 py-0.2 rounded ${
+                isDark ? 'bg-amber-500/20 text-amber-200 border border-amber-500/30' : 'bg-amber-100 text-amber-800 border border-amber-300'
+              }`}>
+                ({postOpStatus.sariyerHandoverFrom} Nöbetçiydi)
+              </span>
+            )}
+          </div>
         </div>
 
         {onOpenSchedule && (

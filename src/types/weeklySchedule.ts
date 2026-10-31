@@ -35,4 +35,6 @@ export interface TodayPostOpStatus {
   dayName: string;
   seyrantepePostOp: string[];
   sariyerPostOp: string[];
+  seyrantepeHandoverFrom?: string; // e.g. 'YAĞMUR M.' (Dünkü Seyrantepe-3 nöbetçisi)
+  sariyerHandoverFrom?: string;    // e.g. 'CEYDA' (Dünkü Sarıyer-3 nöbetçisi)
 }

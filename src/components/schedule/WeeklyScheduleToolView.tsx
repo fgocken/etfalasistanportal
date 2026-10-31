@@ -22,7 +22,7 @@ import {
   getIstanbulDateInfo,
   OFFICIAL_OCTOBER_WEEK_SCHEDULE
 } from '../../services/weeklyScheduleService';
-import { isRosterAdminUnlocked } from '../roster/DutyRosterService';
+import { isRosterAdminUnlocked, getPreviousDayPostOpDuty } from '../roster/DutyRosterService';
 import { RosterAdminAuthModal } from '../roster/RosterAdminAuthModal';
 import { WeeklyCellEditModal } from './WeeklyCellEditModal';
 import { WeeklyScheduleUploadModal } from './WeeklyScheduleUploadModal';
@@ -462,6 +462,9 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
                         );
                       }
 
+                      const handover = isPostOpRow ? getPreviousDayPostOpDuty(day.dateKey) : null;
+                      const handoverDoc = isSeyPostOp ? handover?.seyrantepeDutyDoc : handover?.sariyerDutyDoc;
+
                       return (
                         <td
                           key={day.dateKey}
@@ -475,32 +478,45 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
                             isEditMode ? 'cursor-pointer hover:bg-amber-500/15 hover:ring-1 hover:ring-amber-500' : ''
                           }`}
                         >
-                          <div className="flex flex-wrap items-center justify-center gap-1">
-                            {docs.length > 0 ? (
-                              docs.map((doc, i) => {
-                                const isDocMatch = cleanSearch && doc.toUpperCase().includes(cleanSearch);
-                                return (
-                                  <span
-                                    key={i}
-                                    className={`px-1.5 py-0.5 rounded text-[11px] font-bold tracking-tight ${
-                                      isDocMatch
-                                        ? 'bg-teal-600 text-white shadow-2xs'
-                                        : isPostOpRow
-                                          ? isSeyPostOp
-                                            ? 'text-teal-700 dark:text-teal-300 bg-teal-500/10'
-                                            : 'text-amber-700 dark:text-amber-300 bg-amber-500/10'
-                                          : 'text-slate-800 dark:text-slate-200'
-                                    }`}
-                                  >
-                                    {doc}
-                                  </span>
-                                );
-                              })
-                            ) : (
-                              <span className="text-slate-400 dark:text-slate-600 font-normal">-</span>
-                            )}
-                            {isEditMode && (
-                              <Edit2 className="w-2.5 h-2.5 opacity-50 text-amber-500 ml-1 shrink-0" />
+                          <div className="flex flex-col items-center justify-center gap-0.5">
+                            <div className="flex flex-wrap items-center justify-center gap-1">
+                              {docs.length > 0 ? (
+                                docs.map((doc, i) => {
+                                  const isDocMatch = cleanSearch && doc.toUpperCase().includes(cleanSearch);
+                                  return (
+                                    <span
+                                      key={i}
+                                      className={`px-1.5 py-0.5 rounded text-[11px] font-bold tracking-tight ${
+                                        isDocMatch
+                                          ? 'bg-teal-600 text-white shadow-2xs'
+                                          : isPostOpRow
+                                            ? isSeyPostOp
+                                              ? 'text-teal-700 dark:text-teal-300 bg-teal-500/10'
+                                              : 'text-amber-700 dark:text-amber-300 bg-amber-500/10'
+                                            : 'text-slate-800 dark:text-slate-200'
+                                      }`}
+                                    >
+                                      {doc}
+                                    </span>
+                                  );
+                                })
+                              ) : (
+                                <span className="text-slate-400 dark:text-slate-600 font-normal">-</span>
+                              )}
+                              {isEditMode && (
+                                <Edit2 className="w-2.5 h-2.5 opacity-50 text-amber-500 ml-1 shrink-0" />
+                              )}
+                            </div>
+
+                            {/* Dünkü Nöbetçiden Devir Bilgisi */}
+                            {handoverDoc && docs.length > 0 && (
+                              <span className={`text-[9px] font-medium tracking-tight px-1 py-0.2 rounded whitespace-nowrap ${
+                                isSeyPostOp
+                                  ? 'text-teal-700/90 dark:text-teal-300/90 bg-teal-500/15'
+                                  : 'text-amber-700/90 dark:text-amber-300/90 bg-amber-500/15'
+                              }`}>
+                                ({handoverDoc} Nöbetçiydi)
+                              </span>
                             )}
                           </div>
                         </td>
