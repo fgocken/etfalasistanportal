@@ -635,6 +635,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-breast-biopsy',
+    title: 'Meme Biyopsileri (Eksizyonel, İnsizyonel ve Tel ile İşaretli Biyopsiler)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Genel Cerrahi',
+    description: 'Meme biyopsilerinde MAC / sedoanaljezi yönetimi, lokal anestezik toksisitesi (LAST), epinefrin yanıtı, tel lokalizasyonu ve vazo-vagal senkop, spesimen mamografisi bekleme aralığı ve ERAS prensipleri.',
+    keywords: ['meme biyopsisi', 'eksizyonel biyopsi', 'tel ile işaretli biyopsi', 'wlbb', 'meme cerrahisi', 'genel cerrahi', 'tru-cut', 'insizyonel biyopsi', 'bi-rads', 'sedasyon', 'mac', 'jaffe', 'eras', 'prospect'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',

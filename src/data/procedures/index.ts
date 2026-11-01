@@ -7,6 +7,7 @@ import { colonoscopy } from './colonoscopy';
 import { ercp } from './ercp';
 import { eus } from './eus';
 import { ekt } from './ekt';
+import { breastBiopsy } from './breastBiopsy';
 
 /**
  * Cerrahi Branş Meta Verileri (Tüm Branşlar İçin Kategori Ağacı)
@@ -106,7 +107,8 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   colonoscopy,
   ercp,
   eus,
-  ekt
+  ekt,
+  breastBiopsy
 ];
 
 /**
