@@ -645,6 +645,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-breast-conserving-surgery',
+    title: 'Meme Koruyucu Cerrahi (Lumpektomi / Parsiyel Mastektomi ± SLNB)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Genel Cerrahi',
+    description: 'Meme koruyucu cerrahide PECS I/II ve Serratus blokları, LMA ile genel anestezi, mavi boya (Patent Blue) enjeksiyonu ve yalancı SpO2 desatürasyonu, aksiller sinir stimülasyonu, neoadjuvan kardiyotoksisite ve ERAS ilkeleri.',
+    keywords: ['meme koruyucu cerrahi', 'mkc', 'lumpektomi', 'parsiyel mastektomi', 'kuadrantektomi', 'slnb', 'sentinel lenf nodu', 'pecs bloğu', 'serratus bloğu', 'patent blue', 'metilen mavisi', 'genel cerrahi', 'onkoanestezi', 'jaffe', 'eras', 'prospect'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',

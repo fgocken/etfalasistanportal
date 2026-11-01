@@ -8,6 +8,7 @@ import { ercp } from './ercp';
 import { eus } from './eus';
 import { ekt } from './ekt';
 import { breastBiopsy } from './breastBiopsy';
+import { breastConservingSurgery } from './breastConservingSurgery';
 
 /**
  * Cerrahi Branş Meta Verileri (Tüm Branşlar İçin Kategori Ağacı)
@@ -108,7 +109,8 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   ercp,
   eus,
   ekt,
-  breastBiopsy
+  breastBiopsy,
+  breastConservingSurgery
 ];
 
 /**
