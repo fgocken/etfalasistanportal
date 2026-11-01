@@ -44,11 +44,12 @@ import { ClinicContactsView } from './directory/ClinicContactsView';
 import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DUTY_ROSTER: Full Tool View] */
 import { WeeklyScheduleToolView } from './schedule/WeeklyScheduleToolView';
 import { IcuWorkspace } from './icu/IcuWorkspace';
+import { ProceduresWorkspace } from './procedures/ProceduresWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -296,11 +297,30 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-rose-800',
     ringClassDark: 'ring-1 ring-rose-500/20',
     ringClassLight: 'ring-1 ring-rose-500/10'
+  },
+  procedures: {
+    id: 'procedures',
+    title: 'Sistematik Prosedür Bazlı Anestezi Yönetimi',
+    badge: 'Cerrahi Rehber',
+    badgeHighlight: true,
+    desc: 'Cerrahi branşlara göre prosedür bazlı anestezi yönetimi. 5 temel aşama: Tanım/Süre, Anestezi Teknikleri, Pre-op, İntra-op (havayolu, vasküler, cerrahi kritik anlar), Post-op (ağrı, ERAS & PROSPECT).',
+    clinicalKey: 'Jaffe 5. Baskı, ERAS ve PROSPECT rehberleriyle uyumlu sistematik cerrahi anestezi yönetimi.',
+    icon: BookOpen,
+    iconBgDark: 'bg-blue-500/15',
+    iconBgLight: 'bg-blue-50',
+    iconColorDark: 'text-blue-400',
+    iconColorLight: 'text-blue-700',
+    borderHoverDark: 'hover:border-blue-500/40',
+    borderHoverLight: 'hover:border-blue-400',
+    titleHoverDark: 'group-hover:text-blue-300',
+    titleHoverLight: 'group-hover:text-blue-800',
+    ringClassDark: 'ring-1 ring-blue-500/20',
+    ringClassLight: 'ring-1 ring-blue-500/10'
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['schedule', 'roster', 'icu', 'contacts', 'calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v14';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['schedule', 'roster', 'icu', 'procedures', 'contacts', 'calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics'];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v15';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -1536,6 +1556,18 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 11. Yoğun Bakım (ICU) Tool */}
         {activeTab === 'icu' && (
           <IcuWorkspace isDark={isDark} />
+        )}
+
+        {/* 12. Sistematik Prosedür Bazlı Anestezi Yönetimi */}
+        {activeTab === 'procedures' && (
+          <ProceduresWorkspace 
+            isDark={isDark} 
+            initialProcedureId={
+              initialRoute?.type === 'arac' && initialRoute.id === 'procedures'
+                ? initialRoute.subId || null
+                : null
+            }
+          />
         )}
       </main>
 

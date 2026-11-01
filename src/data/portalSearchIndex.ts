@@ -545,6 +545,36 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'icu'
   },
   {
+    id: 'proc-systematic-management',
+    title: 'Sistematik Prosedür Bazlı Anestezi Yönetimi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Cerrahi Rehber',
+    description: 'Cerrahi branşlara göre prosedür bazlı anestezi yönetimi, pre-op hazırlık, intra-op havayolu ve vasküler erişim, cerrahi kritik anlar, Jaffe 5th ed., ERAS ve PROSPECT rehberleri.',
+    keywords: ['prosedür', 'cerrahi anestezi', 'ameliyat rehberi', 'jaffe', 'eras', 'prospect', 'branş cerrahisi', 'anestezi yönetimi', 'laparoskopi'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-lap-chole',
+    title: 'Laparoskopik Kolesistektomi (Anestezi Yönetimi, Jaffe, ERAS & PROSPECT)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Genel Cerrahi',
+    description: 'Laparoskopik kolesistektomide anestezi teknikleri, CO2 pnömoperitoneum yönetimi, trokar girişi, vagal bradikardi, derin nöromusküler blokaj ve multimodal analjezi.',
+    keywords: ['laparoskopik kolesistektomi', 'kolesistektomi', 'safra kesesi', 'lap-kole', 'genel cerrahi', 'jaffe', 'eras', 'prospect', 'trokar', 'pnömoperitoneum'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-open-chole',
+    title: 'Açık Kolesistektomi (Anestezi Yönetimi, Jaffe, ERAS & PROSPECT)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Genel Cerrahi',
+    description: 'Açık kolesistektomide anestezi teknikleri, subkostal Kocher insizyonu ekartasyonu, torakal epidural analjezi, derin nöromusküler blokaj, vasküler erişim ve ERAS prensipleri.',
+    keywords: ['açık kolesistektomi', 'kolesistektomi', 'kocher insizyonu', 'subkostal', 'safra kesesi', 'açık batın', 'genel cerrahi', 'jaffe', 'eras', 'prospect', 'torakal epidural'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',
