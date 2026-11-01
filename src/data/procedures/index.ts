@@ -4,6 +4,9 @@ import { openCholecystectomy } from './openCholecystectomy';
 import { awakeCraniotomy } from './awakeCraniotomy';
 import { gastroscopy } from './gastroscopy';
 import { colonoscopy } from './colonoscopy';
+import { ercp } from './ercp';
+import { eus } from './eus';
+import { ekt } from './ekt';
 
 /**
  * Cerrahi Branş Meta Verileri (Tüm Branşlar İçin Kategori Ağacı)
@@ -80,6 +83,12 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
     name: 'Gastroenteroloji',
     shortName: 'Gastroenteroloji',
     description: 'Tanısal ve girişimsel üst GİS endoskopi, kolonoskopi, polipektomi, ERCP ve EUS sedasyonu'
+  },
+  {
+    id: 'psikiyatri',
+    name: 'Psikiyatri',
+    shortName: 'Psikiyatri',
+    description: 'Elektrokonvülsif tedavi (EKT / ECT), transkraniyal manyetik stimülasyon (TMS) ve psikiyatrik girişim anestezi yönetimi'
   }
 ];
 
@@ -94,7 +103,10 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   openCholecystectomy,
   awakeCraniotomy,
   gastroscopy,
-  colonoscopy
+  colonoscopy,
+  ercp,
+  eus,
+  ekt
 ];
 
 /**

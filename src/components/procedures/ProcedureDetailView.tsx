@@ -35,6 +35,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
   // Ana bölümlerin açılıp kapanabilir durumları (hepsi başlangıçta açık)
   const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>({
     sec1: true,
+    secBleed: true,
     sec2: true,
     sec3: true,
     sec4: true,
@@ -68,7 +69,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
   };
 
   const expandAll = () => {
-    setSectionOpen({ sec1: true, sec2: true, sec3: true, sec4: true, sec5: true, secRef: true });
+    setSectionOpen({ sec1: true, secBleed: true, sec2: true, sec3: true, sec4: true, sec5: true, secRef: true });
     setSubOpen({
       '3a': true, '3b': true, '3c': true,
       '4a': true, '4b': true, '4c': true, '4d': true, '4e': true, '4f': true, '4g': true,
@@ -77,7 +78,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
   };
 
   const collapseAll = () => {
-    setSectionOpen({ sec1: false, sec2: false, sec3: false, sec4: false, sec5: false, secRef: false });
+    setSectionOpen({ sec1: false, secBleed: false, sec2: false, sec3: false, sec4: false, sec5: false, secRef: false });
     setSubOpen({
       '3a': false, '3b': false, '3c': false,
       '4a': false, '4b': false, '4c': false, '4d': false, '4e': false, '4f': false, '4g': false,
@@ -191,6 +192,14 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
               className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap cursor-pointer transition-colors"
             >
               1. Tanım & Süre
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('secBleed')}
+              className="px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 font-semibold whitespace-nowrap cursor-pointer transition-colors border border-rose-200/50 dark:border-rose-800/50 flex items-center gap-1"
+            >
+              <Droplet className="w-3 h-3 text-rose-500" />
+              <span>Kanama Profili</span>
             </button>
             <button
               type="button"
@@ -322,6 +331,132 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
           )}
         </div>
       </section>
+
+      {/* BEKLENEN KANAMA VE TRANSFÜZYON PROFİLİ */}
+      {procedure.bleedingProfile && (
+        <section id="secBleed" className="scroll-mt-6">
+          <div className={`rounded-xl border transition-colors overflow-hidden ${
+            isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+          }`}>
+            <button
+              type="button"
+              onClick={() => toggleSection('secBleed')}
+              className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+            >
+              <div className="flex items-center gap-2.5">
+                <span className="w-7 h-7 rounded-lg bg-rose-500/15 text-rose-500 flex items-center justify-center text-xs font-mono font-bold">
+                  <Droplet className="w-4 h-4 text-rose-500" />
+                </span>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
+                      Beklenen Kanama ve Transfüzyon Profili
+                    </h2>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                      procedure.bleedingProfile.riskLevel === 'minimal'
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                        : procedure.bleedingProfile.riskLevel === 'low'
+                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30'
+                        : procedure.bleedingProfile.riskLevel === 'moderate'
+                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                        : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30'
+                    }`}>
+                      {procedure.bleedingProfile.riskLevelLabel}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">Tahmini ortalama kan kaybı, kan ürünü & Cross-Match hazırlığı ve hemostaz yönetimi</p>
+                </div>
+              </div>
+              {sectionOpen.secBleed ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+            </button>
+
+            {sectionOpen.secBleed && (
+              <div className="p-4 pt-0 space-y-4 border-t border-slate-100 dark:border-slate-800/70 mt-1">
+                {/* 4 Temel Metrik Kartı */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {/* Tahmini Kan Kaybı (EBL) */}
+                  <div className={`p-3 rounded-lg border flex flex-col justify-between ${
+                    isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-rose-50/50 border-rose-200/70'
+                  }`}>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Tahmini Ortalama Kan Kaybı</span>
+                    <span className="text-xs font-bold text-rose-600 dark:text-rose-400 mt-1">{procedure.bleedingProfile.estimatedBloodLoss}</span>
+                  </div>
+
+                  {/* Kanama Risk Sınıfı */}
+                  <div className={`p-3 rounded-lg border flex flex-col justify-between ${
+                    isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
+                  }`}>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Kanama Risk Derecesi</span>
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">{procedure.bleedingProfile.riskLevelLabel}</span>
+                  </div>
+
+                  {/* Cross-Match / Hazırlık */}
+                  <div className={`p-3 rounded-lg border flex flex-col justify-between ${
+                    isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
+                  }`}>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Kan Ürünü & Cross-Match</span>
+                    <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 mt-1">{procedure.bleedingProfile.crossMatchRequirement}</span>
+                  </div>
+
+                  {/* Transfüzyon Olasılığı */}
+                  <div className={`p-3 rounded-lg border flex flex-col justify-between ${
+                    isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
+                  }`}>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Transfüzyon İhtimali</span>
+                    <span className="text-xs font-bold text-amber-600 dark:text-amber-400 mt-1">{procedure.bleedingProfile.transfusionProbability}</span>
+                  </div>
+                </div>
+
+                {/* Kritik Kanama Odakları */}
+                {procedure.bleedingProfile.criticalBleedingSources && procedure.bleedingProfile.criticalBleedingSources.length > 0 && (
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />
+                      Potansiyel Majör Kanama Odakları & Vasküler Risk Noktaları:
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {procedure.bleedingProfile.criticalBleedingSources.map((source, sIdx) => (
+                        <div
+                          key={sIdx}
+                          className={`p-2.5 rounded-lg border text-xs flex items-start gap-2 ${
+                            isDark ? 'bg-slate-950/40 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 mt-1.5" />
+                          <span>{source}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Hemostaz ve Kan Koruma Stratejileri */}
+                {procedure.bleedingProfile.hemostasisStrategies && procedure.bleedingProfile.hemostasisStrategies.length > 0 && (
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                      <ShieldAlert className="w-3.5 h-3.5 text-teal-500" />
+                      Hemostaz ve Hasta Kan Yönetimi (PBM) Stratejileri:
+                    </span>
+                    <div className="space-y-1.5">
+                      {procedure.bleedingProfile.hemostasisStrategies.map((strat, stIdx) => (
+                        <div
+                          key={stIdx}
+                          className={`p-2.5 rounded-lg border text-xs flex items-start gap-2 ${
+                            isDark ? 'bg-teal-500/5 border-teal-500/20 text-slate-300' : 'bg-teal-50/50 border-teal-200 text-slate-700'
+                          }`}
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5 text-teal-500 shrink-0 mt-0.5" />
+                          <span>{strat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* BÖLÜM 2: OLASI ANESTEZİ YÖNETİMİ TEKNİKLERİ */}
       <section id="sec2" className="scroll-mt-6">

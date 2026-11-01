@@ -17,13 +17,30 @@ export type SurgicalSpecialty =
   | 'gogus_cerrahisi'
   | 'cocuk_cerrahisi'
   | 'goz'
-  | 'gastroenteroloji';
+  | 'gastroenteroloji'
+  | 'psikiyatri';
 
 export interface SurgicalSpecialtyMeta {
   id: SurgicalSpecialty;
   name: string;
   shortName: string;
   description: string;
+}
+
+export interface BleedingProfile {
+  // Beklenen ortalama kan kaybı miktarı (EBL)
+  estimatedBloodLoss: string; // örn: "< 50 mL (minimal / ihmal edilebilir)" veya "100 - 300 mL"
+  // Kanama risk derecesi
+  riskLevel: 'minimal' | 'low' | 'moderate' | 'high' | 'massive_potential';
+  riskLevelLabel: string; // örn: "Minimal / İhmal Edilebilir", "Düşük Risk", "Orta Düzey Risk", "Yüksek / Potansiyel Masif"
+  // Kan grubu ve Cross-Match / T&S hazırlık durumu
+  crossMatchRequirement: string; // örn: "Rutin kan hazırlığı gerekmez (T&S opsiyonel)", "1-2 Ünite ES Cross-Match hazır bulundurulmalıdır"
+  // Olası transfüzyon gereksinimi oranı
+  transfusionProbability: string; // örn: "< %1 (Çok Düşük)", "%5 - %15", vb.
+  // Potansiyel majör cerrahi/girişimsel kanama odakları ve anatomik risk noktaları
+  criticalBleedingSources?: string[];
+  // Hemostaz & Kan Koruma Stratejisi (Traneksamik asit, cell saver, koter, klips vb.)
+  hemostasisStrategies?: string[];
 }
 
 export interface ProcedureDefinition {
@@ -38,6 +55,9 @@ export interface ProcedureDefinition {
   indications: string[];
   averageDuration: string; // örn: "60 - 90 dk"
   categoryTag?: string; // örn: "Laparoskopik Cerrahi", "Açık Girişim", vb.
+
+  // 1.5) Beklenen Kanama ve Transfüzyon Profili (Tanım/Süre sonrasında, Anestezi Yönetimi öncesinde)
+  bleedingProfile?: BleedingProfile;
 
   // 2) Olası anestezi yönetimi teknikleri
   anesthesiaTechniques: {

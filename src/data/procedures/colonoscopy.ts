@@ -26,7 +26,26 @@ export const colonoscopy: ProcedureDefinition = {
   ],
   averageDuration: '20 - 45 dakika (Tanısal Kolonoskopi: 20-30 dk; Polipektomi / EMR / Hemostaz: 30-60 dk)',
 
-  // 2) Olası anestezi yönetimi teknikleri
+  // Beklenen Kanama ve Transfüzyon Profili
+  bleedingProfile: {
+    estimatedBloodLoss: '< 5 mL (Tanısal biyopsilerde ihmal edilebilir; standart kement polipektomide 5–20 mL; geniş tabanlı sesil polip veya EMR rezeksiyonunda 20–50 mL)',
+    riskLevel: 'low',
+    riskLevelLabel: 'Düşük Risk (Tanısal < 5 mL; Polipektomide %0.5–2 post-polipektomi kanama insidansı)',
+    crossMatchRequirement: 'Rutin elektif tanısal ve terapötik polipektomi için kan hazırlığı gerekmez',
+    transfusionProbability: '< %0.5 (Çok Düşük)',
+    criticalBleedingSources: [
+      'Geniş saplı veya sesil polip tabanındaki besleyici arteriyel damar kanaması',
+      'Endoskopik Mukozal Rezeksiyon (EMR) koter kesi yüzeyi ve submukozal mikrovasküler ağ',
+      'Kolon divertiküllerinin temas travması',
+      'Sert koterizasyonun neden olduğu gecikmiş (post-polipektomi 2–7. gün) termal skar dökülme kanamaları'
+    ],
+    hemostasisStrategies: [
+      'Büyük ve vasküler saplı poliplere rezeksiyon öncesi profilaktik endoloop veya klips (hemoklips) uygulanması',
+      'Aktif polipektomi kanamasında mekanik hemostatik klipsler (TTS klipsler)',
+      'Submukozal seyreltik adrenalin (1:10.000 veya 1:20.000) enjeksiyonu ve Coag-grasper ile termal hemostaz',
+      'İşlem öncesi antikoagülan ve antitrombositer ajanların ESGE/ASGE rehberlerine göre uygun süre önce kesilmiş ve INR < 1.5 olduğunun teyidi'
+    ]
+  },
   anesthesiaTechniques: {
     primary: [
       'Monitored Anesthesia Care (MAC) / Derin Sedasyon: Propofol bazlı titre edilen sedasyon + analjezik adjuvan (Fentanil veya Ketamin / "Ketofol") eşliğinde spontan solunumun korunması — Altın Standart'
@@ -140,8 +159,9 @@ export const colonoscopy: ProcedureDefinition = {
     erasReference: 'Enhanced Recovery After Surgery (ERAS®) Society Principles for Ambulatory and Non-Operating Room Interventional Procedures (NORA).',
     prospectReference: 'PROSPECT Guidelines & ESGE / ASGE Consensus: Evidence-based pain and sedation management in colonoscopy.',
     otherReferences: [
-      'ASGE / ASA Consensus Guidelines: Guidelines for Sedation and Anesthesia in Gastrointestinal Endoscopy. Gastrointestinal Endoscopy journal.',
-      'ESGE (European Society of Gastrointestinal Endoscopy) Guideline: Non-anesthesiologist and anesthesiologist-administered sedation for GI endoscopy.',
+      'ASGE Standards of Practice Committee: Management of antithrombotic agents and bleeding complications in GI endoscopy.',
+      'ESGE Clinical Guideline: Colorectal polypectomy and endoscopic mucosal resection (EMR) hemostasis and bleeding.',
+      'ASA (American Society of Anesthesiologists): Practice Guidelines for Perioperative Blood Management.',
       'Miller, R. D., et al. Miller’s Anesthesia (9th ed.). Chapter 82: Non-Operating Room Anesthesia (NORA).'
     ]
   }

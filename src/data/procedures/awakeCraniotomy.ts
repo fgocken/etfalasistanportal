@@ -25,7 +25,27 @@ export const awakeCraniotomy: ProcedureDefinition = {
   ],
   averageDuration: '3 - 6 saat (Pozisyonlama ve Skalp Bloğu: 45-60 dk; Kemik flep açılışı: 45-60 dk; Uyanık haritalama ve rezeksiyon: 60-120 dk; Kapanış: 45-60 dk)',
 
-  // 2) Olası anestezi yönetimi teknikleri
+  // Beklenen Kanama ve Transfüzyon Profili
+  bleedingProfile: {
+    estimatedBloodLoss: '100 - 250 mL (Standart gliom rezeksiyonunda kontrollüdür; ancak dural venöz sinüs komşuluğunda, aşırı vaskülarize gliom/menenjiyom veya AVM olgularında 500–1000+ mL ani masif kanama riski taşır)',
+    riskLevel: 'high',
+    riskLevelLabel: 'Yüksek Risk / Potansiyel Masif Kanama',
+    crossMatchRequirement: 'En az 2 Ünite Eritrosit Süspansiyonu (ES) Cross-Match yapılarak kan merkezinde hazır bekletilmeli; Tip-Tarama ve antikor paneli doğrulanmalıdır',
+    transfusionProbability: '%5 - %12 (Tümör vaskülaritesine ve venöz sinüs tutulumuna bağlı)',
+    criticalBleedingSources: [
+      'Skalp kesisi ve vasküler flep kenarları (A. temporalis superficialis, A. occipitalis dalları)',
+      'Kemik flebi kenarları ve diploik venöz göllenmeler',
+      'Dura mater ve orta meningeal arter (MMA) dalları',
+      'Dural Venöz Sinüsler (Superior sagittal sinüs veya transvers sinüs laserasyonu hem masif kanama hem de fatal venöz hava embolisi yaratabilir)',
+      'Tümör içi derin besleyici arteriyel pediküller ve köprü venleri'
+    ],
+    hemostasisStrategies: [
+      'Skalp hemostazı için Raney klipsleri veya Dandy klempleri; kemik kenarlarına kemik mumu (bone wax)',
+      'Bipolar mikro-koagülasyon, topikal hemostatik jelatin matriksler (FloSeal, Surgicel, pamuk pattiler)',
+      'Hemodinamik Kontrol: Uyanıklık aşamasında anksiyete ve ajitasyona bağlı hipertansiyon kanamayı şiddetlendirir; MAP hedefe göre titre edilmelidir',
+      'Aşırı kanama ve mikrovasküler sızıntılarda Traneksamik Asit (TXA 1 g IV yavaş infüzyon) ve cell-saver (malignite dışı lezyonlarda) hazırlığı'
+    ]
+  },
   anesthesiaTechniques: {
     primary: [
       'Asleep-Awake-Asleep (AAA) Tekniği: Açılış evresinde LMA/sedasyon altında anestezi -> Kortikal haritalama ve rezeksiyon evresinde tam uyanıklık ve kooperasyon -> Kapanış evresinde tekrar sedasyon/anestezi',
@@ -153,6 +173,8 @@ export const awakeCraniotomy: ProcedureDefinition = {
     erasReference: 'Hagan, K. B., et al. Consensus Statement for Perioperative Care in Craniotomy: Enhanced Recovery After Surgery (ERAS®) Society Recommendations. World Neurosurg.',
     prospectReference: 'PROSPECT Working Group. Evidence-based recommendations for postoperative pain management in craniotomy. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
     otherReferences: [
+      'ESAIC Guidelines on Management of Severe Perioperative Bleeding: Neurosurgical & Hemostatic Considerations.',
+      'ASA Practice Guidelines for Perioperative Blood Management and Transfusion Triggers.',
       "Cottrell, J. E., & Patel, P. (2016). Cottrell and Patel's Neuroanesthesia (6th ed.). Chapter 14: Anesthetic Considerations for Awake Craniotomy and Brain Mapping.",
       'Society for Neuroscience in Anesthesiology and Critical Care (SNACC): Consensus Statement on Anesthetic Management of Patients Undergoing Awake Craniotomy.',
       'Miller, R. D., et al. Miller’s Anesthesia (9th ed.). Chapter 64: Anesthesia for Neurologic Surgery.'

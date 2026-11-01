@@ -605,6 +605,36 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-ercp',
+    title: 'ERCP (Endoskopik Retrograd Kolanjiyopankreatografi)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Gastroenteroloji',
+    description: 'ERCP anestezisinde endotrakeal genel anestezi vs derin sedasyon, prone pozisyon yönetimi, Oddi sfinkterotomi kanaması, floroskopi güvenliği ve post-ERCP pankreatit (PEP) profilaksisi.',
+    keywords: ['ercp', 'kolanjit', 'koledok taşı', 'sfinkterotomi', 'gastroenteroloji', 'prone pozisyon', 'duodenoskop', 'post ercp pankreatit', 'pep', 'nora', 'jaffe', 'asge', 'esge'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-eus',
+    title: 'EUS (Endoskopik Ultrasonografi & EUS-FNA/FNB)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Gastroenteroloji',
+    description: 'EUS ve biyopsi anestezi yönetimi, MAC / derin sedasyon, pankreas/lenf nodu iğne girişinde mutlak hasta hareketsizliği, çölyak pleksus nörolizinde hipotansiyon yönetimi.',
+    keywords: ['eus', 'endosonografi', 'endoskopik ultrasonografi', 'eus fna', 'eus fnb', 'çölyak blok', 'çölyak nöroliz', 'pankreas biyopsisi', 'gastroenteroloji', 'nora', 'jaffe', 'asge', 'esge'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-ekt',
+    title: 'EKT (Elektrokonvülsif Tedavi / ECT Anestezisi)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Psikiyatri',
+    description: 'EKT anestezisinde Propofol / Metodeksital indüksiyonu, Süksinilkolin nöromusküler blokajı, hiperventilasyon, izole manşon tekniği, bifazik otonomik yanıt (bradikardi/sempatik fırtına) yönetimi.',
+    keywords: ['ekt', 'ect', 'elektrokonvülsif', 'psikiyatri', 'şizofreni', 'depresyon', 'katatoni', 'süksinilkolin', 'propofol', 'metodeksital', 'cuff', 'nora', 'jaffe', 'apa'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',

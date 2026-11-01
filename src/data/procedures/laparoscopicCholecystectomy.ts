@@ -25,7 +25,25 @@ export const laparoscopicCholecystectomy: ProcedureDefinition = {
   ],
   averageDuration: '45 - 90 dakika (Komplike olmayan elektif vaka: ~60 dk; Akut gangrenöz kolesistit/adezyon: 90-120 dk)',
 
-  // 2) Olası anestezi yönetimi teknikleri
+  // Beklenen Kanama ve Transfüzyon Profili
+  bleedingProfile: {
+    estimatedBloodLoss: '< 50 mL (Elektif vakalarda genellikle 20–50 mL arası ihmal edilebilir; akut flegmonöz/gangrenöz kolesistitte 100–200 mL)',
+    riskLevel: 'low',
+    riskLevelLabel: 'Düşük Risk (< 100 mL)',
+    crossMatchRequirement: 'Rutin Cross-Match gerekmez. Kan Grubu ve Tip-Tarama (Type & Screen) yeterlidir (Akut gangrenöz kolesistit veya açık konversiyon riski yüksek olgularda 1-2 ünite ES rezerve edilir)',
+    transfusionProbability: '< %1 (Çok Düşük)',
+    criticalBleedingSources: [
+      'Sistik arter yaralanması veya klips kayması/avülsiyonu',
+      'Karaciğer yatağı (gallbladder fossa) parankimal kanaması',
+      'Calot üçgeninde aberan sağ hepatik arter yaralanması',
+      'İlk trokar girişi (kör Veress iğnesi veya trokar) sırasında inferior epigastrik arter veya majör retroperitoneal damar (aort, v. kava) yaralanması'
+    ],
+    hemostasisStrategies: [
+      'Bipolar veya monopolar titiz koterizasyon ve titanyum/polimerik klipsleme',
+      'Karaciğer parankim yatağına topikal hemostatik ajanlar (oksitlenmiş rejenere selüloz, jelatin matriks)',
+      'Kontrolsüz Calot kanamalarında kör klemplemeden kaçınma (ortak safra kanalı yaralanmasını önlemek için) ve ivedilikle açığa geçiş (açık konversiyon) hazırlığı'
+    ]
+  },
   anesthesiaTechniques: {
     primary: [
       'Genel Anestezi (Endotrakeal Entübasyonlu) — Altın Standart'
@@ -146,6 +164,8 @@ export const laparoscopicCholecystectomy: ProcedureDefinition = {
     erasReference: 'Gustafsson, U. O., et al. Guidelines for Perioperative Care in Elective Colorectal and Abdominal Surgery: Enhanced Recovery After Surgery (ERAS®) Society Recommendations. World J Surg.',
     prospectReference: 'Barazanchi, A. W. H., et al. Evidence-based management of pain after laparoscopic cholecystectomy: a PROSPECT review update. British Journal of Anaesthesia (BJA).',
     otherReferences: [
+      'ESAIC (European Society of Anaesthesiology and Intensive Care) Guidelines: Management of Severe Perioperative Bleeding.',
+      'ASA (American Society of Anesthesiologists): Practice Guidelines for Perioperative Blood Management.',
       'Miller, R. D., et al. Miller’s Anesthesia (9th ed.). Chapter: Anesthesia for Laparoscopic and Robotic Surgeries.',
       'Barash, P. G., et al. Clinical Anesthesia (8th ed.). Laparoscopic Surgery Principles.'
     ]

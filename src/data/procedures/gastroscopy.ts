@@ -26,7 +26,26 @@ export const gastroscopy: ProcedureDefinition = {
   ],
   averageDuration: '10 - 25 dakika (Tanısal Gastroskopi: 10-15 dk; Terapötik hemostaz / dilatasyon / polipektomi / PEG: 20-45 dk)',
 
-  // 2) Olası anestezi yönetimi teknikleri
+  // Beklenen Kanama ve Transfüzyon Profili
+  bleedingProfile: {
+    estimatedBloodLoss: '< 5 mL (Tanısal işlem ve forseps mukozal biyopsilerinde ihmal edilebilir, 0–5 mL; polipektomide 5–15 mL; terapötik aktif GİS kanama müdahalesinde başlangıç kanaması değişken ve masif olabilir)',
+    riskLevel: 'minimal',
+    riskLevelLabel: 'Minimal / İhmal Edilebilir (< 10 mL - Elektif Tanısal)',
+    crossMatchRequirement: 'Elektif tanısal gastroskopide rutin kan hazırlığı gerekmez (Aktif üst GİS kanama endikasyonunda en az 2–4 Ünite ES ve TDP hazır bulundurulmalıdır)',
+    transfusionProbability: 'Elektif tanısalda < %0.1 (Aktif kanayan ülser/variste %50–80 transfüzyon ihtiyacı)',
+    criticalBleedingSources: [
+      'Mukozal forseps biyopsi alanları',
+      'Endoskopik polipektomi veya EMR/ESD rezeksiyon yatağı',
+      'Zorlu entübasyonda posterior farenks ve krikofarengeal mukozal laserasyon',
+      'Önceden mevcut özofagus/mide varisleri veya Dieulafoy lezyonunun temasla kanaması'
+    ],
+    hemostasisStrategies: [
+      'Standart biyopsilerde spontan hemostaz',
+      'Polipektomi ve EMR kanamalarında endoskopik hemoklips (TTS clips), Argon Plazma Koagülasyonu (APC) veya koterizasyon',
+      'Varis kanamalarında endoskopik bant ligasyonu (EVL) ve skleroterapi',
+      'Masif kanamalarda Hızlı Seri Entübasyon (RSI) ile havayolunun kan aspirasyonundan mutlak korunması'
+    ]
+  },
   anesthesiaTechniques: {
     primary: [
       'Monitored Anesthesia Care (MAC) / Derin Sedasyon: Propofol bazlı titre edilen sedasyon (Propofol bolus/TCI + düşük doz Fentanil/Remifentanil veya Midazolam) eşliğinde spontan solunumun korunması — Altın Standart'
@@ -140,8 +159,9 @@ export const gastroscopy: ProcedureDefinition = {
     erasReference: 'Enhanced Recovery After Surgery (ERAS®) Society Principles for Ambulatory and Non-Operating Room Interventional Procedures (NORA).',
     prospectReference: 'PROSPECT Guidelines & ESGE / ASGE Consensus: Evidence-based pain and sedation management in upper gastrointestinal endoscopy.',
     otherReferences: [
-      'ASGE / ASA Consensus Guidelines: Guidelines for Sedation and Anesthesia in Gastrointestinal Endoscopy. Gastrointestinal Endoscopy journal.',
-      'ESGE (European Society of Gastrointestinal Endoscopy) Guideline: Non-anesthesiologist and anesthesiologist-administered sedation for GI endoscopy.',
+      'ASGE Standards of Practice Committee: Management of antithrombotic agents and bleeding complications in GI endoscopy.',
+      'ESGE (European Society of Gastrointestinal Endoscopy) Guideline: Diagnosis and management of acute lower and upper gastrointestinal bleeding.',
+      'ASA (American Society of Anesthesiologists): Practice Guidelines for Perioperative Blood Management.',
       'Miller, R. D., et al. Miller’s Anesthesia (9th ed.). Chapter 82: Non-Operating Room Anesthesia (NORA).'
     ]
   }

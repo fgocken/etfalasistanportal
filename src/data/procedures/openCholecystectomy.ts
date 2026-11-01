@@ -26,7 +26,26 @@ export const openCholecystectomy: ProcedureDefinition = {
   ],
   averageDuration: '60 - 120 dakika (Elektif primer açık vaka: 60-90 dk; Laparoskopiden konversiyon veya şiddetli gangrenöz kolesistit/adezyon: 90-150 dk)',
 
-  // 2) Olası anestezi yönetimi teknikleri
+  // Beklenen Kanama ve Transfüzyon Profili
+  bleedingProfile: {
+    estimatedBloodLoss: '100 - 300 mL (Akut flegmonöz/gangrenöz kolesistit, siroz zemininde portal hipertansiyon veya yoğun yapışıklıklarda 400–600 mL üzerine çıkabilir)',
+    riskLevel: 'moderate',
+    riskLevelLabel: 'Orta Düzey Risk (100 – 300 mL)',
+    crossMatchRequirement: '1 - 2 Ünite Eritrosit Süspansiyonu (ES) Cross-Match yapılarak kan merkezinde rezerve edilmeli, kan grubu ve antikor tarama doğrulanmalıdır',
+    transfusionProbability: '%3 - %8 (Laparoskopiden konversiyon ve sirotik hastalarda %15-20)',
+    criticalBleedingSources: [
+      'Calot diseksiyonunda sistik arter ligatür yetmezliği veya aberan sağ hepatik arter yaralanması',
+      'Geniş karaciğer yatağı parankimal venöz sızıntıları ve derin yatak laserasyonları',
+      'Porta hepatis eksplorasyonunda portal ven veya ana hepatik arter dalları',
+      'Subkostal insizyonda rektus kası ve çevre vasküler yapılar (superior epigastrik damarlar)'
+    ],
+    hemostasisStrategies: [
+      'Sistik artere çift ligatür veya transfikse sütür ligasyonu',
+      'Karaciğer yatağına topikal hemostatik ajanlar (fibrin yapıştırıcı matriks, jelatin sünger, oksitlenmiş selüloz)',
+      'Subkostal kas tabakalarının titiz elektrokoagülasyonu',
+      'İntraoperatif hemostazı korumak için normotermi, normal pH ve iyonize kalsiyum optimizasyonu; aşırı kanamada Traneksamik Asit (TXA 1 g IV bolus)'
+    ]
+  },
   anesthesiaTechniques: {
     primary: [
       'Genel Anestezi (Endotrakeal Entübasyonlu) + Torakal Epidural Anestezi / Rejyonel Fasya Plan Blokları (Bilateral Subkostal TAP veya ESP Bloğu) ile Multimodal Analjezi'
@@ -147,6 +166,8 @@ export const openCholecystectomy: ProcedureDefinition = {
     erasReference: 'Lassen, K., et al. Guidelines for Perioperative Care for Pancreaticoduodenectomy and Open Hepatobiliary Surgery: Enhanced Recovery After Surgery (ERAS®) Society Recommendations. World J Surg.',
     prospectReference: 'PROSPECT Working Group. Evidence-based recommendations for postoperative pain management in open abdominal and hepatobiliary surgery. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
     otherReferences: [
+      'ESAIC Guidelines on Management of Severe Perioperative Bleeding: Updated Recommendations. Eur J Anaesthesiol.',
+      'ASA (American Society of Anesthesiologists) Practice Guidelines for Perioperative Blood Management. Anesthesiology.',
       'Miller, R. D., et al. Miller’s Anesthesia (9th ed.). Chapter 65: Anesthesia for Abdominal and Hepatobiliary Surgery.',
       'Barash, P. G., et al. Clinical Anesthesia (8th ed.). Anesthesia for Gastrointestinal and Biliary Procedures.'
     ]

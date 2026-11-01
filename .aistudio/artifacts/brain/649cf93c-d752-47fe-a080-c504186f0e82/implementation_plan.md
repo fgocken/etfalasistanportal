@@ -54,6 +54,13 @@ Kullanıcı bir prosedüre tıkladığında açılan detay görünümü, kullan�
   - Cerrahi Tanım
   - Temel Endikasyonlar
   - Tahmini Ortalama Prosedür Süresi (dk / saat)
+- **1.5) Beklenen Kanama ve Transfüzyon Profili (Yeni Standart Blok):**
+  - Tahmini Ortalama Kan Kaybı (EBL)
+  - Kanama Risk Derecesi (Minimal / Düşük / Orta / Yüksek / Potansiyel Masif)
+  - Kan Ürünü & Cross-Match / Tip-Tarama (Type & Screen) Hazırlığı
+  - Transfüzyon İhtimali (%)
+  - Potansiyel Majör Kanama Odakları & Vasküler Risk Noktaları
+  - Hemostaz ve Hasta Kan Yönetimi (PBM) Stratejileri
 - **2) Olası Anestezi Yönetimi Teknikleri:**
   - Birincil Teknikler (Genel Anestezi, Spinal/Epidural, Kombine, Rejyonel Blok)
   - Alternatif Teknikler & Klinik Tercih Gerekçeleri
