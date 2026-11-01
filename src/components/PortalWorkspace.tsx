@@ -319,8 +319,23 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   }
 };
 
-export const DEFAULT_TOOL_ORDER: ToolTabId[] = ['schedule', 'roster', 'icu', 'procedures', 'contacts', 'calculator', 'intraop', 'infusion', 'preop', 'airway', 'treatments', 'nerve-blocks', 'emergencies', 'infographics'];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v15';
+export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
+  'procedures',
+  'icu',
+  'calculator',
+  'intraop',
+  'infusion',
+  'preop',
+  'airway',
+  'treatments',
+  'nerve-blocks',
+  'emergencies',
+  'infographics',
+  'schedule',
+  'roster',
+  'contacts'
+];
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v16';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
