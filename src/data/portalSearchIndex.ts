@@ -575,6 +575,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-awake-craniotomy',
+    title: 'Uyanık Kraniyotomi (Anestezi Yönetimi, Jaffe, ERAS & PROSPECT)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin Cerrahi',
+    description: 'Uyanık kraniyotomide Asleep-Awake-Asleep (AAA) ve MAC teknikleri, Skalp Bloğu, Deksmedetomidin/Remifentanil infüzyonu, kortikal haritalama, nöbet yönetimi ve ERAS ilkeleri.',
+    keywords: ['uyanık kraniyotomi', 'kraniyotomi', 'awake craniotomy', 'beyin cerrahisi', 'nöroşirürji', 'elokent alan', 'gliom', 'skalp bloğu', 'deksmedetomidin', 'jaffe', 'eras', 'prospect', 'snacc'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',

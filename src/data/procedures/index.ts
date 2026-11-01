@@ -1,6 +1,7 @@
 import { ProcedureDefinition, SurgicalSpecialty, SurgicalSpecialtyMeta } from '../../types/procedures';
 import { laparoscopicCholecystectomy } from './laparoscopicCholecystectomy';
 import { openCholecystectomy } from './openCholecystectomy';
+import { awakeCraniotomy } from './awakeCraniotomy';
 
 /**
  * Cerrahi Branş Meta Verileri (Tüm Branşlar İçin Kategori Ağacı)
@@ -82,7 +83,8 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
  */
 export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   laparoscopicCholecystectomy,
-  openCholecystectomy
+  openCholecystectomy,
+  awakeCraniotomy
 ];
 
 /**
