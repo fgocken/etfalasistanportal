@@ -2,6 +2,8 @@ import { ProcedureDefinition, SurgicalSpecialty, SurgicalSpecialtyMeta } from '.
 import { laparoscopicCholecystectomy } from './laparoscopicCholecystectomy';
 import { openCholecystectomy } from './openCholecystectomy';
 import { awakeCraniotomy } from './awakeCraniotomy';
+import { gastroscopy } from './gastroscopy';
+import { colonoscopy } from './colonoscopy';
 
 /**
  * Cerrahi Branş Meta Verileri (Tüm Branşlar İçin Kategori Ağacı)
@@ -72,6 +74,12 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
     name: 'Göz Hastalıkları',
     shortName: 'Göz Cerrahisi',
     description: 'Katarakt (fakoemülsiyon), vitrektomi, glokom ve strabismus ameliyatları'
+  },
+  {
+    id: 'gastroenteroloji',
+    name: 'Gastroenteroloji',
+    shortName: 'Gastroenteroloji',
+    description: 'Tanısal ve girişimsel üst GİS endoskopi, kolonoskopi, polipektomi, ERCP ve EUS sedasyonu'
   }
 ];
 
@@ -84,7 +92,9 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
 export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   laparoscopicCholecystectomy,
   openCholecystectomy,
-  awakeCraniotomy
+  awakeCraniotomy,
+  gastroscopy,
+  colonoscopy
 ];
 
 /**

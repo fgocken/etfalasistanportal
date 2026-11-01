@@ -585,6 +585,26 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-gastroscopy',
+    title: 'Gastroskopi (ÖGD / Üst GİS Endoskopi Sedasyonu)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Gastroenteroloji',
+    description: 'Gastroskopide Propofol bazlı derin sedasyon, mikroakım EtCO2 kapnografi, sol lateral pozisyon, krikofarengeal geçiş, laringospazm ve aspirasyon yönetimi, ASGE/ASA kılavuzları.',
+    keywords: ['gastroskopi', 'ögd', 'özofagogastroduodenoskopi', 'üst gis', 'endoskopi', 'gastroenteroloji', 'propofol', 'sedasyon', 'nora', 'aspirasyon', 'jaffe', 'asge'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-colonoscopy',
+    title: 'Kolonoskopi (Alt GİS Endoskopi & Polipektomi Sedasyonu)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Gastroenteroloji',
+    description: 'Kolonoskopide Propofol bazlı sedasyon + Fentanil/Ketofol analjezisi, fleksura geçişleri ve mezenterik traksiyonda vagal stimülasyon/bradikardi yönetimi, medikal CO2 insüflasyonu.',
+    keywords: ['kolonoskopi', 'alt gis', 'polipektomi', 'kolon kanseri', 'gastroenteroloji', 'propofol', 'sedasyon', 'nora', 'fentanil', 'vagal bradikardi', 'jaffe', 'asge', 'esge'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',
