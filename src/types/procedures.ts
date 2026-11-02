@@ -50,62 +50,62 @@ export interface ProcedureDefinition {
   specialty: SurgicalSpecialty;
   specialtyName: string;
   
-  // 1) Prosedür ismi - tanımı - endikasyonları - tahmini ortalama prosedür süresi
+  // 1) Prosedür İsmi, Tanımı, Endikasyonları ve Tahmini Süresi
   description: string;
   indications: string[];
   averageDuration: string; // örn: "60 - 90 dk"
   categoryTag?: string; // örn: "Laparoskopik Cerrahi", "Açık Girişim", vb.
 
-  // 1.5) Beklenen Kanama ve Transfüzyon Profili (Tanım/Süre sonrasında, Anestezi Yönetimi öncesinde)
+  // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile?: BleedingProfile;
 
-  // 2) Olası anestezi yönetimi teknikleri
+  // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: string[];
     alternative?: string[];
     notes?: string;
   };
 
-  // 3) Pre-operatif hazırlığı
+  // 4) Pre-operatif Hazırlık
   preoperative: {
-    // 3a) Varsa prosedür spesifik dikkat edilmesi gereken konsültasyonları
+    // 4a) Prosedür Spesifik Dikkat Edilmesi Gereken Konsültasyonlar
     consultations?: string[];
-    // 3b) Varsa prosedür spesifik anamnez ve fizik muayenede dikkat edilmesi gerekenler
+    // 4b) Prosedür Spesifik Anamnez ve Fizik Muayenede Dikkat Edilecekler
     historyAndPhysical?: string[];
-    // 3c) Varsa prosedür spesifik kan ve lab sonuçlarında dikkat edilmesi gerekenler
+    // 4c) Prosedür Spesifik Kan ve Laboratuvar Sonuçlarında Dikkat Edilecekler
     laboratoryAndTests?: string[];
   };
 
-  // 4) İntra-operatif yönetim
+  // 5) İntra-operatif Yönetim
   intraoperative: {
-    // 4a) Varsa prosedür spesifik monitörizasyon
+    // 5a) Prosedür Spesifik Monitörizasyon
     monitoring: string[];
-    // 4b) Varsa prosedür spesifik gerekli vasküler erişimler
+    // 5b) Prosedür Spesifik Gerekli Vasküler Erişimler
     vascularAccess: string[];
-    // 4c) Hasta pozisyonu
+    // 5c) Hasta Pozisyonu & Fizyolojik Güvenlik Önlemleri
     patientPosition: string;
     patientPositionDetails?: string[];
-    // 4d) Prosedür bazlı anestezi yönetimi
+    // 5d) Prosedür Bazlı Anestezi Yönetimi (İndüksiyon, İdame, Nöromusküler Strateji)
     anesthesiaManagement: string[];
-    // 4e) Prosedür bazlı hava yolu yönetimi
+    // 5e) Prosedür Bazlı Hava Yolu Yönetimi
     airwayManagement: string[];
-    // 4f) Prosedür spesifik dikkat edilmesi gereken kritik karar noktaları ve dikkat edilmesi gereken cerrahi aşamaları
+    // 5f) Prosedür Spesifik Dikkat Edilmesi Gereken Kritik Karar Noktaları ve Cerrahi Aşamaları
     criticalSurgicalStages: string[];
-    // 4g) Uyandırmada (emergence) dikkat edilmesi gerekenler
+    // 5g) Uyandırmada (Emergence) Dikkat Edilmesi Gerekenler
     emergenceNotes: string[];
   };
 
-  // 5) Post-operatif yönetim dikkat edilmesi gerekenler
+  // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
-    // 5a) Ağrı yönetimi
+    // 6a) Ağrı Yönetimi & Multimodal Analjezi Stratejisi
     painManagement: string[];
-    // 5b) Varsa PROSPECT rehber önerileri
+    // 6b) Varsa PROSPECT Rehber Önerileri
     prospectRecommendations?: string[];
-    // 5c) Varsa ERAS rehberi önerileri
+    // 6c) Varsa ERAS Rehberi Önerileri
     erasRecommendations?: string[];
   };
 
-  // Kullanılabilecek kaynaklar
+  // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
     jaffeReference?: string; // Jaffe 5th ed.
     erasReference?: string;

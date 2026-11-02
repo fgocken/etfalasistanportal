@@ -202,10 +202,6 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
                   }`}>
                     {proc.shortCode || proc.specialtyName}
                   </span>
-                  <div className="flex items-center gap-1 text-[11px] font-mono text-amber-500 font-semibold">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>{proc.averageDuration}</span>
-                  </div>
                 </div>
 
                 <h3 className={`text-base font-bold transition-colors ${
@@ -219,6 +215,12 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
                 }`}>
                   {proc.description}
                 </p>
+
+                {/* Tahmini Süre: Kart üzerinde tanımından hemen sonra */}
+                <div className="flex items-center gap-1.5 text-[11px] font-medium text-amber-600 dark:text-amber-400 pt-0.5">
+                  <Clock className="w-3.5 h-3.5 shrink-0" />
+                  <span>Tahmini Ortalama Süre: <strong className="font-mono font-semibold">{proc.averageDuration}</strong></span>
+                </div>
               </div>
 
               <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">

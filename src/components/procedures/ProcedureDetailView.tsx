@@ -32,32 +32,32 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
   isDark,
   onBack
 }) => {
-  // Ana bölümlerin açılıp kapanabilir durumları (hepsi başlangıçta açık)
+  // Ana bölümlerin açılıp kapanabilir durumları (hepsi başlangıçta açık: 1'den 7'ye kadar)
   const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>({
     sec1: true,
-    secBleed: true,
     sec2: true,
     sec3: true,
     sec4: true,
     sec5: true,
-    secRef: true
+    sec6: true,
+    sec7: true
   });
 
-  // Alt akordeonların durumları (3a-3c, 4a-4g, 5a-5c)
+  // Alt akordeonların durumları (4a-4c, 5a-5g, 6a-6c)
   const [subOpen, setSubOpen] = useState<Record<string, boolean>>({
-    '3a': true,
-    '3b': true,
-    '3c': true,
     '4a': true,
     '4b': true,
     '4c': true,
-    '4d': true,
-    '4e': true,
-    '4f': true,
-    '4g': true,
     '5a': true,
     '5b': true,
-    '5c': true
+    '5c': true,
+    '5d': true,
+    '5e': true,
+    '5f': true,
+    '5g': true,
+    '6a': true,
+    '6b': true,
+    '6c': true
   });
 
   const toggleSection = (key: string) => {
@@ -69,20 +69,20 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
   };
 
   const expandAll = () => {
-    setSectionOpen({ sec1: true, secBleed: true, sec2: true, sec3: true, sec4: true, sec5: true, secRef: true });
+    setSectionOpen({ sec1: true, sec2: true, sec3: true, sec4: true, sec5: true, sec6: true, sec7: true });
     setSubOpen({
-      '3a': true, '3b': true, '3c': true,
-      '4a': true, '4b': true, '4c': true, '4d': true, '4e': true, '4f': true, '4g': true,
-      '5a': true, '5b': true, '5c': true
+      '4a': true, '4b': true, '4c': true,
+      '5a': true, '5b': true, '5c': true, '5d': true, '5e': true, '5f': true, '5g': true,
+      '6a': true, '6b': true, '6c': true
     });
   };
 
   const collapseAll = () => {
-    setSectionOpen({ sec1: false, secBleed: false, sec2: false, sec3: false, sec4: false, sec5: false, secRef: false });
+    setSectionOpen({ sec1: false, sec2: false, sec3: false, sec4: false, sec5: false, sec6: false, sec7: false });
     setSubOpen({
-      '3a': false, '3b': false, '3c': false,
-      '4a': false, '4b': false, '4c': false, '4d': false, '4e': false, '4f': false, '4g': false,
-      '5a': false, '5b': false, '5c': false
+      '4a': false, '4b': false, '4c': false,
+      '5a': false, '5b': false, '5c': false, '5d': false, '5e': false, '5f': false, '5g': false,
+      '6a': false, '6b': false, '6c': false
     });
   };
 
@@ -138,48 +138,25 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
           ? 'bg-slate-900/90 border-slate-800 shadow-md' 
           : 'bg-white border-slate-200 shadow-xs'
       }`}>
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
-                isDark ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30' : 'bg-teal-50 text-teal-800 border border-teal-200'
-              }`}>
-                {procedure.shortCode || 'PROSEDÜR'}
-              </span>
-              <span className="text-xs text-slate-400 font-medium">Sistematik Prosedür Bazlı Anestezi Yönetimi</span>
-            </div>
-            <h1 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${
-              isDark ? 'text-slate-100' : 'text-slate-900'
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
+              isDark ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30' : 'bg-teal-50 text-teal-800 border border-teal-200'
             }`}>
-              {procedure.name}
-            </h1>
-            <p className={`text-sm leading-relaxed max-w-3xl ${
-              isDark ? 'text-slate-300' : 'text-slate-600'
-            }`}>
-              {procedure.description}
-            </p>
+              {procedure.shortCode || 'PROSEDÜR'}
+            </span>
+            <span className="text-xs text-slate-400 font-medium">Sistematik Prosedür Bazlı Anestezi Yönetimi</span>
           </div>
-
-          {/* Average Duration Box */}
-          <div className={`shrink-0 p-3.5 rounded-xl border flex items-center gap-3 sm:min-w-[200px] ${
-            isDark 
-              ? 'bg-slate-950/70 border-slate-800/80 text-slate-200' 
-              : 'bg-slate-50 border-slate-200/80 text-slate-800'
+          <h1 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${
+            isDark ? 'text-slate-100' : 'text-slate-900'
           }`}>
-            <div className={`p-2.5 rounded-lg shrink-0 ${
-              isDark ? 'bg-amber-500/15 text-amber-400' : 'bg-amber-100 text-amber-800'
-            }`}>
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                Tahmini Ortalama Süre
-              </div>
-              <div className="text-xs sm:text-sm font-bold font-mono text-amber-600 dark:text-amber-300">
-                {procedure.averageDuration}
-              </div>
-            </div>
-          </div>
+            {procedure.name}
+          </h1>
+          <p className={`text-sm leading-relaxed max-w-3xl ${
+            isDark ? 'text-slate-300' : 'text-slate-600'
+          }`}>
+            {procedure.description}
+          </p>
         </div>
 
         {/* Hızlı Atla & Genişlet/Daralt Araç Çubuğu */}
@@ -195,46 +172,46 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => scrollToSection('secBleed')}
+              onClick={() => scrollToSection('sec2')}
               className="px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 font-semibold whitespace-nowrap cursor-pointer transition-colors border border-rose-200/50 dark:border-rose-800/50 flex items-center gap-1"
             >
               <Droplet className="w-3 h-3 text-rose-500" />
-              <span>Kanama Profili</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('sec2')}
-              className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap cursor-pointer transition-colors"
-            >
-              2. Teknikler
+              <span>2. Kanama Profili</span>
             </button>
             <button
               type="button"
               onClick={() => scrollToSection('sec3')}
               className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap cursor-pointer transition-colors"
             >
-              3. Pre-op
+              3. Teknikler
             </button>
             <button
               type="button"
               onClick={() => scrollToSection('sec4')}
               className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap cursor-pointer transition-colors"
             >
-              4. İntra-op
+              4. Pre-op
             </button>
             <button
               type="button"
               onClick={() => scrollToSection('sec5')}
               className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap cursor-pointer transition-colors"
             >
-              5. Post-op
+              5. İntra-op
             </button>
             <button
               type="button"
-              onClick={() => scrollToSection('secRef')}
+              onClick={() => scrollToSection('sec6')}
               className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap cursor-pointer transition-colors"
             >
-              Kaynaklar
+              6. Post-op
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec7')}
+              className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap cursor-pointer transition-colors"
+            >
+              7. Kaynaklar
             </button>
           </div>
 
@@ -332,25 +309,26 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
         </div>
       </section>
 
-      {/* BEKLENEN KANAMA VE TRANSFÜZYON PROFİLİ */}
+      {/* BÖLÜM 2: BEKLENEN KANAMA VE TRANSFÜZYON PROFİLİ */}
       {procedure.bleedingProfile && (
-        <section id="secBleed" className="scroll-mt-6">
+        <section id="sec2" className="scroll-mt-6">
           <div className={`rounded-xl border transition-colors overflow-hidden ${
             isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
           }`}>
             <button
               type="button"
-              onClick={() => toggleSection('secBleed')}
+              onClick={() => toggleSection('sec2')}
               className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
             >
               <div className="flex items-center gap-2.5">
                 <span className="w-7 h-7 rounded-lg bg-rose-500/15 text-rose-500 flex items-center justify-center text-xs font-mono font-bold">
-                  <Droplet className="w-4 h-4 text-rose-500" />
+                  2
                 </span>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                      Beklenen Kanama ve Transfüzyon Profili
+                    <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                      <Droplet className="w-4 h-4 text-rose-500 inline-block" />
+                      <span>2) Beklenen Kanama ve Transfüzyon Profili</span>
                     </h2>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                       procedure.bleedingProfile.riskLevel === 'minimal'
@@ -367,10 +345,10 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                   <p className="text-[11px] text-slate-400">Tahmini ortalama kan kaybı, kan ürünü & Cross-Match hazırlığı ve hemostaz yönetimi</p>
                 </div>
               </div>
-              {sectionOpen.secBleed ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+              {sectionOpen.sec2 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
             </button>
 
-            {sectionOpen.secBleed && (
+            {sectionOpen.sec2 && (
               <div className="p-4 pt-0 space-y-4 border-t border-slate-100 dark:border-slate-800/70 mt-1">
                 {/* 4 Temel Metrik Kartı */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -458,31 +436,31 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
         </section>
       )}
 
-      {/* BÖLÜM 2: OLASI ANESTEZİ YÖNETİMİ TEKNİKLERİ */}
-      <section id="sec2" className="scroll-mt-6">
+      {/* BÖLÜM 3: OLASI ANESTEZİ YÖNETİMİ TEKNİKLERİ */}
+      <section id="sec3" className="scroll-mt-6">
         <div className={`rounded-xl border transition-colors overflow-hidden ${
           isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}>
           <button
             type="button"
-            onClick={() => toggleSection('sec2')}
+            onClick={() => toggleSection('sec3')}
             className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
           >
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center text-xs font-mono font-bold">
-                2
+                3
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  2) Olası Anestezi Yönetimi Teknikleri
+                  3) Olası Anestezi Yönetimi Teknikleri
                 </h2>
                 <p className="text-[11px] text-slate-400">Birincil altın standart ve seçilmiş alternatif yaklaşımlar</p>
               </div>
             </div>
-            {sectionOpen.sec2 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+            {sectionOpen.sec3 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
           </button>
 
-          {sectionOpen.sec2 && (
+          {sectionOpen.sec3 && (
             <div className="p-4 pt-0 space-y-4 border-t border-slate-100 dark:border-slate-800/70 mt-1">
               {/* Birincil Teknikler */}
               <div className="space-y-2">
@@ -545,50 +523,50 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
         </div>
       </section>
 
-      {/* BÖLÜM 3: PRE-OPERATİF HAZIRLIK (3a, 3b, 3c) */}
-      <section id="sec3" className="scroll-mt-6">
+      {/* BÖLÜM 4: PRE-OPERATİF HAZIRLIK (4a, 4b, 4c) */}
+      <section id="sec4" className="scroll-mt-6">
         <div className={`rounded-xl border transition-colors overflow-hidden ${
           isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}>
           <button
             type="button"
-            onClick={() => toggleSection('sec3')}
+            onClick={() => toggleSection('sec4')}
             className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
           >
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center text-xs font-mono font-bold">
-                3
+                4
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  3) Pre-operatif Hazırlık
+                  4) Pre-operatif Hazırlık
                 </h2>
-                <p className="text-[11px] text-slate-400">3a Konsültasyonlar, 3b Anamnez/Fizik Muayene, 3c Kan ve Laboratuvar</p>
+                <p className="text-[11px] text-slate-400">4a Konsültasyonlar, 4b Anamnez/Fizik Muayene, 4c Kan ve Laboratuvar</p>
               </div>
             </div>
-            {sectionOpen.sec3 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+            {sectionOpen.sec4 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
           </button>
 
-          {sectionOpen.sec3 && (
+          {sectionOpen.sec4 && (
             <div className="p-4 pt-0 space-y-3 border-t border-slate-100 dark:border-slate-800/70 mt-1">
-              {/* 3a) Konsültasyonlar */}
+              {/* 4a) Konsültasyonlar */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('3a')}
+                  onClick={() => toggleSub('4a')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-indigo-500">3a)</span>
+                    <span className="font-mono font-bold text-xs text-indigo-500">4a)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Spesifik Dikkat Edilmesi Gereken Konsültasyonlar
                     </span>
                   </div>
-                  {subOpen['3a'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['4a'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['3a'] && (
+                {subOpen['4a'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.preoperative.consultations && procedure.preoperative.consultations.length > 0 ? (
                       procedure.preoperative.consultations.map((item, idx) => (
@@ -609,24 +587,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 3b) Anamnez ve Fizik Muayene */}
+              {/* 4b) Anamnez ve Fizik Muayene */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('3b')}
+                  onClick={() => toggleSub('4b')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-teal-500">3b)</span>
+                    <span className="font-mono font-bold text-xs text-teal-500">4b)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Spesifik Anamnez ve Fizik Muayenede Dikkat Edilecekler
                     </span>
                   </div>
-                  {subOpen['3b'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['4b'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['3b'] && (
+                {subOpen['4b'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.preoperative.historyAndPhysical && procedure.preoperative.historyAndPhysical.length > 0 ? (
                       procedure.preoperative.historyAndPhysical.map((item, idx) => (
@@ -647,24 +625,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 3c) Kan ve Laboratuvar */}
+              {/* 4c) Kan ve Laboratuvar */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('3c')}
+                  onClick={() => toggleSub('4c')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-rose-500">3c)</span>
+                    <span className="font-mono font-bold text-xs text-rose-500">4c)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Spesifik Kan ve Laboratuvar Sonuçlarında Dikkat Edilecekler
                     </span>
                   </div>
-                  {subOpen['3c'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['4c'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['3c'] && (
+                {subOpen['4c'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.preoperative.laboratoryAndTests && procedure.preoperative.laboratoryAndTests.length > 0 ? (
                       procedure.preoperative.laboratoryAndTests.map((item, idx) => (
@@ -689,50 +667,50 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
         </div>
       </section>
 
-      {/* BÖLÜM 4: İNTRA-OPERATİF YÖNETİM (4a - 4g) */}
-      <section id="sec4" className="scroll-mt-6">
+      {/* BÖLÜM 5: İNTRA-OPERATİF YÖNETİM (5a - 5g) */}
+      <section id="sec5" className="scroll-mt-6">
         <div className={`rounded-xl border transition-colors overflow-hidden ${
           isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}>
           <button
             type="button"
-            onClick={() => toggleSection('sec4')}
+            onClick={() => toggleSection('sec5')}
             className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
           >
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center text-xs font-mono font-bold">
-                4
+                5
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  4) İntra-operatif Yönetim
+                  5) İntra-operatif Yönetim
                 </h2>
-                <p className="text-[11px] text-slate-400">4a Monitörizasyon, 4b Vasküler, 4c Pozisyon, 4d Anestezi, 4e Havayolu, 4f Kritik Anlar, 4g Uyandırma</p>
+                <p className="text-[11px] text-slate-400">5a Monitörizasyon, 5b Vasküler, 5c Pozisyon, 5d Anestezi, 5e Havayolu, 5f Kritik Anlar, 5g Uyandırma</p>
               </div>
             </div>
-            {sectionOpen.sec4 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+            {sectionOpen.sec5 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
           </button>
 
-          {sectionOpen.sec4 && (
+          {sectionOpen.sec5 && (
             <div className="p-4 pt-0 space-y-3 border-t border-slate-100 dark:border-slate-800/70 mt-1">
-              {/* 4a) Monitörizasyon */}
+              {/* 5a) Monitörizasyon */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('4a')}
+                  onClick={() => toggleSub('5a')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-teal-500">4a)</span>
+                    <span className="font-mono font-bold text-xs text-teal-500">5a)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Spesifik Monitörizasyon
                     </span>
                   </div>
-                  {subOpen['4a'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['5a'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['4a'] && (
+                {subOpen['5a'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.intraoperative.monitoring.map((m, idx) => (
                       <div 
@@ -749,24 +727,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 4b) Vasküler Erişimler */}
+              {/* 5b) Vasküler Erişimler */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('4b')}
+                  onClick={() => toggleSub('5b')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-cyan-500">4b)</span>
+                    <span className="font-mono font-bold text-xs text-cyan-500">5b)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Spesifik Gerekli Vasküler Erişimler
                     </span>
                   </div>
-                  {subOpen['4b'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['5b'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['4b'] && (
+                {subOpen['5b'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.intraoperative.vascularAccess.map((v, idx) => (
                       <div 
@@ -783,24 +761,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 4c) Hasta Pozisyonu */}
+              {/* 5c) Hasta Pozisyonu */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('4c')}
+                  onClick={() => toggleSub('5c')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-amber-500">4c)</span>
+                    <span className="font-mono font-bold text-xs text-amber-500">5c)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Hasta Pozisyonu & Fizyolojik Güvenlik Önlemleri
                     </span>
                   </div>
-                  {subOpen['4c'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['5c'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['4c'] && (
+                {subOpen['5c'] && (
                   <div className="p-3 pt-0 space-y-3 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     <div className={`p-3 rounded-lg text-xs font-bold ${
                       isDark ? 'bg-amber-500/15 text-amber-200 border border-amber-500/30' : 'bg-amber-100 text-amber-900 border border-amber-200'
@@ -821,24 +799,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 4d) Prosedür Bazlı Anestezi Yönetimi */}
+              {/* 5d) Prosedür Bazlı Anestezi Yönetimi */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('4d')}
+                  onClick={() => toggleSub('5d')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-blue-500">4d)</span>
+                    <span className="font-mono font-bold text-xs text-blue-500">5d)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Bazlı Anestezi Yönetimi (İndüksiyon, İdame, Nöromusküler Strateji)
                     </span>
                   </div>
-                  {subOpen['4d'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['5d'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['4d'] && (
+                {subOpen['5d'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.intraoperative.anesthesiaManagement.map((am, idx) => (
                       <div 
@@ -855,24 +833,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 4e) Hava Yolu Yönetimi */}
+              {/* 5e) Hava Yolu Yönetimi */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('4e')}
+                  onClick={() => toggleSub('5e')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-teal-500">4e)</span>
+                    <span className="font-mono font-bold text-xs text-teal-500">5e)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Bazlı Hava Yolu Yönetimi
                     </span>
                   </div>
-                  {subOpen['4e'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['5e'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['4e'] && (
+                {subOpen['5e'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.intraoperative.airwayManagement.map((aw, idx) => (
                       <div 
@@ -889,24 +867,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 4f) Kritik Karar Noktaları ve Cerrahi Aşamalar */}
+              {/* 5f) Kritik Karar Noktaları ve Cerrahi Aşamalar */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('4f')}
+                  onClick={() => toggleSub('5f')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-rose-500">4f)</span>
+                    <span className="font-mono font-bold text-xs text-rose-500">5f)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Prosedür Spesifik Dikkat Edilmesi Gereken Kritik Karar Noktaları ve Cerrahi Aşamaları
                     </span>
                   </div>
-                  {subOpen['4f'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['5f'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['4f'] && (
+                {subOpen['5f'] && (
                   <div className="p-3 pt-0 space-y-2.5 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.intraoperative.criticalSurgicalStages.map((cs, idx) => (
                       <div 
@@ -925,24 +903,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 4g) Uyandırmada Dikkat Edilecekler */}
+              {/* 5g) Uyandırmada Dikkat Edilecekler */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('4g')}
+                  onClick={() => toggleSub('5g')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-emerald-500">4g)</span>
+                    <span className="font-mono font-bold text-xs text-emerald-500">5g)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Uyandırmada (Emergence) Dikkat Edilmesi Gerekenler
                     </span>
                   </div>
-                  {subOpen['4g'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['5g'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['4g'] && (
+                {subOpen['5g'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.intraoperative.emergenceNotes.map((em, idx) => (
                       <div 
@@ -963,50 +941,50 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
         </div>
       </section>
 
-      {/* BÖLÜM 5: POST-OPERATİF YÖNETİM (5a, 5b, 5c) */}
-      <section id="sec5" className="scroll-mt-6">
+      {/* BÖLÜM 6: POST-OPERATİF YÖNETİM (6a, 6b, 6c) */}
+      <section id="sec6" className="scroll-mt-6">
         <div className={`rounded-xl border transition-colors overflow-hidden ${
           isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}>
           <button
             type="button"
-            onClick={() => toggleSection('sec5')}
+            onClick={() => toggleSection('sec6')}
             className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
           >
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center text-xs font-mono font-bold">
-                5
+                6
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  5) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
+                  6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
                 </h2>
-                <p className="text-[11px] text-slate-400">5a Ağrı Yönetimi, 5b PROSPECT Rehber Önerileri, 5c ERAS Rehberi Önerileri</p>
+                <p className="text-[11px] text-slate-400">6a Ağrı Yönetimi, 6b PROSPECT Rehber Önerileri, 6c ERAS Rehberi Önerileri</p>
               </div>
             </div>
-            {sectionOpen.sec5 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+            {sectionOpen.sec6 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
           </button>
 
-          {sectionOpen.sec5 && (
+          {sectionOpen.sec6 && (
             <div className="p-4 pt-0 space-y-3 border-t border-slate-100 dark:border-slate-800/70 mt-1">
-              {/* 5a) Ağrı Yönetimi */}
+              {/* 6a) Ağrı Yönetimi */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('5a')}
+                  onClick={() => toggleSub('6a')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-indigo-500">5a)</span>
+                    <span className="font-mono font-bold text-xs text-indigo-500">6a)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Ağrı Yönetimi & Multimodal Analjezi Stratejisi
                     </span>
                   </div>
-                  {subOpen['5a'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['6a'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['5a'] && (
+                {subOpen['6a'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.postoperative.painManagement.map((pm, idx) => (
                       <div 
@@ -1023,24 +1001,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 5b) PROSPECT Rehber Önerileri */}
+              {/* 6b) PROSPECT Rehber Önerileri */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('5b')}
+                  onClick={() => toggleSub('6b')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-teal-500">5b)</span>
+                    <span className="font-mono font-bold text-xs text-teal-500">6b)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Varsa PROSPECT Rehber Önerileri
                     </span>
                   </div>
-                  {subOpen['5b'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['6b'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['5b'] && (
+                {subOpen['6b'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.postoperative.prospectRecommendations && procedure.postoperative.prospectRecommendations.length > 0 ? (
                       procedure.postoperative.prospectRecommendations.map((pr, idx) => (
@@ -1062,24 +1040,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 )}
               </div>
 
-              {/* 5c) ERAS Rehberi Önerileri */}
+              {/* 6c) ERAS Rehberi Önerileri */}
               <div className={`rounded-lg border overflow-hidden ${
                 isDark ? 'bg-slate-950/50 border-slate-800/80' : 'bg-slate-50 border-slate-200'
               }`}>
                 <button
                   type="button"
-                  onClick={() => toggleSub('5c')}
+                  onClick={() => toggleSub('6c')}
                   className="w-full p-3 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-blue-500">5c)</span>
+                    <span className="font-mono font-bold text-xs text-blue-500">6c)</span>
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                       Varsa ERAS Rehberi Önerileri
                     </span>
                   </div>
-                  {subOpen['5c'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {subOpen['6c'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                 </button>
-                {subOpen['5c'] && (
+                {subOpen['6c'] && (
                   <div className="p-3 pt-0 space-y-2 border-t border-slate-200/60 dark:border-slate-800/60 mt-1">
                     {procedure.postoperative.erasRecommendations && procedure.postoperative.erasRecommendations.length > 0 ? (
                       procedure.postoperative.erasRecommendations.map((er, idx) => (
@@ -1106,32 +1084,32 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
       </section>
 
       {/* =========================================================================
-          EN SONDA YER ALAN KULLANILAN KAYNAKLAR BÖLÜMÜ
+          BÖLÜM 7: KULLANILAN KAYNAKLAR VE LİTERATÜR REFERANSLARI
          ========================================================================= */}
-      <section id="secRef" className="scroll-mt-6">
+      <section id="sec7" className="scroll-mt-6">
         <div className={`rounded-xl border transition-colors overflow-hidden ${
           isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-300 shadow-2xs'
         }`}>
           <button
             type="button"
-            onClick={() => toggleSection('secRef')}
+            onClick={() => toggleSection('sec7')}
             className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-900/50 transition-colors"
           >
             <div className="flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-lg bg-teal-500/15 text-teal-400 flex items-center justify-center text-xs font-mono font-bold">
-                <BookOpen className="w-4 h-4" />
+                7
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  Kullanılan Kaynaklar ve Literatür Referansları
+                  7) Kullanılan Kaynaklar ve Literatür Referansları
                 </h2>
                 <p className="text-[11px] text-slate-400">Öncelikli rehberler (Jaffe 5th ed, ERAS, PROSPECT) ve ek kaynaklar</p>
               </div>
             </div>
-            {sectionOpen.secRef ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+            {sectionOpen.sec7 ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
           </button>
 
-          {sectionOpen.secRef && (
+          {sectionOpen.sec7 && (
             <div className="p-4 pt-0 space-y-3 border-t border-slate-200 dark:border-slate-800/80 mt-1 text-xs">
               <div className="space-y-2">
                 {procedure.references.jaffeReference && (
@@ -1139,7 +1117,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                     isDark ? 'bg-slate-900/90 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'
                   }`}>
                     <strong className="text-teal-600 dark:text-teal-400 block text-[11px] uppercase tracking-wider mb-0.5">
-                      1) Birincil Kaynak (Jaffe Manual):
+                      7a) Birincil Kaynak (Jaffe Manual):
                     </strong>
                     <span>{procedure.references.jaffeReference}</span>
                   </div>
@@ -1150,7 +1128,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                     isDark ? 'bg-slate-900/90 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'
                   }`}>
                     <strong className="text-blue-600 dark:text-blue-400 block text-[11px] uppercase tracking-wider mb-0.5">
-                      2) Varsa ERAS Protokol Önerileri:
+                      7b) Varsa ERAS Protokol Önerileri:
                     </strong>
                     <span>{procedure.references.erasReference}</span>
                   </div>
@@ -1161,7 +1139,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                     isDark ? 'bg-slate-900/90 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'
                   }`}>
                     <strong className="text-teal-600 dark:text-teal-400 block text-[11px] uppercase tracking-wider mb-0.5">
-                      3) Varsa PROSPECT Rehber Önerileri:
+                      7c) Varsa PROSPECT Rehber Önerileri:
                     </strong>
                     <span>{procedure.references.prospectReference}</span>
                   </div>
@@ -1172,7 +1150,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                     isDark ? 'bg-slate-900/90 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-800'
                   }`}>
                     <strong className="text-slate-500 dark:text-slate-400 block text-[11px] uppercase tracking-wider mb-1">
-                      4) Diğer Kullanılan Kaynaklar:
+                      7d) Diğer Kullanılan Kaynaklar:
                     </strong>
                     <ul className="space-y-1 list-disc list-inside">
                       {procedure.references.otherReferences.map((ref, idx) => (
