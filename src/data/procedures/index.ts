@@ -9,6 +9,23 @@ import { eus } from './eus';
 import { ekt } from './ekt';
 import { breastBiopsy } from './breastBiopsy';
 import { breastConservingSurgery } from './breastConservingSurgery';
+import { craniotomyAneurysm } from './craniotomyAneurysm';
+import { craniotomyEmbolectomy } from './craniotomyEmbolectomy';
+
+export {
+  laparoscopicCholecystectomy,
+  openCholecystectomy,
+  awakeCraniotomy,
+  gastroscopy,
+  colonoscopy,
+  ercp,
+  eus,
+  ekt,
+  breastBiopsy,
+  breastConservingSurgery,
+  craniotomyAneurysm,
+  craniotomyEmbolectomy
+};
 
 /**
  * Cerrahi Branş Meta Verileri (Tüm Branşlar İçin Kategori Ağacı)
@@ -110,7 +127,9 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   eus,
   ekt,
   breastBiopsy,
-  breastConservingSurgery
+  breastConservingSurgery,
+  craniotomyAneurysm,
+  craniotomyEmbolectomy
 ];
 
 /**

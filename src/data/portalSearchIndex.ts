@@ -585,6 +585,26 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-craniotomy-aneurysm',
+    title: 'Kraniyotomi: İntrakraniyel Anevrizma Kliplenmesi (SAK Anestezi Yönetimi)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin Cerrahi',
+    description: 'Serebral anevrizma kliplenmesinde TIVA/GETA teknikleri, transmural basınç dengesi, intraoperatif rüptür ve adenozin asistol protokolü, geçici klipleme ve burst süpresyon, AHA/ASA & SNACC rehberleri.',
+    keywords: ['kraniyotomi anevrizma', 'anevrizma kliplenmesi', 'intrakraniyel anevrizma', 'serebral anevrizma', 'sak', 'subaraknoid kanama', 'beyin cerrahisi', 'nöroşirürji', 'adenozin asistoli', 'geçici klip', 'burst süpresyon', 'tiva', 'mannitol', 'jaffe', 'aha asa', 'snacc'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-craniotomy-embolectomy',
+    title: 'Kraniyotomi: Serebral Embolektomi (Akut İskemik İnme Cerrahisi)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin Cerrahi',
+    description: 'Akut iskemik inmede cerrahi trombektomi/embolektomi, pre-rekanalizasyon MAP ≥85-90 mmHg, post-rekanalizasyon reperfüzyon kanaması koruması (MAP <85 mmHg), IV tPA/heparin reversal ve AHA/ASA & SNACC ilkeleri.',
+    keywords: ['kraniyotomi embolektomi', 'serebral embolektomi', 'inme cerrahisi', 'akut iskemik inme', 'trombektomi', 'mca embolektomi', 'büyük damar oklüzyonu', 'lvo', 'beyin cerrahisi', 'nöroşirürji', 'tpa reversal', 'kriyopresipitat', 'penumbra', 'rekanalizasyon', 'reperfüzyon kanaması', 'jaffe', 'aha asa', 'snacc', 'eso'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
     id: 'proc-gastroscopy',
     title: 'Gastroskopi (ÖGD / Üst GİS Endoskopi Sedasyonu)',
     category: 'Kılavuzlar & Protokoller',
