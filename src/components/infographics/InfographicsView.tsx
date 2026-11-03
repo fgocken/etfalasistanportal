@@ -20,6 +20,7 @@ import { PADSSInfographic } from './PADSSInfographic';
 import { AdultFastingInfographic } from './AdultFastingInfographic';
 import { PediatricFastingInfographic } from './PediatricFastingInfographic';
 import { RSIvsElectiveInfographic } from './RSIvsElectiveInfographic';
+import { VasoactiveDecisionMatrixInfographic } from './VasoactiveDecisionMatrixInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -42,6 +43,23 @@ export interface InfographicCardItem {
 }
 
 const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
+  {
+    id: 'vasoactive-decision-matrix',
+    title: 'Vazoaktif ve İnotropik Ajanlar Klinik Karar Matriksi',
+    source: 'Klinik Karar Matriksi & Çoklu Yolak Modeli',
+    sourceBadge: 'Karar Matriksi',
+    category: 'Vazopresör, İnotrop & Şok',
+    shortDesc: 'Doz-yanıt reseptör kayması (biphasic), ikili kombinasyon sinerjileri (Noradrenalin+Vazopressin, Vazopressin+Milrinon vb.), 5 kritik klinik şok vaka simülatörü ve kanıta dayalı referanslar.',
+    pillsHeader: 'Klinik Karar Modülleri:',
+    publisher: 'Klinik Karar Algoritması (SSC / VASST / SOAP II)',
+    riskPills: [
+      { label: 'Doz Kayması', rate: 'Dinamik', colorClass: 'text-indigo-600 dark:text-indigo-400', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30' },
+      { label: 'Kombinasyon', rate: 'Multi-Ajan', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Simülatör', rate: '5 Senaryo', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Kanıt Düzeyi', rate: 'SSC / ESC', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+    ],
+    accentColor: 'indigo'
+  },
   {
     id: 'rsi-vs-elective',
     title: 'Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon',
@@ -391,6 +409,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
             </div>
           </div>
         </div>
+      )}
+
+      {/* VIEW: Vasoactive and Inotropic Agents Decision Matrix Infographic */}
+      {activeInfographicId === 'vasoactive-decision-matrix' && (
+        <VasoactiveDecisionMatrixInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2A: RSI vs Elective Intubation Infographic */}

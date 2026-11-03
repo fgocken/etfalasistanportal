@@ -139,7 +139,32 @@ app.get('/api/roster', (req, res) => {
 
 app.post('/api/roster', (req, res) => {
   try {
-    const roster = req.body;
+    const payload = req.body;
+    if (!payload) {
+      return res.status(400).json({ success: false, error: 'Geçersiz nöbet takvimi verisi' });
+    }
+
+    // Support batch syncing if payload contains rosters object
+    if (payload.rosters && typeof payload.rosters === 'object') {
+      const rosters = readRosters();
+      for (const key of Object.keys(payload.rosters)) {
+        const item = payload.rosters[key];
+        if (item && item.monthKey && item.days) {
+          rosters[key] = sanitizeRoster(item);
+        }
+      }
+      const saved = saveRosters(rosters);
+      if (!saved) {
+        return res.status(500).json({ success: false, error: 'Sunucuya kayıt yazılamadı' });
+      }
+      return res.json({
+        success: true,
+        monthKeys: Object.keys(rosters).sort(),
+        rosters
+      });
+    }
+
+    const roster = payload;
     if (!roster || !roster.monthKey || !roster.days) {
       return res.status(400).json({ success: false, error: 'Geçersiz nöbet takvimi verisi' });
     }
@@ -153,14 +178,54 @@ app.post('/api/roster', (req, res) => {
       return res.status(500).json({ success: false, error: 'Sunucuya kayıt yazılamadı' });
     }
 
+    console.log(`[Roster API] Successfully saved month ${sanitized.monthKey} to server data.`);
+
     res.json({
       success: true,
       monthKey: roster.monthKey,
       monthKeys: Object.keys(rosters).sort(),
-      roster
+      roster: sanitized
     });
   } catch (err: any) {
+    console.error('[Roster API Error]', err);
     res.status(500).json({ success: false, error: err?.message || 'Bilinmeyen hata' });
+  }
+});
+
+app.post('/api/roster/sync', (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload || !payload.rosters || typeof payload.rosters !== 'object') {
+      return res.status(400).json({ success: false, error: 'Eşitleme için geçerli rosters nesnesi gereklidir.' });
+    }
+
+    const rosters = readRosters();
+    let syncedCount = 0;
+
+    for (const key of Object.keys(payload.rosters)) {
+      const item = payload.rosters[key];
+      if (item && item.monthKey && item.days && Object.keys(item.days).length > 0) {
+        rosters[key] = sanitizeRoster(item);
+        syncedCount++;
+      }
+    }
+
+    const saved = saveRosters(rosters);
+    if (!saved) {
+      return res.status(500).json({ success: false, error: 'Sunucuya kayıt yazılamadı' });
+    }
+
+    console.log(`[Roster Sync] Successfully synced ${syncedCount} rosters from client.`);
+
+    res.json({
+      success: true,
+      syncedCount,
+      monthKeys: Object.keys(rosters).sort(),
+      rosters
+    });
+  } catch (err: any) {
+    console.error('[Roster Sync Error]', err);
+    res.status(500).json({ success: false, error: err?.message || 'Eşitleme sırasında hata oluştu' });
   }
 });
 

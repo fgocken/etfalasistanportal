@@ -1,6 +1,6 @@
 {
-  "summary":  "Kullanıcı geri bildirimi doğrultusunda revize edilen uygulama planı: Prosedürler otomatik toplu eklenmeyecek, altyapı ve arayüz şablonu hazırlandıktan sonra her cerrahi prosedür kullanıcı ile sohbet üzerinden tek tek, kontrol edilerek ve doğrulanarak sisteme dahil edilecektir.",
-  "updatedAt":  "2026-11-01T17:44:07.687553344Z",
-  "requestFeedback":  true,
-  "userFacing":  true
+  "summary": "İnfografik modülüne eklenecek 'Vazoaktif ve İnotropik Ajanlar Klinik Kılavuzu' için interaktif tablo ve fonksiyonel sekmeli matris mimarisini, veri modelini ve bileşen entegrasyonunu içeren uygulama planı.",
+  "updatedAt": "2026-11-03T09:22:04.264211348Z",
+  "requestFeedback": true,
+  "userFacing": true
 }

@@ -586,6 +586,13 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const handleSelectSearchResult = (item: PortalSearchItem) => {
     if (item.tabId === 'disclaimer') {
       onOpenDisclaimer();
+    } else if (item.tabId === 'infographics') {
+      if (item.id.startsWith('info-')) {
+        const infoId = item.id.replace('info-', '');
+        updateHashRoute('infografik', infoId);
+      }
+      handleSelectTab('infographics');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       handleSelectTab(item.tabId);
       window.scrollTo({ top: 0, behavior: 'smooth' });

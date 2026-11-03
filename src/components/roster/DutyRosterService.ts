@@ -178,8 +178,33 @@ export function saveRosterRegistry(registry: RosterRegistry): void {
   }
 }
 
+export interface SyncStatus {
+  inSync: boolean;
+  message: string;
+  unsyncedKeys: string[];
+}
+
+let currentSyncStatus: SyncStatus = {
+  inSync: true,
+  message: 'Sunucuyla eşitlendi',
+  unsyncedKeys: []
+};
+
+export function getLastSyncStatus(): SyncStatus {
+  return currentSyncStatus;
+}
+
+export function setLastSyncStatus(status: SyncStatus): void {
+  currentSyncStatus = status;
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('etfal-sync-status-changed', { detail: status }));
+  }
+}
+
 /**
- * Fetches persisted rosters from server API (/api/roster) and merges with local storage
+ * Fetches persisted rosters from server API (/api/roster) and merges with local storage.
+ * AUTO-SYNC: If the current device (e.g. user's mobile phone) possesses months (such as November)
+ * that the server does not have, it automatically uploads them to the server so other computers can view them!
  */
 export async function fetchServerRosters(): Promise<RosterRegistry> {
   const localRegistry = getRosterRegistry();
@@ -188,7 +213,52 @@ export async function fetchServerRosters(): Promise<RosterRegistry> {
     if (res.ok) {
       const data = await res.json();
       if (data && data.rosters && typeof data.rosters === 'object') {
-        const rawMerged: RosterRegistry = { ...localRegistry, ...data.rosters };
+        const serverRosters = data.rosters;
+        
+        // Detect if this local device has any months with real duty data that the server lacks (e.g. November on phone)
+        const missingOnServer: RosterRegistry = {};
+        for (const key of Object.keys(localRegistry)) {
+          const localItem = localRegistry[key];
+          const hasDays = localItem && localItem.days && Object.keys(localItem.days).length > 0;
+          if (hasDays && (!serverRosters[key] || !serverRosters[key].days || Object.keys(serverRosters[key].days).length === 0)) {
+            missingOnServer[key] = localItem;
+          }
+        }
+
+        const unsyncedKeys = Object.keys(missingOnServer);
+        if (unsyncedKeys.length > 0) {
+          console.log('[Auto-Sync] Device has local months not found on server:', unsyncedKeys);
+          // Automatically upload missing months to server in the background
+          fetch('/api/roster/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ rosters: missingOnServer })
+          }).then(async (syncRes) => {
+            if (syncRes.ok) {
+              console.log('[Auto-Sync] Successfully uploaded local months to server:', unsyncedKeys);
+              setLastSyncStatus({
+                inSync: true,
+                message: `Tüm listeler (${unsyncedKeys.join(', ')}) sunucuyla eşitlendi`,
+                unsyncedKeys: []
+              });
+            }
+          }).catch((err) => {
+            console.warn('[Auto-Sync] Failed background push to server:', err);
+            setLastSyncStatus({
+              inSync: false,
+              message: `Bu cihazdaki ${unsyncedKeys.join(', ')} listesi henüz sunucuya aktarılamadı`,
+              unsyncedKeys
+            });
+          });
+        } else {
+          setLastSyncStatus({
+            inSync: true,
+            message: 'Sunucuyla eşitlendi',
+            unsyncedKeys: []
+          });
+        }
+
+        const rawMerged: RosterRegistry = { ...localRegistry, ...serverRosters };
         const merged: RosterRegistry = {};
         for (const k of Object.keys(rawMerged)) {
           merged[k] = normalizeRoster(rawMerged[k]);
@@ -208,14 +278,71 @@ export async function fetchServerRosters(): Promise<RosterRegistry> {
     }
   } catch (err) {
     console.warn('Server roster API unreachable, using local registry cache:', err);
+    setLastSyncStatus({
+      inSync: false,
+      message: 'Sunucuya bağlanılamadı (yerel hafıza kullanılıyor)',
+      unsyncedKeys: []
+    });
   }
   return localRegistry;
 }
 
 /**
+ * Manually pushes all rosters on this device to the server API so any other computer can view them.
+ */
+export async function syncAllLocalRostersToServer(): Promise<{ success: boolean; count: number; message: string }> {
+  const registry = getRosterRegistry();
+  const keys = Object.keys(registry);
+  if (keys.length === 0) {
+    return { success: false, count: 0, message: 'Aktarılacak nöbet listesi bulunamadı.' };
+  }
+
+  try {
+    const res = await fetch('/api/roster/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rosters: registry })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      const count = data.syncedCount || keys.length;
+      setLastSyncStatus({
+        inSync: true,
+        message: 'Tüm nöbet listeleri sunucuya başarıyla aktarıldı',
+        unsyncedKeys: []
+      });
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('etfal-sync-status-changed', { detail: { inSync: true } }));
+        window.dispatchEvent(new CustomEvent('etfal-rosters-updated', { detail: { registry } }));
+      }
+      return {
+        success: true,
+        count,
+        message: `${count} aylık nöbet listesi sunucuya aktarıldı! Artık diğer bilgisayarlardan görüntülenebilir.`
+      };
+    } else {
+      throw new Error(`Sunucu hatası: HTTP ${res.status}`);
+    }
+  } catch (err: any) {
+    console.error('Manual sync failed:', err);
+    setLastSyncStatus({
+      inSync: false,
+      message: 'Sunucuya aktarım başarısız oldu',
+      unsyncedKeys: keys
+    });
+    return {
+      success: false,
+      count: 0,
+      message: `Sunucuya aktarılırken hata oluştu: ${err?.message || err}. Lütfen internet bağlantınızı kontrol ediniz.`
+    };
+  }
+}
+
+/**
  * Saves a roster to both server API (/api/roster) and local storage
  */
-export async function saveRosterToServer(roster: MonthDutyRoster): Promise<void> {
+export async function saveRosterToServer(roster: MonthDutyRoster): Promise<{ success: boolean; error?: string }> {
   const normalizedRoster = normalizeRoster(roster);
   // Update local registry immediately
   const registry = getRosterRegistry();
@@ -223,20 +350,46 @@ export async function saveRosterToServer(roster: MonthDutyRoster): Promise<void>
   saveRosterRegistry(registry);
   setActiveMonthKey(normalizedRoster.monthKey);
 
+  let success = false;
+  let errorMsg = '';
+
   // Send to server for global persistence across all clinic users
   try {
-    await fetch('/api/roster', {
+    const res = await fetch('/api/roster', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(normalizedRoster)
     });
-  } catch (err) {
+    if (res.ok) {
+      success = true;
+      setLastSyncStatus({
+        inSync: true,
+        message: 'Sunucuyla eşitlendi',
+        unsyncedKeys: []
+      });
+    } else {
+      errorMsg = `Sunucu yanıtı: HTTP ${res.status}`;
+      setLastSyncStatus({
+        inSync: false,
+        message: 'Yalnızca bu cihazda kayıtlı (sunucuya aktarılamadı)',
+        unsyncedKeys: [normalizedRoster.monthKey]
+      });
+    }
+  } catch (err: any) {
     console.warn('Failed to send roster to server API:', err);
+    errorMsg = err?.message || 'Ağ hatası';
+    setLastSyncStatus({
+      inSync: false,
+      message: 'Yalnızca bu cihazda kayıtlı (ağ bağlantısı yok)',
+      unsyncedKeys: [normalizedRoster.monthKey]
+    });
   }
 
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('etfal-rosters-updated', { detail: { monthKey: normalizedRoster.monthKey, registry } }));
   }
+
+  return { success, error: errorMsg };
 }
 
 /**

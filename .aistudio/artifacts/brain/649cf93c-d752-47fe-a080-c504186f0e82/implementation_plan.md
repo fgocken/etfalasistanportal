@@ -1,136 +1,97 @@
-# Sistematik Prosedür Bazlı Anestezi Yönetimi (Revize Klinik Uygulama Planı)
+# Vazoaktif Ajanların Karşılaştırması ve Klinik Kılavuzu (İnteraktif İnfografik)
 
-Bu plan, kullanıcının **"Prosedürleri hazır değil, tek tek chat yaparak eklemek istiyorum, hepsini kontrol etmek gerekiyor"** direktifi doğrultusunda güncellenmiştir. Sistemde önceden doldurulmuş varsayımsal prosedürler bulunmayacak; araç mükemmel bir modüler altyapı, branş filtreleri, anlık arama ve 5 bölümlü akordeon/sekme şablonuyla hazırlanacak ve her bir prosedür kullanıcının chat üzerinden vereceği klinik direktiflerle sırayla eklenecektir.
+Yoğun bakım, anestezi ve acil ünitelerinde hemodinamik optimizasyon için 12 vazoaktif/inotrop ajanın reseptör profillerini, hemodinamik etkilerini, standart doz aralıklarını, klinik incilerini ve özel şok senaryolarını sunan birebir interaktif karşılaştırma infografiği.
 
----
-
-## Kullanıcı İncelemesi & Revize Edilen Kararlar
+## User Review & Critical Decisions
 
 > [!IMPORTANT]
-> **Revizyon Notu (Kullanıcı Talebiyle Güncellendi):**
-> - **Toplu / Otomatik Veri Eklenmeyecek:** Cerrahi prosedürlerin klinik içeriği kritik önem taşıdığından, içerikler yapay zeka tarafından rastgele üretilmeyecek; kullanıcı ile birebir chat yapılarak tek tek, aşama aşama eklenecek ve hekim kontrolünden geçecektir.
-> - **İlk Aşama Hedefi:** Aracın iskeleti, cerrahi branş mimarisi, 5 ana bölümlü (1..5) görsel şablonu, arama motoru ve ilk örnek/pilot prosedür (veya kullanıcının ilk belirleyeceği prosedür) arayüzde çalışır hale getirilecek.
-> - **Sonraki Süreç:** Kullanıcı her mesajında yeni bir prosedürün verilerini veya revizyonunu ilettikçe, sistem aynı tedavi/ilaç modülündeki gibi genişletilecektir.
+> Kullanıcı tercihleri doğrultusunda PDF içeriğinin tüm klinik verileri birebir interaktif tablo ve fonksiyonel sekmeli matris (Vazopresörler, İnotroplar, İnodilatörler, Karma/Puşe) mimarisiyle tasarlanmıştır.
+
+- **Onaylanan Karar 1 (İçerik Yapısı)**: PDF'teki Tablo 1 (Reseptör ve Hemodinamik Doz Tablosu), Bölüm 2 (Klinik Karar Verme ve High-Yield İnciler) ve Bölüm 3 (Özel Şok Senaryoları) eksiksiz olarak interaktif tablo ve akordeon/kart yapısında sunulacaktır.
+- **Onaylanan Karar 2 (Filtreleme & Sekmeler)**: İlaçlar fonksiyonel sekmeli matris ile filtrelenebilecek: `Tümü (12 Ajan)`, `Vazopresörler (Saf/Baskın)`, `İnotroplar`, `İnodilatörler`, `Karma / Periferik Puşe`.
+- **Arama & Hızlı Erişim**: Hekimler ilaç ismine (örn. Noradrenalin, Milrinon) veya klinik endikasyona (örn. Septik Şok, RV Yetmezliği, Anafilaksi) göre anlık filtreleme yapabilecektir.
 
 ---
 
-## 1. Genel Bakış ve Temel Konsept
+## 1. Overview & Core Concept
 
-* **Ne İşe Yarar:** Anestezi hekimlerinin cerrahi branşlara göre kategorize edilmiş prosedürleri inceleyebileceği, her prosedür için 5 temel aşamayı (Tanım/Süre, Anestezi Teknikleri, Pre-op, İntra-op, Post-op / ERAS / PROSPECT) içeren modüler klinik karar destek aracı.
-* **Prosedür Ekleme Yöntemi:** Hekim kontrollü, chat üzerinden adım adım genişleyen cerrahi anestezi kütüphanesi.
-* **Kaynak Uyumu:**
-  1. Jaffe, R. A., & Schmiesing, C. I. *Anesthesiologist's Manual of Surgical Procedures (5th ed.)*
-  2. ERAS Society Protokolleri
-  3. PROSPECT Kanıta Dayalı Analjezi Rehberleri
-  4. İlgili güncel klinik kılavuzlar
+- **Ne İşe Yarar**: Yoğun bakım ve ameliyathanede kritik hemodinamik instabilite anında hekimlerin saniyeler içinde doğru ajanı, reseptör etkisini ($\alpha_1, \beta_1, \beta_2, D_1/V_1$), kardiyak debi (CO), sistemik vasküler rezistans (SVR), kalp hızı (HR) ve pulmoner vasküler rezistans (PVR) yanıtını incelemesini sağlar.
+- **Hedef Kitle**: Anesteziyoloji ve Reanimasyon asistanları, uzmanları ve yoğun bakım hekimleri.
+- **Temel Değer**: Statik PDF dokümanını; aranabilir, sekmelerle filtrelenebilir, satır detayları açılabilir, karanlık/aydınlık mod uyumlu ve derin bağlantı (deep-link) destekli profesyonel bir yatak başı klinik aracına dönüştürür.
 
 ---
 
-## 2. Kullanıcı Deneyimi ve Arayüz Tasarımı
+## 2. User Experience & Visual Design
 
-### 1) Liste ve Keşif Arayüzü (Procedure Catalog)
-- **Cerrahi Branş Sekmeleri:**
-  - Tümü
-  - Genel Cerrahi
-  - Ortopedi ve Travmatoloji
-  - Kadın Hastalıkları ve Doğum
-  - Kalp ve Damar Cerrahisi (KVC)
-  - Üroloji
-  - Kulak Burun Boğaz (KBB)
-  - Beyin ve Sinir Cerrahisi (Nöroşirürji)
-  - Plastik, Rekonstrüktif ve Estetik Cerrahi
-  - Göğüs Cerrahisi
-  - Çocuk Cerrahisi
-  - Göz Hastalıkları
-- **Hızlı Arama Motoru:** Prosedür adı, branş adı, endikasyon veya cerrahi kısaltma ile anlık arama (örn. "kolesistektomi", "protez", "sezaryen").
-- **Prosedür Kartları:** Prosedürün adı, branşı, tahmini süresi ve birincil anestezi yöntemini özetleyen sade klinik kartlar.
-- **"Yeni Prosedür Ekleme Rehberi":** Kullanıcının chat üzerinden hangi şablonda veri sağlayabileceğini gösteren bilgilendirici hızlı yardım kartı.
+### Ana Kullanıcı Akışları
+1. **İnfografikler Ana Ekranı**: `InfographicsView` üzerinde "Vazoaktif ve İnotropik Ajanlar" kartı yer alır (Kaynak: *Klinik Kılavuz & Karşılaştırma Matriksi*).
+2. **Kapsamlı Karşılaştırma Matrisi**:
+   - Üstte fonksiyonel kategori sekmeleri: `Tümü (12)`, `Vazopresörler`, `İnotroplar`, `İnodilatörler`, `Karma & Puşe`.
+   - Dinamik arama kutusu: İlaç adı veya senaryo yazıldığında anında eşleşen satırlar listelenir.
+   - Reseptör ve hemodinamik etki sütunları: Renk kodlu yön okları ($\uparrow\uparrow\uparrow, \downarrow\downarrow, \leftrightarrow$) ve reseptör afiniteleri ($++++, ++, 0$).
+   - Satır genişletme: Tıklanan ilacın yarı ömrü, etki mekanizması ve pratik hazırlama notu satır altında detay kartı olarak açılır.
+3. **High-Yield İnciler & Kritik Klinik Notlar**:
+   - Noradrenalin: Splanknik venöz yataktan unstressed volume $\to$ stressed volume dönüşümü ve preload artışı.
+   - Adrenalin: Düşük doz $\beta_2$ vazodilatasyon vs yüksek doz $\alpha_1$ vazokonstriksiyon; Tip B laktik asidoz ve hiperglisemi uyarısı.
+   - Vazopressin: Asidozda ($pH < 7.15$) korunan $V_1$ duyarlılığı; PVR artırmadan SVR artırma (RV yetmezliği & HOCM).
+   - Fenilefrin: Saf $\alpha_1$, baroreseptör refleks bradikardi, Fallot spell krizi ve HOCM.
+   - Dobutamin vs Milrinon: Yarı ömür farkı (2 dk vs 2-3 saat) ve kronik $\beta$-blokerde Milrinon'un cAMP koruyucu üstünlüğü.
+   - Levosimendan: $Ca^{2+}$ duyarlılaştırıcı (MVO$_2$ artırmaz) ve 7-9 gün süren aktif metabolit (OR-1896).
+   - Ekstravazasyon Yönetimi: $\alpha_1$ nekrozunda kanül çekilmeden 3-5 mL aspirasyon + 5-10 mg Fentolamin (10 mL SF ile) subkutan infiltrasyon.
+4. **Özel Klinik Senaryolarda Ajan Seçim Tablosu**:
+   - Septik Şok, Kardiyojenik Şok, Sağ Ventrikül (RV) Yetersizliği, HOCM / SAM Obstrüksiyonu, Anafilaktik Şok, Denerve Kalp (Kalp Nakli).
+   - Her senaryo için: *İlk Tercih Ajanlar*, *Kaçınılması Gereken Ajanlar* ve *Fizyolojik Gerekçe*.
 
-### 2) Prosedür Detay Arayüzü (5 Aşamalı Rehber Şablonu)
-Kullanıcı bir prosedüre tıkladığında açılan detay görünümü, kullanıcının belirlediği tam şablona sadık kalır:
-
-- **1) Genel Tanım ve Endikasyonlar:**
-  - Prosedür Adı & Branşı
-  - Cerrahi Tanım
-  - Temel Endikasyonlar
-  - Tahmini Ortalama Prosedür Süresi (dk / saat)
-- **1.5) Beklenen Kanama ve Transfüzyon Profili (Yeni Standart Blok):**
-  - Tahmini Ortalama Kan Kaybı (EBL)
-  - Kanama Risk Derecesi (Minimal / Düşük / Orta / Yüksek / Potansiyel Masif)
-  - Kan Ürünü & Cross-Match / Tip-Tarama (Type & Screen) Hazırlığı
-  - Transfüzyon İhtimali (%)
-  - Potansiyel Majör Kanama Odakları & Vasküler Risk Noktaları
-  - Hemostaz ve Hasta Kan Yönetimi (PBM) Stratejileri
-- **2) Olası Anestezi Yönetimi Teknikleri:**
-  - Birincil Teknikler (Genel Anestezi, Spinal/Epidural, Kombine, Rejyonel Blok)
-  - Alternatif Teknikler & Klinik Tercih Gerekçeleri
-- **3) Pre-operatif Hazırlık (Akordeon Paneller):**
-  - `3a)` Varsa prosedür spesifik dikkat edilmesi gereken konsültasyonlar
-  - `3b)` Varsa prosedür spesifik anamnez ve fizik muayenede dikkat edilmesi gerekenler
-  - `3c)` Varsa prosedür spesifik kan ve laboratuvar sonuçlarında dikkat edilmesi gerekenler
-- **4) İntra-operatif Yönetim (Akordeon Paneller):**
-  - `4a)` Varsa prosedür spesifik monitörizasyon (İnvaziv arter, CVP vb.)
-  - `4b)` Varsa prosedür spesifik gerekli vasküler erişimler (Geniş lümenli IV, santral kateter vb.)
-  - `4c)` Hasta pozisyonu (Supine, Prone, Litotomi, Trendelenburg, Lateral vb.)
-  - `4d)` Prosedür bazlı anestezi yönetimi (İndüksiyon, idame, kas gevşetici stratejisi)
-  - `4e)` Prosedür bazlı hava yolu yönetimi (ETT, Video laringoskopi, LMA, Fiberoptik)
-  - `4f)` Prosedür spesifik dikkat edilmesi gereken kritik karar noktaları ve cerrahi aşamaları (Klempaj, insüflasyon, turnike açılışı, kanama riski vb.)
-  - `4g)` Uyandırmada (emergence) dikkat edilmesi gerekenler (Derin/uyanık ekstübasyon, havayolu ödemi, nöromusküler blok geri dönüşümü)
-- **5) Post-operatif Yönetim (Akordeon Paneller):**
-  - `5a)` Ağrı yönetimi (Multimodal analjezi, rejyonel teknikler, PCA vb.)
-  - `5b)` Varsa PROSPECT rehber önerileri
-  - `5c)` Varsa ERAS rehberi önerileri
-- **Kaynaklar Bölümü:** Jaffe 5. Baskı sayfa referansı, ERAS ve PROSPECT atıfları.
+### Görsel Kimlik ve Tipografi
+- **Renk Paleti**: Medikal hassasiyet odaklı; nötr zemin (`slate-900` / `slate-50`), vazopresör mavisi/laciverti, inotropik teal (`teal-600`), inodilatör moru (`purple-600`), uyarı rozetleri (`rose-500`, `amber-500`).
+- **Tipografi**: Başlık ve etiketlerde `Plus Jakarta Sans`, sayısal doz ve etki göstergelerinde `font-mono tabular-nums`.
+- **Anti-Slop & Sıfır-Pill Disiplini**: Statik metinler kutucuklara hapsedilmeyecek; temiz tablo sınırları, saç çizgisi (hairline) bölücüler ve okunaklı sembolik etki göstergeleri kullanılacaktır.
 
 ---
 
-## 3. Veri Mimarisi ve Dosya Yapısı
+## 3. Key Product Decisions & Trade-Offs
 
-* `src/types/procedures.ts`: 5 ana bölümü ve tüm alt maddeleri eksiksiz içeren TypeScript veri modeli.
-* `src/data/procedures/`: Prosedürlerin branş branş veya tek tek kaydedileceği modüler veri dizini (tıpkı `src/components/treatments/` gibi).
-* `src/data/procedures/index.ts`: Kayıtlı tüm onaylanmış prosedürleri dışa aktaran merkezi kayıt kütüphanesi.
-* `src/components/procedures/ProceduresWorkspace.tsx`: Cerrahi branş sekmeleri, arama motoru, prosedür listesi.
-* `src/components/procedures/ProcedureDetailView.tsx`: 5 aşamalı sekmeler ve akordeon paneller ile prosedür detay görünümü.
-* `src/components/PortalWorkspace.tsx` & `src/components/WelcomeScreen.tsx`: Yeni klinik aracın menüye ve dashboard'a eklenmesi.
+- **Karar 1: Tek Bileşende Eksiksiz İçerik vs Çoklu Sayfa**:
+  - *Seçim*: Tüm kılavuz `VasoactiveAgentsInfographic.tsx` bileşeni içinde 3 ana bölümlü (1. Reseptör & Doz Tablosu, 2. Klinik İnciler, 3. Özel Şok Senaryoları) tek bir akıcı sayfada sunulacaktır.
+  - *Neden*: Acil ameliyathane veya yoğun bakımda hekimin sayfalar arasında kaybolmadan tek dokunuşla ilgili tabloya veya senaryoya ulaşması hayatidir.
+- **Karar 2: Derin Bağlantı (Deep-Link) & Paylaşım Desteği**:
+  - *Seçim*: `#infographics/vasoactive-agents` hash rotası ile doğrudan açılabilme ve `ShareLinkButton` ile klinik personeline doğrudan link gönderebilme.
+  - *Neden*: Asistanlar veya uzmanlar vaka sırasında doğrudan bu infografiğin linkini paylaşabilmelidir.
 
 ---
 
-## 4. Teknik Mimari Diyagramı
+## 4. Technical Architecture & Data Strategy
+
+### Bileşen Hiyerarşisi
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        PortalWorkspace / App                           │
-│  - ToolTabId: 'procedures'                                             │
-│  - Deep Link: #arac=procedures(&prosedur=...)                          │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                      ProceduresWorkspace                               │
-│  ├── SpecialtyFilterTabs (11 Branş + Tümü)                             │
-│  ├── Live Search Bar                                                   │
-│  └── List View: Kayıtlı Prosedür Kartları                              │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ (Prosedür Seçimi)
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                      ProcedureDetailView                               │
-│  ├── Header: İsim, Branş, Süre, Geri Dön Butonu                       │
-│  ├── 5 Aşamalı Sekmeler [1..5]                                         │
-│  │   ├── Bölüm 1: Tanım, Endikasyonlar, Ortalama Süre                  │
-│  │   ├── Bölüm 2: Olası Anestezi Teknikleri (Birincil / Alternatif)    │
-│  │   ├── Bölüm 3: Pre-op Hazırlık (3a Kons, 3b Anamnez/FM, 3c Lab)   │
-│  │   ├── Bölüm 4: İntra-op (4a Mon, 4b Vasküler, 4c Poz, 4d Anestezi, │
-│  │   │            4e Havayolu, 4f Kritik Anlar, 4g Uyandırma)          │
-│  │   └── Bölüm 5: Post-op (5a Ağrı, 5b PROSPECT, 5c ERAS)             │
-│  └── Kaynaklar: Jaffe 5th ed, ERAS, PROSPECT                           │
-└────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     InfographicsView                        │
+│   (Koleksiyon Listesi & Seçili İnfografik Router'ı)         │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+            ┌──────────────────┴──────────────────┐
+            ▼                                     ▼
+┌─────────────────────────┐           ┌─────────────────────────────┐
+│  Mevcut İnfografikler   │           │ VasoactiveAgentsInfographic │
+│ (RSI, Fasting, Aldrete) │           │ (YENİ - Vazoaktif Kılavuz)  │
+└─────────────────────────┘           └──────────────┬──────────────┘
+                                                     │
+         ┌───────────────────────────┬───────────────┴───────────────────────────┐
+         ▼                           ▼                                           ▼
+┌─────────────────┐       ┌────────────────────────┐                 ┌──────────────────────┐
+│ Kategori Filtre │       │ Reseptör & Doz Tablosu │                 │ Şok Senaryoları &    │
+│ (Vazo, İnotrop, │       │ (12 Ajan, Hemodinamik, │                 │ High-Yield İnciler   │
+│  İnodil, Karma) │       │  Etki Okları, Dozlar)  │                 │ (Fentolamin, SAM...) │
+└─────────────────┘       └────────────────────────┘                 └──────────────────────┘
 ```
 
----
+### Veri Modelleri
+- `VasoactiveAgent`: İlaç kimliği, kategorisi, $\alpha_1, \beta_1, \beta_2, D_1/V_1$ skorları, CO, SVR, HR, PVR etkileri, standart doz aralığı, pratik klinik notları.
+- `ClinicalScenario`: Senaryo adı, 1. tercih ajanlar, kaçınılması gereken ajanlar, fizyolojik mekanizma gerekçesi.
+- `ClinicalPearl`: Ajan bazlı kritik inciler (Unstressed volume, Tip B laktik asidoz, V1 asidoz stabilitesi, ekstravazasyon protokolü).
 
-## Uygulama Aşamaları
-
-1. **Adım 1:** Veri modelini (`src/types/procedures.ts`) ve bileşen iskeletini oluşturmak.
-2. **Adım 2:** Kullanıcının kontrol etmesi ve şablonu görmesi için örnek 1 adet prototip prosedür (örn. Laparoskopik Kolesistektomi) ile arayüzü yayına almak.
-3. **Adım 3:** Kullanıcının onayından sonra, chat üzerinden ileteceği prosedürleri sırayla kütüphaneye eklemek.
+### Entegrasyon Noktaları
+- `src/components/infographics/VasoactiveAgentsInfographic.tsx`: Yeni bileşen dosyası.
+- `src/components/infographics/InfographicsView.tsx`: Koleksiyon dizisine `vasoactive-agents` kartı ekleme ve render koşulu sağlama.
+- `src/data/portalSearchIndex.ts`: Global komut paleti ve arama motoruna vazoaktif ajanlar ve şok kılavuzu anahtar kelimelerini ekleme.

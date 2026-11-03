@@ -11,7 +11,10 @@ import {
   UserCheck, 
   ShieldCheck, 
   Lock, 
-  Edit2 
+  Edit2,
+  Cloud,
+  CloudCheck,
+  RefreshCw
 } from 'lucide-react';
 import { MonthDutyRoster, DayDutySchedule, MonthOption } from './DutyRosterTypes';
 import { 
@@ -25,7 +28,10 @@ import {
   getAvailableMonthOptions,
   getActiveMonthKey,
   setActiveMonthKey,
-  isRosterAdminUnlocked
+  isRosterAdminUnlocked,
+  syncAllLocalRostersToServer,
+  getLastSyncStatus,
+  SyncStatus
 } from './DutyRosterService';
 import { RosterAdminAuthModal } from './RosterAdminAuthModal';
 import { RosterDutyEditModal } from './RosterDutyEditModal';
@@ -50,6 +56,10 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [showAdminAuthModal, setShowAdminAuthModal] = useState<boolean>(false);
   const [pendingAdminAction, setPendingAdminAction] = useState<'upload' | 'edit' | null>(null);
+
+  // Cloud sync state
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>(() => getLastSyncStatus());
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   // Cell editing modal state
   const [editingCell, setEditingCell] = useState<{
@@ -104,11 +114,21 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
       }
     };
 
+    const handleSyncStatusChanged = (e: any) => {
+      if (e.detail) {
+        setSyncStatus(e.detail);
+      } else {
+        setSyncStatus(getLastSyncStatus());
+      }
+    };
+
     window.addEventListener('etfal-rosters-updated', handleRostersUpdated);
     window.addEventListener('etfal-active-month-changed', handleActiveMonthChanged);
+    window.addEventListener('etfal-sync-status-changed', handleSyncStatusChanged);
     return () => {
       window.removeEventListener('etfal-rosters-updated', handleRostersUpdated);
       window.removeEventListener('etfal-active-month-changed', handleActiveMonthChanged);
+      window.removeEventListener('etfal-sync-status-changed', handleSyncStatusChanged);
     };
   }, []);
 
@@ -413,6 +433,34 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
         </div>
 
         <div className="flex items-center gap-2">
+          {syncStatus.inSync ? (
+            <span 
+              title="Bu cihazdaki tüm nöbet listeleri sunucuyla eşitlendi"
+              className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20"
+            >
+              <CloudCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="hidden sm:inline">Sunucuyla</span> Eşit
+            </span>
+          ) : (
+            <button
+              onClick={async () => {
+                setIsSyncing(true);
+                const res = await syncAllLocalRostersToServer();
+                setIsSyncing(false);
+                setNotification({
+                  type: res.success ? 'success' : 'error',
+                  message: res.message
+                });
+              }}
+              disabled={isSyncing}
+              title="Bu cihazdaki listeyi sunucuya yükleyerek diğer tüm bilgisayarlarla eşitleyin"
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 dark:text-amber-300 bg-amber-500/15 px-2.5 py-1 rounded-lg border border-amber-500/30 hover:bg-amber-500/25 transition-all cursor-pointer animate-pulse"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+              <span>Sunucuya Eşitle</span>
+            </button>
+          )}
+
           {isAdminUnlocked && (
             <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-2.5 py-1 rounded-lg border border-teal-500/20">
               <ShieldCheck className="w-3.5 h-3.5" />

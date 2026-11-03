@@ -209,6 +209,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
 
   // 3. Klinik İnfografikler
   {
+    id: 'info-vasoactive-decision-matrix',
+    title: 'Vazoaktif ve İnotropik Ajanlar Klinik Karar Matriksi',
+    category: 'Klinik İnfografikler',
+    badge: 'Karar Matriksi',
+    description: 'Doz-yanıt reseptör kayması (biphasic), ikili kombinasyon sinerjileri (Noradrenalin+Vazopressin, Vazopressin+Milrinon), 5 kritik şok vaka simülatörü ve kanıta dayalı referanslar.',
+    keywords: [
+      'vazoaktif', 'vazopresor', 'vazopressör', 'inotrop', 'inodilatator', 'inodilatatör', 'karar matriksi', 
+      'reseptör kayması', 'doz yanıt', 'biphasic', 'sinerji', 'vazopressin milrinon', 'noradrenalin dobutamin', 
+      'metilen mavisi', 'vazopleji', 'şok simülatörü', 'septik şok', 'kardiyojenik şok', 'hocm', 'sağ ventrikül', 
+      'ssc 2021', 'vasst', 'soap ii'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
     id: 'info-rsi-vs-elective',
     title: 'Hızlı Seri Entübasyon (RSI) vs Elektif Entübasyon',
     category: 'Klinik İnfografikler',
