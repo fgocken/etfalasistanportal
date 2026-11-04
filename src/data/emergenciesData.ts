@@ -24,7 +24,7 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'generic';
+  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -169,6 +169,59 @@ export interface EmergencyProtocol {
         description: string;
         riskLevel: string;
       }[];
+    };
+
+    // Pulmoner Embolizm (PE / PTE) acil protokolleri
+    peProtocols?: {
+      hemodynamicRvSupport: {
+        title: string;
+        fluidCaution: string;
+        vasopressorsAndInotropes: {
+          agent: string;
+          dosage: string;
+          indication: string;
+          mechanismPearl: string;
+        }[];
+        ventilatorSettings: {
+          parameter: string;
+          target: string;
+          caution: string;
+        }[];
+      };
+      thrombolyticRegimens: {
+        title: string;
+        regimens: {
+          agent: string;
+          standardDose: string;
+          cardiacArrestDose: string;
+          contraindications: string;
+        }[];
+        surgicalAndCatheterOptions: string[];
+      };
+      anticoagulationProtocol: {
+        title: string;
+        ufhProtocol: {
+          bolus: string;
+          infusion: string;
+          targetAptt: string;
+          reversal: string;
+        };
+        lmwhProtocol: {
+          agent: string;
+          dose: string;
+          caution: string;
+        };
+      };
+      riskStratification: {
+        title: string;
+        categories: {
+          riskClass: string;
+          clinicalFeatures: string;
+          rvDysfunction: string;
+          biomarkers: string;
+          primaryAction: string;
+        }[];
+      };
     };
   };
 
@@ -2592,6 +2645,433 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         journal: 'British Journal of Anaesthesia. 2018;120(2):323-352.',
         year: '2018',
         relevance: 'RSI protokolleri, aspirasyon önleme adımları ve kaflı tüp ile acil izolasyon ilkeleri.'
+      }
+    ]
+  },
+  'pe': {
+    id: 'pe',
+    // 1) Başlık
+    title: 'Akut Pulmoner Embolizm (PE / PTE) Kriz Protokolü',
+    subTitle: 'Masif / Submasif Perioperatif Emboli, Akut Sağ Ventrikül Dekompansasyonu & Tromboliz Kılavuzu',
+    codeColor: 'red',
+    severityBadge: 'KOD KIRMIZI · AKUT SAĞ KALP ÇÖKÜŞÜ · ZAMANA DUYARLI HAYATİ ACİL',
+    keyCallout: 'Ani EtCO2 çöküşü + açıklanamayan hipotansiyon/taşikardi = Aksi kanıtlanana dek Masif PE! Aşırı sıvı yükünden KESİNLİKLE kaçının (RV septal shift & kardiyak debi çöküşü). Hemen Noradrenalin başlayın, arrest/şokta acil Alteplase 50-100 mg veya Tenecteplase uygulayın!',
+    quickCalculatorType: 'pe',
+
+    // 2) Tanımlama ve Giriş
+    introduction: {
+      definition: 'Pulmoner Embolizm (PE / PTE); pulmoner arteriyel yatağın derin ven trombozundan (DVT) kopan trombüsler (veya perioperatif hava, yağ, sement, amniyon sıvısı) ile akut mekanik olarak tıkanması sonucu gelişen; pulmoner vasküler direnci (PVR) ani fırlatarak akut sağ ventrikül (RV) yetmezliğine, ventriküler septal kaymaya (septal shift), sol ventrikül doluşunun çökmesine ve kardiyojenik/obstrüktif şoka yol açan en öldürücü perioperatif acillerden biridir.',
+      epidemiology: 'Hastanede yatan ve cerrahi geçiren hastalarda önlenebilir ölüm nedenlerinin başında gelir. Perioperatif dönemde insidans cerrahi tipine göre %0.3 ile %3 arasında değişir (ortopedi, kalça/diz protezi, femur boyun kırıkları, pelvik ve majör onkolojik rezeksiyonlarda risk katlanarak artar). Masif PE\'de 30 günlük mortalite tedavi edilmediğinde %30-50\'yi aşarken, erken tanı ve agresif resüsitasyonla <%10-15 seviyesine çekilebilir.',
+      triggers: [
+        'Büyük Ortopedik Cerrahiler: Total kalça ve diz artroplastisi, femur boyun kırığı fiksasyonu, majör politravma',
+        'Majör Pelvik ve Abdominal Onkolojik Cerrahiler, uzun süreli litotomi pozisyonu ve derin venöz staz',
+        'Uzamış turnike süresi ve turnikenin indirilmesi anı (turnike reperfüzyon mikroembolileri ve asidoz yükü)',
+        'Laparoskopik cerrahide yüksek intraabdominal basınç (>14-15 mmHg) ve dik Trendelenburg pozisyonunda venöz göllenme',
+        'Santral venöz kateterizasyon ve kemoterapi portları (kateter ilişkili venöz tromboz)',
+        'Genetik / Edinsel Trombofililer: Faktör V Leiden mutasyonu, Protrombin G20210A, Antifosfolipid Antikor Sendromu (APS), Protein C/S ve Antitrombin III eksikliği',
+        'Non-Trombotik Emboliler: İntraoperatif venöz hava embolisi (oturur kraniyotomi), ortopedik cerrahide sement/yağ embolisi (FES), amniyotik sıvı embolisi (AFE)'
+      ],
+      safeAgents: [
+        'Vazopressörler: Noradrenalin (1. tercih - MAP ≥ 65-70 mmHg tutarak sağ koroner perfüzyonunu kurtarır), Vazopressin (0.01-0.04 IU/dk - PVR artırmadan SVR artırır, pulmoner NO salınımını uyarır)',
+        'İnotroplar (Normotansif RV Yetmezliğinde): Dobutamin (2-20 mcg/kg/dk - Noradrenalin ile kombine), Milrinon (0.375-0.75 mcg/kg/dk - PDE3 inhibitörü, RV inotropi + pulmoner vazodilatasyon)',
+        'Pulmoner Selektif Vazodilatatörler: İnhale Nitrik Oksit (iNO 10-20 ppm) veya İnhale İloprost (Ventavis 2.5-5 mcg nebül) - sistemik hipotansiyon yapmaksızın pulmoner arter basıncını düşürür',
+        'Antikoagülasyon: Anfraksiyone Heparin (UFH - 80 IU/kg bolus, 18 IU/kg/saat infüzyon, acil ameliyat veya tromboliz/cerrahi planlananlarda tam geri döndürülebilir ilk seçenek)',
+        'Trombolitik Ajanlar: Alteplase (rt-PA), Tenecteplase (TNK-tPA)',
+        'Mekanik Dolaşım Desteği: VA-ECMO (Veno-Arteriyel ECMO) veya Perkütan RV Destek Cihazı (Impella RP)'
+      ],
+      mortalityStats: 'Akut masif pulmoner embolide kardiyojenik şok ve arrest gelişen olgularda ilk 1-2 saatteki mortalite %50-70\'e ulaşır. Perioperatif PE vakalarının önemli kısmında tanı otopside konulur. Erken tanı, aşırı sıvıdan kaçınma, hedefe yönelik vazopressör ve zamanında tromboliz/embolektomi ile mortalite %15\'in altına indirilebilir.',
+      clinicalUrgency: 'Ameliyathanede veya derlenme odasında ani EtCO2 düşüşü ve açıklanamayan hipotansiyon fark edildiğinde saniyeler içinde anestezi ekibi, cerrahi ekip, kardiyoloji/KVC ve acil ECMO ekipleri mobilize edilmelidir.'
+    },
+
+    // 3) Tanı
+    diagnosis: {
+      overview: 'İntraoperatif genel anestezi altındaki PE tanısı uyanık hastadaki gibi göğüs ağrısı ve dispne ile değil; monitördeki ani fizyolojik çöküş ile kendini gösterir: Ani EtCO2 çöküşü (alveoler ölü boşluk ventilasyonu), refrakter hipotansiyon, inatçı sinüs taşikardisi, CVP artışı ve akut sağ kalp dilatasyonu (McConnell bulgusu, D-şeklinde LV). Uyanık serviste/YBÜ\'de ise ani nefes darlığı, plöritik göğüs ağrısı, hemoptizi, taşikardi ve senkop ön plandadır.',
+      clinicalCriteria: [
+        'Ani ve Belirgin End-Tidal CO2 (EtCO2) Düşüşü: Dakika ventilasyonu sabitken EtCO2\'nin aniden <15-20 mmHg seviyelerine veya sıfıra yaklaşması (alveoler ölü boşluk fraksiyonunun fırlaması) - İNTRAOPERATİF EN DUYARLI İPUCU!',
+        'Açıklanamayan Ani Ağır Hipotansiyon ve Kardiyojenik/Obstrüktif Şok (Sistolik KB < 90 mmHg veya bazale göre >40 mmHg ani düşüş; yüksek vazopressör ihtiyacı)',
+        'Refrakter Hipoksemi (FiO2 1.0\'a rağmen düzelmeyen PaO2/FiO2 < 150-200; intrapulmoner şant ve V/Q uyumsuzluğu)',
+        'Sağ Ventrikül Aşırı Yüklenmesi (RV Strain) & CVP / JVP Artışı: Santral venöz basıncın aniden tırmanması (>16-20 mmHg), karotis/juguler venöz dolgunluk',
+        'EKG Bulguları (Klasik S1Q3T3 Deseni): D1 derivasyonunda derin S dalgası, D3\'te patolojik Q dalgası ve T negatifliği; V1-V4 derivasyonlarında simetrik T dalgası inversiyonu, akut sağ dal bloğu (RBBB) ve inatçı sinüs taşikardisi',
+        'Transözofageal / Transtorasik Ekokardiyografi (TEE/TTE): Akut RV dilatasyonu (RV/LV çap oranı > 1.0), McConnell bulgusu (RV serbest duvar hipokinezisi/akinezisi ile birlikte korunmuş apeks kasılması), 60/60 bulgusu, interventriküler septumun sola itilmesi (D-shaped sol ventrikül) ve triküspit yetmezlik pik gradiyentinde artış'
+      ],
+      gradingScaleTitle: 'Wells & Basitleştirilmiş PESI (sPESI) Klinik Risk Skalası',
+      gradingScaleSource: 'ESC 2019 / Konstantinides et al. Eur Heart J',
+      larachScale: [
+        { category: 'Wells Kriteri 1', points: '+3.0 Puan', description: 'Derin Ven Trombozu (DVT) klinik belirti veya bulguları (bacakta asimetrik ödem, baldır hassasiyeti).' },
+        { category: 'Wells Kriteri 2', points: '+3.0 Puan', description: 'Alternatif tanının PE\'den daha az olası olması (klinik tablonun en iyi PE ile açıklanması).' },
+        { category: 'Wells Kriteri 3', points: '+1.5 Puan', description: 'Taşikardi (Kalp hızı > 100 atım/dk; istirahat veya anestezi altında inatçı sinüs taşikardisi).' },
+        { category: 'Wells Kriteri 4', points: '+1.5 Puan', description: 'İmmobilizasyon (≥3 gün yatak istirahati) veya son 4 hafta içinde geçirilmiş majör cerrahi.' },
+        { category: 'Wells Kriteri 5', points: '+1.5 Puan', description: 'Daha önce doğrulanmış DVT veya Pulmoner Embolizm (PE) öyküsü bulunması.' },
+        { category: 'Wells Kriteri 6', points: '+1.0 Puan', description: 'Hemoptizi (pulmoner infarktise sekonder balgamda taze kan görülmesi).' },
+        { category: 'Wells Kriteri 7', points: '+1.0 Puan', description: 'Aktif Malignite (son 6 ay içinde tedavi gören veya palyatif evrede olan kanser hastası).' },
+        { category: 'sPESI Skoru (30 Günlük Mortalite)', points: '0 vs ≥1 Puan', description: 'Yaş>80 (1), Kanser (1), KKY/KOAH (1), Nabız≥110 (1), SKB<100 (1), SpO2<%90 (1). 0 Puan: Düşük Risk (%1.1 mortalite); ≥1 Puan: Yüksek Risk (%10.9 mortalite).' }
+      ],
+      larachInterpretation: 'Wells Skoru: >6 Puan = Yüksek Klinik Olasılık (%65 PE); 2-6 Puan = Orta Olasılık (%30 PE); <2 Puan = Düşük Olasılık (%10 PE). Hemodinamik instabilite varlığında (Sistolik KB <90 mmHg veya arrest) Wells skoruna bakılmaksızın doğrudan "Yüksek Riskli / Masif PE" acil algoritması uygulanır.',
+      differentialDiagnosis: [
+        { condition: 'İntraoperatif Venöz Hava Embolisi', differentiatingFactors: 'Özellikle oturur pozisyonda kraniyotomi, posterior fossa cerrahisi veya santral kateter manipülasyonunda gelişir. TEE\'de sağ kalpte "kar fırtınası" ekojenitesi, precordial Doppler\'de değirmen sesi (mill-wheel murmur). Tedavi: Cerrahi alanın ıslatılması, sol lateral Trendelenburg (Durant manevrası), CVC\'den hava aspirasyonu.' },
+        { condition: 'Amniyotik Sıvı Embolisi (AFE)', differentiatingFactors: 'Doğum eylemi, sezaryen veya plasenta ayrılması esnasında ani kollaps, kardiyak arrest, şiddetli bronkospazm ve DİK (Yaygın İntravasküler Koagülasyon - kontrolsüz kanama). A-OK rejimi (Atropin, Ondansetron, Ketorolak) ve acil masif transfüzyon gerektirir.' },
+        { condition: 'Yağ Embolisi Sendromu (FES)', differentiatingFactors: 'Uzun kemik (femur, tibia) kırıkları veya protez sementlemesinden 24-72 saat sonra triadı: Akut hipoksemi, konfüzyon/nörolojik bozulma ve aksiller/konjonktival peteşiler.' },
+        { condition: 'Akut Masif Miyokard İnfarktüsü (RV İnfarktüsü)', differentiatingFactors: 'Sağ koroner arter (RCA) oklüzyonunda EKG\'de D2, D3, aVF ve sağ prekordiyal V3R-V4R derivasyonlarında ST elevasyonu görülür; ekokardiyografide sol ventrikül inferior duvarı da akinetiktir.' },
+        { condition: 'Tansiyon Pnömotoraks', differentiatingFactors: 'Yüksek tepe hava yolu basıncı, tek taraflı solunum sesi yokluğu, trakeal deviasyon, hipoksi ve hipotansiyon. Göğüs tüpü / iğne dekompresyonu ile saniyeler içinde düzelir.' },
+        { condition: 'Kardiyak Tamponad', differentiatingFactors: 'Beck triadı (hipotansiyon, juguler venöz dolgunluk, derinden gelen kalp sesleri), EKG\'de elektriksel alternans, ekokardiyografide perikardiyal efüzyon ve sağ atriyum/ventrikül diyastolik kollapsı.' }
+      ]
+    },
+
+    // 4) Acile Spesifik Akut Yönetimi - Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'Masif PE / Perioperatif Kardiyak Arrest Ekibi (Mavi Kod) · KVC Acil Embolektomi / ECMO Hattı · Girişimsel Radyoloji Kateter Trombektomi',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'HAYKIR & YARDIM ÇAĞIR / CERRAHİ EKİBİ ANINDA BİLGİLENDİR',
+          action: 'FiO2 1.0\'e çıkarın (%100 O2). Cerrahi manipülasyonu, laparoskopik gaz insüflasyonunu veya turnike indirme sürecini derhal durdurun. Anestezi derinliğini hafifletin (volatil anestezikleri kısın/kapatın). KVC ve Mavi Kod ekiplerini haberdar edin.',
+          criticalNote: 'İntraoperatif ani EtCO2 düşüşü ve taşikardi/hipotansiyonda aksi kanıtlanana dek Masif Pulmoner Emboli düşünülmelidir!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'AŞIRI SIVI İNFÜZYONUNDAN KESİNLİKLE KAÇININ!',
+          action: 'Hipotansiyonu düzeltmek amacıyla kontrolsüz bolus sıvı VERMEYİN! Yalnızca 250-500 mL dengeli kristaloid (Isolyte-S veya Ringer Laktat) 15-20 dakikada dikkatle verilmelidir. CVP yüksekse (>12-14 mmHg) sıvı tamamen kesilmelidir.',
+          criticalNote: 'Aşırı sıvı RV diyastol sonu basıncını artırır, interventriküler septumu sol ventriküle doğru iter (septal shift), sol ventrikül doluşunu bozar ve kardiyojenik şoku derinleştirir!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'ERKEN VAZOPRESSÖR BAŞLA: NORADRENALİN İNFÜZYONU',
+          action: 'İlk tercih ajan Noradrenalin\'dir (0.05 - 1.0 mcg/kg/dk). Hedef Ortalama Arter Basıncı (MAP) ≥ 65-70 mmHg olmalıdır. Sistemik vazokonstriksiyon ile aort kökü diyastolik basıncını yükselterek aşırı gerilmiş ve iskemiye giren sağ ventrikülün koroner perfüzyonunu korur.',
+          criticalNote: 'Refrakter vazoplejide ikinci ajan olarak Vazopressin (0.01 - 0.04 IU/dk) ekleyin. Vazopressin pulmoner vasküler direnci artırmaksızın sistemik basıncı artırır.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'İNVAZİV ARTERİYEL & TEE MONİTÖRİZASYONU',
+          action: 'Hemen radial veya femoral arter kanülasyonu yapın. Mümkün olan en kısa sürede Transözofageal Ekokardiyografi (TEE) probunu yerleştirin: RV dilatasyonu (RV/LV > 1.0), McConnell bulgusu, pulmoner arterde trombüs ve D-şeklinde LV değerlendirin.',
+          criticalNote: 'TEE, intraoperatif şokun ayırıcı tanısında (PE vs MI vs Tamponad vs Hipovolemi) dakikalar içinde kesin yön çizer.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 5,
+          title: 'VENTİLATÖR AYARLARINI OPTİMİZE ET (AŞIRI PEEP YASAĞI)',
+          action: 'Düşük tidal volüm (6 mL/kg ideal kilo), plato basıncı < 28-30 cmH2O, ılımlı PEEP (5-8 cmH2O). Aşırı yüksek PEEP ve alveolar aşırı gerilme pulmoner kılcal damarları sıkarak RV ard yükünü (PVR) katlar ve venöz dönüşü felç eder.',
+          criticalNote: 'Normokapniyi hedefleyin (PaCO2 35-40 mmHg); hiperkapni ve asidoz pulmoner vazokonstriksiyonu şiddetlendirir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 6,
+          title: 'ACİL TROMBOLİTİK TEDAVİ (MASİF PE & ŞOK PROTOKOLÜ)',
+          action: 'Persistan şok (SKB < 90 mmHg veya MAP < 65 mmHg) veya kardiyak arrest durumunda derhal sistemik tromboliz uygulayın: Alteplase (rt-PA) 100 mg IV 2 saatlik infüzyon VEYA arrest/peri-arrest durumunda acil 50 mg IV 15 dakikalık bolus (gerekirse 30 dk sonra 2. 50 mg). Alternatif: Kilo ayarlı Tenecteplase tek bolus.',
+          criticalNote: 'Perioperatif cerrahi kanama riski çok yüksekse alternatif: Acil Cerrahi Pulmoner Embolektomi veya Girişimsel Kateter Trombektomi / VA-ECMO.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 7,
+          title: 'ANTİKOAGÜLASYON: ANFRAKSİYONE HEPARİN (UFH)',
+          action: 'Klinik şüphe anında ve trombolizle eşzamanlı/hemen sonrasında IV UFH 80 IU/kg bolus ardından 18 IU/kg/saat infüzyon başlatın. Hedef aPTT: normalin 1.5 - 2.5 katı (60-80 saniye).',
+          criticalNote: 'Cerrahi kanama veya acil operasyon riski olan olgularda yarı ömrü kısa olduğu ve Protamin Sülfat ile hızla nötralize edilebildiği için UFH altın standarttır.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 8,
+          title: 'REFRAKTER OLGULARDA MEKANİK DESTEK: VA-ECMO & CERRAHİ EMBOLEKTOMİ',
+          action: 'Maksimal medikal ve trombolitik tedaviye rağmen kardiyojenik şok tablosu derinleşiyorsa veya trombolizin mutlak kontrendike olduğu perioperatif hastalarda KVC ekibince Veno-Arteriyel ECMO (VA-ECMO) veya açık cerrahi pulmoner embolektomiye geçilmelidir.',
+          criticalNote: 'VA-ECMO, hem oksijenasyonu sağlar hem de sağ ventrikülü dekomprese ederek cerrahi embolektomiye veya litik etkiye köprü oluşturur.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 9,
+          title: 'KARDİYAK ARREST YÖNETİMİ: UZAMIŞ KPR (EN AZ 60-90 DAKİKA)',
+          action: 'Masif PE arrestinde (PEA veya Asistoli) trombolitik bolus (Alteplase 50 mg IV) verildikten sonra KPR en az 60-90 dakika kesintisiz sürdürülmelidir. Mekanik göğüs kompresyon cihazı (LUCAS vb.) ve acil E-CPR (ECMO eşliğinde KPR) düşünülmelidir.',
+          criticalNote: 'Trombolitik ilacın akciğer damar yatağındaki masif pıhtıyı mekanik kompresyon sirkülasyonu ile eritmesi zaman alır; KPR erkenden sonlandırılmamalıdır!',
+          priority: 'CRITICAL'
+        }
+      ],
+
+      // Pulmoner Embolizm (PE / PTE) acil protokolleri
+      peProtocols: {
+        hemodynamicRvSupport: {
+          title: 'Akut Sağ Ventrikül Yetmezliği & Hemodinamik Resüsitasyon Stratejisi',
+          fluidCaution: 'AŞIRI SIVI YASAKTIR! RV serbest duvarı incedir; aşırı volüm verildiğinde RV genişler ve perikardiyal kısıtlılık nedeniyle interventriküler septumu sola iter (septal bowing / D-shape LV). Bu durum LV doluşunu bloke eder ve kardiyak debiyi sıfırlar. Yalnızca 250-500 mL kristaloid yükleme denemesi yapılabilir.',
+          vasopressorsAndInotropes: [
+            {
+              agent: 'Noradrenalin (Norepinefrin)',
+              dosage: '0.05 - 1.0 mcg/kg/dk IV infüzyon (Hedef MAP ≥ 65-70 mmHg)',
+              indication: 'Tüm hipotansif ve şoktaki PE hastalarında 1. TERCİH vazopressör',
+              mechanismPearl: 'Sistemik vasküler direnci artırır, aort diyastolik basıncını yükselterek sağ ventrikülün koroner perfüzyonunu korur ve iskemi spiralini kırar.'
+            },
+            {
+              agent: 'Vazopressin (AVP)',
+              dosage: '0.01 - 0.04 IU/dk sabit doz IV infüzyon',
+              indication: 'Noradrenalin doz ihtiyacı yükseldiğinde ikili kombinasyon',
+              mechanismPearl: 'Pulmoner vasküler direnci (PVR) artırmaksızın sistemik vasküler direnci artırır; V1 aracılı pulmoner endotelyal NO salınımını uyararak PVR/SVR oranını düşürür.'
+            },
+            {
+              agent: 'Dobutamin',
+              dosage: '2 - 20 mcg/kg/dk IV infüzyon (Tek başına verilmez!)',
+              indication: 'Normotansif veya Noradrenalin ile MAP ≥ 65 sağlanmış RV kontraktilite yetersizliğinde',
+              mechanismPearl: 'Beta-1 inotropik etki ile RV ejeksiyonunu artırır. Vazodilatatör etkisiyle hipotansiyonu derinleştirebileceğinden daima Noradrenalin ile kombine edilmelidir.'
+            },
+            {
+              agent: 'Milrinon',
+              dosage: '0.375 - 0.75 mcg/kg/dk IV infüzyon (Bolus dozu yapmayın)',
+              indication: 'Refrakter RV yetmezliği ve yüksek pulmoner arter basıncı',
+              mechanismPearl: 'Fosfodiesteraz-3 inhibitörü: Hem RV kontraktilitesini artırır hem de pulmoner arteriyel vazodilatasyon sağlar (inodilatatör).'
+            },
+            {
+              agent: 'İnhale Nitrik Oksit (iNO) / İnhale İloprost',
+              dosage: 'iNO: 10 - 20 ppm ventilatör devresinden / İloprost (Ventavis): 2.5 - 5 mcg nebül',
+              indication: 'Refrakter hipoksemi ve şiddetli pulmoner hipertansiyon',
+              mechanismPearl: 'Sadece ventile olan alveollere ulaşarak selektif pulmoner vazodilatasyon yapar; sistemik hipotansiyon oluşturmaz ve V/Q uyumunu düzeltir.'
+            }
+          ],
+          ventilatorSettings: [
+            { parameter: 'Tidal Volüm (Vt)', target: '6 mL/kg (İdeal Vücut Ağırlığı)', caution: 'Aşırı tidal volüm pulmoner kapillerleri gererek RV ard yükünü (PVR) artırır.' },
+            { parameter: 'PEEP', target: '5 - 8 cmH2O (Ilımlı)', caution: 'Yüksek PEEP (>10-12) intratorasik basıncı artırarak venöz dönüşü azaltır ve RV iskemi spiralini tetikler.' },
+            { parameter: 'Plato Basıncı (Pplat)', target: '< 28 - 30 cmH2O', caution: 'Akciğer parankiminde aşırı gerilmeyi ve barotravmayı önleyin.' },
+            { parameter: 'FiO2 / Hedef SpO2', target: 'FiO2 1.0 ile başlayıp SpO2 %92-96\'ya titre et', caution: 'Alveoler hipoksi en güçlü pulmoner vazokonstriktördür (Euler-Liljestrand); hipoksiye asla izin vermeyin.' }
+          ]
+        },
+        thrombolyticRegimens: {
+          title: 'Trombolitik Tedavi Protokolü & Rejimleri (Masif PE & Peri-Arrest)',
+          regimens: [
+            {
+              agent: 'Alteplase (rt-PA) Standart İnfüzyon',
+              standardDose: '100 mg IV infüzyon 2 saatte (veya kilo <65 kg ise 0.6 mg/kg, maks 50 mg 15 dakikada)',
+              cardiacArrestDose: '50 mg IV 15 dakikada bolus infüzyon; 30 dakika sonra ROSC sağlanamazsa 2. 50 mg bolus verilebilir',
+              contraindications: 'Aktif iç kanama, son 3 ayda hemorajik inme / kafa travması, son 3 haftada majör cerrahi (göreceli - arrest durumunda hayat kurtarıcı olarak uygulanır).'
+            },
+            {
+              agent: 'Tenecteplase (TNK-tPA) Kilo Ayarlı Tek Bolus',
+              standardDose: 'Kilo ayarlı tek IV bolus (5-10 saniyede): <60 kg: 30 mg; 60-69 kg: 35 mg; 70-79 kg: 40 mg; 80-89 kg: 45 mg; ≥90 kg: 50 mg',
+              cardiacArrestDose: 'Kilo ayarlı tam bolus hemen IV puşe uygulanır (KPR sırasında uygulama kolaylığı sağlar)',
+              contraindications: 'Fibrin spesifitesi yüksektir, uygulama hızı en avantajlı ajandır; kontrendikasyonları Alteplase ile aynıdır.'
+            }
+          ],
+          surgicalAndCatheterOptions: [
+            'Perkütan Kateter Aracılı Trombektomi & Ultrason Destekli Tromboliz (EKOS): Sistemik trombolizin kontrendike olduğu yüksek kanama riskli perioperatif hastalarda düşük doz tPA (8-12 mg) ile pıhtıyı lokal eritme ve mekanik parçalama.',
+            'Cerrahi Pulmoner Embolektomi (Trendelenburg Operasyonu): Trombolizin başarısız olduğu, mutlak kontrendike olduğu veya sağ atriyumda/ana pulmoner arter bifurkasyonunda hareketli pıhtı (thrombus-in-transit) bulunan masif PE olgularında acil KVC müdahalesi.',
+            'Veno-Arteriyel ECMO (VA-ECMO): Cerrahi embolektomiye köprü olarak veya refrakter arrestte (E-CPR) dakikalar içinde perfüzyon ve oksijenasyonu devralmak üzere femoral kanülasyon ile kurulur.'
+          ]
+        },
+        anticoagulationProtocol: {
+          title: 'Antikoagülasyon Yönetimi (UFH vs LMWH)',
+          ufhProtocol: {
+            bolus: '80 IU/kg IV bolus (maks 10.000 IU) - Şüphe anında derhal verilir',
+            infusion: '18 IU/kg/saat IV sürekli infüzyon (maks 2.000 IU/saat)',
+            targetAptt: 'Hedef aPTT: Kontrolün 1.5 - 2.5 katı (yaklaşık 60 - 80 saniye; her 4-6 saatte bir aPTT kontrolü ile titre edilir)',
+            reversal: 'Protamin Sülfat: 1 mg Protamin, son 2 saatte verilen 100 IU heparini nötralize eder (maks tek doz 50 mg yavaş IV)'
+          },
+          lmwhProtocol: {
+            agent: 'Enoksaparin (DMAH / LMWH)',
+            dose: '1 mg/kg SC günde 2 kez (12 saatte bir) veya 1.5 mg/kg SC günde 1 kez (hemodinamik olarak stabil orta/düşük risk olgularda)',
+            caution: 'Şoktaki, masif PE\'li veya cerrahi kanama riski olan hastalarda UFH tercih edilmelidir (LMWH yarı ömrü uzundur ve tam geri çevrilemez).'
+          }
+        },
+        riskStratification: {
+          title: 'ESC 2019 Pulmoner Embolizm Risk Tabakalaması',
+          categories: [
+            {
+              riskClass: 'Yüksek Risk (Masif PE)',
+              clinicalFeatures: 'Hemodinamik instabilite: Kardiyak arrest, obstrüktif şok veya persistan hipotansiyon (SKB <90 mmHg veya >40 mmHg düşüş, >15 dk süren)',
+              rvDysfunction: 'Pozitif (TTE/TEE\'de RV dilatasyonu, McConnell bulgusu, D-şeklinde LV)',
+              biomarkers: 'Genellikle pozitif (Troponin T/I ve NT-proBNP yüksekliği)',
+              primaryAction: 'ACİL TROMBOLİTİK TEDAVİ veya Cerrahi Embolektomi / VA-ECMO + UFH'
+            },
+            {
+              riskClass: 'Orta-Yüksek Risk (Submasif PE)',
+              clinicalFeatures: 'Hemodinamik olarak stabil (SKB ≥ 90 mmHg), ancak klinik stres ve taşikardi',
+              rvDysfunction: 'Pozitif (Ekokardiyografide veya BTPA\'da belirgin RV büyümesi / strain)',
+              biomarkers: 'Pozitif (Serum kardiyak troponin T/I ve/veya BNP/NT-proBNP yüksekliği)',
+              primaryAction: 'Hastaneye yatış, UFH veya LMWH ile yoğun monitörizasyon, kötüleşirse kurtarma trombolizi'
+            },
+            {
+              riskClass: 'Orta-Düşük Risk',
+              clinicalFeatures: 'Hemodinamik olarak stabil (SKB ≥ 90 mmHg)',
+              rvDysfunction: 'Pozitif VEYA Biyomarker Pozitif (ikisi birden pozitif DEĞİL)',
+              biomarkers: 'Yalnızca biri pozitif',
+              primaryAction: 'Servis / YBÜ yatışı, LMWH veya direkt oral antikoagülan (DOAC)'
+            },
+            {
+              riskClass: 'Düşük Risk',
+              clinicalFeatures: 'Hemodinamik olarak stabil, sPESI Skoru = 0',
+              rvDysfunction: 'Negatif',
+              biomarkers: 'Negatif',
+              primaryAction: 'Erken taburculuk veya kısa süreli servis izlemi, DOAC (Apiksaban / Rivaroksaban)'
+            }
+          ]
+        }
+      }
+    },
+
+    // 5) Patofizyolojisi
+    pathophysiology: {
+      molecularBasis: 'Pulmoner embolide ölümün ana mekanizması solunumsal yetmezlik değil; pulmoner vasküler yatağın ani tıkanmasına bağlı gelişen Akut Sağ Ventrikül Yetmezliği ve Obstrüktif Şoktur.',
+      geneticMutations: [
+        'Faktör V Leiden (G1691A) Mutasyonu (Aktive Protein C direnci - en sık herediter trombofili)',
+        'Protrombin G20210A Gen Mutasyonu (Artmış protrombin plazma seviyesi)',
+        'Antitrombin III Eksikliği (Heparin direnci oluşturabilir)',
+        'Protein C ve Protein S Eksikliği (Doğal antikoagülan yolak defekti)',
+        'Antifosfolipid Antikor Sendromu (Lupus antikoagülanı, antikardiyolipin antikorları)'
+      ],
+      stepsTitle: 'Ölümcül Sağ Ventrikül İskemi ve Çöküş Spirali (Vicious RV Spiral):',
+      cascadeSteps: [
+        { phase: 'Faz 1: Mekanik Tıkanma & Nörohümoral Vazokonstriksiyon', mechanism: 'Trombüsün pulmoner arter dallarını tıkaması ve trombositlerden salınan tromboksan A2 ile serotonin salınımı pulmoner vasküler direnci (PVR) katlar.' },
+        { phase: 'Faz 2: Sağ Ventrikül Ard Yükü (Afterload) Fırlaması', mechanism: 'Normalde düşük dirençli olan ince duvarlı sağ ventrikül ani PVR artışına uyum sağlayamaz; RV sistolik basıncı akut olarak >40-50 mmHg\'nin üzerine çıkamaz ve RV genişlemeye başlar.' },
+        { phase: 'Faz 3: Triküspit Yetmezliği ve RV Duvar Gerilimi', mechanism: 'RV dilatasyonu triküspit anulusunu genişleterek şiddetli triküspit yetmezliğine yol açar; CVP tırmanır ve RV duvar gerilimi (Laplace yasası) oksijen tüketimini fırlatır.' },
+        { phase: 'Faz 4: İnterventriküler Septal Kayma (Septal Shift / D-Shaped LV)', mechanism: 'Genişleyen sağ ventrikül interventriküler septumu sol ventrikül boşluğuna doğru iter; sol ventrikül diyastolik doluşu (preload) mekanik olarak bloke olur.' },
+        { phase: 'Faz 5: Kardiyak Debi Çöküşü & Sistemik Hipotansiyon', mechanism: 'Sol ventriküle kan dolamadığı için atım hacmi ve kardiyak debi aniden çöker; sistemik hipotansiyon gelişir.' },
+        { phase: 'Faz 6: Sağ Koroner Arter İskemisi & Kardiyak Arrest', mechanism: 'Aort kökü basıncının düşmesi sağ koroner perfüzyonunu bozar; aşırı gerilmiş ve iskemik RV kası iflas eder. Tablo hızla PEA (Nabızsız Elektriksel Aktivite) arrestine ilerler.' }
+      ],
+      summaryText: 'Özetle masif pulmoner emboli hastası "hipoksiden değil, akut sağ ventrikülün gerilerek iskemiye girmesi ve sol ventrikül doluşunu engellemesi sonucu obstrüktif şoktan" kaybedilir. Bu nedenle aşırı sıvı verilmesi gerilmiş septumu daha da sola iterek ölümcül döngüyü hızlandırır.'
+    },
+
+    // 6) Klinik Özellikleri - Prezentasyonu
+    presentation: {
+      earlySigns: [
+        'Dakika ventilasyonu sabitken ani, açıklanamayan End-Tidal CO2 (EtCO2) düşüşü (<15-20 mmHg)',
+        'Anestezi derinliğine veya analjeziye rağmen inatçı sinüs taşikardisi (>100-110/dk)',
+        'FiO2 artışına zayıf yanıt veren ani pulse oksimetre desatürasyonu (SpO2 < %90)',
+        'Hafif-orta düzeyde sistemik kan basıncı düşüşü ve nabız basıncında daralma'
+      ],
+      progressingSigns: [
+        'Ağır refrakter hipotansiyon (Sistolik KB < 90 mmHg veya MAP < 65 mmHg; vazopressör bağımlılığı)',
+        'Santral venöz basınçta ani ve belirgin yükselme (CVP > 16-20 mmHg), juguler dolgunluk',
+        'EKG\'de akut sağ kalp yüklenme bulguları (yeni RBBB, S1Q3T3, V1-V4 derivasyonlarında T negatifliği)',
+        'Arter kan gazında derin PaO2 düşüşü, genişlemiş P(A-a)O2 gradiyenti ve artan laktat seviyesi'
+      ],
+      lateSigns: [
+        'Ekokardiyografide McConnell bulgusu (RV serbest duvar akinezisi, apeks hiperkinezisi) ve sol ventriküle bası yapan D-şeklinde septum',
+        'Kardiyojenik / Obstrüktif Şok, periferik nabızların palpe edilememesi ve derin metabolik laktik asidoz',
+        'Kardiyak Arrest: Genellikle Nabızsız Elektriksel Aktivite (PEA) veya Asistoli ritmi ile ani kardiyovasküler kollaps'
+      ],
+      specialAlertTitle: 'İntraoperatif Ani EtCO2 Çöküşü Algoritması',
+      specialAlertContent: 'Genel anestezi altında cerrahi sürerken EtCO2\'nin aniden yarı yarıya düşmesi (<20 mmHg) 3 ana mekanizmaya işaret eder: 1) Akut Masif Pulmoner Emboli (kan akımı akciğere ulaşamadığı için CO2 alveole atılamaz), 2) Kardiyak Arrest / Masif Dolaşım Çöküşü, 3) Trakeal tüp çıkması veya ventilatör devresi ayrılması. Devre kontrol edildikten sonra ilk eylem Masif PE resüsitasyonudur!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Preoperatif Caprini VTE Risk Skorlaması uygulanmalı; Yüksek ve Çok Yüksek riskli cerrahi hastalarda mekanik + farmakolojik profilaksi planlanmalıdır.',
+        'Total kalça/diz artroplastisi ve majör ortopedik travmalarda cerrahiden en az 12 saat önce/sonra DMAH (Enoksaparin) protokolü uygulanmalıdır.',
+        'Uzun sürecek ameliyatlarda tüm hastalara intraoperatif Aralıklı Pnömatik Kompresyon Cihazı (IPC / SCD) ve dereceli varis çorabı takılmalıdır.',
+        'Turnike kullanımında iskemi süresi 90-120 dakikayı aşmamalı; turnike indirilirken anestezi ekibi hemodinami ve EtCO2 takibinde teyakkuzda olmalıdır.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Acil Pulmoner Emboli Resüsitasyon Ekipmanı Hazırlığı',
+        steps: [
+          'İntraoperatif TEE probunun ameliyathane alanında çalışır ve kalibre edilmiş durumda hazır tutulması',
+          'Acil vazopressör infüzyon setinin (Noradrenalin 4 mg / 50 mL ve Vazopressin 20 IU / 50 mL) hızla infüzyona bağlanabilecek şekilde çekili tutulması',
+          'Ameliyathane acil dolabında Alteplase (Actilyse 50 mg flakonlar) ve steril sulandırma sıvılarının stoğunun doğrulanması',
+          'Acil Anfraksiyone Heparin (Nevparin 5.000 IU/mL veya 25.000 IU) ve antidot Protamin Sülfat ampullerinin el altında bulunması',
+          'Gerektiğinde acil kan gazı (laktat, PaO2, baz açığı) analizörünün hazır olması'
+        ]
+      },
+      cleanAnesthesiaProtocol: [
+        'Santral venöz kateterizasyon ve damar yolu açılışında hava girişini önlemek için luer-lock kilitler ve Trendelenburg pozisyonu kullanılması',
+        'Femur protezi sementlenmesi esnasında intramedüller basınç artışını azaltmak için havalandırma deliği (vent hole) açılması ve cerrahla iletişim',
+        'Laparoskopik cerrahide insüflasyon basıncının 12-14 mmHg ile sınırlandırılması ve aşırı dik Trendelenburg\'dan kaçınılması'
+      ],
+      cartChecklist: [
+        'Alteplase (Actilyse 50 mg x 2 flakon) + Enjeksiyonluk Su',
+        'Tenecteplase (Metalyse) tek bolus flakonu',
+        'Anfraksiyone Heparin (5.000 IU/mL x 2 flakon)',
+        'Protamin Sülfat (50 mg / 5 mL ampul x 2 adet)',
+        'Noradrenalin (4 mg / 4 mL x 2 ampul)',
+        'Vazopressin (20 IU / 1 mL ampul)',
+        'Dobutamin (250 mg / 20 mL ampul)',
+        'İnhale İloprost (Ventavis 10 mcg/mL nebül) veya iNO bağlantı seti',
+        'İntraoperatif TEE Prob ve Cihazı'
+      ]
+    },
+
+    // 8) Postoperatif Takip, Uzun Zamanlı Yönetim, Komplikasyonlar ve Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'En az 48-72 saat 3. Basamak Yoğun Bakım Ünitesinde (YBÜ) invaziv arteriyel basınç, CVP, seri laktat ve kardiyak biyobelirteç takibi.',
+      recurrenceRate: 'İlk 3 ayda uygun antikoagülasyon altında %2-5; antikoagülasyon kesildiğinde ilk yıl %10, 5 yılda %30\'a varan nüks riski.',
+      recurrenceRiskBadge: 'İLK 72 SAAT KRİTİK NÜKS VE SAĞ KALP DEKOMPANSASYONU DÖNEMİ',
+      maintenanceTherapy: 'Akut fazda UFH infüzyonundan sonra hasta stabilize olduğunda Enoksaparin 1 mg/kg SC 12 saatte bir ile idame edilir; oral alım açıldığında Faktör Xa inhibitörü DOAC (Apiksaban 2x10 mg 7 gün sonra 2x5 mg veya Rivaroksaban 2x15 mg 21 gün sonra 1x20 mg) veya Varfarin (Hedef INR 2.0 - 3.0) ile en az 3-6 ay tedavi sürdürülür.',
+      monitoringParameters: [
+        'Sürekli İnvaziv Arter Basıncı ve Ortalama Arter Basıncı (Hedef MAP ≥ 65-70 mmHg)',
+        'Santral Venöz Basınç (CVP düşüş eğilimi sağ ventrikülün rahatladığını gösterir)',
+        'Seri Arter Kan Gazı: PaO2/FiO2 oranı, laktat klirensi ve baz açığı düzelmesi',
+        'Seri Kardiyak Biyobelirteçler: Yüksek duyarlıklı Troponin T/I ve NT-proBNP gerilemesi',
+        '24-48. saat kontrol Transtorasik Ekokardiyografi: RV boyutları, McConnell bulgusunun gerilemesi, triküspit yetmezlik gradiyenti ve sistolik PAP ölçümü',
+        'Tromboliz sonrası intrakraniyal kanama (seri nörolojik muayene) ve cerrahi saha drenaj kontrolü'
+      ],
+      expectedComplications: [
+        'Kronik Tromboembolik Pulmoner Hipertansiyon (KTEPH): Vakaların %1-4\'ünde pıhtının organize olması sonucu kalıcı pulmoner hipertansiyon gelişir.',
+        'Trombolitik Tedaviye Bağlı Majör Kanama: İntrakraniyal kanama (%1-2) veya cerrahi alanda masif hematom/hemoraji (%5-10).',
+        'Kardiyojenik / Obstrüktif Şokun Devamı ve İlerleyici RV Yetmezliği.',
+        'Reperfüzyon Pulmoner Ödemi ve ARDS tablosu.'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: 'Bilgisayarlı Tomografi Pulmoner Anjiyografi (BTPA)', description: 'Hemodinamik olarak stabilize edilmiş hastada altın standart tanı yöntemi; trombüsün lümen içi dolma defekti olarak görüntülenmesi.' },
+        { testName: 'Alt Ekstremite Venöz Kompresyon Doppler USG', description: 'Derin ven trombozu (DVT) varlığını doğrulamak ve vena cava filtresi endikasyonunu belirlemek için bilateral inceleme.' },
+        { testName: 'Kapsamlı Transtorasik / Transözofageal Ekokardiyografi', description: 'RV çapı, TAPSE (Triküspit Anüler Düzlem Sistolik Ekskürsiyonu <16 mm = disfonksiyon), sPAP ve paradoksal septal hareketin kantitatif takibi.' },
+        { testName: 'Ventilasyon / Perfüzyon (V/Q) Sintigrafisi', description: 'Böbrek yetmezliği veya kontrast alerjisi nedeniyle BT çekilemeyen hastalarda V/Q uyumsuzluğunun (mismatch) kanıtlanması.' }
+      ],
+      geneticCounseling: 'Tetiklenmemiş (unprovoked) PE veya 50 yaş altı geçirilmiş emboli vakalarında taburculuk sonrası trombofili paneli (Faktör V Leiden, Protrombin gen mutasyonu, Protein C/S, Lupus antikoagülanı) taranmalıdır.',
+      familyScreening: 'Kalıtsal trombofili saptanan olguların birinci derece akrabalarında cerrahi veya gebelik öncesi profilaksi rehberliği için genetik danışmanlık önerilir.',
+      prognosisSummary: 'Erken tanı konulup sağ ventrikül aşırı yüklenmesi doğru yönetilen ve zamanında tromboliz/embolektomi uygulanan olgularda sağkalım %85-90\'ın üzerindedir. En kritik belirleyici sağ ventrikül fonksiyonlarının ilk 24-48 saatteki toparlanma hızıdır.'
+    },
+
+    // 9) High-Yield Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Hipotansif Sağ Kalp Yetmezliğinde Aşırı Sıvı Hastayı Öldürebilir',
+        takeaway: 'Masif PE\'de sağ ventrikül incedir ve aşırı dolduğunda septumu sol ventriküle doğru iter (septal shift). LV boşluğu basıya uğrayıp dolamaz ve kardiyak debi sıfırlanır. Sıvı bolusları yerine erken Noradrenalin ve Vazopressin başlanmalıdır!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'PE Kardiyak Arrestinde KPR En Az 60-90 Dakika Sürdürülmelidir',
+        takeaway: 'Masif emboliye bağlı arrestte trombolitik (Alteplase 50 mg IV bolus) verildikten sonra göğüs kompresyonu en az 60-90 dakika devam ettirilmelidir. İlacın pıhtıyı eritmesi ve pulmoner yatağı açması dolaşımla zaman alır.',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'İntraoperatif En Erken ve En Duyarlı İpucu: Ani EtCO2 Düşüşü',
+        takeaway: 'Cerrahi sırasında dakika ventilasyonu değişmeksizin EtCO2\'nin aniden <15-20 mmHg seviyesine çökmesi, ventilasyonun devam ettiği ancak perfüzyonun durduğu devasa bir alveoler ölü boşluk (dead space) fraksiyonunu işaret eder.',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'Kritik Doz: Alteplase Masif PE ve Arrest Dozları',
+        takeaway: 'Standart masif PE dozu 100 mg IV 2 saatlik infüzyondur. Ancak kardiyak arrest veya saniyeler içinde çöken peri-arrest hastada acil 50 mg IV 15 dakikalık bolus hayat kurtarır (gerekirse 30 dk sonra 2. 50 mg).',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'McConnell Bulgusu Nedir?',
+        takeaway: 'Ekokardiyografide sağ ventrikül serbest duvarının akinezisi / hipokinezisine rağmen RV apeksinin hiperdinamik kasılmaya devam etmesidir. Akut PE için özgüllüğü %94\'tür.',
+        category: 'Sınav / Klinik Notu'
+      }
+    ],
+
+    // 10) Kullanılan Kaynaklar & İleri Okuma
+    references: [
+      {
+        authors: 'Konstantinides SV, Meyer G, Becattini C, et al.',
+        title: '2019 ESC Guidelines for the diagnosis and management of acute pulmonary embolism developed in collaboration with the European Respiratory Society (ERS).',
+        journal: 'European Heart Journal. 2020;41(4):543-603.',
+        year: '2020',
+        relevance: 'Akut pulmoner emboli tanı, risk tabakalaması, tromboliz ve antikoagülasyonunda dünya altın standardı kılavuz.'
+      },
+      {
+        authors: 'Jaff MR, McMurtry MS, Archer SL, et al.',
+        title: 'Management of massive and submassive pulmonary embolism, iliofemoral deep vein thrombosis, and chronic thromboembolic pulmonary hypertension: A scientific statement from the American Heart Association (AHA).',
+        journal: 'Circulation. 2011;123(16):1788-1830.',
+        year: '2011',
+        relevance: 'Masif ve submasif PE tanımları, RV disfonksiyon kriterleri ve kateter/cerrahi embolektomi endikasyonları.'
+      },
+      {
+        authors: 'Soar J, Böttiger BW, Carli P, et al.',
+        title: 'European Resuscitation Council Guidelines 2021: Adult advanced life support (Cardiac arrest caused by pulmonary embolism).',
+        journal: 'Resuscitation. 2021;161:115-151.',
+        year: '2021',
+        relevance: 'Pulmoner emboliye bağlı kardiyak arrestte acil trombolitik uygulama zamanlaması ve 60-90 dakikalık uzamış KPR protokolü.'
+      },
+      {
+        authors: 'Harter P, et al.',
+        title: 'Perioperative Pulmonary Embolism: Diagnosis, Management, and Prevention in Anesthesia Practice.',
+        journal: 'Anesthesiology Clinics. 2020;38(1):155-171.',
+        year: '2020',
+        relevance: 'İntraoperatif EtCO2 değişiklikleri, TEE bulguları, sağ kalp dekompansasyonunda sıvı kısıtlaması ve vazopressör seçimi.'
       }
     ]
   }

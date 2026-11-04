@@ -1,97 +1,38 @@
-# Vazoaktif Ajanların Karşılaştırması ve Klinik Kılavuzu (İnteraktif İnfografik)
+# Pulmoner Embolizm (PE / PTE) Acil Protokolü Entegrasyonu
 
-Yoğun bakım, anestezi ve acil ünitelerinde hemodinamik optimizasyon için 12 vazoaktif/inotrop ajanın reseptör profillerini, hemodinamik etkilerini, standart doz aralıklarını, klinik incilerini ve özel şok senaryolarını sunan birebir interaktif karşılaştırma infografiği.
+## Yapılan Geliştirmeler
 
-## User Review & Critical Decisions
+1. **Master Veri & Protokol Tanımı (`src/data/emergenciesData.ts`):**
+   - **Tanım ve Giriş:** Pulmoner vasküler yatak obstrüksiyonu, sağ ventrikül aşırı yüklenmesi, septal kayma (septal shift) ve obstrüktif şok patofizyolojisi.
+   - **Tanı Kriterleri & Skalalar:** İntraoperatif ani EtCO2 çöküşü (<15-20 mmHg), refrakter hipotansiyon, inatçı sinüs taşikardisi, CVP artışı, TEE/TTE McConnell bulgusu, S1Q3T3 deseni. Wells PE Skoru ve sPESI (Basitleştirilmiş Pulmoner Emboli Ciddiyet İndeksi) tabloları.
+   - **Ayırıcı Tanı:** İntraoperatif hava embolisi, amniyotik sıvı embolisi (AFE), yağ embolisi sendromu (FES), sağ ventrikül MI, tansiyon pnömotoraks, kardiyak tamponad.
+   - **10 Aşamalı Kriz Algoritması:** 
+     1. %100 O2 & Acil Yardım / Cerrahiyi Durdurma
+     2. Aşırı Sıvı Kısıtlaması (Maks 250-500 mL dengeli kristaloid; aşırı volüm septal shift yaparak sol ventrikülü çökertebilir)
+     3. Erken Noradrenalin (MAP ≥ 65-70 hedefi; sağ koroner perfüzyonunu koruma) + Dirençli vazoplejide Vazopressin
+     4. İnvaziv Arter ve TEE Monitörizasyonu (RV/LV > 1.0, D-şeklinde LV)
+     5. Ventilatör Optimizasyonu (Vt 6 mL/kg, Ilımlı PEEP 5-8 cmH2O, Pplat < 28-30)
+     6. Acil Sistemik Tromboliz (Alteplase 100 mg / 2 saat veya Arrestte acil 50 mg IV 15 dk bolus; Tenecteplase)
+     7. Antikoagülasyon (UFH 80 IU/kg bolus + 18 IU/kg/saat infüzyon, aPTT 60-80 sn; Protamin Sülfat antidotu)
+     8. Refrakter Olgularda VA-ECMO & Açık Cerrahi Embolektomi
+     9. Arrest Durumunda Uzamış KPR (En az 60-90 dakika kesintisiz kompresyon)
+   - **Özel Protokoller:**
+     - Akut RV Desteği & Vazoaktifler (Noradrenalin, Vazopressin, Dobutamin, Milrinon, iNO/İloprost)
+     - Trombolitik Rejimler & Cerrahi/Girişimsel Seçenekler (EKOS, Trendelenburg embolektomisi, VA-ECMO)
+     - Antikoagülasyon Yönetimi (UFH vs DMAH/Enoksaparin)
+     - ESC 2019 Risk Tabakalaması (Masif, Submasif, Orta-Düşük, Düşük Risk)
 
-> [!IMPORTANT]
-> Kullanıcı tercihleri doğrultusunda PDF içeriğinin tüm klinik verileri birebir interaktif tablo ve fonksiyonel sekmeli matris (Vazopresörler, İnotroplar, İnodilatörler, Karma/Puşe) mimarisiyle tasarlanmıştır.
+2. **Kullanıcı Arayüzü & İnteraktif Hesaplayıcı (`src/components/emergencies/EmergencyProtocolDetailView.tsx`):**
+   - Hastanın kilosuna göre anlık hesaplanan:
+     - Alteplase Arrest Bolusu (50 mg IV 15 dk) ve İnfüzyon Dozu
+     - Tenecteplase tek bolus dozu (kilo dilimine göre 30-50 mg)
+     - Heparin (UFH) 80 IU/kg bolus ve 18 IU/kg/saat infüzyon dozları
+     - Enoksaparin dozu (1 mg/kg SC)
+     - Noradrenalin başlama aralığı
+     - Kritik sıvı kısıtlama uyarısı
+   - 4 modüllü detaylı kriz paneli (RV Desteği, Tromboliz Rejimleri, Heparin Protokolü, Risk Tabakalaması)
 
-- **Onaylanan Karar 1 (İçerik Yapısı)**: PDF'teki Tablo 1 (Reseptör ve Hemodinamik Doz Tablosu), Bölüm 2 (Klinik Karar Verme ve High-Yield İnciler) ve Bölüm 3 (Özel Şok Senaryoları) eksiksiz olarak interaktif tablo ve akordeon/kart yapısında sunulacaktır.
-- **Onaylanan Karar 2 (Filtreleme & Sekmeler)**: İlaçlar fonksiyonel sekmeli matris ile filtrelenebilecek: `Tümü (12 Ajan)`, `Vazopresörler (Saf/Baskın)`, `İnotroplar`, `İnodilatörler`, `Karma / Periferik Puşe`.
-- **Arama & Hızlı Erişim**: Hekimler ilaç ismine (örn. Noradrenalin, Milrinon) veya klinik endikasyona (örn. Septik Şok, RV Yetmezliği, Anafilaksi) göre anlık filtreleme yapabilecektir.
-
----
-
-## 1. Overview & Core Concept
-
-- **Ne İşe Yarar**: Yoğun bakım ve ameliyathanede kritik hemodinamik instabilite anında hekimlerin saniyeler içinde doğru ajanı, reseptör etkisini ($\alpha_1, \beta_1, \beta_2, D_1/V_1$), kardiyak debi (CO), sistemik vasküler rezistans (SVR), kalp hızı (HR) ve pulmoner vasküler rezistans (PVR) yanıtını incelemesini sağlar.
-- **Hedef Kitle**: Anesteziyoloji ve Reanimasyon asistanları, uzmanları ve yoğun bakım hekimleri.
-- **Temel Değer**: Statik PDF dokümanını; aranabilir, sekmelerle filtrelenebilir, satır detayları açılabilir, karanlık/aydınlık mod uyumlu ve derin bağlantı (deep-link) destekli profesyonel bir yatak başı klinik aracına dönüştürür.
-
----
-
-## 2. User Experience & Visual Design
-
-### Ana Kullanıcı Akışları
-1. **İnfografikler Ana Ekranı**: `InfographicsView` üzerinde "Vazoaktif ve İnotropik Ajanlar" kartı yer alır (Kaynak: *Klinik Kılavuz & Karşılaştırma Matriksi*).
-2. **Kapsamlı Karşılaştırma Matrisi**:
-   - Üstte fonksiyonel kategori sekmeleri: `Tümü (12)`, `Vazopresörler`, `İnotroplar`, `İnodilatörler`, `Karma & Puşe`.
-   - Dinamik arama kutusu: İlaç adı veya senaryo yazıldığında anında eşleşen satırlar listelenir.
-   - Reseptör ve hemodinamik etki sütunları: Renk kodlu yön okları ($\uparrow\uparrow\uparrow, \downarrow\downarrow, \leftrightarrow$) ve reseptör afiniteleri ($++++, ++, 0$).
-   - Satır genişletme: Tıklanan ilacın yarı ömrü, etki mekanizması ve pratik hazırlama notu satır altında detay kartı olarak açılır.
-3. **High-Yield İnciler & Kritik Klinik Notlar**:
-   - Noradrenalin: Splanknik venöz yataktan unstressed volume $\to$ stressed volume dönüşümü ve preload artışı.
-   - Adrenalin: Düşük doz $\beta_2$ vazodilatasyon vs yüksek doz $\alpha_1$ vazokonstriksiyon; Tip B laktik asidoz ve hiperglisemi uyarısı.
-   - Vazopressin: Asidozda ($pH < 7.15$) korunan $V_1$ duyarlılığı; PVR artırmadan SVR artırma (RV yetmezliği & HOCM).
-   - Fenilefrin: Saf $\alpha_1$, baroreseptör refleks bradikardi, Fallot spell krizi ve HOCM.
-   - Dobutamin vs Milrinon: Yarı ömür farkı (2 dk vs 2-3 saat) ve kronik $\beta$-blokerde Milrinon'un cAMP koruyucu üstünlüğü.
-   - Levosimendan: $Ca^{2+}$ duyarlılaştırıcı (MVO$_2$ artırmaz) ve 7-9 gün süren aktif metabolit (OR-1896).
-   - Ekstravazasyon Yönetimi: $\alpha_1$ nekrozunda kanül çekilmeden 3-5 mL aspirasyon + 5-10 mg Fentolamin (10 mL SF ile) subkutan infiltrasyon.
-4. **Özel Klinik Senaryolarda Ajan Seçim Tablosu**:
-   - Septik Şok, Kardiyojenik Şok, Sağ Ventrikül (RV) Yetersizliği, HOCM / SAM Obstrüksiyonu, Anafilaktik Şok, Denerve Kalp (Kalp Nakli).
-   - Her senaryo için: *İlk Tercih Ajanlar*, *Kaçınılması Gereken Ajanlar* ve *Fizyolojik Gerekçe*.
-
-### Görsel Kimlik ve Tipografi
-- **Renk Paleti**: Medikal hassasiyet odaklı; nötr zemin (`slate-900` / `slate-50`), vazopresör mavisi/laciverti, inotropik teal (`teal-600`), inodilatör moru (`purple-600`), uyarı rozetleri (`rose-500`, `amber-500`).
-- **Tipografi**: Başlık ve etiketlerde `Plus Jakarta Sans`, sayısal doz ve etki göstergelerinde `font-mono tabular-nums`.
-- **Anti-Slop & Sıfır-Pill Disiplini**: Statik metinler kutucuklara hapsedilmeyecek; temiz tablo sınırları, saç çizgisi (hairline) bölücüler ve okunaklı sembolik etki göstergeleri kullanılacaktır.
-
----
-
-## 3. Key Product Decisions & Trade-Offs
-
-- **Karar 1: Tek Bileşende Eksiksiz İçerik vs Çoklu Sayfa**:
-  - *Seçim*: Tüm kılavuz `VasoactiveAgentsInfographic.tsx` bileşeni içinde 3 ana bölümlü (1. Reseptör & Doz Tablosu, 2. Klinik İnciler, 3. Özel Şok Senaryoları) tek bir akıcı sayfada sunulacaktır.
-  - *Neden*: Acil ameliyathane veya yoğun bakımda hekimin sayfalar arasında kaybolmadan tek dokunuşla ilgili tabloya veya senaryoya ulaşması hayatidir.
-- **Karar 2: Derin Bağlantı (Deep-Link) & Paylaşım Desteği**:
-  - *Seçim*: `#infographics/vasoactive-agents` hash rotası ile doğrudan açılabilme ve `ShareLinkButton` ile klinik personeline doğrudan link gönderebilme.
-  - *Neden*: Asistanlar veya uzmanlar vaka sırasında doğrudan bu infografiğin linkini paylaşabilmelidir.
-
----
-
-## 4. Technical Architecture & Data Strategy
-
-### Bileşen Hiyerarşisi
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     InfographicsView                        │
-│   (Koleksiyon Listesi & Seçili İnfografik Router'ı)         │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-            ┌──────────────────┴──────────────────┐
-            ▼                                     ▼
-┌─────────────────────────┐           ┌─────────────────────────────┐
-│  Mevcut İnfografikler   │           │ VasoactiveAgentsInfographic │
-│ (RSI, Fasting, Aldrete) │           │ (YENİ - Vazoaktif Kılavuz)  │
-└─────────────────────────┘           └──────────────┬──────────────┘
-                                                     │
-         ┌───────────────────────────┬───────────────┴───────────────────────────┐
-         ▼                           ▼                                           ▼
-┌─────────────────┐       ┌────────────────────────┐                 ┌──────────────────────┐
-│ Kategori Filtre │       │ Reseptör & Doz Tablosu │                 │ Şok Senaryoları &    │
-│ (Vazo, İnotrop, │       │ (12 Ajan, Hemodinamik, │                 │ High-Yield İnciler   │
-│  İnodil, Karma) │       │  Etki Okları, Dozlar)  │                 │ (Fentolamin, SAM...) │
-└─────────────────┘       └────────────────────────┘                 └──────────────────────┘
-```
-
-### Veri Modelleri
-- `VasoactiveAgent`: İlaç kimliği, kategorisi, $\alpha_1, \beta_1, \beta_2, D_1/V_1$ skorları, CO, SVR, HR, PVR etkileri, standart doz aralığı, pratik klinik notları.
-- `ClinicalScenario`: Senaryo adı, 1. tercih ajanlar, kaçınılması gereken ajanlar, fizyolojik mekanizma gerekçesi.
-- `ClinicalPearl`: Ajan bazlı kritik inciler (Unstressed volume, Tip B laktik asidoz, V1 asidoz stabilitesi, ekstravazasyon protokolü).
-
-### Entegrasyon Noktaları
-- `src/components/infographics/VasoactiveAgentsInfographic.tsx`: Yeni bileşen dosyası.
-- `src/components/infographics/InfographicsView.tsx`: Koleksiyon dizisine `vasoactive-agents` kartı ekleme ve render koşulu sağlama.
-- `src/data/portalSearchIndex.ts`: Global komut paleti ve arama motoruna vazoaktif ajanlar ve şok kılavuzu anahtar kelimelerini ekleme.
+3. **Gezinti ve Arama Entegrasyonu:**
+   - `src/components/emergencies/AnesthesiaEmergenciesView.tsx`: Senaryo kartları arasına Pulmoner Embolizm (PE / PTE) kartı "10 Aşamalı Protokol Hazır" etiketiyle eklendi.
+   - `src/data/portalSearchIndex.ts`: `emergency-pulmonary-embolism` başlığı ve kapsamlı anahtar kelimeleriyle (PE, PTE, masif emboli, alteplase, tenecteplase, EtCO2 düşüşü, McConnell vb.) arama dizinine eklendi.
+   - `src/components/PortalWorkspace.tsx`: Arama sonuçlarından tıklandığında doğrudan PE detay protokolüne yönlendirme bağlandı.

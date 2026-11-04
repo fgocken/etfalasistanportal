@@ -42,6 +42,15 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
     isReady: true
   },
   {
+    id: 'pe',
+    title: 'Pulmoner Embolizm (PE / PTE)',
+    shortDesc: 'Masif ve submasif PE, ani EtCO2 çöküşü, akut sağ kalp (RV) dekompansasyonu, hedefe yönelik sıvı kısıtlaması, Alteplase/Tenecteplase trombolizi, UFH ve ECMO.',
+    tag: '10 Aşamalı Protokol Hazır',
+    icon: Activity,
+    accentColor: 'red',
+    isReady: true
+  },
+  {
     id: 'bronchospasm',
     title: 'İntraoperatif Akut Bronkospazm',
     shortDesc: 'Hava yolu direnci fırtınası, yüksek Ppeak, köpekbalığı sırtı EtCO2, Salbutamol/Mg/Adrenalin ve ventilatör optimizasyonu.',
@@ -215,7 +224,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md self-start sm:self-auto border ${
             isDark ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-200'
           }`}>
-            6 Acil Senaryo Hazır (MH, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon) · 3 Senaryo Sırada
+            7 Acil Senaryo Hazır (MH, PE / Tromboemboli, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon) · 3 Senaryo Sırada
           </span>
         </div>
 

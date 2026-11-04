@@ -599,6 +599,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     } else if (item.tabId === 'emergencies') {
       if (item.id === 'emergency-malignant-hyperthermia') {
         setSelectedEmergencyProtocolId('mh');
+      } else if (item.id === 'emergency-pulmonary-embolism') {
+        setSelectedEmergencyProtocolId('pe');
       }
       handleSelectTab('emergencies');
       window.scrollTo({ top: 0, behavior: 'smooth' });

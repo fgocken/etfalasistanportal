@@ -220,6 +220,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'emergencies',
     popular: true
   },
+  {
+    id: 'emergency-pulmonary-embolism',
+    title: 'Akut Pulmoner Embolizm (PE / PTE) Kriz Protokolü',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Pulmoner Emboli',
+    description: '10 aşamalı acil kriz protokolü: Ani EtCO2 çöküşü, aşırı sıvı kısıtlaması, Noradrenalin, acil Alteplase (50-100 mg) ve Tenecteplase trombolizi, UFH antikoagülasyonu, Wells & sPESI skoru ve VA-ECMO.',
+    keywords: [
+      'pulmoner emboli', 'pulmoner embolizm', 'pe', 'pte', 'masif emboli', 'submasif emboli', 
+      'pulmoner tromboemboli', 'alteplase', 'actilyse', 'tenecteplase', 'metalyse', 'tromboliz', 
+      'etco2 düşüşü', 'sağ ventrikül yetmezliği', 'sağ kalp çöküşü', 'mcconnell', 'septal shift', 
+      'wells skoru', 'cenevre skoru', 'pesi', 'spesi', 'heparin', 'ufh', 'enoksaparin', 'dmah', 
+      'va-ecmo', 'embolektomi', 'trendelenburg', 'anestezi acili', 'kriz yönetimi', 'acil protokol'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
 
   // 3. Klinik İnfografikler
   {
