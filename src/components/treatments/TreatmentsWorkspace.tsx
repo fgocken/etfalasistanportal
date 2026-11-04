@@ -31,6 +31,7 @@ import { PropofolProtocol } from './PropofolProtocol';
 import { MidazolamProtocol } from './MidazolamProtocol';
 import { LidocaineProtocol } from './LidocaineProtocol';
 import { KetamineProtocol } from './KetamineProtocol';
+import { NorepinephrineProtocol } from './NorepinephrineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -537,6 +538,56 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30' 
       }
     ]
+  },
+  {
+    id: 'norepinephrine',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'Vazopressör / Şok',
+    badge: 'Levophed · 1. Tercih Vazopressör',
+    title: 'Noradrenalin (Norepinefrin)',
+    shortDesc: 'Septik şok (Surviving Sepsis 1A), vazodilatatuar şok, kardiyojenik şok, perioperatif vazopleji, Push-Dose bolus protokolü, Fentolamin ekstravazasyon antidot yönetimi ve 14 basamaklı altın standart ilaç monografisi & infüzyon pompası hesaplayıcısı.',
+    status: 'active',
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'Standart Ampul', 
+        value: '4 mg / 4 mL (1 mg/mL)', 
+        subtext: 'Norepinefrin baz ampul',
+        tooltip: '1 ampul = 4 mg baz norepinefrin içerir (bitartrat tuzu formu)',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      },
+      { 
+        label: 'İdame Doz Aralığı', 
+        value: '0.05 – 0.25 mcg/kg/dk', 
+        subtext: '4 – 18 mcg/dk · MAP ≥ 65',
+        tooltip: 'Hedef MAP ≥ 65 mmHg olacak şekilde her 2–5 dakikada titre edilir',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Standart Çözelti', 
+        value: '80 mcg/mL (4 mg / 50 mL)', 
+        subtext: '%5 Dextroz (tercih) veya SF',
+        tooltip: '%5 Dextroz (D5W) katekolamin oksidasyonunu önler ve stabilite sağlar',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      },
+      { 
+        label: 'Vazopressin Eşiği', 
+        value: '> 0.25 mcg/kg/dk', 
+        subtext: '2. ajan: Vazopressin + Steroid',
+        tooltip: 'Surviving Sepsis Kılavuzu: >0.25 mcg/kg/dk aşılınca Vazopressin 0.03 U/dk ve Hidrokortizon eklenmelidir',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      }
+    ]
   }
 ];
 
@@ -632,13 +683,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
                   {activeProtocolId ? selectedProtocol?.title : 'Tedaviler ve İlaçlar'}
                 </h1>
-                {!['dexmedetomidine', 'remifentanil', 'fentanyl'].includes(activeProtocolId || '') && (
+                {!['dexmedetomidine', 'remifentanil', 'fentanyl', 'propofol', 'midazolam', 'lidocaine', 'ketamine', 'norepinephrine'].includes(activeProtocolId || '') && (
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 font-mono">
                     {activeProtocolId ? 'Protokol Detayı' : 'Klinik Protokoller'}
                   </span>
                 )}
               </div>
-              {!['dexmedetomidine', 'remifentanil', 'fentanyl'].includes(activeProtocolId || '') && (
+              {!['dexmedetomidine', 'remifentanil', 'fentanyl', 'propofol', 'midazolam', 'lidocaine', 'ketamine', 'norepinephrine'].includes(activeProtocolId || '') && (
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   {activeProtocolId
                     ? 'Protokolü kapatıp listeye dönmek için geri butonunu kullanabilir veya alt sekmelerle görünümü özelleştirebilirsiniz.'
@@ -735,7 +786,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             <button
               type="button"
               onClick={() => setActiveCategory('vasoactive')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer opacity-75 hover:opacity-100 ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeCategory === 'vasoactive'
                   ? isDark 
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-xs' 
@@ -1123,6 +1174,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 11: KETAMİN PROTOKOLÜ VE DOZ HESAPLAYICISI (activeProtocolId === 'ketamine') */}
       {activeProtocolId === 'ketamine' && (
         <KetamineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 12: NORADRENALİN (NOREPİNEFRİN) PROTOKOLÜ VE DOZ HESAPLAYICISI */}
+      {(activeProtocolId === 'norepinephrine' || activeProtocolId === 'noradrenalin') && (
+        <NorepinephrineProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}

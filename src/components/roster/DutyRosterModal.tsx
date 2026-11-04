@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   X, 
   Upload, 
@@ -7,10 +7,10 @@ import {
   Check, 
   AlertCircle, 
   FileSpreadsheet, 
-  Search,
-  UserCheck,
-  ShieldCheck,
-  Lock,
+  Search, 
+  UserCheck, 
+  ShieldCheck, 
+  Lock, 
   Edit2,
   Cloud,
   CloudCheck,
@@ -84,6 +84,44 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Refs for auto-centering on today's row (vertically and horizontally)
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const todayRowRef = useRef<HTMLTableRowElement>(null);
+
+  const scrollToToday = useCallback((smooth = true) => {
+    const runScroll = () => {
+      const container = tableContainerRef.current;
+      const todayEl = todayRowRef.current;
+
+      if (todayEl) {
+        if (container) {
+          const containerRect = container.getBoundingClientRect();
+          const todayRect = todayEl.getBoundingClientRect();
+          const offsetDiff = (todayRect.top - containerRect.top) - (container.clientHeight / 2) + (todayRect.height / 2);
+          container.scrollBy({
+            top: offsetDiff,
+            behavior: smooth ? 'smooth' : 'auto'
+          });
+        }
+
+        todayEl.scrollIntoView({
+          behavior: smooth ? 'smooth' : 'auto',
+          block: 'center',
+          inline: 'center'
+        });
+      }
+    };
+
+    const t1 = setTimeout(runScroll, 120);
+    const t2 = setTimeout(runScroll, 350);
+    const t3 = setTimeout(runScroll, 650);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
   // When modal is opened, sync with latest roster and server
   useEffect(() => {
     if (isOpen) {
@@ -99,17 +137,21 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
         const keys = Object.keys(freshRoster.days).sort();
         setSelectedDateKey(curShift.activeDateKey || (keys.length > 0 ? keys[0] : ''));
         setActiveShiftKey(curShift.activeDateKey);
+        scrollToToday(true);
       });
+
+      const cleanup = scrollToToday(true);
 
       const handleSyncStatus = (e: any) => {
         setSyncStatus(e.detail || getLastSyncStatus());
       };
       window.addEventListener('etfal-sync-status-changed', handleSyncStatus);
       return () => {
+        if (cleanup) cleanup();
         window.removeEventListener('etfal-sync-status-changed', handleSyncStatus);
       };
     }
-  }, [isOpen]);
+  }, [isOpen, activeMonth, activeShiftKey, scrollToToday]);
 
   const handleSelectMonth = (monthKey: string) => {
     setActiveMonthKey(monthKey);
@@ -124,6 +166,7 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
     } else if (keys.length > 0) {
       setSelectedDateKey(keys[0]);
     }
+    scrollToToday(true);
   };
 
   if (!isOpen) return null;
@@ -612,7 +655,7 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
         )}
 
         {/* Body Content: Official Table View */}
-        <div className="p-3 sm:p-5 overflow-y-auto flex-1">
+        <div ref={tableContainerRef} className="p-3 sm:p-5 overflow-y-auto flex-1">
           <div className="border rounded-xl overflow-hidden overflow-x-auto border-slate-300 dark:border-slate-700 text-xs shadow-xs">
             <table className="w-full text-center border-collapse">
               <thead>
@@ -649,6 +692,7 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
                   const day = roster.days[dateKey];
                   const isSelected = dateKey === selectedDateKey;
                   const isToday = dateKey === activeShiftKey;
+                  const isTargetToday = isToday || (!activeShiftKey && isSelected);
                   const isWeekend = isWeekendDay(day);
 
                   const getSeySlot = (num: number) => 
@@ -711,6 +755,7 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
                   return (
                     <tr 
                       key={dateKey}
+                      ref={isTargetToday ? todayRowRef : undefined}
                       onClick={() => setSelectedDateKey(dateKey)}
                       className={`transition-colors text-[11px] ${
                         isSelected

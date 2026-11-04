@@ -206,6 +206,20 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     keywords: ['havayolu', 'havayolu yönetimi', 'entübasyon', 'lma', 'laringoskop'],
     tabId: 'airway'
   },
+  {
+    id: 'emergency-malignant-hyperthermia',
+    title: 'Malign Hipertermi (MH) Kriz Protokolü & Dantrolen',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Malign Hipertermi',
+    description: '10 aşamalı standart acil kriz protokolü: Tetikleyici kesilmesi, %100 O2 hiperventilasyon, 2.5 mg/kg Dantrolen, soğutma, Larach skoru ve patofizyoloji.',
+    keywords: [
+      'malign hipertermi', 'mh', 'dantrolen', 'ryanodex', 'dantrium', 'süksinilkolin', 'sevofluran', 
+      'desfluran', 'ryr1', 'larach skoru', 'masseter spazmı', 'trismus', 'hipermetabolik', 
+      'rabdomiyoliz', 'chct', 'mhaus', 'kriz yönetimi', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
 
   // 3. Klinik İnfografikler
   {
@@ -402,6 +416,34 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Hipo & Hipernatremi',
     description: 'Hiponatremi (beyin ödemi, nöbet, %3 acil bolus, ODS, dDAVP geri indirme) ve Hipernatremi (serebral büzüşme, damar yırtılması, etyolojik hacim yaklaşımları, serebral ödemden korunma, Santral DI dDAVP) protokolleri.',
     keywords: ['sodyum', 'hiponatremi', 'hipernatremi', 'ods', 'santral pontin miyelinozis', 'beyin ödemi', 'acil bolus', '%3 salin', 'ddavp', 'desmopressin', 'diabetes insipidus', 'santral di', 'serbest su açığı', 'overcorrection', 'aşırı düzeltme', 'serebral ödem'],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
+    id: 'treatment-norepinephrine-protocol',
+    title: 'Noradrenalin (Norepinefrin) İnfüzyon & Push-Dose Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Levophed · Vazopressör',
+    description: 'Septik şok (SSC 2021 1A), MAP ≥ 65 hedefi, 4 mg/4 mL ampul seyreltmeleri (80-160 mcg/mL), Push-Dose bolus kılavuzu, Fentolamin ekstravazasyon protokolü ve infüzyon pompası.',
+    keywords: [
+      'noradrenalin',
+      'norepinefrin',
+      'levophed',
+      'sterinor',
+      'vazopressör',
+      'septik şok',
+      'şok',
+      'vazopleji',
+      'push dose',
+      'push-dose noradrenalin',
+      'fentolamin',
+      'ekstravazasyon',
+      'map',
+      'arteriyel tansiyon',
+      'vazopressin',
+      'infüzyon pompası',
+      'katekolamin'
+    ],
     tabId: 'treatments',
     popular: true
   },

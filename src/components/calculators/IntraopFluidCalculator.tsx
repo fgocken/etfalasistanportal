@@ -12,7 +12,9 @@ import {
   Activity,
   ArrowRight,
   Sliders,
-  Sparkles
+  Sparkles,
+  Copy,
+  Check
 } from 'lucide-react';
 
 interface IntraopFluidCalculatorProps {
@@ -141,6 +143,46 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
   const totalHour2 = hour1Fluid + hour2Fluid;
   const totalHour3 = totalHour2 + hour3Fluid;
   const totalHour4 = totalHour3 + hour4PlusRate;
+
+  // Copy output state
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const fallbackCopy = (text: string) => {
+    try {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleCopyPlan = () => {
+    const textToCopy = `• 1. Saat: ${Math.round(hour1Fluid)} mL/saat (½ Defisit + İdame)
+• 2. Saat: ${Math.round(hour2Fluid)} mL/saat (¼ Defisit + İdame + Cerrahi Kayıp)
+• 3. Saat: ${Math.round(hour3Fluid)} mL/saat (¼ Defisit + İdame + Cerrahi Kayıp)
+• 4. Saat ve sonrası: ${Math.round(hour4PlusRate)} mL/saat (İdame + Cerrahi Kayıp)`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      }).catch(() => {
+        fallbackCopy(textToCopy);
+      });
+    } else {
+      fallbackCopy(textToCopy);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -667,7 +709,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
           <div className={`p-6 rounded-2xl border transition-colors ${
             isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
           }`}>
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
               <div>
                 <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Saat Saat İntraoperatif Sıvı İnfüzyon Planı
@@ -676,11 +718,37 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                   Vakanın başlangıcından itibaren her bir saat için önerilen kristalloid sıvı hacmi
                 </p>
               </div>
-              <span className={`px-2.5 py-1 rounded-full text-[11px] font-mono font-medium ${
-                isDark ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30' : 'bg-cyan-50 text-cyan-800 border border-cyan-200'
-              }`}>
-                Dengeli Kristalloid
-              </span>
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={handleCopyPlan}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                    copied
+                      ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/40 shadow-xs'
+                      : isDark
+                        ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700 hover:border-slate-600'
+                        : 'bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border-slate-300 shadow-2xs'
+                  }`}
+                  title="Hesaplama sonucunu panoya kopyala (mesaj olarak paylaşmak için)"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>Plan Kopyalandı!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-cyan-500" />
+                      <span>Planı Kopyala</span>
+                    </>
+                  )}
+                </button>
+                <span className={`px-2.5 py-1 rounded-full text-[11px] font-mono font-medium ${
+                  isDark ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30' : 'bg-cyan-50 text-cyan-800 border border-cyan-200'
+                }`}>
+                  Dengeli Kristalloid
+                </span>
+              </div>
             </div>
 
             {/* 4 Timeline Cards */}
@@ -695,9 +763,6 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-extrabold uppercase tracking-wide text-teal-600 dark:text-teal-400">
                       1. SAAT
-                    </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-500/20 text-teal-700 dark:text-teal-300 font-semibold">
-                      En Yüksek İnfüzyon
                     </span>
                   </div>
 
@@ -821,9 +886,6 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                     <span className="text-xs font-extrabold uppercase tracking-wide text-slate-700 dark:text-slate-300">
                       4. SAAT VE SONRASI
                     </span>
-                    <span className="text-[10px] font-mono text-cyan-500 font-semibold">
-                      Sabit Hız
-                    </span>
                   </div>
 
                   <div>
@@ -850,21 +912,6 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                   <span className="text-slate-500">4. Saat Sonu Kümülatif:</span>
                   <span className="font-bold text-slate-800 dark:text-slate-200">{Math.round(totalHour4)} mL</span>
                 </div>
-              </div>
-            </div>
-
-            {/* Quick Infusion Pump Reference Bar */}
-            <div className={`mt-6 p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs ${
-              isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-            }`}>
-              <div className="flex items-center gap-2 font-medium">
-                <Activity className="w-4 h-4 text-cyan-500" />
-                <span>
-                  <strong>İnfüzyon Pompası Ayarı:</strong> 1. saatte <span className="font-mono font-bold text-teal-600 dark:text-teal-400">{Math.round(hour1Fluid)} mL/saat</span>, 2. ve 3. saatte <span className="font-mono font-bold text-slate-900 dark:text-white">{Math.round(hour2Fluid)} mL/saat</span>, 4. saatten sonra <span className="font-mono font-bold text-cyan-600 dark:text-cyan-400">{Math.round(hour4PlusRate)} mL/saat</span>.
-                </span>
-              </div>
-              <div className="text-[11px] font-mono text-slate-500 shrink-0">
-                1. saatte defisitin %50'si, 2-3. saatlerde %25'er tamamlanır
               </div>
             </div>
           </div>

@@ -1,0 +1,2280 @@
+import React, { useState } from 'react';
+import {
+  ShieldAlert,
+  Flame,
+  AlertTriangle,
+  ArrowLeft,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Activity,
+  Zap,
+  PhoneCall,
+  Sparkles,
+  BookOpen,
+  Info,
+  Layers,
+  HeartCrack,
+  Dna,
+  Syringe,
+  Thermometer,
+  AlertOctagon,
+  ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
+  Wind
+} from 'lucide-react';
+import { EmergencyProtocol } from '../../data/emergenciesData';
+
+interface EmergencyProtocolDetailViewProps {
+  protocol: EmergencyProtocol;
+  isDark: boolean;
+  onBack: () => void;
+}
+
+export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewProps> = ({
+  protocol,
+  isDark,
+  onBack
+}) => {
+  // Quick Weight Calculator (e.g. 70 kg default)
+  const [patientWeight, setPatientWeight] = useState<string>('70');
+  const weightNum = parseFloat(patientWeight) || 0;
+
+  // MH Dantrolene calculations
+  const initialDoseMg = Math.round(weightNum * 2.5);
+  const dantriumVials = Math.ceil(initialDoseMg / 20);
+  const ryanodexVials = Math.ceil(initialDoseMg / 250);
+
+  // Bronchospasm calculations
+  const mgSulfateGrams = weightNum > 0 ? Math.min(2.5, +(weightNum * 0.045).toFixed(1)) : 2.0;
+  const ketamineMg = Math.round(weightNum * 0.75);
+  const methylpredMg = Math.round(weightNum * 1.5);
+  const adrenalinBolus = weightNum < 40 ? Math.max(5, Math.round(weightNum * 0.5)) : 20;
+
+  // Laryngospasm calculations
+  const propofolLaryngoMg = Math.round(weightNum * 0.75);
+  const succinylcholineIvBreakMg = +(weightNum * 0.25).toFixed(1);
+  const succinylcholineImMg = Math.round(weightNum * 3.5);
+  const atropineLaryngoMg = +(Math.min(0.5, Math.max(0.1, weightNum * 0.015))).toFixed(2);
+  const rocuroniumLaryngoMg = Math.round(weightNum * 0.45);
+
+  // CICO calculations
+  const sugammadexMg = Math.round(weightNum * 16);
+  const sugammadexVials200 = Math.ceil(sugammadexMg / 200);
+  const sugammadexVials500 = Math.ceil(sugammadexMg / 500);
+  const atropineCicoMg = +(Math.min(1.0, Math.max(0.2, weightNum * 0.02))).toFixed(2);
+
+  // Airway Obstruction calculations
+  const dexamethasoneMg = +(Math.min(16, Math.max(4, weightNum * 0.2))).toFixed(1);
+  const nebulizedAdrenalinMg = weightNum < 20 ? 2 : 5;
+  const magillSize = weightNum < 15 ? 'İnfant' : weightNum < 35 ? 'Pediatrik' : 'Erişkin (25 cm)';
+  const yankauerType = weightNum < 20 ? 'Ch 10-12 Esnek' : 'Ch 14-18 Rijit Yankauer';
+
+  // Aspiration calculations
+  const ettSizeReco = weightNum < 55 ? 'ID 7.0 mm (Kaflı)' : weightNum < 80 ? 'ID 7.5 mm (Kaflı)' : 'ID 8.0 mm (Kaflı)';
+  const suctionCatheterSize = weightNum < 55 ? 'Ch 12' : 'Ch 14';
+  const ngsSize = weightNum < 55 ? 'Ch 14-16' : 'Ch 16-18';
+  const salbutamolPuffs = '8-10 puf MDI';
+  const peepReco = '6-10 cmH2O';
+
+  // Accordion Sections Open State (sec2 to sec10; default open for immediate clinical speed)
+  const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>({
+    sec2: true,  // 2) Giriş
+    sec3: true,  // 3) Tanı
+    sec4: true,  // 4) Akut Kriz Yönetimi
+    sec5: true,  // 5) Patofizyoloji
+    sec6: true,  // 6) Klinik Özellikler & Prezentasyon
+    sec7: true,  // 7) Koruyucu Tedbirler & Hazırlık
+    sec8: true,  // 8) Postoperatif Takip & Prognoz
+    sec9: true,  // 9) High-Yield Bilgiler
+    sec10: true  // 10) Kullanılan Kaynaklar & İleri Okuma
+  });
+
+  const toggleSection = (key: string) => {
+    setSectionOpen(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const expandAll = () => {
+    setSectionOpen({
+      sec2: true,
+      sec3: true,
+      sec4: true,
+      sec5: true,
+      sec6: true,
+      sec7: true,
+      sec8: true,
+      sec9: true,
+      sec10: true
+    });
+  };
+
+  const collapseAll = () => {
+    setSectionOpen({
+      sec2: false,
+      sec3: false,
+      sec4: false,
+      sec5: false,
+      sec6: false,
+      sec7: false,
+      sec8: false,
+      sec9: false,
+      sec10: false
+    });
+  };
+
+  const isAllExpanded = Object.values(sectionOpen).every(Boolean);
+
+  // Scroll to section with automatic expand if collapsed
+  const scrollToSection = (id: string) => {
+    setSectionOpen(prev => ({ ...prev, [id]: true }));
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* 1) Top Header & Emergency Bar */}
+      <div className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+        isDark 
+          ? 'bg-gradient-to-r from-red-950/70 via-slate-900 to-red-950/50 border-red-500/40 shadow-lg shadow-red-950/20' 
+          : 'bg-gradient-to-r from-red-50 via-white to-rose-50 border-red-300 shadow-xs'
+      }`}>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={onBack}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700' 
+                  : 'bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-300 shadow-2xs'
+              }`}
+            >
+              <ArrowLeft className="w-4 h-4 text-red-500" />
+              <span>Acil Senaryo Listesine Dön</span>
+            </button>
+
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider px-3 py-1 rounded-full font-bold bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/40 animate-pulse">
+              <span className="w-2 h-2 rounded-full bg-red-500" />
+              {protocol.severityBadge}
+            </span>
+          </div>
+
+          <div>
+            <h1 className={`text-2xl sm:text-3xl font-black tracking-tight ${
+              isDark ? 'text-white' : 'text-slate-900'
+            }`}>
+              {protocol.title}
+            </h1>
+            <p className="text-sm font-semibold text-red-600 dark:text-red-400 mt-1">
+              {protocol.subTitle}
+            </p>
+          </div>
+
+          {/* Key Critical Callout Strip */}
+          <div className={`p-4 rounded-xl border flex items-start gap-3 ${
+            isDark ? 'bg-red-950/40 border-red-500/50 text-red-200' : 'bg-red-100/70 border-red-300 text-red-950'
+          }`}>
+            <AlertOctagon className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+            <div className="text-xs leading-relaxed font-semibold">
+              <strong className="font-bold underline decoration-red-500">Öncelikli Eylem: </strong>
+              {protocol.keyCallout}
+            </div>
+          </div>
+
+          {/* Quick Interactive Drug Dose Calculator based on protocol */}
+          {protocol.id === 'bronchospasm' ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">
+                  <Wind className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Acil Bronkodilatör & Hava Yolu İlaç Hesaplayıcısı</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">
+                      KİLOYA GÖRE
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Hastanın kilosunu girerek MDI, Magnezyum, Adrenalin ve Ketamin dozlarını hesaplayın:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Salbutamol MDI adaptörle ETT içine 8-10 puf">
+                    Ventolin: <strong>8-10 puf MDI</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Magnezyum Sülfat 40-50 mg/kg (maks 2.5 g)">
+                    MgSO4: <strong>{mgSulfateGrams} g IV</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Adrenalin IV Titrasyon Bolus (10-50 mcg, ağırda 50-100 mcg)">
+                    Adrenalin: <strong>{adrenalinBolus} mcg IV</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Ketamin 0.75 mg/kg IV bronkodilatör bolus">
+                    Ketamin: <strong>{ketamineMg} mg</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Metilprednizolon 1.5 mg/kg IV">
+                    Prednol: <strong>{methylpredMg} mg</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : protocol.id === 'laryngospasm' ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Acil Laringospazm İlaç & Kırıcı Doz Hesaplayıcısı</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
+                      KİLOYA GÖRE
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Hastanın kilosunu girerek sub-paralitik kırıcı doz ve atropin miktarlarını anında hesaplayın:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Sıkı maske ile CPAP">
+                    CPAP: <strong>10-20 cmH2O</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Propofol 0.75 mg/kg IV refleks kırıcı">
+                    Propofol: <strong>{propofolLaryngoMg} mg IV</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Sub-paralitik kırıcı Süksinilkolin 0.25 mg/kg IV">
+                    Süksinilkolin IV: <strong>{succinylcholineIvBreakMg} mg</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Damar yolu yoksa IM Süksinilkolin 3.5 mg/kg">
+                    Süksinilkolin IM: <strong>{succinylcholineImMg} mg</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Atropin 0.015 mg/kg IV (pediatrik bradikardi önleyici)">
+                    Atropin IV: <strong>{atropineLaryngoMg} mg</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (protocol.id === 'airway-crisis' || protocol.id === 'cico' || protocol.quickCalculatorType === 'cico') ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
+                  <AlertOctagon className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Acil CICO & Krikotiroidotomi / Sugammadeks Doz Hesaplayıcısı</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
+                      16 mg/kg & eFONA
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Kilo girerek acil Sugammadeks kurtarma dozu ve krikotiroidotomi tüp/buji/neşter donanımını anında hesaplayın:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Sugammadeks 16 mg/kg acil IV bolus">
+                    Sugammadeks: <strong>{sugammadexMg} mg IV</strong>
+                  </div>
+                  <div className="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="200 mg / 2 mL flakon ihtiyacı">
+                    200mg Flk: <strong className="text-amber-400">~{sugammadexVials200}</strong>
+                  </div>
+                  <div className="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="500 mg / 5 mL flakon ihtiyacı">
+                    500mg Flk: <strong className="text-emerald-400">~{sugammadexVials500}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Altın standart eFONA boyutu">
+                    Tüp: <strong>ETT ID 6.0 mm</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="15 Fr Coudé uçlu buji">
+                    Buji: <strong>15 Fr Coudé</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Derin hipokside bradikardi için 0.02 mg/kg">
+                    Atropin: <strong>{atropineCicoMg} mg IV</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (protocol.id === 'airway-obstruction' || protocol.quickCalculatorType === 'airway-obstruction') ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
+                  <ShieldAlert className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Akut Hava Yolu Obstrüksiyonu İlaç & Ekipman Hesaplayıcısı</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
+                      ÖDEM & EKSTRAKSİYON
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Hastanın kilosunu girerek Deksametazon, inhale Adrenalin, Magill ve aspiratör boyutlarını anında hesaplayın:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Larenks ödemi için Deksametazon 0.2 mg/kg IV (maks 16 mg)">
+                    Deksametazon: <strong>{dexamethasoneMg} mg IV</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Subglottik ödem için İnhale L-Adrenalin (SF ile nebül)">
+                    Nebül Adrenalin: <strong>{nebulizedAdrenalinMg} mg</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Yabancı cisim için uygun Magill forsepsi boyutu">
+                    Magill: <strong>{magillSize}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Pıhtı ve sekresyon için aspiratör tipi">
+                    Aspiratör: <strong>{yankauerType}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-700 dark:text-teal-300 font-bold" title="Helyum-Oksijen karışımı gaz oranı">
+                    Heliox: <strong>80:20</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (protocol.id === 'aspiration' || protocol.quickCalculatorType === 'aspiration') ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Pulmoner Aspirasyon & Mendelson Acil Ekipman ve Ventilasyon Parametreleri</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">
+                      RSI & PEEP
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Hastanın kilosuna göre uygun kaflı ETT, aspirasyon kateteri, NGS ve solunum parametreleri:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Kaflı tüp boyutu">
+                    ETT: <strong>{ettSizeReco}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Trakeal aspirasyon kateteri boyutu">
+                    Aspiratör: <strong>{suctionCatheterSize}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Nazogastrik / Orogastrik sonda boyutu">
+                    NGS: <strong>{ngsSize}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-700 dark:text-teal-300 font-bold" title="Atelektazi ve şant önleyici PEEP">
+                    PEEP: <strong>{peepReco}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Bronkospazm kurtarma dozu">
+                    Salbutamol: <strong>{salbutamolPuffs}</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className={`p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20">
+                  <Syringe className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">
+                    Acil Dantrolen Başlangıç Dozu Hesaplayıcısı (2.5 mg/kg)
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Hastanın kilosunu girerek anlık doz ve flakon adedini hesaplayın:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <label className="text-xs font-semibold text-slate-500">Hasta Kilosu:</label>
+                  <div className="relative w-20">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2.5 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-2 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 font-mono text-xs">
+                  <div className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-300 font-bold">
+                    {initialDoseMg} mg IV
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Klasik 20 mg flakon">
+                    Dantrium: <strong className="text-amber-400">{dantriumVials}</strong> flk
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Yeni 250 mg flakon">
+                    Ryanodex: <strong className="text-emerald-400">{ryanodexVials}</strong> flk
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Navigation Anchor Bar & Global Expand/Collapse Toggle */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 mt-4 border-t border-red-500/20 text-xs">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec2')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              2) Giriş
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec3')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              3) Tanı
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec4')}
+              className="px-3 py-1 rounded-lg border whitespace-nowrap font-bold bg-red-600 text-white border-red-500 transition-all cursor-pointer shadow-xs"
+            >
+              4) Akut Kriz Yönetimi
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec5')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              5) Patofizyoloji
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec6')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              6) Klinik Özellikler
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec7')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              7) Koruyucu Tedbirler
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec8')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              8) Postop & Prognoz
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec9')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              9) High-Yield Bilgiler
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('sec10')}
+              className={`px-3 py-1 rounded-lg border whitespace-nowrap font-medium transition-all cursor-pointer ${
+                isDark ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              10) Kaynaklar
+            </button>
+          </div>
+
+          {/* Expand All / Collapse All Toggle Button */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={isAllExpanded ? collapseAll : expandAll}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700' 
+                  : 'bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-300 shadow-2xs'
+              }`}
+              title={isAllExpanded ? 'Tüm bölümleri daralt' : 'Tüm bölümleri genişlet'}
+            >
+              <ChevronsUpDown className="w-3.5 h-3.5 text-red-500" />
+              <span>{isAllExpanded ? 'Tümünü Daralt' : 'Tümünü Genişlet'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 2) Giriş (Accordion Section) */}
+      <section id="sec2" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec2')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-500">
+              <Info className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                2) Giriş
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec2 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec2 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec2 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-4 border-t border-slate-100 dark:border-slate-800/80">
+            <div className="space-y-3 text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+              <p>
+                <strong className="text-slate-900 dark:text-white font-bold">Tanım: </strong>
+                {protocol.introduction.definition}
+              </p>
+              <p>
+                <strong className="text-slate-900 dark:text-white font-bold">Epidemiyoloji: </strong>
+                {protocol.introduction.epidemiology}
+              </p>
+            </div>
+
+            {/* Triggers vs Safe Agents Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              {/* Triggers */}
+              <div className={`p-4 rounded-xl border ${
+                isDark ? 'bg-rose-950/20 border-rose-500/30' : 'bg-rose-50/70 border-rose-300'
+              }`}>
+                <div className="flex items-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 mb-2">
+                  <XCircle className="w-4 h-4" />
+                  <span>TETİKLEYİCİ KLİNİK DURUMLAR</span>
+                </div>
+                <ul className="text-xs space-y-1.5 text-slate-700 dark:text-slate-300">
+                  {protocol.introduction.triggers.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5">
+                      <span className="text-rose-500 font-bold shrink-0">✕</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Safe Agents */}
+              <div className={`p-4 rounded-xl border ${
+                isDark ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-emerald-50/70 border-emerald-300'
+              }`}>
+                <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>GÜVENLİ VE TERCİH EDİLEN STRATEJİLER</span>
+                </div>
+                <ul className="text-xs space-y-1.5 text-slate-700 dark:text-slate-300">
+                  {protocol.introduction.safeAgents.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5">
+                      <span className="text-emerald-500 font-bold shrink-0">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+              <div className={`p-3 rounded-xl border ${
+                isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'
+              }`}>
+                <span className="font-bold text-slate-900 dark:text-white block mb-0.5">Mortalite İstatistikleri:</span>
+                <span className="text-slate-600 dark:text-slate-400">{protocol.introduction.mortalityStats}</span>
+              </div>
+              <div className={`p-3 rounded-xl border ${
+                isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'
+              }`}>
+                <span className="font-bold text-slate-900 dark:text-white block mb-0.5">Klinik Aciliyet:</span>
+                <span className="text-slate-600 dark:text-slate-400">{protocol.introduction.clinicalUrgency}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 3) Tanı (Accordion Section) */}
+      <section id="sec3" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec3')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                3) Tanı
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec3 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec3 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec3 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-5 border-t border-slate-100 dark:border-slate-800/80">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              {protocol.diagnosis.overview}
+            </p>
+
+            {/* Clinical Diagnostic Criteria List */}
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                Yatak Başı Klinik Tanı Kriterleri:
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                {protocol.diagnosis.clinicalCriteria.map((crit, idx) => (
+                  <div
+                    key={idx}
+                    className={`p-3 rounded-xl border flex items-start gap-2.5 text-xs ${
+                      idx === 0 
+                        ? isDark ? 'bg-red-950/30 border-red-500/40 text-red-200' : 'bg-red-50 border-red-300 text-red-950 font-bold'
+                        : isDark ? 'bg-slate-800/50 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    <span className="font-mono font-bold text-red-500 shrink-0 mt-0.5">#{idx + 1}</span>
+                    <span className="leading-relaxed">{crit}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Clinical Grading Scale Table */}
+            <div className="space-y-2 pt-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-900 dark:text-white">
+                  {protocol.diagnosis.gradingScaleTitle || 'Larach Klinik Derecelendirme Skalası (CGS)'}
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  {protocol.diagnosis.gradingScaleSource || 'Larach et al. Anesthesiology'}
+                </span>
+              </div>
+
+              <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                <table className="w-full text-left text-xs">
+                  <thead className={`border-b text-[11px] font-bold uppercase tracking-wider ${
+                    isDark ? 'bg-slate-800/80 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'
+                  }`}>
+                    <tr>
+                      <th className="p-3">Süreç / Kategori</th>
+                      <th className="p-3">Puanlama</th>
+                      <th className="p-3">Klinik Kriter Detayı</th>
+                    </tr>
+                  </thead>
+                  <tbody className={`divide-y ${isDark ? 'divide-slate-800 text-slate-300' : 'divide-slate-200 text-slate-700'}`}>
+                    {protocol.diagnosis.larachScale.map((row, idx) => (
+                      <tr key={idx} className={idx % 2 === 0 ? (isDark ? 'bg-slate-900/40' : 'bg-white') : (isDark ? 'bg-slate-900/90' : 'bg-slate-50/70')}>
+                        <td className="p-3 font-bold text-slate-900 dark:text-white">{row.category}</td>
+                        <td className="p-3 font-mono font-bold text-red-600 dark:text-red-400">{row.points}</td>
+                        <td className="p-3 leading-relaxed">{row.description}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                * {protocol.diagnosis.larachInterpretation}
+              </div>
+            </div>
+
+            {/* Differential Diagnosis Table */}
+            <div className="space-y-2 pt-2">
+              <div className="text-xs font-bold text-slate-900 dark:text-white">
+                Ayırıcı Tanı (Malign Hipertermiyi Taklit Eden Durumlar):
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                {protocol.diagnosis.differentialDiagnosis.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className={`p-3 rounded-xl border space-y-1 text-xs ${
+                      isDark ? 'bg-slate-800/30 border-slate-800' : 'bg-slate-50/80 border-slate-200'
+                    }`}
+                  >
+                    <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                      <span>{item.condition}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                      {item.differentiatingFactors}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 4) Akut Kriz Yönetimi (Accordion Section) */}
+      <section id="sec4" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-gradient-to-b from-red-950/20 to-slate-900 border-red-500/40' : 'bg-white border-red-300 shadow-md'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec4')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-red-950/30' : 'hover:bg-red-50/50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-red-500 text-white shadow-xs">
+              <Flame className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  4) Akut Kriz Yönetimi
+                </h2>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
+                  HAYATİ ALGORİTMA
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-red-500/30 text-red-400' : 'border-red-200 text-red-600'
+            }`}>
+              {sectionOpen.sec4 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec4 ? (
+              <ChevronUp className="w-5 h-5 text-red-500" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-red-500" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec4 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-6 border-t border-red-500/20">
+            {/* 7 Core Emergency Action Steps */}
+            <div className="space-y-3 pt-2">
+              {protocol.crisisManagement.coreAlgorithm.map((step) => (
+                <div
+                  key={step.stepNumber}
+                  className={`p-4 rounded-xl border flex flex-col gap-2 transition-all ${
+                    step.priority === 'CRITICAL'
+                      ? isDark ? 'bg-red-950/30 border-red-500/50 text-white' : 'bg-red-50/80 border-red-300 text-slate-900'
+                      : isDark ? 'bg-slate-800/50 border-slate-700 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-900'
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-mono font-black ${
+                        step.priority === 'CRITICAL' ? 'bg-red-500 text-white' : 'bg-slate-700 text-slate-200'
+                      }`}>
+                        {step.stepNumber}
+                      </span>
+                      <h3 className="text-xs sm:text-sm font-black tracking-tight">
+                        {step.title}
+                      </h3>
+                    </div>
+
+                    <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded font-bold ${
+                      step.priority === 'CRITICAL'
+                        ? 'bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30'
+                        : 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                    }`}>
+                      {step.priority === 'CRITICAL' ? 'HAYATİ ÖNCELİK' : 'YÜKSEK ÖNCELİK'}
+                    </span>
+                  </div>
+
+                  <p className="text-xs leading-relaxed text-slate-700 dark:text-slate-300 pl-8">
+                    {step.action}
+                  </p>
+
+                  {step.criticalNote && (
+                    <div className="pl-8 pt-1 text-[11px] font-semibold text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{step.criticalNote}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Detailed Dantrolene Protocol & Formulation Comparison (Only for MH) */}
+            {protocol.crisisManagement.dantroleneProtocol && (
+              <div className={`p-5 rounded-2xl border space-y-4 ${
+                isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-50 border-slate-300'
+              }`}>
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+                  <Syringe className="w-4 h-4 text-red-500" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                    Dantrolen Sodyum Detaylı Protokolü & Formülasyon Farkları
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+                    <div className="text-slate-400 text-[10px] uppercase font-mono">Başlangıç Dozu</div>
+                    <div className="text-sm font-bold text-red-600 dark:text-red-400 font-mono mt-0.5">
+                      {protocol.crisisManagement.dantroleneProtocol.initialDose}
+                    </div>
+                  </div>
+                  <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+                    <div className="text-slate-400 text-[10px] uppercase font-mono">Maksimum Doz</div>
+                    <div className="text-sm font-bold text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+                      {protocol.crisisManagement.dantroleneProtocol.maxDose}
+                    </div>
+                  </div>
+                  <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+                    <div className="text-slate-400 text-[10px] uppercase font-mono">İdame Tedavisi</div>
+                    <div className="text-xs font-semibold text-slate-700 dark:text-slate-300 mt-0.5">
+                      {protocol.crisisManagement.dantroleneProtocol.maintenanceDose}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dantrium vs Ryanodex Table */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                  {protocol.crisisManagement.dantroleneProtocol.formulations.map((form, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-4 rounded-xl border space-y-2 text-xs ${
+                        idx === 1 
+                          ? isDark ? 'bg-emerald-950/20 border-emerald-500/40' : 'bg-emerald-50/70 border-emerald-300'
+                          : isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-white border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 dark:text-white">{form.name}</span>
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                          idx === 1 ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                        }`}>
+                          {idx === 1 ? 'YENİ NESİL (1 FLAKON)' : 'KLASİK FORMÜLASYON'}
+                        </span>
+                      </div>
+                      <div className="space-y-1 text-slate-600 dark:text-slate-400 text-[11px]">
+                        <div><strong>Flakon İçeriği: </strong>{form.vialContent}</div>
+                        <div><strong>Sulandırma: </strong>{form.reconstitution}</div>
+                        <div><strong>Çözücü: </strong><strong className="text-red-500">{form.diluent}</strong></div>
+                        <div><strong>Hazırlama Süresi: </strong>{form.timeToPrepare}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span><strong>Sulandırma Kuralı: </strong>{protocol.crisisManagement.dantroleneProtocol.preparationWarning}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Bronchospasm Specialized Protocols (Ventilator Optimization + Stepwise Pharmacotherapy) */}
+            {protocol.crisisManagement.bronchospasmProtocols && (
+              <div className="space-y-4">
+                {/* 1. Ventilator Optimization & Auto-PEEP Maneuver */}
+                <div className={`p-5 rounded-2xl border space-y-4 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-50 border-slate-300'
+                }`}>
+                  <div className="flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <Wind className="w-4 h-4 text-amber-500" />
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                      {protocol.crisisManagement.bronchospasmProtocols.ventilatorOptimization.title}
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                    {protocol.crisisManagement.bronchospasmProtocols.ventilatorOptimization.settings.map((s, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-3 rounded-xl border space-y-1 text-xs ${
+                          isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-white border-slate-200'
+                        }`}
+                      >
+                        <div className="font-bold text-amber-600 dark:text-amber-400">
+                          {s.parameter}
+                        </div>
+                        <div className="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                          {s.recommendation}
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                          {s.rationale}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Auto-PEEP Apnea Maneuver Alert Card */}
+                  <div className={`p-4 rounded-xl border flex items-start gap-3 ${
+                    isDark ? 'bg-amber-950/20 border-amber-500/40 text-amber-200' : 'bg-amber-50 border-amber-300 text-amber-950 shadow-xs'
+                  }`}>
+                    <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    <div className="text-xs leading-relaxed space-y-1">
+                      <strong className="font-bold text-amber-600 dark:text-amber-400 block">
+                        Hayati Kurtarma Manevrası: Oto-PEEP Apneik Toraks Dekompresyonu
+                      </strong>
+                      <p className="text-[11px]">
+                        {protocol.crisisManagement.bronchospasmProtocols.ventilatorOptimization.autoPeepReleaseManeuver}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Stepwise Pharmacotherapy Table */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <Syringe className="w-4 h-4 text-amber-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        Basamaklı Akut Farmakoterapi Protokolü
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold">
+                      BTS & ASA
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                    <table className="w-full text-left text-xs">
+                      <thead className={`border-b text-[11px] font-bold uppercase tracking-wider ${
+                        isDark ? 'bg-slate-800/80 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'
+                      }`}>
+                        <tr>
+                          <th className="p-3">Basamak / Ajan</th>
+                          <th className="p-3">Dozaj</th>
+                          <th className="p-3">Yol</th>
+                          <th className="p-3">Klinik Not & İnci</th>
+                        </tr>
+                      </thead>
+                      <tbody className={`divide-y ${isDark ? 'divide-slate-800 text-slate-300' : 'divide-slate-200 text-slate-700'}`}>
+                        {protocol.crisisManagement.bronchospasmProtocols.stepwisePharmacotherapy.map((drug, idx) => (
+                          <tr key={idx} className={idx % 2 === 0 ? (isDark ? 'bg-slate-900/40' : 'bg-white') : (isDark ? 'bg-slate-900/90' : 'bg-slate-50/70')}>
+                            <td className="p-3">
+                              <span className="text-[10px] font-mono text-amber-500 block">{drug.step}</span>
+                              <span className="font-bold text-slate-900 dark:text-white">{drug.drug}</span>
+                            </td>
+                            <td className="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">{drug.dosage}</td>
+                            <td className="p-3 font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">{drug.route}</td>
+                            <td className="p-3 text-[11px] leading-relaxed">{drug.clinicalPearls}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 3. Refractory Rescue Plan */}
+                <div className={`p-4 rounded-xl border space-y-2 text-xs ${
+                  isDark ? 'bg-red-950/20 border-red-500/40' : 'bg-red-50 border-red-200'
+                }`}>
+                  <div className="font-bold text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                    <Flame className="w-4 h-4" />
+                    <span>Dirençli / Refrakter "Sessiz Akciğer" Kurtarma Adımları:</span>
+                  </div>
+                  <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+                    {protocol.crisisManagement.bronchospasmProtocols.refractoryRescuePlan.map((rStep, rIdx) => (
+                      <li key={rIdx} className="flex items-start gap-2">
+                        <span className="text-red-500 font-bold shrink-0">▸</span>
+                        <span>{rStep}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* Laryngospasm Specific Protocols (Larson Maneuver, Stepwise Pharmacotherapy & NPPE Management) */}
+            {protocol.crisisManagement.laryngospasmProtocols && (
+              <div className="space-y-4 pt-2">
+                {/* 1. Larson Notch Maneuver */}
+                <div className={`p-4 sm:p-5 rounded-2xl border ${
+                  isDark ? 'bg-rose-950/20 border-rose-500/40' : 'bg-rose-50/80 border-rose-200'
+                }`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="w-5 h-5 text-rose-500 shrink-0" />
+                    <h4 className="font-bold text-sm text-rose-700 dark:text-rose-300">
+                      {protocol.crisisManagement.laryngospasmProtocols.larsonManeuver.title}
+                    </h4>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className={`p-3 rounded-xl border ${
+                      isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-rose-100'
+                    }`}>
+                      <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">
+                        Uygulama Tekniği (Larson's Notch):
+                      </span>
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        {protocol.crisisManagement.laryngospasmProtocols.larsonManeuver.technique}
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-xl border ${
+                      isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-rose-100'
+                    }`}>
+                      <span className="font-bold text-sky-600 dark:text-sky-400 block mb-1">
+                        Fizyolojik Refleks Mekanizması:
+                      </span>
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        {protocol.crisisManagement.laryngospasmProtocols.larsonManeuver.physiologicalMechanism}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Stepwise Pharmacotherapy Table */}
+                <div className={`p-4 sm:p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Syringe className="w-4 h-4 text-rose-500" />
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">
+                        Laringospazm Basamaklı Farmakoterapi Protokolü
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full">
+                      CPAP ➔ Propofol ➔ Süksinilkolin IV/IM
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead className={`text-[11px] uppercase tracking-wider font-semibold border-b ${
+                        isDark ? 'bg-slate-800/80 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-700 border-slate-200'
+                      }`}>
+                        <tr>
+                          <th className="p-3">Basamak</th>
+                          <th className="p-3">Ajan</th>
+                          <th className="p-3">Kriz Dozu</th>
+                          <th className="p-3">Yol</th>
+                          <th className="p-3">Kritik Klinik İpuçları</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                        {protocol.crisisManagement.laryngospasmProtocols.stepwisePharmacotherapy.map((drug, dIdx) => (
+                          <tr key={dIdx} className={dIdx % 2 === 0 ? (isDark ? 'bg-slate-900/40' : 'bg-white') : (isDark ? 'bg-slate-800/20' : 'bg-slate-50/50')}>
+                            <td className="p-3 font-semibold text-rose-600 dark:text-rose-400 whitespace-nowrap">{drug.step}</td>
+                            <td className="p-3 font-bold text-slate-900 dark:text-white whitespace-nowrap">{drug.drug}</td>
+                            <td className="p-3 font-mono font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">{drug.dosage}</td>
+                            <td className="p-3 font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">{drug.route}</td>
+                            <td className="p-3 text-[11px] leading-relaxed">{drug.clinicalPearls}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 3. NPPE Management Plan */}
+                <div className={`p-4 rounded-xl border space-y-2 text-xs ${
+                  isDark ? 'bg-amber-950/20 border-amber-500/40' : 'bg-amber-50 border-amber-200'
+                }`}>
+                  <div className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                    <ShieldAlert className="w-4 h-4" />
+                    <span>Negatif Basınçlı Pulmoner Ödem (NPPE) Erken Tanı & Yönetim İlkeleri:</span>
+                  </div>
+                  <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+                    {protocol.crisisManagement.laryngospasmProtocols.nppeManagement.map((nStep, nIdx) => (
+                      <li key={nIdx} className="flex items-start gap-2">
+                        <span className="text-amber-500 font-bold shrink-0">▸</span>
+                        <span>{nStep}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* CICO Specific Protocols (Scalpel-Bougie-Tube eFONA, Needle vs Scalpel Comparison & Sugammadex Protocol) */}
+            {protocol.crisisManagement.cicoProtocols && (
+              <div className="space-y-4">
+                {/* 1. Scalpel-Bougie-Tube eFONA Algorithm */}
+                <div className={`p-5 rounded-2xl border space-y-4 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <AlertOctagon className="w-5 h-5 text-rose-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        {protocol.crisisManagement.cicoProtocols.scalpelBougieTubeTechnique.title}
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-300 font-bold border border-rose-500/30">
+                      DAS 2015 PLAN D (ALTIN STANDART)
+                    </span>
+                  </div>
+
+                  {/* Laryngeal Handshake Box */}
+                  <div className={`p-4 rounded-xl border space-y-1.5 ${
+                    isDark ? 'bg-indigo-950/20 border-indigo-500/30 text-indigo-200' : 'bg-indigo-50/80 border-indigo-200 text-indigo-950'
+                  }`}>
+                    <div className="font-bold text-xs flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                      <Activity className="w-4 h-4 shrink-0" />
+                      <span>Kritik Anatomik Doğrulama: "Laryngeal Handshake" Tekniği</span>
+                    </div>
+                    <p className="text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                      {protocol.crisisManagement.cicoProtocols.scalpelBougieTubeTechnique.laryngealHandshake}
+                    </p>
+                  </div>
+
+                  {/* Step Cards */}
+                  <div className="space-y-2.5">
+                    <span className="text-xs font-bold text-slate-900 dark:text-white block">
+                      5 Adımda Neşter-Buji-Tüp Krikotiroidotomi Uygulama Protokolü:
+                    </span>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {protocol.crisisManagement.cicoProtocols.scalpelBougieTubeTechnique.techniqueSteps.map((st, sIdx) => (
+                        <div
+                          key={sIdx}
+                          className={`p-3.5 rounded-xl border flex items-start gap-3 ${
+                            isDark ? 'bg-slate-800/40 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+                          }`}
+                        >
+                          <span className="w-6 h-6 rounded-lg bg-rose-500 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                            {sIdx + 1}
+                          </span>
+                          <span className="text-xs leading-relaxed">{st}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Obese Patient Modification */}
+                  <div className={`p-4 rounded-xl border space-y-1.5 ${
+                    isDark ? 'bg-amber-950/20 border-amber-500/30 text-amber-200' : 'bg-amber-50/80 border-amber-200 text-amber-950'
+                  }`}>
+                    <div className="font-bold text-xs flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                      <AlertTriangle className="w-4 h-4 shrink-0" />
+                      <span>Obezite & Palpe Edilemeyen Boyunda 8-10 cm Vertikal Modifikasyon:</span>
+                    </div>
+                    <p className="text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                      {protocol.crisisManagement.cicoProtocols.scalpelBougieTubeTechnique.obesePatientModification}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2. Needle/Cannula vs Scalpel-Bougie-Tube Comparison Table */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <ShieldAlert className="w-4 h-4 text-rose-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        İğne / Kanül Krikotiroidotomi vs Neşter-Buji-Tüp Karşılaştırma Matriksi
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold">
+                      NAP4 Kanıt Düzeyi
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                    <table className="w-full text-left text-xs">
+                      <thead className={`border-b text-[11px] font-bold uppercase tracking-wider ${
+                        isDark ? 'bg-slate-800/80 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'
+                      }`}>
+                        <tr>
+                          <th className="p-3">Kritik Parametre</th>
+                          <th className="p-3 text-emerald-600 dark:text-emerald-400">Neşter-Buji-Tüp (SBT)</th>
+                          <th className="p-3 text-rose-600 dark:text-rose-400">İğne / Dar Lümenli Kanül</th>
+                        </tr>
+                      </thead>
+                      <tbody className={`divide-y ${isDark ? 'divide-slate-800 text-slate-300' : 'divide-slate-200 text-slate-700'}`}>
+                        {protocol.crisisManagement.cicoProtocols.needleVsScalpelComparison.map((row, idx) => (
+                          <tr key={idx} className={idx % 2 === 0 ? (isDark ? 'bg-slate-900/40' : 'bg-white') : (isDark ? 'bg-slate-900/90' : 'bg-slate-50/70')}>
+                            <td className="p-3 font-semibold text-slate-900 dark:text-white">{row.feature}</td>
+                            <td className="p-3 font-medium text-emerald-700 dark:text-emerald-300">{row.scalpelBougieTube}</td>
+                            <td className="p-3 font-medium text-rose-700 dark:text-rose-300">{row.cannulaCricothyrotomy}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 3. Sugammadex Rescue Protocol Callout */}
+                <div className={`p-4 rounded-xl border space-y-2 text-xs ${
+                  isDark ? 'bg-purple-950/20 border-purple-500/40' : 'bg-purple-50 border-purple-200'
+                }`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1.5 text-xs">
+                      <Syringe className="w-4 h-4" />
+                      <span>Roküronyum / Veküronyum Acil Blok Geri Döndürme: Sugammadeks Protokolü</span>
+                    </div>
+                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/30">
+                      {protocol.crisisManagement.cicoProtocols.sugammadexProtocol.dose}
+                    </span>
+                  </div>
+                  <div className="text-slate-700 dark:text-slate-300 leading-relaxed text-xs">
+                    <strong>Endikasyon: </strong>{protocol.crisisManagement.cicoProtocols.sugammadexProtocol.indication}
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-300 font-semibold text-[11px] flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                    <span>{protocol.crisisManagement.cicoProtocols.sugammadexProtocol.pearls}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Airway Obstruction Specific Protocols (Neck Hematoma Evacuation, Foreign Body Extraction & ETT Occlusion) */}
+            {protocol.crisisManagement.airwayObstructionProtocols && (
+              <div className="space-y-4">
+                {/* 1. Neck Hematoma Bedside Evacuation (BAETS / SCOOP) */}
+                <div className={`p-5 rounded-2xl border space-y-4 ${
+                  isDark ? 'bg-red-950/20 border-red-500/40' : 'bg-red-50/70 border-red-200'
+                }`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-red-200 dark:border-red-900/40">
+                    <div className="flex items-center gap-2">
+                      <ShieldAlert className="w-5 h-5 text-red-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        {protocol.crisisManagement.airwayObstructionProtocols.neckHematomaEvacuation.title}
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-700 dark:text-red-300 font-bold border border-red-500/30">
+                      YATAK BAŞI ACİL DEKOMPRESYON
+                    </span>
+                  </div>
+
+                  {/* Urgency Alert Note */}
+                  <div className={`p-3.5 rounded-xl border flex items-start gap-2.5 text-xs ${
+                    isDark ? 'bg-red-900/30 border-red-500/40 text-red-200' : 'bg-red-100/80 border-red-300 text-red-900'
+                  }`}>
+                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
+                    <span className="font-semibold leading-relaxed">
+                      {protocol.crisisManagement.airwayObstructionProtocols.neckHematomaEvacuation.urgencyNote}
+                    </span>
+                  </div>
+
+                  {/* Evacuation Steps */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {protocol.crisisManagement.airwayObstructionProtocols.neckHematomaEvacuation.steps.map((st, sIdx) => (
+                      <div
+                        key={sIdx}
+                        className={`p-3.5 rounded-xl border flex items-start gap-3 ${
+                          isDark ? 'bg-slate-800/70 border-slate-700/80 text-slate-200' : 'bg-white border-slate-200 text-slate-800'
+                        }`}
+                      >
+                        <span className="w-6 h-6 rounded-lg bg-red-500 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                          {sIdx + 1}
+                        </span>
+                        <span className="text-xs leading-relaxed">{st}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. Foreign Body Removal Protocol */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-amber-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        {protocol.crisisManagement.airwayObstructionProtocols.foreignBodyRemoval.title}
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold">
+                      DİREKT GÖRÜŞ & MAGILL
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {protocol.crisisManagement.airwayObstructionProtocols.foreignBodyRemoval.techniquePearls.map((tp, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-3 rounded-xl border text-xs leading-relaxed flex items-start gap-2 ${
+                          isDark ? 'bg-slate-800/40 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <span className="text-amber-500 font-bold shrink-0">▸</span>
+                        <span>{tp}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className={`p-3 rounded-xl border flex items-start gap-2 text-xs font-semibold ${
+                    isDark ? 'bg-amber-950/20 border-amber-500/30 text-amber-300' : 'bg-amber-50 border-amber-300 text-amber-900'
+                  }`}>
+                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                    <span>{protocol.crisisManagement.airwayObstructionProtocols.foreignBodyRemoval.pitfalls}</span>
+                  </div>
+                </div>
+
+                {/* 3. ETT Occlusion / High Peak Pressure Algorithm */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <Wind className="w-4 h-4 text-sky-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        {protocol.crisisManagement.airwayObstructionProtocols.ettOcclusionAlgorithm.title}
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold">
+                      HIZLI DEĞİŞİM & TEST
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {protocol.crisisManagement.airwayObstructionProtocols.ettOcclusionAlgorithm.actionSequence.map((act, aIdx) => (
+                      <div
+                        key={aIdx}
+                        className={`p-3 rounded-xl border flex items-start gap-2.5 text-xs ${
+                          isDark ? 'bg-slate-800/40 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <span className="font-mono font-bold text-sky-500 shrink-0">Basamak {aIdx + 1}:</span>
+                        <span className="leading-relaxed">{act}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Aspiration Specific Protocols (Chemical vs Particulate, Antibiotic Policy & Gastric USG) */}
+            {protocol.crisisManagement.aspirationProtocols && (
+              <div className="space-y-4">
+                {/* 1. Chemical vs Particulate Aspiration Matrix */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-amber-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        Kimyasal Asit (Mendelson) vs Katı Partikül Aspirasyonu Matriksi
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold">
+                      KLİNİK AYRIM
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {protocol.crisisManagement.aspirationProtocols.chemicalVsParticulate.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-4 rounded-xl border flex flex-col justify-between text-xs space-y-2 ${
+                          isDark ? 'bg-slate-800/40 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200'
+                        }`}
+                      >
+                        <div>
+                          <div className="font-bold text-amber-600 dark:text-amber-400 mb-1.5 text-xs">{item.type}</div>
+                          <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400">
+                            {item.characteristics}
+                          </p>
+                        </div>
+                        <div className="pt-2 border-t border-slate-200 dark:border-slate-700/60 text-[11px] font-semibold text-teal-600 dark:text-teal-400">
+                          {item.managementKey}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. Antibiotic and Steroid Policy Box */}
+                <div className={`p-4 rounded-xl border space-y-2 text-xs ${
+                  isDark ? 'bg-rose-950/20 border-rose-500/40' : 'bg-rose-50/80 border-rose-200'
+                }`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 text-xs">
+                      <ShieldAlert className="w-4 h-4 text-rose-500" />
+                      <span>{protocol.crisisManagement.aspirationProtocols.antibioticAndSteroidPolicy.title}</span>
+                    </div>
+                    <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/30 font-bold">
+                      KANIT DÜZEYİ 1A
+                    </span>
+                  </div>
+                  <p className="text-slate-800 dark:text-slate-200 font-medium text-xs">
+                    {protocol.crisisManagement.aspirationProtocols.antibioticAndSteroidPolicy.recommendation}
+                  </p>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {protocol.crisisManagement.aspirationProtocols.antibioticAndSteroidPolicy.evidenceRationale}
+                  </p>
+                </div>
+
+                {/* 3. Gastric USG Assessment (Perlas Classification) */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-teal-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        Gastrik Ultrasonografi ile Antrum Değerlendirmesi (Perlas Sınıflaması)
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold">
+                      POCUS
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    {protocol.crisisManagement.aspirationProtocols.gastricUsgAssessment.map((g, gIdx) => (
+                      <div
+                        key={gIdx}
+                        className={`p-3.5 rounded-xl border flex flex-col justify-between space-y-2 ${
+                          gIdx === 2
+                            ? isDark ? 'bg-red-950/20 border-red-500/40 text-red-200' : 'bg-red-50 border-red-200 text-red-900'
+                            : isDark ? 'bg-slate-800/40 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <div>
+                          <div className={`font-bold text-xs mb-1 ${
+                            gIdx === 2 ? 'text-red-500 font-black' : gIdx === 1 ? 'text-amber-500' : 'text-teal-500'
+                          }`}>
+                            {g.grade}
+                          </div>
+                          <p className="text-[11px] leading-relaxed">
+                            {g.description}
+                          </p>
+                        </div>
+                        <div className={`pt-2 border-t font-semibold text-[11px] ${
+                          gIdx === 2 
+                            ? 'border-red-500/30 text-red-600 dark:text-red-400' 
+                            : 'border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-400'
+                        }`}>
+                          {g.riskLevel}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Cooling, Hyperkalemia and Arrhythmia Sub-Protocols (Only when available) */}
+            {protocol.crisisManagement.coolingProtocol && protocol.crisisManagement.hyperkalemiaProtocol && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Active Cooling */}
+                <div className={`p-4 rounded-xl border space-y-2 text-xs ${
+                  isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-sky-600 dark:text-sky-400">
+                    <Thermometer className="w-4 h-4" />
+                    <span>Aktif Soğutma Protokolü</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                    <strong>Hedef: </strong>{protocol.crisisManagement.coolingProtocol.targetTemp}
+                  </p>
+                  <ul className="space-y-1 list-disc list-inside text-[11px] text-slate-700 dark:text-slate-300">
+                    {protocol.crisisManagement.coolingProtocol.methods.map((m, mIdx) => (
+                      <li key={mIdx}>{m}</li>
+                    ))}
+                  </ul>
+                  <div className="pt-1 text-[11px] font-semibold text-rose-500">
+                    * Durdurma Eşiği: {protocol.crisisManagement.coolingProtocol.stopThreshold}
+                  </div>
+                </div>
+
+                {/* Hyperkalemia & Arrhythmia Warning */}
+                <div className={`p-4 rounded-xl border space-y-2 text-xs ${
+                  isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-red-600 dark:text-red-400">
+                    <HeartCrack className="w-4 h-4" />
+                    <span>Hiperkalemi & Aritmi Yönetimi</span>
+                  </div>
+                  <ul className="space-y-1 text-[11px] text-slate-700 dark:text-slate-300">
+                    {protocol.crisisManagement.hyperkalemiaProtocol.map((hk, hkIdx) => (
+                      <li key={hkIdx} className="flex items-start gap-1.5">
+                        <span className="text-red-500">▸</span>
+                        <span>{hk}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="p-2.5 rounded-lg bg-red-950/40 border border-red-500/50 text-[10px] text-red-200 font-bold leading-relaxed">
+                    {protocol.crisisManagement.arrhythmiaWarning}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* 5) Patofizyoloji (Accordion Section) */}
+      <section id="sec5" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec5')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-purple-500/10 text-purple-500">
+              <Dna className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                5) Patofizyoloji
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec5 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec5 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec5 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-4 border-t border-slate-100 dark:border-slate-800/80">
+            <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed pt-2">
+              {protocol.pathophysiology.molecularBasis}
+            </p>
+
+            {/* Genetic Mutations Tags (Only if present) */}
+            {protocol.pathophysiology.geneticMutations && protocol.pathophysiology.geneticMutations.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <span className="text-xs font-bold text-slate-400">Sorumlu Genler:</span>
+                {protocol.pathophysiology.geneticMutations.map((gen, idx) => (
+                  <span
+                    key={idx}
+                    className={`text-xs font-mono px-2.5 py-1 rounded-lg border font-semibold ${
+                      idx === 0 
+                        ? 'bg-purple-500/15 text-purple-600 dark:text-purple-300 border-purple-500/30'
+                        : 'bg-slate-800 text-slate-300 border-slate-700'
+                    }`}
+                  >
+                    {gen}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Dynamic Pathophysiology Steps (Only if present) */}
+            {protocol.pathophysiology.cascadeSteps && protocol.pathophysiology.cascadeSteps.length > 0 && (
+              <div className="space-y-2.5 pt-2">
+                <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  {protocol.pathophysiology.stepsTitle || 'Patofizyolojik Mekanizma & Kilit Süreçler:'}:
+                </div>
+                <div className={`grid grid-cols-1 ${
+                  protocol.pathophysiology.cascadeSteps.length <= 3 
+                    ? 'md:grid-cols-3' 
+                    : protocol.pathophysiology.cascadeSteps.length === 4 
+                    ? 'md:grid-cols-4' 
+                    : 'md:grid-cols-5'
+                } gap-2`}>
+                  {protocol.pathophysiology.cascadeSteps.map((step, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-3 rounded-xl border flex flex-col justify-between text-xs space-y-2 ${
+                        isDark ? 'bg-slate-800/40 border-slate-800' : 'bg-slate-50 border-slate-200'
+                      }`}
+                    >
+                      <div>
+                        <div className="font-mono text-[10px] font-bold text-purple-500 mb-1">BASAMAK {idx + 1}</div>
+                        <div className="font-bold text-slate-900 dark:text-white leading-tight">{step.phase}</div>
+                      </div>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {step.mechanism}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className={`p-3.5 rounded-xl border text-xs leading-relaxed ${
+              isDark ? 'bg-purple-950/20 border-purple-500/30 text-purple-300' : 'bg-purple-50/70 border-purple-200 text-purple-950'
+            }`}>
+              <strong>Patofizyolojik Özet: </strong>{protocol.pathophysiology.summaryText}
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 6) Klinik Özellikler & Prezentasyon (Accordion Section) */}
+      <section id="sec6" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec6')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-red-500/10 text-red-500">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                6) Klinik Özellikler & Prezentasyon
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec6 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec6 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec6 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-5 border-t border-slate-100 dark:border-slate-800/80">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              {/* Early Signs */}
+              <div className={`p-4 rounded-xl border space-y-2.5 ${
+                isDark ? 'bg-red-950/20 border-red-500/30' : 'bg-red-50/70 border-red-300'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-red-600 dark:text-red-400">1. ERKEN BULGULAR</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-500 font-bold">HAYATİ</span>
+                </div>
+                <ul className="text-xs space-y-1.5 text-slate-700 dark:text-slate-300">
+                  {protocol.presentation.earlySigns.map((s, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5">
+                      <span className="text-red-500 font-bold">▸</span>
+                      <span className={idx === 0 ? 'font-bold' : ''}>{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Progressing Signs */}
+              <div className={`p-4 rounded-xl border space-y-2.5 ${
+                isDark ? 'bg-amber-950/20 border-amber-500/30' : 'bg-amber-50/70 border-amber-300'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-amber-600 dark:text-amber-400">2. İLERLEYEN BULGULAR</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">RİJİDİTE</span>
+                </div>
+                <ul className="text-xs space-y-1.5 text-slate-700 dark:text-slate-300">
+                  {protocol.presentation.progressingSigns.map((s, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5">
+                      <span className="text-amber-500 font-bold">▸</span>
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Late Signs */}
+              <div className={`p-4 rounded-xl border space-y-2.5 ${
+                isDark ? 'bg-purple-950/20 border-purple-500/30' : 'bg-purple-50/70 border-purple-300'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-purple-600 dark:text-purple-400">3. GEÇ BULGULAR</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-500 font-bold">HİPERTERMİ</span>
+                </div>
+                <ul className="text-xs space-y-1.5 text-slate-700 dark:text-slate-300">
+                  {protocol.presentation.lateSigns.map((s, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5">
+                      <span className="text-purple-500 font-bold">▸</span>
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Masseter Spasm Callout (For MH) */}
+            {protocol.presentation.masseterSpasmManagement && (
+              <div className={`p-4 rounded-xl border flex items-start gap-3 ${
+                isDark ? 'bg-slate-800/60 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+              }`}>
+                <AlertOctagon className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                <div className="text-xs leading-relaxed">
+                  <strong className="text-slate-900 dark:text-white font-bold">Süksinilkolin Sonrası Masseter Kas Spazmı (MMR / Trismus) Yönetimi: </strong>
+                  {protocol.presentation.masseterSpasmManagement}
+                </div>
+              </div>
+            )}
+
+            {/* Special Alert Callout (e.g. Silent Chest in Bronchospasm) */}
+            {protocol.presentation.specialAlertTitle && (
+              <div className={`p-4 rounded-xl border flex items-start gap-3 ${
+                isDark ? 'bg-amber-950/20 border-amber-500/40 text-amber-200' : 'bg-amber-50 border-amber-300 text-amber-950 shadow-xs'
+              }`}>
+                <AlertOctagon className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                <div className="text-xs leading-relaxed space-y-1">
+                  <strong className="text-slate-900 dark:text-white font-bold block text-sm">
+                    {protocol.presentation.specialAlertTitle}
+                  </strong>
+                  <p className="text-[11px] leading-relaxed">
+                    {protocol.presentation.specialAlertContent}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* 7) Koruyucu Tedbirler & Hazırlık (Accordion Section) */}
+      <section id="sec7" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec7')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-teal-500/10 text-teal-500">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                7) Koruyucu Tedbirler & Hazırlık
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec7 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec7 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec7 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-5 border-t border-slate-100 dark:border-slate-800/80">
+            {/* Preop Risk Assessment */}
+            <div className="space-y-2 pt-2">
+              <div className="text-xs font-bold text-slate-900 dark:text-white">
+                Preoperatif Risk Değerlendirmesi:
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                {protocol.preventionAndPreparedness.preopRiskAssessment.map((risk, idx) => (
+                  <div
+                    key={idx}
+                    className={`p-3 rounded-xl border text-xs leading-relaxed ${
+                      isDark ? 'bg-slate-800/40 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    {risk}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Clean Machine Protocol Steps */}
+            <div className={`p-5 rounded-2xl border space-y-3 ${
+              isDark ? 'bg-teal-950/20 border-teal-500/30' : 'bg-teal-50/70 border-teal-200'
+            }`}>
+              <div className="text-xs font-bold text-teal-700 dark:text-teal-300 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-teal-500" />
+                <span>{protocol.preventionAndPreparedness.anesthesiaMachinePreparation.title}</span>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                {protocol.preventionAndPreparedness.anesthesiaMachinePreparation.steps.map((st, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
+                    <span className="font-mono font-bold text-teal-500 shrink-0">Adım {idx + 1}:</span>
+                    <span className="leading-relaxed">{st}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Cart Checklist */}
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-slate-900 dark:text-white">
+                {protocol.id === 'bronchospasm'
+                  ? 'Acil Bronkospazm & Havayolu Kiti Asgari Donanım Listesi:'
+                  : protocol.id === 'laryngospasm'
+                  ? 'Acil Laringospazm & Havayolu Kiti Asgari Donanım Listesi:'
+                  : (protocol.id === 'airway-crisis' || protocol.id === 'cico')
+                  ? 'Acil Krikotiroidotomi & CICO Kiti Asgari Donanım Listesi:'
+                  : protocol.id === 'airway-obstruction'
+                  ? 'Acil Hava Yolu Obstrüksiyonu & Boyun Hematomu Kiti Donanım Listesi:'
+                  : protocol.id === 'aspiration'
+                  ? 'Pulmoner Aspirasyon & RSI Acil Donanım Listesi:'
+                  : 'Malign Hipertermi Acil Arabası (MH Cart) Asgari Donanım Listesi:'}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                {protocol.preventionAndPreparedness.cartChecklist.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className={`p-2.5 rounded-lg border flex items-center gap-2 ${
+                      isDark ? 'bg-slate-800/40 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span className="text-[11px]">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 8) Postoperatif Takip & Prognoz (Accordion Section) */}
+      <section id="sec8" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec8')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-sky-500/10 text-sky-500">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                8) Postoperatif Takip & Prognoz
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec8 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec8 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec8 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-5 border-t border-slate-100 dark:border-slate-800/80">
+            {/* Recurrence and ICU Callouts */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
+              {protocol.postopManagement.recurrenceRate && (
+                <div className={`p-4 rounded-xl border ${
+                  isDark ? 'bg-red-950/20 border-red-500/30 text-red-200' : 'bg-red-50 border-red-300 text-red-950'
+                }`}>
+                  <div className="font-bold text-xs mb-1 flex items-center gap-1.5 text-red-500">
+                    <AlertTriangle className="w-4 h-4" />
+                    <span>{protocol.postopManagement.recurrenceRiskBadge || 'NÜKS (REKÜRRENS) RİSKİ:'}</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed">
+                    {protocol.postopManagement.recurrenceRate}
+                  </p>
+                </div>
+              )}
+
+              <div className={`p-4 rounded-xl border ${
+                protocol.postopManagement.recurrenceRate ? '' : 'sm:col-span-2'
+              } ${
+                isDark ? 'bg-slate-800/50 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+              }`}>
+                <div className="font-bold text-xs mb-1 text-slate-900 dark:text-white">
+                  Yoğun Bakım İzlem Süresi:
+                </div>
+                <p className="text-[11px] leading-relaxed">
+                  {protocol.postopManagement.icuMonitoringDuration}
+                </p>
+              </div>
+            </div>
+
+            {/* Monitoring & Complications */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className={`p-4 rounded-xl border space-y-2 ${
+                isDark ? 'bg-slate-800/30 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
+                <span className="font-bold text-slate-900 dark:text-white block">YBÜ Monitorizasyon Parametreleri:</span>
+                <ul className="space-y-1 list-disc list-inside text-slate-600 dark:text-slate-400 text-[11px]">
+                  {protocol.postopManagement.monitoringParameters.map((param, idx) => (
+                    <li key={idx}>{param}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={`p-4 rounded-xl border space-y-2 ${
+                isDark ? 'bg-slate-800/30 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
+                <span className="font-bold text-slate-900 dark:text-white block">Beklenen Komplikasyonlar:</span>
+                <ul className="space-y-1 list-disc list-inside text-rose-600 dark:text-rose-400 text-[11px]">
+                  {protocol.postopManagement.expectedComplications.map((comp, idx) => (
+                    <li key={idx}>{comp}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Definitive Testing: Only if present */}
+            {protocol.postopManagement.definitiveDiagnosticTesting && protocol.postopManagement.definitiveDiagnosticTesting.length > 0 && (
+              <div className="space-y-2 pt-1">
+                <span className="text-xs font-bold text-slate-900 dark:text-white block">
+                  {protocol.id === 'mh' ? 'Kesin Tanı Testleri ve Genetik Danışmanlık:' : 'Postoperatif İleri Tanı ve Değerlendirme:'}
+                </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  {protocol.postopManagement.definitiveDiagnosticTesting.map((test, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-3.5 rounded-xl border space-y-1 ${
+                        isDark ? 'bg-slate-800/40 border-slate-800' : 'bg-slate-50 border-slate-200'
+                      }`}
+                    >
+                      <div className="font-bold text-indigo-600 dark:text-indigo-400">
+                        {test.testName}
+                      </div>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {test.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Family Screening & Prognosis */}
+            <div className={`p-3.5 rounded-xl text-xs leading-relaxed space-y-2 ${
+              isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-50 border border-slate-200 text-slate-700'
+            }`}>
+              {(protocol.postopManagement.geneticCounseling || protocol.postopManagement.familyScreening) && (
+                <div className="space-y-1">
+                  <div className="font-bold text-slate-900 dark:text-white">Aile Taraması ve Genetik Danışmanlık:</div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                    {protocol.postopManagement.geneticCounseling || protocol.postopManagement.familyScreening}
+                  </p>
+                </div>
+              )}
+              {protocol.postopManagement.prognosisSummary && (
+                <div className={`text-[11px] ${(protocol.postopManagement.geneticCounseling || protocol.postopManagement.familyScreening) ? 'pt-2 border-t border-slate-700/60 dark:border-slate-700' : ''}`}>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">Prognoz Özeti: </span>
+                  <span className="text-slate-600 dark:text-slate-300">{protocol.postopManagement.prognosisSummary}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 9) High-Yield Bilgiler (Accordion Section) */}
+      <section id="sec9" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec9')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                9) High-Yield Bilgiler
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec9 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec9 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec9 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-4 border-t border-slate-100 dark:border-slate-800/80">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+              {protocol.highYieldPearls.map((pearl, idx) => (
+                <div
+                  key={idx}
+                  className={`p-4 rounded-xl border flex flex-col justify-between space-y-2.5 transition-all ${
+                    pearl.category === 'Tuzak'
+                      ? isDark ? 'bg-rose-950/20 border-rose-500/30' : 'bg-rose-50/70 border-rose-200'
+                      : pearl.category === 'Kritik Doz'
+                        ? isDark ? 'bg-amber-950/20 border-amber-500/30' : 'bg-amber-50/70 border-amber-200'
+                        : isDark ? 'bg-indigo-950/20 border-indigo-500/30' : 'bg-indigo-50/70 border-indigo-200'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                        pearl.category === 'Tuzak'
+                          ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/30'
+                          : pearl.category === 'Kritik Doz'
+                            ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                            : 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30'
+                      }`}>
+                        {pearl.category}
+                      </span>
+                    </div>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                      {pearl.title}
+                    </h4>
+                  </div>
+
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {pearl.takeaway}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 10) Kullanılan Kaynaklar & İleri Okuma (Accordion Section) */}
+      <section id="sec10" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <button
+          type="button"
+          onClick={() => toggleSection('sec10')}
+          className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
+            isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-slate-500/10 text-slate-400">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                10) Kullanılan Kaynaklar & İleri Okuma
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-mono px-2 py-0.5 rounded border hidden sm:inline-block ${
+              isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}>
+              {sectionOpen.sec10 ? 'Açık' : 'Kapalı'}
+            </span>
+            {sectionOpen.sec10 ? (
+              <ChevronUp className="w-5 h-5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {sectionOpen.sec10 && (
+          <div className="p-5 sm:p-6 pt-0 space-y-3 border-t border-slate-100 dark:border-slate-800/80">
+            <div className="space-y-2.5 pt-2">
+              {protocol.references.map((ref, idx) => (
+                <div
+                  key={idx}
+                  className={`p-3.5 rounded-xl border text-xs space-y-1 ${
+                    isDark ? 'bg-slate-950/50 border-slate-800' : 'bg-white border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-bold text-slate-900 dark:text-slate-100">{ref.authors}</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                      {ref.year}
+                    </span>
+                  </div>
+                  <div className="italic text-slate-700 dark:text-slate-300">
+                    "{ref.title}"
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {ref.journal}
+                  </div>
+                  <div className="text-[11px] text-indigo-600 dark:text-indigo-400 pt-1 font-medium">
+                    → {ref.relevance}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+};

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Search, 
   Calendar, 
@@ -62,6 +62,47 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
 
   // Today's date info for column highlight
   const todayInfo = getIstanbulDateInfo();
+  const isTodayInThisWeek = schedule.days.some(day => day.dateKey === todayInfo.dateKey);
+
+  // Refs for auto-centering on today's column (both horizontally and vertically)
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const todayHeaderRef = useRef<HTMLTableHeaderCellElement>(null);
+
+  const scrollToToday = useCallback((smooth = true) => {
+    const runScroll = () => {
+      const container = tableContainerRef.current;
+      const todayEl = todayHeaderRef.current;
+
+      if (todayEl && container) {
+        // 1. Horizontal centering inside table container
+        const targetScrollLeft = todayEl.offsetLeft - (container.clientWidth / 2) + (todayEl.clientWidth / 2);
+        container.scrollTo({
+          left: Math.max(0, targetScrollLeft),
+          behavior: smooth ? 'smooth' : 'auto'
+        });
+
+        // 2. Vertical centering in viewport
+        todayEl.scrollIntoView({
+          behavior: smooth ? 'smooth' : 'auto',
+          block: 'center',
+          inline: 'center'
+        });
+      }
+    };
+
+    const t1 = setTimeout(runScroll, 120);
+    const t2 = setTimeout(runScroll, 380);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, []);
+
+  // Auto-center on mount and whenever active week changes
+  useEffect(() => {
+    const cleanup = scrollToToday(true);
+    return cleanup;
+  }, [schedule.weekKey, scrollToToday]);
 
   const refreshWeekOptions = () => {
     setAvailableWeeks(getAvailableWeekOptions());
@@ -463,20 +504,26 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
 
       {/* 3. High-Density Weekly Grid Table */}
       <div className="p-3 sm:p-5 overflow-y-auto">
-        <div className="border rounded-xl overflow-hidden overflow-x-auto border-slate-300 dark:border-slate-700 text-xs shadow-xs">
+        <div 
+          ref={tableContainerRef}
+          className="border rounded-xl overflow-hidden overflow-x-auto border-slate-300 dark:border-slate-700 text-xs shadow-xs scroll-smooth"
+        >
           <table className="w-full text-center border-collapse">
             <thead>
               <tr className="bg-slate-900 text-white font-bold text-[11px] tracking-wider uppercase border-b border-slate-700">
                 <th className="py-2.5 px-3 text-left w-56 bg-slate-950">
                   GÖREV YERİ / BİRİM
                 </th>
-                {schedule.days.map((day) => {
+                {schedule.days.map((day, idx) => {
                   const isToday = day.dateKey === todayInfo.dateKey;
+                  const isTargetCol = isToday || (!isTodayInThisWeek && idx === 0);
                   return (
                     <th 
                       key={day.dateKey}
+                      ref={isTargetCol ? todayHeaderRef : undefined}
+                      id={isToday ? 'weekly-schedule-today-col' : undefined}
                       className={`py-2 px-3 border-l border-slate-700 transition-colors ${
-                        isToday ? 'bg-teal-900/90 text-teal-200' : ''
+                        isToday ? 'bg-teal-900/90 text-teal-200 ring-2 ring-teal-400/60 shadow-inner' : ''
                       }`}
                     >
                       <div className="flex flex-col items-center">
@@ -484,7 +531,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs font-black">{day.dayName}</span>
                           {isToday && (
-                            <span className="px-1 py-0.2 rounded text-[9px] bg-teal-500 text-slate-950 font-black">
+                            <span className="px-1.5 py-0.5 rounded text-[9px] bg-teal-400 text-slate-950 font-black animate-pulse">
                               Bugün
                             </span>
                           )}

@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { PortalWorkspace } from './components/PortalWorkspace';
 import { DisclaimerView } from './components/DisclaimerView';
-import { parseHashRoute, ParsedHashRoute, updateHashRoute } from './utils/deepLink';
+import { parseHashRoute, ParsedHashRoute, updateHashRoute, HashRouteType } from './utils/deepLink';
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState<ParsedHashRoute>(() => parseHashRoute());
@@ -78,6 +78,19 @@ export default function App() {
     setCurrentView('welcome');
   };
 
+  const handleProceed = (target?: { type: HashRouteType; id: string }) => {
+    if (target?.type && target?.id) {
+      updateHashRoute(target.type, target.id);
+      setInitialRoute({ type: target.type, id: target.id });
+    } else {
+      const route = parseHashRoute();
+      if (route.type !== null && route.id !== null) {
+        setInitialRoute(route);
+      }
+    }
+    setCurrentView('portal');
+  };
+
   return (
     <div className={`min-h-screen font-sans antialiased selection:bg-teal-500 selection:text-slate-950 relative overflow-x-hidden ${
       isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
@@ -104,7 +117,7 @@ export default function App() {
       <div className="relative z-10 min-h-screen flex flex-col">
         {currentView === 'welcome' && (
           <WelcomeScreen
-            onProceed={() => setCurrentView('portal')}
+            onProceed={handleProceed}
             onOpenDisclaimer={openDisclaimer}
             isDark={isDark}
             onToggleTheme={toggleTheme}

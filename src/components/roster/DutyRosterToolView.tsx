@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   X,
   Upload, 
@@ -75,6 +75,44 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Refs for auto-centering on today's row (vertically and horizontally)
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const todayRowRef = useRef<HTMLTableRowElement>(null);
+
+  const scrollToToday = useCallback((smooth = true) => {
+    const runScroll = () => {
+      const container = tableContainerRef.current;
+      const todayEl = todayRowRef.current;
+
+      if (todayEl) {
+        if (container) {
+          const containerRect = container.getBoundingClientRect();
+          const todayRect = todayEl.getBoundingClientRect();
+          const offsetDiff = (todayRect.top - containerRect.top) - (container.clientHeight / 2) + (todayRect.height / 2);
+          container.scrollBy({
+            top: offsetDiff,
+            behavior: smooth ? 'smooth' : 'auto'
+          });
+        }
+
+        todayEl.scrollIntoView({
+          behavior: smooth ? 'smooth' : 'auto',
+          block: 'center',
+          inline: 'center'
+        });
+      }
+    };
+
+    const t1 = setTimeout(runScroll, 120);
+    const t2 = setTimeout(runScroll, 350);
+    const t3 = setTimeout(runScroll, 650);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
   // Sync with server on initial mount and register event listeners
   useEffect(() => {
     setIsAdminUnlocked(isRosterAdminUnlocked());
@@ -88,6 +126,7 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
       const keys = Object.keys(freshRoster.days).sort();
       setSelectedDateKey(curShift.activeDateKey || (keys.length > 0 ? keys[0] : ''));
       setActiveShiftKey(curShift.activeDateKey);
+      scrollToToday(true);
     });
 
     const handleRostersUpdated = () => {
@@ -97,6 +136,7 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
       setRoster(updated);
       const curShift = getCurrentShiftStatus(updated);
       setActiveShiftKey(curShift.activeDateKey);
+      scrollToToday(true);
     };
 
     const handleActiveMonthChanged = (e: any) => {
@@ -112,6 +152,7 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
       } else if (keys.length > 0) {
         setSelectedDateKey(keys[0]);
       }
+      scrollToToday(true);
     };
 
     const handleSyncStatusChanged = (e: any) => {
@@ -130,7 +171,13 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
       window.removeEventListener('etfal-active-month-changed', handleActiveMonthChanged);
       window.removeEventListener('etfal-sync-status-changed', handleSyncStatusChanged);
     };
-  }, []);
+  }, [scrollToToday]);
+
+  // Auto-center on mount and whenever activeMonth or activeShiftKey changes
+  useEffect(() => {
+    const cleanup = scrollToToday(true);
+    return cleanup;
+  }, [activeMonth, activeShiftKey, scrollToToday]);
 
   // Live timer to keep current active shift up to date
   useEffect(() => {
@@ -159,6 +206,7 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
     } else if (keys.length > 0) {
       setSelectedDateKey(keys[0]);
     }
+    scrollToToday(true);
   };
 
   // Keyboard navigation when this tool is active
@@ -663,7 +711,7 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
       )}
 
       {/* Table Content: Sole clean view */}
-      <div className="p-3 sm:p-5 overflow-y-auto">
+      <div ref={tableContainerRef} className="p-3 sm:p-5 overflow-y-auto">
         <div className="border rounded-xl overflow-hidden overflow-x-auto border-slate-300 dark:border-slate-700 text-xs shadow-xs">
           <table className="w-full text-center border-collapse">
             <thead>
@@ -700,6 +748,7 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
                 const day = roster.days[dateKey];
                 const isSelected = dateKey === selectedDateKey;
                 const isToday = dateKey === activeShiftKey;
+                const isTargetToday = isToday || (!activeShiftKey && isSelected);
                 const isWeekend = isWeekendDay(day);
 
                 const getSeySlot = (num: number) => 
@@ -766,6 +815,7 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
                 return (
                   <tr 
                     key={dateKey}
+                    ref={isTargetToday ? todayRowRef : undefined}
                     onClick={() => setSelectedDateKey(dateKey)}
                     className={`transition-colors text-[11px] ${
                       isSelected

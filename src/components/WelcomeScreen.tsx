@@ -14,10 +14,10 @@ import { CampusWeatherBar } from './campus/CampusWeatherBar';
 import { DutyRosterTickerBar } from './roster/DutyRosterTickerBar'; /* [MODULAR_DUTY_ROSTER: Slim Ticker] */
 import { DutyRosterModal } from './roster/DutyRosterModal'; /* [MODULAR_DUTY_ROSTER] */
 import { TodayPostOpBadgeBar } from './schedule/TodayPostOpBadgeBar';
-import { updateHashRoute } from '../utils/deepLink';
+import { updateHashRoute, HashRouteType } from '../utils/deepLink';
 
 interface WelcomeScreenProps {
-  onProceed: () => void;
+  onProceed: (target?: { type: HashRouteType; id: string }) => void;
   onOpenDisclaimer: () => void;
   isDark: boolean;
   onToggleTheme: () => void;
@@ -31,7 +31,7 @@ export interface ClinicPhoto {
   alt: string;
 }
 
-// User iconic artwork album - 12 photos including new operating room, laboratory, morning visit, PACU and online seminar artworks
+// User iconic artwork album - 11 photos including new operating room, laboratory, morning visit, PACU and online seminar artworks
 const CLINIC_ALBUM: ClinicPhoto[] = [
   {
     id: 1,
@@ -42,76 +42,69 @@ const CLINIC_ALBUM: ClinicPhoto[] = [
   },
   {
     id: 2,
-    src: '/assets/aistudio/ahahahahaha_1f9e8339.jpg',
-    title: 'Şişli Etfal Portalı',
-    subtitle: 'Klinik hafıza, kılavuzlar ve asistan eğitim platformu',
-    alt: 'Şişli Etfal Anestezi Asistan Portalı Portre'
-  },
-  {
-    id: 3,
     src: '/assets/aistudio/ahahahahaha3_2d69811d.jpg',
     title: 'Klinik Neşesi & Dayanışma',
     subtitle: 'Nöbet sonrası dinlenme ve ekip içi motivasyon anları',
     alt: 'Şişli Etfal Anestezi Kliniği Neşeli Anlar ve Dayanışma'
   },
   {
-    id: 4,
+    id: 3,
     src: '/assets/aistudio/ahahahahaha4_e87cbffc.jpg',
     title: 'Nöbetçi Hekim & Konsültasyon',
     subtitle: 'Çift telefon acil servis ve yoğun bakım konsültasyon trafiği',
     alt: 'Şişli Etfal Nöbetçi Asistan Hekim Çift Telefon Konsültasyon'
   },
   {
-    id: 5,
+    id: 4,
     src: '/assets/aistudio/ahahahahaha5_cb5f8baf.jpg',
     title: 'İntraoperatif Takip & Salon',
     subtitle: 'Hemodinami, mekanik ventilasyon ve anestezi derinliği takibi',
     alt: 'Şişli Etfal Ameliyathane Anestezi İntraoperatif Takip'
   },
   {
-    id: 6,
+    id: 5,
     src: '/assets/aistudio/Gemini_Generated_Image_qp07isqp07isqp07_016f594f.jpg',
     title: 'Ameliyathane Ekibi (Salon 8 & 9)',
     subtitle: 'I ❤️ people (under general anesthesia) - Ortopedi Salonları',
     alt: 'Şişli Etfal Ameliyathane Ekibi - I ❤️ people (under general anesthesia) - Salon 8 ve 9 Ortopedi'
   },
   {
-    id: 7,
+    id: 6,
     src: '/assets/aistudio/1793347911650_32625068.jpg',
     title: 'Salon Ekibi & Ameliyathane Dayanışması',
     subtitle: 'Masa başında vaka hazırlığı, kardeşlik ve anestezi ekip ruhu',
     alt: 'Şişli Etfal Ameliyathane Ekibi Masa Başı Dayanışması'
   },
   {
-    id: 8,
+    id: 7,
     src: '/assets/aistudio/1793347584968_aecc76e6.jpg',
     title: 'Deneysel Cerrahi & Araştırma Laboratuvarı',
     subtitle: 'Mikrocerrahi teknikleri ve deneysel anestezi çalışmaları',
     alt: 'Şişli Etfal Anestezi Deneysel Cerrahi ve Araştırma Laboratuvarı'
   },
   {
-    id: 9,
+    id: 8,
     src: '/assets/aistudio/1793347697407_8f776ac5.jpg',
     title: 'Klinik Kadrosu & Sabah Toplantısı',
     subtitle: 'Hocalarımız ve asistan hekimlerimizle ortak klinik birliği',
     alt: 'Şişli Etfal Anestezi Kliniği Sabah Viziti ve Ekip Birliği'
   },
   {
-    id: 10,
+    id: 9,
     src: '/assets/aistudio/1793347731742_53fa5715.jpg',
     title: 'Preoperatif Hazırlık & Damaryolu Ünitesi',
     subtitle: 'Damaryolu açılışı, preop kan alma ve hasta başı moral desteği',
     alt: 'Şişli Etfal Preoperatif Hazırlık ve Damaryolu Ünitesi'
   },
   {
-    id: 11,
+    id: 10,
     src: '/assets/aistudio/1793347853244_d243e192.jpg',
     title: 'Online Asistan Semineri & Olgu Konseyi',
     subtitle: 'Ekran paylaşımıyla teorik eğitimler ve interaktif olgu sunumları',
     alt: 'Şişli Etfal Anestezi Online Asistan Semineri ve Olgu Konseyi'
   },
   {
-    id: 12,
+    id: 11,
     src: '/assets/aistudio/1793347847115_a2fbe784.jpg',
     title: 'Uyandırma (PACU) & Taburculuk Sevinci',
     subtitle: 'Başarılı ekstübasyon sonrası hastayı güven ve tebessümle servise uğurlama',
@@ -181,21 +174,21 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         }`}
       />
 
-      {/* Top-Right Controls: Live Clock & Theme Toggle */}
-      <div className="w-full max-w-4xl mx-auto pt-1 sm:pt-2 flex flex-wrap items-center justify-end z-10 gap-2.5">
-        <div className="flex items-center gap-2 sm:gap-2.5">
+      {/* Top Controls: Live Clock & Theme Toggle */}
+      <div className="relative z-40 w-full max-w-4xl mx-auto pt-1 sm:pt-2 flex items-center justify-end z-10 gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
           <LiveClock isDark={isDark} />
           <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
         </div>
       </div>
 
       {/* Campus Weather & Inter-Campus Drive Time Bar */}
-      <div className="w-full max-w-4xl mx-auto z-10 mt-2.5 rounded-xl overflow-hidden border shadow-xs">
+      <div className="relative z-20 w-full max-w-4xl mx-auto mt-2.5 rounded-xl overflow-hidden border shadow-xs">
         <CampusWeatherBar isDark={isDark} />
       </div>
 
       {/* Broadcast News Ticker Strip: On-Duty Residents [MODULAR_DUTY_ROSTER] */}
-      <div className="w-full max-w-4xl mx-auto z-10 mt-2">
+      <div className="relative z-20 w-full max-w-4xl mx-auto mt-2">
         <DutyRosterTickerBar 
           isDark={isDark} 
           onOpenDetail={() => setIsRosterModalOpen(true)} 
@@ -203,12 +196,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       </div>
 
       {/* Today's Post-Op Doctors Bar (Only visible on weekdays) */}
-      <div className="w-full max-w-4xl mx-auto z-10 mt-1.5">
+      <div className="relative z-20 w-full max-w-4xl mx-auto mt-1.5">
         <TodayPostOpBadgeBar 
           isDark={isDark} 
           onOpenSchedule={() => {
             updateHashRoute('arac', 'schedule');
-            onProceed();
+            onProceed({ type: 'arac', id: 'schedule' });
           }}
         />
       </div>
@@ -338,7 +331,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         {/* Primary Click to Proceed Action Button */}
         <div className="pt-1 sm:pt-2 w-full sm:w-auto">
           <button
-            onClick={onProceed}
+            onClick={() => onProceed()}
             className={`w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 active:scale-[0.98] group cursor-pointer ${
               isDark
                 ? 'bg-teal-500 hover:bg-teal-400 text-slate-950 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30'

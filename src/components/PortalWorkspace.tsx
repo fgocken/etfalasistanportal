@@ -47,7 +47,7 @@ import { IcuWorkspace } from './icu/IcuWorkspace';
 import { ProceduresWorkspace } from './procedures/ProceduresWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
-import { ParsedHashRoute, updateHashRoute } from '../utils/deepLink';
+import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
 export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures';
 
@@ -463,31 +463,33 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   initialRoute
 }) => {
   const [activeTab, setActiveTab] = useState<'tools' | ToolTabId>(() => {
-    if (initialRoute?.type === 'infografik') {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'infografik') {
       return 'infographics';
     }
-    if (initialRoute?.type === 'tedavi') {
+    if (route?.type === 'tedavi') {
       return 'treatments';
     }
-    if (initialRoute?.type === 'blok') {
+    if (route?.type === 'blok') {
       return 'nerve-blocks';
     }
-    if (initialRoute?.type === 'arac' && initialRoute.id && initialRoute.id in ALL_CLINICAL_TOOLS) {
-      return initialRoute.id as ToolTabId;
+    if (route?.type === 'arac' && route.id && route.id in ALL_CLINICAL_TOOLS) {
+      return route.id as ToolTabId;
     }
     return 'tools';
   });
 
   // Keep activeTab synced if initialRoute changes via hash
   useEffect(() => {
-    if (initialRoute?.type === 'infografik') {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'infografik') {
       setActiveTab('infographics');
-    } else if (initialRoute?.type === 'tedavi') {
+    } else if (route?.type === 'tedavi') {
       setActiveTab('treatments');
-    } else if (initialRoute?.type === 'blok') {
+    } else if (route?.type === 'blok') {
       setActiveTab('nerve-blocks');
-    } else if (initialRoute?.type === 'arac' && initialRoute.id && initialRoute.id in ALL_CLINICAL_TOOLS) {
-      setActiveTab(initialRoute.id as ToolTabId);
+    } else if (route?.type === 'arac' && route.id && route.id in ALL_CLINICAL_TOOLS) {
+      setActiveTab(route.id as ToolTabId);
     }
   }, [initialRoute]);
 
@@ -564,6 +566,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [dragOverToolId, setDragOverToolId] = useState<ToolTabId | null>(null);
   const [isRosterModalOpen, setIsRosterModalOpen] = useState<boolean>(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
+  const [selectedEmergencyProtocolId, setSelectedEmergencyProtocolId] = useState<string | null>(null);
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -592,6 +595,24 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         updateHashRoute('infografik', infoId);
       }
       handleSelectTab('infographics');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'emergencies') {
+      if (item.id === 'emergency-malignant-hyperthermia') {
+        setSelectedEmergencyProtocolId('mh');
+      }
+      handleSelectTab('emergencies');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'treatments') {
+      if (item.id === 'treatment-norepinephrine-protocol') {
+        updateHashRoute('tedavi', 'norepinephrine');
+      } else if (item.id === 'treatment-magnesium-replacement' || item.id === 'treatment-hypomagnesemia-infographic') {
+        updateHashRoute('tedavi', 'magnesium');
+      } else if (item.id === 'treatment-potassium-replacement' || item.id === 'treatment-hypokalemia-infographic') {
+        updateHashRoute('tedavi', 'potassium');
+      } else if (item.id === 'treatment-sodium-correction-calculator' || item.id === 'treatment-hyponatremia-infographic') {
+        updateHashRoute('tedavi', 'sodium');
+      }
+      handleSelectTab('treatments');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       handleSelectTab(item.tabId);
@@ -724,7 +745,23 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
             <button
               type="button"
-              onClick={() => setActiveTab('roster')}
+              onClick={() => handleSelectTab('schedule')}
+              title="Haftalık Çalışma Programı ve Salon Dağılımlarını Aç"
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold transition-all cursor-pointer shadow-2xs ${
+                activeTab === 'schedule'
+                  ? 'bg-teal-600 text-white border-teal-600 shadow-teal-500/20'
+                  : isDark 
+                    ? 'bg-teal-500/15 hover:bg-teal-500/25 border-teal-500/30 text-teal-300' 
+                    : 'bg-teal-50 hover:bg-teal-100 border-teal-200 text-teal-800'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5 text-teal-500" />
+              <span className="hidden sm:inline">Haftalık Program</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSelectTab('roster')}
               title="Aylık Nöbet Çizelgesi Aracını Aç"
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold transition-all cursor-pointer shadow-2xs ${
                 activeTab === 'roster'
@@ -1549,7 +1586,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
         {/* 10. Anestezi Acilleri */}
         {activeTab === 'emergencies' && (
-          <AnesthesiaEmergenciesView isDark={isDark} />
+          <AnesthesiaEmergenciesView 
+            isDark={isDark} 
+            initialEmergencyId={selectedEmergencyProtocolId}
+          />
         )}
 
         {/* 11. Clinical Infographics */}

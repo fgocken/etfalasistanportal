@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, ChevronRight, Stethoscope, Building2 } from 'lucide-react';
+import { Activity, ChevronRight, Stethoscope, Building2, Calendar } from 'lucide-react';
 import { TodayPostOpStatus } from '../../types/weeklySchedule';
 import { getTodayPostOpStatus, fetchServerWeeklySchedule } from '../../services/weeklyScheduleService';
 
@@ -64,7 +64,13 @@ export const TodayPostOpBadgeBar: React.FC<TodayPostOpBadgeBarProps> = ({
 
   return (
     <div
-      onClick={onOpenSchedule}
+      onClick={(e) => {
+        if (onOpenSchedule) {
+          e.preventDefault();
+          e.stopPropagation();
+          onOpenSchedule();
+        }
+      }}
       role={onOpenSchedule ? 'button' : undefined}
       title="Haftalık Çalışma Programı ve Salon Dağılımlarını açmak için tıklayınız"
       className={`relative w-full rounded-xl border flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-2 sm:px-3 sm:py-2 gap-2 transition-all shadow-xs select-text ${
@@ -126,10 +132,26 @@ export const TodayPostOpBadgeBar: React.FC<TodayPostOpBadgeBarProps> = ({
           </span>
         </div>
 
+        {/* Haftalık Program Butonu */}
         {onOpenSchedule && (
-          <div className="hidden md:flex items-center text-slate-400 dark:text-slate-500 ml-0.5">
-            <ChevronRight className="w-4 h-4" />
-          </div>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onOpenSchedule();
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all cursor-pointer shadow-2xs shrink-0 active:scale-95 ${
+              isDark
+                ? 'bg-teal-500/20 hover:bg-teal-500/30 border-teal-500/40 text-teal-200 hover:text-white'
+                : 'bg-teal-600 hover:bg-teal-700 border-teal-600 text-white shadow-xs'
+            }`}
+            title="Haftalık Ameliyathane & Rotasyon Programını Aç"
+          >
+            <Calendar className="w-3.5 h-3.5 shrink-0" />
+            <span>Haftalık Program</span>
+            <ChevronRight className="w-3.5 h-3.5 shrink-0 -mr-0.5" />
+          </button>
         )}
       </div>
     </div>

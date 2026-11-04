@@ -123,6 +123,11 @@ export function updateHashRoute(type: HashRouteType | null, id: string | null): 
     if (!type || !id) {
       if (window.location.hash) {
         history.replaceState(null, '', window.location.pathname + window.location.search);
+        try {
+          window.dispatchEvent(new Event('hashchange'));
+        } catch {
+          // ignore
+        }
       }
       return;
     }
@@ -130,6 +135,11 @@ export function updateHashRoute(type: HashRouteType | null, id: string | null): 
     const newHash = `#${type}=${id}`;
     if (window.location.hash !== newHash) {
       history.replaceState(null, '', `${window.location.pathname}${window.location.search}${newHash}`);
+      try {
+        window.dispatchEvent(new Event('hashchange'));
+      } catch {
+        // ignore
+      }
     }
   } catch (e) {
     console.error('Hash update error:', e);
