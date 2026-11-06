@@ -24,7 +24,7 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'generic';
+  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -223,16 +223,138 @@ export interface EmergencyProtocol {
         }[];
       };
     };
+
+    // Venöz ve Paradoksal Hava Embolisi (VAE / PAE) acil protokolleri
+    vaeProtocols?: {
+      durantManeuverAndPositioning: {
+        title: string;
+        technique: string;
+        physiologicalMechanism: string;
+        surgicalSiteCoordination: string;
+      };
+      cvcAspirationProtocol: {
+        title: string;
+        catheterTypeAndDepth: string;
+        aspirationTechnique: string;
+        successRateAndPearls: string;
+      };
+      pfoParadoxicalEmbolism: {
+        title: string;
+        riskMechanism: string;
+        peepWarning: string;
+        managementKey: string;
+      };
+      hyperbaricOxygenGuideline: {
+        title: string;
+        indications: string[];
+        timeWindow: string;
+        transportAndStabilization: string;
+      };
+      monitoringSensitivityHierarchy: {
+        modality: string;
+        threshold: string;
+        clinicalUtility: string;
+        characteristics: string;
+      }[];
+    };
+
+    // LAST (Lokal Anestezik Sistemik Toksisitesi) acil protokolleri
+    lastProtocols?: {
+      lipidRescueProtocol: {
+        title: string;
+        bolusDose: string;
+        infusionDose: string;
+        repeatBolusRule: string;
+        maxCumulativeDose: string;
+        lipidSinkMechanism: string;
+      };
+      aclsModifications: {
+        title: string;
+        epinephrineAdjustment: string;
+        prohibitedDrugs: string[];
+        antiarrhythmicStrategy: string;
+        ecmoCriteria: string;
+      };
+      safeDosageLimits: {
+        agent: string;
+        plainMaxDose: string;
+        epinephrineMaxDose: string;
+        durationOfAction: string;
+        cardiotoxicityRisk: string;
+      }[];
+      toxicityProgressionStages: {
+        stage: string;
+        plasmaLevel: string;
+        cnsSymptoms: string;
+        cvsSymptoms: string;
+        actionRequired: string;
+      }[];
+    };
+
+    // İntraoperatif Anafilaksi acil protokolleri
+    anaphylaxisProtocols?: {
+      epinephrineTitrationByGrade: {
+        title: string;
+        guidelineSource: string;
+        grades: {
+          grade: string;
+          severity: string;
+          clinicalPresentation: string;
+          epinephrineBolus: string;
+          infusionRate: string;
+          clinicalAlert: string;
+        }[];
+        imAlternative: string;
+        pediatricDosing: string;
+      };
+      fluidAndVasopressorResuscitation: {
+        title: string;
+        crystalloidVolume: string;
+        colloidProhibitionWarning: string;
+        secondaryVasopressors: {
+          agent: string;
+          dosage: string;
+          indication: string;
+          mechanism: string;
+        }[];
+        refractoryVasoplegia: string;
+      };
+      ringAndMessmerScale: {
+        grade: string;
+        cutaneousSigns: string;
+        respiratorySigns: string;
+        cardiovascularSigns: string;
+        immediateAction: string;
+      }[];
+      tryptaseAndInvestigationProtocol: {
+        title: string;
+        firstSampleTiming: string;
+        secondSampleTiming: string;
+        diagnosticFormula: string;
+        culpritAgentsBreakdown: {
+          category: string;
+          prevalence: string;
+          commonDrugs: string;
+          riskNotes: string;
+        }[];
+        sugammadexRescueInRocuronium: string;
+        allergyClinicReferral: string;
+      };
+    };
   };
 
-  // 5) Patofizyolojisi
+  // 5) Patofizyolojisi (Doğal ve Hastalığa Özgü Yapı)
   pathophysiology: {
     molecularBasis: string;
     geneticMutations?: string[];
     stepsTitle?: string;
+    flowType?: 'cascade' | 'vicious-cycle' | 'biphasic' | 'cellular-systemic' | 'dual-axis';
+    cycleWarning?: string;
     cascadeSteps?: {
       phase: string;
       mechanism: string;
+      badge?: string;
+      color?: 'purple' | 'red' | 'amber' | 'cyan' | 'rose' | 'emerald';
     }[];
     summaryText: string;
   };
@@ -255,6 +377,7 @@ export interface EmergencyProtocol {
       steps: string[];
     };
     cleanAnesthesiaProtocol?: string[];
+    cartTitle?: string;
     cartChecklist: string[];
   };
 
@@ -450,27 +573,23 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'CACNA1S (Kromozom 1q32): Dihidropiridin reseptörü alfa-1 alt ünitesi (%1-2 vaka).',
         'STAC3: İskelet kası eksitasyon-kontraksiyon eşleşme proteini ("Native American Myopathy" ile ilişkili mutasyon).'
       ],
-      stepsTitle: 'Hücre İçi Kalsiyum Boşalması & Hipermetabolizma Kaskadı',
+      stepsTitle: 'Moleküler Kalsiyum Boşalması, Hipermetabolizma ve Hücre Yıkımı',
+      flowType: 'cascade',
       cascadeSteps: [
         {
-          phase: '1. Tetiklenme & Kontrolsüz Ca2+ Deşarjı',
-          mechanism: 'Volatil anestezik veya süksinilkolin mutasyonlu RYR1 reseptörüne bağlanarak kalsiyum kanalını sürekli açık konumda kilitler. Sarkoplazmik retikulumdan sitozole devasa kalsiyum akar.'
+          phase: 'Moleküler Kalsiyum Kaçağı & Sürekli Kasılma',
+          mechanism: 'Volatil anestezik veya süksinilkolin mutasyonlu RYR1 reseptörüne bağlanarak kanalı açık kilitler. Sarkoplazmik retikulumdan sitozole devasa kalsiyum sızar; Troponin C doyar ve aktin-miyozin kayması durdurulamaz (jeneralize kas rijiditesi).',
+          badge: '1. KALSİYUM KAÇAĞI'
         },
         {
-          phase: '2. Sürekli Aktin-Miyozin Çapraz Köprüleşmesi & Kas Spazmı',
-          mechanism: 'Troponin C sürekli kalsiyumla doyar; aktin-miyozin kayması durdurulamaz. İskelet kası gevşeyemez; sürekli kasılma ve jeneralize rijidite oluşur.'
+          phase: 'Hipermetabolik Tüketim Yangını & ATP İflası',
+          mechanism: 'SERCA pompası kalsiyumu geri çekmek için çılgınca ATP harcar. Oksijen sarfiyatı (VO2) ve CO2 üretimi (VCO2) 3-5 katına fırlar (EtCO2 sıçraması). Anaerobik metabolizmayla devasa ısı açığa çıkar (hipertermi).',
+          badge: '2. HİPERMETABOLİZMA'
         },
         {
-          phase: '3. Hipermetabolik Fırtına & ATP Tükenmesi',
-          mechanism: 'Kas hücresi kalsiyumu SR içine geri pompalamak (SERCA) ve gevşemek için çılgınca ATP harcar. Glikojen depoları dakikalar içinde tükenir. Oksijen sarfiyatı (VO2) ve karbondioksit üretimi (VCO2) normalin 3-5 katına çıkar.'
-        },
-        {
-          phase: '4. Anaerobik Glikoliz, Masif Laktat & Isı Üretimi',
-          mechanism: 'Oksijen yetersiz kalınca anaerobik metabolizma devreye girer. Yüksek enerjili fosfat bağlarının kontrolsüz hidrolizi devasa ısı enerjisi açığa çıkarır (Termojenez). Vücut ısısı dakikada 0.2 - 0.5°C yükselir.'
-        },
-        {
-          phase: '5. Hücre Membran Bütünlüğünün İflası & Rabdomiyoliz',
-          mechanism: 'ATP tamamen tükenince sarkolemma (hücre zarı) bütünlüğü bozulur. Hücre içeriği kontrolsüzce dolaşıma dökülür: Masif Kalsiyum, Potasyum (Hiperkalemi), Miyoglobin (Miyoglobinüri/Böbrek iflası) ve Kreatin Kinaz (CK > 20.000 - 100.000 IU/L).'
+          phase: 'Sarkolemma Çöküşü, Rabdomiyoliz & Hiperkalemi',
+          mechanism: 'ATP tamamen tükenince hücre zarı parçalanır; miyosit içeriği seruma boşalır. Akut hiperkalemi ölümcül kardiyak arresti, miyoglobinüri ise akut tübüler nekroz ve böbrek yetmezliğini tetikler.',
+          badge: '3. MEMBRAN YIKIMI'
         }
       ],
       summaryText: 'Özetle Malign Hipertermi; kas hücresinin kalsiyum pompalama motorunun alev alması, ardından enerji tükenmesiyle kendi kendini sindirerek patlaması (rabdomiyoliz) ve tüm dolaşımı asidoz, potasyum ve ısıyla zehirlemesidir.'
@@ -524,6 +643,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Sıcaklık Monitorizasyonu: Süresi > 30 dakika olan her anestezi vakasında ÇEKİRDEK ISI (özofagus, nazofarenks, timpanik veya mesane) kesintisiz ölçülmelidir.',
         'EtCO2 Monitorizasyonu: Kesintisiz ve kalibre kapnografi şarttır.'
       ],
+      cartTitle: 'Malign Hipertermi Acil Arabası (MH Cart) Asgari Donanım Listesi:',
       cartChecklist: [
         'En az 36 flakon klasik Dantrolen (Dantrium / Revonto, 20 mg) VEYA en az 3 flakon Ryanodex (250 mg).',
         'En az 2000-3000 mL Steril Enjeksiyonluk Su (Aqua ad iniectabilia, flakon sulandırmak için).',
@@ -826,27 +946,23 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 5) Patofizyolojisi
     pathophysiology: {
       molecularBasis: 'Bronkospazm; trakeobronşiyal otonom dengenin parasempatik (vagal) kolinerjik yöne kayması, bronş düz kas hücrelerindeki muskarinik M3 reseptörlerinin uyarılması ve hücre içi kalsiyum salınımının patlaması ile karakterizedir. Bronş lümeni daraldığında Poiseuille Yasası gereği hava yolu direnci yarıçapın dördüncü kuvvetiyle ters orantılı olarak katlanarak fırlar.',
-      stepsTitle: 'Hava Yolu Daralması & Dinamik Hiperinflasyon Mekanizması',
+      stepsTitle: 'Kolinerjik Tetikleme, Poiseuille Direnç Fırtınası ve Oto-PEEP Dinamiği',
+      flowType: 'cascade',
       cascadeSteps: [
         {
-          phase: '1. Tetikleyici ve Vagal Uyarım',
-          mechanism: 'Yüzeyel anestezi, mekanik trakeal irritasyon (ETT) veya volatil iritasyon (Desfluran) afferent vagal lifleri uyarır; asetilkolin deşarjı tetiklenir.'
+          phase: 'Kolinerjik Vagal Tetikleme & M3 Kalsiyum Patlaması',
+          mechanism: 'Yüzeyel anestezi, ETT karinası irritasyonu veya Desfluran maruziyeti afferent vagal lifleri uyarır; asetilkolin M3 reseptörlerine bağlanarak IP3 aracılığıyla sarkoplazmik retikulumdan masif Ca²⁺ deşarj eder.',
+          badge: '1. KOLİNERJİK AKTİVASYON'
         },
         {
-          phase: '2. Hücre İçi Kalsiyum Patlaması',
-          mechanism: 'Asetilkolin bronş düz kasındaki M3 reseptörlerine bağlanır; Fosfolipaz C aktive olarak IP3 üretir ve sarkoplazmik retikulumdan masif Ca2+ salınır.'
+          phase: 'Poiseuille Direnç Fırtınası (R ∝ 1/r⁴)',
+          mechanism: 'Ca²⁺-kalmodulin kompleksi MLCKyi uyararak bronş düz kasını sıkar; bronş lümeni yarıya indiğinde Poiseuille Yasası gereği hava yolu direnci 16 kat (2⁴) fırlar (Ppeak > 45-50 cmH2O ve köpekbalığı sırtı EtCO2).',
+          badge: '2. POISEUILLE KATARSI'
         },
         {
-          phase: '3. Poiseuille Direnç Fırtınası',
-          mechanism: 'Kalsiyum-kalmodulin kompleksi miyozin hafif zincir kinazı (MLCK) aktive eder; bronş lümeni %50 daraldığında hava yolu direnci 16 kat (2⁴) artar!'
-        },
-        {
-          phase: '4. Ekspiratuar Akım Kısıtlanması & Oto-PEEP',
-          mechanism: 'Direnç nedeniyle hava dışarı çıkamaz; ekspiryum bitmeden yeni soluk başlar. Akciğerlerde aşırı hava hapsi (dinamik hiperenflasyon) oluşur.'
-        },
-        {
-          phase: '5. Venöz Dönüş Çöküşü & Hipotansiyon',
-          mechanism: 'Fırlayan intratorasik basınç vena cava inferioru ezer; sağ kalbe venöz dönüş (preload) çöker, kardiyak debi düşer ve pulsus paradoksus / arrest gelişir.'
+          phase: 'Dinamik Hiperinflasyon (Oto-PEEP) & Venöz Preload Çöküşü',
+          mechanism: 'Ekspiratuar akım kısıtlandığı için hava dışarı çıkamaz; akciğerlerde aşırı hava hapsolur. Fırlayan intratorasik basınç vena cava inferioru ezer, sağ ventrikül venöz dönüşü (preload) çöker ve hipotansiyon/asistoli gelişir.',
+          badge: '3. PRELOAD ÇÖKÜŞÜ'
         }
       ],
       summaryText: 'Özetle bronkospazm sadece bir ventilasyon güçlüğü değil, Poiseuille kanunuyla hava yolu direncini fırlatan, dinamik hiperenflasyonla sağ kalbe kan dönüşünü engelleyerek kardiyovasküler kollapsa neden olan çok yönlü bir kardiyopulmoner krizdir.'
@@ -898,6 +1014,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           'Desflurandan Kaçınma: İdame anestezisinde Sevofluran tercih edin; Desfluran kesinlikle kullanılmamalıdır.'
         ]
       },
+      cartTitle: 'Acil Bronkospazm & Havayolu Kiti Asgari Donanım Listesi:',
       cartChecklist: [
         'ETT Uyumlu MDI Ara Adaptörü (Inhaler Spacer / Elbow)',
         'Salbutamol MDI (Ventolin İnhaler Tüpü - En az 1 dolu kutu)',
@@ -1189,27 +1306,23 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 5) Patofizyolojisi
     pathophysiology: {
       molecularBasis: 'Laringospazm; üst solunum yolunu aspirasyondan korumak için evrimleşmiş koruyucu glottik kapanma refleksinin yüzeyel anestezi altında kontrolsüz, abartılı ve hayatı tehdit edici bir spazma dönüşmesidir. Süperior laringeal sinir afferentleri ile rekürren laringeal sinir motor efferentleri larenks adduktor kaslarını (lateral krikoaritenoid, transvers aritenoid, krikotiroid) kasarak hava yolunu tamamen kilitler.',
-      stepsTitle: 'Laringeal Refleks Arkı & Glottik Kapanma Basamakları',
+      stepsTitle: 'Glottik Kapanma Refleksi ve Negatif Basınçlı Pulmoner Ödem (NPPE)',
+      flowType: 'cascade',
       cascadeSteps: [
         {
-          phase: '1. Mukozal İrritasyon & SLN Uyarımı',
-          mechanism: 'Orofarenksteki kan, sekresyon, laringoskop palası veya iritan gaz süperior laringeal sinir iç dalının duyusal liflerini uyarır.'
+          phase: 'Vagal Refleks Arkı & Tetanik Glottik Kapanma',
+          mechanism: 'Sekresyon, kan veya irritan gazla Superior Laringeal Sinir (SLN) duyusal lifleri uyarılır; rekürren laringeal sinir üzerinden lateral krikoaritenoid ve transvers aritenoid kaslar kasılarak gerçek ve yalancı vokal kordları birbirine hava geçirmez yapıştırır.',
+          badge: '1. REFLEKS KAPANMA'
         },
         {
-          phase: '2. Medullar Vagal Refleks Arkı',
-          mechanism: 'Duyusal sinyal beyin sapındaki nükleus ambiguusa ulaşır ve adduktor motor nöronlar kontrolsüz biçimde ateşlenir.'
+          phase: 'Kapalı Glottise Karşı İnspirasyon (Mueller Manevrası)',
+          mechanism: 'Spontan soluyan hasta kapalı larenkse karşı şiddetle nefes almaya çalışır; intratorasik basınç -50 ila -100 cmH2O gibi devasa negatif seviyelere düşer (paradoksal tahterevalli solunumu).',
+          badge: '2. NEGATİF İNTRATORASİK BASINÇ'
         },
         {
-          phase: '3. Glottik Kapanma & Kordların Yapışması',
-          mechanism: 'Lateral krikoaritenoid ve transvers aritenoid kaslar kasılarak gerçek ve yalancı kordları birbirine hava geçirmez şekilde yapıştırır.'
-        },
-        {
-          phase: '4. Kapalı Glottise Karşı Zorlu İnspirasyon',
-          mechanism: 'Hasta nefes almaya çabalar (Mueller manevrası); göğüs kafesinde -50 ila -100 cmH2O negatif basınç oluşur.'
-        },
-        {
-          phase: '5. Negatif Basınçlı Pulmoner Ödem & Bradikardi',
-          mechanism: 'Aşırı hidrostatik negatif basınçla pulmoner kapillerden alveollere sıvı dolar (NPPE). Çocuklarda hipoksi doğrudan vagal bradikardi ve arreste yol açar.'
+          phase: 'Negatif Basınçlı Pulmoner Ödem (NPPE) & Hipoksi',
+          mechanism: 'Aşırı hidrostatik gradyent pulmoner kapillerlerden alveol içine masif transüdaya yol açar (NPPE / pembe köpüklü sıvı). Hipoksi ve vagal uyarım çocuklarda hızla derin bradikardi ve arreste ilerler.',
+          badge: '3. NPPE & KARDİYAK ÇÖKÜŞ'
         }
       ],
       summaryText: 'Özetle laringospazm; hayatı korumaya programlanmış glottik kapanma refleksinin yüzeyel anestezi altında kontrolden çıkarak asfiksiye, Negatif Basınçlı Pulmoner Ödeme (NPPE) ve ani kardiyak arrestine neden olan tehlikeli bir hava yolu krizidir.'
@@ -1259,6 +1372,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           'Hazır İlaç Hazırlığı: Özellikle çocuklarda Atropin ve Süksinilkolin enjektörlerini indüksiyondan önce masada hazır çekili bulundurun.'
         ]
       },
+      cartTitle: 'Acil Laringospazm & Havayolu Kiti Asgari Donanım Listesi:',
       cartChecklist: [
         'Yüze Tam Oturan Silikon Anestezi Maskeleri (Her boy pediatrik ve erişkin)',
         'Guedel Orofarengeal ve Nazofarengeal Airway Seti',
@@ -1536,27 +1650,23 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 5) Patofizyolojisi
     pathophysiology: {
       molecularBasis: 'CICO durumunda ventilasyonun sıfırlanması dakikalar içinde ağır bir asfiksi ve enerji krizine yol açar. Fonksiyonel Rezidüel Kapasite (FRC) hızla tükenir; PaO2 60 saniyede 100 mmHg\'den < 30 mmHg seviyesine çakılır. Hücre içi mitokondriyal oksidatif fosforilasyon durur, anaerobik glikolizle masif laktat ve H+ birikir. Miyokardiyal hipoksi saniyeler içinde sinüs bradikardisine ve asistoliye dönüşür.',
-      stepsTitle: 'Hızlı Asfiksi & Sistemik Hipoksemi Süreci',
+      stepsTitle: 'FRC Rezervi Tükenmesi, Hipoksik Bradikardi ve Anoksik Hasar Eşiği',
+      flowType: 'cascade',
       cascadeSteps: [
         {
-          phase: '1. FRC Tükenmesi & Difüzyon Krizi',
-          mechanism: 'Ventilasyon durduğu anda alveoler oksijen kütüphanesi hızla tükenir; obez veya gebe hastada bu rezerv 60 saniyenin altındadır.'
+          phase: 'FRC Deposu Tükenmesi & Dik Desatürasyon Yamacı',
+          mechanism: 'Ventilasyon sıfırlandığı anda FRC oksijen deposu hızla biter (obez veya gebede < 60 sn). Oksihemoglobin eğrisinin dik yamacına girilir; PaO2 < 30 mmHg seviyesine inerken SpO2 şelale gibi %90dan saniyeler içinde %40a çakılır.',
+          badge: '1. FRC TÜKENMESİ'
         },
         {
-          phase: '2. Kritik Alveoler Hipoksemi',
-          mechanism: 'PaO2 < 30 mmHg seviyesine iner; hemoglobin saturasyonu dik eğriye girerek %90\'dan saniyeler içinde %40\'a düşer.'
+          phase: 'Miyokardiyal İskemi & Hipoksik Vagal Bradikardi',
+          mechanism: 'Miyokard perfüzyonu anoksik kanla sürdürülemez; SA/AV düğüm otomasitesi çöker. Kompansatuar taşikardi aniden derin hipoksik bradikardiye (< 40/dk) ve Nabızsız Elektriksel Aktiviteye (PEA) dönüşür.',
+          badge: '2. MİYOKARDİYAL ÇÖKÜŞ'
         },
         {
-          phase: '3. Hipoksik Pulmoner Vazokonstriksiyon (HPV)',
-          mechanism: 'Tüm akciğerde yaygın vazokonstriksiyon gelişir; sağ ventrikül art yükü fırlar, akut kor pulmonale ve kardiyak debi çöküşü başlar.'
-        },
-        {
-          phase: '4. Miyokardiyal İskemi & Vagal Bradikardi',
-          mechanism: 'Koroner perfüzyon hipoksik kanla beslenir; sinoatriyal ve AV düğüm iletimi yavaşlar, sinüs bradikardisi gelişir.'
-        },
-        {
-          phase: '5. Asistoli / PEA & Anoksik Serebral Hasar',
-          mechanism: 'Hücresel ATP tamamen sıfırlanır, sodyum-potasyum pompası iflas eder; 3-4. dakikada geri dönüşümsüz nöronal ölüm ve kardiyak arrest meydana gelir.'
+          phase: 'Geri Dönüşümsüz Nöronal Anoksi & Beyin Ölümü Eşiği',
+          mechanism: 'Hücresel Na+/K+ ATPaz pompaları susar, sitotoksik ödem patlar. 3-4 dakikalık anoksi geri dönüşümsüz hipoksik iskemik ensefalopatiye, 5-7 dakika ise kortikal beyin ölümüne yol açar (eFONA zaman penceresi).',
+          badge: '3. ANOKSİK HASAR EŞİĞİ'
         }
       ],
       summaryText: 'Özetle CICO; solunum yolunun mekanik olarak sıfırlanmasıyla organizmanın oksijen deposunun 120-180 saniyede tamamen tükenmesi ve dakikalar içinde kardiyak arrest ile anoksik serebral nöron ölümüne yol açan en yıkıcı klinik krizdir.'
@@ -1604,6 +1714,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           'Sugammadeks Rezervi: Rokuronyum kullanılan her ameliyathanede 16 mg/kg acil geri çevirme dozu (yaklaşık 1000-1200 mg) anında ulaşılabilir olmalıdır.'
         ]
       },
+      cartTitle: 'Acil Krikotiroidotomi & CICO Kiti Asgari Donanım Listesi:',
       cartChecklist: [
         'No: 10 ve No: 20 Steril Cerrahi Neşter (Bistüri)',
         '15 Fr Coudé Uçlu Havayolu Bujisi (Eschmann Tracheal Introducer)',
@@ -1854,6 +1965,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           'Sugammadeks Rezervi: Rokuronyum kullanılan her ameliyathanede 16 mg/kg acil geri çevirme dozu anında ulaşılabilir olmalıdır.'
         ]
       },
+      cartTitle: 'Acil Krikotiroidotomi & CICO Kiti Asgari Donanım Listesi:',
       cartChecklist: [
         'No: 10 ve No: 20 Steril Cerrahi Neşter (Bistüri)',
         '15 Fr Coudé Uçlu Havayolu Bujisi (Eschmann Tracheal Introducer)',
@@ -2106,27 +2218,23 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 5) Patofizyolojisi
     pathophysiology: {
       molecularBasis: 'Akut hava yolu obstrüksiyonunun temelinde akışkanlar mekaniği (Bernoulli prensibi ve Poiseuille yasası) yatar. Solunum yolunda lümen yarıçapı yarıya indiğinde direnç yarıçapın dördüncü kuvvetiyle (2⁴ = 16 kat) artar. Gaz akış hızı dar alanda fırlarken lümen duvarına binen lateral basınç düşer (Bernoulli etkisi) ve çevreleyen yumuşak dokular lümen içine çekilerek dinamik kollapsı derinleştirir. İnspiratuar çaba arttıkça intratorasik negatif basınç -60 ila -80 cmH2O seviyelerine tırmanarak alveolar-kapiller membranı bozar ve Negatif Basınçlı Pulmoner Ödemi (NPPE) tetikler.',
-      stepsTitle: 'Hava Yolu Çöküşü & Asfiksi Dinamiği',
+      stepsTitle: 'Mekanik Bası, Bernoulli Dinamik Kollapsı ve Asfiksi Dinamiği',
+      flowType: 'cascade',
       cascadeSteps: [
         {
-          phase: '1. Kritik Lümen Daralması & Türbülans',
-          mechanism: 'Hematom basısı, yabancı cisim veya ödem lümeni daraltır; hava akımı laminerden türbülana geçer, direnç katlanarak artar.'
+          phase: 'Mekanik Darlık, Türbülans & Bernoulli Dinamik Kollapsı',
+          mechanism: 'Hematom basısı, yabancı cisim veya ETT bükülmesi lümeni daraltır; hava akımı türbülana geçer (R ∝ 1/r⁴). Bernoulli prensibi gereği dar alanda hava hızı artarken lateral transmural basınç düşer; farengeal yumuşak dokular içeri emilerek dinamik tıkanmayı kilitler.',
+          badge: '1. BERNOULLI KOLLAPSI'
         },
         {
-          phase: '2. Bernoulli Etkisi & Dinamik Dokusal Kollaps',
-          mechanism: 'Daralan segmentte akış hızı artarken lateral transmural basınç düşer; farengeal/laringeal yumuşak dokular içeri emilerek tıkanmayı pekiştirir.'
+          phase: 'Ekstrem Negatif İnstratorasik Basınç & Pulmoner Kaçak (NPPE)',
+          mechanism: 'Hasta tıkalı hava yoluna karşı çaresizce nefes almaya çabalar (Mueller manevrası); göğüs içinde -80 cmH2O negatif basınç oluşur. Devasa transkapiller hidrostatik gradyent alveolleri suyla doldurur (Negatif Basınçlı Pulmoner Ödem).',
+          badge: '2. İNTRATORASİK ÇEKİLME'
         },
         {
-          phase: '3. Aşırı Negatif İnstratorasik Basınç Üretimi',
-          mechanism: 'Hasta tıkalı hava yoluna karşı çaresizce nefes almaya çabalar (Mueller manevrası); göğüs içinde -80 cmH2O negatif basınç oluşur.'
-        },
-        {
-          phase: '4. Pulmoner Kapiller Kaçak (NPPE) & HPV',
-          mechanism: 'Aşırı hidrostatik negatif basınç pulmoner kapillerden alveollere masif sıvı sızdırır; hipoksik pulmoner vazokonstriksiyon sağ kalbi ezer.'
-        },
-        {
-          phase: '5. Ağır Alveoler Asfiksi, Bradikardi & Arrest',
-          mechanism: 'FRC saniyeler içinde tükenir; PaO2 < 30 mmHg altına iner, hipoksik miyokardiyal ileti durmasıyla sinüs bradikardisi ve asistoli gelişir.'
+          phase: 'Akut Alveoler Asfiksi, Hipoksik Bradikardi & Arrest',
+          mechanism: 'FRC rezervi saniyeler içinde tükenir; PaO2 < 30 mmHg altına iner. Miyokardiyal anoksi ve vagal uyarım kompansatuar taşikardiyi hızla derin bradikardiye ve asistolik kardiyak arreste sürükler.',
+          badge: '3. ASFİKSİ & ARREST'
         }
       ],
       summaryText: 'Özetle akut hava yolu obstrüksiyonu; yalnızca mekanik bir tıkaç değil, Bernoulli prensibiyle dokuları içeri emen, aşırı negatif basınçla akciğeri suyla dolduran (NPPE) ve dakikalar içinde anoksik kardiyak arreste sürükleyen fırtınalı bir krizdir.'
@@ -2174,6 +2282,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           'Neşter-Buji-Tüp Kiti: DAS Plan D cerrahi hava yolu kiti laringoskopi palasının hemen yanında açık bekletilmelidir.'
         ]
       },
+      cartTitle: 'Acil Hava Yolu Obstrüksiyonu & Boyun Hematomu Kiti Donanım Listesi:',
       cartChecklist: [
         'No: 10 ve No: 11 Cerrahi Neşter / Dikiş Makası (Boyun hematomu acil açma seti)',
         'Hemostatik Klemp (Pean / Kelly pensi - derin fasyayı ayırmak için)',
@@ -2455,27 +2564,23 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 5) Patofizyolojisi
     pathophysiology: {
       molecularBasis: 'Pulmoner aspirasyonun patofizyolojisi iki ana mekanizmaya dayanır: Düşük pH\'lı serbest hidroklorik asidin kimyasal yakıcı etkisi (Mendelson Sendromu) ve partiküllerin mekanik hava yolu obstrüksiyonu. Gastrik asit (pH < 2.5) alveolo-kapiller membranla temas ettiği anda Tip I ve Tip II pnömositleri hızla nekroza uğratır. Endojen sürfaktan denatüre olur ve inaktive edilir; alveoler yüzey gerilimi fırlar ve dakikalar içinde yaygın mikroatelektazi gelişir. Kapiller geçirgenlik bozulur; alveollere masif proteinöz plazma ve eritrosit sızarak non-kardiyojenik pulmoner ödem tablosu oluşturur. Bu durum masif intrapulmoner şanta (sağdan sola şant) ve refrakter hipoksemiye yol açar.',
-      stepsTitle: 'Kimyasal Pnömonit & Alveoler Hasar Kaskadı',
+      stepsTitle: 'Bifazik Akciğer Hasarı: Kimyasal Asit Yanığı ve Enflamatuar ARDS',
+      flowType: 'biphasic',
       cascadeSteps: [
         {
-          phase: '1. Asit Teması & Pnömosit Nekrozu',
-          mechanism: 'pH < 2.5 hidroklorik asit Tip I ve Tip II pnömositleri hızla yakar; alveoler epitel bariyeri parçalanır.'
+          phase: 'Akut Kimyasal Asit Yanığı & Sürfaktan Denatürasyonu (İlk 1-2 Saat)',
+          mechanism: 'pH < 2.5 gastrik hidroklorik asit ve pepsin Tip I/II pnömositleri koterize eder. Sürfaktanın fosfolipid yapısı parçalanır; alveol yüzey gerilimi fırlar, yaygın mikroatelektaziler ve sağdan sola intrapulmoner şant oluşur.',
+          badge: '1. KİMYASAL YANIK'
         },
         {
-          phase: '2. Sürfaktan Yıkımı & Masif Atelektazi',
-          mechanism: 'Asit sürfaktanı denatüre eder; alveoller kollabe olur ve sağdan-sola intrapulmoner şant fırlar.'
+          phase: 'Nötrofilik Enflamatuar Fırtına & Eksüdatif ARDS (4-24. Saat)',
+          mechanism: 'Asit hasarı masif sitokin (TNF-alfa, IL-8) ve serbest oksijen radikali salınımını tetikler. Pulmoner kapiller membran parçalanır; alveoller proteinöz eksüdayla dolarak kimyasal akciğer ödemi ve tam ARDS tablosuna ilerler.',
+          badge: '2. ENFLAMATUAR ARDS'
         },
         {
-          phase: '3. Alveolo-Kapiller Kaçak & Ödem',
-          mechanism: 'Endotelyal geçirgenlik bozulur; alveoller proteinöz plazma ve eksüda ile dolarak kimyasal akciğer ödemi oluşturur.'
-        },
-        {
-          phase: '4. Nötrofil Kemotaksisi & Enflamatuar Fırtına',
-          mechanism: 'Sitokinler (TNF-alfa, IL-8) ve serbest radikaller salınır; masif enflamatuar hücre infiltrasyonu parankimi tahrip eder.'
-        },
-        {
-          phase: '5. Ağır Şant Hipoksemisi & ARDS',
-          mechanism: 'Ventilasyon-perfüzyon uyumsuzluğu tavan yapar; refrakter hipoksemi (PaO2/FiO2 < 200) ve tam ARDS tablosu gelişir.'
+          phase: 'Mekanik Havayolu Tıkacı & Bakteriyel Zemin (Partiküllü İse)',
+          mechanism: 'Katı gıda partikülleri lober ve segmenter bronşları mekanik olarak tıkar; absorpsiyon atelektazisi derinleşir ve anaerobik orofarengeal flora ile sekonder süperenfeksiyon (aspirasyon pnömonisi) riski doğar.',
+          badge: '3. PARTİKÜLER OBSTRÜKSİYON'
         }
       ],
       summaryText: 'Özetle pulmoner aspirasyon bir enfeksiyon değil, dakikalar içinde sürfaktanı yok eden, kapiller membranı patlatıp akciğeri eksüdayla dolduran ve refrakter şant hipoksemisiyle ARDS\'ye sürükleyen ağır bir kimyasal yanık tablosudur.'
@@ -2523,6 +2628,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           'Nazogastrik Sonda Protokolü: İndüksiyon öncesi midede sonda varsa tamamen aspire edilip çekilmeli veya açık bırakılmalıdır; gevşek LES üzerinden reflüye zemin hazırlayabilir.'
         ]
       },
+      cartTitle: 'Pulmoner Aspirasyon & RSI Acil Donanım Listesi:',
       cartChecklist: [
         'Rijit Metal Yankauer Aspiratör Ucu ve Geniş Çaplı Aspiratör Hortumu',
         'Farklı Boylarda ETT Aspirasyon Kateterleri (Ch 12, 14, 16)',
@@ -2912,14 +3018,30 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Protein C ve Protein S Eksikliği (Doğal antikoagülan yolak defekti)',
         'Antifosfolipid Antikor Sendromu (Lupus antikoagülanı, antikardiyolipin antikorları)'
       ],
-      stepsTitle: 'Ölümcül Sağ Ventrikül İskemi ve Çöküş Spirali (Vicious RV Spiral):',
+      stepsTitle: 'Sağ Ventrikül Ölüm Döngüsü (RV Death Spiral) Kısır Döngü Mekanizması',
+      flowType: 'vicious-cycle',
+      cycleWarning: 'ÖLÜMCÜL KISIR DÖNGÜ (FEEDBACK LOOP): RV genişledikçe septumu sola iter; LV dolumu engellenince tansiyon düşer; aort kök basıncı düşünce sağ koroner perfüzyonu çöker ve RV daha da genişler! Aşırı sıvı vermek bu döngüyü hızlandırır.',
       cascadeSteps: [
-        { phase: 'Faz 1: Mekanik Tıkanma & Nörohümoral Vazokonstriksiyon', mechanism: 'Trombüsün pulmoner arter dallarını tıkaması ve trombositlerden salınan tromboksan A2 ile serotonin salınımı pulmoner vasküler direnci (PVR) katlar.' },
-        { phase: 'Faz 2: Sağ Ventrikül Ard Yükü (Afterload) Fırlaması', mechanism: 'Normalde düşük dirençli olan ince duvarlı sağ ventrikül ani PVR artışına uyum sağlayamaz; RV sistolik basıncı akut olarak >40-50 mmHg\'nin üzerine çıkamaz ve RV genişlemeye başlar.' },
-        { phase: 'Faz 3: Triküspit Yetmezliği ve RV Duvar Gerilimi', mechanism: 'RV dilatasyonu triküspit anulusunu genişleterek şiddetli triküspit yetmezliğine yol açar; CVP tırmanır ve RV duvar gerilimi (Laplace yasası) oksijen tüketimini fırlatır.' },
-        { phase: 'Faz 4: İnterventriküler Septal Kayma (Septal Shift / D-Shaped LV)', mechanism: 'Genişleyen sağ ventrikül interventriküler septumu sol ventrikül boşluğuna doğru iter; sol ventrikül diyastolik doluşu (preload) mekanik olarak bloke olur.' },
-        { phase: 'Faz 5: Kardiyak Debi Çöküşü & Sistemik Hipotansiyon', mechanism: 'Sol ventriküle kan dolamadığı için atım hacmi ve kardiyak debi aniden çöker; sistemik hipotansiyon gelişir.' },
-        { phase: 'Faz 6: Sağ Koroner Arter İskemisi & Kardiyak Arrest', mechanism: 'Aort kökü basıncının düşmesi sağ koroner perfüzyonunu bozar; aşırı gerilmiş ve iskemik RV kası iflas eder. Tablo hızla PEA (Nabızsız Elektriksel Aktivite) arrestine ilerler.' }
+        {
+          phase: '1. Mekanik Tıkanma & Akut PVR Fırlaması',
+          mechanism: 'Trombüsün pulmoner arteri tıkaması ve trombositlerden salınan Tromboksan A2 / Serotonin pulmoner vasküler direnci (PVR) katlar; RV afterloadu aniden fırlar.',
+          badge: 'DÖNGÜ 1: PVR ARTIŞI'
+        },
+        {
+          phase: '2. RV Dilatasyonu & Duvar İskemisi (Laplace)',
+          mechanism: 'İnce duvarlı sağ ventrikül basınca dayanamayıp hızla genişler; triküspit yetmezliği başlar ve Laplace yasası gereği RV duvar gerilimi ve O2 ihtiyacı fırlar.',
+          badge: 'DÖNGÜ 2: RV DİLATTASYONU'
+        },
+        {
+          phase: '3. İnterventriküler Septal Kayma (D-Shape LV)',
+          mechanism: 'Şişen sağ ventrikül interventriküler septumu sola doğru iter (D-şeklinde LV); sol ventrikül diyastolik doluşu (preload) mekanik olarak kilitlenir.',
+          badge: 'DÖNGÜ 3: SEPTAL SHIFT'
+        },
+        {
+          phase: '4. Hipotansiyon & Sağ Koroner Perfüzyon Çöküşü',
+          mechanism: 'LV atım hacmi çökünce sistemik hipotansiyon gelişir; aort kökü basıncı düşünce sağ koroner arter perfüzyonu sıfırlanır, RV iskemisi derinleşir ve DÖNGÜ BAŞA DÖNER (PEA arrest).',
+          badge: 'DÖNGÜ 4: KORONER İSKELE İFLASI'
+        }
       ],
       summaryText: 'Özetle masif pulmoner emboli hastası "hipoksiden değil, akut sağ ventrikülün gerilerek iskemiye girmesi ve sol ventrikül doluşunu engellemesi sonucu obstrüktif şoktan" kaybedilir. Bu nedenle aşırı sıvı verilmesi gerilmiş septumu daha da sola iterek ölümcül döngüyü hızlandırır.'
     },
@@ -2970,6 +3092,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Femur protezi sementlenmesi esnasında intramedüller basınç artışını azaltmak için havalandırma deliği (vent hole) açılması ve cerrahla iletişim',
         'Laparoskopik cerrahide insüflasyon basıncının 12-14 mmHg ile sınırlandırılması ve aşırı dik Trendelenburg\'dan kaçınılması'
       ],
+      cartTitle: 'Acil Pulmoner Emboli (PE) Resüsitasyon Kiti & Ekipman Listesi:',
       cartChecklist: [
         'Alteplase (Actilyse 50 mg x 2 flakon) + Enjeksiyonluk Su',
         'Tenecteplase (Metalyse) tek bolus flakonu',
@@ -3074,5 +3197,1357 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         relevance: 'İntraoperatif EtCO2 değişiklikleri, TEE bulguları, sağ kalp dekompansasyonunda sıvı kısıtlaması ve vazopressör seçimi.'
       }
     ]
+  },
+  vae: {
+    id: 'vae',
+    title: 'İntra-operatif Hava Embolisi (VAE / PAE)',
+    subTitle: 'Venöz, Pulmoner & Paradoksal Arteriyel Hava Embolisi Kriz Yönetim Protokolü',
+    codeColor: 'cyan',
+    severityBadge: 'HAYATİ TEHDİT / HIZLI KARDİYOVASKÜLER ÇÖKME',
+    keyCallout: 'Hemen Cerrahı Uyar (Cerrahi Alanı SF ile Doldur/Kapat) + %100 O2 Başla + N2O DERHAL KAPAT + Durant Manevrası (Sol Lateral Dekübit + Trendelenburg) + CVC ile Sağ Atriyumdan Hava Aspire Et! PFO şüphesinde PEEP KESİNLİKLE UYGULAMA!',
+    quickCalculatorType: 'vae',
+
+    // 2) Tanımlama ve Giriş
+    introduction: {
+      definition: 'Venöz Hava Embolisi (VAE); atmosferik havanın veya cerrahi gazların açık venöz damarlar/sinüsler yoluyla sistemik venöz dolaşıma girerek sağ atriyum, sağ ventrikül ve pulmoner artere ulaşması; pulmoner vasküler direnci akut artırarak sağ ventrikül çıkış yolu tıkanıklığı ("air-lock"), kardiyovasküler kollaps veya patent foramen ovale (PFO) / intrapulmoner şantlar aracılığıyla sistemik arteriyel dolaşıma geçerek serebral/koroner iskemi (Paradoksal Hava Embolisi - PAE) oluşturması durumudur.',
+      epidemiology: 'Oturur (sitting) pozisyonda gerçekleştirilen suboksipital kraniyotomilerde ve posterior fossa cerrahilerinde TEE ile saptanabilen VAE insidansı %40-80 olup, klinik olarak belirgin/hemodinamik çökme oranı %15-30 arasındadır. Laparoskopik girişimlerde (Veress iğnesi/trokar vasküler penetrasyonu ile CO2 embolisi) %0.1-0.6, ortopedik artroplastilerde (femoral kanal raybalama ve kemik çimentolama) %1-5, santral venöz kateterizasyon (CVC) takılması, bakımı veya kılıf çekilmesi sırasında %0.1-2 sıklıkla görülür.',
+      triggers: [
+        'Oturur pozisyonda (sitting position) suboksipital kraniyotomi ve posterior fossa cerrahisi (negatif hidrostatik venöz basınç gradyenti)',
+        'Laparoskopi ve robotik cerrahide insüflasyon iğnesinin (Veress) veya trokarın majör retroperitoneal vene penetrasyonu / vasküler insüflasyon',
+        'Ortopedik cerrahide total kalça ve diz protezi uygulamaları (femoral kanalın reamingle hazırlanması ve metilmetakrilat çimento preslenmesi)',
+        'Santral venöz kateter (CVC), diyaliz kateteri veya Port takılması, kılıfın açık unutulması, lümen manipulasyonu veya hastanın derin inspiryumunda kateter çekilmesi',
+        'Radikal boyun diseksiyonları ve baş-boyun cerrahisinde internal juguler ven veya dallarının açık kalması',
+        'Obstetrik/Jinekolojik cerrahi: Sezaryen sırasında uterin insizyon ve açık venöz pleksus venleri, histeroskopik cerrahide intrauterin sıvı/gaz distansiyonu',
+        'Açık kardiyak cerrahide kardiyopulmoner baypas de-airing yetersizliği ve aortik kross-klemp kaldırılması'
+      ],
+      safeAgents: [
+        '%100 FiO2 Fraksiyone Oksijen (Azot denitrojenasyonu sağlar; kandaki N2 parsiyel basıncını düşürerek kabarcık boyunun küçülmesini ve rezorpsiyonunu dramatik hızlandırır)',
+        'Noradrenalin (Norepinefrin - RV koroner perfüzyon basıncını korur, sistemik vasküler rezistansı ve RV kontraktilitesini destekler)',
+        'Vazopressin (Katastrofik RV iflasında pulmoner vasküler direnci daha az artırarak aortik diyastolik basıncı yükseltir)',
+        'Kristaloid / Kolloid Hızlı Volüm İnfüzyonu (CVP artırılarak cerrahi alandaki venöz basınç yükseltilir ve negatif basınç gradyenti kırılarak hava girişi durdurulur)',
+        'İnotroplar (Dobutamin / Milrinon - RV pompa yetersizliğinde kontraktilite desteği)',
+        'İntraoperatif Transözofageal Ekokardiyografi (TEE) ve Prekordiyal Doppler (Erken tanı ve aspirasyon teyidinde altın standart)'
+      ],
+      mortalityStats: 'Masif hava embolisinde (>3-5 mL/kg veya akut >200-300 mL hava aspirasyonu) ölüm oranı dakikalar içinde %40-80 seviyesindedir. 100 mL/saniye hızında hava girişi saniyeler içinde ölümcül RVOT hava bloğuna yol açar.',
+      clinicalUrgency: 'DAKİKALAR İÇİNDE SAĞ KALP ÇIKIŞ YOLU TIKANIKLIĞI (AIR LOCK) VE ASİSTOLİK ARREST GELİŞEBİLİR - DERHAL CERRAHA BİLDİRİP N2O KESİLMELİ, ALAN SERUM FİZYOLOJİKLE BOĞULMALI VE HASTA SOL LATERAL TRENDELENBURG (DURANT) POZİSYONUNA ALINMALIDIR.'
+    },
+
+    // 3) Tanı ve Şiddet Skalası
+    diagnosis: {
+      overview: 'İntraoperatif VAE tanısı zamana karşı yarışta erken ve geç klinik göstergelerin sentezi ile konur. En erken ve duyarlı monitör Transözofageal Ekokardiyografi (TEE) ve Prekordiyal Doppler iken; rutin monitörizasyonda ani EtCO2 çöküşü (>2-5 mmHg ani düşüş), EtN2 (end-tidal azot) sıçraması, ani PaO2 desatürasyonu, taşikardi/bradikardi, hipotansiyon ve prekordiyal stetoskopta duyulan "değirmen çarkı (mill-wheel) üfürümü" ile acil tanı doğrulanır.',
+      clinicalCriteria: [
+        'EtCO2 değerinde ani, keskin ve açıklanamayan çökme (alveolar ölü boşluk ventilasyonunun akut patolojik artışı nedeniyle)',
+        'Prekordiyal Doppler stetoskopi ile (4. interkostal aralık sağ parasternal) tipik ıslık, çalkantı veya "değirmen çarkı" (mill-wheel murmur) sesi duyulması',
+        'Transözofageal Ekokardiyografide (TEE) sağ atriyum ve sağ ventrikülde yoğun ekojenik "kar fırtınası" (snowstorm) görünümü ve RV dilatasyonu',
+        'End-Tidal Azot (EtN2) ölçümünde ani sıçrama (>0.1-0.2 kPa / >1-2 mmHg - venöz kandan alveollere diffüze olan havadaki N2 gazının atılımı)',
+        'Ani ve derin sistemik arteryel hipotansiyon ile eşzamanlı CVP/PA basınç fırlaması',
+        'Pulmoner vasküler direnç artışına bağlı pik havayolu basınçlarında ani yükselme ve bronkokonstriksiyon refleksi',
+        'EKG Değişiklikleri: Akut cor pulmonale bulguları (sağ aks deviasyonu, sağ dal bloğu, V1-V3 ST depresyonu/T negatifliği, sinüs taşikardisi, geç dönemde asistoli/PEA)',
+        'Uyanık veya sedatize hastada: Ani retrosternal göğüs ağrısı, derin soluk alma hissi ("gasping"), kontrolsüz inatçı öksürük nöbeti, baş dönmesi ve ajitasyon',
+        'Paradoksal Sistemik / Serebral Emboli (PFO/ASD varlığında): Ani pupil asimetrisi, fokal nörolojik defisit, jeneralize nöbet, miyokard iskemisi (EKG ST elevasyonu)'
+      ],
+      gradingScaleTitle: 'Mirski & Albin İntraoperatif Venöz Hava Embolisi Klinik Şiddet Evrelemesi',
+      gradingScaleSource: 'Mirski MA, et al. Anesthesiology 2007; Albin MS, et al. Crit Care Med',
+      larachScale: [
+        {
+          category: 'Evre I (Subklinik / Minimal)',
+          points: '<0.1 mL/kg/dk',
+          description: 'Yalnızca TEE veya Prekordiyal Doppler ile saptanır. EtCO2 ve kan basıncı normaldir. Cerrah uyarılır, cerrahi alan SF ile ıslatılır, N2O açıksa kapatılır, spontan rezorpsiyon izlenir.'
+        },
+        {
+          category: 'Evre II (Hafif VAE)',
+          points: '~0.2 - 0.5 mL/kg/dk',
+          description: 'EtCO2 değerinde hafif azalma (<%10), hafif PaO2 düşüşü, taşikardi. Sistemik kan basıncı stabildir. %100 O2ye geçilir, N2O tamamen kapatılır, cerrahi alan yıkanır, IV sıvı infüzyonu hızlandırılır.'
+        },
+        {
+          category: 'Evre III (Orta Şiddetli VAE)',
+          points: '~0.5 - 1.5 mL/kg/dk',
+          description: 'EtCO2de belirgin çöküş (>%20), PaO2de derin düşüş, CVP yükselmesi, MAPta %20-30 düşüş. Durant manevrası (sol lateral + Trendelenburg), CVC lümeninden hava aspirasyonu, Noradrenalin infüzyonu.'
+        },
+        {
+          category: 'Evre IV (Ağır / Masif VAE)',
+          points: '>2.0 - 3.0 mL/kg/dk',
+          description: 'Derin hipotansiyon (MAP <%50), prekordiyal değirmen çarkı (mill-wheel) üfürümü, kardiyak debide %50+ çöküş, akut RV iflası. Cerrahi durdurulur, agresif CVC aspirasyonu, yüksek doz vazopressör desteği.'
+        },
+        {
+          category: 'Evre V (Katastrofik Air-Lock)',
+          points: '>3.0 - 5.0 mL/kg Bolus',
+          description: 'RVOT mekanik olarak hava ile tıkanır (Air-Lock), sol ventriküle kan doluşu sıfırlanır, PEA arresti. ACLS KPR: Göğüs kompresyonu (havayı mekanik parçalar), IV Epinefrin 1 mg, Durant pozisyonunda CVC aspirasyonu, arrest sonrası acil HBOT.'
+        }
+      ],
+      larachInterpretation: 'Mirski & Albin Evrelemesi: Evre I-II minimal hemodinamik etkiyle seyreder ve cerrahi alan irrigasyonuyla kontrol edilebilir. Evre III ve üzerinde ise akut RV yetmezliği ve kardiyovasküler çökme gelişir; acil Durant manevrası, CVC aspirasyonu ve inotropik/vazopressör destek hayat kurtarıcıdır.',
+      differentialDiagnosis: [
+        { condition: 'Akut Pulmoner Tromboemboli (PE / PTE)', differentiatingFactors: 'DVT öyküsü, D-Dimer yüksekliği, oturur pozisyon veya gaz insüflasyonu olmaksızın gelişmesi, CVC aspirasyonunda hava kabarcığı gelmemesi.' },
+        { condition: 'Malign Hipertermi (MH)', differentiatingFactors: 'MHde EtCO2 aniden fırlar ve maseter spazmı/hipertermi görülür; VAEde ise EtCO2 hızla çöker!' },
+        { condition: 'Akut Bronkospazm / Mukus Tıkacı', differentiatingFactors: 'Yüksek tepe havayolu basıncı, EtCO2 eğrisinde köpekbalığı yüzgeci (shark-fin) deseni ve ekspiratuar ronküsler.' },
+        { condition: 'Tansiyon Pnömotoraks', differentiatingFactors: 'Tek taraflı solunum seslerinin kaybı, trakeal deviasyon, hipersonorite ve tepe basınç fırlaması.' },
+        { condition: 'Anafilaktik Şok', differentiatingFactors: 'Ciltte yaygın flushing/ürtiker, bronkospazm, vazodilatasyon ve düşük CVP (VAEde ise CVP ani yükselir).' },
+        { condition: 'Kardiyak Tamponad', differentiatingFactors: 'Pulsus paradoksus, TEEde perikardiyal sıvı ve sağ atriyal diyastolik kollaps.' }
+      ]
+    },
+
+    // 4) Acile Spesifik Akut Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'DURANT MANEVRASI (SOL LATERAL + TRENDELENBURG) + %100 O2 + N2O DERHAL KAPAT + CERRAHİ ALANI SF İLE BOĞ + CVC HAVA ASPİRASYONU + JÜGÜLER VEN BASKI! PFO ŞÜPHESİNDE PEEP KESİNLİKLE UYGULAMA!',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'CERRAHI HEMEN UYAR & CERRAHİ ALANI SF İLE BOĞ (İLK 5 SN)',
+          action: 'Cerrahı hemen uyarın: "Hava embolisi şüphesi var, cerrahi alanı hemen serum fizyolojikle doldurun ve açık venleri klempleyin/mum dökün!". Cerrahi alana 1000-2000 mL SF bolus irrigasyon uygulayarak atmosferik hava girişini fiziksel olarak durdurun.',
+          criticalNote: 'Havanın damara girmesini durdurmak tüm resüsitasyonun 1 numaralı önceliğidir. Cerrah alanı derhal SF ile doldurmalı veya ıslak spançla kapatmalıdır.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'N2O GAZINI ANINDA KAPAT & %100 FİO2 OKSİJENE GEÇ (İLK 10 SN)',
+          action: 'Azot protoksit (N2O) açıksa anında ve kesintisiz kapatın! Tıbbi oksijeni derhal %100 FiO2 yüksek akıma getirin. Kandaki ve kabarcık içindeki azot gazının ortamdan hızla yıkanmasını (denitrojenasyon) sağlayın.',
+          criticalNote: 'N2O kanda havaya göre 34 kat daha hızlı diffüze olur. N2O kapatılmazsa intravasküler hava kabarcığının hacmi dakikalar içinde 2-3 KAT BÜYÜR ve ölümcül RVOT tıkanıklığı yaratır!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'DURANT MANEVRASI: SOL LATERAL DEKÜBİT & TRENDELENBURG (İLK 30 SN)',
+          action: 'Hastayı acilen SOL LATERAL DEKÜBİT ve BAŞ AŞAĞI TRENDELENBURG (15-30 derece) pozisyonuna getirin. Hava kabarcıklarını sağ ventrikül apeksinde hapsederek pulmoner çıkış yolu (RVOT) ve pulmoner arter kapağından uzaklaştırın.',
+          criticalNote: 'Hava kanın üstünde yüzer. Sol lateral Trendelenburg pozisyonunda sağ ventrikül apeksi en üst noktaya gelir ve hava burada hapsolur; pulmoner kapağa kan akışı yeniden açılır.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'SANTRAL VENÖZ KATETERDEN (CVC) HAVA ASPİRASYONU (1. DK)',
+          action: 'Santral venöz kateterden veya Bunegin-Albin kateterinden 20-50 mL boş luer-lock enjektörle negatif basınçlı sürekli hava aspirasyonu uygulayın. Sağ atriyum ve SVC bileşkesindeki serbest hava ve köpüklü kanı aspire edin.',
+          criticalNote: 'Çok delikli (multi-orifice) kateter kavoatriyal bileşkede (SVC-RA junction) olmalıdır (sağ IJVden ~13-15 cm derinlikte). Köpüklü kan gelene kadar aspire edin.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 5,
+          title: 'BİLATERAL İNTERNAL JÜGÜLER VEN KOMPRESYONU (1-2. DK)',
+          action: 'Boyun venlerine bilateral hafif manuel kompresyon uygulayın. Serebral ve servikal venöz basıncı anlık yükselterek havanın girdiği açık kranial/servikal veni bulup kapatmak için venöz geri akım sağlayın.',
+          criticalNote: 'Bilateral boyun veni basısı kranial venöz basıncı artırarak venöz lümenden kanın dışarı akmasını sağlar; cerrah hava emen veni lokalize edip bipolar koter veya kemik mumu ile kapatabilir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 6,
+          title: 'AGRESİF İNTRAVENÖZ SIVI YÜKLEMESİ & CVP DÜZEYİ (2-3. DK)',
+          action: 'Isıtılmış dengeli kristaloid (İzolen/Ringer Laktat) 1000-1500 mL hızlı infüzyonla CVP düzeyini 10-12 mmHg seviyesine çıkarın. Sağ atriyal ve sistemik venöz basıncı hidrostatik olarak yükselterek venöz lümen ile atmosfer arasındaki negatif gradyenti sıfırlayın.',
+          criticalNote: 'Hipovolemi VAE riskini ve şiddetini katlar. Venöz basıncın pozitif olması damarın hava emmesini fiziksel olarak engeller. Ancak aşırı yüklemede RV dilatasyonuna dikkat edilmelidir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 7,
+          title: 'VAZOPRESSÖR & İNOTROP DESTEĞİ: NORADRENALİN (2-4. DK)',
+          action: 'Noradrenalin infüzyonu (0.05-0.3 mcg/kg/dk, akut bolus: 10-20 mcg) başlayın; gerekirse Vazopressin (0.01-0.04 IU/dk) ve Dobutamin (2.5-10 mcg/kg/dk) ekleyin. MAP >65-75 mmHg tutularak sağ ventrikül koroner perfüzyonu idame ettirilmelidir.',
+          criticalNote: 'Sağ ventrikül hem sistol hem diyastolde beslenir; sistemik kan basıncı çökerse RV hızla iskemikleşir ve asistolik arrest gelişir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 8,
+          title: 'PEEP AYARINDA KESİN DİKKAT: PFO RİSKİNDE PEEP = 0 (3-5. DK)',
+          action: 'Ventilatör PEEP ayarını 0 cmH2O yapın (PFO riski varsa veya şüpheleniliyorsa). Sağ atriyal basıncın sol atriyal basıncı aşmasını (RAP > LAP) ve havanın foramen ovaleden sistemik artere (beyin/koroner) geçmesini kesin olarak engelleyin.',
+          criticalNote: 'Erişkin popülasyonun %25-30unda gizli Patent Foramen Ovale (PFO) vardır. PEEP uygulanırsa sağ atriyum basıncı sol atriyumu aşar ve hava direkt sol kalbe geçip masif serebral inme yaratır!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 9,
+          title: 'KARDİYOVASKÜLER KOLLAPSTA MEKANİK GÖĞÜS KOMPRESYONU (5. DK)',
+          action: 'Kardiyovasküler kollaps veya persistan air-lock durumunda 100-120/dk ritmik göğüs kompresyonu uygulayın. Sağ ventrikül apeksi ve çıkış yolunda biriken dev hava tıkacını mekanik kuvvetle küçük mikro-kabarcıklara parçalayarak pulmoner dolaşıma dağıtın.',
+          criticalNote: 'Hasta arrest olmasa bile şiddetli çıkış yolu blokajında 1-2 dakikalık ritmik prekordiyal kompresyon hava kilidini (air-lock) parçalayarak akımı yeniden başlatabilir.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 10,
+          title: 'HİPERBARİK OKSİJEN TEDAVİSİ (HBOT) DEĞERLENDİRMESİ & SEVK',
+          action: 'Bölge HBOT merkezi ile iletişime geçin, hastayı %100 FiO2 altında tutun ve nörolojik defisit takibi yapın. Boyle ve Henry yasaları uyarınca intravasküler kabarcık hacmini küçültmek ve doku oksijenasyonunu restore etmek için sevk protokolünü başlatın.',
+          criticalNote: 'Serebral veya koroner hava embolisi şüphesinde altın standart küratif tedavi Hiperbarik Oksijen Tedavisidir (2.8 - 3.0 ATA). İlk 4-6 saat içinde başlanan HBOT nörolojik sekelleri dramatik azaltır.',
+          priority: 'HIGH'
+        }
+      ],
+
+      // VAE'ye özel detaylı klinik protokoller
+      vaeProtocols: {
+        durantManeuverAndPositioning: {
+          title: 'Durant Manevrası ve Hasta Pozisyonlandırma Prensipleri',
+          technique: 'Hasta derhal SOL LATERAL DEKÜBİT ve BAŞ AŞAĞI TRENDELENBURG (15-30 derece) pozisyonuna getirilir. Eğer kraniyal veya oturur pozisyondaki cerrahi nedeniyle tam lateral pozisyon imkansızsa, ameliyat masasına acilen maksimum sol lateral tilt ve Trendelenburg verilir.',
+          physiologicalMechanism: 'Havanın kandan çok daha düşük dansiteye sahip olması (yüzme özelliği) nedeniyle; sol lateral Trendelenburg pozisyonunda sağ ventrikülün apeksi ve lateral serbest duvarı en superior (tepe) konuma gelir. Böylece intravasküler hava sağ ventrikül apeksinde kilitlenir; ventrikülün medial ve inferior kısmında yer alan Sağ Ventrikül Çıkış Yolu (RVOT) ve Pulmoner Kapak havanın tıkayıcı etkisinden kurtularak pulmoner artere kan akımını devam ettirir.',
+          surgicalSiteCoordination: 'Eğer hasta oturur pozisyonda (sitting position) ise cerrahi derhal durdurulur, cerrah kranial venleri ıslak spanç ve SF ile kapatır, dural sinüslere kemik mumu sürülür ve cerrah masanın yatırılmasına onay verir. Oturur pozisyon hızla terk edilmelidir.'
+        },
+        cvcAspirationProtocol: {
+          title: 'Santral Venöz Kateter (CVC) ile Hava Aspirasyonu Kılavuzu',
+          catheterTypeAndDepth: 'Çok delikli (Multi-orifice) özel hava aspirasyon kateterleri (Bunegin-Albin kateteri) standart tek delikli kateterlere göre 4-5 kat daha fazla hava aspire edebilir. Kateter ucunun optimal konumu Kavoatriyal Bileşke (SVC - RA junction) olup, sağ internal juguler venden erişkin erkekte ortalama 13-15 cm, kadında 12-14 cm derinliktedir. TEE eşliğinde veya EKG uç kılavuzluğuyla yerleştirilmiş olması aspirasyon başarısını %85in üzerine çıkarır.',
+          aspirationTechnique: '20 mL veya 50 mL luer-lock enjektör kateterin distal lümenine takılır. Hızlı, kesintisiz ve negatif basınçlı aspirasyon uygulanır. Enjektöre gelen kan köpüklü ve hava kabarcıklı olacaktır. Hava kabarcığı gelmeyene ve lümen temiz kanla dolana kadar aspirasyona devam edilir.',
+          successRateAndPearls: 'Aspirasyonla çekilebilen hava miktarı genellikle giren toplam havanın %20-50si kadardır; ancak kritik miktardaki havayı uzaklaştırmak RVOT tıkanmasını kırmak için hayat kurtarıcıdır. CVC yoksa veya ucu yanlış yerdeyse vakit kaybetmeden Durant manevrası ve torasik kompresyona odaklanılmalıdır.'
+        },
+        pfoParadoxicalEmbolism: {
+          title: 'Patent Foramen Ovale (PFO) ve Paradoksal Sistemik Hava Embolisi (PAE)',
+          riskMechanism: 'Genel sağlıklı erişkin popülasyonunun %25-30unda anatomik olarak açık ancak fonksiyonel olarak kapalı Patent Foramen Ovale (PFO) bulunur. Normal fizyolojide Sol Atriyal Basınç (LAP: 6-10 mmHg) Sağ Atriyal Basınçtan (RAP: 2-6 mmHg) yüksektir ve flap kapalı kalır. Ancak VAE anında pulmoner direnç fırlayınca RAP hızla LAPı geçer (RAP > LAP). Bu durumda foramen ovale açılır ve sağ atriyumdaki hava sol atriyuma, oradan da sistemik arteriyel dolaşıma geçer.',
+          peepWarning: 'KRİTİK UYARI: VAE sırasında hipoksemiyi düzeltmek için ampirik yüksek PEEP (Pozitif Ekspiryum Sonu Basınç) uygulanması SAĞ ATRİYAL BASINCI DRAMATİK YÜKSELTEREK PFO ARACILIĞIYLA PARADOKSAL HAVA GEÇİŞİNİ TETİKLER! PFO varlığı kesin olarak dışlanmadıkça PEEP uygulanmamalı veya 0 cmH2O seviyesine indirilmelidir.',
+          managementKey: 'Paradoksal hava embolisinde hava koroner arterlere giderse akut transmural miyokard enfarktüsü ve kardiyojenik şok; serebral dolaşıma giderse ani intraoperatif inme, pupil anizokorisi ve koma gelişir. Tedavisi agresif %100 O2, baş pozisyonunun korunması ve derhal Hiperbarik Oksijen Tedavisine (HBOT) nakildir.'
+        },
+        hyperbaricOxygenGuideline: {
+          title: 'Hiperbarik Oksijen Tedavisi (HBOT) Protokolü',
+          indications: [
+            'Arteriyel / Paradoksal Hava Embolisi kanıtı (koroner iskemi, EKG ST değişiklikleri, intraoperatif veya post-op fokal nörolojik defisit)',
+            'Geri dönmeyen veya uzamış koma, pupil asimetrisi veya post-op uyanamama',
+            'Masif VAE sonrası yüksek doz inotrop ihtiyacı ve persistan kardiyovasküler şok',
+            'Beyin BT/MRGde intravasküler serebral hava kabarcıklarının veya infarktın saptanması'
+          ],
+          timeWindow: 'İDEAL ZAMAN PENCERESİ: İlk 4-6 saat içinde HBOT kabinine alınması en yüksek nörolojik iyileşmeyi sağlar. Ancak semptomlar devam ettiği sürece 24-48 saate kadar bile HBOT uygulanması klinik fayda gösterir.',
+          transportAndStabilization: 'Hasta %100 FiO2 altında non-rebreather maske veya mekanik ventilatör ile transfer edilmelidir. Helikopter ambulans transferi gerekiyorsa kabin basıncı kesinlikle deniz seviyesinde (1 ATA) tutulmalı veya alçak irtifadan (maksimum 300 metre / 1000 feet) uçuş yapılmalıdır; aksi halde irtifa arttıkça kabarcıklar Boyle Yasası uyarınca genişler!'
+        },
+        monitoringSensitivityHierarchy: [
+          {
+            modality: 'Transözofageal Ekokardiyografi (TEE)',
+            threshold: '0.02 mL/kg/dk (0.1 mL bolus)',
+            clinicalUtility: 'Hassasiyet sıralamasında 1. sırada (Altın Standart). Sağ atriyum, RV, PFO ve sol kalbi doğrudan görüntüler.',
+            characteristics: 'Anlık mikro-kabarcık "kar fırtınası" saptar. İnvazivdir, sürekli operatör dikkati gerektirir.'
+          },
+          {
+            modality: 'Prekordiyal Doppler Ultrason',
+            threshold: '0.05 mL/kg/dk (0.25 mL bolus)',
+            clinicalUtility: 'Hassasiyet sıralamasında 2. sırada. En duyarlı non-invaziv monitördür. 4. İKA sağ parasternal yerleştirilir.',
+            characteristics: 'Karakteristik "ıslık" ve "hışırtı" sesi verir. Koter parazitinden etkilenir, obezitede sinyal zayıflayabilir.'
+          },
+          {
+            modality: 'End-Tidal Azot (EtN2)',
+            threshold: '0.10 mL/kg/dk',
+            clinicalUtility: 'Hassasiyet sıralamasında 3. sırada. Venöz havadaki azotun akciğerden atılımını ölçer.',
+            characteristics: 'Havadaki N2ye özgüldür (CO2 gibi metabolik faktörlerden etkilenmez). Rutin kapnograflarda nadiren bulunur.'
+          },
+          {
+            modality: 'End-Tidal CO2 (EtCO2)',
+            threshold: '0.25 - 0.50 mL/kg/dk',
+            clinicalUtility: 'Hassasiyet sıralamasında 4. sırada. Rutin ameliyathanede en pratik ve güvenilir erken klinik monitör.',
+            characteristics: 'Pulmoner ölü boşluk artışına bağlı ani çöküş gösterir (>2-5 mmHg). Spesifik değildir (kardiyak debi düşüşüyle de iner).'
+          },
+          {
+            modality: 'Pulmoner Arter Basıncı (PAP / CVP)',
+            threshold: '0.50 mL/kg/dk',
+            clinicalUtility: 'Hassasiyet sıralamasında 5. sırada. Pulmoner vasküler direnç artışını ve sağ kalp basınç yükünü yansıtır.',
+            characteristics: 'İnvaziv kateter gerektirir; basınç artışı emboli hacmiyle koreledir.'
+          },
+          {
+            modality: 'Kardiyak Oskültasyon (Stetoskop / Mill-Wheel)',
+            threshold: '>1.5 - 2.0 mL/kg (Masif Emboli)',
+            clinicalUtility: 'Hassasiyet sıralamasında son sırada. Sadece devasa hava tıkacı ve katastrofik aşamada duyulur.',
+            characteristics: 'Tipik "değirmen çarkı" (burbuja/mill-wheel) sesi verir. Bu ses duyulduğunda hasta zaten arrest eşiğindedir!'
+          }
+        ]
+      }
+    },
+
+    // 5) Patofizyolojisi
+    pathophysiology: {
+      molecularBasis: 'Venöz hava embolisinin oluşabilmesi için cerrahi alanda iki temel fiziksel koşulun aynı anda bulunması zorunludur: 1) Basınç altında kollabe olamayan açık venöz lümen veya dural sinüs varlığı (özellikle kemik kanalları, sert dural yapılar, koterize edilmemiş subkutan venler). 2) Cerrahi alan venleri ile sağ atriyum arasında negatif hidrostatik basınç gradyenti (cerrahi sahanın sağ atriyum seviyesinin üzerinde olması; örn. oturur pozisyonda baş seviyesi sağ atriyumdan 20-40 cm yukarıdadır ve bu 15-30 cmH2O negatif aspirasyon basıncı oluşturur).',
+      stepsTitle: 'Giriş Gradyenti, Mekanik RVOT Hava Kilidi ve Şant Dinamiği',
+      flowType: 'cascade',
+      cascadeSteps: [
+        {
+          phase: 'Subatmosferik Negatif Basınç & Venöz Hava Aspirasyonu',
+          mechanism: 'Kollabe olamayan açık venöz sinüs/kemik veni ile sağ atriyum arasındaki hidrostatik negatif gradyent (> -5 cmH2O) havanın hızla emilerek SVC yoluyla sağ atriyum tavanına toplanmasına neden olur.',
+          badge: '1. VENÖZ ASPİRASYON'
+        },
+        {
+          phase: 'Sağ Ventrikül Çıkış Yolu (RVOT) "Air-Lock" Mekanik Tıkacı',
+          mechanism: 'Sağ ventriküle geçen hava pulmoner kapak altında köpüklü bir hava kilidi ("air lock") oluşturur. Gaz kompresibl olduğu için RV kasılır ancak gazı sıkıştırıp kanı ileri itemez; sol kalbe kan dolumu (preload) dakikalar içinde sıfırlanır.',
+          badge: '2. AIR-LOCK KİLİTLENMESİ'
+        },
+        {
+          phase: 'Pulmoner Mikrovasküler ARDS & Paradoksal Emboli (PFO)',
+          mechanism: 'Pulmoner kapillere kaçan mikrokabarcıklar endoteli yakarak lökosit aktivasyonu ve non-kardiyojenik akciğer ödemi tetikler. Sağ atriyal basınç sol atriyumu aştığında PFO açılır; hava sistemik dolaşıma fırlayarak inme ve koroner infarktüs yapar.',
+          badge: '3. PAE & ARDS ÇÖKÜŞÜ'
+        }
+      ],
+      summaryText: 'Havanın fiziksel varlığı sadece bir kitle etkisi yaratmaz; intravasküler kabarcıklar hidrofilik plazma proteinlerini denatüre eder, trombosit agregasyonunu uyarır ve dakikalar içinde non-kardiyojenik pulmoner ödem / ARDS tablosunu tetikleyen şiddetli bir inflamatuar endotel hasarı başlatır.'
+    },
+
+    // 6) Klinik Özellikleri - Prezentasyonu
+    presentation: {
+      earlySigns: [
+        'Transözofageal Ekokardiyografide (TEE) sağ atriyumda ekojenik mikro-kabarcık kar fırtınası ("snowstorm" görünümü - en erken ve en duyarlı bulgu)',
+        'Prekordiyal Dopplerde karakteristik ıslık, çalkantı ve hışırtı seslerinin duyulması (4. İKA sağ parasternal)',
+        'Kapnografide dakika ventilasyonu sabitken ani ve açıklanamayan EtCO2 çöküşü (>2-5 mmHg ani düşüş)',
+        'End-Tidal Azot (EtN2) düzeyinde >0.1-0.2 kPa ani sıçrama (alveole geçen azot gazı atılımı)',
+        'Spontan soluyan veya sedatize hastada ani nefes açlığı ("gasping"), kontrolsüz inatçı öksürük krizi ve ajitasyon',
+        'Hafif-orta sinüs taşikardisi ve solunum sayısı artışı'
+      ],
+      progressingSigns: [
+        'Arteriyel kan basıncında belirgin düşüş (MAPta %20-40 çöküş, refrakter hipotansiyon)',
+        'Santral venöz basınçta (CVP) ve pulmoner arter basıncında ani yükselme, juguler venöz dolgunluk',
+        'Pik hava yolu basıncında akut yükselme ve bronkokonstriksiyon refleksi',
+        'EKG Değişiklikleri: Akut cor pulmonale bulguları (sağ aks deviasyonu, yeni sağ dal bloğu, V1-V3 ST depresyonu ve simetrik T negatifliği)',
+        'Arter kan gazında derin PaO2 çöküşü, genişlemiş alveolo-arteriyel gradyent ve erken respiratuar alkaloz ardından metabolik asidoz'
+      ],
+      lateSigns: [
+        'EtCO2 değerinin hızla 10 mmHgnın altına veya sıfıra yaklaşması',
+        'Prekordiyal stetoskop ile duyulan tipik "mill-wheel" (değirmen çarkı) üfürümü',
+        'Sağ ventrikül çıkış yolunun köpüklü hava ile tam tıkanması (RVOT Air-Lock) ve sol ventrikül doluşunun sıfırlanması',
+        'Kardiyak Arrest: Nabızsız Elektriksel Aktivite (PEA) veya Asistoli ritmi',
+        'Paradoksal Arteriyel Emboli (PFO/ASD varlığında): Pupil anizokorisi, intraoperatif konvülsiyon, fokal nörolojik defisit, EKGde ST elevasyonlu MI'
+      ],
+      specialAlertTitle: 'Paradoksal Arteriyel Emboli (PAE) & PFO Tehdidi',
+      specialAlertContent: 'Genel popülasyonun %25-30unda bulunan gizli Patent Foramen Ovale (PFO), sağ atriyal basıncın sol atriyumu aşmasıyla (RAP > LAP) açılır. Bu durumda hava direkt sol kalbe ve beyne/koronerlere geçerek felç veya transmural enfarktüs yaratır! PEEP kesinlikle uygulanmamalıdır!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Oturur pozisyonda (sitting position) kraniyotomi ve posterior fossa cerrahisi planlanan tüm hastalara preoperatif kontrastlı TEE veya TTE ile PFO (Patent Foramen Ovale) taraması yapılmalıdır.',
+        'Kanıtlanmış PFO veya intrakardiyak şantı olan hastalarda oturur pozisyon kesinlikle KONTRENDİKEDİR; cerrahi yatay (prone/park-bench) pozisyonda gerçekleştirilmelidir.',
+        'Laparoskopik cerrahide insüflasyon iğnesinin (Veress) damar içine girmediğinden emin olmak için aspirasyon ve düşük basınçlı insüflasyon testi uygulanmalıdır.',
+        'Santral kateter veya port takılırken hasta daima Trendelenburg pozisyonuna alınmalı, kateter lümenleri klempli tutulmalı ve açık hub kesinlikle bırakılmamalıdır.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Hava Embolisi Kriz Ekipmanı & Monitörizasyon Hazırlığı',
+        steps: [
+          'Prekordiyal Doppler probunun 3.-6. sağ parasternal aralığa sabitlenmesi ve ses kalibrasyonunun doğrulanması',
+          'İntraoperatif Transözofageal Ekokardiyografi (TEE) cihazının hazır ve çalışır durumda tutulması',
+          'Çok delikli (Bunegin-Albin) santral hava aspirasyon kateterinin SVC-RA bileşkesine yerleştirilip aspirasyon kontrolünün yapılması',
+          'Ameliyat masasının acil durumlarda anında sol lateral tilt ve dik Trendelenburg pozisyonuna getirilebildiğinin test edilmesi',
+          'Acil vazopressör infüzyonunun (Noradrenalin) hazır çekili tutulması ve ameliyathane alanında bol miktarda ılık SF bulundurulması'
+        ]
+      },
+      cleanAnesthesiaProtocol: [
+        'Azot Protoksit (N2O) yüksek riskli cerrahilerde (oturur pozisyon kraniyotomi, posterior fossa) KESİNLİKLE KULLANILMAMALIDIR (hava kabarcığını 2-3 kat büyütür).',
+        'Pozitif Ekspiryum Sonu Basınç (PEEP) ampirik olarak yükseltilmemelidir; PFO açılmasını önlemek için PEEP = 0 cmH2O hedeflenmelidir.',
+        'Venöz basıncı pozitif tutarak hava girişini önlemek için hastanın normovolemik / hafif hipervolemik tutulması (CVP 10-12 mmHg).'
+      ],
+      cartTitle: 'Acil Hava Embolisi (VAE) Kiti & Ekipman Kontrol Listesi:',
+      cartChecklist: [
+        '20 mL ve 50 mL Luer-Lock Hava Aspirasyon Enjektörleri',
+        'Çok Delikli Bunegin-Albin CVC Aspirasyon Kateteri',
+        'Prekordiyal Doppler Ultrasonografi Cihazı ve Prob Jeli',
+        'Transözofageal Ekokardiyografi (TEE) Cihazı ve Çok Düzlemli Prob',
+        'Noradrenalin (Norepinefrin) 4 mg / 4 mL Ampuller',
+        'Vazopressin 20 IU / 1 mL Ampul',
+        'Dobutamin 250 mg / 20 mL Ampul',
+        'Cerrahi Alan SF İrrigasyonu için 1000-2000 mL Isıtılmış Serum Fizyolojik Torbaları',
+        'Bölge Hiperbarik Oksijen Tedavisi (HBOT) Merkezi Acil İletişim Formu'
+      ]
+    },
+
+    // 8) Postoperatif Takip, Uzun Zamanlı Yönetim, Komplikasyonlar ve Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'En az 24-48 saat 3. Seviye Yoğun Bakım Ünitesinde invaziv arteriyel kan basıncı, CVP, sürekli EKG, seri nörolojik muayene ve laktat takibi.',
+      recurrenceRate: 'Akut cerrahi alan kapatıldıktan sonra tekrarlama riski düşüktür; ancak kalan intravasküler havanın geç dönemde PFO veya intrapulmoner şantla beyne geçişi (PAE riski) ilk 12-24 saatte devam edebilir.',
+      recurrenceRiskBadge: 'İLK 12-24 SAAT PARADOKSAL SEREBRAL TUTULUM & GEÇ NÖROLOJİK SEKEL RİSKİ',
+      maintenanceTherapy: '%100 FiO2 yüksek akım oksijen tedavisi ile intravasküler azotun yıkanması (denitrojenasyon) sürdürülür. MAP >65-75 mmHg tutulacak şekilde Noradrenalin titre edilir. Serebral veya koroner hava embolisi kanıtı olan hastalarda ilk 4-6 saat içinde Hiperbarik Oksijen Tedavisi (HBOT, 2.8-3.0 ATA) uygulanır.',
+      monitoringParameters: [
+        'Sürekli İnvaziv Arteriyel Basınç ve MAP takibi (sağ koroner perfüzyonunun korunması)',
+        'Santral Venöz Basınç (CVP) eğilimi (sağ ventrikülün rahatlaması ve negatif gradyentin kırılması)',
+        'Seri Arter Kan Gazı (PaO2/FiO2 oranı, alveolo-arteriyel gradyent ve laktat klirensi)',
+        'Seri Nörolojik Muayene: Pupil refleksi, motor-duyu yanıtı ve Glasgow Koma Skoru takibi',
+        'Kardiyak Biyobelirteçler (Troponin I/T ve NT-proBNP) ile RV geriliminin izlenmesi',
+        'Kontrol Ekokardiyografi: Sağ ventrikül boyutları, triküspit yetmezliği gradiyenti ve rezidüel hava kontrolü',
+        'Kranial BT veya Beyin MRG: Serebral sulkuslarda gaz kabarcığı, mikroenfarkt veya ödem tespiti'
+      ],
+      expectedComplications: [
+        'Geç Dönem Diffüz Nörolojik Hasar ve İskemik Serebral Enfarktüs (paradoksal mikro-kabarcık embolisi sonucu)',
+        'Non-Kardiyojenik Pulmoner Ödem ve ARDS (kan-gaz arayüzeyinin tetiklediği akut endotel hasarı)',
+        'Akut Sağ Ventrikül İskemisi / İnfarktüsü ve Kalıcı Sağ Kalp Yetmezliği',
+        'Tüketim Koagülopatisi ve Yaygın İntravasküler Koagülasyon (DIC) eğilimi'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: 'Transözofageal Ekokardiyografi (TEE) ile Kontrastlı Şant Çalışması', description: 'Ajite salin (hava-sıvı mikstürü) verilerek sağ atriyumdan sol atriyuma 3-5 kardiyak siklus içinde mikrokabarcık geçişi araştırılır (PFO kesin tanısı).' },
+        { testName: 'Kranial Kontrastsız Bilgisayarlı Tomografi (BT)', description: 'Serebral kortikal damarlarda veya subaraknoid boşlukta serbest hava kabarcıkları (intravasküler hava) ve erken sitotoksik ödem saptanır.' },
+        { testName: 'Beyin Difüzyon Manyetik Rezonans Görüntüleme (DWI-MRG)', description: 'Arteriyel hava mikroembolilerine bağlı kortikal ve sınır bölge (watershed) mikro-enfarkt alanlarının erken tespiti.' },
+        { testName: '12 Derivasyonlu Seri EKG ve Ekokardiyografi', description: 'Akut cor pulmonale bulgularının gerilemesi, RV sistolik fonksiyonunun toparlanması ve triküspit kapağın değerlendirilmesi.' }
+      ],
+      geneticCounseling: 'PFO varlığı genetik bir mutasyondan ziyade embriyolojik septum primum ve secundum füzyon defektidir; birinci derece akrabalarda rutin genetik tarama gerekmez ancak aile öyküsünde kriptojenik inme varsa kardiyolojik ekokardiyografik tarama önerilir.',
+      familyScreening: 'Kriptojenik inme veya dalgıç dekompresyon hastalığı öyküsü olan aile bireylerine PFO araştırması önerilebilir.',
+      prognosisSummary: 'Erken tanı konulan, cerrahi alan hızla SF ile doldurulan, N2O kapatılıp Durant manevrası ve CVC aspirasyonu uygulanan olgularda prognoz mükemmeldir (>%90 tam iyileşme). Ancak tanı geciktiğinde, masif hava girişi (>3-5 mL/kg) veya PFO üzerinden serebral/koroner embolizasyon geliştiğinde mortalite %40-80e ulaşabilir. Zamanında HBOT nörolojik sekelleri anlamlı derecede azaltır.'
+    },
+
+    // 9) High-Yield Bilgiler
+    highYieldPearls: [
+      {
+        title: 'N2O Kapatma Refleksi (Kabarcık Boyutu Çarpanı)',
+        takeaway: 'N2O kanda azottan 34 kat daha hızlı diffüze olur. N2O açıksa hava kabarcığının içine dolarak kabarcığı dakikalar içinde 2-3 kat büyütür ve ölümcül RVOT hava kilidini tetikler. Şüphe anında N2O DERHAL VE KESİNTİSİZ KAPATILMALIDIR!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'PEEP Kontrendikasyonu & Gizli PFO Tuzağı',
+        takeaway: 'Toplumun %25-30unda anatomik olarak açık PFO bulunur. VAE sırasında hipoksemiyi düzeltmek için ampirik PEEP artırılması SAĞ ATRİYAL BASINCI SOL ATRİYUMUN ÜZERİNE ÇIKARIR (RAP > LAP) ve ölümcül serebral inme / koroner enfarktüs yaratır! PEEP KESİNLİKLE UYGULANMAMALIDIR (PEEP = 0)!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Durant Manevrası Fizyolojisi (Air-Lock Kırma)',
+        takeaway: 'Hava suyun üstünde yüzer. Sol lateral dekübit + Trendelenburg (baş aşağı) pozisyonunda sağ ventrikül apeksi en tepeye gelir ve hava burada hapsolur; böylece medialdeki pulmoner kapak ve RVOT tıkanıklıktan kurtularak akciğere kan akımı devam eder.',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'Ölümcül Hava Hacmi Eşiği (3 - 5 mL/kg)',
+        takeaway: 'Erişkinde ani verilen 3-5 mL/kg (veya >200-300 mL) hava bolusu ölümcüldür. 100 mL/saniye hızındaki hava girişi saniyeler içinde mekanik hava kilidi ve asistoliye neden olur.',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'CVC Aspirasyonunda Doğru Derinlik (Kavoatriyal Bileşke)',
+        takeaway: 'CVC hava aspirasyonunun başarılı olması için kateter ucu kavoatriyal bileşkede (SVC-RA junction) olmalıdır (sağ internal juguler venden erkekte ortalama 13-15 cm, kadında 12-14 cm). Körlemesine derine itilirse hava yerine sadece kan aspire edilir.',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'Uyanık Hastada İlk İpucu: Öksürük ve Gasping',
+        takeaway: 'Lokal/rejyonel anestezi altındaki veya sedatize uyanık hastada (sezaryen, histeroskopi, CVC takılması) ani retrosternal göğüs ağrısı, nefes açlığı hissi ("gasping") ve kontrolsüz inatçı öksürük nöbeti VAE için en erken ve patognomonik uyarıdır.',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'Hiperbarik Oksijen Tedavisi (HBOT) ve İrtifa Kısıtlaması',
+        takeaway: 'Paradoksal veya arteriyel hava embolisinde altın standart küratif tedavi HBOTdur (2.8-3.0 ATA). Sevk sırasında hava ambulansı kullanılacaksa kabin basıncı deniz seviyesinde tutulmalı veya helikopter <300 metre (1000 feet) irtifadan uçmalıdır; aksi halde Boyle yasası uyarınca kabarcıklar daha da genişler!',
+        category: 'Ezber Bozan'
+      }
+    ],
+
+    // 10) Kanıta Dayalı Kaynaklar
+    references: [
+      {
+        authors: 'Mirski MA, Lele AV, Fitzsimmons L, Toung TJ.',
+        title: 'Diagnosis and treatment of vascular air embolism.',
+        journal: 'Anesthesiology. 2007;106(1):164-177.',
+        year: '2007',
+        relevance: 'Venöz ve arteriyel hava embolisinde patofizyoloji, monitör duyarlılık hiyerarşisi, kriz algoritmaları ve Durant manevrası prensipleri.'
+      },
+      {
+        authors: 'Albin MS, Carroll RG, Maroon JC.',
+        title: 'Clinical considerations concerning detection of venous air embolism in neurosurgery.',
+        journal: 'Critical Care Medicine. 1978;6(6):380-388.',
+        year: '1978',
+        relevance: 'Oturur pozisyonda kraniyotomilerde Prekordiyal Doppler, Bunegin-Albin hava aspirasyon kateteri ve klinik evreleme.'
+      },
+      {
+        authors: 'Gordy S, Rowell S.',
+        title: 'Vascular air embolism: Review of physiological pathophysiology, clinical presentation, and management options.',
+        journal: 'International Journal of Critical Illness and Injury Science. 2013;3(1):73-76.',
+        year: '2013',
+        relevance: 'İntraoperatif kardiyovasküler kollapsta air-lock mekanizması, PFO paradoksal emboli riskleri ve resüsitasyon protokolleri.'
+      },
+      {
+        authors: 'Muth CM, Shank ES.',
+        title: 'Gas embolism.',
+        journal: 'New England Journal of Medicine (NEJM). 2000;342(7):476-482.',
+        year: '2000',
+        relevance: 'Arteriyel gaz embolisinde serebral/koroner iskemi mekanizması, Boyle yasası ve erken Hiperbarik Oksijen Tedavisi (HBOT) endikasyonları.'
+      }
+    ]
+  },
+  last: {
+    id: 'last',
+    title: 'LAST (Lokal Anestezik Sistemik Toksisitesi)',
+    subTitle: 'ASRA-ESRA 2020 Kılavuzu: Acil %20 Lipid Emülsiyon Kurtarma ve Modifiye ACLS Protokolü',
+    codeColor: 'purple',
+    severityBadge: 'HAYATİ TEHDİT · MSS VE KARDİYOVASKÜLER ÇÖKME · DAKİKALAR İÇİNDE LİPİD RESÜSİTASYONU',
+    keyCallout: 'Lokal Anestezik Enjeksiyonunu DERHAL DURDUR + Yardım Çağır (Acil LAST Kiti / %20 İntralipid İstet) + %100 O2 Hiperventilasyon + Nöbeti Benzodiazepin ile Baskıla + %20 Lipid Emülsiyonu 1.5 mL/kg IV Bolus Başla (2-3 dk) + 0.25 mL/kg/dk İnfüzyon! STANDART 1 mg EPİNEFRİNDEN KAÇIN (≤1 mcg/kg)! LİDOKAİN / VAZOPRESSİN KESİNLİKLE YASAK!',
+    quickCalculatorType: 'last',
+
+    // 2) Tanımlama ve Giriş
+    introduction: {
+      definition: 'Lokal Anestezik Sistemik Toksisitesi (LAST); periferik sinir blokları, epidural anestezi, infiltrasyon veya cerrahi yara yeri infüzyonları sırasında lokal anestezik ajanın istem dışı intravasküler enjeksiyonu ya da vasküler yataklardan hızlı sistemik emilimi sonucu plazma konsantrasyonunun toksik eşiği aşmasıyla oluşan; merkezi sinir sistemi (MSS) eksitasyonu/depresyonu ve hayatı tehdit eden kardiyovasküler kollaps (iletim bloğu, refrakter ventriküler aritmiler, asistoli) ile karakterize akut perioperatif klinik krizdir.',
+      epidemiology: 'Ultrasonografi (USG) rehberliği ve aspirasyon rutinlerine rağmen periferik sinir bloklarında LAST insidansı 10.000 blokta yaklaşık 1.8 - 2.5 seviyesindedir. En sık paravertebral, interkostal, kaudal, epidural ve transversus abdominis planı (TAP) bloklarında yüksek vaskülarite nedeniyle görülür. Olguların %20-30unda klasik ardışık MSS belirtileri (prodromal semptomlar) görülmeksizin doğrudan ani kardiyovasküler arrest (özellikle lipofilik Bupivakainde) ortaya çıkabilir.',
+      triggers: [
+        'Periferik sinir bloğu veya doku infiltrasyonu esnasında iğnenin vasküler lümene penetrasyonu ve fark edilmeden doğrudan intravasküler enjeksiyon',
+        'Zengin vasküler yataklara yüksek hacimli blok uygulaması (interkostal, pudendal, kaudal, epidural, TAP blokları)',
+        'Kümülatif maksimum güvenli doz limitlerinin aşılması (özellikle çoklu bloklarda veya cerrahın yaptığı ilave infiltrasyonlarda)',
+        'Hasta Risk Faktörleri: İleri yaş (>70), yenidoğan/infant, düşük kas kitlesi/kaşeksi, karaciğer yetmezliği (azalmış klerens)',
+        'Kardiyak Patolojiler: Ağır iskemik kalp hastalığı, kalp yetmezliği (EF <%35), ileti sistemi defektleri (AV bloklar), mitokondriyal sitopati ve karnitin eksikliği',
+        'Metabolik Riskler: Gebelik (artmış kardiyotoksisite duyarlılığı, azalmış protein bağlama), asidoz, hiperkapni ve hipoksi (toksisiteyi katlar)'
+      ],
+      safeAgents: [
+        '%20 Lipid Emülsiyonu (İntralipid / Lipovenoes - "Lipid sink" ve mitokondriyal metabolik kurtarma; birinci basamak antidot)',
+        'Benzodiazepinler: Midazolam (1-2 mg IV titre - nöbet aktivitesini kontrol etmek için ilk tercih)',
+        'Düşük Doz Epinefrin (≤ 1 mcg/kg bolus: 10 - 50 mcg IV - kardiyak perfüzyon basıncını korur, yüksek dozun aritmik etkisinden kaçınır)',
+        'Atropin (0.5 - 1.0 mg IV - LA indüklü bradikardinin erken düzeltilmesinde)',
+        'Amiodaron (150-300 mg IV - ventriküler aritmilerde antiaaritmik tercih; sınıf Ib ajanlar YASAKTIR)',
+        'Veno-Arteriyel ECMO (VA-ECMO / CPB - refrakter kardiyak arrestte LA klerensi sağlanana kadar mekanik perfüzyon desteği)'
+      ],
+      mortalityStats: '%20 Lipid kurtarma tedavisi ve USG rehberliği öncesi %10-20 seviyelerinde olan LAST mortalitesi, erken lipid emülsiyonu kullanımı ve modifiye ACLS protokolleri ile <%1-3 seviyesine gerilemiştir; ancak kardiyovasküler arrestte başarılı resüsitasyon 60-90 dakikalık uzamış KPR gerektirebilir.',
+      clinicalUrgency: 'LOKAL ANESTEZİK ENJEKSİYONU ANINDA DURDURULMALI, HİPOKSİ VE ASİDOZ HİPERVENTİLASYONLA ENGELLENMELİ VE %20 İNTRALİPİD KİTİ DAKİKALAR İÇİNDE BAŞLANMALIDIR!'
+    },
+
+    // 3) Tanı ve Şiddet Skalası
+    diagnosis: {
+      overview: 'LAST tanısı dinamik ve yüksek klinik şüphe ile konur. Klasik seyirde önce MSS semptomları (metalik tat, perioral uyuşma, tinnitus, ajitasyon, nöbet) ardından KVS belirtileri (hipertansiyon/taşikardi, ardından bradikardi, geniş QRS, ventriküler taşikardi/fibrilasyon, asistoli) gelişir. Ancak bupivakain gibi yüksek lipofilik ajanlarda olguların üçte birinde MSS semptomları atlanarak aniden kardiyak arrest gelişebilir. Lokal anestezik yapıldıktan sonraki ilk 1-30 dakika içinde gelişen tüm açıklanamayan nörolojik ve hemodinamik bozulmalar aksi kanıtlanana kadar LAST kabul edilir.',
+      clinicalCriteria: [
+        'Ön Belirtiler (Prodromal MSS): Dilde ve dudak çevresinde uyuşma (perioral parestezi), ağızda madeni/metalik tat hissi, kulak çınlaması (tinnitus)',
+        'Duyusal ve Vizüel Bozukluklar: Işığa hassasiyet, görme bulanıklığı, çift görme, konuşma peltekleşmesi (dizartri)',
+        'MSS Eksitasyonu: Huzursuzluk, kontrolsüz ajitasyon, konfüzyon, yüz ve ekstremitelerde miyoklonik kas seğirmeleri',
+        'Jeneralize Nöbet: Ani başlayan tonik-klonik konvülziyonlar (asidoz ve hiperkapniyi katlayarak kardiyotoksisiteyi tetikler)',
+        'MSS Depresyonu: Bilinç kaybı, derin koma, solunum depresyonu ve apne',
+        'Erken Kardiyovasküler Belirtiler: Taşikardi ve hipertansiyon (MSS sempatik deşarjına bağlı geçici kompansasyon)',
+        'İlerleyici KVS İletim Bozuklukları: PR uzaması, genişlemiş QRS kompleksi, dal blokları, derin bradikardi ve hipotansiyon',
+        'Malign Ventriküler Aritmiler: Ventriküler taşikardi (VT), Torsades de Pointes, Ventriküler Fibrilasyon (VF)',
+        'Kardiyovasküler Kollaps / Arrest: Refrakter asistoli veya elektriksel-mekanik dissosiasyon (PEA)'
+      ],
+      gradingScaleTitle: 'ASRA 2020 LAST Klinik Şiddet ve Sistem Tutulum Evrelemesi',
+      gradingScaleSource: 'Neal JM, et al. Regional Anesthesia and Pain Medicine 2018/2020 (ASRA Practice Advisory)',
+      larachScale: [
+        {
+          category: 'Evre 1: Subklinik & Prodromal MSS',
+          points: 'Erken İkaz Düzeyi',
+          description: 'Perioral parestezi, dilde metalik tat, kulak çınlaması, konuşma bozukluğu, sersemlik. Kan basıncı ve nabız stabildir. Enjeksiyon hemen kesilir, %100 O2 maskesi takılır, yakın monitörizasyon başlar.'
+        },
+        {
+          category: 'Evre 2: Eksitatör MSS & Nöbet',
+          points: 'Orta Şiddetli Toksisite',
+          description: 'Fasiyal seğirmeler, motor ajitasyon, jeneralize tonik-klonik nöbet. Havayolu emniyete alınır, Midazolam 1-2 mg IV uygulanır, acil LAST Lipid Kiti ameliyathaneye getirtilir.'
+        },
+        {
+          category: 'Evre 3: MSS Depresyonu & Erken KVS',
+          points: 'Ağır Toksisite',
+          description: 'Bilinç kaybı, koma, solunum depresyonu/apne, hipotansiyon, PR ve QRS genişlemesi, bradikardi. Hasta entübe edilir, %100 O2 hiperventilasyon, %20 İntralipid bolus (1.5 mL/kg) derhal başlatılır.'
+        },
+        {
+          category: 'Evre 4: Malign Ventriküler Aritmiler',
+          points: 'Hayati Tehdit',
+          description: 'Geniş QRSli VT, polimorfik VT/Torsades, VF. Lipid infüzyonu hızlandırılır (0.5 mL/kg/dk), Amiodaron 150-300 mg düşünülür (Lidokain KESİNLİKLE YASAKTIR), düşük doz epinefrin uygulanır.'
+        },
+        {
+          category: 'Evre 5: Kardiyovasküler Kollaps & Asistoli',
+          points: 'Katastrofik Arrest',
+          description: 'Refrakter asistoli veya PEA arresti, nabızsızlık. Modifiye ACLS KPR: Epinefrin ≤1 mcg/kg bolus, %20 İntralipid tekrar bolusları (maks 3 bolus), uzamış kardiyak masaj, acil VA-ECMO hazırlığı.'
+        }
+      ],
+      larachInterpretation: 'ASRA 2020 Değerlendirmesi: Herhangi bir prodromal belirti görüldüğü anda lokal anestezik verilmesi sonlandırılmalıdır. Bupivakain ve levobupivakain gibi güçlü lipofilik ajanlarda Evre 1 ve 2 atlanarak hasta saniyeler içinde doğrudan Evre 4 veya 5e girebilir. Bu nedenle şüphe duyulduğu anda %20 Lipid Emülsiyonu hazır edilmelidir.',
+      differentialDiagnosis: [
+        { condition: 'Vazovagal Senkop', differentiatingFactors: 'Genellikle enjeksiyon anında veya öncesinde anksiyete/ağrı ile tetiklenir; bradikardi ve hipotansiyona solukluk ve terleme eşlik eder. Nöbet ve ventriküler aritmi görülmez; bacakların kaldırılması ve atropin ile hızla düzelir.' },
+        { condition: 'Epinefrin Damar İçi Kaçışı (Test Dozu Yanıtı)', differentiatingFactors: 'Lokal anestezik içindeki adrenalinin vasküler kaçışı taşikardi (>20-30 atım artış), hipertansiyon ve çarpıntı yapar; ancak MSS uyuşması, nöbet veya QRS genişlemesi oluşturmaz.' },
+        { condition: 'Akut İntrakraniyal Olay / SVO', differentiatingFactors: 'Fokal nörolojik defisit, asimetrik motor kayıp, afazi; lokal anestezik enjeksiyon zamanıyla birebir korelasyon göstermez, kardiyotoksisite beklenmez.' },
+        { condition: 'Anafilaksi', differentiatingFactors: 'Bronkospazm, yaygın ürtiker, anjiyoödem ve vazodilatatör şok tablosu; lokal anesteziklere bağlı anafilaksi çok nadirdir (<%1) ve lipid kurtarmaya değil epinefrin/steroid/sıvıya yanıt verir.' },
+        { condition: 'Yüksek / Total Spinal Blok', differentiatingFactors: 'Spinal veya epidural sonrası hızla yükselen duyusal/motor blok seviyesi, interkostal paralizi, bradikardi ve hipotansiyon; doğrudan BOS içine kaçış söz konusudur.' },
+        { condition: 'Hiperventilasyon / Panik Atağı', differentiatingFactors: 'Perioral parestezi ve karpopedal spazm yapabilir; vital bulgularda malign aritmi veya EKG genişlemesi görülmez.' }
+      ]
+    },
+
+    // 4) Acile Spesifik Akut Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'LOKAL ANESTEZİĞİ KES + YARDIM ÇAĞIR + %100 O2 + MİDAZOLAM + %20 İNTRALİPİD 1.5 mL/kg BOLUS (2-3 dk) + 0.25 mL/kg/dk İNFÜZYON! STANDART 1 mg ADRENALİN KESİNLİKLE YAPMA (≤1 mcg/kg)! LİDOKAİN / VAZOPRESSİN YASAK!',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'LOKAL ANESTEZİK ENJEKSİYONUNU DERHAL DURDUR & YARDIM ÇAĞIR (İLK 5 SN)',
+          action: 'Lokal anestezik enjeksiyonunu ANINDA sonlandırın. İğneyi/kateteri geri çekin. Ameliyathane veya girişim odasında yardım çağırın: "LAST / Toksisite Kriz Protokolü başlatıldı, acil LAST kutusunu ve %20 İntralipid emülsiyonunu hemen getirin!". Kardiyak arrest ekibini ve KVC/ECMO konsültasyonunu teyakkuza geçirin.',
+          criticalNote: 'Enjeksiyon anında durdurulmazsa giren her ilave mililitre mortaliteyi katlar. LAST kitine hızla ulaşmak başarı şansını belirler.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'HAVAYOLU YÖNETİMİ & %100 O2 İLE HİPERVENTİLASYON (İLK 15 SN)',
+          action: 'Hastaya %100 FiO2 oksijen başlayın. Gerekirse balon-maske ventilasyonu uygulayın veya acil endotrakeal entübasyon yapın. Hafif hiperventilasyon ile PaCO2 30-35 mmHg seviyesinde tutulmalı ve asidoz önlenmelidir.',
+          criticalNote: 'Hipoksi, hiperkapni ve respiratuar/metabolik asidoz lokal anesteziklerin miyokardiyal Na+ kanallarına bağlanmasını dramatik artırır ve toksisite eşiğini düşürür. Asidozun düzeltilmesi altın kuraldır!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'NÖBET AKTİVİTESİNİ BASKILA: BENZODİAZEPİN TERCİHİ (İLK 30 SN)',
+          action: 'Nöbet gelişirse ilk tercih olarak Midazolam 1 - 2 mg IV bolus titre edin. Alternatif: Lorazepam veya Diazepam. Nöbet devam ederse Süksinilkolin 0.5-1 mg/kg IV veya Rokuronyum uygulanarak motor aktivite ve kas asidozu durdurulmalı, hasta entübe edilmelidir.',
+          criticalNote: 'Propofol kardiyotoksik ve miyokardiyal depresandır; ağır hipotansiyon ve kardiyak yetmezliği tetikleyebileceği için LAST nöbetinde ilk tercih DEĞİLDİR (yalnızca düşük doz 20-30 mg çok dikkatle kullanılabilir).',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: '%20 LİPİD EMÜLSİYONU (İNTRALİPİD) ACİL BOLUSU BAŞLA (1. DK)',
+          action: '%20 İntralipid solüsyonundan 1.5 mL/kg IV bolus (70 kg hasta için ~100 mL) 2-3 dakika içinde puşe olarak uygulayın. Vasküler instabilite veya nörolojik çöküş görülen tüm olgularda gecikmeden başlanmalıdır.',
+          criticalNote: 'Lipid kurtarma kardiyak arrest beklenmeden, ilk hemodinamik instabilite veya nöbet anında başlanmalıdır! "Lipid Sink" etkisiyle kanda serbest LA fraksiyonunu bağlar ve miyokardı temizler.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 5,
+          title: '%20 LİPİD EMÜLSİYONU SÜREKLİ İNFÜZYONUNU BAŞLAT (2. DK)',
+          action: 'Bolusun hemen ardından %20 Lipid infüzyonunu 0.25 mL/kg/dk hızında (70 kg hasta için ~17.5 mL/dk veya yaklaşık 1000 mL/saat) başlatın. İnfüzyon hemodinamik stabilite sağlanana kadar en az 10-15 dakika sürdürülmelidir.',
+          criticalNote: 'İnfüzyon pompayla veya manuel serbest akışla verilebilir; hastanın kan basıncı ve kardiyak ritmi normale dönene kadar kesilmemelidir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 6,
+          title: 'PERSİSTAN KARDİYOVASKÜLER ÇÖKMEDE TEKRAR BOLUSU VE HIZ ARTIRIMI (3-5. DK)',
+          action: 'Eğer kan basıncı toparlanmazsa veya aritmiler sürerse: 1.5 mL/kg bolusu 5-10 dakika arayla 1 veya 2 kez tekrarlayın (toplam maks 3 bolus). Sürekli infüzyon hızını iki katına çıkararak 0.5 mL/kg/dk (70 kg için ~35 mL/dk) yapın.',
+          criticalNote: 'Maksimum Kümülatif Lipid Doz Sınırı: İlk 30-60 dakika içinde toplam 10 - 12 mL/kg (70 kg için ~700-840 mL) aşılmamalıdır.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 7,
+          title: 'MODİFİYE ACLS PROTOKOLÜ: DÜŞÜK DOZ EPİNEFRİN UYARISI',
+          action: 'Kardiyak arrest gelişirse KPR başlatın. Ancak STANDART 1 mg EPİNEFRİN DOZUNDAN KESİNLİKLE KAÇININ! Dozu ≤ 1 mcg/kg (erişkinde 10 - 50 mcg IV küçük boluslar) olarak titre edin.',
+          criticalNote: 'Standart yüksek doz Epinefrin (1 mg) miyokardiyal laktat asidozunu artırır, ventriküler aritmileri provoke eder ve %20 Lipid emülsiyonunun kurtarıcı etkisini zayıflatır!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 8,
+          title: 'KONTRENDİKE İLAÇLAR: LİDOKAİN, VAZOPRESSİN VE CCB YASAĞI',
+          action: 'Ventriküler aritmilerde veya arrestte LİDOKAİN ve diğer Sınıf Ib ajanları KESİNLİKLE VERMEYİN! Vazopressin, kalsiyum kanal blokerleri (CCB) ve beta blokerler kullanmayın. Ventriküler aritmi için Amiodaron (150-300 mg) tercih edin.',
+          criticalNote: 'Lidokain zaten toksisiteyi yapan Na+ kanal blokeridir ve tabloyu ağırlaştırır. Vazopressin pulmoner vazokonstriksiyon yaparak sağ kalbi çökertir ve lipid klerensini bozar.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 9,
+          title: 'REFRAKTER ARRESTTE ACİL VA-ECMO / CPB KURTARMA BAŞLAT',
+          action: 'Lipid tedavisi ve KPRye rağmen 15-20 dakika içinde kardiyak output geri dönmezse acil Veno-Arteriyel ECMO (VA-ECMO) veya Kardiyopulmoner Baypas (CPB) hazırlığını tamamlayıp kanüle edin.',
+          criticalNote: 'Lokal anestezikler geri dönüşümlü toksinlerdir; ECMO ile 12-24 saat perfüzyon sağlandığında ilaç dokulardan temizlenir ve miyokard tamamen toparlanabilir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 10,
+          title: 'POST-KRİZ DÖNEMİ VE YOĞUN BAKIMDA İZLEM PROTOKOLÜ',
+          action: 'Başarılı resüsitasyon sonrası hasta en az 24 saat 3. Seviye Yoğun Bakımda takip edilmelidir. Sadece MSS belirtisi olanlar en az 2 saat, kardiyotoksisite geçirenler en az 4-6 saat sürekli EKG ve hemodinami ile izlenmelidir.',
+          criticalNote: 'Lokal anesteziğin depolardan geç salınımı nedeniyle geç rebound toksisite gelişebilir. Aşırı lipid uygulamasına sekonder pankreatit, lipemi ve laboratuvar parazitleri izlenmelidir.',
+          priority: 'HIGH'
+        }
+      ],
+
+      // LAST'a özel detaylı klinik protokoller
+      lastProtocols: {
+        lipidRescueProtocol: {
+          title: '%20 Lipid Emülsiyonu (Lipid Kurtarma) Uygulama Rehberi',
+          bolusDose: '1.5 mL/kg IV Bolus (2-3 dakikada verilir; 70 kg erişkin için yaklaşık 100-105 mL)',
+          infusionDose: '0.25 mL/kg/dk Sürekli İnfüzyon (70 kg hasta için yaklaşık 17.5 mL/dk veya 1050 mL/saat)',
+          repeatBolusRule: 'Kardiyovasküler instabilite veya aritmi devam ederse 5-10 dk arayla 1-2 kez daha 1.5 mL/kg bolus tekrarlanabilir ve infüzyon 0.5 mL/kg/dkya çıkarılabilir.',
+          maxCumulativeDose: 'İlk 30-60 dakikada toplam 10 - 12 mL/kg (70 kg hasta için maksimum ~700 - 840 mL)',
+          lipidSinkMechanism: 'Lipid Sink (Lipid Çökeltisi) Hipotezi: Lipid damlacıkları kanda lipofilik lokal anesteziği (özellikle Bupivakaini) tutarak doku ve miyositlerden uzaklaştırır. Metabolik Hipotez: LA ile bloke olan karnitin açiltransferazı baypas ederek miyosit mitokondrisine doğrudan yağ asidi yakıtı sağlar ve miyokardiyal ATP üretimini restore eder.'
+        },
+        aclsModifications: {
+          title: 'LAST Olgularında Modifiye ACLS Kuralları ve Kesin Kontrendikasyonlar',
+          epinephrineAdjustment: 'DÜŞÜK DOZ KULLANIN: Standart 1 mg yerine ≤ 1 mcg/kg (10 - 50 mcg IV bolus). Yüksek doz adrenalin pulmoner vasküler direnci artırır, miyokard iskemisini derinleştirir ve lipid etkinliğini bozar.',
+          prohibitedDrugs: [
+            'Lidokain ve Sınıf Ib Antiaritmikler: Toksisiteyi katlar, KESİNLİKLE KONTRENDİKEDİR!',
+            'Vazopressin: Pulmoner vazokonstriksiyonu artırır, kardiyak debiyi düşürür ve lipid yanıtını bozar.',
+            'Kalsiyum Kanal Blokerleri (CCB): Miyokardiyal depresyonu ve AV blokları derinleştirir.',
+            'Beta Blokerler: Bradikardiyi ve kontraktilite çöküşünü şiddetlendirir.',
+            'Propofol: Ağır kardiyak depresyon riski nedeniyle nöbet kontrolünde ilk tercih değildir.'
+          ],
+          antiarrhythmicStrategy: 'Ventriküler aritmilerde Amiodaron (150-300 mg IV) ilk tercihtir. Prokainamid, Lidokain ve diğer sodyum kanal blokerleri KESİNLİKLE YASAKTIR.',
+          ecmoCriteria: 'Lipid ve agresif KPRye rağmen 15-30 dakikada ROSC (dolaşımın geri dönüşü) sağlanamazsa derhal VA-ECMO veya Kardiyopulmoner Baypasa geçilmelidir.'
+        },
+        safeDosageLimits: [
+          {
+            agent: 'Bupivakain (Marcaine)',
+            plainMaxDose: '2.0 mg/kg (Maks 150-175 mg)',
+            epinephrineMaxDose: '2.5 mg/kg (Maks 200 mg)',
+            durationOfAction: 'Uzun (3 - 8 saat)',
+            cardiotoxicityRisk: 'ÇOK YÜKSEK (CC/CNS oranı 2.0 - 2.5; en ölümcül)'
+          },
+          {
+            agent: 'Levobupivakain (Chirocaine)',
+            plainMaxDose: '2.5 mg/kg (Maks 150 mg)',
+            epinephrineMaxDose: '3.0 mg/kg (Maks 200 mg)',
+            durationOfAction: 'Uzun (3 - 8 saat)',
+            cardiotoxicityRisk: 'YÜKSEK (S-enantiyomer, Bupivakaine göre %30-40 daha az toksik)'
+          },
+          {
+            agent: 'Ropivakain (Naropin)',
+            plainMaxDose: '3.0 mg/kg (Maks 200-225 mg)',
+            epinephrineMaxDose: '3.5 mg/kg (Maks 250 mg)',
+            durationOfAction: 'Uzun (3 - 6 saat)',
+            cardiotoxicityRisk: 'ORTA-YÜKSEK (Saf S-enantiyomer, kardiyak güvenlik marjı daha geniş)'
+          },
+          {
+            agent: 'Lidokain (Aritmal / Jetokain)',
+            plainMaxDose: '4.5 mg/kg (Maks 300 mg)',
+            epinephrineMaxDose: '7.0 mg/kg (Maks 500 mg)',
+            durationOfAction: 'Orta (1.5 - 2.5 saat)',
+            cardiotoxicityRisk: 'DÜŞÜK-ORTA (CC/CNS oranı ~7.0; önce belirgin MSS belirtileri verir)'
+          },
+          {
+            agent: 'Prilokain (Citanest)',
+            plainMaxDose: '6.0 mg/kg (Maks 400 mg)',
+            epinephrineMaxDose: '8.0 mg/kg (Maks 600 mg)',
+            durationOfAction: 'Orta (1.5 - 2 saat)',
+            cardiotoxicityRisk: 'DÜŞÜK (Methemoglobinemi riski taşır; antidot: Metilen Mavisi)'
+          }
+        ],
+        toxicityProgressionStages: [
+          {
+            stage: 'Prodromal MSS (Plazma LA: 5-10 mcg/mL Lidokain)',
+            plasmaLevel: '5 - 10 mcg/mL',
+            cnsSymptoms: 'Perioral parestezi, dilde metalik tat, tinnitus, baş dönmesi, geveleyerek konuşma.',
+            cvsSymptoms: 'Normal veya hafif hipertansiyon ve taşikardi.',
+            actionRequired: 'Enjeksiyonu kes, %100 O2 başla, hastayla sürekli konuş.'
+          },
+          {
+            stage: 'Eksitatör MSS (Plazma LA: 10-15 mcg/mL)',
+            plasmaLevel: '10 - 15 mcg/mL',
+            cnsSymptoms: 'Fasiyal kas seğirmeleri, huzursuzluk, halüsinasyon, jeneralize tonik-klonik nöbet.',
+            cvsSymptoms: 'Artmış sempatik tonus, taşikardi, hipertansiyon.',
+            actionRequired: 'Midazolam 1-2 mg IV, %20 İntralipid kitini getirt, havayolunu koru.'
+          },
+          {
+            stage: 'MSS Depresyonu & Erken KVS (Plazma LA: 15-20 mcg/mL)',
+            plasmaLevel: '15 - 20 mcg/mL',
+            cnsSymptoms: 'Koma, arefleksi, solunum depresyonu ve apne.',
+            cvsSymptoms: 'PR uzaması, genişlemiş QRS, bradikardi, miyokard depresyonu, derin hipotansiyon.',
+            actionRequired: 'Entübasyon, %20 İntralipid 1.5 mL/kg bolus + 0.25 mL/kg/dk infüzyon.'
+          },
+          {
+            stage: 'Malign KVS Kollaps (Plazma LA: >20-25 mcg/mL)',
+            plasmaLevel: '> 25 mcg/mL',
+            cnsSymptoms: 'Tam bilinç kaybı ve beyin sapı depresyonu.',
+            cvsSymptoms: 'Malign VT/VF, elektromekanik dissosiasyon (PEA), refrakter asistoli.',
+            actionRequired: 'Modifiye ACLS (Epinefrin ≤1 mcg/kg), tekrar lipid bolusu, VA-ECMO hazırla.'
+          }
+        ]
+      }
+    },
+
+    // 5) Patofizyolojisi
+    pathophysiology: {
+      molecularBasis: 'Lokal anestezikler nöronal aksonlarda ve kardiyak miyositlerde voltaj kapılı hızlı sodyum (Nav1.5) kanallarının iç poruna bağlanarak depolarizasyonu ve aksiyon potansiyeli yayılımını bloke eder. İntravasküler toksik konsantrasyonlarda bu blokaj; 1) Beyinde inhibitör kortikal nöronları (GABAerjik interlöronlar) erken aşamada felç ederek kontrolsüz eksitatör deşarja (nöbet) yol açar. 2) Kalpte His-Purkinje iletim sistemini ve ventriküler miyositleri yavaşlatarak PR ve QRS genişlemesine, re-entry aritmilerine (VT/VF) neden olur. 3) Mitokondriyal karnitin-açiltransferaz enzimini ve oksidatif fosforilasyonu bloke ederek miyokardiyal ATP sentezini sıfırlar ve şiddetli negatif inotropi yaratır.',
+      stepsTitle: 'Kanal Blokaj Kinetiği, Mitokondriyal Kriz ve Nörotoksisite Eksenleri',
+      flowType: 'cellular-systemic',
+      cascadeSteps: [
+        {
+          phase: 'Nav1.5 Sodyum Kanal Blokajı ("Fast-in, Slow-out" Tuzağı)',
+          mechanism: 'Bupivakain gibi lipofilik LAlar kardiyak Nav1.5 sodyum ve voltaj kapılı potasyum/kalsiyum kanallarına hızla bağlanır; ancak diyastolde kanaldan çözülmesi son derece yavaştır ("fast-in, slow-out"). Faz 0 depolarizasyonu çöker, PR ve QRS genişler, refrakter re-entry VT/VF veya asistoli gelişir.',
+          badge: 'EKSEN 1: İYON KANALI KİLİTLENMESİ'
+        },
+        {
+          phase: 'Mitokondriyal Karnitin İnhibisyonu & Miyokardiyal Enerji İflası',
+          mechanism: 'Lokal anestezikler mitokondri iç zarındaki karnitin-açiltransferaz enzimini ve oksidatif fosforilasyonu kilitler. Kalbin temel enerji kaynağı olan serbest yağ asitlerinin beta-oksidasyonu durur; masif negatif inotropi ve kardiyojenik kollaps gelişir (%20 Lipid emülsiyonu bu yakıtı sağlar).',
+          badge: 'EKSEN 2: METABOLİK ENERJİ İFLASI'
+        },
+        {
+          phase: 'Kortikal GABAerjik İnhibisyon Kaybı (Nöbetten Komaya)',
+          mechanism: 'Serebral korteksteki inhibitör GABAerjik internöronlar eksitatör nöronlara kıyasla LA toksisitesine daha duyarlıdır. Fren mekanizması kalkınca eksitasyon fırlar (grand-mal konvülziyonlar); ardından tüm beyin sapı depresyonu, koma ve santral solunum arresti oturur.',
+          badge: 'EKSEN 3: KORTİKAL NÖROTOKSİSİTE'
+        }
+      ],
+      summaryText: 'Özetle LAST patofizyolojisinde lipofilite belirleyicidir. Bupivakain yüksek lipofilitesi ve yavaş dissosiasyon kinetiği nedeniyle kardiyotoksisite indeksi (CC/CNS oranı) en dar ve en ölümcül ajandır. %20 Lipid emülsiyonu bu kaskadı hem serbest ilacı kanda hapsederek (sink) hem de mitokondriye metabolik yakıt pompalayarak kırar.'
+    },
+
+    // 6) Klinik Özellikleri - Prezentasyonu
+    presentation: {
+      earlySigns: [
+        'Dilde, dudaklarda ve ağız çevresinde karıncalanma ve uyuşma (perioral parestezi - EN ERKEN İKAZ)',
+        'Ağızda belirgin madeni, ekşi veya metalik tat hissi',
+        'Kulak çınlaması (tinnitus) ve seslere karşı aşırı duyarlılık',
+        'Baş dönmesi, sersemlik hissi, bulanık veya çift görme',
+        'Konuşmada peltekleşme (dizartri) ve anlamsız kelime tekrarları',
+        'Hafif ajitasyon, huzursuzluk ve yüzde seyirme'
+      ],
+      progressingSigns: [
+        'Yüz kaslarında, periorbital alanda ve ekstremitelerde miyoklonik kas seğirmeleri',
+        'Aniden başlayan jeneralize tonik-klonik konvülziyonlar (nöbet)',
+        'Bilinç bulanıklığı, deliryum ardından ani bilinç kaybı ve derin koma',
+        'Spontan solunumun yüzeyelleşmesi, solunum depresyonu ve apne',
+        'Taşikardi ve hipertansiyonun yerini hızla derin hipotansiyon ve bradikardiye bırakması',
+        'EKGde PR aralığının uzaması ve QRS komplekslerinin patolojik genişlemesi'
+      ],
+      lateSigns: [
+        'Malign ventriküler aritmiler: Ventriküler Taşikardi (VT), Torsades de Pointes, Ventriküler Fibrilasyon (VF)',
+        'Miyokardiyal kontraktilitenin çökmesi, kardiyojenik şok ve periferik nabızların kaybolması',
+        'Kardiyak İletim Sistemi İflası: Ağır sinüs bradikardisi, nodal ritim, tam AV blok',
+        'Kardiyak Arrest: Nabızsız Elektriksel Aktivite (PEA) ve refrakter asistoli',
+        'Arter kan gazında derin laktik asidoz, hiperkapni ve miks metabolik-respiratuar çöküş'
+      ],
+      specialAlertTitle: 'Bupivakain Sessiz Kardiyotoksisite Uyarısı',
+      specialAlertContent: 'Bupivakain ve Levobupivakain olgularının yaklaşık üçte birinde prodromal MSS uyuşmaları veya nöbet görülmeksizin HASTA DOĞRUDAN ANİ VENTRİKÜLER ARİTMİ VEYA ASİSTOLİ İLE ÇÖKEBİLİR! Blok sonrası gelişen ani kardiyak instabilitede LAST daima ilk sırada düşünülmelidir!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Hastanın kilosu, yaşı, karaciğer ve böbrek fonksiyonları, kardiyak ejeksiyon fraksiyonu değerlendirilerek her hasta için KİLO BAŞINA MAKSİMUM DOZ önceden hesaplanmalıdır.',
+        'İleri yaş (>70), kaşektik hastalar, kalp yetmezliği ve böbrek/karaciğer yetmezliği olanlarda standart maksimum dozlar en az %20-30 oranında azaltılmalıdır.',
+        'Çoklu blok planlanan hastalarda (örn. bilateral TAP + cerrahi infiltrasyon) tüm alanlara verilen toplam lokal anestezik dozu tek bir kümülatif havuz olarak hesaplanmalıdır.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'LAST Önleme ve Acil Lipid Kiti Standart Hazırlığı',
+        steps: [
+          'Tüm periferik sinir blokları ve yüksek doz infiltrasyonlar kesinlikle tam monitörizasyon altında (EKG, NIBP, SpO2) ve damar yolu açıkken uygulanmalıdır.',
+          'Blok odasında ve ameliyathanede acil %20 Lipid Emülsiyonu (en az iki adet 500 mL torba), infüzyon seti ve aspiratör hazır bulundurulmalıdır.',
+          'Acil havayolu ekipmanı (balon-maske, videolaringoskop, ETT) ve nöbet kontrolü için Midazolam çekili tutulmalıdır.',
+          'Modifiye ACLS için düşük doz Adrenalin (1 mg ampul 100 mL veya 10 mLye sulandırılarak 10 mcg/mL konsantrasyon) hazırlanabilir durumda olmalıdır.'
+        ]
+      },
+      cleanAnesthesiaProtocol: [
+        'İğne yerleşiminde ve ilaç enjeksiyonunda MUTLAKA Ultrasonografi (USG) kullanılmalı; iğne ucu ve LA yayılımı her an ekranda takip edilmelidir.',
+        'Her 3 - 5 mL enjeksiyondan önce MUTLAKA negatif vasküler aspirasyon yapılmalıdır (negatif aspirasyonun damar içi olmadığını %100 garanti etmediği unutulmamalıdır).',
+        'Enjeksiyon fraksiyone (bölünmüş) ve yavaş uygulanmalıdır (maksimum 15-20 mL/dakika hız).',
+        'Kontrendikasyon yoksa 1:200.000 (5 mcg/mL) Epinefrin belirteç (marker) olarak eklenmelidir (damara kaçışta kalp hızında >10-20 atım artış veya SKB >15 mmHg artış erken ikaz verir).'
+      ],
+      cartTitle: 'LAST Acil Lipid Kiti & Donanım Listesi:',
+      cartChecklist: [
+        '%20 Lipid Emülsiyonu (İntralipid / Lipovenoes 500 mL x 2-3 torba)',
+        'Geniş Lümenli IV İnfüzyon Seti ve Basınçlı İnfüzyon Torbası',
+        'Midazolam (5 mg / 5 mL ampul x 2 adet)',
+        'Süksinilkolin (100 mg flakon) ve Rokuronyum (50 mg flakon)',
+        'Atropin Sülfat (0.5 mg ampul x 2 adet)',
+        'Amiodaron (Cordarone 150 mg ampul x 2 adet)',
+        'Epinefrin (Adrenalin 1 mg ampul - sulandırma enjektörüyle)',
+        'Acil Krikotiroidotomi ve Entübasyon Seti',
+        'Bölge KVC / ECMO Acil Konsültasyon İletişim Numarası'
+      ]
+    },
+
+    // 8) Postoperatif Takip, Uzun Zamanlı Yönetim, Komplikasyonlar ve Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'Yalnızca hafif MSS belirtileri gösteren hastalar en az 2 saat; nöbet, kardiyak depresyon veya arrest geçiren hastalar en az 24-48 saat 3. Seviye Yoğun Bakımda takip edilmelidir.',
+      recurrenceRate: 'Lokal anesteziğin periferik dokulardan, kaslardan veya yağ dokusundan sistemik dolaşıma geç salınımı nedeniyle ilk 1-4 saatte %5-10 vakada rebound (tekrarlayan) toksisite görülebilir.',
+      recurrenceRiskBadge: 'İLK 4-6 SAAT REBOUND TOKSİSİTE VE HİPERLİPEMİ RİSKİ',
+      maintenanceTherapy: 'Hemodinamik stabilite sağlandıktan sonra lipid infüzyonu 10-15 dakika daha sürdürülüp kesilir. Rebound hipotansiyon veya aritmi olursa lipid infüzyonu yeniden başlatılabilir. Nöbet sonrası beyin ödemi ve asidoz takibi yapılır.',
+      monitoringParameters: [
+        'Sürekli 5 derivasyonlu EKG monitörizasyonu (PR, QRS genişliği ve ST-T değişiklikleri)',
+        'İnvaziv Arteriyel Kan Basıncı takibi (nabız basıncı ve hemodinamik stabilite)',
+        'Seri Arter Kan Gazı: Laktat klirensi, pH, PaO2/FiO2 ve baz defisiti kontrolü',
+        'Kardiyak Troponin ve CK-MB enzimleri (miyokardiyal iskemi ve hasarın derecesi)',
+        'Serum Amilaz ve Lipaz takibi (yüksek doz lipid emülsiyonuna sekonder akut pankreatit riski)',
+        'Serum Trigliserit Düzeyi ve Lipemi Takibi (lipid yüklenmesi laboratuvar kan testlerinde parazit yapabilir)',
+        'Nörolojik muayene ve serebral fonksiyon izlemi (hipoksik ensefalopati kontrolü)'
+      ],
+      expectedComplications: [
+        'Post-Kardiyak Arrest Miyokardiyal Disfonksiyon ve Geçici Kalp Yetmezliği',
+        'Hipoksik İskemik Serebral Hasar (uzamış nöbet veya resüsitasyona sekonder)',
+        'Aşırı Doz Lipid Emülsiyonuna Sekonder Hipertrigliseridemi, Akut Pankreatit ve Lipemik Serum',
+        'Akut Pulmoner Toksisite / ARDS (nadir; lipid mikroembolileri ve endotel irritasyonu)',
+        'Laboratuvar Analizör Parazitleri (yoğun lipemi nedeniyle elektrolit, hemoglobin ve koagülasyon testlerinde geçici hatalı ölçümler)'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: 'Serum Lokal Anestezik Düzeyi (HPLC / Kütle Spektrometresi)', description: 'Adli ve tıbbi belgeleme için kriz anında alınan kan örneğinde Bupivakain, Ropivakain veya Lidokain konsantrasyonunun doğrulanması (tedaviyi geciktirmeden sonradan çalışılır).' },
+        { testName: '12 Derivasyonlu Seri EKG', description: 'İletim bloklarının, QRS morfolojisinin ve repolarizasyon parametrelerinin normale dönüşünün belgelenmesi.' },
+        { testName: 'Transtorasik Ekokardiyografi (TTE)', description: 'Sol ve sağ ventrikül sistolik fonksiyonlarının, ejeksiyon fraksiyonunun ve duvar hareketlerinin toparlanmasının teyidi.' },
+        { testName: 'Kranial BT / Beyin MRG', description: 'Uzamış nöbet veya arrest geçiren olgularda serebral anoksi veya enfarktüs alanlarının araştırılması.' }
+      ],
+      geneticCounseling: 'Mitokondriyal sitopatisi veya karnitin palmitoiltransferaz (CPT) eksikliği saptanan genç olgularda genetik metabolizma konsültasyonu ve aile taraması önerilir.',
+      familyScreening: 'Miyopati veya açıklanamayan kardiyotoksisite öyküsü olan birinci derece akrabalara metabolik tarama tavsiye edilir.',
+      prognosisSummary: 'Erken fark edilen, enjeksiyonu hemen kesilen ve vakit kaybetmeden %20 Lipid Emülsiyonu başlanan LAST vakalarında prognoz fevkalade iyidir (>%95 tam nörolojik ve kardiyak iyileşme). Bupivakain arrestinde bile uzamış KPR (60+ dk) ve lipid kurtarma ile kalıcı nörolojik sekelsiz tam sağkalım elde edilebilir.'
+    },
+
+    // 9) High-Yield Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Standart Adrenalin Dozundan Kesin Kaçınma (≤1 mcg/kg)',
+        takeaway: 'ACLSdeki standart 1 mg Epinefrin dozu LAST arrestinde ölümcüldür! Miyokardiyal asidozu artırır, ventriküler aritmileri tetikler ve %20 Lipid kurtarmanın etkinliğini bozar. Epinefrin 10-50 mcg küçük boluslarla titre edilmelidir!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Lidokain ile Aritmi Tedavisi Yasağı',
+        takeaway: 'LAST kaynaklı ventriküler aritmide Lidokain veya Prokainamid KESİNLİKLE VERİLMEZ. Zaten Na+ kanal blokajı yapan ajana benzer sınıftan antiaritmik eklemek asistoliye davetiyedir! Tercih Amiodarondur.',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Lipid Kurtarmada "Lipid Sink" ve Metabolik Etki',
+        takeaway: '%20 Lipid emülsiyonu kanda yapay bir lipid fazı oluşturarak lipofilik lokal anesteziği (özellikle Bupivakaini) miyositlerden çeker (sink) ve mitokondriye doğrudan yağ asidi yakıtı sağlayarak ATP sentezini yeniden başlatır.',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: '%20 İntralipid Doz Formülü (1.5 mL/kg + 0.25 mL/kg/dk)',
+        takeaway: 'Hızlı kural: 70 kg hasta için ilk 2-3 dakikada ~100 mL IV bolus, ardından saatte ~1000 mL (veya dakikada 17-18 mL) sürekli infüzyon. Maksimum kümülatif doz ilk saatte 10-12 mL/kgdır.',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'Bupivakainde Sessiz Kardiyotoksisite Tuzağı',
+        takeaway: 'Lidokain önce perioral uyuşma ve nöbetle uyarır; ancak Bupivakain olgularının %30unda MSS belirtisi olmaksızın HASTA ANİDEN VT/VF VEYA ASİSTOLİYE GİRER!',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'Nöbet Kontrolünde Propofolden Kaçınma',
+        takeaway: 'LAST nöbetinde Propofol miyokardı daha da deprese edip arresti tetikleyebileceği için İLK TERCİH DEĞİLDİR; ilk tercih Midazolam (1-2 mg IV) gibi benzodiazepinlerdir.',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Uzamış KPR ve VA-ECMO ile Tam İyileşme',
+        takeaway: 'Lokal anestezikler miyokardı kalıcı tahrip etmez; lipid ve KPR ile veya VA-ECMO desteğiyle ilaç dokulardan temizlenene kadar (60-90 dk bile sürse) resüsitasyona devam edilmelidir.',
+        category: 'Ezber Bozan'
+      }
+    ],
+
+    // 10) Kanıta Dayalı Kaynaklar
+    references: [
+      {
+        authors: 'Neal JM, Neal EJ, Weinberg GL.',
+        title: 'American Society of Regional Anesthesia and Pain Medicine Local Anesthetic Systemic Toxicity checklist: 2020 version.',
+        journal: 'Regional Anesthesia and Pain Medicine. 2021;46(1):81-86.',
+        year: '2021',
+        relevance: 'ASRA 2020 resmi kontrol listesi; %20 Lipid emülsiyon doz protokolü, düşük doz epinefrin prensipleri ve kontrendike ilaçlar.'
+      },
+      {
+        authors: 'Weinberg GL, Di Gregorio G, Ripper R, et al.',
+        title: 'Resuscitation with lipid emulsion: active metabolite or physical sink?',
+        journal: 'Anesthesiology. 2008;108(6):1007-1014.',
+        year: '2008',
+        relevance: 'Lipid emülsiyonunun lipid sink etkisi, mitokondriyal yağ asidi oksidasyonu ve bupivakain toksisitesinden kurtarma mekanizması.'
+      },
+      {
+        authors: 'Gitman M, Fettiplace MR, Weinberg GL, Neal JM, Barrington MJ.',
+        title: 'Local Anesthetic Systemic Toxicity: A Systematic Review of Recent Case Reports and Registry Data.',
+        journal: 'Regional Anesthesia and Pain Medicine. 2019;44(6):629-635.',
+        year: '2019',
+        relevance: 'USG devrinde LAST insidansı, atipik prezentasyonlar ve lipid kurtarma tedavisi sonuçlarının analizi.'
+      },
+      {
+        authors: 'Christie LE, Picard J, Weinberg GL.',
+        title: 'Local anaesthetic systemic toxicity (LAST): celebrating twenty years of lipid emulsion therapy.',
+        journal: 'Anaesthesia. 2023;78(7):806-810.',
+        year: '2023',
+        relevance: 'Lipid emülsiyon tedavisinin 20 yıllık klinik kanıtları, ECMO entegrasyonu ve ASRA/ESRA kılavuz güncellemeleri.'
+      }
+    ]
+  },
+
+  'anaphylaxis': {
+    id: 'anaphylaxis',
+    // 1) Başlık
+    title: 'İntraoperatif Anafilaksi & Şiddetli Anafilaktik Şok',
+    subTitle: 'Hızlı Vazomotor Felç, Refrakter Hipotansiyon, Bronkospazm & Akut Dolaşım Çöküşü',
+    codeColor: 'rose',
+    severityBadge: 'KOD KIRMIZI · ERKEN ADRENALİN & MASİF VOLÜM KOMBİNASYONU',
+    keyCallout: 'Şüpheli tüm ajanları (kas gevşetici, antibiyotik, lateks, kolloid) derhal durdurun, volatil anestezikleri kapatın ve birinci basamak kurtarıcı olan EPİNEFRİNİ (Adrenalin) GECİKMEDEN IV titre edin! Masif kristaloid sıvı yükleyin; kolloidler KESİNLİKLE YASAKTIR!',
+    quickCalculatorType: 'anaphylaxis',
+
+    // 2) Tanımlama ve Giriş
+    introduction: {
+      definition: 'İntraoperatif anafilaksi; genel veya rejyonal anestezi altında uygulanan ilaçlara veya cerrahi temas maddelerine karşı gelişen, önceden duyarlanmış (IgE-aracılı) veya duyarlanma olmaksızın direkt (non-IgE aracılı mast hücresi / MRGPRX2 aktivasyonu) masif vazoaktif mediyatör salınımıyla karakterize, ani ve hayatı tehdit edici sistemik aşırı duyarlık reaksiyonudur.',
+      epidemiology: 'Genel insidans 1:10.000 ila 1:20.000 anestezi arasında değişmektedir. Olguların %50-60ından nöromüsküler blokerler (özellikle Rokuronyum ve Süksinilkolin), %15-20sinden antibiyotikler (başta Sefazolin ve diğer beta-laktamlar), %10undan Klorheksidin (antiseptik/kateter kaplamaları), %5-10undan Patent Blue / lenf nodu boyaları ve lateks sorumludur.',
+      triggers: [
+        'Nöromüsküler Blokerler (NMBAs): Rokuronyum (en sık), Süksinilkolin, Atrakuryum, Sisatrakuryum, Vekuronyum',
+        'Antibiyotikler: Sefazolin (1. kuşak sefalosporin - en sık cerrahi profilaksi tetikleyicisi), Penisilinler, Vankomisin, Teikoplanin',
+        'Antiseptikler & Kateterler: Klorheksidin (cilt antisepsisi, idrar sondası jeli, CVC kaplamaları - sinsi tetikleyici)',
+        'Cerrahi Boyalar: Patent Blue V, İsosülfan Mavi, İndigo Karmin, Metilen Mavisi (lenfatik haritalama)',
+        'Kolloid Sıvılar: Jelatinler (Gelofusine, Haemaccel), Dekstranlar, Hidroksietil Nişasta (HES)',
+        'Doğal Kauçuk Lateks: Cerrahi eldivenler, sondalar, drenler, lavman tüpleri (özellikle tekrarlayan cerrahi geçirenler ve spina bifidalılar)',
+        'Revers Ajanlar: Sugammadeks (nadir bildirimler; rokuronyum-sugammadeks kompleksi veya saf sugammadeks)',
+        'Diğer: Kan ve kan ürünleri, Aprotinin, Protamin, Oksitosin, NSAİİ (non-IgE psödoalerji)'
+      ],
+      safeAgents: [
+        'İnhalasyon Anestezikleri (İntrinsik alerjen değildir; ancak anafilakside derin vazodilatasyon ve miyokard depresyonu nedeniyle KESİLMELİDİR)',
+        'Ketamin (Sempatomimetik ve güçlü bronkodilatör; resüsitasyonda mükemmel sedatif ajan)',
+        'Dengeli Elektrolit Kristaloidleri (Plasmalyte, İzolyte, Ringer Laktat, %0.9 NaCl - alerjik potansiyeli yoktur)',
+        'Opioidler (Fentanil, Remifentanil, Sufentanil - Morfine kıyasla histamin salınımı yapmazlar, güvenlidirler)'
+      ],
+      mortalityStats: 'Perioperatif anafilakside mortalite %3-9 arasında bildirilmektedir (NAP6 verilerine göre %4 civarı). Ölümlerin başlıca nedeni geç Adrenalin yapılması, yetersiz kristaloid volüm resüsitasyonu ve hava yolu ödemi / katastrofik bronkospazma bağlı anoksik arresttir.',
+      clinicalUrgency: 'Genel anestezi altındaki hasta semptomlarını ifade edemez! Uyanık hastadaki kaşıntı, boğazda takılma veya dispne şikayetleri yoktur. Cerrahın örtüleri altında cilt bulguları gizlidir. Aniden gelişen nedeni açıklanamayan ağır hipotansiyon veya ventilatörde yüksek tepe basıncı anafilaksi kabul edilip derhal tedaviye başlanmalıdır.'
+    },
+
+    // 3) Tanı ve Klinik Kriterler
+    diagnosis: {
+      overview: 'Genel anestezi altındaki hastada anafilaksinin kardinal triadı: (1) Ani, açıklanamayan ve efedrin/sıvıya dirençli şiddetli hipotansiyon/şok, (2) Bronkospazm, yüksek hava yolu tepe basıncı (Ppeak) ve desatürasyon, (3) Şiddetli taşikardi (veya derin hipovolemiye sekonder paradoksal bradikardi - Bezold-Jarisch refleksi). Anestezi altındaki vakaların %30-40ında CİLT BULGUSU (eritem/ürtiker) İLK ANDA HİÇ GÖRÜLMEZ veya cerrahi örtülerin altında fark edilmez!',
+      clinicalCriteria: [
+        'Genel anestezi indüksiyonundan veya bir intravenöz ilaç uygulamasından sonraki 1-15 dakika içinde ani kardiyovasküler kollaps veya dirençli hipotansiyon (SKB <%50 düşüş)',
+        'Ventilatörde tepe havayolu basıncının (Ppeak) aniden >40-50 cmH2O seviyesine fırlaması, ekspiryum uzaması ve tidal hacmin ventile edilemeyecek kadar düşmesi',
+        'EtCO2 dalgasının aniden çökmesi veya sıfıra yaklaşması (pulmoner perfüzyonun ve kardiyak debinin aniden kesilmesine sekonder)',
+        'Cerrahi örtüler açıldığında göğüs, boyun ve yüzde flushing (yaygın eritem), ürtiker plakları, dudak/dil/yüz anjiyoödemi',
+        'Periferik nabızların palpe edilememesi, kapiller dolum zamanının >3 saniye uzaması ve EKGde taşiaritmi veya iskemi (Kounis sendromu)'
+      ],
+      gradingScaleTitle: 'Ring & Messmer Perioperatif Anafilaksi Derecelendirme Skalası',
+      gradingScaleSource: 'Ring J, Messmer K. Incidence and severity of anaphylactoid reactions. Lancet 1977 & NAP6 Guidelines',
+      larachScale: [
+        { category: 'Grade I (Hafif)', points: 'Grade 1', description: 'Yalnızca kütanöz ve mukozal belirtiler: Genel eritem, ürtiker plakları, periorbital/yüz ödemi. Vital bulgular stabildir.' },
+        { category: 'Grade II (Orta)', points: 'Grade 2', description: 'Orta derecede çoklu organ tutulumu: Kütanöz bulgular + ılımlı hipotansiyon (SKB düşüşü <%30), taşikardi, hafif bronkospazm ve öksürük.' },
+        { category: 'Grade III (Şiddetli - Hayatı Tehdit Eden)', points: 'Grade 3', description: 'Şiddetli ve yaşamı tehdit eden reaksiyon: Masif kardiyovasküler kollaps/şok, derin hipotansiyon, şiddetli taşikardi veya bradikardi, katastrofik bronkospazm ve tepe basınç fırlaması.' },
+        { category: 'Grade IV (Kardiyak Arrest)', points: 'Grade 4', description: 'Dolaşım arresti: Nabızsız Elektriksel Aktivite (PEA), Asistoli veya Ventriküler Fibrilasyon (VF). Acil KPR gerektirir.' }
+      ],
+      larachInterpretation: 'Grade 1 için antihistaminik ve takip yeterli olabilirken; Grade 2, 3 ve 4 için gecikmeksizin birinci basamak ajan olan İNTRAVENÖZ ADRENALİN titre edilmeli ve masif kristaloid verilmelidir!',
+      differentialDiagnosis: [
+        { condition: 'Aşırı Derin Anestezi / Vazoaktif Doz Aşımı', differentiatingFactors: 'Bronkospazm ve cilt bulgusu yoktur; volatil gaz kapatılınca ve hafif doz efedrin/sıvı ile tansiyon hemen toparlar.' },
+        { condition: 'Akut Akciğer / Bronş İrritasyonu (İzole Bronkospazm)', differentiatingFactors: 'Dolaşım çöküşü ve şok tablosu eşlik etmez; bronkodilatörlere hızlı yanıt verir; cilt bulguları negatiftir.' },
+        { condition: 'Tansiyon Pnömotoraks', differentiatingFactors: 'Tek taraflı solunum sesi kaybı, trakea deviasyonu, boyun ven dolgunluğu ve perküsyonla hiperrezonans vardır.' },
+        { condition: 'Masif Pulmoner Embolizm (PE)', differentiatingFactors: 'Ani EtCO2 düşüşü benzerdir; ancak akut sağ kalp yetmezliği/akut kor pulmonale TEEde RV dilatasyonu ile ayırt edilir; cilt lezyonu yoktur.' },
+        { condition: 'İntraoperatif Venöz Hava Embolisi (VAE)', differentiatingFactors: 'Açık ven cerrahisinde görülür; değirmen çarkı üfürümü, TEEde sağ atriyal hava ve prekordiyal doppler sesi tipiktir.' },
+        { condition: 'Septik Şok / Cerrahi Masif Hemoraji', differentiatingFactors: 'Hemorajide cerrahi alanda kanama aşikardır veya hematokrit hızla düşer; sepsis daha sinsi ve ateş/enfeksiyon öyküsüyle birliktedir.' },
+        { condition: 'Kardiyojenik Şok / Akut Miyokard İnfarktüsü', differentiatingFactors: 'Primer sol ventrikül yetmezliği ve yüksek dolum basınçları mevcuttur; anafilakside ise venöz göllenme nedeniyle "boş kalp" vardır.' }
+      ]
+    },
+
+    // 4) Kriz Yönetimi & Akut Algoritma
+    crisisManagement: {
+      hotlineInfo: 'Ulusal Anafilaksi Acil Kriz Hattı / İmmünoloji & Alerji Laboratuvarı Triptaz Analizi Koordinasyonu',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'TÜM ŞÜPHELİ AJANLARI DERHAL KESİN VE CERRAHI UYARIN',
+          action: 'Uygulanmakta olan antibiyotik, kolloid, kan ürünü, kas gevşetici veya diğer infüzyonları anında durdurun. Damaryolu infüzyon setlerini çıkarıp atın. Cerrahı derhal uyararak cerrahiyi durdurmasını ve cerrahi alanı yıkamasını isteyin. Lateks şüphesi varsa tüm lateks eldiven ve malzemelerin ortamdan uzaklaştırılmasını sağlayın.',
+          criticalNote: 'İntravenöz infüzyon hattında kalan ilacın hastaya gitmesini engellemek için mevcut serum setlerini derhal iptal edip doğrudan kanüle temiz set takılmalıdır!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: '%100 FİO2 İLE HAVALANDIRIN VE VOLATİL ANESTETİKLERİ KAPATIN',
+          action: 'FiO2yi derhal 1.0 (%100) yapın. Volatil halojenli anestezikleri (Sevofluran, Desfluran) anında kapatın ve vaporizatörleri sıfırlayın. Anesteziklerin yarattığı vazomotor tonus kaybı ve miyokardiyal kontraktilite depresyonu anafilaktik şoku hızla derinleştirir.',
+          criticalNote: 'Derin bilinç kaybı ve amnezi gerekirse şok tablosunda kan basıncını düşürmeyen Ketamin (0.5-1 mg/kg IV) tercih edilebilir.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'BİRİNCİ BASAMAK HAYAT KURTARICI: İNTRAVENÖZ ADRENALİN TİTRE EDİN',
+          action: 'Adrenalin (Epinefrin) anafilaksinin TEK birinci basamak hayat kurtarıcı ilacıdır; geciktirilmesi doğrudan mortalite nedenidir! Dereceye göre titre edin: Grade II için 10-20 mcg IV; Grade III (ağır şok) için 50-100-200 mcg IV bolus (1:10.000 veya 1:100.000 sulandırılmış); Grade IV (arrest) için 1 mg IV bolus. Damar yolu yoksa uyluk dış yüzünden (Vastus lateralis) IM 0.5 mg (1:1.000) yapın.',
+          criticalNote: 'Erken sürekli Adrenalin infüzyonuna başlayın (0.05 - 0.5 mcg/kg/dakika). Titrasyon kan basıncı ve tepe basıncı yanıtına göre yapılmalıdır.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'MASİF KRİSTALOİD VOLÜM RESÜSİTASYONU BAŞLATIN (20-30 mL/kg)',
+          action: 'Masif vazodilatasyon ve kapiller kaçış nedeniyle intravasküler volümün %35-50si dakikalar içinde üçüncü boşluğa kaçar ("empty heart" tablosu). En az iki geniş lümenli (14-16G) IV kanülden hızla 20 - 30 mL/kg Dengeli Kristaloid (Plasmalyte / Ringer Laktat / SF) basınçlı torba ile infüze edin (ilk 15-30 dakikada 1-2 Litre).',
+          criticalNote: 'KOLLOİD SIVILAR (Jelatin, Dekstran, HES) KESİNLİKLE KONTRENDİKEDİR! Kolloidlerin kendisi anafilaktoid degranülasyon tetikleyicisidir.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 5,
+          title: 'HASTAYI TRENDELENBURG POZİSYONUNA ALIN VEYA BACAKLARI KALDIRIN',
+          action: 'Hastanın bacaklarını 45 derece yukarı kaldırın (Passive Leg Raise) veya Trendelenburg pozisyonu vererek santral venöz dönüşü destekleyin. Hastayı KESİNLİKLE dik veya oturur pozisyona getirmeyin.',
+          criticalNote: 'Boş ventrikül durumunda hastayı dik pozisyona almak sağ atriyal dolumu sıfırlayarak ani asistolik kardiyak arreste yol açar ("empty ventricle syndrome").',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 6,
+          title: 'REFRAKTER VAZOPPLEJİDE İKİNCİ BASAMAK VAZOPRESSÖRLERİ EKLEYİN',
+          action: 'Yüksek doz adrenaline rağmen hipotansiyon sürüyorsa (özellikle kronik ACEİ/ARB veya beta-bloker kullanan hastalarda): Erken Noradrenalin infüzyonu (0.05 - 0.5 mcg/kg/dk), Vazopressin (0.5 - 2 Ünite IV bolus veya 0.01 - 0.04 Ü/dk sürekli infüzyon) veya refrakter vazoplejide Metilen Mavisi (1.5 - 2 mg/kg IV 20-60 dakikada) uygulayın.',
+          criticalNote: 'Beta-bloker kullanan hastalarda Glukagon (1 - 5 mg IV yavaş puşe, ardından 2-5 mg/saat infüzyon) adrenalin direncini kırmak için endikedir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 7,
+          title: 'ŞİDDETLİ BRONKOSPAZM VE HAVA YOLU DİRENCİNİ TEDAVİ EDİN',
+          action: 'Yüksek tepe basıncı ve ekspiratuar wheezing için: ETT adaptöründen 8-10 puf İnhale Salbutamol (veya aerolize nebül), IV Magnezyum Sülfat 2 g (30-50 mg/kg) 15-20 dakikada infüzyon, IV Ketamin 1-2 mg/kg ve persistan dirençte Aminofilin (5 mg/kg yükleme) uygulayın.',
+          criticalNote: 'Laringeal ödem gelişen ekstubasyon planındaki veya uyanık hastalarda acil videolaringoskopi ile erken entübasyon yapılmalı; CICO gelişirse derhal cerrahi hava yoluna geçilmelidir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 8,
+          title: 'ROKURONYUM ŞÜPHESİNDE ACİL SUGAMMADEKS KURTARMA DOZU',
+          action: 'Eğer anafilaksi indüksiyonda veya idame sırasında Rokuronyum (veya Vekuronyum) verilmesini takiben geliştiyse, derhal 16 mg/kg Sugammadeks IV verin. Sugammadeks molekülü dolaşımdaki rokuronyumu şelasyon gibi sararak IgE bağlanan antijenik epitopları bloke eder ve krizin çözülmesine katkı sağlar (NAP6 kılavuz önerisi).',
+          criticalNote: 'Sugammadeksin kendisinin de nadiren alerji yapabileceği unutulmamalı; ancak rokuronyum anafilaksisinde hayat kurtarıcı bir kurtarma ajanı olarak değerlendirilmelidir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 9,
+          title: 'İKİNCİ BASAMAK İLAÇLARI UYGULAYIN (STEROİD & ANTİHİSTAMİNİK)',
+          action: 'Hemodinamik stabilizasyon sağlandıktan sonra, bifazik reaksiyonları ve uzamış inflamasyonu önlemek amacıyla: Metilprednizolon (1 - 2 mg/kg IV) veya Hidrokortizon (200 mg IV). H1 blokör (Feniramin 45.5 mg ampul) YAVAŞ infüzyonla verilir. Hızlı puşeden kaçının.',
+          criticalNote: 'Kortikosteroidler ve antihistaminikler HAYAT KURTARICI İLK BASAMAK İLAÇLAR DEĞİLDİR! Etkileri 4-6 saatte başlar. Asla Adrenalinin ve sıvı resüsitasyonunun önüne geçmemelidir!',
+          priority: 'MEDIUM'
+        },
+        {
+          stepNumber: 10,
+          title: 'TANI PROTOKOLÜ: SERİ SERUM TRİPTAZ ÖRNEKLERİ ALIN VE KAYDEDİN',
+          action: 'Tanının kesinleştirilmesi ve adli/tıbbi süreç için mutlaka iki ayrı kan örneği alınmalıdır: 1. Tüp: Olayın başlangıcından sonraki 30 - 120. dakikalar arasında (Pik Mast Hücre Degranülasyon Triptazı). 2. Tüp: Postoperatif 24. saatte veya taburculuk öncesi (Bazal Serum Triptazı). Tüm verilen ilaçlar saat/dakika kaydedilerek hasta 4-6 hafta sonra alerji-immünoloji polikliniğine yönlendirilmelidir.',
+          criticalNote: 'Pozitif Anafilaksi Doğrulama Kriteri: Pik Triptaz ≥ (1.2 x Bazal Triptaz) + 2 mcg/L formülü ile kesinleştirilir.',
+          priority: 'MEDIUM'
+        }
+      ],
+
+      // İntraoperatif anafilaksiye özel alt protokoller
+      anaphylaxisProtocols: {
+        epinephrineTitrationByGrade: {
+          title: 'Klinik Evreye Göre Epinefrin (Adrenalin) Titrasyon Protokolü',
+          guidelineSource: 'ESAIC / Resuscitation Council UK Perioperative Anaphylaxis Algorithm',
+          grades: [
+            {
+              grade: 'Grade I',
+              severity: 'Hafif (Kütanöz)',
+              clinicalPresentation: 'Genel flushing, ürtiker, göz kapağı ödemi. Tansiyon ve solunum normal.',
+              epinephrineBolus: 'GEREKMEZ (Sadece antihistaminik ve yakın takip)',
+              infusionRate: 'Yok',
+              clinicalAlert: 'Kardiyovasküler instabilite veya tepe basınç artışı gelişirse derhal Grade IIye geçilir.'
+            },
+            {
+              grade: 'Grade II',
+              severity: 'Orta (Hafif Şok / Bronkospazm)',
+              clinicalPresentation: 'Hafif hipotansiyon (SKB <%30 düşüş), taşikardi, hafif bronkospazm, öksürük.',
+              epinephrineBolus: '10 - 20 mcg IV Titre Bolus (1:100.000 solüsyon: 1 mg ampul 100 mL SFye sulandırılır = 10 mcg/mL; 1-2 mL verilir)',
+              infusionRate: 'Gerekirse 0.05 mcg/kg/dk başlanır',
+              clinicalAlert: 'Yanıt alınamazsa 1-2 dakika içinde Grade III dozuna yükseltilir.'
+            },
+            {
+              grade: 'Grade III',
+              severity: 'Ağır (Hayatı Tehdit Eden Şok / Kollaps)',
+              clinicalPresentation: 'Derin hipotansiyon (SKB >%50 düşüş), periferik nabız kaybı, katastrofik bronkospazm, EtCO2 çöküşü.',
+              epinephrineBolus: '50 - 100 - 200 mcg IV Bolus (1:10.000 veya 1:100.000 solüsyon ile 1-2 dakikada bir titre)',
+              infusionRate: '0.05 - 0.5 mcg/kg/dakika sürekli IV infüzyon',
+              clinicalAlert: 'Gecikmeksizin geniş damar yolu açılmalı ve masif kristaloid sıvı ile eşzamanlı verilmelidir.'
+            },
+            {
+              grade: 'Grade IV',
+              severity: 'Kardiyak Arrest (PEA / Asistoli / VF)',
+              clinicalPresentation: 'Dolaşım arresti, nabızsızlık, elektrokardiyografik arrest ritmi (en sık PEA).',
+              epinephrineBolus: '1 mg IV Bolus (Standart ACLS KPR protokolü uyarınca her 3-5 dakikada bir)',
+              infusionRate: 'ROSC sonrası 0.1 - 1.0 mcg/kg/dk infüzyon',
+              clinicalAlert: 'Masif volüm açığı nedeniyle KPR göğüs kompresyonları sırasında basınçlı kristaloid verilmelidir.'
+            }
+          ],
+          imAlternative: 'Eğer damaryolu düşmüş veya açılamıyorsa: Uyluğun dış yan yüzünden (Vastus lateralis) 0.5 mg (1:1.000 konsantrasyondan 0.5 mL) İntramüsküler enjeksiyon derhal uygulanmalıdır (Gluteal bölgeden emilim çok yavaştır, kaçınılmalıdır).',
+          pediatricDosing: 'Pediatrik hastalarda IV Adrenalin dozu: 1 mcg/kg IV titre; Kardiyak arrestte 10 mcg/kg IV (0.1 mL/kg 1:10.000). IM alternatif: <6 yaş 0.15 mg; 6-12 yaş 0.3 mg; >12 yaş 0.5 mg IM.'
+        },
+
+        fluidAndVasopressorResuscitation: {
+          title: 'Masif Kristaloid Volüm Resüsitasyonu & Vazopleji Kontrolü',
+          crystalloidVolume: '20 - 30 mL/kg Dengeli Kristaloid (Plasmalyte, İzolyte, Ringer Laktat veya %0.9 SF) ilk 15-30 dakikada basınçlı infüzyon torbalarıyla verilmelidir. 70 kg hasta için ilk 30 dakikada en az 1.5 - 2 Litre kristaloid hedeflenir.',
+          colloidProhibitionWarning: 'Jelatin bazlı (Gelofusine, Haemaccel) veya nişasta bazlı (HES) KOLLOİD SIVILAR KESİNLİKLE KONTRENDİKEDİR! Kolloidler kendi başlarına anafilaktoid reaksiyon tetikleyicisidir ve şoku ölümcül hale getirebilir.',
+          secondaryVasopressors: [
+            {
+              agent: 'Noradrenalin',
+              dosage: '0.05 - 0.5 mcg/kg/dakika IV infüzyon',
+              indication: 'Adrenaline dirençli masif vazodilatasyon ve düşük sistemik vasküler direnç (SVR)',
+              mechanism: 'Saf ve güçlü alfa-1 vazokonstriksiyon ile perfüzyon basıncını (MAP) hızla yükseltir.'
+            },
+            {
+              agent: 'Vazopressin (AVP)',
+              dosage: '0.5 - 2 Ünite IV bolus (0.03 Ü/kg) ardından 0.01 - 0.04 Ü/dk sürekli infüzyon',
+              indication: 'Adrenalin ve noradrenalin taşifilaksisi; özellikle kronik ACE-I veya ARB kullanan vazoplejik hastalar',
+              mechanism: 'V1 reseptörleri üzerinden katekolaminlerden bağımsız potent vazokonstriksiyon sağlar; asidozda etkinliğini korur.'
+            },
+            {
+              agent: 'Metilen Mavisi',
+              dosage: '1.5 - 2.0 mg/kg IV (100 mL %5 Dekstroz içinde 20-60 dakikada)',
+              indication: 'Tüm katekolaminlere dirençli refrakter vazoplejik şok',
+              mechanism: 'İndüklenebilir nitrik oksit sentaz (iNOS) ve çözünür guanilat siklazı (sGC) inhibe ederek NO kaynaklı masif vazodilatasyonu kırar.'
+            },
+            {
+              agent: 'Glukagon',
+              dosage: '1 - 5 mg IV yavaş bolus (5 dakikada), ardından 2 - 5 mg/saat sürekli infüzyon',
+              indication: 'Kronik Beta-Bloker tedavisi alan ve adrenaline yanıt vermeyen hipotansif/bradikardik hastalar',
+              mechanism: 'Beta-adrenerjik reseptörleri baypas ederek doğrudan miyokardiyal adenilat siklazı aktive eder; inotropik ve kronotropik etki sağlar.'
+            }
+          ],
+          refractoryVasoplegia: 'Ağır vakalarda sağ ve sol ventrikül kontraktilitesini TEE ile değerlendirin. Derin şokta venöz göllenme ("empty heart") ve azalmış venöz dönüş temel sorundur; bu nedenle agresif volüm olmadan vazopressörler tek başına yeterli olamaz.'
+        },
+
+        ringAndMessmerScale: [
+          {
+            grade: 'Grade I',
+            cutaneousSigns: 'Yaygın eritem, ürtiker plakları, kaşıntı, periorbital/fasiyal ödem',
+            respiratorySigns: 'Yok / Normal',
+            cardiovascularSigns: 'Normal kan basıncı ve nabız',
+            immediateAction: 'Şüpheli ilacı kes, H1 antihistaminik (Feniramin) uygula, vital bulguları 30 dakika izle.'
+          },
+          {
+            grade: 'Grade II',
+            cutaneousSigns: 'Eritem, ürtiker, mukozal anjiyoödem (genellikle mevcuttur)',
+            respiratorySigns: 'Hafif dispne, öksürük, ekspiratuar uzama, hafif stridor',
+            cardiovascularSigns: 'Ilımlı hipotansiyon (SKB <%30 düşüş), taşikardi (>100/dk), aritmi',
+            immediateAction: 'İlaçları kes, %100 O2, Adrenalin 10-20 mcg IV titre, kristaloid sıvı yüklemesi başlat.'
+          },
+          {
+            grade: 'Grade III',
+            cutaneousSigns: 'Bazen kütanöz bulgular vardır; ancak %30-40 VAKADA HİÇ BULGU OLMAYABİLİR!',
+            respiratorySigns: 'Şiddetli bronkospazm, yüksek Ppeak (>40 cmH2O), desatürasyon, laringeal ödem',
+            cardiovascularSigns: 'Masif kardiyovasküler şok, derin hipotansiyon, nabız kaybı, EtCO2 çöküşü',
+            immediateAction: 'Adrenalin 50-100-200 mcg IV bolus + 0.1-0.5 mcg/kg/dk infüzyon, 20-30 mL/kg kristaloid, Trendelenburg.'
+          },
+          {
+            grade: 'Grade IV',
+            cutaneousSigns: 'Cilt soluk, soğuk, siyanotik veya kül rengi',
+            respiratorySigns: 'Ventilasyon yapılamaz (apne / şiddetli direnç)',
+            cardiovascularSigns: 'Kardiyak Arrest: Nabızsız Elektriksel Aktivite (PEA), Asistoli, Nabızsız VT/VF',
+            immediateAction: 'Derhal KPR başlat, Adrenalin 1 mg IV puşe (3-5 dk ara ile), masif sıvı infüzyonu, ECMO ekibini uyar.'
+          }
+        ],
+
+        tryptaseAndInvestigationProtocol: {
+          title: 'Serum Triptaz Tanı Protokolü & İmmünolojik Araştırma (NAP6 Standartları)',
+          firstSampleTiming: '1. Kan Örneği (Pik Triptaz): Reaksiyonun başlangıcından itibaren 30 - 120. dakikalar arasında (en geç 4. saat içinde) alınmalıdır. Bu örnek mast hücresi degranülasyonunun tepe seviyesini gösterir.',
+          secondSampleTiming: '2. Kan Örneği (Bazal Triptaz): Reaksiyondan en az 24 saat sonra (veya taburculuk öncesi poliklinik kontrolünde) alınmalıdır. Bu örnek hastanın kendi fizyolojik bazal mast hücresi yükünü belirler.',
+          diagnosticFormula: 'Pozitif Anafilaksi Doğrulama Formülü: Pik Serum Triptazı ≥ (1.2 x Bazal Serum Triptazı) + 2 mcg/L (Örn: Bazal 5 mcg/L olan hastada pik triptazın ≥ 8 mcg/L olması reaksiyonu kanıtlar).',
+          culpritAgentsBreakdown: [
+            {
+              category: 'Nöromüsküler Blokerler (NMBAs)',
+              prevalence: '%50 - 60',
+              commonDrugs: 'Rokuronyum (en sık), Süksinilkolin, Atrakuryum',
+              riskNotes: 'Kuaterner amonyum epitopları nedeniyle daha önce hiç ilaç almamış bireylerde bile kozmetik/temizlik kimyasalları çapraz duyarlılığıyla ilk dozda reaksiyon gelişebilir.'
+            },
+            {
+              category: 'Antibiyotikler',
+              prevalence: '%15 - 20',
+              commonDrugs: 'Sefazolin, Ampisilin-Sulbaktam, Vankomisin',
+              riskNotes: 'Sefazolinin R1 yan zinciri penisilinlerden farklıdır; penisilin alerjisi olanlarda sefazolin çoğunlukla tolere edilirken sefazolin alerjisi izole olabilir.'
+            },
+            {
+              category: 'Antiseptikler',
+              prevalence: '%8 - 10',
+              commonDrugs: 'Klorheksidin (Hibiscrub, Biocid, kaplı kateterler)',
+              riskNotes: 'Sinsi tetikleyicidir; idrar sondası kayganlaştırıcı jellerinde ve santral kateter kaplamalarında bulunur; reaksiyon cerrahi başladıktan 20-40 dk sonra çıkabilir.'
+            },
+            {
+              category: 'Cerrahi Boyalar',
+              prevalence: '%5 - 8',
+              commonDrugs: 'Patent Blue V, İsosülfan Mavi, Metilen Mavisi',
+              riskNotes: 'Meme kanseri / lenf haritalamasında subkutan enjeksiyondan 15-45 dakika sonra mavi cilt ve masif hipotansiyonla ortaya çıkar.'
+            },
+            {
+              category: 'Doğal Kauçuk Lateks',
+              prevalence: '%3 - 5',
+              commonDrugs: 'Cerrahi eldivenler, Foley sondalar, elastik bantlar',
+              riskNotes: 'Lateks temasından 30-60 dakika sonra mukozal emilimle reaksiyon başlar. Çoklu cerrahi ve spina bifidalı hastalar yüksek risklidir.'
+            }
+          ],
+          sugammadexRescueInRocuronium: 'Rokuronyuma bağlı anafilakside yüksek doz Sugammadeks (16 mg/kg) verilmesi, dolaşımdaki serbest rokuronyumu hızla enkapsüle ederek IgE antikorlarının bağlanmasını ve mast hücre uyarısını sonlandırabilir.',
+          allergyClinicReferral: 'Olay sonrası epikrizde anestezi indüksiyonunda ve cerrahide kullanılan tüm ilaçlar, solüsyonlar, antiseptikler, lateks ve cerrahi boyalar tam saatleriyle listelenmelidir. Hasta reaksiyondan 4 - 6 hafta sonra Deri Prik Testi, İntradermal Test ve Spesifik IgE incelemesi için Alerji-İmmünoloji Kliniğine sevk edilmelidir.'
+        }
+      }
+    },
+
+    // 5) Patofizyoloji
+    pathophysiology: {
+      molecularBasis: 'Anafilaksi; mast hücreleri ve bazofillerin yüzeyindeki yüksek afiniteli IgE reseptörlerinin (FcεRI) önceden duyarlanmış spesifik antijenler tarafından çapraz bağlanması (Tip I immünolojik aşırı duyarlık) veya MRGPRX2 reseptörü / kompleman aktivasyonu (non-IgE aracılı psödoalerji) yoluyla hücre içi kalsiyum akışını tetiklemesi ve sitoplazmik granüllerin saniyeler içinde ekzositozla dolaşıma boşalmasıdır.',
+      stepsTitle: 'Mediyatör Degranülasyonu, Masif Kapiller Kaçak ve Kounis Sendromu',
+      flowType: 'cellular-systemic',
+      cascadeSteps: [
+        {
+          phase: 'Mast Hücresi & Bazofil Degranülasyonu',
+          mechanism: 'Antijenin IgE-FcεRI reseptörlerine çapraz bağlanması veya MRGPRX2 doğrudan uyarımı hücre içine masif Ca²⁺ akımı başlatır; sitoplazmik granüllerdeki pre-forme mediyatörler (Histamin, Triptaz, Karboksipeptidaz A3) ve sekonder lökotrienler (LTC4/D4) saniyeler içinde ekzositozla dolaşıma boşalır.',
+          badge: 'EKSEN 1: MEDİYATÖR FIRTINASI'
+        },
+        {
+          phase: 'Masif NO Vazoplejisi & Kapiller Kaçak ("Empty Heart")',
+          mechanism: 'Histamin ve PAF endotelyal nitrik oksit (NO) sentezini patlatır; sistemik vasküler direnç (SVR) hızla çöker. Endotel hücre bağlantıları çözülerek intravasküler plazmanın %35-50si dakikalar içinde interstisyel alana kaçar; santral venöz dolum sıfırlanır ("boş kalp" tablosu).',
+          badge: 'EKSEN 2: VAZOMOTOR FELÇ & KAÇAK'
+        },
+        {
+          phase: 'Kounis Sendromu (Alerjik Koroner Vazospazm & İskemi)',
+          mechanism: 'Lokal koroner damar yatağındaki kardiyak mast hücrelerinin degranülasyonu epikardiyal koroner arterlerde şiddetli vazospazma (Tip 1 Kounis) veya var olan aterom plağının rüptürüne (Tip 2 Kounis) yol açarak EKGde ST elevasyonu ve kardiyojenik çöküş üretir.',
+          badge: 'EKSEN 3: KOUNIS MİYOKARD İSKEMİSİ'
+        }
+      ],
+      summaryText: 'Özetle anafilaksi; masif vazodilatasyon, dramatik intravasküler volüm kaybı, bronkokonstriksiyon ve miyokardiyal disfonksiyonun bir araya geldiği, sadece Adrenalinin vazokonstriktör, inotropik, bronkodilatör ve mast hücresi membran stabilize edici alfa-1/beta-1/beta-2 reseptör etkileriyle geri çevrilebilen akut dolaşım felcidir.'
+    },
+
+    // 6) Klinik Özellikler & Prezentasyon
+    presentation: {
+      earlySigns: [
+        'Açıklanamayan ani hipotansiyon (SKB <%50 düşüş) veya efedrin/sıvı tedavisine yanıtsızlık',
+        'Ventilatörde ani tepe inspiratuar basınç artışı (Ppeak >40-50 cmH2O) ve tidal hacim düşüşü',
+        'Kapnografide ani EtCO2 düşüşü veya dalga formu kaybı (kardiyak debi ve akciğer perfüzyonunun kesilmesi)',
+        'Sinüs taşikardisi (>120-140/dk) veya derin hipovolemiye bağlı paradoksal bradikardi'
+      ],
+      progressingSigns: [
+        'Dinlemekle bilateral yaygın ekspiratuar wheezing veya solunum seslerinin tamamen kaybolması ("sessiz akciğer")',
+        'Cerrahi örtülerin altında veya açık alanlarda yaygın flushing (kızarıklık), ürtiker döküntüleri',
+        'Dudak, dil, uvula ve yüzde belirgin anjiyoödem (laringoskopide glottik girişin ödemle kapanması)',
+        'Periferik nabızların kaybolması, kapiller dolum zamanının >3 saniye olması, hipotansiyonun şoka ilerlemesi'
+      ],
+      lateSigns: [
+        'Kardiyak Arrest: Nabızsız Elektriksel Aktivite (PEA) veya asistoli',
+        'EKGde ST segment elevasyonu veya çökmesi, aritmiler (Kounis Sendromu)',
+        'Ağır mikst metabolik ve respiratuar asidoz, derin laktat yüksekliği (>5-10 mmol/L)',
+        'Masif akciğer ödemi, pembe köpüklü sekresyon ve refrakter anoksi'
+      ],
+      specialAlertTitle: 'Klinik Tuzak: Cilt Bulgusu Yokluğu Anafilaksiyi Asla Ekarte Ettirmez!',
+      specialAlertContent: 'Genel anestezi altındaki şiddetli anafilaksi olgularının yaklaşık üçte birinde (%30-40) başlangıçta CİLT BULGUSU (eritem, ürtiker) GÖRÜLMEZ! Ağır vazokonstriksiyon ve şok cilt perfüzyonunu azalttığı için döküntüler ancak resüsitasyon başarılı olup perfüzyon geri geldiğinde ortaya çıkabilir. Ani hipotansiyon ve tepe basınç fırlaması görüldüğünde cilt döküntüsü beklemeden derhal anafilaksi protokolü başlatılmalıdır!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Preoperatif vizitte hastanın geçmiş cerrahi ve anestezi öyküsü, ilaç alerjileri, gıda alerjileri (kivi, muz, avokado lateks çapraz reaktivitesi!) ayrıntılı sorgulanmalıdır.',
+        'Önceki anestezi sırasında açıklanamayan hipotansiyon, bronkospazm veya yoğun bakım yatışı öyküsü olan hastalarda önceki ameliyat raporları ve alerji testleri mutlaka incelenmelidir.',
+        'Kanıtlanmış nöromüsküler bloker alerjisi olan hastalarda tüm NMBAlar potansiyel çapraz reaktiftir; mümkünse genel anestezide kas gevşeticisiz teknik (Remifentanil/Propofol) veya rejyonal anestezi tercih edilmelidir.',
+        'Penisilin alerjisi öyküsü olanlarda sefazolin çoğunlukla güvenlidir; ancak anafilaksi öyküsü olan şiddetli olgularda alternatif profilaksi (Vankomisin / Siprofloksasin) düşünülmelidir.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Ameliyathane Anafilaksi Acil Kiti & Hazırlık Standartları',
+        steps: [
+          'Tüm ameliyathanelerde ve anestezi odalarında sulandırılmış Adrenalin hazır bulundurulmalıdır (10 mcg/mL ve 100 mcg/mL enjektörler).',
+          'Basınçlı sıvı infüzyon torbaları ve en az 2-3 litre dengeli kristaloid sıvı anında erişilebilir olmalıdır.',
+          'Geniş lümenli IV kanüller (14G, 16G) ve santral kateter setleri hazır tutulmalıdır.',
+          'Tanısal triptaz kan tüpleri (EDTA veya düz tüp) laboratuvar istem formuyla birlikte acil dolabında bulunmalıdır.'
+        ]
+      },
+      cleanAnesthesiaProtocol: [
+        'Lateks Alerjili Hasta Protokolü: Hasta günün ilk vakası olarak ameliyathaneye alınmalı; ameliyathaneden tüm lateks eldivenler, kateterler ve kauçuk ekipmanlar uzaklaştırılmalı; kapıya "LATEKS ALERJİSİ - LATEKSSİZ ODA" uyarısı asılmalıdır.',
+        'Klorheksidin Duyarlılığı: Klorheksidinli cilt temizleyiciler, idrar sondası jelleri ve antimikrobiyal kaplı CVC/arter kateterleri kesinlikle kullanılmamalı; Povidon İyot tercih edilmelidir.',
+        'İlaç Uygulama Güvenliği: Profilaktik antibiyotikler indüksiyondan önce yavaş infüzyonla verilmeli; cerrahi koter başlamadan önce infüzyon tamamlanmalıdır (böylece reaksiyon cerrahi başlangıçla karışmaz).'
+      ],
+      cartTitle: 'İntraoperatif Anafilaksi Acil Kiti & İlaç Listesi:',
+      cartChecklist: [
+        'Adrenalin (Epinefrin 1 mg/mL ampul x 10 adet)',
+        'Noradrenalin (4 mg / 4 mL ampul x 2 adet)',
+        'Vazopressin (20 Ünite flakon x 2 adet)',
+        'Sugammadeks (Bridion 200 mg ve 500 mg flakonlar)',
+        'Metilprednizolon (Prednol 40 mg ve 250 mg ampul)',
+        'Feniramin Maleat (Avil 45.5 mg ampul x 4 adet)',
+        'Magnezyum Sülfat (%15 10 mL ampul x 2 adet)',
+        'Salbutamol Ölçülü Doz İnhaler ve Ventilatör ETT Adaptörü',
+        'Metilen Mavisi (%1 ampul)',
+        'Glukagon (1 mg liyofilize flakon)',
+        'Serum Triptaz Örnek Tüpleri ve İmmünoloji İstem Formu',
+        'Basınçlı İnfüzyon Manşonu ve Geniş Lümenli Sıvı Setleri'
+      ]
+    },
+
+    // 8) Postoperatif Takip, Uzun Zamanlı Yönetim, Komplikasyonlar ve Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'Grade II reaksiyon geçiren hastalar en az 6-12 saat; Grade III ve IV reaksiyon geçiren, adrenalin infüzyonu veya KPR uygulanan tüm hastalar en az 24 saat 3. Seviye Yoğun Bakımda takip edilmelidir.',
+      recurrenceRate: 'Olguların %5-20sinde başlangıçtaki başarılı resüsitasyondan sonraki 1 ila 72 saat içinde (en sık 4-8. saatlerde) antijen maruziyeti olmaksızın BİFAZİK ANAFİLAKSİ reaksiyonu gelişebilir.',
+      recurrenceRiskBadge: 'İLK 24 SAATTE BİFAZİK ŞOK VE HAVA YOLU ÖDEMİ TEKRARI RİSKİ',
+      maintenanceTherapy: 'Hemodinamik stabilite sağlandıktan sonra adrenalin infüzyonu kademeli azaltılarak kesilir. Bifazik reaksiyonu önlemek için Metilprednizolon (40-80 mg IV 6-8 saatte bir) ve H1 blokör idamesi 24-48 saat sürdürülür. Ekstübasyon kararı öncesi mutlaka kaf kaçak testi (cuff leak test) yapılarak laringeal ödemin gerilediği doğrulanmalıdır.',
+      monitoringParameters: [
+        'İnvaziv Arter Kan Basıncı (dakikalık MAP ve nabız basıncı takibi)',
+        'Sürekli EKG monitörizasyonu (ST-T değişiklikleri, Kounis sendromu iskemi takibi)',
+        'Seri Arter Kan Gazı: Laktat klirensi, pH, baz açığı ve oksijenasyon indeksi (PaO2/FiO2)',
+        'Kardiyak Enzimler (Troponin I/T) ve 12 Derivasyonlu EKG (miyokardiyal hasar kontrolü)',
+        'Serum Triptaz Kinetiği (24. saat bazal kan örneği alınması)',
+        'Saatlik İdrar Çıkışı takibi (akut tübüler nekroz ve hipoperfüzyon takibi)'
+      ],
+      expectedComplications: [
+        'Post-Arrest Hipoksik İskemik Ensefalopati (uzamış arrest veya refrakter hipoksiye sekonder)',
+        'Kounis Sendromu & Miyokard İnfarktüsü (koroner vazospazma bağlı sol ventrikül yetmezliği)',
+        'Laringeal ve Glottik Ödem (erken ekstübasyonda akut post-op obstrüksiyon riski)',
+        'Non-Kardiyojenik Pulmoner Ödem / ARDS (kapiller kaçış ve endotel hasarı)',
+        'Akut Böbrek Hasarı (derin ve uzamış hipotansiyona bağlı prerenal/renal yetmezlik)'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: 'Serum Triptaz Düzeyi (1. ve 2. Örnek)', description: 'Akut pik triptaz (30-120 dk) ve bazal triptaz (24 st) düzeyleri arasındaki orantı ile anafilaksinin immünolojik doğrulanması.' },
+        { testName: 'Deri Prik ve İntradermal Testler', description: 'Reaksiyondan 4-6 hafta sonra anestezi sırasında kullanılan tüm ilaçlar ve alternatifleri ile alerji kliniğinde uygulanan testler.' },
+        { testName: 'Spesifik IgE Ölçümü (In Vitro)', description: 'Rokuronyum, Süksinilkolin, Sefazolin, Penisilin, Lateks ve Klorheksidin için spesifik IgE antikorlarının kanda araştırılması.' },
+        { testName: 'Bazofil Aktivasyon Testi (BAT)', description: 'Deri testlerinin şüpheli kaldığı durumlarda flow sitometri ile in vitro hücresel alerjen yanıtının tespiti.' }
+      ],
+      geneticCounseling: 'Familyal mastositoz veya herediter alfa-triptazemi (HαT) şüphesi olan bazal triptazı >11.4 mcg/L saptanan bireylere TPSAB1 genetik kopya sayısı taraması ve hematoloji konsültasyonu önerilir.',
+      familyScreening: 'Herediter alfa-triptazemi veya mastositoz kuşkusu olan hastaların birinci derece akrabalarında bazal triptaz düzeyi taranmalıdır.',
+      prognosisSummary: 'Erken fark edilen, volatil ajanları hemen kesilen, ilk dakikalarda İNTRAVENÖZ ADRENALİN uygulanan ve agresif kristaloid sıvı verilen intraoperatif anafilaksi vakalarında prognoz mükemmeldir (>%90 tam iyileşme). Mortalite neredeyse her zaman Adrenalinin gecikmesine, kolloid kullanımına veya hava yolunun kaybedilmesine bağlıdır.'
+    },
+
+    // 9) High-Yield Klinik Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Cilt Bulgusu Bekleme Yanılgısı',
+        takeaway: 'Genel anestezi altındaki hastaların %30-40ında CİLTTE KIZARIKLIK VEYA ÜRTİKER OLMAZ! Şiddetli vazomotor şok ve hipotansiyon kutanöz kan akımını kestiği için tek bulgu ani dirençli hipotansiyon veya tepe basınç artışıdır.',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Birinci Basamak Hayat Kurtarıcı: Yalnızca Adrenalin',
+        takeaway: 'Kortizon ve antihistaminik anafilaksiyi tedavi etmez, hayat kurtarmaz! Tek birinci basamak hayat kurtarıcı ilaç İNTRAVENÖZ ADRENALİNDİR; gecikmeksizin titre edilmelidir.',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'Kolloid Sıvı Kullanımı Kesinlikle Yasaktır',
+        takeaway: 'Masif volüm açığını kapatmak için asla Jelatin (Gelofusine vb.) veya Dekstran vermeyin; kolloidler kendileri masif degranülasyon tetikleyicisidir.',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Rokuronyum Anafilaksisinde Sugammadeks 16 mg/kg',
+        takeaway: 'Rokuronyuma bağlı kollapsta yüksek doz Sugammadeks (16 mg/kg) dolaşımdaki antijeni sarıp epitopları maskeleyerek krizden çıkış sağlayabilir.',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'Kounis Sendromunu Unutmayın',
+        takeaway: 'Anafilaksi sırasında koroner arter spazmı gelişerek EKGde ST elevasyonu ve kardiyojenik çöküş görülebilir. Tedavide primer odak yine anafilaksinin hızla resüsite edilmesidir.',
+        category: 'Sınav / Klinik Notu'
+      }
+    ],
+
+    // 10) Kanıta Dayalı Kaynaklar
+    references: [
+      {
+        authors: 'Kempker RR, Hunter JM, Cook TM, et al. (NAP6 Steering Group)',
+        title: 'Anaesthesia, surgery, and life-threatening allergic reactions: report and findings of the Royal College of Anaesthetists 6th National Audit Project (NAP6).',
+        journal: 'British Journal of Anaesthesia. 2018;121(1):159-171.',
+        year: '2018',
+        relevance: 'Perioperatif anafilakside altın standart epidemiyolojik çalışma; tetikleyici ajanlar, triptaz protokolü ve mortalite analizleri.'
+      },
+      {
+        authors: 'Garvey LH, Dewachter P, Hepner DL, et al.',
+        title: 'Management of suspected immediate perioperative allergic reactions: an international consensus statement.',
+        journal: 'British Journal of Anaesthesia. 2019;123(1):e50-e64.',
+        year: '2019',
+        relevance: 'Uluslararası anestezi anafilaksi konsensus kılavuzu; adrenalin titrasyon şemaları ve refrakter vazopleji yönetimi.'
+      },
+      {
+        authors: 'Ring J, Messmer K.',
+        title: 'Incidence and severity of anaphylactoid reactions to colloid solutions.',
+        journal: 'The Lancet. 1977;309(8010):466-469.',
+        year: '1977',
+        relevance: 'Tüm dünyada kabul gören Ring & Messmer 4 dereceli anafilaksi klinik sınıflandırmasının orijinal kaynağı.'
+      },
+      {
+        authors: 'Cardona V, Ansotegui IJ, Ebisawa M, et al.',
+        title: 'World Allergy Organization Anaphylaxis Guidance 2020.',
+        journal: 'World Allergy Organization Journal. 2020;13(10):100472.',
+        year: '2020',
+        relevance: 'WAO küresel anafilaksi kılavuzu; epinefrin erken kullanımı, pozisyonlandırma ve triptaz tanı standartları.'
+      }
+    ]
   }
 };
+

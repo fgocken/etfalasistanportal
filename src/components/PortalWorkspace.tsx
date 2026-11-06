@@ -601,6 +601,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         setSelectedEmergencyProtocolId('mh');
       } else if (item.id === 'emergency-pulmonary-embolism') {
         setSelectedEmergencyProtocolId('pe');
+      } else if (item.id === 'emergency-venous-air-embolism') {
+        setSelectedEmergencyProtocolId('vae');
+      } else if (item.id === 'emergency-last-toxicity') {
+        setSelectedEmergencyProtocolId('last');
+      } else if (item.id === 'emergency-anaphylaxis-shock') {
+        setSelectedEmergencyProtocolId('anaphylaxis');
       }
       handleSelectTab('emergencies');
       window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -1,6 +1,6 @@
 {
-  "summary": "Pulmoner Embolizm (PE / PTE) acil protokolü başarıyla eklendi.\n- ESC 2019, AHA ve ERC kılavuzlarına tam uyumlu 10 aşamalı kriz protokolü\n- İnteraktif kiloya duyarlı hızlı doz hesaplayıcısı (Alteplase arrest bolusu vs infüzyon, Tenecteplase kilo ayarlı bolus, Heparin UFH bolus/infüzyon, Enoksaparin, Noradrenalin ve sıvı kısıtlama eşikleri)\n- Akut sağ ventrikül yetmezliği yönetimi (aşırı sıvı kısıtlaması, Noradrenalin, Vazopressin, inotroplar, iNO/İloprost, ventilatör PEEP optimizasyonu)\n- Trombolitik rejimler, cerrahi embolektomi (Trendelenburg), kateter aracılı trombektomi (EKOS) ve VA-ECMO desteği\n- Wells PE ve sPESI skorlaması ile ESC 2019 risk tabakalaması\n- Global portal aramasına ve acil senaryo kartlarına entegrasyon",
-  "updatedAt": "2026-11-04T12:53:58.448061230Z",
+  "summary": "Documentation of the complete architectural refactoring of the Anesthesia Emergencies pathophysiology model from rigid 5-step templates into authentic biological mechanisms (vicious-cycle loops, cellular-systemic axes, and bifazik cascades) across all 10 ready emergency protocols.",
+  "updatedAt": "2026-11-06T09:06:53.263404930Z",
   "requestFeedback": true,
   "userFacing": true
 }

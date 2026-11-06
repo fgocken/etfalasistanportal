@@ -236,6 +236,57 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'emergencies',
     popular: true
   },
+  {
+    id: 'emergency-venous-air-embolism',
+    title: 'İntraoperatif Venöz & Paradoksal Hava Embolisi (VAE / PAE)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Hava Embolisi (VAE)',
+    description: '10 aşamalı acil kriz protokolü: Cerrahi alanı SF ile yıkama, N2O derhal kapatma, Durant manevrası (sol lateral Trendelenburg), CVC hava aspirasyonu, kesin PEEP yasağı, Noradrenalin ve HBOT.',
+    keywords: [
+      'hava embolisi', 'venöz hava embolisi', 'vae', 'pae', 'paradoksal hava embolisi', 'arteriyel hava embolisi',
+      'durant manevrası', 'sol lateral dekübit', 'trendelenburg', 'azot protoksit', 'n2o kapatma',
+      'cvc aspirasyonu', 'bunegin albin', 'kavoatriyal bileşke', 'sağ atriyum hava', 'air lock',
+      'değirmen çarkı', 'mill wheel', 'prekordiyal doppler', 'tee kar fırtınası', 'snowstorm',
+      'sitting position', 'oturur pozisyon kraniyotomi', 'laparoskopi gaz embolisi', 'çimento embolisi',
+      'pfo', 'patent foramen ovale', 'peep kontrendikasyonu', 'peep yasağı', 'hbot', 'hiperbarik oksijen',
+      'anestezi acili', 'kriz yönetimi', 'acil protokol'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-last-toxicity',
+    title: 'LAST (Lokal Anestezik Sistemik Toksisitesi) & %20 Lipid Kurtarma',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'LAST · İntralipid',
+    description: '10 aşamalı acil kriz protokolü: ASRA 2020 %20 Lipid Emülsiyonu (1.5 mL/kg bolus + 0.25 mL/kg/dk infüzyon), modifiye düşük doz adrenalin (≤1 mcg/kg), nöbet kontrolü (Midazolam) ve güvenli LA doz limitleri.',
+    keywords: [
+      'last', 'lokal anestezik toksisitesi', 'lokal anestezik sistemik toksisitesi', 'intralipid', 'lipid emülsiyon', 
+      'lipid kurtarma', 'lipid sink', 'bupivakain', 'marcaine', 'ropivakain', 'naropin', 'lidokain', 
+      'aritmal', 'prilokain', 'levobupivakain', 'chirocaine', 'asra 2020', 'esra', 'midazolam', 'propofol uyarısı', 
+      'modifiye acls', 'düşük doz adrenalin', 'kardiyotoksisite', 'nöbet', 'perioral parestezi', 'metalik tat', 
+      'kardiyak arrest', 'lipid doz hesaplama', 'anestezi acili', 'kriz yönetimi', 'acil protokol'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-anaphylaxis-shock',
+    title: 'İntraoperatif Anafilaksi & Şiddetli Anafilaktik Şok',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Anafilaktik Şok',
+    description: '10 aşamalı acil kriz protokolü: Erken IV Adrenalin titrasyonu, masif kristaloid sıvı (20-30 mL/kg), kesin kolloid yasağı, Ring & Messmer evrelemesi, seri Triptaz tanı protokolü (NAP6) ve Sugammadeks 16 mg/kg kurtarma dozu.',
+    keywords: [
+      'anafilaksi', 'anafilaktik şok', 'şiddetli anafilaksi', 'intraoperatif anafilaksi', 'adrenalin', 
+      'epinefrin', 'adrenalin titrasyonu', 'triptaz', 'serum triptazı', 'nap6', 'ring messmer', 
+      'rokuronyum anafilaksisi', 'süksinilkolin', 'kas gevşetici alerjisi', 'sefazolin alerjisi', 
+      'penisilin alerjisi', 'klorheksidin', 'patent blue', 'lateks alerjisi', 'sugammadeks kurtarma', 
+      'kounis sendromu', 'mast hücresi', 'vazopleji', 'kristaloid sıvı', 'kolloid yasağı', 
+      'anestezi acili', 'kriz yönetimi', 'acil protokol'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
 
   // 3. Klinik İnfografikler
   {

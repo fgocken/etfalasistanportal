@@ -51,6 +51,15 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
     isReady: true
   },
   {
+    id: 'vae',
+    title: 'İntra-operatif Hava Embolisi (VAE / PAE)',
+    shortDesc: 'Venöz ve paradoksal hava embolisi, Durant manevrası (sol lateral Trendelenburg), N2O derhal kapatma, CVC hava aspirasyonu, PEEP yasağı ve HBOT.',
+    tag: '10 Aşamalı Protokol Hazır',
+    icon: Wind,
+    accentColor: 'cyan',
+    isReady: true
+  },
+  {
     id: 'bronchospasm',
     title: 'İntraoperatif Akut Bronkospazm',
     shortDesc: 'Hava yolu direnci fırtınası, yüksek Ppeak, köpekbalığı sırtı EtCO2, Salbutamol/Mg/Adrenalin ve ventilatör optimizasyonu.',
@@ -70,12 +79,12 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
   },
   {
     id: 'anaphylaxis',
-    title: 'Şiddetli Anafilaktik Şok',
-    shortDesc: 'İntravenöz/intramüsküler Adrenalin titrasyonu, masif vazodilatasyon ve volüm resüsitasyonu.',
-    tag: 'Grade 3-4 Reaksiyon (Sıradaki)',
+    title: 'Şiddetli Anafilaktik Şok & İntraoperatif Anafilaksi',
+    shortDesc: 'Ring & Messmer Grade 2-4 reaksiyon, Adrenalin kademeli titrasyonu (IV/IM), masif kristaloid volüm, kolloid yasağı, Triptaz tanı protokolü ve Sugammadeks kurtarma dozu.',
+    tag: '10 Aşamalı Protokol Hazır',
     icon: Syringe,
     accentColor: 'rose',
-    isReady: false
+    isReady: true
   },
   {
     id: 'acls',
@@ -89,11 +98,11 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
   {
     id: 'last',
     title: 'LAST (Lokal Anestezik Sistemik Toksisitesi)',
-    shortDesc: '%20 İntralipid bolus & infüzyon kurtarma protokolü ve nörotoksisite basamakları.',
-    tag: 'ASRA Kılavuzu (Sıradaki)',
+    shortDesc: 'ASRA 2020 %20 Lipid Emülsiyon (İntralipid) kurtarma, modifiye düşük doz adrenalin (≤1 mcg/kg), nöbet kontrolü ve LA güvenli doz limitleri.',
+    tag: '10 Aşamalı Protokol Hazır',
     icon: Activity,
     accentColor: 'purple',
-    isReady: false
+    isReady: true
   },
   {
     id: 'airway-crisis',
@@ -224,7 +233,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md self-start sm:self-auto border ${
             isDark ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-200'
           }`}>
-            7 Acil Senaryo Hazır (MH, PE / Tromboemboli, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon) · 3 Senaryo Sırada
+            10 Acil Senaryo Hazır (MH, PE, Hava Embolisi, LAST, Anafilaksi, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon) · 2 Senaryo Sırada (ACLS, MTP)
           </span>
         </div>
 
