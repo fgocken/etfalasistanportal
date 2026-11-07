@@ -1008,6 +1008,66 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'procedures',
     popular: true
   },
+  {
+    id: 'proc-anterior-thoracic-spine-surgery',
+    title: 'Anterior Torasik Omurga Cerrahisi: Torakotomi / VATS Yaklaşımı İle Torakal Diskektomi, Korpektomi ve Enstrümentasyon (T3-T12)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'T3-T12 kalsifiye disk ve kırıklarda torakotomi/VATS; tek akciğer ventilasyonu (DLT/OLV), Adamkiewicz arteri parapleji riski, lateral dekübitüs ve torasik epidural analjezi.',
+    keywords: ['anterior thoracic spine', 'torasik omurga', 'torakotomi', 'vats', 'torakal diskektomi', 'korpektomi', 't3-t12', 'adamkiewicz arteri', 'tek akciger ventilasyonu', 'olv', 'dlt', 'lateral dekübitüs', 'jaffe', 'srs', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-posterior-thoracic-spine-surgery',
+    title: 'Posterior Torasik Omurga Cerrahisi: Laminektomi, Kostotransversektomi ve Enstrümente Füzyon (Pedikül Vidaları ve Osteotomiler)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'T1-T12 torasik stenoz, kırık ve kifoskoliozda posterior füzyon ve osteotomiler; prone karın serbestliği (Batson pleksusu), sıfır göz basısı (POVL), İONM ve TXA.',
+    keywords: ['posterior thoracic spine', 'torasik omurga', 'laminektomi', 'kostotransversektomi', 'pedikül vidası', 'kifoz', 'skolyoz', 'osteotomi', 'pso', 'vcr', 'batson pleksusu', 'povl', 'adamkiewicz', 'jaffe', 'srs', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-anterior-lumbar-lumbosacral-spine-surgery',
+    title: 'Anterior Lomber ve Lumbosakral Omurga Cerrahisi: Retroperitoneal Yaklaşımla ALIF, OLIF ve Korpektomi (L1-S1)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'L1-S1 bel kayması ve disk dejenerasyonunda ALIF/OLIF; sol ana iliak ven kanama alarmı, süperior hipogastrik pleksus ve retrograd ejakülasyon koruması, çift ayak pulse oksimetresi.',
+    keywords: ['anterior lumbar spine', 'alif', 'olif', 'xlif', 'retroperitoneal', 'l1-s1', 'l4-l5', 'l5-s1', 'sol ana iliak ven', 'retrograd ejakülasyon', 'hipogastrik pleksus', 'ayak nabız oksimetresi', 'lomber pleksus emg', 'jaffe', 'nass', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-posterior-lumbar-spine-surgery',
+    title: 'Posterior Lomber Omurga Cerrahisi: Laminektomi, Diskektomi, Foraminotomi ve Enstrümente Füzyon (TLIF, PLIF, Pedikül Vidaları L1-S1)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'L1-S1 kanal darlığı, bel fıtığı ve bel kaymasında laminektomi, TLIF ve pedikül vidalama; prone karın serbestliği (Batson pleksusu), tetiklenmiş vida EMG, dural yırtık ve pürüzsüz uyanma.',
+    keywords: ['posterior lumbar spine', 'lomber omurga', 'laminektomi', 'diskektomi', 'tlif', 'plif', 'pedikül vidası', 'spondilolistezis', 'bel kayması', 'batson pleksusu', 'triggered emg', 'dural yırtık', 'bos kaçağı', 'kauda ekuina', 'povl', 'jaffe', 'nass', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-posterior-lumbar-fusion-instrumentation',
+    title: 'Posterior Lomber Füzyon ve Enstrümantasyon: Çok Seviyeli Pedikül Vidaları, Pelvik Fiksasyon (S2AI/İliak), Cisimlerarası Füzyon (TLIF/PLIF) ve Deformite Osteotomileri (L1-Pelvis)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Lomber skolyoz, düz bel ve lumbosakral instabilitede çok seviyeli pedikül vidalama, S2AI pelvik fiksasyon ve PSO osteotomisi; süperior gluteal arter/siyatik çentik alarmı, masif kanama ve POVL savunması.',
+    keywords: ['posterior lumbar fusion', 'enstrümantasyon', 'pedikül vidası', 's2ai', 'iliak vida', 'pelvik fiksasyon', 'tlif', 'plif', 'pso', 'spo', 'osteotomi', 'flat back', 'lomber skolyoz', 'deformite', 'siyatik çentik', 'triggered emg', 'povl', 'jaffe', 'nass', 'srs', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-combined-anterior-posterior-thoracolumbar-instrumentation',
+    title: 'Torasik ve Lomber Omurgada Kombine Anterior ve Posterior Enstrümantasyon: Aynı Gün / Aşamalı Çift Seviyeli Rekonstrüksiyon (360 Derece Füzyon)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Rijit kifoskolyoz, spondilopitozis ve tümör spondilektomisinde 360 derece füzyon; çift pozisyon değişimi/tüp güvenliği, kümülatif masif kanama, Adamkiewicz ve POVL koruması.',
+    keywords: ['combined anterior posterior', '360 derece füzyon', 'torakolomber', 'torakotomi', 'retroperitoneal', 'korpektomi', 'pedikül vidası', 's2ai', 'adamkiewicz', 'resüsitasyon molası', 'pozisyon değişimi', 'dlt', 'masif kanama', 'povl', 'jaffe', 'srs', 'nass', 'snacc', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
   // Troubleshooting Tool
   {
     id: 'tool-troubleshooting',

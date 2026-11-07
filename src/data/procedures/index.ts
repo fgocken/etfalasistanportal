@@ -32,6 +32,12 @@ import { percutaneousTrigeminalNeuralgia } from './percutaneousTrigeminalNeuralg
 import { anteriorMidLowerCervicalFusion } from './anteriorMidLowerCervicalFusion';
 import { posteriorMidLowerCervicalFusion } from './posteriorMidLowerCervicalFusion';
 import { anteriorCervicothoracicSpineSurgery } from './anteriorCervicothoracicSpineSurgery';
+import { anteriorThoracicSpineSurgery } from './anteriorThoracicSpineSurgery';
+import { posteriorThoracicSpineSurgery } from './posteriorThoracicSpineSurgery';
+import { anteriorLumbarLumbosacralSpineSurgery } from './anteriorLumbarLumbosacralSpineSurgery';
+import { posteriorLumbarSpineSurgery } from './posteriorLumbarSpineSurgery';
+import { posteriorLumbarFusionInstrumentation } from './posteriorLumbarFusionInstrumentation';
+import { combinedAnteriorPosteriorThoracolumbarInstrumentation } from './combinedAnteriorPosteriorThoracolumbarInstrumentation';
 
 export {
   laparoscopicCholecystectomy,
@@ -66,7 +72,13 @@ export {
   percutaneousTrigeminalNeuralgia,
   anteriorMidLowerCervicalFusion,
   posteriorMidLowerCervicalFusion,
-  anteriorCervicothoracicSpineSurgery
+  anteriorCervicothoracicSpineSurgery,
+  anteriorThoracicSpineSurgery,
+  posteriorThoracicSpineSurgery,
+  anteriorLumbarLumbosacralSpineSurgery,
+  posteriorLumbarSpineSurgery,
+  posteriorLumbarFusionInstrumentation,
+  combinedAnteriorPosteriorThoracolumbarInstrumentation
 };
 
 /**
@@ -192,7 +204,13 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   percutaneousTrigeminalNeuralgia,
   anteriorMidLowerCervicalFusion,
   posteriorMidLowerCervicalFusion,
-  anteriorCervicothoracicSpineSurgery
+  anteriorCervicothoracicSpineSurgery,
+  anteriorThoracicSpineSurgery,
+  posteriorThoracicSpineSurgery,
+  anteriorLumbarLumbosacralSpineSurgery,
+  posteriorLumbarSpineSurgery,
+  posteriorLumbarFusionInstrumentation,
+  combinedAnteriorPosteriorThoracolumbarInstrumentation
 ];
 
 /**

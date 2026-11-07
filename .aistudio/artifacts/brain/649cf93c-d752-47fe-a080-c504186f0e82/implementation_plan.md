@@ -425,3 +425,105 @@ Tüm acil senaryolarındaki patofizyoloji bölümü, yapay ve mekanik 5 basamakl
     4. **Spinal Kord Su Ayırıcı (Watershed) İskemisi ve MAP > 85 mmHg:** C7-T3 anterior spinal arter dolaşımının kritik sınır (watershed) bölgesidir; mikrovasküler kord iskemisini engellemek için MAP > 85-90 mmHg tutulmalıdır. İONM (MEP/SSEP) eşliğinde kürarsız TIVA sürdürülür.
     5. **Manubriotomi Sonrası Havayolu Güvenliği ve Gecikmiş Ekstübasyon:** Sternal ayrışma ve derin retrosternal retraksiyon masif larinks ve trakea ödemine yol açar. Hasta çoğunlukla ameliyathanede ekstübe edilmez; entübe olarak Yoğun Bakıma transfer edilir ve yatakbaşında acil sternal tel açma kiti hazır tutulur.
 - **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 27. Yeni Prosedür: Anterior Torasik Omurga Cerrahisi - Torakotomi / VATS Yaklaşımı İle Torakal Diskektomi, Korpektomi ve Enstrümentasyon (T3-T12)
+
+- **Kullanıcı İsteği:** Anterior Thoracic Spine Surgery ekle.
+- **Türkçe İsimlendirme Kuralı:** **Anterior Torasik Omurga Cerrahisi: Torakotomi / VATS Yaklaşımı İle Torakal Diskektomi, Korpektomi ve Enstrümentasyon (T3-T12)**
+- **Dosya:** `src/data/procedures/anteriorThoracicSpineSurgery.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section II: Neurosurgery - Spine Surgery: Anterior Thoracic Spine Surgery, pp. 524-530), SRS, NASS, SNACC, EACTA ve ERAS Society Kompleks Omurga Cerrahisi Kılavuzları referans alındı.
+  - **Anterior Torasik Cerrahide Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **Tek Akciğer Ventilasyonu (OLV) ve DLT Bronkoskopik Teyidi:** Cerrahi görüş ve akciğer ekarte hasarını önlemek için sol DLT (Double Lumen Tube) ile tek akciğer ventilasyonu zorunludur. DLT pozisyonu supin takıldıktan sonra fiberoptik bronkoskopi (FOB) ile doğrulanmalı, hasta lateral dekübitüs pozisyonuna alındıktan sonra FOB ile KESİNLİKLE YENİDEN KONTROL EDİLMELİDİR.
+    2. **Adamkiewicz Arteri ve Parapleji Riski (İONM & MAP > 85 mmHg):** Medulla spinalisin alt 2/3'ünü besleyen Adamkiewicz arteri %75 solda ve T8-L1 aralığında çıkar; segmental damarlar bağlanırken veya korpektomide bu arterin feda edilmesi anterior kord sendromuna ve kalıcı paraplejiye yol açar. Segmental ligasyonda tcMEP/SSEP izlenmeli ve MAP kesinlikle > 85-90 mmHg tutulmalıdır.
+    3. **Lateral Dekübitüs Fizyolojisi ve Aksiller Rulo Koruması:** Altta kalan göğüs duvarına, aksilla apeksinin 2-3 parmak altına aksiller rulo yerleştirilerek brakiyal pleksus basısı önlenir. Alttaki göz, kulak ve peroneal sinir basıdan korunur.
+    4. **Büyük Damar Kanaması ve Hızlı Transfüzyon Hazırlığı:** Torasik aort, azigos venleri ve interkostal damarlar omurgaya yapışıktır; bir interkostal arter foramen içine retraksiyon yaparsa masif kanama gelişir. En az 2 geniş damar yolu, hızlı infüzyon pompası ve Cell Saver hazır tutulur.
+    5. **Post-Torakotomi Şiddetli Ağrı ve Solunum Koruması:** Torakotomi en ağrılı cerrahilerdendir; Torasik Epidural Kateter, Paravertebral Blok (PVB) veya Erektör Spina Blok (ESPB) multimodal ağrı yönetiminin merkezinde yer almalıdır. Kapanışta göğüs tüpü bağlanıp nazik recruitment ile akciğer re-ekspanse edilir.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 28. Yeni Prosedür: Posterior Torasik Omurga Cerrahisi - Laminektomi, Kostotransversektomi ve Enstrümente Füzyon (Pedikül Vidaları ve Osteotomiler)
+
+- **Kullanıcı İsteği:** Posterior Thoracic Spine Surgery ekle.
+- **Türkçe İsimlendirme Kuralı:** **Posterior Torasik Omurga Cerrahisi: Laminektomi, Kostotransversektomi ve Enstrümente Füzyon (Pedikül Vidaları ve Osteotomiler)**
+- **Dosya:** `src/data/procedures/posteriorThoracicSpineSurgery.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section II: Neurosurgery - Spine Surgery: Posterior Thoracic Spine Surgery, pp. 530-536), SRS, NASS, SNACC ve ERAS Society Kompleks Omurga Cerrahisi Kılavuzları referans alındı.
+  - **Posterior Torasik Cerrahide Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **Prone Pozisyonda Karın Boşluğu ve Batson Pleksus Kanaması:** Karına binen en ufak bası Vena Cava Inferior'u sıkıştırarak kanı Batson epidural venöz pleksusuna şantlar ve cerrahi sahada masif venöz kan gölüne yol açar. Batın Jackson masasında tamamen serbest asılı tutulmalıdır.
+    2. **Sıfır Oküler Bası ve Postoperatif Görme Kaybı (POVL) Savunması:** Uzun cerrahi süre, prone pozisyon, kan kaybı ve hipotansiyon İskemik Optik Nöropati (ION) ve retinal arter oklüzyonu ile kalıcı körlük yaratır; gözler her 15-30 dakikada bir kontrol edilir, hematokrit > %25-28 ve MAP > 75-80 mmHg korunur.
+    3. **Torakal Kord İskemisi, Adamkiewicz ve İONM Disiplini:** T4-T8 watershed ve alt torakal kord iskemisi hızla paraplejiye yol açar; deformite düzeltme manevralarında ve osteotomilerde tcMEP ve SSEP kesintisiz izlenir, kürarsız TIVA sürdürülür ve MAP > 80-85 mmHg tutulur.
+    4. **Kostotransversektomide Gizli Plevral Delinme ve Pnömotoraks:** Kosta başı ve transvers proçes çıkarılırken parietal plevra delinebilir; sinsi tansiyon pnömotoraks veya hemotoraks gelişebilir. Ventilatör tepe basınçları (Ppeak) izlenir, pozitif basınçlı Valsalva ile hava kaçağı test edilir.
+    5. **Masif Kanama, Traneksamik Asit (TXA) ve Cell Saver:** Çok seviyeli dekortikasyon ve osteotomilerde masif kanama riski yüksektir; indüksiyonda 10-30 mg/kg yükleme ve 1-5 mg/kg/saat TXA infüzyonu uygulanır, Cell Saver hazır tutulur.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 29. Yeni Prosedür: Anterior Lomber ve Lumbosakral Omurga Cerrahisi - Retroperitoneal Yaklaşımla ALIF, OLIF ve Korpektomi (L1-S1)
+
+- **Kullanıcı İsteği:** Anterior Lumbar/Lumbosacral Spine Surgery ekle.
+- **Türkçe İsimlendirme Kuralı:** **Anterior Lomber ve Lumbosakral Omurga Cerrahisi: Retroperitoneal Yaklaşımla ALIF, OLIF ve Korpektomi (L1-S1)**
+- **Dosya:** `src/data/procedures/anteriorLumbarLumbosacralSpineSurgery.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section II: Neurosurgery - Spine Surgery: Anterior Lumbar/Lumbosacral Spine Surgery, pp. 536-542), NASS, ISASS, SNACC ve ERAS Society Kompleks Omurga Cerrahisi Kılavuzları referans alındı.
+  - **Anterior Lomber ve Lumbosakral Cerrahide Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **Sol Ana İliak Ven Avülsiyonu ve Masif Kanama Acil Eylem Protokolü:** Sol ana iliak ven L4-L5 disk mesafesini tam üzerinden çaprazlar; aşırı ekartör traksiyonu veya diske yapışıklık venin avülsiyonuna (yırtılmasına) ve saniyeler içinde 1-2 litre masif pelvik kanamaya yol açar. Masada 4-0 Prolene sütürler, vasküler Satinsky klempleri, Surgicel/Floseal ve Cell Saver hazır tutulmalı; 2 adet geniş lümenli damar yolu ve Belmont hızlı infüzyon sistemi kurulmalıdır.
+    2. **Süperior Hipogastrik Pleksus Koruması ve Retrograd Ejakülasyon:** L5-S1 disk mesafesi ve aort bifurkasyonunun ön yüzünde mesane boynu sfinkterini inerve eden sempatik süperior hipogastrik pleksus lifleri bulunur. Bu bölgede KESİNLİKLE MONOPOLAR KOTER KULLANILMAZ; termal veya mekanik hasar erkek hastalarda %2-%10 oranında kalıcı retrograd ejakülasyona ve infertiliteye (kısırlık) yol açar.
+    3. **Çift Taraflı Ayak Nabız Oksimetresi ve Ekartör İskemisi Takibi:** İliak arterlerin lateral ekartasyonu alt ekstremite kan akımını durdurabilir. Her iki ayak başparmağına sürekli pulse oksimetre probu takılır; pletismografik dalga formu silinirse cerraha haber verilerek ekartör gevşetilir, böylece distal bacak iskemisi ve kompartman sendromu önlenir.
+    4. **Transpsoas Lomber Pleksus Koruması ve Kürarsız Nöromonitörizasyon:** OLIF ve lateral yaklaşımlarda psoas majör kası içinden geçen lomber pleksus (özellikle femoral sinir L2-L4) risk altındadır. Hasarı önlemek için psoas ekartasyonu 20-30 dakikayı aşmamalıdır; tetiklenmiş EMG (triggered EMG) takibi için entübasyon sonrası KAS GEVŞETİCİ KESİNLİKLE KULLANILMAZ (TOF 4/4) ve TIVA uygulanır.
+    5. **Retroperitoneal Diseksiyon İleusu, Erken Mobilizasyon ve VTE Koruması:** Retroperitoneal sempatik pleksus manipülasyonu şiddetli paralitik ileusa neden olur. Postoperatif erken sakız çiğneme (gum chewing) ve kademeli oral hidrasyon başlatılır; derin pelvik venöz staza bağlı DVT riskine karşı aralıklı pnömotik kompresyon (IPC) ve erken mekanik/farmakolojik profilaksi uygulanır.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 30. Yeni Prosedür: Posterior Lomber Omurga Cerrahisi - Laminektomi, Diskektomi, Foraminotomi ve Enstrümente Füzyon (TLIF, PLIF, Pedikül Vidaları L1-S1)
+
+- **Kullanıcı İsteği:** Posterior Lumbar Spine Surgery ekle.
+- **Türkçe İsimlendirme Kuralı:** **Posterior Lomber Omurga Cerrahisi: Laminektomi, Diskektomi, Foraminotomi ve Enstrümente Füzyon (TLIF, PLIF, Pedikül Vidaları L1-S1)**
+- **Dosya:** `src/data/procedures/posteriorLumbarSpineSurgery.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section II: Neurosurgery - Spine Surgery: Posterior Lumbar Spine Surgery, pp. 542-548), NASS, ISASS, SNACC ve ERAS Society Kompleks Lomber Omurga Cerrahisi Kılavuzları referans alındı.
+  - **Posterior Lomber Cerrahide Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **Prone Pozisyonda Karın Boşluğu ve Batson Epidural Venöz Pleksusu Dekompresyonu:** Hasta prone pozisyona (Jackson masası / Wilson çerçevesi) alınırken batın kesinlikle hiçbir yere bası yapmamalı, boşlukta sarkıtılmalıdır. Karına binen en ufak bası Vena Cava Inferior'u tıkayarak venöz dönüşü vertebral Batson epidural pleksusuna şantlar; bu durum cerrahi sahada durdurulamaz bir venöz kan gölüne yol açarak cerrahın dural keseyi ve kökleri görmesini engeller ve cerrahi komplikasyonları katlar.
+    2. **Pedikül Vidalarında Tetiklenmiş EMG (Triggered EMG) ve Kürarsız TIVA:** Lomber pedikül vidaları gönderilirken vidanın medial pedikül korteksini delmesi L1-S1 sinir köklerine veya kauda ekuinaya doğrudan temas yaratır. Vida başına monopolar cerrahi prob dokundurulup akım verildiğinde eşik değer < 6-8 mA ise vida omurilik kanalına taşmıştır ve derhal düzeltilmelidir. Bu uyarılmış EMG yanıtını alabilmek için entübasyon sonrasında KAS GEVŞETİCİ KESİNLİKLE KULLANILMAZ (TOF 4/4) ve anestezi TIVA (Propofol + Remifentanil) ile yürütülür.
+    3. **Sıfır Oküler Bası ve Postoperatif Görme Kaybı (POVL) Koruması:** Prone pozisyonda saatler süren cerrahide göz küresine binen dış orbital bası Santral Retinal Arter Oklüzyonuna (CRAO), intraoperatif kanama ve derin hipotansiyon ise İskemik Optik Nöropatiye (ION) yol açarak kalıcı körlük yaratır. Baş ProneView aynalı kaskına veya nöral yüz yastığına yerleştirilir, her 15-30 dakikada bir orbital bası kontrol edilir, MAP > 75-80 mmHg tutulur ve hematokrit > %25-28 korunur.
+    4. **Dural Yırtık (İnsidental Durotomi), BOS Kaçağı ve Pürüzsüz Uyanma:** İleri yaş spinal stenoz ve revizyon olgularında dura incelmiştir ve %8-15 oranında dural yırtık (BOS kaçağı) gelişir. Primer dural dikiş ve fibrin yapıştırıcı tamirinden sonra uyanma evresinde hastanın öksürmesi, ıkınması ve hipertansiyon intratekal basıncı fırlatarak tamir hattını patlatır (BOS fistülü ve menenjit riski). Ekstübasyonda IV Lidokain (1.5 mg/kg) ile öksürük tamamen engellenmeli ve hasta normotansif, sakin uyandırılmalıdır.
+    5. **Epidural Hematom, Kauda Ekuina Sendromu ve Multimodal Analjezi (TLIP / Lomber ESP Bloğu):** Kapanışta ve erken postop dönemde cerrahi lojda toplanan hematom dural keseyi sıkıştırarak hızla akut Kauda Ekuina Sendromuna (parapleji, idrar/gaita inkontinansı) yol açabilir; cerrahi kapanış öncesi tansiyon normotansif seviyeye çekilerek titiz hemostaz kontrol edilmelidir. Postoperatif analjezide opioid tüketimini azaltıp erken mobilizasyonu sağlamak için ultrason eşliğinde bilateral TLIP (Thoracolumbar Interfascial Plane) veya Lomber Erektör Spina Plan (ESP) bloğu uygulanmalıdır.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 31. Yeni Prosedür: Posterior Lomber Füzyon ve Enstrümantasyon - Çok Seviyeli Pedikül Vidaları, Pelvik Fiksasyon (S2AI/İliak), Cisimlerarası Füzyon (TLIF/PLIF) ve Deformite Osteotomileri (L1-Pelvis)
+
+- **Kullanıcı İsteği:** Posterior Lumbar Fusion and Instrumentation ekle.
+- **Türkçe İsimlendirme Kuralı:** **Posterior Lomber Füzyon ve Enstrümantasyon: Çok Seviyeli Pedikül Vidaları, Pelvik Fiksasyon (S2AI/İliak), Cisimlerarası Füzyon (TLIF/PLIF) ve Deformite Osteotomileri (L1-Pelvis)**
+- **Dosya:** `src/data/procedures/posteriorLumbarFusionInstrumentation.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section II: Neurosurgery - Spine Surgery: Posterior Lumbar Fusion and Instrumentation, pp. 548-554), NASS, SRS, ISASS, SNACC ve ERAS Society Kompleks Lomber Füzyon ve Deformite Kılavuzları referans alındı.
+  - **Posterior Lomber Füzyon ve Enstrümantasyonda Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **S2AI / İliak Vida Pelvik Ankorajında Siyatik Çentik ve Süperior Gluteal Arter Tehlikesi:** Uzun füzyonlarda lumbosakral bileşkeyi korumak için S2-alar-iliak (S2AI) veya iliak vidalar takılır. Vida iliak kanat dışına taşarsa veya siyatik çentikten (greater sciatic notch) çıkarsa süperior gluteal arteri yırtarak pelviste durdurulamaz arteriyel masif kanama yaratır veya siyatik siniri ezer. Pelvik vidalama esnasında anestezi ekibi ani hipotansiyon ve derin pelvik kanama belirtilerini yakından izlemelidir.
+    2. **Çok Seviyeli Pedikül Vidalarında Tetiklenmiş EMG (Triggered EMG) ve Kürarsız TIVA Zorunluluğu:** 8 ila 16 pedikül vidasının her biri gönderilirken medial korteks delinme (pedicle breach) riski taşır; medial penetrasyon L1-S1 sinir köklerine veya kauda ekuinaya basarak parezi yaratır. Cerrahi prob ile vida başına akım verilip eşik değer test edilir (< 6-8 mA alarm!). Bu elektriksel kas yanıtını yakalamak için entübasyon sonrası KAS GEVŞETİCİ KESİNLİKLE VERİLMEZ (TOF 4/4) ve anestezi TIVA ile sürdürülür.
+    3. **5 Saati Aşan Prone Cerrahide Masif Füzyon İlişkili POVL (Postoperatif Görme Kaybı) Savunması:** Uzun ameliyat süresi (> 5-6 saat), masif kan kaybı (> 1000-1500 mL), aşırı kristaloid yüklenmesi ve bağımlı pozisyon İskemik Optik Nöropatiye (ION) ve Santral Retinal Arter Oklüzyonuna (CRAO) yol açarak kalıcı körlük yapar! Baş ProneView aynalı kaskında asılı tutulur; göz küreleri her 15-30 dakikada bir kontrol edilir, hematokrit > %28 (Hgb > 9 g/dL) ve MAP > 75-80 mmHg korunur.
+    4. **Osteotomi (PSO/SPO), Sagital Düzeltme ve Ani Kord/Kök İskemisinde İONM Alarmı:** Skolyoz ve düz bel deformitelerinde kemik kama çıkarılıp (PSO) omurga hiperekstansiyona zorlandığında dural kese katlanır ve sinir kökleri gerilir. tcMEP/SSEP sinyallerinde > %50 düşüş olursa anestezi derhal MAP > 85-90 mmHg seviyesine çıkarmalı, cerrah kompresyonu gevşetmeli ve implantları rahatlatmalıdır.
+    5. **Masif Kanama, Koagülopati ve DVT ile Epidural Hematom Dengesi:** Çok seviyeli dekortikasyon ve osteotomi masif kanamaya yol açar; TXA infüzyonu ameliyat başından itibaren uygulanmalı, Cell Saver kullanılmalı, seri kan gazında iyonize kalsiyum ve fibrinojen replase edilmelidir. Postoperatif dönemde pelvik venöz staza bağlı yüksek DVT riskine karşı IPC çorapları sürdürülürken, erken dönemde kauda ekuinayı sıkıştırabilecek akut epidural hematoma karşı cerrahi hemostaz teyit edilmeden antikoagülan verilmemeli, saatlik alt ekstremite nörolojik muayenesi yapılmalıdır.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 32. Yeni Prosedür: Torasik ve Lomber Omurgada Kombine Anterior ve Posterior Enstrümantasyon - Aynı Gün / Aşamalı Çift Seviyeli Rekonstrüksiyon (360 Derece Füzyon)
+
+- **Kullanıcı İsteği:** Combined Anterior and Posterior Instrumentation of the Thoracic and Lumbar Spine ekle.
+- **Türkçe İsimlendirme Kuralı:** **Torasik ve Lomber Omurgada Kombine Anterior ve Posterior Enstrümantasyon: Aynı Gün / Aşamalı Çift Seviyeli Rekonstrüksiyon (360 Derece Füzyon)**
+- **Dosya:** `src/data/procedures/combinedAnteriorPosteriorThoracolumbarInstrumentation.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section II: Neurosurgery - Spine Surgery: Combined Anterior and Posterior Instrumentation of the Thoracic and Lumbar Spine, pp. 554-560), SRS, NASS, SNACC ve ERAS Society 360 Derece Spinal Rekonstrüksiyon Kılavuzları referans alındı.
+  - **Kombine Anterior-Posterior Cerrahide Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **İki Aşamalı / Çift Pozisyon Değişiminde Hava Yolu, Tüp Güvenliği ve Resüsitasyon Mola Protokolü:** Anterior aşama (lateral dekübitüs veya supin) bitip göğüs tüpü/drenler bağlandıktan sonra hastanın posterior aşama için prone masaya çevrilmesi anında ekstübasyon, damar yolu kopması veya ani kardiyovasküler kollaps ölümcül bir risktir. Pozisyon değişiminden önce cerrah ve anestezi ekibi arasında "Resüsitasyon Molası" (Resuscitation Time-Out) verilir; kan gazı, Hb, laktat ve sıcaklık dengelenir. Şiddetli asidoz, kontrolsüz kanama veya hipotermi varsa posterior aşama 2-5 gün sonraya ertelenir (Staged Cerrahi kararı).
+    2. **Kümülatif Masif Kan Kaybı, Dilüsyonel Koagülopati ve Agresif TXA + Cell Saver Protokolü:** Hem ön hem arka kolonun açılması kümülatif kan kaybını 2000-5000 mL seviyesine çıkarır; tüketim koagülopatisi ve DIC riski çok yüksektir. Yüksek doz TXA infüzyonu, çift hatlı Cell Saver, 1:1:1 oranında dengeli masif transfüzyon, ROTEM/TEG takibi, iyonize kalsiyum ve fibrinojen desteği hayat kurtarıcıdır.
+    3. **Adamkiewicz Arteri, Çift Seviyeli İskemi ve İONM MAP > 85-90 mmHg Zorunluluğu:** Anterior fazda segmental ligasyon ve korpektomide Adamkiewicz arteri; posterior fazda ise traksiyon/rotasyonla omurilik gerilme riski altındadır. İki aşamada da tcMEP ve SSEP kesintisiz izlenmeli; entübasyon sonrası KAS GEVŞETİCİ KESİNLİKLE VERİLMEMELİ (TOF 4/4), kürarsız TIVA sürdürülmeli ve MAP KESİNLİKLE > 85-90 mmHg tutulmalıdır.
+    4. **8-12 Saati Aşan Cerrahide Yüz/Larinks Ödemi, Sıfır Oküler Bası (POVL) ve Zorunlu Postoperatif Mekanik Ventilasyon:** 8-12 saatlik cerrahi, masif sıvı resüsitasyonu ve uzun prone pozisyon masif baş-yüz ve larinks ödemine yol açar; İskemik Optik Nöropati (ION) ve retinal arter oklüzyonu ile kalıcı körlük (POVL) riski en üst düzeydedir (gözler sürekli kontrol edilir, hematokrit > %28 tutulur). Hasta ameliyathanede KESİNLİKLE EKSTÜBE EDİLMEZ; entübe, sedatize olarak Yoğun Bakıma transfer edilir.
+    5. **Çift Kavite İnvazyonu (Toraks + Retroperiton + Posterior Omurga), Pnömotoraks ve Multimodal Analjezi:** Anterior torakofrenotomi plevra açılması ve diyafram kesisi gerektirir; posterior proneda göğüs tüpü tıkanırsa tansiyon pnömotoraks gelişebilir. Göğüs tüpü fonksiyonu kontrol edilmeli; nörolojik defisiti maskelememek ve epidural hematom riskinden kaçınmak için epidural kateterden kaçınılarak cerrahi infiltrasyon, ESP bloğu ve IV multimodal analjezi uygulanmalıdır.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
