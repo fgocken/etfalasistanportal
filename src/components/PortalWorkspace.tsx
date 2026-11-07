@@ -24,7 +24,8 @@ import {
   Search,
   Wind,
   Pill,
-  Compass
+  Compass,
+  Wrench
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -45,11 +46,12 @@ import { DutyRosterToolView } from './roster/DutyRosterToolView'; /* [MODULAR_DU
 import { WeeklyScheduleToolView } from './schedule/WeeklyScheduleToolView';
 import { IcuWorkspace } from './icu/IcuWorkspace';
 import { ProceduresWorkspace } from './procedures/ProceduresWorkspace';
+import { AnesthesiaTroubleshootingWorkspace } from './troubleshooting/AnesthesiaTroubleshootingWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'troubleshooting';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -316,6 +318,25 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-blue-800',
     ringClassDark: 'ring-1 ring-blue-500/20',
     ringClassLight: 'ring-1 ring-blue-500/10'
+  },
+  troubleshooting: {
+    id: 'troubleshooting',
+    title: 'Anestezi Troubleshooting',
+    badge: 'Sorun Giderme',
+    badgeHighlight: true,
+    desc: 'Ventilatör alarmları (Ppeak ↑, devre ayrılması, kaçak), akut desatürasyon, EtCO2 anomalileri, sönümlü arter trasesi ve intraoperatif hemodinamik krizlerde ilk 60 saniye algoritmik sorun giderme rehberi.',
+    clinicalKey: 'Ameliyathanede kriz anında ilk 60 saniye kontrol listesi, ayrıcı tanı matrisi ve sistematik adım adım sorun giderme eylemleri.',
+    icon: Wrench,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800',
+    ringClassDark: 'ring-1 ring-teal-500/20',
+    ringClassLight: 'ring-1 ring-teal-500/10'
   }
 };
 
@@ -331,11 +352,12 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'nerve-blocks',
   'emergencies',
   'infographics',
+  'troubleshooting',
   'schedule',
   'roster',
   'contacts'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v16';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v18';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -516,13 +538,20 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert emergencies, nerve-blocks, airway & roster if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert troubleshooting, procedures, icu, emergencies etc. if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
           if (Array.isArray(parsedOld)) {
-            const updated = parsedOld.filter(id => id in ALL_CLINICAL_TOOLS);
+            // Remove troubleshooting if present to ensure it moves after infographics
+            const updated = parsedOld.filter(id => (id in ALL_CLINICAL_TOOLS) && id !== 'troubleshooting');
+            const infoIdx = updated.indexOf('infographics');
+            if (infoIdx !== -1) {
+              updated.splice(infoIdx + 1, 0, 'troubleshooting');
+            } else {
+              updated.push('troubleshooting');
+            }
             if (!updated.includes('airway')) {
               const preopIdx = updated.indexOf('preop');
               if (preopIdx !== -1) {
@@ -1634,6 +1663,18 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             isDark={isDark} 
             initialProcedureId={
               initialRoute?.type === 'arac' && initialRoute.id === 'procedures'
+                ? initialRoute.subId || null
+                : null
+            }
+          />
+        )}
+
+        {/* 13. Anestezi Troubleshooting */}
+        {activeTab === 'troubleshooting' && (
+          <AnesthesiaTroubleshootingWorkspace 
+            isDark={isDark} 
+            initialItemId={
+              initialRoute?.type === 'arac' && initialRoute.id === 'troubleshooting'
                 ? initialRoute.subId || null
                 : null
             }

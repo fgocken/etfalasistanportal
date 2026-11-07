@@ -11,6 +11,27 @@ import { breastBiopsy } from './breastBiopsy';
 import { breastConservingSurgery } from './breastConservingSurgery';
 import { craniotomyAneurysm } from './craniotomyAneurysm';
 import { craniotomyEmbolectomy } from './craniotomyEmbolectomy';
+import { anteriorUpperCervicalFusion } from './anteriorUpperCervicalFusion';
+import { posteriorUpperCervicalFusion } from './posteriorUpperCervicalFusion';
+import { craniotomyVascularMalformation } from './craniotomyVascularMalformation';
+import { craniotomyEcIcBypass } from './craniotomyEcIcBypass';
+import { craniotomyTumor } from './craniotomyTumor';
+import { craniotomyTrauma } from './craniotomyTrauma';
+import { craniotomyMicrovascularDecompression } from './craniotomyMicrovascularDecompression';
+import { bifrontalCraniotomyCsfLeak } from './bifrontalCraniotomyCsfLeak';
+import { transsphenoidalPituitaryResection } from './transsphenoidalPituitaryResection';
+import { ventricularShuntProcedures } from './ventricularShuntProcedures';
+import { craniocervicalDecompressionChiari } from './craniocervicalDecompressionChiari';
+import { stereotacticNeurosurgery } from './stereotacticNeurosurgery';
+import { stereotacticDbsPallidotomyThalamotomy } from './stereotacticDbsPallidotomyThalamotomy';
+import { vagalNerveStimulation } from './vagalNerveStimulation';
+import { surgicalAnalgesicsStimulationPumps } from './surgicalAnalgesicsStimulationPumps';
+import { epilepsySurgery } from './epilepsySurgery';
+import { surgeryForSpasticity } from './surgeryForSpasticity';
+import { percutaneousTrigeminalNeuralgia } from './percutaneousTrigeminalNeuralgia';
+import { anteriorMidLowerCervicalFusion } from './anteriorMidLowerCervicalFusion';
+import { posteriorMidLowerCervicalFusion } from './posteriorMidLowerCervicalFusion';
+import { anteriorCervicothoracicSpineSurgery } from './anteriorCervicothoracicSpineSurgery';
 
 export {
   laparoscopicCholecystectomy,
@@ -24,7 +45,28 @@ export {
   breastBiopsy,
   breastConservingSurgery,
   craniotomyAneurysm,
-  craniotomyEmbolectomy
+  craniotomyEmbolectomy,
+  anteriorUpperCervicalFusion,
+  posteriorUpperCervicalFusion,
+  craniotomyVascularMalformation,
+  craniotomyEcIcBypass,
+  craniotomyTumor,
+  craniotomyTrauma,
+  craniotomyMicrovascularDecompression,
+  bifrontalCraniotomyCsfLeak,
+  transsphenoidalPituitaryResection,
+  ventricularShuntProcedures,
+  craniocervicalDecompressionChiari,
+  stereotacticNeurosurgery,
+  stereotacticDbsPallidotomyThalamotomy,
+  vagalNerveStimulation,
+  surgicalAnalgesicsStimulationPumps,
+  epilepsySurgery,
+  surgeryForSpasticity,
+  percutaneousTrigeminalNeuralgia,
+  anteriorMidLowerCervicalFusion,
+  posteriorMidLowerCervicalFusion,
+  anteriorCervicothoracicSpineSurgery
 };
 
 /**
@@ -129,7 +171,28 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   breastBiopsy,
   breastConservingSurgery,
   craniotomyAneurysm,
-  craniotomyEmbolectomy
+  craniotomyEmbolectomy,
+  anteriorUpperCervicalFusion,
+  posteriorUpperCervicalFusion,
+  craniotomyVascularMalformation,
+  craniotomyEcIcBypass,
+  craniotomyTumor,
+  craniotomyTrauma,
+  craniotomyMicrovascularDecompression,
+  bifrontalCraniotomyCsfLeak,
+  transsphenoidalPituitaryResection,
+  ventricularShuntProcedures,
+  craniocervicalDecompressionChiari,
+  stereotacticNeurosurgery,
+  stereotacticDbsPallidotomyThalamotomy,
+  vagalNerveStimulation,
+  surgicalAnalgesicsStimulationPumps,
+  epilepsySurgery,
+  surgeryForSpasticity,
+  percutaneousTrigeminalNeuralgia,
+  anteriorMidLowerCervicalFusion,
+  posteriorMidLowerCervicalFusion,
+  anteriorCervicothoracicSpineSurgery
 ];
 
 /**

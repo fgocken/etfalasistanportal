@@ -45,7 +45,8 @@ export const VALID_TOOL_IDS = [
   'roster',
   'schedule',
   'icu',
-  'procedures'
+  'procedures',
+  'troubleshooting'
 ] as const;
 
 export type ValidToolId = typeof VALID_TOOL_IDS[number];

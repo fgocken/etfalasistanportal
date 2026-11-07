@@ -799,6 +799,227 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-anterior-upper-cervical-fusion',
+    title: 'Üst Servikal (C1-C2) Anterior Füzyon ve Odontoid Vida Tespiti',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Üst servikal (C1-C2) odontoid vida fiksasyonu ve anterior füzyonda uyanık fiberoptik entübasyon, İONM (MEP/SSEP), çift C-kollu skopi, TIVA ve retrofaringeal ödem/kaff kaçak testi yönetimi.',
+    keywords: ['anterior fusion', 'upper cervical spine', 'c1-c2', 'c1 c2', 'odontoid', 'dens kırığı', 'dens fraktürü', 'odontoid vida', 'atlantoaksiyel', 'uyanık fiberoptik', 'afoi', 'ionm', 'mep', 'ssep', 'vertebral arter', 'retrofaringeal ödem', 'cuff leak test', 'nöroşirürji', 'jaffe', 'eras'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-posterior-upper-cervical-fusion',
+    title: 'Üst Servikal (C1-C2 / O-C2) Posterior Füzyon ve Enstrümantasyon',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Üst servikal (O-C2, C1-C2) posterior enstrümantasyon (Harms/Magerl), prone çevirme, uyanık fiberoptik, İONM (MEP/SSEP), TIVA, Mayfield tespiti ve görme kaybı (ION) koruması.',
+    keywords: ['posterior fusion', 'upper cervical spine', 'c1-c2 posterior', 'harms tekniği', 'magerl', 'transartiküler vida', 'lateral mass vida', 'oksipitoservikal', 'prone pozisyon', 'mayfield çivili başlık', 'uyanık fiberoptik', 'ionm', 'mep', 'ssep', 'vertebral arter', 'tiva', 'iskemik optik nöropati', 'görme kaybı', 'jaffe', 'eras'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-craniotomy-vascular-malformation',
+    title: 'Kraniyotomi: İntrakraniyel Vasküler Malformasyon Cerrahisi (AVM ve Kavernom)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Serebral AVM ve kavernom mikrocerrahisinde TIVA, İONM (MEP/SSEP), Normal Perfüzyon Basıncı Çöküşü (NPPB), oklüzif hiperemi, post-rezeksiyon hipotansiyon ve pürüzsüz uyanma.',
+    keywords: ['craniotomy', 'vascular malformations', 'avm', 'arteriyovenöz malformasyon', 'kavernom', 'cavernoma', 'kavernöz hemanjiom', 'nppb', 'spetzler-martin', 'normal perfusion pressure breakthrough', 'oklüzif hiperemi', 'icg anjiyografi', 'tiva', 'esmolol', 'nöroşirürji', 'jaffe', 'eras'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-craniotomy-ec-ic-bypass',
+    title: 'Kraniyotomi: Ekstrakraniyel-İntrakraniyel Revaskülarizasyon (EC-IC Bypass / STA-MCA)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Moyamoya ve kompleks anevrizmalarda STA-MCA bypass; normokapni (PaCO2 38-42), geçici kliplemede indüklenmiş hipertansiyon (MAP 90-100), TIVA, ICG anjiyografi ve serebral hiperperfüzyon önlemi.',
+    keywords: ['ec-ic bypass', 'craniotomy', 'extracranial intracranial bypass', 'sta-mca', 'moyamoya', 'moyamoya hastalığı', 'revaskülarizasyon', 'serebral bypass', 'indüklenmiş hipertansiyon', 'tiva', 'icg anjiyografi', 'charbel', 'serebral hiperperfüzyon', 'chs', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-craniotomy-tumor',
+    title: 'Kraniyotomi: Supratentoryal Beyin Tümörü Rezeksiyonu (Gliom, Menenjiyom, Metastaz)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Supratentoryal beyin tümörlerinde TIVA, İONM (MEP/SSEP/Phase Reversal), gevşek beyin (slack brain) yönetimi, Mannitol/Hipertonik Salin, hafif hiperventilasyon, CUSA ve pürüzsüz uyanma.',
+    keywords: ['craniotomy for tumor', 'craniotomy tumor', 'beyin tümörü', 'gliom', 'glioblastoma', 'menenjiyom', 'meningioma', 'metastaz', 'supratentoryal tümör', 'kibas', 'mannitol', 'slack brain', 'tiva', 'cusa', 'mayfield', 'pürüzsüz uyanma', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-craniotomy-trauma',
+    title: 'Acil Kraniyotomi ve Kraniektomi: Akut Kafa Travması Cerrahisi (Epidural, Subdural Hematom ve Dekompresyon)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Akut epidural, subdural hematom ve dekompresif kraniektomide MILS ile RSI, hipotansiyondan kaçınma (MAP ≥ 80), CPP ≥ 60-70, normokapni, hipertonik salin, MTP ve kranium açılışı.',
+    keywords: ['craniotomy for trauma', 'craniotomy trauma', 'nörotravma', 'kafa travması', 'epidural hematom', 'edh', 'subdural hematom', 'sdh', 'dekompresif kraniektomi', 'tbi', 'btf', 'brain trauma foundation', 'mils', 'rsi', 'hipertonik salin', 'cpp', 'kibas', 'jaffe', 'atls', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-craniotomy-microvascular-decompression',
+    title: 'Kraniyotomi: Kranyal Sinir Mikrovasküler Dekompresyonu (MVD - Trigeminal, Fasiyal ve Glossofaringeal)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Trigeminal nevralji ve hemifasiyal spazmda retrosigmoid MVD; BAEP işitme izlemi (Dalga V), kas gevşeticisiz TIVA, trigemino-kardiyak refleks ve pürüzsüz uyanma.',
+    keywords: ['microvascular decompression', 'mvd', 'cranial nerve decompression', 'jannetta', 'trigeminal nevralji', 'hemifasiyal spazm', 'glossofaringeal nevralji', 'retrosigmoid', 'park-bench', 'baep', 'abr', 'fasiyal emg', 'lateral spread response', 'trigemino-kardiyak refleks', 'tiva', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-bifrontal-craniotomy-csf-leak',
+    title: 'Bifrontal Kraniyotomi: Beyin Omurilik Sıvısı (BOS) Fistülü ve Rinore Onarımı (Ön Kafa Kaidesi Rekonstrüksiyonu)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Ön kafa tabanı BOS fistülü ve kranializasyonda oral OGT (nazal tüp yasağı), N2O kontrendikasyonu, lomber drenaj, intratekal flöresein, Valsalva ve pürüzsüz uyanma.',
+    keywords: ['bifrontal craniotomy', 'csf leak', 'bos fistülü', 'bos rinoresi', 'ön kafa kaidesi', 'lamina kribrosa', 'frontal sinüs kranializasyonu', 'perikranyal flep', 'lomber drenaj', 'intratekal flöresein', 'ngt kontrendikasyonu', 'n2o yasağı', 'valsalva', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-transsphenoidal-pituitary-resection',
+    title: 'Transsfenoidal Hipofiz Tümörü Rezeksiyonu (Endoskopik Endonazal Hipofiz Cerrahisi)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Endoskopik hipofiz cerrahisi; akromegali zor hava yolu, nazal epinefrin yanıtı, ICA hasar önlemi, Valsalva ile tümör indirilmesi, boğaz tamponu ve DI takibi.',
+    keywords: ['transsphenoidal', 'pituitary tumor', 'hipofiz adenomu', 'hipofizektomi', 'endonazal hipofiz', 'akromegali', 'cushing', 'prolaktinoma', 'diyabetes insipidus', 'throat pack', 'karotid arter', 'valsalva', 'hadad flebi', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-ventricular-shunt-procedures',
+    title: 'Ventriküler Şant Girişimleri: Ventriküloperitoneal ve Ventriküloatrial Şant Cerrahisi (VP / VA Şant)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Hidrosefali şant cerrahisinde subkütan tünelleme sempatik yanıtı, laparoskopi ve KİBAS etkileşimi, aşırı drenaj önlemi, VA şant hava embolisi/aritmi ve sterilite.',
+    keywords: ['ventricular shunt', 'vp shunt', 'va shunt', 'ventriküloperitoneal şant', 'ventriküloatrial şant', 'hidrosefali', 'normal basınçlı hidrosefali', 'nph', 'subkütan tünelleme', 'laparoskopik şant', 'overdrainage', 'şant enfeksiyonu', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-craniocervical-decompression-chiari',
+    title: 'Kraniyoservikal Dekompresyon: Chiari Malformasyonu Cerrahisi (Foramen Magnum Dekompresyonu ve Duraplasti)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Chiari malformasyonunda foramen magnum dekompresyonu; servikal nötral entübasyon, prone pozisyon çene-göğüs 2 parmak kuralı, İONM (MEP/SSEP), VAE ve santral apne takibi.',
+    keywords: ['chiari malformation', 'craniocervical decompression', 'chiari dekompresyonu', 'foramen magnum dekompresyonu', 'suboksipital kraniektomi', 'c1 laminektomi', 'siringomiyeli', 'duraplasti', 'prone pozisyon', 'ionm', 'mep', 'ssep', 'baep', 'santral apne', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-stereotactic-neurosurgery',
+    title: 'Stereotaktik Beyin Biyopsisi (Çerçeveli ve Çerçevesiz Tanısal Girişimler)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Derin yerleşimli kitle ve tümörlerde stereotaktik biyopsi; çerçeveli hava yolu güvenliği, burr-hole, dural koagülasyon, beyin şifti önlemi ve Ommaya rezervuarı.',
+    keywords: ['stereotactic biopsy', 'stereotaktik beyin biyopsisi', 'tümör biyopsisi', 'derin beyin lezyonu', 'leksell çerçeve', 'crw', 'burr-hole', 'ommaya rezervuarı', 'kist aspirasyonu', 'lenfoma', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-stereotactic-dbs-pallidotomy-thalamotomy',
+    title: 'Stereotaktik Fonksiyonel Girişimler: Derin Beyin Stimülasyonu (DBS), Pallidotomi ve Talamotomi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Parkinson, tremor ve distonide DBS, GPi pallidotomisi ve Vim talamotomisi; MER uyanık testleme, test/kalıcı RF lezyonlama, optik traktus/kapsül kontrolü ve IPG.',
+    keywords: ['deep brain stimulation', 'dbs', 'pallidotomy', 'thalamotomy', 'pallidotomi', 'talamotomi', 'beyin pili', 'parkinson', 'esansiyel tremor', 'distoni', 'stn', 'gpi', 'vim', 'mer', 'mikroelektrot kaydı', 'radyofrekans lezyonlama', 'uyanık dbs', 'deksmedetomidin', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-vagal-nerve-stimulation',
+    title: 'Vagal Sinir Stimülasyonu (VNS): Sol Vagus Siniri Stimülatörü İmplantasyonu (Dirençli Epilepsi Tedavisi)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Dirençli epilepside sol VNS implantasyonu; daima sol vagus kuralı, diseksiyonda bradikardi/asistoli yönetimi, elektrot test uyarımı ve servikal hematom önlemi.',
+    keywords: ['vagal nerve stimulation', 'vns', 'vagus siniri', 'vagal stimülasyon', 'dirençli epilepsi', 'epilepsi cerrahisi', 'sol vagus', 'bradikardi', 'asistoli', 'lennox-gastaut', 'depresyon', 'lead interrogation', 'jaffe', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-surgical-analgesics-scs-itp-mcs',
+    title: 'Cerrahi Analjezik Yöntemler: Omurilik Stimülasyonu (SCS), İntratekal İlaç Pompaları ve Motor Korteks Stimülasyonu (MCS)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Kronik ağrı ve spastisitede SCS, İTP (Baklofen/Morfin pompası) ve MCS; uyanık parestezi haritalaması, akut baklofen toksisitesi/yoksunluğu, SSEP faz dönüşümü ve epidural hematom önlemi.',
+    keywords: ['surgical analgesics', 'spinal cord stimulation', 'scs', 'intrathecal pump', 'itb', 'baklofen pompası', 'ağrı pompası', 'omurilik pili', 'motor cortex stimulation', 'mcs', 'motor korteks stimülasyonu', 'fbss', 'crps', 'refleks sempatik distrofi', 'talamik ağrı', 'morfin pompası', 'jaffe', 'nacc', 'pacc', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-epilepsy-surgery',
+    title: 'Epilepsi Cerrahisi: Rezektif Cerrahi, Amigdalohipokampektomi ve Elektrokortikografi (ECoG) Eşliğinde Odak Rezeksiyonu',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Dirençli epilepside temporal lobektomi ve amigdalohipokampektomi; ECoG anestezi etkileşimi, masada akut nöbet soğuk SF protokolü, AED etkileşimleri ve pürüzsüz uyanma.',
+    keywords: ['epilepsy surgery', 'epilepsi cerrahisi', 'temporal lobektomi', 'amigdalohipokampektomi', 'atl', 'ah', 'mezial temporal skleroz', 'ecog', 'elektrokortikografi', 'diken dalga', 'fokal epilepsi', 'kortikal haritalama', 'cold saline', 'jaffe', 'ilae', 'aes', 'snacc', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-surgery-for-spasticity',
+    title: 'Spastisite Cerrahisi: Selektif Dorsal Rizotomi (SDR), DREZ Lezyonlama ve Periferik Nörotomi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Serebral palsi ve spastisitede SDR ve DREZotomi; sıfır kas gevşetici kuralı, kökçük EMG stimülasyonu, S2-S4 sfinkter koruması, pediatrik hipotermi ve spazm analjezisi.',
+    keywords: ['surgery for spasticity', 'spastisite cerrahisi', 'selektif dorsal rizotomi', 'sdr', 'drez', 'drezotomi', 'periferik nörotomi', 'serebral palsi', 'spastik dipleji', 'kökçük stimülasyonu', 'emg', 'anal sfinkter', 'jaffe', 'aacpdm', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-percutaneous-trigeminal-neuralgia',
+    title: 'Trigeminal Nevraljide Perkütan Girişimler: Radyofrekans Rizotomi (RFT), Balon Mikrokompresyonu ve Gliserol Rizolizisi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Trigeminal nevraljide perkütan RFT, balon mikrokompresyonu ve gliserol; trigeminokardiyak refleks (TCR) asistoli alarmı, uyut-uyandır-uyut sedasyonu, kornea refleksi ve ICA koruması.',
+    keywords: ['percutaneous trigeminal neuralgia', 'trigeminal nevralji', 'perkütan rizotomi', 'radyofrekans rizotomi', 'rft', 'balon mikrokompresyonu', 'gliserol rizolizisi', 'meckel mağarası', 'gasser ganglionu', 'foramen ovale', 'hartel tekniği', 'trigeminokardiyak refleks', 'tcr', 'asistoli', 'kornea refleksi', 'jaffe', 'aans', 'cns', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-anterior-mid-lower-cervical-fusion',
+    title: 'Orta ve Alt Servikal Omurga Anterior Füzyon ve Fiksasyonu: Anterior Servikal Diskektomi ve Füzyon (ACDF / ACCF)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'C3-C7 servikal miyelopati ve fıtıklarda ACDF ve ACCF; MILS entübasyon, ekartör sonrası tüp kaf deflasyonu (RLN koruması), MEP/SSEP TIVA ve acil boyun hematomu protokolü.',
+    keywords: ['anterior cervical fusion', 'acdf', 'accf', 'servikal diskektomi', 'korpektomi', 'anterior servikal füzyon', 'c3-c7', 'servikal miyelopati', 'smith-robinson', 'recurrent laryngeal nerve', 'rln', 'retrofaringeal hematom', 'mils', 'jaffe', 'csrs', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-posterior-mid-lower-cervical-fusion',
+    title: 'Orta ve Alt Servikal Omurga Posterior Füzyon ve Fiksasyonu: Laminektomi, Laminoplasti ve Lateral Mas / Pedikül Vidalama (C3-T1)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'C3-T1 posterior laminektomi ve lateral mas vidalaması; Mayfield çivi fiksasyonu, prone sıfır göz basısı (POVL önleme), TIVA MEP/SSEP ve kaf kaçak testi.',
+    keywords: ['posterior cervical fusion', 'lateral mass', 'lateral mas vidalama', 'c3-c7', 'c7-t1', 'laminektomi', 'laminoplasti', 'mayfield', 'povl', 'magerl', 'vertebral arter', 'servikal miyelopati', 'jaffe', 'csrs', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-anterior-cervicothoracic-spine-surgery',
+    title: 'Anterior Servikotorasik Omurga Cerrahisi: Transsternal / Manubriotomi Yaklaşımı İle C7-T3 Dekompresyon ve Rekonstrüksiyon',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'C7-T3 omurga tümör ve travmalarında transsternal dekompresyon; innominate arter ekartasyonu, sol radiyal arter kuralı, duktus torasikus ve gecikmiş ekstübasyon.',
+    keywords: ['anterior cervicothoracic', 'servikotorasik omurga', 'transsternal', 'manubriotomi', 'c7-t3', 'korpektomi', 'innominate arter', 'sol radiyal arter', 'duktus torasikus', 'watershed iskemi', 'jaffe', 'csrs', 'nass', 'eras', 'nöroşirürji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  // Troubleshooting Tool
+  {
+    id: 'tool-troubleshooting',
+    title: 'Anestezi Troubleshooting (Perioperatif Kriz ve Sorun Giderme)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting',
+    description: 'Ameliyathanede ani alarmlar, ventilatör sorunları ve hemodinamik krizlerde algoritmik sorun giderme rehberi.',
+    keywords: ['troubleshooting', 'sorun giderme', 'arıza', 'ventilatör alarmı', 'kriz', 'ameliyathane'],
+    tabId: 'troubleshooting',
+    popular: true
+  },
+  {
     id: 'disclaimer-info',
     title: 'Aydınlatma Metni ve Tıbbi Sorumluluk Reddi',
     category: 'Yerleşkeler & Bilgi',
