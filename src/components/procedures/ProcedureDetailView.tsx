@@ -577,8 +577,8 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                     ))}
                   </div>
 
-                  {/* Eğer önceden girilmiş ek hava yolu gerekçesi varsa ayrıca göster */}
-                  {parsedRules.airwayRationale && (
+                  {/* Eğer kuralların tekrarı olmayan gerçek ek bir hava yolu gerekçesi varsa ayrıca göster */}
+                  {parsedRules.airwayRationale && !parsedRules.airwayRationale.includes('(1)') && parsedRules.airwayRationale.trim() !== parsedRules.headerTitle.trim() && (
                     <div className={`p-3 rounded-lg border text-xs leading-relaxed ${
                       isDark ? 'bg-slate-900/60 border-slate-800 text-slate-400' : 'bg-white/80 border-slate-200 text-slate-600'
                     }`}>

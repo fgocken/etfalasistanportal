@@ -51,6 +51,12 @@ import { repairRupturedLaceratedGlobe } from './repairRupturedLaceratedGlobe';
 import { dacryocystorhinostomy } from './dacryocystorhinostomy';
 import { orbitotomyAnteriorLateral } from './orbitotomyAnteriorLateral';
 import { retinalSurgery } from './retinalSurgery';
+import { laryngoscopy } from './laryngoscopy';
+import { bronchoscopy } from './bronchoscopy';
+import { tracheostomyCricothyroidotomy } from './tracheostomyCricothyroidotomy';
+import { intubationForEpiglottitis } from './intubationForEpiglottitis';
+import { zenkersDiverticulectomy } from './zenkersDiverticulectomy';
+import { laryngealFrameworkSurgery } from './laryngealFrameworkSurgery';
 
 export {
   laparoscopicCholecystectomy,
@@ -104,7 +110,13 @@ export {
   repairRupturedLaceratedGlobe,
   dacryocystorhinostomy,
   orbitotomyAnteriorLateral,
-  retinalSurgery
+  retinalSurgery,
+  laryngoscopy,
+  bronchoscopy,
+  tracheostomyCricothyroidotomy,
+  intubationForEpiglottitis,
+  zenkersDiverticulectomy,
+  laryngealFrameworkSurgery
 };
 
 /**
@@ -249,7 +261,13 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   repairRupturedLaceratedGlobe,
   dacryocystorhinostomy,
   orbitotomyAnteriorLateral,
-  retinalSurgery
+  retinalSurgery,
+  laryngoscopy,
+  bronchoscopy,
+  tracheostomyCricothyroidotomy,
+  intubationForEpiglottitis,
+  zenkersDiverticulectomy,
+  laryngealFrameworkSurgery
 ];
 
 /**

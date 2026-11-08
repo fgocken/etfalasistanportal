@@ -22,11 +22,22 @@ export function getProcedureIndispensableRules(
   const explicitTitle = procedure.rulesTitle || procedure.anesthesiaTechniques?.rulesTitle;
 
   if (explicitRules && explicitRules.length > 0) {
+    // Kurallar zaten ayrıştırılmış nesneler halinde mevcut; notes alanı kural metninin tekrarıysa ek not olarak gösterilmez
+    let cleanAirwayRationale: string | undefined = undefined;
+    const rawNotes = procedure.anesthesiaTechniques?.notes?.trim();
+    if (rawNotes) {
+      const isDuplicateOfRules = /\([1-9]\)/.test(rawNotes) || 
+        /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR|ALTIN ÜÇGEN|TEMEL AYAK|KRİTİK KLİNİK NOKTA|HAYATİ ZORUNLULUK/i.test(rawNotes);
+      if (!isDuplicateOfRules) {
+        cleanAirwayRationale = rawNotes;
+      }
+    }
+
     return {
       hasRules: true,
       headerTitle: explicitTitle || `${procedure.name.toUpperCase()} ANESTEZİSİNDE VAZGEÇİLMEZ KURALLAR`,
       rules: explicitRules,
-      airwayRationale: procedure.anesthesiaTechniques?.notes
+      airwayRationale: cleanAirwayRationale
     };
   }
 
@@ -41,7 +52,7 @@ export function getProcedureIndispensableRules(
 
   // Not metninde (1) kural başlangıcı aranır
   const firstRuleIdx = notes.indexOf('(1)');
-  const mentionsRules = /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR/i.test(notes);
+  const mentionsRules = /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR|ALTIN ÜÇGEN|TEMEL AYAK|KRİTİK KLİNİK NOKTA|HAYATİ ZORUNLULUK|HAYATİ HEDEF|TEMEL HEDEF/i.test(notes);
 
   // Eğer numaralı kural dizilimi yoksa bu klasik bir "Hava Yolu ve Klinik Tercih Notu"dur
   if (firstRuleIdx === -1 && !mentionsRules) {
@@ -60,13 +71,19 @@ export function getProcedureIndispensableRules(
   if (firstRuleIdx > 0) {
     const rawHeader = notes.substring(0, firstRuleIdx).trim().replace(/[:—\-\s]+$/, '');
     if (rawHeader.length > 3) {
-      // Eğer başlık içinde VAZGEÇİLMEZ veya KURAL geçiyorsa bunu başlık yap
-      if (/VAZGEÇİLMEZ|KURAL|DİREĞİ|HAYATİ|HEDEF|AYAR|SÜTUN/i.test(rawHeader)) {
+      // Eğer başlık içinde kural anahtar kelimeleri geçiyorsa veya standart başlık uzunluğundaysa bunu başlık yap
+      const isTitlePattern = /VAZGEÇİLMEZ|KURAL|DİREĞİ|HAYATİ|HEDEF|AYAR|SÜTUN|ÜÇGEN|AYAĞI|AYAK|NOKTA|İLKE|ZORUNLULUK|KRİTİK/i.test(rawHeader) || rawHeader.length < 130;
+      if (isTitlePattern) {
         title = rawHeader;
       } else {
         preNote = rawHeader;
       }
     }
+  }
+
+  // Eğer preNote başlık ile aynıysa veya kural belirteçleri içeriyorsa iptal et
+  if (preNote && (/\([1-9]\)/.test(preNote) || preNote.trim() === title.trim())) {
+    preNote = undefined;
   }
 
   // Kuralları ayrıştır: (1) ... (2) ... (3) ... (4) ... (5) ...
