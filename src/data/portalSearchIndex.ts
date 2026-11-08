@@ -1068,6 +1068,26 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'procedures',
     popular: true
   },
+  {
+    id: 'proc-carotid-endarterectomy',
+    title: 'Karotis Endarterektomi (KEA): Açık Karotis Bifurkasyonu Plak Rezeksiyonu ve Yama (Patch) / Primer Anjiyoplasti',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Kalp ve Damar Cerrahisi',
+    description: 'Semptomatik ve kritik karotis darlığında plak endarterektomisi; klempleme iskemisi ve şant kararı, karotis sinüs vagal refleksi, serebral hiperperfüzyon ve akut boyun hematomu yönetimi.',
+    keywords: ['carotid endarterectomy', 'kea', 'cea', 'karotis', 'inme', 'şah damarı', 'stump pressure', 'güdük basıncı', 'şant', 'javid', 'karotis sinüs', 'hiperperfüzyon sendromu', 'chs', 'boyun hematomu', 'servikal pleksus bloğu', 'jaffe', 'esvs', 'svs', 'kvc', 'vasküler'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-cataract-extraction-iol-insertion',
+    title: 'Katarakt Cerrahisi ve Göz İçi Lens İmplantasyonu: Fakoemülsifikasyon (FAKO) Yöntemi ile İntraoküler Lens (İOL) Yerleşimi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Göz Hastalıkları',
+    description: 'Fakoemülsifikasyon ve katlanabilir İOL implantasyonu; okülokardiyak refleks (Aschner), açık gözde öksürük ve ekspulsif kanama, beyin sapı anestezisi ve gevşek iris sendromu (IFIS).',
+    keywords: ['cataract extraction', 'katarakt', 'fako', 'phacoemulsification', 'iol', 'göz içi lens', 'okülokardiyak refleks', 'aschner fenomeni', 'ekspulsif koroid kanaması', 'retrobulber blok', 'sub-tenon', 'peribulber', 'ifis', 'tamsulosin', 'topikal anestezi', 'jaffe', 'aao', 'escrs', 'göz cerrahisi'],
+    tabId: 'procedures',
+    popular: true
+  },
   // Troubleshooting Tool
   {
     id: 'tool-troubleshooting',

@@ -38,6 +38,8 @@ import { anteriorLumbarLumbosacralSpineSurgery } from './anteriorLumbarLumbosacr
 import { posteriorLumbarSpineSurgery } from './posteriorLumbarSpineSurgery';
 import { posteriorLumbarFusionInstrumentation } from './posteriorLumbarFusionInstrumentation';
 import { combinedAnteriorPosteriorThoracolumbarInstrumentation } from './combinedAnteriorPosteriorThoracolumbarInstrumentation';
+import { carotidEndarterectomy } from './carotidEndarterectomy';
+import { cataractExtractionIolInsertion } from './cataractExtractionIolInsertion';
 
 export {
   laparoscopicCholecystectomy,
@@ -78,7 +80,9 @@ export {
   anteriorLumbarLumbosacralSpineSurgery,
   posteriorLumbarSpineSurgery,
   posteriorLumbarFusionInstrumentation,
-  combinedAnteriorPosteriorThoracolumbarInstrumentation
+  combinedAnteriorPosteriorThoracolumbarInstrumentation,
+  carotidEndarterectomy,
+  cataractExtractionIolInsertion
 };
 
 /**
@@ -210,7 +214,9 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   anteriorLumbarLumbosacralSpineSurgery,
   posteriorLumbarSpineSurgery,
   posteriorLumbarFusionInstrumentation,
-  combinedAnteriorPosteriorThoracolumbarInstrumentation
+  combinedAnteriorPosteriorThoracolumbarInstrumentation,
+  carotidEndarterectomy,
+  cataractExtractionIolInsertion
 ];
 
 /**

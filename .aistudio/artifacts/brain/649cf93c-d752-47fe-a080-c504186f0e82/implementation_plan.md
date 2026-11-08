@@ -527,3 +527,57 @@ Tüm acil senaryolarındaki patofizyoloji bölümü, yapay ve mekanik 5 basamakl
     4. **8-12 Saati Aşan Cerrahide Yüz/Larinks Ödemi, Sıfır Oküler Bası (POVL) ve Zorunlu Postoperatif Mekanik Ventilasyon:** 8-12 saatlik cerrahi, masif sıvı resüsitasyonu ve uzun prone pozisyon masif baş-yüz ve larinks ödemine yol açar; İskemik Optik Nöropati (ION) ve retinal arter oklüzyonu ile kalıcı körlük (POVL) riski en üst düzeydedir (gözler sürekli kontrol edilir, hematokrit > %28 tutulur). Hasta ameliyathanede KESİNLİKLE EKSTÜBE EDİLMEZ; entübe, sedatize olarak Yoğun Bakıma transfer edilir.
     5. **Çift Kavite İnvazyonu (Toraks + Retroperiton + Posterior Omurga), Pnömotoraks ve Multimodal Analjezi:** Anterior torakofrenotomi plevra açılması ve diyafram kesisi gerektirir; posterior proneda göğüs tüpü tıkanırsa tansiyon pnömotoraks gelişebilir. Göğüs tüpü fonksiyonu kontrol edilmeli; nörolojik defisiti maskelememek ve epidural hematom riskinden kaçınmak için epidural kateterden kaçınılarak cerrahi infiltrasyon, ESP bloğu ve IV multimodal analjezi uygulanmalıdır.
 - **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 33. Yeni Prosedür: Karotis Endarterektomi (KEA) - Açık Karotis Bifurkasyonu Plak Rezeksiyonu ve Yama (Patch) / Primer Anjiyoplasti
+
+- **Kullanıcı İsteği:** Carotid Endarterectomy ekle.
+- **Türkçe İsimlendirme Kuralı:** **Karotis Endarterektomi (KEA): Açık Karotis Bifurkasyonu Plak Rezeksiyonu ve Yama (Patch) / Primer Anjiyoplasti**
+- **Dosya:** `src/data/procedures/carotidEndarterectomy.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section III: Vascular Surgery - Carotid Endarterectomy, pp. 586-594), ESVS 2023, SVS, SNACC ve AHA/ASA Kılavuzları referans alındı.
+  - **Karotis Endarterektomide Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **Karotis Klempleme İskemisi, Güdük Basıncı (Stump Pressure) ve Şant Kararı:** Karotis klemplendiğinde beynin ipsilateral hemisferi Willis poligonu kollaterallerine bağımlı hale gelir. Klempleme öncesi MAP %10-20 yükseltilerek kollateral akım desteklenmelidir. Güdük basıncı < 40-50 mmHg ise, veya uyanık hastada nörolojik defisit (karşı elde güç kaybı, dizartri, bilinç bulanıklığı), veya genel anestezide EEG/SSEP/NIRS'ta iskemi bulgusu saptanırsa derhal intraluminal geçici şant (Javid / Pruitt-Inahara) yerleştirilmelidir.
+    2. **Karotis Sinüs Refleksi ve Şiddetli Vagal Bradikardi / Hipotansiyon Koruması:** Bifurkasyon diseksiyonunda karotis sinüs baroreseptörlerinin gerilmesi ani ve şiddetli vagal deşarja, derin bradikardiye, asistoliye ve vazodilatatör şoka yol açabilir. Cerrah diseksiyona başlamadan önce bifurkasyona 1-2 mL %1-2'lik Lidokain infiltrasyonu yapmalı, anestezi ekibi masada Atropin ve Efedrin/Noradrenalini hazır tutmalıdır.
+    3. **Karotis Deklempleme Hipotansiyonu ve Serebral Hiperperfüzyon Sendromu (CHS):** Kronik iskemik serebral damarlar otoregülasyonunu kaybetmiştir. Klempler açıldıktan sonra gelişebilecek kontrolsüz sistemik hipertansiyon (SKB > 140-160 mmHg) doğrudan kapiller yatağa yansıyarak vazojenik beyin ödemi, nöbetler ve ölümcül intraserebral kanamayla seyreden Serebral Hiperperfüzyon Sendromuna (CHS) neden olur. Deklempleme anında tansiyon derhal sıkı kontrol altına alınmalıdır (SKB < 130-140 mmHg, Labetalol/Esmolol/Nikardipin hazır).
+    4. **Akut Kompresif Boyun Hematomu ve Acil Yatakbaşı Dikiş Açma Protokolü:** Karotis sütür hattından veya boyun damarlarından sızan kan, derin servikal fasyanın altında toplanarak trakeayı hızla ezer ve masif larinks ödemi yaratır. Postoperatif ilk 6 saatte boyunda ani şişlik, dispne veya stridor geliştiğinde hasta ameliyathaneye yetiştirilemez; yatakbaşında steril şartlar aranmaksızın tüm cilt ve fasya dikişleri derhal açılıp hematom boşaltılmalı, trakea basısı kalktıktan sonra acil entübasyon yapılmalıdır.
+    5. **Kraniyal Sinir Yaralanmaları (VII, IX, X, XI, XII) ve Postoperatif Solunum Koruması:** Cerrahi sahada hipoglossal sinir (CN XII - dil deviasyonu ve hava yolu tıkanıklığı), rekürren laringeal sinir / vagus (CN X - tek taraflı ses kısıklığı veya bilateral felçte stridor/afoni), fasiyal sinirin marjinal mandibuler dalı (CN VII - ağız sarkması) ve glossofaringeal sinir (CN IX - yutma güçlüğü) doğrudan hasar riski taşır. Ekstübasyonda vokal kord hareketi, dil protrüzyonu ve yutma refleksi mutlaka kontrol edilmeli, bilateral karotis cerrahisi öyküsü olanlarda bilateral glomus kaybına bağlı hipoksik solunum dürtüsü kaybı bilinmelidir.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
+
+---
+
+## 34. Arayüz ve Kullanıcı Deneyimi Yeniliği: Cerrahi Branş Kartları Karşılama Ekranı ve Hiyerarşik Gezinme (Drill-Down)
+
+- **Kullanıcı İsteği:** "Sistematik Prosedür Bazlı Anestezi Yönetimi tıklayınca bizi branş kartları karşılasın. Branş kartına basınca prosedürler açılsın. Böylelikle biraz daha derli toplu olur."
+- **Yapılan İyileştirmeler:**
+  1. **Branş Kartları Karşılama Ekranı (Specialty Directory Landing View):**
+     - Prosedür modülüne girildiğinde kullanıcıyı doğrudan 37 prosedürlük uzun liste yerine 13 cerrahi branşı temsil eden şık ve düzenli **Cerrahi Branş Kartları** karşılar.
+     - Her kartta branşa özel renk teması, lucide ikonu (Beyin ve Sinir Cerrahisi için Beyin, Kalp ve Damar için Kalp, Genel Cerrahi için Makas vb.), branş adı, kapsam açıklaması ve aktif kayıtlı prosedür sayacı (`{count} Prosedür`) yer alır.
+  2. **Hiyerarşik Gezinme ve Branş İçi Prosedürler (Drill-Down Navigation):**
+     - Bir branş kartına tıklandığında görünüm o branşın prosedürlerine odaklanır.
+     - En üstte `[ ← Tüm Cerrahi Branşlar ]` breadcrumb butonu ve seçili branş başlığı/özeti sunulur.
+     - Kullanıcı dilerse yatay hızlı branş değiştirici ile diğer aktif branşlara (Genel Cerrahi, KVC, Gastroenteroloji vb.) tek tıkla geçiş yapabilir.
+  3. **Akıllı Çok Kademeli Arama (Instant Global & Scoped Search):**
+     - Branş kartları ekranındayken arama çubuğuna yazıldığında, sistem anında tüm branşlar genelinde eşleşen prosedürleri tek bir dinamik arama sonuçları listesinde sunar. Arama temizlendiğinde pürüzsüzce branş kartlarına geri döner.
+     - Belirli bir branşın içindeyken arama yapıldığında arama o branşın prosedürlerine odaklanır.
+  4. **Prosedür Detayından Geri Dönüş Akışı:**
+     - Prosedür detay sayfasında (`ProcedureDetailView`) "Geri Dön" tıklandığında kullanıcı doğrudan ayrıldığı branşın prosedür listesine döner; oradan "Tüm Cerrahi Branşlar" butonuna basarak ana branş dizinine geçebilir.
+
+---
+
+## 35. Yeni Prosedür: Katarakt Cerrahisi ve Göz İçi Lens İmplantasyonu: Fakoemülsifikasyon (FAKO) Yöntemi ile İntraoküler Lens (İOL) Yerleşimi
+
+- **Kullanıcı İsteği:** Cataract Extraction with Intraocular Lens Insertion ekle.
+- **Türkçe İsimlendirme Kuralı:** **Katarakt Cerrahisi ve Göz İçi Lens İmplantasyonu: Fakoemülsifikasyon (FAKO) Yöntemi ile İntraoküler Lens (İOL) Yerleşimi**
+- **Dosya:** `src/data/procedures/cataractExtractionIolInsertion.ts`
+- **Kapsam ve Akademik Standartlar:**
+  - Jaffe 5. Baskı (Section VI: Ophthalmology - Cataract Extraction with Intraocular Lens Insertion, pp. 844-852), AAO, ESCRS, OAS ve TOD Protokolleri referans alındı.
+  - Göz Hastalıkları (`goz`) branşının ilk prosedürü olarak sisteme kaydedildi.
+  - **Katarakt Cerrahisinde Anestezinin 5 Vazgeçilmez Kuralı:**
+    1. **Okülokardiyak Refleks (Aschner Fenomeni) ve Ani Vagal Duraklama:** Ekstraoküler kaslara bası veya göz küresine traksiyon uygulandığında trigemino-vagal refleks arkı tetiklenir; ani derin bradikardi, blok ve asistoli gelişebilir. Monitörde bradikardi görüldüğü anda cerraha derhal "Traksiyonu bırak" uyarısı verilmeli, bası kalkınca nabız düzelir; düzelmezse İV Atropin (0.5 mg) uygulanmalıdır.
+    2. **Göz Küresi Açıkken Öksürük, Ikınma ve Ekspulsif Koroidal Hemoraji Felaketi:** Kornea kesilip ön kamara açıldığında göz küresi açık küre (open globe) durumundadır. Hastanın aniden öksürmesi, ıkınması veya başını oynatması intratorasik ve oküler venöz basıncı fırlatarak arka siliyer arterleri patlatır (ekspulsif koroidal kanama); göz içi dokuları yaradan dışarı fırlar ve kalıcı körlük gelişir. Öksürük önceden sezinlenmeli, aşırı hipoventilasyon kaynaklı huzursuz uyanmalar önlenmelidir.
+    3. **Retrobulber / Peribulber Blokta Beyin Sapı Anestezisi ve Retrobulber Hematom:** İğneli bloklarda iğne optik sinir kılıfının dural uzantısını delerse lokal anestezik doğrudan subaraknoid mesafeye enjekte olur. 2-5 dakika içinde kontralateral körlük, afoni, solunum arresti ve kardiyovasküler kollaps (beyin sapı anestezisi) gelişir; anestezi acil entübasyon ve resüsitasyona hazır olmalıdır. Retrobulber hematomda acil lateral kantotomi gerekebilir.
+    4. **Topikal / Sedasyon Yönetiminde "Aşırı Sedasyon ve Hipoventilasyon Tuzağı":** Katarakt hastaları çoğunlukla yaşlı ve KOAH'lıdır; cerrahi örtü altında hava açlığı ve CO2 göllenmesi hastada ani panik ve baş hareketi yaratır. Derin sedasyon hastayı uyutup aniden sıçrayarak uyandırabileceğinden (mikroskop altında arka kapsül yırtığı riski) KESİNLİKLE UYGULANMAMALI; örtü altına 2-3 L/dk O2 köprüsü kurulmalı, hasta ile uyanık ve sakin sözel iletişim sürdürülmelidir.
+    5. **İntraoperatif Gevşek İris Sendromu (IFIS) ve Alfa-1 Blokerleri (Tamsulosin):** Prostat hipertrofisi için Tamsulosin veya diğer alfa-1 antagonistlerini kullanan hastalarda cerrahi esnasında iris gevşekçe dalgalanır, pupilla hızla büzüşür (miyozis) ve iris fako ucuna aspire olarak yırtılır. Preoperatif sorgulamada tamsulosin öyküsü tespit edilmeli, cerraha IFIS uyarısı verilmeli ve intrakameral fenilefrin/adrenalin ile iris kancaları (Malyugin halkası) hazır bulundurulmalıdır.
+- **Katalog ve Arama Entegrasyonu:** `src/data/procedures/index.ts` ve `src/data/portalSearchIndex.ts` dosyalarına kaydedildi.
