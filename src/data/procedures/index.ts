@@ -44,6 +44,13 @@ import { cornealTransplant } from './cornealTransplant';
 import { trabeculectomy } from './trabeculectomy';
 import { ectropionRepair } from './ectropionRepair';
 import { entropionRepair } from './entropionRepair';
+import { ptosisRepair } from './ptosisRepair';
+import { eyelidReconstruction } from './eyelidReconstruction';
+import { pterygiumExcision } from './pterygiumExcision';
+import { repairRupturedLaceratedGlobe } from './repairRupturedLaceratedGlobe';
+import { dacryocystorhinostomy } from './dacryocystorhinostomy';
+import { orbitotomyAnteriorLateral } from './orbitotomyAnteriorLateral';
+import { retinalSurgery } from './retinalSurgery';
 
 export {
   laparoscopicCholecystectomy,
@@ -90,7 +97,14 @@ export {
   cornealTransplant,
   trabeculectomy,
   ectropionRepair,
-  entropionRepair
+  entropionRepair,
+  ptosisRepair,
+  eyelidReconstruction,
+  pterygiumExcision,
+  repairRupturedLaceratedGlobe,
+  dacryocystorhinostomy,
+  orbitotomyAnteriorLateral,
+  retinalSurgery
 };
 
 /**
@@ -228,7 +242,14 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   cornealTransplant,
   trabeculectomy,
   ectropionRepair,
-  entropionRepair
+  entropionRepair,
+  ptosisRepair,
+  eyelidReconstruction,
+  pterygiumExcision,
+  repairRupturedLaceratedGlobe,
+  dacryocystorhinostomy,
+  orbitotomyAnteriorLateral,
+  retinalSurgery
 ];
 
 /**
