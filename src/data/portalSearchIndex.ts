@@ -1088,6 +1088,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'procedures',
     popular: true
   },
+  {
+    id: 'proc-corneal-transplant',
+    title: 'Kornea Nakli (Keratoplasti): Penetran Keratoplasti (PKP) ve Lameller Kornea Nakli (DALK, DSAEK, DMEK)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Göz Hastalıkları',
+    description: 'Tam kat (PKP) ve lameller kornea nakli (DALK/DMEK); açık küre evresinde sıfır hareket/öksürük disiplini, pürüzsüz ekstübasyon, azot protoksit (N2O) yasağı ve Flieringa halkası vagal refleksi.',
+    keywords: ['corneal transplant', 'keratoplasti', 'kornea nakli', 'pkp', 'penetran keratoplasti', 'dalk', 'dsaek', 'dmek', 'flieringa halkası', 'açık küre', 'open globe', 'ekspulsif koroid kanaması', 'sf6 gazı', 'n2o yasağı', 'pürüzsüz ekstübasyon', 'jaffe', 'aao', 'escrs', 'göz cerrahisi'],
+    tabId: 'procedures',
+    popular: true
+  },
   // Troubleshooting Tool
   {
     id: 'tool-troubleshooting',

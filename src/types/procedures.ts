@@ -43,6 +43,20 @@ export interface BleedingProfile {
   hemostasisStrategies?: string[];
 }
 
+export interface IndispensableRule {
+  number: number;
+  title: string;
+  content: string;
+}
+
+export interface AnesthesiaTechniques {
+  primary: string[];
+  alternative?: string[];
+  notes?: string;
+  indispensableRules?: IndispensableRule[];
+  rulesTitle?: string;
+}
+
 export interface ProcedureDefinition {
   id: string;
   name: string;
@@ -60,11 +74,9 @@ export interface ProcedureDefinition {
   bleedingProfile?: BleedingProfile;
 
   // 3) Olası Anestezi Yönetimi Teknikleri
-  anesthesiaTechniques: {
-    primary: string[];
-    alternative?: string[];
-    notes?: string;
-  };
+  anesthesiaTechniques: AnesthesiaTechniques;
+  indispensableRules?: IndispensableRule[];
+  rulesTitle?: string;
 
   // 4) Pre-operatif Hazırlık
   preoperative: {

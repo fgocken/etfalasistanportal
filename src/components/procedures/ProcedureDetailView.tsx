@@ -20,6 +20,7 @@ import {
   Minimize2
 } from 'lucide-react';
 import { ProcedureDefinition } from '../../types/procedures';
+import { getProcedureIndispensableRules } from '../../utils/procedureRulesParser';
 
 interface ProcedureDetailViewProps {
   procedure: ProcedureDefinition;
@@ -59,6 +60,9 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
     '6b': true,
     '6c': true
   });
+
+  // Anestezinin Vazgeçilmez Kuralları ve Hava Yolu Notlarının Akıllı Ayrıştırılması
+  const parsedRules = getProcedureIndispensableRules(procedure);
 
   const toggleSection = (key: string) => {
     setSectionOpen(prev => ({ ...prev, [key]: !prev[key] }));
@@ -509,14 +513,90 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 </div>
               )}
 
-              {/* Klinik Notlar & Gerekçe */}
-              {procedure.anesthesiaTechniques.notes && (
-                <div className={`p-4 rounded-xl border text-xs leading-relaxed space-y-1 ${
-                  isDark ? 'bg-blue-500/10 border-blue-500/25 text-blue-200' : 'bg-blue-50 border-blue-200 text-blue-900'
+              {/* Anestezinin Vazgeçilmez Kuralları VEYA Standart Klinik / Hava Yolu Notları */}
+              {parsedRules.hasRules ? (
+                <div className={`p-4 sm:p-5 rounded-xl border transition-colors space-y-4 ${
+                  isDark 
+                    ? 'bg-amber-950/20 border-amber-500/30' 
+                    : 'bg-amber-50/70 border-amber-200 shadow-xs'
                 }`}>
-                  <strong className="block font-bold">Klinik Tercih Gerekçesi ve Hava Yolu Kararı:</strong>
-                  <p>{procedure.anesthesiaTechniques.notes}</p>
+                  {/* Başlık Alanı */}
+                  <div className="flex items-start gap-3">
+                    <div className={`p-2 rounded-lg shrink-0 mt-0.5 ${
+                      isDark ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-800'
+                    }`}>
+                      <ShieldAlert className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-900 dark:text-amber-200">
+                          Hayati Klinik İlkeler
+                        </span>
+                        <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                          {parsedRules.rules.length} Temel Kural
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mt-1 uppercase tracking-tight">
+                        {parsedRules.headerTitle}
+                      </h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
+                        Cerrahi başarıyı belirleyen, perioperatif mortalite ve majör morbiditeyi önleyen tavizsiz anestezi prensipleri:
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Numaralandırılmış Kural Kartları */}
+                  <div className="space-y-2.5 pt-1">
+                    {parsedRules.rules.map((rule) => (
+                      <div
+                        key={rule.number}
+                        className={`p-3.5 rounded-lg border transition-all ${
+                          isDark
+                            ? 'bg-slate-900/90 border-slate-800/80 hover:border-amber-500/40 text-slate-200'
+                            : 'bg-white border-amber-200/60 shadow-xs hover:border-amber-400 text-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5 ${
+                            isDark 
+                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
+                              : 'bg-amber-100 text-amber-900 border border-amber-300'
+                          }`}>
+                            0{rule.number}
+                          </span>
+                          <div className="flex-1 space-y-1 min-w-0">
+                            <h5 className="text-xs font-bold tracking-tight text-slate-900 dark:text-slate-100 leading-snug">
+                              {rule.title}
+                            </h5>
+                            <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 font-normal">
+                              {rule.content}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Eğer önceden girilmiş ek hava yolu gerekçesi varsa ayrıca göster */}
+                  {parsedRules.airwayRationale && (
+                    <div className={`p-3 rounded-lg border text-xs leading-relaxed ${
+                      isDark ? 'bg-slate-900/60 border-slate-800 text-slate-400' : 'bg-white/80 border-slate-200 text-slate-600'
+                    }`}>
+                      <strong className="block font-semibold mb-0.5 text-slate-700 dark:text-slate-300">Ek Hava Yolu & Klinik Not:</strong>
+                      <p>{parsedRules.airwayRationale}</p>
+                    </div>
+                  )}
                 </div>
+              ) : (
+                /* Standart Klinik Tercih Gerekçesi ve Hava Yolu Kararı (Kurallar dizisi olmayan standart prosedürler için) */
+                procedure.anesthesiaTechniques.notes && (
+                  <div className={`p-4 rounded-xl border text-xs leading-relaxed space-y-1 ${
+                    isDark ? 'bg-blue-500/10 border-blue-500/25 text-blue-200' : 'bg-blue-50 border-blue-200 text-blue-900'
+                  }`}>
+                    <strong className="block font-bold">Klinik Tercih Gerekçesi ve Hava Yolu Kararı:</strong>
+                    <p>{procedure.anesthesiaTechniques.notes}</p>
+                  </div>
+                )
               )}
             </div>
           )}

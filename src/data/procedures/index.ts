@@ -40,6 +40,10 @@ import { posteriorLumbarFusionInstrumentation } from './posteriorLumbarFusionIns
 import { combinedAnteriorPosteriorThoracolumbarInstrumentation } from './combinedAnteriorPosteriorThoracolumbarInstrumentation';
 import { carotidEndarterectomy } from './carotidEndarterectomy';
 import { cataractExtractionIolInsertion } from './cataractExtractionIolInsertion';
+import { cornealTransplant } from './cornealTransplant';
+import { trabeculectomy } from './trabeculectomy';
+import { ectropionRepair } from './ectropionRepair';
+import { entropionRepair } from './entropionRepair';
 
 export {
   laparoscopicCholecystectomy,
@@ -82,7 +86,11 @@ export {
   posteriorLumbarFusionInstrumentation,
   combinedAnteriorPosteriorThoracolumbarInstrumentation,
   carotidEndarterectomy,
-  cataractExtractionIolInsertion
+  cataractExtractionIolInsertion,
+  cornealTransplant,
+  trabeculectomy,
+  ectropionRepair,
+  entropionRepair
 };
 
 /**
@@ -216,7 +224,11 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   posteriorLumbarFusionInstrumentation,
   combinedAnteriorPosteriorThoracolumbarInstrumentation,
   carotidEndarterectomy,
-  cataractExtractionIolInsertion
+  cataractExtractionIolInsertion,
+  cornealTransplant,
+  trabeculectomy,
+  ectropionRepair,
+  entropionRepair
 ];
 
 /**
