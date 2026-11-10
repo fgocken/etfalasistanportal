@@ -156,11 +156,6 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
           }`}>
             {procedure.name}
           </h1>
-          <p className={`text-sm leading-relaxed max-w-3xl ${
-            isDark ? 'text-slate-300' : 'text-slate-600'
-          }`}>
-            {procedure.description}
-          </p>
         </div>
 
         {/* Hızlı Atla & Genişlet/Daralt Araç Çubuğu */}
