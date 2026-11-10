@@ -190,7 +190,9 @@ export const DutyRosterToolView: React.FC<DutyRosterToolViewProps> = ({ isDark }
     return () => clearInterval(interval);
   }, [roster]);
 
-  const sortedDates = Object.keys(roster.days).sort();
+  const sortedDates = Object.keys(roster.days).sort(
+    (a, b) => (roster.days[a]?.dayNumber || 0) - (roster.days[b]?.dayNumber || 0)
+  );
 
   // Month selection switch
   const handleSelectMonth = (monthKey: string) => {

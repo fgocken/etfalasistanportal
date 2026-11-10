@@ -64,76 +64,68 @@ export function formatMonthKeyDisplay(monthKey: string): string {
 export function normalizeRoster(roster: MonthDutyRoster): MonthDutyRoster {
   if (!roster || !roster.days) return roster;
   
-  const dateKeys = Object.keys(roster.days).sort();
   const [expectedYearStr, expectedMonthStr] = (roster.monthKey || '').split('-');
   const expectedMonth = parseInt(expectedMonthStr, 10);
   const expectedYear = parseInt(expectedYearStr, 10);
+  const validYear = (!isNaN(expectedYear) && expectedYear >= 2020) ? expectedYear : 2026;
+  const validMonth = (!isNaN(expectedMonth) && expectedMonth >= 1 && expectedMonth <= 12) ? expectedMonth : 11;
+  const maxDaysInMonth = new Date(validYear, validMonth, 0).getDate();
 
-  // Detect if previous month dates leaked in due to timezone/serial parsing bug (e.g. 2026-10-30 in 2026-11)
-  let needsShiftCorrection = false;
-  if (expectedMonth && expectedYear && dateKeys.length > 0) {
-    const prevMonth = expectedMonth === 1 ? 12 : expectedMonth - 1;
-    const hasPreviousMonthKeys = dateKeys.some(k => {
-      const parts = k.split('-');
-      return parseInt(parts[1], 10) === prevMonth;
-    });
-    if (hasPreviousMonthKeys) {
-      needsShiftCorrection = true;
-    }
-  }
-
-  const days: Record<string, DayDutySchedule> = {};
   const turkishDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+  const cleanedDays: Record<string, DayDutySchedule> = {};
 
-  if (needsShiftCorrection) {
-    // Re-anchor sequential days to the correct month starting at day 1
-    dateKeys.forEach((oldKey, idx) => {
-      const dayNum = idx + 1;
-      const dayStr = String(dayNum).padStart(2, '0');
-      const monthStr = String(expectedMonth).padStart(2, '0');
-      const newKey = `${expectedYear}-${monthStr}-${dayStr}`;
-      const formattedDate = `${dayStr}.${monthStr}.${expectedYear}`;
+  // Sort entries by dayNumber to handle them sequentially and safely
+  const entries = Object.entries(roster.days);
 
-      const d = new Date(expectedYear, expectedMonth - 1, dayNum, 12, 0, 0);
-      const dow = d.getDay();
-      const dayName = turkishDays[dow];
-      const isWeekend = dow === 0 || dow === 6;
+  for (const [key, day] of entries) {
+    if (!day) continue;
 
-      const oldDay = roster.days[oldKey];
-      days[newKey] = {
-        ...oldDay,
-        date: newKey,
-        formattedDate,
-        dayNumber: dayNum,
-        dayName,
-        isWeekend,
-        seyrantepeStaff: (oldDay.seyrantepeStaff || []).map(s => ({
-          ...s,
-          id: s.id.replace(/sey-[^-]+-[^-]+-/, `sey-${newKey}-`)
-        })),
-        cayirbasiStaff: (oldDay.cayirbasiStaff || []).map(s => ({
-          ...s,
-          id: s.id.replace(/sar-[^-]+-[^-]+-/, `sar-${newKey}-`)
-        }))
-      };
-    });
-  } else {
-    for (const dateKey of Object.keys(roster.days)) {
-      const day = { ...roster.days[dateKey] };
-      if (day && day.date) {
-        const parts = day.date.split('-');
-        if (parts.length === 3) {
-          const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 12, 0, 0);
-          const dow = d.getDay();
-          day.dayName = turkishDays[dow];
-          day.isWeekend = dow === 0 || dow === 6;
-        }
+    let dayNum = typeof day.dayNumber === 'number' ? day.dayNumber : 0;
+    if (!dayNum || dayNum < 1 || isNaN(dayNum)) {
+      const parts = (day.date || key).split('-');
+      if (parts.length === 3) {
+        dayNum = parseInt(parts[2], 10);
       }
-      days[dateKey] = day;
     }
+
+    // STRICT GREGORIAN BOUND: Never permit days > maxDaysInMonth (e.g. November only has 30 days)
+    if (!dayNum || dayNum < 1 || dayNum > maxDaysInMonth) {
+      continue;
+    }
+
+    const monthStr = String(validMonth).padStart(2, '0');
+    const dayStr = String(dayNum).padStart(2, '0');
+    const canonicalKey = `${validYear}-${monthStr}-${dayStr}`;
+    const formattedDate = `${dayStr}.${monthStr}.${validYear}`;
+
+    const d = new Date(validYear, validMonth - 1, dayNum, 12, 0, 0);
+    const dow = d.getDay();
+    const dayName = turkishDays[dow];
+    const isWeekend = dow === 0 || dow === 6;
+
+    cleanedDays[canonicalKey] = {
+      ...day,
+      date: canonicalKey,
+      formattedDate,
+      dayNumber: dayNum,
+      dayName,
+      isWeekend,
+      seyrantepeStaff: (day.seyrantepeStaff || []).map((s, idx) => ({
+        ...s,
+        id: `sey-${canonicalKey}-${idx + 1}`
+      })),
+      cayirbasiStaff: (day.cayirbasiStaff || []).map((s, idx) => ({
+        ...s,
+        id: `sar-${canonicalKey}-${idx + 1}`
+      }))
+    };
   }
 
-  return { ...roster, days };
+  return {
+    ...roster,
+    monthKey: `${validYear}-${String(validMonth).padStart(2, '0')}`,
+    days: cleanedDays
+  };
 }
 
 /**
@@ -1043,10 +1035,20 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
         // 7. Parse Data Rows
         const days: Record<string, DayDutySchedule> = {};
         let totalStaffParsed = 0;
+        const maxDaysInMonth = new Date(detectedYear, detectedMonth, 0).getDate();
 
         for (let r = dataStartRowIdx; r < rawGrid.length; r++) {
+          // If we already parsed all days in this calendar month (e.g. 30 days for November), stop!
+          if (Object.keys(days).length >= maxDaysInMonth) {
+            break;
+          }
+
           const row = rawGrid[r];
           if (!row || row.length === 0) continue;
+
+          // Check if row has any non-empty cell at all
+          const hasAnyContent = row.some((v: any) => v !== null && v !== undefined && String(v).trim() !== '');
+          if (!hasAnyContent) continue;
 
           // Skip signature or summary rows at bottom (e.g. "HAZIRLAYAN", "BAŞHEKİM", "TOPLAM", etc.)
           const rowText = row.map((v: any) => String(v || '').trim()).join(' ').toUpperCase();
@@ -1144,8 +1146,13 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
           }
 
           // Fallback sequential day number if day couldn't be parsed
-          if (!parsedDayNum || parsedDayNum < 1 || parsedDayNum > 31) {
+          if (!parsedDayNum || parsedDayNum < 1 || parsedDayNum > maxDaysInMonth) {
             parsedDayNum = Object.keys(days).length + 1;
+          }
+
+          // If day number exceeds calendar month days (e.g. day 31 in November), stop processing rows
+          if (parsedDayNum > maxDaysInMonth) {
+            break;
           }
 
           // Prevent month bleed: all days in this roster sheet must strictly anchor to the detected roster month and year
@@ -1239,15 +1246,17 @@ export async function parseExcelRoster(file: File): Promise<MonthDutyRoster> {
             }
           });
 
-          days[dateKey] = {
-            date: dateKey,
-            formattedDate,
-            dayNumber: parsedDayNum,
-            dayName,
-            isWeekend,
-            seyrantepeStaff,
-            cayirbasiStaff
-          };
+          if (parsedDayNum >= 1 && parsedDayNum <= maxDaysInMonth) {
+            days[dateKey] = {
+              date: dateKey,
+              formattedDate,
+              dayNumber: parsedDayNum,
+              dayName,
+              isWeekend,
+              seyrantepeStaff,
+              cayirbasiStaff
+            };
+          }
         }
 
         // Validate that we found at least some days

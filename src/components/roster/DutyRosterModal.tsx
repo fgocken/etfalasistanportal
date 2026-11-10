@@ -171,7 +171,9 @@ export const DutyRosterModal: React.FC<DutyRosterModalProps> = ({
 
   if (!isOpen) return null;
 
-  const sortedDates = Object.keys(roster.days).sort();
+  const sortedDates = Object.keys(roster.days).sort(
+    (a, b) => (roster.days[a]?.dayNumber || 0) - (roster.days[b]?.dayNumber || 0)
+  );
 
   // Admin Trigger Handlers
   const handleRequestUpload = () => {

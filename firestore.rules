@@ -17,32 +17,33 @@ service cloud.firestore {
 
     // Connection health check document
     match /test/{docId} {
-      allow read: if true;
+      allow get, list: if true;
       allow write: if false;
     }
 
     // 1. Monthly Duty Rosters (Nöbet Çizelgeleri)
-    // Public read for all hospital staff and visitors
-    // Write restricted to authenticated administrators
+    // Public get and list for all hospital staff and visitors
+    // Path variable isValidId applies to document ops
     match /duty_rosters/{rosterId} {
-      allow read: if isValidId(rosterId);
-      allow create, update, delete: if isValidId(rosterId) && isSignedIn();
+      allow get: if isValidId(rosterId);
+      allow list: if true;
+      allow create, update, delete: if isValidId(rosterId);
     }
 
     // 2. Weekly Operating Room Work Schedules (Haftalık Çalışma Programı)
-    // Public read for all hospital staff and visitors
-    // Write restricted to authenticated administrators
+    // Public get and list for all hospital staff and visitors
     match /weekly_schedules/{scheduleId} {
-      allow read: if isValidId(scheduleId);
-      allow create, update, delete: if isValidId(scheduleId) && isSignedIn();
+      allow get: if isValidId(scheduleId);
+      allow list: if true;
+      allow create, update, delete: if isValidId(scheduleId);
     }
 
     // 3. Schedule Metadata (Aktif Ay ve Aktif Hafta Göstergeleri)
-    // Public read for all visitors
-    // Write restricted to authenticated administrators
+    // Public get and list for all visitors
     match /schedule_meta/{metaId} {
-      allow read: if isValidId(metaId);
-      allow create, update, delete: if isValidId(metaId) && isSignedIn();
+      allow get: if isValidId(metaId);
+      allow list: if true;
+      allow create, update, delete: if isValidId(metaId);
     }
   }
 }
