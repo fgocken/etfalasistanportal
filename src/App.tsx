@@ -4,6 +4,8 @@ import { WelcomeScreen } from './components/WelcomeScreen';
 import { PortalWorkspace } from './components/PortalWorkspace';
 import { DisclaimerView } from './components/DisclaimerView';
 import { parseHashRoute, ParsedHashRoute, updateHashRoute, HashRouteType } from './utils/deepLink';
+import { initFirestoreRealtimeSync, stopFirestoreRealtimeSync } from './services/firestoreSyncService';
+import { testConnection } from './firebase';
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState<ParsedHashRoute>(() => parseHashRoute());
@@ -58,6 +60,15 @@ export default function App() {
     };
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Initialize real-time cloud synchronization (Firebase Firestore)
+  useEffect(() => {
+    testConnection().catch(console.warn);
+    initFirestoreRealtimeSync();
+    return () => {
+      stopFirestoreRealtimeSync();
+    };
   }, []);
 
   const openDisclaimer = () => {

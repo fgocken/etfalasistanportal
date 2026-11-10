@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "dutyRoster": {
+      "title": "DutyRoster",
+      "description": "Monthly clinical duty roster containing shifts, staff duties, and assignments for anaesthesiology residents",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Document identifier matching monthKey (e.g., 2026-11)"
+        },
+        "monthKey": {
+          "type": "string",
+          "description": "Month key formatted as YYYY-MM"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable Turkish title for the month"
+        },
+        "days": {
+          "type": "object",
+          "description": "Daily shift schedule indexed by YYYY-MM-DD"
+        },
+        "staffList": {
+          "type": "array",
+          "description": "List of resident physician staff names participating in shifts"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of the last modification"
+        }
+      },
+      "required": ["id", "monthKey", "title", "updatedAt"]
+    },
+    "weeklySchedule": {
+      "title": "WeeklySchedule",
+      "description": "Weekly operating theatre and intensive care staffing schedule",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Document identifier matching weekKey (e.g., 2026-W45)"
+        },
+        "weekKey": {
+          "type": "string",
+          "description": "Week key formatted as YYYY-Www"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable title of the weekly work schedule"
+        },
+        "dateRangeText": {
+          "type": "string",
+          "description": "Formatted date range string (e.g. 02.11.2026 - 06.11.2026)"
+        },
+        "days": {
+          "type": "array",
+          "description": "Week days array containing day details and holiday status"
+        },
+        "rows": {
+          "type": "array",
+          "description": "Operating theatre units and their assigned residents"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of the last modification"
+        }
+      },
+      "required": ["id", "weekKey", "title", "updatedAt"]
+    },
+    "scheduleMeta": {
+      "title": "ScheduleMeta",
+      "description": "Global active keys and metadata for public roster and schedule display",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Settings key, typically 'active_settings'"
+        },
+        "activeMonthKey": {
+          "type": "string",
+          "description": "Currently active month key to display across all visitors"
+        },
+        "activeWeekKey": {
+          "type": "string",
+          "description": "Currently active week key to display across all visitors"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of the last update"
+        }
+      },
+      "required": ["id", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/duty_rosters/{rosterId}": {
+      "schema": {
+        "$ref": "#/entities/dutyRoster"
+      },
+      "description": "Collection of monthly on-call duty rosters accessible to all clinical visitors"
+    },
+    "/weekly_schedules/{scheduleId}": {
+      "schema": {
+        "$ref": "#/entities/weeklySchedule"
+      },
+      "description": "Collection of weekly operating theatre assignment schedules"
+    },
+    "/schedule_meta/{metaId}": {
+      "schema": {
+        "$ref": "#/entities/scheduleMeta"
+      },
+      "description": "Metadata holding active keys and global synchronization settings"
+    }
+  }
+}

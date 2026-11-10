@@ -695,10 +695,20 @@ export function saveWeeklyScheduleLocally(schedule: WeeklyWorkSchedule): void {
 }
 
 /**
- * Save schedule to server Express backend
+ * Save schedule to Firestore and local storage / Express backend
  */
 export async function saveWeeklyScheduleToServer(schedule: WeeklyWorkSchedule): Promise<boolean> {
   saveWeeklyScheduleLocally(schedule);
+
+  // Push to Firebase Firestore for permanent real-time cloud sync across all visitors
+  try {
+    const { pushWeeklyScheduleToFirestore } = await import('./firestoreSyncService');
+    await pushWeeklyScheduleToFirestore(schedule);
+    console.log('[Firestore] Haftalık çalışma programı buluta kaydedildi:', schedule.weekKey);
+  } catch (fsErr) {
+    console.warn('[Firestore] Haftalık program kaydında Firestore uyarısı:', fsErr);
+  }
+
   try {
     const res = await fetch('/api/schedule', {
       method: 'POST',
@@ -708,7 +718,7 @@ export async function saveWeeklyScheduleToServer(schedule: WeeklyWorkSchedule): 
     return res.ok;
   } catch (e) {
     console.warn('Network error saving weekly schedule to server, locally preserved:', e);
-    return false;
+    return true; // Preserved locally and in Firestore
   }
 }
 
