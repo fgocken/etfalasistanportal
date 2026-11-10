@@ -595,6 +595,301 @@ export const OFFICIAL_NOVEMBER_WEEK_SCHEDULE: WeeklyWorkSchedule = {
   ]
 };
 
+// 3. Hafta: 09 - 13 Kasım 2026 (Eklenen Yeni Hafta)
+export const OFFICIAL_NOVEMBER_9_13_SCHEDULE: WeeklyWorkSchedule = {
+  weekKey: '2026-W46',
+  title: '09 - 13 Kasım 2026 Haftalık Mesai Programı',
+  dateRangeText: '09.11.2026 - 13.11.2026',
+  updatedAt: '2026-11-09T08:00:00Z',
+  days: [
+    { dateKey: '2026-11-09', dateFormatted: '09.11.2026', dayName: 'Pazartesi' },
+    { dateKey: '2026-11-10', dateFormatted: '10.11.2026', dayName: 'Salı' },
+    { dateKey: '2026-11-11', dateFormatted: '11.11.2026', dayName: 'Çarşamba' },
+    { dateKey: '2026-11-12', dateFormatted: '12.11.2026', dayName: 'Perşembe' },
+    { dateKey: '2026-11-13', dateFormatted: '13.11.2026', dayName: 'Cuma' }
+  ],
+  rows: [
+    {
+      unitId: 'genel-cerrahi',
+      unitName: 'GENEL CERRAHİ',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['SÜLEYMAN'],
+        '2026-11-10': ['EBRU'],
+        '2026-11-11': ['EBRU'],
+        '2026-11-12': ['EBRU'],
+        '2026-11-13': ['ZEYNEP', 'EBRU', 'MUSTAFA']
+      }
+    },
+    {
+      unitId: 'nrs',
+      unitName: 'NRŞ (BEYİN CERRAHİSİ)',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['FURKAN G.'],
+        '2026-11-10': ['Y.DERTSİZ'],
+        '2026-11-11': ['FURKAN G.'],
+        '2026-11-12': ['YAKUP'],
+        '2026-11-13': ['Y.DERTSİZ']
+      }
+    },
+    {
+      unitId: 'ortopedi-acil',
+      unitName: 'ORTOPEDİ - ACİL',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['HANİFE', 'ZEHRA E.'],
+        '2026-11-10': ['HANİFE', 'YAĞMUR M'],
+        '2026-11-11': ['ZEHRA E.', 'YAKUP'],
+        '2026-11-12': ['HANİFE', 'ZEHRA E.'],
+        '2026-11-13': ['HANİFE', 'ZEHRA E.', 'ALPER']
+      }
+    },
+    {
+      unitId: 'kbb',
+      unitName: 'KBB',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['İMRAN'],
+        '2026-11-10': ['İMRAN', 'İBRAHİM'],
+        '2026-11-11': ['İMRAN'],
+        '2026-11-12': ['İMRAN'],
+        '2026-11-13': ['İMRAN', 'İBRAHİM']
+      }
+    },
+    {
+      unitId: 'plastik-cerrahi',
+      unitName: 'PLASTİK CERRAHİ',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['AYŞEGÜL'],
+        '2026-11-10': ['AYŞEGÜL'],
+        '2026-11-11': ['AYŞEGÜL'],
+        '2026-11-12': ['MUSTAFA', 'PELİN'],
+        '2026-11-13': ['AYŞEGÜL']
+      }
+    },
+    {
+      unitId: 'uroloji',
+      unitName: 'ÜROLOJİ',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['YAĞMUR M.'],
+        '2026-11-10': ['İBRAHİM'],
+        '2026-11-11': ['İBRAHİM'],
+        '2026-11-12': ['YAĞMUR M.'],
+        '2026-11-13': ['MUSTAFA', 'HAMİT']
+      }
+    },
+    {
+      unitId: 'arka-kbb-goz',
+      unitName: 'ARKA KBB + GÖZ',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['EMİR'],
+        '2026-11-10': ['HAMİT'],
+        '2026-11-11': ['HAMİT'],
+        '2026-11-12': ['ZEYNEP'],
+        '2026-11-13': ['İBRAHİM']
+      }
+    },
+    {
+      unitId: 'kvc',
+      unitName: 'KVC',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['EREN', 'MERVE A.'],
+        '2026-11-10': ['EREN'],
+        '2026-11-11': ['EREN'],
+        '2026-11-12': ['MERVE A.'],
+        '2026-11-13': ['EREN', 'MERVE A.']
+      }
+    },
+    {
+      unitId: 'ybu',
+      unitName: 'YBÜ (YOĞUN BAKIM)',
+      category: 'yogun_bakim',
+      assignments: {
+        '2026-11-09': ['FATMA', 'ALPER', 'ECEM'],
+        '2026-11-10': ['MERVE A.', 'İNCİ', 'ECEM'],
+        '2026-11-11': ['FATMA', 'İNCİ', 'ECEM'],
+        '2026-11-12': ['FATMA', 'İNCİ', 'İBRAHİM'],
+        '2026-11-13': ['FATMA', 'YAĞMUR M', 'ECEM']
+      }
+    },
+    {
+      unitId: 'post-op-ybu',
+      unitName: 'POST-OP YBÜ (SEYRANTEPE)',
+      category: 'yogun_bakim',
+      isPostOp: 'seyrantepe',
+      assignments: {
+        '2026-11-09': ['YAKUP'],
+        '2026-11-10': ['CAN'],
+        '2026-11-11': ['CAN'],
+        '2026-11-12': ['EMİR'],
+        '2026-11-13': ['CAN']
+      }
+    },
+    {
+      unitId: 'dis-anestezi',
+      unitName: 'DIŞ ANESTEZİ / ENDOSKOPİ',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['ÇAĞATAY', 'YAĞMUR D'],
+        '2026-11-10': ['SÜHEYLA O.', 'BURÇAK'],
+        '2026-11-11': ['ORKUT', 'BURÇAK'],
+        '2026-11-12': ['ÇAĞATAY', 'FURKAN G'],
+        '2026-11-13': ['ÇAĞATAY', 'BURÇAK']
+      }
+    },
+    {
+      unitId: 'poliklinik',
+      unitName: 'ANESTEZİ POLİKLİNİĞİ',
+      category: 'poliklinik',
+      assignments: {
+        '2026-11-09': ['MUSTAFA', 'Y.DERTSİZ'],
+        '2026-11-10': ['MUSTAFA', 'NUMAN'],
+        '2026-11-11': ['EMİR', 'NUMAN'],
+        '2026-11-12': ['ORKUT', 'NUMAN'],
+        '2026-11-13': ['ORKUT', 'NUMAN']
+      }
+    },
+    {
+      unitId: 'sariyer-ybu',
+      unitName: 'SARIYER YBÜ',
+      category: 'yogun_bakim',
+      assignments: {
+        '2026-11-09': ['ŞEVKİ', 'BERKAN', 'İBRAHİM'],
+        '2026-11-10': ['ORKUT', 'ALPER', 'CEYDA'],
+        '2026-11-11': ['ŞEVKİ', 'BERKAN', 'CEYDA'],
+        '2026-11-12': ['ŞEVKİ', 'BERKAN', 'HAMİT'],
+        '2026-11-13': ['ŞEVKİ', 'BERKAN', 'CEYDA']
+      }
+    },
+    {
+      unitId: 'sariyer-1-ybu',
+      unitName: 'SARIYER -1 YBÜ (SARIYER POST-OP)',
+      category: 'yogun_bakim',
+      isPostOp: 'sariyer',
+      assignments: {
+        '2026-11-09': ['BERKAN'],
+        '2026-11-10': ['ALPER'],
+        '2026-11-11': ['BERKAN'],
+        '2026-11-12': ['BERKAN'],
+        '2026-11-13': ['BERKAN']
+      }
+    },
+    {
+      unitId: 'sariyer-2-ybu',
+      unitName: 'SARIYER -2 YBÜ',
+      category: 'yogun_bakim',
+      assignments: {
+        '2026-11-09': ['SÜHEYLA O.'],
+        '2026-11-10': ['ÇAĞATAY'],
+        '2026-11-11': ['YAĞMUR D'],
+        '2026-11-12': ['SÜHEYLA O.'],
+        '2026-11-13': ['SÜHEYLA O.']
+      }
+    },
+    {
+      unitId: 'sariyer-pol',
+      unitName: 'SARIYER ANESTEZİ POLİKLİNİK',
+      category: 'poliklinik',
+      assignments: {
+        '2026-11-09': ['ZEHRA P.'],
+        '2026-11-10': ['ZEHRA P.'],
+        '2026-11-11': ['Y.DERTSİZ'],
+        '2026-11-12': ['ZEHRA P.'],
+        '2026-11-13': ['ZEHRA P.']
+      }
+    },
+    {
+      unitId: 'cocuk-cerrahisi',
+      unitName: 'ÇOCUK CERRAHİSİ',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['FN GÜNLÜ'],
+        '2026-11-10': ['FN GÜNLÜ'],
+        '2026-11-11': ['FN GÜNLÜ'],
+        '2026-11-12': ['FN GÜNLÜ'],
+        '2026-11-13': ['YAĞMUR D.']
+      }
+    },
+    {
+      unitId: 'dogumhane',
+      unitName: 'DOĞUMHANE (C/S)',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['MERVE İ.'],
+        '2026-11-10': ['MERVE İ.'],
+        '2026-11-11': ['MERVE İ.'],
+        '2026-11-12': ['MERVE İ.'],
+        '2026-11-13': ['MERVE İ.']
+      }
+    },
+    {
+      unitId: 'kadin-dogum',
+      unitName: 'KADIN DOĞUM',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': ['CELİL'],
+        '2026-11-10': ['CELİL'],
+        '2026-11-11': ['ALPER'],
+        '2026-11-12': ['CELİL'],
+        '2026-11-13': ['CELİL']
+      }
+    },
+    {
+      unitId: 'gogus-cerrahisi',
+      unitName: 'GÖĞÜS CERRAHİSİ / MR-GÖĞÜS',
+      category: 'ameliyathane',
+      assignments: {
+        '2026-11-09': [],
+        '2026-11-10': ['YAĞMUR D.'],
+        '2026-11-11': ['SÜLEYMAN'],
+        '2026-11-12': ['SÜLEYMAN'],
+        '2026-11-13': ['PELİN']
+      }
+    },
+    {
+      unitId: 'nobet-ertesi',
+      unitName: 'NÖBET ERTESİ',
+      category: 'diger',
+      assignments: {
+        '2026-11-09': [],
+        '2026-11-10': [],
+        '2026-11-11': [],
+        '2026-11-12': [],
+        '2026-11-13': ['YAĞMUR D.', 'FN.YÜCE', 'YAKUP']
+      }
+    },
+    {
+      unitId: 'izin',
+      unitName: 'İZİNLİ HEKİMLER',
+      category: 'diger',
+      assignments: {
+        '2026-11-09': ['SEVCAN'],
+        '2026-11-10': [],
+        '2026-11-11': [],
+        '2026-11-12': [],
+        '2026-11-13': []
+      }
+    },
+    {
+      unitId: 'rotasyoner',
+      unitName: 'ROTASYONER ASİSTANLAR',
+      category: 'diger',
+      assignments: {
+        '2026-11-09': ['PELİN', 'ZEYNEP', 'BATUHAN', 'BETÜL', 'FN YÜCE'],
+        '2026-11-10': ['PELİN', 'ZEYNEP', 'BATUHAN', 'BETÜL', 'FN YÜCE'],
+        '2026-11-11': ['PELİN', 'ZEYNEP', 'BATUHAN', 'BETÜL', 'FN YÜCE'],
+        '2026-11-12': ['PELİN', 'ZEYNEP', 'BATUHAN', 'BETÜL', 'FN YÜCE'],
+        '2026-11-13': ['PELİN', 'ZEYNEP', 'BATUHAN', 'BETÜL']
+      }
+    }
+  ]
+};
+
 /**
  * Retrieves the multi-week schedule registry from LocalStorage
  */
@@ -619,6 +914,9 @@ export function getWeeklyScheduleRegistry(): WeeklyScheduleRegistry {
   if (!registry['2026-W45'] || !registry['2026-W45'].days) {
     registry['2026-W45'] = OFFICIAL_NOVEMBER_WEEK_SCHEDULE;
   }
+  if (!registry['2026-W46'] || !registry['2026-W46'].days) {
+    registry['2026-W46'] = OFFICIAL_NOVEMBER_9_13_SCHEDULE;
+  }
 
   return registry;
 }
@@ -636,8 +934,8 @@ export function getActiveWeekKey(): string {
     const saved = localStorage.getItem(ACTIVE_WEEK_STORAGE_KEY);
     if (saved) return saved;
   } catch {}
-  // Default to November week (2026-W45) as it is the current/latest loaded week
-  return '2026-W45';
+  // Default to the newest active week (2026-W46: 09-13 Kasım)
+  return '2026-W46';
 }
 
 export function setActiveWeekKey(weekKey: string): void {
@@ -681,12 +979,18 @@ export function getSavedWeeklySchedule(specificWeekKey?: string): WeeklyWorkSche
 }
 
 /**
- * Save schedule locally and notify
+ * Save schedule locally and notify (clean overwrite removes any stale/ghost rows for this week)
  */
-export function saveWeeklyScheduleLocally(schedule: WeeklyWorkSchedule): void {
+export function saveWeeklyScheduleLocally(schedule: WeeklyWorkSchedule, cleanOverwrite = true): void {
   try {
     const registry = getWeeklyScheduleRegistry();
-    registry[schedule.weekKey] = schedule;
+    if (cleanOverwrite && registry[schedule.weekKey]) {
+      delete registry[schedule.weekKey];
+    }
+    registry[schedule.weekKey] = {
+      ...schedule,
+      updatedAt: new Date().toISOString()
+    };
     saveWeeklyScheduleRegistry(registry);
     setActiveWeekKey(schedule.weekKey);
     window.dispatchEvent(new CustomEvent('etfal-schedule-updated', { detail: schedule }));
@@ -696,16 +1000,16 @@ export function saveWeeklyScheduleLocally(schedule: WeeklyWorkSchedule): void {
 }
 
 /**
- * Save schedule to Firestore and local storage / Express backend
+ * Save schedule to Firestore and local storage / Express backend with clean overwrite guarantee
  */
-export async function saveWeeklyScheduleToServer(schedule: WeeklyWorkSchedule): Promise<boolean> {
-  saveWeeklyScheduleLocally(schedule);
+export async function saveWeeklyScheduleToServer(schedule: WeeklyWorkSchedule, cleanOverwrite = true): Promise<boolean> {
+  saveWeeklyScheduleLocally(schedule, cleanOverwrite);
 
-  // Push to Firebase Firestore for permanent real-time cloud sync across all visitors
+  // Push to Firebase Firestore for permanent real-time cloud sync with clean overwrite
   try {
     const { pushWeeklyScheduleToFirestore } = await import('./firestoreSyncService');
-    await pushWeeklyScheduleToFirestore(schedule);
-    console.log('[Firestore] Haftalık çalışma programı buluta kaydedildi:', schedule.weekKey);
+    await pushWeeklyScheduleToFirestore(schedule, cleanOverwrite);
+    console.log('[Firestore] Haftalık çalışma programı buluta kaydedildi (Temiz Üzerine Yazma):', schedule.weekKey);
   } catch (fsErr) {
     console.warn('[Firestore] Haftalık program kaydında Firestore uyarısı:', fsErr);
   }
@@ -720,6 +1024,40 @@ export async function saveWeeklyScheduleToServer(schedule: WeeklyWorkSchedule): 
   } catch (e) {
     console.warn('Network error saving weekly schedule to server, locally preserved:', e);
     return true; // Preserved locally and in Firestore
+  }
+}
+
+/**
+ * Delete a specific week entirely from local storage, Express backend, and Firestore
+ */
+export async function deleteWeeklyScheduleLocallyAndServer(weekKey: string): Promise<boolean> {
+  try {
+    const registry = getWeeklyScheduleRegistry();
+    if (registry[weekKey]) {
+      delete registry[weekKey];
+      saveWeeklyScheduleRegistry(registry);
+    }
+
+    try {
+      const { deleteWeeklyScheduleFromFirestore } = await import('./firestoreSyncService');
+      await deleteWeeklyScheduleFromFirestore(weekKey);
+    } catch {}
+
+    try {
+      await fetch(`/api/schedule/${weekKey}`, { method: 'DELETE' });
+    } catch {}
+
+    // Reset active week to first available
+    const remaining = Object.keys(registry);
+    if (remaining.length > 0) {
+      setActiveWeekKey(remaining[0]);
+    }
+
+    window.dispatchEvent(new CustomEvent('etfal-active-week-changed', { detail: { weekKey: getActiveWeekKey() } }));
+    return true;
+  } catch (err) {
+    console.error('Error deleting weekly schedule:', err);
+    return false;
   }
 }
 
@@ -905,6 +1243,93 @@ export function fileToBase64(file: File): Promise<string> {
   });
 }
 
+// Salon Normalizer for Hospital Template matching standard names
+function normalizeHospitalSalon(raw: string): { 
+  unitId: string; 
+  unitName: string; 
+  category: 'ameliyathane' | 'yogun_bakim' | 'poliklinik' | 'diger'; 
+  isPostOp?: 'seyrantepe' | 'sariyer' 
+} {
+  const clean = raw.trim().replace(/^[:\s-]+|[:\s-]+$/g, '');
+  const u = clean.toUpperCase();
+
+  if (/^GENEL CERRAH[İI]$|^GC$/.test(u)) {
+    return { unitId: 'genel-cerrahi', unitName: 'GENEL CERRAHİ', category: 'ameliyathane' };
+  }
+  if (/^NR[ŞS]|^BEY[İI]N CERRAH/.test(u)) {
+    return { unitId: 'nrs', unitName: 'NRŞ (BEYİN CERRAHİSİ)', category: 'ameliyathane' };
+  }
+  if (/^ORTOPED[İI]/.test(u)) {
+    return { unitId: 'ortopedi-acil', unitName: 'ORTOPEDİ - ACİL', category: 'ameliyathane' };
+  }
+  if (/^KBB$/.test(u)) {
+    return { unitId: 'kbb', unitName: 'KBB', category: 'ameliyathane' };
+  }
+  if (/^PLAST[İI]K|^PRC$/.test(u)) {
+    return { unitId: 'plastik-cerrahi', unitName: 'PLASTİK CERRAHİ', category: 'ameliyathane' };
+  }
+  if (/^[ÜU]ROLOJ[İI]|^[ÜU]RO$/.test(u)) {
+    return { unitId: 'uroloji', unitName: 'ÜROLOJİ', category: 'ameliyathane' };
+  }
+  if (/ARKA KBB|KBB\s*\+\s*G[ÖO]Z/.test(u)) {
+    return { unitId: 'arka-kbb-goz', unitName: 'ARKA KBB + GÖZ', category: 'ameliyathane' };
+  }
+  if (/^KVC$/.test(u)) {
+    return { unitId: 'kvc', unitName: 'KVC', category: 'ameliyathane' };
+  }
+  if (/^YB[ÜU]$|^YO[ĞG]UN BAKIM$/.test(u)) {
+    return { unitId: 'ybu', unitName: 'YBÜ (YOĞUN BAKIM)', category: 'yogun_bakim' };
+  }
+  if (/POST-OP YB[ÜU]|POST OP YB[ÜU]|POSTOP YB[ÜU]/.test(u)) {
+    return { unitId: 'post-op-ybu', unitName: 'POST-OP YBÜ (SEYRANTEPE)', category: 'yogun_bakim', isPostOp: 'seyrantepe' };
+  }
+  if (/DI[ŞS] ANESTEZ[İI]|ENDOSKOP[İI]/.test(u) && !u.includes('MR')) {
+    return { unitId: 'dis-anestezi', unitName: 'DIŞ ANESTEZİ / ENDOSKOPİ', category: 'ameliyathane' };
+  }
+  if (/^POL[İI]KL[İI]N[İI]K|^POL$|ANESTEZ[İI] POL[İI]KL[İI]N[İI][ĞG][İI]/.test(u)) {
+    return { unitId: 'poliklinik', unitName: 'ANESTEZİ POLİKLİNİĞİ', category: 'poliklinik' };
+  }
+  if (/^SARIYER YB[ÜU]$|^SYB[ÜU]$/.test(u)) {
+    return { unitId: 'sariyer-ybu', unitName: 'SARIYER YBÜ', category: 'yogun_bakim' };
+  }
+  if (/SARIYER\s*-?1|S-1 YB[ÜU]/.test(u)) {
+    return { unitId: 'sariyer-1-ybu', unitName: 'SARIYER -1 YBÜ (SARIYER POST-OP)', category: 'yogun_bakim', isPostOp: 'sariyer' };
+  }
+  if (/SARIYER\s*-?2|S-2 YB[ÜU]/.test(u)) {
+    return { unitId: 'sariyer-2-ybu', unitName: 'SARIYER -2 YBÜ', category: 'yogun_bakim' };
+  }
+  if (/SARIYER.*POL/.test(u)) {
+    return { unitId: 'sariyer-pol', unitName: 'SARIYER ANESTEZİ POLİKLİNİK', category: 'poliklinik' };
+  }
+  if (/ÇOCUK|COCUK/.test(u)) {
+    return { unitId: 'cocuk-cerrahisi', unitName: 'ÇOCUK CERRAHİSİ', category: 'ameliyathane' };
+  }
+  if (/DO[ĞG]UMHANE/.test(u)) {
+    return { unitId: 'dogumhane', unitName: 'DOĞUMHANE (C/S)', category: 'ameliyathane' };
+  }
+  if (/KADIN DO[ĞG]UM/.test(u)) {
+    return { unitId: 'kadin-dogum', unitName: 'KADIN DOĞUM', category: 'ameliyathane' };
+  }
+  if (/G[ÖO][ĞG][ÜU]S|MR.*G[ÖO][ĞG][ÜU]S|MR\\Ç/.test(u)) {
+    return { unitId: 'gogus-cerrahisi', unitName: 'GÖĞÜS CERRAHİSİ / MR-GÖĞÜS', category: 'ameliyathane' };
+  }
+  if (/N[ÖO]BET ERTES[İI]/.test(u)) {
+    return { unitId: 'nobet-ertesi', unitName: 'NÖBET ERTESİ', category: 'diger' };
+  }
+  if (/^İZ[İI]N|^IZIN/.test(u)) {
+    return { unitId: 'izin', unitName: 'İZİNLİ HEKİMLER', category: 'diger' };
+  }
+  if (/ROTASYON/.test(u)) {
+    return { unitId: 'rotasyoner', unitName: 'ROTASYONER ASİSTANLAR', category: 'diger' };
+  }
+
+  return {
+    unitId: u.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'unit',
+    unitName: clean,
+    category: 'ameliyathane'
+  };
+}
+
 /**
  * Parse Weekly Work Schedule from Excel (.xlsx, .xls)
  */
@@ -929,89 +1354,151 @@ export async function parseWeeklyScheduleExcel(file: File): Promise<WeeklyWorkSc
           throw new Error('Seçilen sayfada veri satırları bulunamadı');
         }
 
-        // 1. Detect Header Row with Days (Pazartesi, Salı, Çarşamba, Perşembe, Cuma)
+        // 1. Detect Header Row:
+        // Priority A: Row containing multiple date cells (e.g. 09.11.2026, 10.11.2026, ...)
+        // Priority B: Row containing Turkish day names (PAZARTESİ, SALI, ...)
         let headerRowIdx = -1;
-        let dayColIndices: Record<number, number> = {};
+        interface DayColumnRange {
+          dayIndex: number;
+          startCol: number;
+          endCol: number;
+          dateStr?: string;
+          dateObj?: Date;
+        }
 
-        const dayKeywords = [
-          ['PAZARTESİ', 'PZT', 'MON'],
-          ['SALI', 'SAL', 'TUE'],
-          ['ÇARŞAMBA', 'CARSAMBA', 'ÇAR', 'WED'],
-          ['PERŞEMBE', 'PERSEMBE', 'PER', 'THU'],
-          ['CUMA', 'CUM', 'FRI']
-        ];
+        let dayRanges: DayColumnRange[] = [];
+        const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
 
-        for (let r = 0; r < Math.min(rawGrid.length, 12); r++) {
+        // Search for date headers in rows 0..15
+        for (let r = 0; r < Math.min(rawGrid.length, 16); r++) {
           const row = rawGrid[r];
-          const matchedDays: Record<number, number> = {};
+          if (!row || row.length === 0) continue;
+
+          const dateMatches: { col: number; dateStr: string; dateObj: Date }[] = [];
           for (let c = 0; c < row.length; c++) {
-            const cellVal = String(row[c] || '').trim().toUpperCase();
-            dayKeywords.forEach((keywords, dayIdx) => {
-              if (keywords.some(k => cellVal.includes(k))) {
-                matchedDays[dayIdx] = c;
-              }
-            });
+            const cellVal = String(row[c] || '').trim();
+            const m = cellVal.match(/(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})/);
+            if (m) {
+              const day = parseInt(m[1], 10);
+              const month = parseInt(m[2], 10);
+              let year = parseInt(m[3], 10);
+              if (year < 100) year += 2000;
+              dateMatches.push({
+                col: c,
+                dateStr: `${String(day).padStart(2, '0')}.${String(month).padStart(2, '0')}.${year}`,
+                dateObj: new Date(year, month - 1, day, 12, 0, 0)
+              });
+            }
           }
-          if (Object.keys(matchedDays).length >= 3) {
+
+          if (dateMatches.length >= 3) {
             headerRowIdx = r;
-            dayColIndices = matchedDays;
+            // Build ranges: Each day spans from its start col until the next date column
+            for (let i = 0; i < Math.min(dateMatches.length, 5); i++) {
+              const cur = dateMatches[i];
+              const next = dateMatches[i + 1];
+              const endCol = next ? (next.col - 1) : (cur.col + 2);
+              dayRanges.push({
+                dayIndex: i,
+                startCol: cur.col,
+                endCol,
+                dateStr: cur.dateStr,
+                dateObj: cur.dateObj
+              });
+            }
             break;
           }
         }
 
-        // Fallback column positions if day headers not explicitly named: cols 1..5
-        if (headerRowIdx === -1 || Object.keys(dayColIndices).length < 3) {
-          headerRowIdx = 0;
-          for (let i = 0; i < 5; i++) {
-            dayColIndices[i] = i + 1;
+        // Priority B: Day name keywords if date cells were not found in row
+        if (headerRowIdx === -1) {
+          const dayKeywords = [
+            ['PAZARTESİ', 'PZT', 'MON'],
+            ['SALI', 'SAL', 'TUE'],
+            ['ÇARŞAMBA', 'CARSAMBA', 'ÇAR', 'WED'],
+            ['PERŞEMBE', 'PERSEMBE', 'PER', 'THU'],
+            ['CUMA', 'CUM', 'FRI']
+          ];
+
+          for (let r = 0; r < Math.min(rawGrid.length, 16); r++) {
+            const row = rawGrid[r];
+            const matchedDayCols: { dayIdx: number; col: number }[] = [];
+            for (let c = 0; c < row.length; c++) {
+              const cellVal = String(row[c] || '').trim().toUpperCase();
+              dayKeywords.forEach((keywords, dIdx) => {
+                if (keywords.some(k => cellVal.includes(k))) {
+                  matchedDayCols.push({ dayIdx: dIdx, col: c });
+                }
+              });
+            }
+
+            if (matchedDayCols.length >= 3) {
+              headerRowIdx = r;
+              matchedDayCols.sort((a, b) => a.col - b.col);
+              for (let i = 0; i < matchedDayCols.length; i++) {
+                const cur = matchedDayCols[i];
+                const next = matchedDayCols[i + 1];
+                const endCol = next ? (next.col - 1) : (cur.col + 2);
+                dayRanges.push({
+                  dayIndex: cur.dayIdx,
+                  startCol: cur.col,
+                  endCol
+                });
+              }
+              break;
+            }
           }
         }
 
-        // 2. Detect Week Date Range & Year
-        let startDay = 2;
-        let endDay = 6;
+        // Fallback if neither date nor day names detected: Monday=cols 1..3, Salı=cols 4..6, etc.
+        if (headerRowIdx === -1 || dayRanges.length < 3) {
+          headerRowIdx = 9; // Common row in hospital template
+          dayRanges = [
+            { dayIndex: 0, startCol: 1, endCol: 3 },
+            { dayIndex: 1, startCol: 4, endCol: 6 },
+            { dayIndex: 2, startCol: 7, endCol: 9 },
+            { dayIndex: 3, startCol: 10, endCol: 12 },
+            { dayIndex: 4, startCol: 13, endCol: 15 }
+          ];
+        }
+
+        // 2. Generate Days and Week Info
+        let startDay = 9;
+        let endDay = 13;
         let month = 11;
         let year = 2026;
 
-        const searchContext = rawGrid.slice(0, 6).flat().map(v => String(v || '').trim()).join(' ') + ' ' + file.name;
-        const upperContext = searchContext.toUpperCase();
-
-        const TURKISH_MONTHS: Record<string, number> = {
-          'OCAK': 1, 'ŞUBAT': 2, 'SUBAT': 2, 'MART': 3, 'NİSAN': 4, 'NISAN': 4,
-          'MAYIS': 5, 'HAZİRAN': 6, 'HAZIRAN': 6, 'TEMMUZ': 7, 'AĞUSTOS': 8, 'AGUSTOS': 8,
-          'EYLÜL': 9, 'EYLUL': 9, 'EKİM': 10, 'EKIM': 10, 'KASIM': 11, 'ARALIK': 12
-        };
-
-        const rangeMatch = upperContext.match(/(\d{1,2})\s*[-–—/]\s*(\d{1,2})\s+([A-ZÇĞİÖŞÜ]+)\s*(\d{4})?/);
-        if (rangeMatch) {
-          startDay = parseInt(rangeMatch[1], 10);
-          endDay = parseInt(rangeMatch[2], 10);
-          const monthStr = rangeMatch[3];
-          if (TURKISH_MONTHS[monthStr]) {
-            month = TURKISH_MONTHS[monthStr];
-          }
-          if (rangeMatch[4]) {
-            year = parseInt(rangeMatch[4], 10);
+        if (dayRanges[0]?.dateObj) {
+          startDay = dayRanges[0].dateObj.getDate();
+          month = dayRanges[0].dateObj.getMonth() + 1;
+          year = dayRanges[0].dateObj.getFullYear();
+          if (dayRanges[dayRanges.length - 1]?.dateObj) {
+            endDay = dayRanges[dayRanges.length - 1].dateObj!.getDate();
+          } else {
+            endDay = startDay + 4;
           }
         } else {
-          const dotMatch = upperContext.match(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/);
-          if (dotMatch) {
-            startDay = parseInt(dotMatch[1], 10);
-            month = parseInt(dotMatch[2], 10);
-            let y = parseInt(dotMatch[3], 10);
-            if (y < 100) y += 2000;
-            year = y;
-            endDay = startDay + 4;
+          // Detect from sheet context or filename
+          const searchContext = rawGrid.slice(0, 10).flat().map(v => String(v || '').trim()).join(' ') + ' ' + file.name;
+          const rangeMatch = searchContext.toUpperCase().match(/(\d{1,2})\s*[-–—/]\s*(\d{1,2})\s+([A-ZÇĞİÖŞÜ]+)\s*(\d{4})?/);
+          if (rangeMatch) {
+            startDay = parseInt(rangeMatch[1], 10);
+            endDay = parseInt(rangeMatch[2], 10);
+            const TURKISH_MONTHS: Record<string, number> = {
+              'OCAK': 1, 'ŞUBAT': 2, 'SUBAT': 2, 'MART': 3, 'NİSAN': 4, 'NISAN': 4,
+              'MAYIS': 5, 'HAZİRAN': 6, 'HAZIRAN': 6, 'TEMMUZ': 7, 'AĞUSTOS': 8, 'AGUSTOS': 8,
+              'EYLÜL': 9, 'EYLUL': 9, 'EKİM': 10, 'EKIM': 10, 'KASIM': 11, 'ARALIK': 12
+            };
+            if (TURKISH_MONTHS[rangeMatch[3]]) month = TURKISH_MONTHS[rangeMatch[3]];
+            if (rangeMatch[4]) year = parseInt(rangeMatch[4], 10);
           }
         }
 
-        // Generate 5 days (Monday to Friday)
         const days: WorkDayInfo[] = [];
-        const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
         const mondayDate = new Date(year, month - 1, startDay, 12, 0, 0);
 
         for (let i = 0; i < 5; i++) {
-          const curDate = new Date(year, month - 1, startDay + i, 12, 0, 0);
+          const curDate = dayRanges[i]?.dateObj || new Date(year, month - 1, startDay + i, 12, 0, 0);
           const cYear = curDate.getFullYear();
           const cMonth = curDate.getMonth() + 1;
           const cDay = curDate.getDate();
@@ -1037,70 +1524,138 @@ export async function parseWeeklyScheduleExcel(file: File): Promise<WeeklyWorkSc
         const title = `${String(startDay).padStart(2, '0')} - ${String(endDay).padStart(2, '0')} ${turkishMonthName} ${year} Haftalık Mesai Programı`;
         const dateRangeText = `${days[0].dateFormatted} - ${days[4].dateFormatted}`;
 
-        // 3. Parse Salon / Unit Rows
+        // 3. Parse Salon / Unit Rows: Column A (row[0]) is strictly the Unit Name!
         const rows: UnitAssignmentRow[] = [];
-        const unitColIdx = 0;
+        const unmappedRows: { rowNumber: number; rawFirstCells: string[]; reason: string }[] = [];
+        const detectedUnitsMeta: { unitName: string; category: string; doctorCount: number }[] = [];
+
+        // Check if there's a side table in Column Q (index 16) for Nöbet Ertesi
+        let nobetErtesiFromSideTable: string[] = [];
 
         for (let r = headerRowIdx + 1; r < rawGrid.length; r++) {
           const row = rawGrid[r];
           if (!row || row.length === 0) continue;
 
-          let unitName = String(row[unitColIdx] || row[1] || '').trim();
-          if (!unitName || unitName.length < 2) continue;
-
-          const upperUnit = unitName.toUpperCase();
-          if (/İMZA|IMZA|HAZIRLAYAN|BAŞHEKİM|TOPLAM|ONAY/.test(upperUnit)) continue;
-
-          let category: 'ameliyathane' | 'yogun_bakim' | 'poliklinik' | 'diger' = 'ameliyathane';
-          let isPostOp: 'seyrantepe' | 'sariyer' | undefined = undefined;
-
-          if (/YBÜ|YOGUN BAKIM|YOĞUN BAKIM/.test(upperUnit)) {
-            category = 'yogun_bakim';
-          } else if (/POLİKLİNİK|POLIKLINIK/.test(upperUnit)) {
-            category = 'poliklinik';
-          } else if (/İZİN|ROTASYON|NÖBET ERTESİ|NOBET ERTESI/.test(upperUnit)) {
-            category = 'diger';
+          // Check if Col Q (index 16) has "NÖBET ERTESİ"
+          const sideHeader = String(row[16] || '').trim().toUpperCase();
+          if (sideHeader.includes('NÖBET ERTESİ') || sideHeader.includes('NOBET ERTESI')) {
+            const sideDocs: string[] = [];
+            for (let sc = 17; sc < Math.min(row.length, 22); sc++) {
+              const val = String(row[sc] || '').trim();
+              if (val && !/^\d+$/.test(val)) {
+                const cleaned = sanitizeDoctorName(val);
+                if (cleaned && !sideDocs.includes(cleaned)) sideDocs.push(cleaned);
+              }
+            }
+            if (sideDocs.length > 0) {
+              nobetErtesiFromSideTable = sideDocs;
+            }
           }
 
-          if (/SARIYER.*POST-OP|SARIYER -1/.test(upperUnit)) {
-            isPostOp = 'sariyer';
-          } else if (/SEYRANTEPE.*POST-OP/.test(upperUnit)) {
-            isPostOp = 'seyrantepe';
+          // Column A is strictly the unit name
+          let rawUnit = String(row[0] || '').trim();
+          if (!rawUnit) {
+            continue;
           }
 
+          const upperUnit = rawUnit.toUpperCase();
+
+          // Skip date headers, signature or total rows
+          if (/^\d{1,2}[./-]\d{1,2}|İMZA|IMZA|HAZIRLAYAN|BAŞHEKİM|BASHEKIM|TOPLAM|ONAY|TARİH|TARIH|GÜNLÜK|HAFTALIK|PROGRAM/.test(upperUnit)) {
+            unmappedRows.push({
+              rowNumber: r + 1,
+              rawFirstCells: [rawUnit],
+              reason: 'İmza / onay / tarih satırı olarak atlandı.'
+            });
+            continue;
+          }
+
+          // Normalize salon name according to hospital standard template
+          const normalized = normalizeHospitalSalon(rawUnit);
+
+          // Extract doctors across each day's column range (e.g. Pazartesi = cols B, C, D)
           const assignments: Record<string, string[]> = {};
+          let totalDocCount = 0;
+
           for (let dIdx = 0; dIdx < 5; dIdx++) {
             const dateKey = days[dIdx].dateKey;
-            const col = dayColIndices[dIdx] !== undefined ? dayColIndices[dIdx] : (dIdx + 1);
-            const rawCell = row[col];
+            const range = dayRanges[dIdx] || { startCol: dIdx * 3 + 1, endCol: dIdx * 3 + 3 };
+            const dayDocs: string[] = [];
 
-            const docs: string[] = [];
-            if (rawCell) {
-              const str = String(rawCell).trim();
-              if (str && str !== '-' && str !== '/' && str !== 'BOŞ') {
-                const parts = str.split(/[,/;|\n\r]+/).map(p => p.trim()).filter(Boolean);
+            // Special case for ROTASYONER ASİSTANLAR: In hospital template, rotationers are listed in cols B..F
+            if (normalized.unitId === 'rotasyoner' && dIdx > 0 && dayDocs.length === 0 && assignments[days[0].dateKey]) {
+              // Rotationers attend all weekdays
+              assignments[dateKey] = [...assignments[days[0].dateKey]];
+              totalDocCount += assignments[dateKey].length;
+              continue;
+            }
+
+            for (let c = range.startCol; c <= range.endCol; c++) {
+              const cellVal = String(row[c] || '').trim();
+              if (cellVal && cellVal !== '-' && cellVal !== '/' && cellVal !== 'BOŞ' && cellVal !== 'BOS') {
+                const parts = cellVal.split(/[,/;|\n\r]+/).map(p => p.trim()).filter(Boolean);
                 parts.forEach(p => {
                   const cleaned = sanitizeDoctorName(p);
-                  if (cleaned && !docs.includes(cleaned)) {
-                    docs.push(cleaned);
+                  if (cleaned && !dayDocs.includes(cleaned)) {
+                    dayDocs.push(cleaned);
                   }
                 });
               }
             }
-            assignments[dateKey] = docs;
+
+            assignments[dateKey] = dayDocs;
+            totalDocCount += dayDocs.length;
           }
 
-          const unitId = upperUnit
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '') || `unit-${r}`;
+          // Deduplicate / merge rows by unitId (e.g. GÖĞÜS CERRAHİSİ and MR-GÖĞÜS must strictly be one single row)
+          const existingRow = rows.find(r => r.unitId === normalized.unitId);
+          if (existingRow) {
+            days.forEach(d => {
+              const prevDocs = existingRow.assignments[d.dateKey] || [];
+              const newDocs = assignments[d.dateKey] || [];
+              newDocs.forEach(doc => {
+                if (!prevDocs.includes(doc)) prevDocs.push(doc);
+              });
+              existingRow.assignments[d.dateKey] = prevDocs;
+            });
+          } else {
+            rows.push({
+              unitId: normalized.unitId,
+              unitName: normalized.unitName,
+              category: normalized.category,
+              isPostOp: normalized.isPostOp,
+              assignments
+            });
 
+            detectedUnitsMeta.push({
+              unitName: normalized.unitName,
+              category: normalized.category,
+              doctorCount: totalDocCount
+            });
+          }
+        }
+
+        // If Nöbet Ertesi wasn't in Column A but was found in Column Q side table, add it
+        const hasNobetErtesi = rows.some(r => r.unitId === 'nobet-ertesi');
+        if (!hasNobetErtesi && nobetErtesiFromSideTable.length > 0) {
+          const fridayDateKey = days[4].dateKey;
+          const nobetAssignments: Record<string, string[]> = {
+            [days[0].dateKey]: [],
+            [days[1].dateKey]: [],
+            [days[2].dateKey]: [],
+            [days[3].dateKey]: [],
+            [fridayDateKey]: nobetErtesiFromSideTable
+          };
           rows.push({
-            unitId,
-            unitName,
-            category,
-            isPostOp,
-            assignments
+            unitId: 'nobet-ertesi',
+            unitName: 'NÖBET ERTESİ',
+            category: 'diger',
+            assignments: nobetAssignments
+          });
+          detectedUnitsMeta.push({
+            unitName: 'NÖBET ERTESİ',
+            category: 'diger',
+            doctorCount: nobetErtesiFromSideTable.length
           });
         }
 
@@ -1108,12 +1663,34 @@ export async function parseWeeklyScheduleExcel(file: File): Promise<WeeklyWorkSc
           throw new Error('Excel dosyasında ameliyathane veya birim satırları tespit edilemedi.');
         }
 
+        // Diagnostic information
+        const dayColumnsDiag = [0, 1, 2, 3, 4].map(idx => {
+          const r = dayRanges[idx] || { startCol: idx + 1, endCol: idx + 1 };
+          const startLetter = String.fromCharCode(65 + r.startCol);
+          const endLetter = String.fromCharCode(65 + r.endCol);
+          const colLetter = startLetter === endLetter ? startLetter : `${startLetter}..${endLetter}`;
+          return {
+            dayName: dayNames[idx],
+            colIndex: r.startCol,
+            colLetter
+          };
+        });
+
+        const diagnostics = {
+          headerRowIndex: headerRowIdx + 1,
+          dayColumns: dayColumnsDiag,
+          detectedUnitCount: rows.length,
+          unmappedRows,
+          detectedUnits: detectedUnitsMeta
+        };
+
         const schedule: WeeklyWorkSchedule = {
           weekKey,
           title,
           dateRangeText,
           days,
           rows,
+          diagnostics,
           updatedAt: new Date().toISOString()
         };
 

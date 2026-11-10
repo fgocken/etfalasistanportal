@@ -1,5 +1,5 @@
 {
-  "activeWeekKey": "2026-W45",
+  "activeWeekKey": "2026-W46",
   "schedules": {
     "2026-W44": {
       "weekKey": "2026-W44",
@@ -1104,6 +1104,299 @@
               "BATUHAN",
               "BETÜL"
             ]
+          }
+        }
+      ]
+    },
+    "2026-W46": {
+      "weekKey": "2026-W46",
+      "title": "09 - 13 Kasım 2026 Haftalık Mesai Programı",
+      "dateRangeText": "09.11.2026 - 13.11.2026",
+      "updatedAt": "2026-11-09T08:00:00Z",
+      "days": [
+        { "dateKey": "2026-11-09", "dateFormatted": "09.11.2026", "dayName": "Pazartesi" },
+        { "dateKey": "2026-11-10", "dateFormatted": "10.11.2026", "dayName": "Salı" },
+        { "dateKey": "2026-11-11", "dateFormatted": "11.11.2026", "dayName": "Çarşamba" },
+        { "dateKey": "2026-11-12", "dateFormatted": "12.11.2026", "dayName": "Perşembe" },
+        { "dateKey": "2026-11-13", "dateFormatted": "13.11.2026", "dayName": "Cuma" }
+      ],
+      "rows": [
+        {
+          "unitId": "genel-cerrahi",
+          "unitName": "GENEL CERRAHİ",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["SÜLEYMAN"],
+            "2026-11-10": ["EBRU"],
+            "2026-11-11": ["EBRU"],
+            "2026-11-12": ["EBRU"],
+            "2026-11-13": ["ZEYNEP", "EBRU", "MUSTAFA"]
+          }
+        },
+        {
+          "unitId": "nrs",
+          "unitName": "NRŞ (BEYİN CERRAHİSİ)",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["FURKAN G."],
+            "2026-11-10": ["Y.DERTSİZ"],
+            "2026-11-11": ["FURKAN G."],
+            "2026-11-12": ["YAKUP"],
+            "2026-11-13": ["Y.DERTSİZ"]
+          }
+        },
+        {
+          "unitId": "ortopedi-acil",
+          "unitName": "ORTOPEDİ - ACİL",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["HANİFE", "ZEHRA E."],
+            "2026-11-10": ["HANİFE", "YAĞMUR M"],
+            "2026-11-11": ["ZEHRA E.", "YAKUP"],
+            "2026-11-12": ["HANİFE", "ZEHRA E."],
+            "2026-11-13": ["HANİFE", "ZEHRA E.", "ALPER"]
+          }
+        },
+        {
+          "unitId": "kbb",
+          "unitName": "KBB",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["İMRAN"],
+            "2026-11-10": ["İMRAN", "İBRAHİM"],
+            "2026-11-11": ["İMRAN"],
+            "2026-11-12": ["İMRAN"],
+            "2026-11-13": ["İMRAN", "İBRAHİM"]
+          }
+        },
+        {
+          "unitId": "plastik-cerrahi",
+          "unitName": "PLASTİK CERRAHİ",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["AYŞEGÜL"],
+            "2026-11-10": ["AYŞEGÜL"],
+            "2026-11-11": ["AYŞEGÜL"],
+            "2026-11-12": ["MUSTAFA", "PELİN"],
+            "2026-11-13": ["AYŞEGÜL"]
+          }
+        },
+        {
+          "unitId": "uroloji",
+          "unitName": "ÜROLOJİ",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["YAĞMUR M."],
+            "2026-11-10": ["İBRAHİM"],
+            "2026-11-11": ["İBRAHİM"],
+            "2026-11-12": ["YAĞMUR M."],
+            "2026-11-13": ["MUSTAFA", "HAMİT"]
+          }
+        },
+        {
+          "unitId": "arka-kbb-goz",
+          "unitName": "ARKA KBB + GÖZ",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["EMİR"],
+            "2026-11-10": ["HAMİT"],
+            "2026-11-11": ["HAMİT"],
+            "2026-11-12": ["ZEYNEP"],
+            "2026-11-13": ["İBRAHİM"]
+          }
+        },
+        {
+          "unitId": "kvc",
+          "unitName": "KVC",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["EREN", "MERVE A."],
+            "2026-11-10": ["EREN"],
+            "2026-11-11": ["EREN"],
+            "2026-11-12": ["MERVE A."],
+            "2026-11-13": ["EREN", "MERVE A."]
+          }
+        },
+        {
+          "unitId": "ybu",
+          "unitName": "YBÜ (YOĞUN BAKIM)",
+          "category": "yogun_bakim",
+          "assignments": {
+            "2026-11-09": ["FATMA", "ALPER", "ECEM"],
+            "2026-11-10": ["MERVE A.", "İNCİ", "ECEM"],
+            "2026-11-11": ["FATMA", "İNCİ", "ECEM"],
+            "2026-11-12": ["FATMA", "İNCİ", "İBRAHİM"],
+            "2026-11-13": ["FATMA", "YAĞMUR M", "ECEM"]
+          }
+        },
+        {
+          "unitId": "post-op-ybu",
+          "unitName": "POST-OP YBÜ (SEYRANTEPE)",
+          "category": "yogun_bakim",
+          "isPostOp": "seyrantepe",
+          "assignments": {
+            "2026-11-09": ["YAKUP"],
+            "2026-11-10": ["CAN"],
+            "2026-11-11": ["CAN"],
+            "2026-11-12": ["EMİR"],
+            "2026-11-13": ["CAN"]
+          }
+        },
+        {
+          "unitId": "dis-anestezi",
+          "unitName": "DIŞ ANESTEZİ / ENDOSKOPİ",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["ÇAĞATAY", "YAĞMUR D"],
+            "2026-11-10": ["SÜHEYLA O.", "BURÇAK"],
+            "2026-11-11": ["ORKUT", "BURÇAK"],
+            "2026-11-12": ["ÇAĞATAY", "FURKAN G"],
+            "2026-11-13": ["ÇAĞATAY", "BURÇAK"]
+          }
+        },
+        {
+          "unitId": "poliklinik",
+          "unitName": "ANESTEZİ POLİKLİNİĞİ",
+          "category": "poliklinik",
+          "assignments": {
+            "2026-11-09": ["MUSTAFA", "Y.DERTSİZ"],
+            "2026-11-10": ["MUSTAFA", "NUMAN"],
+            "2026-11-11": ["EMİR", "NUMAN"],
+            "2026-11-12": ["ORKUT", "NUMAN"],
+            "2026-11-13": ["ORKUT", "NUMAN"]
+          }
+        },
+        {
+          "unitId": "sariyer-ybu",
+          "unitName": "SARIYER YBÜ",
+          "category": "yogun_bakim",
+          "assignments": {
+            "2026-11-09": ["ŞEVKİ", "BERKAN", "İBRAHİM"],
+            "2026-11-10": ["ORKUT", "ALPER", "CEYDA"],
+            "2026-11-11": ["ŞEVKİ", "BERKAN", "CEYDA"],
+            "2026-11-12": ["ŞEVKİ", "BERKAN", "HAMİT"],
+            "2026-11-13": ["ŞEVKİ", "BERKAN", "CEYDA"]
+          }
+        },
+        {
+          "unitId": "sariyer-1-ybu",
+          "unitName": "SARIYER -1 YBÜ (SARIYER POST-OP)",
+          "category": "yogun_bakim",
+          "isPostOp": "sariyer",
+          "assignments": {
+            "2026-11-09": ["BERKAN"],
+            "2026-11-10": ["ALPER"],
+            "2026-11-11": ["BERKAN"],
+            "2026-11-12": ["BERKAN"],
+            "2026-11-13": ["BERKAN"]
+          }
+        },
+        {
+          "unitId": "sariyer-2-ybu",
+          "unitName": "SARIYER -2 YBÜ",
+          "category": "yogun_bakim",
+          "assignments": {
+            "2026-11-09": ["SÜHEYLA O."],
+            "2026-11-10": ["ÇAĞATAY"],
+            "2026-11-11": ["YAĞMUR D"],
+            "2026-11-12": ["SÜHEYLA O."],
+            "2026-11-13": ["SÜHEYLA O."]
+          }
+        },
+        {
+          "unitId": "sariyer-pol",
+          "unitName": "SARIYER ANESTEZİ POLİKLİNİK",
+          "category": "poliklinik",
+          "assignments": {
+            "2026-11-09": ["ZEHRA P."],
+            "2026-11-10": ["ZEHRA P."],
+            "2026-11-11": ["Y.DERTSİZ"],
+            "2026-11-12": ["ZEHRA P."],
+            "2026-11-13": ["ZEHRA P."]
+          }
+        },
+        {
+          "unitId": "cocuk-cerrahisi",
+          "unitName": "ÇOCUK CERRAHİSİ",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["FN GÜNLÜ"],
+            "2026-11-10": ["FN GÜNLÜ"],
+            "2026-11-11": ["FN GÜNLÜ"],
+            "2026-11-12": ["FN GÜNLÜ"],
+            "2026-11-13": ["YAĞMUR D."]
+          }
+        },
+        {
+          "unitId": "dogumhane",
+          "unitName": "DOĞUMHANE (C/S)",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["MERVE İ."],
+            "2026-11-10": ["MERVE İ."],
+            "2026-11-11": ["MERVE İ."],
+            "2026-11-12": ["MERVE İ."],
+            "2026-11-13": ["MERVE İ."]
+          }
+        },
+        {
+          "unitId": "kadin-dogum",
+          "unitName": "KADIN DOĞUM",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": ["CELİL"],
+            "2026-11-10": ["CELİL"],
+            "2026-11-11": ["ALPER"],
+            "2026-11-12": ["CELİL"],
+            "2026-11-13": ["CELİL"]
+          }
+        },
+        {
+          "unitId": "gogus-cerrahisi",
+          "unitName": "GÖĞÜS CERRAHİSİ / MR-GÖĞÜS",
+          "category": "ameliyathane",
+          "assignments": {
+            "2026-11-09": [],
+            "2026-11-10": ["YAĞMUR D."],
+            "2026-11-11": ["SÜLEYMAN"],
+            "2026-11-12": ["SÜLEYMAN"],
+            "2026-11-13": ["PELİN"]
+          }
+        },
+        {
+          "unitId": "nobet-ertesi",
+          "unitName": "NÖBET ERTESİ",
+          "category": "diger",
+          "assignments": {
+            "2026-11-09": [],
+            "2026-11-10": [],
+            "2026-11-11": [],
+            "2026-11-12": [],
+            "2026-11-13": ["YAĞMUR D.", "FN.YÜCE", "YAKUP"]
+          }
+        },
+        {
+          "unitId": "izin",
+          "unitName": "İZİNLİ HEKİMLER",
+          "category": "diger",
+          "assignments": {
+            "2026-11-09": ["SEVCAN"],
+            "2026-11-10": [],
+            "2026-11-11": [],
+            "2026-11-12": [],
+            "2026-11-13": []
+          }
+        },
+        {
+          "unitId": "rotasyoner",
+          "unitName": "ROTASYONER ASİSTANLAR",
+          "category": "diger",
+          "assignments": {
+            "2026-11-09": ["PELİN", "ZEYNEP", "BATUHAN", "BETÜL", "FN YÜCE"],
+            "2026-11-10": ["PELİN", "ZEYNEP", "BATUHAN", "BETÜL", "FN YÜCE"],
+            "2026-11-11": ["PELİN", "ZEYNEP", "BATUHAN", "BETÜL", "FN YÜCE"],
+            "2026-11-12": ["PELİN", "ZEYNEP", "BATUHAN", "BETÜL", "FN YÜCE"],
+            "2026-11-13": ["PELİN", "ZEYNEP", "BATUHAN", "BETÜL"]
           }
         }
       ]

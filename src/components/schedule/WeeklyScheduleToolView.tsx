@@ -275,9 +275,28 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
     }
   };
 
-  // Filter rows
+  // Deduplicate and filter rows
   const cleanSearch = searchDoctor.trim().toUpperCase();
-  const filteredRows = (safeSchedule.rows || []).filter(row => {
+  const deduplicatedRows = (safeSchedule.rows || []).reduce<UnitAssignmentRow[]>((acc, row) => {
+    const existing = acc.find(r => r.unitId === row.unitId || r.unitName === row.unitName);
+    if (existing) {
+      // Merge assignments across all days
+      Object.keys(row.assignments || {}).forEach(dateKey => {
+        const docs = row.assignments[dateKey] || [];
+        if (!existing.assignments[dateKey]) existing.assignments[dateKey] = [];
+        docs.forEach(d => {
+          if (!existing.assignments[dateKey].includes(d)) {
+            existing.assignments[dateKey].push(d);
+          }
+        });
+      });
+    } else {
+      acc.push({ ...row, assignments: { ...row.assignments } });
+    }
+    return acc;
+  }, []);
+
+  const filteredRows = deduplicatedRows.filter(row => {
     if (categoryFilter !== 'all' && row.category !== categoryFilter) return false;
     if (!cleanSearch) return true;
 
@@ -289,7 +308,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
 
   // Calculate doctor stats if search is active
   const searchResultsCount = cleanSearch
-    ? (safeSchedule.rows || []).reduce((acc, row) => {
+    ? deduplicatedRows.reduce((acc, row) => {
         return acc + Object.values(row.assignments || {}).reduce((dAcc, docs) => {
           return dAcc + (docs || []).filter(d => d.toUpperCase().includes(cleanSearch)).length;
         }, 0);
@@ -311,16 +330,9 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
             <Calendar className="w-5 h-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-base sm:text-lg font-black tracking-tight">
-                {safeSchedule.title}
-              </h2>
-              <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                isDark ? 'bg-teal-950/80 text-teal-300 border border-teal-800/50' : 'bg-teal-50 text-teal-700 border border-teal-200'
-              }`}>
-                {safeSchedule.dateRangeText}
-              </span>
-            </div>
+            <h2 className="text-base sm:text-lg font-black tracking-tight">
+              {safeSchedule.title}
+            </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               Ameliyathane salonları, yoğun bakımlar ve poliklinik hekim dağılımı
             </p>
@@ -329,20 +341,6 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
 
         {/* Right Actions */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* PDF Yükle Butonu */}
-          <button
-            type="button"
-            onClick={handleRequestUpload}
-            title={isAdminUnlocked ? 'Haftalık PDF programı yükle' : 'Yükleme yapmak için admin şifresi gereklidir'}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-2xs ${
-              isDark ? 'bg-teal-600 hover:bg-teal-500 text-white' : 'bg-teal-700 hover:bg-teal-800 text-white'
-            }`}
-          >
-            <Upload className="w-3.5 h-3.5" />
-            <span>PDF Yükle</span>
-            {!isAdminUnlocked && <Lock className="w-3 h-3 opacity-70 ml-0.5" />}
-          </button>
-
           {/* Düzenleme Modu Butonu */}
           <button
             type="button"

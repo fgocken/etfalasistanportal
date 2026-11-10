@@ -17,6 +17,20 @@ export interface WorkDayInfo {
   holidayNote?: string; // 'Cumhuriyet Bayramı'
 }
 
+export interface ScheduleRowDiagnostic {
+  rowNumber: number;
+  rawFirstCells: string[];
+  reason: string;
+}
+
+export interface ScheduleParseDiagnostics {
+  headerRowIndex: number;
+  dayColumns: { dayName: string; colIndex: number; colLetter: string }[];
+  detectedUnitCount: number;
+  unmappedRows: ScheduleRowDiagnostic[];
+  detectedUnits: { unitName: string; category: string; doctorCount: number }[];
+}
+
 export interface WeeklyWorkSchedule {
   weekKey: string;          // '2026-W44', '2026-W45'
   title: string;            // '26 - 30 Ekim 2026 Haftalık Mesai Programı'
@@ -26,6 +40,7 @@ export interface WeeklyWorkSchedule {
   updatedAt?: string;
   pdfUrl?: string;          // Optional original official PDF document
   pdfFileName?: string;     // e.g. '02-06_kasim_mesai_programi.pdf'
+  diagnostics?: ScheduleParseDiagnostics;
 }
 
 export type WeeklyScheduleRegistry = Record<string, WeeklyWorkSchedule>;

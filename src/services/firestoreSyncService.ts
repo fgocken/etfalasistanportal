@@ -2,6 +2,7 @@ import {
   collection, 
   doc, 
   setDoc, 
+  deleteDoc,
   getDocs, 
   onSnapshot, 
   serverTimestamp, 
@@ -170,9 +171,10 @@ export async function pushDutyRosterToFirestore(roster: MonthDutyRoster): Promis
 }
 
 /**
- * Pushes a single weekly schedule to Firestore so all visitors see it immediately
+ * Pushes a single weekly schedule to Firestore so all visitors see it immediately.
+ * cleanOverwrite: true (default) completely replaces the document to prevent ghost/merged corrupted rows.
  */
-export async function pushWeeklyScheduleToFirestore(schedule: WeeklyWorkSchedule): Promise<boolean> {
+export async function pushWeeklyScheduleToFirestore(schedule: WeeklyWorkSchedule, cleanOverwrite = true): Promise<boolean> {
   if (!schedule || !schedule.weekKey) return false;
 
   const path = `weekly_schedules/${schedule.weekKey}`;
@@ -191,15 +193,33 @@ export async function pushWeeklyScheduleToFirestore(schedule: WeeklyWorkSchedule
       serverTimestamp: serverTimestamp()
     };
 
-    await setDoc(docRef, payload, { merge: true });
+    // When cleanOverwrite is true, completely replace document so old rows are wiped clean
+    await setDoc(docRef, payload, { merge: !cleanOverwrite });
 
     // Also update active settings
     await updateActiveSettingsInFirestore({ activeWeekKey: schedule.weekKey });
 
-    console.log(`[Firestore] Haftalık çalışma programı buluta yüklendi: ${schedule.weekKey}`);
+    console.log(`[Firestore] Haftalık çalışma programı buluta yüklendi (Temiz Yazma: ${cleanOverwrite}): ${schedule.weekKey}`);
     return true;
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
+    return false;
+  }
+}
+
+/**
+ * Completely removes a week's schedule from Firestore
+ */
+export async function deleteWeeklyScheduleFromFirestore(weekKey: string): Promise<boolean> {
+  if (!weekKey) return false;
+  const path = `weekly_schedules/${weekKey}`;
+  try {
+    const docRef = doc(db, 'weekly_schedules', weekKey);
+    await deleteDoc(docRef);
+    console.log(`[Firestore] Hafta programı tamamen silindi: ${weekKey}`);
+    return true;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
     return false;
   }
 }

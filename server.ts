@@ -320,6 +320,24 @@ app.post('/api/schedule', (req, res) => {
   }
 });
 
+app.delete('/api/schedule/:weekKey', (req, res) => {
+  try {
+    const { weekKey } = req.params;
+    const existing = readWeeklySchedule() || { activeWeekKey: '2026-W45', schedules: {} };
+    if (existing.schedules && existing.schedules[weekKey]) {
+      delete existing.schedules[weekKey];
+      const remaining = Object.keys(existing.schedules);
+      if (existing.activeWeekKey === weekKey) {
+        existing.activeWeekKey = remaining.length > 0 ? remaining[0] : '2026-W45';
+      }
+      saveWeeklySchedule(existing);
+    }
+    res.json({ success: true, ...existing });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err?.message || 'Silinemedi' });
+  }
+});
+
 // PDF Schedule Parsing Helper Functions
 function getISOWeekNumber(d: Date): number {
   const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
