@@ -2,6 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { PDFParse } from 'pdf-parse';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -316,6 +317,195 @@ app.post('/api/schedule', (req, res) => {
     res.json({ success: true, ...existing });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err?.message || 'Bilinmeyen hata' });
+  }
+});
+
+// PDF Schedule Parsing Helper Functions
+function getISOWeekNumber(d: Date): number {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  return Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+}
+
+const TURKISH_MONTH_MAP: Record<string, number> = {
+  'OCAK': 1, 'ŞUBAT': 2, 'SUBAT': 2, 'MART': 3, 'NİSAN': 4, 'NISAN': 4,
+  'MAYIS': 5, 'HAZİRAN': 6, 'HAZIRAN': 6, 'TEMMUZ': 7, 'AĞUSTOS': 8, 'AGUSTOS': 8,
+  'EYLÜL': 9, 'EYLUL': 9, 'EKİM': 10, 'EKIM': 10, 'KASIM': 11, 'ARALIK': 12
+};
+
+const TURKISH_MONTH_NAMES_ARR = [
+  'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+  'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+];
+
+const STANDARD_UNITS: Array<{ unitId: string; unitName: string; category: any; isPostOp?: any }> = [
+  { unitId: 'genel-cerrahi', unitName: 'GENEL CERRAHİ', category: 'ameliyathane' },
+  { unitId: 'nrs', unitName: 'NRŞ (BEYİN CERRAHİSİ)', category: 'ameliyathane' },
+  { unitId: 'ortopedi-acil', unitName: 'ORTOPEDİ - ACİL', category: 'ameliyathane' },
+  { unitId: 'kbb', unitName: 'KBB', category: 'ameliyathane' },
+  { unitId: 'plastik-cerrahi', unitName: 'PLASTİK CERRAHİ', category: 'ameliyathane' },
+  { unitId: 'uroloji', unitName: 'ÜROLOJİ', category: 'ameliyathane' },
+  { unitId: 'arka-kbb-goz', unitName: 'ARKA KBB + GÖZ', category: 'ameliyathane' },
+  { unitId: 'gogus-cerrahisi', unitName: 'GÖĞÜS CERRAHİSİ / MR-GÖĞÜS', category: 'ameliyathane' },
+  { unitId: 'cocuk-cerrahisi', unitName: 'ÇOCUK CERRAHİSİ', category: 'ameliyathane' },
+  { unitId: 'dogumhane', unitName: 'DOĞUMHANE (C/S)', category: 'ameliyathane' },
+  { unitId: 'kadin-dogum', unitName: 'KADIN DOĞUM', category: 'ameliyathane' },
+  { unitId: 'dis-anestezi', unitName: 'DIŞ ANESTEZİ / ENDOSKOPİ', category: 'ameliyathane' },
+  { unitId: 'poliklinik', unitName: 'ANESTEZİ POLİKLİNİĞİ', category: 'poliklinik' },
+  { unitId: 'sariyer-ybu', unitName: 'SARIYER YBÜ', category: 'yogun_bakim' },
+  { unitId: 'sariyer-1-ybu', unitName: 'SARIYER -1 YBÜ (SARIYER POST-OP)', category: 'yogun_bakim', isPostOp: 'sariyer' },
+  { unitId: 'sariyer-2-ybu', unitName: 'SARIYER -2 YBÜ', category: 'yogun_bakim' },
+  { unitId: 'sariyer-pol', unitName: 'SARIYER ANESTEZİ POLİKLİNİK', category: 'poliklinik' },
+  { unitId: 'nobet-ertesi', unitName: 'NÖBET ERTESİ', category: 'diger' },
+  { unitId: 'izin', unitName: 'İZİNLİ HEKİMLER', category: 'diger' },
+  { unitId: 'rotasyoner', unitName: 'ROTASYONER ASİSTANLAR', category: 'diger' }
+];
+
+app.post('/api/parse-schedule-pdf', async (req, res) => {
+  try {
+    const { pdfBase64, fileName } = req.body;
+    if (!pdfBase64) {
+      return res.status(400).json({ success: false, error: 'PDF verisi bulunamadı' });
+    }
+
+    const cleanBase64 = String(pdfBase64).replace(/^data:application\/pdf;base64,/, '');
+    const buffer = Buffer.from(cleanBase64, 'base64');
+    const parser = new PDFParse({ data: buffer });
+    const parsedTextResult = await parser.getText();
+    const fullText = (parsedTextResult?.text || '').trim();
+    const upperText = fullText.toUpperCase();
+    const upperFileName = String(fileName || '').toUpperCase();
+
+    // 1. Detect Week Range & Month & Year
+    let startDay = 2;
+    let endDay = 6;
+    let month = 11;
+    let year = 2026;
+
+    // Try finding date range in text or file name: e.g. "02 - 06 KASIM 2026" or "26 - 30 EKİM 2026"
+    const textRangeMatch = (upperText + ' ' + upperFileName).match(/(\d{1,2})\s*[-–—/]\s*(\d{1,2})\s+([A-ZÇĞİÖŞÜ]+)\s*(\d{4})?/);
+    if (textRangeMatch) {
+      startDay = parseInt(textRangeMatch[1], 10);
+      endDay = parseInt(textRangeMatch[2], 10);
+      const monthStr = textRangeMatch[3];
+      if (TURKISH_MONTH_MAP[monthStr]) {
+        month = TURKISH_MONTH_MAP[monthStr];
+      }
+      if (textRangeMatch[4]) {
+        year = parseInt(textRangeMatch[4], 10);
+      }
+    } else {
+      // Check for DD.MM.YYYY - DD.MM.YYYY
+      const dotMatch = (upperText + ' ' + upperFileName).match(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})\s*[-–—/]\s*(\d{1,2})\.(\d{1,2})\.(\d{2,4})/);
+      if (dotMatch) {
+        startDay = parseInt(dotMatch[1], 10);
+        month = parseInt(dotMatch[2], 10);
+        let y = parseInt(dotMatch[3], 10);
+        if (y < 100) y += 2000;
+        year = y;
+        endDay = parseInt(dotMatch[4], 10);
+      }
+    }
+
+    // Generate Monday-Friday WorkDayInfo objects
+    const days: any[] = [];
+    const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
+    const mondayDate = new Date(year, month - 1, startDay, 12, 0, 0);
+
+    for (let i = 0; i < 5; i++) {
+      const curDate = new Date(year, month - 1, startDay + i, 12, 0, 0);
+      const cYear = curDate.getFullYear();
+      const cMonth = curDate.getMonth() + 1;
+      const cDay = curDate.getDate();
+      const dateKey = `${cYear}-${String(cMonth).padStart(2, '0')}-${String(cDay).padStart(2, '0')}`;
+      const dateFormatted = `${String(cDay).padStart(2, '0')}.${String(cMonth).padStart(2, '0')}.${cYear}`;
+
+      const isHoliday = (cMonth === 10 && cDay === 29) || (cMonth === 1 && cDay === 1) || (cMonth === 4 && cDay === 23) || (cMonth === 5 && cDay === 1) || (cMonth === 5 && cDay === 19);
+      const holidayNote = (cMonth === 10 && cDay === 29) ? '29 Ekim Cumhuriyet Bayramı' : undefined;
+
+      days.push({
+        dateKey,
+        dateFormatted,
+        dayName: dayNames[i],
+        isHoliday,
+        holidayNote
+      });
+    }
+
+    const weekNum = getISOWeekNumber(mondayDate);
+    const weekKey = `${year}-W${String(weekNum).padStart(2, '0')}`;
+    const turkishMonthName = TURKISH_MONTH_NAMES_ARR[month - 1] || 'Kasım';
+    const title = `${String(startDay).padStart(2, '0')} - ${String(endDay).padStart(2, '0')} ${turkishMonthName} ${year} Haftalık Mesai Programı`;
+    const dateRangeText = `${days[0].dateFormatted} - ${days[4].dateFormatted}`;
+
+    // 2. Extract unit assignments
+    const rows: any[] = [];
+
+    // Helper: extract doctor names following a unit pattern in the text
+    const lines = fullText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+    for (const stdUnit of STANDARD_UNITS) {
+      const assignments: Record<string, string[]> = {};
+      days.forEach(d => {
+        assignments[d.dateKey] = [];
+      });
+
+      // Scan lines for this unit name
+      const searchNeedle = stdUnit.unitName.split(' ')[0].toUpperCase();
+      let foundLineIdx = lines.findIndex(l => l.toUpperCase().includes(searchNeedle));
+
+      if (foundLineIdx !== -1) {
+        // Collect tokens from the line and subsequent 2 lines
+        const contextText = lines.slice(foundLineIdx, foundLineIdx + 3).join(' ');
+        // Extract words resembling doctor names (all caps, 3-20 chars)
+        const doctorTokens = contextText
+          .replace(new RegExp(searchNeedle, 'gi'), '')
+          .split(/[,/;|\t\n]+/)
+          .map(t => t.trim().toUpperCase())
+          .filter(t => t.length >= 3 && !/PAZARTESİ|SALI|ÇARŞAMBA|PERŞEMBE|CUMA|HAFTALIK|PROGRAM|AMELİYATHANE|SARIYER|SEYRANTEPE|TARİH/.test(t));
+
+        if (doctorTokens.length > 0) {
+          // Distribute across days
+          days.forEach((d, idx) => {
+            const doc = doctorTokens[idx % doctorTokens.length];
+            if (doc && !assignments[d.dateKey].includes(doc)) {
+              assignments[d.dateKey].push(doc);
+            }
+          });
+        }
+      }
+
+      rows.push({
+        unitId: stdUnit.unitId,
+        unitName: stdUnit.unitName,
+        category: stdUnit.category,
+        isPostOp: stdUnit.isPostOp,
+        assignments
+      });
+    }
+
+    const schedule = {
+      weekKey,
+      title,
+      dateRangeText,
+      days,
+      rows,
+      updatedAt: new Date().toISOString(),
+      pdfUrl: `data:application/pdf;base64,${cleanBase64}`,
+      pdfFileName: fileName || 'haftalik_program.pdf'
+    };
+
+    res.json({
+      success: true,
+      schedule,
+      detectedWeek: weekKey,
+      detectedTitle: title
+    });
+  } catch (err: any) {
+    console.error('[PDF Parse Error]', err);
+    res.status(500).json({ success: false, error: err?.message || 'PDF analiz edilirken hata oluştu' });
   }
 });
 

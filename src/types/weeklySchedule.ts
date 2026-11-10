@@ -24,6 +24,8 @@ export interface WeeklyWorkSchedule {
   days: WorkDayInfo[];      // 5 weekdays Monday to Friday
   rows: UnitAssignmentRow[];
   updatedAt?: string;
+  pdfUrl?: string;          // Optional original official PDF document
+  pdfFileName?: string;     // e.g. '02-06_kasim_mesai_programi.pdf'
 }
 
 export type WeeklyScheduleRegistry = Record<string, WeeklyWorkSchedule>;

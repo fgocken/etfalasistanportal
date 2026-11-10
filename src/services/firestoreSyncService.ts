@@ -185,6 +185,8 @@ export async function pushWeeklyScheduleToFirestore(schedule: WeeklyWorkSchedule
       dateRangeText: schedule.dateRangeText || '',
       days: schedule.days || [],
       rows: schedule.rows || [],
+      pdfUrl: schedule.pdfUrl || '',
+      pdfFileName: schedule.pdfFileName || '',
       updatedAt: new Date().toISOString(),
       serverTimestamp: serverTimestamp()
     };

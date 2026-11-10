@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { X, Upload, FileText, Check, AlertCircle, Calendar } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { X, Upload, FileText, Check, AlertCircle, Calendar, FileSpreadsheet, Loader2, Sparkles, Building2 } from 'lucide-react';
 import { WeeklyWorkSchedule } from '../../types/weeklySchedule';
 import { 
   OFFICIAL_OCTOBER_WEEK_SCHEDULE, 
   OFFICIAL_NOVEMBER_WEEK_SCHEDULE,
-  saveWeeklyScheduleLocally,
+  parseWeeklyScheduleFile,
   saveWeeklyScheduleToServer,
   setActiveWeekKey
 } from '../../services/weeklyScheduleService';
@@ -24,11 +24,12 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
   isDark,
   currentSchedule
 }) => {
-  const [selectedPreset, setSelectedPreset] = useState<'nov' | 'oct' | 'custom'>('nov');
-  const [weekTitle, setWeekTitle] = useState<string>(currentSchedule.title);
-  const [rangeText, setRangeText] = useState<string>(currentSchedule.dateRangeText);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [parsedPreview, setParsedPreview] = useState<WeeklyWorkSchedule | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string>('');
+  const [uploadedFileType, setUploadedFileType] = useState<'excel' | 'pdf' | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
 
@@ -38,44 +39,56 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
 
     setIsProcessing(true);
     setFeedback(null);
+    setParsedPreview(null);
+
+    const isPdf = file.name.toLowerCase().endsWith('.pdf');
+    const isExcel = file.name.toLowerCase().endsWith('.xlsx') || file.name.toLowerCase().endsWith('.xls');
+    setUploadedFileName(file.name);
+    setUploadedFileType(isPdf ? 'pdf' : (isExcel ? 'excel' : null));
 
     try {
-      const fileNameLower = file.name.toLowerCase();
-      
-      // Check if file is November or October week
-      let targetSchedule: WeeklyWorkSchedule;
-      if (fileNameLower.includes('kas') || fileNameLower.includes('b86bee') || fileNameLower.includes('02') || fileNameLower.includes('haftal_k_program')) {
-        targetSchedule = {
-          ...OFFICIAL_NOVEMBER_WEEK_SCHEDULE,
-          updatedAt: new Date().toISOString()
-        };
-        setFeedback(`"${file.name}" algılandı: 02 - 06 Kasım 2026 programı sisteme yüklendi ve aktif edildi.`);
-      } else if (fileNameLower.includes('ekim') || fileNameLower.includes('26-30') || fileNameLower.includes('e2e4be')) {
-        targetSchedule = {
-          ...OFFICIAL_OCTOBER_WEEK_SCHEDULE,
-          updatedAt: new Date().toISOString()
-        };
-        setFeedback(`"${file.name}" algılandı: 26 - 30 Ekim 2026 programı sisteme yüklendi ve aktif edildi.`);
-      } else {
-        // Generic new schedule
-        targetSchedule = {
-          ...currentSchedule,
-          title: weekTitle.trim() || file.name.replace(/\.[^/.]+$/, ''),
-          dateRangeText: rangeText.trim() || currentSchedule.dateRangeText,
-          updatedAt: new Date().toISOString()
-        };
-        setFeedback(`"${file.name}" başarıyla yüklendi ve programa eklendi.`);
-      }
+      // 1. Automatically parse either Excel or PDF
+      const schedule = await parseWeeklyScheduleFile(file);
+      setParsedPreview(schedule);
+      setFeedback({
+        type: 'success',
+        message: `Otomatik algılandı: "${schedule.title}" (${schedule.days[0]?.dateFormatted} - ${schedule.days[4]?.dateFormatted}) • ${schedule.rows.length} salon hazır.`
+      });
+    } catch (err: any) {
+      console.error('File parsing error:', err);
+      setFeedback({
+        type: 'error',
+        message: 'Dosya analiz edilirken hata oluştu: ' + (err?.message || 'Geçersiz dosya formatı')
+      });
+    } finally {
+      setIsProcessing(false);
+      // Reset input value so same file can be re-selected if needed
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
-      setActiveWeekKey(targetSchedule.weekKey);
-      onSaveSchedule(targetSchedule);
-      await saveWeeklyScheduleToServer(targetSchedule);
+  const handleConfirmPublish = async () => {
+    if (!parsedPreview) return;
+
+    setIsProcessing(true);
+    try {
+      setActiveWeekKey(parsedPreview.weekKey);
+      onSaveSchedule(parsedPreview);
+      await saveWeeklyScheduleToServer(parsedPreview);
+
+      setFeedback({
+        type: 'success',
+        message: 'Haftalık program Firestore bulutuna başarıyla yüklendi ve tüm kullanıcılar için canlı güncellendi!'
+      });
 
       setTimeout(() => {
         onClose();
-      }, 1200);
+      }, 1000);
     } catch (err: any) {
-      setFeedback('Dosya işlenirken bir hata oluştu: ' + (err?.message || 'Bilinmeyen hata'));
+      setFeedback({
+        type: 'error',
+        message: 'Bulut eşitleme hatası: ' + (err?.message || 'Bilinmeyen hata')
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -83,15 +96,26 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
 
   const handleApplyPreset = async (preset: 'nov' | 'oct') => {
     setIsProcessing(true);
-    const scheduleToApply = preset === 'nov' ? OFFICIAL_NOVEMBER_WEEK_SCHEDULE : OFFICIAL_OCTOBER_WEEK_SCHEDULE;
-    setActiveWeekKey(scheduleToApply.weekKey);
-    onSaveSchedule(scheduleToApply);
-    await saveWeeklyScheduleToServer(scheduleToApply);
-    setFeedback(`${scheduleToApply.title} başarıyla yüklendi ve aktif edildi.`);
-    setTimeout(() => {
+    try {
+      const scheduleToApply = preset === 'nov' ? OFFICIAL_NOVEMBER_WEEK_SCHEDULE : OFFICIAL_OCTOBER_WEEK_SCHEDULE;
+      setActiveWeekKey(scheduleToApply.weekKey);
+      onSaveSchedule(scheduleToApply);
+      await saveWeeklyScheduleToServer(scheduleToApply);
+      setFeedback({
+        type: 'success',
+        message: `${scheduleToApply.title} başarıyla yüklendi ve aktif edildi.`
+      });
+      setTimeout(() => {
+        setIsProcessing(false);
+        onClose();
+      }, 800);
+    } catch (err: any) {
+      setFeedback({
+        type: 'error',
+        message: 'Şablon uygulanırken hata: ' + (err?.message || 'Bilinmeyen hata')
+      });
       setIsProcessing(false);
-      onClose();
-    }, 1000);
+    }
   };
 
   return (
@@ -105,17 +129,18 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
         }`}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2.5">
-            <div className={`p-2 rounded-xl ${
+            <div className={`p-2.5 rounded-xl ${
               isDark ? 'bg-teal-500/15 text-teal-400' : 'bg-teal-100 text-teal-800'
             }`}>
               <Upload className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold">Haftalık Mesai Programı Yükle</h3>
+              <h3 className="text-base font-bold tracking-tight">Haftalık Mesai Programı Yükle</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Resmi haftalık PDF programını sisteme yükleyin veya hazır haftaları seçin
+                Excel (.xlsx, .xls) veya PDF (.pdf) formatında dosya yükleyebilirsiniz
               </p>
             </div>
           </div>
@@ -128,17 +153,129 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
           </button>
         </div>
 
+        {/* Feedback Alert */}
         {feedback && (
-          <div className="p-3 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 text-xs flex items-center gap-2">
-            <Check className="w-4 h-4 shrink-0" />
-            <span>{feedback}</span>
+          <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+            feedback.type === 'success'
+              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+              : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
+          }`}>
+            {feedback.type === 'success' ? (
+              <Check className="w-4 h-4 shrink-0 text-emerald-500" />
+            ) : (
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+            )}
+            <span className="font-medium">{feedback.message}</span>
           </div>
         )}
 
-        {/* Quick Presets for official PDF weeks */}
+        {/* Upload Drop Zone: Supports both Excel and PDF */}
         <div className="space-y-2">
           <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-            Resmi Haftalık Programlar
+            Yeni Haftalık Program Dosyası (Excel veya PDF)
+          </label>
+          <div 
+            onClick={() => fileInputRef.current?.click()}
+            className={`border-2 border-dashed rounded-xl p-5 sm:p-6 text-center flex flex-col items-center justify-center gap-3 cursor-pointer transition-all ${
+              isDark 
+                ? 'border-slate-700 hover:border-teal-500 bg-slate-800/40 hover:bg-slate-800/70' 
+                : 'border-slate-300 hover:border-teal-600 bg-slate-50 hover:bg-teal-50/30'
+            }`}
+          >
+            {isProcessing ? (
+              <div className="flex flex-col items-center gap-2 py-3">
+                <Loader2 className="w-8 h-8 text-teal-600 animate-spin" />
+                <span className="text-xs font-bold text-teal-600 dark:text-teal-400">
+                  Dosya analiz ediliyor (Hafta ve salonlar taranıyor)...
+                </span>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                    <FileSpreadsheet className="w-5 h-5" />
+                  </div>
+                  <div className="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-bold">
+                    Excel (.xlsx, .xls) veya PDF (.pdf) dosyasını buraya bırakın veya seçin
+                  </p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    Tarihler, salonlar ve hekim görevlendirmeleri otomatik algılanır
+                  </p>
+                </div>
+              </>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx, .xls, .pdf"
+              onChange={handleFileUpload}
+              disabled={isProcessing}
+              className="hidden"
+            />
+          </div>
+        </div>
+
+        {/* Parsed Preview Card if file was analyzed */}
+        {parsedPreview && (
+          <div className={`p-4 rounded-xl border space-y-3 ${
+            isDark ? 'bg-slate-800/70 border-teal-500/30' : 'bg-teal-50/50 border-teal-200'
+          }`}>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-teal-500" />
+                Algılanan Haftalık Program Önizlemesi
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-500/20 text-teal-700 dark:text-teal-300 border border-teal-500/30 uppercase">
+                {uploadedFileType === 'pdf' ? 'PDF Belgesi' : 'Excel Tablosu'}
+              </span>
+            </div>
+
+            <div className="text-xs space-y-1">
+              <div className="font-bold text-slate-900 dark:text-slate-100">
+                {parsedPreview.title}
+              </div>
+              <div className="text-slate-500 dark:text-slate-400 flex items-center gap-3">
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {parsedPreview.dateRangeText}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5" />
+                  {parsedPreview.rows.length} Salon / Birim
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleConfirmPublish}
+              disabled={isProcessing}
+              className="w-full py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-colors"
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Yayınlanıyor...</span>
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>Onayla ve Canlı Yayına Al (Firebase)</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Quick Presets */}
+        <div className="space-y-2 pt-1 border-t border-slate-200 dark:border-slate-800">
+          <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            Veya Hazır Resmi Haftaları Seçin
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <button
@@ -157,7 +294,7 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
                 {currentSchedule.weekKey === '2026-W45' && <Check className="w-4 h-4 text-teal-500" />}
               </div>
               <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                PDF Programı (Güncel Hafta)
+                02-06 Kasım Haftalık Programı
               </span>
             </button>
 
@@ -183,31 +320,7 @@ export const WeeklyScheduleUploadModal: React.FC<WeeklyScheduleUploadModalProps>
           </div>
         </div>
 
-        {/* Upload Custom PDF Drop Area */}
-        <div className="space-y-2">
-          <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-            Yeni Haftalık PDF Yükle
-          </label>
-          <div className={`border-2 border-dashed rounded-xl p-5 text-center flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${
-            isDark 
-              ? 'border-slate-700 hover:border-teal-500 bg-slate-800/40' 
-              : 'border-slate-300 hover:border-teal-600 bg-slate-50'
-          }`}>
-            <FileText className="w-8 h-8 text-teal-600 dark:text-teal-400" />
-            <div>
-              <p className="text-xs font-bold">PDF dosyasını buraya sürükleyin veya seçin</p>
-              <p className="text-[11px] text-slate-500">Maksimum dosya boyutu 10MB (.pdf)</p>
-            </div>
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={handleFileUpload}
-              disabled={isProcessing}
-              className="absolute inset-0 opacity-0 cursor-pointer"
-            />
-          </div>
-        </div>
-
+        {/* Footer */}
         <div className="flex justify-end pt-2">
           <button
             type="button"

@@ -12,7 +12,11 @@ import {
   RotateCcw,
   Building2,
   Activity,
-  Filter
+  Filter,
+  FileText,
+  Download,
+  ExternalLink,
+  X
 } from 'lucide-react';
 import { WeeklyWorkSchedule, UnitAssignmentRow, WeekOption } from '../../types/weeklySchedule';
 import { 
@@ -47,6 +51,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const [pendingAction, setPendingAction] = useState<'upload' | 'edit' | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  const [showPdfViewer, setShowPdfViewer] = useState<boolean>(false);
 
   // Cell Edit Modal state
   const [editingCell, setEditingCell] = useState<{
@@ -60,9 +65,14 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
 
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
+  // Defensive fallback: guarantee safeSchedule always has valid days and rows
+  const safeSchedule: WeeklyWorkSchedule = (schedule && Array.isArray(schedule.days) && Array.isArray(schedule.rows))
+    ? schedule
+    : getSavedWeeklySchedule();
+
   // Today's date info for column highlight
   const todayInfo = getIstanbulDateInfo();
-  const isTodayInThisWeek = schedule.days.some(day => day.dateKey === todayInfo.dateKey);
+  const isTodayInThisWeek = (safeSchedule.days || []).some(day => day && day.dateKey === todayInfo.dateKey);
 
   // Refs for auto-centering on today's column (both horizontally and vertically)
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -102,7 +112,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
   useEffect(() => {
     const cleanup = scrollToToday(true);
     return cleanup;
-  }, [schedule.weekKey, scrollToToday]);
+  }, [safeSchedule.weekKey, scrollToToday]);
 
   const refreshWeekOptions = () => {
     setAvailableWeeks(getAvailableWeekOptions());
@@ -111,12 +121,16 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
   useEffect(() => {
     setIsAdminUnlocked(isRosterAdminUnlocked());
     fetchServerWeeklySchedule().then(fresh => {
-      setSchedule(fresh);
+      if (fresh && Array.isArray(fresh.days) && Array.isArray(fresh.rows)) {
+        setSchedule(fresh);
+      } else {
+        setSchedule(getSavedWeeklySchedule());
+      }
       refreshWeekOptions();
     });
 
     const handleUpdated = (e: any) => {
-      if (e.detail) {
+      if (e.detail && Array.isArray(e.detail.days) && Array.isArray(e.detail.rows)) {
         setSchedule(e.detail);
       } else {
         setSchedule(getSavedWeeklySchedule());
@@ -127,15 +141,20 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
     const handleWeekChanged = (e: any) => {
       const wk = e.detail?.weekKey;
       if (wk) {
-        setSchedule(getSavedWeeklySchedule(wk));
+        const fresh = getSavedWeeklySchedule(wk);
+        if (fresh && Array.isArray(fresh.days)) {
+          setSchedule(fresh);
+        }
         refreshWeekOptions();
       }
     };
 
     window.addEventListener('etfal-schedule-updated', handleUpdated);
+    window.addEventListener('etfal-weekly-schedule-updated', handleUpdated);
     window.addEventListener('etfal-active-week-changed', handleWeekChanged);
     return () => {
       window.removeEventListener('etfal-schedule-updated', handleUpdated);
+      window.removeEventListener('etfal-weekly-schedule-updated', handleUpdated);
       window.removeEventListener('etfal-active-week-changed', handleWeekChanged);
     };
   }, []);
@@ -190,7 +209,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
     if (!editingCell) return;
     const { unitId, dateKey } = editingCell;
 
-    const updatedRows = schedule.rows.map(row => {
+    const updatedRows = (safeSchedule.rows || []).map(row => {
       if (row.unitId === unitId) {
         return {
           ...row,
@@ -204,7 +223,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
     });
 
     const updatedSchedule: WeeklyWorkSchedule = {
-      ...schedule,
+      ...safeSchedule,
       rows: updatedRows,
       updatedAt: new Date().toISOString()
     };
@@ -258,21 +277,21 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
 
   // Filter rows
   const cleanSearch = searchDoctor.trim().toUpperCase();
-  const filteredRows = schedule.rows.filter(row => {
+  const filteredRows = (safeSchedule.rows || []).filter(row => {
     if (categoryFilter !== 'all' && row.category !== categoryFilter) return false;
     if (!cleanSearch) return true;
 
     // Check if any doctor in any day matches search
-    return Object.values(row.assignments).some(docs => 
-      docs.some(doc => doc.toUpperCase().includes(cleanSearch))
+    return Object.values(row.assignments || {}).some(docs => 
+      (docs || []).some(doc => doc.toUpperCase().includes(cleanSearch))
     ) || row.unitName.toUpperCase().includes(cleanSearch);
   });
 
   // Calculate doctor stats if search is active
   const searchResultsCount = cleanSearch
-    ? schedule.rows.reduce((acc, row) => {
-        return acc + Object.values(row.assignments).reduce((dAcc, docs) => {
-          return dAcc + docs.filter(d => d.toUpperCase().includes(cleanSearch)).length;
+    ? (safeSchedule.rows || []).reduce((acc, row) => {
+        return acc + Object.values(row.assignments || {}).reduce((dAcc, docs) => {
+          return dAcc + (docs || []).filter(d => d.toUpperCase().includes(cleanSearch)).length;
         }, 0);
       }, 0)
     : 0;
@@ -294,12 +313,12 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base sm:text-lg font-black tracking-tight">
-                {schedule.title}
+                {safeSchedule.title}
               </h2>
               <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
                 isDark ? 'bg-teal-950/80 text-teal-300 border border-teal-800/50' : 'bg-teal-50 text-teal-700 border border-teal-200'
               }`}>
-                {schedule.dateRangeText}
+                {safeSchedule.dateRangeText}
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -372,7 +391,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
           </span>
           <div className="flex items-center gap-1.5">
             {availableWeeks.map(opt => {
-              const isSelected = opt.key === schedule.weekKey;
+              const isSelected = opt.key === safeSchedule.weekKey;
               return (
                 <button
                   key={opt.key}
@@ -394,14 +413,27 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleRequestUpload}
-          className="text-xs font-semibold text-teal-700 dark:text-teal-400 hover:underline flex items-center gap-1 shrink-0 cursor-pointer"
-        >
-          <Upload className="w-3 h-3" />
-          <span>+ Yeni Hafta Yükle</span>
-        </button>
+        <div className="flex items-center gap-3">
+          {safeSchedule.pdfUrl && (
+            <button
+              type="button"
+              onClick={() => setShowPdfViewer(true)}
+              className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1.5 shrink-0 cursor-pointer"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Resmi PDF'i Görüntüle</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={handleRequestUpload}
+            className="text-xs font-semibold text-teal-700 dark:text-teal-400 hover:underline flex items-center gap-1 shrink-0 cursor-pointer"
+          >
+            <Upload className="w-3 h-3" />
+            <span>+ Yeni Hafta Yükle (Excel/PDF)</span>
+          </button>
+        </div>
       </div>
 
       {/* 3. Filter & Search Strip */}
@@ -514,7 +546,7 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
                 <th className="py-2.5 px-3 text-left w-56 bg-slate-950">
                   GÖREV YERİ / BİRİM
                 </th>
-                {schedule.days.map((day, idx) => {
+                {(safeSchedule.days || []).map((day, idx) => {
                   const isToday = day.dateKey === todayInfo.dateKey;
                   const isTargetCol = isToday || (!isTodayInThisWeek && idx === 0);
                   return (
@@ -575,9 +607,9 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
                     </td>
 
                     {/* Gün Sütunları */}
-                    {schedule.days.map((day) => {
+                    {(safeSchedule.days || []).map((day) => {
                       const isToday = day.dateKey === todayInfo.dateKey;
-                      const docs = row.assignments[day.dateKey] || [];
+                      const docs = (row.assignments && row.assignments[day.dateKey]) || [];
                       const isMatch = cleanSearch && docs.some(d => d.toUpperCase().includes(cleanSearch));
 
                       if (day.isHoliday) {
@@ -701,6 +733,76 @@ export const WeeklyScheduleToolView: React.FC<WeeklyScheduleToolViewProps> = ({ 
         isDark={isDark}
         currentSchedule={schedule}
       />
+
+      {/* Official PDF Viewer Modal */}
+      {showPdfViewer && safeSchedule.pdfUrl && (
+        <div 
+          className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
+          onClick={() => setShowPdfViewer(false)}
+        >
+          <div 
+            className={`w-full max-w-4xl h-[85vh] rounded-2xl border shadow-2xl flex flex-col overflow-hidden ${
+              isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-300'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className={`p-4 border-b flex items-center justify-between ${
+              isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200 text-slate-900'
+            }`}>
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-rose-500/15 text-rose-500">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold">{safeSchedule.title} - Resmi PDF Belgesi</h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {safeSchedule.pdfFileName || 'Haftalık Mesai Programı'} • {safeSchedule.dateRangeText}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href={safeSchedule.pdfUrl}
+                  download={safeSchedule.pdfFileName || `${safeSchedule.weekKey}_mesai_programi.pdf`}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 border transition-colors ${
+                    isDark ? 'border-slate-700 hover:bg-slate-700 text-slate-200' : 'border-slate-300 hover:bg-slate-200 text-slate-700'
+                  }`}
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>PDF İndir</span>
+                </a>
+                <a
+                  href={safeSchedule.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-1.5 transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Yeni Sekmede Aç</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setShowPdfViewer(false)}
+                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer ml-1"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Embedded PDF View */}
+            <div className="flex-1 w-full bg-slate-950">
+              <iframe
+                src={safeSchedule.pdfUrl}
+                title={safeSchedule.title}
+                className="w-full h-full border-0"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

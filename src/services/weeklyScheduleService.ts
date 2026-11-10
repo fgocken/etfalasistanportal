@@ -1,5 +1,6 @@
-import { WeeklyWorkSchedule, TodayPostOpStatus, WeeklyScheduleRegistry, WeekOption } from '../types/weeklySchedule';
-import { getPreviousDayPostOpDuty } from '../components/roster/DutyRosterService';
+import * as XLSX from 'xlsx';
+import { WeeklyWorkSchedule, WorkDayInfo, UnitAssignmentRow, TodayPostOpStatus, WeeklyScheduleRegistry, WeekOption } from '../types/weeklySchedule';
+import { getPreviousDayPostOpDuty, sanitizeDoctorName } from '../components/roster/DutyRosterService';
 
 const REGISTRY_STORAGE_KEY = 'etfal_weekly_schedules_registry_v2';
 const ACTIVE_WEEK_STORAGE_KEY = 'etfal_weekly_active_week_key_v2';
@@ -879,4 +880,290 @@ export function getTodayPostOpStatus(
     seyrantepeHandoverFrom: handover.seyrantepeDutyDoc || undefined,
     sariyerHandoverFrom: handover.sariyerDutyDoc || undefined
   };
+}
+
+/**
+ * Calculates ISO 8601 week number (1..53)
+ */
+export function getISOWeekNumber(d: Date): number {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  return Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+}
+
+/**
+ * Converts a browser File to base64 data URL
+ */
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('Dosya verisi okunamadı.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Parse Weekly Work Schedule from Excel (.xlsx, .xls)
+ */
+export async function parseWeeklyScheduleExcel(file: File): Promise<WeeklyWorkSchedule> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const buffer = e.target?.result as ArrayBuffer;
+        if (!buffer) throw new Error('Dosya verisi okunamadı');
+
+        const workbook = XLSX.read(buffer, { type: 'array' });
+        if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+          throw new Error('Excel dosyasında çalışma sayfası bulunamadı');
+        }
+
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rawGrid: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+
+        if (!rawGrid || rawGrid.length === 0) {
+          throw new Error('Seçilen sayfada veri satırları bulunamadı');
+        }
+
+        // 1. Detect Header Row with Days (Pazartesi, Salı, Çarşamba, Perşembe, Cuma)
+        let headerRowIdx = -1;
+        let dayColIndices: Record<number, number> = {};
+
+        const dayKeywords = [
+          ['PAZARTESİ', 'PZT', 'MON'],
+          ['SALI', 'SAL', 'TUE'],
+          ['ÇARŞAMBA', 'CARSAMBA', 'ÇAR', 'WED'],
+          ['PERŞEMBE', 'PERSEMBE', 'PER', 'THU'],
+          ['CUMA', 'CUM', 'FRI']
+        ];
+
+        for (let r = 0; r < Math.min(rawGrid.length, 12); r++) {
+          const row = rawGrid[r];
+          const matchedDays: Record<number, number> = {};
+          for (let c = 0; c < row.length; c++) {
+            const cellVal = String(row[c] || '').trim().toUpperCase();
+            dayKeywords.forEach((keywords, dayIdx) => {
+              if (keywords.some(k => cellVal.includes(k))) {
+                matchedDays[dayIdx] = c;
+              }
+            });
+          }
+          if (Object.keys(matchedDays).length >= 3) {
+            headerRowIdx = r;
+            dayColIndices = matchedDays;
+            break;
+          }
+        }
+
+        // Fallback column positions if day headers not explicitly named: cols 1..5
+        if (headerRowIdx === -1 || Object.keys(dayColIndices).length < 3) {
+          headerRowIdx = 0;
+          for (let i = 0; i < 5; i++) {
+            dayColIndices[i] = i + 1;
+          }
+        }
+
+        // 2. Detect Week Date Range & Year
+        let startDay = 2;
+        let endDay = 6;
+        let month = 11;
+        let year = 2026;
+
+        const searchContext = rawGrid.slice(0, 6).flat().map(v => String(v || '').trim()).join(' ') + ' ' + file.name;
+        const upperContext = searchContext.toUpperCase();
+
+        const TURKISH_MONTHS: Record<string, number> = {
+          'OCAK': 1, 'ŞUBAT': 2, 'SUBAT': 2, 'MART': 3, 'NİSAN': 4, 'NISAN': 4,
+          'MAYIS': 5, 'HAZİRAN': 6, 'HAZIRAN': 6, 'TEMMUZ': 7, 'AĞUSTOS': 8, 'AGUSTOS': 8,
+          'EYLÜL': 9, 'EYLUL': 9, 'EKİM': 10, 'EKIM': 10, 'KASIM': 11, 'ARALIK': 12
+        };
+
+        const rangeMatch = upperContext.match(/(\d{1,2})\s*[-–—/]\s*(\d{1,2})\s+([A-ZÇĞİÖŞÜ]+)\s*(\d{4})?/);
+        if (rangeMatch) {
+          startDay = parseInt(rangeMatch[1], 10);
+          endDay = parseInt(rangeMatch[2], 10);
+          const monthStr = rangeMatch[3];
+          if (TURKISH_MONTHS[monthStr]) {
+            month = TURKISH_MONTHS[monthStr];
+          }
+          if (rangeMatch[4]) {
+            year = parseInt(rangeMatch[4], 10);
+          }
+        } else {
+          const dotMatch = upperContext.match(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/);
+          if (dotMatch) {
+            startDay = parseInt(dotMatch[1], 10);
+            month = parseInt(dotMatch[2], 10);
+            let y = parseInt(dotMatch[3], 10);
+            if (y < 100) y += 2000;
+            year = y;
+            endDay = startDay + 4;
+          }
+        }
+
+        // Generate 5 days (Monday to Friday)
+        const days: WorkDayInfo[] = [];
+        const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
+        const mondayDate = new Date(year, month - 1, startDay, 12, 0, 0);
+
+        for (let i = 0; i < 5; i++) {
+          const curDate = new Date(year, month - 1, startDay + i, 12, 0, 0);
+          const cYear = curDate.getFullYear();
+          const cMonth = curDate.getMonth() + 1;
+          const cDay = curDate.getDate();
+          const dateKey = `${cYear}-${String(cMonth).padStart(2, '0')}-${String(cDay).padStart(2, '0')}`;
+          const dateFormatted = `${String(cDay).padStart(2, '0')}.${String(cMonth).padStart(2, '0')}.${cYear}`;
+
+          const isHoliday = (cMonth === 10 && cDay === 29) || (cMonth === 1 && cDay === 1) || (cMonth === 4 && cDay === 23) || (cMonth === 5 && cDay === 1);
+          const holidayNote = (cMonth === 10 && cDay === 29) ? '29 Ekim Cumhuriyet Bayramı' : undefined;
+
+          days.push({
+            dateKey,
+            dateFormatted,
+            dayName: dayNames[i],
+            isHoliday,
+            holidayNote
+          });
+        }
+
+        const weekNum = getISOWeekNumber(mondayDate);
+        const weekKey = `${year}-W${String(weekNum).padStart(2, '0')}`;
+        const monthNames = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+        const turkishMonthName = monthNames[month - 1] || 'Kasım';
+        const title = `${String(startDay).padStart(2, '0')} - ${String(endDay).padStart(2, '0')} ${turkishMonthName} ${year} Haftalık Mesai Programı`;
+        const dateRangeText = `${days[0].dateFormatted} - ${days[4].dateFormatted}`;
+
+        // 3. Parse Salon / Unit Rows
+        const rows: UnitAssignmentRow[] = [];
+        const unitColIdx = 0;
+
+        for (let r = headerRowIdx + 1; r < rawGrid.length; r++) {
+          const row = rawGrid[r];
+          if (!row || row.length === 0) continue;
+
+          let unitName = String(row[unitColIdx] || row[1] || '').trim();
+          if (!unitName || unitName.length < 2) continue;
+
+          const upperUnit = unitName.toUpperCase();
+          if (/İMZA|IMZA|HAZIRLAYAN|BAŞHEKİM|TOPLAM|ONAY/.test(upperUnit)) continue;
+
+          let category: 'ameliyathane' | 'yogun_bakim' | 'poliklinik' | 'diger' = 'ameliyathane';
+          let isPostOp: 'seyrantepe' | 'sariyer' | undefined = undefined;
+
+          if (/YBÜ|YOGUN BAKIM|YOĞUN BAKIM/.test(upperUnit)) {
+            category = 'yogun_bakim';
+          } else if (/POLİKLİNİK|POLIKLINIK/.test(upperUnit)) {
+            category = 'poliklinik';
+          } else if (/İZİN|ROTASYON|NÖBET ERTESİ|NOBET ERTESI/.test(upperUnit)) {
+            category = 'diger';
+          }
+
+          if (/SARIYER.*POST-OP|SARIYER -1/.test(upperUnit)) {
+            isPostOp = 'sariyer';
+          } else if (/SEYRANTEPE.*POST-OP/.test(upperUnit)) {
+            isPostOp = 'seyrantepe';
+          }
+
+          const assignments: Record<string, string[]> = {};
+          for (let dIdx = 0; dIdx < 5; dIdx++) {
+            const dateKey = days[dIdx].dateKey;
+            const col = dayColIndices[dIdx] !== undefined ? dayColIndices[dIdx] : (dIdx + 1);
+            const rawCell = row[col];
+
+            const docs: string[] = [];
+            if (rawCell) {
+              const str = String(rawCell).trim();
+              if (str && str !== '-' && str !== '/' && str !== 'BOŞ') {
+                const parts = str.split(/[,/;|\n\r]+/).map(p => p.trim()).filter(Boolean);
+                parts.forEach(p => {
+                  const cleaned = sanitizeDoctorName(p);
+                  if (cleaned && !docs.includes(cleaned)) {
+                    docs.push(cleaned);
+                  }
+                });
+              }
+            }
+            assignments[dateKey] = docs;
+          }
+
+          const unitId = upperUnit
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '') || `unit-${r}`;
+
+          rows.push({
+            unitId,
+            unitName,
+            category,
+            isPostOp,
+            assignments
+          });
+        }
+
+        if (rows.length === 0) {
+          throw new Error('Excel dosyasında ameliyathane veya birim satırları tespit edilemedi.');
+        }
+
+        const schedule: WeeklyWorkSchedule = {
+          weekKey,
+          title,
+          dateRangeText,
+          days,
+          rows,
+          updatedAt: new Date().toISOString()
+        };
+
+        resolve(schedule);
+      } catch (err: any) {
+        reject(new Error(`Excel dosyası işlenirken hata: ${err?.message || err}`));
+      }
+    };
+    reader.onerror = () => reject(new Error('Dosya okunamadı.'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+/**
+ * Parse Weekly Work Schedule from PDF (.pdf) via backend /api/parse-schedule-pdf
+ */
+export async function parseWeeklySchedulePDF(file: File): Promise<WeeklyWorkSchedule> {
+  const base64 = await fileToBase64(file);
+  const res = await fetch('/api/parse-schedule-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      pdfBase64: base64,
+      fileName: file.name
+    })
+  });
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData?.error || 'PDF dosyası sunucu tarafından analiz edilemedi');
+  }
+
+  const data = await res.json();
+  if (!data || !data.schedule) {
+    throw new Error('PDF dosyasından geçerli bir haftalık mesai programı çıkarılamadı');
+  }
+
+  return data.schedule as WeeklyWorkSchedule;
+}
+
+/**
+ * Universal Weekly Schedule parser supporting both Excel (.xlsx, .xls) and PDF (.pdf)
+ */
+export async function parseWeeklyScheduleFile(file: File): Promise<WeeklyWorkSchedule> {
+  const ext = file.name.toLowerCase();
+  if (ext.endsWith('.xlsx') || ext.endsWith('.xls')) {
+    return parseWeeklyScheduleExcel(file);
+  } else if (ext.endsWith('.pdf')) {
+    return parseWeeklySchedulePDF(file);
+  } else {
+    throw new Error('Desteklenmeyen dosya formatı. Lütfen .xlsx, .xls veya .pdf dosyası seçiniz.');
+  }
 }
