@@ -226,6 +226,11 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
 
   const handleStartInduction = () => {
     if (t1Time) return;
+    if (!hemoT0Done || !isT0PsiLogged) {
+      playAlertSound(450, 300);
+      alert('⚠️ T0 Bazal Fazı tamamlanmadan indüksiyon başlatılamaz!\n\nLütfen önce:\n1. T0 Hemodinami ölçümünü onaylayınız,\n2. T0 PSi değerini kaydediniz.');
+      return;
+    }
     const now = Date.now();
     setT1Time(now);
     addLog('▶ İNDÜKSİYON BAŞLATILDI (Ketofol İV Verilmeye Başlandı)', false, true);
@@ -453,6 +458,7 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
   const cd600 = getCountdown(600000);
 
   const isGroup1 = grup === 'Grup 1 (PSi)';
+  const isBazalCompleted = isT0PsiLogged && hemoT0Done;
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-24 relative">
@@ -612,6 +618,11 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
                     placeholder="T0 PSi Değeri (90-100)"
                     value={t0Psi}
                     onChange={(e) => setT0Psi(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleLogT0Psi();
+                      }
+                    }}
                     disabled={isT0PsiLogged}
                     className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 dark:text-white outline-none focus:border-teal-500 disabled:opacity-60"
                   />
@@ -648,19 +659,52 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
 
             <div className="space-y-3">
               {!t1Time ? (
-                <button
-                  type="button"
-                  onClick={handleStartInduction}
-                  className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-between shadow-md transition-all cursor-pointer active:scale-98"
-                >
-                  <span className="flex items-center gap-2">
-                    <Play className="w-4 h-4 fill-white" />
-                    <span>İndüksiyonu Başlat (Ketofol İV Verildi)</span>
-                  </span>
-                  <span className="text-xs font-mono bg-blue-700/70 px-2 py-0.5 rounded">
-                    Kronometreyi Başlat
-                  </span>
-                </button>
+                <div className="space-y-2">
+                  {!isBazalCompleted && (
+                    <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-xs font-semibold flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <Lock className="w-4 h-4 text-amber-500 shrink-0" />
+                        <span>
+                          {!hemoT0Done && !isT0PsiLogged
+                            ? 'Bazal Faz Bekleniyor: T0 Hemodinami ve T0 PSi kaydedilmeden indüksiyon başlatılamaz.'
+                            : !hemoT0Done
+                              ? 'Bazal Faz Bekleniyor: T0 Hemodinami onayı yapılmalıdır.'
+                              : 'Bazal Faz Bekleniyor: T0 PSi kaydedilmelidir.'}
+                        </span>
+                      </span>
+                      <span className="text-[10px] font-mono bg-amber-500/20 px-2 py-0.5 rounded font-bold">KİLİTLİ</span>
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={handleStartInduction}
+                    disabled={!isBazalCompleted}
+                    className={`w-full py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-between shadow-md transition-all ${
+                      !isBazalCompleted
+                        ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-300 dark:border-slate-700 cursor-not-allowed opacity-60'
+                        : 'bg-blue-600 hover:bg-blue-500 text-white cursor-pointer active:scale-98 shadow-blue-500/20'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      {!isBazalCompleted ? (
+                        <Lock className="w-4 h-4 text-slate-400 shrink-0" />
+                      ) : (
+                        <Play className="w-4 h-4 fill-white" />
+                      )}
+                      <span>
+                        {!isBazalCompleted
+                          ? 'İndüksiyonu Başlat (Önce T0 Bazal Fazı Tamamlayınız)'
+                          : 'İndüksiyonu Başlat (Ketofol İV Verildi)'}
+                      </span>
+                    </span>
+                    <span className={`text-xs font-mono px-2 py-0.5 rounded ${
+                      !isBazalCompleted ? 'bg-slate-300 dark:bg-slate-700 text-slate-500' : 'bg-blue-700/70 text-white'
+                    }`}>
+                      {!isBazalCompleted ? 'T0 KİLİTLİ' : 'Kronometreyi Başlat'}
+                    </span>
+                  </button>
+                </div>
               ) : (
                 <div className="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
@@ -671,9 +715,16 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
                 </div>
               )}
 
-              <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/70">
-                <div className="text-xs text-slate-600 dark:text-slate-400">
-                  <span className="font-bold text-slate-900 dark:text-slate-200">Monitör:</span> T1 Hemodinami (İndüksiyon sonu / bilinç kaybı anı).
+              {/* T1 Hemodinami: Pulses when induction started until confirmed */}
+              <div className={`flex items-center justify-between p-2.5 rounded-lg border transition-all ${
+                t1Time && !hemoT1Done
+                  ? 'bg-amber-500/15 border-amber-500 ring-2 ring-amber-400/50 shadow-md animate-pulse'
+                  : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700/70'
+              }`}>
+                <div className="text-xs text-slate-700 dark:text-slate-300">
+                  <span className={`font-bold ${t1Time && !hemoT1Done ? 'text-amber-800 dark:text-amber-300 font-black' : 'text-slate-900 dark:text-slate-200'}`}>
+                    Monitör:
+                  </span> T1 Hemodinami (İndüksiyon sonu / bilinç kaybı anı).
                 </div>
                 <button
                   type="button"
@@ -684,28 +735,32 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
                       ? 'bg-emerald-600 text-white border-emerald-500 cursor-default'
                       : !t1Time
                         ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 border-slate-300 dark:border-slate-700 cursor-not-allowed opacity-60'
-                        : 'bg-slate-700 hover:bg-slate-600 text-white border-slate-600'
+                        : 'bg-amber-600 hover:bg-amber-500 text-white border-amber-500 font-black shadow-md animate-pulse active:scale-95'
                   }`}
                 >
                   {hemoT1Done ? '✔ Onaylandı' : 'Yapıldı / Onayla'}
                 </button>
               </div>
 
-              {/* T1 PSi: Conditioned by Group */}
+              {/* T1 PSi: Conditioned by Group - Pulses when induction started until confirmed */}
               {isGroup1 ? (
-                /* Grup 1: Soru Tabanlı (PSi <= 50 hedefine erişildi mi?) */
+                /* Grup 1: Soru Tabanlı (PSi >= 50 hedefine erişildi mi?) - Yanıp Sönen Uyarı */
                 <div className={`p-3.5 rounded-xl border transition-all ${
                   isT1PsiLogged
                     ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
-                    : 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900/60'
+                    : t1Time
+                      ? 'bg-blue-500/15 dark:bg-blue-950/40 border-blue-500 dark:border-blue-400 ring-2 ring-blue-500/50 shadow-lg animate-pulse'
+                      : 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900/60'
                 }`}>
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
-                      <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <div className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-blue-500" />
-                        <span>PSi ≥ 50 Hedefine Erişildi mi?</span>
+                        <span className={t1Time && !isT1PsiLogged ? 'text-blue-900 dark:text-blue-200 font-extrabold' : ''}>
+                          PSi ≥ 50 Hedefine Erişildi mi?
+                        </span>
                       </div>
-                      <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      <div className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
                         Grup 1 protokolü: Değer girmeye gerek yoktur; PSi ≥ 50 sağlandığında indüksiyon tamamlanır.
                       </div>
                     </div>
@@ -730,7 +785,11 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
                             type="button"
                             onClick={() => handleGroup1T1Target(true)}
                             disabled={!t1Time}
-                            className="px-4 py-1.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xs disabled:opacity-50 cursor-pointer flex items-center gap-1.5 transition-all active:scale-95"
+                            className={`px-4 py-1.5 rounded-lg text-xs font-black shadow-md disabled:opacity-50 cursor-pointer flex items-center gap-1.5 transition-all active:scale-95 ${
+                              t1Time
+                                ? 'bg-blue-600 hover:bg-blue-500 text-white animate-pulse ring-2 ring-blue-400/60'
+                                : 'bg-slate-300 text-slate-500'
+                            }`}
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Evet, PSi ≥ 50 Ulaşıldı</span>
@@ -742,7 +801,11 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
                 </div>
               ) : (
                 /* Grup 2: Sayısal PSi Değeri Girilir (Kör Kayıt) */
-                <div>
+                <div className={`p-2 rounded-xl border transition-all ${
+                  t1Time && !isT1PsiLogged
+                    ? 'border-blue-500 bg-blue-500/10 ring-2 ring-blue-400/40 animate-pulse'
+                    : 'border-transparent'
+                }`}>
                   <div className="flex items-center gap-3">
                     <div className="relative flex-1 max-w-xs">
                       <input
@@ -750,6 +813,9 @@ export const EktTrackerView: React.FC<EktTrackerViewProps> = ({ isDark }) => {
                         placeholder="T1 PSi Değeri (Kör Kayıt)"
                         value={t1Psi}
                         onChange={(e) => setT1Psi(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleLogT1Psi();
+                        }}
                         disabled={!t1Time || isT1PsiLogged}
                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 dark:text-white outline-none focus:border-blue-500 disabled:opacity-60"
                       />
