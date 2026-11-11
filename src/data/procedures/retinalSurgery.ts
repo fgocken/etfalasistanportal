@@ -53,7 +53,7 @@ export const retinalSurgery: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Spiral Telli Tüp + Tam Nöromusküler Blokaj (TOF 0/4) + AZOT PROTOKSİT (N2O) KESİNLİKLE YASAKTIR + Pürüzsüz Ekstübasyon Protokolü — DÜNYA GENELİNDE ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (GETA) + Spiral Telli Tüp + Tam Nöromusküler Blokaj (TOF 0/4) + AZOT PROTOKSİT (N2O) KESİNLİKLE YASAKTIR + Pürüzsüz Ekstübasyon Protokolü — DÜNYA GENELİNDE ALTIN STANDARTTIR'
     ],
     alternative: [
       'Derin Rejyonel Blok (Genişletilmiş Sub-Tenon Bloğu veya Peribulber Blok) + Monitörize Anestezi Bakımı (MAC: Bilinçli Minimal Sedasyon): Genel anestezi riski çok yüksek olan, sırtüstü 1.5 saat kımıldamadan yatabilen, koopere erişkin hastalarda; ancak tam oküler akinezi şarttır. DİKKAT: Hasta kesinlikle derin uyutulmamalıdır (aşırı sedasyon apneye ve panikle sıçrayarak uyanmaya yol açar; bu durum fovea perforasyonuna neden olabilir!)'

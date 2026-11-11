@@ -55,7 +55,7 @@ export const anteriorCervicothoracicSpineSurgery: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Propofol + Remifentanil) — İntraoperatif Transkraniyal MEP ve SSEP nöromonitörizasyonu için ZORUNLU ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — İntraoperatif Transkraniyal MEP ve SSEP nöromonitörizasyonu için ZORUNLU ALTIN STANDARTTIR'
     ],
     alternative: [
       'İONM Sinyal Düşüşlerinde: Yalnızca TIVA protokolünün devamı; volatil ajanlar (Sevofluran/Desfluran) kord perfüzyonunu ve MEP yanıtlarını baskıladığından kaçınılır (< 0.3 MAC)'

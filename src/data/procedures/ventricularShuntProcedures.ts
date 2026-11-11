@@ -53,7 +53,7 @@ export const ventricularShuntProcedures: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + İnhalasyon (Sevofluran / İzofluran) veya TIVA (Propofol + Remifentanil): Kas gevşetici ile tam kontrollü mekanik ventilasyon',
+      'Endotrakeal Genel Anestezi (GETA) — İnhalasyonel Anestezi (Sevofluran) veya TIVA (Propofol + Remifentanil): Kas gevşetici ile tam kontrollü mekanik ventilasyon',
       'Laparoskopik VP şant uygulanacak olgularda endotrakeal genel anestezi ZORUNLUDUR (pnömoperitoneum ve artan karın içi basınca karşı hava yolu güvenliği)'
     ],
     alternative: [

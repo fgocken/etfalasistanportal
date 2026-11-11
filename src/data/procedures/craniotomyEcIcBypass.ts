@@ -50,7 +50,7 @@ export const craniotomyEcIcBypass: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Total İntravenöz Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'TIVA + Düşük Doz Uçucu Anestezik (<0.4 - 0.5 MAC Sevofluran): İONM (MEP/SSEP ve EEG) dalgalarını korurken serebral metabolik koruma (CMRO2 düşüşü) ve optimal anestezi derinliği sağlar'
     ],
     alternative: [

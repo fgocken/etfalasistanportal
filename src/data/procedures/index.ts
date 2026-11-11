@@ -57,6 +57,9 @@ import { tracheostomyCricothyroidotomy } from './tracheostomyCricothyroidotomy';
 import { intubationForEpiglottitis } from './intubationForEpiglottitis';
 import { zenkersDiverticulectomy } from './zenkersDiverticulectomy';
 import { laryngealFrameworkSurgery } from './laryngealFrameworkSurgery';
+import { trachealCricotrachealResection } from './trachealCricotrachealResection';
+import { laryngectomyPartialTotal } from './laryngectomyPartialTotal';
+import { tonsillectomyAdenoidectomy } from './tonsillectomyAdenoidectomy';
 
 export {
   laparoscopicCholecystectomy,
@@ -116,7 +119,10 @@ export {
   tracheostomyCricothyroidotomy,
   intubationForEpiglottitis,
   zenkersDiverticulectomy,
-  laryngealFrameworkSurgery
+  laryngealFrameworkSurgery,
+  trachealCricotrachealResection,
+  laryngectomyPartialTotal,
+  tonsillectomyAdenoidectomy
 };
 
 /**
@@ -267,7 +273,10 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   tracheostomyCricothyroidotomy,
   intubationForEpiglottitis,
   zenkersDiverticulectomy,
-  laryngealFrameworkSurgery
+  laryngealFrameworkSurgery,
+  trachealCricotrachealResection,
+  laryngectomyPartialTotal,
+  tonsillectomyAdenoidectomy
 ];
 
 /**
@@ -282,7 +291,9 @@ export function getProcedureById(id: string): ProcedureDefinition | undefined {
  */
 export function getProceduresBySpecialty(specialty: SurgicalSpecialty | 'all'): ProcedureDefinition[] {
   if (specialty === 'all') return REGISTERED_PROCEDURES;
-  return REGISTERED_PROCEDURES.filter(p => p.specialty === specialty);
+  return REGISTERED_PROCEDURES.filter(p => 
+    p.specialty === specialty || (p.secondarySpecialties && p.secondarySpecialties.includes(specialty))
+  );
 }
 
 /**

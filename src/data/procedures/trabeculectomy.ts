@@ -54,7 +54,7 @@ export const trabeculectomy: ProcedureDefinition = {
       'Rejyonel Anestezi (Genişletilmiş Sub-Tenon Bloğu veya Peribulber Blok) + Monitörize Anestezi Bakımı (MAC: Bilinçli Minimal Sedasyon) — Koopere, sırtüstü yatabilen erişkin glokom hastalarında DÜNYA GENELİNDE İLK TERCİHTİR'
     ],
     alternative: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Tam Nöromusküler Blokaj (TOF 0/4) + Pürüzsüz Ekstübasyon Protokolü: Aşırı anksiyeteli, panik, sırtüstü yatamayan (ortopne, ağır kifoz), kontrolsüz esansiyel veya Parkinson baş tremoru olan, klostrofobik, demanslı, nistagmuslu veya pediatrik hastalarda',
+      'Endotrakeal Genel Anestezi (GETA) + Tam Nöromusküler Blokaj (TOF 0/4) + Pürüzsüz Ekstübasyon Protokolü: Aşırı anksiyeteli, panik, sırtüstü yatamayan (ortopne, ağır kifoz), kontrolsüz esansiyel veya Parkinson baş tremoru olan, klostrofobik, demanslı, nistagmuslu veya pediatrik hastalarda',
       'Laringeal Maske (LMA) ile Genel Anestezi: Aspirasyon riski düşük, öksürmesiz ve pürüzsüz uyanma hedeflenen genel anestezi adaylarında'
     ],
     rulesTitle: 'TRABEKÜLEKTOMİDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',

@@ -51,7 +51,7 @@ export const vagalNerveStimulation: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + İnhalasyon (Sevofluran / İzofluran) veya TIVA (Propofol + Remifentanil): Hava yolu güvenliği ve hareketsiz cerrahi saha sağlar',
+      'Endotrakeal Genel Anestezi (GETA) — İnhalasyonel Anestezi (Sevofluran) veya TIVA (Propofol + Remifentanil): Hava yolu güvenliği ve hareketsiz cerrahi saha sağlar',
       'İkinci Seçenek (Revizyon/Pil Değişimi İçin): Laringeal Maske (LMA) veya Lokal Anestezi + Sedasyon (yalnızca izole subklaviküler jeneratör değişimi yapılan erişkin olgularda)'
     ],
     alternative: [

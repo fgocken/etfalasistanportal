@@ -25,7 +25,8 @@ import {
   Wind,
   Pill,
   Compass,
-  Wrench
+  Wrench,
+  Zap
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -47,11 +48,12 @@ import { WeeklyScheduleToolView } from './schedule/WeeklyScheduleToolView';
 import { IcuWorkspace } from './icu/IcuWorkspace';
 import { ProceduresWorkspace } from './procedures/ProceduresWorkspace';
 import { AnesthesiaTroubleshootingWorkspace } from './troubleshooting/AnesthesiaTroubleshootingWorkspace';
+import { EktTrackerView } from './ekt/EktTrackerView';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'troubleshooting';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'troubleshooting' | 'ekt';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -337,6 +339,25 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-teal-800',
     ringClassDark: 'ring-1 ring-teal-500/20',
     ringClassLight: 'ring-1 ring-teal-500/10'
+  },
+  ekt: {
+    id: 'ekt',
+    title: 'EKT Vaka Takip & Zamanlayıcı',
+    badge: 'CRF & Zamanlayıcı',
+    badgeHighlight: true,
+    desc: 'Elektrokonvülsif Tedavi (EKT) vaka takibi, Ketofol indüksiyon kronometresi, PSi derinlik takibi, 15sn-1dk-3dk-10dk hemodinami uyarıları ve otomatik CRF loglayıcı.',
+    clinicalKey: 'Ketofol indüksiyonu ve EKT şoku sonrası otonomik hemodinami zirvelerini saniyesi saniyesine kayıt altına alan araştırma/klinik takip aracı.',
+    icon: Zap,
+    iconBgDark: 'bg-amber-500/15',
+    iconBgLight: 'bg-amber-50',
+    iconColorDark: 'text-amber-400',
+    iconColorLight: 'text-amber-700',
+    borderHoverDark: 'hover:border-amber-500/40',
+    borderHoverLight: 'hover:border-amber-400',
+    titleHoverDark: 'group-hover:text-amber-300',
+    titleHoverLight: 'group-hover:text-amber-800',
+    ringClassDark: 'ring-1 ring-amber-500/20',
+    ringClassLight: 'ring-1 ring-amber-500/10'
   }
 };
 
@@ -355,9 +376,10 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'troubleshooting',
   'schedule',
   'roster',
-  'contacts'
+  'contacts',
+  'ekt'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v18';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v19';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -538,8 +560,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert troubleshooting, procedures, icu, emergencies etc. if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert ekt, troubleshooting, procedures, icu, emergencies etc. if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
@@ -578,6 +600,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             }
             if (!updated.includes('roster')) {
               updated.push('roster');
+            }
+            if (!updated.includes('ekt')) {
+              updated.push('ekt');
             }
             if (updated.length === DEFAULT_TOOL_ORDER.length && DEFAULT_TOOL_ORDER.every(id => updated.includes(id))) {
               return updated as ToolTabId[];
@@ -1679,6 +1704,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 : null
             }
           />
+        )}
+
+        {/* 14. EKT Vaka Takip & Zamanlayıcı */}
+        {activeTab === 'ekt' && (
+          <EktTrackerView isDark={isDark} />
         )}
       </main>
 

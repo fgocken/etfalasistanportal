@@ -52,7 +52,7 @@ export const orbitotomyAnteriorLateral: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Spiral Telli Tüp + Normotansif/Hafif Hipotansif Stabilite (MAP 70-85 mmHg) + Nöromusküler Blokaj + Pürüzsüz Ekstübasyon Protokolü — DÜNYA GENELİNDE MUTLAK ZORUNLU STANDARTTIR'
+      'Endotrakeal Genel Anestezi (GETA) + Spiral Telli Tüp + Normotansif/Hafif Hipotansif Stabilite (MAP 70-85 mmHg) + Nöromusküler Blokaj + Pürüzsüz Ekstübasyon Protokolü — DÜNYA GENELİNDE MUTLAK ZORUNLU STANDARTTIR'
     ],
     alternative: [
       'KONTRENDİKASYON UYARISI: Retrobulber, Peribulber veya Sub-Tenon blokları lateral orbitotomide KESİNLİKLE UYGULANMAZ! İntrakonal kitle varlığında iğne ile tümörün veya optik sinirin delinmesi, retrobulber hematom ve görme kaybı riski nedeniyle blok kontrendikedir',

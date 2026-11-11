@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EKT Vaka Takip, Log ve Zamanlayıcı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        clinical: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                            accent: '#3b82f6',
+                            danger: '#ef4444',
+                            success: '#10b981',
+                            warning: '#f59e0b',
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .glass { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+        .btn-touch { touch-action: manipulation; transition: all 0.1s ease; }
+        .btn-touch:active:not(:disabled) { transform: scale(0.96); }
+        .btn-disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(100%); pointer-events: none; }
+        
+        .alert-box { transition: all 0.3s ease; }
+        .alert-active { background-color: rgba(239, 68, 68, 0.9); color: white; animation: pulse-fast 1s infinite; border-color: #f87171; box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+        .alert-done { background-color: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+        
+        /* Custom Scrollbar for Log */
+        #event-log::-webkit-scrollbar { width: 6px; }
+        #event-log::-webkit-scrollbar-track { background: #1e293b; border-radius: 4px; }
+        #event-log::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-clinical-900 text-slate-200 min-h-screen flex flex-col font-sans pb-10">
+
+    <!-- Header -->
+    <div class="sticky top-0 z-50 glass border-b border-slate-700 p-3">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- Protocol Inputs -->
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="flex flex-col">
+                    <label class="text-[10px] text-slate-400 font-bold uppercase mb-1">Protokol No</label>
+                    <input type="text" id="inp-protokol" placeholder="Örn: 12345" class="bg-slate-800 border border-slate-600 rounded px-2 py-1.5 text-white font-mono text-sm w-28 focus:border-clinical-accent focus:outline-none">
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-[10px] text-slate-400 font-bold uppercase mb-1">Grup</label>
+                    <select id="inp-grup" class="bg-slate-800 border border-slate-600 rounded px-2 py-1.5 text-white text-sm focus:border-clinical-accent focus:outline-none">
+                        <option value="Grup 1 (PSi)">Grup 1 (PSi)</option>
+                        <option value="Grup 2 (Kör)">Grup 2 (Kör)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Global Timer -->
+            <div class="flex items-center gap-4">
+                <div class="flex flex-col items-center">
+                    <div id="display-global" class="text-3xl font-black tabular-nums tracking-tighter text-white leading-none">00:00</div>
+                    <div class="text-[9px] text-slate-400 uppercase tracking-widest mt-1">İndüksiyon Süresi</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 max-w-7xl mx-auto w-full p-4 grid grid-cols-1 lg:grid-cols-12 gap-6 mt-2">
+
+        <!-- LEFT COLUMN: Workflow Phases (Spans 7 cols) -->
+        <div class="lg:col-span-7 flex flex-col gap-5">
+            
+            <!-- T0 - BAZAL FAZ -->
+            <div class="glass p-4 rounded-xl border-l-4 border-l-slate-400">
+                <h2 class="text-sm font-bold text-white mb-2 uppercase flex items-center gap-2">T0 - Bazal Faz (Pre-Oksijenasyon)</h2>
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center justify-between bg-slate-800/50 p-2 rounded border border-slate-700">
+                        <div class="text-xs text-slate-400 italic">
+                            <span class="font-bold text-slate-300">Monitör:</span> T0 Hemodinami ölçümlerini (KAH, SKB, vb.) yapın.
+                        </div>
+                        <button onclick="confirmHemo('t0', 'T0 Hemodinami (Bazal)')" id="btn-hemo-t0" class="btn-touch bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold py-1.5 px-3 rounded border border-slate-500">Yapıldı / Onayla</button>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="number" id="inp-t0-psi" placeholder="T0 PSi Değeri" class="bg-slate-800 border border-slate-600 rounded px-3 py-2 text-white w-40 focus:border-clinical-accent focus:outline-none">
+                        <button onclick="logT0()" id="btn-t0" class="btn-touch bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- T1 - İNDÜKSİYON -->
+            <div class="glass p-4 rounded-xl border-l-4 border-l-clinical-accent">
+                <h2 class="text-sm font-bold text-white mb-2 uppercase">T1 - İndüksiyon (Bilinç Kaybı / Uyku)</h2>
+                <div class="flex flex-col gap-3">
+                    <button id="btn-start-induk" onclick="startInduction()" class="btn-touch bg-clinical-accent hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg w-full flex justify-between items-center">
+                        <span>İndüksiyonu Başlat (Zamanlayıcıyı Tetikler)</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                    
+                    <div class="flex items-center justify-between bg-slate-800/50 p-2 rounded border border-slate-700">
+                        <div class="text-xs text-slate-400 italic">
+                            <span class="font-bold text-slate-300">Monitör:</span> T1 Hemodinami (İndüksiyon sonu) kontrol edin.
+                        </div>
+                        <button onclick="confirmHemo('t1', 'T1 Hemodinami (İndüksiyon Sonu)')" id="btn-hemo-t1" class="btn-touch btn-disabled bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold py-1.5 px-3 rounded border border-slate-500">Yapıldı / Onayla</button>
+                    </div>
+                    
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center gap-3">
+                            <input type="number" id="inp-t1-psi" placeholder="T1 PSi Değeri" class="bg-slate-800 border border-slate-600 rounded px-3 py-2 text-white w-48 focus:border-clinical-accent focus:outline-none" disabled>
+                            <button onclick="logT1()" id="btn-t1" class="btn-touch btn-disabled bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded">Kaydet</button>
+                        </div>
+                        <div class="text-[10px] text-slate-400 font-medium pl-1">
+                            (Grup 1: PSi 50-70 hedefi | Grup 2: MOAA/S ≤ 1, kör kayıt)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRE-İKTAL & ŞOK -->
+            <div class="glass p-4 rounded-xl border-l-4 border-l-clinical-danger relative">
+                <h2 class="text-sm font-bold text-white mb-2 uppercase">Pre-İktal (Uyarı Öncesi) & ŞOK</h2>
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-3">
+                        <input type="number" id="inp-t2-psi" placeholder="T2 PSi (En Kritik Değer!)" class="bg-slate-800 border border-slate-600 rounded px-3 py-2 text-white w-56 focus:border-red-500 focus:outline-none" disabled>
+                        <button onclick="logT2Psi()" id="btn-t2-psi" class="btn-touch btn-disabled bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded">Kaydet</button>
+                    </div>
+                    
+                    <button id="btn-shock" onclick="triggerShock()" class="btn-touch btn-disabled mt-2 bg-red-700 hover:bg-red-600 text-white font-black text-xl py-4 px-4 rounded-lg shadow-[0_0_15px_rgba(239,68,68,0.4)] w-full tracking-widest border border-red-500">
+                        EKT UYARISINI VER (ŞOK)
+                    </button>
+                    <div class="text-xs text-center text-red-300/70 font-mono" id="lbl-induk-uyari">İndüksiyon - Uyarı Aralığı: Bekleniyor...</div>
+                </div>
+            </div>
+
+            <!-- İKTAL / NÖBET FAZI -->
+            <div class="glass p-4 rounded-xl border-l-4 border-l-purple-500">
+                <h2 class="text-sm font-bold text-white mb-2 uppercase flex justify-between">
+                    <span>E) İktal / Nöbet Fazı</span>
+                    <span id="live-shock-timer" class="text-purple-400 font-mono text-base tabular-nums">00:00 (Şoktan İtibaren)</span>
+                </h2>
+                
+                <div class="flex flex-col gap-3">
+                    <button id="alert-15s" onclick="confirmTimedHemo('15s', 'T2 Hemodinami (15. Sn)')" class="alert-box btn-touch btn-disabled bg-slate-800 border border-slate-700 p-3 rounded flex justify-between items-center w-full text-left">
+                        <span class="text-sm font-bold text-purple-300">15. Sn (T2 Hemo)</span>
+                        <span id="time-15s" class="text-sm font-mono text-slate-400 font-bold bg-slate-900/50 px-2 py-1 rounded">Bekliyor</span>
+                    </button>
+                    <button id="alert-60s" onclick="confirmTimedHemo('60s', 'T3 Hemodinami (1. Dk)')" class="alert-box btn-touch btn-disabled bg-slate-800 border border-slate-700 p-3 rounded flex justify-between items-center w-full text-left">
+                        <span class="text-sm font-bold text-purple-300">1. Dk (T3 Hemo)</span>
+                        <span id="time-60s" class="text-sm font-mono text-slate-400 font-bold bg-slate-900/50 px-2 py-1 rounded">Bekliyor</span>
+                    </button>
+                    
+                    <div class="mt-2 bg-slate-800 p-3 rounded-lg border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="text-sm font-bold text-white">Yeniden Uyarı Gereksinimi Oldu mu?</span>
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <button id="btn-re-no" onclick="logReshock('Hayır')" class="btn-touch btn-disabled bg-slate-700 hover:bg-slate-600 flex-1 sm:px-6 py-2 rounded text-sm font-bold">Hayır</button>
+                            <button id="btn-re-yes" onclick="logReshock('Evet')" class="btn-touch btn-disabled bg-orange-700 hover:bg-orange-600 flex-1 sm:px-6 py-2 rounded text-sm font-bold">Evet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ERKEN DERLENME (T4) -->
+            <div class="glass p-4 rounded-xl border-l-4 border-l-emerald-500">
+                <h2 class="text-sm font-bold text-white mb-2 uppercase">F) Erken Derlenme Fazı</h2>
+                
+                <div class="mb-3">
+                    <button id="alert-180s" onclick="confirmTimedHemo('180s', 'T4 Hemodinami (3. Dk)')" class="alert-box btn-touch btn-disabled bg-slate-800 border border-slate-700 p-3 rounded flex justify-between items-center w-full text-left">
+                        <span class="text-sm font-bold text-emerald-300">3. Dk (T4 Hemo)</span>
+                        <span id="time-180s" class="text-sm font-mono text-slate-400 font-bold bg-slate-900/50 px-2 py-1 rounded">Bekliyor</span>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <button id="btn-solunum" onclick="logRecovery('Spontan Solunum')" class="btn-touch btn-disabled bg-slate-800 border border-emerald-900 hover:border-emerald-500 rounded p-3 text-center flex flex-col items-center justify-center">
+                        <span class="text-sm font-bold text-emerald-400 mb-1">Spontan Solunum</span>
+                        <span id="dur-solunum" class="text-[10px] text-slate-400">Tıkla ve Kaydet</span>
+                    </button>
+                    <button id="btn-goz" onclick="logRecovery('Göz Açtı')" class="btn-touch btn-disabled bg-slate-800 border border-emerald-900 hover:border-emerald-500 rounded p-3 text-center flex flex-col items-center justify-center">
+                        <span class="text-sm font-bold text-emerald-400 mb-1">Göz Açtı</span>
+                        <span id="dur-goz" class="text-[10px] text-slate-400">Tıkla ve Kaydet</span>
+                    </button>
+                    <button id="btn-emir" onclick="logRecovery('Emirlere Uydu')" class="btn-touch btn-disabled bg-slate-800 border border-emerald-900 hover:border-emerald-500 rounded p-3 text-center flex flex-col items-center justify-center">
+                        <span class="text-sm font-bold text-emerald-400 mb-1">Emirlere Uydu</span>
+                        <span id="dur-emir" class="text-[10px] text-slate-400">Tıkla ve Kaydet</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <input type="number" id="inp-t3-psi" placeholder="T3 PSi (Göz Açma Anı)" class="bg-slate-800 border border-slate-600 rounded px-3 py-2 text-white w-48 focus:border-emerald-500 focus:outline-none" disabled>
+                    <button onclick="logT3Psi()" id="btn-t3-psi" class="btn-touch btn-disabled bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded">Kaydet</button>
+                </div>
+            </div>
+
+            <!-- GEÇ DERLENME (T5) -->
+            <div class="glass p-4 rounded-xl border-l-4 border-l-clinical-success">
+                <h2 class="text-sm font-bold text-white mb-2 uppercase">G) Geç Derlenme Fazı (PACU)</h2>
+                
+                <div class="mb-3">
+                    <button id="alert-600s" onclick="confirmTimedHemo('600s', 'T5 Hemodinami (10. Dk)')" class="alert-box btn-touch btn-disabled bg-slate-800 border border-slate-700 p-3 rounded flex justify-between items-center w-full text-left">
+                        <span class="text-sm font-bold text-clinical-success">10. Dk (T5 Hemo)</span>
+                        <span id="time-600s" class="text-sm font-mono text-slate-400 font-bold bg-slate-900/50 px-2 py-1 rounded">Bekliyor</span>
+                    </button>
+                </div>
+                
+                <button id="btn-mas" onclick="logMAS()" class="btn-touch btn-disabled bg-slate-800 border border-clinical-success hover:bg-slate-700 text-white font-bold py-4 px-4 rounded-lg w-full flex justify-between items-center">
+                    <span>MAS ≥ 9 Ulaşıldı (Taburcu)</span>
+                    <span id="dur-mas" class="text-xs text-slate-400 font-mono">Tıkla ve Kaydet</span>
+                </button>
+            </div>
+
+        </div> <!-- End Left Column -->
+
+        <!-- RIGHT COLUMN: Reminders & Event Log (Spans 5 cols) -->
+        <div class="lg:col-span-5 flex flex-col gap-5 h-[calc(100vh-100px)] lg:sticky lg:top-24">
+            
+            <!-- Event Log Panel -->
+            <div class="glass rounded-xl flex flex-col flex-1 overflow-hidden border border-slate-600">
+                <div class="bg-slate-800 p-3 border-b border-slate-600 flex justify-between items-center shrink-0">
+                    <h3 class="text-sm font-bold text-white uppercase flex items-center gap-2">
+                        <svg class="w-4 h-4 text-clinical-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Olay Günlüğü (Log)
+                    </h3>
+                    <button onclick="copyLog()" class="text-xs bg-slate-600 hover:bg-slate-500 text-white px-3 py-1 rounded font-bold transition-colors">Kopyala</button>
+                </div>
+                <div id="event-log" class="p-3 overflow-y-auto flex-1 bg-slate-900/50 flex flex-col gap-2 font-mono text-xs text-slate-300">
+                    <!-- Logs will appear here -->
+                    <div class="text-center text-slate-500 py-4 italic">Sistem hazır. Kayıt bekliyor...</div>
+                </div>
+            </div>
+
+        </div> <!-- End Right Column -->
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-clinical-success text-white px-6 py-3 rounded-full shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-50 font-bold text-sm">
+        Log Panoya Kopyalandı!
+    </div>
+
+    <script>
+        // State Variables
+        let t1_time = null; // İndüksiyon Başlangıç (Global Timer)
+        let t2_time = null; // Şok Zamanı (Relatif hesaplar için master)
+        
+        let flags = {
+            t0: false, t1: false, t2_psi: false, reshock: false, t3_psi: false,
+            a15: false, a60: false, a180: false, a600: false,
+            c15: false, c60: false, c180: false, c600: false, // Onay (Confirm) bayrakları
+            solunum: false, goz: false, emir: false, mas: false
+        };
+
+        // UI Elements
+        const displayGlobal = document.getElementById('display-global');
+        const displayShock = document.getElementById('live-shock-timer');
+        const eventLog = document.getElementById('event-log');
+        
+        // Exact Date Formatter for Log (DD.MM.YYYY HH:mm:ss)
+        function getExactTimestamp() {
+            const d = new Date();
+            const pad = (n) => n.toString().padStart(2, '0');
+            return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        }
+
+        // Format MM:SS
+        function formatMMSS(ms) {
+            if (ms < 0) ms = 0;
+            let totalSec = Math.floor(ms / 1000);
+            let m = Math.floor(totalSec / 60).toString().padStart(2, '0');
+            let s = (totalSec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        // Add Log Entry
+        function addLog(message, isAlert = false) {
+            // Remove placeholder if first log
+            if(eventLog.innerHTML.includes("Sistem hazır")) eventLog.innerHTML = "";
+            
+            const timestamp = getExactTimestamp();
+            const div = document.createElement('div');
+            div.className = `p-2 rounded border-l-2 ${isAlert ? 'border-red-500 bg-red-900/20 text-red-200' : 'border-slate-500 bg-slate-800/80'} shadow-sm`;
+            div.innerHTML = `<span class="text-[10px] text-slate-400 mr-2">[${timestamp}]</span> <span>${message}</span>`;
+            eventLog.appendChild(div);
+            
+            // Auto scroll to bottom
+            eventLog.scrollTop = eventLog.scrollHeight;
+        }
+
+        // Timer Loop
+        function updateLoop() {
+            const now = Date.now();
+
+            // 1. Global Timer (İndüksiyon Süresi)
+            if (t1_time) {
+                displayGlobal.textContent = formatMMSS(now - t1_time);
+            }
+
+            // 2. Shock Timer & Alerts (T2 Süresi)
+            if (t2_time) {
+                let ms_since_t2 = now - t2_time;
+                displayShock.textContent = formatMMSS(ms_since_t2) + " (Şoktan)";
+
+                // Alert Configurations
+                const alerts = [
+                    { id: '15s', ms: 15000, flag: 'a15', conf: 'c15', text: 'T2 Hemodinami (15. Saniye) Ölçüm ve Onay Bekliyor!' },
+                    { id: '60s', ms: 60000, flag: 'a60', conf: 'c60', text: 'T3 Hemodinami (1. Dakika) Ölçüm ve Onay Bekliyor!' },
+                    { id: '180s', ms: 180000, flag: 'a180', conf: 'c180', text: 'T4 Hemodinami (3. Dakika) Ölçüm ve Onay Bekliyor!' },
+                    { id: '600s', ms: 600000, flag: 'a600', conf: 'c600', text: 'T5 Hemodinami (10. Dakika) Ölçüm ve Onay Bekliyor!' }
+                ];
+
+                alerts.forEach(alt => {
+                    if (flags[alt.conf]) return; // Zaten onaylandıysa atla
+
+                    let box = document.getElementById(`alert-${alt.id}`);
+                    let timeTxt = document.getElementById(`time-${alt.id}`);
+                    let rem = alt.ms - ms_since_t2;
+
+                    if (rem > 0) {
+                        timeTxt.textContent = Math.ceil(rem / 1000) + ' sn kaldı';
+                    } else if (rem <= 0 && !flags[alt.flag]) {
+                        // TRIGGER ALARM / ENABLE BUTTON
+                        flags[alt.flag] = true;
+                        timeTxt.textContent = "ONAYLA";
+                        box.classList.remove('btn-disabled', 'bg-slate-800');
+                        box.className = 'alert-box alert-active btn-touch p-3 rounded flex justify-between items-center w-full text-left';
+                        addLog(`🔔 UYARI: ${alt.text}`, true);
+                    }
+                });
+            }
+
+            requestAnimationFrame(updateLoop);
+        }
+
+        // Actions
+        function confirmHemo(id, name) {
+            let btn = document.getElementById(`btn-hemo-${id}`);
+            if (btn.classList.contains('btn-disabled')) return;
+            
+            addLog(`✅ Onaylandı: ${name}`);
+            btn.classList.add('btn-disabled');
+            btn.classList.replace('bg-slate-700', 'bg-emerald-700');
+            btn.classList.replace('hover:bg-slate-600', 'hover:bg-emerald-600');
+            btn.textContent = "✔ Onaylandı";
+        }
+
+        function confirmTimedHemo(id, name) {
+            let box = document.getElementById(`alert-${id}`);
+            if (box.classList.contains('btn-disabled')) return;
+            
+            let confFlag = `c${id.replace('s', '')}`;
+            if (flags[confFlag]) return;
+            
+            flags[confFlag] = true;
+            addLog(`✅ Onaylandı: ${name}`);
+            
+            // Yeşile döndür ve tekrar tıklanmasını engelle
+            box.className = 'alert-box alert-done p-3 rounded flex justify-between items-center w-full text-left pointer-events-none cursor-default';
+            let timeTxt = document.getElementById(`time-${id}`);
+            timeTxt.textContent = "✔ Yapıldı";
+            timeTxt.classList.replace('bg-slate-900/50', 'bg-emerald-900/50');
+            timeTxt.classList.replace('text-slate-400', 'text-emerald-500');
+        }
+
+        function logT0() {
+            if(flags.t0) return;
+            const val = document.getElementById('inp-t0-psi').value;
+            if(!val) { alert("Lütfen T0 PSi değeri giriniz."); return; }
+            
+            const prot = document.getElementById('inp-protokol').value || "Belirtilmedi";
+            const grup = document.getElementById('inp-grup').value;
+            
+            addLog(`Hasta Protokol: ${prot} | Grup: ${grup}`);
+            addLog(`T0 PSi Kaydedildi: ${val}`);
+            
+            flags.t0 = true;
+            document.getElementById('btn-t0').classList.add('btn-disabled');
+            document.getElementById('inp-t0-psi').disabled = true;
+            document.getElementById('inp-protokol').disabled = true;
+            document.getElementById('inp-grup').disabled = true;
+        }
+
+        function startInduction() {
+            if (t1_time) return;
+            t1_time = Date.now();
+            document.getElementById('btn-start-induk').classList.add('hidden');
+            
+            // Enable next steps
+            document.getElementById('inp-t1-psi').disabled = false;
+            document.getElementById('btn-t1').classList.remove('btn-disabled');
+            document.getElementById('btn-hemo-t1').classList.remove('btn-disabled');
+            
+            addLog(`▶ İNDÜKSİYON BAŞLATILDI (Ketofol Verilmeye Başlandı)`);
+            updateLoop();
+        }
+
+        function logT1() {
+            if(!t1_time || flags.t1) return;
+            const val = document.getElementById('inp-t1-psi').value;
+            if(!val) { alert("Lütfen T1 PSi değeri giriniz."); return; }
+
+            addLog(`T1 PSi Kaydedildi (İndüksiyon Sonu): ${val}`);
+            flags.t1 = true;
+            
+            document.getElementById('btn-t1').classList.add('btn-disabled');
+            document.getElementById('inp-t1-psi').disabled = true;
+
+            // Enable T2 inputs
+            document.getElementById('inp-t2-psi').disabled = false;
+            document.getElementById('btn-t2-psi').classList.remove('btn-disabled');
+        }
+
+        function logT2Psi() {
+            if(!flags.t1 || flags.t2_psi) return;
+            const val = document.getElementById('inp-t2-psi').value;
+            if(!val) { alert("Lütfen T2 PSi değeri giriniz."); return; }
+
+            addLog(`T2 PSi Kaydedildi (Pre-İktal/Uyarı Öncesi Kritik): ${val}`);
+            flags.t2_psi = true;
+            
+            document.getElementById('btn-t2-psi').classList.add('btn-disabled');
+            document.getElementById('inp-t2-psi').disabled = true;
+            
+            // Enable Shock Button
+            document.getElementById('btn-shock').classList.remove('btn-disabled');
+        }
+
+        function triggerShock() {
+            if(t2_time || !flags.t2_psi) return;
+            t2_time = Date.now();
+            
+            let induk_uyari_sn = Math.floor((t2_time - t1_time) / 1000);
+            
+            document.getElementById('btn-shock').classList.add('btn-disabled');
+            document.getElementById('lbl-induk-uyari').textContent = `İndüksiyon-Uyarı Aralığı: ${induk_uyari_sn} saniye`;
+            
+            addLog(`⚡ EKT UYARISI VERİLDİ (ŞOK).`);
+            addLog(`Hesaplanan İndüksiyon-Uyarı Aralığı: ${induk_uyari_sn} saniye`);
+            
+            // Unlock next phases
+            document.getElementById('btn-re-no').classList.remove('btn-disabled');
+            document.getElementById('btn-re-yes').classList.remove('btn-disabled');
+            ['solunum', 'goz', 'emir'].forEach(id => {
+                document.getElementById(`btn-${id}`).classList.remove('btn-disabled');
+            });
+            document.getElementById('inp-t3-psi').disabled = false;
+            document.getElementById('btn-t3-psi').classList.remove('btn-disabled');
+            document.getElementById('btn-mas').classList.remove('btn-disabled');
+        }
+
+        function logReshock(status) {
+            if(flags.reshock) return;
+            addLog(`Yeniden Uyarı Gereksinimi: ${status}`);
+            flags.reshock = true;
+            document.getElementById('btn-re-no').classList.add('btn-disabled');
+            document.getElementById('btn-re-yes').classList.add('btn-disabled');
+        }
+
+        function logRecovery(type) {
+            let flagKey = type === 'Spontan Solunum' ? 'solunum' : type === 'Göz Açtı' ? 'goz' : 'emir';
+            if(!t1_time || flags[flagKey]) return; // İndüksiyona (t1_time) göre hesap
+            
+            let time_now = Date.now();
+            let dur_sec = Math.floor((time_now - t1_time) / 1000); // Kullanıcı İndüksiyon başlangıcına göre istedi
+            
+            addLog(`Derlenme - ${type}: İndüksiyon başlangıcından ${dur_sec} saniye sonra.`);
+            
+            document.getElementById(`dur-${flagKey}`).textContent = `${dur_sec} sn (İndük'ten)`;
+            document.getElementById(`btn-${flagKey}`).classList.add('btn-disabled');
+            flags[flagKey] = true;
+        }
+
+        function logT3Psi() {
+            if(flags.t3_psi) return;
+            const val = document.getElementById('inp-t3-psi').value;
+            if(!val) { alert("Lütfen T3 PSi değeri giriniz."); return; }
+
+            addLog(`T3 PSi Kaydedildi (Uyanma/Göz Açma İndeksi): ${val}`);
+            flags.t3_psi = true;
+            document.getElementById('btn-t3-psi').classList.add('btn-disabled');
+            document.getElementById('inp-t3-psi').disabled = true;
+        }
+
+        function logMAS() {
+            if(!t2_time || flags.mas) return;
+            let time_now = Date.now();
+            let dur_min = ((time_now - t2_time) / 1000 / 60).toFixed(1); // Şoktan (t2_time) itibaren dakika hesabı
+            
+            addLog(`Geç Derlenme: MAS >= 9 Skalasına ulaşıldı. Şoktan itibaren geçen süre: ${dur_min} dakika.`);
+            document.getElementById('dur-mas').textContent = `${dur_min} dk (Şoktan)`;
+            document.getElementById('btn-mas').classList.add('btn-disabled');
+            flags.mas = true;
+        }
+
+        function copyLog() {
+            const logs = Array.from(eventLog.children)
+                             .map(div => div.textContent.replace(/\s+/g, ' ').trim())
+                             .join('\n');
+            if(!logs) return;
+            
+            const textToCopy = `EKT CRF VAKA GÜNLÜĞÜ\n--------------------------------\n${logs}`;
+            
+            try {
+                navigator.clipboard.writeText(textToCopy).then(showToast);
+            } catch(e) {
+                let el = document.createElement('textarea');
+                el.value = textToCopy;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                showToast();
+            }
+        }
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => t.classList.add('opacity-0', 'pointer-events-none'), 2500);
+        }
+
+    </script>
+</body>
+</html>

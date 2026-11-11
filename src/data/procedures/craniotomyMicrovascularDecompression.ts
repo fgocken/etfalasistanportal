@@ -54,7 +54,7 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Total İntravenöz Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'TIVA ŞARTTIR: İntraoperatif Nöromonitörizasyon (BAEP / ABR ve Fasiyal / Alt Kranyal Sinir Spontan-Tetiklenmiş EMG) kullanıldığından indüksiyon sonrasında KAS GEVŞETİCİ KESİNLİKLE KULLANILMAZ!'
     ],
     alternative: [

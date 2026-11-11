@@ -55,7 +55,7 @@ export const anteriorLumbarLumbosacralSpineSurgery: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Propofol + Remifentanil) — İntraoperatif MEP, SSEP ve Transpsoas / Lomber Pleksus EMG monitörizasyonu için MUTLAK ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — İntraoperatif MEP, SSEP ve Transpsoas / Lomber Pleksus EMG monitörizasyonu için MUTLAK ALTIN STANDARTTIR'
     ],
     alternative: [
       'GETA + Düşük Doz Sevofluran/Desfluran (< 0.5 MAC) + Opioid İnfüzyonu (Yalnızca psoas içinden geçilmeyen ve İONM yapılmayan standart L5-S1 ALIF olgularında)'

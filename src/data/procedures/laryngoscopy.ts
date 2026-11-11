@@ -52,7 +52,7 @@ export const laryngoscopy: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Genel Endotrakeal Anestezi (GETA) + Mikrolaringeal Tüp (MLT 5.0 - 6.0 mm) + Tam Nöromusküler Blokaj (TOF 0/4) + TIVA (Propofol + Remifentanil) + Lazer Güvenlik Protokolü (FiO2 < %30, N2O Yasak) + Pürüzsüz Ekstübasyon — DÜNYA GENELİNDE ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) + Mikrolaringeal Tüp (MLT 5.0 - 6.0 mm) + Tam Nöromusküler Blokaj + Lazer Güvenlik Protokolü (FiO2 < %30) — DÜNYA GENELİNDE ALTIN STANDARTTIR'
     ],
     alternative: [
       'Tüpsüz Yüksek Frekanslı Jet Ventilasyon (HFJV - Tubeless Jet Ventilation): Arka komissür ve subglottik alandaki lezyonlarda tüpün cerrahi görüşü engellememesi için supraglottik veya transglottik jet ventilasyon; barotravma ve pnömotoraks riskine karşı dikkatli olunmalıdır',

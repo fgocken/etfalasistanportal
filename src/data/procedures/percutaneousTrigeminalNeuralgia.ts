@@ -53,7 +53,7 @@ export const percutaneousTrigeminalNeuralgia: ProcedureDefinition = {
   anesthesiaTechniques: {
     primary: [
       'Perkütan Radyofrekans (RFT) ve Gliserol İçin: Monitörize Anestezi Bakımı (MAC) + Hızlı Açılıp Kapanan Sedasyon (Ultra-kısa etkili Propofol + Remifentanil titrasyonu). Kanül geçişinde derin hipnoz -> Test uyarımında TAM UYANIK VE KOOPERE -> Termal lezyonlama anında DERİN HİPNOZ',
-      'Perkütan Balon Mikrokompresyonu (PMC) İçin: Dengeli Genel Endotrakeal Anestezi (GETA) veya Laringeal Maske (LMA) — Balon şişirilmesi son derece ağrılıdır ve masif trigeminokardiyak refleks yaratır; genel anestezi şarttır'
+      'Perkütan Balon Mikrokompresyonu (PMC) İçin: Endotrakeal Genel Anestezi (GETA) veya Laringeal Maske (LMA) — Balon şişirilmesi son derece ağrılıdır ve masif trigeminokardiyak refleks yaratır; genel anestezi şarttır'
     ],
     alternative: [
       'Yüksek Riskli Yaşlı Olgularda: Deksmedetomidin infüzyonu eşliğinde MAC ve lokal mandibulomaksiller blok desteği'

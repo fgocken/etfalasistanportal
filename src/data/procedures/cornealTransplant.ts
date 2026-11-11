@@ -50,7 +50,7 @@ export const cornealTransplant: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Tam Nöromusküler Blokaj (TOF 0/4 - 1/4) + Pürüzsüz Ekstübasyon Protokolü — Penetran Keratoplastide (PKP) gözün 8 mm açık küre haline gelmesi nedeniyle DÜNYA GENELİNDE MUTLAK TERCİH EDİLEN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (GETA) + Tam Nöromusküler Blokaj (TOF 0/4 - 1/4) + Pürüzsüz Ekstübasyon Protokolü — Penetran Keratoplastide (PKP) gözün 8 mm açık küre haline gelmesi nedeniyle DÜNYA GENELİNDE MUTLAK TERCİH EDİLEN STANDARTTIR'
     ],
     alternative: [
       'Derin Rejyonel Blok (Genişletilmiş Sub-Tenon Bloğu veya Peribulber Blok) + Monitörize Anestezi Bakımı (MAC): Genel anestezi riski çok yüksek olan, kooperasyonu tam yaşlı hastalarda veya lameller keratoplastilerde (DMEK/DSAEK); ancak trefinasyon öncesi tam oküler akinezi ve hipotonik göz şarttır',

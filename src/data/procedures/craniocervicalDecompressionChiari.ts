@@ -53,7 +53,7 @@ export const craniocervicalDecompressionChiari: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Total İntravenöz Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'İntraoperatif Nöromonitörizasyon (tcMEP, SSEP, BAEP) kullanıldığından entübasyon sonrasında KAS GEVŞETİCİ KESİNLİKLE KULLANILMAZ!'
     ],
     alternative: [

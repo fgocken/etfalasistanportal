@@ -54,7 +54,7 @@ export const anteriorUpperCervicalFusion: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Total İntravenöz Anestezi (TIVA - Propofol & Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol & Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'Uyanık Esnek Fiberoptik Bronkoskopik Entübasyon (AFOI - Awake Flexible Optical Intubation) + TIVA İdamesi: C1-C2 instabilitesinde nörolojik morbiditeyi önleyen altın standart yaklaşım'
     ],
     alternative: [

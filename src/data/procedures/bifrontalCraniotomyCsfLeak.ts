@@ -54,7 +54,7 @@ export const bifrontalCraniotomyCsfLeak: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Total İntravenöz Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'TIVA + Düşük Doz Sevofluran (< 0.5 MAC): Frontal lobların cerrahi retraksiyonunu kolaylaştırmak için mükemmel beyin gevşemesi (CMRO2 ve CBF azaltılması) sağlar'
     ],
     alternative: [

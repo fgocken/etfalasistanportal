@@ -55,7 +55,7 @@ export const transsphenoidalPituitaryResection: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Total İntravenöz Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'TIVA + Düşük Doz Sevofluran (< 0.5 MAC): İntraoperatif hemodinamik stabilite sağlar, cerrahi alan kanamasını azaltır ve pürüzsüz uyanma kolaylığı sunar'
     ],
     alternative: [

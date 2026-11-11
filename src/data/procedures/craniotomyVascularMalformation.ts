@@ -54,7 +54,7 @@ export const craniotomyVascularMalformation: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Total İntravenöz Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'TIVA + Düşük Doz Sevofluran (<0.4 - 0.5 MAC): Serebral metabolik oksijen tüketimini (CMRO2) ve serebral kan akımını (CBF) azaltır, optimal beyin gevşemesi sağlar ve intraoperatif nöromonitörizasyonu (MEP/SSEP) baskılamaz'
     ],
     alternative: [

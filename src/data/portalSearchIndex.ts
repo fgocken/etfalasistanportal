@@ -1098,6 +1098,36 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'procedures',
     popular: true
   },
+  {
+    id: 'proc-tracheal-cricotracheal-resection',
+    title: 'Trakeal ve Krikotrakeal Rezeksiyon: Laringotrakeal Stenoz ve Tümör Cerrahisi (Tracheal and Cricotracheal Resection)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Göğüs Cerrahisi & KBB',
+    description: 'Post-entübasyon stenozu ve trakea tümörlerinde laringotrakeal rezeksiyon; çapraz-saha (Cross-Field) ventilasyonu, çene-sternum sütürü (Guardian Suture), sıfır öksürükle masada pürüzsüz erken ekstübasyon.',
+    keywords: ['tracheal resection', 'cricotracheal resection', 'trakeal rezeksiyon', 'krikotrakeal rezeksiyon', 'pits', 'trakeal stenoz', 'subglottik stenoz', 'cross-field ventilation', 'çapraz saha ventilasyonu', 'guardian suture', 'çene dikişi', 'innominat arter', 'bubble test', 'masada ekstübasyon', 'jaffe', 'sts', 'eacts', 'göğüs cerrahisi', 'kbb', 'kulak burun boğaz', 'laringoloji'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-laryngectomy-partial-and-total',
+    title: 'Larenjektomi: Parsiyel ve Total Larenjektomi (Laryngectomy: Partial and Total)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'KBB',
+    description: 'İleri evre larinks kanserinde parsiyel ve total larenjektomi; çapraz-saha (Cross-Field) ventilasyonu, karotis sinüs vagal refleksi önlemi, kalıcı stoma ve ömür boyu oral entübasyon imkansızlığı disiplini.',
+    keywords: ['laryngectomy', 'larenjektomi', 'total larenjektomi', 'parsiyel larenjektomi', 'larinks kanseri', 'supraglottik larenjektomi', 'hemilarenjektomi', 'cross-field ventilation', 'kalıcı stoma', 'end-tracheostomy', 'karotis sinüs refleksi', 'faringorafi', 'neofarinks', 'jaffe', 'nccn', 'ahns', 'ntsp', 'kbb', 'baş boyun cerrahisi'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-tonsillectomy-and-adenoidectomy',
+    title: 'Tonsillektomi ve Adenoidektomi (Tonsillectomy and/or Adenoidectomy)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'KBB & Çocuk Cerrahisi',
+    description: 'Pediatrik ve erişkin adenotonsillektomi; Oral RAE tüp, Crowe-Davis ağız açacağı basıncı, agresif PONV profilaksisi, laringospazm savunması ve kanayan tonsil (Bleeding Tonsil) protokolü.',
+    keywords: ['tonsillectomy', 'adenoidectomy', 'tonsillektomi', 'adenoidektomi', 'bademcik', 'geniz eti', 'oral rae tüp', 'crowe-davis', 'boyle-davis', 'bleeding tonsil', 'kanayan tonsil', 'ponv', 'laringospazm', 'osas', 'jaffe', 'aao-hns', 'kbb', 'çocuk cerrahisi'],
+    tabId: 'procedures',
+    popular: true
+  },
   // Troubleshooting Tool
   {
     id: 'tool-troubleshooting',
@@ -1107,6 +1137,17 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Ameliyathanede ani alarmlar, ventilatör sorunları ve hemodinamik krizlerde algoritmik sorun giderme rehberi.',
     keywords: ['troubleshooting', 'sorun giderme', 'arıza', 'ventilatör alarmı', 'kriz', 'ameliyathane'],
     tabId: 'troubleshooting',
+    popular: true
+  },
+  // EKT Vaka Takip & Zamanlayıcı Tool
+  {
+    id: 'tool-ekt-tracker',
+    title: 'EKT Vaka Takip, Log ve Zamanlayıcı (CRF)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'EKT · CRF',
+    description: 'Elektrokonvülsif Tedavi (EKT) vaka takibi, Ketofol indüksiyon kronometresi, PSi derinlik ölçümleri, 15sn-1dk-3dk-10dk hemodinami uyarıları ve otomatik CRF olay günlüğü.',
+    keywords: ['ekt', 'elektrokonvülsif', 'şok', 'crf', 'vaka takip', 'zamanlayıcı', 'kronometre', 'ketofol', 'propofol', 'ketamin', 'psi', 'derinlik', 'nöbet', 'süksinilkolin', 'hemodinami'],
+    tabId: 'ekt',
     popular: true
   },
   {

@@ -57,7 +57,7 @@ export const combinedAnteriorPosteriorThoracolumbarInstrumentation: ProcedureDef
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + Çift Lümenli Tüp (DLT) veya Bronşiyal Bloker (Anterior torasik aşama için) + TIVA (Total İntravenöz Anestezi: Propofol + Remifentanil) — Sürekli tcMEP, SSEP ve Pedikül Vida EMG takibi için MUTLAK STANDARTTIR'
+      'Endotrakeal Genel Anestezi (Çift Lümenli Tüp [DLT] / OLV) + TIVA (Propofol + Remifentanil) — Sürekli tcMEP, SSEP ve Pedikül Vida EMG takibi için MUTLAK STANDARTTIR'
     ],
     alternative: [
       'TIVA + Düşük Doz Ketamin İnfüzyonu (0.1-0.2 mg/kg/saat): Opioid toleransı ve hiperaljeziyi engellemek, hemodinamik stabiliteyi desteklemek amacıyla',

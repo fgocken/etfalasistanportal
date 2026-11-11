@@ -250,7 +250,9 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
   const procedureCountsBySpecialty = useMemo(() => {
     const map: Record<string, number> = {};
     for (const spec of SURGICAL_SPECIALTIES) {
-      map[spec.id] = REGISTERED_PROCEDURES.filter(p => p.specialty === spec.id).length;
+      map[spec.id] = REGISTERED_PROCEDURES.filter(p => 
+        p.specialty === spec.id || (p.secondarySpecialties && p.secondarySpecialties.includes(spec.id))
+      ).length;
     }
     return map;
   }, []);

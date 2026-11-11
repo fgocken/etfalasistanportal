@@ -52,7 +52,7 @@ export const craniotomyEmbolectomy: ProcedureDefinition = {
   // 2) Olası anestezi yönetimi teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Total İntravenöz Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI]) + Dengeli Genel Endotrakeal Anestezi (GETA)',
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
       'TIVA + Düşük Doz Uçucu İnhalasyon Anesteziği (<0.5 - 0.7 MAC Sevofluran): İskemik penumbra perfüzyonunu bozmayan, serebral otoregülasyonu koruyan, serebral metabolik oksijen tüketimini (CMRO2) düşüren ve intraoperatif nöromonitörizasyona (MEP/SSEP) engel olmayan dengeli rejim'
     ],
     alternative: [

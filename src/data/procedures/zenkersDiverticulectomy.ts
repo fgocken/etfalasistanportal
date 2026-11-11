@@ -50,7 +50,7 @@ export const zenkersDiverticulectomy: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Genel Endotrakeal Anestezi (GETA) + İndüksiyonda Baş-Yukarı (Reverse Trendelenburg 30-45°) Pozisyon + Pre-indüksiyon Nazik Divertikül Boşaltımı + Videolaringoskopi Eşliğinde Doğrudan Görüş Altında Kaflı Entübasyon + TIVA (Propofol + Remifentanil) + Endoskopik Girişimde TOF 0/4 Tam Kas Gevşemesi — DÜNYA GENELİNDE ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) + İndüksiyonda Baş-Yukarı (Reverse Trendelenburg) Pozisyon + Videolaringoskopi Eşliğinde Kaflı Entübasyon — DÜNYA GENELİNDE ALTIN STANDARTTIR'
     ],
     alternative: [
       'Uyanık Fleksibl Fiberoptik Entübasyon (AFOI): Masif kese varlığında, aspirasyon riski çok yüksek veya zor hava yolu anatomisi olan olgularda (aspirasyon ve kör ilerletme travması riskine karşı aşırı dikkatli olunmalıdır)',

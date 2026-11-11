@@ -63,6 +63,7 @@ export interface ProcedureDefinition {
   shortCode?: string;
   specialty: SurgicalSpecialty;
   specialtyName: string;
+  secondarySpecialties?: SurgicalSpecialty[];
   
   // 1) Prosedür İsmi, Tanımı, Endikasyonları ve Tahmini Süresi
   description: string;

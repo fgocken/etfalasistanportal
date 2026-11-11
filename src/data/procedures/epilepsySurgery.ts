@@ -55,7 +55,7 @@ export const epilepsySurgery: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Total İntravenöz Anestezi: Propofol + Remifentanil) — ECoG ve nöromonitörizasyon için altın standarttır',
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — ECoG ve nöromonitörizasyon için altın standarttır',
       'Uyanık Kraniyotomi (Asleep-Awake-Asleep - AAA Tekniği): Dominant hemisfer konuşma (Broca / Wernicke) ve motor alan komşuluğundaki rezeksiyonlarda LMA/Kafa Bloku eşliğinde uyanık testleme'
     ],
     alternative: [

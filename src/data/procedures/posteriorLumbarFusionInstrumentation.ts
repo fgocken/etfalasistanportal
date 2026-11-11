@@ -59,7 +59,7 @@ export const posteriorLumbarFusionInstrumentation: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Total İntravenöz Anestezi: Propofol + Remifentanil) — Sürekli tcMEP, SSEP ve Pedikül/Pelvik Vida Tetiklenmiş EMG takibi için MUTLAK STANDARTTIR'
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — Sürekli tcMEP, SSEP ve Pedikül/Pelvik Vida Tetiklenmiş EMG takibi için MUTLAK STANDARTTIR'
     ],
     alternative: [
       'TIVA Protokolüne Düşük Doz Ketamin İnfüzyonu Eklenmesi (0.1-0.2 mg/kg/saat): N-metil-D-aspartat (NMDA) reseptör antagonisti olarak intraoperatif remifentanil hiperaljezisini önler ve İONM sinyallerini baskılamaz',

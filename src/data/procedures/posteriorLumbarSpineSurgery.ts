@@ -56,7 +56,7 @@ export const posteriorLumbarSpineSurgery: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Total İntravenöz Anestezi: Propofol + Remifentanil) — İntraoperatif Nöromonitörizasyon (MEP/SSEP) ve Pedikül Vida Tetiklenmiş EMG (Triggered EMG) takibi için MUTLAK ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — İntraoperatif Nöromonitörizasyon (MEP/SSEP) ve Pedikül Vida Tetiklenmiş EMG (Triggered EMG) takibi için MUTLAK ALTIN STANDARTTIR'
     ],
     alternative: [
       'Dengeli Genel Anestezi (Düşük Doz Sevofluran < 0.5 MAC + Remifentanil İV): İONM sinyal kalitesi uygun olan seçilmiş vakalarda',

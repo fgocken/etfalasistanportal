@@ -55,7 +55,7 @@ export const anteriorThoracicSpineSurgery: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TEK AKCİĞER VENTİLASYONU (OLV - One-Lung Ventilation: Sol Çift Lümenli Tüp [Left DLT] veya Bronşiyal Bloker) + TIVA (Total İntravenöz Anestezi: Propofol + Remifentanil) — İONM ve torakotomide ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (Sol Çift Lümenli Tüp / OLV) + TIVA (Propofol + Remifentanil) — İONM ve torakotomide ALTIN STANDARTTIR'
     ],
     alternative: [
       'Zor Hava Yolu veya Küçük Havayolu Olan Olgularda: Tek lümenli tüp içerisinden yönlendirilen tel kılavuzlu Bronşiyal Bloker (Arndt / Cohen bloker)'

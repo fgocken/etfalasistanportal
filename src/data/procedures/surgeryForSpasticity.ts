@@ -52,7 +52,7 @@ export const surgeryForSpasticity: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Total İntravenöz Anestezi: Propofol + Remifentanil) — İntraoperatif nörofizyolojik kök stimülasyonu (EMG) için MUTLAK ALTIN STANDARTTIR',
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — İntraoperatif nörofizyolojik kök stimülasyonu (EMG) için MUTLAK ALTIN STANDARTTIR',
       'Düşük Doz İnhalasyon Anestezisi (< 0.5 MAC Sevofluran/İzofluran) + Opioid İnfüzyonu: Kökçük uyarımı fazında MAC düzeyi < 0.3 seviyesine çekilerek TIVA ağırlıklı idameye dönülür'
     ],
     alternative: [

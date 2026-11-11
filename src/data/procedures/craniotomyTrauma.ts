@@ -55,7 +55,7 @@ export const craniotomyTrauma: ProcedureDefinition = {
   anesthesiaTechniques: {
     primary: [
       'Genel Anestezi + Hızlı Seri İndüksiyon (RSI) ve Manuel Hat İçi Servikal Stabilizasyon (MILS): Tüm travma hastaları aksi kanıtlanana kadar TOK (dolu mide) ve SERVİKAL TRAVMALI kabul edilir; krikoid bası veya videolaringoskop eşliğinde başa fleksiyon/ekstansiyon verilmeden entübasyon zorunludur',
-      'Dengeli Anestezi (Ketamin/Etomidat + Fentanil + Rokuronyum + TIVA veya Düşük Doz Sevofluran < 0.5 MAC)'
+      'Endotrakeal Genel Anestezi (GETA) — TIVA (Propofol/Ketamin + Fentanil) veya Düşük Doz Sevofluran (< 0.5 MAC)'
     ],
     alternative: [
       'Saf TIVA (Propofol + Remifentanil Hedef Kontrollü İnfüzyon): Hemodinamik olarak resüsite edilmiş, stabil olgularda serebral metabolizma (CMRO2) ve intrakraniyel basıncı (ICP) düşürmek için'

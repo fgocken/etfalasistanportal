@@ -51,7 +51,7 @@ export const repairRupturedLaceratedGlobe: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Modifiye Hızlı Ardışık İndüksiyon (Modified RSI) ile Dengeli Genel Endotrakeal Anestezi (GETA) + Yüksek Doz Non-Depolarizan Nöromusküler Blokaj (Rokuronyum 0.9 - 1.2 mg/kg) + Pürüzsüz Ekstübasyon Protokolü — Açık kürede DÜNYA GENELİNDE MUTLAK ZORUNLU STANDARTTIR'
+      'Modifiye Hızlı Ardışık İndüksiyon (Modified RSI) ile Endotrakeal Genel Anestezi (GETA) + Yüksek Doz Non-Depolarizan Nöromusküler Blokaj (Rokuronyum 0.9 - 1.2 mg/kg) + Pürüzsüz Ekstübasyon Protokolü — Açık kürede DÜNYA GENELİNDE MUTLAK ZORUNLU STANDARTTIR'
     ],
     alternative: [
       'KONTRENDİKASYON UYARISI: Rejyonel anestezi (Retrobulber, Peribulber veya Sub-Tenon Blokları) AÇIK KÜRE TRAVMASINDA KESİNLİKLE YASAKTIR! Retrobulber mesafeye enjekte edilecek 3-5 mL sıvı hacmi intraorbital basıncı fırlatarak göz içi dokularını (iris, lens, vitreus, retina) açık yaradan dışarı fışkırtır (ekstrüzyon felaketi) ve gözü anında kör eder!',

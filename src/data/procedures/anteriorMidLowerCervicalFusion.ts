@@ -54,7 +54,7 @@ export const anteriorMidLowerCervicalFusion: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Propofol + Remifentanil) — İntraoperatif MEP ve SSEP nöromonitörizasyonu yapılacak olgularda ALTIN STANDARTTIR',
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — İntraoperatif MEP ve SSEP nöromonitörizasyonu yapılacak olgularda ALTIN STANDARTTIR',
       'İkinci Seçenek (İONM Yapılmayan Standart Tek Seviye ACDF İçin): GETA + Düşük Doz Sevofluran/Desfluran (MAC 0.8-1.0) + Titre Edilmiş Opioid'
     ],
     alternative: [

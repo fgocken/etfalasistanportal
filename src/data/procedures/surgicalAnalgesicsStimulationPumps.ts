@@ -55,9 +55,9 @@ export const surgicalAnalgesicsStimulationPumps: ProcedureDefinition = {
   anesthesiaTechniques: {
     primary: [
       'Perkütan SCS Girişimi İçin: Lokal Anestezi + Monitörize Anestezi Bakımı (MAC) / Titre Edilmiş Sedasyon (Deksmedetomidin infüzyonu veya Düşük Doz Remifentanil/Propofol). Hasta test aşamasında TAM UYANIK ve KOOPERE olmalı; parestezinin ağrılı sahayı örtüşünü teyit etmelidir',
-      'Açık Laminotomi Paddle Lead SCS İçin: Dengeli Genel Endotrakeal Anestezi (GETA) + TIVA (Propofol + Remifentanil). İntraoperatif SSEP / MEP nöromonitörizasyonu yapılacağından cerrahi test aşamasında nöromusküler blokajdan kaçınılır',
-      'İntratekal İlaç Pompası (ITB/Ağrı) İçin: Dengeli Genel Endotrakeal Anestezi (GETA) veya Lokal Anestezi + MAC Sedasyon (hasta toleransı ve hava yolu anatomisine göre)',
-      'Motor Korteks Stimülasyonu (MCS) İçin: Genel Endotrakeal Anestezi (GETA) + TIVA (Propofol + Remifentanil) eşliğinde Uyanık/Asedatif Faz Dönüşümü ve Kortikal Haritalama (veya uyanık kraniyotomi protokolü)'
+      'Açık Laminotomi Paddle Lead SCS İçin: Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil). İntraoperatif SSEP / MEP nöromonitörizasyonu yapılacağından cerrahi test aşamasında nöromusküler blokajdan kaçınılır',
+      'İntratekal İlaç Pompası (ITB/Ağrı) İçin: Endotrakeal Genel Anestezi (GETA) veya Lokal Anestezi + MAC Sedasyon (hasta toleransı ve hava yolu anatomisine göre)',
+      'Motor Korteks Stimülasyonu (MCS) İçin: Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) eşliğinde Uyanık/Asedatif Faz Dönüşümü ve Kortikal Haritalama (veya uyanık kraniyotomi protokolü)'
     ],
     alternative: [
       'Spinal veya Epidural Blok: Perkütan veya açık SCS girişimlerinde KONTRENDİKEDİR (nörolojik parestezi testini ve epidural mesafe ayırt etmeyi engeller)',
@@ -116,7 +116,7 @@ export const surgicalAnalgesicsStimulationPumps: ProcedureDefinition = {
       '  - C-kollu skopi altında Touhy iğnesi ile epidural aralığa girilir ve elektrot dorsal epidural hatta ilerletilir.',
       '  - Cerrah test uyarımı başlattığında sedasyon minimuma indirilir; hasta uyanık olarak elektrot titreşiminin/karıncalanmasının bacaklarındaki veya kolundaki ağrılı alanı %80-100 örtüp örtmediğini söyler.',
       'Açık Laminotomi Paddle Lead ve Genel Anestezi Yönetimi:',
-      '  - GETA + TIVA (Propofol + Remifentanil) uygulanır.',
+      '  - Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) uygulanır.',
       '  - Nöromonitörizasyon (MEP/SSEP) yapılacağından entübasyon sonrası ek kas gevşetici verilmez.',
       'İntratekal Pompalarda Doz Aşımı ve Toksisite Önlemi:',
       '  - Pompa haznesi doldurulurken veya kateter yıkanırken yanlışlıkla sistemik veya yüksek doz intratekal ilaç (baklofen/morfin) kaçmamasına azami dikkat edilir.',
