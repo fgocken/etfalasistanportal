@@ -18,7 +18,8 @@ export type SurgicalSpecialty =
   | 'cocuk_cerrahisi'
   | 'goz'
   | 'gastroenteroloji'
-  | 'psikiyatri';
+  | 'psikiyatri'
+  | 'kardiyoloji';
 
 export interface SurgicalSpecialtyMeta {
   id: SurgicalSpecialty;

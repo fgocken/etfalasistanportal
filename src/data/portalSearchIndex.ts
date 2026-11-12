@@ -1128,6 +1128,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'procedures',
     popular: true
   },
+  {
+    id: 'proc-tavi-tavr',
+    title: 'Transkateter Aort Kapak İmplantasyonu (TAVİ / TAVR)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Kardiyoloji & KVC',
+    description: 'Transfemoral ve alternatif perkütan aort kapak replasmanı; Hızlı Ventriküler Pacing (RVP 180-220 bpm), MAC sedasyon vs GETA, retroperitoneal kanama, paravalvüler kaçak ve iletim blokları yönetimi.',
+    keywords: ['tavi', 'tavr', 'transkateter aort kapak implantasyonu', 'transcatheter aortic valve replacement', 'aort darlığı', 'aortic stenosis', 'kardiyoloji', 'kvc', 'heart team', 'rvp', 'rapid ventricular pacing', 'edwards sapien', 'medtronic evolut', 'pacing', 'paravalvüler kaçak', 'pvl', 'jaffe', 'tam av blok', 'lbbb', 'mac', 'bilinçli sedasyon', 'perkütan kapak'],
+    tabId: 'procedures',
+    popular: true
+  },
   // Troubleshooting Tool
   {
     id: 'tool-troubleshooting',

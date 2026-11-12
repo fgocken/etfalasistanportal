@@ -60,6 +60,7 @@ import { laryngealFrameworkSurgery } from './laryngealFrameworkSurgery';
 import { trachealCricotrachealResection } from './trachealCricotrachealResection';
 import { laryngectomyPartialTotal } from './laryngectomyPartialTotal';
 import { tonsillectomyAdenoidectomy } from './tonsillectomyAdenoidectomy';
+import { transcatheterAorticValveImplantation } from './transcatheterAorticValveImplantation';
 
 export {
   laparoscopicCholecystectomy,
@@ -122,7 +123,8 @@ export {
   laryngealFrameworkSurgery,
   trachealCricotrachealResection,
   laryngectomyPartialTotal,
-  tonsillectomyAdenoidectomy
+  tonsillectomyAdenoidectomy,
+  transcatheterAorticValveImplantation
 };
 
 /**
@@ -206,6 +208,12 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
     name: 'Psikiyatri',
     shortName: 'Psikiyatri',
     description: 'Elektrokonvülsif tedavi (EKT / ECT), transkraniyal manyetik stimülasyon (TMS) ve psikiyatrik girişim anestezi yönetimi'
+  },
+  {
+    id: 'kardiyoloji',
+    name: 'Kardiyoloji (Girişimsel)',
+    shortName: 'Kardiyoloji',
+    description: 'Transkateter aort kapak implantasyonu (TAVİ/TAVR), perkütan koroner girişimler ve yapısal kalp hastalıkları anestezi ve sedasyon yönetimi'
   }
 ];
 
@@ -276,7 +284,8 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   laryngealFrameworkSurgery,
   trachealCricotrachealResection,
   laryngectomyPartialTotal,
-  tonsillectomyAdenoidectomy
+  tonsillectomyAdenoidectomy,
+  transcatheterAorticValveImplantation
 ];
 
 /**
