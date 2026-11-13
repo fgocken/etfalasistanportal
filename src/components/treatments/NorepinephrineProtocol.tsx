@@ -28,6 +28,15 @@ import {
   Shield,
   BookOpen
 } from 'lucide-react';
+import {
+  ContraindicationsGridBlock,
+  DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
+  MonographCopyButton,
+  MonographQuickNav,
+  OrganImpairmentGridBlock,
+  PregnancyLactationBlock,
+} from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -128,6 +137,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 1. BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI                  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-ozet"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -206,6 +216,19 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
+
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-ozet', label: 'Özet & Reseptörler' },
+          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
+          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-guvenlik', label: 'ISMP High-Alert' },
+          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
+        ]}
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 2. FARMAKOKİNETİK ÖZELLİKLER (PK/PD AKORDİYON)                      */}
@@ -544,6 +567,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 5. İNTERAKTİF İNFÜZYON POMPASI & DOZ HESAPLAYICISI                  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-hesaplayici"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -558,29 +582,44 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
                 İnteraktif İnfüzyon Pompası &amp; Doz Hesaplayıcısı
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Türkiye 4 mg/4 mL ampul formülasyonu, standart 50 mL enjektör veya torba infüzyon parametreleri.
+                Erişkin/pediatrik ağırlık (5–150 kg), 4 mg/4 mL ampul ve 50 mL enjektör / torba parametreleri.
               </p>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              setWeightKg(70);
-              setPrepType('vial_50');
-              setDoseMode('weight_based');
-              setDoseMcgKgMin(0.10);
-              setDoseMcgMin(7.0);
-            }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors cursor-pointer self-start sm:self-auto ${
-              isDark
-                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
-                : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
-            }`}
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Sıfırla (70 kg / 0.10 mcg)</span>
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <MonographCopyButton
+              isDark={isDark}
+              getText={() =>
+                [
+                  `NORADRENALİN (NOREPİNEFRİN) İNFÜZYON ÖZETİ`,
+                  `Hasta Ağırlığı: ${weightKg} kg`,
+                  `Çözelti Konsantrasyonu: ${concentrationMcgMl} mcg/mL`,
+                  `Hedef Doz: ${activeDoseMcgKgMin.toFixed(2)} mcg/kg/dk (${activeDoseMcgMin.toFixed(1)} mcg/dk)`,
+                  `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat`,
+                  `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(1)} mg/gün (~${dailyAmpoulesNeeded.toFixed(1)} adet 4 mg ampul)`,
+                ].join('\n')
+              }
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setWeightKg(70);
+                setPrepType('vial_50');
+                setDoseMode('weight_based');
+                setDoseMcgKgMin(0.10);
+                setDoseMcgMin(7.0);
+              }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
+                isDark
+                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+              }`}
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Sıfırla</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
@@ -593,28 +632,28 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
                   <Activity className="w-3.5 h-3.5 text-rose-500" />
                   <span>Hasta Vücut Ağırlığı:</span>
                 </label>
-                <span className="font-mono text-sm text-rose-600 dark:text-rose-400 font-bold">
-                  {weightKg} kg
+                <span className="font-mono tabular-nums text-sm text-rose-600 dark:text-rose-400 font-bold">
+                  {weightKg} kg {weightKg < 40 ? '· Pediatrik' : ''}
                 </span>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
                 <input
                   id={weightInputId}
                   type="range"
-                  min="30"
+                  min="5"
                   max="150"
                   step="1"
                   value={weightKg}
                   onChange={(e) => setWeightKg(Number(e.target.value))}
                   className="w-full accent-rose-600 h-2 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer"
                 />
-                <div className="flex items-center gap-1 shrink-0">
-                  {[50, 70, 85, 100].map((w) => (
+                <div className="flex items-center gap-1 shrink-0 flex-wrap">
+                  {[15, 30, 50, 70, 85, 100].map((w) => (
                     <button
                       key={w}
                       type="button"
                       onClick={() => setWeightKg(w)}
-                      className={`px-2 py-1 text-[11px] font-mono rounded border transition-colors cursor-pointer ${
+                      className={`px-2 py-1 text-[11px] font-mono tabular-nums rounded border transition-colors cursor-pointer ${
                         weightKg === w
                           ? 'bg-rose-600 text-white border-rose-600 font-bold'
                           : isDark
@@ -1484,42 +1523,101 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
+      <ContraindicationsGridBlock
+        isDark={isDark}
+        absoluteItems={[
+          'Düzeltilmemiş ağır hipovolemi (sıvı resüsitasyonu yapılmadan tek başına başlanması splanknik/renal iskemiyi derinleştirir).',
+          'Mezenterik veya periferik vasküler tromboz (yalnızca hayat kurtarıcı acil perfüzyon gerekliliğinde istisna).',
+          'Ciddi hipoksi ve hiperkapniyle birlikte halotan/siklopropan anestezisi altında malign ventriküler aritmi riski.',
+        ]}
+        relativeItems={[
+          'MAO inhibitörleri veya trisiklik antidepresan (TCA) kullanımı: Presör etki 2–10 kat artabilir; düşük dozla başlanmalıdır.',
+          'Non-selektif beta-bloker kullanımı: Karşılanmamış alfa-1 vazokonstriksiyon nedeniyle şiddetli hipertansif yanıt gelişebilir.',
+          'Şiddetli asidemi (pH < 7.15): Katekolamin reseptör duyarlılığı düşer; asit-baz ve ventilasyon optimize edilmelidir.',
+        ]}
+        clinicalNote="Hayati şok ve derin hipotansiyon acillerinde mutlak kontrendikasyon yoktur; sıvı resüsitasyonu ile eşzamanlı ve titre edilerek başlanmalıdır."
+      />
+
+      <OrganImpairmentGridBlock
+        isDark={isDark}
+        renalSummary="Organ-bağımsız klirens: Böbrek yetmezliğinde veya CRRT'de başlangıç dozu azaltılmaz."
+        renalDetails={[
+          'Norepinefrin nöronal Uptake-1 ve doku COMT/MAO enzimleriyle dakikalar içinde inaktive edilir.',
+          'eGFR < 30 mL/dk veya CRRT/HD altında ek doz ayarlaması gerekmez; hedef MAP ≥ 65 mmHg düzeyine göre titre edilir.',
+          'Hipovolemi düzeltilmeden yüksek doz verilmesi renal vazokonstriksiyonu artırabilir; septik şokta ise renal perfüzyon basıncını korur.',
+        ]}
+        hepaticSummary="Child-Pugh A / B / C yetmezliğinde rutin doz kısıtlaması gerekmez; doku COMT/MAO yolu korunur."
+        hepaticDetails={[
+          'Karaciğer yetmezliğinde splenik ve portal vazokonstriksiyon nedeniyle mezenterik perfüzyon ve laktat trendi yakından izlenmelidir.',
+          'Sirotik vazodilatasyon ve hepatorenal sendrom (HRS) tip-1 tedavisinde terlipresine güçlü alternatif vazopressördür.',
+        ]}
+      />
+
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="FDA Gebelik Kategorisi C · SOAP 2023 konsensusunda obstetrik spinal hipotansiyonda güvenli seçenek."
+        pregnancyDetails={[
+          'Plasentayı yüksek konsantrasyonda geçmez (COMT/MAO plasental bariyer), ancak yüksek sistemik dozlar uterin arter vazokonstriksiyonu yapabilir.',
+          'Sezaryen spinal hipotansiyonunda düşük doz noradrenalin (5–10 mcg bolus veya 0.02–0.05 mcg/kg/dk) fenilefrine göre maternal kalp hızını daha iyi korur ve fetal asidoz yaratmaz.',
+          'Maternal şok/sepsiste anne hayatı ve uteroplasental perfüzyon için hedef MAP ≥ 65 mmHg sağlanması esastır.',
+        ]}
+        lactationSummary="Yarı ömrü 1–2 dakika, oral biyoyararlanımı ~0% olduğundan emzirmeye engel oluşturmaz."
+        lactationDetails={[
+          'Anne sütüne geçip geçmediği sınırlı veriye sahip olsa da gastrointestinal sistemde MAO/COMT ile tamamen yıkıldığı için infant tarafından emilmez.',
+          'Anne hemodinamik olarak stabilize olup şok kliniği çözüldüğünde emzirmeye ara verilmesi ("pump & dump") gerekmez.',
+        ]}
+      />
+
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="NORepinephrine"
+        confusionRiskWith="EPINEPHrine"
+        criticalAlerts={[
+          'ISMP Tall-Man etiketleme zorunludur: NORepinephrine (Noradrenalin) ile EPINEPHrine (Adrenalin) enjektörleri aynı sepette tutulmamalıdır.',
+          'Torba/enjektör değişiminde çift pompa (smart switchover) kullanılmalıdır; 2–3 dakikalık kesinti ani derin hipotansiyona yol açar.',
+          'Standart enjektör konsantrasyonları (80 / 160 / 320 mcg/mL) yüksek risklidir; pompa programlamasında bağımsız çift kontrol yapılmalıdır.',
+        ]}
+        antidoteOrRescue="Ekstravazasyonda infüzyonu kapatın, kanülden aspire edin ve 12 saat içinde 5–10 mg Fentolamin (10–15 mL SF) SC infiltre edin (veya topikal %2 Nitrogliserin + ılık kompres; buz ASLA koymayın)."
+      />
+
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 14. GÜNCEL KILAVUZ REFERANSLARI & DOĞRULAMA                         */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all text-xs ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-400' : 'bg-white border-slate-200 text-slate-600 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
-            <span className="font-bold text-slate-900 dark:text-slate-100">
-              Kanıta Dayalı Kaynakça &amp; Kılavuz Standartları
-            </span>
-          </div>
-          <span className="font-mono text-[10px]">Güncelleme: 2025/2026 Konsensus</span>
-        </div>
-
-        <ul className="space-y-1.5 list-disc list-inside leading-relaxed">
-          <li>
-            <strong>Surviving Sepsis Campaign (SSC 2021 / 2025):</strong> International Guidelines for Management of Sepsis and Septic Shock.
-            Crit Care Med 2021; 49:e1063–e1143. (Noradrenalin 1. tercih vazopressör, MAP ≥ 65 mmHg, erken periferik başlama, &gt;0.25 mcg/kg/dk'da Vazopressin eklenmesi).
-          </li>
-          <li>
-            <strong>ESICM Consensus on Circulatory Shock (Cecconi et al.):</strong> Consensus on circulatory shock and hemodynamic monitoring.
-            Intensive Care Med 2014; 40:1795–1815.
-          </li>
-          <li>
-            <strong>SOAP Consensus Statement (2023):</strong> Society for Obstetric Anesthesia and Perinatology Consensus Statement on the Management
-            of Hypotension During Spinal Anesthesia for Cesarean Delivery.
-          </li>
-          <li>
-            <strong>MDCalc Norepinephrine Dosing &amp; Extravasation Phentolamine Protocol:</strong> Standard titration parameters and IV extravasation antidote guidelines.
-          </li>
-        </ul>
-      </section>
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Noradrenalin (Norepinefrin)"
+        references={[
+          {
+            authors: 'Evans L, Rhodes A, Alhazzani W, et al.',
+            title: 'Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021.',
+            journal: 'Crit Care Med',
+            year: 2021,
+            pmid: '34605781',
+            doi: '10.1097/CCM.0000000000005337',
+            note: 'Septik şokta 1. tercih vazopressör, MAP ≥ 65 mmHg, >0.25 mcg/kg/dk dozunda Vazopressin eklenmesi.',
+          },
+          {
+            authors: 'De Backer D, Biston P, Devriendt J, et al. (SOAP II Investigators)',
+            title: 'Comparison of Dopamine and Norepinephrine in the Treatment of Shock.',
+            journal: 'N Engl J Med',
+            year: 2010,
+            pmid: '20200382',
+            doi: '10.1056/NEJMoa0907118',
+            note: 'Dopamine göre belirgin daha düşük aritmi insidansı ve kardiyojenik şok alt grubunda sağkalım üstünlüğü.',
+          },
+          {
+            authors: 'Cecconi M, De Backer D, Antonelli M, et al.',
+            title: 'Consensus on circulatory shock and hemodynamic monitoring. Task force of ESICM.',
+            journal: 'Intensive Care Med',
+            year: 2014,
+            pmid: '25392034',
+            doi: '10.1007/s00134-014-3525-z',
+            note: 'Dolaşım şokunda erken vazopressör ve dinamik sıvı yanıtlılığı hedefleri.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/norepinephrine.html"
+        medscapeUrl="https://reference.medscape.com/drug-interactionchecker"
+      />
     </div>
   );
 };

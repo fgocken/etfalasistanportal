@@ -55,7 +55,30 @@ export const awakeCraniotomy: ProcedureDefinition = {
     alternative: [
       'Acil Dönüşüm Planı (Emergency Airway Rescue): Fokal/jeneralize nöbet, hava embolisi, masif kanama, akut beyin şişmesi veya hastanın ajite olup koopere olamaması halinde baş Mayfield çivisine tespitliyken videolaringoskop, LMA veya fiberoptik ile acil genel anesteziye geçiş'
     ],
-    notes: 'Uyanık kraniyotomide başarının temeli; mükemmel uygulanmış iki taraflı Skalp Bloğu (Scalp Block), solunumu deprese etmeden hızlı kooperasyon sağlayan kısa etkili ajanlar (Deksmedetomidin, Remifentanil, Propofol) ve hastanın ameliyat öncesi ayrıntılı nöropsikolojik/psikolojik hazırlığına dayanır.'
+    notes: 'Uyanık kraniyotomide başarının temeli; mükemmel uygulanmış iki taraflı Skalp Bloğu (Scalp Block), solunumu deprese etmeden hızlı kooperasyon sağlayan kısa etkili ajanlar (Deksmedetomidin, Remifentanil, Propofol) ve hastanın ameliyat öncesi ayrıntılı nöropsikolojik/psikolojik hazırlığına dayanır.',
+    rulesTitle: 'UYANIK KRANİYOTOMİDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'KUSURSUZ BİLATERAL SKALP BLOĞU VE AĞRISIZ DURA YÖNETİMİ',
+        content: 'Kraniyotomi açılışı, Mayfield çivi yerleşimi ve uyanık faz konforu tamamen 6 çift kraniyal/servikal sinirin (Supraorbital, Supratroklear, Zigomatikotemporal, Aurikulotemporal, Greater ve Lesser Oksipital sinirler) Bupivakain/Ropivakain ile blokajına dayanır; toksik maksimum doz (LA total mg/kg) aşılmamalı ve dura yapraklarına lokal anestezik emdirilmiş pamuk uygulanmalıdır.'
+      },
+      {
+        number: 2,
+        title: 'SOLUNUM DEPRESYONSUZ KOOPERASYON (DEKSMEDETOMİDİN + REMİFENTANİL)',
+        content: 'Kortikal dil ve motor haritalama sırasında hasta komutlara net yanıt vermeli (RASS 0 ile -1 arası), ancak hiperkapni (PaCO2 > 45 mmHg) nedeniyle akut beyin şişmesi (brain bulge) gelişmemelidir. Benzodiazepinlerden ve uzun etkili opioidlerden kesinlikle kaçınılır; Propofol EEG baskıladığı için haritalamadan 15-20 dakika önce kesilmelidir.'
+      },
+      {
+        number: 3,
+        title: 'BAŞ ÇİVİYE SABİTLİYKEN ACİL HAVA YOLU KURTARMA PLANI',
+        content: 'Hasta ameliyat masasına Mayfield çivileriyle sabitlenmiş ve örtülerle kısmen kapatılmıştır; akut solunum depresyonu, obstrüksiyon, masif beyin ödemi veya kontrolsüz nöbette masaya uygun pozisyonda 2. nesil LMA, videolaringoskop ve fleksibl bronkoskop her an steril/ulaşılabilir hazır bulundurulmalıdır.'
+      },
+      {
+        number: 4,
+        title: 'İNTRAOPERATİF KORTİKAL STİMÜLASYON NÖBETİNE ANINDA MÜDAHALE',
+        content: 'Elektrik stimülasyonu sırasında %3-15 oranında fokal veya jeneralize nöbet tetiklenebilir. Nöbet geliştiğinde ilk ve en hızlı tedavi cerrahın korteksi BUZLU SERUM FİZYOLOJİK (4°C Ringer/SF) ile irrige etmesidir; devam ederse küçük titre bolus Propofol (20-30 mg IV) veya Levetirasetam hazır tutulmalıdır (aşırı sedasyon solunumu durdurabilir).'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

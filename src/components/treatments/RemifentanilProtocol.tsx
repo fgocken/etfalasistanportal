@@ -22,6 +22,11 @@ import {
   Flame,
   Zap
 } from 'lucide-react';
+import {
+  DrugReferencesAndInteractionsBlock,
+  MonographCopyButton,
+  PregnancyLactationBlock,
+} from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -607,25 +612,43 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              setWeightKg(70);
-              setPrepType('vial_5mg_100');
-              setEnableBolus(false);
-              setBolusDoseMcgKg(0.5);
-              setBolusDurationSec(60);
-              setMaintenanceDoseMcgKgMin(0.15);
-            }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
-              isDark
-                ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700'
-                : 'bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-200'
-            }`}
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Varsayılana Sıfırla</span>
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <MonographCopyButton
+              isDark={isDark}
+              getText={() =>
+                [
+                  `REMİFENTANİL İNFÜZYON ÖZETİ`,
+                  `Hesaplama Ağırlığı (IBW/LBM): ${weightKg} kg`,
+                  `Çözelti Konsantrasyonu: ${concentrationMcgMl.toFixed(1)} mcg/mL`,
+                  `İdame Dozu: ${activeDoseMcgKgMin.toFixed(3)} mcg/kg/dk (${minuteDoseMcg.toFixed(1)} mcg/dk)`,
+                  `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat`,
+                  enableBolus
+                    ? `Yükleme Bolus: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(1)} mL, ${bolusDurationSec} sn)`
+                    : `Yükleme Bolus: Devre dışı`,
+                  `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(1)} mg (~${vialsNeeded5mg.toFixed(1)} adet 5 mg flakon)`,
+                ].join('\n')
+              }
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setWeightKg(70);
+                setPrepType('vial_5mg_100');
+                setEnableBolus(false);
+                setBolusDoseMcgKg(0.5);
+                setBolusDurationSec(60);
+                setMaintenanceDoseMcgKgMin(0.15);
+              }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                isDark
+                  ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700'
+                  : 'bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-200'
+              }`}
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Varsayılana Sıfırla</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -635,7 +658,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor={weightInputId} className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Hasta Ağırlığı (kg) <span className="text-[10px] text-slate-400 font-normal">(Obezde IBW)</span>
+                  Hasta Ağırlığı (kg) <span className="text-[10px] text-slate-400 font-normal">(Obezde IBW/LBM)</span>
                 </label>
                 <div className="relative">
                   <input
@@ -646,7 +669,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
                     step={1}
                     value={weightKg}
                     onChange={(e) => setWeightKg(Math.max(1, Number(e.target.value)))}
-                    className={`w-full px-3.5 py-2.5 rounded-xl border text-sm font-semibold transition-all focus:outline-hidden focus:ring-2 focus:ring-rose-500 ${
+                    className={`w-full px-3.5 py-2.5 rounded-xl border text-sm font-semibold font-mono tabular-nums transition-all focus:outline-hidden focus:ring-2 focus:ring-rose-500 ${
                       isDark
                         ? 'bg-slate-800/80 border-slate-700 text-white'
                         : 'bg-slate-50 border-slate-300 text-slate-900'
@@ -655,6 +678,50 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
                   <span className="absolute right-3.5 top-2.5 text-xs text-slate-400 pointer-events-none font-medium">
                     kg
                   </span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWeightKg(20);
+                      setMaintenanceDoseMcgKgMin(0.15);
+                    }}
+                    className={`px-2 py-0.5 rounded-md border text-[10.5px] font-semibold transition-colors cursor-pointer ${
+                      isDark
+                        ? 'border-slate-700 bg-slate-800/80 text-slate-300 hover:text-white'
+                        : 'border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    Pediatrik (20 kg)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWeightKg(70);
+                      setMaintenanceDoseMcgKgMin(0.15);
+                    }}
+                    className={`px-2 py-0.5 rounded-md border text-[10.5px] font-semibold transition-colors cursor-pointer ${
+                      isDark
+                        ? 'border-slate-700 bg-slate-800/80 text-slate-300 hover:text-white'
+                        : 'border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    Erişkin IBW (70 kg)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWeightKg(70);
+                      setMaintenanceDoseMcgKgMin(0.075);
+                    }}
+                    className={`px-2 py-0.5 rounded-md border text-[10.5px] font-semibold transition-colors cursor-pointer ${
+                      isDark
+                        ? 'border-amber-500/30 bg-amber-950/30 text-amber-300 hover:bg-amber-900/40'
+                        : 'border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100'
+                    }`}
+                  >
+                    Yaşlı ≥65 (%50 ↓)
+                  </button>
                 </div>
               </div>
 
@@ -1364,79 +1431,67 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
 
           <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-500/5 space-y-1">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Gebelik ve Doğum Analjezisi</span>
+            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Hızlı Kesilme &amp; Hiperaljezi</span>
             <p className="text-slate-600 dark:text-slate-400 text-xs">
-              <strong>Gebelik Kategorisi C:</strong> Plasentayı hızla geçer; ancak yenidoğan esterazları tarafından da hızla
-              hidrolize edilir. Doğumda epidural alamayan gebelerde PCA ile güvenle kullanılır.
+              Analjezi infüzyon kapandıktan 5–10 dakika içinde biter. Uzun cerrahi sonrası köprü analjezik
+              (parasetamol, NSAİİ, tramadol/morfin) verilmezse akut opioid kaynaklı hiperaljezi gelişir.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 13. İLAÇ ETKİLEŞİMİ SORGULAMA DIŞ BAĞLANTILARI                      */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <ExternalLink className="w-5 h-5 text-rose-500" />
-              <span>İlaç Etkileşimi Sorgulama (Dış Kaynaklar)</span>
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Hastanın kullandığı sedatifler, hipnotikler, inhalasyon anestezikleri ve beta blokerlerle etkileşim sorgulaması:
-            </p>
-          </div>
-        </div>
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="FDA Gebelik Kategorisi C · Plasentayı hızla geçer ancak fetal doku esterazları tarafından süratle yıkılır."
+        pregnancyDetails={[
+          'Doğum analjezisinde epidural blok kontrendike olduğunda hasta kontrollü analjezi (PCA) ile güvenle kullanılabilir; sürekli fetal kalp hızı ve maternal SpO₂ izlenmelidir.',
+          'Sezaryen genel anestezi indüksiyonunda maternal hipertansif yanıtı azaltmak için kullanılabilir; doğumda neonatal resüsitasyon ve Nalokson hazır bulundurulmalıdır.',
+        ]}
+        lactationSummary="Plazma yarı ömrü ~3–4 dakika ve kontekst-duyarlı yarı ömrü sabit olduğundan süte kalıcı geçiş minimaldir."
+        lactationDetails={[
+          'Tek başına veya kısa cerrahi sonrası anne anesteziden tamamen ayıldığında emzirme güvenlidir.',
+          'Uzun süreli YBÜ infüzyonu sonrası bebeğin uyanıklık ve solunum durumu klinik olarak gözlemlenmelidir.',
+        ]}
+      />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <a
-            href="https://www.drugs.com/drug-interactions/remifentanil-index.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`p-4 rounded-xl border flex items-center justify-between transition-all group ${
-              isDark
-                ? 'bg-slate-800/60 border-slate-700 hover:border-rose-500 hover:bg-slate-800'
-                : 'bg-slate-50 border-slate-200 hover:border-rose-500 hover:bg-white hover:shadow-xs'
-            }`}
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-rose-600 dark:group-hover:text-rose-400 flex items-center gap-1.5">
-                <span>Drugs.com Remifentanil Etkileşim Veritabanı</span>
-              </span>
-              <p className="text-xs text-slate-500 mt-1">
-                Remifentanil için majör, orta ve minör farmakodinamik etkileşim sorgusu
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-rose-500 shrink-0 ml-2" />
-          </a>
-
-          <a
-            href="https://reference.medscape.com/drug-interactionchecker"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`p-4 rounded-xl border flex items-center justify-between transition-all group ${
-              isDark
-                ? 'bg-slate-800/60 border-slate-700 hover:border-rose-500 hover:bg-slate-800'
-                : 'bg-slate-50 border-slate-200 hover:border-rose-500 hover:bg-white hover:shadow-xs'
-            }`}
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-rose-600 dark:group-hover:text-rose-400 flex items-center gap-1.5">
-                <span>Medscape Drug Interaction Checker</span>
-              </span>
-              <p className="text-xs text-slate-500 mt-1">
-                Klinik anestezi ve yoğun bakım ilaç kombinasyon kontrolü
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-rose-500 shrink-0 ml-2" />
-          </a>
-        </div>
-      </section>
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Remifentanil"
+        references={[
+          {
+            authors: 'Minto CF, Schnider TW, Egan TD, et al.',
+            title: 'Influence of age and gender on the pharmacokinetics and pharmacodynamics of remifentanil. I. Model development.',
+            journal: 'Anesthesiology',
+            year: 1997,
+            pmid: '9009935',
+            doi: '10.1097/00000542-199701000-00004',
+            note: 'Yaşlılarda %50 doz azaltımı ve obezlerde LBM/IBW esaslı dozlama dayanağı olan Minto PK/PD modeli.',
+          },
+          {
+            authors: 'Glass PS, Gan TJ, Howell S',
+            title: 'A review of the pharmacokinetics and pharmacodynamics of remifentanil.',
+            journal: 'Anesth Analg',
+            year: 1999,
+            pmid: '10511072',
+            doi: '10.1097/00000539-199910001-00003',
+            note: 'Doku/plazma esteraz hidrolizi ve sabit 3–4 dakikalık bağlam-duyarlı yarı ömür farmakokinetiği.',
+          },
+          {
+            authors: 'Devlin JW, Skrobik Y, Gélinas C, et al. (SCCM PADIS)',
+            title: 'Clinical Practice Guidelines for the Prevention and Management of Pain, Agitation/Sedation, Delirium, Immobility, and Sleep Disruption in Adult Patients in the ICU.',
+            journal: 'Crit Care Med',
+            year: 2018,
+            pmid: '30113379',
+            doi: '10.1097/CCM.0000000000003299',
+            note: 'Yoğun bakımda analgosedasyon ve organ yetmezliğinde remifentanil kullanımı.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/remifentanil-index.html"
+        medscapeUrl="https://reference.medscape.com/drug-interactionchecker"
+      />
     </div>
   );
 };

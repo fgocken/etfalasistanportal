@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ClipboardCheck, 
   Heart, 
@@ -10,17 +10,19 @@ import {
   Layers,
   BookOpen,
   CheckCircle2,
-  Clock
+  Clock,
+  Footprints
 } from 'lucide-react';
 import { MaceCalculator } from './MaceCalculator';
 import { AsaClassification } from '../asa/AsaClassification';
+import { DasiCalculator } from './DasiCalculator';
 
 interface PreoperativeEvaluationProps {
   isDark: boolean;
-  initialTool?: 'mace' | 'asa' | null;
+  initialTool?: PreopToolId | null;
 }
 
-type PreopToolId = 'mace' | 'asa';
+export type PreopToolId = 'mace' | 'dasi' | 'asa';
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -62,6 +64,27 @@ const PREOP_CARDS: PreopCardItem[] = [
     ]
   },
   {
+    id: 'dasi',
+    title: 'Duke Activity Status Index (DASI)',
+    badge: 'METs · VO₂peak',
+    category: 'Fonksiyonel Kapasite',
+    shortDesc: '12 soruluk yapılandırılmış fiziksel aktivite anketiyle objektif DASI skoru, tahmini VO₂peak (mL/kg/dk) ve METs hesabı; METS Çalışması (≤34) perioperatif risk analizi.',
+    icon: Footprints,
+    iconBgDark: 'bg-cyan-500/15',
+    iconBgLight: 'bg-cyan-50',
+    iconColorDark: 'text-cyan-400',
+    iconColorLight: 'text-cyan-700',
+    borderHoverDark: 'hover:border-cyan-500/40',
+    borderHoverLight: 'hover:border-cyan-400',
+    highlightsHeader: 'Klinik Parametreler ve Eşikler:',
+    highlights: [
+      { label: 'Skor Aralığı', value: '0 – 58.20 Puan', colorClass: 'text-cyan-700 dark:text-cyan-300', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' },
+      { label: '4.0 MET Eşiği', value: 'DASI ≈ 10.23', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'METS Risk Eşiği', value: 'DASI ≤ 34 Puan', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Kanıt', value: 'Hlatky · Lancet 2018', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' }
+    ]
+  },
+  {
     id: 'asa',
     title: 'ASA Fiziksel Durum Sınıflaması',
     badge: 'ASA I – VI · 2025/2026',
@@ -86,6 +109,12 @@ const PREOP_CARDS: PreopCardItem[] = [
 
 export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ isDark, initialTool = null }) => {
   const [activeToolId, setActiveToolId] = useState<PreopToolId | null>(initialTool);
+
+  useEffect(() => {
+    if (initialTool !== undefined) {
+      setActiveToolId(initialTool);
+    }
+  }, [initialTool]);
 
   const selectedTool = PREOP_CARDS.find(card => card.id === activeToolId);
 
@@ -163,7 +192,7 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
             <span className="font-mono text-[11px]">{PREOP_CARDS.length} Klinik Araç</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {PREOP_CARDS.map((card) => {
               const Icon = card.icon;
               return (
@@ -250,6 +279,10 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
       {/* GÖRÜNÜM 2: AÇIK ARAÇ DETAYLARI (Tıklanınca Açılan Tam Görünüm) */}
       {activeToolId === 'mace' && (
         <MaceCalculator isDark={isDark} />
+      )}
+
+      {activeToolId === 'dasi' && (
+        <DasiCalculator isDark={isDark} />
       )}
 
       {activeToolId === 'asa' && (

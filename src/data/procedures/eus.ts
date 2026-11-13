@@ -54,7 +54,30 @@ export const eus: ProcedureDefinition = {
     alternative: [
       'Orta Düzey Sedasyon (Bilinçli Sedasyon): Yalnızca minimal invaziv, kısa ve tecrübeli ellerde tanısal radyal EUS için (FNA ve terapötik girişimlerde ani hasta hareketi vasküler yaralanma riski doğurduğundan tercih edilmez)'
     ],
-    notes: 'EUS işlemlerinde hasta hareketsizliği yaşamsal önem taşır: İğne lezyona (özellikle pankreas başı, portal ven veya mezenterik damar komşuluğu) batırılmışken hastanın öğürmesi, öksürmesi veya kıpırdaması fatal vasküler laserasyonlara yol açabilir. Bu nedenle sedasyon düzeyi kesintisiz derinlikte tutulmalı, şüpheli havayolunda entübe genel anesteziye geçilmelidir.'
+    notes: 'EUS işlemlerinde hasta hareketsizliği yaşamsal önem taşır: İğne lezyona (özellikle pankreas başı, portal ven veya mezenterik damar komşuluğu) batırılmışken hastanın öğürmesi, öksürmesi veya kıpırdaması fatal vasküler laserasyonlara yol açabilir. Bu nedenle sedasyon düzeyi kesintisiz derinlikte tutulmalı, şüpheli havayolunda entübe genel anesteziye geçilmelidir.',
+    rulesTitle: 'ENDOSKOPİK ULTRASONOGRAFİDE (EUS) TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'FNA / FNB İĞNE BİYOPSİSİ ANINDA MUTLAK HAREKETSİZLİK',
+        content: 'Pankreas kitleleri, çölyak pleksus veya mediastinal lenf nodlarına 19G-22G iğne ile girilirken iğne ucu portal ven, splenik arter veya aorttan milimetreler uzaktadır. Öğürme, öksürük veya ani uyanma hareketi ölümcül iç kanamaya yol açar; biyopsi öncesi hedef derinlik/stabilite kesinleştirilmelidir.'
+      },
+      {
+        number: 2,
+        title: 'RİJİT VE KALIN EKOENDOSKOP İLE FARENGEAL/ÖZOFAGEAL GÜVENLİK',
+        content: 'Ekoendoskopun uç kısmı standart gastroskoptan daha uzun, kalın ve rijittir; krikofaringeal geçiş sırasında faringeal travma ve laringospazm riski yüksektir. İndüksiyonda baş-boyun hizalaması iyi sağlanmalı ve endoskop geçerken yeterli anestezi derinliği mevcut olmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'MİDE ÇIKIŞI OBSTRÜKSİYONU VE KİST DRENAJINDA ASPİRASYON KORUMASI',
+        content: 'Pankreas başı tümörü bulunan olgularda sıklıkla gizli gastrik çıkış obstrüksiyonu (mide stazı) bulunur; ayrıca büyük psödokist/WOPN drenajında (LAMS / Hot AXIOS) aniden mideye litrelerce kist sıvısı boşalabilir. Bu yüksek riskli olgularda Endotrakeal Genel Anestezi (RSI) mutlak tercih edilmelidir.'
+      },
+      {
+        number: 4,
+        title: 'ÇÖLYAK PLEKSUS BLOKAJI HİPOTANSİYONU VE SÜREKLİ HEMODİNAMİ',
+        content: 'EUS eşliğinde çölyak pleksus nörolizi/blokajı (CPB/CPN) uygulanan olgularda ani splanknik vazodilatasyona bağlı şiddetli ortostatik hipotansiyon ve ishal gelişebilir. İşlem öncesi yeterli IV kristaloid yüklemesi yapılmalı ve işlem sonrası kan basıncı yakından takip edilmelidir.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

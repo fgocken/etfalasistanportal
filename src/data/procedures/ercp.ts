@@ -53,7 +53,30 @@ export const ercp: ProcedureDefinition = {
     alternative: [
       'Orta Düzey Sedasyon (Bilinçli Sedasyon): Yalnızca minimal tanısal olgularda (günümüzde ERCP invazivliği ve prone pozisyon zorlukları nedeniyle nadiren tercih edilir)'
     ],
-    notes: 'ERAS, ASGE ve ESGE kılavuzları; hastanın yüzüstü (prone) pozisyonda yatması, duodenoskopun geniş çapı, floroskopi tüpünün sürekli hareketi, sfinkterotomi ağrısı ve acil havayolu müdahalesinin prone pozisyonda güç olması nedeniyle, özellikle yaşlı, obez, aspirasyon riski yüksek veya zor kanülasyon beklenen hastalarda endotrakeal genel anesteziyi öncelikli önermektedir.'
+    notes: 'ERAS, ASGE ve ESGE kılavuzları; hastanın yüzüstü (prone) pozisyonda yatması, duodenoskopun geniş çapı, floroskopi tüpünün sürekli hareketi, sfinkterotomi ağrısı ve acil havayolu müdahalesinin prone pozisyonda güç olması nedeniyle, özellikle yaşlı, obez, aspirasyon riski yüksek veya zor kanülasyon beklenen hastalarda endotrakeal genel anesteziyi öncelikli önermektedir.',
+    rulesTitle: 'ERCP İŞLEMİNDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'PRONE / YARI-PRONE POZİSYONDA HAVA YOLU GÜVENLİĞİ (GETA TERCİHİ)',
+        content: 'ERCP çoğunlukla yüzüstü (prone) veya yüzüstü-sol yan pozisyonda uygulanır; skopi cihazı baş etrafında döner ve endotrakeal tüp olmayan hastada acil havayolu müdahalesi son derece zordur. Obez, OUA, mide retansiyonu olan veya uzun terapötik işlem beklenen hastalarda Endotrakeal Genel Anestezi (GETA) altın standarttır.'
+      },
+      {
+        number: 2,
+        title: 'AKUT KOLANJİT, SEPSİS VE HİPOTANSİYON RESÜSİTASYONU',
+        content: 'Biliyer obstrüksiyonlu hastalar sıklıkla septik kolanjit ve dehidratasyon tablosunda acil ERCP\'ye alınır. İndüksiyon öncesi geniş lümenli IV yol ile sıvı resüsitasyonu yapılmalı ve Noradrenalin/Efedrin hazır tutulmalıdır; sfinkterotomi esnasında geçici bakteriyemi gelişebileceğinden antibiyotik profilaksisi doğrulanmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'SFİNKTEROTOMİ KANAMASI, KOAGÜLOPATİ VE PERFORASYON ALARMİ',
+        content: 'Tıkanma sarılığında K vitamini malabsorpsiyonuna bağlı INR uzaması sık görülür; sfinkterotomi öncesi INR < 1.5 ve Trombosit > 50.000/mcL olmalıdır. İşlem sonu veya sırasında karında aşırı sertleşme, subkütan amfizem veya açıklanamayan hipotansiyon gelişirse retroperitoneal duodenal perforasyon akla gelmelidir.'
+      },
+      {
+        number: 4,
+        title: 'BİLİYER SPAZM VE POST-ERCP PANKREATİT ÖNLEMİ',
+        content: 'Oddi sfinkteri spazmını önlemek için gereksiz yüksek doz morfinden kaçınılmalıdır (gerektiğinde kısa etkili Fentanil/Remifentanil tercih edilir; spazm çözmek için Glukagon veya Hiyosin Butilbromür uygulanabilir). Kontrendikasyon yoksa işlem öncesi Rektal İndometazin/Diklofenak (100 mg) post-ERCP pankreatit riskini %50 azaltır.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

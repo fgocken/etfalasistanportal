@@ -54,7 +54,25 @@ export const gastroscopy: ProcedureDefinition = {
       'Genel Anestezi (Endotrakeal Entübasyonlu): Masif aktif üst GİS kanaması olan, dolu mideli, pilor darlığı/gastrik çıkış obstrüksiyonu bulunan, akalazyalı, yüksek aspirasyon riskli veya kardiyopulmoner instabilitesi olan olgularda hava yolunu korumak için Hızlı Seri İndüksiyon (RSI) ile endotrakeal entübasyon',
       'Orta Düzey Sedasyon (Bilinçli Sedasyon): Titre edilmiş Midazolam + Fentanil (özellikle anestezi derinliği kısıtlı tutulmak istenen hafif tanısal vakalarda)'
     ],
-    notes: 'Gastroskopi ameliyathane dışı anestezi (NORA) ortamında uygulanır. Ağız boşluğu ve farenkste cerrahi endoskop bulunması nedeniyle havayolu paylaşılmaktadır. Propofol ile sağlanan derin sedasyon öğürme refleksini ve hasta stresini mükemmel baskılarken; aspirasyon, hipofaringeal sekresyon birikimi ve laringospazm riskine karşı havayolu açıklığı ve spontan solunum kapnografi ile kesintisiz gözetim altında tutulmalıdır.'
+    notes: 'Gastroskopi ameliyathane dışı anestezi (NORA) ortamında uygulanır. Ağız boşluğu ve farenkste cerrahi endoskop bulunması nedeniyle havayolu paylaşılmaktadır. Propofol ile sağlanan derin sedasyon öğürme refleksini ve hasta stresini mükemmel baskılarken; aspirasyon, hipofaringeal sekresyon birikimi ve laringospazm riskine karşı havayolu açıklığı ve spontan solunum kapnografi ile kesintisiz gözetim altında tutulmalıdır.',
+    rulesTitle: 'GASTROSKOPİ (ÜST GİS ENDOSKOPİ) SEDASYONUNDA TEMEL İLKELER',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'PAYLAŞILAN HAVA YOLUNDA KESİNTİSİZ KAPNOGRAFİ VE TİTRE SEDASYON',
+        content: 'NORA ortamında endoskop ağız/orofarenks içindeyken maske ventilasyonu zordur; bu nedenle EtCO2 örneklemeli nazal kanül ile kesintisiz kapnografi izlemi (apneyi nabız oksimetresinden dakikalar önce saptar) şarttır. Özellikle yaşlı ve Obstrüktif Uyku Apneli (OUA) hastalarda derin hipotansiyon ve farengeal kollapsı önlemek için Propofol küçük titre boluslarla (10-30 mg) veya TCI ile uygulanmalıdır.'
+      },
+      {
+        number: 2,
+        title: 'DOLU MİDE VE AKTİF KANAMADA ASPİRASYON / RSI KARARI',
+        content: 'Aktif üst GİS hematemezi, pilor stenozu/gastrik çıkış obstrüksiyonu, akalazya, şiddetli gastroparezi veya ileus varlığında hasta 12 saat aç olsa bile MİDE TAM DOLU kabul edilir. Bu olgularda sedasyon aspirasyon felaketine yol açar; Hızlı Seri İndüksiyon (RSI) ile endotrakeal entübasyon uygulanmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'SOL LATERAL POZİSYON VE KRİKOFARİNGEAL LARİNGOSPAZM KORUMASI',
+        content: 'Sol lateral dekübit pozisyon sekresyonların yerçekimiyle yanaktan dışarı drene olmasını sağlar; ısırma bloğu (bite-block) öncesi hareketli diş protezleri mutlaka çıkarılmalıdır. Yüzeyel sedasyonda farenkse endoskop teması veya sekresyon birikimi ani laringospazmı tetikleyebileceğinden yüksek debili Yankauer aspiratör daima başucunda hazır tutulmalıdır.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

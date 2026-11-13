@@ -59,7 +59,35 @@ export const ekt: ProcedureDefinition = {
       'Süksinilkolin Kontrendikasyonunda: Düşük doz Rokuronyum (0.3 - 0.5 mg/kg IV) indüksiyonu ve nöbet bitiminde derhal yüksek doz Sugammadeks (4 - 16 mg/kg IV) ile acil revers uygulaması',
       'Kısa/Yetersiz Nöbet Süresi Olan Olgularda: Nöbet süresini uzatmak amacıyla indüksiyonda Etomidat (0.15 - 0.3 mg/kg IV) veya Ketamin (0.5 - 1.0 mg/kg IV) kullanımı'
     ],
-    notes: 'EKT anestezisinde temel amaç hastanın uyarılmayı hatırlamaması, hemodinamik stabilitenin korunması ve kas gevşemesiyle kemik/kas yaralanmalarının önlenmesidir. Ancak hipnotik ajanların çoğu antikonvülzan etkilidir. Propofol nöbet süresini doza bağımlı olarak kısaltabilir; bu nedenle terapötik nöbet kalitesini (motor ≥ 25 sn, EEG ≥ 30 sn) korumak için en düşük etkin indüksiyon dozu titre edilmelidir.'
+    notes: 'EKT anestezisinde temel amaç hastanın uyarılmayı hatırlamaması, hemodinamik stabilitenin korunması ve kas gevşemesiyle kemik/kas yaralanmalarının önlenmesidir. Ancak hipnotik ajanların çoğu antikonvülzan etkilidir. Propofol nöbet süresini doza bağımlı olarak kısaltabilir; bu nedenle terapötik nöbet kalitesini (motor ≥ 25 sn, EEG ≥ 30 sn) korumak için en düşük etkin indüksiyon dozu titre edilmelidir.',
+    rulesTitle: 'ELEKTROKONVÜLSİF TEDAVİDE (EKT) TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'NÖBET KALİTESİNİ BOZMAYAN HİPNOTİK TİTRASYONU (ANTİKONVÜLZAN DENGE)',
+        content: 'Tüm IV anestezikler (Propofol, Tiopental, Metoheksital) nöbet eşiğini yükseltir; özellikle aşırı yüksek doz Propofol (>1.5-2 mg/kg) nöbet süresini kısaltarak EKT etkinliğini azaltır. En düşük etkin hipnotik doz (Propofol 0.75-1.25 mg/kg veya kısa nöbetli olgularda Etomidat 0.15-0.25 mg/kg) hedeflenmeli, sedasyon PSi/klinik bilinç kaybı ile titre edilmelidir.'
+      },
+      {
+        number: 2,
+        title: 'TAM KAS GEVŞEMESİ VE BİLATERAL BITE-BLOCK DİŞ/DİL KORUMASI',
+        content: 'Elektrik uyarısı öncesi tam nöromusküler blokaj (Süksinilkolin 0.75-1.0 mg/kg sonrası fasikülasyonların tamamen durması) sağlanmazsa tonik-klonik kasılmalar vertebra kompresyon kırığına veya uzun kemik fraktürüne yol açabilir. Uyarı öncesi mutlaka özel silikon/gazlı EKT ısırma koruyucusu (bite-block) molar dişler arasına yerleştirilip dil ve dudaklar korunmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'BİFAZİK OTONOMİK YANIT (VAGAL BRADİKARDİ + KATEKOLAMİN FIRTINASI)',
+        content: 'Stimülasyonla ilk 10-15 saniyede şiddetli parasempatik bradikardi/asistoli (gerekirse Atropin/Glikopirolat), hemen ardından ise masif sempatik katekolamin deşarjıyla taşikardi ve >%30-50 hipertansiyon piki görülür. İskemik kalp hastalarında ve yaşlılarda miyokard iskemisi ile serebral kanamayı önlemek için Esmolol (0.5-1 mg/kg) veya Labetalol hazır tutulmalıdır.'
+      },
+      {
+        number: 4,
+        title: 'ÖN OKSİJENASYON, HAFİF HİPERVENTİLASYON VE HAVA YOLU DESTEĞİ',
+        content: 'Nöbet sırasında serebral oksijen ve glukoz tüketimi (CMRO2) dramatik olarak artar; ayrıca hafif hiperventilasyon (EtCO2 30-35 mmHg) nöbet eşiğini düşürerek nöbet kalitesini artırır. İndüksiyon öncesi 2-3 dakika %100 O2 preoksijenasyon ve apneyi takip eden fazda balon-maske ventilasyonu sürdürülmelidir.'
+      },
+      {
+        number: 5,
+        title: 'PSİKOTROP İLAÇ ETKİLEŞİMLERİ VE UZAMIŞ NÖBET (STATUS) TAKİBİ',
+        content: 'Lityum kullanımı nöromusküler blokajı uzatır ve post-iktal deliryumu artırır; antikonvülzanlar ve benzodiazepinler ise nöbet oluşumunu engeller. Motor veya EEG nöbeti >120-180 saniye sürerse (uzamış nöbet/status epileptikus) beyni korumak için derhal Midazolam (2-5 mg IV) veya Propofol ile sonlandırılmalıdır.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

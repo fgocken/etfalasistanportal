@@ -26,7 +26,9 @@ import {
   Pill,
   Compass,
   Wrench,
-  Zap
+  Zap,
+  Library,
+  ShieldCheck
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -34,7 +36,7 @@ import { DutyRosterModal } from './roster/DutyRosterModal'; /* [MODULAR_DUTY_ROS
 import { PortalSearchModal } from './search/PortalSearchModal';
 import { DashboardSearchBar } from './search/DashboardSearchBar';
 import { PortalSearchItem } from '../data/portalSearchIndex';
-import { IntraopFluidCalculator } from './calculators/IntraopFluidCalculator';
+import { FluidManagementStrategiesInfographic } from './infographics/FluidManagementStrategiesInfographic';
 import { InfusionRateCalculator } from './calculators/InfusionRateCalculator';
 import { PreoperativeEvaluation } from './preop/PreoperativeEvaluation';
 import { AirwayManagementView } from './airway/AirwayManagementView';
@@ -49,11 +51,13 @@ import { IcuWorkspace } from './icu/IcuWorkspace';
 import { ProceduresWorkspace } from './procedures/ProceduresWorkspace';
 import { AnesthesiaTroubleshootingWorkspace } from './troubleshooting/AnesthesiaTroubleshootingWorkspace';
 import { EktTrackerView } from './ekt/EktTrackerView';
+import { ReferencesLibraryView } from './references/ReferencesLibraryView';
+import { VascularAccessWorkspace } from './vascular/VascularAccessWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'troubleshooting' | 'ekt';
+export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'troubleshooting' | 'ekt' | 'references';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -93,10 +97,10 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   },
   intraop: {
     id: 'intraop',
-    title: 'İntraop Sıvı Hesaplaması',
-    badge: 'İntraop Sıvı',
-    desc: 'Preoperatif açlık sıvı açığı (%50 ilk saatte, kalanı sonraki 2 saatte) ve cerrahi doku travma kaybına (2–8 mL/kg/saat) göre saat saat infüzyon planı.',
-    clinicalKey: 'Obez hastada aşırı sıvı yükünü önlemek için cerrahi doku travma kaybı AdjBW üzerinden hesaplanır.',
+    title: 'İntraoperatif Sıvı Yönetimi: Liberal vs Restriktif vs GDFT',
+    badge: 'ERAS · POQI',
+    desc: 'Liberal (4-2-1 + 3. boşluk hesaplayıcı), Restriktif (Sıfır-Denge) ve Hedefe Yönelik (GDFT) sıvı stratejilerinin 12 parametreli kıyaslama tablosu ve intraop uygulama rehberi.',
+    clinicalKey: 'Liberal Sıvı Yönetimi seçildiğinde NPO açığı ve cerrahi doku travmasına göre saat saat infüzyon hesaplayıcısı açılır.',
     icon: Droplet,
     iconBgDark: 'bg-cyan-500/10',
     iconBgLight: 'bg-cyan-50',
@@ -127,8 +131,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   preop: {
     id: 'preop',
     title: 'Preoperatif Değerlendirme',
-    desc: 'Perioperatif MACE kardiyak risk analizi (RCRI & Gupta), güncel 2025/2026 ASA fiziksel durum sınıflaması ve metabolik kapasite (MET) kılavuzu.',
-    clinicalKey: 'Elektif cerrahi öncesi kardiyak morbidite öngörüsü ve hedef odaklı konsültasyon optimizasyonu sağlar.',
+    desc: 'Perioperatif MACE kardiyak risk analizi (RCRI & Gupta), Duke Activity Status Index (DASI / VO₂peak & METs) fonksiyonel kapasite hesaplayıcı ve güncel 2025/2026 ASA sınıflaması.',
+    clinicalKey: 'Elektif cerrahi öncesi objektif fonksiyonel kapasite (DASI) ve kardiyak morbidite öngörüsü sağlar.',
     icon: ClipboardCheck,
     iconBgDark: 'bg-blue-500/15',
     iconBgLight: 'bg-blue-50',
@@ -161,8 +165,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   treatments: {
     id: 'treatments',
     title: 'Tedaviler ve İlaçlar',
-    desc: 'Akut hipo/hipernatremi (Adrogué-Madias & ODS güvenliği), Magnezyum (Mathews 2022), Potasyum protokolü ve Deksmedetomidin, Propofol, Midazolam monografları.',
-    clinicalKey: 'Hiponatremide aşırı hızlı düzeltmeden kaçınma (maksimum 8–10 mEq/L/gün) ve kanıta dayalı elektrolit replasmanı.',
+    desc: 'Noradrenalin, Adrenalin (Epinefrin), Deksmedetomidin, Propofol, Midazolam, Lidokain, Ketamin monografları ile Sodyum, Magnezyum ve Potasyum replasman hesaplayıcıları.',
+    clinicalKey: 'Hiponatremide aşırı hızlı düzeltmeden kaçınma, katekolamin infüzyon/push-dose güvenliği ve kanıta dayalı elektrolit replasmanı.',
     icon: Pill,
     iconBgDark: 'bg-teal-500/15',
     iconBgLight: 'bg-teal-50',
@@ -191,6 +195,25 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-indigo-800',
     ringClassDark: 'ring-1 ring-indigo-500/20',
     ringClassLight: 'ring-1 ring-indigo-500/10'
+  },
+  'vascular-access': {
+    id: 'vascular-access',
+    title: 'Güvenli Vasküler Erişim',
+    badge: 'USG · SVK Aktif',
+    badgeHighlight: true,
+    desc: 'USG eşliğinde SVK (İJV, Subklavyen/Aksiller, Femoral), Association of Anaesthetists 2025 ömür boyu damar koruma, Kateter/Ven oranı, Peres derinlik hesaplayıcısı ve LocSSIPs/Seldinger güvenlik protokolü.',
+    clinicalKey: 'Dinamik USG takibi, Kateter/Ven oranı (≤%33–45), Peres CAJ derinliği ve Never Event kılavuz tel güvenliği.',
+    icon: ShieldCheck,
+    iconBgDark: 'bg-sky-500/15',
+    iconBgLight: 'bg-sky-50',
+    iconColorDark: 'text-sky-400',
+    iconColorLight: 'text-sky-700',
+    borderHoverDark: 'hover:border-sky-500/40',
+    borderHoverLight: 'hover:border-sky-400',
+    titleHoverDark: 'group-hover:text-sky-300',
+    titleHoverLight: 'group-hover:text-sky-800',
+    ringClassDark: 'ring-1 ring-sky-500/20',
+    ringClassLight: 'ring-1 ring-sky-500/10'
   },
   emergencies: {
     id: 'emergencies',
@@ -358,6 +381,25 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-amber-800',
     ringClassDark: 'ring-1 ring-amber-500/20',
     ringClassLight: 'ring-1 ring-amber-500/10'
+  },
+  references: {
+    id: 'references',
+    title: 'KAYNAKLAR VE İLERİ OKUMA',
+    badge: 'PubMed · DOI',
+    badgeHighlight: true,
+    desc: 'Portal genelinde kullanılan tüm textbooklar, uluslararası kılavuzlar ve dönüm noktası çalışmalarının mükerrersiz, sistematik bibliyografyası (PubMed & DOI bağlantılarıyla).',
+    clinicalKey: 'Her yeni eklenen kılavuz veya protokolün kaynakları bu merkezi dizinde tekilleştirilerek otomatik listelenir.',
+    icon: Library,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800',
+    ringClassDark: 'ring-1 ring-teal-500/20',
+    ringClassLight: 'ring-1 ring-teal-500/10'
   }
 };
 
@@ -371,15 +413,17 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'airway',
   'treatments',
   'nerve-blocks',
+  'vascular-access',
   'emergencies',
   'infographics',
   'troubleshooting',
   'schedule',
   'roster',
   'contacts',
-  'ekt'
+  'ekt',
+  'references'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v19';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v21';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -537,8 +581,17 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
   }, [initialRoute]);
 
-  const handleSelectTab = (tabId: 'tools' | ToolTabId) => {
+  const handleSelectTab = (
+    tabId: 'tools' | ToolTabId,
+    options?: { preservePreopTool?: boolean; preserveTreatmentProtocol?: boolean }
+  ) => {
     setActiveTab(tabId);
+    if (!options?.preservePreopTool) {
+      setSelectedPreopToolId(null);
+    }
+    if (!options?.preserveTreatmentProtocol) {
+      setSelectedTreatmentProtocolId(null);
+    }
     if (tabId === 'tools') {
       updateHashRoute(null, null);
     } else if (tabId !== 'infographics') {
@@ -547,6 +600,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   };
 
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
+  const [intraopInitialStrategy, setIntraopInitialStrategy] = useState<'liberal' | 'restrictive' | 'gdft'>('gdft');
 
   // Tool Order state with localStorage persistence
   const [toolOrder, setToolOrder] = useState<ToolTabId[]>(() => {
@@ -560,8 +614,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert ekt, troubleshooting, procedures, icu, emergencies etc. if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert references, vascular-access, ekt, troubleshooting, procedures, icu, emergencies etc. if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
@@ -590,10 +644,18 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                 updated.push('nerve-blocks');
               }
             }
-            if (!updated.includes('emergencies')) {
+            if (!updated.includes('vascular-access')) {
               const nbIdx = updated.indexOf('nerve-blocks');
               if (nbIdx !== -1) {
-                updated.splice(nbIdx + 1, 0, 'emergencies');
+                updated.splice(nbIdx + 1, 0, 'vascular-access');
+              } else {
+                updated.push('vascular-access');
+              }
+            }
+            if (!updated.includes('emergencies')) {
+              const vaIdx = updated.indexOf('vascular-access');
+              if (vaIdx !== -1) {
+                updated.splice(vaIdx + 1, 0, 'emergencies');
               } else {
                 updated.push('emergencies');
               }
@@ -603,6 +665,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             }
             if (!updated.includes('ekt')) {
               updated.push('ekt');
+            }
+            if (!updated.includes('references')) {
+              updated.push('references');
             }
             if (updated.length === DEFAULT_TOOL_ORDER.length && DEFAULT_TOOL_ORDER.every(id => updated.includes(id))) {
               return updated as ToolTabId[];
@@ -621,6 +686,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [isRosterModalOpen, setIsRosterModalOpen] = useState<boolean>(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
   const [selectedEmergencyProtocolId, setSelectedEmergencyProtocolId] = useState<string | null>(null);
+  const [selectedPreopToolId, setSelectedPreopToolId] = useState<'mace' | 'dasi' | 'asa' | null>(null);
+  const [selectedTreatmentProtocolId, setSelectedTreatmentProtocolId] = useState<string | null>(null);
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -661,20 +728,63 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         setSelectedEmergencyProtocolId('last');
       } else if (item.id === 'emergency-anaphylaxis-shock') {
         setSelectedEmergencyProtocolId('anaphylaxis');
+      } else if (item.id === 'emergency-perioperative-acls') {
+        setSelectedEmergencyProtocolId('acls');
       }
       handleSelectTab('emergencies');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (item.tabId === 'treatments') {
-      if (item.id === 'treatment-norepinephrine-protocol') {
-        updateHashRoute('tedavi', 'norepinephrine');
+      let targetTreatmentId: string | null = null;
+      if (item.id === 'treatment-epinephrine-protocol') {
+        targetTreatmentId = 'epinephrine';
+      } else if (item.id === 'treatment-norepinephrine-protocol') {
+        targetTreatmentId = 'norepinephrine';
+      } else if (item.id === 'treatment-dexmedetomidine-protocol') {
+        targetTreatmentId = 'dexmedetomidine';
+      } else if (item.id === 'treatment-remifentanil-protocol') {
+        targetTreatmentId = 'remifentanil';
+      } else if (item.id === 'treatment-fentanyl-protocol') {
+        targetTreatmentId = 'fentanyl';
+      } else if (item.id === 'treatment-propofol-protocol') {
+        targetTreatmentId = 'propofol';
+      } else if (item.id === 'treatment-midazolam-protocol') {
+        targetTreatmentId = 'midazolam';
+      } else if (item.id === 'treatment-lidocaine-protocol') {
+        targetTreatmentId = 'lidocaine';
+      } else if (item.id === 'treatment-ketamine-protocol') {
+        targetTreatmentId = 'ketamine';
       } else if (item.id === 'treatment-magnesium-replacement' || item.id === 'treatment-hypomagnesemia-infographic') {
-        updateHashRoute('tedavi', 'magnesium');
+        targetTreatmentId = 'magnesium';
       } else if (item.id === 'treatment-potassium-replacement' || item.id === 'treatment-hypokalemia-infographic') {
-        updateHashRoute('tedavi', 'potassium');
+        targetTreatmentId = 'potassium';
       } else if (item.id === 'treatment-sodium-correction-calculator' || item.id === 'treatment-hyponatremia-infographic') {
-        updateHashRoute('tedavi', 'sodium');
+        targetTreatmentId = 'sodium';
       }
-      handleSelectTab('treatments');
+      setSelectedTreatmentProtocolId(targetTreatmentId);
+      handleSelectTab('treatments', { preserveTreatmentProtocol: true });
+      if (targetTreatmentId) {
+        updateHashRoute('tedavi', targetTreatmentId);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'intraop') {
+      if (item.id === 'calc-intraop-npo' || item.id === 'calc-tissue-trauma') {
+        setIntraopInitialStrategy('liberal');
+      } else {
+        setIntraopInitialStrategy('gdft');
+      }
+      handleSelectTab('intraop');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'preop') {
+      if (item.id === 'calc-preop-dasi') {
+        setSelectedPreopToolId('dasi');
+      } else if (item.id === 'calc-mace-rcri' || item.id === 'calc-mace-gupta') {
+        setSelectedPreopToolId('mace');
+      } else if (item.id.includes('asa')) {
+        setSelectedPreopToolId('asa');
+      } else {
+        setSelectedPreopToolId(null);
+      }
+      handleSelectTab('preop', { preservePreopTool: true });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       handleSelectTab(item.tabId);
@@ -1598,9 +1708,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           </div>
         )}
 
-        {/* 3. Intraop Fluid Calculator */}
+        {/* 3. Intraop Fluid Management Strategies (Liberal, Restrictive, GDFT + Embedded Liberal Calculator) */}
         {activeTab === 'intraop' && (
-          <IntraopFluidCalculator isDark={isDark} />
+          <FluidManagementStrategiesInfographic
+            isDark={isDark}
+            initialStrategy={intraopInitialStrategy}
+          />
         )}
 
         {/* 4. Infusion Rate Calculator */}
@@ -1608,9 +1721,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <InfusionRateCalculator isDark={isDark} />
         )}
 
-        {/* 5. Preoperative Evaluation (contains MACE, ASA, NPO, Airway) */}
+        {/* 5. Preoperative Evaluation (contains MACE, DASI, ASA) */}
         {(activeTab === 'preop' || (activeTab as string) === 'asa') && (
-          <PreoperativeEvaluation isDark={isDark} initialTool={(activeTab as string) === 'asa' ? 'asa' : null} />
+          <PreoperativeEvaluation
+            isDark={isDark}
+            initialTool={(activeTab as string) === 'asa' ? 'asa' : selectedPreopToolId}
+          />
         )}
 
         {/* 7. Havayolu Yönetimi */}
@@ -1623,11 +1739,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <TreatmentsWorkspace 
             isDark={isDark} 
             initialProtocolId={
-              initialRoute?.type === 'tedavi'
+              selectedTreatmentProtocolId ||
+              (initialRoute?.type === 'tedavi'
                 ? initialRoute.id
                 : (initialRoute?.type === 'arac' && initialRoute.id?.includes('tedavi=')
                     ? initialRoute.id.split('tedavi=')[1]
-                    : initialRoute?.subId || null)
+                    : initialRoute?.subId || null))
             }
           />
         )}
@@ -1644,6 +1761,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                     : initialRoute?.subId || null)
             }
           />
+        )}
+
+        {/* 9B. Güvenli Vasküler Erişim */}
+        {activeTab === 'vascular-access' && (
+          <VascularAccessWorkspace isDark={isDark} />
         )}
 
         {/* 10. Anestezi Acilleri */}
@@ -1709,6 +1831,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 14. EKT Vaka Takip & Zamanlayıcı */}
         {activeTab === 'ekt' && (
           <EktTrackerView isDark={isDark} />
+        )}
+
+        {/* 15. KAYNAKLAR VE İLERİ OKUMA */}
+        {activeTab === 'references' && (
+          <ReferencesLibraryView isDark={isDark} />
         )}
       </main>
 

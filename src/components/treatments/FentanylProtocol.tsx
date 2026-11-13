@@ -25,6 +25,7 @@ import {
   Layers,
   FileText
 } from 'lucide-react';
+import { DrugReferencesAndInteractionsBlock } from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -1679,7 +1680,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 10: KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
+      {/* BÖLÜM 11: KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
@@ -1762,7 +1763,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 11: IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
+      {/* BÖLÜM 12: IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
@@ -1822,7 +1823,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 12: İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
+      {/* BÖLÜM 13: İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
@@ -1879,73 +1880,34 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 13: İLAÇ ETKİLEŞİMİ SORGULAMA DIŞ BAĞLANTILARI */}
+      {/* BÖLÜM 14: KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-500/10 text-indigo-500">
-            <ExternalLink className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              İlaç Etkileşimi Sorgulama Dış Bağlantıları
-            </h2>
-            <p className="text-xs text-slate-500">
-              Uluslararası bağımsız farmakoloji veritabanları üzerinden anlık etkileşim kontrolü
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          <a
-            href="https://www.drugs.com/drug-interactions/fentanyl.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`p-4 rounded-xl border flex items-center justify-between transition-all group ${
-              isDark
-                ? 'bg-slate-800/60 border-slate-700 hover:bg-slate-800 hover:border-rose-500/50 text-slate-200'
-                : 'bg-slate-50 border-slate-200 hover:bg-white hover:border-rose-400 text-slate-800 shadow-2xs'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-rose-500/10 text-rose-500 group-hover:scale-110 transition-transform">
-                <ExternalLink className="w-4 h-4" />
-              </div>
-              <div>
-                <span className="font-bold text-xs sm:text-sm block">Drugs.com Fentanyl Drug Interactions</span>
-                <span className="text-[11px] text-slate-500">Kapsamlı CYP3A4 ve santral depresan etkileşim sorgulaması</span>
-              </div>
-            </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-rose-500 group-hover:translate-x-0.5 transition-all" />
-          </a>
-
-          <a
-            href="https://reference.medscape.com/drug-interactionchecker"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`p-4 rounded-xl border flex items-center justify-between transition-all group ${
-              isDark
-                ? 'bg-slate-800/60 border-slate-700 hover:bg-slate-800 hover:border-rose-500/50 text-slate-200'
-                : 'bg-slate-50 border-slate-200 hover:bg-white hover:border-rose-400 text-slate-800 shadow-2xs'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-indigo-500/10 text-indigo-500 group-hover:scale-110 transition-transform">
-                <ExternalLink className="w-4 h-4" />
-              </div>
-              <div>
-                <span className="font-bold text-xs sm:text-sm block">Medscape Multi-Drug Interaction Checker</span>
-                <span className="text-[11px] text-slate-500">Çoklu ilaç kombinasyonları ve klinik farmakoloji kılavuzu</span>
-              </div>
-            </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 group-hover:translate-x-0.5 transition-all" />
-          </a>
-        </div>
-      </section>
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Fentanil"
+        references={[
+          {
+            authors: 'Peng PW, Sandler AN',
+            title: 'A review of the use of fentanyl analgesia in the management of acute pain in adults.',
+            journal: 'Anesthesiology',
+            year: 1999,
+            pmid: '9952166',
+            doi: '10.1097/00000542-199902000-00034',
+            note: 'Erişkinde akut ağrı ve perioperatif analjezide fentanil farmakokinetiği ve klinik kullanımı.',
+          },
+          {
+            authors: 'Devlin JW, Skrobik Y, Gélinas C, et al. (SCCM PADIS)',
+            title: 'Clinical Practice Guidelines for the Prevention and Management of Pain, Agitation/Sedation, Delirium, Immobility, and Sleep Disruption in Adult Patients in the ICU.',
+            journal: 'Crit Care Med',
+            year: 2018,
+            pmid: '30113379',
+            doi: '10.1097/CCM.0000000000003299',
+            note: 'Yoğun bakımda analjezi-öncelikli sedasyon ve fentanil infüzyon kümülasyon yönetimi.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/fentanyl.html"
+        medscapeUrl="https://reference.medscape.com/drug-interactionchecker"
+      />
     </div>
   );
 };

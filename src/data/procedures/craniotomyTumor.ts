@@ -61,7 +61,26 @@ export const craniotomyTumor: ProcedureDefinition = {
     alternative: [
       'Dengeli İnhalasyon Anestezisi (Sevofluran < 0.7 MAC + Remifentanil İnfüzyonu): İONM motor uyarılmış potansiyel (MEP) monitörizasyonu kullanılmayan vakalarda'
     ],
-    notes: 'Beyin tümörü cerrahisinde anestezinin altın üçgeni: (1) CERRAHİ İÇİN RAHAT BEYİN (SLACK BRAIN) SAĞLAMAK — Mannitol veya Hipertonik Salin, hafif kontrollü hiperventilasyon (PaCO2 32-35 mmHg), baş elevasyonu ve TIVA ile beyin ödeminin kırılması, (2) İNTRAOPERATİF NÖROMONİTÖRİZASYONU (MEP/SSEP) KORUMAK — İndüksiyon sonrası idame evresinde nöromusküler blokörlerden kaçınmak, (3) UYANMA SIRASINDA ÖKSÜRME VE HİPERTANSİYONU ÖNLEMEK (SMOOTH EMERGENCE) — Uyanma pikleri tümör rezeksiyon yatağında ölümcül hematoma yol açar; tansiyon sıkı kontrol edilmelidir (Sistolik KB < 140 mmHg).'
+    clinicalRationale: 'Propofol + Remifentanil TIVA (veya <0.5 MAC Sevofluran), intrakraniyal kompliyansı koruyup beyin ödemini azaltarak cerrah için gevşek beyin (slack brain) sağlar ve elokent tümörlerde MEP/SSEP monitörizasyonuna olanak tanır. Baş pozisyonlamasında tüp kıvrılmasını önlemek, PaCO2\'yi hassas titre etmek ve uyanmada hızlı nörolojik değerlendirme yapabilmek için spiral telli orotrakeal entübasyon tercih edilir.',
+    notes: 'BEYİN TÜMÖRÜ CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ: (1) CERRAHİ İÇİN RAHAT BEYİN (SLACK BRAIN); (2) İONM (MEP/SSEP) KORUMASI; (3) UYANMA SIRASINDA ÖKSÜRME VE HİPERTANSİYONUN ÖNLENMESİ (SMOOTH EMERGENCE).',
+    rulesTitle: 'BEYİN TÜMÖRÜ CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'KİBAS KONTROLÜ VE İDEAL BEYİN GEVŞEMESİ (SLACK BRAIN)',
+        content: 'İntrakraniyal kitlelerde kompliyans tükenmiştir; hiperkapni, hipoksi ve jugüler venöz bası herniyasyona yol açar. Baş 15-30° eleve ve nötral tutulmalı; TIVA, Mannitol (0.5-1 g/kg) veya %3 Hipertonik Salin ve PaCO2 32-35 mmHg hafif hiperventilasyon ile optimal beyin gevşekliği sağlanmalıdır.'
+      },
+      {
+        number: 2,
+        title: 'İNTRAOPERATİF NÖROMONİTÖRİZASYON (MEP/SSEP) KORUMASI',
+        content: 'Elokent korteks/motor yolaklara komşu lezyonlarda tcMEP ve SSEP sinyallerini korumak için Propofol + Remifentanil TIVA tercih edilmeli ve indüksiyon sonrasında idamede nöromusküler blokörlerden KESİNLİKLE kaçınılmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'VALSALVA HEMOSTAZI VE ÖKSÜRÜKSÜZ PÜRÜZSÜZ UYANMA (SMOOTH EMERGENCE)',
+        content: 'Kapanış öncesi kontrollü Valsalva manevrası ile gizli venöz kanamalar kontrol edilir. Ekstübasyon sırasındaki öksürük ve hipertansiyon (SKB > 140 mmHg) tümör rezeksiyon yatağında ölümcül hematoma yol açacağından IV Lidokain/Remifentanil/Esmolol ile pürüzsüz uyanma sağlanır.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık

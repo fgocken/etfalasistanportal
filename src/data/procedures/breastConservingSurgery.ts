@@ -58,7 +58,30 @@ export const breastConservingSurgery: ProcedureDefinition = {
       'Monitörize Anestezi Bakımı (MAC / Bilinçli-Derin Sedoanaljezi) + USG Eşliğinde Pektoral Sinir Bloğu (PECS II) veya TPVB + Cerrah Tarafından Cömert Lokal Anestezik İnfiltrasyonu (Genel anestezinin yüksek mortalite riski taşıdığı ciddi kardiyopulmoner komorbiditeli yaşlı olgularda)',
       'Genel Anestezi + İntravenöz Multimodal Analjezikler (Rejyonel blok yapılamayan veya kontrendike olan hastalarda)'
     ],
-    notes: 'Meme koruyucu cerrahide (özellikle eşzamanlı aksiller sentinel lenf nodu biyopsisi [SLNB] eklendiğinde) cerrahi alan pektoral fasyaya ve aksillaya kadar genişler. Genel anestezi altında ultrason rehberliğinde uygulanan PECS II veya Serratus Anterior (SAPB) blokları intraoperatif opioid tüketimini %60-70 azaltır, ameliyat sonrası uyanmayı pürüzsüzleştirir, PONV insidansını düşürür ve en önemlisi kronik post-mastektomi ağrı sendromu (PMPS) riskini anlamlı ölçüde engeller. Cerrahi koldan damar yolu açılması veya tansiyon ölçülmesi lenfödem riski nedeniyle kesinlikle yasaktır.'
+    notes: 'Meme koruyucu cerrahide (özellikle eşzamanlı aksiller sentinel lenf nodu biyopsisi [SLNB] eklendiğinde) cerrahi alan pektoral fasyaya ve aksillaya kadar genişler. Genel anestezi altında ultrason rehberliğinde uygulanan PECS II veya Serratus Anterior (SAPB) blokları intraoperatif opioid tüketimini %60-70 azaltır, ameliyat sonrası uyanmayı pürüzsüzleştirir, PONV insidansını düşürür ve en önemlisi kronik post-mastektomi ağrı sendromu (PMPS) riskini anlamlı ölçüde engeller. Cerrahi koldan damar yolu açılması veya tansiyon ölçülmesi lenfödem riski nedeniyle kesinlikle yasaktır.',
+    rulesTitle: 'MEME KORUYUCU CERRAHİDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'CERRAHİ TARAF KOLUN MUTLAK KORUNMASI (LENFÖDEM YASAĞI)',
+        content: 'Aksiller sentinel lenf nodu biyopsisi (SLNB) veya aksiller diseksiyon planlanan cerrahi taraf koldan KESİNLİKLE IV damar yolu açılmaz, kan alınmaz ve non-invaziv tansiyon manşonu bağlanmaz! Damar yolu, pulse oksimetre ve NİKB manşonu mutlaka kontralateral (sağlam) kola veya bilateral cerrahide alt ekstremiteye yerleştirilmelidir.'
+      },
+      {
+        number: 2,
+        title: 'MAVİ BOYA (PATENT BLUE V / METİLEN MAVİSİ) ANAFİLAKSİSİ VE SAHTE DESATÜRASYON',
+        content: 'SLNB haritalaması için periareolar enjekte edilen Patent Blue V veya İzosulfan Mavisi %0.5-2 oranında ciddi anafilaksiye (ciltte mavi ürtiker, bronkospazm, refrakter hipotansiyon) neden olabilir; ayrıca metilen/mavi boyalar pulse oksimetrede gerçek hipoksi olmaksızın %85-92 düzeyinde sahte SpO2 düşüşü ve yeşil-mavi idrar oluşturur.'
+      },
+      {
+        number: 3,
+        title: 'PECS II / SAPB İLE KRONİK AĞRI KORUMASI VE AKSİLLER SİNİR STİMÜLASYONU',
+        content: 'Aksiller diseksiyonda uzun torasik ve torakodorsal sinirler cerrahi probla test edildiğinden derin kas gevşemesinden kaçınılmalıdır (TOF ≥ 2-3). USG rehberliğinde uygulanan PECS II veya Serratus Anterior (SAPB) bloğu ise hem akut opioid ihtiyacını hem de kronik post-mastektomi ağrı sendromu (PMPS) riskini belirgin azaltır.'
+      },
+      {
+        number: 4,
+        title: 'NEOADJUVAN KEMOTERAPİ KARDİYOTOKSİSİTESİ VE HEMATOLOJİK DEĞERLENDİRME',
+        content: 'Neoadjuvan Antrasiklin (Doksorubisin) ve anti-HER2 (Trastuzumab) tedavisi alan hastalarda subklinik kardiyomiyopati/LVEF düşüşü ve kemik iliği baskılanması (nötropeni/trombositopeni) görülebilir. İndüksiyon öncesi güncel EKO ve kan tablosu teyit edilmelidir.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

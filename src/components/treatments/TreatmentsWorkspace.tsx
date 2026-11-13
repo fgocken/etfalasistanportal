@@ -32,6 +32,7 @@ import { MidazolamProtocol } from './MidazolamProtocol';
 import { LidocaineProtocol } from './LidocaineProtocol';
 import { KetamineProtocol } from './KetamineProtocol';
 import { NorepinephrineProtocol } from './NorepinephrineProtocol';
+import { EpinephrineProtocol } from './EpinephrineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -52,6 +53,7 @@ interface ProtocolCardItem {
   title: string;
   shortDesc: string;
   status: 'active' | 'upcoming';
+  hasStandaloneHeader?: boolean;
   accentColor: 'teal' | 'cyan' | 'purple' | 'rose';
   highlightsHeader: string;
   highlights: { 
@@ -211,8 +213,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Sedoanaljezi',
     badge: 'Precedex · Alfa-2 Agonist',
     title: 'Deksmedetomidin',
-    shortDesc: 'Uyanabilir kooperatif sedasyon (RASS -1/-2), mekanik ventilasyon, deliryum kontrolü ve weaning için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
+    shortDesc: 'Uyanabilir kooperatif sedasyon (RASS -1/-2), mekanik ventilasyon, deliryum kontrolü ve weaning için altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'teal',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -257,8 +260,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Sedoanaljezi',
     badge: 'Ultiva · Ultra-Kısa Opioid',
     title: 'Remifentanil',
-    shortDesc: 'Organ-bağımsız esteraz metabolizması, 3-4 dk sabit bağlam duyarlı yarı ömür, anestezi ve YBÜ analgosedasyonu için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
+    shortDesc: 'Organ-bağımsız esteraz metabolizması, 3-4 dk sabit bağlam duyarlı yarı ömür, anestezi ve YBÜ analgosedasyonu için altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'rose',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -303,8 +307,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Sedoanaljezi',
     badge: 'TALINAT · FENTAVER · DUROGESIC',
     title: 'Fentanil',
-    shortDesc: 'Yüksek potensli lipofilik μ-agonist, CYP3A4 metabolizması, kümülasyon sayacı, cerrahi ve YBÜ analgosedasyonu için 13 basamaklı altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
+    shortDesc: 'Yüksek potensli lipofilik μ-agonist, CYP3A4 metabolizması, kümülasyon sayacı, cerrahi ve YBÜ analgosedasyonu için altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'purple',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -349,8 +354,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Sedoanaljezi',
     badge: 'Diprivan · GABA-A Hipnotik',
     title: 'Propofol',
-    shortDesc: 'Genel anestezi indüksiyonu ve idamesi (TIVA), YBÜ sedasyonu, PRIS risk monitörizasyonu ve 24 saatlik lipid kalori yönetimi için 13 basamaklı altın standart ilaç monografisi.',
+    shortDesc: 'Genel anestezi indüksiyonu ve idamesi (TIVA), YBÜ sedasyonu, PRIS risk monitörizasyonu ve 24 saatlik lipid kalori yönetimi için altın standart ilaç monografisi.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'teal',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -396,8 +402,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Sedoanaljezi',
     badge: 'Dormicum · Benzodiazepin',
     title: 'Midazolam',
-    shortDesc: 'Suda çözünür imidazobenzodiazepin; akut nöbet (IM/IN/IV), akut ciddi ajitasyon, sempatomimetik intoksikasyonlar (kokain/amfetamin), alkol yoksunluğu / DT, YBÜ sedasyon infüzyonu ve flumazenil antidot takibi için 13 basamaklı ilaç monografisi.',
+    shortDesc: 'Suda çözünür imidazobenzodiazepin; akut nöbet (IM/IN/IV), akut ciddi ajitasyon, sempatomimetik intoksikasyonlar, alkol yoksunluğu / DT, YBÜ sedasyon infüzyonu ve flumazenil antidot takibi için altın standart ilaç monografisi.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'purple',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -446,8 +453,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Lokal / Antiaritmik',
     badge: 'Aritmal · Jetokain · Sınıf Ib',
     title: 'Lidokain',
-    shortDesc: 'Amid yapılı prototip lokal anestezik ve Sınıf Ib antiaritmik; lokal infiltrasyon, sinir blokları, RSI KİB premedikasyonu, perioperatif IV opioid koruyucu analjezi, ACLS VF/VT resüsitasyonu ve ASRA LAST İntralipid acil kurtarma için 13 basamaklı ilaç monografisi.',
+    shortDesc: 'Amid yapılı prototip lokal anestezik ve Sınıf Ib antiaritmik; lokal infiltrasyon, sinir blokları, RSI KİB premedikasyonu, perioperatif IV analjezi, ACLS VF/VT resüsitasyonu ve ASRA LAST İntralipid kurtarma için altın standart ilaç monografisi.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'cyan',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -496,8 +504,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Disosiyatif Sedoanaljezi',
     badge: 'Ketalar · NMDA Antagonisti',
     title: 'Ketamin',
-    shortDesc: 'NMDA reseptör blokajı ile disosiyatif anestezi ve analjezi; RSI şok indüksiyonu, Ketofol protokolü, akut ağrı sub-dissosiyatif dozu, refrakter bronkospazm, deliryum yönetimi ve YBÜ infüzyonu için 13 basamaklı altın standart ilaç monografisi.',
+    shortDesc: 'NMDA reseptör blokajı ile disosiyatif anestezi ve analjezi; RSI şok indüksiyonu, Ketofol protokolü, akut ağrı sub-dissosiyatif dozu, refrakter bronkospazm, deliryum yönetimi ve YBÜ infüzyonu için altın standart ilaç monografisi.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'purple',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -546,8 +555,9 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
     categoryLabel: 'Vazopressör / Şok',
     badge: 'Levophed · 1. Tercih Vazopressör',
     title: 'Noradrenalin (Norepinefrin)',
-    shortDesc: 'Septik şok (Surviving Sepsis 1A), vazodilatatuar şok, kardiyojenik şok, perioperatif vazopleji, Push-Dose bolus protokolü, Fentolamin ekstravazasyon antidot yönetimi ve 14 basamaklı altın standart ilaç monografisi & infüzyon pompası hesaplayıcısı.',
+    shortDesc: 'Septik şok (Surviving Sepsis 1A), vazodilatatuar şok, kardiyojenik şok, perioperatif vazopleji, Push-Dose bolus protokolü, Fentolamin ekstravazasyon antidot yönetimi için altın standart ilaç monografisi ve infüzyon pompası hesaplayıcısı.',
     status: 'active',
+    hasStandaloneHeader: true,
     accentColor: 'rose',
     highlightsHeader: 'Protokol Temel Parametreleri:',
     highlights: [
@@ -586,6 +596,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         colorClass: 'text-amber-700 dark:text-amber-300', 
         bgClass: 'bg-amber-500/10', 
         borderClass: 'border-amber-500/30' 
+      }
+    ]
+  },
+  {
+    id: 'epinephrine',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'İnopressör / Acil Resüsitasyon',
+    badge: 'ACLS · Anafilaksi · İnotrop',
+    title: 'Adrenalin (Epinefrin)',
+    shortDesc: 'Kardiyak arrest (ACLS/PALS 1 mg), perioperatif anafilaksi (0.5 mg IM / 50–200 mcg IV), LAST modifiye düşük doz (≤1 mcg/kg), Push-Dose, nebülize stridor ve bifazik doz-reseptör infüzyon pompası hesaplayıcısı için altın standart ilaç monografisi.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'TR Ampul Formları', 
+        value: '0.25 · 0.5 · 1 mg / mL', 
+        subtext: '1:1.000 (1000 mcg/mL) etiketi kontrol et',
+        tooltip: 'Türkiye klinik ampulleri farklı mg içerip hepsi 1 mL hacimdedir; IV uygulamadan önce 1:10.000 veya 10 mcg/mL olarak seyreltilmelidir',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      },
+      { 
+        label: 'İnfüzyon Aralığı', 
+        value: '0.01 – 0.50 mcg/kg/dk', 
+        subtext: 'β₂/β₁ inotrop (≤0.05) · α₁ (>0.15)',
+        tooltip: 'Doz bağımlı bifazik yanıt: düşük dozda β₂/β₁ baskın, yüksek dozda α₁ vazokonstriksiyon',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      },
+      { 
+        label: 'Anafilaksi / ACLS', 
+        value: '0.5 mg IM · 1 mg IV', 
+        subtext: 'Ameliyathane IV titrasyon: 50–200 mcg',
+        tooltip: 'NAP6 / WAO: Anafilakside M. vastus lateralis IM veya monitörize IV titrasyon; ACLS arrestte 3-5 dk 1 mg IV',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      },
+      { 
+        label: 'LAST Modifiye Doz', 
+        value: '≤ 1 mcg/kg IV', 
+        subtext: 'Standart 1 mg IV VERİLMEZ!',
+        tooltip: 'ASRA 2020 LAST Kılavuzu: Yüksek doz adrenalin İntralipid etkisini bozar; 70 kg için maks 50–70 mcg',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
       }
     ]
   }
@@ -649,7 +710,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     }
     return card.category === activeCategory;
   });
-  const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === activeProtocolId);
+  const aliasMap: Record<string, string> = {
+    noradrenalin: 'norepinephrine',
+    adrenalin: 'epinephrine'
+  };
+  const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
+  const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
 
   return (
     <div className="space-y-6">
@@ -683,13 +749,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
                   {activeProtocolId ? selectedProtocol?.title : 'Tedaviler ve İlaçlar'}
                 </h1>
-                {!['dexmedetomidine', 'remifentanil', 'fentanyl', 'propofol', 'midazolam', 'lidocaine', 'ketamine', 'norepinephrine'].includes(activeProtocolId || '') && (
+                {!(activeProtocolId && selectedProtocol?.hasStandaloneHeader) && (
                   <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 font-mono">
                     {activeProtocolId ? 'Protokol Detayı' : 'Klinik Protokoller'}
                   </span>
                 )}
               </div>
-              {!['dexmedetomidine', 'remifentanil', 'fentanyl', 'propofol', 'midazolam', 'lidocaine', 'ketamine', 'norepinephrine'].includes(activeProtocolId || '') && (
+              {!(activeProtocolId && selectedProtocol?.hasStandaloneHeader) && (
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   {activeProtocolId
                     ? 'Protokolü kapatıp listeye dönmek için geri butonunu kullanabilir veya alt sekmelerle görünümü özelleştirebilirsiniz.'
@@ -1179,6 +1245,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 12: NORADRENALİN (NOREPİNEFRİN) PROTOKOLÜ VE DOZ HESAPLAYICISI */}
       {(activeProtocolId === 'norepinephrine' || activeProtocolId === 'noradrenalin') && (
         <NorepinephrineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 13: ADRENALİN (EPİNEFRİN) PROTOKOLÜ VE DOZ HESAPLAYICISI */}
+      {(activeProtocolId === 'epinephrine' || activeProtocolId === 'adrenalin') && (
+        <EpinephrineProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}

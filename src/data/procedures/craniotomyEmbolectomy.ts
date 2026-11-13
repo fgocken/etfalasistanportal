@@ -58,7 +58,21 @@ export const craniotomyEmbolectomy: ProcedureDefinition = {
     alternative: [
       'Etomidat İndüksiyonu + Titre Opioid Tabanlı Anestezi (Remifentanil/Süfentanil + Düşük MAC İnhalasyon): Ciddi hemodinamik instabilite, sol ventrikül sistolik disfonksiyonu veya ejeksiyon fraksiyonu düşük akut inme hastalarında hemodinamik çöküşü önlemek için'
     ],
-    notes: 'Serebral embolektomi anestezisinde en kritik kural İKİ FARKLI DÖNEMİN hemodinamik hedeflerini titizlikle ayırmaktır: (1) REKANALİZASYON ÖNCESİ (Pre-recanalization): İskemik penumbradaki kollateral perfüzyonu yaşatmak için KESİNLİKLE HİPOTANSİYONDAN KAÇINILMALI ve MAP ≥85-90 mmHg (SAB 140-160 mmHg) tutulmalıdır; (2) REKANALİZASYON SONRASI (Post-recanalization): Damar açılıp embolektomi tamamlandığında reperfüzyon hasarı ve öldürücü hemorajik transformasyonu (beyin kanamasını) engellemek için MAP katı bir şekilde <80-85 mmHg (SAB 110-130 mmHg) seviyesine düşürülüp kontrol altında tutulmalıdır.'
+    clinicalRationale: 'Propofol + Remifentanil TIVA veya <0.5 MAC Sevofluran kombinasyonu, serebral otoregülasyonu ve iskemik penumbra perfüzyonunu koruyarak CMRO2 düşüşü sağlar ve hızlı nörolojik uyanmaya imkan tanır. Kesin PaCO2 kontrolü (normokapni) ve baş rotasyonunda lümen açıklığını korumak için spiral telli (armored) endotrakeal entübasyon zorunludur; LMA kontrollü PaCO2 ve aspirasyon koruması açısından yetersizdir.',
+    notes: 'Serebral embolektomi anestezisinde en kritik kural iki farklı dönemin hemodinamik hedeflerini titizlikle ayırmaktır: (1) REKANALİZASYON ÖNCESİ — Penumbrayı yaşatmak için MAP ≥ 85-90 mmHg (SAB 140-160 mmHg) tutulur; (2) REKANALİZASYON SONRASI — Reperfüzyon kanamasını önlemek için MAP < 80-85 mmHg (SAB 110-130 mmHg) seviyesine düşürülür.',
+    rulesTitle: 'SEREBRAL EMBOLEKTOMİDE İKİ DÖNEMLİ HEMODİNAMİK YÖNETİM',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'REKANALİZASYON ÖNCESİ: PENUMBRA PERFÜZYONU İÇİN YÜKSEK TANSİYON (MAP ≥ 85-90 mmHg)',
+        content: 'Tıkalı serebral arter açılana kadar iskemik penumbra dokusu tamamen kollateral kan akımına ve sistemik kan basıncına bağımlıdır. İndüksiyondaki en kısa süreli hipotansiyon bile infarktı geri dönüşsüz büyütür; Noradrenalin veya Fenilefrin infüzyonu indüksiyonla eşzamanlı başlatılarak SAB 140-160 mmHg tutulmalı ve normokapni (hiperventilasyonsuz) korunmalıdır.'
+      },
+      {
+        number: 2,
+        title: 'REKANALİZASYON SONRASI: HEMORAJİK TRANSFORMASYONA KARŞI SIKI BASINÇ DÜŞÜŞÜ',
+        content: 'Embolektomi yapılıp arteriyel akım sağlandığı anda hasarlı damar yatağı otoregülasyonu kaybetmiştir; kontrolsüz hipertansiyon öldürücü reperfüzyon ödemine ve intrakraniyal kanamaya yol açar. Damar açıldığı an Nikardipin/Labetalol ile SAB 110-130 mmHg (MAP < 80-85 mmHg) aralığına çekilmelidir.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

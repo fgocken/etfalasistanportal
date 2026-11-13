@@ -14,28 +14,54 @@ export interface ParsedRulesResult {
  * Hem mevcut 42+ prosedürdeki serbest metin formatını (1), (2), (3)... 
  * hem de gelecekte eklenecek yapısal `indispensableRules` dizisini destekler.
  */
+function normalizePrinciplesTitle(rawTitle: string): string {
+  return rawTitle
+    .replace(/(^|\s)[2-9]\s+VAZGEÇİLMEZ\s+KURALI(?=\s|$)/gi, '$1TEMEL İLKELERİ')
+    .replace(/(^|\s)[2-9]\s+ÖLÜMCÜL\s+KURALI(?=\s|$)/gi, '$1HAYATİ İLKELERİ')
+    .replace(/(^|\s)[2-9]\s+HAYATİ\s+ANESTEZİ\s+KURALI(?=\s|$)/gi, '$1HAYATİ ANESTEZİ İLKELERİ')
+    .replace(/(^|\s)[2-9]\s+VAZGEÇİLMEZ\s+DİREĞİ(?=\s|$)/gi, '$1TEMEL İLKELERİ')
+    .replace(/(^|\s)[2-9]\s+TEMEL\s+DİREĞİ(?=\s|$)/gi, '$1TEMEL İLKELERİ')
+    .replace(/(^|\s)[2-9]\s+KRİTİK\s+KLİNİK\s+NOKTASI(?=\s|$)/gi, '$1KRİTİK KLİNİK NOKTALARI')
+    .replace(/(^|\s)[2-9]\s+ALTIN\s+KURALI(?=\s|$)/gi, '$1ALTIN İLKELERİ')
+    .replace(/(^|\s)[2-9]\s+VAZGEÇİLMEZ\s+İLKESİ(?=\s|$)/gi, '$1VAZGEÇİLMEZ İLKELERİ')
+    .replace(/(^|\s)[2-9]\s+TEMEL\s+HEDEFİ(?=\s|$)/gi, '$1TEMEL HEDEFLERİ')
+    .replace(/(^|\s)[2-9]\s+HAYATİ\s+HEDEFİ(?=\s|$)/gi, '$1HAYATİ HEDEFLERİ')
+    .replace(/(^|\s)[2-9]\s+KRİTİK\s+SÜTUNU(?=\s|$)/gi, '$1KRİTİK SÜTUNLARI')
+    .replace(/(^|\s)[2-9]\s+TEMEL\s+AYAĞI(?=\s|$)/gi, '$1TEMEL AYAKLARI')
+    .replace(/(^|\s)[2-9]\s+HAYATİ\s+ZORUNLULUĞU(?=\s|$)/gi, '$1HAYATİ ÖNCELİKLERİ')
+    .replace(/(^|\s)ALTIN\s+ÜÇGENİ(?=\s|$)/gi, '$1TEMEL ANESTEZİ İLKELERİ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
 export function getProcedureIndispensableRules(
   procedure: ProcedureDefinition
 ): ParsedRulesResult {
+  const explicitRationale = procedure.anesthesiaTechniques?.clinicalRationale?.trim();
+
   // 1. Doğrudan yapısal olarak tanımlanmış kurallar varsa öncelikli kullan
   const explicitRules = procedure.indispensableRules || procedure.anesthesiaTechniques?.indispensableRules;
   const explicitTitle = procedure.rulesTitle || procedure.anesthesiaTechniques?.rulesTitle;
 
   if (explicitRules && explicitRules.length > 0) {
     // Kurallar zaten ayrıştırılmış nesneler halinde mevcut; notes alanı kural metninin tekrarıysa ek not olarak gösterilmez
-    let cleanAirwayRationale: string | undefined = undefined;
-    const rawNotes = procedure.anesthesiaTechniques?.notes?.trim();
-    if (rawNotes) {
-      const isDuplicateOfRules = /\([1-9]\)/.test(rawNotes) || 
-        /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR|ALTIN ÜÇGEN|TEMEL AYAK|KRİTİK KLİNİK NOKTA|HAYATİ ZORUNLULUK/i.test(rawNotes);
-      if (!isDuplicateOfRules) {
-        cleanAirwayRationale = rawNotes;
+    let cleanAirwayRationale: string | undefined = explicitRationale;
+    if (!cleanAirwayRationale) {
+      const rawNotes = procedure.anesthesiaTechniques?.notes?.trim();
+      if (rawNotes) {
+        const isDuplicateOfRules = /\([1-9]\)/.test(rawNotes) || 
+          /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR|ALTIN ÜÇGEN|TEMEL AYAK|KRİTİK KLİNİK NOKTA|HAYATİ ZORUNLULUK|TEMEL İLKE/i.test(rawNotes);
+        if (!isDuplicateOfRules) {
+          cleanAirwayRationale = rawNotes;
+        }
       }
     }
 
     return {
       hasRules: true,
-      headerTitle: explicitTitle || `${procedure.name.toUpperCase()} ANESTEZİSİNDE VAZGEÇİLMEZ KURALLAR`,
+      headerTitle: normalizePrinciplesTitle(
+        explicitTitle || `${procedure.name.toUpperCase()} — TEMEL ANESTEZİ İLKELERİ`
+      ),
       rules: explicitRules,
       airwayRationale: cleanAirwayRationale
     };
@@ -46,13 +72,14 @@ export function getProcedureIndispensableRules(
     return {
       hasRules: false,
       headerTitle: '',
-      rules: []
+      rules: [],
+      airwayRationale: explicitRationale
     };
   }
 
   // Not metninde (1) kural başlangıcı aranır
   const firstRuleIdx = notes.indexOf('(1)');
-  const mentionsRules = /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR|ALTIN ÜÇGEN|TEMEL AYAK|KRİTİK KLİNİK NOKTA|HAYATİ ZORUNLULUK|HAYATİ HEDEF|TEMEL HEDEF/i.test(notes);
+  const mentionsRules = /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR|ALTIN ÜÇGEN|TEMEL AYAK|KRİTİK KLİNİK NOKTA|HAYATİ ZORUNLULUK|HAYATİ HEDEF|TEMEL HEDEF|TEMEL İLKE/i.test(notes);
 
   // Eğer numaralı kural dizilimi yoksa bu klasik bir "Hava Yolu ve Klinik Tercih Notu"dur
   if (firstRuleIdx === -1 && !mentionsRules) {
@@ -60,13 +87,13 @@ export function getProcedureIndispensableRules(
       hasRules: false,
       headerTitle: 'Klinik Tercih Gerekçesi ve Hava Yolu Kararı',
       rules: [],
-      airwayRationale: notes
+      airwayRationale: explicitRationale || notes
     };
   }
 
   // Başlığı çek: (1)'den önceki metin
-  let title = `${procedure.name.toUpperCase()} CERRAHİSİNDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI`;
-  let preNote: string | undefined = undefined;
+  let title = `${procedure.name.toUpperCase()} — TEMEL ANESTEZİ İLKELERİ`;
+  let preNote: string | undefined = explicitRationale;
 
   if (firstRuleIdx > 0) {
     const rawHeader = notes.substring(0, firstRuleIdx).trim().replace(/[:—\-\s]+$/, '');
@@ -75,18 +102,18 @@ export function getProcedureIndispensableRules(
       const isTitlePattern = /VAZGEÇİLMEZ|KURAL|DİREĞİ|HAYATİ|HEDEF|AYAR|SÜTUN|ÜÇGEN|AYAĞI|AYAK|NOKTA|İLKE|ZORUNLULUK|KRİTİK/i.test(rawHeader) || rawHeader.length < 130;
       if (isTitlePattern) {
         title = rawHeader;
-      } else {
+      } else if (!preNote) {
         preNote = rawHeader;
       }
     }
   }
 
   // Eğer preNote başlık ile aynıysa veya kural belirteçleri içeriyorsa iptal et
-  if (preNote && (/\([1-9]\)/.test(preNote) || preNote.trim() === title.trim())) {
+  if (!explicitRationale && preNote && (/\([1-9]\)/.test(preNote) || preNote.trim() === title.trim())) {
     preNote = undefined;
   }
 
-  // Kuralları ayrıştır: (1) ... (2) ... (3) ... (4) ... (5) ...
+  // Kuralları ayrıştır: (1) ... (2) ... (3) ...
   const rules: IndispensableRule[] = [];
   const rulePattern = /\(([1-9])\)\s*([\s\S]+?)(?=\([1-9]\)|$)/g;
   let match: RegExpExecArray | null;
@@ -116,7 +143,7 @@ export function getProcedureIndispensableRules(
       sepLen = candidates[0].len;
     }
 
-    let ruleTitle = `Kural ${num}`;
+    let ruleTitle = `Klinik İlke ${num}`;
     let content = body;
 
     if (splitIdx !== -1) {
@@ -134,7 +161,7 @@ export function getProcedureIndispensableRules(
   if (rules.length >= 2) {
     return {
       hasRules: true,
-      headerTitle: title,
+      headerTitle: normalizePrinciplesTitle(title),
       rules,
       airwayRationale: preNote
     };
@@ -145,6 +172,6 @@ export function getProcedureIndispensableRules(
     hasRules: false,
     headerTitle: 'Klinik Tercih Gerekçesi ve Hava Yolu Kararı',
     rules: [],
-    airwayRationale: notes
+    airwayRationale: explicitRationale || notes
   };
 }

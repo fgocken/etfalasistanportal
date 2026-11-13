@@ -57,6 +57,7 @@ export const intubationForEpiglottitis: ProcedureDefinition = {
       'Koopere Erişkin Hastada: Uyanık Fleksibl Fiberoptik Nazotrakeal Entübasyon (AFOI) — Yalnızca solunum sıkıntısı hafif, panik ve ajitasyonu olmayan stabil erişkinlerde deneyimli ekipçe uygulanabilir; çocuklarda kesinlikle kontrendikedir',
       'Acil Cerrahi Hava Yolu: İndüksiyonda tam hava yolu obstrüksiyonu (CICO) gelişirse masada steril bekleyen KBB ekibi tarafından derhal Rijit Bronkoskopi kılavuzluğu veya Acil Trakeostomi / Krikotiroidotomi'
     ],
+    clinicalRationale: 'Spontan solunumun korunduğu oturur pozisyonda %100 O2 + sevofluran inhalasyon indüksiyonu; kas gevşetici verildiğinde ödemli epiglotun faringeal tonus kaybıyla hava yolunu tam tıkayarak oluşturacağı CICO felaketini önlediği için altın standarttır. Ödemli dar glottik yarıktan atravmatik geçiş sağlamak için yaşa göre 0.5-1.0 mm küçük çaplı endotrakeal tüp hazırlanır; KBB ekibi steril rijit bronkoskop ve acil trakeostomi kitiyle masada hazır bekletilir.',
     rulesTitle: 'AKUT EPİGLOTİT ENTÜBASYONUNDA ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',
     indispensableRules: [
       {

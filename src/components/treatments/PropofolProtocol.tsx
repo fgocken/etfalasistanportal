@@ -26,6 +26,7 @@ import {
   FileText,
   AlertOctagon
 } from 'lucide-react';
+import { DrugReferencesAndInteractionsBlock } from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -1548,7 +1549,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 10. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR */}
+      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR */}
       <div
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
@@ -1602,7 +1603,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 11. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
+      {/* 12. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
       <div
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
@@ -1646,7 +1647,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 12. İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
+      {/* 13. İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
       <div
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
@@ -1660,7 +1661,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900'} space-y-2.5 text-xs`}>
           <div className="flex items-center gap-2 font-bold text-sm text-rose-800 dark:text-rose-300">
             <AlertOctagon className="w-4 h-4 text-rose-500 shrink-0" />
-            <span>ISMP High-Alert İlaç Sınıflandırması & Havayolu Güvenliği</span>
+            <span>ISMP High-Alert İlaç Sınıflandırması &amp; Havayolu Güvenliği</span>
           </div>
           <p className="leading-relaxed text-slate-700 dark:text-slate-300">
             1. <strong>Yetkili Uygulayıcı Zorunluluğu:</strong> Propofol yalnızca anesteziyoloji veya yoğun bakım uzmanları ile ileri havayolu yönetimi konusunda eğitimli ve sertifikalı hekimler tarafından uygulanmalıdır.
@@ -1674,74 +1675,42 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 13. İLAÇ ETKİLEŞİMİ SORGULAMAK İÇİN DIŞ BAĞLANTILAR */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-          <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400">
-            <ExternalLink className="w-5 h-5" />
-            <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-              İlaç Etkileşimleri ve Dış Kaynak Sorgulama
-            </h3>
-          </div>
-          <span className="text-[11px] text-slate-500 dark:text-slate-400">
-            Resmi farmakope ve klinik etkileşim veri tabanları
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-          <a
-            href="https://www.drugs.com/drug-interactions/propofol.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group cursor-pointer ${
-              isDark
-                ? 'bg-slate-800/60 hover:bg-slate-800 border-slate-700 text-slate-200 hover:border-teal-500/50'
-                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800 hover:border-teal-500/50'
-            }`}
-          >
-            <div className="flex items-center gap-2.5">
-              <Pill className="w-4 h-4 text-teal-500" />
-              <div>
-                <span className="text-xs font-bold block group-hover:text-teal-600 dark:group-hover:text-teal-400">
-                  Drugs.com Propofol Etkileşim Kontrolü
-                </span>
-                <span className="text-[11px] text-slate-500">
-                  Opioidler, sedatifler, antiaritmikler ve CYP etkileşimleri
-                </span>
-              </div>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-teal-500 shrink-0" />
-          </a>
-
-          <a
-            href="https://reference.medscape.com/drug/diprivan-propofol-343100"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group cursor-pointer ${
-              isDark
-                ? 'bg-slate-800/60 hover:bg-slate-800 border-slate-700 text-slate-200 hover:border-teal-500/50'
-                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800 hover:border-teal-500/50'
-            }`}
-          >
-            <div className="flex items-center gap-2.5">
-              <FileText className="w-4 h-4 text-teal-500" />
-              <div>
-                <span className="text-xs font-bold block group-hover:text-teal-600 dark:group-hover:text-teal-400">
-                  Medscape Propofol (Diprivan) Monografisi
-                </span>
-                <span className="text-[11px] text-slate-500">
-                  Klinik referans dozları, yan etkiler ve gebelik kategorisi
-                </span>
-              </div>
-            </div>
-            <ExternalLink className="w-4 h-4 text-teal-500 shrink-0" />
-          </a>
-        </div>
-      </div>
+      {/* 14. KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ SORGULAMA */}
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Propofol"
+        references={[
+          {
+            authors: 'Schnider TW, Minto CF, Gambus PL, et al.',
+            title: 'The Influence of Method of Administration and Covariates on the Pharmacokinetics of Propofol in Adult Volunteers.',
+            journal: 'Anesthesiology',
+            year: 1998,
+            pmid: '9605675',
+            doi: '10.1097/00000542-199805000-00006',
+            note: 'Yaş, boy ve LBW kovaryatlarını içeren TCI Schnider farmakokinetik modeli.',
+          },
+          {
+            authors: 'Kam PC, Cardone D',
+            title: 'Propofol infusion syndrome.',
+            journal: 'Anaesthesia',
+            year: 2007,
+            pmid: '17567345',
+            doi: '10.1111/j.1365-2044.2007.05055.x',
+            note: 'PRIS patofizyolojisi, 4 mg/kg/saat üzerindeki tavan riski ve mitokondriyal toksisite derlemesi.',
+          },
+          {
+            authors: 'Devlin JW, Skrobik Y, Gélinas C, et al. (SCCM PADIS)',
+            title: 'Clinical Practice Guidelines for the Prevention and Management of Pain, Agitation/Sedation, Delirium, Immobility, and Sleep Disruption in Adult Patients in the ICU.',
+            journal: 'Crit Care Med',
+            year: 2018,
+            pmid: '30113379',
+            doi: '10.1097/CCM.0000000000003299',
+            note: 'Mekanik ventilasyonlu erişkinlerde benzodiazepin yerine propofol veya deksmedetomidin önerisi.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/propofol.html"
+        medscapeUrl="https://reference.medscape.com/drug/diprivan-propofol-343100"
+      />
     </div>
   );
 };

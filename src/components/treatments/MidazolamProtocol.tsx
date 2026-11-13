@@ -31,6 +31,7 @@ import {
   Skull,
   Wine
 } from 'lucide-react';
+import { DrugReferencesAndInteractionsBlock } from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -1809,7 +1810,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 10. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR */}
+      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR */}
       <div
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
@@ -1863,7 +1864,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 11. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
+      {/* 12. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
       <div
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
@@ -1908,7 +1909,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 12. İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
+      {/* 13. İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
       <div
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
@@ -1916,13 +1917,13 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
       >
         <div className="flex items-center gap-2.5 mb-4 text-rose-600 dark:text-rose-400">
           <ShieldAlert className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">İlaç Güvenliği İlişkili Durumlar (ISMP High-Alert & Kontrole Tabi Reçete)</h2>
+          <h2 className="text-base sm:text-lg font-bold">İlaç Güvenliği İlişkili Durumlar (ISMP High-Alert &amp; Kontrole Tabi Reçete)</h2>
         </div>
 
         <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900'} space-y-2.5 text-xs`}>
           <div className="flex items-center gap-2 font-bold text-sm text-rose-800 dark:text-rose-300">
             <AlertOctagon className="w-4 h-4 text-rose-500 shrink-0" />
-            <span>ISMP High-Alert & Konsantrasyon Karışıklığı Uyarısı</span>
+            <span>ISMP High-Alert &amp; Konsantrasyon Karışıklığı Uyarısı</span>
           </div>
           <p className="leading-relaxed text-slate-700 dark:text-slate-300">
             1. <strong>Konsantrasyon Karışıklığı (1 mg/mL vs 5 mg/mL):</strong> En sık yapılan medikal hata 1 mg/mL ampul yerine 5 mg/mL ampulün çekilmesidir (hastaya 5 kat aşırı doz verilir!). Şırıngalar mutlaka renkli ve miligram cinsinden etiketlenmelidir.
@@ -1931,79 +1932,38 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             2. <strong>Yeşil Reçete / Kontrole Tabi Madde:</strong> Bağımlılık ve kötüye kullanım potansiyeli nedeniyle ulusal ve uluslararası mevzuata göre kilitli dolaplarda saklanmalı ve her kullanım kayıt altına alınmalıdır.
           </p>
           <p className="leading-relaxed text-slate-700 dark:text-slate-300">
-            3. <strong>Oksijen & Resüsitasyon Hazırlığı:</strong> Midazolam uygulanan her odada balon-valf-maske (Ambu), aspiratör, yüksek akımlı oksijen ve <strong>Flumazenil ampul</strong> kullanıma hazır bulunmalıdır.
+            3. <strong>Oksijen &amp; Resüsitasyon Hazırlığı:</strong> Midazolam uygulanan her odada balon-valf-maske (Ambu), aspiratör, yüksek akımlı oksijen ve <strong>Flumazenil ampul</strong> kullanıma hazır bulunmalıdır.
           </p>
         </div>
       </div>
 
-      {/* 13. İLAÇ ETKİLEŞİMİ SORGULAMAK İÇİN DIŞ BAĞLANTILAR */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-          <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400">
-            <ExternalLink className="w-5 h-5" />
-            <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-              İlaç Etkileşimleri ve Dış Kaynak Sorgulama
-            </h3>
-          </div>
-          <span className="text-[11px] text-slate-500 dark:text-slate-400">
-            Resmi farmakope ve klinik etkileşim veri tabanları
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-          <a
-            href="https://www.drugs.com/drug-interactions/midazolam.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group cursor-pointer ${
-              isDark
-                ? 'bg-slate-800/60 hover:bg-slate-800 border-slate-700 text-slate-200 hover:border-purple-500/50'
-                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800 hover:border-purple-500/50'
-            }`}
-          >
-            <div className="flex items-center gap-2.5">
-              <Pill className="w-4 h-4 text-purple-500" />
-              <div>
-                <span className="text-xs font-bold block group-hover:text-purple-600 dark:group-hover:text-purple-400">
-                  Drugs.com Midazolam Etkileşim Kontrolü
-                </span>
-                <span className="text-[11px] text-slate-500">
-                  CYP3A4 inhibitör/indükleyicileri, opioidler ve sedatif etkileşimleri
-                </span>
-              </div>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-purple-500 shrink-0" />
-          </a>
-
-          <a
-            href="https://reference.medscape.com/drug/versed-midazolam-342907"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group cursor-pointer ${
-              isDark
-                ? 'bg-slate-800/60 hover:bg-slate-800 border-slate-700 text-slate-200 hover:border-purple-500/50'
-                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800 hover:border-purple-500/50'
-            }`}
-          >
-            <div className="flex items-center gap-2.5">
-              <FileText className="w-4 h-4 text-purple-500" />
-              <div>
-                <span className="text-xs font-bold block group-hover:text-purple-600 dark:group-hover:text-purple-400">
-                  Medscape Midazolam (Versed) Monografisi
-                </span>
-                <span className="text-[11px] text-slate-500">
-                  Klinik referans dozları, yan etkiler, gebelik ve böbrek uyarıları
-                </span>
-              </div>
-            </div>
-            <ExternalLink className="w-4 h-4 text-purple-500 shrink-0" />
-          </a>
-        </div>
-      </div>
+      {/* 14. KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ SORGULAMA */}
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Midazolam"
+        references={[
+          {
+            authors: 'Silbergleit R, Durkalski V, Lowenstein D, et al. (RAMPART)',
+            title: 'Intramuscular versus intravenous therapy for prehospital status epilepticus.',
+            journal: 'N Engl J Med',
+            year: 2012,
+            pmid: '22335738',
+            doi: '10.1056/NEJMoa1107494',
+            note: 'Status epileptikusta IM midazolamın (10 mg) IV lorazepama göre etkinlik ve hız üstünlüğü.',
+          },
+          {
+            authors: 'Devlin JW, Skrobik Y, Gélinas C, et al. (SCCM PADIS)',
+            title: 'Clinical Practice Guidelines for the Prevention and Management of Pain, Agitation/Sedation, Delirium, Immobility, and Sleep Disruption in Adult Patients in the ICU.',
+            journal: 'Crit Care Med',
+            year: 2018,
+            pmid: '30113379',
+            doi: '10.1097/CCM.0000000000003299',
+            note: 'YBÜ infüzyonunda benzodiazepin ilişkili deliryum riski ve renal 1-OH metabolit birikimi uyarısı.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/midazolam.html"
+        medscapeUrl="https://reference.medscape.com/drug/versed-midazolam-342907"
+      />
     </div>
   );
 };

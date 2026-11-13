@@ -256,7 +256,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  1) Prosedür İsmi, Tanımı, Endikasyonları ve Tahmini Süresi
+                  Prosedür İsmi, Tanımı, Endikasyonları ve Tahmini Süresi
                 </h2>
                 <p className="text-[11px] text-slate-400">Cerrahi operasyon özeti ve temel endikasyon listesi</p>
               </div>
@@ -327,7 +327,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                   <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
                       <Droplet className="w-4 h-4 text-rose-500 inline-block" />
-                      <span>2) Beklenen Kanama ve Transfüzyon Profili</span>
+                      <span>Beklenen Kanama ve Transfüzyon Profili</span>
                     </h2>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                       procedure.bleedingProfile.riskLevel === 'minimal'
@@ -360,11 +360,13 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                   </div>
 
                   {/* Kanama Risk Sınıfı */}
-                  <div className={`p-3 rounded-lg border flex flex-col justify-between ${
+                  <div className={`p-3 rounded-lg border flex flex-col ${
                     isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                   }`}>
-                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Kanama Risk Derecesi</span>
-                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">{procedure.bleedingProfile.riskLevelLabel}</span>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider text-center">Kanama Risk Derecesi</span>
+                    <div className="flex-1 flex items-center justify-center text-center py-2">
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug">{procedure.bleedingProfile.riskLevelLabel}</span>
+                    </div>
                   </div>
 
                   {/* Cross-Match / Hazırlık */}
@@ -376,11 +378,13 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                   </div>
 
                   {/* Transfüzyon Olasılığı */}
-                  <div className={`p-3 rounded-lg border flex flex-col justify-between ${
+                  <div className={`p-3 rounded-lg border flex flex-col ${
                     isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                   }`}>
-                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Transfüzyon İhtimali</span>
-                    <span className="text-xs font-bold text-amber-600 dark:text-amber-400 mt-1">{procedure.bleedingProfile.transfusionProbability}</span>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider text-center">Transfüzyon İhtimali</span>
+                    <div className="flex-1 flex items-center justify-center text-center py-2">
+                      <span className="text-xs font-bold text-amber-600 dark:text-amber-400 leading-snug">{procedure.bleedingProfile.transfusionProbability}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -451,7 +455,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  3) Olası Anestezi Yönetimi Teknikleri
+                  Olası Anestezi Yönetimi Teknikleri
                 </h2>
                 <p className="text-[11px] text-slate-400">Birincil altın standart ve seçilmiş alternatif yaklaşımlar</p>
               </div>
@@ -508,8 +512,21 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 </div>
               )}
 
-              {/* Anestezinin Vazgeçilmez Kuralları VEYA Standart Klinik / Hava Yolu Notları */}
-              {parsedRules.hasRules ? (
+              {/* Not: Altın standart anestezi ve hava yolu seçimi klinik gerekçesi */}
+              {parsedRules.airwayRationale && (
+                <div className={`p-3.5 sm:p-4 rounded-xl border text-xs leading-relaxed flex items-start gap-2.5 ${
+                  isDark ? 'bg-blue-500/10 border-blue-500/25 text-blue-100' : 'bg-blue-50/70 border-blue-200 text-slate-700'
+                }`}>
+                  <BookOpen className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-blue-300' : 'text-blue-600'}`} />
+                  <div className="space-y-1">
+                    <strong className={`block font-bold ${isDark ? 'text-blue-200' : 'text-blue-900'}`}>Not:</strong>
+                    <p>{parsedRules.airwayRationale}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Hayati Klinik İlkeler */}
+              {parsedRules.hasRules && (
                 <div className={`p-4 sm:p-5 rounded-xl border transition-colors space-y-4 ${
                   isDark 
                     ? 'bg-amber-950/20 border-amber-500/30' 
@@ -528,19 +545,19 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                           Hayati Klinik İlkeler
                         </span>
                         <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
-                          {parsedRules.rules.length} Temel Kural
+                          Prosedüre Özgü Kritik Öncelikler
                         </span>
                       </div>
                       <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mt-1 uppercase tracking-tight">
                         {parsedRules.headerTitle}
                       </h4>
                       <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
-                        Cerrahi başarıyı belirleyen, perioperatif mortalite ve majör morbiditeyi önleyen tavizsiz anestezi prensipleri:
+                        Cerrahi başarıyı belirleyen, perioperatif mortalite ve majör morbiditeyi önleyen klinik prensipler:
                       </p>
                     </div>
                   </div>
 
-                  {/* Numaralandırılmış Kural Kartları */}
+                  {/* Klinik Prensip Kartları */}
                   <div className="space-y-2.5 pt-1">
                     {parsedRules.rules.map((rule) => (
                       <div
@@ -552,12 +569,12 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          <span className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5 ${
+                          <span className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5 ${
                             isDark 
                               ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
-                              : 'bg-amber-100 text-amber-900 border border-amber-300'
+                              : 'bg-amber-100 text-amber-800 border border-amber-300'
                           }`}>
-                            0{rule.number}
+                            <AlertTriangle className="w-3.5 h-3.5" />
                           </span>
                           <div className="flex-1 space-y-1 min-w-0">
                             <h5 className="text-xs font-bold tracking-tight text-slate-900 dark:text-slate-100 leading-snug">
@@ -571,27 +588,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                       </div>
                     ))}
                   </div>
-
-                  {/* Eğer kuralların tekrarı olmayan gerçek ek bir hava yolu gerekçesi varsa ayrıca göster */}
-                  {parsedRules.airwayRationale && !parsedRules.airwayRationale.includes('(1)') && parsedRules.airwayRationale.trim() !== parsedRules.headerTitle.trim() && (
-                    <div className={`p-3 rounded-lg border text-xs leading-relaxed ${
-                      isDark ? 'bg-slate-900/60 border-slate-800 text-slate-400' : 'bg-white/80 border-slate-200 text-slate-600'
-                    }`}>
-                      <strong className="block font-semibold mb-0.5 text-slate-700 dark:text-slate-300">Ek Hava Yolu & Klinik Not:</strong>
-                      <p>{parsedRules.airwayRationale}</p>
-                    </div>
-                  )}
                 </div>
-              ) : (
-                /* Standart Klinik Tercih Gerekçesi ve Hava Yolu Kararı (Kurallar dizisi olmayan standart prosedürler için) */
-                procedure.anesthesiaTechniques.notes && (
-                  <div className={`p-4 rounded-xl border text-xs leading-relaxed space-y-1 ${
-                    isDark ? 'bg-blue-500/10 border-blue-500/25 text-blue-200' : 'bg-blue-50 border-blue-200 text-blue-900'
-                  }`}>
-                    <strong className="block font-bold">Klinik Tercih Gerekçesi ve Hava Yolu Kararı:</strong>
-                    <p>{procedure.anesthesiaTechniques.notes}</p>
-                  </div>
-                )
               )}
             </div>
           )}
@@ -614,7 +611,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  4) Pre-operatif Hazırlık
+                  Pre-operatif Hazırlık
                 </h2>
                 <p className="text-[11px] text-slate-400">4a Konsültasyonlar, 4b Anamnez/Fizik Muayene, 4c Kan ve Laboratuvar</p>
               </div>
@@ -758,7 +755,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  5) İntra-operatif Yönetim
+                  İntra-operatif Yönetim
                 </h2>
                 <p className="text-[11px] text-slate-400">5a Monitörizasyon, 5b Vasküler, 5c Pozisyon, 5d Anestezi, 5e Havayolu, 5f Kritik Anlar, 5g Uyandırma</p>
               </div>
@@ -1032,7 +1029,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
+                  Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
                 </h2>
                 <p className="text-[11px] text-slate-400">6a Ağrı Yönetimi, 6b PROSPECT Rehber Önerileri, 6c ERAS Rehberi Önerileri</p>
               </div>
@@ -1176,7 +1173,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
               </span>
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-                  7) Kullanılan Kaynaklar ve Literatür Referansları
+                  Kullanılan Kaynaklar ve Literatür Referansları
                 </h2>
                 <p className="text-[11px] text-slate-400">Öncelikli rehberler (Jaffe 5th ed, ERAS, PROSPECT) ve ek kaynaklar</p>
               </div>

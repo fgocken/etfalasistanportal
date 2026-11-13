@@ -56,7 +56,31 @@ export const craniotomyEcIcBypass: ProcedureDefinition = {
     alternative: [
       'Opioid Tabanlı Yüksek Doz GETA (Fentanil/Süfentanil + TIVA): Ciddi kardiyak rezerv kısıtlılığı olan olgularda'
     ],
-    notes: 'EC-IC Bypass cerrahisinde anestezi yönetiminin 4 VAZGEÇİLMEZ KURALI: (1) HİPOTANSİYONDAN KESİNLİKLE KAÇINMAK — Geçici klipleme esnasında alıcı arter kapatıldığında kollateral perfüzyonu korumak için İNDÜKLENMİŞ HİPERTANSİYON (MAP %10-20 artırılarak ≥ 90-100 mmHg) uygulanmalıdır, (2) HİPERVENTİLASYONDAN KESİN KAÇINMA (PaCO2 38 - 42 mmHg NORMOKAPNİ ŞARTTIR!) — Hipokapni Moyamoya hastalarında narin damarları büzerek yaygın serebral enfarkta (çalma sendromu) yol açar, (3) Hematokrit %30-33 tutularak optimal mikrosirkülasyon ve normovolemi sağlanmalıdır, (4) Anastomoz açıldıktan sonra "Serebral Hiperperfüzyon Sendromu" (CHS) ve kanamayı önlemek için tansiyon derhal normotansif sınırlara (Sistolik KB < 130-140 mmHg) çekilmelidir.'
+    clinicalRationale: 'Kronik hipoperfüzyon altındaki beyin dokusunda CMRO2 düşüşü sağlarken İONM (EEG, SSEP, MEP) sinyallerini bozmamak ve vazoparalitik damarlarda çalma fenomenini (steal) engellemek için Propofol + Remifentanil TIVA altın standarttır. PaCO2\'nin 38-42 mmHg dar aralığında kesin kontrolü ve baş rotasyonunda lümen güvenliği için spiral telli ETT ile kontrollü mekanik ventilasyon gereklidir.',
+    notes: 'EC-IC BYPASS CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ: (1) GEÇİCİ KLİPTE İNDÜKLENMİŞ HİPERTANSİYON; (2) HİPERVENTİLASYON YASAĞI VE MUTLAK NORMOKAPNİ; (3) HEMATOKRİT (%30-33) VE NORMOVOLEMİ; (4) ANASTOMOZ SONRASI SEREBRAL HİPERPERFÜZYON SENDROMU (CHS) ÖNLEMİ.',
+    rulesTitle: 'EC-IC BYPASS CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'HİPOTANSİYONDAN KAÇINMA VE GEÇİCİ KLİPTE İNDÜKLENMİŞ HİPERTANSİYON',
+        content: 'Kronik hipoperfüzyondaki beyin dokusu basınç-bağımlıdır; indüksiyon sırasındaki kısa hipotansiyon bile kalıcı inme yaratır. Alıcı M4 dalı geçici kliplendiğinde kollateral akımı korumak için Noradrenalin/Fenilefrin ile MAP %10-20 artırılarak ≥ 90-100 mmHg tutulmalıdır.'
+      },
+      {
+        number: 2,
+        title: 'HİPERVENTİLASYON YASAĞI VE SIKI NORMOKAPNİ (PaCO2 38-42 mmHg)',
+        content: 'Moyamoya ve tıkayıcı serebrovasküler hastalıklarda hipokapni sağlam damarları vazokonstrikte ederek ya da vazoparalitik alandan kanı çalarak (Steal Sendromu) masif enfarkta yol açar! PaCO2 mutlaka 38-42 mmHg aralığında normokapnik tutulmalı, hiperventilasyon kesinlikle yapılmamalıdır.'
+      },
+      {
+        number: 3,
+        title: 'OPTİMAL REOLOJİ: HEMATOKRİT (%30-33), NORMOVOLEMİ VE NORMOTERMİ',
+        content: 'Mikrovasküler anastomoz açıklığı için hemokonsantrasyon önlenmelidir (ideal Hct %30-33); hipotermi vazospazmı ve viskoziteyi artırdığından normotermi korunur. Pediatrik Moyamoya hastalarında preoperatif ağlama ve dehidratasyonu önlemek için kesintisiz IV hidrasyon sağlanır ve Aspirin kesilmez.'
+      },
+      {
+        number: 4,
+        title: 'ANASTOMOZ SONRASI SEREBRAL HİPERPERFÜZYON SENDROMU (CHS) ÖNLEMİ',
+        content: 'Donör STA ile alıcı kortikal arter anastomozu açıldığı an yüksek akımın otoregülasyonsuz yatağa girmesi beyin ödemi, fokal nöbet ve intraserebral kanamaya (CHS) neden olabilir. Klempler açıldığında hedeflenen tansiyon normotansif sınırlara (SKB < 130-140 mmHg) indirilmelidir.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık

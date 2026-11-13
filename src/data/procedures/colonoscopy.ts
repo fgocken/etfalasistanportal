@@ -54,7 +54,25 @@ export const colonoscopy: ProcedureDefinition = {
       'Orta Düzey Sedasyon (Bilinçli Sedasyon): Titre edilmiş Midazolam + Fentanil kombinasyonu',
       'Genel Anestezi (Endotrakeal Entübasyonlu): İleri derecede ajite, kooperasyon kurulamayan, masif kolon dilatasyonu/toksik megakolon riski taşıyan veya şiddetli kardiyopulmoner komorbiditesi olan seçilmiş olgularda'
     ],
-    notes: 'Kolonoskopide temel anestezik zorluk; splenik ve hepatik fleksuraların geçişi esnasında kolonun gerilmesi ve mezenterik traksiyonun oluşturduğu şiddetli viseral ağrı ile vagal stimülasyondur. Propofol tek başına hipnotik olup analjezik etkisi bulunmadığından; fentanil veya ketamin kombinasyonu hasta konforu, sedasyon stabilitesi ve vagal reflekslerin önlenmesi için esastır.'
+    notes: 'Kolonoskopide temel anestezik zorluk; splenik ve hepatik fleksuraların geçişi esnasında kolonun gerilmesi ve mezenterik traksiyonun oluşturduğu şiddetli viseral ağrı ile vagal stimülasyondur. Propofol tek başına hipnotik olup analjezik etkisi bulunmadığından; fentanil veya ketamin kombinasyonu hasta konforu, sedasyon stabilitesi ve vagal reflekslerin önlenmesi için esastır.',
+    rulesTitle: 'KOLONOSKOPİ SEDASYONUNDA TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'ANALJEZİK ADJUVANLA VİSERAL AĞRI VE HAREKETSİZLİK YÖNETİMİ',
+        content: 'Splenik/hepatik fleksura geçişlerinde ve loop (ilmek) oluşumunda şiddetli mezenterik gerilme ağrısı olur. Propofol analjezik değildir; tek başına verilmesi derin solunum depresyonuna ve aşırı doz sedasyona yol açar. Düşük doz Fentanil (25-50 mcg) veya Ketamin (0.2-0.3 mg/kg - "Ketofol") eklenmesi çok daha düşük Propofol dozuyla konforlu anestezi sağlar.'
+      },
+      {
+        number: 2,
+        title: 'BAĞIRSAK HAZIRLIĞINA BAĞLI HİPOVOLEMİ VE VAGAL BRADİKARDİ',
+        content: 'Kolonoskopi hastaları yoğun laksatif temizlik ve uzun açlık nedeniyle preoperatif belirgin derecede dehidrate ve hipovolemiktir. Propofolün vazodilatatör etkisiyle birleşen kolon distansiyonu ani vagal bradikardi ve derin hipotansiyona yol açabilir; işlem başlangıcında IV kristaloid yüklemesi yapılmalı ve Atropin/Efedrin hazır tutulmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'PERFORASYON RİSKİNİ MASKEMEMEK VE KARIN DİSTANSİYONU İZLEMİ',
+        content: 'Aşırı derin anestezi, polipektomi veya zor ilerleme esnasında hastanın aşırı distansiyon tepkisini tamamen ortadan kaldırarak iatrojenik kolon perforasyonu riskini artırabilir. İşlem sırasında batında ani sertleşme/gerginlik, açıklanamayan taşikardi veya uyanmada şiddetli karın ağrısı perforasyon alarmıdır.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

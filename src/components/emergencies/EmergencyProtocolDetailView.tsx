@@ -123,6 +123,32 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
   const anaphylaxisSugammadexVials200 = Math.ceil(anaphylaxisSugammadexMg / 200);
   const anaphylaxisMethylprednisoloneMg = Math.round(weightNum * 1.5);
 
+  // Perioperative Cardiac Arrest & ACLS calculations (handles both adult & pediatric weights)
+  const isPediatricWeight = weightNum > 0 && weightNum < 40;
+  const aclsEpiDoseText = isPediatricWeight
+    ? `${+(weightNum * 0.01).toFixed(2)} mg (10 mcg/kg)`
+    : '1 mg IV/IO (3-5 dk)';
+  const aclsAmiodarone1Text = isPediatricWeight
+    ? `${Math.min(300, Math.round(weightNum * 5))} mg (5 mg/kg)`
+    : '300 mg (2. doz 150 mg)';
+  const aclsLidocaineMin = Math.round(weightNum * 1.0);
+  const aclsLidocaineMax = Math.round(weightNum * 1.5);
+  const aclsDefibText = isPediatricWeight
+    ? `${Math.round(weightNum * 2)} → ${Math.round(weightNum * 4)} J (2-4 J/kg)`
+    : '200 J Bifazik (360 J Mono)';
+  const aclsFluidBolusMl = Math.round(weightNum * 20);
+
+  // Optional ECG lightbox modal state
+  const [selectedEcgItem, setSelectedEcgItem] = useState<{
+    rhythmName: string;
+    badge: string;
+    shockable: boolean;
+    imagePath: string;
+    caption: string;
+    ecgFeatures: string;
+    sourceLicense: string;
+  } | null>(null);
+
   // Accordion Sections Open State (sec2 to sec10; default open for immediate clinical speed)
   const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>({
     sec2: true,  // 2) Giriş
@@ -779,6 +805,67 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
                 </div>
               </div>
             </div>
+          ) : (protocol.id === 'acls' || protocol.quickCalculatorType === 'acls') ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 shrink-0">
+                  <HeartCrack className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Perioperatif ACLS Doz &amp; Defibrilasyon Hesaplayıcısı</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
+                      {isPediatricWeight ? 'PEDİATRİK (<40 kg) MODU' : 'ERİŞKİN AHA/ERC MODU'}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Kilo girerek Adrenalin, Amiodaron, Lidokain, Bifazik Defibrilasyon enerjisi ve 20 mL/kg hipovolemi bolusunu görüntüleyin:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Şoklanamaz ritimde İLK ANDA, şoklanabilirde 2. şok sonrası (LAST hariç!)">
+                    Adrenalin: <strong>{aclsEpiDoseText}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="VF/pVT 1. şok enerjisi">
+                    Defibrilasyon: <strong>{aclsDefibText}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="3. şok sonrası refrakter VF/pVTde">
+                    Amiodaron: <strong>{aclsAmiodarone1Text}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Amiodaron yoksa 1-1.5 mg/kg IV">
+                    Lidokain: <strong>{aclsLidocaineMin}-{aclsLidocaineMax} mg IV</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Hipovolemik/hemorajik PEAda hızlı 20 mL/kg kristaloid">
+                    Sıvı (20 mL/kg): <strong>{aclsFluidBolusMl} mL</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Entübe hastada asenkron sabit solutma hızı">
+                    Ventilasyon: <strong className="text-cyan-400">10/dk (Hiperventile Etme!)</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (protocol.id === 'mh' || protocol.quickCalculatorType === 'dantrolene') ? (
             <div className={`p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-4 ${
               isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
@@ -1138,6 +1225,88 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
               <div className="text-[11px] text-slate-500 dark:text-slate-400 italic">
                 * {protocol.diagnosis.larachInterpretation}
               </div>
+
+              {/* Gerçek Onaylı Public Domain EKG Ritim Örnekleri (ACLS vb.) */}
+              {protocol.diagnosis.rhythmEcgGallery && protocol.diagnosis.rhythmEcgGallery.length > 0 && (
+                <div className={`mt-4 pt-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-red-500" />
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">
+                        Onaylı Klinik EKG Şeritleri (Derivasyon II) — Görsel Tanı Atlası
+                      </span>
+                    </div>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                      isDark ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300' : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    }`}>
+                      Telifsiz · Public Domain (Wikimedia Commons)
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    {protocol.diagnosis.rhythmEcgGallery.map((ecg, idx) => (
+                      <div
+                        key={idx}
+                        className={`rounded-xl border p-3.5 flex flex-col gap-2.5 transition-all ${
+                          ecg.shockable
+                            ? isDark
+                              ? 'bg-red-950/20 border-red-500/35 hover:border-red-500/60'
+                              : 'bg-red-50/50 border-red-200 hover:border-red-300'
+                            : isDark
+                              ? 'bg-slate-800/45 border-slate-700 hover:border-amber-500/50'
+                              : 'bg-slate-50/90 border-slate-200 hover:border-amber-300'
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className={`text-xs font-extrabold ${
+                            isDark ? 'text-white' : 'text-slate-900'
+                          }`}>
+                            {ecg.rhythmName}
+                          </span>
+                          <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                            ecg.shockable
+                              ? 'bg-red-500/15 text-red-600 dark:text-red-300 border border-red-500/30'
+                              : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                          }`}>
+                            {ecg.badge}
+                          </span>
+                        </div>
+
+                        {/* Gerçek EKG Şeridi Frame (Her temada yüksek kontrast için beyaz EKG kağıdı zemini) */}
+                        <button
+                          type="button"
+                          onClick={() => setSelectedEcgItem(ecg)}
+                          className="group relative w-full rounded-lg bg-white border border-slate-300 dark:border-slate-700 p-2 overflow-hidden text-left cursor-zoom-in shadow-2xs"
+                          title="Büyütmek için tıklayın"
+                        >
+                          <img
+                            src={ecg.imagePath}
+                            alt={`${ecg.rhythmName} Gerçek EKG Şeridi`}
+                            referrerPolicy="no-referrer"
+                            className="w-full h-24 sm:h-28 object-contain mx-auto transition-transform duration-200 group-hover:scale-[1.02]"
+                          />
+                          <span className="absolute bottom-1.5 right-1.5 text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-900/75 text-white opacity-80 group-hover:opacity-100">
+                            Büyüt
+                          </span>
+                        </button>
+
+                        <div className="space-y-1 text-[11px] leading-relaxed">
+                          <div className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+                            <strong className="font-semibold">EKG Bulgusu: </strong>
+                            {ecg.ecgFeatures}
+                          </div>
+                          <div className={isDark ? 'text-slate-400' : 'text-slate-600'}>
+                            {ecg.caption}
+                          </div>
+                          <div className="pt-1 text-[10px] font-mono text-slate-400 dark:text-slate-500">
+                            Kaynak: {ecg.sourceLicense}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Differential Diagnosis Table */}
@@ -3033,6 +3202,229 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
               </div>
             )}
 
+            {/* Perioperatif Kardiyak Arrest & ACLS Özel Protokol Kartları */}
+            {protocol.crisisManagement.aclsProtocols && (
+              <div className="space-y-6 pt-2">
+                {/* 1. Yüksek Kaliteli KPR Fizyolojik Hedefleri */}
+                <div className={`p-5 rounded-2xl border space-y-4 ${
+                  isDark ? 'bg-red-950/20 border-red-500/40' : 'bg-red-50/70 border-red-300 shadow-2xs'
+                }`}>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-red-500/30">
+                    <div className="flex items-center gap-2">
+                      <HeartCrack className="w-4 h-4 text-red-500 shrink-0" />
+                      <h3 className="text-sm font-bold text-red-800 dark:text-red-200">
+                        Yüksek Kaliteli KPR &amp; Ameliyathane Fizyolojik Hedefleri
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-red-500/20 text-red-700 dark:text-red-300 font-bold self-start sm:self-auto">
+                      EtCO2 &amp; ARTER REHBERLİĞİ
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    {protocol.crisisManagement.aclsProtocols.cprQualityTargets.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-3.5 rounded-xl border space-y-1.5 ${
+                          isDark ? 'bg-slate-900/70 border-slate-800 text-slate-200' : 'bg-white border-red-200 text-slate-800'
+                        }`}
+                      >
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-red-600 dark:text-red-400 font-bold">
+                          {item.metric}
+                        </div>
+                        <div className="text-xs font-mono font-extrabold text-slate-900 dark:text-white">
+                          {item.target}
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                          {item.clinicalNote}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. Şoklanabilir (VF/pVT) vs Şoklanamaz (Asistoli/PEA) İkili Algoritma */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
+                  {protocol.crisisManagement.aclsProtocols.rhythmAlgorithms.map((alg, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-5 rounded-2xl border space-y-3 ${
+                        idx === 0
+                          ? isDark ? 'bg-amber-950/15 border-amber-500/40' : 'bg-amber-50/70 border-amber-300 shadow-2xs'
+                          : isDark ? 'bg-rose-950/15 border-rose-500/40' : 'bg-rose-50/70 border-rose-300 shadow-2xs'
+                      }`}
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-black/10 dark:border-white/10">
+                        <span className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                          <Zap className={`w-4 h-4 ${idx === 0 ? 'text-amber-500' : 'text-rose-500'}`} />
+                          {alg.pathway}
+                        </span>
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
+                          idx === 0
+                            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
+                            : 'bg-rose-500/20 text-rose-700 dark:text-rose-300'
+                        }`}>
+                          {alg.badge}
+                        </span>
+                      </div>
+
+                      <div className="space-y-2 text-[11px] leading-relaxed">
+                        <div>
+                          <strong className="text-slate-900 dark:text-white">İlk Adım: </strong>
+                          <span className="text-slate-700 dark:text-slate-300">{alg.initialAction}</span>
+                        </div>
+                        <div>
+                          <strong className="text-slate-900 dark:text-white">Defibrilasyon: </strong>
+                          <span className="text-slate-700 dark:text-slate-300 font-mono">{alg.defibrillationDose}</span>
+                        </div>
+                        <div>
+                          <strong className="text-slate-900 dark:text-white">Adrenalin Zamanlaması: </strong>
+                          <span className="text-slate-700 dark:text-slate-300">{alg.epinephrineTiming}</span>
+                        </div>
+                        <div>
+                          <strong className="text-slate-900 dark:text-white">Antiaritmikler: </strong>
+                          <span className="text-slate-700 dark:text-slate-300">{alg.antiarrhythmics}</span>
+                        </div>
+                        <div className={`p-2.5 rounded-lg border mt-2 ${
+                          isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-white/90 border-slate-200 text-slate-700'
+                        }`}>
+                          <strong>Kritik Uyarı: </strong>{alg.criticalAlerts}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 3. Perioperatif 5H & 5T + Anesteziye Özgü Geri Döndürülebilir Nedenler Tablosu */}
+                <div className={`rounded-2xl border overflow-hidden ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Layers className="w-4 h-4 text-red-500" />
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                        Perioperatif Geri Döndürülebilir Nedenler (5H &amp; 5T + Anesteziye Özgü Nedenler)
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-400">PEA &amp; Dirençli Arrestte Hızla Tara</span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs min-w-[760px]">
+                      <thead>
+                        <tr className={`border-b text-[11px] uppercase font-bold ${
+                          isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+                        }`}>
+                          <th className="py-2.5 px-3.5 w-[16%]">Kategori</th>
+                          <th className="py-2.5 px-3.5 w-[24%]">Neden</th>
+                          <th className="py-2.5 px-3.5 w-[28%]">İntraoperatif İpuçları</th>
+                          <th className="py-2.5 px-3.5 w-[32%]">Acil Geri Çevirme / Tedavi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        {protocol.crisisManagement.aclsProtocols.perioperativeHAndTs.map((ht, idx) => (
+                          <tr key={idx} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50/70'}>
+                            <td className="py-3 px-3.5 align-top font-mono text-[10px] font-bold">
+                              <span className={`px-2 py-0.5 rounded ${
+                                ht.category.startsWith('5H')
+                                  ? 'bg-sky-500/15 text-sky-600 dark:text-sky-400'
+                                  : ht.category.startsWith('5T')
+                                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
+                                    : 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
+                              }`}>
+                                {ht.category}
+                              </span>
+                            </td>
+                            <td className="py-3 px-3.5 align-top font-bold text-slate-900 dark:text-white">
+                              {ht.cause}
+                            </td>
+                            <td className="py-3 px-3.5 align-top text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                              {ht.intraopClues}
+                            </td>
+                            <td className="py-3 px-3.5 align-top text-[11px] text-emerald-700 dark:text-emerald-300 font-medium leading-relaxed">
+                              {ht.immediateReversal}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 4. Ameliyathane İçi Özel ACLS Modifikasyonları */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+                }`}>
+                  <div className="flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                      {protocol.crisisManagement.aclsProtocols.operatingRoomModifications.title}
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                      <span className="font-bold text-cyan-600 dark:text-cyan-400 block mb-1">Anestezikler &amp; Ventilasyon Ayarı</span>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {protocol.crisisManagement.aclsProtocols.operatingRoomModifications.anestheticAndVentilation}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                      <span className="font-bold text-amber-600 dark:text-amber-400 block mb-1">Prone (Yüzüstü) Pozisyonda Ters KPR</span>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {protocol.crisisManagement.aclsProtocols.operatingRoomModifications.proneAndPositioningCpr}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-rose-950/20 border-rose-500/30' : 'bg-rose-50/70 border-rose-200'}`}>
+                      <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">Gebelik Arresti (4-5 Dakika Kuralı)</span>
+                      <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+                        {protocol.crisisManagement.aclsProtocols.operatingRoomModifications.maternalCardiacArrest}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-purple-950/20 border-purple-500/30' : 'bg-purple-50/70 border-purple-200'}`}>
+                      <span className="font-bold text-purple-600 dark:text-purple-400 block mb-1">ECPR (VA-ECMO) Aktivasyon Kriterleri</span>
+                      <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+                        {protocol.crisisManagement.aclsProtocols.operatingRoomModifications.ecprCriteria}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5. ROSC Sonrası Hedefler */}
+                <div className={`p-5 rounded-2xl border space-y-3 ${
+                  isDark ? 'bg-emerald-950/15 border-emerald-500/30' : 'bg-emerald-50/60 border-emerald-200 shadow-2xs'
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <h3 className="text-sm font-bold text-emerald-800 dark:text-emerald-200">
+                      ROSC (Spontan Dolaşımın Dönüşü) Sonrası Hedef Parametreler
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs">
+                    {protocol.crisisManagement.aclsProtocols.roscPostArrestTargets.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-3 rounded-xl border ${
+                          isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-emerald-200'
+                        }`}
+                      >
+                        <div className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                          {item.parameter}
+                        </div>
+                        <div className="font-bold text-xs text-slate-900 dark:text-white mt-0.5">
+                          {item.target}
+                        </div>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                          {item.rationale}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Cooling, Hyperkalemia and Arrhythmia Sub-Protocols (Only when available) */}
             {protocol.crisisManagement.coolingProtocol && protocol.crisisManagement.hyperkalemiaProtocol && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3772,6 +4164,65 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
           </div>
         )}
       </section>
+
+      {/* EKG Büyütme Modalı (Lightbox) */}
+      {selectedEcgItem && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-xs p-4"
+          onClick={() => setSelectedEcgItem(null)}
+        >
+          <div
+            className={`w-full max-w-3xl rounded-2xl border p-5 space-y-4 shadow-2xl ${
+              isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-200 text-slate-900'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm sm:text-base font-extrabold">{selectedEcgItem.rhythmName}</span>
+                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                  selectedEcgItem.shockable
+                    ? 'bg-red-500/15 text-red-600 dark:text-red-300 border border-red-500/30'
+                    : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                }`}>
+                  {selectedEcgItem.badge}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedEcgItem(null)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                  isDark
+                    ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    : 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                Kapat
+              </button>
+            </div>
+
+            <div className="rounded-xl bg-white border border-slate-300 p-3 sm:p-4">
+              <img
+                src={selectedEcgItem.imagePath}
+                alt={`${selectedEcgItem.rhythmName} Büyütülmüş EKG`}
+                referrerPolicy="no-referrer"
+                className="w-full max-h-64 object-contain mx-auto"
+              />
+            </div>
+
+            <div className="space-y-1.5 text-xs leading-relaxed">
+              <p>
+                <strong>EKG Bulgusu: </strong>
+                <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>{selectedEcgItem.ecgFeatures}</span>
+              </p>
+              <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>{selectedEcgItem.caption}</p>
+              <p className="text-[11px] font-mono text-slate-400 pt-1">
+                Kaynak: {selectedEcgItem.sourceLicense}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

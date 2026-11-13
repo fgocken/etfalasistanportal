@@ -59,7 +59,26 @@ export const craniotomyAneurysm: ProcedureDefinition = {
     alternative: [
       'Opioid Tabanlı Yüksek Doz Dengeli Anestezi (Fentanil/Süfentanil + Düşük MAC İnhalasyon): Ciddi hemodinamik instabilite veya sol ventrikül yetmezliği olan SAK olgularında kardiyak stabiliteyi korumak için'
     ],
-    notes: 'Anevrizma cerrahisinde anestezi yönetiminin 3 temel hedefi: (1) Klip konulana dek Transmural Basınç Gradyanını (TMP = MAP - ICP) sabit tutarak re-rüptürü önlemek (ani hipertansiyondan kesin kaçınma), (2) Mikronöroşirürjikal manevralar için ideal beyin gevşemesini sağlamak (mannitol, hipertonik salin, hafif hiperventilasyon, BOS drenajı), (3) Geçici klipleme veya rüptür durumunda nöroproteksiyon ve anlık kardiyovasküler manevraları kusursuz yönetmektir.'
+    clinicalRationale: 'Propofol ve Remifentanil bazlı TIVA (veya <0.5 MAC Sevofluran desteği), serebral metabolik hızı (CMRO2) ve serebral kan akımını (CBF) azaltarak cerrahi için ideal beyin gevşemesini sağlarken İONM (MEP/SSEP) sinyallerini korur. Laringoskopi ve Mayfield çivisi sırasındaki hipertansiyon pikini baskılamak ve baş-mikroskop manipülasyonlarında tüp katlanmasını (kinking) önlemek için spiral telli (armored) orotrakeal entübasyon altın standarttır.',
+    notes: 'ANEVRİZMA CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ: (1) TRANSMURAL BASINÇ GRADYANI (TMP) KONTROLÜ — Klip konulana dek TMP = MAP - ICP sabit tutularak re-rüptür önlenir; (2) MİKROCERRAHİ İÇİN İDEAL BEYİN GEVŞEMESİ (SLACK BRAIN) — Mannitol, hipertonik salin, hafif hiperventilasyon ve BOS drenajı; (3) GEÇİCİ KLİPLEME VE RÜPTÜR YÖNETİMİ — Nöroproteksiyon, geçici klipte MAP artırımı ve gerektiğinde Adenozin ile geçici asistoli.',
+    rulesTitle: 'ANEVRİZMA CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'TRANSMURAL BASINÇ GRADYANI (TMP) KONTROLÜ VE RE-RÜPTÜRÜ ÖNLEME',
+        content: 'Anevrizma kliplenene dek duvar gerilimini belirleyen Transmural Basınç Gradyanı (TMP = MAP - ICP) sabit tutulmalıdır. Laringoskopi, Mayfield çivi yerleşimi ve dural açılıştaki ani hipertansiyon pikleri re-rüptüre; ani ICP düşüşü (hızlı BOS drenajı) ise aynı şekilde rüptüre neden olur.'
+      },
+      {
+        number: 2,
+        title: 'MİKROCERRAHİ İÇİN OPTİMAL BEYİN GEVŞEMESİ (SLACK BRAIN)',
+        content: 'Retraktör basısına bağlı serebral iskemiyi önlemek için Mannitol (0.5-1 g/kg) veya %3 Hipertonik Salin, başın 15-30° elevasyonu, jugüler venöz dönüşün serbest bırakılması, hafif kontrollü hiperventilasyon (PaCO2 32-35 mmHg) ve TIVA ile optimal beyin gevşekliği sağlanmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'GEÇİCİ KLİPLEME HİPERTANSİYONU VE RÜPTÜRDE ADENOZİN ASİSTOLİSİ',
+        content: 'Ana arter geçici kliplendiğinde kollateral kan akımını korumak için MAP bazale göre %10-20 yükseltilip iskemi süresi sesli sayılır. Kontrolsüz intraoperatif rüptür veya derin kliplemede cerrah talep ederse 30-45 sn geçici asistoli için IV Adenozin (0.3-0.4 mg/kg hızlı bolus) uygulanır.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

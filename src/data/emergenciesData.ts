@@ -24,7 +24,7 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'generic';
+  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'acls' | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -48,6 +48,15 @@ export interface EmergencyProtocol {
       description: string;
     }[];
     larachInterpretation: string;
+    rhythmEcgGallery?: {
+      rhythmName: string;
+      badge: string;
+      shockable: boolean;
+      imagePath: string;
+      caption: string;
+      ecgFeatures: string;
+      sourceLicense: string;
+    }[];
     differentialDiagnosis: {
       condition: string;
       differentiatingFactors: string;
@@ -340,6 +349,42 @@ export interface EmergencyProtocol {
         sugammadexRescueInRocuronium: string;
         allergyClinicReferral: string;
       };
+    };
+
+    // Perioperatif Kardiyak Arrest & ACLS acil protokolleri
+    aclsProtocols?: {
+      cprQualityTargets: {
+        metric: string;
+        target: string;
+        clinicalNote: string;
+      }[];
+      rhythmAlgorithms: {
+        pathway: 'Shockable (VF / Nabızsız VT)' | 'Non-Shockable (Asistoli / PEA)';
+        badge: string;
+        initialAction: string;
+        defibrillationDose: string;
+        epinephrineTiming: string;
+        antiarrhythmics: string;
+        criticalAlerts: string;
+      }[];
+      perioperativeHAndTs: {
+        category: '5H (Fizyolojik)' | '5T (Mekanik / Toksik)' | 'Anesteziye Özgü';
+        cause: string;
+        intraopClues: string;
+        immediateReversal: string;
+      }[];
+      operatingRoomModifications: {
+        title: string;
+        anestheticAndVentilation: string;
+        proneAndPositioningCpr: string;
+        maternalCardiacArrest: string;
+        ecprCriteria: string;
+      };
+      roscPostArrestTargets: {
+        parameter: string;
+        target: string;
+        rationale: string;
+      }[];
     };
   };
 
@@ -4546,6 +4591,531 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         journal: 'World Allergy Organization Journal. 2020;13(10):100472.',
         year: '2020',
         relevance: 'WAO küresel anafilaksi kılavuzu; epinefrin erken kullanımı, pozisyonlandırma ve triptaz tanı standartları.'
+      }
+    ]
+  },
+
+  'acls': {
+    id: 'acls',
+    // 1) Başlık
+    title: 'Perioperatif Kardiyak Arrest & ACLS Protokolü',
+    subTitle: 'Ameliyathane İçi İleri Yaşam Desteği (AHA / ERC / ASA) & Geri Döndürülebilir Nedenler Yönetimi',
+    codeColor: 'red',
+    severityBadge: 'KOD MAVİ / KIRMIZI · ANINDA KPR VE DEFİBRİLASYON',
+    keyCallout: 'Tüm anestezikleri (volatil/propofol) derhal kapatın, %100 O2 verin (hiperventilasyondan kaçının: 10 soluk/dk), yüksek kaliteli göğüs kompresyonuna (<10 sn kesinti) başlayın ve şoklanabilir ritimde (VF/pVT) gecikmeden 200 J bifazik defibrilasyon uygulayın!',
+    quickCalculatorType: 'acls',
+
+    // 2) Tanımlama ve Giriş
+    introduction: {
+      definition: 'Perioperatif kardiyak arrest; anestezi indüksiyonu, idamesi, cerrahi girişim veya erken derlenme (PACU) sürecinde gelişen, ani mekanik kalp aktivitesi ve sistemik dolaşım durmasıdır. Genel toplum arrestlerinden farklı olarak ameliyathanede tanıklıdır, hasta monitörizedir ve çoğu vaka hipoksi, hipovolemi, vagal refleks, ilaç toksisitesi veya emboli gibi hızla geri döndürülebilir iyatrojenik nedenlere bağlıdır.',
+      epidemiology: 'Non-kardiyak cerrahilerde perioperatif kardiyak arrest insidansı 10.000 anestezide yaklaşık 4 - 7 olgu arasındadır (pediatride ~1.4 - 2.9 / 10.000; ASA III-V ve acil cerrahilerde 10 kat daha sıktır). Ameliyathane içi arrestlerde Non-Şoklanabilir ritimler (PEA ve Asistoli) olguların ~%70-80ini oluştururken, VF/pVT yaklaşık %20-30 oranında görülür.',
+      triggers: [
+        'Masif Cerrahi Kanama & Gizli Hipovolemi (En sık perioperatif PEA/arrest nedeni)',
+        'Hava Yolu Kaybı / Hipoksi / Özofageal Entübasyon / CICO veya Oto-PEEP',
+        'Anestezi İlaçlarına Bağlı Kardiyovasküler Kollaps (Propofol/volatil doz aşımı, yüksek spinal/epidural blok)',
+        'Anafilaktik Şok (Rokuronyum, Sefazolin, Klorheksidin) veya LAST (Bupivakain/Lokal anestezik toksisitesi)',
+        'Majör Embolik Olaylar (Pulmoner Emboli, Venöz/Paradoksal Hava Embolisi, Kemik Çimentosu Sendromu)',
+        'Şiddetli Vagal Refleks (Periton çekilmesi, okülokardiyak refleks, pnömoperiton insüflasyonu, laringoskopi)',
+        'Elektrolit Fırtınaları (Masif transfüzyon veya süksinilkolin sonrası Hiperkalemi; Hipokalsemi)'
+      ],
+      safeAgents: [
+        'Adrenalin (Epinefrin): 1 mg IV/IO (3-5 dk arayla; şoklanamaz ritimde İLK ANDA, şoklanabilirde 2. şok sonrası)',
+        'Amiodaron: 300 mg IV/IO (3. şok sonrası refrakter VF/pVT); 2. doz 150 mg IV/IO',
+        'Lidokain (Amiodaron yoksa/alternatif): 1.0 - 1.5 mg/kg IV/IO, ardından 0.5 - 0.75 mg/kg',
+        'Kalsiyum Klorür (%10 CaCl2 10-20 mL) veya Kalsiyum Glukonat (Hiperkalemi / Masif Transfüzyon Hipokalsemisi)',
+        'Sodyum Bikarbonat (1 mEq/kg IV — yalnızca hiperkalemi, TCA/sodyum kanal toksisitesi veya ağır metabolik asidozda)',
+        'Dengeli Kristaloid / Kan Ürünleri (Hemorajik/Hipovolemik PEAda basınçlı infüzyon)'
+      ],
+      mortalityStats: 'Hastane dışı arrestlerin aksine tanıklı ve tam monitörize ortam avantajı sayesinde ameliyathane içi kardiyak arrestlerde ROSC (spontan dolaşımın geri dönüşü) oranı %50-70, taburculuk sağkalımı ise %30-50 civarındadır. Sağkalımı belirleyen temel faktörler 2 dakika içinde defibrilasyon, kesintisiz KPR ve altta yatan H/T nedeninin düzeltilmesidir.',
+      clinicalUrgency: 'Ameliyathanede invaziv arter trasesinin düzleşmesi, EtCO2 dalgasının ani çöküşü (<10 mmHg) veya karotis/femoral nabzın 10 saniye içinde alınamaması durumunda tereddütsüz KPR başlatılmalıdır. Şüphe varsa "nabız ararken vakit kaybetme, basıya başla" kuralı geçerlidir.'
+    },
+
+    // 3) Tanı
+    diagnosis: {
+      overview: 'Ameliyathane hastasında EKG monitörü sıklıkla yanıltıcı "sahte sinüs" ritmi (Nabızsız Elektriksel Aktivite - PEA) gösterebilir. Bu nedenle tanı EKG ile değil, mekanik dolaşımın durduğunu gösteren üçlü doğrulama (Arter trasesi düzleşmesi + EtCO2 çöküşü + 10 saniyelik santral nabız yokluğu) ile konur.',
+      clinicalCriteria: [
+        'Santral nabzın (Karotis veya Femoral) en fazla 10 saniye içinde kesin olarak palpe edilememesi',
+        'İnvaziv arter kateteri varsa arteriyel pulsatil dalga formunun tamamen düzleşmesi (MAP < 20-30 mmHg)',
+        'Entübe hastada EtCO2 değerinin veya kapnografi dalgasının ani olarak <10 mmHg altına çökmesi (devre ayrılması ekarte edildikten sonra)',
+        'SpO2 pletismografik nabız dalgasının tamamen kaybolması',
+        'EKG monitöründe Ventriküler Fibrilasyon (VF), Nabızsız Ventriküler Taşikardi (pVT), Asistoli veya organize ritme rağmen mekanik nabızsızlık (PEA)'
+      ],
+      gradingScaleTitle: 'Perioperatif Arrest Ritim Sınıflandırması ve İlk Tedavi Yönelimi',
+      gradingScaleSource: 'AHA 2020/2025 & ERC Perioperative Cardiac Arrest Guidelines',
+      larachScale: [
+        {
+          category: 'Ventriküler Fibrilasyon (VF)',
+          points: 'ŞOKLANABİLİR',
+          description: 'Düzensiz, kaotik, QRS kompleksi seçilemeyen dalga formu. En sık koroner iskemi, elektrolit bozukluğu (hiperkalemi/hipokalemi), ilaç proaritmisinden kaynaklanır. DERHAL 200 J BIFAZİK DEFİBRİLASYON!'
+        },
+        {
+          category: 'Nabızsız Ventriküler Taşikardi (pVT)',
+          points: 'ŞOKLANABİLİR',
+          description: 'Geniş QRSli, hızlı (>150/dk), düzenli veya polimorfik (Torsades de Pointes) ritim ve eşlik eden nabızsızlık. Monomorfikse DERHAL DEFİBRİLASYON; Torsades ise ek olarak 2 g IV Magnezyum Sülfat.'
+        },
+        {
+          category: 'Nabızsız Elektriksel Aktivite (PEA)',
+          points: 'ŞOKLANAMAZ',
+          description: 'EKGde organize elektriksel aktivite (dar/geniş kompleks) görülmesine rağmen arteriyel nabız veya mekanik kalp atımı yoktur. Ameliyathanedeki en sık arrest ritmidir; mutlaka geri döndürülebilir 5H-5T (hipovolemi, tansiyon pnömotoraks, tamponad, PE) aranmalıdır!'
+        },
+        {
+          category: 'Asistoli / İleri Agonal Ritim',
+          points: 'ŞOKLANAMAZ',
+          description: 'Düz EKG çizgisi (mutlaka kablo/elektrot bağlantısını ve EKG kazancını iki derivasyonda teyit edin; ince VF ile karıştırılmamalıdır). Şok verilmez; kesintisiz KPR + hemen 1 mg IV Adrenalin + nedenin düzeltilmesi.'
+        }
+      ],
+      larachInterpretation: 'Şoklanabilir ritimlerde (VF/pVT) her 1 dakikalık defibrilasyon gecikmesi sağkalımı %7-10 azaltır. Şoklanamaz ritimlerde (PEA/Asistoli) ise şok KESİNLİKLE verilmez; temel kurtarıcı yüksek kaliteli KPR, erken Adrenalin (1 mg IV) ve etyolojik nedenin (kanama, pnömotoraks, anafilaksi, yüksek spinal vb.) hızla tedavisidir.',
+      rhythmEcgGallery: [
+        {
+          rhythmName: 'Ventriküler Fibrilasyon (VF)',
+          badge: 'ŞOKLANABİLİR · 200 J BİFAZİK',
+          shockable: true,
+          imagePath: '/ecg/vf_real.jpg',
+          ecgFeatures: 'Kaotik, düzensiz, P dalgası ve QRS kompleksi seçilemeyen fibrilasyon dalgaları (HR: ---).',
+          caption: 'Kaba veya ince amplitüdlü olabilir. Ritim görülür görülmez gecikmeden defibrilasyon uygulanır; şok sonrası nabız beklemeden 2 dk KPRye geçilir.',
+          sourceLicense: 'Wikimedia Commons · Derivasyon II · Public Domain'
+        },
+        {
+          rhythmName: 'Nabızsız Ventriküler Taşikardi (pVT)',
+          badge: 'ŞOKLANABİLİR · 200 J BİFAZİK',
+          shockable: true,
+          imagePath: '/ecg/vt_real.jpg',
+          ecgFeatures: 'Geniş QRS kompleksli (>120 ms), hızlı (>150/dk), düzenli monomorfik (veya Torsades de Pointes) taşikardi.',
+          caption: 'Monomorfik pVTde DERHAL senkronize olmayan yüksek enerjili defibrilasyon (200 J bifazik) yapılır. Polimorfik VT (Torsades) ise ek olarak 2 g IV MgSO4 verilir.',
+          sourceLicense: 'Wikimedia Commons · Derivasyon II · Public Domain'
+        },
+        {
+          rhythmName: 'Nabızsız Elektriksel Aktivite (PEA)',
+          badge: 'ŞOKLANAMAZ · NABIZ YOK / ARTER DÜZ',
+          shockable: false,
+          imagePath: '/ecg/pea_real.jpg',
+          ecgFeatures: 'EKGde organize elektriksel ritim (sinüs/supraventriküler veya geniş kompleks) görülür ANCAK mekanik nabız ve arter trasesi YOKTUR.',
+          caption: 'Ameliyathanede en sık görülen arrest formudur ("Sahte Sinüs" tuzağı!). ŞOK VERİLMEZ; derhal KPR + erken Adrenalin 1 mg IV + 5H-5T (kanama, pnömotoraks, tamponad, PE) tedavisi!',
+          sourceLicense: 'Wikimedia Commons · Derivasyon II · Public Domain'
+        },
+        {
+          rhythmName: 'Asistoli / İleri Agonal Ritim',
+          badge: 'ŞOKLANAMAZ · KPR + ERKEN ADRENALİN',
+          shockable: false,
+          imagePath: '/ecg/asystole_real.jpg',
+          ecgFeatures: 'Ventriküler depolarizasyon yokluğu ve izoelektrik düz çizgi (veya tek tük geniş, düşük hızlı agonal kompleksler).',
+          caption: 'Düz çizgi görüldüğünde 2 farklı derivasyonda kablo bağlantısını ve EKG kazancını (gain) kontrol ederek ince VFyi ekarte edin. Şok kontrendikedir; kesintisiz KPR + Adrenalin 1 mg IV!',
+          sourceLicense: 'Wikimedia Commons · Derivasyon II · Public Domain'
+        }
+      ],
+      differentialDiagnosis: [
+        {
+          condition: 'EKG Elektrot / Kablo Ayrılması veya Artefakt',
+          differentiatingFactors: 'Hasta uyanıksa konuşur veya EtCO2 ve SpO2 pletismograf dalgası tamamen normaldir. Düz EKG görüldüğünde önce kapnografi ve SpO2 kontrol edilmelidir.'
+        },
+        {
+          condition: 'Solunum Devresi Ayrılması veya Özofageal Entübasyon',
+          differentiatingFactors: 'EtCO2 sıfıra düşer ancak başlangıçta nabız ve arter basıncı normaldir; düzeltilmezse dakikalar içinde hipoksik PEA/asistoliye ilerler.'
+        },
+        {
+          condition: 'İnvaziv Arter Hattında Sönümlenme (Damping) / Pıhtı',
+          differentiatingFactors: 'Arter trasesi düzleşir ancak EKG, EtCO2 ve SpO2 dalgası normaldir; karotis nabzı palpe edilir.'
+        },
+        {
+          condition: 'İnce Ventriküler Fibrilasyon (Fine VF) vs Asistoli',
+          differentiatingFactors: 'Düşük amplitüdlü VF asistoli sanılabilir. EKG amplitüd (gain) artırılmalı ve iki farklı derivasyondan kontrol edilmelidir; şüphe varsa asistoli gibi KPR + Adrenalin ile perfüzyon artırılır.'
+        }
+      ]
+    },
+
+    // 4) Acile Spesifik Akut Yönetimi - Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'Ameliyathane İçi KOD MAVİ / EKİP ÇAĞRISI: Defibrilatörü, Acil Arabasını ve varsa POCUS/TEE probunu anında odaya isteyin; cerraha işlemi durdurmasını ve gerekirse kompresyona uygun pozisyona almasını söyleyin!',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'Tanı Koy, Yardım Çağır ve Cerrahiyi Durdur',
+          action: 'Nabız/Arter/EtCO2 kaybını (<10 sn) doğrula. Ekibi ve defibrilatörü çağır. Cerraha majör kanama varsa geçici kompresyon/klemp koymasını, batın/laparoskopideyse PNÖMOPERİTONU (CO2 İNSÜFLASYONUNU) DERHAL BOŞALTMASINI söyleyin.',
+          criticalNote: 'Pnömoperiton karın içi basıncı artırarak venöz dönüşü sıfırlar; laparoskopik arrestte gaz derhal boşaltılmadan KPR efektif olamaz!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'Anestezikleri Kapat & %100 Oksijenle Kontrollü Ventile Et',
+          action: 'Tüm volatil ajanları (Sevofluran/Desfluran/İzofluran), N2O ve propofol/remifentanil infüzyonlarını DERHAL kapatın. Taze gaz akımını 10-15 L/dk %100 O2 yapın. Entübeyse solunum hızını 10/dk (6 sn’de 1 soluk), tidal volümü 6-7 mL/kg ayarlayın.',
+          criticalNote: 'Hiperventilasyon KESİNLİKLE YASAKTIR! Hızlı/derin solutma intratorasik basıncı artırıp kalbe venöz dönüşü keserek serebral ve koroner perfüzyonu öldürür.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'Yüksek Kaliteli Göğüs Kompresyonuna Başla (C-A-B)',
+          action: 'Sert zeminde (ameliyat masası sırt tahtası altında kilitli, ayak seviyesi sabit), 100 - 120 bası/dk hızında, 5 - 6 cm derinlikte, tam göğüs geri çekilmesine (recoil) izin vererek ve kesintileri <10 saniye tutarak kompresyon yapın. Her 2 dakikada bir kompresör değiştirin.',
+          criticalNote: 'Eğer hasta Prone (yüzüstü) pozisyondaysa ve supin çevirmek >1-2 dk gecikecekse derhal skapulalar arası TERS (Posterior) KPR başlatın ve supin hazırlığı yapın.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'Ritmi Analiz Et: Şoklanabilir (VF/pVT) vs Şoklanamaz (PEA/Asistoli)',
+          action: 'Defibrilatör pedleri/kaşıkları gelir gelmez ritim kontrolü (<10 sn) yapın. VF veya Nabızsız VT ise DERHAL 150-200 J Bifazik (monofazik 360 J) ŞOK verin ve nabız bakmadan anında 2 dakika KPRye devam edin. PEA veya Asistoli ise ŞOK VERMEYİN, KPRye devam edin.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 5,
+          title: 'Vazopresör: Adrenalin 1 mg IV/IO (Zamanlama Farkına Dikkat!)',
+          action: 'Şoklanamaz ritimde (PEA/Asistoli): İLK ANDA (0. dakikada) Adrenalin 1 mg IV/IO puşe edin. Şoklanabilir ritimde (VF/pVT): 2. şoktan hemen sonra Adrenalin 1 mg IV/IO puşe edin. Her iki yolda da 3 - 5 dakikada bir tekrarlayın (20 mL SF flush + ekstremite elevasyonu).',
+          criticalNote: 'İSTİSNALAR: Lokal Anestezik Toksisitesinde (LAST) 1 mg yerine ≤1 mcg/kg (maks 50 mcg) düşük doz verilir! Kalp cerrahisi sonrası tamponad/arrestte ise erken sternotomi önceliklidir.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 6,
+          title: 'Antiaritmik Tedavi (Refrakter VF / pVT)',
+          action: '3. şoka rağmen devam eden VF/pVTde Amiodaron 300 mg IV/IO bolus (100 mL %5 Dekstroz değil, arrestte doğrudan/hızlı puşe) uygulayın. Direnç sürerse 5. şok sonrası 2. doz 150 mg IV verin. Alternatif olarak Lidokain 1 - 1.5 mg/kg (2. doz 0.5-0.75 mg/kg) kullanılabilir.',
+          criticalNote: 'Polimorfik VT (Torsades de Pointes) ve hipomagnezemide ilk tercih Magnezyum Sülfat 2 g IV (1-2 dakikada) bolusudur.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 7,
+          title: 'Fizyolojik KPR Kalitesi Monitörizasyonu (EtCO2 & Arter)',
+          action: 'Ameliyathanedeki mevcut monitörleri KPRyi yönlendirmek için kullanın: EtCO2 < 10 mmHg ise kompresyon derinliğini/hızını artırın veya hipovolemiyi/pnömotoraksı düzeltin. İnvaziv arter diyastolik basıncı > 20-25 mmHg hedeflenir.',
+          criticalNote: 'KPR sırasında EtCO2nin aniden 35-40 mmHg üzerine sıçraması ROSCun (spontan dolaşımın dönüşü) en erken ve en güvenilir göstergesidir!',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 8,
+          title: 'Perioperatif 5H & 5T + Anesteziye Özgü Nedenleri Tedavi Et',
+          action: 'PEA ve dirençli arrestte eş zamanlı etyoloji taraması yapın: Yatak başı POCUS (pnömotoraks, tamponad, boş ventrikül, sağ kalp dilatasyonu) çekin; kan gazı (K+, Ca++, Hgb, pH) alın. Kanama varsa masif transfüzyon, yüksek spinal ise pozisyon+adrenalin, LAST ise %20 Lipid, PE ise Alteplase başlatın.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 9,
+          title: 'Gebelikte Perimortem Sezaryen & ECPR (VA-ECMO) Kararı',
+          action: '≥20 haftalık gebede sol uterin deplasmana rağmen 4. dakikada ROSC sağlanamazsa 5. dakikaya kadar bebek ameliyathanede yatak başı Perimortem Sezaryen ile çıkarılmalıdır. Genç ve geri döndürülebilir nedeni olan refrakter arrestte 10-15. dakikada VA-ECMO (ECPR) ekibini aktive edin.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 10,
+          title: 'ROSC Sonrası Stabilizasyon (Post-Arrest Bakım)',
+          action: 'Nabız ve spontan dolaşım döndüğünde FiO2yi SpO2 %92 - %98 tutacak şekilde titre edin (hiperoksiden kaçının!), PaCO2 35 - 45 mmHg ayarlayın, Noradrenalin ile MAP ≥ 65 mmHg sağlayın, 12 derivasyonlu EKG çekip koroner iskemi/POCUS değerlendirmesi yapın ve YBÜye transfer edin.',
+          priority: 'HIGH'
+        }
+      ],
+
+      aclsProtocols: {
+        cprQualityTargets: [
+          {
+            metric: 'Kompresyon Hızı & Derinliği',
+            target: '100 - 120 / dk · 5 - 6 cm',
+            clinicalNote: 'Her basıda tam göğüs geri çekilmesine (recoil) izin verin; göğüs üstüne yaslanmayın.'
+          },
+          {
+            metric: 'Göğüs Kompresyon Oranı (CCF)',
+            target: '≥ %80 (Kesinti < 10 sn)',
+            clinicalNote: 'Ritim analizi, entübasyon veya şok öncesi duraklamalar 10 saniyeyi asla geçmemelidir.'
+          },
+          {
+            metric: 'Ventilasyon (Entübe Hasta)',
+            target: '10 soluk / dk (6 sn’de 1)',
+            clinicalNote: 'Asenkron 10/dk; hiperventilasyon intratorasik basıncı artırıp venöz dönüşü yok eder!'
+          },
+          {
+            metric: 'EtCO2 & Arteriyel Diyastolik',
+            target: 'EtCO2 ≥ 10-20 mmHg · DBP > 20-25',
+            clinicalNote: 'EtCO2 < 10 mmHg kötü KPR veya masif hipovolemidir; ani > 35-40 mmHg sıçraması ROSC göstergesidir.'
+          }
+        ],
+
+        rhythmAlgorithms: [
+          {
+            pathway: 'Shockable (VF / Nabızsız VT)',
+            badge: 'DEFİBRİLASYON ÖNCELİKLİ',
+            initialAction: 'Ritim tanınır tanınmaz DERHAL şok verin; şok sonrası nabız beklemeden 2 dakika KPR yapın.',
+            defibrillationDose: 'Bifazik 150 - 200 J (üretici önerisi, bilinmiyorsa maks 200 J) · Monofazik 360 J · Pediatrik 2 → 4 J/kg (maks 10 J/kg).',
+            epinephrineTiming: '2. şoktan hemen sonra Adrenalin 1 mg IV/IO başlanır, her 3 - 5 dakikada bir tekrarlanır (Pediatrik: 0.01 mg/kg = 10 mcg/kg).',
+            antiarrhythmics: '3. şok sonrası Amiodaron 300 mg IV/IO; 5. şok sonrası 150 mg IV/IO (Pediatrik: 5 mg/kg). Alternatif: Lidokain 1-1.5 mg/kg IV. Torsades: MgSO4 2 g IV.',
+            criticalAlerts: 'Şok verirken O2 devresini hastadan uzaklaştırın veya kapalı devre tutun (kıvılcım/yangın riski!). İlaçları 20 mL SF ile yıkayın.'
+          },
+          {
+            pathway: 'Non-Shockable (Asistoli / PEA)',
+            badge: 'ERKEN ADRENALİN + 5H/5T',
+            initialAction: 'ŞOK VERİLMEZ! Derhal 2 dakika yüksek kaliteli KPR + geri döndürülebilir neden (POCUS + kan gazı) taraması başlatın.',
+            defibrillationDose: 'Kontrendikedir (Defibrilasyon uygulanmaz; asistoli görüldüğünde ince VFyi ekarte etmek için EKG kazancını/kabloları kontrol edin).',
+            epinephrineTiming: 'Arrest tanınır tanınmaz İLK ANDA (0. dk) Adrenalin 1 mg IV/IO verilir, her 3 - 5 dakikada bir tekrarlanır.',
+            antiarrhythmics: 'Rutin antiaritmik (Amiodaron/Lidokain) ve rutin Atropin önerilmez; ancak şiddetli vagal/bradikardik arrest geçişinde atropin/pacing düşünülebilir.',
+            criticalAlerts: 'Ameliyathanede en sık PEA görülür: İlk olarak HİPOVOLEMİ (kanama), TANSİYON PNÖMOTORAKS, KARDİYAK TAMPONAD, PE ve ANAFİLAKSİ/LAST dışlanmalıdır!'
+          }
+        ],
+
+        perioperativeHAndTs: [
+          {
+            category: '5H (Fizyolojik)',
+            cause: 'Hipovolemi (Masif Hemoraji / Venöz Göllenme)',
+            intraopClues: 'Boş kalp (POCUS), düşük EtCO2, cerrahi alanda aktif kanama, yüksek laktat',
+            immediateReversal: 'Cerrahi kompresyon/klemp, basınçlı kristaloid + Masif Transfüzyon (1:1:1 ES:TDP:PLT) + TXA 1 g IV.'
+          },
+          {
+            category: '5H (Fizyolojik)',
+            cause: 'Hipoksi (Devre Ayrılması / CICO / Özofageal ETT)',
+            intraopClues: 'Düşük SpO2, yüksek Ppeak, solunum seslerinin yokluğu, EtCO2 sıfırlanması',
+            immediateReversal: 'El ambu + %100 O2 kontrolü, ETT yerini laringoskopi/bronkoskopi ile teyit et, tıkanmışsa tüpü değiştir.'
+          },
+          {
+            category: '5H (Fizyolojik)',
+            cause: 'Hiperkalemi / Hipokalsemi / Asidoz (H+)',
+            intraopClues: 'Masif transfüzyon (sitrat → düşük Ca++), süksinilkolin + yanık/denervasyon, KBY, sivri T/geniş QRS',
+            immediateReversal: '%10 Kalsiyum Klorür 10-20 mL IV (veya Ca Glukonat 30 mL), İnsülin 10 Ü + Dekstroz, NaHCO3 1 mEq/kg IV.'
+          },
+          {
+            category: '5H (Fizyolojik)',
+            cause: 'Hipotermi (Kaza / Uzun Açık Cerrahi)',
+            intraopClues: 'Özofageal ısı <32-34°C, Osborn J dalgası, defibrilasyona/ilaçlara direnç',
+            immediateReversal: 'Aktif iç/dış ısıtma, ısıtılmış IV sıvılar; <30°C ise ilaç aralıklarını uzat, 30-32°C üstüne ısıtana kadar KPR sürdür.'
+          },
+          {
+            category: '5T (Mekanik / Toksik)',
+            cause: 'Tansiyon Pnömotoraks',
+            intraopClues: 'Tek taraflı solunum sesi kaybı, ani Ppeak artışı, boyun venöz dolgunluğu, trakeal deviasyon',
+            immediateReversal: 'Derhal İğne Dekompresyonu (2. İKA midklaviküler veya 4-5. İKA ön aksiller) → ardından Tüp Torakostomi!'
+          },
+          {
+            category: '5T (Mekanik / Toksik)',
+            cause: 'Kardiyak Tamponad',
+            intraopClues: 'Toraks/kalp cerrahisi veya santral kateter perforasyonu, POCUSda perikardiyal efüzyon/RV kollapsı',
+            immediateReversal: 'Acil Perikardiyosentez (POCUS rehberliğinde) veya acil cerrahi resternotomi/perikardiyotomi.'
+          },
+          {
+            category: '5T (Mekanik / Toksik)',
+            cause: 'Toksinler (LAST / Anafilaksi / Anestezik Doz Aşımı / MH)',
+            intraopClues: 'Blok sonrası aritmi (LAST), ani bronkospazm+şok (Anafilaksi), rijidite+hiperkapni (MH)',
+            immediateReversal: 'LAST: %20 Lipid (1.5 mL/kg) + düşük doz Epi! Anafilaksi: Adrenalin + Kristaloid! MH: Dantrolen 2.5 mg/kg! İlaç aşırı dozu: İlaçları kes.'
+          },
+          {
+            category: '5T (Mekanik / Toksik)',
+            cause: 'Tromboz - Pulmoner Emboli (PE) veya Koroner (MI)',
+            intraopClues: 'Ani EtCO2 çöküşü + POCUSda RV dilatasyonu (PE) veya ST elevasyonu (Kounis/MI)',
+            immediateReversal: 'Masif PE: Alteplase 50 mg IV bolus + 15 dk daha KPR veya VA-ECMO. MI: PCI / Acil anjiyo aktivasyonu.'
+          },
+          {
+            category: 'Anesteziye Özgü',
+            cause: 'Yüksek Spinal / Total Nöroaksiyel Blok & Aşırı Vagal Refleks',
+            intraopClues: 'Spinal/epidural sonrası ani bradikardi→asistoli, üst ekstremite güçsüzlüğü, laparoskopi insüflasyonu',
+            immediateReversal: 'Adrenalin/Efedrin + Atropin (vagalde) + Hızlı IV sıvı + Entübasyon/ventilasyon; pnömoperitonu boşalt!'
+          },
+          {
+            category: 'Anesteziye Özgü',
+            cause: 'Oto-PEEP (Dinamik Hiperinflasyon) & Hava Embolisi',
+            intraopClues: 'KOAH/astımda yüksek Ppeak sonrası gelişen PEA; oturur kraniyotomide ani EtCO2 düşüşü',
+            immediateReversal: 'Oto-PEEPte devreyi 10-15 sn ayırıp göğsü boşalt! Hava embolisinde N2O kapat, cerrahi sahayı yıka, Durant pozisyonu ver.'
+          }
+        ],
+
+        operatingRoomModifications: {
+          title: 'Ameliyathane İçi Özel ACLS Modifikasyonları (Pozisyon, Pnömoperiton, Gebelik, ECPR)',
+          anestheticAndVentilation: 'Tüm volatil anestezikler (Sevofluran/Desfluran) ve propofol/opioid infüzyonları derhal kapatılır; devre %100 O2 ile yıkanır. Entübe hastada ventilatör asenkron modda 10 soluk/dk, 6-7 mL/kg TV, PEEP 0-5 cmH2O ayarlanır (kompresyonla eşzamanlı tetikleme kapalı olmalıdır).',
+          proneAndPositioningCpr: 'Prone (yüzüstü) omurga/beyin cerrahisinde hasta steril alan/pinler nedeniyle hemen çevrilemiyorsa vakit kaybetmeden TERS (Posterior) KPR başlatılır: Eller orta torasik omurga (T7-T10) üzerinde, ellerin altında sternuma destek yastığı konularak bastırılır; defibrilasyon pedleri bi-aksiller veya sağ skapula altı – sol mid-aksiller yapıştırılır.',
+          maternalCardiacArrest: '≥20 haftalık (fundus göbek hizasında veya üstünde) gebede kompresyonlarla eşzamanlı olarak manuel Sol Uterin Deplasman (LUD) yapılır (aortokaval basıyı kaldırır). İlaç dozları değişmez; ancak 4. dakikada ROSC elde edilemezse 5. dakikada anne ve fetüsün sağkalımı için yatak başı PERİMORTEM SEZARYEN (Resuscitative Hysterotomy) başlatılır!',
+          ecprCriteria: 'Ekstrakorporeal KPR (VA-ECMO): Tanıklı ameliyathane içi arrestte, genç/düşük frailtili hastada ve geri döndürülebilir neden (masif PE, LAST, refrakter VT/VF, hipotermi, kardiyak cerrahi) varlığında 10-15 dakika içinde ROSC sağlanamıyorsa erken aktive edilmelidir.'
+        },
+
+        roscPostArrestTargets: [
+          {
+            parameter: 'Oksijenasyon (SpO2 / PaO2)',
+            target: 'SpO2 %92 – %98 (PaO2 75–100 mmHg)',
+            rationale: 'ROSC sonrası %100 FiO2 ile hiperoksi serbest oksijen radikalleri oluşturarak beyin hasarını artırır; FiO2 hızla azaltılmalıdır.'
+          },
+          {
+            parameter: 'Ventilasyon (PaCO2)',
+            target: 'Normokapni: PaCO2 35 – 45 mmHg',
+            rationale: 'Hipokapni serebral vazokonstriksiyon yaparak iskemiyi artırır; hiperkapni ise KİBAS ve asidozu kötüleştirir.'
+          },
+          {
+            parameter: 'Hemodinami (MAP / SKB)',
+            target: 'MAP ≥ 65 mmHg (SKB ≥ 90 mmHg)',
+            rationale: 'Hipoperfüzyon sekonder beyin hasarını derinleştirir; gereğinde Noradrenalin veya Adrenalin infüzyonu titre edilir.'
+          },
+          {
+            parameter: 'Sıcaklık Kontrolü (TTM)',
+            target: '32 – 37.5°C (Ateş Kesinlikle Önlenir)',
+            rationale: 'Komatöz hastada en az 24 saat aktif sıcaklık kontrolü uygulanmalı; hipertermi (>37.7°C) kesinlikle engellenmelidir.'
+          },
+          {
+            parameter: 'Metabolik & Koroner Hedef',
+            target: 'Glukoz 140–180 mg/dL · 12-Lead EKG + POCUS',
+            rationale: 'Hipoglisemiden kaçınılır; STEMI veya açıklanamayan hemodinamik şok varsa acil koroner anjiyografi (PCI) planlanır.'
+          }
+        ]
+      }
+    },
+
+    // 5) Patofizyoloji
+    pathophysiology: {
+      molecularBasis: 'Kardiyak arrest anında miyokardiyal mekanik pompa fonksiyonunun durmasıyla kalp debisi ve serebral/koroner perfüzyon basıncı (CPP = Aortik Diyastolik Basınç − Sağ Atriyal Basınç) sıfıra iner. Hücresel ATP üretimi aerobikten anaerobik glikolize kayar; dakikalar içinde intrasellüler asidoz, Na+/K+-ATPaz pompa yetmezliği, sitotoksik glutamat/kalsiyum birikimi ve geri dönüşsüz nöronal/miyokardiyal nekroz başlar.',
+      stepsTitle: '3 Fazlı Kardiyak Arrest Zaman Modeli & Perioperatif Kaskad',
+      flowType: 'cellular-systemic',
+      cascadeSteps: [
+        {
+          phase: 'Faz 1: Elektriksel Faz (0 – 4 Dakika)',
+          mechanism: 'Kalp kasındaki yüksek enerjili fosfat depoları henüz tükenmemiştir. Ameliyathane içi tanıklı VF/pVT arrestlerinde bu pencerede uygulanan erken defibrilasyon ile ROSC olasılığı >%70-80 düzeyindedir.',
+          badge: '0-4 DK: DEFİBRİLASYON PENCERESİ'
+        },
+        {
+          phase: 'Faz 2: Dolaşım Fazı (4 – 10 Dakika)',
+          mechanism: 'Miyokardiyal ATP azalmıştır; göğüs kompresyonu yapılmadan verilen şok sıklıkla asistoli/PEAya dönüşür. Önce kesintisiz yüksek kaliteli KPR ile koroner perfüzyon basıncı (CPP > 15-20 mmHg) oluşturulmalı ve geri döndürülebilir neden (5H-5T) giderilmelidir.',
+          badge: '4-10 DK: KPR + CPP + 5H/5T'
+        },
+        {
+          phase: 'Faz 3: Metabolik Faz (> 10 Dakika) & Reperfüzyon Hasarı',
+          mechanism: 'Yaygın endotelyal aktivasyon, mikrosirkülatuar tromboz, derin laktik asidoz ve doku hipoksisi gelişir. ROSC sağlansa dahi Post-Kardiyak Arrest Sendromu (beyin hasarı, miyokardiyal stunning, sistemik iskemi-reperfüzyon yanıtı) tabloya hakim olur.',
+          badge: '>10 DK: SİSTEMİK İSKEMİ & ECPR'
+        }
+      ],
+      summaryText: 'Perioperatif arrestlerin çoğu kalp dışı, geri döndürülebilir mekanik, hipovolemik, hipoksik veya farmakolojik nedenlerden kaynaklanır; bu nedenle etkin göğüs kompresyonuyla zaman kazanırken altta yatan H/T nedenini saniyeler içinde ortadan kaldırmak sağkalımın anahtarıdır.'
+    },
+
+    // 6) Klinik Özellikler & Prezentasyon
+    presentation: {
+      earlySigns: [
+        'İnvaziv arteriyel basınçta hızlı düşüş, daralan nabız basıncı ve bradikardiye veya malign aritmiye geçiş',
+        'EtCO2 dalga formunda ve sayısal değerinde progresif veya ani düşüş (<15-20 mmHg altına inmesi)',
+        'SpO2 pletismografik dalga genliğinin küçülmesi ve sinyal kaybı',
+        'Uyanık/rejyonal anestezi hastasında ani baş dönmesi, bilinç kaybı, dispne veya ölüm korkusu'
+      ],
+      progressingSigns: [
+        'Arteriyel trasede tam düzleşme, NIBP ölçememe hatası',
+        'EtCO2 değerinin <10 mmHg düzeyine çökmesi (entübe hastada azalmış pulmoner kan akımı)',
+        'Karotis veya femoral arterde 10 saniye içinde nabız alınamaması',
+        'EKGde VF, pVT, asistoli veya nabızsız organize ritim (PEA) ortaya çıkışı'
+      ],
+      lateSigns: [
+        'Bilateral dilate ve ışık refleksi kaybolmuş pupiller (uzamış serebral anoksi)',
+        'KPRye ve tekrarlayan adrenaline yanıtsız refrakter asistoli / geniş-kompleks agonal ritim',
+        'Derin metabolik asidoz (pH < 7.0), aşırı laktat (>10-15 mmol/L) ve hiperkalemi',
+        'Koagülopati (DIC) ve çoklu organ yetmezliği (ROSC sonrası)'
+      ],
+      specialAlertTitle: 'Ameliyathane Altın Kuralı: "Sahte Sinüs" (PEA) Tuzağına Düşmeyin!',
+      specialAlertContent: 'Ameliyathanede hastalar sıklıkla EKGde normal sinüs ritmi veya sinüs taşikardisi gösterirken kalp mekanik olarak kan pompalamıyor olabilir (Nabızsız Elektriksel Aktivite - PEA)! Eğer arter trasesi düzse ve EtCO2 çökmüşse EKGye bakıp zaman kaybetmeyin; nabız (<10 sn) yoksa hasta ARRESTTİR, derhal KPRye başlayın!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Yüksek kardiyak riskli hastalarda (RCRI ≥ 2, ciddi aort stenozu, düşük EF, pulmoner hipertansiyon) indüksiyon öncesi invaziv arteriyel monitörizasyon ve defibrilatör pedlerinin önceden yapıştırılması hayat kurtarır.',
+        'Preoperatif EKG, elektrolitler (özellikle K+ ve Mg++) ve volüm durumu optimize edilmeden elektif vakaya başlanmamalıdır.',
+        'Yüksek kanama beklenen cerrahilerde (vasküler, hepatik, majör ortopedi, plasenta akreata) en az 2 geniş lümenli IV yol + cross-matched kan ürünleri odada hazır bulundurulmalıdır.',
+        'Beta-bloker ve antiaritmik tedaviler perioperatif kesilmemelidir (rebound taşikardi ve iskemi riski).'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Ameliyathane Acil Arrest & Defibrilasyon Hazırlık Standartları',
+        steps: [
+          'Her ameliyathane bloğunda bifazik defibrilatör (pediatrik ve erişkin pedler takılı, günlük deşarj testi yapılmış) 30 saniye içinde erişilebilir konumda olmalıdır.',
+          'Acil arabasında (Crash Cart) 1 mg Adrenalin ampulleri, Amiodaron (150 mg ampul), Lidokain, Atropin, %10 Kalsiyum Klorür, Magnezyum Sülfat ve Sodyum Bikarbonat tam stoklu olmalıdır.',
+          'Ameliyat masasının altında sert KPR tahtası (backboard) ve entübasyon/videolaringoskop ekipmanı her vakada hazır bulunmalıdır.',
+          'Yatak başı ultrason (POCUS) ve kardiyak/akciğer probları ameliyathane koridorunda anında odaya alınabilecek şekilde şarjda tutulmalıdır.'
+        ]
+      },
+      cleanAnesthesiaProtocol: [
+        'Kriz Ekip Liderliği (CRM): Arrest anında kıdemli anestezist Ekip Lideri olur; bir kişi kompresyon, bir kişi ilaç/zaman takibi (3-5 dk Adrenalin sayacı), bir kişi havayolu, bir kişi POCUS/neden araştırma görevini sesli kapalı-döngü iletişimle (closed-loop communication) üstlenir.',
+        'Defibrilasyon Güvenliği: Defibrilasyon öncesi oksijen maskesi/devresi açık oksijen kaçağı yaratmayacak şekilde kapatılmalı veya güvenli mesafeye alınmalı, "Herkes çekilsin!" komutu verilmelidir.',
+        'Yüksek Spinal Önleme: Nöroaksiyel blok sonrası ilk 20 dakikada yakın TA/nabız takibi ve blok seviyesi kontrolü ile bradikardi-arrest geçişi erken evrede vazopresör/atropinle durdurulmalıdır.'
+      ],
+      cartTitle: 'Perioperatif Kardiyak Arrest Acil Arabası (Crash Cart) Kontrol Listesi:',
+      cartChecklist: [
+        'Bifazik Defibrilatör + Erişkin/Pediatrik Kendinden Yapışkanlı Pedler (Pads)',
+        'Adrenalin (Epinefrin 1 mg/mL ve 0.5 mg/mL ampuller x 20 adet + 20 mL SF Flush)',
+        'Amiodaron (150 mg/3 mL ampul x 6 adet — 300 mg + 150 mg dozları için)',
+        'Lidokain (%2 100 mg/5 mL ampul x 4 adet)',
+        'Magnezyum Sülfat (%15 1.5 g/10 mL ampul x 4 adet — Torsades için)',
+        'Kalsiyum Klorür (%10 10 mL) veya Kalsiyum Glukonat (%10 10 mL x 4 adet)',
+        'Sodyum Bikarbonat (%8.4 10 mL/10 mEq veya 100 mL flakon)',
+        'Atropin (0.5 mg veya 1 mg ampul x 5 adet)',
+        'İntraosseöz (IO) Kemik İçi Girişim Seti (EZ-IO veya manuel iğne)',
+        '14G Geniş Lümenli Uzun Torasentez İğnesi (Tansiyon Pnömotoraks dekompresyonu için)',
+        'Sert KPR Sırt Tahtası (CPR Backboard) ve Kronometre / Zamanlayıcı',
+        'POCUS (Taşınabilir Ultrason) + Steril Jel ve İğne Dekompresyon/Perikardiyosentez Seti'
+      ]
+    },
+
+    // 8) Postoperatif Takip, Uzun Zamanlı Yönetim, Komplikasyonlar ve Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'ROSC sağlanan tüm hastalar cerrahi durum değerlendirildikten sonra (gereğinde hasar kontrol cerrahisi / hızlı kapatma yapılarak) kesintisiz olarak en az 48 - 72 saat 3. Basamak Yoğun Bakım Ünitesinde (YBÜ) mekanik ventilasyon ve invaziv monitörizasyon altında izlenmelidir.',
+      recurrenceRate: 'İlk ROSC sağlanan hastaların %20-35inde ilk saatler içinde altta yatan neden (gizli kanama, miyokardiyal iskemi, elektrolit imbalansı, tamponad) tam çözülmediyse RE-ARREST (ikincil arrest) gelişebilir.',
+      recurrenceRiskBadge: 'İLK 24 SAATTE POST-ARREST ŞOK VE RE-ARREST RİSKİ',
+      maintenanceTherapy: 'Post-kardiyak arrest sendromunda hedefe yönelik normoksemi (SpO2 %92-98), normokapni (PaCO2 35-45 mmHg), MAP ≥ 65 mmHg (vazopresör/inotrop infüzyonu), ateşin önlenmesi (TTM 32-37.5°C) ve normoglisemi (140-180 mg/dL) sağlanır. Komatöz hastada nörolojik prognoz tayini ROSCtan itibaren en az 72 saat ertelenmelidir.',
+      monitoringParameters: [
+        'Sürekli İnvaziv Arteriyel Kan Basıncı (MAP ≥ 65 mmHg hedefi) ve 5-derivasyonlu EKG',
+        '12 Derivasyonlu EKG + Seri Troponin I/T + Transtorasik/Transözofageal Ekokardiyografi (TTE/TEE)',
+        'Seri Arter Kan Gazı: PaO2, PaCO2, laktat klirensi, pH, K+ ve iyonize Ca++',
+        'Saatlik İdrar Çıkışı (≥ 0.5 mL/kg/sa) ve böbrek fonksiyon testleri',
+        'Merkezi Vücut Sıcaklığı (Özofageal / Mesane probu ile sürekli takip, ateş > 37.7°C önlenir)',
+        'Komatöz hastada 72. saatten sonra Multimodal Nörolojik Prognoz Değerlendirmesi (EEG, SSEP, Nöron Spesifik Enolaz, Beyin BT/MR)'
+      ],
+      expectedComplications: [
+        'Post-Arrest Miyokardiyal Stunning (ilk 24-48 saatte geçici ciddi sol ventrikül disfonksiyonu)',
+        'Hipoksik İskemik Beyin Hasarı (uzamış veya kalitesiz KPR / hiperoksi / ateş nedeniyle)',
+        'Kosta / Sternum Kırığı, Pnömotoraks, Karaciğer/Dalak Laserasyonu (kompresyona bağlı travma)',
+        'Akut Böbrek Hasarı ve İskemik Hepatit ("Shock Liver")',
+        'Aspirasyon Pnömonisi, ARDS ve Ventilatör İlişkili Akciğer Hasarı'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: '12 Derivasyonlu EKG & Acil Koroner Anjiyografi', description: 'ST elevasyonu veya yüksek iskemi şüphesi varsa vakit kaybetmeden primer PCI için kateter laboratuvarına alınması.' },
+        { testName: 'POCUS / Kapsamlı TTE (RUSH / FEEL Protokolü)', description: 'Kardiyak tamponad, masif PE (McConnell bulgusu), hipovolemi, pnömotoraks ve EF değerlendirmesi.' },
+        { testName: 'BT Pulmoner Anjiyografi / Beyin BT', description: 'Hemodinamik stabilizasyon sonrası masif PE doğrulaması veya nörolojik hemoraji/ödem dışlanması.' }
+      ],
+      prognosisSummary: 'Ameliyathanede gelişen tanıklı arrestler, diğer hastane içi ve dışı arrestlere kıyasla çok daha yüksek ROSC (%50-70) ve nörolojik olarak sağlam taburculuk oranına sahiptir. Prognozu belirleyen ana faktörler <2 dk içinde defibrilasyon, hiperventilasyonsuz kesintisiz KPR ve cerrahi/anestezik nedenin (5H-5T) hızla ortadan kaldırılmasıdır.'
+    },
+
+    // 9) High-Yield Klinik Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Ameliyathanede Hiperventilasyon Öldürür!',
+        takeaway: 'Arrest sırasında stresle hastayı el ambuyla çok hızlı (20-30/dk) solutmak intratorasik basıncı artırarak sağ kalbe venöz dönüşü sıfırlar ve koroner perfüzyonu yok eder. Entübe hastada hız KESİNLİKLE 10 soluk/dk (6 saniyede 1) olmalıdır!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'EtCO2 = KPR Kalite Barometresi ve ROSC Dedektörü',
+        takeaway: 'KPR sırasında EtCO2 < 10 mmHg ise bası kaliteniz kötüdür veya hasta şiddetli hipovolemiktir! Nabız bakmak için durmadan EtCO2nin aniden 35-40 mmHg üzerine fırlaması ROSCun en erken işaretidir.',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'PEAda Asla Şok Vermeyin — 5H & 5T + POCUS Kullanın!',
+        takeaway: 'Ameliyathanede en sık PEA görülür. EKGde ritim var diye şok verilmez; derhal kanama (hipovolemi), tansiyon pnömotoraks, tamponad, PE, anafilaksi veya LAST aranıp tedavi edilmelidir.',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'LAST ve Gebelik Arrestinde Özel Kurallar',
+        takeaway: 'LAST (lokal anestezik) arrestinde standart 1 mg Adrenalin YASAKTIR (≤1 mcg/kg titre + %20 Lipid)! ≥20 hafta gebede 4. dakikada ROSC yoksa 5. dakikaya kadar Perimortem Sezaryen hayat kurtarır.',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'Prone Pozisyonda Bekleme — Ters KPR Başlat!',
+        takeaway: 'Omurga cerrahisinde hasta yüzüstüyse ve çivili başlık/açık yara nedeniyle supin çevirme gecikecekse, hiç beklemeden iki skapula arasından posterior (ters) göğüs kompresyonuna başlayın.',
+        category: 'Ezber Bozan'
+      }
+    ],
+
+    // 10) Kanıta Dayalı Kaynaklar
+    references: [
+      {
+        authors: 'Panchal AR, Bartos JA, Cabañas JG, et al. (AHA ACLS Writing Group)',
+        title: 'Part 3: Adult Basic and Advanced Life Support: American Heart Association Guidelines for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care.',
+        journal: 'Circulation. 2020;142(16_suppl_2):S366-S468 (ve 2023-2025 Focused Updates).',
+        year: '2020-2025',
+        relevance: 'Erişkin ACLS algoritmaları, defibrilasyon, adrenalin zamanlaması, amiodaron/lidokain ve ROSC sonrası bakım standartları.'
+      },
+      {
+        authors: 'Lott C, Truhlář A, Alfonzo A, et al. (ERC Special Circumstances Writing Group)',
+        title: 'European Resuscitation Council Guidelines 2021: Cardiac arrest in special circumstances (Operating Room / Perioperative Arrest).',
+        journal: 'Resuscitation. 2021;161:152-219.',
+        year: '2021',
+        relevance: 'Ameliyathane içi kardiyak arrest, prone KPR, pnömoperiton dekompresyonu, gebelikte perimortem sezaryen ve ECPR kılavuzu.'
+      },
+      {
+        authors: 'Moitra VK, Einav S, Thies KC, et al.',
+        title: 'Cardiac Arrest in the Operating Room: Resuscitation and Management for the Anesthesiologist: Part 1.',
+        journal: 'Anesthesia & Analgesia. 2018;126(3):876-888.',
+        year: '2018',
+        relevance: 'Anestezistler için ameliyathaneye özgü PEA nedenleri, EtCO2/arteriyel KPR rehberliği ve modifiye ACLS yaklaşımı.'
+      },
+      {
+        authors: 'McEvoy MD, Thies KC, Einav S, et al.',
+        title: 'Cardiac Arrest in the Operating Room: Part 2 — Special Situations in the Perioperative Period.',
+        journal: 'Anesthesia & Analgesia. 2018;126(3):889-903.',
+        year: '2018',
+        relevance: 'Laparoskopi, nöroaksiyel blok, hava embolisi, LAST, anafilaksi ve prone pozisyonda perioperatif arrest yönetimi.'
       }
     ]
   }

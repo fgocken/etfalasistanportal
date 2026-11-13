@@ -15,7 +15,7 @@ export const laparoscopicCholecystectomy: ProcedureDefinition = {
   categoryTag: 'Laparoskopik Minimal İnvaziv Cerrahi',
   
   // 1) Prosedür ismi - tanımı - endikasyonları - tahmini ortalama prosedür süresi
-  description: 'Safra kesesinin karın duvarına açılan 4 adet trokar girişinden CO2 pnömoperitoneumu ve laparoskopik optik yardımıyla kistik kanal ile kistik arter kliplenerek rezeke edilmesi ve çıkarılması ameliyatıdır.',
+  description: 'Karbondioksit (CO2) insüflasyonu ile oluşturulan pnömoperiton yardımıyla karın içinde sağlanan video-endoskopik çalışma alanında, milimetrik trokar girişleri aracılığıyla sistik kanal ve sistik arterin kliplenip kesilmesi ve safra kesesinin karaciğer yatağından (sistik plak) minimal invaziv yöntemle diseke edilerek vücut dışına çıkarılması işlemidir.',
   indications: [
     'Semptomatik Kolelitiyazis (Safra kesesi taşları)',
     'Akut veya Kronik Kolesistit',
@@ -51,7 +51,30 @@ export const laparoscopicCholecystectomy: ProcedureDefinition = {
     alternative: [
       'Seçilmiş yüksek riskli (ciddi KOAH, kardiyak kısıtlılık vb.) hastalarda düşük basınçlı (8–10 mmHg) pnömoperitoneum eşliğinde Spinal / Epidural Anestezi (Literatürde bildirilmiş ancak diyafram irritasyonu ve omuz ağrısı nedeniyle rutin tercih edilmez)'
     ],
-    notes: 'Pnömoperitoneum oluşturulması, diyafram elevasyonu ve intraabdominal basınç artışı nedeniyle hava yolu güvenliği ve kontrollü mekanik ventilasyon için endotrakeal entübasyonla genel anestezi şarttır. LMA rutin önerilmez (aspirasyon riski ve yüksek tepe inspiratuar basınç ihtiyacı nedeniyle).'
+    notes: 'Pnömoperitoneum oluşturulması, diyafram elevasyonu ve intraabdominal basınç artışı nedeniyle hava yolu güvenliği ve kontrollü mekanik ventilasyon için endotrakeal entübasyonla genel anestezi şarttır. LMA rutin önerilmez (aspirasyon riski ve yüksek tepe inspiratuar basınç ihtiyacı nedeniyle).',
+    rulesTitle: 'LAPAROSKOPİK KOLESİSTEKTOMİDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'CO2 PNÖMOPERİTONEUM BASINCI VE KARDİYOVASKÜLER STABİLİTE',
+        content: 'İntraabdominal basınç (İAB) ideal olarak 12-15 mmHg sınırında tutulmalıdır (>15 mmHg vena kava inferior basısıyla venöz dönüşü ve kalp debisini %20-30 düşürür, SVR artar). İnsüflasyon yavaş başlatılmalı (≤ 2 L/dk); Ters Trendelenburg pozisyonu öncesi yeterli önyük (hidrasyon) sağlanmalıdır.'
+      },
+      {
+        number: 2,
+        title: 'TROKAR GİRİŞİ, VAGAL BRADİKARDİ VE DAMAR / GAZ EMBOLİSİ TEYAKKUZU',
+        content: 'İlk kör trokar / Veress iğnesi girişinde ani peritoneal gerilmeye bağlı derin vagal bradikardi veya asistoli gelişebilir; Atropin (0.5 mg IV) hazır tutulmalı ve cerraha derhal insüflasyonu durdurması söylenmelidir. İnsüflasyon başlangıcında ani EtCO2 düşüşü ve hipotansiyon gelişirse CO2 gaz embolisi veya retroperitoneal majör damar yaralanması düşünülmelidir.'
+      },
+      {
+        number: 3,
+        title: 'HİPERKAPNİ VE AKCİĞER KORUYUCU MEKANİK VENTİLASYON',
+        content: 'Peritondan emilen CO2 ve diyaframın sefale itilmesiyle FRC düşer, pik hava yolu basınçları artar. Normokapniyi (EtCO2 35-40 mmHg) korumak için tidal volüm (PBW\'ye göre 6-8 mL/kg) yerine dakika ventilasyonu solunum sayısı artırılarak sağlanmalı; atelektaziyi önlemek için 5-8 cmH2O PEEP ve derin cerrahi relaksasyon (TOF 0-1) uygulanmalıdır.'
+      },
+      {
+        number: 4,
+        title: 'YÜKSEK PONV RİSKİNE KARŞI İKİLİ PROFİLAKSİ VE MULTİMODAL ANALJEZİ',
+        content: 'Laparoskopik cerrahi yüksek postoperatif bulantı-kusma (PONV) riski taşır; indüksiyonda Deksametazon (4-8 mg IV) + kapanışta Ondansetron (4 mg IV) ikili profilaksisi standarttır. Diyafragmatik sağ omuz yansıma ağrısını ve opioid ihtiyacını azaltmak için kapanışta rezidüel CO2 tamamen boşaltılmalı, trokar yerlerine lokal anestezik veya Subkostal TAP/ESP bloğu uygulanmalıdır.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

@@ -53,7 +53,30 @@ export const openCholecystectomy: ProcedureDefinition = {
     alternative: [
       'Ciddi kardiyopulmoner kısıtlılığı olan ve genel anestezi yüksek mortalite riski taşıyan çok nadir seçilmiş olgularda Torakal Epidural Anestezi veya Kombine Spinal-Epidural Anestezi (ancak subkostal ekartasyon, diyafram traksiyonu ve cerrahi manipülasyon nedeniyle genel anestezi açık cerrahide temel dayanaktır)'
     ],
-    notes: 'Açık kolesistektomide sağ subkostal insizyon, karın duvarı retraksiyonu ve subdiyafragmatik cerrahi manipulasyon yüksek derecede nosiseptif uyarı ve diyafram irritasyonu oluşturur. Hastanın cerrahi relaksasyonu, derin anestezi idamesi ve kontrollü mekanik ventilasyonu için endotrakeal entübasyonla genel anestezi şarttır. Torakal epidural kateter veya ultrason eşliğinde rejyonel fasya plan blokları (Subkostal TAP / ESP) intraoperatif anestezik/opioid ihtiyacını belirgin azaltır.'
+    notes: 'Açık kolesistektomide sağ subkostal insizyon, karın duvarı retraksiyonu ve subdiyafragmatik cerrahi manipulasyon yüksek derecede nosiseptif uyarı ve diyafram irritasyonu oluşturur. Hastanın cerrahi relaksasyonu, derin anestezi idamesi ve kontrollü mekanik ventilasyonu için endotrakeal entübasyonla genel anestezi şarttır. Torakal epidural kateter veya ultrason eşliğinde rejyonel fasya plan blokları (Subkostal TAP / ESP) intraoperatif anestezik/opioid ihtiyacını belirgin azaltır.',
+    rulesTitle: 'AÇIK KOLESİSTEKTOMİDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'SAĞ SUBKOSTAL KESİDE SOLUNUMSAL KOMPLİKASYON VE DİYAFRAM KORUMASI',
+        content: 'Sağ subkostal (Kocher) kesisi postoperatif vital kapasiteyi ve FRC\'yi %40-50 azaltarak bazal atelektazi ve hipoksemi riskini dramatik biçimde artırır. Etkin intraoperatif/postoperatif rejyonel analjezi (Torakal Epidural veya USG eşliğinde Subkostal TAP/ESP bloğu) öksürme ve derin solunumu koruyarak pnömoniyi önleyen en kritik müdahaledir.'
+      },
+      {
+        number: 2,
+        title: 'SAĞ SUBKOSTAL EKARTASYON VE VENA KAVA BASISI YÖNETİMİ',
+        content: 'Karaciğeri yukarı kaldırmak için yerleştirilen derin ekartörler diyaframı irrite eder ve Vena Kava İnferior\'u komprese ederek ani venöz dönüş azalmasına ve hipotansiyona neden olabilir. Cerrahi ekartasyon anında gelişen ani tansiyon düşüklüğünde cerrah uyarılmalı ve vazopressör/sıvı desteği sağlanmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'KARACİĞER YATAĞI KANAMASI VE BİLİYER OBSTRÜKSİYON KOAGÜLOPATİSİ',
+        content: 'Özellikle kronik inflamasyon, siroz veya obstrüktif sarılık (K vitamini malabsorpsiyonu) zeminindeki olgularda Calot üçgeni ve karaciğer yatağından ciddi kanama gelişebilir. Preoperatif PT/INR düzeltilmeli (gerekirse K vitamini / TDP), 2 adet geniş lümenli IV yol açılmalı ve 1-2 ünite ES cross-match hazır bulundurulmalıdır.'
+      },
+      {
+        number: 4,
+        title: 'BİLİYER SEPSİS VE AKUT KOLANJİTTE HEMODİNAMİK HAZIRLIK',
+        content: 'Akut gangrenöz kolesistit veya kolanjit olgularında safra manipülasyonu bakteriyemi ve septik hipotansiyonu tetikleyebilir; profilaktik antibiyotik insizyon öncesi tamamlanmalı, vazoaktif ajanlar ve invaziv takip hazırlığı yapılmalıdır.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı

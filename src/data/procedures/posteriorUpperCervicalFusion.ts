@@ -59,7 +59,31 @@ export const posteriorUpperCervicalFusion: ProcedureDefinition = {
     alternative: [
       'TIVA + Düşük Doz Sevofluran (<0.4 - 0.5 MAC): İONM (MEP/SSEP) amplitüdlerini koruyacak şekilde titre edilerek'
     ],
-    notes: 'Posterior üst servikal fiksasyonda anestezi yönetiminin 4 kritik sütunu: (1) Entübasyon ve PRONE çevirme esnasında boyunda fleksiyon/ekstansiyon ve rotasyonu tamamen engelleyerek medulla ve spinal kordu korumak, (2) İONM (tcMEP ve SSEP) sinyallerini baskılamamak için TIVA uygulamak ve indüksiyon sonrası KAS GEVŞETİCİ KULLANMAMAK, (3) Prone pozisyonda gözleri ve yüzü basıdan koruyarak İntraoperatif Görme Kaybını (ION) engellemek, (4) Spinal kord perfüzyon basıncını (SCPP) korumak için Ortalama Arter Basıncını (MAP) ≥ 85 mmHg tutmaktır.'
+    clinicalRationale: 'İnstabil kraniyoservikal bileşke nedeniyle boyun hareketinden kaçınmak için AFOI, ardından prone pozisyonda ve çivili başlıkta tüp katlanmasını (kinking) önlemek için spiral telli (zırhlı) ETT seçimi zorunludur. Vidalamada tcMEP ve SSEP takibinin güvenilir kalması için kas gevşeticisiz Propofol + Remifentanil TIVA altın standart anestezi rejimidir.',
+    notes: 'POSTERİOR ÜST SERVİKAL FİKSASYONDA TEMEL ANESTEZİ İLKELERİ: (1) AFOI VE PRONE ÇEVRİLMEDE NÖTRAL SERVİKAL KORUMA; (2) İONM (tcMEP/SSEP) İÇİN TIVA VE KAS GEVŞETİCİSİZ İDAME; (3) PRONE POZİSYONDA GÖZ KORUMASI (ION ÖNLEMİ) VE SERBEST BATIN; (4) SPİNAL KORD PERFÜZYONU (MAP ≥ 85 mmHg).',
+    rulesTitle: 'POSTERİOR ÜST SERVİKAL FİKSASYONDA TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'AFOI VE PRONE ÇEVİRMEDE MUTLAK NÖTRAL SERVİKAL KORUMA',
+        content: 'Oksipitoservikal veya C1-C2 instabilitesinde entübasyon Uyanık Fiberoptik (AFOI) ile yapılmalı; ardından baş Mayfield çivisine alınıp hasta prone pozisyona çevrilirken boyun en az 4 kişilik ekip ve cerrah liderliğinde blok halinde (log-roll), hiçbir fleksiyon/rotasyona izin verilmeden döndürülmelidir.'
+      },
+      {
+        number: 2,
+        title: 'İONM (tcMEP / SSEP) KORUMASI İÇİN TIVA VE KAS GEVŞETİCİSİZ İDAME',
+        content: 'C1 lateral kitle ve C2 pars/pedikül vidalamasında spinal kord ve sinir köklerini korumak için tcMEP ve SSEP takibi zorunludur. Propofol + Remifentanil TIVA tercih edilmeli, prone pozisyon ve ilk kesi sonrası kas gevşetici KESİNLİKLE verilmemelidir.'
+      },
+      {
+        number: 3,
+        title: 'PRONE POZİSYONDA GÖZ KORUMASI (ION ÖNLEMİ) VE SERBEST BATIN',
+        content: 'Prone pozisyonda orbita üzerine dolaylı basınç körlüğe (İntraoperatif Görme Kaybı - ION) yol açar; baş Mayfield çivisiyle tamamen askıda tutulmalı, gözler saatlik kontrol edilmeli ve batının serbest sarkması sağlanarak Vena Kava basısı ile epidural venöz kanama önlenmelidir.'
+      },
+      {
+        number: 4,
+        title: 'SPİNAL KORD PERFÜZYON BASINCI (MAP ≥ 85 mmHg) VE KANAMA/ÖDEM HAZIRLIĞI',
+        content: 'Bası altındaki kordu korumak için MAP ≥ 85 mmHg tutulur. C1-C2 bölgesindeki zengin venöz pleksuslardan veya yüksek binen vertebral arterden ani kanama riskine karşı 2-4 ünite ES hazır tutulmalı; uzun prone cerrahi sonunda ekstübasyon öncesi Cuff-Leak testi yapılmalıdır.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık

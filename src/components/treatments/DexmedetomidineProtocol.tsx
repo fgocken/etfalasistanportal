@@ -21,6 +21,10 @@ import {
   Stethoscope,
   BookOpen
 } from 'lucide-react';
+import {
+  DrugReferencesAndInteractionsBlock,
+  PregnancyLactationBlock,
+} from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -1482,80 +1486,67 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
 
           <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-500/5 space-y-1">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Gebelik ve Laktasyon</span>
+            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Hemodinamik &amp; Bolus Güvenliği</span>
             <p className="text-slate-600 dark:text-slate-400 text-xs">
-              <strong>Gebelik Kategorisi C:</strong> Plasentayı geçer. Sadece anne için faydası fetüse riskinden üstünse
-              kullanılmalıdır. Anne sütüne çok düşük miktarda geçer; uygulamadan sonra 24 saat emzirmeye ara verilmesi
-              önerilir.
+              Hızlı IV bolus bifazik geçici hipertansiyon ardından derin bradikardi/asistoli tetikleyebilir.
+              Şiddetli bradikardide Atropin hazır bulundurulmalı, yükleme en az 10–20 dakikada verilmelidir.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 13. İLAÇ ETKİLEŞİMİ SORGULAMA DIŞ BAĞLANTILARI                      */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <ExternalLink className="w-5 h-5 text-teal-500" />
-              <span>İlaç Etkileşimi Sorgulama (Dış Kaynaklar)</span>
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Hastanın kullandığı diğer ilaçlarla (sedatifler, antiaritmikler, vazodilatatörler) etkileşimi anında sorgulayın:
-            </p>
-          </div>
-        </div>
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="FDA Gebelik Kategorisi C · Plasentayı kısmen geçer; maternal fayda fetüs riskine üstünse kullanılır."
+        pregnancyDetails={[
+          'Obstetrik anestezide spinal bloğa veya doğum analjezisine adjuvan olarak kullanımı sınırlı ve seçili olgulardadır; fetal bradikardi açısından yakından izlenmelidir.',
+          'Yoğun bakımda gebe hastada konfor/sedasyon gerektiğinde en düşük etkin idame dozu tercih edilmelidir.',
+        ]}
+        lactationSummary="Anne sütüne çok düşük düzeyde geçer (RID < %1); oral biyoyararlanımı çok düşüktür."
+        lactationDetails={[
+          'Kısa süreli ameliyathane/sedasyon uygulaması sonrası anne tamamen uyandığında emzirme güvenlidir.',
+          'Uzun süreli yoğun bakım infüzyonu sonrası prematüre veya yenidoğan bebeklerde uyku/emme takibi veya 24 saatlik ara önerilebilir.',
+        ]}
+      />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <a
-            href="https://www.drugs.com/drug-interactions/dexmedetomidine-index.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`p-4 rounded-xl border flex items-center justify-between transition-all group ${
-              isDark
-                ? 'bg-slate-800/60 border-slate-700 hover:border-teal-500 hover:bg-slate-800'
-                : 'bg-slate-50 border-slate-200 hover:border-teal-500 hover:bg-white hover:shadow-xs'
-            }`}
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 flex items-center gap-1.5">
-                <span>Drugs.com Drug Interactions Checker</span>
-              </span>
-              <p className="text-xs text-slate-500 mt-1">
-                Deksmedetomidin için majör, orta ve minör etkileşim veri tabanı
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-teal-500 shrink-0 ml-2" />
-          </a>
-
-          <a
-            href="https://reference.medscape.com/drug-interactionchecker"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`p-4 rounded-xl border flex items-center justify-between transition-all group ${
-              isDark
-                ? 'bg-slate-800/60 border-slate-700 hover:border-teal-500 hover:bg-slate-800'
-                : 'bg-slate-50 border-slate-200 hover:border-teal-500 hover:bg-white hover:shadow-xs'
-            }`}
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 flex items-center gap-1.5">
-                <span>Medscape Drug Interaction Checker</span>
-              </span>
-              <p className="text-xs text-slate-500 mt-1">
-                Klinik farmakoloji ve çoklu ilaç kombinasyon kontrolü
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-teal-500 shrink-0 ml-2" />
-          </a>
-        </div>
-      </section>
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Deksmedetomidin"
+        references={[
+          {
+            authors: 'Riker RR, Shehabi Y, Bokesch PM, et al. (SEDCOM)',
+            title: 'Dexmedetomidine vs midazolam for sedation of critically ill patients: a randomized trial.',
+            journal: 'JAMA',
+            year: 2009,
+            pmid: '19190314',
+            doi: '10.1001/jama.2009.56',
+            note: 'YBÜ sedasyonunda midazolama kıyasla daha düşük deliryum insidansı ve daha kısa ekstübasyon süresi.',
+          },
+          {
+            authors: 'Shehabi Y, Howe BD, Bellomo R, et al. (SPICE III)',
+            title: 'Early Sedation with Dexmedetomidine in Critically Ill Patients.',
+            journal: 'N Engl J Med',
+            year: 2019,
+            pmid: '31106539',
+            doi: '10.1056/NEJMoa1904710',
+            note: '3.904 kritik hastada erken deksmedetomidin sedasyonu çok merkezli RKÇ verileri.',
+          },
+          {
+            authors: 'Devlin JW, Skrobik Y, Gélinas C, et al. (SCCM PADIS)',
+            title: 'Clinical Practice Guidelines for the Prevention and Management of Pain, Agitation/Sedation, Delirium, Immobility, and Sleep Disruption in Adult Patients in the ICU.',
+            journal: 'Crit Care Med',
+            year: 2018,
+            pmid: '30113379',
+            doi: '10.1097/CCM.0000000000003299',
+            note: 'Benzodiazepin dışı hafif sedasyon önceliği ve deliryum önleme kılavuzu.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/dexmedetomidine-index.html"
+        medscapeUrl="https://reference.medscape.com/drug-interactionchecker"
+      />
     </div>
   );
 };

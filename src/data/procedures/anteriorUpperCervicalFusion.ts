@@ -60,7 +60,26 @@ export const anteriorUpperCervicalFusion: ProcedureDefinition = {
     alternative: [
       'Düşük Doz Uçucu Anestezik (<0.5 MAC Sevofluran) + Sürekli Remifentanil İnfüzyonu: İONM (MEP/SSEP) amplitüdlerini koruyacak şekilde titre edilerek'
     ],
-    notes: 'Üst servikal fiksasyon cerrahisinde anestezi yönetiminin 3 temel ayağı: (1) C1-C2 instabilitesi nedeniyle boyunda HİÇBİR fleksiyon veya hiperekstansiyona izin vermeksizin Uyanık Fiberoptik Entübasyon (AFOI) ile spinal kordu korumak, (2) Cerrahi vida yerleşimi esnasında spinal kord ve medulla basısını anlık yakalamak için motor (MEP) ve duyusal (SSEP) nöromonitörizasyonu kesintisiz sürdürmek (TIVA zorunludur; indüksiyon sonrası kas gevşetici KESİNLİKLE kullanılmaz), (3) Spinal kord perfüzyon basıncını (SCPP) korumak için Ortalama Arter Basıncını (MAP) ≥ 85 mmHg seviyesinde tutmaktır.'
+    clinicalRationale: 'C1-C2 instabilitesinde direkt laringoskopi servikal ekstansiyonla kuadriplejiye yol açabileceğinden boyun nötral hatta iken uyanık fiberoptik entübasyon (AFOI) ve nörolojik kontrol en güvenli hava yolu stratejisidir. İntraoperatif MEP/SSEP sinyallerinin baskılanmaması ve nörolojik hasarın anında saptanabilmesi için Propofol + Remifentanil TIVA (idamede kas gevşeticisiz) altın standarttır.',
+    notes: 'ANTERİOR ÜST SERVİKAL FİKSASYONDA TEMEL ANESTEZİ İLKELERİ: (1) İNSTABİL C1-C2 NEDENİYLE UYANIK FİBEROPTİK ENTÜBASYON (AFOI); (2) İONM (MEP/SSEP) KORUMASI İÇİN TIVA VE KAS GEVŞETİCİSİZ İDAME; (3) SPİNAL KORD PERFÜZYONU İÇİN YÜKSEK MAP HEDEFİ (MAP ≥ 85 mmHg).',
+    rulesTitle: 'ANTERİOR ÜST SERVİKAL FİKSASYONDA TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'İNSTABİL C1-C2 OMURGA İÇİN UYANIK FİBEROPTİK ENTÜBASYON (AFOI)',
+        content: 'Odontoid kırığı ve C1-C2 instabilitesinde direkt laringoskopi boynu ekstansiyona zorlayarak ani kuadripleji veya medüller arrest yapabilir. Sert boyunluk korunarak AFOI uygulanmalı ve hasta henüz uyanıkken entübasyon sonrası ekstremite motor yanıtı teyit edildikten sonra genel anesteziye geçilmelidir.'
+      },
+      {
+        number: 2,
+        title: 'NÖROMONİTÖRİZASYON (MEP/SSEP) İÇİN TIVA VE KAS GEVŞETİCİSİZ İDAME',
+        content: 'Vida ilerletilmesi ve redüksiyon manevralarında spinal kord ve beyin sapı hasarını milisaniyeler içinde yakalamak için tcMEP ve SSEP takibi esastır. Bu sinyalleri baskılamamak için Propofol + Remifentanil TIVA kullanılmalı ve entübasyon sonrasında kas gevşetici KESİNLİKLE tekrarlanmamalıdır.'
+      },
+      {
+        number: 3,
+        title: 'SPİNAL KORD PERFÜZYON BASINCI (MAP ≥ 85 mmHg) VE POSTOP ÖDEM GÜVENLİĞİ',
+        content: 'Kompresyona uğramış veya ödemli üst servikal spinal kordu korumak için Ortalama Arter Basıncı (MAP) ≥ 85 mmHg tutulmalıdır. Anterior retrofaringeal diseksiyon ciddi faringeal/epiglottik ödem yarattığından ekstübasyon öncesi mutlaka Cuff-Leak testi yapılmalıdır.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık

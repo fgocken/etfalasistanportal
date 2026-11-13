@@ -60,7 +60,31 @@ export const craniotomyVascularMalformation: ProcedureDefinition = {
     alternative: [
       'Opioid Tabanlı Yüksek Doz GETA (Fentanil/Süfentanil + TIVA): Ciddi kardiyovasküler instabilitesi olan olgularda'
     ],
-    notes: 'AVM cerrahisinde anestezi yönetiminin 4 hayati hedefi: (1) Rezeksiyon öncesinde besleyici arterlerin gerilmesini ve nidal rüptürü önlemek için ani hipertansiyondan kesinlikle kaçınmak, (2) İONM (MEP/SSEP ve kortikal haritalama) sinyallerini korumak için TIVA uygulamak, (3) Mikronöroşirürji için mükemmel beyin gevşemesi sağlamak (Mannitol, Hipertonik Salin, hafif hiperventilasyon PaCO2 32-35 mmHg), (4) NİDUS ÇIKARILDIKTAN SONRA "Normal Perfüzyon Basıncı Çöküşü" (NPPB) ve hiperemik beyin kanamasını önlemek için kan basıncını sıkı kontrol altında (MAP 65-75 mmHg) tutmaktır.'
+    clinicalRationale: 'Yüksek akımlı AVM nidusunda serebral vazodilatasyonu ve hipertansif rüptürü önlemek, aynı zamanda elokent alan haritalaması ile İONM (MEP/SSEP) sinyallerini korumak için Propofol + Remifentanil TIVA (veya <0.5 MAC Sevofluran) altın standarttır. Uzun mikrocerrahi sırasında baş pozisyonuna bağlı lümen tıkanmasını önlemek için spiral telli ETT ile kontrollü ventilasyon (normokapni/hafif hipokapni) tercih edilir.',
+    notes: 'AVM CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ: (1) REZEKSİYON ÖNCESİ HİPERTANSİYONDAN KAÇINMA; (2) İONM VE KORTİKAL HARİTALAMA İÇİN TIVA; (3) MİKROCERRAHİ İÇİN BEYİN GEVŞEMESİ (SLACK BRAIN); (4) NİDUS SONRASI NORMAL PERFÜZYON BASINCI ÇÖKÜŞÜNÜ (NPPB) ÖNLEME.',
+    rulesTitle: 'AVM CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'REZEKSİYON ÖNCESİ ANİ HİPERTANSİYONU VE NİDAL RÜPTÜRÜ ÖNLEME',
+        content: 'Yüksek akımlı arteriyovenöz malformasyon (AVM) yatakları ince duvarlıdır ve otoregülasyondan yoksundur. Laringoskopi, Mayfield çivisi veya dural açılış sırasındaki tansiyon pikleri intraoperatif nidal rüptüre neden olur; indüksiyon/entübasyonda derin analjezi ve Esmolol/Labetalol titrasyonu şarttır.'
+      },
+      {
+        number: 2,
+        title: 'ELOKENT KORTEKS HARİTALAMASI VE İONM İÇİN TIVA (KAS GEVŞETİCİSİZ)',
+        content: 'Spetzler-Martin skorunda elokent alan komşuluğu varsa MEP, SSEP ve kortikal haritalama sinyallerini korumak için Propofol + Remifentanil TIVA uygulanmalı, entübasyon sonrasında nöromusküler bloker verilmemelidir.'
+      },
+      {
+        number: 3,
+        title: 'MİKROCERRAHİ İÇİN BEYİN GEVŞEMESİ (SLACK BRAIN) VE MASİF KANAMA HAZIRLIĞI',
+        content: 'Derin besleyici arterlere ulaşırken beyin parankimini travmatize etmemek için Mannitol/Hipertonik Salin, baş elevasyonu ve PaCO2 32-35 mmHg düzeyinde hafif hiperventilasyon uygulanır; Rapid Infuser ve Cell-Saver hazır bulundurulmalıdır.'
+      },
+      {
+        number: 4,
+        title: 'NİDUS ÇIKARILINCA "NORMAL PERFÜZYON BASINCI ÇÖKÜŞÜNÜ" (NPPB) ÖNLEME',
+        content: 'Kronik yüksek akımlı şant kapandığında çevre normal beyin damarları vazoparalizi halindedir ve ani artan kan akımına dayanamayarak masif beyin ödemine veya hiperemik kanamaya (NPPB) yol açar. Nidus çıktığı anda MAP 65-75 mmHg ve Sistolik KB < 110-120 mmHg tutulmalıdır.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık

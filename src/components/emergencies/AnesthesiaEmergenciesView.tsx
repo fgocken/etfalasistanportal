@@ -89,11 +89,11 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
   {
     id: 'acls',
     title: 'Perioperatif Kardiyak Arrest & ACLS',
-    shortDesc: 'Şoklanabilir (VF/pVT) ve şoklanamaz (Asistoli/PEA) ritimler, arrest algoritması.',
-    tag: 'AHA / ERC 2025 (Sıradaki)',
+    shortDesc: 'Şoklanabilir (VF/pVT) ve şoklanamaz (Asistoli/PEA) algoritmaları, EtCO2/arteriyel KPR hedefleri, perioperatif 5H-5T, prone/gebelik KPR ve ROSC bakımı.',
+    tag: '10 Aşamalı Protokol Hazır',
     icon: HeartCrack,
     accentColor: 'red',
-    isReady: false
+    isReady: true
   },
   {
     id: 'last',
@@ -233,7 +233,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md self-start sm:self-auto border ${
             isDark ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-200'
           }`}>
-            10 Acil Senaryo Hazır (MH, PE, Hava Embolisi, LAST, Anafilaksi, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon) · 2 Senaryo Sırada (ACLS, MTP)
+            11 Acil Senaryo Hazır (MH, PE, Hava Embolisi, LAST, Anafilaksi, ACLS, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon) · 1 Senaryo Sırada (MTP)
           </span>
         </div>
 
@@ -322,7 +322,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
         }`}>
           <HelpCircle className="w-4 h-4 text-red-500 shrink-0" />
           <span>
-            <strong>Malign Hipertermi</strong>, <strong>Bronkospazm</strong>, <strong>Laringospazm</strong>, <strong>CICO</strong>, <strong>Akut Hava Yolu Obstrüksiyonu</strong> ve <strong>Pulmoner Aspirasyon</strong> protokolleri hazırlandı. Kalan 3 acil durum (ACLS, Anafilaktik Şok, LAST, MTP) aynı standart 10 aşamalı şablon mimarisiyle sırayla eklenecektir.
+            <strong>Malign Hipertermi</strong>, <strong>PE</strong>, <strong>Hava Embolisi</strong>, <strong>LAST</strong>, <strong>Anafilaktik Şok</strong>, <strong>Perioperatif ACLS</strong>, <strong>Bronkospazm</strong>, <strong>Laringospazm</strong>, <strong>CICO</strong>, <strong>Akut Hava Yolu Obstrüksiyonu</strong> ve <strong>Pulmoner Aspirasyon</strong> protokolleri hazırlandı. Kalan acil durum (MTP) aynı standart 10 aşamalı şablon mimarisiyle sıradaki adımda eklenecektir.
           </span>
         </div>
       </div>

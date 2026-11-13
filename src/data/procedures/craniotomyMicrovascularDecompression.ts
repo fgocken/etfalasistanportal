@@ -60,7 +60,31 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
     alternative: [
       'TIVA + Çok Düşük Doz Sevofluran (< 0.3 - 0.4 MAC): Yalnızca BAEP dalgalarını baskılamayacak ve EMG amplitüdünü bozmayacak mikro düzeyde'
     ],
-    notes: 'MVD CERRAHİSİNDE ANESTEZİNİN 4 HAYATİ ZORUNLULUĞU: (1) KAS GEVŞETİCİSİZ İDAME — Fasiyal sinir serbest EMG (Free-run EMG), Lateral Spread Response (LSR) ve alt kranyal sinir kas yanıtlarını izlemek için indüksiyon sonrası kas gevşetici tekrarlanmamalıdır, (2) BEYİN SAPI VE İŞİTME MONİTÖRİZASYONU (BAEP) — CN VIII gerildiğinde BAEP Dalga V latansında > 1.0 ms uzama veya amplitüdde > %50 düşüş işitme kaybı alarmıdır; cerrah derhal retraktörü gevşetmeli ve alana papaverin uygulamalıdır, (3) OTONOMİK REFLEKSLER — Trigemino-kardiyak refleks (CN V) veya glossofaringeal-vagal refleks (CN IX/X) ile cerrahi manipulasyon sırasında aniden ASİSTOLİ, masif bradikardi veya hipotansiyon gelişebilir; cerraha manipülasyonu durdurması söylenmeli ve Atropin hazır bulundurulmalıdır, (4) PÜRÜZSÜZ UYANMA — Arka çukur dar ve rijit bir kompartmandır; uyanmada öksürme/ıkınma beyin sapına bası yapan ölümcül hematoma yol açar!'
+    clinicalRationale: 'Arka çukur cerrahisinde kranyal sinir EMG\'si (LSR takibi) ve BAEP kayıtlarının güvenilirliği için entübasyon sonrası kas gevşetici kullanılmadan Propofol + Remifentanil TIVA idamesi altın standarttır. Lateral/park-bench pozisyonda boyun fleksiyonuna bağlı tüp katlanmasını önlemek için spiral telli (gerekirse glossofaringeal olgularda NIM elektrotlu) ETT ile kontrollü ventilasyon uygulanır.',
+    notes: 'MVD CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ: (1) KAS GEVŞETİCİSİZ TIVA İDAMESİ; (2) BAEP / İŞİTME MONİTÖRİZASYONU; (3) TRİGEMİNO-KARDİYAK VE VAGAL REFLEKS YÖNETİMİ; (4) PÜRÜZSÜZ UYANMA VE ARKA ÇUKUR KANAMASI ÖNLEMİ.',
+    rulesTitle: 'MVD CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'KAS GEVŞETİCİSİZ TIVA İDAMESİ (SERBEST EMG VE LSR TAKİBİ)',
+        content: 'Hemifasiyal spazm (CN VII) ve trigeminal nevralji (CN V) cerrahisinde Lateral Spread Response (LSR) kaybolmasını ve sinir irritasyonunu yakalamak için serbest/tetiklenmiş EMG kullanılır. Entübasyondan sonra kas gevşetici KESİNLİKLE yapılmamalı, Propofol + Remifentanil TIVA sürdürülmelidir.'
+      },
+      {
+        number: 2,
+        title: 'BEYİN SAPI İŞİTSEL UYARILMIŞ POTANSİYELLERİ (BAEP) VE RETRAKTÖR UYARISI',
+        content: 'Serebellar retraksiyon sırasında vestibülokoklear sinirin (CN VIII) gerilmesi kalıcı işitme kaybı yaratabilir. BAEP Dalga V latansında ≥ 1.0 ms gecikme veya amplitüdde > %50 azalma geliştiğinde anestezi/İONM ekibi derhal cerrahı uyarmalıdır (retraktörün gevşetilmesi ve papaverin uygulanması için).'
+      },
+      {
+        number: 3,
+        title: 'TRİGEMİNO-KARDİYAK VE GLOSOFARİNGEAL-VAGAL REFLEKS (ANİ ASİSTOLİ)',
+        content: 'CN V, IX veya X köklerinin cerrahi manipülasyonu saniyeler içinde şiddetli vagal bradikardi, derin hipotansiyon veya ani ASİSTOLİYE (Trigemino-kardiyak refleks) yol açabilir! İlk müdahale cerrahın manevrayı DERHAL durdurmasıdır; yanıt vermezse IV Atropin (0.5-1 mg) uygulanır.'
+      },
+      {
+        number: 4,
+        title: 'PÜRÜZSÜZ UYANMA VE ARKA ÇUKUR HEMATOMASINDAN KORUNMA',
+        content: 'Dar ve rijit arka çukur kompartmanında uyanma sırasındaki öksürük veya hipertansiyon beyin sapı basısı yapan ölümcül hematoma neden olur (Remifentanil/Lidokain ile yumuşak ekstübasyon). Postoperatif dönemde PONV profilaksisi ve alt kranyal sinir muayenesi sağlanır.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık

@@ -32,6 +32,10 @@ import {
   Shield,
   BookOpen
 } from 'lucide-react';
+import {
+  DrugReferencesAndInteractionsBlock,
+  MonographQuickNav,
+} from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -334,6 +338,20 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </div>
+
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-dozaj', label: 'Dozaj Tablosu' },
+          { id: 'sec-hesaplayici', label: 'Ketamin & Ketofol' },
+          { id: 'sec-hazirlama', label: 'Ketofol Hazırlama' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-emergence', label: 'Emergence Deliryumu' },
+          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
+        ]}
+      />
 
       {/* =========================================================================
           BÖLÜM 2: FARMAKODİNAMİK VE ETKİ MEKANİZMASI
@@ -1807,76 +1825,50 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* =========================================================================
           BÖLÜM 13: KANITA DAYALI KAYNAKÇA VE KILAVUZLAR
           ========================================================================= */}
-      <section
-        id="sec-kaynaklar"
-        className={`p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
-            <BookOpen className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              13. Kanıta Dayalı Kaynakça &amp; Klinik Kılavuzlar
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              ACEP, ASRA/AAPM, SCCM PADIS ve uluslararası anestezi kılavuzları
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                ACEP Clinical Policy: Procedural Sedation &amp; Analgesia:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Green SM, et al. Clinical Practice Guideline for Emergency Department Ketamine Dissociative Sedation in Adults. Ann Emerg Med. 2011;57(5):449-461.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                ASRA / AAPM Guidelines on Ketamine for Pain:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Schug SA, et al. Consensus Guidelines on the Use of Intravenous Ketamine Infusions for Acute Pain Management. Reg Anesth Pain Med. 2018;43(5):456-466.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                SCCM PADIS Clinical Practice Guidelines:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Devlin JW, et al. Clinical Practice Guidelines for the Prevention and Management of Pain, Agitation/Sedation, Delirium, Immobility, and Sleep Disruption in Adult Patients in the ICU. Crit Care Med. 2018;46(9):e825-e873.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                Ketofol Clinical Trials &amp; Meta-Analysis:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Ghadami Yazdi A, et al. Comparison of Ketamine-Propofol (Ketofol) with Propofol Alone for Procedural Sedation: A Systematic Review and Meta-Analysis. J Clin Anesth. 2021;72:110287.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-        </div>
-      </section>
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Ketamin"
+        references={[
+          {
+            authors: 'Green SM, Roback MG, Kennedy RM, Krauss B',
+            title: 'Clinical practice guideline for emergency department ketamine dissociative sedation: 2011 update.',
+            journal: 'Ann Emerg Med',
+            year: 2011,
+            pmid: '21256625',
+            doi: '10.1016/j.annemergmed.2010.11.030',
+            note: 'ACEP erişkin ve pediatrik dissosiyatif sedasyon klinik uygulama kılavuzu.',
+          },
+          {
+            authors: 'Schwenk ES, Viscusi ER, Buvanendran A, Schug SA, et al.',
+            title: 'Consensus Guidelines on the Use of Intravenous Ketamine Infusions for Acute Pain Management From the ASRA, AAPM, and ASA.',
+            journal: 'Reg Anesth Pain Med',
+            year: 2018,
+            pmid: '29870457',
+            doi: '10.1097/AAP.0000000000000806',
+            note: 'Akut ağrı ve opioid koruyucu analjezide sub-dissosiyatif ketamin infüzyon kılavuzu.',
+          },
+          {
+            authors: 'Devlin JW, Skrobik Y, Gélinas C, et al. (SCCM PADIS)',
+            title: 'Clinical Practice Guidelines for the Prevention and Management of Pain, Agitation/Sedation, Delirium, Immobility, and Sleep Disruption in Adult Patients in the ICU.',
+            journal: 'Crit Care Med',
+            year: 2018,
+            pmid: '30113379',
+            doi: '10.1097/CCM.0000000000003299',
+            note: 'Yoğun bakımda opioid koruyucu analjezik ve adjuvan sedasyon stratejisi.',
+          },
+          {
+            authors: 'Jalili M, Bahreini M, Doosti-Irani A, et al.',
+            title: 'Ketamine-propofol combination (ketofol) vs propofol for procedural sedation and analgesia: systematic review and meta-analysis.',
+            journal: 'Am J Emerg Med',
+            year: 2016,
+            pmid: '26809929',
+            doi: '10.1016/j.ajem.2015.12.074',
+            note: 'Prosedürel sedasyonda ketofol vs propofol solunum ve hemodinami meta-analizi.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/ketamine.html"
+        medscapeUrl="https://reference.medscape.com/drug-interactionchecker"
+      />
     </div>
   );
 };

@@ -56,6 +56,7 @@ export const zenkersDiverticulectomy: ProcedureDefinition = {
       'Uyanık Fleksibl Fiberoptik Entübasyon (AFOI): Masif kese varlığında, aspirasyon riski çok yüksek veya zor hava yolu anatomisi olan olgularda (aspirasyon ve kör ilerletme travması riskine karşı aşırı dikkatli olunmalıdır)',
       'Lokal / Rejyonel Anestezi (Yüzeyel Servikal Pleksus Bloğu + Sedasyon): Yalnızca genel anesteziyi kaldıramayacak çok düşkün, açık cerrahi planlanan hastalarda nadiren uygulanır'
     ],
+    clinicalRationale: 'Rijit Weerda divertiküloskopisi ve stapler uygulaması sırasında tam hareketsizlik (TOF 0/4) sağlamak ve açık cerrahide sinir stimülasyonu gerektiğinde hızla titre edilebilmek için Propofol-Remifentanil TIVA standarttır. Kese içindeki bayat gıda içeriğinin regürjitasyon ve aspirasyonunu önlemek amacıyla baş-yukarı indüksiyonda klasik krikoid bası (kese rüptürü/boşalması riski nedeniyle) uygulanmaz; doğrudan videolaringoskopi altında yerleştirilen kaflı endotrakeal tüp ile hava yolu güvenceye alınır.',
     rulesTitle: 'ZENKER DİVERTİKÜLEKTOMİSİNDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',
     indispensableRules: [
       {

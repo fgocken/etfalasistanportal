@@ -32,6 +32,10 @@ import {
   Shield,
   BookOpen
 } from 'lucide-react';
+import {
+  DrugReferencesAndInteractionsBlock,
+  MonographQuickNav,
+} from './shared/DrugMonographBlocks';
 
 interface Props {
   isDark: boolean;
@@ -348,6 +352,20 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </div>
+
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-dozaj', label: 'Dozaj Tablosu' },
+          { id: 'sec-hesaplayici', label: 'Doz & LAST Hesaplayıcı' },
+          { id: 'sec-tamponlama', label: 'Tamponlama' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-last', label: 'LAST İntralipid' },
+          { id: 'sec-pregnancy', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
+        ]}
+      />
 
       {/* =========================================================================
           BÖLÜM 2: FARMAKODİNAMİK VE ETKİ MEKANİZMASI
@@ -1791,10 +1809,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
-          BÖLÜM 10: KRİTİK KLİNİK İPUÇLARI VE "PEARL"LER
-          ========================================================================= */}
-      {/* =========================================================================
-          BÖLÜM 10: GEBELİK VE LAKTASYON KILAVUZU
+          BÖLÜM 11: GEBELİK VE LAKTASYON KILAVUZU
           ========================================================================= */}
       <section
         id="sec-pregnancy"
@@ -2052,76 +2067,50 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* =========================================================================
           BÖLÜM 13: KANITA DAYALI KAYNAKÇA VE KILAVUZLAR
           ========================================================================= */}
-      <section
-        id="sec-kaynaklar"
-        className={`p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-            <BookOpen className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              13. Kanıta Dayalı Kaynakça &amp; Klinik Kılavuzlar
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              ASRA, AHA, ERC, ASA ve Cochrane uluslararası referansları
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                ASRA LAST Checklist 2020:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Neal JM, et al. The ASRA Checklist for Managing Local Anesthetic Systemic Toxicity: 2020 Version. Reg Anesth Pain Med. 2021;46(1):81-86.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                AHA ACLS Guidelines 2020 &amp; Update:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Panchal AR, et al. 2020 American Heart Association Guidelines for CPR and Emergency Cardiovascular Care: Adult Basic and Advanced Life Support. Circulation. 2020;142:S366–S468.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                Cochrane Review: Perioperative Systemic Lidocaine:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Weibel S, et al. Continuous intravenous perioperative lidocaine infusion for postoperative pain and recovery in adults. Cochrane Database Syst Rev. 2018;6(6):CD009642.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 dark:text-white block">
-                ERC Resuscitation Guidelines:
-              </span>
-              <p className="text-slate-500 dark:text-slate-400">
-                Soar J, et al. European Resuscitation Council Guidelines 2021: Adult advanced life support. Resuscitation. 2021;161:115-151.
-              </p>
-            </div>
-            <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
-          </div>
-        </div>
-      </section>
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Lidokain"
+        references={[
+          {
+            authors: 'Neal JM, Neal EJ, Weinberg GL',
+            title: 'American Society of Regional Anesthesia and Pain Medicine Local Anesthetic Systemic Toxicity checklist: 2020 version.',
+            journal: 'Reg Anesth Pain Med',
+            year: 2021,
+            pmid: '33148630',
+            doi: '10.1136/rapm-2020-101986',
+            note: 'LAST kurtarma protokolü (%20 İntralipid bolus/infüzyon ve modifiye ACLS).',
+          },
+          {
+            authors: 'Panchal AR, Bartos JA, Cabañas JG, et al.',
+            title: '2020 American Heart Association Guidelines for CPR and Emergency Cardiovascular Care: Adult Basic and Advanced Life Support.',
+            journal: 'Circulation',
+            year: 2020,
+            pmid: '33081529',
+            doi: '10.1161/CIR.0000000000000916',
+            note: 'Refrakter VF/pVT tedavisinde antiaritmik lidokain protokolü.',
+          },
+          {
+            authors: 'Weibel S, Jelting Y, Pace NL, et al.',
+            title: 'Continuous intravenous perioperative lidocaine infusion for postoperative pain and recovery in adults.',
+            journal: 'Cochrane Database Syst Rev',
+            year: 2018,
+            pmid: '29864216',
+            doi: '10.1002/14651858.CD009642.pub3',
+            note: 'Perioperatif IV lidokain infüzyonu etkinlik ve güvenlik değerlendirmesi.',
+          },
+          {
+            authors: 'Soar J, Böttiger BW, Carli P, et al.',
+            title: 'European Resuscitation Council Guidelines 2021: Adult advanced life support.',
+            journal: 'Resuscitation',
+            year: 2021,
+            pmid: '33773825',
+            doi: '10.1016/j.resuscitation.2021.02.010',
+            note: 'Avrupa Resüsitasyon Konseyi erişkin ileri yaşam desteği standartları.',
+          },
+        ]}
+        drugsComUrl="https://www.drugs.com/drug-interactions/lidocaine.html"
+        medscapeUrl="https://reference.medscape.com/drug-interactionchecker"
+      />
     </div>
   );
 };

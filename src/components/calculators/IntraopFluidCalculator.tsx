@@ -197,7 +197,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
             </div>
             <div>
               <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                İntraop Sıvı Hesaplaması
+                İntraop Sıvı Hesaplaması (LİBERAL YÖNETİM)
               </h2>
               <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 İdame (4-2-1), Açlık Defisiti ve İnvaziv Cerrahi Kayıp Esaslı Perioperatif İnfüzyon Protokolü

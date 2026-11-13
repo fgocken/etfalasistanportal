@@ -21,6 +21,7 @@ import { AdultFastingInfographic } from './AdultFastingInfographic';
 import { PediatricFastingInfographic } from './PediatricFastingInfographic';
 import { RSIvsElectiveInfographic } from './RSIvsElectiveInfographic';
 import { VasoactiveDecisionMatrixInfographic } from './VasoactiveDecisionMatrixInfographic';
+import { FluidManagementStrategiesInfographic } from './FluidManagementStrategiesInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -43,6 +44,22 @@ export interface InfographicCardItem {
 }
 
 const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
+  {
+    id: 'fluid-management-strategies',
+    title: 'İntraoperatif Sıvı Yönetimi: Liberal vs Restriktif vs GDFT',
+    source: 'Miller’s Anesthesia, ERAS Society, POQI & RELIEF',
+    sourceBadge: 'ERAS / POQI',
+    category: 'Sıvı & Hemodinami',
+    shortDesc: 'Liberal (4-2-1 + 3. boşluk), Restriktif (Sıfır-Denge) ve Hedefe Yönelik (GDFT) sıvı stratejilerinin 12 parametreli kıyaslama tablosu, adım adım intraop protokolü ve kanıta dayalı kaynaklar.',
+    pillsHeader: '3 Temel Strateji:',
+    publisher: "Miller's / ERAS / POQI",
+    riskPills: [
+      { label: 'Liberal', rate: '8-15 mL/kg/sa', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Restriktif', rate: '1.5-4 mL/kg/sa', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'GDFT', rate: 'PPV/SVV < %12', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+    ],
+    accentColor: 'teal'
+  },
   {
     id: 'vasoactive-decision-matrix',
     title: 'Vazoaktif ve İnotropik Ajanlar Klinik Karar Matriksi',
@@ -409,6 +426,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
             </div>
           </div>
         </div>
+      )}
+
+      {/* VIEW: Fluid Management Strategies Infographic */}
+      {activeInfographicId === 'fluid-management-strategies' && (
+        <FluidManagementStrategiesInfographic isDark={isDark} />
       )}
 
       {/* VIEW: Vasoactive and Inotropic Agents Decision Matrix Infographic */}

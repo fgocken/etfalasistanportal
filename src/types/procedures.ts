@@ -53,6 +53,7 @@ export interface IndispensableRule {
 export interface AnesthesiaTechniques {
   primary: string[];
   alternative?: string[];
+  clinicalRationale?: string;
   notes?: string;
   indispensableRules?: IndispensableRule[];
   rulesTitle?: string;

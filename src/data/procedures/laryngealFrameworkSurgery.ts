@@ -60,6 +60,7 @@ export const laryngealFrameworkSurgery: ProcedureDefinition = {
       'Genel Endotrakeal Anestezi (GETA) + Mikrolaringeal Tüp (MLT): Yalnızca hasta kesinlikle uyanık cerrahiye koopere olamayacaksa veya anksiyetesi kontrol edilemiyorsa uygulanır; ancak intraoperatif ses kalitesi doğrudan dinlenemediğinden implant başarısı düşüktür',
       'Lokal Anestezi Tek Başına: Yüksek motivasyonlu ve ağrı eşiği yüksek olgularda minimal sedatif ile'
     ],
+    clinicalRationale: 'Tip I tiroplasti ve aritenoid adduksiyonunda Silastik/Gore-Tex implant boyutu ve sütür gerginliği hastanın ameliyat masasında gerçek zamanlı konuşması ("eeeee") ve transnazal fleksibl laringoskopi ile ayarlandığından, solunumu baskılamayan deksmedetomidin temelli bilinçli sedasyon (MAC) + lokal blok mutlak altın standarttır. Endotrakeal tüp ses tellerini ayırıp fonasyonu imkansız kılacağı için doğal hava yolu korunur ve nazal O2/sidestream EtCO2 ile takip sağlanır.',
     rulesTitle: 'LARİNKS ÇATI CERRAHİSİNDE (TİROPLASTİ) ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',
     indispensableRules: [
       {

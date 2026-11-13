@@ -58,7 +58,25 @@ export const breastBiopsy: ProcedureDefinition = {
       'Ultrason Eşliğinde Rejyonel Fasya Plan Blokları (PECS I/II Bloğu, Serratus Anterior Plan Bloğu [SAPB] veya Torasik Paravertebral Blok [TPVB]) + Hafif Sedasyon (Genel anestezinin yüksek risk taşıdığı ciddi kardiyopulmoner komorbiditesi olan hastalarda mükemmel hedefe yönelik anestezi sağlar)',
       'Yalnızca Lokal Anestezi İnfiltrasyonu (Sedasyonsuz, küçük yüzeyel kitlelerde ayaktan poliklinik/küçük cerrahi odası şartlarında)'
     ],
-    notes: 'Meme biyopsilerinin büyük kısmı günübirlik (outpatient/ambulatory) cerrahi prosedürlerdir. Hızlı derlenme ve erken taburculuk için MAC (Sedoanaljezi) altın standarttır. Ancak cerrahi örtülerin hastanın baş ve yüzünü kapatması nedeniyle sedasyon derinliğinin dikkatle titre edilmesi ve mikroakım kapnografi ile solunum paterninin kesintisiz izlenmesi şarttır. Derin retromammar lezyonlarda lokal anestezik iğnesi veya cerrahi bistürinin göğüs duvarına/plevraya yaklaşımı pnömotoraks riski açısından cerrahi ekiple koordine edilmelidir.'
+    notes: 'Meme biyopsilerinin büyük kısmı günübirlik (outpatient/ambulatory) cerrahi prosedürlerdir. Hızlı derlenme ve erken taburculuk için MAC (Sedoanaljezi) altın standarttır. Ancak cerrahi örtülerin hastanın baş ve yüzünü kapatması nedeniyle sedasyon derinliğinin dikkatle titre edilmesi ve mikroakım kapnografi ile solunum paterninin kesintisiz izlenmesi şarttır. Derin retromammar lezyonlarda lokal anestezik iğnesi veya cerrahi bistürinin göğüs duvarına/plevraya yaklaşımı pnömotoraks riski açısından cerrahi ekiple koordine edilmelidir.',
+    rulesTitle: 'MEME BİYOPSİSİNDE TEMEL ANESTEZİ İLKELERİ',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'TEL İŞARETLEME SONRASI VAZOVAGAL SENKOP VE TEL GÜVENLİĞİ',
+        content: 'Radyolojide oturur pozisyonda kılavuz tel yerleştirilmesi sırasında hastaların önemli kısmında açlıkla birleşen vazovagal reaksiyon, bradikardi ve ortostatik hipotansiyon gelişir. Ameliyathaneye alınan hastanın bazal vital bulguları kontrol edilip IV hidrasyon başlatılmalı; boyama/örtünme sırasında kılavuz telin çekilmemesi ve bükülmemesi için mutlak özen gösterilmelidir.'
+      },
+      {
+        number: 2,
+        title: 'ÖRTÜ ALTI HAVA YOLU ERİŞİMİ, OKSİJEN YANGIN GÜVENLİĞİ VE KAPNOGRAFİ',
+        content: 'Cerrahi örtüler göğüs ve boyun bölgesini örterken hastanın yüzü altında yüksek konsantrasyonda oksijen birikebilir ve elektrokoterle ölümcül ameliyathane yangınına yol açabilir. Gereksiz yüksek FiO2 nazal O2\'den kaçınılmalı, örtüler hastanın yüzü üzerinde nefes alma çadırı oluşturacak şekilde asılmalı ve EtCO2 kesintisiz izlenmelidir.'
+      },
+      {
+        number: 3,
+        title: 'DERİN RETROMAMMAR LEZYONLARDA HAREKETSİZLİK VE PNÖMOTORAKS TEYAKKUZU',
+        content: 'Göğüs duvarına, pektoral fasyaya veya interkostal aralığa yakın lezyonların eksizyonunda lokal infiltrasyon sırasında hastanın sıçramaması için kısa süreli yeterli derinlik sağlanmalı; işlem esnasında ani öksürük, tek taraflı göğüs ağrısı veya desatürasyon gelişirse plevral perforasyon/pnömotoraks derhal ekarte edilmelidir.'
+      }
+    ]
   },
 
   // 3) Pre-operatif hazırlığı
