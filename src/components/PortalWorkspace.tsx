@@ -199,10 +199,10 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   'vascular-access': {
     id: 'vascular-access',
     title: 'Güvenli Vasküler Erişim',
-    badge: 'USG · SVK Aktif',
+    badge: 'IV · SVK · Arteriyel',
     badgeHighlight: true,
-    desc: 'USG eşliğinde SVK (İJV, Subklavyen/Aksiller, Femoral), Association of Anaesthetists 2025 ömür boyu damar koruma, Kateter/Ven oranı, Peres derinlik hesaplayıcısı ve LocSSIPs/Seldinger güvenlik protokolü.',
-    clinicalKey: 'Dinamik USG takibi, Kateter/Ven oranı (≤%33–45), Peres CAJ derinliği ve Never Event kılavuz tel güvenliği.',
+    desc: 'Periferik IV kanülasyon (14G–26G, Poiseuille r⁴/L, 7 Fr SVK kıyası, DIVA), USG ve Landmark metodu ile SVK (ventilasyon tedbirleri) ile İnvaziv Arteriyel Kanülasyon (Radiyal, Brakiyal, Femoral, Aksiller; transdüser sıfırlama ve kare dalga testi).',
+    clinicalKey: 'Periferik IV akım fiziği, USG/Landmark SVK yaklaşımları, Brakiyal/Radiyal/Femoral arteriyel monitörizasyon, kare dalga sönümleme ve Never Event güvenliği.',
     icon: ShieldCheck,
     iconBgDark: 'bg-sky-500/15',
     iconBgLight: 'bg-sky-50',

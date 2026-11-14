@@ -9,149 +9,19 @@ import {
   Compass,
   ExternalLink,
   Eye,
-  Maximize2,
   RotateCcw,
   ShieldAlert,
   ShieldCheck,
-  SlidersHorizontal,
-  X
+  Wind
 } from 'lucide-react';
+import { CvcCoagulationTablesAccordion } from './CvcCoagulationTablesAccordion';
 
 interface UsgCvcModuleProps {
   isDark: boolean;
 }
 
-type CvcSiteId = 'ijv' | 'subclavian' | 'femoral';
-type ProbeAxis = 'oop' | 'ip';
 type PeresAccessSite = 'r-ijv' | 'l-ijv' | 'r-scv' | 'l-scv' | 'femoral';
 type CatheterType = 'triple-7fr' | 'sheath-85fr' | 'dialysis-12fr';
-
-interface RealSonoItem {
-  id: string;
-  siteTag: CvcSiteId | 'general';
-  regionLabel: string;
-  title: string;
-  imagePath: string;
-  landmarks: string;
-  clinicalNote: string;
-  attribution: string;
-  pmid: string;
-  doi: string;
-  license: string;
-}
-
-interface SiteProtocolSpec {
-  id: CvcSiteId;
-  name: string;
-  shortName: string;
-  probeInfo: string;
-  position: string;
-  landmarkSummary: string;
-  anatomyNotes: string[];
-  advantages: string[];
-  cautions: string[];
-  needleStrategy: string;
-  compressionNote: string;
-  depthRange: string;
-  infectionRisk: string;
-  thrombosisRisk: string;
-  pneumothoraxRisk: string;
-  coagulopathySafety: string;
-}
-
-const SITE_PROTOCOLS: Record<CvcSiteId, SiteProtocolSpec> = {
-  ijv: {
-    id: 'ijv',
-    name: 'İnternal Juguler Ven (İJV)',
-    shortName: 'İnternal Juguler (İJV)',
-    probeInfo: 'Yüksek frekanslı Lineer Prob (7–15 MHz) · Derinlik ayarı: 2.5–3.5 cm',
-    position: '15° Trendelenburg (hava embolisi önlemi + venöz dolgunluk) · Baş karşıya maksimum 15–30° rotasyon (aşırı rotasyon İJV’yi karotis üzerine bindirir).',
-    landmarkSummary: 'Krikoid kıkırdak / Sedillot üçgeni (SKM sternal ve klaviküler başları arası). Sağ İJV brakiyosefalik ven ve SVC ile düz hat oluşturduğundan birinci tercihtir.',
-    anatomyNotes: [
-      'İJV tipik olarak Ana Karotis Arterin (AKA) anterolateralinde, ince duvarlı ve oval/eliptik kesitli olarak izlenir.',
-      'Prob ile hafif basıda İJV tamamen kollabe olurken, kalın kas duvarlı Karotis Arter yuvarlak ve pulsatil kalır.',
-      'Başın >45° döndürülmesi veni arterin tam önüne taşır ("double-wall" arter ponksiyonu riski artar).',
-      'Johnston 2025: Ponksiyon öncesi ven çapı USG ile ölçülmeli; kateter dış çapı / ven çapı oranı mümkünse ≤%33–45 tutularak kateter ilişkili tromboz (CRT) azaltılmalıdır.'
-    ],
-    advantages: [
-      'USG altında anatomik görüntülemesi en net ve öğrenme eğrisi en yüksek erişim yeridir.',
-      'Dışarıdan doğrudan bası uygulanabildiği için koagülopati/antikoagülan varlığında uzman operatör + gerçek zamanlı USG ile rutin kan ürünü profilaksisi gerektirmeden güvenli uygulanabilir.',
-      'Sağ İJV yoluyla kateter ucunun kava-atriyal bileşkeye (CAJ / alt SVC, karina düzeyi) malpozisyon oranı en düşüktür.'
-    ],
-    cautions: [
-      'Sol İJV seçilirse torasik duktus hasarı (şilotoraks) ve sol brakiyosefalik ven açılanmasına bağlı duvar erozyonu riski daha yüksektir.',
-      'Çok derin veya klavikulaya çok yakın ponksiyonda apikal plevra (pnömotoraks) veya subklavyen arter yaralanması gelişebilir.',
-      'Hipovolemik hastada solunumla tam kollaps görülebilir; Trendelenburg artırılmalı ve hastaya Valsalva/ekspiratuvar tutma yaptırılmalıdır.'
-    ],
-    needleStrategy: 'Kısa eksende (Out-of-Plane) "walk-down" tekniği veya uzun eksende (In-Plane) oblik/supraklaviküler yaklaşım kullanılır. İğne açısı 30–45° olmalıdır.',
-    compressionNote: 'Kompresyon altında İJV lümeni tamamen kapanır; AKA dairesel formunu ve pulsasyonunu korur.',
-    depthRange: '1.0 – 2.2 cm',
-    infectionRisk: 'Orta (3SITES: Subklavyenden yüksek, femoral ile benzer/hafif düşük)',
-    thrombosisRisk: 'Orta (Kateter/Ven oranı ≤%33–45 ile CRT azaltılır)',
-    pneumothoraxRisk: 'Çok Düşük (< %0.1–0.5, USG ile nadir)',
-    coagulopathySafety: 'Uygun (Basılabilir bölge + USG)'
-  },
-  subclavian: {
-    id: 'subclavian',
-    name: 'Subklavyen / İnfraklaviküler Aksiller Ven (SKV)',
-    shortName: 'Subklavyen / Aksiller',
-    probeInfo: 'Lineer Prob (7–13 MHz, obezitede mikrokonveks) · Derinlik ayarı: 3.0–4.5 cm',
-    position: '10–15° Trendelenburg · Baş nötral veya hafif karşıya dönük · Omuzlar doğal pozisyonda (omuz altına rulo koymak klavikulayı vene bastırıp daraltabilir).',
-    landmarkSummary: 'USG ile klavikula altında aslında "İnfraklaviküler Aksiller Ven" görüntülenir (1. kosta dış kenarında subklavyen vene devam eder).',
-    anatomyNotes: [
-      'Klavikula distal 1/3 altında prob aksiyel/oblik yerleştirildiğinde Aksiller Ven yüzeyelde ve anteromedialde, Aksiller Arter posterolateralde görülür.',
-      'Damarların hemen derininde parlak hiperekoik Plevral Çizgi ve solunumla senkron "lung sliding" izlenir.',
-      'Klavikula güçlü akustik gölgelenme oluşturur; prob hafif kaudale/laterale açılandırılarak ven penceresi açılır.'
-    ],
-    advantages: [
-      '3SITES çalışmasına göre santral kateter ilişkili kan dolaşımı enfeksiyonu (CLABSI) ve semptomatik DVT riski en düşük bölgedir.',
-      'Pansuman stabilitesi ve hasta konforu (boyun hareketlerinden etkilenmez, uzun süreli yoğun bakım/TPN) mükemmeldir.',
-      'Kafa içi basınç artışı (KİBAS) veya boyunluk (servikal travma) bulunan olgularda venöz dönüşü engellemez.'
-    ],
-    cautions: [
-      'Klavikula arkasında kaldığı için arteriyel kanamada dışarıdan kompresyon UYGULANAMAZ; koagülopati/antikoagülasyon varlığında basılabilir bölgelere göre risklidir.',
-      'Pnömotoraks ve hemotoraks riski (3SITES verisi: ~%1.5) İJV ve femorale kıyasla anlamlı olarak daha yüksektir.',
-      'Ömür Boyu Damar Koruma (Johnston 2025): Kronik böbrek hastalığında (KBH / gelecekteki diyaliz AV fistülü) santral venöz stenozu önlemek için subklavyen erişimden kaçınılmalı; mastektomi veya aksiller lenf nodu diseksiyonu geçiren tarafta aksiller/subklavyen kanülasyon yapılmamalıdır.'
-    ],
-    needleStrategy: 'Klavikula gölgesinden kaçınmak için Uzun Eksen (In-Plane) lateral-to-medial aksiller yaklaşım plevrayı ve iğne ucunu kesintisiz görmek açısından altın standarttır.',
-    compressionNote: 'Göğüs duvarı/klavikula komşuluğu nedeniyle ven tam kollabe olmayabilir; Renkli/Pulse Doppler ve duvar kalınlığı mutlaka doğrulanmalıdır.',
-    depthRange: '2.0 – 3.8 cm',
-    infectionRisk: 'En Düşük (3SITES: 0.5 / 1000 kateter günü)',
-    thrombosisRisk: 'En Düşük (Subklavyen HR belirgin düşük)',
-    pneumothoraxRisk: 'En Yüksek (~%1.5; USG In-Plane ile azaltılır)',
-    coagulopathySafety: 'Riskli (Komprese edilemez bölge)'
-  },
-  femoral: {
-    id: 'femoral',
-    name: 'Femoral Ven (FV)',
-    shortName: 'Femoral Ven (FV)',
-    probeInfo: 'Lineer Prob (7–15 MHz) · Derinlik ayarı: 3.0–4.5 cm (obezitede 5–6 cm)',
-    position: 'Supin (Trendelenburg gerektirmez — solunum sıkıntısında ideal) · Bacak hafif abdüksiyon ve dış rotasyon ("kurbağa bacağı").',
-    landmarkSummary: 'İnguinal ligaman (ASIS–pubik tüberkül hattı) 1–2 cm distali. Lateralden Mediale "NAVEL" sırası: Sinir (Nerve) – Arter – Ven – Boşluk – Lenfatikler.',
-    anatomyNotes: [
-      'Femoral Ven (FV), Femoral Arterin (FA) hemen medialinde yerleşir; ancak distale indikçe ven arterin posterioruna (altına) kayar — ponksiyon inguinal kıvrıma yakın yapılmalıdır.',
-      'Safena magna veninin femoral vene döküldüğü proksimal düzeyde (saphenofemoral junction) hedef çap en geniştir.',
-      'Femoral sinir, fasya iliaka altında arterin lateralinde kama şeklinde hiperekoik görünür.'
-    ],
-    advantages: [
-      'Pnömotoraks/hemotoraks riski SIFIRDIR ve KPR sırasında göğüs kompresyonları sürerken eş zamanlı takılabilir.',
-      'Supin pozisyonda baş-aşağı yatırılmayı tolere edemeyen ağır pulmoner ödem, KOAH atağı veya KİBAS hastalarında hızlı erişim sağlar.',
-      'Tamamen basılabilir olduğu için ağır koagülopatide veya trombolitik tedavi alacak hastalarda en güvenli alternatiftir.'
-    ],
-    cautions: [
-      'Kasık kıvrımı florası ve nem nedeniyle CLABSI enfeksiyon riski ile derin ven trombozu (DVT) insidansı en yüksektir (ASA/CDC: elektif uzun süreli erişimde son tercih, 48–72 sa içinde çekilmeli).',
-      'İnguinal ligaman üstüne çıkılırsa retroperitoneal kanama gelişebilir (kompresyonla durmaz!).',
-      'CVP ölçümü yüksek karın içi basıncından etkilenebilir; ancak Johnston 2025 damar koruma ilkesi gereği üst ekstremite venlerinin mutlak korunması gereken diyaliz/SVC trombozu olgularında stratejik alternatiftir.'
-    ],
-    needleStrategy: 'Kısa eksen (Out-of-Plane) veya oblik yaklaşımla FV, FA ile üst üste binmeden tam medialde yakalanır. İğne açısı 30–45°.',
-    compressionNote: 'Kompresyonda FV tamamen kapanır; FA ise yuvarlak ve pulsatil kalır (ancak derin ven trombozunda ven komprese olmaz — trombüsü dışla!).',
-    depthRange: '1.5 – 3.5 cm',
-    infectionRisk: 'En Yüksek (İnguinal kolonizasyon; 3SITES)',
-    thrombosisRisk: 'En Yüksek (İliofemoral DVT riski)',
-    pneumothoraxRisk: 'Yok (%0)',
-    coagulopathySafety: 'Çok Güvenli (Tam basılabilir)'
-  }
-};
 
 const SELDINGER_STEPS = [
   {
@@ -166,8 +36,8 @@ const SELDINGER_STEPS = [
   },
   {
     id: 3,
-    title: 'Pozisyon & Gerçek Zamanlı Dinamik USG Ponksiyonu',
-    detail: 'İJV/SKV için 15° Trendelenburg verilir; baş rotasyonu ≤ 30° tutulur. Lokal anestezi (%1–2 lidokain) sonrası iğne ucu ekranda kesintisiz takip edilerek damar ön duvarına tek geçişte girilir (arka duvara geçilmez).'
+    title: 'Pozisyon, Mekanik Ventilasyon Kontrolü & Dinamik USG Ponksiyonu',
+    detail: 'İJV/SKV için 15° Trendelenburg verilir; baş rotasyonu ≤ 30° tutulur. Mekanik ventilatörde İJV/FV için devre kesilmez; SKV’de plevra çizgisi korunarak ve ağır ARDS yoksa kısa ekspiratuvar tutma opsiyonu değerlendirilerek iğne ucu kesintisiz izlenir (arka duvara geçilmez).'
   },
   {
     id: 4,
@@ -192,14 +62,14 @@ const SELDINGER_STEPS = [
   {
     id: 8,
     title: 'Lümen Hazırlığı, Tespit & Multimodal Uç Doğrulama (CAJ / Karina)',
-    detail: 'Tüm lümenlerden serbest kan aspirasyonu yapılıp %0.9 NaCl ile yıkanır. Sütür + steril CHG şeffaf pansuman uygulanır. Hedef uç (alt SVC / kava-atriyal bileşke, radyografik karina düzeyi, perikard dışı) İntrakaviter EKG (IC-ECG) veya grafi + USG plevral kayma ile doğrulanır.'
+    detail: 'Tüm lümenlerden serbest kan aspirasyonu yapılıp %0.9 NaCl ile yıkanır. Sütür + steril CHG şeffaf pansuman uygulanır. Hedef uç (alt SVC / kava-atriyal bileşke, radyografik karina düzeyi, perikard dışı) İntrakaviter EKG (IC-ECG) veya grafi ile doğrulanır.'
   }
 ];
 
 const QUICK_NAV = [
   { id: 'cvc-sites', label: '1. Bölge Seçimi & 3SITES' },
-  { id: 'cvc-usg', label: '2. İnteraktif USG Sonoanatomi' },
-  { id: 'cvc-peres', label: '3. Peres Derinlik Hesabı' },
+  { id: 'cvc-vent', label: '2. Mekanik Ventilasyon Tedbirleri' },
+  { id: 'cvc-peres', label: '3. Peres & Kateter/Ven Oranı' },
   { id: 'cvc-seldinger', label: '4. Seldinger 8 Adım' },
   { id: 'cvc-complications', label: '5. Komplikasyon & Kriz' },
   { id: 'cvc-refs', label: '6. Kaynaklar' }
@@ -250,80 +120,7 @@ const CVC_REFERENCES = [
   }
 ];
 
-const REAL_SONO_GALLERY: RealSonoItem[] = [
-  {
-    id: 'real-ijv-compression',
-    siteTag: 'ijv',
-    regionLabel: 'İJV · Kısa Eksen + Kompresyon Testi',
-    title: 'İnternal Juguler Ven (j) vs Karotis Arter (c): Kompresyonla Kollaps',
-    imagePath: '/usg/ijv_compression_real.jpg',
-    landmarks: 'scm: Sternokleidomastoid · j: İJV · c: Ana Karotis Arter · kalın ok: Vagus siniri · scal: Skalen kas',
-    clinicalNote: 'Panel A (kompresyon yok): İnce duvarlı oval İJV (j) açık izlenir. Panel B (prob basısı): İJV tamamen kollabe olurken kalın duvarlı Karotis Arter (c) yuvarlak formunu korur.',
-    attribution: 'Walter U et al. Front Neurol. 2018;9:805 (Fig. 1A–B kırpılmış) · Wikimedia Commons',
-    pmid: '30319534',
-    doi: '10.3389/fneur.2018.00805',
-    license: 'CC BY 4.0'
-  },
-  {
-    id: 'real-axillary-inplane',
-    siteTag: 'subclavian',
-    regionLabel: 'Aksiller / Subklavyen · Uzun Eksen (In-Plane)',
-    title: 'İnfraklaviküler Aksiller Ven: In-Plane Ponksiyon & Tel Geçişi',
-    imagePath: '/usg/axillary_inplane_real.jpg',
-    landmarks: 'Yüzeyelde Pektoralis Major/Minör fasya planları · Derinde hipoekoik Aksiller Ven lümeni · Hiperekoik iğne/tel hattı',
-    clinicalNote: 'Klavikula gölgesinden kaçınarak deltopektoral alanda uzun eksende ön duvar tentingi ve kılavuz telin lümen içi ilerleyişi izlenmektedir.',
-    attribution: 'Nikorowitsch J et al. Clin Res Cardiol. 2026 (Fig. 1B kırpılmış)',
-    pmid: '40553151',
-    doi: '10.1007/s00392-025-02692-7',
-    license: 'CC BY 4.0'
-  },
-  {
-    id: 'real-femoral-variation',
-    siteTag: 'femoral',
-    regionLabel: 'Femoral Ven · Kısa Eksen Anatomi & Varyasyon',
-    title: 'Ana Femoral Ven (CFV) & Femoral Arter (CFA) İlişkisi',
-    imagePath: '/usg/femoral_real.png',
-    landmarks: 'CFA: Ana Femoral Arter · CFV: Ana Femoral Ven (a: olağan yan yana yerleşim · b: arter altı üst üste binme)',
-    clinicalNote: 'Panel a’da beklenen medial ven konumu, Panel b’de ise distale indikçe venin arterin posterioruna (altına) kaydığı yüksek riskli varyasyon görülmektedir.',
-    attribution: 'Kupó P et al. J Interv Card Electrophysiol. 2020 (Fig. 1)',
-    pmid: '31823233',
-    doi: '10.1007/s10840-019-00683-z',
-    license: 'CC BY 4.0'
-  },
-  {
-    id: 'real-dual-axis',
-    siteTag: 'general',
-    regionLabel: 'Kısa + Uzun Eksen · Çift Ekran Ponksiyon',
-    title: 'Dinamik Eş Zamanlı OOP + IP İğne Şaftı ve Uç Doğrulaması',
-    imagePath: '/usg/dual_axis_puncture_real.png',
-    landmarks: '1a–3a: Kısa eksen (OOP) merkezleme · 1b–3b: Uzun eksen (IP) şaft/uç · 1c–3c: Gerçek zamanlı steril prob pozisyonu',
-    clinicalNote: 'Önce kısa eksende ven orta hatta hizalanır, ardından uzun eksende iğne şaftı ve ucunun (3b) arka duvarı delmeden lümen ortasına girişi takip edilir.',
-    attribution: 'Zhang Y et al. Front Cardiovasc Med. 2022 (Fig. 1)',
-    pmid: '36741842',
-    doi: '10.3389/fcvm.2022.1026619',
-    license: 'CC BY 4.0'
-  },
-  {
-    id: 'real-pleura-barcode',
-    siteTag: 'subclavian',
-    regionLabel: 'Post-SVK Plevra Tarama · M-Mod',
-    title: 'Pnömotoraks Bulgusu: M-Mod "Barcode / Stratosphere Sign"',
-    imagePath: '/usg/pleura_barcode_real.jpg',
-    landmarks: 'Üstte B-Mod plevra çizgisi (3.8 cm) · Altta M-Mod plevral kayma kaybına bağlı yatay paralel çizgiler',
-    clinicalNote: 'Normalde plevral kayma ile oluşan granüler "Seashore (kıyı)" görüntüsünün kaybolup paralel barkod çizgilerine dönmesi pnömotoraks açısından yüksek derecede anlamlıdır.',
-    attribution: 'Anto AM et al. Front Med. 2026 (Fig. 2)',
-    pmid: '41939769',
-    doi: '10.3389/fmed.2026.1795346',
-    license: 'CC BY 4.0'
-  }
-];
-
 export const UsgCvcModule: React.FC<UsgCvcModuleProps> = ({ isDark }) => {
-  const [selectedSite, setSelectedSite] = useState<CvcSiteId>('ijv');
-  const [probeAxis, setProbeAxis] = useState<ProbeAxis>('oop');
-  const [compressionActive, setCompressionActive] = useState<boolean>(false);
-  const [selectedSonoItem, setSelectedSonoItem] = useState<RealSonoItem | null>(null);
-
   // Peres & Equipment + Catheter-to-Vein Ratio Calculator States
   const [heightCm, setHeightCm] = useState<number>(175);
   const [peresSite, setPeresAccessSite] = useState<PeresAccessSite>('r-ijv');
@@ -332,8 +129,6 @@ export const UsgCvcModule: React.FC<UsgCvcModuleProps> = ({ isDark }) => {
 
   // Seldinger 8-Step Checklist State
   const [checkedSteps, setCheckedSteps] = useState<number[]>([]);
-
-  const siteSpec = SITE_PROTOCOLS[selectedSite];
 
   const peresResult = useMemo(() => {
     const safeHeight = Math.max(100, Math.min(220, heightCm || 170));
@@ -582,590 +377,120 @@ export const UsgCvcModule: React.FC<UsgCvcModuleProps> = ({ isDark }) => {
         </div>
       </section>
 
-      {/* BÖLÜM 2: İNTERAKTİF USG SONOANATOMİ ATLASI */}
-      <section id="cvc-usg" className={`${panelClass} p-5 sm:p-6 space-y-5`}>
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div>
-            <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
-              <span>02 · Dinamik B-Mod Ultrasonografi</span>
-              <span aria-hidden="true">·</span>
-              <span>ESAIC PERSEUS Standardı</span>
+      {/* BÖLÜM 2: MEKANİK VENTİLATÖRE BAĞLI HASTADA TEDBİRLER (USG METODU) */}
+      <section id="cvc-vent" className={`${panelClass} p-5 sm:p-6 space-y-5`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className={`p-2 rounded-lg ${isDark ? 'bg-sky-500/15 text-sky-400' : 'bg-sky-50 text-sky-700'}`}>
+              <Wind className="w-5 h-5" />
             </div>
-            <h3 className={`text-lg font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              İnteraktif USG Sonoanatomi &amp; İğne Yaklaşım Simülatörü
-            </h3>
-          </div>
-
-          {/* Bölge Sekmeleri */}
-          <div className={`inline-flex flex-wrap p-1 rounded-lg border gap-1 ${
-            isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
-          }`}>
-            {(['ijv', 'subclavian', 'femoral'] as CvcSiteId[]).map((sId) => (
-              <button
-                key={sId}
-                type="button"
-                onClick={() => setSelectedSite(sId)}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                  selectedSite === sId
-                    ? isDark
-                      ? 'bg-sky-600 text-white'
-                      : 'bg-white text-sky-800 shadow-2xs'
-                    : isDark
-                      ? 'text-slate-400 hover:text-slate-200'
-                      : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {SITE_PROTOCOLS[sId].shortName}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Kontroller + Split Console (SVG USG Viewport & Teknik Bilgi Paneli) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          {/* Sol Kolon: B-Mod USG Simülatörü */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-3">
-            {/* Prob Ekseni & Kompresyon Testi Butonları */}
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className={`inline-flex p-1 rounded-lg border text-xs ${
-                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
-              }`}>
-                <button
-                  type="button"
-                  onClick={() => setProbeAxis('oop')}
-                  className={`px-2.5 py-1 rounded-md font-medium whitespace-nowrap transition-colors cursor-pointer ${
-                    probeAxis === 'oop'
-                      ? isDark ? 'bg-slate-800 text-sky-300' : 'bg-white text-slate-900 shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                  }`}
-                >
-                  Out-of-Plane (Kısa Eksen)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProbeAxis('ip')}
-                  className={`px-2.5 py-1 rounded-md font-medium whitespace-nowrap transition-colors cursor-pointer ${
-                    probeAxis === 'ip'
-                      ? isDark ? 'bg-slate-800 text-sky-300' : 'bg-white text-slate-900 shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                  }`}
-                >
-                  In-Plane (Uzun Eksen)
-                </button>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setCompressionActive((prev) => !prev)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                  compressionActive
-                    ? 'bg-sky-600 border-sky-500 text-white'
-                    : isDark
-                      ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
-                      : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>{compressionActive ? 'Prob Kompresyonu: AÇIK' : 'Kompresyon Testi Uygula'}</span>
-              </button>
-            </div>
-
-            {/* Kalibreli B-Mode USG Ekranı (SVG) */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-3 space-y-2">
-              <div className="flex items-center justify-between text-[11px] font-mono tabular-nums text-slate-400 px-1">
-                <span>B-MODE · LINEAR 10–12 MHz · {probeAxis === 'oop' ? 'TRANSVERS (OOP)' : 'LONGİTUDİNAL (IP)'}</span>
-                <span className={compressionActive ? 'text-amber-400 font-semibold' : 'text-sky-400'}>
-                  {compressionActive ? 'KOMPRESYON (+)' : 'NORMAL BASI'}
-                </span>
-              </div>
-
-              <svg
-                viewBox="0 0 560 300"
-                className="w-full h-auto rounded-lg bg-[#05080f] border border-slate-800/80"
-                role="img"
-                aria-label={`${siteSpec.name} USG sonoanatomi şeması`}
-              >
-                <defs>
-                  <linearGradient id="tissueBg" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#1e293b" stopOpacity="0.55" />
-                    <stop offset="35%" stopColor="#0f172a" stopOpacity="0.85" />
-                    <stop offset="100%" stopColor="#020617" stopOpacity="0.98" />
-                  </linearGradient>
-                  <linearGradient id="veinLumen" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#040914" />
-                    <stop offset="100%" stopColor="#0a1628" />
-                  </linearGradient>
-                  <linearGradient id="arteryLumen" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#070a12" />
-                    <stop offset="100%" stopColor="#140c12" />
-                  </linearGradient>
-                </defs>
-
-                {/* Tissue Field */}
-                <rect x="0" y="0" width="510" height="300" fill="url(#tissueBg)" />
-
-                {/* Subcutaneous / Fascia Echo Lines */}
-                <path d="M 12 28 Q 250 34 495 28" stroke="#475569" strokeWidth="1.5" fill="none" strokeDasharray="4 3" opacity="0.7" />
-                <path d="M 12 52 Q 250 62 495 50" stroke="#64748b" strokeWidth="1.2" fill="none" opacity="0.5" />
-
-                {/* Right-side Depth Ruler (0 - 4 cm) */}
-                <line x1="515" y1="10" x2="515" y2="285" stroke="#334155" strokeWidth="1.5" />
-                {[0, 1, 2, 3, 4].map((cm) => {
-                  const y = 14 + cm * 66;
-                  return (
-                    <g key={cm}>
-                      <line x1="515" y1={y} x2="524" y2={y} stroke="#64748b" strokeWidth="1.5" />
-                      <text x="528" y={y + 4} fill="#94a3b8" fontSize="11" fontFamily="monospace">
-                        {cm}cm
-                      </text>
-                    </g>
-                  );
-                })}
-
-                {/* SITE 1: INTERNAL JUGULAR VEIN */}
-                {selectedSite === 'ijv' && probeAxis === 'oop' && (
-                  <g>
-                    {/* SCM Muscle */}
-                    <path
-                      d="M 85 48 Q 245 30 415 56 Q 360 95 245 96 Q 130 92 85 48 Z"
-                      fill="#1e293b"
-                      stroke="#64748b"
-                      strokeWidth="1.4"
-                      opacity="0.85"
-                    />
-                    <text x="245" y="68" textAnchor="middle" fill="#cbd5e1" fontSize="11" fontWeight="600">
-                      M. Sternokleidomastoideus (SKM)
-                    </text>
-
-                    {/* Thyroid (Medial) */}
-                    <ellipse cx="425" cy="198" rx="48" ry="42" fill="#334155" stroke="#64748b" strokeWidth="1.2" opacity="0.7" />
-                    <text x="425" y="202" textAnchor="middle" fill="#cbd5e1" fontSize="10.5">
-                      Tiroid Lobu
-                    </text>
-
-                    {/* Carotid Artery (Medial, thick wall, non-compressible) */}
-                    <circle cx="292" cy="176" r="28" fill="url(#arteryLumen)" stroke="#f87171" strokeWidth="2.8" />
-                    <circle cx="292" cy="176" r="24" fill="none" stroke="#fca5a5" strokeWidth="0.7" strokeDasharray="3 2" opacity="0.6" />
-                    <text x="292" y="173" textAnchor="middle" fill="#fecaca" fontSize="11" fontWeight="700">
-                      Karotis
-                    </text>
-                    <text x="292" y="187" textAnchor="middle" fill="#fca5a5" fontSize="9.5" fontFamily="monospace">
-                      Pulsatil
-                    </text>
-
-                    {/* Internal Jugular Vein (Anterolateral, thin wall, collapses on compression) */}
-                    <ellipse
-                      cx="188"
-                      cy={compressionActive ? 148 : 138}
-                      rx={compressionActive ? 54 : 46}
-                      ry={compressionActive ? 8 : 27}
-                      fill="url(#veinLumen)"
-                      stroke="#38bdf8"
-                      strokeWidth="2.2"
-                      style={{ transition: 'all 180ms ease-out' }}
-                    />
-                    <text
-                      x="188"
-                      y={compressionActive ? 128 : 136}
-                      textAnchor="middle"
-                      fill="#7dd3fc"
-                      fontSize="11.5"
-                      fontWeight="700"
-                    >
-                      İJV (Ven)
-                    </text>
-                    <text
-                      x="188"
-                      y={compressionActive ? 172 : 150}
-                      textAnchor="middle"
-                      fill="#38bdf8"
-                      fontSize="9.5"
-                      fontFamily="monospace"
-                    >
-                      {compressionActive ? 'Kollabe (%100)' : 'Kompresibl'}
-                    </text>
-
-                    {/* OOP Needle Tip Dot inside Vein */}
-                    {!compressionActive && (
-                      <g>
-                        <circle cx="188" cy="130" r="4.5" fill="#facc15" />
-                        <circle cx="188" cy="130" r="9" fill="none" stroke="#facc15" strokeWidth="1" strokeDasharray="2 2" />
-                        <text x="115" y="114" fill="#fde047" fontSize="10" fontFamily="monospace">
-                          İğne Ucu (Eko)
-                        </text>
-                        <line x1="158" y1="117" x2="181" y2="127" stroke="#fde047" strokeWidth="1" />
-                      </g>
-                    )}
-
-                    {/* Orientation Markers */}
-                    <text x="18" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">LATERAL</text>
-                    <text x="435" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">MEDİAL</text>
-                  </g>
-                )}
-
-                {/* SITE 2: SUBCLAVIAN / AXILLARY VEIN */}
-                {selectedSite === 'subclavian' && probeAxis === 'oop' && (
-                  <g>
-                    {/* Pectoralis Major / Minor */}
-                    <rect x="28" y="40" width="450" height="44" rx="12" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" opacity="0.75" />
-                    <text x="250" y="66" textAnchor="middle" fill="#cbd5e1" fontSize="11" fontWeight="600">
-                      M. Pectoralis Major &amp; Minor
-                    </text>
-
-                    {/* Clavicle / Rib Shadow (Medial/Superior) */}
-                    <ellipse cx="425" cy="94" rx="44" ry="14" fill="#cbd5e1" stroke="#f8fafc" strokeWidth="1.5" />
-                    <polygon points="382,102 468,102 478,285 372,285" fill="#020617" opacity="0.92" />
-                    <text x="425" y="98" textAnchor="middle" fill="#0f172a" fontSize="10" fontWeight="700">
-                      Klavikula
-                    </text>
-                    <text x="425" y="165" textAnchor="middle" fill="#64748b" fontSize="9.5" fontFamily="monospace">
-                      Akustik Gölge
-                    </text>
-
-                    {/* Axillary / Subclavian Artery (Lateral & slightly deeper) */}
-                    <circle cx="162" cy="176" r="24" fill="url(#arteryLumen)" stroke="#f87171" strokeWidth="2.8" />
-                    <text x="162" y="175" textAnchor="middle" fill="#fecaca" fontSize="10.5" fontWeight="700">
-                      Aksiller Art.
-                    </text>
-                    <text x="162" y="188" textAnchor="middle" fill="#fca5a5" fontSize="9" fontFamily="monospace">
-                      Pulsatil
-                    </text>
-
-                    {/* Axillary / Subclavian Vein (Medial/Superficial to Artery) */}
-                    <ellipse
-                      cx="265"
-                      cy="160"
-                      rx="42"
-                      ry={compressionActive ? 14 : 25}
-                      fill="url(#veinLumen)"
-                      stroke="#38bdf8"
-                      strokeWidth="2.2"
-                      style={{ transition: 'all 180ms ease-out' }}
-                    />
-                    <text x="265" y="158" textAnchor="middle" fill="#7dd3fc" fontSize="11" fontWeight="700">
-                      Aksiller / SKV
-                    </text>
-                    <text x="265" y="172" textAnchor="middle" fill="#38bdf8" fontSize="9" fontFamily="monospace">
-                      {compressionActive ? 'Kısmi Kollaps' : 'Venöz Lümen'}
-                    </text>
-
-                    {/* Hyperechoic Pleura Line & Lung */}
-                    <line x1="40" y1="242" x2="368" y2="242" stroke="#fbbf24" strokeWidth="3" />
-                    <line x1="40" y1="256" x2="368" y2="256" stroke="#fbbf24" strokeWidth="1" strokeDasharray="6 4" opacity="0.5" />
-                    <text x="200" y="234" textAnchor="middle" fill="#fcd34d" fontSize="10.5" fontWeight="700">
-                      PLEVRA ÇİZGİSİ ("Lung Sliding" Kontrol Et!)
-                    </text>
-                    <text x="200" y="274" textAnchor="middle" fill="#94a3b8" fontSize="9.5" fontFamily="monospace">
-                      A-Çizgileri (Akciğer Parankimi)
-                    </text>
-
-                    {!compressionActive && (
-                      <circle cx="265" cy="156" r="4.5" fill="#facc15" />
-                    )}
-
-                    <text x="18" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">LATERAL</text>
-                    <text x="435" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">MEDİAL</text>
-                  </g>
-                )}
-
-                {/* SITE 3: FEMORAL VEIN */}
-                {selectedSite === 'femoral' && probeAxis === 'oop' && (
-                  <g>
-                    {/* Fascia Lata & Iliopsoas */}
-                    <path d="M 18 76 Q 250 86 485 74" stroke="#94a3b8" strokeWidth="1.5" fill="none" />
-                    <text x="255" y="66" textAnchor="middle" fill="#cbd5e1" fontSize="10.5">
-                      Fasya Lata &amp; Subkütan Doku
-                    </text>
-
-                    {/* Femoral Nerve (Lateral, honeycomb hyperechoic wedge) */}
-                    <polygon points="80,152 136,142 128,176 74,174" fill="#334155" stroke="#a3e635" strokeWidth="1.5" strokeDasharray="3 2" />
-                    <text x="105" y="162" textAnchor="middle" fill="#bef264" fontSize="10" fontWeight="700">
-                      N (Sinir)
-                    </text>
-
-                    {/* Femoral Artery (Middle/Lateral) */}
-                    <circle cx="204" cy="160" r="26" fill="url(#arteryLumen)" stroke="#f87171" strokeWidth="2.8" />
-                    <text x="204" y="157" textAnchor="middle" fill="#fecaca" fontSize="10.5" fontWeight="700">
-                      A (Arter)
-                    </text>
-                    <text x="204" y="170" textAnchor="middle" fill="#fca5a5" fontSize="9" fontFamily="monospace">
-                      Pulsatil
-                    </text>
-
-                    {/* Femoral Vein (Medial) */}
-                    <ellipse
-                      cx="306"
-                      cy={compressionActive ? 162 : 160}
-                      rx={compressionActive ? 48 : 38}
-                      ry={compressionActive ? 7 : 28}
-                      fill="url(#veinLumen)"
-                      stroke="#38bdf8"
-                      strokeWidth="2.2"
-                      style={{ transition: 'all 180ms ease-out' }}
-                    />
-                    <text
-                      x="306"
-                      y={compressionActive ? 144 : 158}
-                      textAnchor="middle"
-                      fill="#7dd3fc"
-                      fontSize="11"
-                      fontWeight="700"
-                    >
-                      V (Femoral Ven)
-                    </text>
-                    <text
-                      x="306"
-                      y={compressionActive ? 184 : 172}
-                      textAnchor="middle"
-                      fill="#38bdf8"
-                      fontSize="9"
-                      fontFamily="monospace"
-                    >
-                      {compressionActive ? 'Kollabe (Trombüs Yok)' : 'Kompresibl'}
-                    </text>
-
-                    {/* Empty Space / Lymphatics */}
-                    <circle cx="404" cy="158" r="14" fill="#1e293b" stroke="#64748b" strokeWidth="1" strokeDasharray="2 2" />
-                    <text x="404" y="162" textAnchor="middle" fill="#94a3b8" fontSize="9.5">
-                      EL (Lenf)
-                    </text>
-
-                    {!compressionActive && (
-                      <circle cx="306" cy="152" r="4.5" fill="#facc15" />
-                    )}
-
-                    <text x="245" y="232" textAnchor="middle" fill="#94a3b8" fontSize="10.5" fontFamily="monospace">
-                      NAVEL DİZİLİMİ (Lateral ➔ Medial)
-                    </text>
-                    <text x="18" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">LATERAL</text>
-                    <text x="435" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">MEDİAL</text>
-                  </g>
-                )}
-
-                {/* LONGITUDINAL / IN-PLANE VIEW FOR ALL SITES */}
-                {probeAxis === 'ip' && (
-                  <g>
-                    <text x="255" y="42" textAnchor="middle" fill="#cbd5e1" fontSize="11" fontWeight="600">
-                      {siteSpec.name} · Uzun Eksen (Longitudinal / In-Plane) Görünümü
-                    </text>
-
-                    {/* Longitudinal Vein Channel */}
-                    <rect
-                      x="30"
-                      y={compressionActive ? 132 : 108}
-                      width="450"
-                      height={compressionActive ? 18 : 66}
-                      rx="6"
-                      fill="url(#veinLumen)"
-                      stroke="#38bdf8"
-                      strokeWidth="2.2"
-                      style={{ transition: 'all 180ms ease-out' }}
-                    />
-                    <text
-                      x="360"
-                      y={compressionActive ? 124 : 145}
-                      textAnchor="middle"
-                      fill="#7dd3fc"
-                      fontSize="12"
-                      fontWeight="700"
-                    >
-                      {selectedSite === 'ijv'
-                        ? 'İnternal Juguler Ven Lümeni'
-                        : selectedSite === 'subclavian'
-                          ? 'Aksiller / Subklavyen Ven Lümeni'
-                          : 'Femoral Ven Lümeni'}
-                    </text>
-
-                    {/* Full Needle Shaft + Bevel Tip inside Lumen */}
-                    {!compressionActive && (
-                      <g>
-                        <line x1="45" y1="42" x2="218" y2="136" stroke="#facc15" strokeWidth="3.2" strokeLinecap="round" />
-                        <circle cx="218" cy="136" r="5" fill="#fde047" />
-                        <text x="122" y="72" fill="#fde047" fontSize="10.5" fontWeight="700">
-                          İğne Şaftı + Uç Tamamı Görünür
-                        </text>
-                      </g>
-                    )}
-
-                    {/* Pleura / Deep Floor Warning Line */}
-                    {selectedSite === 'subclavian' && (
-                      <g>
-                        <line x1="30" y1="226" x2="480" y2="226" stroke="#fbbf24" strokeWidth="3" />
-                        <text x="255" y="246" textAnchor="middle" fill="#fcd34d" fontSize="10.5" fontWeight="700">
-                          PLEVRA ÇİZGİSİ — İğne Ucu Daima Plevranın Üzerinde Tutulur!
-                        </text>
-                      </g>
-                    )}
-
-                    {selectedSite !== 'subclavian' && (
-                      <g>
-                        <rect x="30" y="198" width="450" height="32" rx="4" fill="url(#arteryLumen)" stroke="#f87171" strokeWidth="1.4" strokeDasharray="5 3" opacity="0.7" />
-                        <text x="255" y="218" textAnchor="middle" fill="#fca5a5" fontSize="10">
-                          Arka Duvarın Altında Arter / Derin Yapılar (Arka Duvar Delinmez!)
-                        </text>
-                      </g>
-                    )}
-
-                    <text x="18" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">
-                      {selectedSite === 'subclavian' ? 'LATERAL (İĞNE GİRİŞİ)' : 'SEFALİK / PROKSİMAL'}
-                    </text>
-                    <text x="365" y="286" fill="#94a3b8" fontSize="11" fontFamily="monospace">
-                      {selectedSite === 'subclavian' ? 'MEDİAL (KLAVİKULA)' : 'KAUDAL / KALP YÖNÜ'}
-                    </text>
-                  </g>
-                )}
-              </svg>
-
-              {/* Ven vs Arter Ayırıcı Tanı Özeti (4 Kısa Kriter) */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px]">
-                <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400 block">Kompresyon</span>
-                  <span className="text-sky-300 font-semibold">Ven Tam Kapanır</span>
-                </div>
-                <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400 block">Duvar &amp; Şekil</span>
-                  <span className="text-sky-300 font-semibold">İnce Duvar · Oval</span>
-                </div>
-                <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400 block">Solunum / Valsalva</span>
-                  <span className="text-sky-300 font-semibold">Ven Çapı Değişir</span>
-                </div>
-                <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400 block">Hedef Derinlik</span>
-                  <span className="text-slate-100 font-mono tabular-nums font-semibold">{siteSpec.depthRange}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Sağ Kolon: Bölgeye Özel Klinik ve Teknik Detaylar */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-3">
-            <div className={`${subSurfaceClass} p-4 space-y-3 flex-1`}>
-              <div className="pb-2.5 border-b border-slate-200 dark:border-slate-800">
-                <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  {siteSpec.name}
-                </h4>
-                <p className={`text-xs mt-1 font-mono ${isDark ? 'text-sky-400' : 'text-sky-700'}`}>
-                  {siteSpec.probeInfo}
-                </p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Hasta Pozisyonu &amp; Landmark
-                </span>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  {siteSpec.position}
-                </p>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                  {siteSpec.landmarkSummary}
-                </p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Sonoanatomi &amp; İğne Tekniği
-                </span>
-                <ul className={`text-xs space-y-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  {siteSpec.anatomyNotes.map((note, idx) => (
-                    <li key={idx}>• {note}</li>
-                  ))}
-                </ul>
-                <p className={`text-xs pt-1 font-medium ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
-                  İğne Stratejisi: {siteSpec.needleStrategy}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
-                <div>
-                  <span className={`font-semibold block ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
-                    Üstünlükler:
-                  </span>
-                  <ul className={`space-y-0.5 mt-0.5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    {siteSpec.advantages.map((adv, idx) => (
-                      <li key={idx}>• {adv}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <span className={`font-semibold block ${isDark ? 'text-rose-400' : 'text-rose-700'}`}>
-                    Dikkat Edilecek Tuzaklar:
-                  </span>
-                  <ul className={`space-y-0.5 mt-0.5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    {siteSpec.cautions.map((c, idx) => (
-                      <li key={idx}>• {c}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Gerçek Klinik B-Mod / M-Mod Sonoanatomi Arşivi (Telifsiz CC BY 4.0) */}
-        <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Gerçek Klinik B-Mod &amp; M-Mod Sonoanatomi Görselleri
-              </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Açık erişimli hakemli dergi ve Wikimedia Commons arşivlerinden derlenen doğrulanmış CC BY 4.0 gerçek hasta taramaları · Büyütmek için görsele tıklayın
-              </p>
+              <div className="text-xs text-slate-500 dark:text-slate-400">
+                02 · Mekanik Ventilasyon Güvenliği · Pozitif Basınçlı Ventilasyon (PBV)
+              </div>
+              <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Mekanik Ventilatöre Bağlı Hastada Tedbirler (USG Metodu)
+              </h3>
             </div>
-            <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 shrink-0">
-              {REAL_SONO_GALLERY.length} Gerçek Taramalar · CC BY 4.0
-            </span>
+          </div>
+          <span
+            className={`inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-2.5 py-1 rounded-md border self-start sm:self-auto ${
+              isDark
+                ? 'bg-sky-500/10 border-sky-500/30 text-sky-300'
+                : 'bg-sky-50 border-sky-200 text-sky-800'
+            }`}
+          >
+            Rutin Apne Gerekmez · Bölgeye Göre Seçici Tedbir
+          </span>
+        </div>
+
+        <div
+          className={`p-3.5 rounded-xl border text-xs leading-relaxed ${
+            isDark
+              ? 'bg-sky-950/30 border-sky-900/60 text-sky-200'
+              : 'bg-sky-50 border-sky-200 text-sky-950'
+          }`}
+        >
+          <strong>Klinik İlke:</strong> Gerçek zamanlı USG eşliğinde <strong>İJV ve Femoral</strong> kateterizasyonda ventilatör durdurulmaz ve devre açılmaz. Subklavyen/aksiller erişimde ise plevra kubbesi In-Plane kesitte sürekli görülse bile yüksek PEEP altında seçici önlemler devreye girer.
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className={`${subSurfaceClass} p-4 space-y-2.5`}>
+            <div className="flex items-center justify-between gap-2">
+              <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                İnternal Juguler Ven (İJV)
+              </h4>
+              <span
+                className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded border ${
+                  isDark
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                    : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                }`}
+              >
+                Devre Kesilmez
+              </span>
+            </div>
+            <ul className={`text-xs space-y-1.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <li>• <strong>Tedbir Durumu:</strong> Rutin apne veya ventilatör durdurma <strong>alınmaz / gerekmez</strong>.</li>
+              <li>• <strong>PEEP Avantajı:</strong> 5–8 cmH₂O PEEP intratorasik basıncı hafif artırarak İJV dolgunluğunu ve çapını büyütür; ponksiyonu kolaylaştırır.</li>
+              <li>• <strong>Yüksek PEEP (&gt; 10–15 cmH₂O):</strong> Akciğer apeksi yükseldiği için düşük supraklaviküler pencereden kaçınılır; orta boyun (krikoid düzeyi) tercih edilir.</li>
+            </ul>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {REAL_SONO_GALLERY.map((item) => {
-              const isSiteMatch = item.siteTag === selectedSite;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setSelectedSonoItem(item)}
-                  className={`group rounded-xl border text-left overflow-hidden flex flex-col transition-colors cursor-pointer ${
-                    isSiteMatch
-                      ? isDark
-                        ? 'bg-slate-950 border-sky-500/70'
-                        : 'bg-sky-50/40 border-sky-400'
-                      : isDark
-                        ? 'bg-slate-950/70 border-slate-800 hover:border-slate-700'
-                        : 'bg-slate-50/60 border-slate-200 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="relative bg-black aspect-[16/10] w-full overflow-hidden border-b border-slate-800">
-                    <img
-                      src={item.imagePath}
-                      alt={item.title}
-                      loading="lazy"
-                      className="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-200"
-                    />
-                    <span className="absolute top-2 right-2 p-1.5 rounded-md bg-slate-950/80 border border-slate-700 text-slate-200 opacity-85 group-hover:opacity-100">
-                      <Maximize2 className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                  <div className="p-3.5 flex-1 flex flex-col justify-between space-y-2">
-                    <div className="space-y-1">
-                      <div className="text-[11px] font-mono text-sky-600 dark:text-sky-400">
-                        {item.regionLabel}
-                      </div>
-                      <div className={`text-xs font-bold leading-snug ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                        {item.title}
-                      </div>
-                      <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                        {item.clinicalNote}
-                      </p>
-                    </div>
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate">
-                      {item.attribution} · {item.license}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+          <div className={`${subSurfaceClass} p-4 space-y-2.5`}>
+            <div className="flex items-center justify-between gap-2">
+              <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Subklavyen / Aksiller (SKV)
+              </h4>
+              <span
+                className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded border ${
+                  isDark
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                    : 'bg-amber-50 border-amber-200 text-amber-800'
+                }`}
+              >
+                Seçici Tedbir
+              </span>
+            </div>
+            <ul className={`text-xs space-y-1.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <li>• <strong>Kısa Ekspiratuvar Tutma:</strong> İnspirasyonda plevra yükselir. Hasta ağır hipoksemik değilse (SpO₂ &gt; %95), iğne ilerletilirken <strong>10–15 sn ekspiratuvar duraklatma (PEEP = 0)</strong> opsiyonu plevrayı aşağı çeker; tel/akım doğrulanınca derhal ventilasyona dönülür.</li>
+              <li>• <strong>Ağır ARDS / Yüksek PEEP:</strong> Alveoler derecruitment riski nedeniyle ventilatör <strong>ASLA</strong> kapatılmaz ve devre açılmaz — bunun yerine İJV veya Femoral seçilir.</li>
+            </ul>
+          </div>
+
+          <div className={`${subSurfaceClass} p-4 space-y-2.5`}>
+            <div className="flex items-center justify-between gap-2">
+              <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Femoral Ven (FV)
+              </h4>
+              <span
+                className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded border ${
+                  isDark
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                    : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                }`}
+              >
+                Tedbir Gerekmez
+              </span>
+            </div>
+            <ul className={`text-xs space-y-1.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <li>• <strong>Tedbir Durumu:</strong> Toraks boşluğundan ve plevra mekaniğinden tamamen bağımsızdır; <strong>ventilatör ayarı değiştirilmez</strong>.</li>
+              <li>• <strong>Klinik Kullanım:</strong> Ağır solunum yetmezliği, yüksek PEEP veya apne toleransı olmayan hastalarda pnömotoraks riski %0 olduğu için güvenli alternatiftir.</li>
+              <li>• <strong>Hemodinamik Not:</strong> Yüksek PEEP venöz dönüşü yavaşlatabileceğinden kan akımı ve kılavuz tel USG ile doğrulanır.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          className={`p-3.5 rounded-xl border text-xs leading-relaxed flex items-start gap-2.5 ${
+            isDark
+              ? 'bg-rose-950/30 border-rose-900/60 text-rose-200'
+              : 'bg-rose-50 border-rose-200 text-rose-900'
+          }`}
+        >
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+          <div>
+            <strong>Ortak Güvenlik Kuralı (Tansiyon Pnömotoraks Alarmı):</strong> Pozitif basınçlı ventilasyon altında gelişebilecek küçük bir plevral laserasyon hızla <strong>tansiyon pnömotoraksa</strong> ilerleyebilir. İşlem sırasında ve hemen sonrasında ani <strong>Ppeak artışı, SpO₂/EtCO₂ düşüşü, tek taraflı solunum ses kaybı ve hipotansiyon</strong> gelişimi açısından sürekli takip zorunludur.
           </div>
         </div>
       </section>
@@ -1564,6 +889,9 @@ export const UsgCvcModule: React.FC<UsgCvcModuleProps> = ({ isDark }) => {
         </div>
       </section>
 
+      {/* GİZLENEBİLİR AKORDİYON: JOHNSTON 2025 TABLO 5 & TABLO 6 (KOAGÜLASYON & TROMBOSİT EŞİKLERİ) */}
+      <CvcCoagulationTablesAccordion isDark={isDark} />
+
       {/* BÖLÜM 6: KANITA DAYALI KAYNAKLAR */}
       <section id="cvc-refs" className={`${panelClass} p-5 sm:p-6 space-y-4`}>
         <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
@@ -1621,91 +949,6 @@ export const UsgCvcModule: React.FC<UsgCvcModuleProps> = ({ isDark }) => {
           ))}
         </div>
       </section>
-
-      {/* Gerçek Sonoanatomi Büyütülmüş İnceleme Modalı */}
-      {selectedSonoItem && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4"
-          onClick={() => setSelectedSonoItem(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={selectedSonoItem.title}
-        >
-          <div
-            className={`w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-xl border shadow-2xl ${
-              isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-3 p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800">
-              <div>
-                <div className="text-xs font-mono text-sky-500">
-                  {selectedSonoItem.regionLabel} · {selectedSonoItem.license}
-                </div>
-                <h4 className="text-base sm:text-lg font-bold mt-0.5">
-                  {selectedSonoItem.title}
-                </h4>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedSonoItem(null)}
-                aria-label="Görseli kapat"
-                className={`p-1.5 rounded-lg border cursor-pointer transition-colors ${
-                  isDark
-                    ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                    : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="p-4 sm:p-5 space-y-4">
-              <div className="rounded-xl overflow-hidden bg-black border border-slate-800 flex items-center justify-center">
-                <img
-                  src={selectedSonoItem.imagePath}
-                  alt={selectedSonoItem.title}
-                  className="max-h-[58vh] w-auto object-contain"
-                />
-              </div>
-
-              <div className={`${subSurfaceClass} p-4 space-y-2 text-xs`}>
-                <div>
-                  <span className="font-semibold text-sky-600 dark:text-sky-400">Anatomik İşaretler: </span>
-                  <span className={isDark ? 'text-slate-200' : 'text-slate-800'}>{selectedSonoItem.landmarks}</span>
-                </div>
-                <div>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">Klinik Yorum: </span>
-                  <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>{selectedSonoItem.clinicalNote}</span>
-                </div>
-                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-slate-400">
-                  <span>Kaynak: {selectedSonoItem.attribution} ({selectedSonoItem.license})</span>
-                  <div className="flex items-center gap-2">
-                    <a
-                      href={`https://pubmed.ncbi.nlm.nih.gov/${selectedSonoItem.pmid}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sky-500 hover:underline"
-                    >
-                      <span>PubMed {selectedSonoItem.pmid}</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                    <a
-                      href={`https://doi.org/${selectedSonoItem.doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-teal-500 hover:underline"
-                    >
-                      <span>DOI: {selectedSonoItem.doi}</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

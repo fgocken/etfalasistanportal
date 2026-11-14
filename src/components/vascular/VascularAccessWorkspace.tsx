@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Compass, Activity, Droplet, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, Compass, Crosshair, Activity, Droplet, AlertTriangle, Syringe } from 'lucide-react';
+import { IvAccessInfographic } from '../infographics/IvAccessInfographic';
 import { UsgCvcModule } from './UsgCvcModule';
+import { LandmarkCvcModule } from './LandmarkCvcModule';
+import { ArterialCannulationModule } from './ArterialCannulationModule';
 
 interface VascularAccessWorkspaceProps {
   isDark: boolean;
 }
 
-type VascularSubModuleId = 'usg-cvc' | 'arterial' | 'diva' | 'clabsi';
+type VascularSubModuleId = 'peripheral-iv' | 'usg-cvc' | 'landmark-cvc' | 'arterial' | 'diva' | 'clabsi';
 
 interface SubModuleTab {
   id: VascularSubModuleId;
@@ -19,32 +22,48 @@ interface SubModuleTab {
 
 const SUB_MODULES: SubModuleTab[] = [
   {
-    id: 'usg-cvc',
+    id: 'peripheral-iv',
     index: '01',
+    title: 'Periferik IV Erişim & Kanüller',
+    subtitle: '14G–26G · Poiseuille · 7Fr SVK · DIVA',
+    ready: true,
+    icon: Syringe,
+  },
+  {
+    id: 'usg-cvc',
+    index: '02',
     title: 'USG Eşliğinde SVK',
     subtitle: 'İJV · Subklavyen · Femoral',
     ready: true,
     icon: Compass,
   },
   {
+    id: 'landmark-cvc',
+    index: '03',
+    title: 'Landmark Metodu ile SVK',
+    subtitle: 'Anatomik İşaret · Ventilasyon Tedbiri',
+    ready: true,
+    icon: Crosshair,
+  },
+  {
     id: 'arterial',
-    index: '02',
+    index: '04',
     title: 'İnvaziv Arteriyel Kanülasyon',
-    subtitle: 'Radiyal · Femoral · Aksiller',
-    ready: false,
+    subtitle: 'Radiyal · Brakiyal · Femoral · Aksiller',
+    ready: true,
     icon: Activity,
   },
   {
     id: 'diva',
-    index: '03',
-    title: 'Zor Periferik Erişim (DIVA)',
-    subtitle: 'USG Periferik · Orta Hat · İO',
+    index: '05',
+    title: 'Midline & İntraosseöz (İO)',
+    subtitle: 'İleri Kurtarma Erişimi',
     ready: false,
     icon: Droplet,
   },
   {
     id: 'clabsi',
-    index: '04',
+    index: '06',
     title: 'CLABSI & Komplikasyonlar',
     subtitle: 'Steril Bariyer · Bakım Paketi',
     ready: false,
@@ -53,7 +72,7 @@ const SUB_MODULES: SubModuleTab[] = [
 ];
 
 export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = ({ isDark }) => {
-  const [activeSubModule, setActiveSubModule] = useState<VascularSubModuleId>('usg-cvc');
+  const [activeSubModule, setActiveSubModule] = useState<VascularSubModuleId>('peripheral-iv');
   const currentTab = SUB_MODULES.find((m) => m.id === activeSubModule) || SUB_MODULES[0];
 
   return (
@@ -79,10 +98,10 @@ export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = (
               <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                 <span>Perioperatif Girişimsel Standartlar</span>
                 <span aria-hidden="true">·</span>
-                <span>Association of Anaesthetists 2025 · ASA 2020 · ESAIC PERSEUS</span>
+                <span>INS 2024 · Association of Anaesthetists 2025 · ASA 2020 · ESAIC PERSEUS</span>
                 <span aria-hidden="true">·</span>
                 <span className={isDark ? 'text-sky-400 font-medium' : 'text-sky-700 font-medium'}>
-                  Modül 01 Aktif
+                  Modül 01–04 Aktif
                 </span>
               </div>
               <h2
@@ -97,16 +116,14 @@ export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = (
                   isDark ? 'text-slate-300' : 'text-slate-600'
                 }`}
               >
-                USG eşliğinde santral venöz kateterizasyon (İJV, Subklavyen/Aksiller, Femoral),
-                ömür boyu damar koruma ve Kateter/Ven oranı hesabı, Peres derinlik formülü,
-                LocSSIPs/Seldinger 8 adımlı güvenlik protokolü ve kriz yönetimi standartları.
+                Periferik IV kanül seçimi (14G–26G, Poiseuille r⁴/L, 7 Fr SVK kıyaslaması ve DIVA teknikleri), USG ve Landmark metodu ile SVK, İnvaziv Arteriyel Kanülasyon (Radiyal, Brakiyal, Femoral, Aksiller; transdüser sıfırlama, Overdamped/Underdamped kare dalga görselleri, PPV/SVV) ve LocSSIPs güvenlik protokolleri.
               </p>
             </div>
           </div>
         </div>
 
         {/* Alt Modül Navigasyon Sekmeleri */}
-        <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
           {SUB_MODULES.map((mod) => {
             const Icon = mod.icon;
             const isSelected = activeSubModule === mod.id;
@@ -160,8 +177,14 @@ export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = (
       </section>
 
       {/* Aktif Alt Modül İçeriği */}
-      {activeSubModule === 'usg-cvc' ? (
+      {activeSubModule === 'peripheral-iv' ? (
+        <IvAccessInfographic isDark={isDark} />
+      ) : activeSubModule === 'usg-cvc' ? (
         <UsgCvcModule isDark={isDark} />
+      ) : activeSubModule === 'landmark-cvc' ? (
+        <LandmarkCvcModule isDark={isDark} />
+      ) : activeSubModule === 'arterial' ? (
+        <ArterialCannulationModule isDark={isDark} />
       ) : (
         <section
           className={`rounded-xl border p-6 space-y-3 ${
@@ -178,14 +201,16 @@ export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = (
           </h3>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
             Bu alt modülün klinik içeriği sıradaki güncellemede eklenecektir. Şu anda{' '}
-            <strong>01 · USG Eşliğinde SVK</strong> modülünü tam kapsamlı olarak kullanabilirsiniz.
+            <strong>01 · Periferik IV Erişim &amp; Kanüller</strong>, <strong>02 · USG Eşliğinde SVK</strong>,{' '}
+            <strong>03 · Landmark Metodu ile SVK</strong> ve <strong>04 · İnvaziv Arteriyel Kanülasyon</strong>{' '}
+            modüllerini kullanabilirsiniz.
           </p>
           <button
             type="button"
-            onClick={() => setActiveSubModule('usg-cvc')}
+            onClick={() => setActiveSubModule('peripheral-iv')}
             className="px-4 py-2 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-700 text-white transition-colors cursor-pointer"
           >
-            USG Eşliğinde SVK Modülüne Dön
+            Periferik IV Erişim Modülüne Dön
           </button>
         </section>
       )}

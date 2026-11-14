@@ -22,6 +22,7 @@ import { PediatricFastingInfographic } from './PediatricFastingInfographic';
 import { RSIvsElectiveInfographic } from './RSIvsElectiveInfographic';
 import { VasoactiveDecisionMatrixInfographic } from './VasoactiveDecisionMatrixInfographic';
 import { FluidManagementStrategiesInfographic } from './FluidManagementStrategiesInfographic';
+import { IvAccessInfographic } from './IvAccessInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -44,6 +45,23 @@ export interface InfographicCardItem {
 }
 
 const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
+  {
+    id: 'iv-access',
+    title: 'IV Erişim: Standart Kanüller, Renkler & İnfüzyon Hızları',
+    source: 'ISO 10555-5 · INS 2024 · Miller’s Anesthesia',
+    sourceBadge: 'ISO 10555-5',
+    category: 'Vasküler Erişim & Sıvı',
+    shortDesc: '14G Turuncu’dan 26G Mor’a tüm periferik IV kanül renkleri, dış çap/uzunluk ölçüleri, yerçekimi ve basınçlı infüzyon hızları (mL/dk), Poiseuille yasası ve klinik tercih alanları.',
+    pillsHeader: 'Standart Kanül Akımları:',
+    publisher: 'ISO 10555-5 / INS Standards',
+    riskPills: [
+      { label: '14G Turuncu', rate: '270 mL/dk', colorClass: 'text-orange-600 dark:text-orange-400', bgClass: 'bg-orange-500/10', borderClass: 'border-orange-500/30' },
+      { label: '16G Gri', rate: '195 mL/dk', colorClass: 'text-slate-600 dark:text-slate-300', bgClass: 'bg-slate-500/10', borderClass: 'border-slate-500/30' },
+      { label: '18G Yeşil', rate: '98 mL/dk', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: '20G Pembe', rate: '60 mL/dk', colorClass: 'text-pink-600 dark:text-pink-400', bgClass: 'bg-pink-500/10', borderClass: 'border-pink-500/30' },
+    ],
+    accentColor: 'teal'
+  },
   {
     id: 'fluid-management-strategies',
     title: 'İntraoperatif Sıvı Yönetimi: Liberal vs Restriktif vs GDFT',
@@ -426,6 +444,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
             </div>
           </div>
         </div>
+      )}
+
+      {/* VIEW: IV Access Infographic */}
+      {activeInfographicId === 'iv-access' && (
+        <IvAccessInfographic isDark={isDark} />
       )}
 
       {/* VIEW: Fluid Management Strategies Infographic */}

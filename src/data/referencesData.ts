@@ -133,7 +133,8 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
       'Vazoaktif Karar Matriksi',
       'Anestezi Acilleri (MH, Bronkospazm, Laringospazm)',
       'Tedaviler & Elektrolitler',
-      'Sistematik Prosedür Yönetimi'
+      'Sistematik Prosedür Yönetimi',
+      'Güvenli Vasküler Erişim (İnvaziv Arteriyel)'
     ],
     clinicalNote: 'Perioperatif sıvı fizyolojisi, otonomik farmakoloji, NORA, hava yolu komplikasyonları ve malign hipertermi ana başvuru kaynağı.'
   },
@@ -1401,7 +1402,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     year: '2025',
     pmid: '40958714',
     doi: '10.1111/anae.16727',
-    usedInModules: ['Güvenli Vasküler Erişim (USG Eşliğinde SVK)'],
+    usedInModules: ['Güvenli Vasküler Erişim (USG & Landmark SVK)', 'Güvenli Vasküler Erişim (İnvaziv Arteriyel)'],
     clinicalNote: '6 alanda 15 konsensus önerisi: LocSSIPs güvenlik listeleri, ömür boyu damar koruma (KBH/AV fistül ve mastektomi/aksiller diseksiyon), Kateter/Ven çap oranı ile CRT önlemi, koagülopati/antikoagülasyon risk-yarar dengesi, alt SVC/karina düzeyinde uç doğrulama (IC-ECG) ve kılavuz tel retansiyonu ("Never Event") önlemi.'
   },
   {
@@ -1414,7 +1415,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     year: '2020',
     pmid: '31821240',
     doi: '10.1097/ALN.0000000000002864',
-    usedInModules: ['Güvenli Vasküler Erişim (USG Eşliğinde SVK)'],
+    usedInModules: ['Güvenli Vasküler Erişim (USG & Landmark SVK)'],
     clinicalNote: 'Gerçek zamanlı USG ile ponksiyon, dilatasyon öncesi basınç/USG venöz doğrulama, yanlışlıkla arteriyel dilatasyonda kateteri yerinde bırakma ve post-prosedür uç doğrulama standardı.'
   },
   {
@@ -1427,7 +1428,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     year: '2020',
     pmid: '32265391',
     doi: '10.1097/EJA.0000000000001180',
-    usedInModules: ['Güvenli Vasküler Erişim (USG Eşliğinde SVK)'],
+    usedInModules: ['Güvenli Vasküler Erişim (USG Eşliğinde SVK)', 'Güvenli Vasküler Erişim (İnvaziv Arteriyel)'],
     clinicalNote: 'Perioperatif İJV, aksiller/subklavyen ve femoral erişimde pre-prosedür USG tarama (RaCeVA), In-Plane/Out-of-Plane teknikler ve plevral kayma ile pnömotoraks dışlama.'
   },
   {
@@ -1468,6 +1469,156 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     doi: '10.1093/cid/cir257',
     usedInModules: ['Güvenli Vasküler Erişim (USG Eşliğinde SVK)'],
     clinicalNote: 'Maksimal Steril Bariyer (MSB), >%0.5 alkolik klorheksidin glukonat cilt antisepsisi, femoral erişimden kaçınma ve günlük kateter gerekliliği değerlendirmesi.'
+  },
+  {
+    id: 'vasc-ins-2024',
+    category: 'vascular_access',
+    kind: 'Uluslararası Kılavuz',
+    authors: 'Nickel B, Gorski L, Kleidon T, et al. (Infusion Nurses Society).',
+    title: 'Infusion Therapy Standards of Practice, 9th Edition.',
+    publication: 'Journal of Infusion Nursing. 2024;47(1S Suppl 1):S1–S285.',
+    year: '2024',
+    pmid: '38211609',
+    usedInModules: ['Güvenli Vasküler Erişim (Periferik IV)', 'Klinik İnfografikler (IV Erişim)'],
+    clinicalNote: 'Periferik IV kanüllerde en küçük uygun kalibre seçimi, 2-deneme DIVA kuralı, USG eşliğinde uzun kanül kullanımı, ven koruma ve flebit/ekstravazasyon önleme standartları.'
+  },
+  {
+    id: 'vasc-iso-10555-5',
+    category: 'vascular_access',
+    kind: 'Uluslararası Kılavuz',
+    authors: 'International Organization for Standardization (ISO).',
+    title: 'ISO 10555-5:2013/Amd 1:2017 — Intravascular catheters: Over-needle peripheral catheters.',
+    publication: 'ISO Standards. 2017.',
+    year: '2017',
+    externalUrl: 'https://www.iso.org/standard/57882.html',
+    usedInModules: ['Güvenli Vasküler Erişim (Periferik IV)', 'Klinik İnfografikler (IV Erişim)'],
+    clinicalNote: '14G Turuncu – 26G Mor standart periferik IV kanül renk kodlaması, dış çap toleransları ve standart yerçekimi akım testi referansları.'
+  },
+  {
+    id: 'vasc-arrow-7fr-20cm',
+    category: 'vascular_access',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Teleflex / Arrow® Vascular Access Technical Data.',
+    title: 'Arrow Three-Lumen Central Venous Catheterization Set (7 Fr × 20 cm: Distal 16G, Medial 18G, Proximal 18G) Flow Specifications.',
+    publication: 'Manufacturer Instructions for Use (IFU).',
+    year: '2024',
+    externalUrl: 'https://www.teleflex.com/',
+    usedInModules: ['Güvenli Vasküler Erişim (Periferik IV)', 'Klinik İnfografikler (IV Erişim)'],
+    clinicalNote: 'Standart 7 Fr 20 cm 3 lümenli SVK yerçekimi (100 cm H₂O, %0.9 NaCl) akım referansları: Distal 16G ≈ 3,100 mL/sa (~52 mL/dk), Medial 18G ≈ 1,500 mL/sa (~25 mL/dk), Proksimal 18G ≈ 1,600 mL/sa (~27 mL/dk).'
+  },
+  {
+    id: 'vasc-bannon-landmark-2011',
+    category: 'vascular_access',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Bannon MP, Heller SF, Rivera M.',
+    title: 'Anatomic considerations for central venous cannulation.',
+    publication: 'Risk Management and Healthcare Policy. 2011;4:27–39.',
+    year: '2011',
+    pmid: '22312225',
+    doi: '10.2147/rmhp.s10383',
+    usedInModules: ['Güvenli Vasküler Erişim (Landmark Metodu ile SVK)'],
+    clinicalNote: 'Sédillot üçgeni, eksternal juguler ven kesişimi, klavikula bükümü ve komşu plevra/arter anatomisi üzerine klinik landmark rehberi.'
+  },
+  {
+    id: 'vasc-nuttall-arterial-2016',
+    category: 'vascular_access',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Nuttall G, Burckhardt J, Hadley A, Kane S, Kor D, Marienau MS, Schroeder DR, Handlogten K, Wilson G, Oliver WC.',
+    title: 'Surgical and Patient Risk Factors for Severe Arterial Line Complications in Adults.',
+    publication: 'Anesthesiology. 2016;124(3):590–597.',
+    year: '2016',
+    pmid: '26640979',
+    doi: '10.1097/ALN.0000000000000967',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)'],
+    clinicalNote: '62.626 erişkin perioperatif arteriyel kateterizasyonda majör komplikasyonların çok nadir olduğu (genel oran 3.4/10.000; radiyal 2.7/10.000, brakiyal 12.3/10.000, femoral 9.0/10.000) ancak kadın cinsiyet, ASA skoru ve ileri yaşın riski artırdığı gösterilmiştir.'
+  },
+  {
+    id: 'vasc-handlogten-brachial-2014',
+    category: 'vascular_access',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Handlogten KS, Wilson GA, Clifford L, Nuttall GA, Kor DJ.',
+    title: 'Brachial artery catheterization: an assessment of use patterns and associated complications.',
+    publication: 'Anesthesia & Analgesia. 2014;118(2):288–295.',
+    year: '2014',
+    pmid: '24445630',
+    doi: '10.1213/ANE.0000000000000082',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)'],
+    clinicalNote: '21.597 brakiyal arter kateterizasyonunda toplam komplikasyon oranı %0.19 (vasküler %0.16, nörolojik %0.03); erken iskemi/parestezi bulgularında kateterin derhal çekilmesi ve yakın distal takip ile güvenle kullanılabileceğini gösterir.'
+  },
+  {
+    id: 'vasc-scheer-arterial-2002',
+    category: 'vascular_access',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Scheer B, Perel A, Pfeiffer UJ.',
+    title: 'Clinical review: complications and risk factors of peripheral arterial catheters used for haemodynamic monitoring in anaesthesia and intensive care medicine.',
+    publication: 'Critical Care. 2002;6(3):199–204.',
+    year: '2002',
+    pmid: '12133178',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)'],
+    clinicalNote: 'Radiyal, femoral, aksiller, brakiyal ve dorsalis pedis arteriyel kateterizasyonda tromboz, geçici oklüzyon, psödoanevrizma ve lokal enfeksiyon oranlarının bölge bazlı karşılaştırmalı sistematik derlemesi.'
+  },
+  {
+    id: 'vasc-gardner-damping-1981',
+    category: 'vascular_access',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Gardner RM.',
+    title: 'Direct blood pressure measurement—dynamic response requirements.',
+    publication: 'Anesthesiology. 1981;54(3):227–236.',
+    year: '1981',
+    pmid: '7469106',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)'],
+    clinicalNote: 'Arteriyel basınç monitörizasyonunda doğal frekans, sönümleme katsayısı (ζ), kare dalga (fast-flush) testi ve overdamped/underdamped dalga bozulmalarının klasik fizyolojik temeli.'
+  },
+  {
+    id: 'vasc-foti-underdamping-2022',
+    category: 'vascular_access',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Foti L, Michard F, Villa G, Ricci Z, Romagnoli S.',
+    title: 'The impact of arterial pressure waveform underdamping and resonance filters on cardiac output measurements with pulse wave analysis.',
+    publication: 'British Journal of Anaesthesia. 2022;129(1):e6–e8.',
+    year: '2022',
+    pmid: '35459533',
+    doi: '10.1016/j.bja.2022.03.024',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)'],
+    clinicalNote: 'Underdamped (rezonant) arteriyel basınç dalgasının sistolik tepeyi ve nabız dalga analizi (pulse contour) ile ölçülen atım hacmi / kardiyak debi değerlerini yapay olarak yükselttiğini gösterir.'
+  },
+  {
+    id: 'vasc-michard-ppv-2000',
+    category: 'vascular_access',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Michard F, Boussat S, Chemla D, Anguel N, Mercat A, Lecarpentier Y, Richard C, Pinsky MR, Teboul JL.',
+    title: 'Relation between respiratory changes in arterial pulse pressure and fluid responsiveness in septic patients with acute circulatory failure.',
+    publication: 'American Journal of Respiratory and Critical Care Medicine. 2000;162(1):134–138.',
+    year: '2000',
+    pmid: '10903232',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)', 'İntraoperatif Sıvı Yönetimi (GDFT)'],
+    clinicalNote: 'Mekanik ventilasyon altında arteriyel Nabız Basıncı Varyasyonu (PPV ≥ %13) eşiğinin sıvı yüklemesine yanıtı CVP ve PAOP’tan üstün öngördüğünü kanıtlayan klasik çalışma.'
+  },
+  {
+    id: 'vasc-yang-du-ppv-2014',
+    category: 'vascular_access',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Yang X, Du B.',
+    title: 'Does pulse pressure variation predict fluid responsiveness in critically ill patients? A systematic review and meta-analysis.',
+    publication: 'Critical Care. 2014;18(6):650.',
+    year: '2014',
+    pmid: '25427970',
+    doi: '10.1186/s13054-014-0650-6',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)', 'İntraoperatif Sıvı Yönetimi (GDFT)'],
+    clinicalNote: '22 klinik çalışmanın meta-analizi: sinüs ritminde ve kontrollü mekanik ventilasyonda PPV eşiği (~%12) için havuzlanmış duyarlılık %88, özgüllük %89 ve AUROC 0.94.'
+  },
+  {
+    id: 'vasc-myatra-tv-challenge-2017',
+    category: 'vascular_access',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Myatra SN, Prabu NR, Divatia JV, Monnet X, Kulkarni AP, Teboul JL.',
+    title: 'The Changes in Pulse Pressure Variation or Stroke Volume Variation After a "Tidal Volume Challenge" Reliably Predict Fluid Responsiveness During Low Tidal Volume Ventilation.',
+    publication: 'Critical Care Medicine. 2017;45(3):415–421.',
+    year: '2017',
+    pmid: '27922879',
+    doi: '10.1097/CCM.0000000000002183',
+    usedInModules: ['Güvenli Vasküler Erişim (İnvaziv Arteriyel)', 'İntraoperatif Sıvı Yönetimi (GDFT)'],
+    clinicalNote: 'Düşük tidal volüm ventilasyonda (6 mL/kg) 1 dk süreyle VT 8 mL/kg’a yükseltildiğinde ΔPPV ≥ %3.5 veya ΔSVV ≥ %2.5 artışının sıvı yanıtlılığını yüksek doğrulukla öngördüğünü gösterir.'
   },
 
   // =========================================================================
