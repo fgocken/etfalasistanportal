@@ -275,81 +275,122 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         isDark={isDark}
         items={[
           { id: 'sec-ozet', label: 'Bifazik Etki' },
-          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
+          { id: 'sec-pkpd', label: 'Farmakokinetik' },
           { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
+          { id: 'sec-acildoz', label: 'Acil & Bolus Dozlar' },
           { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
           { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-uyumluluk', label: 'Çözelti & Ekstravazasyon' },
           { id: 'sec-guvenlik', label: 'ISMP High-Alert' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
         ]}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 2. TÜRKİYE AMPUL FORMLARI & 10 KAT DOZ HATASI GÜVENLİK UYARISI       */}
+      {/* 6. FARMAKOKİNETİK & METABOLİZMA (AKORDİYON)                         */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-100' : 'bg-rose-50/70 border-rose-200 text-rose-950'
+        id="sec-pkpd"
+        className={`rounded-2xl border transition-all overflow-hidden ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
-        <div className="flex items-start gap-3">
-          <AlertOctagon className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
-          <div className="space-y-3 w-full">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <h2 className="text-sm sm:text-base font-bold text-rose-700 dark:text-rose-300">
-                Kritik İlaç Güvenliği: 1:1.000 vs 1:10.000 Karışıklığı &amp; Türkiye Ampul Formları
-              </h2>
-              <span className="text-xs font-mono font-semibold text-rose-700 dark:text-rose-300">
-                Yüksek Riskli İlaç (ISMP)
-              </span>
+        <button
+          type="button"
+          onClick={() => setPkOpen(!pkOpen)}
+          aria-expanded={pkOpen}
+          className={`w-full p-5 sm:p-6 flex items-center justify-between text-left transition-colors cursor-pointer ${
+            isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <Clock className="w-5 h-5" />
             </div>
-            <p className="text-xs sm:text-sm leading-relaxed text-rose-900 dark:text-rose-200">
-              Adrenalin kaynaklı iyatrojenik mortalitenin en sık nedeni <strong>1:1.000 (1 mg/mL)</strong> konsantre
-              ampulün, seyreltilmeden <strong>1:10.000 (0.1 mg/mL)</strong> veya Push-Dose yerine doğrudan IV puşe
-              edilmesidir (10 kat – 100 kat aşırı doz → ventriküler fibrilasyon, akut pulmoner ödem, intrakraniyal
-              kanama).
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">TR Standart Ampuller</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  0.25 · 0.5 · 1.0 mg / 1 mL
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex flex-wrap items-center gap-2">
+                <span>Farmakokinetik &amp; Farmakodinamik (PK/PD) Özellikleri</span>
+                <span className="text-xs font-mono tabular-nums text-amber-700 dark:text-amber-400">
+                  t½: 1–2 dk · COMT / MAO
                 </span>
-                <span className="block text-[11px] text-rose-700 dark:text-rose-300 mt-1">
-                  Üçü de 1 mL hacimdedir; etiket mg değerini mutlaka okuyun!
-                </span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">1:1.000 (1 mg/mL)</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  1.000 mcg / mL
-                </span>
-                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                  Erişkin ACLS (1 mg IV), Anafilaksi IM (0.5 mL), Nebülizasyon.
-                </span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">1:10.000 (0.1 mg/mL)</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  100 mcg / mL
-                </span>
-                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                  1 mg (1 mL) + 9 mL SF. Pediatrik PALS &amp; IV anafilaksi titrasyon stoğu.
-                </span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">Push-Dose (1:100.000)</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  10 mcg / mL
-                </span>
-                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                  1 mg / 100 mL SF. Ameliyathane IV anafilaksi &amp; hipotansiyon bolusu.
-                </span>
-              </div>
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                IV, IM ve endotrakeal emilim kinetiği; plazma yarı ömrü ve metabolik yan etkilerin fizyolojisi.
+              </p>
             </div>
           </div>
-        </div>
+          {pkOpen ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+        </button>
+
+        {pkOpen && (
+          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center pt-4">
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  IV Etki Başlangıcı
+                </span>
+                <span className="text-base font-bold font-mono tabular-nums text-amber-600 dark:text-amber-400 mt-1 block">
+                  &lt; 1 Dakika
+                </span>
+                <span className="text-[10px] text-slate-400">Zirve etki: 1–2 dk</span>
+              </div>
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  IM Etki Başlangıcı
+                </span>
+                <span className="text-base font-bold font-mono tabular-nums text-rose-600 dark:text-rose-400 mt-1 block">
+                  3 – 5 Dakika
+                </span>
+                <span className="text-[10px] text-slate-400">Uyluk IM zirve: ~8 dk</span>
+              </div>
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  Plazma Yarı Ömrü
+                </span>
+                <span className="text-base font-bold font-mono tabular-nums text-indigo-600 dark:text-indigo-400 mt-1 block">
+                  1 – 2 Dakika
+                </span>
+                <span className="text-[10px] text-slate-400">Etki süresi: 5–10 dk</span>
+              </div>
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  Metabolizma
+                </span>
+                <span className="text-base font-bold font-mono text-teal-600 dark:text-teal-400 mt-1 block">
+                  COMT + MAO
+                </span>
+                <span className="text-[10px] text-slate-400">Metanefrin · VMA (İdrar)</span>
+              </div>
+            </div>
+
+            <div className={`p-4 rounded-xl border text-xs leading-relaxed space-y-2 ${
+              isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+            }`}>
+              <p>
+                Oral yoldan gastrointestinal mukoza ve karaciğerdeki yoğun MAO/COMT enzimleri nedeniyle tamamen inaktive
+                edilir; parenteral veya inhaler uygulanır. Karaciğer, böbrek ve dolaşımdaki dokularda COMT ve MAO ile
+                inaktif <strong>metanefrin</strong> ve <strong>vanililmandelik asite (VMA)</strong> metabolize edilir.
+                Endojen klirens organ yetmezliğinden bağımsızdır; yanıt hemodinamik hedeflere göre titre edilir.
+              </p>
+            </div>
+          </div>
+        )}
       </section>
+
+      <ContraindicationsGridBlock
+        isDark={isDark}
+        absoluteItems={[
+          'Hayati tehlike oluşturan ANAFİLAKSİ ve KARDİYAK ARRESTTE hiçbir mutlak kontrendikasyon YOKTUR.',
+          'Parmağa, buruna, kulak kepçesine veya penise yapılan lokal anestezik enjeksiyonlarında adrenalinli solüsyonlar doku nekrozu riski nedeniyle kullanılmamalıdır (elektif dijital blok).',
+        ]}
+        relativeItems={[
+          'Ciddi koroner arter hastalığı, hipertrofik obstrüktif kardiyomiyopati (HOCM) ve feokromositoma krizi.',
+          'Non-selektif beta-bloker (ör. Propranolol) veya kokain/MAOI entoksikasyonu: Karşılanmamış α₁ vazokonstriksiyon hipertansif krizi tetikleyebilir.',
+          'Dar açılı glokom ve kontrolsüz tirotoksikoz (sempatomimetik aşırı duyarlılık).',
+        ]}
+        clinicalNote="Anafilakside beta-bloker kullanan hastada adrenalin yanıtı yetersiz kalırsa 1–5 mg IV Glukagon eklenmelidir. LAST arrestinde standart 1 mg IV yerine ≤ 1 mcg/kg modifiye doz uygulanır."
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 3. İNTERAKTİF İNFÜZYON POMPASI & DOZ HESAPLAYICISI                  */}
@@ -736,6 +777,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 4. ACİL BOLUS, PUSH-DOSE, ANAFİLAKSİ, LAST & NEBÜLİZASYON MODÜLÜ    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-acildoz"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
         }`}
@@ -1132,188 +1174,33 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 6. FARMAKOKİNETİK & METABOLİZMA (AKORDİYON)                         */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`rounded-2xl border transition-all overflow-hidden ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <button
-          type="button"
-          onClick={() => setPkOpen(!pkOpen)}
-          aria-expanded={pkOpen}
-          className={`w-full p-5 sm:p-6 flex items-center justify-between text-left transition-colors cursor-pointer ${
-            isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex flex-wrap items-center gap-2">
-                <span>Farmakokinetik &amp; Farmakodinamik (PK/PD) Özellikleri</span>
-                <span className="text-xs font-mono tabular-nums text-amber-700 dark:text-amber-400">
-                  t½: 1–2 dk · COMT / MAO
-                </span>
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                IV, IM ve endotrakeal emilim kinetiği; plazma yarı ömrü ve metabolik yan etkilerin fizyolojisi.
-              </p>
-            </div>
-          </div>
-          {pkOpen ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
-        </button>
+      <OrganImpairmentGridBlock
+        isDark={isDark}
+        renalSummary="Organ-bağımsız klirens: Böbrek yetmezliğinde veya diyaliz hastalarında doz azaltımı gerekmez."
+        renalDetails={[
+          'Epinefrin COMT ve MAO enzimleriyle dokularda hızla inaktif metanefrin ve VMA metabolitlerine yıkılır.',
+          'İnfüzyon sırasında hipokalemi (β₂ ile hücre içine K⁺ kayması) böbrek yetmezliği olan hastada aritmi eşiğini hızla değiştirebilir; kan gazında K⁺ izlenmelidir.',
+        ]}
+        hepaticSummary="Karaciğer yetmezliğinde (Child-Pugh A/B/C) başlangıç doz revizyonu gerekmez; metabolizma ekstrahepatik COMT/MAO ile sürer."
+        hepaticDetails={[
+          'Karaciğer hastalığında β₂ aracılı glikojenoliz ve laktat klirensi yavaşladığından Tip-B laktat artışı daha belirgin ve uzun sürebilir.',
+          'Hedef MAP ve kardiyak debi yanıtına göre klinik titre edilir.',
+        ]}
+      />
 
-        {pkOpen && (
-          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800 space-y-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center pt-4">
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  IV Etki Başlangıcı
-                </span>
-                <span className="text-base font-bold font-mono tabular-nums text-amber-600 dark:text-amber-400 mt-1 block">
-                  &lt; 1 Dakika
-                </span>
-                <span className="text-[10px] text-slate-400">Zirve etki: 1–2 dk</span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  IM Etki Başlangıcı
-                </span>
-                <span className="text-base font-bold font-mono tabular-nums text-rose-600 dark:text-rose-400 mt-1 block">
-                  3 – 5 Dakika
-                </span>
-                <span className="text-[10px] text-slate-400">Uyluk IM zirve: ~8 dk</span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  Plazma Yarı Ömrü
-                </span>
-                <span className="text-base font-bold font-mono tabular-nums text-indigo-600 dark:text-indigo-400 mt-1 block">
-                  1 – 2 Dakika
-                </span>
-                <span className="text-[10px] text-slate-400">Etki süresi: 5–10 dk</span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  Metabolizma
-                </span>
-                <span className="text-base font-bold font-mono text-teal-600 dark:text-teal-400 mt-1 block">
-                  COMT + MAO
-                </span>
-                <span className="text-[10px] text-slate-400">Metanefrin · VMA (İdrar)</span>
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-xl border text-xs leading-relaxed space-y-2 ${
-              isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-            }`}>
-              <p>
-                Oral yoldan gastrointestinal mukoza ve karaciğerdeki yoğun MAO/COMT enzimleri nedeniyle tamamen inaktive
-                edilir; parenteral veya inhaler uygulanır. Karaciğer, böbrek ve dolaşımdaki dokularda COMT ve MAO ile
-                inaktif <strong>metanefrin</strong> ve <strong>vanililmandelik asite (VMA)</strong> metabolize edilir.
-                Endojen klirens organ yetmezliğinden bağımsızdır; yanıt hemodinamik hedeflere göre titre edilir.
-              </p>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 7. ÇÖZELTİ HAZIRLAMA, UYUMLULUK & PERİFERİK DAMAR GÜVENLİĞİ         */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <Droplet className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Çözelti Stabilitesi, Kimyasal Geçimsizlik &amp; Ekstravazasyon Yönetimi
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mb-5">
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Taşıyıcı Sıvı: D5W veya %0.9 SF</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              <strong>%5 Dextroz (D5W)</strong>, D5W + %0.9 SF veya acilde <strong>%0.9 NaCl (SF)</strong> içinde
-              hazırlanır. Sürekli infüzyonda 24 saatte bir yenilenmelidir. Işık ve hava temasıyla hızla oksitlenip{' '}
-              <strong>pembe / kahverengi adrenokroma</strong> dönüşür; renklenmiş çözelti derhal imha edilir.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-950/20 border-rose-900/50' : 'bg-rose-50/70 border-rose-200'}`}>
-            <h4 className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              <span>Alkali Geçimsizlik: NaHCO₃ Yasağı</span>
-            </h4>
-            <p className="text-rose-900 dark:text-rose-200 leading-relaxed">
-              <strong>%8.4 Sodyum Bikarbonat (NaHCO₃)</strong>, aminofilin, furosemid ve tiyopental ile{' '}
-              <strong>ASLA aynı Y-port/lümenden</strong> verilmez! Alkali pH adrenalini saniyeler içinde inaktive eder.
-              KPR sırasında bikarbonat verilecekse öncesinde ve sonrasında hat SF ile yıkanmalıdır.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <ShieldAlert className="w-4 h-4 text-amber-500" />
-              <span>Damar Yolu Tercihi</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Uzun süreli sürekli infüzyonda <strong>Santral Venöz Kateter (SVK)</strong> esastır. Acilde SVK
-              beklenirken antekübital veya önkol geniş periferik venlerinden (≥ 20G) düşük konsantrasyon (10–16 mcg/mL)
-              geçici olarak başlanabilir.
-            </p>
-          </div>
-        </div>
-
-        {/* Ekstravazasyon Akordiyonu */}
-        <div className={`rounded-xl border overflow-hidden ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
-          <button
-            type="button"
-            onClick={() => setExtravasationOpen(!extravasationOpen)}
-            aria-expanded={extravasationOpen}
-            className={`w-full p-4 flex items-center justify-between text-left cursor-pointer transition-colors ${
-              isDark ? 'bg-slate-800/60 hover:bg-slate-800' : 'bg-slate-50 hover:bg-slate-100'
-            }`}
-          >
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-300">
-              <AlertOctagon className="w-4 h-4 shrink-0" />
-              <span>Ekstravazasyon Geliştiğinde Acil Fentolamin Kurtarma Protokolü (12 Saat İçinde)</span>
-            </div>
-            {extravasationOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-          </button>
-
-          {extravasationOpen && (
-            <div className="p-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-xs border-t border-slate-200 dark:border-slate-700">
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">1. Durdur &amp; Aspire Et</span>
-                İnfüzyonu hemen kapatın; kanülü çekmeden önce enjektörle kanül içindeki/dokudaki ilacı aspire edin.
-              </div>
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">2. Antidot: Fentolamin</span>
-                <strong>5 – 10 mg Fentolamin</strong>, 10–15 mL SF içinde seyreltilir (veya yoksa topikal %2 Nitrogliserin).
-              </div>
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">3. Subkutan İnfiltrasyon</span>
-                25–27G ince iğne ile soluk/soğuk alan çevresine çoklu noktadan SC enjekte edin (hiperemi sağlanana dek).
-              </div>
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">4. Elevasyon &amp; Sıcaklık</span>
-                Ekstremiteyi eleve edin, kuru ılık kompres uygulayın. <strong>SOĞUK / BUZ ASLA KULLANMAYIN!</strong>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="FDA Gebelik Kategorisi C · Gebelikte anafilaksi ve kardiyak arrestte İLK VE MUTLAK TERCİH adrenalin verilmesidir."
+        pregnancyDetails={[
+          'Maternal hipotansiyon ve hipoksi fetüste anında fatal bradikardi yapar; gebede anafilakside 0.5 mg IM adrenalin geciktirilmemelidir.',
+          'Yüksek doz sürekli infüzyon uterin arter α₁ vazokonstriksiyonu ile plasental akımı azaltabileceğinden maternal stabilize olur olmaz en düşük etkin doza titre edilmelidir.',
+        ]}
+        lactationSummary="Plazma yarı ömrü 1–2 dakika, oral biyoyararlanımı ~0% olduğu için emzirmeye güvenle devam edilebilir."
+        lactationDetails={[
+          'Oral alımda GI mukozada hızla yıkıldığı için anne sütüyle infantta sistemik etki oluşturmaz.',
+          'Anne acil müdahale sonrası stabil hale geldiğinde sütün dökülmesi ("pump & dump") gerekmez.',
+        ]}
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. YAN ETKİLER, METABOLİK ETKİLER & İLAÇ ETKİLEŞİMLERİ              */}
@@ -1455,47 +1342,99 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      <ContraindicationsGridBlock
-        isDark={isDark}
-        absoluteItems={[
-          'Hayati tehlike oluşturan ANAFİLAKSİ ve KARDİYAK ARRESTTE hiçbir mutlak kontrendikasyon YOKTUR.',
-          'Parmağa, buruna, kulak kepçesine veya penise yapılan lokal anestezik enjeksiyonlarında adrenalinli solüsyonlar doku nekrozu riski nedeniyle kullanılmamalıdır (elektif dijital blok).',
-        ]}
-        relativeItems={[
-          'Ciddi koroner arter hastalığı, hipertrofik obstrüktif kardiyomiyopati (HOCM) ve feokromositoma krizi.',
-          'Non-selektif beta-bloker (ör. Propranolol) veya kokain/MAOI entoksikasyonu: Karşılanmamış α₁ vazokonstriksiyon hipertansif krizi tetikleyebilir.',
-          'Dar açılı glokom ve kontrolsüz tirotoksikoz (sempatomimetik aşırı duyarlılık).',
-        ]}
-        clinicalNote="Anafilakside beta-bloker kullanan hastada adrenalin yanıtı yetersiz kalırsa 1–5 mg IV Glukagon eklenmelidir. LAST arrestinde standart 1 mg IV yerine ≤ 1 mcg/kg modifiye doz uygulanır."
-      />
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 7. ÇÖZELTİ HAZIRLAMA, UYUMLULUK & PERİFERİK DAMAR GÜVENLİĞİ         */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        id="sec-uyumluluk"
+        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <Droplet className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+            Çözelti Stabilitesi, Kimyasal Geçimsizlik &amp; Ekstravazasyon Yönetimi
+          </h2>
+        </div>
 
-      <OrganImpairmentGridBlock
-        isDark={isDark}
-        renalSummary="Organ-bağımsız klirens: Böbrek yetmezliğinde veya diyaliz hastalarında doz azaltımı gerekmez."
-        renalDetails={[
-          'Epinefrin COMT ve MAO enzimleriyle dokularda hızla inaktif metanefrin ve VMA metabolitlerine yıkılır.',
-          'İnfüzyon sırasında hipokalemi (β₂ ile hücre içine K⁺ kayması) böbrek yetmezliği olan hastada aritmi eşiğini hızla değiştirebilir; kan gazında K⁺ izlenmelidir.',
-        ]}
-        hepaticSummary="Karaciğer yetmezliğinde (Child-Pugh A/B/C) başlangıç doz revizyonu gerekmez; metabolizma ekstrahepatik COMT/MAO ile sürer."
-        hepaticDetails={[
-          'Karaciğer hastalığında β₂ aracılı glikojenoliz ve laktat klirensi yavaşladığından Tip-B laktat artışı daha belirgin ve uzun sürebilir.',
-          'Hedef MAP ve kardiyak debi yanıtına göre klinik titre edilir.',
-        ]}
-      />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mb-5">
+          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <span>Taşıyıcı Sıvı: D5W veya %0.9 SF</span>
+            </h4>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>%5 Dextroz (D5W)</strong>, D5W + %0.9 SF veya acilde <strong>%0.9 NaCl (SF)</strong> içinde
+              hazırlanır. Sürekli infüzyonda 24 saatte bir yenilenmelidir. Işık ve hava temasıyla hızla oksitlenip{' '}
+              <strong>pembe / kahverengi adrenokroma</strong> dönüşür; renklenmiş çözelti derhal imha edilir.
+            </p>
+          </div>
 
-      <PregnancyLactationBlock
-        isDark={isDark}
-        pregnancySummary="FDA Gebelik Kategorisi C · Gebelikte anafilaksi ve kardiyak arrestte İLK VE MUTLAK TERCİH adrenalin verilmesidir."
-        pregnancyDetails={[
-          'Maternal hipotansiyon ve hipoksi fetüste anında fatal bradikardi yapar; gebede anafilakside 0.5 mg IM adrenalin geciktirilmemelidir.',
-          'Yüksek doz sürekli infüzyon uterin arter α₁ vazokonstriksiyonu ile plasental akımı azaltabileceğinden maternal stabilize olur olmaz en düşük etkin doza titre edilmelidir.',
-        ]}
-        lactationSummary="Plazma yarı ömrü 1–2 dakika, oral biyoyararlanımı ~0% olduğu için emzirmeye güvenle devam edilebilir."
-        lactationDetails={[
-          'Oral alımda GI mukozada hızla yıkıldığı için anne sütüyle infantta sistemik etki oluşturmaz.',
-          'Anne acil müdahale sonrası stabil hale geldiğinde sütün dökülmesi ("pump & dump") gerekmez.',
-        ]}
-      />
+          <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-950/20 border-rose-900/50' : 'bg-rose-50/70 border-rose-200'}`}>
+            <h4 className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600" />
+              <span>Alkali Geçimsizlik: NaHCO₃ Yasağı</span>
+            </h4>
+            <p className="text-rose-900 dark:text-rose-200 leading-relaxed">
+              <strong>%8.4 Sodyum Bikarbonat (NaHCO₃)</strong>, aminofilin, furosemid ve tiyopental ile{' '}
+              <strong>ASLA aynı Y-port/lümenden</strong> verilmez! Alkali pH adrenalini saniyeler içinde inaktive eder.
+              KPR sırasında bikarbonat verilecekse öncesinde ve sonrasında hat SF ile yıkanmalıdır.
+            </p>
+          </div>
+
+          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
+              <ShieldAlert className="w-4 h-4 text-amber-500" />
+              <span>Damar Yolu Tercihi</span>
+            </h4>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Uzun süreli sürekli infüzyonda <strong>Santral Venöz Kateter (SVK)</strong> esastır. Acilde SVK
+              beklenirken antekübital veya önkol geniş periferik venlerinden (≥ 20G) düşük konsantrasyon (10–16 mcg/mL)
+              geçici olarak başlanabilir.
+            </p>
+          </div>
+        </div>
+
+        {/* Ekstravazasyon Akordiyonu */}
+        <div className={`rounded-xl border overflow-hidden ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
+          <button
+            type="button"
+            onClick={() => setExtravasationOpen(!extravasationOpen)}
+            aria-expanded={extravasationOpen}
+            className={`w-full p-4 flex items-center justify-between text-left cursor-pointer transition-colors ${
+              isDark ? 'bg-slate-800/60 hover:bg-slate-800' : 'bg-slate-50 hover:bg-slate-100'
+            }`}
+          >
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-300">
+              <AlertOctagon className="w-4 h-4 shrink-0" />
+              <span>Ekstravazasyon Geliştiğinde Acil Fentolamin Kurtarma Protokolü (12 Saat İçinde)</span>
+            </div>
+            {extravasationOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+          </button>
+
+          {extravasationOpen && (
+            <div className="p-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-xs border-t border-slate-200 dark:border-slate-700">
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">1. Durdur &amp; Aspire Et</span>
+                İnfüzyonu hemen kapatın; kanülü çekmeden önce enjektörle kanül içindeki/dokudaki ilacı aspire edin.
+              </div>
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">2. Antidot: Fentolamin</span>
+                <strong>5 – 10 mg Fentolamin</strong>, 10–15 mL SF içinde seyreltilir (veya yoksa topikal %2 Nitrogliserin).
+              </div>
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">3. Subkutan İnfiltrasyon</span>
+                25–27G ince iğne ile soluk/soğuk alan çevresine çoklu noktadan SC enjekte edin (hiperemi sağlanana dek).
+              </div>
+              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">4. Elevasyon &amp; Sıcaklık</span>
+                Ekstremiteyi eleve edin, kuru ılık kompres uygulayın. <strong>SOĞUK / BUZ ASLA KULLANMAYIN!</strong>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
       <HighAlertSafetyBlock
         isDark={isDark}
@@ -1508,6 +1447,73 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
         antidoteOrRescue="Ekstravazasyonda 12 saat içinde 5–10 mg Fentolamin SC infiltrasyon (veya %2 Nitrogliserin). Sistemik hipertansif kriz/taşiaritmi için kısa etkili α-bloker (Fentolamin) veya esmolol/labetalol titre edilir."
       />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 2. TÜRKİYE AMPUL FORMLARI & 10 KAT DOZ HATASI GÜVENLİK UYARISI       */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+          isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-100' : 'bg-rose-50/70 border-rose-200 text-rose-950'
+        }`}
+      >
+        <div className="flex items-start gap-3">
+          <AlertOctagon className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+          <div className="space-y-3 w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h2 className="text-sm sm:text-base font-bold text-rose-700 dark:text-rose-300">
+                Kritik İlaç Güvenliği: 1:1.000 vs 1:10.000 Karışıklığı &amp; Türkiye Ampul Formları
+              </h2>
+              <span className="text-xs font-mono font-semibold text-rose-700 dark:text-rose-300">
+                Yüksek Riskli İlaç (ISMP)
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm leading-relaxed text-rose-900 dark:text-rose-200">
+              Adrenalin kaynaklı iyatrojenik mortalitenin en sık nedeni <strong>1:1.000 (1 mg/mL)</strong> konsantre
+              ampulün, seyreltilmeden <strong>1:10.000 (0.1 mg/mL)</strong> veya Push-Dose yerine doğrudan IV puşe
+              edilmesidir (10 kat – 100 kat aşırı doz → ventriküler fibrilasyon, akut pulmoner ödem, intrakraniyal
+              kanama).
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
+                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">TR Standart Ampuller</span>
+                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
+                  0.25 · 0.5 · 1.0 mg / 1 mL
+                </span>
+                <span className="block text-[11px] text-rose-700 dark:text-rose-300 mt-1">
+                  Üçü de 1 mL hacimdedir; etiket mg değerini mutlaka okuyun!
+                </span>
+              </div>
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
+                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">1:1.000 (1 mg/mL)</span>
+                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
+                  1.000 mcg / mL
+                </span>
+                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
+                  Erişkin ACLS (1 mg IV), Anafilaksi IM (0.5 mL), Nebülizasyon.
+                </span>
+              </div>
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
+                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">1:10.000 (0.1 mg/mL)</span>
+                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
+                  100 mcg / mL
+                </span>
+                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
+                  1 mg (1 mL) + 9 mL SF. Pediatrik PALS &amp; IV anafilaksi titrasyon stoğu.
+                </span>
+              </div>
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
+                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">Push-Dose (1:100.000)</span>
+                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
+                  10 mcg / mL
+                </span>
+                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
+                  1 mg / 100 mL SF. Ameliyathane IV anafilaksi &amp; hipotansiyon bolusu.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 10. KANITA DAYALI KAYNAKÇA                                          */}

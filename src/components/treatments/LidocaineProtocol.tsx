@@ -357,12 +357,15 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
         isDark={isDark}
         items={[
           { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'Farmakokinetik' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
           { id: 'sec-dozaj', label: 'Dozaj Tablosu' },
           { id: 'sec-hesaplayici', label: 'Doz & LAST Hesaplayıcı' },
-          { id: 'sec-tamponlama', label: 'Tamponlama' },
-          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-          { id: 'sec-last', label: 'LAST İntralipid' },
+          { id: 'sec-populasyon', label: 'Özel Popülasyonlar' },
           { id: 'sec-pregnancy', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-last', label: 'LAST İntralipid' },
+          { id: 'sec-tamponlama', label: 'Tamponlama' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
         ]}
       />
@@ -447,6 +450,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           BÖLÜM 3: FARMAKOKİNETİK PROFİLİ
           ========================================================================= */}
       <section
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -562,6 +566,180 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
+          BÖLÜM 12: FARMAKOKİNETİK VE DİNAMİK İNTERAKTİF SİMÜLATÖR
+          ========================================================================= */}
+      <section
+        className={`p-6 rounded-2xl border space-y-4 ${
+          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                Farmakokinetik &amp; Doku pH İnteraktif Simülatörü
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                pKa 7.9 kimyası: Doku pH'sının non-iyonize lipofilik fraksiyon ve etki hızına etkisi
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setPkOpen(!pkOpen)}
+            className="flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+          >
+            <span>{pkOpen ? 'Simülatörü Gizle' : 'Simülatörü Genişlet'}</span>
+            {pkOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {pkOpen && (
+          <div className="space-y-4 pt-2 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Dağılım Hacmi (Vd)</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  1.1 – 1.5 L/kg
+                </span>
+                <span className="text-[10px] text-slate-500">Geniş doku penetrasyonu</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Yarılanma Ömrü (t½)</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  1.5 – 2.0 Saat
+                </span>
+                <span className="text-[10px] text-slate-500">Sirozda 4–5 saate uzar</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Klirens &amp; Ekstraksiyon</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  10 – 12 mL/kg/dk
+                </span>
+                <span className="text-[10px] text-slate-500">Hepatik ekstraksiyon oranı: 0.7</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Plazma Protein Bağlanması</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  %65
+                </span>
+                <span className="text-[10px] text-slate-500">Alfa-1 asit glikoprotein (AAG)</span>
+              </div>
+            </div>
+
+            {/* pH Henderson-Hasselbalch Tablosu */}
+            <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 space-y-2">
+              <span className="font-bold text-blue-700 dark:text-blue-300 block">
+                Doku pH'sına Göre Aktif Non-İyonize (Membrandan Geçebilen) Baz Fraksiyonu:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
+                <div className="p-3 rounded-lg bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
+                  <span className="block text-[10px] text-rose-500 font-bold uppercase">Enfeksiyon / Abse İçi (pH 6.0)</span>
+                  <span className="text-lg font-black text-rose-600 block mt-1">%1.2 Non-İyonize</span>
+                  <span className="text-[10px] text-slate-500 font-sans block mt-0.5">Membranı geçemez; blok yetersiz!</span>
+                </div>
+
+                <div className="p-3 rounded-lg bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
+                  <span className="block text-[10px] text-blue-500 font-bold uppercase">Fizyolojik Doku (pH 7.4)</span>
+                  <span className="text-lg font-black text-blue-600 block mt-1">%24.0 Non-İyonize</span>
+                  <span className="text-[10px] text-slate-500 font-sans block mt-0.5">Standart başlangıç süresi (2-5 dk)</span>
+                </div>
+
+                <div className="p-3 rounded-lg bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
+                  <span className="block text-[10px] text-emerald-500 font-bold uppercase">Tamponlanmış Çözelti (pH 7.8)</span>
+                  <span className="text-lg font-black text-emerald-600 block mt-1">%44.3 Non-İyonize</span>
+                  <span className="text-[10px] text-slate-500 font-sans block mt-0.5">Ultra hızlı başlangıç (&lt;60 sn); ağrısız!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* =========================================================================
+          BÖLÜM 8: KONTRENDİKASYONLAR VE YÜKSEK RİSK DURUMLARI
+          ========================================================================= */}
+      <section
+        id="sec-kontrendikasyon"
+        className={`p-6 rounded-2xl border space-y-6 ${
+          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              Kontrendikasyonlar &amp; Yüksek Risk Durumları
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Kardiyovasküler ileti defektleri, anatomik uç organlar ve genetik bozukluklar
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 space-y-3">
+            <span className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 uppercase tracking-wide">
+              <Skull className="w-4 h-4 text-rose-600" />
+              <span>Mutlak Kontrendikasyonlar</span>
+            </span>
+            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Ağır AV Bloklar (2. veya 3. Derece AV Blok):</strong> Kalp pili (pacemaker) olmayan tam bloklu hastalarda SA ve AV nodal kaçış ritmini baskılayarak asistoliye yol açabilir.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Bifasiküler &amp; Trifasiküler Bloklar:</strong> İntraventriküler iletinin durması riski.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Amid Tipi Lokal Anestezik Alerjisi:</strong> Çok nadirdir (genellikle metilparaben koruyucuya bağlıdır), gerçek alerjide mutlak kontrendikedir.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Akut Porfiria:</strong> Porfirin sentezini indükleyerek ölümcül nöro-visseral atakları tetikleyebilir.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-3">
+            <span className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1.5 uppercase tracking-wide">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <span>Relatif Kontrendikasyonlar &amp; Özel Uyarılar</span>
+            </span>
+            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+              <li className="flex items-start gap-2">
+                <span className="text-amber-600 font-bold">•</span>
+                <span><strong>Uç Organlarda Epinefrinli Form Yasağı:</strong> Parmaklar, ayak parmakları, penis ucu, burun ucu ve kulak memesi gibi terminal kan dolaşımına sahip organlara asla adrenalinli form enjekte edilmez (iskemik gangren riski).</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-600 font-bold">•</span>
+                <span><strong>Ağır Karaciğer Yetmezliği:</strong> Klerens %60–70 azalır; tekrarlayan veya infüzyon dozlarında doz %50 oranında düşürülmelidir.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-600 font-bold">•</span>
+                <span><strong>Ciddi Kalp Yetmezliği &amp; Düşük Debi:</strong> Hepatik perfüzyon düştüğü için lidokain klerensi azalır ve toksisite riski katlanır.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-600 font-bold">•</span>
+                <span><strong>Methemoglobinemi Riski:</strong> Lidokain metaboliti o-toluidin türevi değildir fakat çok yüksek dozlarda enzim yetersizliği olanlarda methemoglobinemiye zemin hazırlayabilir.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
           BÖLÜM 4: KLİNİK ENDİKASYONLAR VE UYGULAMA YOLLARI
           ========================================================================= */}
       <section
@@ -576,7 +754,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              4. Klinik Endikasyonlar &amp; Uygulama Yolları
+              Klinik Endikasyonlar &amp; Uygulama Yolları
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Lokal, rejyonel, sistemik IV, kardiyak resüsitasyon ve hava yolu endotrakeal anestezisi
@@ -753,7 +931,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              5. Dozaj Tablosu &amp; Klinik Uygulama Kılavuzu
+              Dozaj Tablosu &amp; Klinik Uygulama Kılavuzu
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Endikasyonlara göre güvenli tavan dozları, infüzyon hızları ve solüsyon konsantrasyonları
@@ -870,7 +1048,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-xl font-black text-slate-900 dark:text-white">
-                  6. İnteraktif Doz &amp; Toksisite Hesaplayıcısı
+                  İnteraktif Doz &amp; Toksisite Hesaplayıcısı
                 </h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-mono">
                   4 Özel Klinik Araç
@@ -1604,205 +1782,73 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
-          BÖLÜM 7: HAZIRLAMA, SEYRELTME VE STABİLİTE (TAMPONLAMA)
+          BÖLÜM 11: ÖZEL POPÜLASYONLAR VE DOZ AYARLARI
           ========================================================================= */}
       <section
-        id="sec-tamponlama"
+        id="sec-populasyon"
         className={`p-6 rounded-2xl border space-y-6 ${
           isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
         <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
           <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-            <Droplet className="w-5 h-5" />
+            <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              7. Hazırlama, Seyreltme &amp; Tamponlama Tekniği
+              Özel Popülasyonlar &amp; Doz Modifikasyonları (Böbrek / Karaciğer Dahil)
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Ticari ampul formları, tamponlama kimyası ve infüzyon çözeltisi stabilitesi
+              Pediatri, geriatri, karaciğer yetmezliği, gebelik ve böbrek fonksiyonları
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Türkiye Piyasa Formları</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• <strong>Aritmal %2:</strong> 100 mg / 5 mL ampul (20 mg/mL)</li>
-              <li>• <strong>Aritmal %10:</strong> 500 mg / 5 mL ampul (100 mg/mL - Yalnızca IV infüzyon seyreltmesi için!)</li>
-              <li>• <strong>Jetokain Ampul:</strong> 40 mg Lidokain + 0.025 mg Epinefrin (2 mL)</li>
-              <li>• <strong>Vemcaine %10 Sprey:</strong> 50 mL şişe (1 puf = 10 mg)</li>
-              <li>• <strong>Anestol Pomad %5:</strong> 30 g tüp (topikal deri)</li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 space-y-2">
-            <span className="font-bold text-blue-700 dark:text-blue-300 block">
-              Tamponlama Protokolü (Alkalinizasyon)
-            </span>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              Lidokain hidroklorür solüsyonunun pH'sı 5.0–6.5'tir (adrenalinli formlarda koruyucu sodyum metabisülfit nedeniyle pH 3.5–4.5'e kadar düşer).
-              Enjeksiyon yanmasını önlemek ve etkiyi 2 dakikanın altına indirmek için:
-            </p>
-            <div className="p-2 rounded bg-white/60 dark:bg-slate-900/60 font-mono font-bold text-blue-800 dark:text-blue-200 text-center">
-              9 mL %1 Lidokain + 1 mL %8.4 NaHCO₃
-            </div>
-            <p className="text-[10px] text-slate-500">
-              Dikkat: 10:1 oranından fazla bikarbonat eklenirse lidokain bazı çöker ve solüsyon bulanıklaşır (bulanık solüsyon kesinlikle enjekte edilmez).
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Seyreltici Uyumluluğu &amp; Saklama</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• %0.9 NaCl ve %5 Dekstroz ile tam geçimlidir.</li>
-              <li>• Oda sıcaklığında (20–25°C) ışıktan korunarak saklanır.</li>
-              <li>• Adrenalinli solüsyonlar ısı ve ışıktan korunmalıdır; dondurulmamalıdır.</li>
-              <li>• %20 İntralipid acil arabasında oda sıcaklığında hazır bekletilmelidir.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BÖLÜM 8: KONTRENDİKASYONLAR VE YÜKSEK RİSK DURUMLARI
-          ========================================================================= */}
-      <section
-        id="sec-kontrendikasyon"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
-            <AlertTriangle className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              8. Kontrendikasyonlar &amp; Yüksek Risk Durumları
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Kardiyovasküler ileti defektleri, anatomik uç organlar ve genetik bozukluklar
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 space-y-3">
-            <span className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 uppercase tracking-wide">
-              <Skull className="w-4 h-4 text-rose-600" />
-              <span>Mutlak Kontrendikasyonlar</span>
-            </span>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Ağır AV Bloklar (2. veya 3. Derece AV Blok):</strong> Kalp pili (pacemaker) olmayan tam bloklu hastalarda SA ve AV nodal kaçış ritmini baskılayarak asistoliye yol açabilir.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Bifasiküler &amp; Trifasiküler Bloklar:</strong> İntraventriküler iletinin durması riski.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Amid Tipi Lokal Anestezik Alerjisi:</strong> Çok nadirdir (genellikle metilparaben koruyucuya bağlıdır), gerçek alerjide mutlak kontrendikedir.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Akut Porfiria:</strong> Porfirin sentezini indükleyerek ölümcül nöro-visseral atakları tetikleyebilir.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-3">
-            <span className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1.5 uppercase tracking-wide">
-              <AlertTriangle className="w-4 h-4 text-amber-600" />
-              <span>Relatif Kontrendikasyonlar &amp; Özel Uyarılar</span>
-            </span>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span><strong>Uç Organlarda Epinefrinli Form Yasağı:</strong> Parmaklar, ayak parmakları, penis ucu, burun ucu ve kulak memesi gibi terminal kan dolaşımına sahip organlara asla adrenalinli form enjekte edilmez (iskemik gangren riski).</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span><strong>Ağır Karaciğer Yetmezliği:</strong> Klerens %60–70 azalır; tekrarlayan veya infüzyon dozlarında doz %50 oranında düşürülmelidir.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span><strong>Ciddi Kalp Yetmezliği &amp; Düşük Debi:</strong> Hepatik perfüzyon düştüğü için lidokain klerensi azalır ve toksisite riski katlanır.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span><strong>Methemoglobinemi Riski:</strong> Lidokain metaboliti o-toluidin türevi değildir fakat çok yüksek dozlarda enzim yetersizliği olanlarda methemoglobinemiye zemin hazırlayabilir.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BÖLÜM 9: TOKSİSİTE (LAST - LOKAL ANESTEZİK SİSTEMİK TOKSİSİTESİ)
-          ========================================================================= */}
-      <section
-        id="sec-last"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
-            <ShieldAlert className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              9. LAST (Lokal Anestezik Sistemik Toksisitesi) Aşamaları
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Plazma konsantrasyonuna bağlı progresif MSS eksitasyonu ve kardiyovasküler kollaps kademeleri
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block font-mono">
-              1 – 5 mcg/mL
-            </span>
-            <span className="font-bold text-slate-900 dark:text-white block">Terapötik Aralık</span>
-            <p className="text-slate-500">
-              Antiaritmik ve sistemik analjezik etki. Toksisite semptomu görülmez; hafif sedasyon ve analjezi.
+            <span className="font-bold text-slate-900 dark:text-white block">Karaciğer Yetmezliği</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Lidokain %90 oranında hepatik CYP1A2 ve CYP3A4 enzimleri ile elimine edilir.
+              Siroz ve karaciğer yetmezliğinde yarı ömür 1.5 saatten 5 saate uzar; klerens %60 azalır. Sürekli infüzyon dozu <strong>%40–50 azaltılmalıdır</strong>.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 space-y-1.5">
-            <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block font-mono">
-              5 – 10 mcg/mL
-            </span>
-            <span className="font-bold text-blue-700 dark:text-blue-300 block">Erken MSS Uyarısı</span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Dilde ve dudakta uyuşma, <strong>ağızda metalik tat</strong>, kulak çınlaması (tinnitus), baş dönmesi, geveleyerek konuşma, nistagmus, anksiyete.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <span className="font-bold text-slate-900 dark:text-white block">Geriatri (Yaşlı Hastalar)</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Azalmış hepatik kan akımı ve düşük kardiyak debi nedeniyle klerens düşer. MSS toksisite eşiği daha düşüktür.
+              İnfüzyon ve maksimum lokal dozlar <strong>%20–25 oranında azaltılmalıdır</strong>.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
-            <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider block font-mono">
-              10 – 15 mcg/mL
-            </span>
-            <span className="font-bold text-amber-800 dark:text-amber-200 block">MSS Eksitasyonu &amp; Depresyon</span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Kortikal inhibitör yolların felci: <strong>Jeneralize tonik-klonik nöbetler</strong>, bilinç kaybı, stupor, koma ve solunum durması (apne).
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <span className="font-bold text-slate-900 dark:text-white block">Gebelik &amp; Laktasyon</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              FDA Kategori B. Plasentayı kolayca geçer. Fetal asidoz durumunda "iyon tuzağı" (ion trapping) gelişerek fetal dolaşımda lidokain birikebilir.
+              Laktasyonda anne sütüne çok düşük oranlarda geçer, emzirmeye genellikle engel değildir.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-rose-500/15 border border-rose-500/40 space-y-1.5">
-            <span className="text-[10px] font-bold text-rose-700 dark:text-rose-300 uppercase tracking-wider block font-mono">
-              &gt; 15 – 25 mcg/mL
-            </span>
-            <span className="font-bold text-rose-800 dark:text-rose-200 block">Kardiyovasküler Kollaps</span>
-            <p className="text-slate-700 dark:text-slate-200">
-              Miyokard depresyonu, PR ve QRS genişlemesi, refrakter hipotansiyon, şiddetli bradikardi, VT/VF ve asistoli.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <span className="font-bold text-slate-900 dark:text-white block">Pediatrik Kullanım</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Lokal infiltrasyonda saf form için <strong>3 mg/kg</strong>, adrenalinli form için maksimum <strong>4–5 mg/kg</strong> aşılmamalıdır.
+              ACLS arrestinde 1 mg/kg IV/IO uygulanır.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <span className="font-bold text-slate-900 dark:text-white block">Böbrek Yetmezliği</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Lidokainin kendisi karaciğerde metabolize olsa da aktif metabolitleri (MEGX ve GX) böbrekle atılır.
+              Ağır KBY olgularında uzun süreli infüzyonda bu metabolitler birikerek santral toksisiteye (ajitasyon, nöbet) katkıda bulunabilir.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <span className="font-bold text-slate-900 dark:text-white block">Obez Hastalar</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Lidokain orta derecede lipofiliktir. Toksisiteden kaçınmak için maksimum lokal ve sürekli IV infüzyon dozları <strong>İdeal Vücut Ağırlığı (İVA)</strong> üzerinden hesaplanmalıdır.
             </p>
           </div>
         </div>
@@ -1823,7 +1869,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              10. Gebelik ve Laktasyon Kılavuzu
+              Gebelik ve Laktasyon Kılavuzu
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Obstetrik anestezi, plasental transfer, fetal iyon tuzağı ve emzirme güvenliği
@@ -1895,173 +1941,132 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
-          BÖLÜM 11: ÖZEL POPÜLASYONLAR VE DOZ AYARLARI
+          BÖLÜM 9: TOKSİSİTE (LAST - LOKAL ANESTEZİK SİSTEMİK TOKSİSİTESİ)
           ========================================================================= */}
       <section
+        id="sec-last"
         className={`p-6 rounded-2xl border space-y-6 ${
           isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
         <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-            <ShieldCheck className="w-5 h-5" />
+          <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
+            <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              11. Özel Popülasyonlar &amp; Doz Modifikasyonları
+              LAST (Lokal Anestezik Sistemik Toksisitesi) Aşamaları
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Pediatri, geriatri, karaciğer yetmezliği, gebelik ve böbrek fonksiyonları
+              Plazma konsantrasyonuna bağlı progresif MSS eksitasyonu ve kardiyovasküler kollaps kademeleri
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Karaciğer Yetmezliği</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lidokain %90 oranında hepatik CYP1A2 ve CYP3A4 enzimleri ile elimine edilir.
-              Siroz ve karaciğer yetmezliğinde yarı ömür 1.5 saatten 5 saate uzar; klerens %60 azalır. Sürekli infüzyon dozu <strong>%40–50 azaltılmalıdır</strong>.
+            <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block font-mono">
+              1 – 5 mcg/mL
+            </span>
+            <span className="font-bold text-slate-900 dark:text-white block">Terapötik Aralık</span>
+            <p className="text-slate-500">
+              Antiaritmik ve sistemik analjezik etki. Toksisite semptomu görülmez; hafif sedasyon ve analjezi.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Geriatri (Yaşlı Hastalar)</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Azalmış hepatik kan akımı ve düşük kardiyak debi nedeniyle klerens düşer. MSS toksisite eşiği daha düşüktür.
-              İnfüzyon ve maksimum lokal dozlar <strong>%20–25 oranında azaltılmalıdır</strong>.
+          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 space-y-1.5">
+            <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block font-mono">
+              5 – 10 mcg/mL
+            </span>
+            <span className="font-bold text-blue-700 dark:text-blue-300 block">Erken MSS Uyarısı</span>
+            <p className="text-slate-600 dark:text-slate-300">
+              Dilde ve dudakta uyuşma, <strong>ağızda metalik tat</strong>, kulak çınlaması (tinnitus), baş dönmesi, geveleyerek konuşma, nistagmus, anksiyete.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Gebelik &amp; Laktasyon</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              FDA Kategori B. Plasentayı kolayca geçer. Fetal asidoz durumunda "iyon tuzağı" (ion trapping) gelişerek fetal dolaşımda lidokain birikebilir.
-              Laktasyonda anne sütüne çok düşük oranlarda geçer, emzirmeye genellikle engel değildir.
+          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
+            <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider block font-mono">
+              10 – 15 mcg/mL
+            </span>
+            <span className="font-bold text-amber-800 dark:text-amber-200 block">MSS Eksitasyonu &amp; Depresyon</span>
+            <p className="text-slate-600 dark:text-slate-300">
+              Kortikal inhibitör yolların felci: <strong>Jeneralize tonik-klonik nöbetler</strong>, bilinç kaybı, stupor, koma ve solunum durması (apne).
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Pediatrik Kullanım</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lokal infiltrasyonda saf form için <strong>3 mg/kg</strong>, adrenalinli form için maksimum <strong>4–5 mg/kg</strong> aşılmamalıdır.
-              ACLS arrestinde 1 mg/kg IV/IO uygulanır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Böbrek Yetmezliği</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lidokainin kendisi karaciğerde metabolize olsa da aktif metabolitleri (MEGX ve GX) böbrekle atılır.
-              Ağır KBY olgularında uzun süreli infüzyonda bu metabolitler birikerek santral toksisiteye (ajitasyon, nöbet) katkıda bulunabilir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Obez Hastalar</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lidokain orta derecede lipofiliktir. Toksisiteden kaçınmak için maksimum lokal ve sürekli IV infüzyon dozları <strong>İdeal Vücut Ağırlığı (İVA)</strong> üzerinden hesaplanmalıdır.
+          <div className="p-4 rounded-xl bg-rose-500/15 border border-rose-500/40 space-y-1.5">
+            <span className="text-[10px] font-bold text-rose-700 dark:text-rose-300 uppercase tracking-wider block font-mono">
+              &gt; 15 – 25 mcg/mL
+            </span>
+            <span className="font-bold text-rose-800 dark:text-rose-200 block">Kardiyovasküler Kollaps</span>
+            <p className="text-slate-700 dark:text-slate-200">
+              Miyokard depresyonu, PR ve QRS genişlemesi, refrakter hipotansiyon, şiddetli bradikardi, VT/VF ve asistoli.
             </p>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          BÖLÜM 12: FARMAKOKİNETİK VE DİNAMİK İNTERAKTİF SİMÜLATÖR
+          BÖLÜM 7: HAZIRLAMA, SEYRELTME VE STABİLİTE (TAMPONLAMA)
           ========================================================================= */}
       <section
-        className={`p-6 rounded-2xl border space-y-4 ${
+        id="sec-tamponlama"
+        className={`p-6 rounded-2xl border space-y-6 ${
           isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
-        <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-              <Activity className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                12. Farmakokinetik &amp; Doku pH İnteraktif Simülatörü
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                pKa 7.9 kimyası: Doku pH'sının non-iyonize lipofilik fraksiyon ve etki hızına etkisi
-              </p>
-            </div>
+        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
+            <Droplet className="w-5 h-5" />
           </div>
-
-          <button
-            type="button"
-            onClick={() => setPkOpen(!pkOpen)}
-            className="flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
-          >
-            <span>{pkOpen ? 'Simülatörü Gizle' : 'Simülatörü Genişlet'}</span>
-            {pkOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              IV Uygulama, Hazırlama, Seyreltme &amp; Tamponlama Tekniği
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Ticari ampul formları, tamponlama kimyası ve infüzyon çözeltisi stabilitesi
+            </p>
+          </div>
         </div>
 
-        {pkOpen && (
-          <div className="space-y-4 pt-2 text-xs">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Dağılım Hacmi (Vd)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  1.1 – 1.5 L/kg
-                </span>
-                <span className="text-[10px] text-slate-500">Geniş doku penetrasyonu</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Yarılanma Ömrü (t½)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  1.5 – 2.0 Saat
-                </span>
-                <span className="text-[10px] text-slate-500">Sirozda 4–5 saate uzar</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Klirens &amp; Ekstraksiyon</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  10 – 12 mL/kg/dk
-                </span>
-                <span className="text-[10px] text-slate-500">Hepatik ekstraksiyon oranı: 0.7</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Plazma Protein Bağlanması</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  %65
-                </span>
-                <span className="text-[10px] text-slate-500">Alfa-1 asit glikoprotein (AAG)</span>
-              </div>
-            </div>
-
-            {/* pH Henderson-Hasselbalch Tablosu */}
-            <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 space-y-2">
-              <span className="font-bold text-blue-700 dark:text-blue-300 block">
-                Doku pH'sına Göre Aktif Non-İyonize (Membrandan Geçebilen) Baz Fraksiyonu:
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
-                <div className="p-3 rounded-lg bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
-                  <span className="block text-[10px] text-rose-500 font-bold uppercase">Enfeksiyon / Abse İçi (pH 6.0)</span>
-                  <span className="text-lg font-black text-rose-600 block mt-1">%1.2 Non-İyonize</span>
-                  <span className="text-[10px] text-slate-500 font-sans block mt-0.5">Membranı geçemez; blok yetersiz!</span>
-                </div>
-
-                <div className="p-3 rounded-lg bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
-                  <span className="block text-[10px] text-blue-500 font-bold uppercase">Fizyolojik Doku (pH 7.4)</span>
-                  <span className="text-lg font-black text-blue-600 block mt-1">%24.0 Non-İyonize</span>
-                  <span className="text-[10px] text-slate-500 font-sans block mt-0.5">Standart başlangıç süresi (2-5 dk)</span>
-                </div>
-
-                <div className="p-3 rounded-lg bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
-                  <span className="block text-[10px] text-emerald-500 font-bold uppercase">Tamponlanmış Çözelti (pH 7.8)</span>
-                  <span className="text-lg font-black text-emerald-600 block mt-1">%44.3 Non-İyonize</span>
-                  <span className="text-[10px] text-slate-500 font-sans block mt-0.5">Ultra hızlı başlangıç (&lt;60 sn); ağrısız!</span>
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-white block">Türkiye Piyasa Formları</span>
+            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
+              <li>• <strong>Aritmal %2:</strong> 100 mg / 5 mL ampul (20 mg/mL)</li>
+              <li>• <strong>Aritmal %10:</strong> 500 mg / 5 mL ampul (100 mg/mL - Yalnızca IV infüzyon seyreltmesi için!)</li>
+              <li>• <strong>Jetokain Ampul:</strong> 40 mg Lidokain + 0.025 mg Epinefrin (2 mL)</li>
+              <li>• <strong>Vemcaine %10 Sprey:</strong> 50 mL şişe (1 puf = 10 mg)</li>
+              <li>• <strong>Anestol Pomad %5:</strong> 30 g tüp (topikal deri)</li>
+            </ul>
           </div>
-        )}
+
+          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 space-y-2">
+            <span className="font-bold text-blue-700 dark:text-blue-300 block">
+              Tamponlama Protokolü (Alkalinizasyon)
+            </span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              Lidokain hidroklorür solüsyonunun pH'sı 5.0–6.5'tir (adrenalinli formlarda koruyucu sodyum metabisülfit nedeniyle pH 3.5–4.5'e kadar düşer).
+              Enjeksiyon yanmasını önlemek ve etkiyi 2 dakikanın altına indirmek için:
+            </p>
+            <div className="p-2 rounded bg-white/60 dark:bg-slate-900/60 font-mono font-bold text-blue-800 dark:text-blue-200 text-center">
+              9 mL %1 Lidokain + 1 mL %8.4 NaHCO₃
+            </div>
+            <p className="text-[10px] text-slate-500">
+              Dikkat: 10:1 oranından fazla bikarbonat eklenirse lidokain bazı çöker ve solüsyon bulanıklaşır (bulanık solüsyon kesinlikle enjekte edilmez).
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-white block">Seyreltici Uyumluluğu &amp; Saklama</span>
+            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
+              <li>• %0.9 NaCl ve %5 Dekstroz ile tam geçimlidir.</li>
+              <li>• Oda sıcaklığında (20–25°C) ışıktan korunarak saklanır.</li>
+              <li>• Adrenalinli solüsyonlar ısı ve ışıktan korunmalıdır; dondurulmamalıdır.</li>
+              <li>• %20 İntralipid acil arabasında oda sıcaklığında hazır bekletilmelidir.</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* =========================================================================

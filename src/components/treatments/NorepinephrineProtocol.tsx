@@ -221,10 +221,13 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         isDark={isDark}
         items={[
           { id: 'sec-ozet', label: 'Özet & Reseptörler' },
-          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
+          { id: 'sec-pkpd', label: 'Farmakokinetik' },
           { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-dozaj', label: 'Dozaj Kademeleri' },
+          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
           { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
           { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-uyumluluk', label: 'Çözelti & Ekstravazasyon' },
           { id: 'sec-guvenlik', label: 'ISMP High-Alert' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
         ]}
@@ -234,6 +237,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 2. FARMAKOKİNETİK ÖZELLİKLER (PK/PD AKORDİYON)                      */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -334,6 +338,21 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         )}
       </section>
+
+      <ContraindicationsGridBlock
+        isDark={isDark}
+        absoluteItems={[
+          'Düzeltilmemiş ağır hipovolemi (sıvı resüsitasyonu yapılmadan tek başına başlanması splanknik/renal iskemiyi derinleştirir).',
+          'Mezenterik veya periferik vasküler tromboz (yalnızca hayat kurtarıcı acil perfüzyon gerekliliğinde istisna).',
+          'Ciddi hipoksi ve hiperkapniyle birlikte halotan/siklopropan anestezisi altında malign ventriküler aritmi riski.',
+        ]}
+        relativeItems={[
+          'MAO inhibitörleri veya trisiklik antidepresan (TCA) kullanımı: Presör etki 2–10 kat artabilir; düşük dozla başlanmalıdır.',
+          'Non-selektif beta-bloker kullanımı: Karşılanmamış alfa-1 vazokonstriksiyon nedeniyle şiddetli hipertansif yanıt gelişebilir.',
+          'Şiddetli asidemi (pH < 7.15): Katekolamin reseptör duyarlılığı düşer; asit-baz ve ventilasyon optimize edilmelidir.',
+        ]}
+        clinicalNote="Hayati şok ve derin hipotansiyon acillerinde mutlak kontrendikasyon yoktur; sıvı resüsitasyonu ile eşzamanlı ve titre edilerek başlanmalıdır."
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 3. ENDİKASYONLAR & KLİNİK KANIT DÜZEYLERİ                           */}
@@ -437,6 +456,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 4. DOZAJ REJİMLERİ & TİTRASYON BASAMAKLARI                          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-dozaj"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1113,164 +1133,35 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 7. ÇÖZELTİ HAZIRLAMA & UYUMLULUK REHBERİ                             */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <Droplet className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Çözelti Hazırlama, Seyreltme &amp; Kimyasal Uyumluluk
-          </h2>
-        </div>
+      <OrganImpairmentGridBlock
+        isDark={isDark}
+        renalSummary="Organ-bağımsız klirens: Böbrek yetmezliğinde veya CRRT'de başlangıç dozu azaltılmaz."
+        renalDetails={[
+          'Norepinefrin nöronal Uptake-1 ve doku COMT/MAO enzimleriyle dakikalar içinde inaktive edilir.',
+          'eGFR < 30 mL/dk veya CRRT/HD altında ek doz ayarlaması gerekmez; hedef MAP ≥ 65 mmHg düzeyine göre titre edilir.',
+          'Hipovolemi düzeltilmeden yüksek doz verilmesi renal vazokonstriksiyonu artırabilir; septik şokta ise renal perfüzyon basıncını korur.',
+        ]}
+        hepaticSummary="Child-Pugh A / B / C yetmezliğinde rutin doz kısıtlaması gerekmez; doku COMT/MAO yolu korunur."
+        hepaticDetails={[
+          'Karaciğer yetmezliğinde splenik ve portal vazokonstriksiyon nedeniyle mezenterik perfüzyon ve laktat trendi yakından izlenmelidir.',
+          'Sirotik vazodilatasyon ve hepatorenal sendrom (HRS) tip-1 tedavisinde terlipresine güçlü alternatif vazopressördür.',
+        ]}
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-          {/* 1. Taşıyıcı Sıvı Tercihi */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Taşıyıcı Sıvı: %5 Dextroz (D5W) Altın Standart</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Katekolaminler oksidasyona karşı oldukça hassastır. Dekstroz molekülü norepinefrinin oksidatif yıkımını engeller
-              ve stabiliteyi artırır. Bu nedenle <strong>%5 Dextroz (D5W)</strong> veya <strong>D5W + %0.9 SF</strong> tercih edilir.
-              Saf Serum Fizyolojik (%0.9 NaCl) acil durumlarda kullanılabilir ancak 24 saatten uzun saklanmamalıdır.
-            </p>
-          </div>
-
-          {/* 2. Işık Koruması & Oksidasyon Uyarısı */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <ShieldAlert className="w-4 h-4 text-amber-500" />
-              <span>Işık Koruması &amp; Renk Değişimi</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Ampuller ışıktan korunarak oda sıcaklığında saklanmalıdır. İnfüzyon hattında opak koruyucu kılıf önerilir.
-              Solüsyon pembe, sarı veya kahverengiye dönerse veya partikül içeriyorsa <strong>OKSİT OLMUŞTUR</strong>;
-              biyolojik etkinliğini kaybetmiştir, <strong>KESİNLİKLE KULLANILMAMALIDIR!</strong>
-            </p>
-          </div>
-
-          {/* 3. Kritik Geçimsizlik: Bikarbonat */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-rose-950/20 border-rose-900/50' : 'bg-rose-50/70 border-rose-200'
-          }`}>
-            <h4 className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              <span>Kritik Geçimsizlik: Alkali Solüsyonlar</span>
-            </h4>
-            <p className="text-rose-900 dark:text-rose-200 leading-relaxed text-xs">
-              <strong>Sodyum Bikarbonat (%8.4 NaHCO₃)</strong> ve alkali çözeltilerle ASLA aynı damar yolundan verilmemelidir!
-              Alkali pH katekolaminleri saniyeler içinde kimyasal olarak inaktive eder. Ayrıca furosemid, aminofilin ve
-              tiyopental ile aynı lümenden geçimsizdir.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 8. PERİFERİK DAMAR YOLU GÜVENLİK KURALLARI & EKSTRAVAZASYON YÖNETİMİ */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`rounded-2xl border transition-all overflow-hidden ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <button
-          type="button"
-          onClick={() => setExtravasationOpen(!extravasationOpen)}
-          aria-expanded={extravasationOpen}
-          className={`w-full p-5 sm:p-6 flex items-center justify-between text-left transition-colors cursor-pointer ${
-            isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <span>Periferik Damar Yolu Güvenliği &amp; Ekstravazasyon (Fentolamin) Yönetimi</span>
-                <span className="text-xs font-normal px-2 py-0.5 rounded font-mono bg-rose-500/15 text-rose-700 dark:text-rose-300">
-                  Antidot: Fentolamin 5–10 mg
-                </span>
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Yoğun bakımcı ve anestezistin en titiz güvenlik alanı: Erken periferik başlama ve lokal doku nekrozu acil kurtarma protokolü.
-              </p>
-            </div>
-          </div>
-          {extravasationOpen ? (
-            <ChevronUp className="w-5 h-5 text-slate-400" />
-          ) : (
-            <ChevronDown className="w-5 h-5 text-slate-400" />
-          )}
-        </button>
-
-        {extravasationOpen && (
-          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800 space-y-4">
-            {/* Periferik Kullanım Şartları */}
-            <div className={`p-4 rounded-xl border leading-relaxed text-xs sm:text-sm ${
-              isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-            }`}>
-              <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span>"Santral Hat Beklenirken Tedavi Geciktirilmez" — Periferik Güvenlik İlkeleri:</span>
-              </h4>
-              <ul className="space-y-1.5 list-disc list-inside">
-                <li>
-                  <strong>Damar Yeri:</strong> Yalnızca <strong>antekübital fossa veya önkol geniş venleri</strong> (≥ 20G veya 18G kanül).
-                  El sırtı (dorsum manus), el bileği veya ayak/bacak venleri KESİNLİKLE KULLANILMAMALIDIR!
-                </li>
-                <li>
-                  <strong>Süre Sınırı:</strong> Periferik infüzyon bir geçiş stratejisidir. Maksimum <strong>24–48 saat</strong> içinde
-                  santral venöz kateterizasyon (SVK) sağlanmalıdır.
-                </li>
-                <li>
-                  <strong>Monitörizasyon:</strong> İnfüzyon bölgesi her 1–2 saatte bir ödem, solukluk, soğukluk ve geri kan akımı açısından
-                  fiziki olarak palpe ve inspekte edilmelidir.
-                </li>
-              </ul>
-            </div>
-
-            {/* Fentolamin Ekstravazasyon Protokolü */}
-            <div className={`p-4 rounded-xl border ${
-              isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-200' : 'bg-rose-50/80 border-rose-200 text-rose-950'
-            }`}>
-              <div className="flex items-center gap-2 mb-2 font-bold text-sm text-rose-700 dark:text-rose-300">
-                <AlertOctagon className="w-5 h-5 text-rose-600" />
-                <span>EKSTRAVAZASYON GELİŞTİĞİNDE ACİL KURTARMA PROTOKOLÜ (12 SAAT İÇİNDE UYGULANMALI):</span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs mt-3">
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">1. İnfüzyonu Durdur</span>
-                  İnfüzyon derhal kesilir. Kateter hemen çekilmez; enjektör takılarak ekstravaze olmuş noradrenalin aspire edilir.
-                </div>
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">2. Fentolamin Hazırla</span>
-                  <strong>Fentolamin (Regitine / Alfa-bloker) 5 – 10 mg</strong>, 10–15 mL Serum Fizyolojik içinde seyreltilir.
-                </div>
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">3. Subkutan İnfiltrasyon</span>
-                  İnce iğne (25–27G) ile iskemi/solukluk alanına çember şeklinde çoklu noktadan subkutan enjekte edilir (doku hiperemisi hedeflenir).
-                </div>
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">4. Alternatif &amp; Bakım</span>
-                  Fentolamin yoksa <strong>Topikal %2 Nitrogliserin pomad</strong> sürülür. Kol eleve edilir, ılık kompres konur (SOĞUK/BUZ ASLA UYGULANMAZ!).
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="FDA Gebelik Kategorisi C · SOAP 2023 konsensusunda obstetrik spinal hipotansiyonda güvenli seçenek."
+        pregnancyDetails={[
+          'Plasentayı yüksek konsantrasyonda geçmez (COMT/MAO plasental bariyer), ancak yüksek sistemik dozlar uterin arter vazokonstriksiyonu yapabilir.',
+          'Sezaryen spinal hipotansiyonunda düşük doz noradrenalin (5–10 mcg bolus veya 0.02–0.05 mcg/kg/dk) fenilefrine göre maternal kalp hızını daha iyi korur ve fetal asidoz yaratmaz.',
+          'Maternal şok/sepsiste anne hayatı ve uteroplasental perfüzyon için hedef MAP ≥ 65 mmHg sağlanması esastır.',
+        ]}
+        lactationSummary="Yarı ömrü 1–2 dakika, oral biyoyararlanımı ~0% olduğundan emzirmeye engel oluşturmaz."
+        lactationDetails={[
+          'Anne sütüne geçip geçmediği sınırlı veriye sahip olsa da gastrointestinal sistemde MAO/COMT ile tamamen yıkıldığı için infant tarafından emilmez.',
+          'Anne hemodinamik olarak stabilize olup şok kliniği çözüldüğünde emzirmeye ara verilmesi ("pump & dump") gerekmez.',
+        ]}
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 9. KARDİYOVASKÜLER & ORGAN YAN ETKİLERİ                             */}
@@ -1523,50 +1414,165 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      <ContraindicationsGridBlock
-        isDark={isDark}
-        absoluteItems={[
-          'Düzeltilmemiş ağır hipovolemi (sıvı resüsitasyonu yapılmadan tek başına başlanması splanknik/renal iskemiyi derinleştirir).',
-          'Mezenterik veya periferik vasküler tromboz (yalnızca hayat kurtarıcı acil perfüzyon gerekliliğinde istisna).',
-          'Ciddi hipoksi ve hiperkapniyle birlikte halotan/siklopropan anestezisi altında malign ventriküler aritmi riski.',
-        ]}
-        relativeItems={[
-          'MAO inhibitörleri veya trisiklik antidepresan (TCA) kullanımı: Presör etki 2–10 kat artabilir; düşük dozla başlanmalıdır.',
-          'Non-selektif beta-bloker kullanımı: Karşılanmamış alfa-1 vazokonstriksiyon nedeniyle şiddetli hipertansif yanıt gelişebilir.',
-          'Şiddetli asidemi (pH < 7.15): Katekolamin reseptör duyarlılığı düşer; asit-baz ve ventilasyon optimize edilmelidir.',
-        ]}
-        clinicalNote="Hayati şok ve derin hipotansiyon acillerinde mutlak kontrendikasyon yoktur; sıvı resüsitasyonu ile eşzamanlı ve titre edilerek başlanmalıdır."
-      />
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 7. ÇÖZELTİ HAZIRLAMA & UYUMLULUK REHBERİ                             */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        id="sec-uyumluluk"
+        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <Droplet className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+            Çözelti Hazırlama, Seyreltme &amp; Kimyasal Uyumluluk
+          </h2>
+        </div>
 
-      <OrganImpairmentGridBlock
-        isDark={isDark}
-        renalSummary="Organ-bağımsız klirens: Böbrek yetmezliğinde veya CRRT'de başlangıç dozu azaltılmaz."
-        renalDetails={[
-          'Norepinefrin nöronal Uptake-1 ve doku COMT/MAO enzimleriyle dakikalar içinde inaktive edilir.',
-          'eGFR < 30 mL/dk veya CRRT/HD altında ek doz ayarlaması gerekmez; hedef MAP ≥ 65 mmHg düzeyine göre titre edilir.',
-          'Hipovolemi düzeltilmeden yüksek doz verilmesi renal vazokonstriksiyonu artırabilir; septik şokta ise renal perfüzyon basıncını korur.',
-        ]}
-        hepaticSummary="Child-Pugh A / B / C yetmezliğinde rutin doz kısıtlaması gerekmez; doku COMT/MAO yolu korunur."
-        hepaticDetails={[
-          'Karaciğer yetmezliğinde splenik ve portal vazokonstriksiyon nedeniyle mezenterik perfüzyon ve laktat trendi yakından izlenmelidir.',
-          'Sirotik vazodilatasyon ve hepatorenal sendrom (HRS) tip-1 tedavisinde terlipresine güçlü alternatif vazopressördür.',
-        ]}
-      />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+          {/* 1. Taşıyıcı Sıvı Tercihi */}
+          <div className={`p-4 rounded-xl border ${
+            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <span>Taşıyıcı Sıvı: %5 Dextroz (D5W) Altın Standart</span>
+            </h4>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
+              Katekolaminler oksidasyona karşı oldukça hassastır. Dekstroz molekülü norepinefrinin oksidatif yıkımını engeller
+              ve stabiliteyi artırır. Bu nedenle <strong>%5 Dextroz (D5W)</strong> veya <strong>D5W + %0.9 SF</strong> tercih edilir.
+              Saf Serum Fizyolojik (%0.9 NaCl) acil durumlarda kullanılabilir ancak 24 saatten uzun saklanmamalıdır.
+            </p>
+          </div>
 
-      <PregnancyLactationBlock
-        isDark={isDark}
-        pregnancySummary="FDA Gebelik Kategorisi C · SOAP 2023 konsensusunda obstetrik spinal hipotansiyonda güvenli seçenek."
-        pregnancyDetails={[
-          'Plasentayı yüksek konsantrasyonda geçmez (COMT/MAO plasental bariyer), ancak yüksek sistemik dozlar uterin arter vazokonstriksiyonu yapabilir.',
-          'Sezaryen spinal hipotansiyonunda düşük doz noradrenalin (5–10 mcg bolus veya 0.02–0.05 mcg/kg/dk) fenilefrine göre maternal kalp hızını daha iyi korur ve fetal asidoz yaratmaz.',
-          'Maternal şok/sepsiste anne hayatı ve uteroplasental perfüzyon için hedef MAP ≥ 65 mmHg sağlanması esastır.',
-        ]}
-        lactationSummary="Yarı ömrü 1–2 dakika, oral biyoyararlanımı ~0% olduğundan emzirmeye engel oluşturmaz."
-        lactationDetails={[
-          'Anne sütüne geçip geçmediği sınırlı veriye sahip olsa da gastrointestinal sistemde MAO/COMT ile tamamen yıkıldığı için infant tarafından emilmez.',
-          'Anne hemodinamik olarak stabilize olup şok kliniği çözüldüğünde emzirmeye ara verilmesi ("pump & dump") gerekmez.',
-        ]}
-      />
+          {/* 2. Işık Koruması & Oksidasyon Uyarısı */}
+          <div className={`p-4 rounded-xl border ${
+            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
+              <ShieldAlert className="w-4 h-4 text-amber-500" />
+              <span>Işık Koruması &amp; Renk Değişimi</span>
+            </h4>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
+              Ampuller ışıktan korunarak oda sıcaklığında saklanmalıdır. İnfüzyon hattında opak koruyucu kılıf önerilir.
+              Solüsyon pembe, sarı veya kahverengiye dönerse veya partikül içeriyorsa <strong>OKSİT OLMUŞTUR</strong>;
+              biyolojik etkinliğini kaybetmiştir, <strong>KESİNLİKLE KULLANILMAMALIDIR!</strong>
+            </p>
+          </div>
+
+          {/* 3. Kritik Geçimsizlik: Bikarbonat */}
+          <div className={`p-4 rounded-xl border ${
+            isDark ? 'bg-rose-950/20 border-rose-900/50' : 'bg-rose-50/70 border-rose-200'
+          }`}>
+            <h4 className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600" />
+              <span>Kritik Geçimsizlik: Alkali Solüsyonlar</span>
+            </h4>
+            <p className="text-rose-900 dark:text-rose-200 leading-relaxed text-xs">
+              <strong>Sodyum Bikarbonat (%8.4 NaHCO₃)</strong> ve alkali çözeltilerle ASLA aynı damar yolundan verilmemelidir!
+              Alkali pH katekolaminleri saniyeler içinde kimyasal olarak inaktive eder. Ayrıca furosemid, aminofilin ve
+              tiyopental ile aynı lümenden geçimsizdir.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 8. PERİFERİK DAMAR YOLU GÜVENLİK KURALLARI & EKSTRAVAZASYON YÖNETİMİ */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        className={`rounded-2xl border transition-all overflow-hidden ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setExtravasationOpen(!extravasationOpen)}
+          aria-expanded={extravasationOpen}
+          className={`w-full p-5 sm:p-6 flex items-center justify-between text-left transition-colors cursor-pointer ${
+            isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <span>Periferik Damar Yolu Güvenliği &amp; Ekstravazasyon (Fentolamin) Yönetimi</span>
+                <span className="text-xs font-normal px-2 py-0.5 rounded font-mono bg-rose-500/15 text-rose-700 dark:text-rose-300">
+                  Antidot: Fentolamin 5–10 mg
+                </span>
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Yoğun bakımcı ve anestezistin en titiz güvenlik alanı: Erken periferik başlama ve lokal doku nekrozu acil kurtarma protokolü.
+              </p>
+            </div>
+          </div>
+          {extravasationOpen ? (
+            <ChevronUp className="w-5 h-5 text-slate-400" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-slate-400" />
+          )}
+        </button>
+
+        {extravasationOpen && (
+          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            {/* Periferik Kullanım Şartları */}
+            <div className={`p-4 rounded-xl border leading-relaxed text-xs sm:text-sm ${
+              isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+            }`}>
+              <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <span>"Santral Hat Beklenirken Tedavi Geciktirilmez" — Periferik Güvenlik İlkeleri:</span>
+              </h4>
+              <ul className="space-y-1.5 list-disc list-inside">
+                <li>
+                  <strong>Damar Yeri:</strong> Yalnızca <strong>antekübital fossa veya önkol geniş venleri</strong> (≥ 20G veya 18G kanül).
+                  El sırtı (dorsum manus), el bileği veya ayak/bacak venleri KESİNLİKLE KULLANILMAMALIDIR!
+                </li>
+                <li>
+                  <strong>Süre Sınırı:</strong> Periferik infüzyon bir geçiş stratejisidir. Maksimum <strong>24–48 saat</strong> içinde
+                  santral venöz kateterizasyon (SVK) sağlanmalıdır.
+                </li>
+                <li>
+                  <strong>Monitörizasyon:</strong> İnfüzyon bölgesi her 1–2 saatte bir ödem, solukluk, soğukluk ve geri kan akımı açısından
+                  fiziki olarak palpe ve inspekte edilmelidir.
+                </li>
+              </ul>
+            </div>
+
+            {/* Fentolamin Ekstravazasyon Protokolü */}
+            <div className={`p-4 rounded-xl border ${
+              isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-200' : 'bg-rose-50/80 border-rose-200 text-rose-950'
+            }`}>
+              <div className="flex items-center gap-2 mb-2 font-bold text-sm text-rose-700 dark:text-rose-300">
+                <AlertOctagon className="w-5 h-5 text-rose-600" />
+                <span>EKSTRAVAZASYON GELİŞTİĞİNDE ACİL KURTARMA PROTOKOLÜ (12 SAAT İÇİNDE UYGULANMALI):</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs mt-3">
+                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">1. İnfüzyonu Durdur</span>
+                  İnfüzyon derhal kesilir. Kateter hemen çekilmez; enjektör takılarak ekstravaze olmuş noradrenalin aspire edilir.
+                </div>
+                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">2. Fentolamin Hazırla</span>
+                  <strong>Fentolamin (Regitine / Alfa-bloker) 5 – 10 mg</strong>, 10–15 mL Serum Fizyolojik içinde seyreltilir.
+                </div>
+                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">3. Subkutan İnfiltrasyon</span>
+                  İnce iğne (25–27G) ile iskemi/solukluk alanına çember şeklinde çoklu noktadan subkutan enjekte edilir (doku hiperemisi hedeflenir).
+                </div>
+                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
+                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">4. Alternatif &amp; Bakım</span>
+                  Fentolamin yoksa <strong>Topikal %2 Nitrogliserin pomad</strong> sürülür. Kol eleve edilir, ılık kompres konur (SOĞUK/BUZ ASLA UYGULANMAZ!).
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
 
       <HighAlertSafetyBlock
         isDark={isDark}

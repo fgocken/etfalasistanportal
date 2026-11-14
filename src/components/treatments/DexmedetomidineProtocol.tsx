@@ -1191,7 +1191,24 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 9. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                         */}
+      {/* 9. GEBELİK VE LAKTASYON KILAVUZU                                     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="FDA Gebelik Kategorisi C · Plasentayı kısmen geçer; maternal fayda fetüs riskine üstünse kullanılır."
+        pregnancyDetails={[
+          'Obstetrik anestezide spinal bloğa veya doğum analjezisine adjuvan olarak kullanımı sınırlı ve seçili olgulardadır; fetal bradikardi açısından yakından izlenmelidir.',
+          'Yoğun bakımda gebe hastada konfor/sedasyon gerektiğinde en düşük etkin idame dozu tercih edilmelidir.',
+        ]}
+        lactationSummary="Anne sütüne çok düşük düzeyde geçer (RID < %1); oral biyoyararlanımı çok düşüktür."
+        lactationDetails={[
+          'Kısa süreli ameliyathane/sedasyon uygulaması sonrası anne tamamen uyandığında emzirme güvenlidir.',
+          'Uzun süreli yoğun bakım infüzyonu sonrası prematüre veya yenidoğan bebeklerde uyku/emme takibi veya 24 saatlik ara önerilebilir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 10. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
@@ -1495,22 +1512,8 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      <PregnancyLactationBlock
-        isDark={isDark}
-        pregnancySummary="FDA Gebelik Kategorisi C · Plasentayı kısmen geçer; maternal fayda fetüs riskine üstünse kullanılır."
-        pregnancyDetails={[
-          'Obstetrik anestezide spinal bloğa veya doğum analjezisine adjuvan olarak kullanımı sınırlı ve seçili olgulardadır; fetal bradikardi açısından yakından izlenmelidir.',
-          'Yoğun bakımda gebe hastada konfor/sedasyon gerektiğinde en düşük etkin idame dozu tercih edilmelidir.',
-        ]}
-        lactationSummary="Anne sütüne çok düşük düzeyde geçer (RID < %1); oral biyoyararlanımı çok düşüktür."
-        lactationDetails={[
-          'Kısa süreli ameliyathane/sedasyon uygulaması sonrası anne tamamen uyandığında emzirme güvenlidir.',
-          'Uzun süreli yoğun bakım infüzyonu sonrası prematüre veya yenidoğan bebeklerde uyku/emme takibi veya 24 saatlik ara önerilebilir.',
-        ]}
-      />
-
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
+      {/* 14. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}

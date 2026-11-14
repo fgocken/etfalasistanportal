@@ -1219,7 +1219,24 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 9. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                         */}
+      {/* 9. GEBELİK VE LAKTASYON KILAVUZU                                     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="FDA Gebelik Kategorisi C · Plasentayı hızla geçer ancak fetal doku esterazları tarafından süratle yıkılır."
+        pregnancyDetails={[
+          'Doğum analjezisinde epidural blok kontrendike olduğunda hasta kontrollü analjezi (PCA) ile güvenle kullanılabilir; sürekli fetal kalp hızı ve maternal SpO₂ izlenmelidir.',
+          'Sezaryen genel anestezi indüksiyonunda maternal hipertansif yanıtı azaltmak için kullanılabilir; doğumda neonatal resüsitasyon ve Nalokson hazır bulundurulmalıdır.',
+        ]}
+        lactationSummary="Plazma yarı ömrü ~3–4 dakika ve kontekst-duyarlı yarı ömrü sabit olduğundan süte kalıcı geçiş minimaldir."
+        lactationDetails={[
+          'Tek başına veya kısa cerrahi sonrası anne anesteziden tamamen ayıldığında emzirme güvenlidir.',
+          'Uzun süreli YBÜ infüzyonu sonrası bebeğin uyanıklık ve solunum durumu klinik olarak gözlemlenmelidir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 10. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
@@ -1440,22 +1457,8 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      <PregnancyLactationBlock
-        isDark={isDark}
-        pregnancySummary="FDA Gebelik Kategorisi C · Plasentayı hızla geçer ancak fetal doku esterazları tarafından süratle yıkılır."
-        pregnancyDetails={[
-          'Doğum analjezisinde epidural blok kontrendike olduğunda hasta kontrollü analjezi (PCA) ile güvenle kullanılabilir; sürekli fetal kalp hızı ve maternal SpO₂ izlenmelidir.',
-          'Sezaryen genel anestezi indüksiyonunda maternal hipertansif yanıtı azaltmak için kullanılabilir; doğumda neonatal resüsitasyon ve Nalokson hazır bulundurulmalıdır.',
-        ]}
-        lactationSummary="Plazma yarı ömrü ~3–4 dakika ve kontekst-duyarlı yarı ömrü sabit olduğundan süte kalıcı geçiş minimaldir."
-        lactationDetails={[
-          'Tek başına veya kısa cerrahi sonrası anne anesteziden tamamen ayıldığında emzirme güvenlidir.',
-          'Uzun süreli YBÜ infüzyonu sonrası bebeğin uyanıklık ve solunum durumu klinik olarak gözlemlenmelidir.',
-        ]}
-      />
-
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
+      {/* 14. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}

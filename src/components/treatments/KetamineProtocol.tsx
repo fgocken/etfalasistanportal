@@ -343,12 +343,15 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
         isDark={isDark}
         items={[
           { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-farmakokinetik', label: 'Farmakokinetik' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
           { id: 'sec-dozaj', label: 'Dozaj Tablosu' },
           { id: 'sec-hesaplayici', label: 'Ketamin & Ketofol' },
-          { id: 'sec-hazirlama', label: 'Ketofol Hazırlama' },
-          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-          { id: 'sec-emergence', label: 'Emergence Deliryumu' },
+          { id: 'sec-populasyon', label: 'Özel Popülasyonlar' },
           { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-emergence', label: 'Emergence Deliryumu' },
+          { id: 'sec-hazirlama', label: 'Ketofol Hazırlama' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
         ]}
       />
@@ -546,6 +549,163 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
+          BÖLÜM 12: FARMAKOKİNETİK VE DİNAMİK SİMÜLATÖR
+          ========================================================================= */}
+      <section
+        id="sec-farmakokinetik"
+        className={`p-6 rounded-2xl border space-y-4 ${
+          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                Farmakokinetik &amp; Norketamin Metabolizma Profili
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Yüksek lipid çözünürlüğü, t½α 1–2 dk hızlı yeniden dağılım ve aktif metabolit Norketamin
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setPkOpen(!pkOpen)}
+            className="flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+          >
+            <span>{pkOpen ? 'Simülatörü Gizle' : 'Simülatörü Genişlet'}</span>
+            {pkOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {pkOpen && (
+          <div className="space-y-4 pt-2 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Dağılım Hacmi (Vd)</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  2.5 – 3.5 L/kg
+                </span>
+                <span className="text-[10px] text-slate-500">Mükemmel santral penetrasyon</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Yeniden Dağılım (t½α)</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  1 – 2 Dakika
+                </span>
+                <span className="text-[10px] text-slate-500">Uyanma yeniden dağılımla olur</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Eliminasyon (t½β)</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  2.0 – 3.0 Saat
+                </span>
+                <span className="text-[10px] text-slate-500">Hepatik klerens: 12-17 mL/kg/dk</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-400 uppercase font-bold block">Protein Bağlanması</span>
+                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
+                  %12 – %15
+                </span>
+                <span className="text-[10px] text-slate-500">Çok düşük (serbest fraksiyon yüksek)</span>
+              </div>
+            </div>
+
+            {/* Norketamin Metabolizma Şeması */}
+            <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 space-y-2">
+              <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
+                Aktif Metabolit: Norketamin (Dönüşüm Yolağı):
+              </span>
+              <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Ketamin karaciğerde sitokrom P450 (özellikle CYP3A4 ve CYP2B6) enzimleri aracılığıyla N-demetilasyona uğrayarak <strong>Norketamin</strong>'e dönüşür.
+                Norketamin, ana molekülün yaklaşık <strong>1/3 ila 1/5'i oranında analjezik ve anestezik etkinliğe</strong> sahiptir.
+                Yarılanma ömrü daha uzundur (yaklaşık 12 saat). Sürekli infüzyon veya tekrarlayan dozlarda birikerek kümülatif analjezik etkiye katkıda bulunur.
+              </p>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* =========================================================================
+          BÖLÜM 8: KONTRENDİKASYONLAR VE YÜKSEK RİSK DURUMLARI
+          ========================================================================= */}
+      <section
+        id="sec-kontrendikasyon"
+        className={`p-6 rounded-2xl border space-y-6 ${
+          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              Kontrendikasyonlar &amp; Yüksek Risk Durumları
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Kontrendike klinik tablolar, koroner iskemi, açık göz yaralanmaları ve psikotik durumlar
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 space-y-3">
+            <span className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 uppercase tracking-wide">
+              <Skull className="w-4 h-4 text-rose-600" />
+              <span>Mutlak Kontrendikasyonlar</span>
+            </span>
+            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Kontrolsüz Şiddetli Hipertansiyon &amp; Aort Diseksiyonu:</strong> Sempatik deşarj ile kan basıncını ve duvar stresini artırarak diseksiyon rüptürünü tetikleyebilir.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Akut Koroner Sendrom / Ağır Koroner Arter Hastalığı:</strong> Miyokardiyal oksijen tüketimini (MVO₂) ve kalp hızını artırarak infarktüs alanını genişletebilir.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Aktif Şizofreni &amp; Akut Psikoz:</strong> Halüsinasyonları ve psikotik atakları alevlendirebilir.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-rose-600 font-bold">•</span>
+                <span><strong>Feokromositoma:</strong> Katekolamin salınımını tetikleyerek ölümcül hipertansif krize yol açabilir.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-3">
+            <span className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1.5 uppercase tracking-wide">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <span>Relatif Kontrendikasyonlar &amp; Güncel Kanıtlar</span>
+            </span>
+            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+              <li className="flex items-start gap-2">
+                <span className="text-amber-600 font-bold">•</span>
+                <span><strong>Kafa İçi Basınç (KİB) Miti vs Gerçek:</strong> Tarihsel olarak KİB artırdığı düşünülse de, modern kanıtlar (normokapnik mekanik ventilasyon altında) ketaminin serebral perfüzyon basıncını (SPB) koruduğunu ve KİB'i artırmadığını göstermiştir; travmatik beyin hasarında güvenle kullanılır.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-600 font-bold">•</span>
+                <span><strong>Açık Göz Yaralanması:</strong> Göz içi basıncını (GİB) hafif artırabilir ve blefarospazma yol açabilir; dikkatle kullanılmalıdır.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-600 font-bold">•</span>
+                <span><strong>Endojen Katekolamin Tükenmiş Ağır Şok:</strong> Negatif inotropik etki açığa çıkabilir; düşük dozda ve vazopressör desteği altında verilmelidir.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
           BÖLÜM 4: KLİNİK ENDİKASYONLAR VE UYGULAMA YOLLARI
           ========================================================================= */}
       <section
@@ -560,7 +720,7 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              4. Klinik Endikasyonlar &amp; Uygulama Yolları
+              Klinik Endikasyonlar &amp; Uygulama Yolları
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               RSI indüksiyonu, prosedürel dissosiasyon, Ketofol, akut ağrı, refrakter astım ve ajitasyon
@@ -730,7 +890,7 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              5. Dozaj Tablosu &amp; Uygulama Yolları Kılavuzu
+              Dozaj Tablosu &amp; Uygulama Yolları Kılavuzu
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               IV, IM, İntranazal ve sürekli infüzyon protokolleri; etki başlangıç ve etki süreleri
@@ -856,7 +1016,7 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-xl font-black text-slate-900 dark:text-white">
-                  6. İnteraktif Akıllı Doz &amp; Protokol Hesaplayıcısı
+                  İnteraktif Akıllı Doz &amp; Protokol Hesaplayıcısı
                 </h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 font-mono">
                   Ketofol Dahil 4 Araç
@@ -1429,242 +1589,6 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
-          BÖLÜM 7: HAZIRLAMA, SEYRELTME VE KETOFOL KILAVUZU
-          ========================================================================= */}
-      <section
-        id="sec-hazirlama"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
-            <Droplet className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              7. Hazırlama, Seyreltici Uyumluluğu &amp; Ketofol Karışımı
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Ticari ampul formları, infüzyon çözeltisi stabilitesi ve Ketofol fizikokimyasal özellikleri
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Ticari Formlar &amp; Saklama</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• <strong>Ketalar %5 Flakon:</strong> 50 mg/mL, 10 mL flakon = 500 mg Ketamin HCl.</li>
-              <li>• <strong>Ketanest / Esketamin:</strong> S(+) enantiomeri (2 kat daha potent).</li>
-              <li>• <strong>Spravato:</strong> 28 mg İntranazal Esketamin cihazı (Depresyon).</li>
-              <li>• Oda sıcaklığında (15–25°C), ışıktan korunarak saklanır. Dondurulmamalıdır.</li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 space-y-2">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
-              Ketofol Fizikokimyasal Stabilitesi
-            </span>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              Propofol (lipid emülsiyonu) ile Ketamin HCl aynı enjektörde karıştırıldığında emülsiyon stabilitesi <strong>en az 3–4 saat</strong> korunur.
-              Lipid partikül çapı bozulmaz, faz ayrışması veya presipitasyon meydana gelmez. Karışım hazırlandıktan sonra aseptik koşullarda aynı gün içinde tüketilmelidir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Seyreltici &amp; Geçimsizlik</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• %0.9 NaCl ve %5 Dekstroz ile tam geçimlidir.</li>
-              <li>• <strong>Barbitüratlar ile KESİNLİKLE GEÇİMSİZDİR:</strong> Tiyopental ile aynı damar yolundan verilirse anında presipitasyon (çökelme) oluşur; lümen tıkanır!</li>
-              <li>• Diazepam ile de presipite olabilir; ayrı lümenden verilmelidir.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BÖLÜM 8: KONTRENDİKASYONLAR VE YÜKSEK RİSK DURUMLARI
-          ========================================================================= */}
-      <section
-        id="sec-kontrendikasyon"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
-            <AlertTriangle className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              8. Kontrendikasyonlar &amp; Yüksek Risk Durumları
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Kontrendike klinik tablolar, koroner iskemi, açık göz yaralanmaları ve psikotik durumlar
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 space-y-3">
-            <span className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 uppercase tracking-wide">
-              <Skull className="w-4 h-4 text-rose-600" />
-              <span>Mutlak Kontrendikasyonlar</span>
-            </span>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Kontrolsüz Şiddetli Hipertansiyon &amp; Aort Diseksiyonu:</strong> Sempatik deşarj ile kan basıncını ve duvar stresini artırarak diseksiyon rüptürünü tetikleyebilir.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Akut Koroner Sendrom / Ağır Koroner Arter Hastalığı:</strong> Miyokardiyal oksijen tüketimini (MVO₂) ve kalp hızını artırarak infarktüs alanını genişletebilir.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Aktif Şizofreni &amp; Akut Psikoz:</strong> Halüsinasyonları ve psikotik atakları alevlendirebilir.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-rose-600 font-bold">•</span>
-                <span><strong>Feokromositoma:</strong> Katekolamin salınımını tetikleyerek ölümcül hipertansif krize yol açabilir.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-3">
-            <span className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1.5 uppercase tracking-wide">
-              <AlertTriangle className="w-4 h-4 text-amber-600" />
-              <span>Relatif Kontrendikasyonlar &amp; Güncel Kanıtlar</span>
-            </span>
-            <ul className="space-y-2 text-slate-700 dark:text-slate-300">
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span><strong>Kafa İçi Basınç (KİB) Miti vs Gerçek:</strong> Tarihsel olarak KİB artırdığı düşünülse de, modern kanıtlar (normokapnik mekanik ventilasyon altında) ketaminin serebral perfüzyon basıncını (SPB) koruduğunu ve KİB'i artırmadığını göstermiştir; travmatik beyin hasarında güvenle kullanılır.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span><strong>Açık Göz Yaralanması:</strong> Göz içi basıncını (GİB) hafif artırabilir ve blefarospazma yol açabilir; dikkatle kullanılmalıdır.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-amber-600 font-bold">•</span>
-                <span><strong>Endojen Katekolamin Tükenmiş Ağır Şok:</strong> Negatif inotropik etki açığa çıkabilir; düşük dozda ve vazopressör desteği altında verilmelidir.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BÖLÜM 9: UYANMA REAKSİYONLARI VE "EMERGENCE" DELİRYUMU YÖNETİMİ
-          ========================================================================= */}
-      <section
-        id="sec-emergence"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-purple-500/15 text-purple-600 dark:text-purple-400">
-            <AlertOctagon className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              9. Uyanma Reaksiyonları &amp; "Emergence" Deliryumu Yönetimi
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Canlı rüyalar, halüsinasyonlar, disfori patofizyolojisi ve kanıta dayalı önleme protokolleri
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-purple-700 dark:text-purple-300 block">Klinik Görünüm &amp; Risk Oranı</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Yetişkinlerin yaklaşık <strong>%10 – 20'sinde</strong> uyanma evresinde canlı rüyalar, yüzen vücut hissi (out-of-body), illüzyonlar, öfori veya korkutucu halüsinasyonlar görülür.
-              Çocuklarda bu oran belirgin şekilde düşüktür (%3 – 5).
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 space-y-2">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
-              Profilaktik Benzodiazepin &amp; Çevre Kontrolü
-            </span>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              İşlem öncesinde veya esnasında uygulanan <strong>1 – 2 mg IV Midazolam</strong>, uyanma deliryumu insidansını %70'in üzerinde azaltır.
-              Hastanın loş, sessiz, minimal işitsel ve dokunsal uyaran içeren bir ortamda derlenmeye bırakılması reaksiyonları dramatik azaltır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-teal-500/10 border border-teal-500/30 space-y-2">
-            <span className="font-bold text-teal-700 dark:text-teal-300 block">Hipersalivasyon &amp; Laringospazm</span>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              Ketamin bronşiyal ve tükürük salgılarını artırır. Pediatrik girişimlerde veya hava yolu manevralarında aşırı sekresyona bağlı laringospazmı önlemek için profilaktik <strong>Atropin (0.01 mg/kg)</strong> veya <strong>Glikopirolat</strong> düşünülebilir.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BÖLÜM 10: GEBELİK VE LAKTASYON KILAVUZU
-          ========================================================================= */}
-      <section
-        id="sec-gebelik"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-pink-500/15 text-pink-600 dark:text-pink-400">
-            <HeartPulse className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              10. Gebelik ve Laktasyon Kılavuzu
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              FDA / TGA gebelik kategorisi, uterin tonus, plasental geçiş ve emzirme güvenliği
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block text-xs">
-              1. FDA / TGA Gebelik Sınıfı &amp; Uterin Etkiler
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Kategori:</strong> FDA Kategori B (uzamış kullanımda veya terme yakın yüksek dozlarda Kategori D).<br />
-              • <strong>Uterin Tonus ve Kontraktilite:</strong> Düşük analjezik dozlarda (0.2–0.5 mg/kg) uterin tonusu bozmaz ve uterin kan akımını korur. Ancak yüksek indüksiyon dozlarında (&gt;2 mg/kg) uterin bazal tonusunu tetikleyerek fetal distres riski oluşturabilir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block text-xs">
-              2. Plasental Geçiş &amp; Doğum Eylemi / Sezaryen
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Hızlı Plasental Geçiş:</strong> Lipofilik yapısıyla saniyeler içinde plasentayı geçer (fetal/maternal oranı ~0.8–1.0).<br />
-              • <strong>Maternal Şokta Sezaryen İndüksiyonu:</strong> Maternal kanama, dekompanse hipovolemi veya şiddetli astımı olan gebelerde acil genel anestezi indüksiyonunda (1.0 mg/kg IV) sempatik destek sağlayarak hayat kurtarıcı bir alternatiftir.<br />
-              • <strong>Fetal İzlem:</strong> Yüksek dozlarda neonatal solunum depresyonu ve hipertonisite yapabilir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
-              3. Laktasyon, Anne Sütü &amp; Emzirme Güvenliği
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Süte Minimum Geçiş:</strong> Anne sütüne geçen ketamin ve norketamin miktarı düşüktür (relatif infant dozu RID &lt; %2).<br />
-              • <strong>Emzirmeye Dönüş:</strong> Anne işlem veya anesteziden tamamen uyanıp koopere olduğunda bebeği güvenle emzirebilir.<br />
-              • <strong>"Pump &amp; Dump" Gerekmez:</strong> Tek doz uygulamalarda sütün sağılıp dökülmesine gerek yoktur.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
           BÖLÜM 11: ÖZEL POPÜLASYONLAR VE DOZ AYARLARI
           ========================================================================= */}
       <section
@@ -1679,7 +1603,7 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              11. Özel Popülasyonlar &amp; Doz Modifikasyonları
+              Özel Popülasyonlar &amp; Doz Modifikasyonları (Böbrek / Karaciğer Dahil)
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Pediatri, geriatri, karaciğer yetmezliği, gebelik ve böbrek fonksiyonları
@@ -1738,88 +1662,167 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
-          BÖLÜM 12: FARMAKOKİNETİK VE DİNAMİK SİMÜLATÖR
+          BÖLÜM 10: GEBELİK VE LAKTASYON KILAVUZU
           ========================================================================= */}
       <section
-        id="sec-farmakokinetik"
-        className={`p-6 rounded-2xl border space-y-4 ${
+        id="sec-gebelik"
+        className={`p-6 rounded-2xl border space-y-6 ${
           isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
-        <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
-              <Activity className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                12. Farmakokinetik &amp; Norketamin Metabolizma Profili
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Yüksek lipid çözünürlüğü, t½α 1–2 dk hızlı yeniden dağılım ve aktif metabolit Norketamin
-              </p>
-            </div>
+        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="p-2 rounded-lg bg-pink-500/15 text-pink-600 dark:text-pink-400">
+            <HeartPulse className="w-5 h-5" />
           </div>
-
-          <button
-            type="button"
-            onClick={() => setPkOpen(!pkOpen)}
-            className="flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
-          >
-            <span>{pkOpen ? 'Simülatörü Gizle' : 'Simülatörü Genişlet'}</span>
-            {pkOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              Gebelik ve Laktasyon Kılavuzu
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              FDA / TGA gebelik kategorisi, uterin tonus, plasental geçiş ve emzirme güvenliği
+            </p>
+          </div>
         </div>
 
-        {pkOpen && (
-          <div className="space-y-4 pt-2 text-xs">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Dağılım Hacmi (Vd)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  2.5 – 3.5 L/kg
-                </span>
-                <span className="text-[10px] text-slate-500">Mükemmel santral penetrasyon</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Yeniden Dağılım (t½α)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  1 – 2 Dakika
-                </span>
-                <span className="text-[10px] text-slate-500">Uyanma yeniden dağılımla olur</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Eliminasyon (t½β)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  2.0 – 3.0 Saat
-                </span>
-                <span className="text-[10px] text-slate-500">Hepatik klerens: 12-17 mL/kg/dk</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Protein Bağlanması</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  %12 – %15
-                </span>
-                <span className="text-[10px] text-slate-500">Çok düşük (serbest fraksiyon yüksek)</span>
-              </div>
-            </div>
-
-            {/* Norketamin Metabolizma Şeması */}
-            <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 space-y-2">
-              <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
-                Aktif Metabolit: Norketamin (Dönüşüm Yolağı):
-              </span>
-              <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                Ketamin karaciğerde sitokrom P450 (özellikle CYP3A4 ve CYP2B6) enzimleri aracılığıyla N-demetilasyona uğrayarak <strong>Norketamin</strong>'e dönüşür.
-                Norketamin, ana molekülün yaklaşık <strong>1/3 ila 1/5'i oranında analjezik ve anestezik etkinliğe</strong> sahiptir.
-                Yarılanma ömrü daha uzundur (yaklaşık 12 saat). Sürekli infüzyon veya tekrarlayan dozlarda birikerek kümülatif analjezik etkiye katkıda bulunur.
-              </p>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-white block text-xs">
+              1. FDA / TGA Gebelik Sınıfı &amp; Uterin Etkiler
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Kategori:</strong> FDA Kategori B (uzamış kullanımda veya terme yakın yüksek dozlarda Kategori D).<br />
+              • <strong>Uterin Tonus ve Kontraktilite:</strong> Düşük analjezik dozlarda (0.2–0.5 mg/kg) uterin tonusu bozmaz ve uterin kan akımını korur. Ancak yüksek indüksiyon dozlarında (&gt;2 mg/kg) uterin bazal tonusunu tetikleyerek fetal distres riski oluşturabilir.
+            </p>
           </div>
-        )}
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-white block text-xs">
+              2. Plasental Geçiş &amp; Doğum Eylemi / Sezaryen
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Hızlı Plasental Geçiş:</strong> Lipofilik yapısıyla saniyeler içinde plasentayı geçer (fetal/maternal oranı ~0.8–1.0).<br />
+              • <strong>Maternal Şokta Sezaryen İndüksiyonu:</strong> Maternal kanama, dekompanse hipovolemi veya şiddetli astımı olan gebelerde acil genel anestezi indüksiyonunda (1.0 mg/kg IV) sempatik destek sağlayarak hayat kurtarıcı bir alternatiftir.<br />
+              • <strong>Fetal İzlem:</strong> Yüksek dozlarda neonatal solunum depresyonu ve hipertonisite yapabilir.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+              3. Laktasyon, Anne Sütü &amp; Emzirme Güvenliği
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>Süte Minimum Geçiş:</strong> Anne sütüne geçen ketamin ve norketamin miktarı düşüktür (relatif infant dozu RID &lt; %2).<br />
+              • <strong>Emzirmeye Dönüş:</strong> Anne işlem veya anesteziden tamamen uyanıp koopere olduğunda bebeği güvenle emzirebilir.<br />
+              • <strong>"Pump &amp; Dump" Gerekmez:</strong> Tek doz uygulamalarda sütün sağılıp dökülmesine gerek yoktur.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          BÖLÜM 9: UYANMA REAKSİYONLARI VE "EMERGENCE" DELİRYUMU YÖNETİMİ
+          ========================================================================= */}
+      <section
+        id="sec-emergence"
+        className={`p-6 rounded-2xl border space-y-6 ${
+          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="p-2 rounded-lg bg-purple-500/15 text-purple-600 dark:text-purple-400">
+            <AlertOctagon className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              Uyanma Reaksiyonları &amp; "Emergence" Deliryumu Yönetimi
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Canlı rüyalar, halüsinasyonlar, disfori patofizyolojisi ve kanıta dayalı önleme protokolleri
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-purple-700 dark:text-purple-300 block">Klinik Görünüm &amp; Risk Oranı</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Yetişkinlerin yaklaşık <strong>%10 – 20'sinde</strong> uyanma evresinde canlı rüyalar, yüzen vücut hissi (out-of-body), illüzyonlar, öfori veya korkutucu halüsinasyonlar görülür.
+              Çocuklarda bu oran belirgin şekilde düşüktür (%3 – 5).
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 space-y-2">
+            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
+              Profilaktik Benzodiazepin &amp; Çevre Kontrolü
+            </span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              İşlem öncesinde veya esnasında uygulanan <strong>1 – 2 mg IV Midazolam</strong>, uyanma deliryumu insidansını %70'in üzerinde azaltır.
+              Hastanın loş, sessiz, minimal işitsel ve dokunsal uyaran içeren bir ortamda derlenmeye bırakılması reaksiyonları dramatik azaltır.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-teal-500/10 border border-teal-500/30 space-y-2">
+            <span className="font-bold text-teal-700 dark:text-teal-300 block">Hipersalivasyon &amp; Laringospazm</span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              Ketamin bronşiyal ve tükürük salgılarını artırır. Pediatrik girişimlerde veya hava yolu manevralarında aşırı sekresyona bağlı laringospazmı önlemek için profilaktik <strong>Atropin (0.01 mg/kg)</strong> veya <strong>Glikopirolat</strong> düşünülebilir.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          BÖLÜM 7: HAZIRLAMA, SEYRELTME VE KETOFOL KILAVUZU
+          ========================================================================= */}
+      <section
+        id="sec-hazirlama"
+        className={`p-6 rounded-2xl border space-y-6 ${
+          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+          <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+            <Droplet className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              IV Uygulama, Hazırlama, Seyreltici Uyumluluğu &amp; Ketofol Karışımı
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Ticari ampul formları, infüzyon çözeltisi stabilitesi ve Ketofol fizikokimyasal özellikleri
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-white block">Ticari Formlar &amp; Saklama</span>
+            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
+              <li>• <strong>Ketalar %5 Flakon:</strong> 50 mg/mL, 10 mL flakon = 500 mg Ketamin HCl.</li>
+              <li>• <strong>Ketanest / Esketamin:</strong> S(+) enantiomeri (2 kat daha potent).</li>
+              <li>• <strong>Spravato:</strong> 28 mg İntranazal Esketamin cihazı (Depresyon).</li>
+              <li>• Oda sıcaklığında (15–25°C), ışıktan korunarak saklanır. Dondurulmamalıdır.</li>
+            </ul>
+          </div>
+
+          <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 space-y-2">
+            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
+              Ketofol Fizikokimyasal Stabilitesi
+            </span>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              Propofol (lipid emülsiyonu) ile Ketamin HCl aynı enjektörde karıştırıldığında emülsiyon stabilitesi <strong>en az 3–4 saat</strong> korunur.
+              Lipid partikül çapı bozulmaz, faz ayrışması veya presipitasyon meydana gelmez. Karışım hazırlandıktan sonra aseptik koşullarda aynı gün içinde tüketilmelidir.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="font-bold text-slate-900 dark:text-white block">Seyreltici &amp; Geçimsizlik</span>
+            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
+              <li>• %0.9 NaCl ve %5 Dekstroz ile tam geçimlidir.</li>
+              <li>• <strong>Barbitüratlar ile KESİNLİKLE GEÇİMSİZDİR:</strong> Tiyopental ile aynı damar yolundan verilirse anında presipitasyon (çökelme) oluşur; lümen tıkanır!</li>
+              <li>• Diazepam ile de presipite olabilir; ayrı lümenden verilmelidir.</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* =========================================================================
