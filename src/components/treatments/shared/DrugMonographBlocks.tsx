@@ -10,25 +10,28 @@ import {
   HeartPulse,
   ShieldAlert,
   Stethoscope,
+  Zap,
 } from 'lucide-react';
 
 /**
- * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v2.0)
+ * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v2.1)
  * -------------------------------------------------------------------------
  * Tedaviler ve İlaçlar modülüne eklenecek her yeni ilaç monografisi ve
- * güncellenen mevcut monografiler aşağıdaki 10 çekirdek klinik sütun ve
- * etkileşimli güvenlik bileşenlerini içermelidir:
+ * güncellenen mevcut monografiler aşağıdaki çekirdek klinik sütunları
+ * ve sıralamayı (Kontrendikasyonlar DAİMA Endikasyonlardan önce) içermelidir:
  *
- * 1. Kimlik & Klinik Özet Header (`hasStandaloneHeader: true` workspace kaydı)
- * 2. Etkileşimli Doz & İnfüzyon Hesaplayıcı (Pediatrik/Obez/Yaşlı önayarlar + Rapor Kopyala)
- * 3. Farmakokinetik / Farmakodinamik (PK/PD) Profili (`tabular-nums` tablo)
+ * 1. Kimlik, Klinik Özet Header & Etki Mekanizması (`MechanismOfActionBlock`)
+ * 2. Farmakokinetik / Farmakodinamik (PK/PD) Profili (`tabular-nums` tablo)
+ * 3. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`) — Endikasyonlardan ÖNCE
  * 4. Klinik Endikasyonlar ve Doz Rejimleri (Yetişkin, Pediatrik, Özel Senaryolar)
- * 5. Hazırlama, Dilüsyon, Stabilite ve Y-Site Uyumluluk
- * 6. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`)
+ * 5. Etkileşimli Doz & İnfüzyon Hesaplayıcı (Rapor Kopyala)
+ * 6. Hazırlama, Dilüsyon, Stabilite ve Uyumluluk
  * 7. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`)
  * 8. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`)
- * 9. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock`)
- * 10. Kanıta Dayalı Kaynakça (PubMed/DOI tıklanabilir) & İlaç Etkileşimleri (`DrugReferencesAndInteractionsBlock`)
+ * 9. Önemli Olumsuz Etkiler (Adverse Effects) (`AdverseEffectsBlock`)
+ * 10. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`)
+ * 11. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock`)
+ * 12. Kanıta Dayalı Kaynakça (PubMed/DOI tıklanabilir) & İlaç Etkileşimleri (`DrugReferencesAndInteractionsBlock`)
  */
 export interface GoldStandardSectionSpec {
   id: string;
@@ -39,15 +42,18 @@ export interface GoldStandardSectionSpec {
 
 export const GOLD_STANDARD_SECTIONS: GoldStandardSectionSpec[] = [
   { id: 'sec-ozet', order: 1, title: 'Klinik Kimlik & Özet' },
-  { id: 'sec-hesaplayici', order: 2, title: 'Doz & İnfüzyon Hesaplayıcı', requiredComponent: 'MonographCopyButton' },
+  { id: 'sec-etki', order: 2, title: 'Etki Mekanizması', requiredComponent: 'MechanismOfActionBlock' },
   { id: 'sec-pkpd', order: 3, title: 'Farmakokinetik & Farmakodinamik' },
-  { id: 'sec-dozlar', order: 4, title: 'Endikasyonlar & Dozaj' },
-  { id: 'sec-uyumluluk', order: 5, title: 'Dilüsyon & Y-Site Uyumluluk' },
-  { id: 'sec-kontrendikasyon', order: 6, title: 'Mutlak vs Relatif Kontrendikasyonlar', requiredComponent: 'ContraindicationsGridBlock' },
-  { id: 'sec-organ', order: 7, title: 'Böbrek & Karaciğer Yetmezliği', requiredComponent: 'OrganImpairmentGridBlock' },
-  { id: 'sec-gebelik', order: 8, title: 'Gebelik & Laktasyon', requiredComponent: 'PregnancyLactationBlock' },
-  { id: 'sec-guvenlik', order: 9, title: 'ISMP High-Alert & Tall-Man Güvenliği', requiredComponent: 'HighAlertSafetyBlock' },
-  { id: 'sec-kaynaklar', order: 10, title: 'Kaynakça (PubMed/DOI) & Etkileşim', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
+  { id: 'sec-kontrendikasyon', order: 4, title: 'Mutlak vs Relatif Kontrendikasyonlar', requiredComponent: 'ContraindicationsGridBlock' },
+  { id: 'sec-dozlar', order: 5, title: 'Endikasyonlar & Dozaj' },
+  { id: 'sec-hesaplayici', order: 6, title: 'Doz & İnfüzyon Hesaplayıcı', requiredComponent: 'MonographCopyButton' },
+  { id: 'sec-uyumluluk', order: 7, title: 'Dilüsyon & Uyumluluk' },
+  { id: 'sec-organ', order: 8, title: 'Böbrek & Karaciğer Yetmezliği', requiredComponent: 'OrganImpairmentGridBlock' },
+  { id: 'sec-gebelik', order: 9, title: 'Gebelik & Laktasyon', requiredComponent: 'PregnancyLactationBlock' },
+  { id: 'sec-olumsuz', order: 10, title: 'Önemli Olumsuz Etkiler (Adverse Effects)', requiredComponent: 'AdverseEffectsBlock' },
+  { id: 'sec-ozel-durumlar', order: 11, title: 'Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar', requiredComponent: 'SpecialClinicalCautionsBlock' },
+  { id: 'sec-guvenlik', order: 12, title: 'ISMP High-Alert & Tall-Man Güvenliği', requiredComponent: 'HighAlertSafetyBlock' },
+  { id: 'sec-kaynaklar', order: 13, title: 'Kaynakça (PubMed/DOI) & Etkileşim', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
 ];
 
 export interface MonographNavItem {
@@ -480,6 +486,200 @@ export const PregnancyLactationBlock: React.FC<PregnancyLactationBlockProps> = (
             ))}
           </ul>
         </div>
+      </div>
+    </section>
+  );
+};
+
+export interface MechanismPillar {
+  title: string;
+  detail: string;
+}
+
+interface MechanismOfActionBlockProps {
+  isDark: boolean;
+  sectionId?: string;
+  sectionTitle?: string;
+  summary: string;
+  pillars: MechanismPillar[];
+}
+
+export const MechanismOfActionBlock: React.FC<MechanismOfActionBlockProps> = ({
+  isDark,
+  sectionId = 'sec-etki',
+  sectionTitle = 'Etki Mekanizması & Moleküler Farmakodinamik',
+  summary,
+  pillars,
+}) => {
+  return (
+    <section
+      id={sectionId}
+      className={`rounded-2xl border p-5 sm:p-6 ${
+        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <div className="flex items-center gap-2.5">
+        <Zap className={`h-5 w-5 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          {sectionTitle}
+        </h3>
+      </div>
+
+      <p className={`mt-3 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+        {summary}
+      </p>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+        {pillars.map((pillar, idx) => (
+          <div
+            key={idx}
+            className={`rounded-xl border p-3.5 ${
+              isDark ? 'border-indigo-500/25 bg-indigo-950/20' : 'border-indigo-200 bg-indigo-50/50'
+            }`}
+          >
+            <p className={`text-xs font-bold ${isDark ? 'text-indigo-300' : 'text-indigo-800'}`}>
+              {pillar.title}
+            </p>
+            <p className={`mt-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              {pillar.detail}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export interface AdverseEffectItem {
+  title: string;
+  incidenceOrSeverity?: string;
+  detail: string;
+  tone?: 'rose' | 'amber' | 'indigo' | 'teal';
+}
+
+interface AdverseEffectsBlockProps {
+  isDark: boolean;
+  sectionId?: string;
+  sectionTitle?: string;
+  items: AdverseEffectItem[];
+}
+
+export const AdverseEffectsBlock: React.FC<AdverseEffectsBlockProps> = ({
+  isDark,
+  sectionId = 'sec-olumsuz',
+  sectionTitle = 'Önemli Olumsuz Etkiler (Adverse Effects)',
+  items,
+}) => {
+  const toneStyles = (tone: AdverseEffectItem['tone'] = 'rose') => {
+    switch (tone) {
+      case 'amber':
+        return {
+          box: isDark ? 'border-amber-500/30 bg-amber-950/20' : 'border-amber-200 bg-amber-50/60',
+          title: isDark ? 'text-amber-300' : 'text-amber-800',
+        };
+      case 'indigo':
+        return {
+          box: isDark ? 'border-indigo-500/30 bg-indigo-950/20' : 'border-indigo-200 bg-indigo-50/60',
+          title: isDark ? 'text-indigo-300' : 'text-indigo-800',
+        };
+      case 'teal':
+        return {
+          box: isDark ? 'border-teal-500/30 bg-teal-950/20' : 'border-teal-200 bg-teal-50/60',
+          title: isDark ? 'text-teal-300' : 'text-teal-800',
+        };
+      default:
+        return {
+          box: isDark ? 'border-rose-500/30 bg-rose-950/20' : 'border-rose-200 bg-rose-50/60',
+          title: isDark ? 'text-rose-300' : 'text-rose-800',
+        };
+    }
+  };
+
+  return (
+    <section
+      id={sectionId}
+      className={`rounded-2xl border p-5 sm:p-6 ${
+        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
+        <HeartPulse className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
+        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          {sectionTitle}
+        </h3>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+        {items.map((item, idx) => {
+          const styles = toneStyles(item.tone);
+          return (
+            <div key={idx} className={`rounded-xl border p-3.5 space-y-1.5 ${styles.box}`}>
+              <div className="flex items-start justify-between gap-2">
+                <p className={`text-xs font-bold leading-snug ${styles.title}`}>{item.title}</p>
+                {item.incidenceOrSeverity && (
+                  <span className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-black/10 dark:bg-white/10 text-slate-700 dark:text-slate-200">
+                    {item.incidenceOrSeverity}
+                  </span>
+                )}
+              </div>
+              <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                {item.detail}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
+
+export interface ClinicalCautionItem {
+  title: string;
+  detail: string;
+}
+
+interface SpecialClinicalCautionsBlockProps {
+  isDark: boolean;
+  sectionId?: string;
+  sectionTitle?: string;
+  items: ClinicalCautionItem[];
+}
+
+export const SpecialClinicalCautionsBlock: React.FC<SpecialClinicalCautionsBlockProps> = ({
+  isDark,
+  sectionId = 'sec-ozel-durumlar',
+  sectionTitle = 'Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar',
+  items,
+}) => {
+  return (
+    <section
+      id={sectionId}
+      className={`rounded-2xl border p-5 sm:p-6 ${
+        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
+        <Stethoscope className={`h-5 w-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
+        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          {sectionTitle}
+        </h3>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+        {items.map((item, idx) => (
+          <div
+            key={idx}
+            className={`flex items-start gap-2.5 rounded-xl border p-3.5 text-xs sm:text-sm leading-relaxed ${
+              isDark ? 'border-slate-800 bg-slate-950/60 text-slate-300' : 'border-slate-200 bg-slate-50/70 text-slate-700'
+            }`}
+          >
+            <span className={`font-bold shrink-0 ${isDark ? 'text-teal-400' : 'text-teal-600'}`}>•</span>
+            <div>
+              <strong className={isDark ? 'text-white' : 'text-slate-900'}>{item.title}: </strong>
+              <span>{item.detail}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

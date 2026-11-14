@@ -33,8 +33,10 @@ import {
   BookOpen
 } from 'lucide-react';
 import {
+  AdverseEffectsBlock,
   DrugReferencesAndInteractionsBlock,
   MonographQuickNav,
+  SpecialClinicalCautionsBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -351,6 +353,8 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           { id: 'sec-populasyon', label: 'Özel Popülasyonlar' },
           { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
           { id: 'sec-emergence', label: 'Emergence Deliryumu' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
           { id: 'sec-hazirlama', label: 'Ketofol Hazırlama' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
         ]}
@@ -1824,6 +1828,92 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
+
+      {/* ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS) */}
+      <AdverseEffectsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'Emergence Reaksiyonları & Halüsinasyonlar',
+            incidenceOrSeverity: '%10–20 (Erişkin)',
+            detail:
+              'Canlı rüyalar, beden dışı deneyim, disfori, korkutucu halüsinasyonlar ve ajitasyon görülür; profilaktik 1–2 mg IV Midazolam veya Propofol (Ketofol) ile > %70 önlenir.',
+            tone: 'indigo',
+          },
+          {
+            title: 'Sempatik Stimülasyon (Taşikardi & HT)',
+            incidenceOrSeverity: 'Sık (Doza Bağımlı)',
+            detail:
+              'Santral sempatik çıkış ve nöronal katekolamin geri alım inhibisyonu ile kalp hızı, kan basıncı ve miyokard O₂ tüketimi (MVO₂) artar; ciddi KAH/aort diseksiyonunda zararlı olabilir.',
+            tone: 'amber',
+          },
+          {
+            title: 'Hipersalivasyon & Laringospazm',
+            incidenceOrSeverity: '%5–10 (Pediatri)',
+            detail:
+              'Tükürük ve trakeobronşiyal sekresyonları artırır; pediatrik prosedürel sedasyonda faringeal sekresyon birikimi refleks laringospazma (%0.3–1) zemin hazırlayabilir.',
+            tone: 'amber',
+          },
+          {
+            title: 'Bulantı, Kusma & Nistagmus',
+            incidenceOrSeverity: '%5–15',
+            detail:
+              'Derlenme döneminde bulantı/kusma sıkça görülür; horizontal/rotatuar nistagmus, diplopi ve geçici kas tonusu artışı (tonik-klonik olmayan miyoklonus) normal disosiyatif bulgudur.',
+            tone: 'teal',
+          },
+          {
+            title: 'Hızlı IV Bolusta Geçici Apne',
+            incidenceOrSeverity: 'Hızlı Enjeksiyon',
+            detail:
+              'Solunum dürtüsünü genellikle korusa da yüksek dozun (< 30 sn) çok hızlı IV puşesi 1–2 dakikalık geçici santral apneye neden olabilir; 60 saniyede yavaş verilmelidir.',
+            tone: 'rose',
+          },
+          {
+            title: 'Ketamin Üropatisi & Kolanjiopati',
+            incidenceOrSeverity: 'Kronik / Yüksek Doz',
+            detail:
+              'Uzamış yüksek doz kullanımda veya kötüye kullanımda ürotelyal toksisiteye bağlı hemorajik/ülseratif sistit, dizüri, hidronefroz ve safra yolu dilatasyonu/kolestaz gelişebilir.',
+            tone: 'rose',
+          },
+        ]}
+      />
+
+      {/* KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
+      <SpecialClinicalCautionsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'Katekolamin Rezervi Tükenmiş Kronik Şok (Paradoks Hipotansiyon!)',
+            detail:
+              'Ketamin doğrudan inotropik değildir; miyokardı hafifçe deprese eder, ancak sağlam sempatik sistem üzerinden tansiyonu yükseltir. Uzun süreli septik/kardiyojenik şokta adrenal/sempatik rezervi tükenmiş hastalarda paradoksal ağır hipotansiyon ve bradikardi yapabilir — indüksiyon dozu 0.5–1.0 mg/kg’a düşürülmeli ve vazopressör hazır olmalıdır.',
+          },
+          {
+            title: 'Koroner Arter Hastalığı, Aort Diseksiyonu & Kontrolsüz Hipertansiyon',
+            detail:
+              'Sempatik deşarja bağlı taşikardi ve artmış MVO₂ miyokard iskemisini veya aort duvar stresini tetikleyebilir; bu hastalarda opioid ile küntleştirilmeli veya alternatif indüksiyon ajanları seçilmelidir.',
+          },
+          {
+            title: 'KİBAS ve Göz İçi Basıncı (GİB) Güncel Kanıtları',
+            detail:
+              'Klasik textbook uyarısının aksine, normokapni korunduğunda ve kontrollü ventilasyon altında Ketamin kafa içi basıncını (KİB) kritik yükseltmez; travmatik beyin hasarı + şok birlikteliğinde serebral perfüzyon basıncını (CPP) koruması nedeniyle güvenle kullanılmaktadır.',
+          },
+          {
+            title: 'Aktif Psikoz, Şizofreni & Bipolar Mani',
+            detail:
+              'NMDA antagonizması psikotomimetik semptomları ve halüsinasyonları ağırlaştırabileceğinden aktif psikozlu olgularda mümkünse kaçınılmalıdır.',
+          },
+          {
+            title: 'Hava Yolu Refleksleri & Aspirasyon Yanılgısı',
+            detail:
+              'Faringeal/laringeal koruyucu refleksler kısmen korunsa da tam aspirasyon koruması sağlamaz! Tam tok mide/RSI endikasyonunda yine hızlı seri entübasyon ve NMB (roküronyum/süksinilkolin) uygulanmalıdır.',
+          },
+          {
+            title: 'Barbitürat ve Diazepam ile İV Geçimsizlik',
+            detail:
+              'Aynı damar yolundan Tiyopental veya Diazepam ile karıştırıldığında fizikokimyasal çökelme (presipitasyon) olur ve kateteri tıkar; ayrı lümen veya yıkama şarttır.',
+          },
+        ]}
+      />
 
       {/* =========================================================================
           BÖLÜM 13: KANITA DAYALI KAYNAKÇA VE KILAVUZLAR

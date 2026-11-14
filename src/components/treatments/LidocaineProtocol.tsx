@@ -33,8 +33,10 @@ import {
   BookOpen
 } from 'lucide-react';
 import {
+  AdverseEffectsBlock,
   DrugReferencesAndInteractionsBlock,
   MonographQuickNav,
+  SpecialClinicalCautionsBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -365,6 +367,8 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           { id: 'sec-populasyon', label: 'Özel Popülasyonlar' },
           { id: 'sec-pregnancy', label: 'Gebelik & Laktasyon' },
           { id: 'sec-last', label: 'LAST İntralipid' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
           { id: 'sec-tamponlama', label: 'Tamponlama' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
         ]}
@@ -2068,6 +2072,92 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
+
+      {/* ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS) */}
+      <AdverseEffectsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'MSS Toksisitesi (Erken LAST Bulguları)',
+            incidenceOrSeverity: '5–15 mcg/mL',
+            detail:
+              'Perioral/dil uyuşması, ağızda metalik tat, tinnitus, görme bulanıklığı, dizartri ve kas seğirmelerini takiben tonik-klonik nöbetler ve koma gelişebilir.',
+            tone: 'rose',
+          },
+          {
+            title: 'Kardiyovasküler Kollaps & Aritmiler',
+            incidenceOrSeverity: '> 15 mcg/mL',
+            detail:
+              'PR/QRS genişlemesi, ileri AV blok, sinüs arresti, negatif inotropi, derin hipotansiyon ve ventriküler taşiaritmi / asistoli gelişebilir.',
+            tone: 'rose',
+          },
+          {
+            title: 'Geçici Nörolojik Semptomlar (TNS)',
+            incidenceOrSeverity: '%10–30 (Spinal)',
+            detail:
+              'Klasik hiperbarik spinal Lidokain sonrası ilk 24 saatte kalça ve alt ekstremiteye yayılan şiddetli ağrı/disestezi (motor defisit olmadan); bu nedenle spinal anestezide yerini Bupivakaine bırakmıştır.',
+            tone: 'amber',
+          },
+          {
+            title: 'Adrenalinli Formlara Bağlı İskemi & Taşikardi',
+            incidenceOrSeverity: 'Katkı Etkisi',
+            detail:
+              'Kazara IV emilim veya aşırı dozda taşikardi, hipertansif kriz ve uç organlarda (parmak/burun/kulak) lokal vazokonstriktif doku iskemisi riski.',
+            tone: 'amber',
+          },
+          {
+            title: 'Alerjik / Anafilaktik Reaksiyonlar',
+            incidenceOrSeverity: 'Nadir (< %1)',
+            detail:
+              'Amid yapıya bağlı gerçek IgE alerjisi çok nadirdir; reaksiyonların çoğu çoklu doz flakonlardaki metilparaben veya adrenalinli formlardaki sodyum metabisülfit koruyucularına bağlıdır.',
+            tone: 'indigo',
+          },
+          {
+            title: 'Methemoglobinemi',
+            incidenceOrSeverity: 'Çok Nadir',
+            detail:
+              'Prilokain ve benzokaine göre çok daha nadir olsa da yüksek doz topikal/infiltrasyon sonrası özellikle bebeklerde ve G6PD eksikliğinde MetHb artışı görülebilir (antidotu: Metilen mavisi).',
+            tone: 'teal',
+          },
+        ]}
+      />
+
+      {/* KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
+      <SpecialClinicalCautionsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'Asidoz, Hiperkapni & Hipoksi (LAST Eşiği Düşüşü)',
+            detail:
+              'Respiratuar veya metabolik asidoz pH’yı düşürerek α₁-asit glikoproteine bağlanmayı azaltır (serbest aktif Lidokain artar!) ve nöronal Na⁺ kanallarında iyon tuzağı yaratarak nöbet eşiğini belirgin düşürür.',
+          },
+          {
+            title: 'Karaciğer Yetmezliği & Kalp Yetmezliği (Kardiyak Debi↓)',
+            detail:
+              'Lidokain yüksek hepatik ekstraksiyon oranlı (%60–70) bir ilaçtır. Sirozda ve düşük kardiyak debili kalp yetmezliğinde hepatik kan akımı düştüğü için klirens yarıya iner; sürekli IV infüzyon dozu %40–50 azaltılmalıdır.',
+          },
+          {
+            title: 'SA / AV İleti Sistemi Hastalığı & WPW Sendromu',
+            detail:
+              'Hasta sinüs sendromu veya ileri AV blokta pacemaker yoksa asistoli tetiklenebilir. Amiodaron veya beta-bloker ile birlikte kullanımda hem ileti bloğu hem de CYP3A4/1A2 üzerinden plazma düzeyi artar.',
+          },
+          {
+            title: 'Aritmal %10 Ampul (500 mg/5 mL) Ölümcül Hata Riski',
+            detail:
+              'Aritmal %2 (100 mg/5 mL) ile Aritmal %10 (500 mg/5 mL) ampulleri birbirine benzerdir. %10’luk ampulün yanlışlıkla direkt IV puşe edilmesi anında masif LAST ve kardiyak arreste yol açar; sadece infüzyon seyreltmesi içindir.',
+          },
+          {
+            title: 'Perioperatif IV İnfüzyon Güvenlik Sınırları',
+            detail:
+              'Analjezik IV Lidokain infüzyonu (1–2 mg/kg/saat) İdeal Vücut Ağırlığı (İVA) üzerinden hesaplanmalı, rejyonel bloklarla (TAP, erektör spina vb.) eşzamanlı verilirken toplam toksik doz hesaba katılmalıdır (bloktan sonraki 4 saatte IV Lidokain başlatılmaz).',
+          },
+          {
+            title: 'Fetal Asidozda İyon Tuzağı (Ion Trapping)',
+            detail:
+              'Obstetrik epidural/bloklarda fetal asfiksi varsa bazik lidokain plasentadan geçip asidik fetal kanda iyonize olarak hapsolur ve neonatal kardiyodepresyon/hipotoni yaratabilir.',
+          },
+        ]}
+      />
 
       {/* =========================================================================
           BÖLÜM 13: KANITA DAYALI KAYNAKÇA VE KILAVUZLAR

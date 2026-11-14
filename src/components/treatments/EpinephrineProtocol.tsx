@@ -269,18 +269,44 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
+
+        {/* Etki Mekanizması & Moleküler Sinyal Yolakları */}
+        <div
+          id="sec-etki"
+          className={`mt-4 p-4 rounded-xl border leading-relaxed text-xs sm:text-sm ${
+            isDark
+              ? 'bg-amber-950/20 border-amber-900/50 text-amber-100'
+              : 'bg-amber-50/70 border-amber-200 text-amber-950'
+          }`}
+        >
+          <div className="flex items-start gap-2.5">
+            <Activity className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <span className="font-bold text-sm block">Etki Mekanizması &amp; Moleküler Sinyal Yolakları:</span>
+              <p>
+                Böbreküstü bezi medullasından salınan endojen katekolamin olarak tüm <strong>α ve β adrenoseptörleri</strong>{' '}
+                uyarır: <strong>β₁/β₂ reseptörleri (Gs proteini → adenilat siklaz → cAMP↑)</strong> üzerinden miyokard
+                kontraktilitesini/otomatisitesini artırır, bronş düz kasını gevşetir ve mast hücre medyatör salınımını
+                durdurur (anafilakside hayati mekanizma); <strong>α₁ reseptörleri (Gq → IP₃/DAG → Ca²⁺↑)</strong> üzerinden
+                yüksek dozlarda ve KPR bolusunda güçlü periferik vazokonstriksiyonla koroner perfüzyon basıncını yükseltir.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <MonographQuickNav
         isDark={isDark}
         items={[
-          { id: 'sec-ozet', label: 'Bifazik Etki' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
           { id: 'sec-pkpd', label: 'Farmakokinetik' },
           { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
           { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
-          { id: 'sec-acildoz', label: 'Acil & Bolus Dozlar' },
+          { id: 'sec-acildoz', label: 'Endikasyonlar & Acil Dozlar' },
           { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
           { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
           { id: 'sec-uyumluluk', label: 'Çözelti & Ekstravazasyon' },
           { id: 'sec-guvenlik', label: 'ISMP High-Alert' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
@@ -1203,17 +1229,18 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 8. YAN ETKİLER, METABOLİK ETKİLER & İLAÇ ETKİLEŞİMLERİ              */}
+      {/* 8. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS) & ETKİLEŞİMLER          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-olumsuz"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
           <HeartPulse className="w-5 h-5 text-rose-600 dark:text-rose-400" />
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Kardiyovasküler, Metabolik Yan Etkiler &amp; İlaç Etkileşimleri
+            Önemli Olumsuz Etkiler (Adverse Effects) &amp; İlaç Etkileşimleri
           </h2>
         </div>
 
@@ -1283,17 +1310,18 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 9. KLİNİK KARŞILAŞTIRMA & ANESTEZİST İNCİLERİ                        */}
+      {/* 9. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR           */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-ozel-durumlar"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <Stethoscope className="w-5 h-5 text-amber-600 dark:text-amber-400" />
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Kritik Klinik İnciler &amp; Adrenalin vs Noradrenalin Seçimi
+            Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar
           </h2>
         </div>
 

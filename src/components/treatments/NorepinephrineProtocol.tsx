@@ -215,18 +215,45 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
+
+        {/* Etki Mekanizması & Moleküler Sinyal Yolağı */}
+        <div
+          id="sec-etki"
+          className={`mt-4 p-4 rounded-xl border leading-relaxed text-xs sm:text-sm ${
+            isDark
+              ? 'bg-rose-950/20 border-rose-900/50 text-rose-100'
+              : 'bg-rose-50/70 border-rose-200 text-rose-950'
+          }`}
+        >
+          <div className="flex items-start gap-2.5">
+            <Activity className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <span className="font-bold text-sm block">Etki Mekanizması &amp; Moleküler Sinyal Yolakları:</span>
+              <p>
+                Damar düz kasındaki postsinaptik <strong>α₁-adrenoseptörlere (Gq proteini kenetli)</strong> yüksek afiniteli
+                bağlanarak fosfolipaz C aktivasyonu üzerinden IP₃/DAG üretir; sarkoplazmik retikulumdan Ca²⁺ salınımı ile
+                güçlü arteriyoler ve venöz kasılma oluşturur (SVR↑, venöz dönüş/preload↑). Kalpte{' '}
+                <strong>β₁-reseptörlerini (Gs → cAMP↑ → PKA → L-tipi Ca²⁺ akımı↑)</strong> uyararak kontraktiliteyi destekler;
+                periferik <strong>β₂-etkisi minimal</strong> olduğundan vazodilatasyon veya β₂-aracılı Tip-B laktat artışı yapmaz.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <MonographQuickNav
         isDark={isDark}
         items={[
-          { id: 'sec-ozet', label: 'Özet & Reseptörler' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
           { id: 'sec-pkpd', label: 'Farmakokinetik' },
           { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
           { id: 'sec-dozaj', label: 'Dozaj Kademeleri' },
           { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
           { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
           { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
           { id: 'sec-uyumluluk', label: 'Çözelti & Ekstravazasyon' },
           { id: 'sec-guvenlik', label: 'ISMP High-Alert' },
           { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
@@ -358,6 +385,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. ENDİKASYONLAR & KLİNİK KANIT DÜZEYLERİ                           */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-endikasyon"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1164,21 +1192,22 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 9. KARDİYOVASKÜLER & ORGAN YAN ETKİLERİ                             */}
+      {/* 9. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-olumsuz"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
           <HeartPulse className="w-5 h-5 text-rose-600 dark:text-rose-400" />
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Kardiyovasküler &amp; Organik Yan Etkiler
+            Önemli Olumsuz Etkiler (Adverse Effects)
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
             <span className="font-bold text-slate-900 dark:text-white block mb-1">Aşırı Afterload &amp; CO Düşüşü</span>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -1204,6 +1233,20 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             <span className="font-bold text-slate-900 dark:text-white block mb-1">Splanknik / Renal Vazokonstriksiyon</span>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
               Hipovolemisi düzeltilmemiş hastada mezenterik ve renal perfüzyonu bozar; ancak septik şokta renal perfüzyon basıncını artırarak GFR'yi yükseltir.
+            </p>
+          </div>
+
+          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-rose-950/20 border-rose-900/40' : 'bg-rose-50/70 border-rose-200'}`}>
+            <span className="font-bold text-rose-700 dark:text-rose-300 block mb-1">Ekstravazasyon &amp; Doku Nekrozu</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Periferik damardan doku içine sızarsa lokal α₁ vazokonstriksiyon ile cilt ve yumuşak doku nekrozu yapar (antidotu: Fentolamin 5–10 mg lokal infiltrasyon).
+            </p>
+          </div>
+
+          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-amber-950/20 border-amber-900/40' : 'bg-amber-50/70 border-amber-200'}`}>
+            <span className="font-bold text-amber-700 dark:text-amber-300 block mb-1">Ventriküler Aritmiler &amp; MVO₂ Artışı</span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Yüksek dozlarda miyokard oksijen tüketimini artırır; hipoksi, asidoz veya halojenli anestezik varlığında ventriküler ektopi/taşiaritmi tetikleyebilir.
             </p>
           </div>
         </div>
@@ -1341,17 +1384,18 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 13. KRİTİK KLİNİK İNCİLER & SIK YAPILAN TUZAKLAR                    */}
+      {/* 13. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-ozel-durumlar"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <Stethoscope className="w-5 h-5 text-rose-600 dark:text-rose-400" />
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Kritik Klinik İnciler &amp; Yoğun Bakımcı / Anestezist Tuzakları
+            Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar
           </h2>
         </div>
 

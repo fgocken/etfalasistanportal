@@ -209,12 +209,13 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
   },
   {
     id: 'airway-management-module',
-    title: 'Havayolu Yönetimi',
+    title: 'Havayolu Yönetimi, Zor Havayolu (DAS 2025) & Gastrik USG',
     category: 'Kılavuzlar & Protokoller',
-    badge: 'Havayolu',
-    description: 'Havayolu yönetimi araç ve içerikleri için hazırlık aşamasında olan bölüm.',
-    keywords: ['havayolu', 'havayolu yönetimi', 'entübasyon', 'lma', 'laringoskop'],
-    tabId: 'airway'
+    badge: 'DAS 2025 · GUS',
+    description: 'Zor havayolu tanımı ve risk skorları (LEMON, Mallampati, MACOCHA), interaktif DAS 2025 Plan A–D algoritması, Gastrik USG Perlas 0–2 karar desteği ve RSI vs Elektif karşılaştırması.',
+    keywords: ['havayolu', 'havayolu yönetimi', 'zor havayolu', 'das 2025', 'plan a', 'plan b', 'plan c', 'plan d', 'efona', 'lemon', 'macocha', 'mallampati', 'gastrik usg', 'perlas', 'rsi', 'entübasyon'],
+    tabId: 'airway',
+    popular: true
   },
   {
     id: 'emergency-malignant-hyperthermia',
@@ -313,6 +314,98 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'emergencies',
     popular: true
   },
+  {
+    id: 'emergency-massive-transfusion',
+    title: 'Masif Transfüzyon Protokolü (MTP) & Hemorajik Şok Yönetimi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'MTP · 1:1:1 & ROTEM',
+    description: '10 aşamalı acil kriz protokolü: ABC skoru, 1:1:1 dengeli paket (ES:TDP:PLT), ilk 3 saatte TXA (1 g + 1 g), her 4 ünitede kalsiyum, ROTEM/TEG fibrinojen hedefleri ve Ölümcül Dörtlü önleme.',
+    keywords: [
+      'masif transfüzyon', 'mtp', 'hemorajik şok', 'masif kanama', '1:1:1', 'eritrosit süspansiyonu',
+      'tdp', 'taze donmuş plazma', 'trombosit', 'traneksamik asit', 'txa', 'fibrinojen konsantresi',
+      'kriyopresipitat', 'kalsiyum klorür', 'sitrat toksisitesi', 'hipokalsemi', 'rotem', 'teg',
+      'fibtem', 'extem', 'abc skoru', 'şok indeksi', 'permisif hipotansiyon', 'ölümcül dörtlü',
+      'lethal triad', 'lethal diamond', 'taco', 'trali', '4f pcc', 'anestezi acili', 'acil protokol'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-etco2-elevation',
+    title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Yükselmesi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · EtCO₂ ↑',
+    description: 'EtCO2 > 45 mmHg hiperkapni, FiCO2 > 0 yeniden soluma (soda lime / valf arızası), shark-fin kapnogram, laparoskopik CO2 emilimi ve Malign Hipertermi erken tanısı.',
+    keywords: [
+      'etco2 yükselmesi', 'etco2 artışı', 'hiperkapni', 'kapnografi', 'kapnogram', 'fico2', 'yeniden soluma',
+      'rebreathing', 'soda lime', 'ekspiratuvar valf', 'shark fin', 'köpekbalığı yüzgeci', 'kurar çentiği',
+      'curare cleft', 'hipoventilasyon', 'laparoskopi co2', 'subkutan amfizem', 'kapnotoraks',
+      'malign hipertermi', 'turnike açılması', 'bikarbonat', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-etco2-decrease',
+    title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Azalması',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · EtCO₂ ↓',
+    description: 'Ani EtCO2 düşüşü veya sıfırlanması (flatline): Kardiyak arrest, Masif PE/VAE, özofageal entübasyon (NAP4), devre ayrılması, tansiyon pnömotoraks, hiperventilasyon ve hipotermi ayrımı.',
+    keywords: [
+      'etco2 azalması', 'etco2 düşüşü', 'etco2 sıfırlanma', 'hipokapni', 'kapnografi', 'flatline',
+      'kardiyak arrest', 'pulmoner emboli', 'hava embolisi', 'vae', 'özofageal entübasyon', 'nap4',
+      'devre ayrılması', 'disconnection', 'tansiyon pnömotoraks', 'kardiyak tamponad',
+      'hiperventilasyon', 'hipotermi', 'sample line', 'su tutucu', 'ölü boşluk', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-fico2-elevation',
+    title: 'İntraoperatif Dönemde FiCO₂ Yükselmesi (Yeniden Soluma)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · FiCO₂ ↑',
+    description: 'İnspiratuvar CO2 > 0–2 mmHg: Tükenmiş soda lime, tek yönlü ekspiratuvar/inspiratuvar valf takılması, kanister kanalizasyonu/bypass, Mapleson/Bain yetersiz FGF ve sıfır kalibrasyon kayması.',
+    keywords: [
+      'fico2 yükselmesi', 'fico2 artışı', 'inspired co2', 'yeniden soluma', 'rebreathing',
+      'soda lime tükenmesi', 'co2 absorban', 'tek yönlü valf', 'ekspiratuvar valf', 'inspiratuvar valf',
+      'kanalizasyon', 'channeling', 'bypass', 'bain devresi', 'mapleson', 'ölü boşluk',
+      'karbonmonoksit', 'compound a', 'slurred downstroke', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-ppeak-elevation',
+    title: 'İntraoperatif Dönemde Tepe Hava Yolu Basıncı (Ppeak) Yükselmesi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · Ppeak ↑',
+    description: 'Ppeak > 35–40 cmH2O: Ppeak − Pplat gradienti ile rezistans (kink ETT, sekresyon, bronkospazm, HME tıkanıklığı) vs kompliyans (tansiyon pnömotoraks, endobronşiyal entübasyon, pnömoperitonyum, oto-PEEP) ayrımı.',
+    keywords: [
+      'ppeak yükselmesi', 'tepe hava yolu basıncı', 'peak inspiratory pressure', 'yüksek basınç alarmı',
+      'pplat', 'plato basıncı', 'hava yolu direnci', 'kompliyans', 'bronkospazm', 'tansiyon pnömotoraks',
+      'endobronşiyal entübasyon', 'sağ ana bronş', 'ett kink', 'mukus tıkacı', 'hme tıkanıklığı',
+      'oto peep', 'breath stacking', 'pnömoperitonyum', 'opioid rijiditesi', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-hypoxemia',
+    title: 'İntraoperatif Hipoksemi (Desatürasyon)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · SpO₂ ↓',
+    description: 'SpO2 < %90–94 desatürasyon: Pleth dalga formu & MetHb/COHb ayrımı, Tek Akciğer Ventilasyonu (OLV — FOB, bağımlı PEEP, üst akciğer CPAP), Hepatopulmoner Sendrom (HPS) ve düşük DO2/SvO2 yönetimi.',
+    keywords: [
+      'hipoksemi', 'desatürasyon', 'spo2 düşüşü', 'oksijenasyon bozukluğu', 'pleth', 'pletismografi',
+      'tek akciğer ventilasyonu', 'olv', 'çift lümenli tüp', 'dlt', 'fob', 'cpap', 'hpv',
+      'hepatopulmoner sendrom', 'hps', 'platipne', 'ortodeoksi', 'ipvd', 'şant',
+      'methemoglobinemi', 'co-oksimetri', 'düşük svo2', 'fink etkisi', 'difüzyon hipoksisi',
+      'endobronşiyal entübasyon', 'tansiyon pnömotoraks', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
 
   // 3. Klinik İnfografikler
   {
@@ -355,6 +448,34 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'reseptör kayması', 'doz yanıt', 'biphasic', 'sinerji', 'vazopressin milrinon', 'noradrenalin dobutamin', 
       'metilen mavisi', 'vazopleji', 'şok simülatörü', 'septik şok', 'kardiyojenik şok', 'hocm', 'sağ ventrikül', 
       'ssc 2021', 'vasst', 'soap ii'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
+    id: 'info-difficult-airway-das',
+    title: 'Zor Havayolu Değerlendirmesi, Skorlar & DAS 2025 Plan A–D',
+    category: 'Klinik İnfografikler',
+    badge: 'DAS 2025 · ASA 2022',
+    description: 'Zor havayolu tanımları, interaktif LEMON/Mallampati/MACOCHA skorlayıcıları, MOANS-RODS-SHORT, fizyolojik zor havayolu ve canlı DAS 2025 Plan A–D algoritması (eFONA).',
+    keywords: [
+      'zor havayolu', 'difficult airway', 'das 2025', 'plan a', 'plan b', 'plan c', 'plan d', 'efona', 'cico',
+      'mallampati', 'lemon', 'macocha', 'moans', 'rods', 'short', 'ulbt', 'tiromental mesafe', 'sternomental',
+      'cormack lehane', 'videolaringoskop', 'uyanık entübasyon', 'ati', 'krikotiroidotomi', 'sad', 'lma'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
+    id: 'info-gastric-usg-perlas',
+    title: 'Gastrik USG (Perlas 0–2) Aktif Karar Destek Uygulaması',
+    category: 'Klinik İnfografikler',
+    badge: 'Perlas 0–2 · GUS',
+    description: 'Yatak başı RLD antral CSA & Perlas hacim hesaplayıcı (mL ve mL/kg), ≥1.5 mL/kg aspirasyon riski uyarısı, elektif/acil karar motoru ve I-AIM tarama rehberi.',
+    keywords: [
+      'gastrik usg', 'gus', 'mide ultrasonu', 'gastric pocus', 'perlas 0', 'perlas 1', 'perlas 2', 'perlas skoru',
+      'antral alan', 'csa', '1.5 ml/kg', 'rld', 'sağ lateral dekübit', 'dolu mide', 'glp-1', 'semaglutid',
+      'aspirasyon riski', 'karar destek', 'i-aim', 'antrum'
     ],
     tabId: 'infographics',
     popular: true
@@ -768,6 +889,54 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-sevoflurane-protocol',
+    title: 'Sevofluran (Sevorane) MAC, Maske İndüksiyonu & Düşük Akım Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Sevorane · Volatil Anestezik',
+    description: 'Kan/gaz 0.65, MAC %2.05; pediatrik/erişkin inhalasyon indüksiyonu, bronkodilatasyon, yaş/N2O/opioid düzeltmeli MAC hesaplayıcı, Compound A ve düşük akım tüketimi.',
+    keywords: [
+      'sevofluran',
+      'sevofloran',
+      'sevoflurane',
+      'sevorane',
+      'volatil',
+      'inhalasyon anestezigi',
+      'mac',
+      'compound a',
+      'maske indüksiyonu',
+      'bronkodilatör',
+      'malign hipertermi',
+      'düşük akım'
+    ],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
+    id: 'treatment-desflurane-protocol',
+    title: 'Desfluran (Suprane) MAC, TEC-6, Sempatik Yanıt & Karbon Ayak İzi Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Suprane · Volatil Anestezik',
+    description: 'Kan/gaz 0.42–0.45, MAC %6.0; morbid obezitede hızlı derlenme, TEC-6 ısıtmalı vaporizatör, >%6 sempatik pik/laringospazm, kuru absorbanda CO zehirlenmesi ve GWP100 2540.',
+    keywords: [
+      'desfluran',
+      'desfloran',
+      'desflurane',
+      'suprane',
+      'volatil',
+      'tec 6',
+      'd-vapor',
+      'mac',
+      'karbonmonoksit',
+      'co zehirlenmesi',
+      'sempatik hiperaktivite',
+      'laringospazm',
+      'gwp',
+      'obezite uyanma'
+    ],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',
@@ -859,8 +1028,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     title: 'Anestezi Acilleri ve Kriz Yönetimi',
     category: 'Kılavuzlar & Protokoller',
     badge: 'Acil Protokol',
-    description: 'Perioperatif kriz yönetimi, malign hipertermi, arrest/ACLS, anafilaksi, LAST ve acil eylem algoritmaları.',
-    keywords: ['anestezi acilleri', 'acil', 'kriz', 'malign hipertermi', 'arrest', 'acls', 'cpr', 'anafilaksi', 'last', 'cico', 'mavi kod'],
+    description: 'Perioperatif kriz yönetimi, malign hipertermi, masif transfüzyon (MTP), arrest/ACLS, anafilaksi, LAST, EtCO2 yükselmesi/azalması, FiCO2 yükselmesi, Ppeak yükselmesi ve intraoperatif hipoksemi algoritmaları.',
+    keywords: ['anestezi acilleri', 'acil', 'kriz', 'malign hipertermi', 'masif transfüzyon', 'mtp', 'arrest', 'acls', 'cpr', 'anafilaksi', 'last', 'cico', 'mavi kod', 'etco2', 'fico2', 'ppeak', 'tepe hava yolu basıncı', 'hipoksemi', 'desatürasyon', 'olv', 'hepatopulmoner sendrom'],
     tabId: 'emergencies',
     popular: true
   },
@@ -1389,17 +1558,6 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Transfemoral ve alternatif perkütan aort kapak replasmanı; Hızlı Ventriküler Pacing (RVP 180-220 bpm), MAC sedasyon vs GETA, retroperitoneal kanama, paravalvüler kaçak ve iletim blokları yönetimi.',
     keywords: ['tavi', 'tavr', 'transkateter aort kapak implantasyonu', 'transcatheter aortic valve replacement', 'aort darlığı', 'aortic stenosis', 'kardiyoloji', 'kvc', 'heart team', 'rvp', 'rapid ventricular pacing', 'edwards sapien', 'medtronic evolut', 'pacing', 'paravalvüler kaçak', 'pvl', 'jaffe', 'tam av blok', 'lbbb', 'mac', 'bilinçli sedasyon', 'perkütan kapak'],
     tabId: 'procedures',
-    popular: true
-  },
-  // Troubleshooting Tool
-  {
-    id: 'tool-troubleshooting',
-    title: 'Anestezi Troubleshooting (Perioperatif Kriz ve Sorun Giderme)',
-    category: 'Kılavuzlar & Protokoller',
-    badge: 'Troubleshooting',
-    description: 'Ameliyathanede ani alarmlar, ventilatör sorunları ve hemodinamik krizlerde algoritmik sorun giderme rehberi.',
-    keywords: ['troubleshooting', 'sorun giderme', 'arıza', 'ventilatör alarmı', 'kriz', 'ameliyathane'],
-    tabId: 'troubleshooting',
     popular: true
   },
   // EKT Vaka Takip & Zamanlayıcı Tool

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   AlertOctagon, 
   Flame, 
@@ -11,10 +11,15 @@ import {
   Wind,
   ArrowRight,
   Layers,
-  HelpCircle
+  HelpCircle,
+  Sliders,
+  Wrench
 } from 'lucide-react';
 import { ANESTHESIA_EMERGENCIES_DATA } from '../../data/emergenciesData';
+import { EMERGENCY_TROUBLESHOOTING_ITEMS } from '../../data/emergenciesTroubleshootingData';
 import { EmergencyProtocolDetailView } from './EmergencyProtocolDetailView';
+import { EmergencyTroubleshootingDetailView } from './EmergencyTroubleshootingDetailView';
+import { updateHashRoute } from '../../utils/deepLink';
 
 interface AnesthesiaEmergenciesViewProps {
   isDark: boolean;
@@ -26,6 +31,7 @@ interface EmergencyCategoryPreview {
   title: string;
   shortDesc: string;
   tag: string;
+  footerNote?: string;
   icon: React.ComponentType<{ className?: string }>;
   accentColor: 'rose' | 'amber' | 'red' | 'purple' | 'cyan' | 'emerald';
   isReady?: boolean;
@@ -134,11 +140,63 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
   {
     id: 'mtp',
     title: 'Masif Transfüzyon Protokolü (MTP)',
-    shortDesc: '1:1:1 TDP-ES-Trombosit transfüzyon oranı, kalsiyum ve traneksamik asit zamanlaması.',
-    tag: 'Hemostaz & TEG/ROTEM (Sıradaki)',
+    shortDesc: '1:1:1 TDP-ES-Trombosit dengeli resüsitasyonu, ABC skoru, ROTEM/TEG hedefli fibrinojen, ilk 3 saat TXA, her 4 ünitede kalsiyum ve Ölümcül Dörtlü yönetimi.',
+    tag: '10 Aşamalı Protokol Hazır',
     icon: Activity,
     accentColor: 'rose',
-    isReady: false
+    isReady: true
+  }
+];
+
+interface TroubleshootingPreview {
+  id: string;
+  title: string;
+  shortDesc: string;
+  tag: string;
+  footerNote: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const TROUBLESHOOTING_PREVIEWS: TroubleshootingPreview[] = [
+  {
+    id: 'etco2-elevation',
+    title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Yükselmesi',
+    shortDesc: 'EtCO₂ > 45 mmHg hiperkapni, FiCO₂ > 0 yeniden soluma (soda lime / valf arızası), shark-fin & kurar çentiği kapnogramı, laparoskopik CO₂ emilimi ve Malign Hipertermi erken taraması.',
+    tag: 'Sorun Giderme · EtCO₂ ↑',
+    footerNote: 'İlk 60 sn · 4 Kapnogram & 9 Neden',
+    icon: Sliders
+  },
+  {
+    id: 'etco2-decrease',
+    title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Azalması',
+    shortDesc: 'Ani EtCO₂ düşüşü veya flatline: Kardiyak arrest, Masif PE/VAE, özofageal entübasyon (NAP4), devre ayrılması, tansiyon pnömotoraks, hiperventilasyon ve hipotermi ayrımı.',
+    tag: 'Sorun Giderme · EtCO₂ ↓',
+    footerNote: 'İlk 60 sn · 4 Kapnogram & 9 Neden',
+    icon: Activity
+  },
+  {
+    id: 'fico2-elevation',
+    title: 'İntraoperatif Dönemde FiCO₂ Yükselmesi (Yeniden Soluma)',
+    shortDesc: 'İnspiratuvar CO₂ > 0–2 mmHg: Tükenmiş soda lime, tek yönlü ekspiratuvar/inspiratuvar valf takılması, kanister kanalizasyonu/bypass, Mapleson/Bain düşük FGF ve sıfır kalibrasyon kayması.',
+    tag: 'Sorun Giderme · FiCO₂ ↑',
+    footerNote: 'İlk 60 sn · 4 Kapnogram & 8 Neden',
+    icon: Wind
+  },
+  {
+    id: 'ppeak-elevation',
+    title: 'İntraoperatif Dönemde Tepe Hava Yolu Basıncı (Ppeak) Yükselmesi',
+    shortDesc: 'Ppeak > 35–40 cmH₂O: Basınç-zaman eğrisi ve Ppeak − Pplat gradienti ile rezistans (ETT kink, sekresyon, bronkospazm, HME tıkanıklığı) vs kompliyans (tansiyon pnömotoraks, sağ ana bronş, oto-PEEP) ayrımı.',
+    tag: 'Sorun Giderme · Ppeak ↑',
+    footerNote: 'İlk 60 sn · Basınç Eğrisi & 10 Neden',
+    icon: Wind
+  },
+  {
+    id: 'hypoxemia',
+    title: 'İntraoperatif Hipoksemi (Desatürasyon)',
+    shortDesc: 'SpO₂ < %90–94: Pleth artefakt & dishemoglobinemi (MetHb/COHb) ayrımı, düşük DO₂/SvO₂, Tek Akciğer Ventilasyonu (OLV — FOB, PEEP, üst akciğer CPAP) ve Hepatopulmoner Sendrom (HPS) yönetimi.',
+    tag: 'Sorun Giderme · SpO₂ ↓',
+    footerNote: 'İlk 60 sn · 4 Pleth Eğrisi & 12 Neden',
+    icon: Activity
   }
 ];
 
@@ -149,20 +207,50 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
   const [selectedEmergencyId, setSelectedEmergencyId] = useState<string | null>(initialEmergencyId || null);
   const [feedbackNotice, setFeedbackNotice] = useState<string | null>(null);
 
-  // If an active protocol is selected (e.g. 'mh')
+  useEffect(() => {
+    if (initialEmergencyId !== undefined) {
+      setSelectedEmergencyId(initialEmergencyId);
+    }
+  }, [initialEmergencyId]);
+
+  const handleBackToList = () => {
+    setSelectedEmergencyId(null);
+    updateHashRoute('arac', 'emergencies');
+  };
+
+  // Standart 10 aşamalı Anestezi Acili protokolü
   if (selectedEmergencyId && ANESTHESIA_EMERGENCIES_DATA[selectedEmergencyId]) {
     return (
       <EmergencyProtocolDetailView
         protocol={ANESTHESIA_EMERGENCIES_DATA[selectedEmergencyId]}
         isDark={isDark}
-        onBack={() => setSelectedEmergencyId(null)}
+        onBack={handleBackToList}
+      />
+    );
+  }
+
+  // İntraoperatif Monitörizasyon & Ventilatör Kriz / Sorun Giderme Protokolü
+  const selectedTroubleshootingItem = selectedEmergencyId
+    ? EMERGENCY_TROUBLESHOOTING_ITEMS.find((item) => item.id === selectedEmergencyId)
+    : undefined;
+
+  if (selectedTroubleshootingItem) {
+    return (
+      <EmergencyTroubleshootingDetailView
+        item={selectedTroubleshootingItem}
+        isDark={isDark}
+        onBack={handleBackToList}
       />
     );
   }
 
   const handleSelectEmergency = (id: string) => {
-    if (ANESTHESIA_EMERGENCIES_DATA[id]) {
+    if (
+      ANESTHESIA_EMERGENCIES_DATA[id] ||
+      EMERGENCY_TROUBLESHOOTING_ITEMS.some((item) => item.id === id)
+    ) {
       setSelectedEmergencyId(id);
+      updateHashRoute('arac', `emergencies&sub=${id}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       const item = EMERGENCY_PREVIEWS.find(p => p.id === id);
@@ -199,7 +287,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           </h3>
 
           <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-            Ameliyathanede ve derlenme odasında saniyelerin kritik olduğu acil senaryolarda kılavuz odaklı tanı kriterleri, dozaj hesaplayıcıları ve adım adım eylem algoritmaları.
+            Ameliyathanede ve derlenme odasında saniyelerin kritik olduğu <strong>klinik acil senaryolar</strong> ile alt bölümde yer alan <strong>intraoperatif monitörizasyon ve ventilatör troubleshooting rehberleri</strong>.
           </p>
         </div>
       </div>
@@ -223,17 +311,17 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           <div>
             <h4 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
               <Layers className="w-4 h-4 text-red-500" />
-              <span>Acil Senaryo Protokolleri</span>
+              <span>1. Klinik Acil Senaryo Protokolleri (10 Aşamalı Şablon)</span>
             </h4>
             <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              Aşağıdaki acil senaryo kartlarından hazır olanı açabilir veya planlananları inceleyebilirsiniz.
+              Standart 10 aşamalı klinik kriz protokolleri ve hastanın kilosuna göre dinamik ilaç/müdahale hesaplayıcıları.
             </p>
           </div>
           
           <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md self-start sm:self-auto border ${
             isDark ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-200'
           }`}>
-            11 Acil Senaryo Hazır (MH, PE, Hava Embolisi, LAST, Anafilaksi, ACLS, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon) · 1 Senaryo Sırada (MTP)
+            12 Klinik Acil Aktif (MH, PE, Hava Embolisi, LAST, Anafilaksi, ACLS, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon, MTP)
           </span>
         </div>
 
@@ -292,7 +380,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
 
                 <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-[11px]">
                   <span className={`font-mono text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                    {isReady ? '10 Bölümlü Protokol' : 'Şablona Göre Hazırlanacak'}
+                    {item.footerNote || (isReady ? '10 Bölümlü Protokol' : 'Şablona Göre Hazırlanacak')}
                   </span>
                   
                   {isReady ? (
@@ -322,8 +410,85 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
         }`}>
           <HelpCircle className="w-4 h-4 text-red-500 shrink-0" />
           <span>
-            <strong>Malign Hipertermi</strong>, <strong>PE</strong>, <strong>Hava Embolisi</strong>, <strong>LAST</strong>, <strong>Anafilaktik Şok</strong>, <strong>Perioperatif ACLS</strong>, <strong>Bronkospazm</strong>, <strong>Laringospazm</strong>, <strong>CICO</strong>, <strong>Akut Hava Yolu Obstrüksiyonu</strong> ve <strong>Pulmoner Aspirasyon</strong> protokolleri hazırlandı. Kalan acil durum (MTP) aynı standart 10 aşamalı şablon mimarisiyle sıradaki adımda eklenecektir.
+            <strong>Malign Hipertermi</strong>, <strong>PE</strong>, <strong>Hava Embolisi</strong>, <strong>LAST</strong>, <strong>Anafilaktik Şok</strong>, <strong>Perioperatif ACLS</strong>, <strong>Bronkospazm</strong>, <strong>Laringospazm</strong>, <strong>CICO</strong>, <strong>Akut Hava Yolu Obstrüksiyonu</strong>, <strong>Pulmoner Aspirasyon</strong> ve <strong>Masif Transfüzyon Protokolü (MTP)</strong> dahil tüm 12 klinik acil senaryo standart 10 aşamalı şablon ve kilo bazlı doz hesaplayıcılarıyla kullanıma hazırdır.
           </span>
+        </div>
+      </div>
+
+      {/* 4. İntraoperatif Troubleshooting Meseleleri (Klinik Hastalık Şemasından Ayrı — Teal/Slate Tema) */}
+      <div className={`p-6 rounded-2xl border transition-all ${
+        isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800 mb-5">
+          <div>
+            <h4 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              <Wrench className="w-4 h-4 text-teal-500" />
+              <span>2. İntraoperatif Troubleshooting Meseleleri (Monitör, Devre &amp; Ventilatör)</span>
+            </h4>
+            <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              Spesifik bir klinik tanı değil; intraoperatif parametre sapmalarında İlk 60 Saniye, dalga formu ve sistematik teknik/fizyolojik ayırıcı tanı algoritmaları.
+            </p>
+          </div>
+
+          <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md self-start sm:self-auto border ${
+            isDark ? 'bg-teal-950/30 text-teal-300 border-teal-500/30' : 'bg-teal-50 text-teal-700 border-teal-200'
+          }`}>
+            5 Troubleshooting Konusu · İlk 60 sn &amp; Dalga Formu
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {TROUBLESHOOTING_PREVIEWS.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.id}
+                onClick={() => handleSelectEmergency(item.id)}
+                className={`p-4 rounded-xl border relative overflow-hidden transition-all group cursor-pointer ${
+                  isDark
+                    ? 'bg-gradient-to-b from-teal-950/20 to-slate-800/70 border-teal-500/35 hover:border-teal-400 shadow-sm'
+                    : 'bg-gradient-to-b from-teal-50/60 to-white border-teal-200 hover:border-teal-400 hover:shadow-md'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2 mb-2.5">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-teal-600 text-white shadow-xs">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span
+                    className={`text-[10px] font-mono px-2 py-0.5 rounded border font-semibold ${
+                      isDark
+                        ? 'bg-teal-500/15 border-teal-500/35 text-teal-300'
+                        : 'bg-teal-50 border-teal-200 text-teal-700'
+                    }`}
+                  >
+                    {item.tag}
+                  </span>
+                </div>
+
+                <h5
+                  className={`text-sm font-bold mb-1.5 transition-colors ${
+                    isDark ? 'text-white group-hover:text-teal-300' : 'text-slate-900 group-hover:text-teal-700'
+                  }`}
+                >
+                  {item.title}
+                </h5>
+
+                <p className={`text-xs leading-relaxed line-clamp-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  {item.shortDesc}
+                </p>
+
+                <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-[11px]">
+                  <span className={`font-mono text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                    {item.footerNote}
+                  </span>
+                  <span className="font-bold text-xs inline-flex items-center gap-1 text-teal-600 dark:text-teal-400 group-hover:translate-x-0.5 transition-transform">
+                    <span>Algoritmayı Aç</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

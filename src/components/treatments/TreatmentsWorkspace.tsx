@@ -15,7 +15,8 @@ import {
   ShieldCheck,
   CheckCircle2,
   Clock,
-  ExternalLink
+  ExternalLink,
+  Wind
 } from 'lucide-react';
 import { parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 import { MagnesiumCalculator } from './MagnesiumCalculator';
@@ -33,13 +34,15 @@ import { LidocaineProtocol } from './LidocaineProtocol';
 import { KetamineProtocol } from './KetamineProtocol';
 import { NorepinephrineProtocol } from './NorepinephrineProtocol';
 import { EpinephrineProtocol } from './EpinephrineProtocol';
+import { SevofluraneProtocol } from './SevofluraneProtocol';
+import { DesfluraneProtocol } from './DesfluraneProtocol';
 
 interface Props {
   isDark: boolean;
   initialProtocolId?: string | null;
 }
 
-type TreatmentCategory = 'medications' | 'electrolyte' | 'vasoactive' | 'sedation' | 'hemostasis';
+type TreatmentCategory = 'medications' | 'general_anesthetics' | 'electrolyte' | 'vasoactive' | 'sedation' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 type SodiumViewMode = 'all' | 'calc' | 'infographic';
@@ -350,8 +353,8 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'propofol',
     category: 'medications',
-    categories: ['medications', 'sedation'],
-    categoryLabel: 'Sedoanaljezi',
+    categories: ['medications', 'general_anesthetics', 'sedation'],
+    categoryLabel: 'Genel Anestezik / Sedoanaljezi',
     badge: 'Diprivan · GABA-A Hipnotik',
     title: 'Propofol',
     shortDesc: 'Genel anestezi indüksiyonu ve idamesi (TIVA), YBÜ sedasyonu, PRIS risk monitörizasyonu ve 24 saatlik lipid kalori yönetimi için altın standart ilaç monografisi.',
@@ -500,8 +503,8 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'ketamine',
     category: 'medications',
-    categories: ['medications', 'sedation'],
-    categoryLabel: 'Disosiyatif Sedoanaljezi',
+    categories: ['medications', 'general_anesthetics', 'sedation'],
+    categoryLabel: 'Genel Anestezik / Sedoanaljezi',
     badge: 'Ketalar · NMDA Antagonisti',
     title: 'Ketamin',
     shortDesc: 'NMDA reseptör blokajı ile disosiyatif anestezi ve analjezi; RSI şok indüksiyonu, Ketofol protokolü, akut ağrı sub-dissosiyatif dozu, refrakter bronkospazm, deliryum yönetimi ve YBÜ infüzyonu için altın standart ilaç monografisi.',
@@ -649,6 +652,102 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-emerald-500/30' 
       }
     ]
+  },
+  {
+    id: 'sevoflurane',
+    category: 'medications',
+    categories: ['medications', 'general_anesthetics'],
+    categoryLabel: 'Volatil Genel Anestezik',
+    badge: 'Sevorane · Sarı Kod · MAC %2.05',
+    title: 'Sevofluran (sevoFLURANE)',
+    shortDesc: 'Hava yolunu irrite etmeyen, düşük kan/gaz çözünürlüklü (0.65) volatil anestezik; pediatrik/erişkin maske indüksiyonu, bronkodilatasyon, yaş-düzeltmeli MAC, Compound A güvenliği ve CO₂e tüketim hesabı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'MAC (40 Yaş · O₂)', 
+        value: '%2.05 (%60 N₂O: ~%0.8)', 
+        subtext: 'Pediatrik tepe (1–6 ay): %3.2',
+        tooltip: 'Mapleson denklemiyle her dekatta ~%6 azalır',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      },
+      { 
+        label: 'Kan / Gaz Katsayısı', 
+        value: '0.65 (Yağ/Gaz: 47–53)', 
+        subtext: 'Hızlı maske indüksiyonu & uyanma',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'Hava Yolu Profili', 
+        value: 'İrritasyon Yok · Bronkodilatör', 
+        subtext: 'Astım & pediatri maske 1. tercih',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'Güvenlik & Absorban', 
+        value: 'MH Tetikleyici · Compound A', 
+        subtext: 'Asla IV verilmez; KOH-free absorban',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      }
+    ]
+  },
+  {
+    id: 'desflurane',
+    category: 'medications',
+    categories: ['medications', 'general_anesthetics'],
+    categoryLabel: 'Volatil Genel Anestezik',
+    badge: 'Suprane · Mavi Kod · MAC %6.0',
+    title: 'Desfluran (desFLURANE)',
+    shortDesc: 'En düşük kan/gaz çözünürlüklü (0.42–0.45) volatil; morbid obezite & uzun vakalarda en hızlı uyanma, 22.8°C kaynama (TEC-6 zorunlu), >%6 sempatik pik/laringospazm, kuru absorbanda CO zehirlenmesi ve GWP₁₀₀ 2540.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'MAC (40 Yaş · O₂)', 
+        value: '%6.0 (%60 N₂O: ~%2.8)', 
+        subtext: '6–12 ay pik: %9.9 · Yaşlıda ↓',
+        tooltip: 'Düşük potensli; TEC-6 / D-Vapor 39°C ısıtmalı vaporizatör gerektirir',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      },
+      { 
+        label: 'Kan / Gaz · Yağ/Gaz', 
+        value: '0.42–0.45 · 18.7', 
+        subtext: 'Obezitede en hızlı derlenme',
+        colorClass: 'text-emerald-700 dark:text-emerald-300', 
+        bgClass: 'bg-emerald-500/10', 
+        borderClass: 'border-emerald-500/30' 
+      },
+      { 
+        label: 'Hava Yolu & Sempatik', 
+        value: 'İndüksiyonda KONTRENDİKE', 
+        subtext: '>%6 hızlı artışta taşikardi & spazm',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      },
+      { 
+        label: 'Metabolizma & CO Riski', 
+        value: '%0.02 · En Yüksek CO / GWP', 
+        subtext: 'Kuru absorbanda COHb! ≤1 L/dk FGF',
+        colorClass: 'text-amber-700 dark:text-amber-300', 
+        bgClass: 'bg-amber-500/10', 
+        borderClass: 'border-amber-500/30' 
+      }
+    ]
   }
 ];
 
@@ -699,6 +798,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
   };
 
   const medCount = getCategoryCount('medications');
+  const generalAnestheticsCount = getCategoryCount('general_anesthetics');
   const sedationCount = getCategoryCount('sedation');
   const electrolyteCount = getCategoryCount('electrolyte');
   const vasoactiveCount = getCategoryCount('vasoactive');
@@ -712,7 +812,9 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
   });
   const aliasMap: Record<string, string> = {
     noradrenalin: 'norepinephrine',
-    adrenalin: 'epinephrine'
+    adrenalin: 'epinephrine',
+    sevofloran: 'sevoflurane',
+    desfloran: 'desflurane'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -806,7 +908,28 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               </span>
             </button>
 
-            {/* 2. Sedoanaljezi & Nöromüsküler */}
+            {/* 2. Genel Anestezikler */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('general_anesthetics')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'general_anesthetics'
+                  ? isDark 
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-xs' 
+                    : 'bg-amber-50 text-amber-800 border border-amber-400 shadow-xs'
+                  : isDark 
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent' 
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <Wind className="w-3.5 h-3.5 text-amber-500" />
+              <span>Genel Anestezikler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-mono font-bold">
+                {generalAnestheticsCount} İlaç
+              </span>
+            </button>
+
+            {/* 3. Sedoanaljezi & Nöromüsküler */}
             <button
               type="button"
               onClick={() => setActiveCategory('sedation')}
@@ -1252,6 +1375,16 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <EpinephrineProtocol isDark={isDark} />
       )}
 
+      {/* GÖRÜNÜM 14: SEVOFLURAN MONOGRAFİSİ & MAC HESAPLAYICISI */}
+      {(activeProtocolId === 'sevoflurane' || activeProtocolId === 'sevofloran') && (
+        <SevofluraneProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 15: DESFLURAN MONOGRAFİSİ & MAC / CO2e HESAPLAYICISI */}
+      {(activeProtocolId === 'desflurane' || activeProtocolId === 'desfloran') && (
+        <DesfluraneProtocol isDark={isDark} />
+      )}
+
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
       {!activeProtocolId && filteredCards.length === 0 && (
         <div className={`p-8 rounded-xl border text-center space-y-3 ${
@@ -1261,6 +1394,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             <Layers className="w-6 h-6" />
           </div>
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+            {activeCategory === 'general_anesthetics' && 'Genel Anestezikler (İnhalasyon & IV)'}
             {activeCategory === 'vasoactive' && 'İnfüzyon & Vazoaktif Protokolleri'}
             {activeCategory === 'sedation' && 'Sedoanaljezi & Nöromüsküler Blokaj'}
             {activeCategory === 'hemostasis' && 'Hemostaz & Kan Transfüzyon Yönetimi'}

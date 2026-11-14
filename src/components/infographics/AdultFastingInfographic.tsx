@@ -24,6 +24,7 @@ import {
 interface AdultFastingInfographicProps {
   isDark: boolean;
   onOpenPediatric?: () => void;
+  onOpenGastricUsg?: () => void;
 }
 
 interface FastingItem {
@@ -142,7 +143,7 @@ const ADULT_FASTING_ITEMS: FastingItem[] = [
   }
 ];
 
-export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = ({ isDark, onOpenPediatric }) => {
+export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = ({ isDark, onOpenPediatric, onOpenGastricUsg }) => {
   const [selectedItemId, setSelectedItemId] = useState<string>('clear-fluids');
   const selectedItem = ADULT_FASTING_ITEMS.find(item => item.id === selectedItemId) || ADULT_FASTING_ITEMS[0];
 
@@ -443,8 +444,18 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
               </div>
             </div>
           </div>
-          <div className="mt-3 pt-2 border-t border-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold">
-            ✓ Şüpheli vakalarda altın standart başucu kılavuz
+          <div className="mt-3 pt-2 border-t border-emerald-500/20 flex items-center justify-between gap-2 text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold">
+            <span>✓ Şüpheli vakalarda altın standart başucu kılavuz</span>
+            {onOpenGastricUsg && (
+              <button
+                type="button"
+                onClick={onOpenGastricUsg}
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold cursor-pointer shrink-0"
+              >
+                <span>Perlas Karar Desteğini Aç</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
           </div>
         </div>
       </div>

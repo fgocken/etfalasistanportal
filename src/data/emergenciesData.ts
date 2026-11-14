@@ -24,7 +24,7 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'acls' | 'generic';
+  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -385,6 +385,64 @@ export interface EmergencyProtocol {
         target: string;
         rationale: string;
       }[];
+    };
+
+    // Masif Transfüzyon Protokolü (MTP) acil protokolleri
+    mtpProtocols?: {
+      activationCriteria: {
+        title: string;
+        definitions: string[];
+        abcScoreItems: {
+          parameter: string;
+          criterion: string;
+          points: string;
+        }[];
+        abcInterpretation: string;
+        shockIndexRule: string;
+      };
+      balancedTransfusionPackages: {
+        title: string;
+        targetRatio: string;
+        emergencyUncrossmatched: string;
+        packages: {
+          packageName: string;
+          contents: string;
+          antifibrinolyticOrCalcium: string;
+          clinicalNote: string;
+        }[];
+      };
+      rotemTegGuidedHemostasis: {
+        title: string;
+        principle: string;
+        targets: {
+          parameter: string;
+          rotemThreshold: string;
+          tegThreshold: string;
+          conventionalLab: string;
+          treatment: string;
+          priorityNote: string;
+        }[];
+      };
+      pharmacotherapyAndElectrolytes: {
+        title: string;
+        agents: {
+          agent: string;
+          dosage: string;
+          timingWindow: string;
+          mechanismAndPearls: string;
+        }[];
+      };
+      lethalDiamondAndPhysiologicTargets: {
+        title: string;
+        permissiveHypotension: string;
+        tbiExceptionAlert: string;
+        targets: {
+          axis: string;
+          targetValue: string;
+          intervention: string;
+          pathophysiologyRisk: string;
+        }[];
+      };
     };
   };
 
@@ -5116,6 +5174,470 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         journal: 'Anesthesia & Analgesia. 2018;126(3):889-903.',
         year: '2018',
         relevance: 'Laparoskopi, nöroaksiyel blok, hava embolisi, LAST, anafilaksi ve prone pozisyonda perioperatif arrest yönetimi.'
+      }
+    ]
+  },
+
+  'mtp': {
+    id: 'mtp',
+    // 1) Başlık
+    title: 'Masif Transfüzyon Protokolü (MTP) & Hemorajik Şok Yönetimi',
+    subTitle: '1:1:1 Dengeli Resüsitasyon · Viskoelastik (ROTEM/TEG) Hedefli Hemostaz · Ölümcül Dörtlü Önleme',
+    codeColor: 'rose',
+    severityBadge: 'KOD KIRMIZI · AKTİF MASİF HEMORAJİ',
+    keyCallout: 'MTP erken aktive edilmeli! İlk pakette 1:1:1 (ES:TDP:Trombosit) dengeli transfüzyon başlatın, ilk 3 saat içinde Traneksamik Asit (1 g IV bolus + 1 g 8 sa infüzyon) uygulayın, her 4 ünite sonrası İyonize Kalsiyum replasmanı yapın ve yüksek akımlı ısıtıcılarla (≥36°C) hipotermiyi önleyin!',
+    quickCalculatorType: 'mtp',
+
+    // 2) Tanımlama ve Giriş
+    introduction: {
+      definition: 'Masif Transfüzyon; klasik olarak 24 saat içinde ≥10 Ünite Eritrosit Süspansiyonu (ES) verilmesi (erişkinde yaklaşık 1 toplam kan hacmi; ~70 mL/kg) olarak tanımlanır. Günümüzde klinik aciliyeti yakalamak adına dinamik tanımlar öne çıkmıştır: 1 saat içinde ≥4 Ünite ES transfüzyonu ve devam eden kontrolsüz kanama, 3 saat içinde toplam kan hacminin >%50 kaybı veya ≥150 mL/dk hızla süren aktif hemoraji Masif Transfüzyon Protokolü (MTP) aktivasyonu gerektirir.',
+      epidemiology: 'Kontrolsüz majör hemoraji; majör travmada önlenebilir ölümlerin bir numaralı nedenidir ve perioperatif kardiyak arrestlerin en sık geri döndürülebilir etiyolojilerindendir. Obstetrik kanamalar (PPH), majör vasküler/aortik rüptürler, karaciğer transplantasyonu/rezeksiyonu ve kompleks omurga/travma cerrahilerinde MTP gereksinimi %3-15 oranında ortaya çıkar.',
+      triggers: [
+        'Majör Travma (Künt/Penetran gövde travması, pelvik halka kırıkları, solid organ laserasyonları)',
+        'Obstetrik Aciller (Uterin atoni, plasenta akreata spektrumu, abruptio plasenta, uterin rüptür)',
+        'Vasküler & Kardiyotorasik Cerrahi (Abdominal/torasik aort anevrizması rüptürü, reoperatif KVC, diseksiyon)',
+        'Hepatobiliyer & Transplantasyon Cerrahisi (Karaciğer nakli, portal hipertansif varis/parankim kanamaları)',
+        'İntraoperatif Majör Damar Yaralanması veya Dilüsyonel/İlaç İlişkili Koagülopati (DOAK, VKA, Antiplatelet)'
+      ],
+      safeAgents: [
+        'Dengeli 1:1:1 Kan Ürünü Paketleri (ES : Taze Donmuş Plazma : Trombosit)',
+        'Erken Traneksamik Asit (TXA 1 g IV ≤3 saat içinde) & Kalsiyum Klorür/Glukonat Replasmanı',
+        'Viskoelastik Test (ROTEM / TEG) Rehberli Hedefli Fibrinojen Konsantresi (2-4 g) / Kriyopresipitat',
+        'Yüksek Akımlı Kan/Sıvı Isıtıcı Sistemleri (Level 1 / Belmont, 38-40°C) & Aktif Hasta Isıtma',
+        'Uygun Vakada Otolog Kan Kurtarma (Cell-Saver) ve Hasar Kontrol Cerrahisi / Anjiyoembolizasyon'
+      ],
+      mortalityStats: 'Masif hemorajide mortalite %25-50 arasındadır. "Ölümcül Dörtlü" (Hipotermi + Asidoz + Koagülopati + Hipokalsemi) yerleştiğinde mortalite >%70 üzerine çıkar. Sabit 1:1:1 dengeli transfüzyon ve erken TXA ile 24 saatlik eksanguinasyon mortalitesi anlamlı şekilde düşer; MTP aktivasyonundaki her 1 dakikalık gecikme mortaliteyi %5 artırır.',
+      clinicalUrgency: 'Klasik laboratuvar (INR, aPTT, fibrinojen) sonuçlarını beklemek ölümcüldür! Skorlama veya klinik öngörü ile derhal MTP aktive edilmeli, uncrossmatched O kan + AB plazma ile resüsitasyon başlatılmalıdır.'
+    },
+
+    // 3) Tanı
+    diagnosis: {
+      overview: 'MTP aktivasyon kararı, masif transfüzyonun gerçekleşmesini bekleyerek değil, devam eden hemoraji hızına, hemodinamik yanıta ve doğrulanmış erken tahmin skorlarına (ABC Skoru, Şok İndeksi) dayanarak proaktif olarak verilir.',
+      clinicalCriteria: [
+        'ABC Skoru ≥ 2 (Yatak başı hızlı aktivasyon eşiği; duyarlılık %75-90, özgüllük %67-88)',
+        'Şok İndeksi (SI = Kalp Hızı / Sistolik Kan Basıncı) ≥ 1.0 (≥1.4 ise kritik MTP & yüksek mortalite belirteci)',
+        '1 saat içinde ≥4 Ünite ES verilmiş olması ve cerrahi/travmatik kanamanın aktif olarak sürmesi',
+        'Viskoelastik (ROTEM/TEG) veya kan gazında hızla derinleşen metabolik laktik asidoz (BE < -6 mEq/L, Laktat > 4 mmol/L)',
+        'İlk 20-30 mL/kg kristaloid bolusa geçici yanıt veya yanıtsızlık (ATLS Evre III-IV Hemorajik Şok: >1500-2000 mL kayıp)',
+        'Başlangıç Hemoglobin (Hb) düzeyinin akut kanamada aldatıcı şekilde NORMAL çıkabileceği unutulmamalıdır!'
+      ],
+      gradingScaleTitle: 'ABC Skoru (Assessment of Blood Consumption) & MTP Aktivasyon Kriterleri',
+      gradingScaleSource: 'Nunez et al. J Trauma / ATLS 10th Ed.',
+      larachScale: [
+        { category: '1. Penetran Mekanizma', points: '1 Puan', description: 'Ateşli silah, kesici-delici alet veya yüksek hızlı penetran majör damar/kavite yaralanması mevcutsa.' },
+        { category: '2. Başlangıç SKB ≤ 90 mmHg', points: '1 Puan', description: 'Acil servis, travma odası veya ameliyathane gelişinde sistolik kan basıncının ≤90 mmHg olması.' },
+        { category: '3. Başlangıç Nabız ≥ 120 /dk', points: '1 Puan', description: 'Ciddi kompanzatuvar veya dekompanse taşikardi (≥120 atım/dk) varlığı (beta-bloker kullanımı maskeleyebilir).' },
+        { category: '4. Pozitif FAST Ultrason', points: '1 Puan', description: 'Yatak başı POCUS / FAST incelemesinde periton, perikard veya plevral boşlukta serbest sıvı/kan saptanması.' },
+        { category: 'EK: Şok İndeksi (Nabız / SKB)', points: '≥ 1.0 – 1.4', description: 'Normali 0.5-0.7 dir. ≥1.0 MTP hazırlığı gerektirir; ≥1.4 akut masif transfüzyon ve erken koagülopatinin güçlü habercisidir.' }
+      ],
+      larachInterpretation: 'ABC Skoru ≥ 2 puan olduğunda derhal Masif Transfüzyon Protokolü (MTP) aktive edilmelidir (Laboratuvar beklenmez). Obstetrikte ise >1500 mL kanama + devam eden kanama veya Şok İndeksi ≥1.1 doğrudan aktivasyon endikasyonudur.',
+      differentialDiagnosis: [
+        {
+          condition: 'Gizli / Okült Kanama Odağı (Retroperiton, Pelvis, Hemotoraks, Uyluk)',
+          differentiatingFactors: 'Açık cerrahi saha kuru görünürken hemodinami hızla çöküyorsa POCUS (eFAST), dren çıkışı, pelvik/uyluk çapı ve özofagus/gastrik tüp kontrol edilmelidir.'
+        },
+        {
+          condition: 'Tansiyon Pnömotoraks veya Kardiyak Tamponad',
+          differentiatingFactors: 'Her ikisi de ağır hipotansiyon ve taşikardi yapar ancak venöz dönüş engellendiği için JVD (boyun ven dolgunluğu) yüksektir; POCUS ve yüksek hava yolu basıncı ile ayırt edilir.'
+        },
+        {
+          condition: 'Nörojenik Şok / Yüksek Spinal Blok',
+          differentiatingFactors: 'Hipotansiyona eşlik eden paradoksal BRADİKARDİ ve sıcak/pembe ekstremiteler görülür; hemoglobin düşmez ve laktat erken dönemde normal kalır.'
+        },
+        {
+          condition: 'Anafilaktik Şok veya Şiddetli Vazopleji / Sepsis',
+          differentiatingFactors: 'Kanama odağı olmaksızın ani bronkospazm, ürtiker/eritem veya ateş/vazodilatasyon öyküsü vardır; SVV/PPV yüksek olsa da sıvı/kan kaybı dışlanır.'
+        }
+      ]
+    },
+
+    // 4) Akut Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'Kan Merkezi ile Doğrudan Kapalı-Döngü İletişim: Hasta Adı, Protokol No, Lokasyon (Ameliyathane Salonu), Taşıyıcı Personel (Runner) ve "MTP KOD KIRMIZI" anonsu eşzamanlı yapılmalıdır.',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'MTP\'yi Derhal Aktive Et, Ekip ve Runner Ata & Cerrahı Bilgilendir',
+          action: 'Kan bankasını arayarak Masif Transfüzyon Protokolünü başlatın. Salondan yalnızca kan taşıma ve ısıtıcıya besleme işinden sorumlu bir "Runner" belirleyin. Cerraha geçici hemostaz (packing, klemp, turnike, REBOA/aort kompresyonu) için sesli bildirim yapın.',
+          criticalNote: 'Cross-match sonucunu beklemeyin! Hayati şokta derhal 0 Rh(-) [doğurganlık çağındaki kadınlarda] veya 0 Rh(+) [erkeklerde/≥50 yaş kadında] ES + AB TDP isteyin.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'Geniş Damar Yolu (≥2 Adet 14G-16G) & Yüksek Akımlı Isıtıcı Kurulumu',
+          action: 'En az 2 adet kısa-geniş periferik kanül (14G Turuncu veya 16G Gri) veya hızlı infüzyon santral kateteri (8.5 Fr MAC / Introducer) açın. İnce uzun standart 3 lümenli SVK (20 cm) hızlı transfüzyon için yetersizdir (Poiseuille Yasası). Tüm ürünleri 38-40°C yüksek akımlı ısıtıcıdan (Level 1 / Belmont) geçirin.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'Erken Traneksamik Asit (TXA) Bolusu Ver (İlk 3 Saat Penceresi)',
+          action: 'Kanama/travma başlangıcından sonraki ilk 3 saat içinde 1 g TXA IV (100 mL SF içinde 10 dakikada yavaş puşe/infüzyon) uygulayın; ardından 1 g TXA 8 saatte IV infüzyon başlatın. Obstetrik kanamada (WOMAN) kanama sürerse 30 dk sonra 1 g ikinci doz verilir.',
+          criticalNote: 'Travma/kanama başlangıcından >3 saat geçtikten sonra yeni TXA başlanması mortaliteyi artırabilir!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: '1:1:1 Dengeli Paket Transfüzyonunu Başlat (PROPPR Stratejisi)',
+          action: 'Sabit oranlı 1:1:1 (ör. Paket 1: 4 Ü ES + 4 Ü TDP + 1 Havuz/Aferez Trombosit) uygulamasına geçin. Kristaloid infüzyonunu sınırlandırın (en fazla 1-1.5 L dengeli kristaloid); HES/nişasta/jelatin kolloidlerinden kaçının (dilüsyonel koagülopati ve glikokaliks hasarı).',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 5,
+          title: 'Kalsiyum Replasmanı Yap & İyonize Ca²⁺ İzle (Her 4 Ünitede 1)',
+          action: 'Banka kanındaki sitrat antikoagülanı iyonize kalsiyumu şelatlayarak pıhtılaşmayı ve miyokard kontraktilitesini durdurur. İlk paketten itibaren her 4 Ünite kan ürünü (ES/TDP) sonrası veya iCa²⁺ < 1.1 mmol/L ise %10 Kalsiyum Klorür 10 mL (1 g, tercihen SVK) veya %10 Kalsiyum Glukonat 20-30 mL (2-3 g) IV uygulayın.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 6,
+          title: 'Viskoelastik Test (ROTEM / TEG) ile Hedefli Hemostaz & Fibrinojen Yönetimi',
+          action: 'İlk kan örnekleri ile bazal ROTEM/TEG, AKG, laktat, iCa²⁺, tam kan, INR/aPTT ve Clauss fibrinojen gönderin; her pakette tekrarlayın. Masif kanamada ilk tükenen faktör FİBRİNOJENDİR: FIBTEM A5 < 10 mm veya Fibrinojen < 1.5-2.0 g/L ise 2-4 g Fibrinojen Konsantresi (30-50 mg/kg) veya 10 Ü (1-2 havuz) Kriyopresipitat verin.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 7,
+          title: 'Hipotermi, Asidoz ve Permisif Hipotansiyon Yönetimi (TBI İstisnasına Dikkat!)',
+          action: 'Aktif sıcak hava üflemeli battaniye ve oda ısısı (≥24°C) ile çekirdek ısıyı ≥36.0°C tutun. Cerrahi kanama kontrolü sağlanana dek TBI (kafa travması) YOKSA permisif hipotansiyon (SKB 80-90 mmHg / MAP 50-65 mmHg) uygulayın. Ağır TBI / spinal kord yaralanması VARSA MAP ≥ 80 mmHg hedefleyin!',
+          criticalNote: 'Cerrahi hemostaz sonrası kanama durduğunda MTP resmi olarak sonlandırılmalı ("Stand-Down") ve kalan ürünler derhal soğuk zincirle Kan Merkezine iade edilmelidir.',
+          priority: 'HIGH'
+        }
+      ],
+      mtpProtocols: {
+        activationCriteria: {
+          title: 'MTP Erken Aktivasyon Skorlaması & Dinamik Tanım Kriterleri',
+          definitions: [
+            'Klasik Tanım: 24 saat içinde ≥10 Ünite Eritrosit Süspansiyonu (ES) (~1 kan hacmi)',
+            'Dinamik Acil Tanım: 1 saat içinde ≥4 Ünite ES verilmesi + devam eden kontrolsüz kanama',
+            'Hızlı Kayıp Tanımı: 3 saat içinde tahmini kan hacminin >%50 kaybı veya >150 mL/dk aktif kanama',
+            'Klinik Tetikleyiciler: ABC Skoru ≥ 2, Şok İndeksi ≥ 1.0-1.4 veya Kristaloide yanıtsız Evre III-IV Şok'
+          ],
+          abcScoreItems: [
+            { parameter: 'Mekanizma', criterion: 'Penetran yaralanma varlığı', points: '+1 Puan' },
+            { parameter: 'Kan Basıncı', criterion: 'Başlangıç SKB ≤ 90 mmHg', points: '+1 Puan' },
+            { parameter: 'Kalp Hızı', criterion: 'Başlangıç Nabız ≥ 120 /dk', points: '+1 Puan' },
+            { parameter: 'Görüntüleme', criterion: 'Pozitif FAST Ultrason (serbest sıvı)', points: '+1 Puan' }
+          ],
+          abcInterpretation: 'ABC ≥ 2 Puan → MTP Derhal Aktive Edilir (0-1 puan negatif prediktif değeri %97 yüksektir).',
+          shockIndexRule: 'Şok İndeksi (SI = Nabız / SKB): Normal 0.5-0.7 | ≥1.0 MTP Hazırlığı | ≥1.4 Acil MTP + Yüksek Mortalite'
+        },
+        balancedTransfusionPackages: {
+          title: 'Sabit Oranlı 1:1:1 Paket Resüsitasyonu & Acil Grup Seçimi (PROPPR / ATLS)',
+          targetRatio: 'Hedef Oran 1 : 1 : 1 (Örn: 4 Ü ES : 4 Ü TDP : 1 Havuz/Aferez Trombosit [~6 Ü random])',
+          emergencyUncrossmatched: 'Çapraz karşılaştırmasız acil durumda: Doğurganlık çağı kadınlarda (≤50 yaş) Rh(-) alloimmünizasyonu önlemek için 0 Rh(-); erkeklerde ve >50 yaş kadınlarda kan stoğunu korumak adına 0 Rh(+) ES + AB (veya düşük titreli A) TDP verilir; ilk kan örneği cross-match için derhal gönderilir.',
+          packages: [
+            {
+              packageName: 'Paket 1 (Acil Başlangıç)',
+              contents: '4–6 Ünite ES (0 Rh-/+) + 4–6 Ünite TDP (AB) + 1 Havuz/Aferez Trombosit',
+              antifibrinolyticOrCalcium: 'TXA 1 g IV (10 dk) + %10 CaCl₂ 10 mL (4. ünite sonrası)',
+              clinicalNote: 'İlk 15 dakikada ısıtıcıdan hızlı infüzyon; bazal ROTEM/TEG ve AKG örneği alınır.'
+            },
+            {
+              packageName: 'Paket 2 (Dengeli Devam)',
+              contents: '4–6 Ünite Gruba Özgü ES + 4–6 Ünite TDP + 1 Havuz Trombosit + Kriyopresipitat / Fibrinojen',
+              antifibrinolyticOrCalcium: 'TXA 1 g / 8 sa infüzyon + %10 CaCl₂ 10 mL (iCa²⁺ <1.1 mmol/L ise)',
+              clinicalNote: 'Gruba özgü ürüne geçilir; fibrinojen <1.5-2.0 g/L ise erken replasman eklenir.'
+            },
+            {
+              packageName: 'Paket 3+ (ROTEM / TEG Hedefli)',
+              contents: 'Viskoelastik Test & Lab Sonuçlarına Göre Bireyselleştirilmiş ES : TDP : PLT : Fibrinojen',
+              antifibrinolyticOrCalcium: 'Seri iCa²⁺ (>1.1 mmol/L), K⁺ (<5.5 mEq/L) ve Hiperfibrinoliz kontrolü',
+              clinicalNote: 'Cerrahi hemostaz sağlandığında gereksiz transfüzyondan kaçınmak için oranı lab/ROTEM belirler.'
+            }
+          ]
+        },
+        rotemTegGuidedHemostasis: {
+          title: 'Viskoelastik Test (ROTEM / TEG) & Konvansiyonel Lab Hedefli Hemostaz Algoritması',
+          principle: 'Avrupa Majör Travma ve ESAIC Kılavuzları (2023): İlk ampirik 1:1:1 paketten sonra, körlemesine plazma vermek yerine mümkün olan en kısa sürede ROTEM/TEG veya seri laboratuvar rehberliğinde hedefli faktör/fibrinojen tedavisine geçilmelidir.',
+          targets: [
+            {
+              parameter: '1. Fibrinojen Eksikliği (İlk Tükenen!)',
+              rotemThreshold: 'FIBTEM A5 < 10 mm (A10 < 12 mm)',
+              tegThreshold: 'TEG CFF MA < 14 mm (veya α-açısı < 53°)',
+              conventionalLab: 'Clauss Fibrinojen < 1.5 – 2.0 g/L (Obstetrikte < 2.0 g/L)',
+              treatment: 'Fibrinojen Konsantresi 2–4 g IV (30–50 mg/kg) VEYA Kriyopresipitat 10 Ü (2 havuz)',
+              priorityNote: 'En kritik erken hemostatik hedef! 1 g fibrinojen ~0.25-0.3 g/L yükseltir.'
+            },
+            {
+              parameter: '2. Faktör Eksikliği / Trombin Üretimi',
+              rotemThreshold: 'EXTEM CT > 80 sn (FIBTEM normalken)',
+              tegThreshold: 'TEG R zamanı > 10 dk (CKH-R > 10 dk)',
+              conventionalLab: 'INR / PT veya aPTT > 1.5 × normal üst sınırı',
+              treatment: 'TDP 15–20 mL/kg (4–6 Ü) VEYA 4-Faktör PCC 15–25 IU/kg (özellikle VKA/DOAK varsa)',
+              priorityNote: 'Heparin etkisi şüphesinde INTEM CT vs HEPTEM CT kıyası ile Protamin değerlendirilir.'
+            },
+            {
+              parameter: '3. Trombositopeni / Fonksiyon Bozukluğu',
+              rotemThreshold: 'EXTEM A5 < 35 mm (FIBTEM ≥ 10 mm iken)',
+              tegThreshold: 'TEG MA < 50 mm (CFF MA normalken)',
+              conventionalLab: 'Trombosit < 50.000/mm³ (TBI / CNS / Masif kanamada < 100.000/mm³)',
+              treatment: '1 Aferez Trombosit veya 1 Havuz (4–6 Ü Random) Trombosit Süspansiyonu',
+              priorityNote: 'Antiplatelet kullanan TBI/masif kanama hastasında erken verilebilir.'
+            },
+            {
+              parameter: '4. Hiperfibrinoliz',
+              rotemThreshold: 'EXTEM / INTEM ML > %15 (APTEM ile düzelir)',
+              tegThreshold: 'TEG LY30 > %3 (EPL > %15)',
+              conventionalLab: 'D-dimer aşırı yüksek / Pıhtı erimesi',
+              treatment: 'TXA 1 g IV bolus + infüzyon tamamlama (≤3 saat penceresindeyse)',
+              priorityNote: 'APTEM\'de CT/A5/ML düzelmesi hiperfibrinolizi kesinleştirir.'
+            },
+            {
+              parameter: '5. Oksijen Taşıma Kapasitesi (Eritrosit)',
+              rotemThreshold: 'Viskoelastik testler Hb ölçmez (AKG/CBC gerekir)',
+              tegThreshold: 'Viskoelastik testler Hct ölçmez',
+              conventionalLab: 'Hedef Hemoglobin (Hb) 7.0 – 9.0 g/dL',
+              treatment: 'Eritrosit Süspansiyonu (ES); Hb > 10 g/dL üzerine gereksiz zorlanmaz',
+              priorityNote: 'Hematokrit %24-27 düzeyi trombosit marjinasyonu ve pıhtı stabilitesi için de destekleyicidir.'
+            }
+          ]
+        },
+        pharmacotherapyAndElectrolytes: {
+          title: 'Kritik Farmakoterapi & Elektrolit Replasmanı Protokolü',
+          agents: [
+            {
+              agent: 'Traneksamik Asit (TXA)',
+              dosage: '1 g IV (100 mL SF içinde 10 dk) + 1 g 8 saatte IV infüzyon',
+              timingWindow: '≤ 3 SAAT İÇİNDE (En yüksek fayda ilk 1 saatte!)',
+              mechanismAndPearls: 'Plazminojenin fibrine bağlanmasını bloke eder. 3 saatten sonra başlanması travmada mortaliteyi artırabilir. Yüksek doz (>4 g) nöbet riskini artırır.'
+            },
+            {
+              agent: '%10 Kalsiyum Klorür veya Glukonat',
+              dosage: 'CaCl₂ %10: 10 mL (1 g) SVK\'dan VEYA Ca Glukonat %10: 20–30 mL (2–3 g) periferik/SVK',
+              timingWindow: 'Her 4 Ü ES/TDP sonrası veya İyonize Ca²⁺ < 1.1 mmol/L (<0.9 acil)',
+              mechanismAndPearls: 'CaCl₂ periferik damarda nekroz yapabilir (mümkünse SVK); ancak eşit hacimde 3 kat daha fazla elementer Ca²⁺ (272 mg vs 93 mg) sağlar ve karaciğer metabolizması gerektirmez.'
+            },
+            {
+              agent: 'Fibrinojen Konsantresi / Kriyopresipitat',
+              dosage: 'Fibrinojen: 2–4 g IV (30–50 mg/kg) VEYA Kriyopresipitat: 10 Ü (~2–3 g fibrinojen)',
+              timingWindow: 'FIBTEM A5 < 10 mm veya Fibrinojen < 1.5–2.0 g/L',
+              mechanismAndPearls: 'TDP içinde fibrinojen konsantrasyonu düşüktür (~2 g/L); tek başına TDP ile fibrinojeni yükseltmek volüm yüklenmesine yol açar.'
+            },
+            {
+              agent: '4-Faktör PCC (Protrombin Kompleks Kons.)',
+              dosage: '25–50 IU/kg IV (Varfarin tersine çevirmede) veya 15–25 IU/kg (EXTEM CT > 80 sn)',
+              timingWindow: 'VKA/DOAK ilişkili kanama veya plazmaya rağmen uzamış EXTEM CT',
+              mechanismAndPearls: 'Faktör II, VII, IX, X + Protein C/S içerir. Heparin/AT3 eksikliğinde tromboemboli riski nedeniyle mutlaka fibrinojen düzeyi yeterli olduktan sonra verilmelidir.'
+            },
+            {
+              agent: 'Rekombinant Faktör VIIa (rFVIIa - Son Çare)',
+              dosage: '90 mcg/kg IV (yalnızca pH ≥ 7.20, Isı ≥ 35°C, PLT ≥ 50k, Fib ≥ 1.5 g/L ise)',
+              timingWindow: 'Cerrahi/MTP\'ye tamamen dirençli salvaj kanama',
+              mechanismAndPearls: 'Rutin kullanımı önerilmez; asidoz (pH < 7.1) ve hipotermi ortamında rFVIIa tamamen etkisiz kalır ve arteriyel tromboz riskini artırır.'
+            }
+          ]
+        },
+        lethalDiamondAndPhysiologicTargets: {
+          title: 'Ölümcül Dörtlü (Lethal Diamond) Kırılması & Hemodinamik Hedefler',
+          permissiveHypotension: 'Cerrahi/radyolojik kanama kontrolü sağlanana dek hedef SKB 80–90 mmHg (MAP 50–65 mmHg). Yüksek tansiyon taze pıhtıyı yerinden atarak ("pop the clot") kanamayı artırır.',
+          tbiExceptionAlert: 'KRİTİK İSTİSNA — TRAVMATİK BEYİN HASARI (TBI) veya SPİNAL KORD YARALANMASI VARSA: Permisif hipotansiyon KONTRENDİKEDİR! İkincil beyin hasarını önlemek için MAP ≥ 80 mmHg (SKB ≥ 100–110 mmHg) hedeflenmelidir.',
+          targets: [
+            {
+              axis: '1. Hipotermi Önleme',
+              targetValue: 'Çekirdek Isı ≥ 36.0°C (Minimum > 35.0°C)',
+              intervention: 'Level 1/Belmont kan ısıtıcısı, Bair Hugger, oda ısısı ≥24°C, ıslak örtülerin değişimi',
+              pathophysiologyRisk: '<34°C\'de faktör enzim aktivitesi %50 düşer ve trombosit adezyonu (GP Ib/vWF) felç olur.'
+            },
+            {
+              axis: '2. Asidoz & Perfüzyon',
+              targetValue: 'pH > 7.20 · Laktat düşüş trendi · BE > -6 mEq/L',
+              intervention: 'Asıl tedavi kan/volüm ve doku perfüzyonudur; pH < 7.10 ise ventilasyon ve geçici NaHCO₃ destek',
+              pathophysiologyRisk: 'pH ≤ 7.20 düzeyinde FVIIa/TF kompleksi aktivitesi %90, trombin üretimi %50 azalır.'
+            },
+            {
+              axis: '3. Hipokalsemi Kontrolü',
+              targetValue: 'İyonize Ca²⁺ > 1.1 mmol/L (1.1 – 1.3 mmol/L)',
+              intervention: 'Her 4 Ü kan ürününde CaCl₂ 1 g veya Ca Glukonat 2-3 g IV profilaksi + seri AKG',
+              pathophysiologyRisk: 'Faktör II, VII, IX, X aktivasyonu ve fibrin polimerizasyonu Ca²⁺ bağımlıdır; kalp kontraktilitesi çöker.'
+            },
+            {
+              axis: '4. Hiperkalemi Yönetimi',
+              targetValue: 'Serum K⁺ < 5.5 mEq/L',
+              intervention: 'Taze ES (<14 gün) tercihi, CaCl₂ (membran stabilizasyonu), İnsülin-Dekstroz, hızlı SVK infüzyonunda yavaşlatma',
+              pathophysiologyRisk: 'Eski banka kanında ekstraselüler K⁺ >20-30 mEq/L olabilir; hızlı infüzyonda hiperkalemik arrest yapar.'
+            }
+          ]
+        }
+      }
+    },
+
+    // 5) Patofizyoloji
+    pathophysiology: {
+      molecularBasis: 'Akut masif hemoraji; sadece intravasküler hacim ve hemoglobin kaybı değildir. Erken dönemde travma/doku hasarı ve hipoperfüzyona bağlı endotelyal glikokaliks dökülmesi (endotelyopati), Protein C aktivasyonu (Faktör V ve VIII yıkımı) ve hiperfibrinoliz ile "Travma-İlişkili Koagülopati (TIC)" gelişir. Eşzamanlı masif kristaloid/ES verilmesi ve sitrat birikimi ise dilüsyonel koagülopatiyi tetikleyerek Ölümcül Dörtlü (Lethal Diamond) kısır döngüsünü oluşturur.',
+      stepsTitle: 'Ölümcül Dörtlü (Lethal Diamond) Kısır Döngüsü',
+      flowType: 'vicious-cycle',
+      cycleWarning: 'Bu dört fizyolojik çöküş birbirini logaritmik olarak besler; döngü ısıtma, 1:1:1 transfüzyon, kalsiyum ve pH düzeltmesiyle eşzamanlı kırılmadıkça cerrahi sütürler dahi pıhtı tutamaz!',
+      cascadeSteps: [
+        {
+          phase: '1. Hipoperfüzyon & Metabolik Asidoz',
+          mechanism: 'Azalmış doku oksijen sunumu anaerobik metabolizmayı ve laktik asidozu tetikler. pH < 7.20 seviyesine indiğinde FVIIa ve protrombinaz kompleksi aktivitesi dramatik şekilde çöker.',
+          badge: 'ASİDOZ (pH < 7.20)'
+        },
+        {
+          phase: '2. Hipotermi (< 35°C)',
+          mechanism: 'Soğuk banka kanı (+4°C), açık vücut boşlukları ve şok ısı üretimini durdurur. Her 1°C düşüş pıhtılaşma faktörü enzimatik hızını %10 yavaşlatır ve trombosit aktivasyonunu bozar.',
+          badge: 'HİPOTERMİ (< 35°C)'
+        },
+        {
+          phase: '3. Sitrat Toksisitesi & Hipokalsemi',
+          mechanism: 'Karaciğer hipoperfüze ve soğukken banka kanındaki sitratı metabolize edemez. Serbest iCa²⁺ hızla bağlanır; Faktör IV (Ca²⁺) eksikliği koagülasyonu kilitler ve miyokardiyumu deprese eder.',
+          badge: 'HİPOKALSEMİ (iCa²⁺ < 1.1)'
+        },
+        {
+          phase: '4. TIC, Hiperfibrinoliz & Dilüsyon',
+          mechanism: 'Endotelyal tPA salınımı, fibrinojen tükenmesi ve aşırı kristaloidle faktör dilüsyonu pıhtı oluşumunu tamamen durdurarak daha fazla kanamaya yol açar.',
+          badge: 'KOAGÜLOPATİ (TIC)'
+        }
+      ],
+      summaryText: 'Masif transfüzyonda amaç yalnızca kan basıncını yükseltmek değil; Ölümcül Dörtlü\'yü (Asidoz, Hipotermi, Hipokalsemi, Koagülopati) eşzamanlı bloke ederek endotel hasarını sınırlamak ve stabil bir fibrin-trombosit tıkacı oluşturmaktır.'
+    },
+
+    // 6) Klinik Özellikler & Prezentasyon
+    presentation: {
+      earlySigns: [
+        'Daralmış nabız basıncı ve açıklanamayan sinüs taşikardisi (>100-120/dk; beta-bloker altındaki hastada gizlenebilir)',
+        'İnvaziv arter trasesinde belirgin solunumsal dalgalanma (PPV / SVV > %13-15) ve vazopresör ihtiyacının hızla artması',
+        'Cerrahi alanda sızma tarzında diffüz kapiller kanama başlangıcı (mikrovasküler kanama — erken koagülopati işareti)',
+        'EtCO2 değerinde progresif düşüş (azalmış kardiyak debi ve pulmoner perfüzyon yansıması)'
+      ],
+      progressingSigns: [
+        'İnatçı hipotansiyon (SKB < 80-90 mmHg), soğuk-nemli ekstremiteler ve kapiller dolum zamanında uzama (>3 sn)',
+        'Oligüri (<0.5 mL/kg/saat) veya anüri gelişimi',
+        'Kan gazında baz açığının derinleşmesi (BE < -6 mEq/L), laktat tırmanışı (>4 mmol/L) ve iCa²⁺ < 1.0 mmol/L düşüşü',
+        'Çekirdek sıcaklığının <35.5°C altına düşmesi ve EKG\'de QTc uzaması (hipokalsemi) / sivri T dalgaları (hiperkalemi)'
+      ],
+      lateSigns: [
+        'Cerrahi yatakta hiç pıhtı oluşmaması (ağır tüketim / dilüsyonel koagülopati, fibrinojen < 1.0 g/L)',
+        'Derin refrakter bradikardi, geniş QRS ve hiperkalemik/hipokalsemik PEA veya asistoli',
+        'Ağır asidemi (pH < 7.0) ve rFVIIa dahil tüm hemodinamik/hemostatik manevralara yanıtsızlık'
+      ],
+      specialAlertTitle: 'Yalancı Normal Hemoglobin & Beta-Bloker Tuzağına Düşmeyin!',
+      specialAlertContent: 'Akut hızlı kanamada plazma ve eritrositler eşit oranda kaybedildiği için ilk saatteki Hemoglobin/Hematokrit değeri tamamen NORMAL (12-13 g/dL) çıkabilir; Hb yalnızca interstisyel sıvı geçişi veya IV kristaloid verildikten sonra düşer. Benzer şekilde beta-bloker kullanan veya yaşlı hastalarda taşikardi gelişmeden ani hipotansif çöküş görülebilir!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Yüksek kanama riskli cerrahilerde (revizyon kalça/omurga, plasenta akreata, majör hepatik/vasküler, travma) ameliyat öncesi Type & Screen + aktif Cross-Match tamamlanmış ve ≥2 geniş lümenli (14G-16G) IV erişim planlanmış olmalıdır.',
+        'Preoperatif anemi (WHO: Kadın <12, Erkek <13 g/dL) ve demir eksikliği elektif vakalarda IV demir ile önceden düzeltilmeli; antikoagülan/antiplatelet kesilme süreleri (DOAK 48-72 sa, Klopidogrel 5 gün) doğrulanmalıdır.',
+        'Hasta kan yönetimi (PBM) kapsamında normotermi, antifibrinolitik profilaksi ve uygun olgularda Cell-Saver kurulumu vaka başlamadan hazır edilmelidir.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Yüksek Riskli Vaka & Ameliyathane Hızlı Transfüzyon Hazırlık Protokolü',
+        steps: [
+          'Hızlı Kan Isıtıcısı (Belmont Rapid Infuser veya Level 1) odaya alınmalı, steril seti primerlenmeye hazır bulundurulmalıdır.',
+          'İnvaziv arter kanülasyonu (PPV/SVV ve seri AKG/iCa²⁺/ROTEM takibi için) ve 2 adet geniş kısa IV kanül (14G-16G) veya yüksek akımlı introducer indüksiyon çevresinde açılmalıdır.',
+          'Kan merkezi ile vaka öncesi hasta kan grubu, antikor taraması (IAT) ve kurumsal MTP telefon/pnömatik tüp hattı teyit edilmelidir.',
+          'Traneksamik Asit (2 g), %10 Kalsiyum Klorür/Glukonat ampulleri ve Noradrenalin infüzyonu anestezik masasında etiketli hazır tutulmalıdır.'
+        ]
+      },
+      cartTitle: 'Masif Transfüzyon Protokolü (MTP) Ameliyathane Acil Donanım Listesi:',
+      cartChecklist: [
+        'Yüksek Akımlı Kan & Sıvı Isıtıcı (Level 1 / Belmont — 38-40°C, 500-750 mL/dk kapasite)',
+        'En Az 2 Adet Kısa-Geniş IV Kanül (14G Turuncu / 16G Gri) + 8.5 Fr Hızlı İnfüzyon Santral Kateteri (MAC)',
+        'Basınçlı İnfüzyon Manşonları (300 mmHg basınç torbaları, yedekli)',
+        'Traneksamik Asit (TXA 500 mg/5 mL veya 250 mg/2.5 mL ampuller — toplam 2 g)',
+        '%10 Kalsiyum Klorür (10 mL) ve %10 Kalsiyum Glukonat (10 mL x 4 ampul)',
+        'Fibrinojen Konsantresi (1 g flakonlar) veya Kriyopresipitat erişimi + 4-Faktör PCC',
+        'ROTEM / TEG Viskoelastik Test Tüpleri (Sitratlı mavi kapak) + AKG/Hemogram/Cross-Match tüpleri',
+        'Aktif Hasta Isıtıcı (Üst/Alt Bair Hugger zorunlu sıcak hava battaniyesi) + Özofageal/Mesane Isı Probu',
+        'İnvaziv Arteriyel Monitörizasyon Seti + İdrar Sondası (saatlik diürez takibi) + POCUS'
+      ]
+    },
+
+    // 8) Postoperatif Takip & Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'Masif transfüzyon uygulanan tüm hastalar postoperatif dönemde yoğun bakım ünitesinde (YBÜ) en az 24–48 saat mekanik ventilasyon, invaziv hemodinamik monitörizasyon ve seri hemostaz takibi altında izlenmelidir.',
+      recurrenceRate: 'İlk hemostaz sağlansa dahi hastaların %15-25\'inde ilk 6-12 saat içinde hipoterminin düzelmesiyle vazodilatasyon ("re-warming shock") veya gizli cerrahi sızıntı sonucu yeniden kanama görülebilir.',
+      recurrenceRiskBadge: 'RE-WARMING ŞOK & GEÇ KANAMA RİSKİ',
+      maintenanceTherapy: 'YBÜ\'de hemodinamik stabilizasyon (MAP ≥ 65 mmHg), laktat klirensi (<2 mmol/L), normotermi (≥36.0°C) ve hedefli koagülasyon idamesi sağlanır. Aktif kanama tamamen durup koagülopati düzeldikten sonraki ilk 24 saat içinde tromboembolik risk (DVT/PE) nedeniyle mekanik (IPC) ve ardından farmakolojik tromboprofilaksi (DMAH) başlatılmalıdır.',
+      monitoringParameters: [
+        'Saatlik dren ve yara pansumanı çıkışı + karın içi basınç (İAB) ölçümü (Abdominal Kompartman Sendromu taraması)',
+        'Seri Kan Gazı (2-4 saatte bir): pH, baz açığı, laktat, iyonize Ca²⁺, K⁺ ve Hemoglobin',
+        'ROTEM / TEG, Trombosit, Clauss Fibrinojen, INR ve aPTT kontrolü',
+        'Saatlik idrar çıkışı (≥ 0.5 mL/kg/sa), Kreatinin ve Rabdomiyoliz/Hemoliz belirteçleri',
+        'Solunum mekaniği, PaO₂/FiO₂ oranı ve akciğer grafisi (TACO / TRALI ayırımı)',
+        'Santral venöz basınç / POCUS IVC & kardiyak doluş (aşırı sıvı yüklenmesi kontrolü)'
+      ],
+      expectedComplications: [
+        'TACO (Transfüzyon İlişkili Dolaşım Yüklenmesi) — En sık transfüzyon ilişkili mortalite nedeni',
+        'TRALI (Transfüzyon İlişkili Akut Akciğer Hasarı) — İnfüzyondan ilk 6 saat içinde non-kardiyojenik pulmoner ödem',
+        'Hiperkalemi & Sitrat Toksisitesi (Aritmi, QT uzaması, hipomagnezemi)',
+        'Abdominal Kompartman Sendromu (masif resüsitasyon sonrası mezenter/bağırsak ödemi)',
+        'Akut Böbrek Hasarı (AKI), ARDS ve Çoklu Organ Yetmezliği (MODS)',
+        'Geç Dönem Venöz Tromboemboli (DVT / Pulmoner Emboli — koagülasyon rebound\'u)'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: 'Tekrarlayan ROTEM / TEG & Hemostaz Paneli', description: 'Postoperatif 1., 6. ve 12. saatlerde rezidüel fibrinoliz veya tüketim koagülopatisi kontrolü.' },
+        { testName: 'Akciğer Grafisi & BNP / POCUS Akciğer', description: 'Post-transfüzyon hipoksemi gelişirse TACO (hidrostatik yüklenme — diüretik yanıtlı) ile TRALI (permeabilite ödemi — destek tedavisi) ayrımı.' },
+        { testName: 'Direct Antiglobulin Test (DAT / Coombs) & Hemoliz Paneli', description: 'Acil O Rh(+/-) veya yüksek hacimli transfüzyon sonrası akut/geç hemolitik reaksiyon dışlanması.' }
+      ],
+      prognosisSummary: 'MTP\'nin zamanında aktive edilmesi, sabit 1:1:1 dengeli paket kullanımı, ilk 3 saatte TXA verilmesi, kalsiyum ve normoterminin agresif korunması; koagülopatiyi ve çoklu organ yetmezliğini önleyerek sağkalımı dramatik biçimde artırır. Kanama durduğunda aşırı transfüzyondan kaçınmak TACO ve ARDS insidansını belirgin azaltır.'
+    },
+
+    // 9) High-Yield Klinik Bilgiler
+    highYieldPearls: [
+      {
+        title: 'İki Geniş Kısa Branül, Standart 3 Lümenli SVK\'yı Ezer!',
+        takeaway: 'Poiseuille Yasasına göre akım yarıçapın 4. kuvvetiyle doğru, uzunlukla ters orantılıdır (r⁴/L). 20 cm uzunluğundaki standart 3 lümenli SVK\'nın 18G/16G lümenleri, kısa 14G-16G periferik kanüllerden veya 8.5 Fr MAC introducer\'dan katbekat yavaştır!',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'TXA İçin 3 Saat Kuralı — Geç Kalırsan Zarar Verir!',
+        takeaway: 'CRASH-2 çalışmasına göre Traneksamik Asit kanama başlangıcından ilk 1 saatte verilirse kanamaya bağlı ölümü %32 azaltır; 1-3 saatte %21 azaltır; ancak >3 saat sonra başlanırsa mortaliteyi ARTIRABİLİR!',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'İlk Tükenen Pıhtılaşma Faktörü: FİBRİNOJEN',
+        takeaway: 'Masif kanamada klasik INR/aPTT uzamadan çok önce kritik düzeye (<1.5-2.0 g/L) düşen ilk faktör Fibrinojendir. Sadece TDP vererek fibrinojeni yükseltmek çok fazla volüm gerektirir; FIBTEM A5 < 10 mm ise 2-4 g Fibrinojen Konsantresi veya Kriyopresipitat verin!',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'Ölümcül Üçlü Artık "Ölümcül Dörtlü" (Hipokalsemi!)',
+        takeaway: 'Hipotermi + Asidoz + Koagülopati üçlüsünün yanına HİPOKALSEMİ eklenmiştir. Banka kanındaki sitrat serbest kalsiyumu bağladığı için kalsiyum vermeden döktüğünüz hiçbir pıhtılaşma faktörü ve TDP tam pıhtı oluşturamaz!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Permisif Hipotansiyonun Tek Büyük Yasağı: TBI!',
+        takeaway: 'Kontrolsüz hemorajide SKB 80-90 mmHg (MAP 50-65 mmHg) pıhtıyı korur; ANCAK eşlik eden Travmatik Beyin Hasarı (TBI) veya spinal travma varsa düşük tansiyon beyni öldürür — mutlaka MAP ≥ 80 mmHg hedefleyin!',
+        category: 'Tuzak'
+      }
+    ],
+
+    // 10) Kanıta Dayalı Kaynaklar
+    references: [
+      {
+        authors: 'Rossaint R, Afshari A, Bouillon B, Cerny V, Cimpoesu D, Curry N, et al.',
+        title: 'The European guideline on management of major bleeding and coagulopathy following trauma: sixth edition.',
+        journal: 'Critical Care. 2023;27(1):80.',
+        year: '2023',
+        relevance: 'Güncel Avrupa majör kanama ve koagülopati kılavuzu: permisif hipotansiyon, TBI MAP ≥80 mmHg, TXA zamanlaması, ROTEM/TEG hedefli fibrinojen, PCC ve Ca²⁺ yönetimi.'
+      },
+      {
+        authors: 'Kietaibl S, Ahmed A, Afshari A, Albaladejo P, Aldecoa C, Barauskas G, et al.',
+        title: 'Management of severe peri-operative bleeding: Guidelines from the European Society of Anaesthesiology and Intensive Care (ESAIC) — Second update 2022.',
+        journal: 'European Journal of Anaesthesiology. 2023;40(4):226-304.',
+        year: '2023',
+        relevance: 'Perioperatif masif hemoraji, viskoelastik hemostatik test rehberliği, obstetrik/kardiyak/hepatik kanama ve antifibrinolitik kılavuzu.'
+      },
+      {
+        authors: 'Holcomb JB, Tilley BC, Baraniuk S, Fox EE, Wade CE, Podbielski JM, et al. (PROPPR Study Group)',
+        title: 'Transfusion of plasma, platelets, and red blood cells in a 1:1:1 vs a 1:1:2 ratio and mortality in patients with severe trauma: the PROPPR randomized clinical trial.',
+        journal: 'JAMA. 2015;313(5):471-482.',
+        year: '2015',
+        relevance: 'Masif transfüzyonda 1:1:1 dengeli oranının ilk 24 saatteki eksanguinasyon mortalitesini azaltması ve daha yüksek hemostaz başarısı kanıtı.'
+      },
+      {
+        authors: 'CRASH-2 Trial Collaborators (Shakur H, Roberts I, et al.) & WOMAN Trial Collaborators',
+        title: 'Effects of tranexamic acid on death, vascular occlusive events, and blood transfusion in trauma patients with significant haemorrhage (CRASH-2) & Effect of early tranexamic acid administration in postpartum haemorrhage (WOMAN).',
+        journal: 'Lancet. 2010;376(9734):23-32 & Lancet. 2017;389(10084):2105-2116.',
+        year: '2010 / 2017',
+        relevance: 'İlk 3 saat içinde uygulanan Traneksamik Asit (TXA 1 g + 1 g) tedavisinin sağkalım faydası ve 3 saat sonrası riskleri.'
+      },
+      {
+        authors: 'American Society of Anesthesiologists Task Force on Perioperative Blood Management & ACS ATLS Committee',
+        title: 'Practice Guidelines for Perioperative Blood Management & Advanced Trauma Life Support (ATLS) 10th Edition: Hemorrhagic Shock.',
+        journal: 'Anesthesiology. 2015;122(2):241-275 & ACS ATLS 10th Ed. (2018).',
+        year: '2015 / 2018',
+        relevance: 'Hemorajik şok sınıflaması, perioperatif transfüzyon eşikleri, sıcaklık koruma ve masif transfüzyon komplikasyon yönetimi.'
       }
     ]
   }

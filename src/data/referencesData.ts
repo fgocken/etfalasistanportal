@@ -160,7 +160,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     usedInModules: [
       'Vazoaktif Karar Matriksi',
       'Sistematik Prosedür Yönetimi',
-      'Anestezi Troubleshooting'
+      'Anestezi Acilleri'
     ],
     clinicalNote: 'Kardiyovasküler farmakoloji, adrenerjik reseptör fizyolojisi, laparoskopi ve ayaktan/genel cerrahi anestezi yönetimi.'
   },
@@ -174,7 +174,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     year: '2022',
     usedInModules: [
       'İntraoperatif Sıvı Yönetimi',
-      'Anestezi Troubleshooting',
+      'Anestezi Acilleri',
       'Temel İlaç Monografları'
     ],
     clinicalNote: 'İntraoperatif açlık açığı, 3. boşluk kayıpları, devre arızaları ve pratik ameliyathane içi problem çözme algoritmaları.'
@@ -478,6 +478,19 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
   // 3. HAVA YOLU YÖNETİMİ, ZOR ENTÜBASYON, ASPİRASYON & EKSTÜBASYON
   // =========================================================================
   {
+    id: 'airway-das-2025',
+    category: 'airway',
+    kind: 'Uluslararası Kılavuz',
+    authors: 'Ahmad I, El-Boghdadly K, Iliff H, Dua G, Higgs A, Huntington M, Mir F, Nouraei SAR, O\'Sullivan EP, Patel A, Rivett K, McNarry AF. (Difficult Airway Society).',
+    title: 'Difficult Airway Society 2025 guidelines for management of unanticipated difficult tracheal intubation in adults.',
+    publication: 'British Journal of Anaesthesia. 2026;136(1):283–307.',
+    year: '2026',
+    pmid: '41203471',
+    doi: '10.1016/j.bja.2025.10.006',
+    usedInModules: ['Klinik İnfografikler (Zor Havayolu & DAS 2025)', 'Havayolu Yönetimi'],
+    clinicalNote: 'Güncellenmiş DAS 2025 Plan A–D algoritması: primer/erken videolaringoskopi, kesintisiz oksijenasyon (HFNO), insan faktörleri ("Stop and Think"), SAD içinden kör entübasyon yasağı ve neşter-buji-tüp eFONA.'
+  },
+  {
     id: 'airway-das-2015',
     category: 'airway',
     kind: 'Uluslararası Kılavuz',
@@ -488,7 +501,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     pmid: '26556848',
     doi: '10.1093/bja/aev371',
     usedInModules: ['Anestezi Acilleri (CICO, Hava Yolu Obstrüksiyonu)', 'Klinik İnfografikler (RSI)'],
-    clinicalNote: 'Plan A–D zor entübasyon basamakları, 3+1 girişim sınırı ve Plan D acil neşter-buji-tüp krikotiroidotomi standardı.'
+    clinicalNote: 'Klasik Plan A–D zor entübasyon basamakları, 3+1 girişim sınırı ve Plan D acil neşter-buji-tüp krikotiroidotomi standardı.'
   },
   {
     id: 'airway-asa-2022',
@@ -582,6 +595,19 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     clinicalNote: 'Sellick manevrasının (krikoid bası) aspirasyonu önlemedeki kanıt düzeyi ve laringoskopi görüntüsünü bozma riski.'
   },
   {
+    id: 'airway-perlas-2014',
+    category: 'airway',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Van de Putte P, Perlas A.',
+    title: 'Ultrasound assessment of gastric content and volume.',
+    publication: 'British Journal of Anaesthesia. 2014;113(1):12–22.',
+    year: '2014',
+    pmid: '24950550',
+    doi: '10.1093/bja/aeu151',
+    usedInModules: ['Klinik İnfografikler (Gastrik USG Perlas 0–2)', 'Havayolu Yönetimi'],
+    clinicalNote: 'Perlas 0–2 kalitatif derecelendirme, RLD antral CSA formülü [27.0 + 14.6 × CSA_RLD − 1.28 × Yaş] ve ≥1.5 mL/kg yüksek aspirasyon riski eşik değeri.'
+  },
+  {
     id: 'airway-perlas-2016',
     category: 'airway',
     kind: 'Klinik İnceleme / Derleme',
@@ -591,8 +617,8 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     year: '2016',
     pmid: '25951832',
     doi: '10.1093/bja/aev113',
-    usedInModules: ['Anestezi Acilleri (Pulmoner Aspirasyon)'],
-    clinicalNote: 'Yatak başı gastrik ultrasonografi (GUS) ile antral içerik derecelendirmesi (Perlas Grade 0–2) ve aspirasyon risk tayini.'
+    usedInModules: ['Anestezi Acilleri (Pulmoner Aspirasyon)', 'Klinik İnfografikler (Gastrik USG Perlas 0–2)'],
+    clinicalNote: 'Yatak başı gastrik ultrasonografi (GUS) ile I-AIM tarama çerçevesi, antral içerik derecelendirmesi (Perlas Grade 0–2) ve aspirasyon risk tayini.'
   },
   {
     id: 'airway-larson-1998',
@@ -1287,6 +1313,56 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     clinicalNote: 'Prosedürel sedoanaljezide Ketofol kombinasyonunun tek başına propofole göre solunum depresyonu ve hipotansiyonu azalttığını gösteren meta-analiz.'
   },
   {
+    id: 'pharm-mapleson-mac-1996',
+    category: 'pharmacology',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Mapleson WW.',
+    title: 'Effect of age on MAC in humans: a meta-analysis.',
+    publication: 'British Journal of Anaesthesia. 1996;76(2):179–185.',
+    year: '1996',
+    pmid: '8777094',
+    usedInModules: ['Tedaviler (Sevofluran & Desfluran Protokolleri)'],
+    clinicalNote: 'Volatil anesteziklerde 40 yaş referanslı log-lineer yaşa bağlı MAC düşüş denklemi (~%6/dekat).'
+  },
+  {
+    id: 'pharm-lerman-sevoflurane-1994',
+    category: 'pharmacology',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Lerman J, Sikich N, Kleinman S, Yentis S.',
+    title: 'The pharmacology of sevoflurane in infants and children.',
+    publication: 'Anesthesiology. 1994;80(4):814–824.',
+    year: '1994',
+    pmid: '8024136',
+    doi: '10.1097/00000542-199404000-00014',
+    usedInModules: ['Tedaviler (Sevofluran Protokolü)'],
+    clinicalNote: 'Yenidoğan (%3.3), süt çocuğu (%3.2) ve çocuklarda Sevofluran MAC değerleri ile inhalasyon indüksiyonu farmakolojisi.'
+  },
+  {
+    id: 'pharm-ebert-desflurane-1993',
+    category: 'pharmacology',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Ebert TJ, Muzi M.',
+    title: 'Sympathetic hyperactivity during desflurane anesthesia in healthy volunteers. A comparison with isoflurane.',
+    publication: 'Anesthesiology. 1993;79(3):444–453.',
+    year: '1993',
+    pmid: '8363068',
+    usedInModules: ['Tedaviler (Desfluran Protokolü)'],
+    clinicalNote: 'Desfluranın >1 MAC hızlı artışlarında sempatik sinir aktivitesini ~2.5 kat artırarak taşikardi ve hipertansiyon oluşturması.'
+  },
+  {
+    id: 'pharm-fang-desflurane-co-1995',
+    category: 'pharmacology',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Fang ZX, Eger EI 2nd, Laster MJ, Chortkoff BS, Kandel L, Ionescu P.',
+    title: 'Carbon monoxide production from degradation of desflurane, enflurane, isoflurane, halothane, and sevoflurane by soda lime and Baralyme.',
+    publication: 'Anesthesia & Analgesia. 1995;80(6):1187–1193.',
+    year: '1995',
+    pmid: '7762850',
+    doi: '10.1097/00000539-199506000-00021',
+    usedInModules: ['Tedaviler (Desfluran Protokolü)', 'İntraoperatif Hipoksemi'],
+    clinicalNote: 'Kurumuş soda lime/Baralyme ile Desfluranın en yüksek miktarda karbonmonoksit (CO) ürettiğini kanıtlayan çalışma.'
+  },
+  {
     id: 'pharm-drugs-medscape-interactions',
     category: 'pharmacology',
     kind: 'Klinik İnceleme / Derleme',
@@ -1671,7 +1747,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     year: '2023',
     pmid: '36520073',
     doi: '10.1097/ALN.0000000000004379',
-    usedInModules: ['Anestezi Troubleshooting', 'Sistematik Prosedürler', 'Anestezi Acilleri'],
+    usedInModules: ['Sistematik Prosedürler', 'Anestezi Acilleri'],
     clinicalNote: 'Kantitatif TOF monitörizasyonu zorunluluğu ve ekstübasyon öncesi rezidüel blokajı dışlamak için TOF oranı ≥ 0.90 hedefi.'
   }
 ];

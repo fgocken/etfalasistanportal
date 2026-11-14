@@ -23,6 +23,8 @@ import { RSIvsElectiveInfographic } from './RSIvsElectiveInfographic';
 import { VasoactiveDecisionMatrixInfographic } from './VasoactiveDecisionMatrixInfographic';
 import { FluidManagementStrategiesInfographic } from './FluidManagementStrategiesInfographic';
 import { IvAccessInfographic } from './IvAccessInfographic';
+import { DifficultAirwayDASInfographic } from './DifficultAirwayDASInfographic';
+import { GastricUsgPerlasInfographic } from './GastricUsgPerlasInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -94,6 +96,40 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Kanıt Düzeyi', rate: 'SSC / ESC', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
     ],
     accentColor: 'indigo'
+  },
+  {
+    id: 'difficult-airway-das',
+    title: 'Zor Havayolu & DAS 2025 Plan A–D Algoritması',
+    source: 'DAS 2025 (BJA) · ASA 2022 · MACOCHA & LEMON',
+    sourceBadge: 'DAS 2025',
+    category: 'Havayolu & Kriz Yönetimi',
+    shortDesc: 'Zor havayolu alt tanımları, interaktif LEMON/Mallampati/MACOCHA skorlayıcısı, MOANS/RODS/SHORT ve adım adım DAS 2025 Plan A–D (eFONA) simülatörü.',
+    pillsHeader: 'DAS 2025 Kriz Basamakları:',
+    publisher: 'British Journal of Anaesthesia / ASA',
+    riskPills: [
+      { label: 'Plan A (VL)', rate: '3+1 Deneme', colorClass: 'text-cyan-600 dark:text-cyan-400', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' },
+      { label: 'Plan B (SAD)', rate: 'Maks 3', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Plan C (Maske)', rate: 'Uyandır', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Plan D (eFONA)', rate: 'Neşter-Buji', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'teal'
+  },
+  {
+    id: 'gastric-usg-perlas',
+    title: 'Gastrik USG (POCUS) & Perlas 0–2 Karar Destek',
+    source: 'Van de Putte & Perlas (BJA) · ASA 2023 GLP-1',
+    sourceBadge: 'Perlas 0–2',
+    category: 'Preop Açlık & Aspirasyon',
+    shortDesc: 'Yatak başı gastrik ultrasonografi (GUS) ile Perlas 0–2 evrelemesi, RLD antral kesit alanı (CSA), 1.5 mL/kg volüm hesabı ve aktif indüksiyon karar desteği.',
+    pillsHeader: 'Perlas Karar Eşikleri:',
+    publisher: 'Br J Anaesth / Anesth Analg',
+    riskPills: [
+      { label: 'Grade 0', rate: 'Boş Antrum', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Grade 1', rate: '< 1.5 mL/kg', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Grade 2', rate: '> 1.5 mL/kg', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Katı Gıda', rate: 'RSI / Ertele', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+    ],
+    accentColor: 'emerald'
   },
   {
     id: 'rsi-vs-elective',
@@ -461,6 +497,16 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
         <VasoactiveDecisionMatrixInfographic isDark={isDark} />
       )}
 
+      {/* VIEW: Difficult Airway & DAS 2025 Plan A-D Infographic */}
+      {activeInfographicId === 'difficult-airway-das' && (
+        <DifficultAirwayDASInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: Gastric USG Perlas 0-2 Decision Support Infographic */}
+      {activeInfographicId === 'gastric-usg-perlas' && (
+        <GastricUsgPerlasInfographic isDark={isDark} />
+      )}
+
       {/* VIEW 2A: RSI vs Elective Intubation Infographic */}
       {activeInfographicId === 'rsi-vs-elective' && (
         <RSIvsElectiveInfographic isDark={isDark} />
@@ -470,7 +516,8 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {activeInfographicId === 'adult-fasting' && (
         <AdultFastingInfographic 
           isDark={isDark} 
-          onOpenPediatric={() => setActiveInfographicId('pediatric-fasting')}
+          onOpenPediatric={() => handleSelectInfographic('pediatric-fasting')}
+          onOpenGastricUsg={() => handleSelectInfographic('gastric-usg-perlas')}
         />
       )}
 

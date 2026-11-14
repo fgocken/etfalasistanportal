@@ -11,18 +11,23 @@ import {
   BookOpen,
   CheckCircle2,
   Clock,
-  Footprints
+  Footprints,
+  Coffee,
+  Baby
 } from 'lucide-react';
 import { MaceCalculator } from './MaceCalculator';
 import { AsaClassification } from '../asa/AsaClassification';
 import { DasiCalculator } from './DasiCalculator';
+import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
+import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
 
 interface PreoperativeEvaluationProps {
   isDark: boolean;
   initialTool?: PreopToolId | null;
+  onOpenGastricUsg?: () => void;
 }
 
-export type PreopToolId = 'mace' | 'dasi' | 'asa';
+export type PreopToolId = 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting';
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -104,10 +109,52 @@ const PREOP_CARDS: PreopCardItem[] = [
       { label: 'Acil Eki', value: 'ASA-E Kriterleri', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
       { label: 'Geçerlilik', value: '2025/2026 Güncel', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' }
     ]
+  },
+  {
+    id: 'adult-fasting',
+    title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
+    badge: 'ASA 2023 · ESAIC',
+    category: 'Preop Açlık & Aspirasyon',
+    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez), GLP-1 agonistleri ve dolu mide kriterleri.',
+    icon: Coffee,
+    iconBgDark: 'bg-emerald-500/15',
+    iconBgLight: 'bg-emerald-50',
+    iconColorDark: 'text-emerald-400',
+    iconColorLight: 'text-emerald-600',
+    borderHoverDark: 'hover:border-emerald-500/40',
+    borderHoverLight: 'hover:border-emerald-400',
+    highlightsHeader: 'Açlık Pencereleri:',
+    highlights: [
+      { label: 'Berrak Sıvı', value: '2 Saat', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Hafif Öğün', value: '6 Saat', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Ağır / Et', value: '8 Saat', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Sakız', value: 'İptal Yok', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' }
+    ]
+  },
+  {
+    id: 'pediatric-fasting',
+    title: 'Pediatrik Preoperatif Açlık Kılavuzu (6 - 4 - 3 - 1 Kuralı)',
+    badge: 'ESAIC 2022 · ESPA',
+    category: 'Pediatri & Preop Açlık',
+    shortDesc: 'Çocuklarda dehidratasyon, hipoglisemi ve ajitasyonu önleyen modern 6-4-3-1 açlık standardı: Berrak sıvılar 1 sa, anne sütü 3 sa, mama 4 sa, katı 6 sa.',
+    icon: Baby,
+    iconBgDark: 'bg-amber-500/15',
+    iconBgLight: 'bg-amber-50',
+    iconColorDark: 'text-amber-400',
+    iconColorLight: 'text-amber-600',
+    borderHoverDark: 'hover:border-amber-500/40',
+    borderHoverLight: 'hover:border-amber-400',
+    highlightsHeader: 'Pediatrik 6-4-3-1:',
+    highlights: [
+      { label: 'Berrak Sıvı', value: '1 Saat', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Anne Sütü', value: '3 Saat', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Bebek Maması', value: '4 Saat', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Katı / İnek Sütü', value: '6 Saat', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' }
+    ]
   }
 ];
 
-export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ isDark, initialTool = null }) => {
+export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ isDark, initialTool = null, onOpenGastricUsg }) => {
   const [activeToolId, setActiveToolId] = useState<PreopToolId | null>(initialTool);
 
   useEffect(() => {
@@ -289,6 +336,21 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
         <div className="space-y-4">
           <AsaClassification isDark={isDark} />
         </div>
+      )}
+
+      {activeToolId === 'adult-fasting' && (
+        <AdultFastingInfographic
+          isDark={isDark}
+          onOpenPediatric={() => setActiveToolId('pediatric-fasting')}
+          onOpenGastricUsg={onOpenGastricUsg}
+        />
+      )}
+
+      {activeToolId === 'pediatric-fasting' && (
+        <PediatricFastingInfographic
+          isDark={isDark}
+          onOpenAdult={() => setActiveToolId('adult-fasting')}
+        />
       )}
 
     </div>

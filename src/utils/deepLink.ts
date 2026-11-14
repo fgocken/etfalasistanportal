@@ -18,8 +18,11 @@ export interface ParsedHashRoute {
 
 // Bilinen infografik kimlikleri
 export const VALID_INFOGRAPHIC_IDS = [
+  'iv-access',
   'fluid-management-strategies',
   'vasoactive-decision-matrix',
+  'difficult-airway-das',
+  'gastric-usg-perlas',
   'rsi-vs-elective',
   'adult-fasting',
   'pediatric-fasting',
@@ -49,7 +52,6 @@ export const VALID_TOOL_IDS = [
   'schedule',
   'icu',
   'procedures',
-  'troubleshooting',
   'ekt',
   'references'
 ] as const;
