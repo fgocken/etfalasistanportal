@@ -31,7 +31,8 @@ import {
   GlucoseUnit,
   LactateUnit,
   parseNum,
-  SeverityTone
+  SeverityTone,
+  UreaMode
 } from '../../utils/abgAnalysis';
 import { AbgAcidBaseMap } from './AbgAcidBaseMap';
 import { ShareLinkButton } from '../common/ShareLinkButton';
@@ -107,6 +108,7 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
     setInputs({ ...DEFAULT_ABG_INPUTS, ...preset.values });
     if (
       preset.values.glucose ||
+      preset.values.bun ||
       preset.values.hb ||
       preset.values.peep ||
       preset.values.urcl ||
@@ -146,6 +148,16 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
         ? String(Number((nextUnit === 'mmol/L' ? val / 18.018 : val * 18.018).toFixed(1)))
         : inputs.glucose;
     setInputs((prev) => ({ ...prev, glucoseUnit: nextUnit, glucose: converted }));
+  };
+
+  const handleUreaModeChange = (nextMode: UreaMode) => {
+    if (nextMode === inputs.ureaMode) return;
+    const val = parseNum(inputs.bun);
+    const converted =
+      val !== null
+        ? String(Number((nextMode === 'bun' ? val / 2.14 : val * 2.14).toFixed(1)))
+        : inputs.bun;
+    setInputs((prev) => ({ ...prev, ureaMode: nextMode, bun: converted }));
   };
 
   const handleCopyReport = async () => {
@@ -833,21 +845,48 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                   </div>
                 </div>
 
-                <div>
+                <div className="col-span-2">
                   <label className={labelTextClass} htmlFor="abg-bun">
-                    BUN (mg/dL)
+                    {inputs.ureaMode === 'urea' ? 'Üre (mg/dL)' : 'BUN — Kan Üre Azotu (mg/dL)'}
                   </label>
-                  <input
-                    id="abg-bun"
-                    type="number"
-                    step="1"
-                    placeholder="İsteğe bağlı"
-                    inputMode="decimal"
-                    value={inputs.bun}
-                    onChange={(e) => updateField('bun', e.target.value)}
-                    className={inputBaseClass}
-                  />
-                  <span className={helperTextClass}>7–20 mg/dL</span>
+                  <div className="flex gap-1.5">
+                    <input
+                      id="abg-bun"
+                      type="number"
+                      step="1"
+                      placeholder="İsteğe bağlı"
+                      inputMode="decimal"
+                      value={inputs.bun}
+                      onChange={(e) => updateField('bun', e.target.value)}
+                      className={inputBaseClass}
+                    />
+                    <select
+                      aria-label="Üre veya BUN seçimi"
+                      value={inputs.ureaMode}
+                      onChange={(e) => handleUreaModeChange(e.target.value as UreaMode)}
+                      className={`w-28 shrink-0 px-2 py-1.5 text-xs font-mono rounded-lg border ${
+                        isDark
+                          ? 'bg-slate-950/70 border-slate-700/80 text-slate-100'
+                          : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    >
+                      <option value="urea">Üre (mg/dL)</option>
+                      <option value="bun">BUN (mg/dL)</option>
+                    </select>
+                  </div>
+                  <span className={helperTextClass}>
+                    {(() => {
+                      const val = parseNum(inputs.bun);
+                      if (inputs.ureaMode === 'urea') {
+                        return val !== null
+                          ? `Normal: 15–43 mg/dL · BUN ≈ ${formatTr(val / 2.14, 1)} mg/dL`
+                          : 'Normal: 15–43 mg/dL (÷ 2,14 = BUN)';
+                      }
+                      return val !== null
+                        ? `Normal: 7–20 mg/dL · Üre ≈ ${formatTr(val * 2.14, 0)} mg/dL`
+                        : 'Normal: 7–20 mg/dL (× 2,14 = Üre)';
+                    })()}
+                  </span>
                 </div>
 
                 <div>
@@ -900,7 +939,7 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                   <span className={helperTextClass}>37,0 °C ref.</span>
                 </div>
 
-                <div className="col-span-2">
+                <div>
                   <label className={labelTextClass} htmlFor="abg-urcl">
                     İdrar Cl⁻ (mEq/L)
                   </label>
@@ -908,13 +947,13 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                     id="abg-urcl"
                     type="number"
                     step="1"
-                    placeholder="Metabolik alkalozda isteğe bağlı"
+                    placeholder="Alkalozda isteğe bağlı"
                     inputMode="decimal"
                     value={inputs.urcl}
                     onChange={(e) => updateField('urcl', e.target.value)}
                     className={inputBaseClass}
                   />
-                  <span className={helperTextClass}>&lt;20 klora yanıtlı · &gt;20 klora dirençli</span>
+                  <span className={helperTextClass}>&lt;20 yanıtlı · &gt;20 dirençli</span>
                 </div>
               </div>
             )}
@@ -1102,15 +1141,25 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                     isDark={isDark}
                   />
                 )}
-                {analysis.osmolalGap !== null && (
-                  <MetricTile
-                    label="Osmolal Gap"
-                    value={`${formatSignedTr(analysis.osmolalGap, 0)} mOsm/kg`}
-                    sub={`Hesap: ${formatTr(analysis.calcOsmolality!, 0)}`}
-                    tone={analysis.osmolalGap > 10 ? 'bad' : 'neutral'}
-                    isDark={isDark}
-                  />
-                )}
+                <MetricTile
+                  label="Osmolal Gap"
+                  value={
+                    analysis.osmolalGap !== null
+                      ? `${formatSignedTr(analysis.osmolalGap, 0)} mOsm/kg`
+                      : 'N/A'
+                  }
+                  sub={
+                    analysis.osmolalGap !== null
+                      ? `Hesap: ${formatTr(analysis.calcOsmolality!, 0)} mOsm/kg`
+                      : analysis.measuredOsm !== null
+                        ? 'Glukoz ve Üre/BUN gerekli'
+                        : analysis.calcOsmolality !== null
+                          ? `Hesap: ${formatTr(analysis.calcOsmolality, 0)} · Ölç. Osm. yok`
+                          : 'Ölçülen Osm. girilmedi'
+                  }
+                  tone={analysis.osmolalGap !== null && analysis.osmolalGap > 10 ? 'bad' : 'neutral'}
+                  isDark={isDark}
+                />
               </div>
 
               {/* 2B. Dedicated Anyon Açığı (Anion Gap) & Delta Analizi Panel */}
@@ -1874,6 +1923,39 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
               isDark={isDark}
             />
           </div>
+        </div>
+
+        {/* 9 - 10. Serum Osmolalitesi ve Osmolal Gap */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FootnoteCard
+            number="9"
+            title="Serum Osmolalitesi (Hesaplanan & Ölçülen)"
+            normalRange="275–295 mOsm/kg (Efektif tonisite: 275–290)"
+            definition="Plazma çözücü kilogramı başına düşen ozmotik aktif partikül yüküdür; başlıca bileşenleri Na⁺ (ve eşlik eden anyonlar), glukoz ve üredir."
+            significance="Hipo/hipertonik bozuklukları ve DKA/HHS hiperosmolar durumları izler. Üre hücre zarını serbestçe geçtiği için efektif tonisite hesabında (2×Na⁺ + Glukoz/18) yer almaz; ancak laboratuvarda ölçülen osmolaliteyle karşılaştırmak için toplam hesaplanan osmolaliteye mutlaka eklenir."
+            formula="Osm = 2×Na⁺ + (Glukoz ÷ 18) + (BUN ÷ 2,8)  |  Üre ile: (Üre ÷ 6) [BUN = Üre ÷ 2,14]"
+            interpretation={[
+              { range: '< 275 mOsm/kg', meaning: 'Hipoosmolalite (SIADH, su intoksikasyonu, gerçek hipotonik hiponatremi).' },
+              { range: '275–295 mOsm/kg', meaning: 'Normal fizyolojik serum osmolalitesi.' },
+              { range: '> 295 mOsm/kg', meaning: 'Hiperosmolalite (hipernatremi, DKA/HHS, üremi, mannitol/toksik alkol; >320 HHS eşiği).' }
+            ]}
+            isDark={isDark}
+          />
+
+          <FootnoteCard
+            number="10"
+            title="Osmolal Gap (Osmolal Açık)"
+            normalRange="< 10 mOsm/kg (−10 ile +10 mOsm/kg)"
+            definition="Ozmometre ile ölçülen gerçek serum osmolalitesinden formül ile hesaplanan serum osmolalitesinin çıkarılmasıyla elde edilen farktır."
+            significance="Nedeni açıklanamayan yüksek anyon açıklı metabolik asidozda (HAGMA) düşük molekül ağırlıklı, ölçülemeyen ozmotik aktif maddelerin (metanol, etilen glikol, izopropanol, etanol, propilen glikol, mannitol) taramasında kullanılır. Toksik alkoller organik asitlere metabolize oldukça Osmolal Gap düşerken Anyon Açığı yükselir."
+            formula="Osmolal Gap = Ölçülen Serum Osmolalitesi − Hesaplanan Osmolalite"
+            interpretation={[
+              { range: '≤ 10 mOsm/kg', meaning: 'Fizyolojik sınırda (ancak geç başvuran toksik alkol zehirlenmesini tek başına dışlamaz).' },
+              { range: '> 10 mOsm/kg', meaning: 'Ölçülemeyen ozmol şüphesi — etanol düzeyini değerlendirin; açıklamıyorsa toksik alkol/mannitol araştırın.' },
+              { range: '> 25 mOsm/kg', meaning: 'Metanol, etilen glikol, izopropanol veya yüksek doz mannitol açısından yüksek klinik olasılık.' }
+            ]}
+            isDark={isDark}
+          />
         </div>
       </section>
     </div>

@@ -1,6 +1,7 @@
 export type AlbuminUnit = 'g/dL' | 'g/L';
 export type LactateUnit = 'mmol/L' | 'mg/dL';
 export type GlucoseUnit = 'mg/dL' | 'mmol/L';
+export type UreaMode = 'urea' | 'bun';
 export type SampleType = 'abg' | 'vbg';
 export type RespChronicity = 'acute' | 'chronic';
 
@@ -26,6 +27,7 @@ export interface AbgInputValues {
   glucose: string;
   glucoseUnit: GlucoseUnit;
   bun: string;
+  ureaMode: UreaMode;
   measuredOsm: string;
   tempC: string;
   urcl: string;
@@ -61,6 +63,7 @@ export const DEFAULT_ABG_INPUTS: AbgInputValues = {
   glucose: '',
   glucoseUnit: 'mg/dL',
   bun: '',
+  ureaMode: 'urea',
   measuredOsm: '',
   tempC: '37.0',
   urcl: '',
@@ -93,7 +96,8 @@ export const ABG_PRESETS: AbgPreset[] = [
       fio2: '0.21',
       age: '28',
       glucose: '480',
-      bun: '26',
+      ureaMode: 'urea',
+      bun: '56',
       respChronicity: 'acute'
     }
   },
@@ -339,6 +343,7 @@ export interface AbgAnalysisResult {
   correctedCl: number | null;
   freeWaterNaEffect: number | null;
   calcOsmolality: number | null;
+  measuredOsm: number | null;
   osmolalGap: number | null;
   pfRatio: number | null;
   fio2Normalized: number | null;
@@ -428,6 +433,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
       correctedCl: null,
       freeWaterNaEffect: null,
       calcOsmolality: null,
+      measuredOsm: null,
       osmolalGap: null,
       pfRatio: null,
       fio2Normalized: null,
@@ -509,7 +515,8 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
   const peep = parseNum(input.peep);
   const hb = parseNum(input.hb);
   const sao2 = parseNum(input.sao2);
-  const bun = parseNum(input.bun);
+  const rawRenalN = parseNum(input.bun);
+  const bun = rawRenalN !== null ? (input.ureaMode === 'urea' ? rawRenalN / 2.14 : rawRenalN) : null;
   const measuredOsm = parseNum(input.measuredOsm);
   const tempC = parseNum(input.tempC);
   const urcl = parseNum(input.urcl);
@@ -713,9 +720,10 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     const corrPredictedHco3 = corrDeltaAg !== null ? hco3 + corrDeltaAg : null;
     const corrDeltaRatio = corrDeltaAg !== null && deltaHco3 > 0 ? corrDeltaAg / deltaHco3 : null;
 
+    const isHypoalbuminemic = albGL !== null && albGL < 35;
     const highRawAg = ag > 14;
     const highCorrAg = effectiveCag > 14;
-    const hiddenByHypoalbuminemia = !highRawAg && highCorrAg;
+    const hiddenByHypoalbuminemia = isHypoalbuminemic && !highRawAg && highCorrAg;
 
     let agInterpretation = '';
     if (!highCorrAg) {
@@ -735,7 +743,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
             : refRatio <= 2
               ? 'Saf yüksek anyon açıklı metabolik asidoz (HAGMA) ile uyumlu (1,0–2,0).'
               : 'Eşlik eden metabolik alkaloz veya kronik respiratuar asidoz kompanzasyonu mevcut (>2,0).';
-      agInterpretation = `${hiddenByHypoalbuminemia ? 'Dikkat: Düzeltilmemiş AG normal görünse de hipoalbüminemi nedeniyle albümin düzeltmeli AG yüksek (>14) saptandı! ' : ''}${ratioDesc}`;
+      agInterpretation = `${hiddenByHypoalbuminemia ? 'Dikkat: Albümin <3,5 g/dL (35 g/L) olduğu için düzeltilmemiş AG normal görünse de hipoalbüminemi nedeniyle albümin düzeltmeli AG yüksek (>14) saptandı! ' : ''}${ratioDesc}`;
     }
 
     anionGapAnalysis = {
@@ -762,7 +770,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
       title: `Anyon Açığı (AG): ${formatTr(ag)} mEq/L${albGL !== null ? ` · Albümin Düzeltmeli (Figge): ${formatTr(cag)} mEq/L` : ''}`,
       body: highAg
         ? `Düzeltilmiş AG > 14 mEq/L — ölçülemeyen anyon birikimi (HAGMA) saptandı.${agWithK !== null ? ` Potasyumlu AG: ${formatTr(agWithK)} mEq/L.` : ''}`
-        : `Normal sınırlar içinde (≤ 14 mEq/L).${albGL !== null && albGL < 32 ? ' Hipoalbüminemi nedeniyle düzeltilmiş değer özellikle önemlidir.' : ''}`
+        : `Normal sınırlar içinde (≤ 14 mEq/L).${isHypoalbuminemic ? ' Hipoalbüminemi (<3,5 g/dL) nedeniyle düzeltilmiş değer özellikle önemlidir.' : ''}`
     });
 
     if (highAg) {
@@ -839,7 +847,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
         stewartUnmeasured < -5
           ? ' Belirgin ölçülemeyen anyon (keton, üremi, salisilat veya toksik alkol) yükü araştırılmalıdır.'
           : ''
-      }${albEffect > 3 ? ' Hipoalbüminemi (alkalozlaştırıcı etki) metabolik asidozu kısmen maskeliyor olabilir.' : ''}`
+      }${albGL < 35 && albEffect > 2 ? ' Hipoalbüminemi (<3,5 g/dL; alkalozlaştırıcı etki) metabolik asidozu kısmen maskeliyor olabilir.' : ''}`
     });
   }
 
@@ -859,7 +867,19 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
             : 'Fizyolojik sınırda (< 10 mOsm/kg).'
         }`
       });
+    } else if (measuredOsm !== null) {
+      steps.push({
+        tone: 'neutral',
+        title: 'Osmolal Gap (Eksik Bileşen)',
+        body: 'Ölçülen osmolalite girildi; kesin Osmolal Gap hesabı için Glukoz ve Üre/BUN değerlerinin de girilmesi gerekir.'
+      });
     }
+  } else if (measuredOsm !== null) {
+    steps.push({
+      tone: 'neutral',
+      title: 'Osmolal Gap (Eksik Bileşen)',
+      body: 'Ölçülen osmolalite girildi; Osmolal Gap hesabı için Glukoz ve Üre/BUN değerlerinin de girilmesi gerekir.'
+    });
   }
 
   // Step 6: Oxygenation, A–a Gradient, Berlin ARDS & CaO2
@@ -1106,6 +1126,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     correctedCl,
     freeWaterNaEffect,
     calcOsmolality,
+    measuredOsm,
     osmolalGap,
     pfRatio,
     fio2Normalized,
