@@ -531,7 +531,7 @@ app.post('/api/parse-schedule-pdf', async (req, res) => {
 });
 
 // Podcast RSS Proxy & Config API
-const PODCAST_CACHE_TTL_MS = 15 * 60 * 1000;
+const PODCAST_CACHE_TTL_MS = 2 * 60 * 1000;
 const DEFAULT_PODCAST_RSS_URL = 'https://anchor.fm/s/11a3a92e0/podcast/rss';
 const DEFAULT_PODCAST_SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/furkan-gken7';
 
@@ -624,11 +624,14 @@ async function fetchPodcastFeed(config: PodcastConfig, forceRefresh = false): Pr
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 12000);
-    const response = await fetch(config.rssUrl, {
+    const fetchUrlObj = new URL(config.rssUrl);
+    fetchUrlObj.searchParams.set('_t', String(Date.now()));
+    const response = await fetch(fetchUrlObj.toString(), {
       headers: {
         Accept: 'application/rss+xml, application/xml, text/xml, */*',
         'User-Agent': 'SisliEtfalAnesthesiaPortal/1.0'
       },
+      cache: 'no-store',
       signal: controller.signal
     });
     clearTimeout(timeoutId);
@@ -747,6 +750,7 @@ app.delete('/api/podcast/config', (req, res) => {
 });
 
 app.get('/api/podcast/feed', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   const config = readPodcastConfig();
   if (!config) {
     return res.json({

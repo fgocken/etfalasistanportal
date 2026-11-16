@@ -72,34 +72,44 @@ export interface PodcastLocalState {
 const CATEGORY_RULES: Array<{ category: PodcastCategory; pattern: RegExp }> = [
   {
     category: 'Havayolu',
-    pattern: /havayolu|airway|entübasyon|entubasyon|laringoskop|krikotiroidotomi|cico|sga|larengeal|maske/i
+    pattern:
+      /(?:^|[^\p{L}])(havayolu yönetimi|zor havayolu|airway|entübasyon|entubasyon|laringoskop|krikotiroidotomi|cico|larengeal maske|lma)(?=$|[^\p{L}])/iu
   },
   {
     category: 'Yoğun Bakım',
-    pattern: /yoğun bakım|yogun bakim|ybü|icu|ventilasyon|ventilatör|ards|sepsis|kan gazı|asit[- ]baz|stewart/i
+    pattern:
+      /(?:^|[^\p{L}])(yoğun bakım|yogun bakim|ybü|icu|mekanik ventilasyon|ventilatör|ards|sepsis|kan gazı|asit[- ]baz|stewart)(?=$|[^\p{L}])/iu
   },
   {
     category: 'Rejyonal & Blok',
-    pattern: /blok|rejyonal|spinal|epidural|pleksus|last|intralipid|sinir|fasya|tap|esp|peng/i
+    pattern:
+      /(?:^|[^\p{L}])(rejyonal|spinal|epidural|pleksus|intralipid|periferik sinir|sinir bloğu|sinir blokajı|fasya bloğu|tap blok|esp blok|peng blok|blokaj|last)(?=$|[^\p{L}])/iu
   },
   {
     category: 'Farmakoloji',
-    pattern: /propofol|ketamin|remifentanil|opioid|kas gevşetici|rokuronyum|sugammadeks|lokal anestezik|noradrenalin|adrenalin|farmakoloji|ilaç/i
+    pattern:
+      /(?:^|[^\p{L}])(propofol|ketamin|remifentanil|fentanil|sevofluran|desfluran|rokuronyum|sugammadeks|lokal anestezik|noradrenalin|adrenalin|farmakoloji|farmakokinetik)(?=$|[^\p{L}])/iu
   },
   {
     category: 'Hemodinami & Sıvı',
-    pattern: /sıvı|sivi|gdft|kristaloid|masif|transfüzyon|şok|sok|hemodinami|arteriyel|santral venöz|svk|kalp/i
+    pattern:
+      /(?:^|[^\p{L}])(sıvı tedavisi|sıvı yönetimi|gdft|kristaloid|masif transfüzyon|hemodinami|arteriyel kateter|santral venöz|vazopresör)(?=$|[^\p{L}])/iu
   },
   {
     category: 'Klinik Vaka',
-    pattern: /vaka|olgu|kriz|malign hipertermi|anafilaksi|emboli|pnömotoraks|aciller|nöbet|nobet/i
+    pattern:
+      /(?:^|[^\p{L}])(vaka sunumu|olgu sunumu|malign hipertermi|anafilaksi|amniyotik sıvı embolisi|pnömotoraks)(?=$|[^\p{L}])/iu
   }
 ];
 
 export function inferPodcastCategory(title: string, description: string): PodcastCategory {
-  const combined = `${title} ${description}`;
   for (const rule of CATEGORY_RULES) {
-    if (rule.pattern.test(combined)) {
+    if (rule.pattern.test(title)) {
+      return rule.category;
+    }
+  }
+  for (const rule of CATEGORY_RULES) {
+    if (rule.pattern.test(description)) {
       return rule.category;
     }
   }

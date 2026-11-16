@@ -38,7 +38,7 @@ interface PodcastWorkspaceProps {
 
 const PROGRESS_STORAGE_KEY = 'etfal_podcast_progress_v1';
 const FEED_CACHE_STORAGE_KEY = 'etfal_podcast_feed_cache_v1';
-const FEED_CACHE_TTL_MS = 15 * 60 * 1000;
+const FEED_CACHE_TTL_MS = 60 * 1000;
 const DEFAULT_RSS_URL = 'https://anchor.fm/s/11a3a92e0/podcast/rss';
 const DEFAULT_SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/furkan-gken7';
 const PLAYBACK_RATES = [1, 1.25, 1.5, 1.75, 2] as const;
@@ -160,16 +160,36 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
 
   const fetchFeed = useCallback(
     async (forceRefresh = false) => {
+      const cached = readLocalFeedCache();
+
       if (forceRefresh) {
         setRefreshing(true);
+      } else if (cached) {
+        // Show cached snapshot immediately (stale-while-revalidate), then still check live RSS below
+        applyFeedData({
+          success: true,
+          configured: true,
+          config: cached.config,
+          show: cached.show,
+          episodes: cached.episodes,
+          cachedAt: cached.cachedAt,
+          fromCache: true
+        });
+        setLoading(false);
       } else {
         setLoading(true);
       }
       setErrorMsg(null);
 
+      // Skip network fetch only if local cache is very fresh (< 60s) and user didn't request refresh
+      if (!forceRefresh && cached && Date.now() - cached.cachedAtMs < FEED_CACHE_TTL_MS) {
+        return;
+      }
+
       // 1. Try Express backend proxy (/api/podcast/feed) first when available
       try {
-        const res = await fetch(`/api/podcast/feed${forceRefresh ? '?refresh=1' : ''}`);
+        const apiUrl = `/api/podcast/feed${forceRefresh ? `?refresh=1&_t=${Date.now()}` : `?_t=${Math.floor(Date.now() / 60000)}`}`;
+        const res = await fetch(apiUrl, { cache: 'no-store' });
         const contentType = res.headers.get('content-type') || '';
         if (res.ok && contentType.includes('application/json')) {
           const data: PodcastFeedResponse = await res.json();
@@ -190,31 +210,13 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
           }
         }
       } catch {
-        // Fall through cleanly to browser RSS fetch on static/Vercel deployments
+        // Fall through cleanly to direct browser RSS fetch on static/Vercel deployments
       }
 
-      // 2. Fallback for static builds (e.g. Vercel / Shared Preview): check fresh localStorage cache first
-      const cached = readLocalFeedCache();
-      if (!forceRefresh && cached && Date.now() - cached.cachedAtMs < FEED_CACHE_TTL_MS) {
-        applyFeedData({
-          success: true,
-          configured: true,
-          config: cached.config,
-          show: cached.show,
-          episodes: cached.episodes,
-          cachedAt: cached.cachedAt,
-          fromCache: true
-        });
-        setLoading(false);
-        setRefreshing(false);
-        return;
-      }
-
-      // 3. Direct browser RSS fetch (Anchor/Spotify RSS supports Access-Control-Allow-Origin: *)
+      // 2. Direct browser RSS fetch with cache-busting param to bypass Anchor/Fastly stale edge caches
       try {
-        const rssRes = await fetch(DEFAULT_RSS_URL, {
-          cache: forceRefresh ? 'no-cache' : 'default'
-        });
+        const rssUrl = `${DEFAULT_RSS_URL}?_t=${forceRefresh ? Date.now() : Math.floor(Date.now() / 60000)}`;
+        const rssRes = await fetch(rssUrl, { cache: 'no-store' });
         if (!rssRes.ok) {
           throw new Error(`RSS yanıt kodu: ${rssRes.status}`);
         }
