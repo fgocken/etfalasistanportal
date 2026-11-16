@@ -28,7 +28,10 @@ import {
   Zap,
   Library,
   ShieldCheck,
-  FlaskConical
+  FlaskConical,
+  Gauge,
+  Headphones,
+  HelpCircle
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -53,11 +56,14 @@ import { EktTrackerView } from './ekt/EktTrackerView';
 import { ReferencesLibraryView } from './references/ReferencesLibraryView';
 import { VascularAccessWorkspace } from './vascular/VascularAccessWorkspace';
 import { BedsideAbgAnalyzer } from './labs/BedsideAbgAnalyzer';
+import { MechanicalVentilationWorkspace } from './ventilation/MechanicalVentilationWorkspace';
+import { PodcastWorkspace } from './podcast/PodcastWorkspace';
+import { QuestionBankWorkspace } from './question-bank/QuestionBankWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'abg' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
+export type ToolTabId = 'calculator' | 'abg' | 'mechanical-ventilation' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'podcast' | 'question-bank' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -113,6 +119,25 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-teal-800',
     ringClassDark: 'ring-1 ring-teal-500/20',
     ringClassLight: 'ring-1 ring-teal-500/10'
+  },
+  'mechanical-ventilation': {
+    id: 'mechanical-ventilation',
+    title: 'Mekanik Ventilasyon',
+    badge: 'Hazırlanıyor',
+    badgeHighlight: true,
+    desc: 'İnvaziv ve non-invaziv mekanik ventilasyon modları, akciğer koruyucu stratejiler, ARDS PEEP titrasyonu, driving pressure ve weaning protokolleri. İçeriği hazırlanmaktadır.',
+    clinicalKey: 'Klinik içerik bir sonraki adımda doldurulacaktır.',
+    icon: Gauge,
+    iconBgDark: 'bg-sky-500/15',
+    iconBgLight: 'bg-sky-50',
+    iconColorDark: 'text-sky-400',
+    iconColorLight: 'text-sky-700',
+    borderHoverDark: 'hover:border-sky-500/40',
+    borderHoverLight: 'hover:border-sky-400',
+    titleHoverDark: 'group-hover:text-sky-300',
+    titleHoverLight: 'group-hover:text-sky-800',
+    ringClassDark: 'ring-1 ring-sky-500/20',
+    ringClassLight: 'ring-1 ring-sky-500/10'
   },
   intraop: {
     id: 'intraop',
@@ -270,6 +295,44 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     ringClassDark: 'ring-1 ring-violet-500/20',
     ringClassLight: 'ring-1 ring-violet-500/10'
   },
+  podcast: {
+    id: 'podcast',
+    title: 'Etfal Anestezi Podcast',
+    badge: 'Spotify · Sesli Eğitim',
+    badgeHighlight: true,
+    desc: 'Miller’s Anesthesia ve klinik anestezi serisi: hız kontrollü (1x–2x) yerleşik ses oynatıcısı, kaldığı yerden devam, kategori filtresi, bölüm/kişisel notlar ve Spotify’da aç desteği.',
+    clinicalKey: 'Spotify for Podcasters yayınına yeni bölüm eklendikçe portala otomatik olarak yansır.',
+    icon: Headphones,
+    iconBgDark: 'bg-violet-500/15',
+    iconBgLight: 'bg-violet-50',
+    iconColorDark: 'text-violet-400',
+    iconColorLight: 'text-violet-700',
+    borderHoverDark: 'hover:border-violet-500/40',
+    borderHoverLight: 'hover:border-violet-400',
+    titleHoverDark: 'group-hover:text-violet-300',
+    titleHoverLight: 'group-hover:text-violet-800',
+    ringClassDark: 'ring-1 ring-violet-500/20',
+    ringClassLight: 'ring-1 ring-violet-500/10'
+  },
+  'question-bank': {
+    id: 'question-bank',
+    title: 'Soru Bankası',
+    badge: 'Hazırlanıyor',
+    badgeHighlight: true,
+    desc: 'Anesteziyoloji ve Reanimasyon yeterlik / board sınavlarına yönelik konu bazlı testler, vaka soruları ve açıklamalı çözümler. İçeriği daha sonra eklenecektir.',
+    clinicalKey: 'Kısa süre içinde konu tarama soruları ve referanslı açıklamalar bu bölümde yer alacaktır.',
+    icon: HelpCircle,
+    iconBgDark: 'bg-indigo-500/15',
+    iconBgLight: 'bg-indigo-50',
+    iconColorDark: 'text-indigo-400',
+    iconColorLight: 'text-indigo-700',
+    borderHoverDark: 'hover:border-indigo-500/40',
+    borderHoverLight: 'hover:border-indigo-400',
+    titleHoverDark: 'group-hover:text-indigo-300',
+    titleHoverLight: 'group-hover:text-indigo-800',
+    ringClassDark: 'ring-1 ring-indigo-500/20',
+    ringClassLight: 'ring-1 ring-indigo-500/10'
+  },
   contacts: {
     id: 'contacts',
     title: 'Klinik ve Dahili Hatlar',
@@ -406,6 +469,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
 export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'procedures',
   'icu',
+  'mechanical-ventilation',
   'abg',
   'calculator',
   'intraop',
@@ -417,13 +481,15 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'vascular-access',
   'emergencies',
   'infographics',
+  'podcast',
+  'question-bank',
   'schedule',
   'roster',
   'contacts',
   'ekt',
   'references'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v23';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v25';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -625,17 +691,41 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert abg, references, vascular-access, ekt, procedures, icu, emergencies etc. if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert podcast, question-bank, mechanical-ventilation, abg, etc. if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v24', 'etfal_clinical_tools_order_v23', 'etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
           if (Array.isArray(parsedOld)) {
             const updated = parsedOld.filter(id => (id in ALL_CLINICAL_TOOLS));
-            if (!updated.includes('abg')) {
+            if (!updated.includes('podcast')) {
+              const infoIdx = updated.indexOf('infographics');
+              if (infoIdx !== -1) {
+                updated.splice(infoIdx + 1, 0, 'podcast');
+              } else {
+                updated.push('podcast');
+              }
+            }
+            if (!updated.includes('question-bank')) {
+              const podIdx = updated.indexOf('podcast');
+              if (podIdx !== -1) {
+                updated.splice(podIdx + 1, 0, 'question-bank');
+              } else {
+                updated.push('question-bank');
+              }
+            }
+            if (!updated.includes('mechanical-ventilation')) {
               const icuIdx = updated.indexOf('icu');
               if (icuIdx !== -1) {
-                updated.splice(icuIdx + 1, 0, 'abg');
+                updated.splice(icuIdx + 1, 0, 'mechanical-ventilation');
+              } else {
+                updated.unshift('mechanical-ventilation');
+              }
+            }
+            if (!updated.includes('abg')) {
+              const mvIdx = updated.indexOf('mechanical-ventilation');
+              if (mvIdx !== -1) {
+                updated.splice(mvIdx + 1, 0, 'abg');
               } else {
                 updated.unshift('abg');
               }
@@ -1751,6 +1841,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <BedsideAbgAnalyzer isDark={isDark} />
         )}
 
+        {/* 2C. Mekanik Ventilasyon */}
+        {activeTab === 'mechanical-ventilation' && (
+          <MechanicalVentilationWorkspace isDark={isDark} />
+        )}
+
         {/* 3. Intraop Fluid Management Strategies (Liberal, Restrictive, GDFT + Embedded Liberal Calculator) */}
         {activeTab === 'intraop' && (
           <FluidManagementStrategiesInfographic
@@ -1835,6 +1930,16 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             isDark={isDark} 
             initialInfographicId={initialRoute?.type === 'infografik' ? initialRoute.id : null}
           />
+        )}
+
+        {/* 11B. Podcast */}
+        {activeTab === 'podcast' && (
+          <PodcastWorkspace isDark={isDark} />
+        )}
+
+        {/* 11C. Soru Bankası */}
+        {activeTab === 'question-bank' && (
+          <QuestionBankWorkspace isDark={isDark} />
         )}
 
         {/* 8. Contacts */}

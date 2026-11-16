@@ -3,6 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PDFParse } from 'pdf-parse';
+import { parsePodcastRssXml } from './src/utils/podcastRssParser';
+import type { PodcastConfig, PodcastEpisode, PodcastShowMeta } from './src/types/podcast';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,10 +14,11 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json({ limit: '15mb' }));
 
-// Persistent storage directory for rosters
+// Persistent storage directory for rosters, schedule, and podcast config
 const DATA_DIR = path.join(__dirname, 'data');
 const ROSTERS_FILE = path.join(DATA_DIR, 'rosters.json');
 const SCHEDULE_FILE = path.join(DATA_DIR, 'weekly_schedule.json');
+const PODCAST_CONFIG_FILE = path.join(DATA_DIR, 'podcast_config.json');
 
 // Ensure data folder exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -524,6 +527,260 @@ app.post('/api/parse-schedule-pdf', async (req, res) => {
   } catch (err: any) {
     console.error('[PDF Parse Error]', err);
     res.status(500).json({ success: false, error: err?.message || 'PDF analiz edilirken hata oluştu' });
+  }
+});
+
+// Podcast RSS Proxy & Config API
+const PODCAST_CACHE_TTL_MS = 15 * 60 * 1000;
+const DEFAULT_PODCAST_RSS_URL = 'https://anchor.fm/s/11a3a92e0/podcast/rss';
+const DEFAULT_PODCAST_SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/furkan-gken7';
+
+interface PodcastFeedCache {
+  rssUrl: string;
+  spotifyShowUrl: string;
+  show: PodcastShowMeta;
+  episodes: PodcastEpisode[];
+  cachedAtMs: number;
+}
+
+let podcastFeedCache: PodcastFeedCache | null = null;
+
+function isValidHttpUrl(rawUrl: string): boolean {
+  try {
+    const parsed = new URL(rawUrl.trim());
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function readPodcastConfig(): PodcastConfig {
+  try {
+    if (fs.existsSync(PODCAST_CONFIG_FILE)) {
+      const raw = fs.readFileSync(PODCAST_CONFIG_FILE, 'utf-8');
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed.rssUrl === 'string' && parsed.rssUrl.trim()) {
+        return {
+          rssUrl: parsed.rssUrl.trim(),
+          spotifyShowUrl:
+            typeof parsed.spotifyShowUrl === 'string' && parsed.spotifyShowUrl.trim()
+              ? parsed.spotifyShowUrl.trim()
+              : DEFAULT_PODCAST_SPOTIFY_URL,
+          updatedAt: parsed.updatedAt
+        };
+      }
+    }
+  } catch (err) {
+    console.error('[Podcast Config Read Error]', err);
+  }
+
+  const envRss = (process.env.PODCAST_RSS_URL || '').trim();
+  if (envRss && isValidHttpUrl(envRss)) {
+    return {
+      rssUrl: envRss,
+      spotifyShowUrl: (process.env.PODCAST_SPOTIFY_URL || '').trim() || DEFAULT_PODCAST_SPOTIFY_URL
+    };
+  }
+
+  return {
+    rssUrl: DEFAULT_PODCAST_RSS_URL,
+    spotifyShowUrl: DEFAULT_PODCAST_SPOTIFY_URL
+  };
+}
+
+function savePodcastConfig(config: PodcastConfig): boolean {
+  try {
+    fs.writeFileSync(PODCAST_CONFIG_FILE, JSON.stringify(config, null, 2), 'utf-8');
+    return true;
+  } catch (err) {
+    console.error('[Podcast Config Save Error]', err);
+    return false;
+  }
+}
+
+async function fetchPodcastFeed(config: PodcastConfig, forceRefresh = false): Promise<{
+  show: PodcastShowMeta;
+  episodes: PodcastEpisode[];
+  cachedAt: string;
+  fromCache: boolean;
+  staleWarning?: string;
+}> {
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    podcastFeedCache &&
+    podcastFeedCache.rssUrl === config.rssUrl &&
+    podcastFeedCache.spotifyShowUrl === config.spotifyShowUrl &&
+    now - podcastFeedCache.cachedAtMs < PODCAST_CACHE_TTL_MS
+  ) {
+    return {
+      show: podcastFeedCache.show,
+      episodes: podcastFeedCache.episodes,
+      cachedAt: new Date(podcastFeedCache.cachedAtMs).toISOString(),
+      fromCache: true
+    };
+  }
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+    const response = await fetch(config.rssUrl, {
+      headers: {
+        Accept: 'application/rss+xml, application/xml, text/xml, */*',
+        'User-Agent': 'SisliEtfalAnesthesiaPortal/1.0'
+      },
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`RSS sunucusu HTTP ${response.status} döndü`);
+    }
+
+    const xmlText = await response.text();
+    if (!/<(rss|channel|feed)\b/i.test(xmlText)) {
+      throw new Error('Verilen URL geçerli bir podcast RSS/XML yayını değil');
+    }
+
+    const { show, episodes } = parsePodcastRssXml(xmlText, config.spotifyShowUrl);
+    podcastFeedCache = {
+      rssUrl: config.rssUrl,
+      spotifyShowUrl: config.spotifyShowUrl,
+      show,
+      episodes,
+      cachedAtMs: now
+    };
+
+    return {
+      show,
+      episodes,
+      cachedAt: new Date(now).toISOString(),
+      fromCache: false
+    };
+  } catch (err: any) {
+    if (
+      podcastFeedCache &&
+      podcastFeedCache.rssUrl === config.rssUrl
+    ) {
+      return {
+        show: podcastFeedCache.show,
+        episodes: podcastFeedCache.episodes,
+        cachedAt: new Date(podcastFeedCache.cachedAtMs).toISOString(),
+        fromCache: true,
+        staleWarning: `Güncel RSS çekilemedi (${err?.message || 'bağlantı hatası'}); önbellekteki son bölümler gösteriliyor.`
+      };
+    }
+    throw err;
+  }
+}
+
+app.get('/api/podcast/config', (req, res) => {
+  const config = readPodcastConfig();
+  res.json({
+    success: true,
+    configured: Boolean(config?.rssUrl),
+    config
+  });
+});
+
+app.post('/api/podcast/config', async (req, res) => {
+  try {
+    const rssUrl = String(req.body?.rssUrl || '').trim();
+    const spotifyShowUrl = String(req.body?.spotifyShowUrl || '').trim();
+
+    if (!rssUrl || !isValidHttpUrl(rssUrl)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Lütfen geçerli bir https:// Spotify for Podcasters RSS feed adresi girin.'
+      });
+    }
+
+    if (spotifyShowUrl && !isValidHttpUrl(spotifyShowUrl)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Spotify şov linki geçerli bir URL olmalıdır (veya boş bırakabilirsiniz).'
+      });
+    }
+
+    const nextConfig: PodcastConfig = {
+      rssUrl,
+      spotifyShowUrl,
+      updatedAt: new Date().toISOString()
+    };
+
+    podcastFeedCache = null;
+    const feedResult = await fetchPodcastFeed(nextConfig, true);
+
+    const saved = savePodcastConfig(nextConfig);
+    if (!saved) {
+      return res.status(500).json({
+        success: false,
+        error: 'Podcast yapılandırması sunucuya kaydedilemedi.'
+      });
+    }
+
+    res.json({
+      success: true,
+      configured: true,
+      config: nextConfig,
+      ...feedResult
+    });
+  } catch (err: any) {
+    console.error('[Podcast Config Error]', err);
+    res.status(400).json({
+      success: false,
+      error: err?.message || 'RSS adresi okunamadı. Bağlantıyı kontrol edip tekrar deneyin.'
+    });
+  }
+});
+
+app.delete('/api/podcast/config', (req, res) => {
+  try {
+    if (fs.existsSync(PODCAST_CONFIG_FILE)) {
+      fs.unlinkSync(PODCAST_CONFIG_FILE);
+    }
+    podcastFeedCache = null;
+    res.json({ success: true, configured: false });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err?.message || 'Yapılandırma temizlenemedi' });
+  }
+});
+
+app.get('/api/podcast/feed', async (req, res) => {
+  const config = readPodcastConfig();
+  if (!config) {
+    return res.json({
+      success: true,
+      configured: false,
+      config: null,
+      show: null,
+      episodes: [],
+      cachedAt: null,
+      fromCache: false
+    });
+  }
+
+  try {
+    const forceRefresh = req.query.refresh === '1' || req.query.refresh === 'true';
+    const feedResult = await fetchPodcastFeed(config, forceRefresh);
+    res.json({
+      success: true,
+      configured: true,
+      config,
+      ...feedResult
+    });
+  } catch (err: any) {
+    console.error('[Podcast Feed Error]', err);
+    res.status(502).json({
+      success: false,
+      configured: true,
+      config,
+      show: null,
+      episodes: [],
+      cachedAt: null,
+      fromCache: false,
+      error: err?.message || 'Podcast RSS yayını çekilemedi'
+    });
   }
 });
 

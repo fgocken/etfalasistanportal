@@ -39,6 +39,7 @@ export type ValidInfographicId = typeof VALID_INFOGRAPHIC_IDS[number];
 export const VALID_TOOL_IDS = [
   'calculator',
   'abg',
+  'mechanical-ventilation',
   'intraop',
   'infusion',
   'preop',
@@ -48,6 +49,8 @@ export const VALID_TOOL_IDS = [
   'vascular-access',
   'emergencies',
   'infographics',
+  'podcast',
+  'question-bank',
   'contacts',
   'roster',
   'schedule',

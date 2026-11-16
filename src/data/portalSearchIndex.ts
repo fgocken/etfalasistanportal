@@ -172,6 +172,44 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     ],
     tabId: 'abg'
   },
+  {
+    id: 'tool-mechanical-ventilation',
+    title: 'Mekanik Ventilasyon',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Hazırlanıyor',
+    description: 'İnvaziv ve non-invaziv mekanik ventilasyon modları, akciğer koruyucu stratejiler, PEEP ve weaning bölümü (içeriği hazırlanıyor).',
+    keywords: [
+      'mekanik ventilasyon',
+      'ventilatör',
+      'peep',
+      'driving pressure',
+      'weaning',
+      'niv',
+      'simv',
+      'psv',
+      'pcv',
+      'vcv'
+    ],
+    tabId: 'mechanical-ventilation'
+  },
+  {
+    id: 'tool-podcast',
+    title: 'Podcast (Spotify RSS & Portal Oynatıcı)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'RSS · Spotify',
+    description: 'Spotify for Podcasters RSS senkronizasyonu, hız kontrolü, kaldığı yerden devam, kategori filtresi ve bölüm/klinik notları.',
+    keywords: ['podcast', 'spotify', 'rss', 'sesli ders', 'dinle', 'eğitim serisi', 'vaka tartışması'],
+    tabId: 'podcast'
+  },
+  {
+    id: 'tool-question-bank',
+    title: 'Soru Bankası',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Hazırlanıyor',
+    description: 'Anesteziyoloji yeterlik ve board sınavlarına yönelik soru bankası bölümü (içeriği daha sonra eklenecek).',
+    keywords: ['soru bankası', 'sorular', 'sınav', 'yeterlik', 'tard', 'edaic', 'board', 'quiz', 'test'],
+    tabId: 'question-bank'
+  },
 
   // 2. Kılavuzlar & Protokoller
   {
