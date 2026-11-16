@@ -27,7 +27,8 @@ import {
   Compass,
   Zap,
   Library,
-  ShieldCheck
+  ShieldCheck,
+  FlaskConical
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -51,11 +52,12 @@ import { ProceduresWorkspace } from './procedures/ProceduresWorkspace';
 import { EktTrackerView } from './ekt/EktTrackerView';
 import { ReferencesLibraryView } from './references/ReferencesLibraryView';
 import { VascularAccessWorkspace } from './vascular/VascularAccessWorkspace';
+import { BedsideAbgAnalyzer } from './labs/BedsideAbgAnalyzer';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
+export type ToolTabId = 'calculator' | 'abg' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -92,6 +94,25 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     borderHoverLight: 'hover:border-teal-400',
     titleHoverDark: 'group-hover:text-teal-300',
     titleHoverLight: 'group-hover:text-teal-800'
+  },
+  abg: {
+    id: 'abg',
+    title: 'Yatak Başı Kan Gazı Analizi',
+    badge: 'AKG · Stewart',
+    badgeHighlight: true,
+    desc: 'Henderson-Hasselbalch tutarlılığı, Winter/Boston kompanzasyonu, Figge albümin düzeltmeli anyon açığı, Delta oranı, Story (BJA) Stewart SBE dökümü, CaO₂, P/F, A–a gradiyenti, VBG çevrimi ve seri trend karşılaştırması.',
+    clinicalKey: 'Hipoalbüminemi ve eş zamanlı metabolik alkalozun gizlediği yüksek anyon açıklı asidozları Stewart SBE ve Delta oranı ile açığa çıkarır.',
+    icon: FlaskConical,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-700',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    titleHoverDark: 'group-hover:text-teal-300',
+    titleHoverLight: 'group-hover:text-teal-800',
+    ringClassDark: 'ring-1 ring-teal-500/20',
+    ringClassLight: 'ring-1 ring-teal-500/10'
   },
   intraop: {
     id: 'intraop',
@@ -385,6 +406,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
 export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'procedures',
   'icu',
+  'abg',
   'calculator',
   'intraop',
   'infusion',
@@ -401,7 +423,7 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'ekt',
   'references'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v22';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v23';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -603,13 +625,21 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and insert references, vascular-access, ekt, procedures, icu, emergencies etc. if missing
-      for (const oldKey of ['etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and insert abg, references, vascular-access, ekt, procedures, icu, emergencies etc. if missing
+      for (const oldKey of ['etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
           if (Array.isArray(parsedOld)) {
             const updated = parsedOld.filter(id => (id in ALL_CLINICAL_TOOLS));
+            if (!updated.includes('abg')) {
+              const icuIdx = updated.indexOf('icu');
+              if (icuIdx !== -1) {
+                updated.splice(icuIdx + 1, 0, 'abg');
+              } else {
+                updated.unshift('abg');
+              }
+            }
             if (!updated.includes('airway')) {
               const preopIdx = updated.indexOf('preop');
               if (preopIdx !== -1) {
@@ -716,6 +746,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         targetEmergencyId = 'acls';
       } else if (item.id === 'emergency-massive-transfusion') {
         targetEmergencyId = 'mtp';
+      } else if (item.id === 'emergency-tension-pneumothorax') {
+        targetEmergencyId = 'tension-pneumothorax';
+      } else if (item.id === 'emergency-airway-fire') {
+        targetEmergencyId = 'airway-fire';
       } else if (item.id === 'emergency-etco2-elevation') {
         targetEmergencyId = 'etco2-elevation';
       } else if (item.id === 'emergency-etco2-decrease') {
@@ -1710,6 +1744,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               </div>
             </div>
           </div>
+        )}
+
+        {/* 2B. Yatak Başı Kan Gazı Analizi */}
+        {activeTab === 'abg' && (
+          <BedsideAbgAnalyzer isDark={isDark} />
         )}
 
         {/* 3. Intraop Fluid Management Strategies (Liberal, Restrictive, GDFT + Embedded Liberal Calculator) */}

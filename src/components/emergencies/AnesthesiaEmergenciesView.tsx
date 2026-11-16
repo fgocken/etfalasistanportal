@@ -145,6 +145,24 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
     icon: Activity,
     accentColor: 'rose',
     isReady: true
+  },
+  {
+    id: 'tension-pneumothorax',
+    title: 'Tansiyon Pnömotoraks',
+    shortDesc: 'Tek yönlü valf & obstrüktif şok, N₂O kapatma, PEEP=0, acil 4–5. İKA AAL/MAL iğne veya parmak torakostomi, BTS Emniyet Üçgeni tüp ve klemp yasağı.',
+    tag: '10 Aşamalı Protokol Hazır',
+    icon: Wind,
+    accentColor: 'red',
+    isReady: true
+  },
+  {
+    id: 'airway-fire',
+    title: 'Hava Yolu Yangını (Airway Fire)',
+    shortDesc: 'ETT çıkarımı + gaz kesimi + steril SF dökümü (eşzamanlı refleks), Yangın Üçgeni, lazer-dirençli ETT & metilen mavisi kaf, FiO₂ ≤ %30 ve 3 dk alkol kuruma.',
+    tag: '10 Aşamalı Protokol Hazır',
+    icon: Flame,
+    accentColor: 'red',
+    isReady: true
   }
 ];
 
@@ -321,7 +339,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md self-start sm:self-auto border ${
             isDark ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-200'
           }`}>
-            12 Klinik Acil Aktif (MH, PE, Hava Embolisi, LAST, Anafilaksi, ACLS, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon, MTP)
+            14 Klinik Acil Aktif (MH, PE, Hava Embolisi, LAST, Anafilaksi, ACLS, Bronkospazm, Laringospazm, CICO, Obstrüksiyon, Aspirasyon, MTP, Tansiyon Pnömotoraks, Airway Fire)
           </span>
         </div>
 
@@ -410,7 +428,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
         }`}>
           <HelpCircle className="w-4 h-4 text-red-500 shrink-0" />
           <span>
-            <strong>Malign Hipertermi</strong>, <strong>PE</strong>, <strong>Hava Embolisi</strong>, <strong>LAST</strong>, <strong>Anafilaktik Şok</strong>, <strong>Perioperatif ACLS</strong>, <strong>Bronkospazm</strong>, <strong>Laringospazm</strong>, <strong>CICO</strong>, <strong>Akut Hava Yolu Obstrüksiyonu</strong>, <strong>Pulmoner Aspirasyon</strong> ve <strong>Masif Transfüzyon Protokolü (MTP)</strong> dahil tüm 12 klinik acil senaryo standart 10 aşamalı şablon ve kilo bazlı doz hesaplayıcılarıyla kullanıma hazırdır.
+            <strong>Malign Hipertermi</strong>, <strong>PE</strong>, <strong>Hava Embolisi</strong>, <strong>LAST</strong>, <strong>Anafilaktik Şok</strong>, <strong>Perioperatif ACLS</strong>, <strong>Bronkospazm</strong>, <strong>Laringospazm</strong>, <strong>CICO</strong>, <strong>Akut Hava Yolu Obstrüksiyonu</strong>, <strong>Pulmoner Aspirasyon</strong>, <strong>Masif Transfüzyon Protokolü (MTP)</strong>, <strong>Tansiyon Pnömotoraks</strong> ve <strong>Hava Yolu Yangını (Airway Fire)</strong> dahil tüm 14 klinik acil senaryo standart 10 aşamalı şablon ve kilo bazlı doz hesaplayıcılarıyla kullanıma hazırdır.
           </span>
         </div>
       </div>

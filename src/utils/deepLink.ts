@@ -38,6 +38,7 @@ export type ValidInfographicId = typeof VALID_INFOGRAPHIC_IDS[number];
 // Bilinen klinik araç kimlikleri
 export const VALID_TOOL_IDS = [
   'calculator',
+  'abg',
   'intraop',
   'infusion',
   'preop',

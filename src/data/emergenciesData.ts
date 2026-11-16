@@ -24,7 +24,7 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'generic';
+  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'tension-pneumothorax' | 'airway-fire' | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -442,6 +442,73 @@ export interface EmergencyProtocol {
           intervention: string;
           pathophysiologyRisk: string;
         }[];
+      };
+    };
+
+    // Tansiyon Pnömotoraks acil protokolleri
+    tensionPneumothoraxProtocols?: {
+      decompressionOptions: {
+        title: string;
+        needleDecompressionAdult: string;
+        needleDecompressionPediatric: string;
+        catheterSpecs: string;
+        fingerThoracostomy: string;
+      };
+      tubeThoracostomyAndSafetyTriangle: {
+        title: string;
+        safetyTriangle: string;
+        tubeSizing: {
+          indication: string;
+          frenchSize: string;
+          technique: string;
+          clinicalNote: string;
+        }[];
+      };
+      chestDrainPhysicsAndRules: {
+        title: string;
+        criticalRules: {
+          rule: string;
+          detail: string;
+          severity: 'DANGER' | 'WARNING' | 'INFO';
+        }[];
+        bubblingInterpretation: {
+          finding: string;
+          meaning: string;
+          action: string;
+        }[];
+      };
+      anesthesiaVentilationAndN2ORules: {
+        title: string;
+        n2oAbsoluteStop: string;
+        ventilationAdjustments: string[];
+      };
+    };
+
+    // Airway Fire (Hava Yolu & Ameliyathane Yangını) acil protokolleri
+    airwayFireProtocols?: {
+      fireTriangle: {
+        title: string;
+        oxidizers: string;
+        ignitionSources: string;
+        fuels: string;
+        criticalWarning: string;
+      };
+      airwayVsNonAirway: {
+        title: string;
+        airwayFireSteps: string[];
+        nonAirwayFireSteps: string[];
+      };
+      preventionByProcedure: {
+        procedure: string;
+        riskMechanism: string;
+        preventionRule: string;
+        criticalAlert: string;
+      }[];
+      postFireAssessment: {
+        title: string;
+        bronchoscopyProtocol: string;
+        toxicInhalationCheck: string;
+        edemaAndSteroids: string;
       };
     };
   };
@@ -5638,6 +5705,763 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         journal: 'Anesthesiology. 2015;122(2):241-275 & ACS ATLS 10th Ed. (2018).',
         year: '2015 / 2018',
         relevance: 'Hemorajik şok sınıflaması, perioperatif transfüzyon eşikleri, sıcaklık koruma ve masif transfüzyon komplikasyon yönetimi.'
+      }
+    ]
+  },
+
+  'tension-pneumothorax': {
+    id: 'tension-pneumothorax',
+    // 1) Başlık
+    title: 'Tansiyon Pnömotoraks Kriz Protokolü',
+    subTitle: 'Tek Yönlü Valf Mekanizması, Akut Obstrüktif Şok & Acil Plevral Dekompresyon',
+    codeColor: 'red',
+    severityBadge: 'KOD KIRMIZI · OBSTRÜKTİF ŞOK / PEA ARREST ACİLİ',
+    keyCallout: 'TANI KLİNİKTİR — ASLA AKCİĞER GRAFİSİ BEKLEMEYİN! N₂O’yu DERHAL kapatın, PEEP’i sıfırlayın, %100 O₂ verin ve derhal İğne veya Parmak Torakostomi ile plevrayı dekomprese edin!',
+    quickCalculatorType: 'tension-pneumothorax',
+
+    // 2) Tanımlama ve Introduction
+    introduction: {
+      definition: 'Tansiyon pnömotoraks; visseral plevra, trakeobronşiyal ağaç veya göğüs duvarındaki tek yönlü bir kapak (ball-valve / check-valve) mekanizması nedeniyle inspiryumda plevral boşluğa giren havanın ekspiryumda dışarı çıkamaması sonucu intraplevral basıncın atmosferik basıncı aşmasıdır. Progresif basınç artışı ipsilateral akciğeri tamamen kollabe eder, mediasteni karşı tarafa iter, vena kava superior/inferior’u bükerek (kinking) kalbe venöz dönüşü keser ve dakikalar içinde obstrüktif şok ile PEA (nabızsız elektriksel aktivite) arrestine yol açar.',
+      epidemiology: 'Genel anestezide pozitif basınçlı ventilasyon (IPPV) altındaki hastalarda basit/okült bir pnömotoraks çok hızlı biçimde tansiyon pnömotoraksa ilerleyebilir. Majör künt/penetran göğüs travmalarında %1–3 oranında görülür; ameliyathanede en sık santral venöz kateter (SVK — özellikle subklavyen %1–3, IJV <%0.5), supraklaviküler/paravertebral bloklar, laparoskopi/robotik cerrahi ve barotravma sonrası gelişir. Tedavisiz olgularda mortalite %100’e yaklaşır.',
+      triggers: [
+        'İyatrojenik Girişimler: Subklavyen/İnternal Juguler SVK yerleştirme, Supraklaviküler/İnfraklaviküler/Paravertebral/İnterkostal Sinir Blokları, Torasentez veya Trakeostomi',
+        'Pozitif Basınçlı Ventilasyon (IPPV) & Barotravma: Yüksek Ppeak/PEEP, büllöz akciğer/KOAH rüptürü, oto-PEEP (breath stacking)',
+        'Azot Protoksit (N₂O) Kullanımı: Okült pnömotoraks hacmini dakikalar içinde 2–4 kat büyüterek ani tansiyon gelişimine yol açar',
+        'Kapalı Göğüs Dreninin Klemplenmesi veya Tıkanması: Hava kaçağı (bronkoplevral fistül) varken göğüs tüpünün klemplenmesi veya pıhtı/kink ile tıkanması (Paramasivam & Bodenham 2008)',
+        'Laparoskopik / Robotik Cerrahi & Diyafram Defektleri: Yüksek Pnömoperitonyum basıncının konjenital/cerrahi diyafram açıklığından plevraya geçmesi (Tansiyon Kapnotoraks)',
+        'Travma & Cerrahi Hasar: Kot kırığı, penetran göğüs yaralanması, nefrektomi / tiroid / özofagus / torasik cerrahi sırasında plevra yaralanması'
+      ],
+      safeAgents: [
+        '%100 Oksijen (FiO₂ 1.0) + N₂O’nun DERHAL Sıfırlanması ve PEEP = 0 cmH₂O',
+        'Acil İğne Dekompresyonu (Erişkin: 14G × ≥5 cm 4–5. İKA AAL/MAL; Çocuk: 2. İKA MCL)',
+        'Acil Parmak Torakostomi (Özellikle Entübe/Travma/Arrestte 4–5. İKA Emniyet Üçgeninden)',
+        'Tüp Torakostomi & Sualtı Kapalı Drenaj Sistemi (BTS Emniyet Üçgeni; gereğinde −10/−20 cmH₂O aspirasyon)',
+        'Hızlı Yatak Başı Akciğer POCUS Doğrulaması (Yalnızca klinik muayene şüpheli ve hasta henüz arreste girmemişse, <15–20 sn)'
+      ],
+      mortalityStats: 'Gecikmiş dekompresyon dakikalar içinde irreversibl obstrüktif şok ve PEA kardiyak arreste yol açar. İğne dekompresyonunda standart 3.2 cm (1.25 inç) branüller erişkinlerin göğüs duvarı kalınlığı nedeniyle %30–50’ye varan oranda başarısız olmaktadır; bu nedenle ≥5 cm kateter ve erişkinde 4–5. İKA AAL/MAL veya parmak torakostomi hayati önem taşır.',
+      clinicalUrgency: 'Tansiyon pnömotoraks KLİNİK BİR TANIDIR. Hipotansiyon + yükselen hava yolu basıncı + tek taraflı solunum sesi kaybı varsa asla akciğer grafisi istemeyin; radyoloji beklemek hastayı öldürür — derhal dekompresyon uygulayın!'
+    },
+
+    // 3) Tanı
+    diagnosis: {
+      overview: 'Genel anestezi altındaki entübe hastada dispne ve göğüs ağrısı sorgulanamaz; tanı ani Ppeak tırmanışı, açıklanamayan hipotansiyon/taşikardi, EtCO₂ düşüşü, SpO₂ bozulması ve fizik muayenede tek taraflı solunum sesi kaybı + hipersonorite kombinasyonuyla saniyeler içinde konur. Şüphe halinde hızlı Akciğer POCUS (<15 sn) tanıyı destekler ancak klinik şok varsa işlem geciktirilmez.',
+      clinicalCriteria: [
+        'Pozitif Basınçlı Ventilasyonda Ani ve Şiddetli Tepe Hava Yolu Basıncı (Ppeak) Artışı + Ekspiratuvar Tidal Volüm Düşüşü (Kompliyans Çöküşü)',
+        'Hızlı Gelişen Obstrüktif Şok (Refrakter Hipotansiyon, Taşikardi, Daralmış Nabız Basıncı) → PEA Kardiyak Arrest',
+        'Etkilenen Hemitoraksta Solunum Seslerinin Kaybolması, Göğüs Ekspansiyon Asimetrisi ve Perküsyonda Timpanizm / Hipersonorite',
+        'Boyun Ven Dolgunluğu (JVD) ve Trakeanın Karşı Tarafa Deviasyonu (Geç bulgu; derin hipovolemide JVD görülmeyebilir!)',
+        'EtCO₂’de Ani Düşüş (düşük kardiyak debiye bağlı) ve Progresif Hipoksemi (SpO₂ < %90)',
+        'Akciğer Ultrasonu (POCUS — E-FAST): Etkilenen tarafta Plevral Kaymanın (Lung Sliding) Yokluğu + B-çizgilerinin Yokluğu + M-Modda "Barkod / Stratosfer İşareti" (Tam kollapsta Lung Point bile kaybolabilir)'
+      ],
+      gradingScaleTitle: 'Akciğer POCUS & Klinik Ayrım Bulguları (Sahota & Sayad 2022 · BTS · ATLS 10)',
+      gradingScaleSource: 'StatPearls NBK559090 / ATLS 10th Ed. / BTS Pleural Disease Guideline',
+      larachScale: [
+        { category: '1. Klinik Triad (Anestezi Altında)', points: 'DERHAL DEKOMPRESE ET', description: 'Ani Ppeak artışı + Tek taraflı solunum sesi kaybı + Açıklanamayan hipotansiyon / PEA arrest → Radyoloji BEKLENMEZ.' },
+        { category: '2. Solunumsal Mekanik & Gaz Değişimi', points: 'Çok Yüksek Özgüllük', description: 'Hem Ppeak hem Pplat yükselir (düşük kompliyans paterni); EtCO2 ve SpO2 düşer, SVR telafisiz yükselir, N2O açıkken dakikalar içinde ağırlaşır.' },
+        { category: '3. Akciğer POCUS (B-Mod)', points: 'Duyarlılık ~%90–98', description: 'Plevral kayma (Lung Sliding) YOK + B-çizgisi YOK + Pulse işareti YOK. Kısmi pnömotoraksta "Lung Point" (%100 özgül) görülür; tansiyonda tüm hemitoraks hava dolu olduğu için Lung Point görülmeyebilir!' },
+        { category: '4. Akciğer POCUS (M-Mod)', points: 'Klasik İşaret', description: 'Normal "Deniz Kıyısı (Seashore)" görünümü kaybolur; plevra altı tamamen paralel yatay çizgilerden oluşan "Barkod / Stratosfer İşareti" görülür.' },
+        { category: '5. Radyografi (Yalnızca Stabil / Basit Olguda)', points: 'TANSİYONDA YASAK', description: 'Kontralateral mediastinal itilme, ipsilateral diyafram düzleşmesi, derin sulkus işareti — ANCAK tansiyon pnömotoraksta X-ray çekilmesi kontrendikedir!' }
+      ],
+      larachInterpretation: 'Klasik "trakeal deviasyon" ve "boyun ven dolgunluğu (JVD)" geç veya hipovolemik hastada maskelenebilen bulgulardır; yoklukları asla tansiyon pnömotoraksı ekarte ettirmez. Ameliyathanede ani kompliyans düşüşü + tek taraflı ses kaybı + şok varsa derhal dekompresyon uygulanır.',
+      differentialDiagnosis: [
+        {
+          condition: 'Sağ Ana Bronş (Endobronşiyal) Entübasyon',
+          differentiatingFactors: 'Sol hemitoraksta ses kaybı ve Ppeak artışı yapar; ANCAK perküsyonda hipersonorite yoktur, şiddetli obstrüktif şok/JVD gelişmez ve ETT 2–3 cm geri çekilince + POCUS’ta "lung pulse" görülmesiyle hızla düzelir.'
+        },
+        {
+          condition: 'Akut Kardiyak Tamponad',
+          differentiatingFactors: 'Hipotansiyon + JVD + taşikardi ortaktır; ancak tamponadda Ppeak normaldir, akciğer sesleri bilateral eşittir ve perküsyon normaldir. POCUS’ta perikardiyal efüzyon ve RV diyastolik kollapsı görülür.'
+        },
+        {
+          condition: 'Şiddetli Akut Bronkospazm / Anafilaksi',
+          differentiatingFactors: 'Ppeak yükselir ancak Ppeak − Pplat farkı (>10 cmH₂O) açıktır (rezistans artışı); oskültasyonda bilateral sessizlik veya yaygın ekspiratuvar wheezing ve kapnogramda "shark-fin" eğrisi vardır.'
+        },
+        {
+          condition: 'Masif Pulmoner Embolizm (PE) veya Venöz Hava Embolisi (VAE)',
+          differentiatingFactors: 'Ani EtCO₂ çöküşü ve obstrüktif şok ortaktır; ancak PE/VAE’de Ppeak ve akciğer kompliyansı genellikle normal kalır ve solunum sesleri bilateral eşittir.'
+        },
+        {
+          condition: 'Mevcut Göğüs Tüpünün Tıkanması veya Klemplenmesi',
+          differentiatingFactors: 'Postoperatif veya yoğun bakım/toraks vakasında tüpte salınım ve kabarcıklanma aniden durur ve hasta kötüleşirse ilk iş tüp klemplerinin açılması ve kink/pıhtı kontrolüdür (Paramasivam & Bodenham 2008).'
+        }
+      ]
+    },
+
+    // 4) Akut Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'ACİL DEKOMPRESYON ANONSU: "TANSİYON PNÖMOTORAKS ŞÜPHESİ! N₂O’yu KAPAT, %100 O₂ VER, PEEP’İ SIFIRLA!" — Cerraha ve ekibe 14G ≥5 cm dekompresyon seti + bistüri (no.10/11) + klemp + toraks tüpü & sualtı drenaj şişesi için yüksek sesle komut verin.',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'AZOT PROTOKSİTİ (N₂O) DERHAL KAPAT, %100 O₂ VER & PEEP’İ SIFIRLA',
+          action: 'Varsa N₂O akımını saniyeler içinde sıfırlayın ve %100 O₂ (yüksek FGF) verin. Ventilatörde PEEP’i DERHAL 0 cmH₂O’ya indirin; düşük tidal volüm / düşük pik basınçla (veya nazik manuel kese ile) ventile ederek intratorasik basıncın venöz dönüşü daha fazla bozmasını önleyin.',
+          criticalNote: 'N₂O kapalı plevral kaviteye hızla difüze olarak pnömotoraksı 10 dakikada 2 katına çıkarır! Laparoskopi sürüyorsa pnömoperitonyum insüflasyonunu derhal durdurun ve batını söndürün.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'MEVCUT GÖĞÜS TÜPÜNÜ KONTROL ET (VARSA KLEMPİ AÇ!)',
+          action: 'Hastada zaten bir toraks tüpü varsa: Üzerinde klemp unutulup unutulmadığını, bağlantıların kıvrıldığını (kink) veya sualtı drenaj şişesinin tıkalı olduğunu derhal kontrol edin. Klemplenmiş tüpü açmak saniyeler içinde hayat kurtarır.',
+          criticalNote: 'Paramasivam & Bodenham (2008) & BTS Kuralı: Aktif hava kaçağı olan bir göğüs tüpü ASLA klemplenmez!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'ENDOTRAKEAL TÜP POZİSYONUNU VE DEVREYİ 5 SANİYEDE TEYİT ET',
+          action: 'İnspeksiyon ve kısa oskültasyonla ETT’nin ana bronşa (genelde sağa) ilerlemediğinden ve tüpte kink/tıkanıklık olmadığından emin olun; şüpheli tarafta cilt altı amfizemi ve perküsyonda hipersonoriteyi kontrol edin. Kritik şokta akciğer grafisi ASLA beklenmez.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'ACİL İĞNE DEKOMPRESYONU VEYA PARMAK TORAKOSTOMİ UYGULA',
+          action: 'Etkilenen tarafa antiseptik sürdükten sonra: (A) İĞNE DEKOMPRESYONU (ATLS 10): Erişkinde 4. veya 5. İnterkostal Aralık, Ön/Orta Aksiller Hat (AAL/MAL); Çocukta 2. İKA Midklaviküler Hat (MCL) üzerinden 14G (≥5 cm) anjiyokatı kostanın ÜST kenarını sıyırarak dik açıyla plevraya ilerletin. Hava fışkırmasını ("hiss") duyduktan sonra metal iğneyi çekin, plastik kanülü bırakın. (B) PARMAK TORAKOSTOMİ (Entübe/Travma/Arrestte Tercih): 4–5. İKA AAL’de 3–4 cm insizyon yapıp künt klemple plevrayı delin ve eldivenli parmağı sokarak havayı doğrudan boşaltın.',
+          criticalNote: 'Standart 3.2 cm venflon erişkinlerin ~%50’sinde plevraya yetişmez; mutlaka ≥5 cm kateter kullanın veya doğrudan parmak torakostomi yapın! İğne veya insizyon mutlaka alt kostanın ÜST kenarından girilmelidir (interkostal nörovasküler demeti korumak için).',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 5,
+          title: 'HEMODİNAMİK RESÜSİTASYON & SIVI/VAZOPRESÖR DESTEĞİ',
+          action: 'Dekompresyonla birlikte venöz dönüş aniden açılır; ancak derin hipotansiyon sürüyorsa hızlı dengeli kristaloid bolusu (10–20 mL/kg) ve gereğinde Noradrenalin / Efedrin / Adrenalin (arrest gelişmişse ACLS 1 mg IV) ile organ perfüzyonunu destekleyin. İyileşme izlenmezse karşı tarafı (bilateral pnömotoraks?) ve kardiyak tamponadı kontrol edin.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 6,
+          title: 'KESİN TEDAVİ: TÜP TORAKOSTOMİ & SUALTI KAPALI DRENAJ (EMİYET ÜÇGENİ)',
+          action: 'İğne/parmak dekompresyon geçicidir (kateter kıvrılabilir veya tıkanabilir). İdeal olarak parmak torakostomi yapılan alandan veya BTS Emniyet Üçgeni içinden (4–5. İKA, ön aksiller–orta aksiller hat arası; meme başı hizasının üstü) trokarsız künt diseksiyonla (veya basit izole olguda 10–14 Fr Seldinger; travma/dev kaçak/hemotoraksta 24–28 Fr) göğüs tüpünü posterior-apikal yöne yerleştirin ve sualtı kapalı drenaj şişesine bağlayın.',
+          criticalNote: 'Tüp ucunun su seviyesinin 2–3 cm altında olduğunu, drenaj şişesinin hasta seviyesinden 50–100 cm aşağıda dik durduğunu ve inspiryum-ekspiryumda salınım (tidalling) olduğunu doğrulayın.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 7,
+          title: 'CERRAHİ HAVA YOLU / BRONKOSKOPİ & RE-EKSPANSİYON İZLEMİ',
+          action: 'Tüp takılmasına rağmen masif sürekli hava kaçağı sürüyorsa trakeobronşiyal rüptür veya büyük bronkoplevral fistül açısından fiberoptik bronkoskopi ve göğüs cerrahisi konsültasyonu isteyin (gerekirse çift lümenli tüp ile akciğer izolasyonu). Akciğer grafisi veya POCUS ile tam ekspansiyonu ve tüp pozisyonunu doğrulayın.',
+          priority: 'HIGH'
+        }
+      ],
+      tensionPneumothoraxProtocols: {
+        decompressionOptions: {
+          title: 'Acil Plevral Dekompresyon Yöntemleri: İğne Torakostomi vs Parmak Torakostomi (ATLS 10 · StatPearls)',
+          needleDecompressionAdult: 'Erişkin Tercih (ATLS 10. Baskı): 4. veya 5. İnterkostal Aralık, Ön Aksiller Hat (AAL) ile Orta Aksiller Hat (MAL) arası (Alternatif: 2. İKA MCL — ancak göğüs duvarı burada daha kalındır ve başarısızlık riski daha yüksektir).',
+          needleDecompressionPediatric: 'Pediatrik / İnfant Standart: 2. İnterkostal Aralık, Midklaviküler Hat (MCL), alt kostanın ÜST kenarından dik giriş (16–18G kateter).',
+          catheterSpecs: '14G (veya 16G) ve EN AZ 4.5–5 cm (tercihen 5–8 cm) uzunluğunda dekompresyon kateteri! Klasik 3.2 cm periferik IV branüller erişkinlerin yaklaşık %50’sinde plevral boşluğa ulaşamaz. İğne ucuna serum fizyolojik dolu enjektör takılıp negatif basınçla aspirasyon (hava kabarcığı görünümü) teyit kolaylığı sağlar.',
+          fingerThoracostomy: 'Entübe / Pozitif Basınçlı Ventilasyon / Travma / Arrest Hastalarında Üstün Seçenek: 4–5. İKA AAL’de (BTS Emniyet Üçgeni) 3–4 cm yatay cilt insizyonu → kavisli klemp ile interkostal kas ve paryetal plevranın künt perforasyonu → eldivenli parmakla plevraya girilip adezyon/havayı serbestleştirme. Kateter tıkanması/kıvrılması riskini tamamen ortadan kaldırır; stabilizasyon sonrası aynı delikten göğüs tüpü ilerletilir.'
+        },
+        tubeThoracostomyAndSafetyTriangle: {
+          title: 'Tüp Torakostomi, BTS "Emniyet Üçgeni" & Tüp Çapı Seçimi (BTS 2010/2023 · Paramasivam 2008)',
+          safetyTriangle: 'BTS Emniyet Üçgeni (Triangle of Safety): Ön sınır Pektoralis majör kasının lateral kenarı · Arka sınır Latissimus dorsi kasının anterior kenarı · Alt sınır Meme başı yatay hizası (5. İKA) · Tepe nokta Aksilla apeksi. Kalp, internal mammarian arter, diyafram, karaciğer ve dalak yaralanmasını önler. Trokar kullanımı KESİNLİKLE önerilmez (künt diseksiyon zorunludur).',
+          tubeSizing: [
+            {
+              indication: 'Basit / İyatrojenik (SVK, Blok) Pnömotoraks',
+              frenchSize: '10–14 Fr (Small-Bore)',
+              technique: 'Seldinger (Kılavuz Tel) veya Künt Diseksiyon',
+              clinicalNote: 'BTS 2010/2023: Büyük tüplerle eşit başarı, belirgin olarak daha az ağrı ve doku travması sağlar.'
+            },
+            {
+              indication: 'Mekanik Ventilasyon Altında Dev Hava Kaçağı / BPF',
+              frenchSize: '20–24 Fr (Orta-Büyük Çap)',
+              technique: 'Parmak Torakostomi / Künt Diseksiyon',
+              clinicalNote: 'Paramasivam & Bodenham 2008: Pozitif basınçlı ventilasyonda yüksek akımlı kaçağı 10-12 Fr tüpler tahliye edemeyebilir.'
+            },
+            {
+              indication: 'Travma / Şüpheli Eşlik Eden Hemopnömotoraks',
+              frenchSize: '24–28 Fr (Large-Bore)',
+              technique: 'Parmak Torakostomi + Künt Diseksiyon (Trokar YASAK)',
+              clinicalNote: 'ATLS 10: Kan ve pıhtının tüpü tıkamaması için geniş çaplı tüp gerekir (eski 36-40 Fr artık rutin değil).'
+            },
+            {
+              indication: 'Pediatrik & İnfant Hastalar',
+              frenchSize: '8–14 Fr (İnfant 8–10 Fr, Çocuk 10–14 Fr)',
+              technique: 'Künt Diseksiyon / USG Rehberliği',
+              clinicalNote: 'İnterkostal aralık darlığı ve ince göğüs duvarı nedeniyle derinlik kontrolü kritiktir.'
+            }
+          ]
+        },
+        chestDrainPhysicsAndRules: {
+          title: 'Sualtı Kapalı Drenaj Fiziği, Aspirasyon (Suction) & Mutlak Kurallar (Paramasivam & Bodenham 2008)',
+          criticalRules: [
+            {
+              rule: '1. HAVA KABARCIĞI ÇIKARAN (BUBBLING) GÖĞÜS TÜPÜ ASLA KLEMPLEMEYİN!',
+              detail: 'Aktif hava kaçağı olan bir hastada drenin klemplenmesi (taşıma sırasında bile!) plevral havanın çıkışını durdurarak dakikalar içinde ölümcül TANSİYON PNÖMOTORAKS ve kardiyak arrest geliştirir. Transportta dren şişesi asla hasta seviyesinin üzerine çıkarılmaz ama klemplenmez.',
+              severity: 'DANGER'
+            },
+            {
+              rule: '2. SUALTI KAPALI SİSTEM SEVİYESİ (2–3 cm Sualtı & 50–100 cm Aşağıda)',
+              detail: 'Drenaj tüpünün distal ucu steril su seviyesinin yalnızca 2–3 cm altında olmalıdır (>5 cm daldırma ekspirasyon direncini artırır). Drenaj şişesi mutlaka hasta göğüs seviyesinin en az 50–100 cm altında dik durmalıdır; aksi halde su plevral boşluğa geri sifon yapar.',
+              severity: 'INFO'
+            },
+            {
+              rule: '3. NEGATİF ASPİRASYON (SUCTION): DÜŞÜK BASINÇ (−10 ile −20 cmH₂O)',
+              detail: 'BTS 2010/2023: Tüm pnömotorakslara rutin suction başlanmaz. Akciğer ekspanse olmuyorsa veya 48 saatte kaçak sürüyorsa yüksek volüm-düşük basınçlı (−10 ila −20 cmH₂O) duvar regülatörü uygulanır. Kontrolsüz yüksek negatif basınç hava hapsini/BPF akımını artırır.',
+              severity: 'WARNING'
+            },
+            {
+              rule: '4. RE-EKSPANSİYON PULMONER ÖDEMİ (RPO) RİSKİ',
+              detail: 'Uzun süreli kollapsın ardından akciğerin aşırı hızlı ve yüksek negatif basınçla ekspanse edilmesi tek taraflı kapiller permeabilite ödemi (RPO) yapabilir. Ani öksürük, pembe köpüklü balgam veya SpO₂ düşüşü gelişirse suction kapatılmalıdır.',
+              severity: 'WARNING'
+            }
+          ],
+          bubblingInterpretation: [
+            {
+              finding: 'Sürekli kabarcıklanma (hem inspiryum hem ekspiryum)',
+              meaning: 'Mekanik ventilasyon altında aktif Bronkoplevral Fistül (BPF) / geniş hava kaçağı VEYA tüpün yan deliği cilt dışına kaymış / devre kaçağı',
+              action: 'Önce tüp yan deliklerini ve bağlantıları kontrol et; sağlam ise havayolu basıncını/PEEP’i azalt, tek akciğer izolasyonu (DLT) veya ikinci dren düşün.'
+            },
+            {
+              finding: 'Yalnızca ekspiryumda veya öksürükle kabarcıklanma',
+              meaning: 'Küçük-orta visseral plevra kaçağı (hava kontrollü tahliye ediliyor)',
+              action: 'Sualtı drenajında izle, kesinlikle klemp koyma.'
+            },
+            {
+              finding: 'Solunumla su sütununda salınım (tidalling) var, kabarcık yok',
+              meaning: 'Tüp açık ve plevral boşlukla ilişkide; hava kaçağı durmuş veya minimal',
+              action: 'Akciğer grafisi / POCUS ile tam re-ekspansiyon kontrolü yap.'
+            },
+            {
+              finding: 'Hem salınım hem kabarcık tamamen durmuş',
+              meaning: 'Akciğer tamamen ekspanse olmuş OLABİLİR VEYA tüp pıhtı/kink ile TAMAMEN TIKANMIŞTIR!',
+              action: 'Tüpü kink/pıhtı açısından incele ve hemen akciğer grafisi / POCUS çek; hasta bozuluyorsa tıkanmayı aç veya yeni tüp tak.'
+            }
+          ]
+        },
+        anesthesiaVentilationAndN2ORules: {
+          title: 'Anestezi Gazları, N₂O Kontrendikasyonu & Ventilatör Yönetimi',
+          n2oAbsoluteStop: 'AZOT PROTOKSİT (N₂O) MUTLAK KONTRENDİKEDİR: N₂O’nun kan/gaz çözünürlük katsayısı (0.47), azottan (N₂: 0.014) ~34 kat daha yüksektir. Azotun plevradan kana geçişinden katbekat hızlı şekilde N₂O plevral boşluğa difüze olur; kapalı pnömotoraks hacmi 10 dakikada 2 katına, 30–45 dakikada 3–4 katına çıkarak saniyeler içinde ölümcül tansiyona dönüşür!',
+          ventilationAdjustments: [
+            'N₂O derhal kapatılmalı ve taze gaz akımı yüksek %100 O₂ (FiO₂ 1.0) yapılmalıdır (TIVA / propofol idamesine geçiş hemodinamik stabilite ve kaçak güvenliği sağlar).',
+            'Dekompresyon gerçekleşene kadar PEEP = 0 cmH₂O yapılmalı ve yüksek Ppeak / yüksek tidal volüm verilmemelidir.',
+            'Yeterli dekompresyon ve göğüs tüpü yerleşiminden sonra akciğer koruyucu düşük tidal volüme (6 mL/kg PBW) ve minimal gerekli PEEP’e kademeli dönülür.',
+            'Laparoskopi sırasında geliştiyse karbondioksit insüflasyonu derhal kapatılıp batın dekomprese edilmelidir (Tansiyon Kapnotoraks farkında olunmalıdır).'
+          ]
+        }
+      }
+    },
+
+    // 5) Patofizyoloji
+    pathophysiology: {
+      molecularBasis: 'Tansiyon pnömotoraksın temel mekanizması plevral yaralanma bölgesindeki "tek yönlü valf" (ball-valve / flap-valve) etkisidir. Her pozitif basınçlı solukta (veya spontan inspiryumda negatif plevral basınçla) hava plevral aralığa girer, ancak ekspiryumda doku flebi kapanarak havanın çıkışını engeller. İntraplevral basınç atmosferik ve santral venöz basıncın (+15 ila +30 cmH₂O üzerine) çıktığında mediasten sağlam tarafa doğru itilir.',
+      stepsTitle: 'Obstrüktif Şok & Kardiyak Arrest Kaskadı',
+      flowType: 'cascade',
+      cycleWarning: 'Pozitif basınçlı mekanik ventilasyon (IPPV), PEEP ve Azot Protoksit (N₂O) tek yönlü hava girişini logaritmik olarak hızlandırarak dakikalar içinde tam kardiyovasküler kollapsa yol açar!',
+      cascadeSteps: [
+        {
+          phase: '1. Tek Yönlü Valf & İntraplevral Basınç Artışı',
+          mechanism: 'Plevral boşluğa giren hava dışarı çıkamaz. İpsilateral akciğer tamamen kollabe olur (şant ve ağır V/Q bozukluğu); IPPV pik basınçları fırlarken N₂O varsa hacim katlanarak artar.',
+          badge: 'İNTRA-PLEVRAL BASINÇ ↑↑',
+          color: 'amber'
+        },
+        {
+          phase: '2. Mediastinal Şift & Kaval Kinking (Venöz Dönüş Blokajı)',
+          mechanism: 'Yükselen hemitoraks basıncı kalbi ve büyük damarları karşı hemitoraksa iter. Vena kava inferior ve superior’un ince duvarları atriyokaval bileşkede katlanarak (kinking) sağ kalbe venöz dönüşü (preload) mekanik olarak keser.',
+          badge: 'PRELOAD ÇÖKÜŞÜ',
+          color: 'red'
+        },
+        {
+          phase: '3. Karşı Akciğer Kompresyonu & Hipoksemi',
+          mechanism: 'Kontralateral sağlam akciğerin de mekanik sıkışması sonucu total fonksiyonel rezidüel kapasite düşer, pulmoner vasküler direnç (PVR) tırmanır, ağır hipoksemi ve hiperkapnik asidoz derinleşir.',
+          badge: 'AĞIR HİPOKSEMİ & PVR ↑',
+          color: 'purple'
+        },
+        {
+          phase: '4. Obstrüktif Şok & PEA Kardiyak Arrest',
+          mechanism: 'Boş kalp nedeniyle atım hacmi ve kardiyak debi sıfıra yaklaşır; miyokardiyal oksijen sunumu kesilir ve organizma derin obstrüktif şokun ardından Nabızsız Elektriksel Aktivite (PEA) arrestine girer. Yeterli dekompresyon yapılmadan yapılan KPR etkisizdir!',
+          badge: 'OBSTRÜKTİF ŞOK / PEA',
+          color: 'rose'
+        }
+      ],
+      summaryText: 'Tansiyon pnömotoraksta ölüm nedeni hipoksemiden çok venöz dönüşün mekanik olarak tıkanmasına bağlı OBSTRÜKTİF ŞOKTUR. İntraplevral pozitif basınç boşaltılmadan verilen sıvı, vazopresör ve göğüs kompresyonları tek başına yanıt vermez.'
+    },
+
+    // 6) Klinik Özellikler & Prezentasyon
+    presentation: {
+      earlySigns: [
+        'Uyanık / Rejyonal Anestezi Hastasında: Ani başlangıçlı plöritik göğüs ağrısı, şiddetli dispne, taşipne, huzursuzluk ve blok/SVK sonrası ani öksürük krizi',
+        'Genel Anestezi Altında: Açıklanamayan ani tepe hava yolu basıncı (Ppeak) ve plato basıncı (Pplat) yükselmesi, ekspiratuvar tidal volümde azalma',
+        'Etkilenen tarafta solunum seslerinde azalma veya kaybolma ve ipsilateral göğüs hareketlerinin geri kalması',
+        'Subkutan (cilt altı) amfizem ve boyun/supraklaviküler bölgede krepitasyon (özellikle trakeobronşiyal veya laparoskopik kaçakta)'
+      ],
+      progressingSigns: [
+        'Hızla derinleşen taşikardi ve vazopresörlere/sıvıya dirençli progresif hipotansiyon (obstrüktif şok)',
+        'SpO₂ düşüşü (desatürasyon), siyanoz ve azalmış pulmoner kan akımına bağlı ani EtCO₂ düşüşü',
+        'Perküsyonda etkilenen hemitoraksta belirgin hipersonorite / timpanizm',
+        'Santral venöz basıncın (CVP) ani tırmanışı ve boyun venlerinde dolgunluk (JVD)'
+      ],
+      lateSigns: [
+        'Trakeanın ve kalp tepe atımının sağlam (karşı) tarafa deviasyonu (geç bulgu!)',
+        'Ağır bradikardi veya taşikardi zemininde ani gelişen Nabızsız Elektriksel Aktivite (PEA) / Asistoli arresti',
+        'Cerrahi veya travma vakalarında KPR’ye rağmen santral nabız alınamaması ve EtCO₂’nin <10 mmHg kalması'
+      ],
+      specialAlertTitle: 'Uyanık vs Entübe Hastada Sinsi Fark & Hipovolemi Tuzağı!',
+      specialAlertContent: 'Uyanık hastalarda (ör. supraklaviküler blok veya sedasyon altında SVK sonrası) ilk belirti ağrı, hava açlığı ve taşipnedir; hipoksemi ve şok daha yavaş (dakikalar-saatler içinde) oturabilir. Buna karşın mekanik ventilasyon altındaki hastada pozitif basınç nedeniyle tansiyon pnömotoraks ÇOK HIZLI (saniyeler-dakikalar içinde) hemodinamik çöküşe ilerler! Ayrıca eşlik eden masif kanamalı travma hastasında boyun ven dolgunluğu (JVD) hipovolemi nedeniyle GÖRÜLMEYEBİLİR — JVD yokluğu tanıyı asla dışlamaz!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Büllöz amfizem, ağır KOAH, marfanoid yapı, geçirilmiş pnömotoraks veya göğüs travması öyküsü olan hastalarda yüksek barotravma riski nedeniyle N₂O kullanımından kaçınılmalı ve düşük tidal volüm (6 mL/kg PBW) + sınırlı Ppeak (<30 cmH₂O) uygulanmalıdır.',
+        'Travma veya kot kırığı olan hastada göğüs grafisi normalken bile okült pnömotoraks oranı %10–15’tir; entübasyon öncesi yatak başı Akciğer POCUS taraması ile basit/okült pnömotoraks saptanıp gerekirse indüksiyon öncesi profilaktik tüp veya yakın hazırlık yapılmalıdır.',
+        'Supraklaviküler/infraklaviküler/paravertebral bloklar ve SVK girişimleri mutlaka gerçek zamanlı Ultrasonografi (USG) eşliğinde, iğne ucunu kesintisiz görerek (in-plane) yapılmalı; SVK için yüksek riskli büllöz/koagülopatili olgularda subklavyen yerine sağ IJV tercih edilmelidir.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Yüksek Riskli Vakada Ventilatör, Gaz & POCUS Güvenlik Protokolü',
+        steps: [
+          'Yüksek barotravma/pnömotoraks riskli veya travma hastalarında indüksiyon öncesi N₂O valfi kapalı tutulmalı (tercihen N₂O bağlantısı çıkarılmalı) ve yüksek tepe basınç alarm limiti (35 cmH₂O) aktif edilmelidir.',
+          'Zorlu SVK veya supraklaviküler/torasik blok sonrası hasta entübe edilecekse hemen indüksiyon sonrası bilateral plevral kayma (lung sliding) POCUS ile doğrulanmalıdır.',
+          'Mevcut göğüs tüpü ile ameliyathaneye gelen hastalarda transfer sonrası ilk kontrol: drenaj şişesi dik ve göğüs seviyesinin 50–100 cm altında, tüp klempsiz ve solunumla salınım/kabarcık durumu not edilmiş olmalıdır.',
+          'Basit/stabil hastada pnömotoraks saptandığında acil cerrahi gerekiyorsa, IPPV başlatılmadan önce veya aynı anda göğüs tüpü yerleştirilmelidir.'
+        ]
+      },
+      cartTitle: 'Ameliyathane Acil Plevral Dekompresyon & Toraks Tüpü Seti:',
+      cartChecklist: [
+        'Acil İğne Dekompresyon Anjiyokatları: 14G × 5–8 cm (en az 4.5–5 cm, erişkin) ve 16–18G (pediatrik) + 10 mL SF enjektörleri',
+        'Steril Parmak Torakostomi / Künt Diseksiyon Seti: No. 10 veya 11 bistüri, büyük kavisli Kelly/Pean klempi, Mayo makası',
+        'Toraks Drenaj Tüpleri: Küçük çaplı 10–14 Fr Seldinger seti + Orta/Büyük çaplı 20–28 Fr düz toraks tüpleri (trokarsız)',
+        'Sualtı Kapalı Toraks Drenaj Sistemi (Steril su işaretli 2–3 cm daldırma hattı) & Düşük Basınçlı Duvar Aspirasyon Regülatörü (−10 ila −20 cmH₂O)',
+        'Steril Eldiven, Klorheksidin/Povidon-İyot, Sütür (No. 0/1 İpek) ve İğne Tutucu + Yatak Başı Lineer/Konveks POCUS Probu'
+      ]
+    },
+
+    // 8) Postoperatif Takip & Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'Tansiyon pnömotoraks veya tüp torakostomi gerektiren tüm hastalar en az 24 saat yoğun bakım veya yüksek bağımlılık biriminde yakın solunumsal, hemodinamik ve drenaj takibi altında izlenmelidir.',
+      recurrenceRate: 'Tüp pozisyon kayması, tıkanma/kink, erken hatalı klempleme veya persistan bronkoplevral fistül (BPF) nedeniyle nüks ve sekonder tansiyon gelişimi riski mevcuttur (%5–15).',
+      recurrenceRiskBadge: 'TÜP TIKANMASI & KLEMP YASAĞI',
+      maintenanceTherapy: 'Sualtı kapalı drenajın kesintisiz sürdürülmesi, hava kaçağı sürüyorsa klempleme yapılmaması, tam ekspansiyon sağlanana kadar −10 ila −20 cmH₂O aspirasyonun kontrollü uygulanması, yeterli interkostal analjezi (multimodal analjezi / gerektiğinde bölgesel blok) ve akciğer koruyucu mekanik ventilasyon.',
+      monitoringParameters: [
+        'Saatlik drenaj şişesi kontrolü: Su sütunu salınımı (tidalling), ekspiratuvar/sürekli kabarcıklanma ve hemoraji miktarı (<200 mL/saat)',
+        'Göğüs tüpü giriş yeri palpasyonu: Yeni gelişen veya ilerleyen cilt altı amfizemi varlığı (yan delik kayması veya tıkanıklık bulgusu)',
+        'Oksijenasyon (SpO₂ / PaO₂/FiO₂), solunum sesleri simetrisi ve entübeyse plato/pik basınç trendi',
+        'Post-prosedür ve günlük PA Akciğer Grafisi veya yatak başı Akciğer POCUS (tam ekspansiyon ve tüp ucu yerleşimi)',
+        'Re-ekspansiyon Pulmoner Ödemi (RPO) belirtileri: Tek taraflı raller, köpüklü balgam ve desatürasyon takibi'
+      ],
+      expectedComplications: [
+        'Kateter/tüp tıkanması, yerinden çıkması veya hatalı klemplemeye bağlı Rekürren Tansiyon Pnömotoraks',
+        'Re-ekspansiyon Pulmoner Ödemi (RPO — hızlı drenaj sonrası)',
+        'Hemotoraks veya İnterkostal Arter/Akciğer Parankim/Diyafram-Karaciğer-Dalak Yaralanması (özellikle trokarlı veya Emniyet Üçgeni dışı girişlerde)',
+        'Persistan Hava Kaçağı / Bronkoplevral Fistül (BPF — >5 gün sürerse göğüs cerrahisi / endobronşiyal müdahale)',
+        'Ampiyem veya Yara Yeri Enfeksiyonu (acil steril olmayan ortamda yapılan dekompresyonlarda profilaktik antibiyotik değerlendirilir)'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: 'PA Akciğer Grafisi (veya AP Supin)', description: 'Dekompresyon sonrası akciğerin tam re-ekspansiyonunu, göğüs tüpü pozisyonunu (tüm yan deliklerin plevra içinde olduğunu) ve gizli hemotoraksı doğrulamak için yapılır.' },
+        { testName: 'Toraks Bilgisayarlı Tomografisi (BT)', description: 'Grafide tam ekspanse olmayan akciğer, masif persistan hava kaçağı, büllöz hastalık veya trakeobronşiyal rüptür şüphesinde kesin anatomik değerlendirme.' },
+        { testName: 'Fiberoptik Bronkoskopi (FOB)', description: 'Tüp takılmasına rağmen akciğer açılmıyorsa veya dev sürekli hava kaçağı varsa ana bronş/trakea laserasyonunu ve mukus tıkacı ile lober kollapsı ayırt etmek için yapılır.' }
+      ],
+      prognosisSummary: 'Tansiyon pnömotoraksın tanınması ve ilk dakikalar içinde doğru derinlikte iğne veya parmak torakostomi ile dekomprese edilmesi durumunda hemodinami ve oksijenasyon neredeyse anında normale döner ve uzun dönem sekelsiz iyileşme sağlanır. Prognozu belirleyen tek faktör dekompresyona kadar geçen gecikme süresidir.'
+    },
+
+    // 9) High-Yield Klinik Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Akciğer Grafisi Beklemek Hata Değil, Malpraktistir!',
+        takeaway: 'Tansiyon pnömotoraks KLİNİK bir tanıdır. Ppeak yükselmiş, bir tarafta solunum sesi kaybolmuş ve tansiyon düşüyorsa X-ray istemek hastayı PEA arrestine sürükler; önce dekomprese edin, grafiyi tüpü taktıktan sonra çekin!',
+        category: 'Tuzak'
+      },
+      {
+        title: '3.2 cm Standart Branül Erişkinlerin %50’sinde Plevraya Yetişmez!',
+        takeaway: 'ATLS 10. Baskıya göre erişkinde iğne dekompresyonu 4–5. İKA Ön/Orta Aksiller Hattan (göğüs duvarı 2. İKA MCL’den daha incedir) ve EN AZ 5 cm (14G) kateterle yapılmalı; entübe/arrest hastada ise doğrudan Parmak Torakostomi tercih edilmelidir!',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'Hava Kabarcığı Çıkaran Göğüs Tüpünü ASLA Klempleme!',
+        takeaway: 'Paramasivam & Bodenham (2008) ve BTS kılavuzunun altın kuralı: Aktif hava kaçağı (bubbling) olan bir drenin klemplenmesi dakikalar içinde iyatrojenik TANSİYON PNÖMOTORAKS ve kardiyak arrest yapar. Taşımada bile tüp klemplenmez!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'N₂O Pnömotoraksı 10 Dakikada İki Katına Çıkarır!',
+        takeaway: 'Azot protoksit kanda azottan 34 kat daha fazla çözünür olduğu için kapalı hava boşluklarına hızla girer. N₂O anestezisi sırasında gelişen açıklanamayan Ppeak artışı ve hipotansiyonda ilk refleks N₂O’yu DERHAL KAPATMAK olmalıdır!',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'Lung Point Her Zaman Olmayabilir & JVD Eksik Olabilir!',
+        takeaway: 'Akciğer USG’de "Lung Point" kısmi pnömotoraks için %100 özgüldür, ancak tansiyon pnömotoraksta akciğer tamamen kollabe olduğu için Lung Point görülmeyebilir (yalnızca lung sliding yokluğu ve barkod işareti vardır). Benzer şekilde hipovolemik travma hastasında JVD (boyun ven dolgunluğu) görülmez!',
+        category: 'Sınav / Klinik Notu'
+      }
+    ],
+
+    // 10) Kanıta Dayalı Kaynaklar
+    references: [
+      {
+        authors: 'Sahota R, Sayad E.',
+        title: 'Tension Pneumothorax. [Updated 2022 Nov 28].',
+        journal: 'In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2022 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK559090/',
+        year: '2022',
+        relevance: 'Tek yönlü valf patofizyolojisi, klinik tanı kriterleri, erişkin vs pediatrik iğne dekompresyonu (4–5. İKA AAL/MAL vs 2. İKA MCL), parmak torakostomi ve Akciğer POCUS bulguları.'
+      },
+      {
+        authors: 'MacDuff A, Arnold A, Harvey J (British Thoracic Society Pleural Disease Guideline Group).',
+        title: 'Management of spontaneous pneumothorax: British Thoracic Society pleural disease guideline 2010.',
+        journal: 'Thorax. 2010;65(Suppl 2):ii18–ii31 (Güncelleme: Roberts ME, et al. Thorax. 2023;78(Suppl 3):s1–s42).',
+        year: '2010 / 2023',
+        relevance: 'BTS "Emniyet Üçgeni" sınırları, küçük çaplı (10–14 Fr) vs büyük çaplı dren seçimi, trokar yasağı, −10/−20 cmH₂O suction endikasyonları ve klemp yasağı.'
+      },
+      {
+        authors: 'Paramasivam E, Bodenham A.',
+        title: 'Air leaks, pneumothorax, and chest drains.',
+        journal: 'Continuing Education in Anaesthesia Critical Care & Pain (BJA Education). 2008;8(6):204–209.',
+        year: '2008',
+        relevance: 'Anestezide iyatrojenik pnömotoraks (SVK, bloklar, barotravma), N₂O/IPPV ile hızlanmış tansiyon gelişimi, sualtı kapalı drenaj fiziği ve kabarcıklanan tüpün klemplenmemesi kuralı.'
+      },
+      {
+        authors: 'American College of Surgeons (ACS) Committee on Trauma.',
+        title: 'Advanced Trauma Life Support (ATLS®): Student Course Manual, 10th Edition — Thoracic Trauma.',
+        journal: 'Chicago, IL: American College of Surgeons.',
+        year: '2018',
+        relevance: 'Erişkin iğne dekompresyonunun 4–5. İKA ön/orta aksiller hatta kaydırılması, ≥5 cm kateter zorunluluğu, parmak torakostomi ve travmada 24–28 Fr tüp torakostomi standardı.'
+      },
+      {
+        authors: 'Gropper MA, Cohen NH, Eriksson LI, Fleisher LA, Leslie K, Wiener-Kronish JP (Eds.) & Butterworth JF, Mackey DC, Wasnick JD.',
+        title: "Miller's Anesthesia (9th/10th Eds.) & Morgan & Mikhail's Clinical Anesthesiology (7th Ed.).",
+        journal: 'Elsevier / McGraw-Hill Education.',
+        year: '2020–2024',
+        relevance: 'İntraoperatif pnömotoraks/kapnotoraks ayırıcı tanısı, N₂O difüzyon kinetiği, tek yönlü bronkoplevral fistül ve perioperatif obstrüktif şok yönetimi.'
+      }
+    ]
+  },
+
+  'airway-fire': {
+    id: 'airway-fire',
+    // 1) Başlık
+    title: 'Hava Yolu Yangını (Airway Fire) & Ameliyathane Yangını',
+    subTitle: 'İntraoperatif İntralüminal Yanma, Yangın Üçgeni & ASA/APSF Eşzamanlı Söndürme Protokolü',
+    codeColor: 'red',
+    severityBadge: 'KOD KIRMIZI · SANİYELER İÇİNDE İNHALASYON & TERMAL YANIK ACİLİ',
+    keyCallout: 'HAVA YOLU YANGININDA İLK 4 ADIM EŞZAMANLI REFLEKSTİR: (1) ENDOTRAKEAL TÜPÜ (ETT) DERHAL ÇIKARIN! (2) TÜM GAZ AKIMINI (O₂ ve N₂O) DERHAL KESİN! (3) HAVA YOLUNA STERİL SF/SU DÖKÜN! (4) KALAN YANAN MATERYALİ ÇIKARIN!',
+    quickCalculatorType: 'airway-fire',
+
+    // 2) Tanımlama ve Introduction
+    introduction: {
+      definition: 'Hava yolu yangını (Airway Fire); endotrakeal tüp (ETT), trakeostomi kanülü veya hastanın solunum yolları içinde ya da çevresinde "Yangın Üçgeni"nin üç bileşeninin (Oksidan [O₂ > %30 veya N₂O] + Tutuşturucu [koter/lazer] + Yakıt [PVC ETT, gazlı bez, alkol bazlı antiseptik]) aynı anda bir araya gelmesiyle oluşan, saniyeler içinde ağır termal inhalasyon hasarına, trakeobronşiyal yanığa, akut hava yolu ödemine ve ölüme yol açabilen felaket düzeyinde bir ameliyathane acilidir.',
+      epidemiology: 'ABD’de yılda yaklaşık 550–650 ameliyathane yangını bildirilmektedir ve bunların %20–30’u ölümcül veya kalıcı sakatlık bırakıcı yaralanmalarla sonuçlanır. Ameliyathane yangınlarının %85’ten fazlası baş, boyun ve üst göğüs (T4 üzeri — "oxygen-enriched / ignition-rich" bölge) cerrahilerinde gerçekleşir. En sık tutuşturucu kaynak monopolar elektrokoter (%70–90) ve cerrahi lazerlerdir. Hava yolu yangınları tamamen ÖNLENEBİLİR olaylar sınıfındadır.',
+      triggers: [
+        'Oksidan Zengin Ortam (FiO₂ > %30 ve/veya N₂O): Açık O₂ maskesi / nazal kanül altında baş-boyun sedasyonunda (MAC) örtü altında oksijen göllenmesi ("tenting") veya ETT kafı etrafından yüksek O₂ kaçağı',
+        'Monopolar Elektrokoter: Trakeostomi sırasında trakeaya girerken, tonsillektomide, orofaringeal/laringeal biyopside veya baş-boyun cilt cerrahisinde koter kullanımı',
+        'Cerrahi Lazerler (CO₂, Nd:YAG, KTP): Lazer dirençli olmayan standart PVC tüp kullanımı, kafın hava ile şişirilmesi veya FiO₂ > %30 iken ateşleme',
+        'Alkol Bazlı Cilt Antiseptikleri (Klorheksidin-Alkol / Povidon-Alkol): Örtü serilmeden ve koter açılmadan önce tam buharlaşma (<3 dk) beklenmemesi veya cilt kıvrımlarında/göbekte göllenme (görünmez mavi alev!)',
+        'Fiberoptik Işık Kabloları & Yüksek Hızlı Matkap/Burr: Çalışır durumda örtü/gazlı bez üzerine bırakılan fiberoptik ışık ucu veya kafsız/kıvılcım sıçratan cihazlar',
+        'Yanıcı Yakıtlar: Standart PVC veya silikon ETT (özellikle >%25-30 O₂ ortamında alev meşalesine dönüşür!), kuru cerrahi tamponlar, kağıt örtüler, hasta saçı/tüyleri'
+      ],
+      safeAgents: [
+        'T4 Üzeri / Baş-Boyun Açık Cerrahilerde: Mümkünse Oda Havası (%21 O₂) veya Kapalı Güvenli Sistemle FiO₂ ≤ %30 (N₂O KESİNLİKLE %0)',
+        'Lazer Cerrahisi İçin Özel Metalik/Spiralli Lazer-Dirençli ETT + Kafın Metilen Mavisi Boyalı Steril SF ile Şişirilmesi',
+        'Trakeostomi Girişinde Soğuk İnsizyon (Neşter / Makas — Trakea Lümeninde Elektrokoter YASAK)',
+        'Islak/Nemli Cerrahi Tampon & Gazlı Bezler (Orofaringeal/laringeal cerrahide kaf çevresini korumak için)',
+        'Alkol Bazlı Antiseptikler İçin ≥ 3 Dakika Tam Kurutma & Göllenme Kontrolü (veya baş-boyunda sulu/alkolsüz povidon-iyot tercihi)'
+      ],
+      mortalityStats: 'Hava yolu yangınında ETT bir "alev meşalesi" (blowtorch effect) gibi çalışarak yüksek basınçlı oksijeni doğrudan trakeobronşiyal ağaca üfler; ETT çekilmesindeki her 5–10 saniyelik gecikme derin akciğer termal yanığını ve mortaliteyi dramatik olarak artırır.',
+      clinicalUrgency: 'Alev, kıvılcım, çıtırtı sesi veya duman fark edildiği anda YANGIN ALARMI VERİN ve ekiple refleks olarak ETT çekimi + gaz kesimi + salin dökümünü AYNI ANDA uygulayın!'
+    },
+
+    // 3) Tanı
+    diagnosis: {
+      overview: 'Hava yolu yangını tanısı doğrudan görsel/işitsel algıyla saniyeler içinde konur: alev, parlama (flash), anormal duman/yanık plastik kokusu, tüpte renk değişimi veya ani SpO₂/devre basıncı kaybı. Alkol bazlı antiseptik alevleri başlangıçta soluk mavi ve GÖRÜNMEZ olabilir; bu nedenle beklenmedik ısı hissi, kıvılcım veya duman şüphesinde dahi yangın varmış gibi hareket edilmelidir.',
+      clinicalCriteria: [
+        'Hava yolu, ETT lümeni veya cerrahi sahada ani alev, kıvılcım, "patlama/puf" sesi (pop) veya duman çıkışı',
+        'ETT konnektörü veya devresinde sıcaklaşma, erime, is/kararma veya beklenmedik gaz kaçağı',
+        'Yoğun yanık plastik / yanık doku kokusu ve cerrahi alanda ani ısı dalgası (görünmez mavi alkol alevi!)',
+        'Ventilatörde ani yüksek basınç / devre ayrılması alarmı veya EtCO₂ ve SpO₂’nin hızla bozulması',
+        'Yangın sonrası direkt laringoskopi ve bronkoskopide mukozal hiperemi, ödem, is birikimi, vezikül veya nekroz görülmesi'
+      ],
+      gradingScaleTitle: 'ASA Yangın Risk Değerlendirmesi & Yangın Üçgeni Sorumluluk Matriksi',
+      gradingScaleSource: 'ASA Practice Advisory for OR Fires (2013) & APSF Fire Safety Algorithm',
+      larachScale: [
+        { category: 'Bileşen 1: Oksidan (Anestezi Kontrolünde!)', points: 'Yüksek Risk ≥ %30 O₂', description: 'FiO₂ > %30 ve özellikle N₂O oksidan yükünü artırır. Anestezist T4 üzeri cerrahilerde oksijen konsantrasyonunu yöneten ana sorumludur.' },
+        { category: 'Bileşen 2: Tutuşturucu (Cerrahi Kontrolünde!)', points: 'Koter / Lazer / Işık', description: 'Monopolar koter, lazer veya sıcak fiberoptik ışık kaynağı. Cerrah aktif kullanımdan önce sesli uyarı ("Koter/Lazer!") vermelidir.' },
+        { category: 'Bileşen 3: Yakıt (Ekip & Hemşire Kontrolünde!)', points: 'ETT / Örtü / Alkol', description: 'PVC ETT, kuru gazlı bez, örtüler ve kurumamış alkollü antiseptik solüsyonlar.' },
+        { category: 'Risk Skor 3/3 (En Yüksek — Baş/Boyun + Açık O₂ + Koter)', points: 'KRİTİK YANGIN RİSKİ', description: 'T4 seviyesi üzerinde açık oksijen (maske/nazal kanül) verilirken elektrokoter/lazer kullanılması kesinlikle önlenmelidir!' },
+        { category: 'Yangın Sonrası İnhalasyon & CO/Siyanür Şüphesi', points: 'Acil Bronkoskopi + AKG', description: 'PVC tüp yanması HCl, karboksihemoglobin (COHb) ve hidrojen siyanür gazı açığa çıkarır.' }
+      ],
+      larachInterpretation: 'ASA Kuralı: Yangın riski her cerrahi başlamadan "Time-Out" sırasında değerlendirilmelidir. Baş-boyun bölgesinde tutuşturucu kullanılacaksa yüksek oksijen konsantrasyonundan kaçınılmalı veya kapalı havayolu (FiO₂ ≤ %30) sağlanmalıdır.',
+      differentialDiagnosis: [
+        {
+          condition: 'Lazerin ETT Kafını Delmesi (Alevsiz Saf Gaz Kaçağı)',
+          differentiatingFactors: 'Kaf Metilen Mavisi boyalı SF ile şişirilmişse cerrahi alanda mavi sıvı görülür ve alev oluşmadan önce lazer durdurulabilir; hava ile şişirilmişse aniden alev parlamasına dönüşür!'
+        },
+        {
+          condition: 'Hava Yolu Dışı Yüzeyel Örtü/Cilt Yangını (Non-Airway Fire)',
+          differentiatingFactors: 'Alev hastanın örtüleri veya cildi üzerindedir, ETT içinde duman/erime yoktur; burada öncelik ETT’yi çekmek değil, gazları kesip yanan örtüleri hızla hastadan sıyırmak ve SF ile söndürmektir.'
+        },
+        {
+          condition: 'Cihaz Kısa Devresi / Elektrokoter Plağı Yanığı',
+          differentiatingFactors: 'Duman ameliyat sahasından değil koter jeneratörü/kablo veya topraklama pedi altından gelir; gaz akışı durdurulur, elektrik prizden çekilir ve topraklama alanı incelenir.'
+        }
+      ]
+    },
+
+    // 4) Akut Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'YANGIN ANONSU: "HAVA YOLU YANGINI! TÜPÜ ÇEK, GAZLARI KES, SALİN DÖK!" — Sirküle hemşireye yangın alarmını aktive etmesi, steril SF ibriklerini açması ve gerekirse yangın söndürücüyü hazırlaması için seslenin.',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'ETT’Yİ DERHAL ÇIKARIN & TÜM HAVAYOLU GAZLARINI KESİN (EŞZAMANLI!)',
+          action: 'Anestezist ve cerrah eşzamanlı olarak: (1) Yanan Endotrakeal Tüpü (veya trakeostomi kanülünü) kafını söndürmeyi beklemeden (veya anında çekerek) hava yolundan DERHAL ÇIKARIN! (2) Anestezi makinesinden hastaya giden tüm taze gaz akımını (O₂, N₂O ve hava) akışmetrelerden veya devreyi makineden tamamen ayırarak DERHAL KESİN!',
+          criticalNote: 'ETT içerideyken sadece oksijeni kısmak veya sadece su dökmek yanmayı yeterince hızlı durduramaz; tüpü çekmeden söndürmeye çalışmak trakeada "alev makinesi" hasarına yol açar!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'HAVAYOLUNA STERİL SERUM FİZYOLOJİK (SF) / SU DÖKÜN & KALINTILARI TEMİZLEYİN',
+          action: 'Tüp çıkarıldıktan hemen sonra trakea/orofarinksteki köz ve sıcak kalıntıları söndürmek için steril SF veya steril su dökün (aspirasyon hazır olsun). Kırılmış ETT parçaları, yanmış kaf artıkları veya tutuşmuş gazlı bezleri forsepsle derhal çıkarın ve masadan uzaklaştırın.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'YANGIN SÖNDÜKTEN SONRA MASKE VENTİLASYONU & ERKEN RE-ENTÜBASYON',
+          action: 'Alev ve duman tamamen sona erdiğinde yüz maskesiyle (mümkün olan en düşük yeterli FiO₂ ile başlayıp stabilizasyonla %100 O₂’ye çıkararak) ventile edin. Termal ödeme bağlı dakikalar içinde tam havayolu tıkanması gelişebileceğinden hastayı hızla (tercihen 0.5–1.0 mm daha küçük çaplı yeni ETT ile, videolaringoskop eşliğinde) re-entübe edin. Volatil ajan yerine TIVA’ya geçin.',
+          criticalNote: 'Yangın tamamen sönmeden hastaya yüksek akım O₂ vermek yangını yeniden alevlendirebilir!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'HASTA DIŞI / ÖRTÜ YANGINI VARSA ÖRTÜLERİ SIYIR & CO₂ SÖNDÜRÜCÜ KULLAN',
+          action: 'Yangın örtü/cilde yayılmışsa tüm yanan örtü ve materyalleri hastanın üzerinden yere atıp SF ile söndürün. Sıvıyla sönmeyen inatçı yangında ekibin diğer üyeleri yalnızca CO₂ (Karbondioksit) Yangın Söndürücüyü kullanmalı; su/toz/Halon söndürücülerden kaçınılmalıdır.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 5,
+          title: 'ÇIKARILAN ETT MUAYENESİ, BRONKOSKOPİ & TOKSİK İNHALASYON ANALİZİ',
+          action: 'Çıkarılan tüpün bütünlüğünü kontrol edin (eksik parça hava yolunda kalmış olabilir!). En kısa sürede rijit veya fiberoptik bronkoskopi + direkt laringoskopi ile tüm hava yolunu yabancı cisim ve termal hasar açısından inceleyin. Karbonmonoksit (COHb) ve siyanür toksisitesi için arteriyel kan gazı ve laktat alın.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 6,
+          title: 'YANGIN ALARMI, TAHLİYE DEĞERLENDİRMESİ & YBÜ TRANSFERİ',
+          action: 'Hastane yangın alarmını ve tıbbi gaz kesme protokolünü (sadece hastayı destekleyecek alternatif O₂ tüpü hazırsa!) değerlendirin. Tüm hava yolu yangını hastalarını erken ekstübe etmeyin; ödem ve ARDS takibi için entübe halde Yoğun Bakım Ünitesine transfer edin.',
+          priority: 'HIGH'
+        }
+      ],
+      airwayFireProtocols: {
+        fireTriangle: {
+          title: 'Ameliyathane Yangın Üçgeni (Fire Triangle) — Üçünden Birini Kesmek Yangını Önler',
+          oxidizers: 'OKSİDANLAR (Anestezi Ekibi): O₂ (> %30) ve Azot Protoksit (N₂O). Önemli gerçek: N₂O yanmayı desteklemede neredeyse saf O₂ kadar güçlüdür! Açık yüz maskesi veya nazal kanül altında örtülerin altına O₂ dolması ("oxygen pooling / tenting") en büyük gizli tehlikedir.',
+          ignitionSources: 'TUTUŞTURUCULAR (Cerrahi Ekip): Monopolar elektrokoter (%85 neden), bipolar koter, cerrahi lazerler (CO₂, KTP, Nd:YAG), sıcak fiberoptik ışık kabloları, defibrilatör pedleri ve yüksek hızlı ortopedik/KBB matkaplar.',
+          fuels: 'YAKITLAR (Hemşirelik & Ortam): Standart PVC/Silikon ETT, trakeostomi kanülü, kuru gazlı bezler/tamponlar, alkol bazlı cilt solüsyonları (klorheksidin-alkol), kağıt/plastik örtüler, endotrakeal jel, saç ve tüyler.',
+          criticalWarning: 'Oksidan + Tutuşturucu + Yakıt aynı alanda bulunduğunda koter ucundaki mikroskobik bir kıvılcım bile PVC tüpü saniyeler içinde trakeaya ateş üfleyen bir meşaleye çevirir!'
+        },
+        airwayVsNonAirway: {
+          title: 'ASA 2013 & APSF Karar Ayrımı: Hava Yolu Yangını vs Hava Yolu Dışı Yangın',
+          airwayFireSteps: [
+            '1. Endotrakeal Tüpü (ETT) DERHAL havayolundan çıkarın (kafı söndürmeyi beklemeyin; gerekirse hızla çekin).',
+            '2. Tüm havayolu gazlarını (O₂ ve N₂O) DERHAL durdurun (devreyi ayırın + akışmetreyi kapatın).',
+            '3. Havayoluna bol miktarda Steril Serum Fizyolojik (SF) veya steril su dökün.',
+            '4. Kalan yanmış tüp, kaf, gazlı bez parçalarını çıkarın; sönünce maske ile ventile edip hızla re-entübe edin ve bronkoskopi yapın.'
+          ],
+          nonAirwayFireSteps: [
+            '1. Tüm solunum gaz akımını durdurun (hastayı yüksek O₂ kaynağından ayırın).',
+            '2. Yanan veya için için tüten tüm örtüleri ve materyalleri hastanın üzerinden derhal sıyırıp yere atın.',
+            '3. Yanan bölgeyi Steril SF veya su ile söndürün (örtü altındaki yangınlarda gerekirse CO₂ yangın söndürücü kullanın).',
+            '4. Hasta yanıklarını değerlendirin, duman inhalasyonu varsa entübasyon ve bronkoskopi planlayın.'
+          ]
+        },
+        preventionByProcedure: [
+          {
+            procedure: 'Lazer Laringeal / Hava Yolu Cerrahisi',
+            riskMechanism: 'Lazer ışını standart PVC veya silikon tüpü milisaniyeler içinde tutuşturur; hava dolu kaf patlayarak dev alev topu oluşturur.',
+            preventionRule: 'Mutlaka Lazer-Dirençli ETT (çift kaflı paslanmaz çelik spiralli tüp) kullanın. Her iki kafı hava yerine Metilen Mavisi boyalı Steril SF ile şişirin. Lazer öncesi FiO₂ ≤ %30 (Hava + O₂, N₂O = %0) ayarlayın ve çevreye ıslak tampon yerleştirin.',
+            criticalAlert: 'Cerrahi sahada mavi sıvı görülürse kaf delinmiştir → Lazeri derhal durdurup tüpü değiştirin!'
+          },
+          {
+            procedure: 'Trakeostomi Açılması',
+            riskMechanism: 'Trakea ön duvarını keserken elektrokoter kullanılması, yüksek O₂ içeren trakea lümeninden kıvılcımın ETT’ye ulaşmasına neden olur.',
+            preventionRule: 'Cilt ve cilt altı diseksiyonu bittikten sonra trakea duvarını açarken elektrokoter KESİNLİKLE KULLANILMAZ (neşter/makasla soğuk giriş!). Koter öncesi ETT kafı ileri itilip FiO₂ ≤ %30’a düşürülür.',
+            criticalAlert: 'Trakeostomide hava yolu yangınlarının %90’ı trakea girişinde koter kullanımından kaynaklanır!'
+          },
+          {
+            procedure: 'Baş-Boyun Sedasyonu (MAC / Göz / Yüz Cerrahisi)',
+            riskMechanism: 'Nazal kanül veya açık maskeyle verilen O₂ örtü altında göllenir; koter açıldığında örtü ve hastanın yüzü aniden parlar.',
+            preventionRule: 'Oksijen gerekmiyorsa oda havası (%21) kullanın. O₂ şartsa kapalı sistem (LMA/ETT) tercih edin veya nazal kanül akımını en düşükte tutup örtüyü hastadan uzaklaştırın ("open-draping" / aktif vakum aspirasyonu), koter öncesi O₂ kesip 1 dk bekleyin.',
+            criticalAlert: 'Koter açıkken örtü altında serbest yüksek akım O₂ vermek en sık non-airway/yüz yangını nedenidir!'
+          },
+          {
+            procedure: 'Alkol Bazlı Cilt Antiseptikleri (CHG-Alkol)',
+            riskMechanism: 'Alkol buharı örtü altında hapsolur ve yanarken soluk mavi/renksiz alev verir (yanan örtünün fark edilmesi gecikir!).',
+            preventionRule: 'Boyama sonrası göllenen fazla sıvıyı silin, kıllı bölgelerde daha uzun olmak üzere EN AZ 3 DAKİKA tam kuruma bekleyin. Örtüleri yapıştırmadan önce cildin tamamen kuru olduğunu doğrulayın.',
+            criticalAlert: 'Islak antiseptik üzerine yapıştırılan yapışkan örtüler alkol buharını saatlerce hapsedebilir!'
+          },
+          {
+            procedure: 'Tonsillektomi & Orofaringeal Cerrahi',
+            riskMechanism: 'Kafsız tüp veya kaf etrafından yükselen O₂/N₂O kaçağına ağız içi monopolar koter kıvılcımının sıçraması.',
+            preventionRule: 'Kaflı ETT kullanın, kaçağı sıfırlayın, FiO₂ ≤ %30 (N₂O = %0) tutun ve hipofarinkse ıslak gazlı bez/tampon koyup kurumasına izin vermeyin.',
+            criticalAlert: 'Kuru boğaz tamponu yüksek oksijende mükemmel yakıttır — tamponları sürekli nemli tutun!'
+          }
+        ],
+        postFireAssessment: {
+          title: 'Yangın Sonrası Değerlendirme, Bronkoskopi & Toksik İnhalasyon Yönetimi',
+          bronchoscopyProtocol: 'Tüm hava yolu yangınlarında (ve şüpheli yüz/duman inhalasyonunda) en kısa sürede Rijit veya Fiberoptik Bronkoskopi yapılmalıdır. Mukozal ödem, ülserasyon, karbon birikimi (is) ve kırılmış tüp/tampon parçaları taranır.',
+          toxicInhalationCheck: 'Yanmış PVC tüplerden Hidrojen Klorür (HCl), Karbonmonoksit (CO) ve Siyanür (HCN) açığa çıkar. Seri arteriyel kan gazında CO-oksimetri ile COHb düzeyi ve yüksek laktat/anyon açığı (siyanür şüphesi!) ölçülmelidir. COHb yüksekse %100 O₂ uygulanır.',
+          edemaAndSteroids: 'Termal hava yolu ödemi ilk 6–24 saatte zirve yapar ve ekstübasyon sonrası ani tıkanma yaratabilir. Hastalar erken ekstübe edilmez; YBÜ’de baş 30–45° elevasyonda, nemlendirilmiş oksijen, gerekirse nebülize adrenalin ve ödem yönetimi (Deksametazon 0.1–0.2 mg/kg IV, maksimum 8–10 mg) eşliğinde seri bronkoskopik takiple izlenir.'
+        }
+      }
+    },
+
+    // 5) Patofizyoloji
+    pathophysiology: {
+      molecularBasis: 'Hava yolu yangını, yüksek enerjili ısı kaynağının (koter/lazer) oksidan zengin (FiO₂ > %30 veya N₂O) atmosferde PVC/polimer endotrakeal tüpü tutuşturmasıyla başlar. Basınçlı solunum gazları tüpün içinde ilerleyen yanmayı bir "meşale" (blowtorch) etkisiyle doğrudan alt solunum yollarına püskürtür; sıcaklık 500–1000°C üzerine çıkarak saniyeler içinde epitelyal koagülasyon nekrozuna neden olur.',
+      stepsTitle: 'Termal & Kimyasal İnhalasyon Hasarı Kaskadı',
+      flowType: 'cascade',
+      cycleWarning: 'PVC yanması yalnızca ısı hasarı vermez; trakeobronşiyal mukozada hidroklorik asit (HCl), fosgen, karbonmonoksit ve siyanür gazlarıyla kimyasal pnömoni ve ARDS başlatır!',
+      cascadeSteps: [
+        {
+          phase: '1. Tutuşma & İntralüminal Meşale Etkisi (0–5 sn)',
+          mechanism: 'Yüksek FiO₂ / N₂O varlığında tutuşan PVC veya silikon tüp içinden geçen gaz akımı alevi doğrudan karinaya ve ana bronşlara üfler; doku sıcaklığı hızla koagülasyon eşiğini aşar.',
+          badge: 'BLOWTORCH ETKİSİ',
+          color: 'red'
+        },
+        {
+          phase: '2. Toksik Duman & Kimyasal Yanık (HCl, CO, HCN)',
+          mechanism: 'Polivinil klorür (PVC) termal yıkımı yoğun asidik Hidrojen Klorür (HCl) gazı, karbonmonoksit ve azotlu bileşiklerden siyanür açığa çıkarır; siliyer aktivite felç olur ve bronkospazm tetiklenir.',
+          badge: 'KİMYASAL PNÖMONİ',
+          color: 'amber'
+        },
+        {
+          phase: '3. Akut Supraglottik & Subglottik Ödem',
+          mechanism: 'Termal hasar ilk dakikalardan itibaren vokal kordlarda ve subglottik alanda masif mikrovasküler permeabilite artışı oluşturur. Tüp çekildikten dakikalar sonra re-entübasyon imkansız hale gelebilir!',
+          badge: 'HAVA YOLU ÖDEMİ',
+          color: 'purple'
+        },
+        {
+          phase: '4. Nekrotizan Trakeobronşit & ARDS (6–48 saat)',
+          mechanism: 'Mukozal dökülme (cast/sloughing) distal havayollarını tıkar, surfaktan inaktive olur, şant ve refrakter hipoksemik solunum yetmezliği (ARDS) gelişir.',
+          badge: 'ARDS & MUKOZAL DÖKÜLME',
+          color: 'rose'
+        }
+      ],
+      summaryText: 'Hava yolu yangınında primer ölüm nedeni akut doku yanığından çok kontrol edilemeyen laringeal ödem (re-entübasyon kaybı) ve asidik/toksik duman inhalasyonuna ikincil ARDS’dir.'
+    },
+
+    // 6) Klinik Özellikler & Prezentasyon
+    presentation: {
+      earlySigns: [
+        'Cerrahi sahada, ETT ağız/trakeostomi çıkışında ani alev, parlama, kıvılcım veya duman görülmesi',
+        'Keskin yanık plastik/kauçuk kokusu ve tüpte veya örtülerde ani sıcaklaşma',
+        'ETT kafının patlamasına bağlı ani "puf" sesi ve ventilatör devresinde büyük kaçak / tidal volüm kaybı',
+        'SpO₂ probu veya kapnograf trasesinde ani bozulma (devre bütünlüğünün eriyerek bozulması)'
+      ],
+      progressingSigns: [
+        'Hızla gelişen şiddetli bronkospazm, yüksek inspiratuvar tepe basınçları (Ppeak) ve hipoksemi',
+        'Orofarinks, dil, vokal kordlar veya boyun derisinde 1.–3. derece termal yanık, bül ve is birikimi',
+        'Kabarık mukozal ödem nedeniyle saatler/dakikalar içinde stridor veya re-entübasyon güçlüğü'
+      ],
+      lateSigns: [
+        'Karbonmonoksit (COHb > %10–20) ve siyanüre bağlı açıklanamayan metabolik laktik asidoz ve bilinç/hemodinami bozukluğu',
+        'Nekrotik mukoza döküntüleriyle (airway casts) ETT veya ana bronşların tıkanması ve obstrüktif atelektazi',
+        'Yangından 12–48 saat sonra gelişen yaygın interstisyel ödem, P/F oranı < 150 (ARDS) ve sepsis'
+      ],
+      specialAlertTitle: 'Görünmez Alkol Alevi & Gizli ETT İçi Yanma Uyarısı!',
+      specialAlertContent: 'Alkol bazlı solüsyonlar (klorheksidin-alkol) parlak ameliyathane lambaları altında Neredeyse GÖRÜNMEZ soluk mavi bir alevle yanar; yalnızca ısı dalgası, örtü kıvrılması veya hastada yanık fark edildiğinde anlaşılabilir! Ayrıca lazerle ETT kafı delinip tüp içinde küçük alev başladığında dışarıdan sadece ETT duvarında renk koyulaşması ve duman görülebilir — en küçük duman/yanık kokusunda DERHAL ETT’yi çekin ve gazları kesin!'
+    },
+
+    // 7) Önleyici - Koruyucu Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Her vakanın "Cerrahisi Güvenliği / Time-Out" aşamasında T4 seviyesi üstü cerrahiler için resmi Yangın Risk Skoru (1-3 puan) belirlenmeli ve yüksek riskli vakalarda ekip rolleri (kimin ETT çekeceği, kimin gazı keseceği, kimin SF dökeceği) sesli olarak paylaşılmalıdır.',
+        'Baş-boyun veya toraks içi MAC/sedasyon vakalarında hastanın gerçek O₂ ihtiyacı sorgulanmalı; satürasyonu koruyorsa oda havası (%21), ek O₂ şartsa kapalı havayolu veya FiO₂ ≤ %30 tercih edilmelidir.',
+        'Lazer cerrahisi planlanıyorsa vaka öncesi mutlaka doğru boyutta Lazer-Dirençli Metalik ETT, Metilen Mavisi boyalı steril SF ve koruyucu ıslak gözlük/tamponlar odaya alınmalıdır.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Ameliyathane Yangın Önleme "Time-Out" & İletişim Protokolü',
+        steps: [
+          'T4 üstü cerrahilerde N₂O kesinlikle kapatılmalı ve anestezi cihazı Hava + O₂ karışımıyla FiO₂ ≤ %30 tutulmalıdır (FiO₂ düşürüldükten sonra devredeki yüksek O₂’nin yıkanması için en az 1–3 dk beklenmelidir!).',
+          'Cerrahi ekip monopolar koter veya lazeri kullanmadan önce anestezisti sesli olarak uyarmalıdır ("Oksijeni %30 altına indirdim, koter/lazer serbest").',
+          'Alkol bazlı antiseptik sürüldükten sonra göllenme kontrolü yapılmalı ve kronometre ile ≥ 3 dakika tam kuruma olmadan yapışkan örtü ve koter uygulanmamalıdır.',
+          'Ameliyathanedeki tüm personel tıbbi gaz acil kapatma vanasının (Zone Valve) ve en yakın CO₂ yangın söndürücünün yerini bilmelidir.'
+        ]
+      },
+      cartTitle: 'Yüksek Yangın Riskli Vaka Ameliyathane Güvenlik Ekipmanı:',
+      cartChecklist: [
+        'Enstrüman Masasında Daima Açık Hazır 2 Adet Steril Serum Fizyolojik / Steril Su İbriği + 50 mL Şırınga (anında havayoluna dökmek için)',
+        'Lazer Cerrahisinde: Çift Kaflı Paslanmaz Çelik Lazer-Dirençli ETT + Metilen Mavili SF Enjektörü',
+        'Islak Cerrahi Tamponlar / Gazlı Bezler (oro/hipofarinks ve lazer sahası için)',
+        'Yedek Re-entübasyon Seti: Videolaringoskop, 0.5–1.0 mm küçük çaplı ETT’ler, yüz maskesi, Ambu ve Magill forseps',
+        'Ameliyathane İçi CO₂ (Karbondioksit) Yangın Söndürücü & Fiberoptik/Rijit Bronkoskopi Erişimi'
+      ]
+    },
+
+    // 8) Postoperatif Takip & Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'Tüm hava yolu yangını veya şüpheli termal/duman inhalasyonu olguları en az 24–48 saat Yoğun Bakım Ünitesinde entübe halde yakın havayolu ödemi, oksijenasyon ve bronkoskopik takip altında izlenmelidir.',
+      recurrenceRate: 'İlk olay sonrası erken ekstübe edilen hastalarda ilk 6–24 saat içinde progresif subglottik/laringeal ödem nedeniyle ani üst havayolu tıkanması ve re-entübasyon başarısızlığı riski (%30–50) çok yüksektir!',
+      recurrenceRiskBadge: 'GEÇ ÖDEM & RE-ENTÜBASYON RİSKİ',
+      maintenanceTherapy: 'Entübasyonun korunması (kaf kaçağı testi geçene ve bronkoskopide ödem gerileyene kadar ekstübasyon ertelenir), akciğer koruyucu ventilasyon (6 mL/kg PBW), baş 30–45° elevasyonu, nebülize bronkodilatör/asetilsistein veya heparin protokolleri (kurumsal inhalasyon yanığı protokolüne göre), nemlendirilmiş gaz ve COHb normalse kontrollü FiO₂.',
+      monitoringParameters: [
+        'Seri Bronkoskopi (ilk 0-2 saat ve gerekirse 24. saatte): Mukozal döküntülerin (cast) temizlenmesi ve subglottik ödem gerilemesi',
+        'Arteriyel Kan Gazı + CO-Oksimetri (COHb düzeyi, methemoglobin, laktat, PaO₂/FiO₂ oranı)',
+        'Ekstübasyon öncesi mutlaka "Cuff Leak Test" (Kaf İndirme Kaçak Testi > 110 mL veya >%15–20) ve direkt laringoskopik ödem değerlendirmesi',
+        'PA Akciğer Grafisi (pnömotoraks, pnömomediastinum ve ARDS infiltratları takibi)',
+        'İnflamatuvar & enfeksiyon takibi (sekonder bakteriyel trakeobronşit — profilaktik antibiyotik rutin değil, kültür/klinik rehberli)'
+      ],
+      expectedComplications: [
+        'Akut Supraglottik / Subglottik Ödem ve Ani Havayolu Kaybı (ekstübasyon erken yapılırsa)',
+        'Kimyasal Pnömoni, ARDS ve Uzamış Mekanik Ventilasyon',
+        'Karbonmonoksit (CO) ve Siyanür İnhalasyon Toksisitesi',
+        'Geç Dönem Trakeal Stenoz, Vokal Kord Granülomu / Sineşi ve Kalıcı Disfoni',
+        'Psikolojik Travma & Mediko-legal İnceleme (kapsamlı olay dokümantasyonu ve tüp/malzeme muhafazası gerekir)'
+      ],
+      definitiveDiagnosticTesting: [
+        { testName: 'Rijit & Fiberoptik Bronkoskopi', description: 'Termal yanığın anatomik derinliğini derecelendirmek, kalan ETT/kaf parçalarını çıkarmak ve mukozal nekroz döküntülerini temizlemek için altın standart.' },
+        { testName: 'CO-Oksimetreli Arteriyel Kan Gazı', description: 'Klasik SpO₂ probu karboksihemoglobini oksihemoglobinden ayırt edemez; COHb ve laktat düzeyi için CO-oksimetri zorunludur.' },
+        { testName: 'Kaf Kaçağı Testi (Cuff Leak Test)', description: 'YBÜ’de ekstübasyon kararı vermeden önce laringeal ödemin çözüldüğünü objektif doğrulamak için uygulanır.' }
+      ],
+      prognosisSummary: 'Yüzeyel veya erken fark edilip ETT’nin saniyeler içinde çıkarıldığı olgular çoğunlukla sekelsiz veya minimal ses kısıklığıyla iyileşir. Buna karşın ETT çıkarılmasının geciktiği, yüksek O₂ altında derin trakeobronşiyal yanık gelişen olgularda mortalite ve kalıcı trakeal stenoz riski belirgin artar.'
+    },
+
+    // 9) High-Yield Klinik Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Airway Fire’da ETT Çekimi ve Gaz Kesimi EŞZAMANLIDIR — Sıra Beklemeyin!',
+        takeaway: 'ASA 2013 kılavuzunda "önce ETT’yi çek, aynı anda tüm gaz akımını durdur ve havayoluna SF dök" tek refleks pakettir. Yanan PVC tüpü içeride bırakıp gazı kısmak bile basıncın verdiği meşale yanmasını hemen durdurmaz!',
+        category: 'Kritik Doz'
+      },
+      {
+        title: 'N₂O da En Az Oksijen Kadar Tehlikeli Bir Oksidandır!',
+        takeaway: 'Azot Protoksit (N₂O) ısı altında parçalanarak oksijen serbestleştirir ve yanmayı saf O₂ kadar şiddetli destekler. Baş-boyun ve lazer cerrahilerinde N₂O kesinlikle %0 olmalı, Hava + O₂ ile FiO₂ ≤ %30 tutulmalıdır!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Lazer Kafını Hava İle Değil Metilen Mavili SF İle Şişirin!',
+        takeaway: 'Lazer cerrahisinde hava dolu kaf delinirse patlar ve yangını büyütür. Metilen Mavisi (veya indigo karmin) boyalı serum fizyolojikle şişirilen kafta delinme anında hem mavi renk cerrahı uyarır hem sıvı kıvılcımı söndürür!',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'Alkol Alevi Görünmezdir & SpO₂ Probu COHb’yi Normal Gösterir!',
+        takeaway: 'Klorheksidin-alkol tam kurumadan (≥3 dk) koter açıldığında çıkan soluk mavi alev parlak ameliyat ışığında görünmez! Ayrıca yanık sonrası SpO₂ %99 görünse bile karboksihemoglobin (COHb) SpO₂ cihazını kandırır — mutlaka kan gazında CO-oksimetri isteyin!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Hava Yolu Yangını Geçiren Hastayı Ameliyathanede Ekstübe Etmeyin!',
+        takeaway: 'Yangın sonrası vokal kordlar ilk anda normal görünse bile termal ödem 6–24 saat içinde hızla ilerleyerek tam obstrüksiyon yapar. İlk re-entübasyonda 0.5–1 mm küçük tüp kullanın ve YBÜ’de cuff leak testi güvenli olana dek entübe izleyin!',
+        category: 'Sınav / Klinik Notu'
+      }
+    ],
+
+    // 10) Kanıta Dayalı Kaynaklar
+    references: [
+      {
+        authors: 'Apfelbaum JL, Caplan RA, Barker SJ, Connis RT, Cowles C, Ehrenwerth J, et al. (ASA Task Force on Operating Room Fires).',
+        title: 'Practice Advisory for the Prevention and Management of Operating Room Fires: An Updated Report by the American Society of Anesthesiologists Task Force on Operating Room Fires.',
+        journal: 'Anesthesiology. 2013;118(2):271–290.',
+        year: '2013',
+        relevance: 'Ameliyathane ve hava yolu yangını önleme/yönetim algoritması: ETT çıkarımı + gaz kesimi + SF dökümü, Yangın Üçgeni, FiO₂ ≤ %30 ve 3 dk antiseptik kuruma standardı.'
+      },
+      {
+        authors: 'Anesthesia Patient Safety Foundation (APSF) & ECRI Institute.',
+        title: 'APSF Operating Room Fire Prevention and Management Algorithm & Surgical Fire Safety.',
+        journal: 'APSF Newsletter / ECRI Clinical Guidance.',
+        year: '2020–2024',
+        relevance: 'Baş-boyun MAC/sedasyon açık oksijen yasağı, "T4 üzeri" yüksek riskli saha yaklaşımı, ekip içi sesli iletişim ve CO₂ yangın söndürücü kuralları.'
+      },
+      {
+        authors: 'Gropper MA, Cohen NH, Eriksson LI, Fleisher LA, Leslie K, Wiener-Kronish JP (Eds.).',
+        title: "Miller's Anesthesia (9th & 10th Editions) — Operating Room Fires & Electrical/Laser Safety.",
+        journal: 'Philadelphia: Elsevier.',
+        year: '2020 / 2024',
+        relevance: 'Lazer-dirençli metalik ETT seçimi, metilen mavili SF ile kaf şişirme, trakeostomi koter yasağı ve termal/kimyasal inhalasyon hasarı fizyolojisi.'
+      },
+      {
+        authors: 'Butterworth JF, Mackey DC, Wasnick JD & Barash PG, Cullen BF, Stoelting RK, et al.',
+        title: "Morgan & Mikhail's Clinical Anesthesiology (7th Ed.) & Barash Clinical Anesthesia (8th Ed.).",
+        journal: 'McGraw-Hill Education / Wolters Kluwer.',
+        year: '2017 / 2022',
+        relevance: 'Yangın üçgeni bileşenleri, N₂O oksidan kinetiği, PVC yanma toksinleri (HCl, CO, HCN) ve post-yangın bronkoskopik yoğun bakım takibi.'
       }
     ]
   }

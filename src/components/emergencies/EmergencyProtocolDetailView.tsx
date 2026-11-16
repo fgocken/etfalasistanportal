@@ -150,6 +150,38 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
   const mtpPccMaxIu = Math.round(weightNum * 25);
   const mtpRf7aMcg = Math.round(weightNum * 90);
 
+  // Tansiyon Pnömotoraks Dekompresyon & Toraks Tüpü hesaplamaları
+  const isPedsPneumo = weightNum > 0 && weightNum < 40;
+  const pneumoNeedleSite = isPedsPneumo
+    ? '2. İKA Midklaviküler Hat (MCL)'
+    : '4–5. İKA Ön/Orta Aksiller Hat (ATLS 10)';
+  const pneumoCatheterSpec = weightNum > 0 && weightNum < 15
+    ? '18G × 3–3.8 cm'
+    : isPedsPneumo
+      ? '16G × 3.8–5 cm'
+      : '14G × ≥5 cm (5–8 cm)';
+  const pneumoSimpleTubeFr = weightNum > 0 && weightNum < 10
+    ? '8–10 Fr'
+    : weightNum > 0 && weightNum < 25
+      ? '10–14 Fr'
+      : '10–14 Fr (Seldinger)';
+  const pneumoTraumaTubeFr = weightNum > 0 && weightNum < 15
+    ? '10–14 Fr'
+    : isPedsPneumo
+      ? '14–20 Fr'
+      : '24–28 Fr (Trokar YASAK)';
+  const pneumoFluidBolusMl = Math.round(weightNum * 20);
+
+  // Airway Fire (Hava Yolu Yangını) re-entübasyon & ödem yönetimi hesaplamaları
+  const airwayFireReintubEtt = weightNum > 0 && weightNum < 15
+    ? 'Pediatrik (0.5 mm küçük kaflı)'
+    : weightNum > 0 && weightNum < 40
+      ? 'ID 5.0–6.0 mm (0.5 mm küçük)'
+      : weightNum < 65
+        ? 'ID 6.5 mm (0.5 mm küçük)'
+        : 'ID 7.0–7.5 mm (0.5 mm küçük)';
+  const airwayFireDexaMg = +(Math.min(10, Math.max(4, weightNum * 0.15))).toFixed(1);
+
   // Optional ECG lightbox modal state
   const [selectedEcgItem, setSelectedEcgItem] = useState<{
     rhythmName: string;
@@ -987,6 +1019,131 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
                   </div>
                   <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Yalnızca dirençli kurtarma (pH ≥7.20, Isı ≥35°C) için 90 mcg/kg">
                     Salvaj rFVIIa: <strong className="text-amber-300">{mtpRf7aMcg} mcg</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (protocol.id === 'tension-pneumothorax' || protocol.quickCalculatorType === 'tension-pneumothorax') ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 shrink-0">
+                  <Wind className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Acil Plevral Dekompresyon &amp; Toraks Tüpü Seçim Hesaplayıcısı</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
+                      {isPedsPneumo ? 'PEDİATRİK (<40 kg) MODU' : 'ERİŞKİN ATLS 10 / BTS MODU'}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Kilo girerek iğne dekompresyon bölgesi/kateter boyu, tüp Fr çapı, aspirasyon basıncı ve obstrüktif şok sıvı bolusunu görün:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono tabular-nums font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono tabular-nums text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Alt kostanın ÜST kenarından dik giriş; standart 3.2 cm venflon erişkinde yetersiz kalır">
+                    İğne Yeri: <strong>{pneumoNeedleSite}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Erişkinde ≥5 cm dekompresyon kateteri veya entübede doğrudan Parmak Torakostomi">
+                    Kateter: <strong>{pneumoCatheterSpec}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Basit / iyatrojenik pnömotoraksta BTS 2010/2023 küçük çap">
+                    Tüp (Basit): <strong>{pneumoSimpleTubeFr}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Travma / dev kaçak / hemopnömotoraks tüp çapı">
+                    Tüp (Travma/Kaçak): <strong>{pneumoTraumaTubeFr}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Gerektiğinde düşük basınçlı sualtı aspirasyonu">
+                    Suction: <strong>−10 ila −20 cmH₂O</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Obstrüktif şokta dekompresyon ile birlikte sıvı desteği">
+                    Sıvı (20 mL/kg): <strong>{pneumoFluidBolusMl} mL</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="N2O pnömotoraksı hızla büyütür; PEEP venöz dönüşü daha da bozar">
+                    Anestezi: <strong className="text-red-400">N₂O KAPAT · PEEP=0</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (protocol.id === 'airway-fire' || protocol.quickCalculatorType === 'airway-fire') ? (
+            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 shrink-0">
+                  <Flame className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Hava Yolu Yangını Refleks Eylem &amp; Re-Entübasyon Hesaplayıcısı</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
+                      ASA OR FIRE ADVISORY
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Kilo girerek yangın sonrası ödem riskine uygun re-entübasyon ETT boyunu, Deksametazon dozunu ve güvenli FiO₂/kuruma sınırlarını görün:
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
+                  <div className="relative w-18">
+                    <input
+                      type="number"
+                      min="1"
+                      max="250"
+                      value={patientWeight}
+                      onChange={(e) => setPatientWeight(e.target.value)}
+                      className={`w-full px-2 py-1 text-xs font-mono tabular-nums font-bold rounded-lg border text-center ${
+                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 font-mono tabular-nums text-[11px]">
+                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="ASA ilk 4 adım aynı anda">
+                    Refleks: <strong className="text-red-400">ETT ÇEK · GAZ KES · SF DÖK</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="T4 üzeri ve lazer cerrahisinde güvenli O2 limiti; N2O = %0">
+                    Güvenli FiO₂: <strong>≤ %30 (N₂O = %0)</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Termal ödem nedeniyle normalden 0.5-1.0 mm küçük çaplı ETT seçilir">
+                    Re-entübasyon ETT: <strong>{airwayFireReintubEtt}</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Ödem yönetimi için Deksametazon ~0.15 mg/kg IV (maks 10 mg)">
+                    Deksametazon: <strong>{airwayFireDexaMg} mg IV</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Alkol bazlı antiseptikler için minimum tam kuruma süresi">
+                    Alkol Kuruma: <strong>≥ 3 Dakika</strong>
+                  </div>
+                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Lazer cerrahisinde hava yerine boyalı salinle kaf şişirilir">
+                    Lazer Kafı: <strong className="text-cyan-300">Metilen Mavili SF</strong>
                   </div>
                 </div>
               </div>
@@ -3769,6 +3926,318 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
                         </p>
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tansiyon Pnömotoraks Alt Protokolleri */}
+            {protocol.crisisManagement.tensionPneumothoraxProtocols && (
+              <div className="space-y-4">
+                {/* 1. Acil Plevral Dekompresyon: İğne vs Parmak Torakostomi */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-red-950/20 border-red-500/40' : 'bg-red-50/70 border-red-300'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-red-600 dark:text-red-400 text-xs sm:text-sm">
+                    <Syringe className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.tensionPneumothoraxProtocols.decompressionOptions.title}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-red-200'
+                    }`}>
+                      <span className="font-bold text-red-600 dark:text-red-400 block mb-1">Erişkin İğne Dekompresyonu (ATLS 10)</span>
+                      <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.tensionPneumothoraxProtocols.decompressionOptions.needleDecompressionAdult}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-red-200'
+                    }`}>
+                      <span className="font-bold text-sky-600 dark:text-sky-400 block mb-1">Pediatrik İğne Dekompresyonu</span>
+                      <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.tensionPneumothoraxProtocols.decompressionOptions.needleDecompressionPediatric}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-amber-950/25 border-amber-500/35' : 'bg-amber-50 border-amber-200'
+                    }`}>
+                      <span className="font-bold text-amber-600 dark:text-amber-400 block mb-1">Kateter Boyu &amp; Başarısızlık Uyarısı</span>
+                      <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.tensionPneumothoraxProtocols.decompressionOptions.catheterSpecs}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-emerald-950/25 border-emerald-500/35' : 'bg-emerald-50 border-emerald-200'
+                    }`}>
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400 block mb-1">Parmak Torakostomi (Entübe / Arrest / Travma)</span>
+                      <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.tensionPneumothoraxProtocols.decompressionOptions.fingerThoracostomy}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. BTS Emniyet Üçgeni & Tüp Çapı Seçimi */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-sky-600 dark:text-sky-400 text-xs sm:text-sm">
+                    <Layers className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.tensionPneumothoraxProtocols.tubeThoracostomyAndSafetyTriangle.title}</span>
+                  </div>
+
+                  <div className={`p-3 rounded-lg border text-[11px] leading-relaxed font-semibold ${
+                    isDark ? 'bg-sky-950/25 border-sky-500/30 text-sky-200' : 'bg-sky-50 border-sky-200 text-sky-950'
+                  }`}>
+                    {protocol.crisisManagement.tensionPneumothoraxProtocols.tubeThoracostomyAndSafetyTriangle.safetyTriangle}
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-[11px]">
+                      <thead>
+                        <tr className={`border-b ${isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                          <th className="py-2 pr-3 font-bold">Klinik Durum</th>
+                          <th className="py-2 px-3 font-bold">Tüp Çapı (Fr)</th>
+                          <th className="py-2 px-3 font-bold">Yerleştirme Tekniği</th>
+                          <th className="py-2 pl-3 font-bold">Klinik Not</th>
+                        </tr>
+                      </thead>
+                      <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                        {protocol.crisisManagement.tensionPneumothoraxProtocols.tubeThoracostomyAndSafetyTriangle.tubeSizing.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="py-2.5 pr-3 font-bold text-slate-900 dark:text-white">{row.indication}</td>
+                            <td className="py-2.5 px-3 font-mono font-bold text-sky-600 dark:text-sky-400 whitespace-nowrap">{row.frenchSize}</td>
+                            <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">{row.technique}</td>
+                            <td className="py-2.5 pl-3 text-slate-600 dark:text-slate-400">{row.clinicalNote}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 3. Sualtı Kapalı Drenaj Fiziği & Klemp Yasağı */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-amber-600 dark:text-amber-400 text-xs sm:text-sm">
+                    <ShieldAlert className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.tensionPneumothoraxProtocols.chestDrainPhysicsAndRules.title}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    {protocol.crisisManagement.tensionPneumothoraxProtocols.chestDrainPhysicsAndRules.criticalRules.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-3.5 rounded-xl border ${
+                          item.severity === 'DANGER'
+                            ? isDark ? 'bg-red-950/35 border-red-500/45 text-red-200' : 'bg-red-50 border-red-300 text-red-950'
+                            : item.severity === 'WARNING'
+                              ? isDark ? 'bg-amber-950/25 border-amber-500/35 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-950'
+                              : isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-800'
+                        }`}
+                      >
+                        <div className="font-bold text-xs mb-1">{item.rule}</div>
+                        <p className="text-[11px] leading-relaxed">{item.detail}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="overflow-x-auto pt-1">
+                    <table className="w-full text-left border-collapse text-[11px]">
+                      <thead>
+                        <tr className={`border-b ${isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                          <th className="py-2 pr-3 font-bold">Sualtı Şişe Bulgusu</th>
+                          <th className="py-2 px-3 font-bold">Fizyolojik Anlamı</th>
+                          <th className="py-2 pl-3 font-bold">Yapılması Gereken</th>
+                        </tr>
+                      </thead>
+                      <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                        {protocol.crisisManagement.tensionPneumothoraxProtocols.chestDrainPhysicsAndRules.bubblingInterpretation.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="py-2 pr-3 font-bold text-slate-900 dark:text-white">{row.finding}</td>
+                            <td className="py-2 px-3 text-slate-700 dark:text-slate-300">{row.meaning}</td>
+                            <td className="py-2 pl-3 font-semibold text-emerald-700 dark:text-emerald-400">{row.action}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 4. N2O Mutlak Yasağı & Ventilatör Ayarları */}
+                <div className={`p-4 rounded-xl border space-y-2.5 ${
+                  isDark ? 'bg-purple-950/20 border-purple-500/35' : 'bg-purple-50/70 border-purple-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-purple-600 dark:text-purple-400 text-xs sm:text-sm">
+                    <Wind className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.tensionPneumothoraxProtocols.anesthesiaVentilationAndN2ORules.title}</span>
+                  </div>
+                  <div className={`p-3 rounded-lg border text-[11px] font-bold leading-relaxed ${
+                    isDark ? 'bg-red-950/35 border-red-500/40 text-red-200' : 'bg-red-50 border-red-300 text-red-950'
+                  }`}>
+                    {protocol.crisisManagement.tensionPneumothoraxProtocols.anesthesiaVentilationAndN2ORules.n2oAbsoluteStop}
+                  </div>
+                  <ul className="space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
+                    {protocol.crisisManagement.tensionPneumothoraxProtocols.anesthesiaVentilationAndN2ORules.ventilationAdjustments.map((adj, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
+                        <span>{adj}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* Airway Fire (Hava Yolu & Ameliyathane Yangını) Alt Protokolleri */}
+            {protocol.crisisManagement.airwayFireProtocols && (
+              <div className="space-y-4">
+                {/* 1. Yangın Üçgeni */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-red-950/20 border-red-500/40' : 'bg-red-50/70 border-red-300'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-red-600 dark:text-red-400 text-xs sm:text-sm">
+                    <Flame className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.airwayFireProtocols.fireTriangle.title}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-red-200'
+                    }`}>
+                      <span className="font-bold text-sky-600 dark:text-sky-400 block mb-1">1. Oksidanlar (Anestezi)</span>
+                      <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.fireTriangle.oxidizers}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-red-200'
+                    }`}>
+                      <span className="font-bold text-amber-600 dark:text-amber-400 block mb-1">2. Tutuşturucular (Cerrahi)</span>
+                      <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.fireTriangle.ignitionSources}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-red-200'
+                    }`}>
+                      <span className="font-bold text-purple-600 dark:text-purple-400 block mb-1">3. Yakıtlar (Hemşirelik / Ortam)</span>
+                      <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.fireTriangle.fuels}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={`p-3 rounded-lg border text-[11px] font-bold leading-relaxed ${
+                    isDark ? 'bg-red-950/40 border-red-500/45 text-red-200' : 'bg-red-100/70 border-red-300 text-red-950'
+                  }`}>
+                    {protocol.crisisManagement.airwayFireProtocols.fireTriangle.criticalWarning}
+                  </div>
+                </div>
+
+                {/* 2. Hava Yolu Yangını vs Hava Yolu Dışı Yangın Karar Ayrımı */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-amber-600 dark:text-amber-400 text-xs sm:text-sm">
+                    <AlertOctagon className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.airwayFireProtocols.airwayVsNonAirway.title}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className={`p-3.5 rounded-xl border space-y-2 ${
+                      isDark ? 'bg-red-950/25 border-red-500/40' : 'bg-red-50 border-red-300'
+                    }`}>
+                      <span className="font-bold text-red-600 dark:text-red-400 block">Hava Yolu Yangını (ETT / Trakea İçi)</span>
+                      <ul className="space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.airwayVsNonAirway.airwayFireSteps.map((st, idx) => (
+                          <li key={idx} className="leading-relaxed">{st}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className={`p-3.5 rounded-xl border space-y-2 ${
+                      isDark ? 'bg-amber-950/20 border-amber-500/35' : 'bg-amber-50 border-amber-200'
+                    }`}>
+                      <span className="font-bold text-amber-600 dark:text-amber-400 block">Hava Yolu Dışı Yangın (Örtü / Cilt Üzeri)</span>
+                      <ul className="space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.airwayVsNonAirway.nonAirwayFireSteps.map((st, idx) => (
+                          <li key={idx} className="leading-relaxed">{st}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Prosedürlere Göre Yangın Önleme Matriksi */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm">
+                    <ShieldAlert className="w-4 h-4 shrink-0" />
+                    <span>Yüksek Riskli Cerrahilere Özgü Yangın Önleme Protokolleri (ASA / APSF)</span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-[11px]">
+                      <thead>
+                        <tr className={`border-b ${isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                          <th className="py-2 pr-3 font-bold">Prosedür / Risk Alanı</th>
+                          <th className="py-2 px-3 font-bold">Tutuşma Mekanizması</th>
+                          <th className="py-2 px-3 font-bold">Önleme Kuralı</th>
+                          <th className="py-2 pl-3 font-bold">Kritik Uyarı</th>
+                        </tr>
+                      </thead>
+                      <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                        {protocol.crisisManagement.airwayFireProtocols.preventionByProcedure.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="py-2.5 pr-3 font-bold text-slate-900 dark:text-white">{row.procedure}</td>
+                            <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">{row.riskMechanism}</td>
+                            <td className="py-2.5 px-3 text-emerald-700 dark:text-emerald-400 font-semibold">{row.preventionRule}</td>
+                            <td className="py-2.5 pl-3 text-rose-600 dark:text-rose-400 font-bold">{row.criticalAlert}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 4. Yangın Sonrası Bronkoskopi, CO/Siyanür & Ödem Yönetimi */}
+                <div className={`p-4 rounded-xl border space-y-2.5 ${
+                  isDark ? 'bg-purple-950/20 border-purple-500/35' : 'bg-purple-50/70 border-purple-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-purple-600 dark:text-purple-400 text-xs sm:text-sm">
+                    <Activity className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.airwayFireProtocols.postFireAssessment.title}</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px]">
+                    <div className={`p-3 rounded-lg border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-purple-200'
+                    }`}>
+                      <span className="font-bold text-purple-600 dark:text-purple-400 block mb-1">Bronkoskopi &amp; Yabancı Cisim</span>
+                      <p className="leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.postFireAssessment.bronchoscopyProtocol}
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-lg border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-purple-200'
+                    }`}>
+                      <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">Toksik İnhalasyon (CO / HCN / HCl)</span>
+                      <p className="leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.postFireAssessment.toxicInhalationCheck}
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-lg border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-purple-200'
+                    }`}>
+                      <span className="font-bold text-amber-600 dark:text-amber-400 block mb-1">Termal Ödem &amp; Steroid / YBÜ</span>
+                      <p className="leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.airwayFireProtocols.postFireAssessment.edemaAndSteroids}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

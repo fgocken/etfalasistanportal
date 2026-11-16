@@ -117,6 +117,61 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     keywords: ['noradrenalin', 'adrenalin', 'dopamin', 'dobutamin', 'nitrogliserin', 'propofol', 'remifentanil', 'vazopresör', 'inotrop', 'aritmi', 'şok'],
     tabId: 'infusion'
   },
+  {
+    id: 'calc-bedside-abg',
+    title: 'Yatak Başı Arteriyel Kan Gazı (AKG) Analizörü',
+    category: 'Hesaplayıcılar',
+    badge: 'AKG · Asit-Baz',
+    description: 'pH, pCO₂, HCO₃⁻, SBE, Henderson-Hasselbalch tutarlılığı, Winter/Boston kompanzasyonu, Figge anyon açığı, Delta oranı ve interaktif asit-baz haritası.',
+    keywords: [
+      'kan gazı',
+      'akg',
+      'abg',
+      'vbg',
+      'arter kan gazı',
+      'venöz kan gazı',
+      'asit baz',
+      'asidoz',
+      'alkaloz',
+      'winter formülü',
+      'anyon açığı',
+      'anion gap',
+      'hagma',
+      'nagma',
+      'delta oranı',
+      'laktat',
+      'henderson hasselbalch',
+      'p/f oranı',
+      'a-a gradiyenti',
+      'cao2',
+      'alpha stat',
+      'ph stat'
+    ],
+    tabId: 'abg',
+    popular: true
+  },
+  {
+    id: 'calc-stewart-sbe',
+    title: 'Stewart Fizikokimyasal Asit-Baz & SBE Katkıları (Story BJA)',
+    category: 'Hesaplayıcılar',
+    badge: 'Stewart · SBE',
+    description: 'Standart Baz Fazlasının (SBE) Na–Cl klor etkisi, albümin, laktat ve ölçülemeyen iyon bileşenlerine ayrıştırılması ve hipoalbüminemi düzeltmesi.',
+    keywords: [
+      'stewart',
+      'story',
+      'fencl',
+      'sbe',
+      'baz fazlası',
+      'base excess',
+      'klor etkisi',
+      'hiperkloremik asidoz',
+      'albümin düzeltmesi',
+      'figge',
+      'ölçülemeyen anyon',
+      'osmolal gap'
+    ],
+    tabId: 'abg'
+  },
 
   // 2. Kılavuzlar & Protokoller
   {
@@ -326,6 +381,37 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'kriyopresipitat', 'kalsiyum klorür', 'sitrat toksisitesi', 'hipokalsemi', 'rotem', 'teg',
       'fibtem', 'extem', 'abc skoru', 'şok indeksi', 'permisif hipotansiyon', 'ölümcül dörtlü',
       'lethal triad', 'lethal diamond', 'taco', 'trali', '4f pcc', 'anestezi acili', 'acil protokol'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-tension-pneumothorax',
+    title: 'Tansiyon Pnömotoraks Kriz Protokolü & Plevral Dekompresyon',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Tansiyon Pnömotoraks',
+    description: '10 aşamalı acil kriz protokolü: N2O kapatma, PEEP=0, 4–5. İKA AAL/MAL 14G (≥5 cm) iğne veya parmak torakostomi, BTS Emniyet Üçgeni, klemp yasağı ve Akciğer POCUS.',
+    keywords: [
+      'tansiyon pnömotoraks', 'pnömotoraks', 'tension pneumothorax', 'iğne dekompresyon', 'needle decompression',
+      'parmak torakostomi', 'finger thoracostomy', 'tüp torakostomi', 'göğüs tüpü', 'chest drain', 'toraks tüpü',
+      'emniyet üçgeni', 'triangle of safety', 'bts 2010', 'atls', 'sualtı drenaj', 'klemp yasağı', 'bubbling',
+      'ppeak artışı', 'obstrüktif şok', 'pea arrest', 'jvd', 'trakeal deviasyon', 'barkod işareti', 'lung sliding',
+      'lung point', 'svk pnömotoraks', 'supraklaviküler blok', 'n2o yasağı', 'kapnotoraks', 'anestezi acili', 'acil protokol'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
+  {
+    id: 'emergency-airway-fire',
+    title: 'Hava Yolu Yangını (Airway Fire) & Ameliyathane Yangını',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Airway Fire · ASA/APSF',
+    description: '10 aşamalı acil kriz protokolü: Eşzamanlı ETT çekimi + gaz akımını kesme + steril SF dökme, Yangın Üçgeni, lazer ETT + metilen mavisi kaf, FiO2 ≤ %30 ve 3 dk alkol kuruma.',
+    keywords: [
+      'airway fire', 'hava yolu yangını', 'ameliyathane yangını', 'yangın', 'or fire', 'fire triangle', 'yangın üçgeni',
+      'ett çıkarımı', 'gaz kesme', 'lazer cerrahisi', 'lazer tüpü', 'metilen mavisi kaf', 'trakeostomi yangını',
+      'elektrokoter', 'monopolar koter', 'alkol antiseptik', 'klorheksidin alkol', 'fio2 30', 'n2o yangın',
+      'co2 söndürücü', 'bronkoskopi', 'karboksihemoglobin', 'cohb', 'inhalasyon yanığı', 'anestezi acili', 'acil protokol'
     ],
     tabId: 'emergencies',
     popular: true
@@ -1028,8 +1114,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     title: 'Anestezi Acilleri ve Kriz Yönetimi',
     category: 'Kılavuzlar & Protokoller',
     badge: 'Acil Protokol',
-    description: 'Perioperatif kriz yönetimi, malign hipertermi, masif transfüzyon (MTP), arrest/ACLS, anafilaksi, LAST, EtCO2 yükselmesi/azalması, FiCO2 yükselmesi, Ppeak yükselmesi ve intraoperatif hipoksemi algoritmaları.',
-    keywords: ['anestezi acilleri', 'acil', 'kriz', 'malign hipertermi', 'masif transfüzyon', 'mtp', 'arrest', 'acls', 'cpr', 'anafilaksi', 'last', 'cico', 'mavi kod', 'etco2', 'fico2', 'ppeak', 'tepe hava yolu basıncı', 'hipoksemi', 'desatürasyon', 'olv', 'hepatopulmoner sendrom'],
+    description: 'Perioperatif kriz yönetimi, malign hipertermi, tansiyon pnömotoraks, hava yolu yangını (airway fire), masif transfüzyon (MTP), arrest/ACLS, anafilaksi, LAST, EtCO2, FiCO2, Ppeak ve hipoksemi algoritmaları.',
+    keywords: ['anestezi acilleri', 'acil', 'kriz', 'malign hipertermi', 'tansiyon pnömotoraks', 'pnömotoraks', 'airway fire', 'hava yolu yangını', 'ameliyathane yangını', 'masif transfüzyon', 'mtp', 'arrest', 'acls', 'cpr', 'anafilaksi', 'last', 'cico', 'mavi kod', 'etco2', 'fico2', 'ppeak', 'tepe hava yolu basıncı', 'hipoksemi', 'desatürasyon', 'olv', 'hepatopulmoner sendrom'],
     tabId: 'emergencies',
     popular: true
   },

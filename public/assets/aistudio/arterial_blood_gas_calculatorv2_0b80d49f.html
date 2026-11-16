@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kan gazı analizörü</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f4;--panel:#fff;--ink:#12242b;--mute:#5b6b72;--line:#d9e1e0;--acc:#0f766e;--accbg:#e1f2ef;--bad:#b4412d;--badbg:#fbe9e5;--warn:#9a6700;--warnbg:#fdf3d8;--ok:#2f7d4f;--okbg:#e3f3e8;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a1f;--panel:#15252b;--ink:#e6eeee;--mute:#93a5a9;--line:#27393f;--acc:#4fc3b5;--accbg:#143a38;--bad:#ff8f7a;--badbg:#3a1f1a;--warn:#e5b84a;--warnbg:#3a2f12;--ok:#6ccb8e;--okbg:#17321f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1a1f;--panel:#15252b;--ink:#e6eeee;--mute:#93a5a9;--line:#27393f;--acc:#4fc3b5;--accbg:#143a38;--bad:#ff8f7a;--badbg:#3a1f1a;--warn:#e5b84a;--warnbg:#3a2f12;--ok:#6ccb8e;--okbg:#17321f;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;font-weight:600;margin:0}
+.lead{color:var(--mute);margin:2px 0 14px}
+.samples{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.samples button{flex:none;font:inherit;font-size:13px;padding:6px 12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;cursor:pointer}
+.samples button:hover{border-color:var(--acc)}
+main{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.panel h3{margin:0 0 10px;font-size:15px;font-weight:600}
+form.panel{display:grid;grid-template-columns:1fr 1fr;gap:10px 10px}
+form label{display:block;font-size:12.5px;color:var(--mute)}
+form input,form select{width:100%;margin-top:3px;font:inherit;font-size:15px;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+form input:focus,form select:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+form small{display:block;font-size:11px;color:var(--mute);opacity:.85}
+.full{grid-column:1/-1}
+.row{display:flex;gap:4px}.row select{width:84px;flex:none}
+.rst{grid-column:1/-1;font:inherit;font-size:13px;padding:7px;border:1px solid var(--line);background:none;color:var(--mute);border-radius:6px;cursor:pointer}
+#out{display:grid;gap:16px;min-width:0}
+.verdict{border-radius:10px;padding:18px 20px;border:1px solid var(--line);border-left-width:6px}
+.verdict.ok{background:var(--okbg);border-left-color:var(--ok)}.verdict.warn{background:var(--warnbg);border-left-color:var(--warn)}.verdict.bad{background:var(--badbg);border-left-color:var(--bad)}
+.verdict .sub{font-size:13px;color:var(--mute)}
+.verdict h2{font-size:25px;line-height:1.2;font-weight:600;margin:4px 0 10px;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--ink)}
+.chip.e{border-style:dashed}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.stat b{display:block;font-size:19px;font-weight:600}.stat span{font-size:12px;color:var(--mute)}
+.stat.bad b{color:var(--bad)}.stat.warn b{color:var(--warn)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+svg{width:100%;height:auto;display:block}
+.gl{stroke:var(--line);stroke-width:1}.iso{fill:none;stroke:var(--mute);stroke-width:1;opacity:.5}
+.ax{fill:var(--mute);font-size:10px}.nb{fill:var(--accbg);stroke:var(--acc);stroke-width:1.5}
+.cap{font-size:12px;color:var(--mute);margin:6px 0 0}
+.bars{display:grid;gap:9px}
+.br{display:grid;grid-template-columns:110px 1fr 48px;align-items:center;gap:8px;font-size:13px}
+.tr{position:relative;height:14px;background:var(--bg);border-radius:3px}
+.tr:before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--mute)}
+.tr i{position:absolute;top:0;bottom:0;border-radius:2px}
+.br em{font-style:normal;text-align:right;font-weight:600}
+.br.sum{border-top:1px solid var(--line);padding-top:8px}
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:s}
+.steps li{counter-increment:s;border-left:4px solid var(--line);padding:2px 0 2px 12px;font-size:14px}
+.steps li:before{content:counter(s) ". ";font-weight:600}
+.steps li.ok{border-color:var(--ok)}.steps li.warn{border-color:var(--warn)}.steps li.bad{border-color:var(--bad)}
+.steps li b{font-weight:600}
+.notes{margin:0;padding-left:18px;font-size:14px;display:grid;gap:6px}
+.act{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.act button{font:inherit;font-size:14px;padding:8px 14px;border-radius:8px;border:1px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+.disc{font-size:12px;color:var(--mute)}
+.empty{padding:40px 16px;text-align:center;color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Kan gazı analizörü</h1>
+<p class="lead">Asit-baz bozukluğu, anyon açığı, delta oranı ve Stewart katkıları değerleri girdikçe güncellenir.</p>
+<div class="samples" id="samples"></div>
+<main>
+<form class="panel" id="f" autocomplete="off" onsubmit="return false"></form>
+<section id="out" aria-live="polite"></section>
+</main>
+<div class="act" style="margin-top:16px"><button id="cp" type="button">Özeti kopyala</button><span class="disc">Klinik karar destek aracıdır; hekim değerlendirmesinin yerini tutmaz. Kaynaklar: Winter formülü, Story (BJA) basitleştirilmiş Stewart yaklaşımı, Henderson-Hasselbalch.</span></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const F=[
+['ph','pH',7.40,'7,35–7,45'],['pco2','pCO₂, mmHg',40,'35–45'],
+['hco3','HCO₃⁻, mmol/L','','boşsa hesaplanır'],['sbe','SBE, mEq/L','','boşsa tahmin edilir'],
+['na','Na⁺, mmol/L',140,'135–145'],['cl','Cl⁻, mmol/L',104,'98–106'],
+['alb','Albümin',4.0,'3,5–5,0 g/dL','albu',['g/dL','g/L']],['lac','Laktat',1.0,'0,5–1,6 mmol/L','lacu',['mmol/L','mg/dL']],
+['pao2','PaO₂, mmHg',95,'80–100'],['fio2','FiO₂',0.21,'0,21–1,0'],
+['age','Yaş',40,''],['urcl','İdrar Cl⁻, mEq/L','','alkalozda isteğe bağlı']];
+$('f').innerHTML=F.map(([id,l,d,r,u,o])=>{
+ const inp=`<input id="${id}" type="number" step="any" inputmode="decimal" value="${d}">`;
+ const sel=u?`<select id="${u}" aria-label="${l} birimi">${o.map(x=>`<option>${x}</option>`).join('')}</select>`:'';
+ return `<label>${l}${u?`<div class="row">${inp}${sel}</div>`:inp}<small>${r}</small></label>`}).join('')+
+ `<label class="full">Solunumsal süreç<select id="rp"><option value="a">Akut</option><option value="k">Kronik</option></select></label><button class="rst" id="rst" type="button">Varsayılana dön</button>`;
+const S=[
+['Normal',[7.40,40,'','',140,104,4.0,1.0,'a',95,.21,35,'']],
+['Diyabetik ketoasidoz',[7.18,22,8,'',134,96,4.2,2.1,'a',100,.21,28,'']],
+['Sepsis, laktik asidoz',[7.21,30,12,-14,138,100,3.2,6.5,'a',85,.21,62,'']],
+['Kronik KOAH',[7.32,60,31,'',141,98,3.8,1.2,'k',65,.21,68,'']],
+['Kusma, metabolik alkaloz',[7.52,48,38,'',136,84,4.0,1.0,'a',90,.21,45,8]],
+['İshal, normal AG’li asidoz',[7.28,26,12,'',136,112,4.0,1.0,'a',95,.21,30,'']],
+['Gizli: HAGMA + alkaloz',[7.40,40,24,'',140,92,4.0,1.0,'a',95,.21,55,'']],
+['Salisilat zehirlenmesi',[7.46,18,13,'',138,106,4.0,1.5,'a',98,.21,24,'']]];
+const IDS=['ph','pco2','hco3','sbe','na','cl','alb','lac','rp','pao2','fio2','age','urcl'];
+$('samples').innerHTML=S.map((s,i)=>`<button type="button" data-i="${i}">${s[0]}</button>`).join('');
+function load(a){IDS.forEach((id,i)=>$(id).value=a[i]);$('albu').value='g/dL';$('lacu').value='mmol/L';run()}
+$('samples').onclick=e=>{const i=e.target.dataset.i;if(i!=null)load(S[i][1])};
+$('rst').onclick=()=>load(S[0][1]);
+$('albu').onchange=e=>{const x=parseFloat($('alb').value);if(!isNaN(x))$('alb').value=+(e.target.value==='g/L'?x*10:x/10).toFixed(1);run()};
+$('lacu').onchange=e=>{const x=parseFloat($('lac').value);if(!isNaN(x))$('lac').value=+(e.target.value==='mg/dL'?x*9.01:x/9.01).toFixed(1);run()};
+$('f').addEventListener('input',run);
+const v=id=>{const x=parseFloat($(id).value);return isNaN(x)?null:x};
+const f1=(x,d=1)=>x.toFixed(d).replace('.',',');
+const sg=x=>(x>=0?'+':'−')+f1(Math.abs(x));
+let REPORT='';
+
+function map(ph,h,bad){
+ const X=p=>40+(p-6.9)/0.8*360,Y=y=>270-Math.min(Math.max(y,0),50)/50*260;
+ let s='<svg viewBox="0 0 440 300" role="img" aria-label="pH ve HCO₃⁻ haritası">';
+ for(let t=0;t<=50;t+=10)s+=`<line x1="40" x2="400" y1="${Y(t)}" y2="${Y(t)}" class="gl"/><text x="34" y="${Y(t)+3}" class="ax" text-anchor="end">${t}</text>`;
+ for(const p of[7.0,7.2,7.4,7.6])s+=`<text x="${X(p)}" y="286" class="ax" text-anchor="middle">${f1(p)}</text>`;
+ for(const c of[10,20,40,60,80]){let d='',lx=0,ly=0;
+  for(let p=6.9;p<=7.701;p+=.02){const y=0.03*c*10**(p-6.1);if(y>50)break;d+=(d?'L':'M')+X(p).toFixed(1)+' '+Y(y).toFixed(1);lx=X(p);ly=Y(y)}
+  s+=`<path d="${d}" class="iso"/><text x="${lx+4}" y="${ly+3}" class="ax">${c}</text>`}
+ s+=`<rect x="${X(7.35)}" y="${Y(26)}" width="${X(7.45)-X(7.35)}" height="${Y(22)-Y(26)}" class="nb"/>`;
+ s+=`<circle cx="${X(Math.min(Math.max(ph,6.9),7.7))}" cy="${Y(h)}" r="6" fill="${bad?'var(--bad)':'var(--ok)'}" stroke="var(--panel)" stroke-width="2"/>`;
+ s+=`<text x="220" y="299" class="ax" text-anchor="middle">pH</text><text x="8" y="12" class="ax">HCO₃⁻</text></svg>`;
+ return s}
+
+function bars(rows,total){
+ const m=Math.max(10,...rows.map(r=>Math.abs(r[1])),Math.abs(total));
+ const bar=(n,x,sum)=>{const w=Math.abs(x)/m*50;return `<div class="br${sum?' sum':''}"><span>${n}</span><div class="tr"><i style="${x>=0?'left:50%':'right:50%'};width:${w}%;background:${x>=0?'var(--acc)':'var(--bad)'}"></i></div><em>${sg(x)}</em></div>`};
+ return '<div class="bars">'+rows.map(r=>bar(r[0],r[1])).join('')+bar('Toplam (SBE)',total,1)+'</div>'}
+
+function empty(){$('out').innerHTML='<div class="panel empty">Analiz için en az pH ve pCO₂ değerlerini girin.</div>';REPORT=''}
+
+function run(){
+ const ph=v('ph'),pco2=v('pco2');
+ if(ph==null||pco2==null||ph<6.5||ph>8||pco2<5||pco2>200)return empty();
+ const calc=0.03*pco2*10**(ph-6.1);
+ let hco3=v('hco3');const given=hco3!=null;if(!given)hco3=calc;
+ let alb=v('alb');if(alb!=null&&$('albu').value==='g/dL')alb*=10;
+ let lac=v('lac');if(lac!=null&&$('lacu').value==='mg/dL')lac/=9.01;
+ const na=v('na'),cl=v('cl'),pao2=v('pao2'),fio2=v('fio2'),age=v('age'),urcl=v('urcl');
+ let sbe=v('sbe');const sbeGiven=sbe!=null;if(!sbeGiven)sbe=0.93*(hco3-24.4+14.8*(ph-7.4));
+ const chronic=$('rp').value==='k',known=na!=null&&cl!=null;
+ const st=[],L=[],ext=[];
+ const step=(t,b)=>st.push([t,b]);
+ const add=(k,r)=>{if(!L.some(x=>x.k===k))L.push({k,r})};
+ const state=ph<7.35?'asidemi':ph>7.45?'alkalemi':'normal pH aralığı';
+ step(ph<7.2||ph>7.6?'bad':ph<7.35||ph>7.45?'warn':'ok',`<b>pH ${f1(ph,2)}:</b> ${state}.`);
+ if(given&&Math.abs(hco3-calc)>2)step('warn',`<b>Tutarsız girdi:</b> pH ve pCO₂’den hesaplanan HCO₃⁻ ${f1(calc)} mmol/L, girilen ${f1(hco3)}. Örnek, birim veya yazım hatasını kontrol edin.`);
+ else if(!given)step('ok',`<b>HCO₃⁻</b> Henderson-Hasselbalch ile hesaplandı: ${f1(calc)} mmol/L.`);
+ const mA=hco3<22,mK=hco3>26,rA=pco2>45,rK=pco2<35;
+ let P=null;
+ if(mA&&rA)P='ba';else if(mK&&rK)P='bk';
+ else if(mA&&rK)P=ph<7.4?'mA':'rK';else if(mK&&rA)P=ph>7.4?'mK':'rA';
+ else P=mA?'mA':mK?'mK':rA?'rA':rK?'rK':null;
+ const nm={mA:'metabolik asidoz',mK:'metabolik alkaloz',rA:'respiratuar asidoz',rK:'respiratuar alkaloz'};
+ if(P==='ba'){add('mA','p');add('rA','p');step('bad','<b>Karma asidoz:</b> HCO₃⁻ düşük ve pCO₂ yüksek; birbirini kompanse etmiyor, pH’yı birlikte düşürüyorlar.')}
+ else if(P==='bk'){add('mK','p');add('rK','p');step('bad','<b>Karma alkaloz:</b> HCO₃⁻ yüksek ve pCO₂ düşük; pH’yı birlikte yükseltiyorlar.')}
+ else if(P){
+  add(P,'p');let e,tol,obs,txt,hi,lo,hk,lk;
+  if(P==='mA'){e=1.5*hco3+8;tol=2;obs=pco2;hk='rA';lk='rK';txt=`Winter formülü: beklenen pCO₂ ${f1(e)} ±2 mmHg (ölçülen ${f1(pco2)}).`}
+  else if(P==='mK'){e=40+0.7*(hco3-24);tol=5;obs=pco2;hk='rA';lk='rK';txt=`Beklenen pCO₂ ${f1(e)} ±5 mmHg (ölçülen ${f1(pco2)}).`}
+  else if(P==='rA'){e=24+(chronic?0.35:0.1)*(pco2-40);tol=3;obs=hco3;hk='mK';lk='mA';txt=`${chronic?'Kronik':'Akut'} süreçte beklenen HCO₃⁻ ${f1(e)} ±3 mmol/L (ölçülen ${f1(hco3)}).`}
+  else{e=24-(chronic?0.4:0.2)*(40-pco2);tol=3;obs=hco3;hk='mK';lk='mA';txt=`${chronic?'Kronik':'Akut'} süreçte beklenen HCO₃⁻ ${f1(e)} ±3 mmol/L (ölçülen ${f1(hco3)}).`}
+  let r='uygun kompanzasyon',tone='ok';
+  if(obs>e+tol){add(hk,'e');r=`beklenenden yüksek: ek ${nm[hk]}`;tone='bad'}
+  else if(obs<e-tol){add(lk,'e');r=`beklenenden düşük: ek ${nm[lk]}`;tone='bad'}
+  step(tone,`<b>Primer bozukluk: ${nm[P]}.</b> ${txt} Sonuç: ${r}.`)}
+ else step('ok','<b>Primer bozukluk:</b> HCO₃⁻ ve pCO₂ normal aralıkta.');
+ let ag=null,cag=null,high=false,ratio=null;
+ if(known){
+  ag=na-cl-hco3;cag=alb!=null?ag+0.25*(42-alb):ag;high=cag>14;
+  step(high?'bad':'ok',`<b>Anyon açığı:</b> ${f1(ag)} mEq/L${alb!=null?`, albümin düzeltmeli ${f1(cag)}`:''}. ${high?'Yüksek (>14); ölçülemeyen anyon var.':'Normal sınırlarda.'}`);
+  if(high){
+   if(!L.some(x=>x.k==='mA'))add('mA','e');
+   const dA=cag-12,dH=24-hco3;
+   if(dH>0){ratio=dA/dH;
+    let m=ratio<0.4?'normal AG’li asidoz baskın (hiperkloremik)':ratio<1?'yüksek AG’li ve normal AG’li asidoz birlikte':ratio<=2?'saf yüksek AG’li asidoz':'HCO₃⁻ beklenenden az düşmüş: ek metabolik alkaloz (veya kronik CO₂ retansiyonu)';
+    if(ratio>2)add('mK','e');
+    if(ratio<0.8)ext.push('Ek normal AG’li asidoz');
+    step(ratio>2||ratio<0.8?'warn':'ok',`<b>Delta oranı ${f1(ratio,2)}:</b> ${m}.`)}
+   else{add('mK','e');step('warn',`<b>Delta analizi:</b> AG ${f1(dA)} yükselmiş ama HCO₃⁻ düşmemiş; gizli metabolik alkaloz var.`)}}
+  else if(mA)step('n','<b>Delta oranı:</b> AG yüksek olmadığı için yorumlanmaz; asidoz normal AG’li (hiperkloremik) tipte.')}
+ let rows=null,uiv=null;
+ if(known&&alb!=null&&lac!=null){
+  const a=(na-cl)-38,b=0.25*(42-alb),c=1-lac;uiv=sbe-(a+b+c);
+  rows=[['Na–Cl (klor etkisi)',a],['Albümin',b],['Laktat',c],['Ölçülemeyen iyon',uiv]];
+  step(uiv<-5?'bad':'n',`<b>Stewart:</b> SBE ${sg(sbe)}${sbeGiven?'':' (tahmini)'}. Klor katkısı ${sg(a)}, albümin ${sg(b)}, laktat ${sg(c)}, ölçülemeyen iyonlar ${sg(uiv)}.${uiv<-5?' Belirgin ölçülemeyen anyon (keton, toksin, üremik asit) düşünülmeli.':''}${b>3?' Düşük albümin asidozu maskeliyor olabilir.':''}`)}
+ let pf=null,aa=null;
+ if(pao2!=null&&fio2!=null&&fio2>0){
+  pf=pao2/fio2;let t=pf<100?'bad':pf<300?'warn':'ok',tx=`<b>Oksijenasyon:</b> PaO₂/FiO₂ ${f1(pf,0)}${pf<100?' (ağır bozulma)':pf<200?' (orta düzey bozulma)':pf<300?' (hafif bozulma)':''}.`;
+  const pa=fio2*713-pco2/0.8;aa=pa-pao2;
+  if(age!=null){const ex=age/4+4;tx+=` A–a gradiyenti ${f1(aa,0)} mmHg (yaşa göre beklenen ≈${f1(ex,0)}); ${aa>ex+5?'yüksek, parankimal/şant/V-Q sorunu düşündürür':'beklenen sınırda'}.`;if(aa>ex+5&&t==='ok')t='warn'}
+  step(t,tx)}
+ const lbl=k=>({mA:high?'Yüksek AG’li metabolik asidoz':known?'Normal AG’li metabolik asidoz':'Metabolik asidoz',mK:'Metabolik alkaloz',rA:'Respiratuar asidoz'+(chronic?' (kronik)':' (akut)'),rK:'Respiratuar alkaloz'+(chronic?' (kronik)':' (akut)')})[k];
+ const names=L.map(x=>lbl(x.k));
+ const title=names.length?names.join(' + '):(ph<7.35||ph>7.45?'Primer bozukluk belirlenemedi':'Asit-baz dengesi normal');
+ const vt=ph<7.2||ph>7.6?'bad':(L.length||ph<7.35||ph>7.45)?'warn':'ok';
+ const chips=L.map(x=>`<span class="chip${x.r==='e'?' e':''}">${x.r==='e'?'Ek: ':''}${lbl(x.k)}</span>`).concat(ext.map(x=>`<span class="chip e">${x}</span>`)).join('');
+ const sub=`pH ${f1(ph,2)}, pCO₂ ${f1(pco2,0)} mmHg, HCO₃⁻ ${f1(hco3)} mmol/L, ${state}`;
+ const stat=(l,x,c='')=>x==null?'':`<div class="stat ${c}"><b>${x}</b><span>${l}</span></div>`;
+ const stats=stat('Anyon açığı',ag!=null?f1(ag):null,ag!=null&&ag>14?'bad':'')+stat('Düzeltilmiş AG',cag!=null&&alb!=null?f1(cag):null,high?'bad':'')+stat('Delta oranı',ratio!=null?f1(ratio,2):null)+stat('SBE',sg(sbe),Math.abs(sbe)>2?'warn':'')+stat('P/F',pf!=null?f1(pf,0):null,pf!=null&&pf<300?'warn':'')+stat('A–a gradiyenti',aa!=null?f1(aa,0):null);
+ const C={mA:high?'Laktat, ketonlar (DKA, açlık, alkol), üremi, toksinler (metanol, etilen glikol, salisilat).':'GİS bikarbonat kaybı (ishal, fistül), renal tübüler asidoz, bol %0,9 NaCl, asetazolamid.',
+  mK:`Kusma/NG drenaj, diüretik, hipovolemi${urcl!=null?(urcl<20?` (idrar Cl⁻ ${urcl}: klora yanıtlı)`:` (idrar Cl⁻ ${urcl}: klora dirençli; mineralokortikoid fazlalığı, ağır hipopotasemi düşünülmeli)`):' (idrar Cl⁻ <20 klora yanıtlı, >20 klora dirençli)'}.`,
+  rA:'Merkezi depresyon (opioid, sedatif), KOAH, nöromüsküler zayıflık, havayolu obstrüksiyonu, obezite hipoventilasyonu.',
+  rK:'Ağrı, anksiyete, pulmoner emboli, sepsis, hipoksemi, karaciğer yetmezliği, salisilat, gebelik.'};
+ const nt=L.map(x=>`<li><b>${lbl(x.k)}:</b> ${C[x.k]}</li>`);
+ if(lac!=null&&lac>2)nt.push(`<li><b>Laktat ${f1(lac)} mmol/L:</b> doku perfüzyonunu ve sepsisi değerlendirin; tekrar ölçüm ile klirens takibi yapın.</li>`);
+ if(L.some(x=>x.k==='mA')&&ph<7.1)nt.push('<li>pH &lt;7,1: bikarbonat kararı etiyolojiye ve hemodinamiye bağlıdır; ketoasidoz ve laktik asidozda rutin kullanım önerilmez.</li>');
+ if(known&&!high&&mA)nt.push('<li>Hiperkloremik asidozda dengeli kristaloid, %0,9 NaCl yüklenmesine tercih edilir.</li>');
+ if(L.some(x=>x.k==='rA')&&ph<7.3)nt.push('<li>Akut respiratuar asidozda havayolu ve ventilasyon desteği (NIV veya invaziv) gerekebilir.</li>');
+ if(!nt.length)nt.push('<li>Dikkat çeken bir bozukluk saptanmadı.</li>');
+ $('out').innerHTML=`<div class="verdict ${vt}"><div class="sub">${sub}</div><h2>${title}</h2><div class="chips">${chips}</div></div>
+ <div class="stats">${stats}</div>
+ <div class="two"><div class="panel"><h3>Asit-baz haritası</h3>${map(ph,hco3,vt!=='ok')}<p class="cap">Eğriler sabit pCO₂ (mmHg) çizgileridir; kutu normal bölgedir.</p></div>
+ <div class="panel"><h3>Stewart katkıları (mEq/L)</h3>${rows?bars(rows,sbe):'<p class="cap">Na, Cl, albümin ve laktat girildiğinde SBE’nin bileşenleri burada görünür.</p>'}${rows?'<p class="cap">Negatif değer asidoz, pozitif değer alkaloz yönünde katkıdır.</p>':''}</div></div>
+ <div class="panel"><h3>Adım adım değerlendirme</h3><ol class="steps">${st.map(s=>`<li class="${s[0]}">${s[1]}</li>`).join('')}</ol></div>
+ <div class="panel"><h3>Olası nedenler ve klinik notlar</h3><ul class="notes">${nt.join('')}</ul></div>`;
+ REPORT=`${title}\n${sub}\n\n`+st.map((s,i)=>`${i+1}. ${s[1].replace(/<[^>]+>/g,'')}`).join('\n');
+}
+$('cp').onclick=async()=>{const b=$('cp');let t='Kopyalandı';try{await navigator.clipboard.writeText(REPORT)}catch(e){t='Kopyalanamadı'}b.textContent=t;setTimeout(()=>b.textContent='Özeti kopyala',1600)};
+run();
+</script>
+</body>
+</html>

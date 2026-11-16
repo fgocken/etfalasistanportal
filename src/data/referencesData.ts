@@ -134,7 +134,8 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
       'Anestezi Acilleri (MH, Bronkospazm, Laringospazm)',
       'Tedaviler & Elektrolitler',
       'Sistematik Prosedür Yönetimi',
-      'Güvenli Vasküler Erişim (İnvaziv Arteriyel)'
+      'Güvenli Vasküler Erişim (İnvaziv Arteriyel)',
+      'Yatak Başı Kan Gazı Analizi'
     ],
     clinicalNote: 'Perioperatif sıvı fizyolojisi, otonomik farmakoloji, NORA, hava yolu komplikasyonları ve malign hipertermi ana başvuru kaynağı.'
   },
@@ -175,9 +176,10 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     usedInModules: [
       'İntraoperatif Sıvı Yönetimi',
       'Anestezi Acilleri',
-      'Temel İlaç Monografları'
+      'Temel İlaç Monografları',
+      'Yatak Başı Kan Gazı Analizi'
     ],
-    clinicalNote: 'İntraoperatif açlık açığı, 3. boşluk kayıpları, devre arızaları ve pratik ameliyathane içi problem çözme algoritmaları.'
+    clinicalNote: 'İntraoperatif açlık açığı, 3. boşluk kayıpları, devre arızaları, asit-baz fizyolojisi ve pratik ameliyathane içi problem çözme algoritmaları.'
   },
   {
     id: 'tb-marino-icu',
@@ -472,6 +474,63 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     doi: '10.1056/NEJM200002173420706',
     usedInModules: ['Anestezi Acilleri (Venöz & Paradoksal Hava Embolisi)'],
     clinicalNote: 'Venöz ve arteriyel/paradoksal gaz embolisi patofizyolojisi, 3–5 mL/kg letal hava hacmi ve hiperbarik oksijen mekanizması.'
+  },
+  {
+    id: 'pneumo-sahota-statpearls-2022',
+    category: 'emergencies_acls',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Sahota R, Sayad E.',
+    title: 'Tension Pneumothorax. [Updated 2022 Nov 28].',
+    publication: 'In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing.',
+    year: '2022',
+    externalUrl: 'https://www.ncbi.nlm.nih.gov/books/NBK559090/',
+    usedInModules: ['Anestezi Acilleri (Tansiyon Pnömotoraks Kriz Protokolü)'],
+    clinicalNote: 'Tek yönlü valf mekanizması, klinik tanı (radyoloji beklemeden müdahale), erişkinde 4–5. İKA AAL/MAL vs çocukta 2. İKA MCL iğne dekompresyonu, parmak torakostomi ve Akciğer POCUS.'
+  },
+  {
+    id: 'pneumo-bts-macduff-2010',
+    category: 'emergencies_acls',
+    kind: 'Uluslararası Kılavuz',
+    authors: 'MacDuff A, Arnold A, Harvey J (British Thoracic Society Pleural Disease Guideline Group).',
+    title: 'Management of spontaneous pneumothorax: British Thoracic Society pleural disease guideline 2010.',
+    publication: 'Thorax. 2010;65(Suppl 2):ii18–ii31 (Güncelleme: Thorax. 2023;78(Suppl 3):s1–s42).',
+    year: '2010 / 2023',
+    usedInModules: ['Anestezi Acilleri (Tansiyon Pnömotoraks Kriz Protokolü)'],
+    clinicalNote: 'BTS Emniyet Üçgeni (Triangle of Safety), küçük çaplı (10–14 Fr) Seldinger dren kullanımı, trokar yasağı, −10/−20 cmH₂O aspirasyon ve kabarcıklanan tüpün klemplenmemesi.'
+  },
+  {
+    id: 'pneumo-paramasivam-2008',
+    category: 'emergencies_acls',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Paramasivam E, Bodenham A.',
+    title: 'Air leaks, pneumothorax, and chest drains.',
+    publication: 'Continuing Education in Anaesthesia Critical Care & Pain (BJA Education). 2008;8(6):204–209.',
+    year: '2008',
+    usedInModules: ['Anestezi Acilleri (Tansiyon Pnömotoraks Kriz Protokolü)'],
+    clinicalNote: 'Anestezide iyatrojenik pnömotoraks, IPPV/N₂O ile hızlı tansiyon gelişimi, sualtı kapalı drenaj fiziği, salınım/kabarcık yorumlama ve klemp yasağı.'
+  },
+  {
+    id: 'fire-asa-2013',
+    category: 'emergencies_acls',
+    kind: 'Uluslararası Kılavuz',
+    authors: 'Apfelbaum JL, Caplan RA, Barker SJ, Connis RT, Cowles C, Ehrenwerth J, et al. (ASA Task Force on Operating Room Fires).',
+    title: 'Practice Advisory for the Prevention and Management of Operating Room Fires: An Updated Report.',
+    publication: 'Anesthesiology. 2013;118(2):271–290.',
+    year: '2013',
+    usedInModules: ['Anestezi Acilleri (Hava Yolu Yangını / Airway Fire)'],
+    clinicalNote: 'Hava yolu yangınında eşzamanlı ETT çekimi + gaz kesimi + SF dökümü, T4 üzeri FiO₂ ≤ %30 kuralı, lazer ETT + boyalı salin kaf ve ≥3 dk antiseptik kuruma standardı.'
+  },
+  {
+    id: 'fire-apsf-ecri',
+    category: 'emergencies_acls',
+    kind: 'Konsensus / Uzman Görüşü',
+    authors: 'Anesthesia Patient Safety Foundation (APSF) & ECRI Institute.',
+    title: 'APSF Operating Room Fire Prevention and Management Algorithm & Surgical Fire Safety.',
+    publication: 'APSF Newsletter / ECRI Clinical Guidance.',
+    year: '2020–2024',
+    externalUrl: 'https://www.apsf.org/videos/or-fire-safety-video/',
+    usedInModules: ['Anestezi Acilleri (Hava Yolu Yangını / Airway Fire)'],
+    clinicalNote: 'Baş-boyun sedasyonunda açık oksijen yasağı, trakeostomide soğuk giriş kuralı, hava yolu vs örtü yangını karar ağacı ve CO₂ yangın söndürücü kullanımı.'
   },
 
   // =========================================================================
@@ -1749,6 +1808,39 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     doi: '10.1097/ALN.0000000000004379',
     usedInModules: ['Sistematik Prosedürler', 'Anestezi Acilleri'],
     clinicalNote: 'Kantitatif TOF monitörizasyonu zorunluluğu ve ekstübasyon öncesi rezidüel blokajı dışlamak için TOF oranı ≥ 0.90 hedefi.'
+  },
+  {
+    id: 'calc-story-stewart-2004',
+    category: 'calculators_safety',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Story DA, Morimatsu H, Bellomo R.',
+    title: 'Strong ions, weak acids and base excess: a simplified Fencl-Stewart approach to clinical acid-base disorders.',
+    publication: 'British Journal of Anaesthesia. 2004;92(1):54–60.',
+    year: '2004',
+    usedInModules: ['Yatak Başı Kan Gazı Analizi'],
+    clinicalNote: 'Standart baz fazlasının (SBE) yatak başında Na–Cl (klor/su), albümin ve laktat katkıları ile ölçülemeyen iyonlara ayrıştırılması.'
+  },
+  {
+    id: 'calc-figge-anion-gap-1998',
+    category: 'calculators_safety',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Figge J, Jabor A, Kazda A, Fencl V.',
+    title: 'Anion gap and hypoalbuminemia.',
+    publication: 'Critical Care Medicine. 1998;26(11):1807–1810.',
+    year: '1998',
+    usedInModules: ['Yatak Başı Kan Gazı Analizi'],
+    clinicalNote: 'Yoğun bakım ve cerrahi hastalarda hipoalbümineminin anyon açığını maskelemesini önleyen albümin düzeltme katsayısı (her 1 g/dL düşüşte +2.5 mEq/L).'
+  },
+  {
+    id: 'calc-berend-acid-base-2014',
+    category: 'calculators_safety',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Berend K, de Vries AP, Gans RO.',
+    title: 'Physiological approach to assessment of acid-base disturbances.',
+    publication: 'New England Journal of Medicine. 2014;371(15):1434–1445.',
+    year: '2014',
+    usedInModules: ['Yatak Başı Kan Gazı Analizi'],
+    clinicalNote: 'Fizyolojik asit-baz değerlendirmesi, Winter ve Boston kompanzasyon kuralları, delta oranı ve hiperkloremik/yüksek AG ayırıcı tanısı.'
   }
 ];
 
