@@ -29,6 +29,7 @@ import {
   PodcastLocalState,
   PodcastShowMeta
 } from '../../types/podcast';
+import { parsePodcastRssXml } from '../../utils/podcastRssParser';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface PodcastWorkspaceProps {
@@ -36,6 +37,10 @@ interface PodcastWorkspaceProps {
 }
 
 const PROGRESS_STORAGE_KEY = 'etfal_podcast_progress_v1';
+const FEED_CACHE_STORAGE_KEY = 'etfal_podcast_feed_cache_v1';
+const FEED_CACHE_TTL_MS = 15 * 60 * 1000;
+const DEFAULT_RSS_URL = 'https://anchor.fm/s/11a3a92e0/podcast/rss';
+const DEFAULT_SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/furkan-gken7';
 const PLAYBACK_RATES = [1, 1.25, 1.5, 1.75, 2] as const;
 
 type StatusFilter = 'all' | 'in_progress' | 'completed';
@@ -66,6 +71,36 @@ function readLocalState(): PodcastLocalState {
 function writeLocalState(state: PodcastLocalState): void {
   try {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // ignore storage write error
+  }
+}
+
+interface CachedFeedSnapshot {
+  config: PodcastConfig;
+  show: PodcastShowMeta;
+  episodes: PodcastEpisode[];
+  cachedAt: string;
+  cachedAtMs: number;
+}
+
+function readLocalFeedCache(): CachedFeedSnapshot | null {
+  try {
+    const raw = localStorage.getItem(FEED_CACHE_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && parsed.show && Array.isArray(parsed.episodes)) {
+      return parsed as CachedFeedSnapshot;
+    }
+  } catch {
+    // ignore storage read error
+  }
+  return null;
+}
+
+function writeLocalFeedCache(snapshot: CachedFeedSnapshot): void {
+  try {
+    localStorage.setItem(FEED_CACHE_STORAGE_KEY, JSON.stringify(snapshot));
   } catch {
     // ignore storage write error
   }
@@ -132,19 +167,105 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
       }
       setErrorMsg(null);
 
+      // 1. Try Express backend proxy (/api/podcast/feed) first when available
       try {
         const res = await fetch(`/api/podcast/feed${forceRefresh ? '?refresh=1' : ''}`);
-        const data: PodcastFeedResponse = await res.json();
-        if (!res.ok || !data.success) {
-          setErrorMsg(data.error || 'Podcast yayını yüklenemedi.');
-          if (data.config) {
-            setConfig(data.config);
+        const contentType = res.headers.get('content-type') || '';
+        if (res.ok && contentType.includes('application/json')) {
+          const data: PodcastFeedResponse = await res.json();
+          if (data.success) {
+            if (data.show && data.config) {
+              writeLocalFeedCache({
+                config: data.config,
+                show: data.show,
+                episodes: data.episodes,
+                cachedAt: data.cachedAt || new Date().toISOString(),
+                cachedAtMs: Date.now()
+              });
+            }
+            applyFeedData(data);
+            setLoading(false);
+            setRefreshing(false);
+            return;
           }
-          return;
         }
-        applyFeedData(data);
+      } catch {
+        // Fall through cleanly to browser RSS fetch on static/Vercel deployments
+      }
+
+      // 2. Fallback for static builds (e.g. Vercel / Shared Preview): check fresh localStorage cache first
+      const cached = readLocalFeedCache();
+      if (!forceRefresh && cached && Date.now() - cached.cachedAtMs < FEED_CACHE_TTL_MS) {
+        applyFeedData({
+          success: true,
+          configured: true,
+          config: cached.config,
+          show: cached.show,
+          episodes: cached.episodes,
+          cachedAt: cached.cachedAt,
+          fromCache: true
+        });
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+
+      // 3. Direct browser RSS fetch (Anchor/Spotify RSS supports Access-Control-Allow-Origin: *)
+      try {
+        const rssRes = await fetch(DEFAULT_RSS_URL, {
+          cache: forceRefresh ? 'no-cache' : 'default'
+        });
+        if (!rssRes.ok) {
+          throw new Error(`RSS yanıt kodu: ${rssRes.status}`);
+        }
+        const xmlText = await rssRes.text();
+        if (!/<(rss|channel|feed)\b/i.test(xmlText)) {
+          throw new Error('Geçerli RSS/XML içeriği alınamadı.');
+        }
+
+        const { show: parsedShow, episodes: parsedEpisodes } = parsePodcastRssXml(
+          xmlText,
+          DEFAULT_SPOTIFY_URL
+        );
+        const nowIso = new Date().toISOString();
+        const defaultConfig: PodcastConfig = {
+          rssUrl: DEFAULT_RSS_URL,
+          spotifyShowUrl: parsedShow.link || DEFAULT_SPOTIFY_URL,
+          updatedAt: nowIso
+        };
+
+        writeLocalFeedCache({
+          config: defaultConfig,
+          show: parsedShow,
+          episodes: parsedEpisodes,
+          cachedAt: nowIso,
+          cachedAtMs: Date.now()
+        });
+
+        applyFeedData({
+          success: true,
+          configured: true,
+          config: defaultConfig,
+          show: parsedShow,
+          episodes: parsedEpisodes,
+          cachedAt: nowIso,
+          fromCache: false
+        });
       } catch (err: any) {
-        setErrorMsg(err?.message || 'Podcast servisine bağlanılamadı.');
+        if (cached) {
+          applyFeedData({
+            success: true,
+            configured: true,
+            config: cached.config,
+            show: cached.show,
+            episodes: cached.episodes,
+            cachedAt: cached.cachedAt,
+            fromCache: true,
+            staleWarning: 'Güncel yayın alınamadı; son önbellekteki bölümler gösteriliyor.'
+          });
+        } else {
+          setErrorMsg(err?.message || 'Podcast servisine bağlanılamadı.');
+        }
       } finally {
         setLoading(false);
         setRefreshing(false);
