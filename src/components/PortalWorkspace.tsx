@@ -677,7 +677,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   };
 
   const [showFluidReferences, setShowFluidReferences] = useState<boolean>(false);
-  const [intraopInitialStrategy, setIntraopInitialStrategy] = useState<'liberal' | 'restrictive' | 'gdft'>('gdft');
+  const [intraopInitialStrategy, setIntraopInitialStrategy] = useState<'liberal' | 'restrictive' | 'gdft'>('liberal');
 
   // Tool Order state with localStorage persistence
   const [toolOrder, setToolOrder] = useState<ToolTabId[]>(() => {
@@ -898,7 +898,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       if (item.id === 'calc-intraop-npo' || item.id === 'calc-tissue-trauma') {
         setIntraopInitialStrategy('liberal');
       } else {
-        setIntraopInitialStrategy('gdft');
+        setIntraopInitialStrategy('liberal');
       }
       handleSelectTab('intraop');
       window.scrollTo({ top: 0, behavior: 'smooth' });

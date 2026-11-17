@@ -53,8 +53,8 @@ interface StrategyDetail {
 const STRATEGIES: StrategyDetail[] = [
   {
     id: 'liberal',
-    name: 'Liberal Sıvı Yönetimi',
-    shortLabel: 'Liberal (Sabit Formül)',
+    name: 'Liberal Yönetim',
+    shortLabel: '1. Liberal Yönetim',
     tagline: 'Klasik Açlık Açığı + 4-2-1 İdame + 3. Boşluk Replasmanı',
     summary:
       'İntraoperatif dönemde tüm varsayılan kayıpların (preoperatif açlık defisiti, bazal idame, insensibl evaporasyon ve cerrahi doku travması/3. boşluk kaybı) sabit mL/kg/saat formülleriyle agresif biçimde yerine konmasını esas alan geleneksel yaklaşımdır.',
@@ -115,8 +115,8 @@ const STRATEGIES: StrategyDetail[] = [
   },
   {
     id: 'restrictive',
-    name: 'Restriktif (Sıfır-Denge) Sıvı Yönetimi',
-    shortLabel: 'Restriktif (Zero-Balance)',
+    name: 'Restriktif (Sıfır-Denge)',
+    shortLabel: '2. Restriktif (Sıfır-Denge)',
     tagline: 'Minimal İdame + 3. Boşluk Eklenmez + Net 0 kg Kilo Değişimi',
     summary:
       'Sağlıklı elektif cerrahi hastasında anatomik "üçüncü boşluk" kaybının klinik olarak anlamlı olmadığı ve preoperatif kısa açlık kurallarıyla normovoleminin korunduğu görüşüne dayanan, yalnızca kan kaybını yerine koyup fazla sıvıdan kaçınan stratejidir.',
@@ -177,8 +177,8 @@ const STRATEGIES: StrategyDetail[] = [
   },
   {
     id: 'gdft',
-    name: 'Hedefe Yönelik Sıvı Yönetimi (GDFT)',
-    shortLabel: 'Hedefe Yönelik (GDFT)',
+    name: 'Hedefe Yönelik (GDFT)',
+    shortLabel: '3. Hedefe Yönelik (GDFT)',
     tagline: 'Dinamik İndeksler (PPV/SVV/SV) Eşliğinde Kişiselleştirilmiş Bolus',
     summary:
       'Hastanın yaş, komorbidite ve anlık fizyolojik yanıtına göre Frank–Starling eğrisi üzerindeki yerini dinamik monitörlerle (PPV, SVV, SV) saptayıp yalnızca "sıvı yanıtlılığı" kanıtlandığında kontrollü bolus vermeyi esas alan modern altın standart yaklaşımdır.',
@@ -422,7 +422,7 @@ const REFERENCES = [
 
 export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrategiesInfographicProps> = ({
   isDark,
-  initialStrategy = 'gdft'
+  initialStrategy = 'liberal'
 }) => {
   const [selectedStrategy, setSelectedStrategy] = useState<StrategyId>(initialStrategy);
 
@@ -430,7 +430,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
     setSelectedStrategy(initialStrategy);
   }, [initialStrategy]);
 
-  const activeStrategy = STRATEGIES.find((s) => s.id === selectedStrategy) || STRATEGIES[2];
+  const activeStrategy = STRATEGIES.find((s) => s.id === selectedStrategy) || STRATEGIES[0];
 
   return (
     <div className="space-y-6">
@@ -451,7 +451,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
         </div>
 
         <h3 className={`text-lg sm:text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          Liberal, Restriktif ve Hedefe Yönelik (GDFT) Sıvı Yönetimi
+          Liberal Yönetim, Restriktif (Sıfır-Denge) ve Hedefe Yönelik (GDFT) Sıvı Yönetimi
         </h3>
 
         <p className={`text-xs leading-relaxed max-w-4xl ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -461,20 +461,36 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
           stratejinin fizyolojik temeli, adım adım ameliyathane uygulaması ve 12 parametreli kıyaslaması yer almaktadır.
         </p>
 
-        {/* U-Shaped Curve Quick Summary Strip */}
+        {/* Canonical 1 -> 2 -> 3 Risk & Physiology Summary Strip */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
           <div
             className={`p-3.5 rounded-xl border ${
-              isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-slate-200'
+              isDark ? 'bg-sky-950/20 border-sky-500/30' : 'bg-sky-50/70 border-sky-200'
+            }`}
+          >
+            <div className="text-[11px] font-mono uppercase tracking-wider text-sky-600 dark:text-sky-400 font-bold">
+              1. Liberal Yönetim · Hipervolemi Ucu (Aşırı Islak)
+            </div>
+            <div className={`text-xs font-semibold mt-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+              Glikokaliks Yıkımı &amp; İnterstisyel Ödem
+            </div>
+            <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+              ANP salınımı, bağırsak duvarı ödemi, uzamış ileus, anastomoz ayrılması ve postoperatif pulmoner ödem.
+            </p>
+          </div>
+
+          <div
+            className={`p-3.5 rounded-xl border ${
+              isDark ? 'bg-amber-950/20 border-amber-500/30' : 'bg-amber-50/70 border-amber-200'
             }`}
           >
             <div className="text-[11px] font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold">
-              Sol Uç · Aşırı Kuru (Hipovolemi)
+              2. Restriktif (Sıfır-Denge) · Hipovolemi Ucu (Aşırı Kuru)
             </div>
             <div className={`text-xs font-semibold mt-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
               Organ Hipoperfüzyonu &amp; ABH Riski
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+            <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
               Düşük kardiyak debi, renal medüller iskemi (RELIEF: %8.6 ABH), laktik asidoz ve cerrahi alan enfeksiyonu.
             </p>
           </div>
@@ -485,29 +501,13 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
             }`}
           >
             <div className="text-[11px] font-mono uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-bold">
-              Optimal Çukur · Övolemi (GDFT / Dengeli)
+              3. Hedefe Yönelik (GDFT) · Optimal Çukur (Övolemi)
             </div>
             <div className={`text-xs font-semibold mt-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
               Korunmuş Glikokaliks &amp; Optimal DO2
             </div>
             <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
               Frank–Starling eğrisi tepesine yakın stabil atım hacmi, normal laktat, minimum komplikasyon ve hızlı derlenme.
-            </p>
-          </div>
-
-          <div
-            className={`p-3.5 rounded-xl border ${
-              isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-slate-200'
-            }`}
-          >
-            <div className="text-[11px] font-mono uppercase tracking-wider text-sky-600 dark:text-sky-400 font-bold">
-              Sağ Uç · Aşırı Islak (Hipervolemi)
-            </div>
-            <div className={`text-xs font-semibold mt-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-              Glikokaliks Yıkımı &amp; İnterstisyel Ödem
-            </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              ANP salınımı, bağırsak duvarı ödemi, uzamış ileus, anastomoz ayrılması ve postoperatif pulmoner ödem.
             </p>
           </div>
         </div>
@@ -531,7 +531,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
               isDark ? 'bg-sky-950/20 border-sky-500/30' : 'bg-sky-50/70 border-sky-200'
             }`}
           >
-            <div className="text-xs font-bold text-sky-600 dark:text-sky-400 mb-1">Liberal Yönetim</div>
+            <div className="text-xs font-bold text-sky-600 dark:text-sky-400 mb-1">1. Liberal Yönetim</div>
             <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Acil dehidrate hastalar, belirgin preop kayıp, kısa minör cerrahiler.
             </p>
@@ -542,7 +542,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
               isDark ? 'bg-amber-950/20 border-amber-500/30' : 'bg-amber-50/70 border-amber-200'
             }`}
           >
-            <div className="text-xs font-bold text-amber-600 dark:text-amber-400 mb-1">Restriktif (Sıfır-Denge)</div>
+            <div className="text-xs font-bold text-amber-600 dark:text-amber-400 mb-1">2. Restriktif (Sıfır-Denge)</div>
             <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
               ERAS düşük/orta riskli elektif kolorektal cerrahi, akciğer rezeksiyonları.
             </p>
@@ -553,7 +553,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
               isDark ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-emerald-50/70 border-emerald-200'
             }`}
           >
-            <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-1">Hedefe Yönelik (GDFT)</div>
+            <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-1">3. Hedefe Yönelik (GDFT)</div>
             <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
               Majör yüksek riskli cerrahi, ASA III–IV hastalar, yüksek kanama/sıvı şifti beklentisi.
             </p>
@@ -579,7 +579,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
             </h4>
           </div>
           <span className="text-[11px] text-slate-500 dark:text-slate-400">
-            Liberal vs Restriktif (Zero-Balance) vs Hedefe Yönelik (GDFT)
+            1. Liberal Yönetim · 2. Restriktif (Sıfır-Denge) · 3. Hedefe Yönelik (GDFT)
           </span>
         </div>
 
@@ -595,13 +595,13 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
               >
                 <th className="py-3 px-4 w-[18%]">Klinik Parametre</th>
                 <th className="py-3 px-4 w-[24%] text-sky-600 dark:text-sky-400">
-                  Liberal Yönetim
+                  1. Liberal Yönetim
                 </th>
                 <th className="py-3 px-4 w-[24%] text-amber-600 dark:text-amber-400">
-                  Restriktif (Sıfır-Denge)
+                  2. Restriktif (Sıfır-Denge)
                 </th>
                 <th className="py-3 px-4 w-[24%] text-emerald-600 dark:text-emerald-400">
-                  Hedefe Yönelik (GDFT)
+                  3. Hedefe Yönelik (GDFT)
                 </th>
               </tr>
             </thead>
