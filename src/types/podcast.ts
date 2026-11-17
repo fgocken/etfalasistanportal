@@ -1,3 +1,38 @@
+export type PodcastChannelId = 'comez' | 'ileri';
+
+export interface PodcastChannelDefinition {
+  id: PodcastChannelId;
+  title: string;
+  shortTitle: string;
+  levelLabel: string;
+  description: string;
+  defaultRssUrl: string;
+  defaultSpotifyUrl: string;
+}
+
+export const PODCAST_CHANNELS: PodcastChannelDefinition[] = [
+  {
+    id: 'comez',
+    title: 'Çömez Podcast Kanalı',
+    shortTitle: 'Çömez',
+    levelLabel: 'Temel Düzey · 1–2. Yıl Asistan',
+    description:
+      'Miller Anestezi Bölümleri Çömez Serisi: temel anestezi kavramları, ameliyathane hazırlığı, nöbet başucu konuları ve sadeleştirilmiş anlatım.',
+    defaultRssUrl: 'https://anchor.fm/s/11a44c3dc/podcast/rss',
+    defaultSpotifyUrl: 'https://podcasters.spotify.com/pod/show/furkan-gken71'
+  },
+  {
+    id: 'ileri',
+    title: 'İleri Düzey Podcast Kanalı',
+    shortTitle: 'İleri Düzey',
+    levelLabel: 'İleri Düzey · Miller’s & Subspesifik',
+    description:
+      'Miller’s Anesthesia bölümleri, derin fizyopatoloji, karmaşık vakalar, YBÜ ve ileri klinik karar süreçleri.',
+    defaultRssUrl: 'https://anchor.fm/s/11a3a92e0/podcast/rss',
+    defaultSpotifyUrl: 'https://podcasters.spotify.com/pod/show/furkan-gken7'
+  }
+];
+
 export interface PodcastConfig {
   rssUrl: string;
   spotifyShowUrl: string;
@@ -46,6 +81,7 @@ export interface PodcastEpisode {
 export interface PodcastFeedResponse {
   success: boolean;
   configured: boolean;
+  channelId?: PodcastChannelId;
   config: PodcastConfig | null;
   show: PodcastShowMeta | null;
   episodes: PodcastEpisode[];
@@ -65,6 +101,7 @@ export interface PodcastEpisodeProgress {
 
 export interface PodcastLocalState {
   lastPlayedGuid: string | null;
+  lastPlayedByChannel?: Partial<Record<PodcastChannelId, string | null>>;
   playbackRate: number;
   episodes: Record<string, PodcastEpisodeProgress>;
 }

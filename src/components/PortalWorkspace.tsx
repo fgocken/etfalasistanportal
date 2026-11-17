@@ -298,10 +298,10 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   podcast: {
     id: 'podcast',
     title: 'Etfal Anestezi Podcast',
-    badge: 'Spotify · Sesli Eğitim',
+    badge: '2 Kanal · Spotify',
     badgeHighlight: true,
-    desc: 'Miller’s Anesthesia ve klinik anestezi serisi: hız kontrollü (1x–2x) yerleşik ses oynatıcısı, kaldığı yerden devam, kategori filtresi, bölüm/kişisel notlar ve Spotify’da aç desteği.',
-    clinicalKey: 'Spotify for Podcasters yayınına yeni bölüm eklendikçe portala otomatik olarak yansır.',
+    desc: 'Çömez Podcast Kanalı (temel anestezi & ilk nöbetler) ve İleri Düzey Podcast Kanalı (Miller’s Anesthesia serisi): hız kontrollü (1x–2x) yerleşik oynatıcı, kaldığı yerden devam, kategori filtresi ve notlar.',
+    clinicalKey: 'Çömez ve İleri Düzey kanallarına eklenen yeni Spotify bölümleri portala otomatik olarak yansır.',
     icon: Headphones,
     iconBgDark: 'bg-violet-500/15',
     iconBgLight: 'bg-violet-50',

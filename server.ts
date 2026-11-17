@@ -530,10 +530,14 @@ app.post('/api/parse-schedule-pdf', async (req, res) => {
   }
 });
 
-// Podcast RSS Proxy & Config API
+// Podcast RSS Proxy & Dual-Channel Config API
 const PODCAST_CACHE_TTL_MS = 2 * 60 * 1000;
 const DEFAULT_PODCAST_RSS_URL = 'https://anchor.fm/s/11a3a92e0/podcast/rss';
 const DEFAULT_PODCAST_SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/furkan-gken7';
+const DEFAULT_COMEZ_RSS_URL = 'https://anchor.fm/s/11a44c3dc/podcast/rss';
+const DEFAULT_COMEZ_SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/furkan-gken71';
+
+type ServerPodcastChannelId = 'comez' | 'ileri';
 
 interface PodcastFeedCache {
   rssUrl: string;
@@ -543,7 +547,36 @@ interface PodcastFeedCache {
   cachedAtMs: number;
 }
 
-let podcastFeedCache: PodcastFeedCache | null = null;
+const podcastFeedCaches: Partial<Record<ServerPodcastChannelId, PodcastFeedCache>> = {};
+
+function normalizeChannelId(raw?: unknown): ServerPodcastChannelId {
+  return raw === 'comez' ? 'comez' : 'ileri';
+}
+
+function getDefaultChannelConfig(channelId: ServerPodcastChannelId): PodcastConfig {
+  if (channelId === 'comez') {
+    const envRss = (process.env.PODCAST_COMEZ_RSS_URL || '').trim();
+    const envSpotify = (process.env.PODCAST_COMEZ_SPOTIFY_URL || '').trim();
+    return {
+      rssUrl: envRss && isValidHttpUrl(envRss) ? envRss : DEFAULT_COMEZ_RSS_URL,
+      spotifyShowUrl:
+        envSpotify && isValidHttpUrl(envSpotify) ? envSpotify : DEFAULT_COMEZ_SPOTIFY_URL
+    };
+  }
+
+  const envRss = (process.env.PODCAST_ILERI_RSS_URL || process.env.PODCAST_RSS_URL || '').trim();
+  const envSpotify = (
+    process.env.PODCAST_ILERI_SPOTIFY_URL ||
+    process.env.PODCAST_SPOTIFY_URL ||
+    ''
+  ).trim();
+
+  return {
+    rssUrl: envRss && isValidHttpUrl(envRss) ? envRss : DEFAULT_PODCAST_RSS_URL,
+    spotifyShowUrl:
+      envSpotify && isValidHttpUrl(envSpotify) ? envSpotify : DEFAULT_PODCAST_SPOTIFY_URL
+  };
+}
 
 function isValidHttpUrl(rawUrl: string): boolean {
   try {
@@ -554,13 +587,32 @@ function isValidHttpUrl(rawUrl: string): boolean {
   }
 }
 
-function readPodcastConfig(): PodcastConfig {
+function readAllPodcastConfigs(): Record<ServerPodcastChannelId, PodcastConfig> {
+  const result: Record<ServerPodcastChannelId, PodcastConfig> = {
+    comez: getDefaultChannelConfig('comez'),
+    ileri: getDefaultChannelConfig('ileri')
+  };
+
   try {
     if (fs.existsSync(PODCAST_CONFIG_FILE)) {
       const raw = fs.readFileSync(PODCAST_CONFIG_FILE, 'utf-8');
       const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed.rssUrl === 'string' && parsed.rssUrl.trim()) {
-        return {
+
+      if (parsed && parsed.channels && typeof parsed.channels === 'object') {
+        (['comez', 'ileri'] as ServerPodcastChannelId[]).forEach((cid) => {
+          const entry = parsed.channels[cid];
+          if (entry && typeof entry.rssUrl === 'string' && entry.rssUrl.trim()) {
+            result[cid] = {
+              rssUrl: entry.rssUrl.trim(),
+              spotifyShowUrl:
+                typeof entry.spotifyShowUrl === 'string' ? entry.spotifyShowUrl.trim() : '',
+              updatedAt: entry.updatedAt
+            };
+          }
+        });
+      } else if (parsed && typeof parsed.rssUrl === 'string' && parsed.rssUrl.trim()) {
+        // Migrate legacy single-channel config to 'ileri'
+        result.ileri = {
           rssUrl: parsed.rssUrl.trim(),
           spotifyShowUrl:
             typeof parsed.spotifyShowUrl === 'string' && parsed.spotifyShowUrl.trim()
@@ -574,23 +626,25 @@ function readPodcastConfig(): PodcastConfig {
     console.error('[Podcast Config Read Error]', err);
   }
 
-  const envRss = (process.env.PODCAST_RSS_URL || '').trim();
-  if (envRss && isValidHttpUrl(envRss)) {
-    return {
-      rssUrl: envRss,
-      spotifyShowUrl: (process.env.PODCAST_SPOTIFY_URL || '').trim() || DEFAULT_PODCAST_SPOTIFY_URL
-    };
-  }
-
-  return {
-    rssUrl: DEFAULT_PODCAST_RSS_URL,
-    spotifyShowUrl: DEFAULT_PODCAST_SPOTIFY_URL
-  };
+  return result;
 }
 
-function savePodcastConfig(config: PodcastConfig): boolean {
+function saveChannelPodcastConfig(
+  channelId: ServerPodcastChannelId,
+  config: PodcastConfig | null
+): boolean {
   try {
-    fs.writeFileSync(PODCAST_CONFIG_FILE, JSON.stringify(config, null, 2), 'utf-8');
+    const current = readAllPodcastConfigs();
+    if (config) {
+      current[channelId] = config;
+    } else {
+      current[channelId] = getDefaultChannelConfig(channelId);
+    }
+    fs.writeFileSync(
+      PODCAST_CONFIG_FILE,
+      JSON.stringify({ channels: current }, null, 2),
+      'utf-8'
+    );
     return true;
   } catch (err) {
     console.error('[Podcast Config Save Error]', err);
@@ -598,7 +652,11 @@ function savePodcastConfig(config: PodcastConfig): boolean {
   }
 }
 
-async function fetchPodcastFeed(config: PodcastConfig, forceRefresh = false): Promise<{
+async function fetchPodcastFeed(
+  channelId: ServerPodcastChannelId,
+  config: PodcastConfig,
+  forceRefresh = false
+): Promise<{
   show: PodcastShowMeta;
   episodes: PodcastEpisode[];
   cachedAt: string;
@@ -606,17 +664,18 @@ async function fetchPodcastFeed(config: PodcastConfig, forceRefresh = false): Pr
   staleWarning?: string;
 }> {
   const now = Date.now();
+  const cached = podcastFeedCaches[channelId];
   if (
     !forceRefresh &&
-    podcastFeedCache &&
-    podcastFeedCache.rssUrl === config.rssUrl &&
-    podcastFeedCache.spotifyShowUrl === config.spotifyShowUrl &&
-    now - podcastFeedCache.cachedAtMs < PODCAST_CACHE_TTL_MS
+    cached &&
+    cached.rssUrl === config.rssUrl &&
+    cached.spotifyShowUrl === config.spotifyShowUrl &&
+    now - cached.cachedAtMs < PODCAST_CACHE_TTL_MS
   ) {
     return {
-      show: podcastFeedCache.show,
-      episodes: podcastFeedCache.episodes,
-      cachedAt: new Date(podcastFeedCache.cachedAtMs).toISOString(),
+      show: cached.show,
+      episodes: cached.episodes,
+      cachedAt: new Date(cached.cachedAtMs).toISOString(),
       fromCache: true
     };
   }
@@ -646,7 +705,7 @@ async function fetchPodcastFeed(config: PodcastConfig, forceRefresh = false): Pr
     }
 
     const { show, episodes } = parsePodcastRssXml(xmlText, config.spotifyShowUrl);
-    podcastFeedCache = {
+    podcastFeedCaches[channelId] = {
       rssUrl: config.rssUrl,
       spotifyShowUrl: config.spotifyShowUrl,
       show,
@@ -661,14 +720,12 @@ async function fetchPodcastFeed(config: PodcastConfig, forceRefresh = false): Pr
       fromCache: false
     };
   } catch (err: any) {
-    if (
-      podcastFeedCache &&
-      podcastFeedCache.rssUrl === config.rssUrl
-    ) {
+    const staleCache = podcastFeedCaches[channelId];
+    if (staleCache && staleCache.rssUrl === config.rssUrl) {
       return {
-        show: podcastFeedCache.show,
-        episodes: podcastFeedCache.episodes,
-        cachedAt: new Date(podcastFeedCache.cachedAtMs).toISOString(),
+        show: staleCache.show,
+        episodes: staleCache.episodes,
+        cachedAt: new Date(staleCache.cachedAtMs).toISOString(),
         fromCache: true,
         staleWarning: `Güncel RSS çekilemedi (${err?.message || 'bağlantı hatası'}); önbellekteki son bölümler gösteriliyor.`
       };
@@ -678,16 +735,21 @@ async function fetchPodcastFeed(config: PodcastConfig, forceRefresh = false): Pr
 }
 
 app.get('/api/podcast/config', (req, res) => {
-  const config = readPodcastConfig();
+  const channels = readAllPodcastConfigs();
+  const channelId = normalizeChannelId(req.query.channel);
+  const activeConfig = channels[channelId];
   res.json({
     success: true,
-    configured: Boolean(config?.rssUrl),
-    config
+    channelId,
+    configured: Boolean(activeConfig?.rssUrl),
+    config: activeConfig,
+    channels
   });
 });
 
 app.post('/api/podcast/config', async (req, res) => {
   try {
+    const channelId = normalizeChannelId(req.body?.channelId);
     const rssUrl = String(req.body?.rssUrl || '').trim();
     const spotifyShowUrl = String(req.body?.spotifyShowUrl || '').trim();
 
@@ -711,10 +773,10 @@ app.post('/api/podcast/config', async (req, res) => {
       updatedAt: new Date().toISOString()
     };
 
-    podcastFeedCache = null;
-    const feedResult = await fetchPodcastFeed(nextConfig, true);
+    delete podcastFeedCaches[channelId];
+    const feedResult = await fetchPodcastFeed(channelId, nextConfig, true);
 
-    const saved = savePodcastConfig(nextConfig);
+    const saved = saveChannelPodcastConfig(channelId, nextConfig);
     if (!saved) {
       return res.status(500).json({
         success: false,
@@ -725,6 +787,7 @@ app.post('/api/podcast/config', async (req, res) => {
     res.json({
       success: true,
       configured: true,
+      channelId,
       config: nextConfig,
       ...feedResult
     });
@@ -739,11 +802,16 @@ app.post('/api/podcast/config', async (req, res) => {
 
 app.delete('/api/podcast/config', (req, res) => {
   try {
-    if (fs.existsSync(PODCAST_CONFIG_FILE)) {
-      fs.unlinkSync(PODCAST_CONFIG_FILE);
-    }
-    podcastFeedCache = null;
-    res.json({ success: true, configured: false });
+    const channelId = normalizeChannelId(req.query.channel || req.body?.channelId);
+    delete podcastFeedCaches[channelId];
+    saveChannelPodcastConfig(channelId, null);
+    const channels = readAllPodcastConfigs();
+    res.json({
+      success: true,
+      channelId,
+      configured: Boolean(channels[channelId]?.rssUrl),
+      config: channels[channelId]
+    });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err?.message || 'Yapılandırma temizlenemedi' });
   }
@@ -751,12 +819,16 @@ app.delete('/api/podcast/config', (req, res) => {
 
 app.get('/api/podcast/feed', async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  const config = readPodcastConfig();
-  if (!config) {
+  const channelId = normalizeChannelId(req.query.channel);
+  const channels = readAllPodcastConfigs();
+  const config = channels[channelId];
+
+  if (!config || !config.rssUrl) {
     return res.json({
       success: true,
       configured: false,
-      config: null,
+      channelId,
+      config: config || null,
       show: null,
       episodes: [],
       cachedAt: null,
@@ -766,10 +838,11 @@ app.get('/api/podcast/feed', async (req, res) => {
 
   try {
     const forceRefresh = req.query.refresh === '1' || req.query.refresh === 'true';
-    const feedResult = await fetchPodcastFeed(config, forceRefresh);
+    const feedResult = await fetchPodcastFeed(channelId, config, forceRefresh);
     res.json({
       success: true,
       configured: true,
+      channelId,
       config,
       ...feedResult
     });
@@ -778,6 +851,7 @@ app.get('/api/podcast/feed', async (req, res) => {
     res.status(502).json({
       success: false,
       configured: true,
+      channelId,
       config,
       show: null,
       episodes: [],

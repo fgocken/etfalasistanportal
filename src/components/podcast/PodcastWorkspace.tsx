@@ -6,7 +6,9 @@ import {
   Clock,
   ExternalLink,
   FileText,
+  GraduationCap,
   Headphones,
+  Layers,
   Link2,
   NotebookPen,
   Pause,
@@ -23,6 +25,9 @@ import {
   formatDurationClock,
   formatDurationShortTr,
   formatPubDateTr,
+  PODCAST_CHANNELS,
+  PodcastChannelDefinition,
+  PodcastChannelId,
   PodcastConfig,
   PodcastEpisode,
   PodcastFeedResponse,
@@ -37,14 +42,40 @@ interface PodcastWorkspaceProps {
 }
 
 const PROGRESS_STORAGE_KEY = 'etfal_podcast_progress_v1';
-const FEED_CACHE_STORAGE_KEY = 'etfal_podcast_feed_cache_v1';
+const ACTIVE_CHANNEL_STORAGE_KEY = 'etfal_podcast_active_channel_v1';
+const FEED_CACHE_STORAGE_PREFIX = 'etfal_podcast_feed_cache_v2_';
+const LEGACY_FEED_CACHE_KEY = 'etfal_podcast_feed_cache_v1';
 const FEED_CACHE_TTL_MS = 60 * 1000;
-const DEFAULT_RSS_URL = 'https://anchor.fm/s/11a3a92e0/podcast/rss';
-const DEFAULT_SPOTIFY_URL = 'https://podcasters.spotify.com/pod/show/furkan-gken7';
 const PLAYBACK_RATES = [1, 1.25, 1.5, 1.75, 2] as const;
 
 type StatusFilter = 'all' | 'in_progress' | 'completed';
 type DetailTab = 'notes' | 'personal';
+
+function getChannelDef(channelId: PodcastChannelId): PodcastChannelDefinition {
+  return PODCAST_CHANNELS.find((c) => c.id === channelId) || PODCAST_CHANNELS[0];
+}
+
+function getEffectiveChannelConfig(channelId: PodcastChannelId): PodcastConfig {
+  const def = getChannelDef(channelId);
+  return {
+    rssUrl: def.defaultRssUrl,
+    spotifyShowUrl: def.defaultSpotifyUrl
+  };
+}
+
+function getInitialChannelId(): PodcastChannelId {
+  try {
+    const saved = localStorage.getItem(ACTIVE_CHANNEL_STORAGE_KEY);
+    if (saved === 'comez' || saved === 'ileri') {
+      return saved;
+    }
+  } catch {
+    // ignore storage read error
+  }
+  // Prefer the first channel that already has a live RSS feed configured
+  const firstConfigured = PODCAST_CHANNELS.find((ch) => Boolean(getEffectiveChannelConfig(ch.id).rssUrl));
+  return firstConfigured ? firstConfigured.id : 'comez';
+}
 
 function readLocalState(): PodcastLocalState {
   try {
@@ -54,6 +85,10 @@ function readLocalState(): PodcastLocalState {
       if (parsed && typeof parsed === 'object') {
         return {
           lastPlayedGuid: typeof parsed.lastPlayedGuid === 'string' ? parsed.lastPlayedGuid : null,
+          lastPlayedByChannel:
+            parsed.lastPlayedByChannel && typeof parsed.lastPlayedByChannel === 'object'
+              ? parsed.lastPlayedByChannel
+              : undefined,
           playbackRate:
             typeof parsed.playbackRate === 'number' && parsed.playbackRate >= 0.5 && parsed.playbackRate <= 3
               ? parsed.playbackRate
@@ -65,7 +100,7 @@ function readLocalState(): PodcastLocalState {
   } catch {
     // ignore storage read error
   }
-  return { lastPlayedGuid: null, playbackRate: 1, episodes: {} };
+  return { lastPlayedGuid: null, lastPlayedByChannel: {}, playbackRate: 1, episodes: {} };
 }
 
 function writeLocalState(state: PodcastLocalState): void {
@@ -77,6 +112,7 @@ function writeLocalState(state: PodcastLocalState): void {
 }
 
 interface CachedFeedSnapshot {
+  channelId: PodcastChannelId;
   config: PodcastConfig;
   show: PodcastShowMeta;
   episodes: PodcastEpisode[];
@@ -84,13 +120,23 @@ interface CachedFeedSnapshot {
   cachedAtMs: number;
 }
 
-function readLocalFeedCache(): CachedFeedSnapshot | null {
+function readLocalFeedCache(channelId: PodcastChannelId): CachedFeedSnapshot | null {
   try {
-    const raw = localStorage.getItem(FEED_CACHE_STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (parsed && parsed.show && Array.isArray(parsed.episodes)) {
-      return parsed as CachedFeedSnapshot;
+    const raw = localStorage.getItem(`${FEED_CACHE_STORAGE_PREFIX}${channelId}`);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.show && Array.isArray(parsed.episodes)) {
+        return parsed as CachedFeedSnapshot;
+      }
+    }
+    if (channelId === 'ileri') {
+      const legacyRaw = localStorage.getItem(LEGACY_FEED_CACHE_KEY);
+      if (legacyRaw) {
+        const parsed = JSON.parse(legacyRaw);
+        if (parsed && parsed.show && Array.isArray(parsed.episodes)) {
+          return { ...(parsed as CachedFeedSnapshot), channelId: 'ileri' };
+        }
+      }
     }
   } catch {
     // ignore storage read error
@@ -98,23 +144,33 @@ function readLocalFeedCache(): CachedFeedSnapshot | null {
   return null;
 }
 
-function writeLocalFeedCache(snapshot: CachedFeedSnapshot): void {
+function writeLocalFeedCache(channelId: PodcastChannelId, snapshot: CachedFeedSnapshot): void {
   try {
-    localStorage.setItem(FEED_CACHE_STORAGE_KEY, JSON.stringify(snapshot));
+    localStorage.setItem(`${FEED_CACHE_STORAGE_PREFIX}${channelId}`, JSON.stringify(snapshot));
   } catch {
     // ignore storage write error
   }
 }
 
 export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) => {
+  const [activeChannelId, setActiveChannelId] = useState<PodcastChannelId>(() => getInitialChannelId());
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [channelConfigured, setChannelConfigured] = useState<boolean>(true);
   const [config, setConfig] = useState<PodcastConfig | null>(null);
   const [show, setShow] = useState<PodcastShowMeta | null>(null);
   const [episodes, setEpisodes] = useState<PodcastEpisode[]>([]);
   const [cachedAt, setCachedAt] = useState<string | null>(null);
   const [staleWarning, setStaleWarning] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [channelCounts, setChannelCounts] = useState<Partial<Record<PodcastChannelId, number>>>(() => {
+    const counts: Partial<Record<PodcastChannelId, number>> = {};
+    PODCAST_CHANNELS.forEach((ch) => {
+      const cached = readLocalFeedCache(ch.id);
+      if (cached) counts[ch.id] = cached.episodes.length;
+    });
+    return counts;
+  });
 
   // Library filter state
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -131,6 +187,7 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const pendingSeekRef = useRef<number | null>(null);
   const lastSavedTickRef = useRef<number>(0);
+  const activeChannelRef = useRef<PodcastChannelId>(activeChannelId);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [audioDuration, setAudioDuration] = useState<number>(0);
@@ -139,19 +196,35 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
   const [volume, setVolume] = useState<number>(1);
   const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
 
-  const applyFeedData = useCallback((data: PodcastFeedResponse) => {
+  activeChannelRef.current = activeChannelId;
+  const activeChannelDef = getChannelDef(activeChannelId);
+
+  const applyFeedData = useCallback((channelId: PodcastChannelId, data: PodcastFeedResponse) => {
+    if (activeChannelRef.current !== channelId) return;
+
+    setChannelConfigured(data.configured);
     setConfig(data.config || null);
     setShow(data.show || null);
-    setEpisodes(Array.isArray(data.episodes) ? data.episodes : []);
+    const nextEpisodes = Array.isArray(data.episodes) ? data.episodes : [];
+    setEpisodes(nextEpisodes);
     setCachedAt(data.cachedAt || null);
     setStaleWarning(data.staleWarning || null);
 
-    if (Array.isArray(data.episodes) && data.episodes.length > 0) {
+    if (data.configured) {
+      setChannelCounts((prev) => ({ ...prev, [channelId]: nextEpisodes.length }));
+    }
+
+    if (nextEpisodes.length > 0) {
       setActiveGuid((prev) => {
-        if (prev && data.episodes.some((ep) => ep.guid === prev)) return prev;
-        const storedLast = readLocalState().lastPlayedGuid;
-        if (storedLast && data.episodes.some((ep) => ep.guid === storedLast)) return storedLast;
-        return data.episodes[0].guid;
+        if (prev && nextEpisodes.some((ep) => ep.guid === prev)) return prev;
+        const latestState = readLocalState();
+        const storedForChannel =
+          latestState.lastPlayedByChannel?.[channelId] ??
+          (channelId === 'ileri' ? latestState.lastPlayedGuid : null);
+        if (storedForChannel && nextEpisodes.some((ep) => ep.guid === storedForChannel)) {
+          return storedForChannel;
+        }
+        return nextEpisodes[0].guid;
       });
     } else {
       setActiveGuid(null);
@@ -159,16 +232,17 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
   }, []);
 
   const fetchFeed = useCallback(
-    async (forceRefresh = false) => {
-      const cached = readLocalFeedCache();
+    async (channelId: PodcastChannelId, forceRefresh = false) => {
+      const effectiveConfig = getEffectiveChannelConfig(channelId);
+      const cached = readLocalFeedCache(channelId);
 
       if (forceRefresh) {
         setRefreshing(true);
-      } else if (cached) {
-        // Show cached snapshot immediately (stale-while-revalidate), then still check live RSS below
-        applyFeedData({
+      } else if (cached && effectiveConfig.rssUrl) {
+        applyFeedData(channelId, {
           success: true,
           configured: true,
+          channelId,
           config: cached.config,
           show: cached.show,
           episodes: cached.episodes,
@@ -178,44 +252,83 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
         setLoading(false);
       } else {
         setLoading(true);
+        setShow(null);
+        setEpisodes([]);
+        setActiveGuid(null);
       }
       setErrorMsg(null);
 
       // Skip network fetch only if local cache is very fresh (< 60s) and user didn't request refresh
-      if (!forceRefresh && cached && Date.now() - cached.cachedAtMs < FEED_CACHE_TTL_MS) {
+      if (
+        !forceRefresh &&
+        effectiveConfig.rssUrl &&
+        cached &&
+        cached.config?.rssUrl === effectiveConfig.rssUrl &&
+        Date.now() - cached.cachedAtMs < FEED_CACHE_TTL_MS
+      ) {
         return;
       }
 
-      // 1. Try Express backend proxy (/api/podcast/feed) first when available
+      // 1. Try Express backend proxy (/api/podcast/feed?channel=...) first when available
       try {
-        const apiUrl = `/api/podcast/feed${forceRefresh ? `?refresh=1&_t=${Date.now()}` : `?_t=${Math.floor(Date.now() / 60000)}`}`;
+        const apiUrl = `/api/podcast/feed?channel=${channelId}${
+          forceRefresh ? `&refresh=1&_t=${Date.now()}` : `&_t=${Math.floor(Date.now() / 60000)}`
+        }`;
         const res = await fetch(apiUrl, { cache: 'no-store' });
         const contentType = res.headers.get('content-type') || '';
         if (res.ok && contentType.includes('application/json')) {
           const data: PodcastFeedResponse = await res.json();
           if (data.success) {
-            if (data.show && data.config) {
-              writeLocalFeedCache({
+            if (data.configured && data.show && data.config) {
+              writeLocalFeedCache(channelId, {
+                channelId,
                 config: data.config,
                 show: data.show,
                 episodes: data.episodes,
                 cachedAt: data.cachedAt || new Date().toISOString(),
                 cachedAtMs: Date.now()
               });
+              applyFeedData(channelId, data);
+              setLoading(false);
+              setRefreshing(false);
+              return;
             }
-            applyFeedData(data);
-            setLoading(false);
-            setRefreshing(false);
-            return;
+            // If backend says unconfigured, check if browser has a custom override URL
+            if (!data.configured && !effectiveConfig.rssUrl) {
+              applyFeedData(channelId, data);
+              setLoading(false);
+              setRefreshing(false);
+              return;
+            }
           }
         }
       } catch {
         // Fall through cleanly to direct browser RSS fetch on static/Vercel deployments
       }
 
-      // 2. Direct browser RSS fetch with cache-busting param to bypass Anchor/Fastly stale edge caches
+      // 2. If no RSS URL is configured for this channel yet, show clean preparing state
+      if (!effectiveConfig.rssUrl) {
+        applyFeedData(channelId, {
+          success: true,
+          configured: false,
+          channelId,
+          config: effectiveConfig,
+          show: null,
+          episodes: [],
+          cachedAt: null,
+          fromCache: false
+        });
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+
+      // 3. Direct browser RSS fetch with cache-busting param to bypass Anchor/Fastly stale edge caches
       try {
-        const rssUrl = `${DEFAULT_RSS_URL}?_t=${forceRefresh ? Date.now() : Math.floor(Date.now() / 60000)}`;
+        const sep = effectiveConfig.rssUrl.includes('?') ? '&' : '?';
+        const rssUrl = `${effectiveConfig.rssUrl}${sep}_t=${
+          forceRefresh ? Date.now() : Math.floor(Date.now() / 60000)
+        }`;
         const rssRes = await fetch(rssUrl, { cache: 'no-store' });
         if (!rssRes.ok) {
           throw new Error(`RSS yanıt kodu: ${rssRes.status}`);
@@ -227,37 +340,40 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
 
         const { show: parsedShow, episodes: parsedEpisodes } = parsePodcastRssXml(
           xmlText,
-          DEFAULT_SPOTIFY_URL
+          effectiveConfig.spotifyShowUrl
         );
         const nowIso = new Date().toISOString();
-        const defaultConfig: PodcastConfig = {
-          rssUrl: DEFAULT_RSS_URL,
-          spotifyShowUrl: parsedShow.link || DEFAULT_SPOTIFY_URL,
+        const resolvedConfig: PodcastConfig = {
+          rssUrl: effectiveConfig.rssUrl,
+          spotifyShowUrl: parsedShow.link || effectiveConfig.spotifyShowUrl,
           updatedAt: nowIso
         };
 
-        writeLocalFeedCache({
-          config: defaultConfig,
+        writeLocalFeedCache(channelId, {
+          channelId,
+          config: resolvedConfig,
           show: parsedShow,
           episodes: parsedEpisodes,
           cachedAt: nowIso,
           cachedAtMs: Date.now()
         });
 
-        applyFeedData({
+        applyFeedData(channelId, {
           success: true,
           configured: true,
-          config: defaultConfig,
+          channelId,
+          config: resolvedConfig,
           show: parsedShow,
           episodes: parsedEpisodes,
           cachedAt: nowIso,
           fromCache: false
         });
       } catch (err: any) {
-        if (cached) {
-          applyFeedData({
+        if (cached && activeChannelRef.current === channelId) {
+          applyFeedData(channelId, {
             success: true,
             configured: true,
+            channelId,
             config: cached.config,
             show: cached.show,
             episodes: cached.episodes,
@@ -265,20 +381,23 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
             fromCache: true,
             staleWarning: 'Güncel yayın alınamadı; son önbellekteki bölümler gösteriliyor.'
           });
-        } else {
+        } else if (activeChannelRef.current === channelId) {
+          setChannelConfigured(true);
           setErrorMsg(err?.message || 'Podcast servisine bağlanılamadı.');
         }
       } finally {
-        setLoading(false);
-        setRefreshing(false);
+        if (activeChannelRef.current === channelId) {
+          setLoading(false);
+          setRefreshing(false);
+        }
       }
     },
     [applyFeedData]
   );
 
   useEffect(() => {
-    fetchFeed(false);
-  }, [fetchFeed]);
+    fetchFeed(activeChannelId, false);
+  }, [activeChannelId, fetchFeed]);
 
   const activeEpisode = useMemo(
     () => episodes.find((ep) => ep.guid === activeGuid) || null,
@@ -291,8 +410,10 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
     (
       guid: string,
       patch: Partial<{ positionSec: number; durationSec: number; completed: boolean; personalNote: string }>,
-      setAsLastPlayed = true
+      setAsLastPlayed = true,
+      channelIdOverride?: PodcastChannelId
     ) => {
+      const targetChannel = channelIdOverride || activeChannelRef.current;
       setLocalState((prev) => {
         const existing = prev.episodes[guid] || {
           positionSec: 0,
@@ -303,6 +424,9 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
         const nextState: PodcastLocalState = {
           ...prev,
           lastPlayedGuid: setAsLastPlayed ? guid : prev.lastPlayedGuid,
+          lastPlayedByChannel: setAsLastPlayed
+            ? { ...(prev.lastPlayedByChannel || {}), [targetChannel]: guid }
+            : prev.lastPlayedByChannel,
           episodes: {
             ...prev.episodes,
             [guid]: {
@@ -318,6 +442,41 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
     },
     []
   );
+
+  const handleSelectChannel = (nextChannelId: PodcastChannelId) => {
+    if (nextChannelId === activeChannelId) return;
+
+    if (audioRef.current) {
+      if (activeEpisode) {
+        updateEpisodeProgress(
+          activeEpisode.guid,
+          {
+            positionSec: audioRef.current.currentTime,
+            durationSec: audioRef.current.duration || activeEpisode.durationSec
+          },
+          true,
+          activeChannelId
+        );
+      }
+      audioRef.current.pause();
+    }
+
+    setIsPlaying(false);
+    setAudioError(null);
+    setShowSpotifyEmbed(false);
+    setSearchQuery('');
+    setSelectedCategory('Tümü');
+    setStatusFilter('all');
+    setCurrentTime(0);
+    setAudioDuration(0);
+
+    try {
+      localStorage.setItem(ACTIVE_CHANNEL_STORAGE_KEY, nextChannelId);
+    } catch {
+      // ignore storage write error
+    }
+    setActiveChannelId(nextChannelId);
+  };
 
   const handlePlaybackRateChange = (rate: number) => {
     if (audioRef.current) {
@@ -350,7 +509,14 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
     setShowSpotifyEmbed(false);
 
     setLocalState((prev) => {
-      const next = { ...prev, lastPlayedGuid: ep.guid };
+      const next: PodcastLocalState = {
+        ...prev,
+        lastPlayedGuid: ep.guid,
+        lastPlayedByChannel: {
+          ...(prev.lastPlayedByChannel || {}),
+          [activeChannelId]: ep.guid
+        }
+      };
       writeLocalState(next);
       return next;
     });
@@ -512,18 +678,24 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
         <div className="flex items-center gap-3 min-w-0">
           <div
             className={`p-2.5 rounded-xl border shrink-0 ${
-              isDark
-                ? 'bg-violet-500/15 border-violet-500/30 text-violet-400'
-                : 'bg-violet-50 border-violet-200 text-violet-700'
+              activeChannelId === 'comez'
+                ? isDark
+                  ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                  : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                : isDark
+                  ? 'bg-violet-500/15 border-violet-500/30 text-violet-400'
+                  : 'bg-violet-50 border-violet-200 text-violet-700'
             }`}
           >
             <Headphones className="w-5 h-5" />
           </div>
           <div className="min-w-0">
             <h2 className={`text-xl font-bold tracking-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              {show?.title || 'Etfal Anestezi Podcast'}
+              {show?.title || activeChannelDef.title}
             </h2>
             <div className={`flex flex-wrap items-center gap-1.5 text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              <span>{activeChannelDef.levelLabel}</span>
+              <span aria-hidden="true">·</span>
               <span>{show?.author || 'Şişli Etfal Anestezi & Reanimasyon'}</span>
               {episodes.length > 0 && (
                 <>
@@ -544,19 +716,21 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={() => fetchFeed(true)}
-            disabled={refreshing}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-              isDark
-                ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800'
-                : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-violet-500' : ''}`} />
-            <span>{refreshing ? 'Yenileniyor' : 'Yenile'}</span>
-          </button>
+          {channelConfigured && (
+            <button
+              type="button"
+              onClick={() => fetchFeed(activeChannelId, true)}
+              disabled={refreshing}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                isDark
+                  ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800'
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-violet-500' : ''}`} />
+              <span>{refreshing ? 'Yenileniyor' : 'Yenile'}</span>
+            </button>
+          )}
 
           <ShareLinkButton
             type="arac"
@@ -566,6 +740,99 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
             title="Podcast Bağlantısını Paylaş"
           />
         </div>
+      </div>
+
+      {/* Dual Podcast Channel Selector (Çömez & İleri Düzey) */}
+      <div
+        role="tablist"
+        aria-label="Podcast kanalları"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+      >
+        {PODCAST_CHANNELS.map((ch) => {
+          const isSelected = activeChannelId === ch.id;
+          const isComez = ch.id === 'comez';
+          const Icon = isComez ? GraduationCap : Layers;
+          const count = channelCounts[ch.id];
+          const hasDefaultOrOverride = Boolean(getEffectiveChannelConfig(ch.id).rssUrl);
+
+          return (
+            <button
+              key={ch.id}
+              type="button"
+              role="tab"
+              aria-selected={isSelected}
+              onClick={() => handleSelectChannel(ch.id)}
+              className={`text-left rounded-xl border p-4 transition-colors cursor-pointer flex items-start gap-3.5 ${
+                isSelected
+                  ? isComez
+                    ? isDark
+                      ? 'bg-emerald-950/30 border-emerald-500/70 text-white'
+                      : 'bg-emerald-50/70 border-emerald-500 text-slate-900'
+                    : isDark
+                      ? 'bg-violet-950/30 border-violet-500/70 text-white'
+                      : 'bg-violet-50/70 border-violet-500 text-slate-900'
+                  : isDark
+                    ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+              }`}
+            >
+              <div
+                className={`p-2.5 rounded-lg border shrink-0 mt-0.5 ${
+                  isSelected
+                    ? isComez
+                      ? 'bg-emerald-600 border-emerald-500 text-white'
+                      : 'bg-violet-600 border-violet-500 text-white'
+                    : isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-400'
+                      : 'bg-slate-50 border-slate-200 text-slate-500'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+              </div>
+
+              <div className="min-w-0 flex-1 space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span
+                    className={`text-[11px] font-medium truncate ${
+                      isSelected
+                        ? isComez
+                          ? isDark
+                            ? 'text-emerald-300'
+                            : 'text-emerald-800'
+                          : isDark
+                            ? 'text-violet-300'
+                            : 'text-violet-800'
+                        : isDark
+                          ? 'text-slate-400'
+                          : 'text-slate-500'
+                    }`}
+                  >
+                    {ch.levelLabel}
+                  </span>
+                  <span
+                    className={`text-[11px] font-mono tabular-nums whitespace-nowrap shrink-0 ${
+                      isDark ? 'text-slate-400' : 'text-slate-500'
+                    }`}
+                  >
+                    {typeof count === 'number'
+                      ? `${count} bölüm`
+                      : hasDefaultOrOverride
+                        ? 'Yayında'
+                        : 'Yakında'}
+                  </span>
+                </div>
+
+                <div className={`text-sm font-bold truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {ch.title}
+                </div>
+
+                <p className={`text-xs leading-relaxed line-clamp-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  {ch.description}
+                </p>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       {staleWarning && (
@@ -588,12 +855,63 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
             isDark ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-white border-slate-200 text-slate-500'
           }`}
         >
-          Podcast bölümleri yükleniyor...
+          {activeChannelDef.title} bölümleri yükleniyor...
+        </div>
+      )}
+
+      {/* Channel Not Yet Connected (Clean Preparing State — No Setup Prompt for End Users) */}
+      {!loading && !channelConfigured && (
+        <div
+          className={`rounded-xl border p-8 text-center space-y-4 ${
+            isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-200 text-slate-800'
+          }`}
+        >
+          <div
+            className={`w-11 h-11 rounded-xl border mx-auto flex items-center justify-center ${
+              activeChannelId === 'comez'
+                ? isDark
+                  ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                  : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                : isDark
+                  ? 'bg-violet-500/15 border-violet-500/30 text-violet-400'
+                  : 'bg-violet-50 border-violet-200 text-violet-700'
+            }`}
+          >
+            {activeChannelId === 'comez' ? (
+              <GraduationCap className="w-5 h-5" />
+            ) : (
+              <Layers className="w-5 h-5" />
+            )}
+          </div>
+
+          <div className="space-y-1.5 max-w-lg mx-auto">
+            <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {activeChannelDef.title} Yayına Hazırlanıyor
+            </h3>
+            <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              {activeChannelDef.description} Bu kanalın Spotify for Podcasters RSS bağlantısı tanımlandığında tüm bölümler otomatik olarak burada listelenecektir.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+            <button
+              type="button"
+              onClick={() => handleSelectChannel(activeChannelId === 'comez' ? 'ileri' : 'comez')}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-violet-600 hover:bg-violet-700 text-white transition-colors cursor-pointer"
+            >
+              <Headphones className="w-3.5 h-3.5" />
+              <span>
+                {activeChannelId === 'comez'
+                  ? 'İleri Düzey Podcast Kanalına Geç'
+                  : 'Çömez Podcast Kanalına Geç'}
+              </span>
+            </button>
+          </div>
         </div>
       )}
 
       {/* Error State (without episodes) */}
-      {!loading && errorMsg && episodes.length === 0 && (
+      {!loading && channelConfigured && errorMsg && episodes.length === 0 && (
         <div
           className={`rounded-xl border p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
             isDark ? 'bg-rose-950/25 border-rose-800/70 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900'
@@ -608,7 +926,7 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
           </div>
           <button
             type="button"
-            onClick={() => fetchFeed(true)}
+            onClick={() => fetchFeed(activeChannelId, true)}
             className="px-4 py-2 text-xs font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 text-white whitespace-nowrap shrink-0 cursor-pointer"
           >
             Tekrar Dene
@@ -617,7 +935,7 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
       )}
 
       {/* Empty Episodes State */}
-      {!loading && !errorMsg && episodes.length === 0 && (
+      {!loading && channelConfigured && !errorMsg && episodes.length === 0 && (
         <div
           className={`rounded-xl border border-dashed p-10 text-center space-y-2 ${
             isDark ? 'bg-slate-900/50 border-slate-800 text-slate-300' : 'bg-white border-slate-300 text-slate-700'
@@ -634,7 +952,7 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
       )}
 
       {/* Main Two-Zone Hybrid Podcast Workspace */}
-      {!loading && episodes.length > 0 && activeEpisode && (
+      {!loading && channelConfigured && episodes.length > 0 && activeEpisode && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* ZONE 1: Active Player Stage + Show Notes / Personal Notes */}
           <section className="lg:col-span-7 space-y-4 min-w-0">
@@ -722,9 +1040,13 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
 
                 <div className="min-w-0 flex-1 space-y-1.5">
                   <div className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <span className={activeChannelId === 'comez' ? 'font-semibold text-emerald-600 dark:text-emerald-400' : 'font-semibold text-violet-600 dark:text-violet-400'}>
+                      {activeChannelDef.shortTitle}
+                    </span>
+                    <span aria-hidden="true">·</span>
                     {activeEpisode.episodeNumber !== null && (
                       <>
-                        <span className="font-mono tabular-nums font-semibold text-violet-600 dark:text-violet-400">
+                        <span className="font-mono tabular-nums font-semibold">
                           Bölüm #{activeEpisode.episodeNumber}
                         </span>
                         <span aria-hidden="true">·</span>
@@ -1101,7 +1423,7 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
           >
             <div className="flex items-center justify-between gap-2">
               <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Bölüm Kitaplığı
+                Bölüm Kitaplığı ({activeChannelDef.shortTitle})
               </h3>
               <span className={`text-xs font-mono tabular-nums ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 {filteredEpisodes.length} / {episodes.length}

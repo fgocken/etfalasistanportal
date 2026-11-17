@@ -194,11 +194,11 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
   },
   {
     id: 'tool-podcast',
-    title: 'Podcast (Spotify RSS & Portal Oynatıcı)',
+    title: 'Podcast (Çömez & İleri Düzey Kanallar)',
     category: 'Kılavuzlar & Protokoller',
-    badge: 'RSS · Spotify',
-    description: 'Spotify for Podcasters RSS senkronizasyonu, hız kontrolü, kaldığı yerden devam, kategori filtresi ve bölüm/klinik notları.',
-    keywords: ['podcast', 'spotify', 'rss', 'sesli ders', 'dinle', 'eğitim serisi', 'vaka tartışması'],
+    badge: '2 Kanal · Spotify RSS',
+    description: 'Çömez Podcast Kanalı (temel anestezi & nöbet) ve İleri Düzey Podcast Kanalı (Miller’s Anesthesia): hız kontrolü, kaldığı yerden devam, kategori filtresi ve klinik notlar.',
+    keywords: ['podcast', 'spotify', 'rss', 'çömez podcast', 'ileri düzey podcast', 'sesli ders', 'dinle', 'eğitim serisi', 'vaka tartışması'],
     tabId: 'podcast'
   },
   {
