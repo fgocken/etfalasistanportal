@@ -135,7 +135,8 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
       'Tedaviler & Elektrolitler',
       'Sistematik Prosedür Yönetimi',
       'Güvenli Vasküler Erişim (İnvaziv Arteriyel)',
-      'Yatak Başı Kan Gazı Analizi'
+      'Yatak Başı Kan Gazı Analizi',
+      'Erişkin & Pediatrik Havayolu Ekipman Hesaplayıcılar'
     ],
     clinicalNote: 'Perioperatif sıvı fizyolojisi, otonomik farmakoloji, NORA, hava yolu komplikasyonları ve malign hipertermi ana başvuru kaynağı.'
   },
@@ -177,7 +178,8 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
       'İntraoperatif Sıvı Yönetimi',
       'Anestezi Acilleri',
       'Temel İlaç Monografları',
-      'Yatak Başı Kan Gazı Analizi'
+      'Yatak Başı Kan Gazı Analizi',
+      'Erişkin & Pediatrik Havayolu Ekipman Hesaplayıcılar'
     ],
     clinicalNote: 'İntraoperatif açlık açığı, 3. boşluk kayıpları, devre arızaları, asit-baz fizyolojisi ve pratik ameliyathane içi problem çözme algoritmaları.'
   },
@@ -718,6 +720,32 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     usedInModules: ['Anestezi Acilleri (Akut Bronkospazm)'],
     clinicalNote: 'İntraoperatif bronkospazmda sevofluran derinleştirme, desfluran yasağı, salbutamol, ketamin ve oto-PEEP boşaltma manevrası.'
   },
+  {
+    id: 'airway-khine-cuffed-1997',
+    category: 'airway',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Khine HH, Corddry DH, Kettrick RG, Martin TM, McCloskey JJ, Rose JB, Theroux MC, Zagnoev M.',
+    title: 'Comparison of cuffed and uncuffed endotracheal tubes in young children during general anesthesia.',
+    publication: 'Anesthesiology. 1997;86(3):627–631.',
+    year: '1997',
+    pmid: '9066329',
+    doi: '10.1097/00000542-199703000-00015',
+    usedInModules: ['Pediatrik Havayolu Ekipman Hesaplayıcı'],
+    clinicalNote: 'Pediatrik hastalarda kaflı ETT seçiminde (Yaş/4 + 3.0 / Motoyama +3.5 mm) güvenli kaf basıncıyla tüp değişim ihtiyacını azalttığını gösteren temel çalışma.'
+  },
+  {
+    id: 'airway-tochen-depth-1979',
+    category: 'airway',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Tochen ML.',
+    title: 'Orotracheal intubation in the newborn infant: a method for determining depth of tube insertion.',
+    publication: 'The Journal of Pediatrics. 1979;95(6):1050–1051.',
+    year: '1979',
+    pmid: '501484',
+    doi: '10.1016/s0022-3476(79)80309-1',
+    usedInModules: ['Pediatrik Havayolu Ekipman Hesaplayıcı'],
+    clinicalNote: 'Yenidoğan orotrakeal entübasyon derinliği için klasik "Kilo (kg) + 6 cm" Tochen kuralının orijinal tanımlaması.'
+  },
 
   // =========================================================================
   // 4. PREOPERATİF DEĞERLENDİRME, AÇLIK, RİSK SKORLARI VE DERLENME
@@ -840,16 +868,30 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     clinicalNote: 'Berrak sıvılar için 2 saat, karbonhidratlı içecekler, sakız çiğneme sonrası erteleme yapılmaması ve güncel preoperatif açlık güncellemesi.'
   },
   {
+    id: 'preop-multisociety-glp1-2024',
+    category: 'preop_recovery',
+    kind: 'Uluslararası Kılavuz',
+    authors: 'Kindel TL, Wang AY, Wadhwa A, Schulman AR, Sharaiha RZ, Kroh M, Ghanem OM, Levy S, Joshi GP, LaMasters TL (ASA, AGA, ASMBS, SAGES, ISPCOP).',
+    title: 'Preprocedure Care of Patients on Glucagon-like Peptide-1 Receptor Agonists: A Multisociety Clinical Practice Guidance.',
+    publication: 'Anesthesiology. 2024 Dec;141(6):1208–1209.',
+    year: '2024',
+    pmid: '39471342',
+    doi: '10.1097/ALN.0000000000005231',
+    externalUrl: 'https://journals.lww.com/anesthesiology/fulltext/10.1097/aln.0000000000005231~preprocedure-care-of-patients-on-glucagon-like-peptide-1',
+    usedInModules: ['Klinik İnfografikler (Erişkin Açlık Süreleri)', 'Klinik İnfografikler (Gastrik USG Perlas 0–2)', 'Preoperatif Değerlendirme'],
+    clinicalNote: '2023 ASA geçici önerisinin yerini alan 5 dernekli ortak rehber: çoğu hasta GLP-1 RA tedavisine devam edebilir; eskalasyon fazı, yüksek doz, haftalık rejim ve GI semptomlar varsa 24 saat sıvı diyet, işlem günü Gastrik USG (POCUS) veya RSI/erteleme önerilir.'
+  },
+  {
     id: 'preop-asa-glp1-2023',
     category: 'preop_recovery',
     kind: 'Konsensus / Uzman Görüşü',
     authors: 'Joshi GP, Abdelmalak BB, Weigel WA, et al.',
-    title: 'American Society of Anesthesiologists Consensus-Based Guidance on Preoperative Management of Patients on Glucagon-Like Peptide-1 (GLP-1) Receptor Agonists.',
+    title: 'American Society of Anesthesiologists Consensus-Based Guidance on Preoperative Management of Patients on Glucagon-Like Peptide-1 (GLP-1) Receptor Agonists (Tarihsel Geçici Öneri — 2024 Multisociety ile Güncellendi).',
     publication: 'ASA Task Force on Preoperative Fasting Guidance.',
     year: '2023',
     externalUrl: 'https://www.asahq.org/about-asa/newsroom/news-releases/2023/06/american-society-of-anesthesiologists-consensus-based-guidance-on-preoperative',
     usedInModules: ['Klinik İnfografikler (Erişkin Açlık Süreleri)'],
-    clinicalNote: 'Semaglutid, liraglutid ve tirzepatid gibi GLP-1 agonistlerinde gecikmiş mide boşalması riski ve gastrik USG / RSI kararları.'
+    clinicalNote: 'İlk dönem rutin 1 hafta/sabah kesme yaklaşımını sunan geçici uzlaşı; Aralık 2024 Multisociety Rehberi (PMID: 39471342) ile bireyselleştirilmiş risk ve 24 saatlik sıvı diyeti modeline güncellenmiştir.'
   },
   {
     id: 'preop-esaic-peds-2022',

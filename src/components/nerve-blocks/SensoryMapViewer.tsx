@@ -243,13 +243,19 @@ export const SensoryMapViewer: React.FC<SensoryMapViewerProps> = ({
                       </div>
 
                       {onSelectBlock && (
-                        <button
-                          onClick={() => onSelectBlock(block.id)}
-                          className="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-semibold whitespace-nowrap transition-colors flex items-center gap-1 self-start sm:self-center"
+                        <a
+                          href={`#blok=${block.id}`}
+                          onClick={(e) => {
+                            if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                              e.preventDefault();
+                              onSelectBlock(block.id);
+                            }
+                          }}
+                          className="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-semibold whitespace-nowrap transition-colors flex items-center gap-1 self-start sm:self-center no-underline"
                         >
                           Bloğu İncele
                           <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
+                        </a>
                       )}
                     </div>
                   );

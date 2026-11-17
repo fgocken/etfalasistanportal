@@ -113,9 +113,9 @@ const PREOP_CARDS: PreopCardItem[] = [
   {
     id: 'adult-fasting',
     title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
-    badge: 'ASA 2023 · ESAIC',
+    badge: 'ASA 2023 · GLP-1 2024',
     category: 'Preop Açlık & Aspirasyon',
-    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez), GLP-1 agonistleri ve dolu mide kriterleri.',
+    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez) ve Multisociety 2024 GLP-1 risk bazlı (24 sa sıvı diyet) yaklaşımı.',
     icon: Coffee,
     iconBgDark: 'bg-emerald-500/15',
     iconBgLight: 'bg-emerald-50',

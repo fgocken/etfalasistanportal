@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kilo ve Ventilasyon Hesaplayıcı</title>
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-hover: #1565c0;
+      --surface: #ffffff;
+      --background: #f4f6f9;
+      --border: #e0e0e0;
+      --text-main: #212121;
+      --text-secondary: #616161;
+      --radius: 12px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.2s ease-in-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .calculator-card {
+      background: var(--surface);
+      width: 100%;
+      max-width: 680px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1976d2, #0d47a1);
+      color: #fff;
+      padding: 24px 28px;
+    }
+
+    .header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .header p {
+      font-size: 0.85rem;
+      color: #e3f2fd;
+      margin-top: 4px;
+    }
+
+    .content {
+      padding: 28px;
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 520px) {
+      .control-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Segmented Controls for Unit and Gender */
+    .segmented-control {
+      display: flex;
+      background: #eeeeee;
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .segmented-control input[type="radio"] {
+      display: none;
+    }
+
+    .segmented-control label {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: var(--transition);
+      user-select: none;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .segmented-control input[type="radio"]:checked + label {
+      background: var(--surface);
+      color: var(--primary);
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Input Fields */
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      height: 42px;
+      padding: 0 48px 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background-color: var(--border);
+      margin: 24px 0;
+    }
+
+    /* Results Grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 520px) {
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .result-card {
+      background: #fafafa;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .result-card.highlight {
+      background: #f0f7ff;
+      border-color: #bbdefb;
+    }
+
+    .result-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .result-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .result-sub {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    /* BMI Badge */
+    .bmi-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 4px;
+      align-self: flex-start;
+      transition: var(--transition);
+    }
+
+    .empty-state {
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-card">
+    <header class="header">
+      <h1>Kilo ve Ventilasyon Hesaplayıcı</h1>
+      <p>Devine & ARDSnet Standartlarına Göre Akciğer Koruyucu Ventilasyon Parametreleri</p>
+    </header>
+
+    <div class="content">
+      <!-- Unit & Gender Selection -->
+      <div class="control-row">
+        <div class="form-group">
+          <label>Birim Sistemi</label>
+          <div class="segmented-control">
+            <input type="radio" id="unitMetric" name="unitSystem" value="metric" checked />
+            <label for="unitMetric">Metrik (cm/kg)</label>
+            <input type="radio" id="unitImperial" name="unitSystem" value="imperial" />
+            <label for="unitImperial">İmperial (in/lb)</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Cinsiyet</label>
+          <div class="segmented-control">
+            <input type="radio" id="genderMale" name="gender" value="male" checked />
+            <label for="genderMale">Erkek</label>
+            <input type="radio" id="genderFemale" name="gender" value="female" />
+            <label for="genderFemale">Kadın</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Height & Weight Inputs -->
+      <div class="control-row">
+        <div class="form-group">
+          <label for="inputHeight">Boy</label>
+          <div class="input-wrapper">
+            <input type="number" id="inputHeight" placeholder="175" step="any" min="0" />
+            <span class="input-suffix" id="heightSuffix">cm</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputWeight">Mevcut Kilo</label>
+          <div class="input-wrapper">
+            <input type="number" id="inputWeight" placeholder="70" step="any" min="0" />
+            <span class="input-suffix" id="weightSuffix">kg</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Calculation Results -->
+      <div class="results-grid">
+        <!-- BMI Result -->
+        <div class="result-card">
+          <span class="result-title">Vücut Kitle İndeksi (VKİ)</span>
+          <span class="result-value" id="valBmi">-</span>
+          <span class="bmi-badge" id="badgeBmi" style="display: none;">-</span>
+        </div>
+
+        <!-- IBW / PBW Result -->
+        <div class="result-card">
+          <span class="result-title">İdeal / Öngörülen Kilo (IBW/PBW)</span>
+          <span class="result-value" id="valIbw">-</span>
+          <span class="result-sub">Devine Formülü / ARDSnet standardı</span>
+        </div>
+
+        <!-- AdjBW Result -->
+        <div class="result-card">
+          <span class="result-title">Düzeltilmiş Kilo (AdjBW)</span>
+          <span class="result-value" id="valAdjBw">-</span>
+          <span class="result-sub">Kilo > IBW %120 ise uygulanır</span>
+        </div>
+
+        <!-- Protective Tidal Volume -->
+        <div class="result-card highlight">
+          <span class="result-title">Normal Koruyucu Ventilasyon</span>
+          <span class="result-value" id="valNormalTv">-</span>
+          <span class="result-sub">PBW × 6 - 8 mL/kg</span>
+        </div>
+
+        <!-- ARDS Tidal Volume -->
+        <div class="result-card highlight" style="grid-column: span 2;">
+          <span class="result-title">ARDS Ventilasyonu</span>
+          <span class="result-value" id="valArdsTv">-</span>
+          <span class="result-sub">PBW × 4 - 6 mL/kg (Düşük Tidal Volüm Stratejisi)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Kilo ve Ventilasyon Hesaplayıcı Fonksiyonu
+     * @param {Object} params - Hesaplama parametreleri
+     * @param {string|number} params.height - Boy (cm veya inç)
+     * @param {string|number} params.weight - Kilo (kg veya lb)
+     * @param {boolean} [params.isMale=true] - Erkek ise true, Kadın ise false
+     * @param {boolean} [params.isMetric=true] - Metrik (cm/kg) ise true, İmperial (inç/lb) ise false
+     */
+    function calculateWeightAndVentilation({ height, weight, isMale = true, isMetric = true }) {
+      // 1. Birim Dönüşümleri (cm ve kg cinsine çevirme)
+      const hCm = isMetric ? parseFloat(height) || 0 : (parseFloat(height) || 0) * 2.54;
+      const wKg = isMetric ? parseFloat(weight) || 0 : (parseFloat(weight) || 0) * 0.45359237;
+
+      // 2. İdeal Kilo (IBW - Devine Formülü)
+      let ibw = 0;
+      if (hCm > 152.4) {
+        ibw = isMale ? 50.0 + 0.91 * (hCm - 152.4) : 45.5 + 0.91 * (hCm - 152.4);
+      } else {
+        ibw = isMale ? 50.0 : 45.5;
+      }
+
+      // 3. Vücut Kitle İndeksi (VKİ / BMI)
+      const bmi = hCm > 0 ? wKg / Math.pow(hCm / 100.0, 2) : 0;
+
+      // VKİ Sınıflandırması
+      let bmiCategory = "";
+      let bmiColor = "";
+      if (bmi > 0) {
+        if (bmi < 18.5) { bmiCategory = "Zayıf"; bmiColor = "#0288D1"; }
+        else if (bmi < 25.0) { bmiCategory = "Normal"; bmiColor = "#2E7D32"; }
+        else if (bmi < 30.0) { bmiCategory = "Fazla Kilolu"; bmiColor = "#EF6C00"; }
+        else if (bmi < 35.0) { bmiCategory = "Obezite (Sınıf 1)"; bmiColor = "#C62828"; }
+        else if (bmi < 40.0) { bmiCategory = "Obezite (Sınıf 2)"; bmiColor = "#B71C1C"; }
+        else { bmiCategory = "Obezite (Sınıf 3 - Morbid)"; bmiColor = "#880E4F"; }
+      }
+
+      // 4. Öngörülen Kilo (PBW - Predicted Body Weight)
+      const pbw = ibw; // ARDSnet standardı: PBW = IBW
+
+      // 5. Düzeltilmiş Kilo (AdjBW - Adjusted Body Weight)
+      // Gerçek kilo, İdeal kilonun %120'sinden fazlaysa hesaplanır
+      const adjBw = (wKg > 0 && ibw > 0 && wKg > ibw * 1.2) 
+        ? ibw + 0.4 * (wKg - ibw) 
+        : wKg;
+
+      // 6. Tidal Volüm Hesaplamaları (PBW üzerinden)
+      const normalTvMin = pbw * 6; // Akciğer Koruyucu Ventilasyon (6 mL/kg)
+      const normalTvMax = pbw * 8; // Akciğer Koruyucu Ventilasyon (8 mL/kg)
+      const ardsTvMin = pbw * 4;   // ARDS Ventilasyonu (4 mL/kg)
+      const ardsTvMax = pbw * 6;   // ARDS Ventilasyonu (6 mL/kg)
+
+      return {
+        hCm,
+        wKg,
+        ibw: ibw.toFixed(1),
+        bmi: bmi.toFixed(1),
+        bmiCategory,
+        bmiColor,
+        pbw: pbw.toFixed(1),
+        adjBw: adjBw.toFixed(1),
+        normalTv: `${Math.round(normalTvMin)} - ${Math.round(normalTvMax)} mL`,
+        ardsTv: `${Math.round(ardsTvMin)} - ${Math.round(ardsTvMax)} mL`
+      };
+    }
+
+    // DOM Elemanları
+    const inputHeight = document.getElementById("inputHeight");
+    const inputWeight = document.getElementById("inputWeight");
+    const heightSuffix = document.getElementById("heightSuffix");
+    const weightSuffix = document.getElementById("weightSuffix");
+
+    const valBmi = document.getElementById("valBmi");
+    const badgeBmi = document.getElementById("badgeBmi");
+    const valIbw = document.getElementById("valIbw");
+    const valAdjBw = document.getElementById("valAdjBw");
+    const valNormalTv = document.getElementById("valNormalTv");
+    const valArdsTv = document.getElementById("valArdsTv");
+
+    function updateUI() {
+      const isMetric = document.getElementById("unitMetric").checked;
+      const isMale = document.getElementById("genderMale").checked;
+      const height = parseFloat(inputHeight.value);
+      const weight = parseFloat(inputWeight.value);
+
+      // Sonekleri güncelle
+      heightSuffix.textContent = isMetric ? "cm" : "in";
+      weightSuffix.textContent = isMetric ? "kg" : "lb";
+
+      // Eksik veya geçersiz girdi kontrolü
+      if (!height || height <= 0) {
+        valBmi.textContent = "-";
+        valIbw.textContent = "-";
+        valAdjBw.textContent = "-";
+        valNormalTv.textContent = "-";
+        valArdsTv.textContent = "-";
+        badgeBmi.style.display = "none";
+        return;
+      }
+
+      const results = calculateWeightAndVentilation({
+        height,
+        weight: weight || 0,
+        isMale,
+        isMetric
+      });
+
+      // IBW & Tidal Volümler sadece boya bağlıdır
+      valIbw.textContent = `${results.ibw} kg`;
+      valNormalTv.textContent = results.normalTv;
+      valArdsTv.textContent = results.ardsTv;
+
+      // Kilo gerektiren alanlar
+      if (weight && weight > 0) {
+        valBmi.textContent = `${results.bmi} kg/m²`;
+        badgeBmi.textContent = results.bmiCategory;
+        badgeBmi.style.backgroundColor = results.bmiColor;
+        badgeBmi.style.display = "inline-block";
+        valAdjBw.textContent = `${results.adjBw} kg`;
+      } else {
+        valBmi.textContent = "-";
+        badgeBmi.style.display = "none";
+        valAdjBw.textContent = "-";
+      }
+    }
+
+    // Dinleyiciler (Event Listeners)
+    inputHeight.addEventListener("input", updateUI);
+    inputWeight.addEventListener("input", updateUI);
+
+    document.querySelectorAll('input[name="unitSystem"]').forEach((elem) => {
+      elem.addEventListener("change", (e) => {
+        // İsteğe bağlı olarak mevcut değerleri dönüştür
+        const toMetric = e.target.value === "metric";
+        if (inputHeight.value) {
+          inputHeight.value = toMetric
+            ? (parseFloat(inputHeight.value) * 2.54).toFixed(1)
+            : (parseFloat(inputHeight.value) / 2.54).toFixed(1);
+        }
+        if (inputWeight.value) {
+          inputWeight.value = toMetric
+            ? (parseFloat(inputWeight.value) * 0.45359237).toFixed(1)
+            : (parseFloat(inputWeight.value) / 0.45359237).toFixed(1);
+        }
+        updateUI();
+      });
+    });
+
+    document.querySelectorAll('input[name="gender"]').forEach((elem) => {
+      elem.addEventListener("change", updateUI);
+    });
+
+    // Başlangıç tetiklemesi
+    updateUI();
+  </script>
+</body>
+</html>

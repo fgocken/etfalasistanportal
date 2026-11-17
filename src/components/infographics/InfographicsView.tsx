@@ -117,7 +117,7 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
   {
     id: 'gastric-usg-perlas',
     title: 'Gastrik USG (POCUS) & Perlas 0–2 Karar Destek',
-    source: 'Van de Putte & Perlas (BJA) · ASA 2023 GLP-1',
+    source: 'Van de Putte & Perlas (BJA) · Multisociety 2024 GLP-1',
     sourceBadge: 'Perlas 0–2',
     category: 'Preop Açlık & Aspirasyon',
     shortDesc: 'Yatak başı gastrik ultrasonografi (GUS) ile Perlas 0–2 evrelemesi, RLD antral kesit alanı (CSA), 1.5 mL/kg volüm hesabı ve aktif indüksiyon karar desteği.',
@@ -151,10 +151,10 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
   {
     id: 'adult-fasting',
     title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
-    source: 'ASA 2023 Güncellemesi & ESAIC Perioperatif Kılavuzları',
-    sourceBadge: 'ASA 2023',
+    source: 'ASA 2023 & Multisociety 2024 GLP-1 (ASA/AGA/ASMBS/SAGES/ISPCOP)',
+    sourceBadge: 'ASA · 2024 GLP-1',
     category: 'Preop Açlık & Aspirasyon',
-    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez) ve GLP-1 (Ozempic/Wegovy) yönetimi.',
+    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez) ve Multisociety 2024 GLP-1 risk bazlı (24 sa sıvı diyet) yönetimi.',
     pillsHeader: 'Açlık Pencereleri:',
     publisher: 'Anesthesiology / ESAIC',
     riskPills: [

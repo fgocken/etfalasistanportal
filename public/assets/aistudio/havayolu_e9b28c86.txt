@@ -1,0 +1,101 @@
+enum class PediatricGroup { Neonate, Infant, Child }
+
+class AdultAirwayViewModel : ViewModel() {
+    var height by mutableStateOf("")
+    var weight by mutableStateOf("")
+    var isMale by mutableStateOf(true)
+    var isMetric by mutableStateOf(true)
+
+    val hCm get() = (height.toDoubleOrNull() ?: 0.0).let { if (isMetric) it else it * 2.54 }
+    val wKg get() = (weight.toDoubleOrNull() ?: 0.0).let { if (isMetric) it else it * 0.45359237 }
+
+    val ettSize: String get() = if (isMale) "8.0 - 8.5" else "7.0 - 7.5"
+    
+    val ettDepth: String get() {
+        if (hCm > 0) {
+            val d = (hCm / 10.0) + 5.0
+            return "%.1f".format(d)
+        }
+        return if (isMale) "23" else "21"
+    }
+
+    val bladeSize: String get() = if (isMale) "MAC 4" else "MAC 3"
+
+    val lmaSize: String get() {
+        val weight = wKg
+        if (weight <= 0) return "Kilo Giriniz"
+        return when {
+            weight < 30 -> "2.5 (Pediatrik)"
+            weight < 50 -> "3"
+            weight < 70 -> "4"
+            weight < 100 -> "5"
+            else -> "5 - 6"
+        }
+    }
+
+    val igelSize: String get() {
+        val weight = wKg
+        if (weight <= 0) return "Kilo Giriniz"
+        return when {
+            weight < 35 -> "2.5 (Beyaz)"
+            weight < 60 -> "3 (Sarı)"
+            weight < 90 -> "4 (Yeşil)"
+            else -> "5 (Turuncu)"
+        }
+    }
+}
+
+class PediatricViewModel : ViewModel() {
+    var selectedGroup by mutableStateOf(PediatricGroup.Neonate)
+    var childAge by mutableFloatStateOf(5f)
+    
+    val estimatedWeight: Double get() {
+        return when {
+            childAge < 1 -> (childAge * 12 * 0.5) + 4.0
+            childAge <= 5 -> (childAge * 2.0) + 8.0
+            else -> (childAge * 3.0) + 7.0
+        }
+    }
+
+    val childCuffedEtt: Double get() {
+        val raw = (childAge / 4.0) + 3.5
+        return (Math.floor(raw * 2.0) / 2.0)
+    }
+    
+    val childUncuffedEtt: Double get() {
+        val raw = (childAge / 4.0) + 4.0
+        return (Math.floor(raw * 2.0) / 2.0)
+    }
+    
+    val childDepth: Double get() = (childAge / 2.0) + 12.0
+
+    val childBlade: String get() = when {
+        childAge < 1 -> "Miller 0 - 1"
+        childAge < 2 -> "Miller 1 / Mac 1"
+        childAge < 8 -> "Miller 2 / Mac 2"
+        else -> "Miller 3 / Mac 3"
+    }
+
+    val childLma: String get() = getLmaSize(estimatedWeight)
+    val childIgel: String get() = getIgelSize(estimatedWeight)
+
+    fun getLmaSize(weight: Double): String = when {
+        weight < 5 -> "1"
+        weight < 10 -> "1.5"
+        weight < 20 -> "2"
+        weight < 30 -> "2.5"
+        weight < 50 -> "3"
+        weight < 70 -> "4"
+        else -> "5"
+    }
+
+    fun getIgelSize(weight: Double): String = when {
+        weight < 5 -> "1 (Pembe)"
+        weight < 12 -> "1.5 (Mavi)"
+        weight < 25 -> "2 (Gri)"
+        weight < 35 -> "2.5 (Beyaz)"
+        weight < 60 -> "3 (Sarı)"
+        weight < 90 -> "4 (Yeşil)"
+        else -> "5 (Turuncu)"
+    }
+}

@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Coffee,
   Layers,
+  Ruler,
   ShieldAlert,
   Wind
 } from 'lucide-react';
@@ -14,13 +15,21 @@ import { GastricUsgPerlasInfographic } from '../infographics/GastricUsgPerlasInf
 import { RSIvsElectiveInfographic } from '../infographics/RSIvsElectiveInfographic';
 import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
 import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
+import { AirwayEquipmentSizer } from './AirwayEquipmentSizer';
 
 interface AirwayManagementViewProps {
   isDark: boolean;
   initialCardId?: AirwayCardId | null;
 }
 
-export type AirwayCardId = 'difficult-das' | 'gastric-usg' | 'rsi' | 'adult-fasting' | 'pediatric-fasting';
+export type AirwayCardId =
+  | 'difficult-das'
+  | 'gastric-usg'
+  | 'rsi'
+  | 'adult-fasting'
+  | 'pediatric-fasting'
+  | 'adult-equipment-sizer'
+  | 'pediatric-equipment-sizer';
 
 interface AirwayCardItem {
   id: AirwayCardId;
@@ -110,9 +119,9 @@ const AIRWAY_CARDS: AirwayCardItem[] = [
   {
     id: 'adult-fasting',
     title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
-    badge: 'ASA 2023',
+    badge: 'ASA 2023 · GLP-1 2024',
     category: 'Preop Açlık & Aspirasyon',
-    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez), GLP-1 agonistleri ve dolu mide kriterleri.',
+    shortDesc: 'Berrak sıvılar (2 sa), hafif öğün (6 sa), ağır/yağlı yemekler (8 sa), sakız çiğneme (vaka ertelenmez) ve Multisociety 2024 GLP-1 risk bazlı (24 sa sıvı diyet) yaklaşımı.',
     publisher: 'Anesthesiology / ESAIC',
     icon: Coffee,
     iconBgDark: 'bg-emerald-500/15',
@@ -149,6 +158,50 @@ const AIRWAY_CARDS: AirwayCardItem[] = [
       { label: 'Anne Sütü', value: '3 Saat', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
       { label: 'Bebek Maması', value: '4 Saat', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
       { label: 'Katı / Süt', value: '6 Saat', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' }
+    ]
+  },
+  {
+    id: 'adult-equipment-sizer',
+    title: 'Erişkin Havayolu Ekipman Hesaplayıcı',
+    badge: 'ETT · MAC · LMA · i-gel',
+    category: 'Erişkin Havayolu Ekipmanı',
+    shortDesc: 'Boy, kilo ve cinsiyete göre kaflı ETT iç çapı, kesici diş tespit derinliği ((Boy/10)+5), Macintosh bıçak, klasik LMA ve renk kodlu i-gel boyutlarını (cm/kg & in/lb) hesaplayın.',
+    publisher: 'Morgan & Mikhail / Miller',
+    icon: Ruler,
+    iconBgDark: 'bg-sky-500/15',
+    iconBgLight: 'bg-sky-50',
+    iconColorDark: 'text-sky-400',
+    iconColorLight: 'text-sky-700',
+    borderHoverDark: 'hover:border-sky-500/40',
+    borderHoverLight: 'hover:border-sky-400',
+    highlightsHeader: 'Erişkin Ekipman Çıktıları:',
+    highlights: [
+      { label: 'Kaflı ETT', value: '7.0 – 8.0 mm', colorClass: 'text-cyan-700 dark:text-cyan-300', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' },
+      { label: 'Derinlik', value: '(Boy/10)+5', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Blade', value: 'MAC 3 / 4', colorClass: 'text-indigo-700 dark:text-indigo-300', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30' },
+      { label: 'SGA', value: 'LMA & i-gel', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' }
+    ]
+  },
+  {
+    id: 'pediatric-equipment-sizer',
+    title: 'Pediatrik Havayolu Ekipman Hesaplayıcı',
+    badge: 'Yenidoğan · İnfant · Çocuk',
+    category: 'Pediatrik Havayolu Ekipmanı',
+    shortDesc: 'Yenidoğan (Tochen kuralı), süt çocuğu (1–12 ay) ve çocuk (1–16 yaş Motoyama/Cole/APLS) için kaflı/kafsız ETT, oral derinlik, Miller/MAC bıçak, LMA ve renk kodlu i-gel hesabı.',
+    publisher: 'AHA PALS / Morgan & Mikhail',
+    icon: Baby,
+    iconBgDark: 'bg-orange-500/15',
+    iconBgLight: 'bg-orange-50',
+    iconColorDark: 'text-orange-400',
+    iconColorLight: 'text-orange-700',
+    borderHoverDark: 'hover:border-orange-500/40',
+    borderHoverLight: 'hover:border-orange-400',
+    highlightsHeader: 'Pediatrik Kurallar:',
+    highlights: [
+      { label: 'Yenidoğan', value: 'Kilo + 6 cm', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Kaflı ETT', value: 'Yaş/4 + 3.5', colorClass: 'text-cyan-700 dark:text-cyan-300', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30' },
+      { label: 'Kafsız ETT', value: 'Yaş/4 + 4.0', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Blade / SGA', value: 'Miller · i-gel', colorClass: 'text-orange-700 dark:text-orange-300', bgClass: 'bg-orange-500/10', borderClass: 'border-orange-500/30' }
     ]
   }
 ];
@@ -205,7 +258,7 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
               <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 {activeCardId
                   ? 'Kart listesine dönmek için sol üstteki geri butonuna tıklayabilirsiniz.'
-                  : 'DAS 2025 Plan A–D algoritması, zor havayolu skorları, Perlas 0–2 Gastrik USG, RSI ve preoperatif açlık kılavuzları'}
+                  : 'DAS 2025 Plan A–D algoritması, zor havayolu skorları, Perlas 0–2 Gastrik USG, RSI, açlık kılavuzları ve ETT/LMA/i-gel boyut hesaplama'}
               </p>
             </div>
           </div>
@@ -327,6 +380,20 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
         <PediatricFastingInfographic
           isDark={isDark}
           onOpenAdult={() => setActiveCardId('adult-fasting')}
+        />
+      )}
+      {activeCardId === 'adult-equipment-sizer' && (
+        <AirwayEquipmentSizer
+          isDark={isDark}
+          scope="adult"
+          onOpenPediatric={() => setActiveCardId('pediatric-equipment-sizer')}
+        />
+      )}
+      {activeCardId === 'pediatric-equipment-sizer' && (
+        <AirwayEquipmentSizer
+          isDark={isDark}
+          scope="pediatric"
+          onOpenAdult={() => setActiveCardId('adult-equipment-sizer')}
         />
       )}
     </div>

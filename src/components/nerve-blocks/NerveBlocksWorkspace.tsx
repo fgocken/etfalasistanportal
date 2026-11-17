@@ -41,6 +41,12 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
     if (initialBlockId) {
       setExpandedBlockId(initialBlockId);
       setActiveTab('blocks');
+      setTimeout(() => {
+        const el = document.getElementById(`block-${initialBlockId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 120);
     }
   }, [initialBlockId]);
 
@@ -204,10 +210,16 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
                       : 'border-slate-800 hover:border-slate-700'
                   }`}
                 >
-                  {/* Blok Kart Başlığı */}
-                  <div
-                    onClick={() => setExpandedBlockId(isExpanded ? null : block.id)}
-                    className="p-5 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 select-none hover:bg-slate-800/40 transition-colors"
+                  {/* Blok Kart Başlığı (Sol tık: aç/kapa, Sağ tık / Ctrl+Tık: yeni sekmede aç veya bağlantı kopyala) */}
+                  <a
+                    href={`#blok=${block.id}`}
+                    onClick={(e) => {
+                      if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                        e.preventDefault();
+                        setExpandedBlockId(isExpanded ? null : block.id);
+                      }
+                    }}
+                    className="group p-5 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors no-underline text-inherit"
                   >
                     <div>
                       <div className="flex items-center gap-2 flex-wrap mb-1.5">
@@ -246,7 +258,7 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
                         {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                       </div>
                     </div>
-                  </div>
+                  </a>
 
                   {/* Genişletilmiş Detay Alanı */}
                   {isExpanded && (

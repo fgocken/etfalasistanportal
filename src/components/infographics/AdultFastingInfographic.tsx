@@ -129,17 +129,17 @@ const ADULT_FASTING_ITEMS: FastingItem[] = [
     id: 'glp1',
     name: 'GLP-1 Reseptör Agonistleri (Semaglutid / Tirzepatid vb.)',
     category: 'Özel Durum',
-    recommendedHours: 7,
-    badgeLabel: 'Haftalık: 1 Hafta Önce Kes',
+    recommendedHours: 24,
+    badgeLabel: 'Risk Bazlı · 24 sa Sıvı Diyet',
     badgeColor: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30',
     examples: [
       'Semaglutid (Ozempic, Wegovy, Rybelsus)',
       'Tirzepatid (Mounjaro, Zepbound)',
       'Liraglutid (Victoza, Saxenda), Dulaglutid (Trulicity)'
     ],
-    clinicalRule: 'ASA 2023-2024 Konsensusu: Haftalık dozlanan ilaçlar elektif cerrahiden 1 hafta önce, günlük dozlananlar ise ameliyat sabahı atlanmalıdır.',
+    clinicalRule: 'Multisociety 2024 (ASA/AGA/ASMBS/SAGES/ISPCOP): Çoğu hasta tedaviye devam edebilir; rutin kesim yerine 4 yüksek risk kriteri değerlendirilir ve riskli olgularda 24 saat sıvı diyet / ortak karar uygulanır.',
     aspirationRisk: 'Gecikmiş Boşalma',
-    keyNotes: 'GLP-1 RA ilaçlar gastrik motiliteyi güçlü şekilde yavaşlatır; 8-12 saatlik açlığa rağmen midede masif katı gıda kalabilir! Karında dolgunluk/bulantı olan hastalarda indüksiyon öncesi Gastrik USG (POCUS) yapılmalı veya hızlı seri indüksiyon (RSI) uygulanmalıdır.'
+    keyNotes: 'Yüksek risk kriterleri: (1) Doz artırma/eskalasyon fazı, (2) yüksek doz, (3) haftalık dozlama, (4) aktif GI semptomları (bulantı, kusma, karın ağrısı, şişkinlik, kabızlık) veya gastroparezi. Riskli hastada işlemden 24 saat önce sıvı diyet önerilir. İşlem günü GI semptomu veya şüphe varsa başucu Gastrik USG (POCUS) yapılmalı, yapılamıyorsa dolu mide (RSI veya erteleme) kabul edilmelidir.'
   }
 ];
 
@@ -161,7 +161,7 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
           </span>
           <span className="text-xs text-slate-400">·</span>
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            ASA 2023 & ESAIC Perioperatif Kılavuzları
+            ASA 2023, ESAIC &amp; Multisociety GLP-1 (2024)
           </span>
         </div>
 
@@ -185,7 +185,22 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
             }`}
           >
             <BookOpen className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-            <span>Kaynak: ASA 2023 Kılavuzu (PMID: 36629465)</span>
+            <span>ASA 2023 Açlık (PMID: 36629465)</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+
+          <a
+            href="https://pubmed.ncbi.nlm.nih.gov/39471342/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all cursor-pointer ${
+              isDark 
+                ? 'bg-purple-950/40 hover:bg-purple-900/50 text-purple-200 border-purple-700/50 hover:border-purple-600' 
+                : 'bg-purple-50 hover:bg-purple-100 text-purple-800 border-purple-200 shadow-2xs'
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+            <span>Multisociety 2024 GLP-1 (PMID: 39471342)</span>
             <ExternalLink className="w-3 h-3 text-slate-400" />
           </a>
 
@@ -365,45 +380,45 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
           </div>
         </div>
 
-        {/* Card 2: GLP-1 Reseptör Agonistleri */}
+        {/* Card 2: GLP-1 Reseptör Agonistleri (Multisociety 2024) */}
         <div className={`p-4 sm:p-5 rounded-2xl border flex flex-col justify-between ${
           isDark 
             ? 'bg-gradient-to-b from-purple-950/20 via-slate-900 to-slate-900 border-purple-500/30' 
             : 'bg-purple-50/50 border-purple-200'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between gap-2 mb-2">
               <span className="text-[10px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-700 dark:text-purple-300">
-                GLP-1 GÜNCEL KONSENSUS
+                MULTISOCIETY 2024
               </span>
               <span className="text-xs font-mono font-bold text-purple-600 dark:text-purple-400">
-                Gecikmiş Mide Boşalması
+                Risk Bazlı Yaklaşım
               </span>
             </div>
             <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Ozempic / Wegovy / Mounjaro
+              GLP-1 RA (Ozempic / Mounjaro)
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              Diyabet ve obezite tedavisinde yaygınlaşan GLP-1 RA ilaçlar mide boşalmasını saatlerce geciktirir.
+              ASA, AGA, ASMBS, SAGES ve ISPCOP ortak rehberi rutin kesme yerine bireyselleştirilmiş risk yönetimini önerir:
             </p>
 
             <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
               <div className="flex items-start gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
-                <span><strong>Haftalık Dozlar:</strong> Elektif ameliyattan 1 hafta önce kesilmelidir.</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
+                <span><strong>Çoğu Hastada Devam:</strong> Stabil idame dozunda ve GI semptomu yoksa ilaca devam edilebilir (rutin 1 hafta kesim artık zorunlu değil).</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
-                <span><strong>Günlük Dozlar:</strong> Ameliyat sabahı doz atlanmalıdır.</span>
+                <span><strong>4 Yüksek Risk Kriteri:</strong> Doz eskalasyon fazı, yüksek doz, haftalık rejim ve aktif GI semptomları (bulantı/kusma/şişkinlik) veya gastroparezi.</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
-                <span>Bulantı/kusma/dolgunluk varsa: <strong>Gastrik USG (POCUS)</strong> veya RSI uygulanır.</span>
+                <span><strong>24 sa Sıvı Diyet &amp; POCUS:</strong> Riskli hastada işlemden <strong>24 saat önce sıvı diyet</strong> uygulanır; şüphede <strong>Gastrik USG</strong> veya RSI/erteleme seçilir.</span>
               </div>
             </div>
           </div>
           <div className="mt-3 pt-2 border-t border-purple-500/20 text-[11px] text-purple-700 dark:text-purple-300 font-semibold">
-            ⚠️ 8 saatlik açlık dolu mideyi ekarte ettirmez!
+            ⚠️ 8 saatlik standart açlık dolu mideyi ekarte ettirmez — Risk varsa 24 sa sıvı diyet + POCUS!
           </div>
         </div>
 
@@ -509,7 +524,7 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
           1. <strong>ASA 2023 Update:</strong> Joshi GP, et al. <em>Practice Guidelines for Preoperative Fasting: Carbohydrate-Containing Clear Liquids with or without Protein, Chewing Gum, and Pediatric Fasting Duration—A Modular Update of the American Society of Anesthesiologists Practice Guidelines.</em> Anesthesiology. 2023 Feb;138(2):132-151. PMID: 36629465.
         </p>
         <p className="leading-relaxed">
-          2. <strong>GLP-1 RA Consensus:</strong> Joshi GP, et al. <em>American Society of Anesthesiologists consensus-based guidance on preoperative management of patients on glucagon-like peptide-1 (GLP-1) receptor agonists.</em> ASA Practice Guidance, 2023.
+          2. <strong>GLP-1 RA Multisociety Guidance (2024):</strong> Kindel TL, Wang AY, Wadhwa A, Schulman AR, Sharaiha RZ, Kroh M, Ghanem OM, Levy S, Joshi GP, LaMasters TL (ASA, AGA, ASMBS, SAGES, ISPCOP). <em>Multisociety Clinical Practice Guidance for the Safe Use of Glucagon-like Peptide-1 Receptor Agonists in the Perioperative Period / Preprocedure Care of Patients on Glucagon-like Peptide-1 Receptor Agonists.</em> Anesthesiology. 2024 Dec;141(6):1208-1209. doi:10.1097/ALN.0000000000005231. PMID: 39471342. (2023 ASA geçici uzlaşısının yerini alan güncel ortak rehber).
         </p>
       </div>
     </div>

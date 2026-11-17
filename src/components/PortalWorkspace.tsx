@@ -914,6 +914,18 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       }
       handleSelectTab('preop', { preservePreopTool: true });
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'airway') {
+      if (item.id === 'airway-adult-equipment-sizer') {
+        setSelectedAirwayCardId('adult-equipment-sizer');
+        handleSelectTab('airway', { preserveAirwayCard: true });
+      } else if (item.id === 'airway-pediatric-equipment-sizer') {
+        setSelectedAirwayCardId('pediatric-equipment-sizer');
+        handleSelectTab('airway', { preserveAirwayCard: true });
+      } else {
+        setSelectedAirwayCardId(null);
+        handleSelectTab('airway');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       handleSelectTab(item.tabId);
       window.scrollTo({ top: 0, behavior: 'smooth' });

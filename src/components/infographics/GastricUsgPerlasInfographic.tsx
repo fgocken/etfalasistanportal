@@ -552,7 +552,7 @@ export const GastricUsgPerlasInfographic: React.FC<GastricUsgPerlasInfographicPr
                   <div className="text-amber-700 dark:text-amber-300 font-medium leading-snug">
                     {isPregnant && '• Gebelik (>20 hf): Bu denklem gebe dışı yetişkinler içindir; gebelikte Arzola / Perlas obstetrik RLD eşiği (CSA > 9.6 cm²) kullanılır. '}
                     {isObese && '• BMI > 35–40 kg/m²: Derin penetrasyon (2–3 MHz) gerekir ve formül yüksek BMI’da hafif sapma gösterebilir. '}
-                    {(hasGlp1 || hasDiabetes) && '• GLP-1 RA / Diyabet: Berrak sıvı az görünse dahi fundus/korpus retansiyonu açısından semptomatik hastada RSI tercih edilebilir.'}
+                    {(hasGlp1 || hasDiabetes) && '• GLP-1 RA / Diyabet (Multisociety 2024): Özellikle doz eskalasyon fazı veya aktif GI semptomu varsa 24 saat sıvı diyete karşın fundus/korpus retansiyonu olabileceğinden belirsizlikte RSI/erteleme değerlendirilir.'}
                   </div>
                 )}
               </div>
@@ -671,7 +671,8 @@ export const GastricUsgPerlasInfographic: React.FC<GastricUsgPerlasInfographicPr
         <p>1. Van de Putte P, Perlas A. <em>Ultrasound assessment of gastric content and volume.</em> British Journal of Anaesthesia. 2014;113(1):12-22. PMID: 24950550.</p>
         <p>2. Perlas A, Mitsakakis N, Liu L, et al. <em>Validation of a mathematical model for ultrasound assessment of gastric volume by gastroscopic examination.</em> Anesthesia &amp; Analgesia. 2013;116(2):357-363. PMID: 23011564.</p>
         <p>3. Perlas A, Van de Putte P, Van Houwe P, Chan VW. <em>I-AIM framework for point-of-care gastric ultrasound.</em> British Journal of Anaesthesia. 2016;116(1):7-11.</p>
-        <p>4. Joshi GP, Abdelmalak BB, Weigel WA, et al. <em>2023 ASA Practice Guidelines for Preoperative Fasting &amp; Consensus Guidance on GLP-1 Receptor Agonists.</em> Anesthesiology. 2023;138(2):132-151. PMID: 36629465.</p>
+        <p>4. Joshi GP, Abdelmalak BB, Weigel WA, et al. <em>2023 ASA Practice Guidelines for Preoperative Fasting.</em> Anesthesiology. 2023;138(2):132-151. PMID: 36629465.</p>
+        <p>5. Kindel TL, Wang AY, Wadhwa A, ... Joshi GP, LaMasters TL (ASA, AGA, ASMBS, SAGES, ISPCOP). <em>Preprocedure Care of Patients on Glucagon-like Peptide-1 Receptor Agonists: A Multisociety Clinical Practice Guidance.</em> Anesthesiology. 2024;141(6):1208-1209. PMID: 39471342.</p>
       </div>
     </div>
   );

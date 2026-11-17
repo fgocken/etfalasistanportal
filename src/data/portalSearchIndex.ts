@@ -622,11 +622,11 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     id: 'info-adult-fasting',
     title: 'Erişkin Preoperatif Açlık Kılavuzu (2 - 6 - 8 Kuralı)',
     category: 'Klinik İnfografikler',
-    badge: 'ASA 2023',
-    description: 'Erişkinde berrak sıvılar (2 sa), hafif öğün (6 sa), yağlı/et (8 sa), sakız çiğneme (vaka ertelenmez) ve GLP-1 (Ozempic/Wegovy) yönetimi.',
+    badge: 'ASA · 2024 GLP-1',
+    description: 'Erişkinde berrak sıvılar (2 sa), hafif öğün (6 sa), yağlı/et (8 sa), sakız çiğneme (vaka ertelenmez) ve Multisociety 2024 GLP-1 risk bazlı (24 sa sıvı diyet) yönetimi.',
     keywords: [
       'açlık', 'preoperatif açlık', 'açlık süreleri', 'aspirasyon', 'berrak sıvı', 'sakız', 'sakız çiğneme', 
-      'glp-1', 'ozempic', 'wegovy', 'mounjaro', 'semaglutid', 'gastrik pocus', 'mide ultrasonu', 'perlas skoru', 
+      'glp-1', 'ozempic', 'wegovy', 'mounjaro', 'semaglutid', 'tirzepatid', 'multisociety 2024', '24 saat sıvı diyet', 'eskalasyon fazı', 'gastrik pocus', 'mide ultrasonu', 'perlas skoru', 
       'hafif öğün', 'katı gıda', 'süt', 'eras', 'maltodekstrin', 'karbonhidrat yüklemesi'
     ],
     tabId: 'infographics',
@@ -1067,6 +1067,49 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Havayolu',
     description: 'Zor havayolu yönetimi, videolaringoskopi, laringeal maske (LMA / i-gel) ve acil havayolu algoritmaları.',
     keywords: ['havayolu', 'airway', 'entübasyon', 'zor havayolu', 'lma', 'i-gel', 'videolaringoskop', 'krikotiroidotomi'],
+    tabId: 'airway',
+    popular: true
+  },
+  {
+    id: 'airway-adult-equipment-sizer',
+    title: 'Erişkin Havayolu Ekipman Hesaplayıcı (ETT / MAC / LMA / i-gel)',
+    category: 'Hesaplayıcılar',
+    badge: 'Erişkin · ETT / i-gel',
+    description: 'Erişkin hastalarda (cm/kg & in/lb) cinsiyet, boy ve kiloya göre kaflı ETT iç çapı, kesici diş tespit derinliği, Macintosh bıçak, klasik LMA ve renk kodlu i-gel boyutu hesabı.',
+    keywords: [
+      'erişkin ett',
+      'ett boyutu',
+      'ett derinliği',
+      'tüp numarası',
+      'tüp derinliği',
+      'lma boyutu',
+      'i-gel',
+      'renk kodu',
+      'macintosh',
+      'havayolu ekipmanı'
+    ],
+    tabId: 'airway',
+    popular: true
+  },
+  {
+    id: 'airway-pediatric-equipment-sizer',
+    title: 'Pediatrik Havayolu Ekipman Hesaplayıcı (Yenidoğan / İnfant / Çocuk)',
+    category: 'Hesaplayıcılar',
+    badge: 'Pediatrik · Tochen / Motoyama',
+    description: 'Yenidoğan (Tochen kilo+6 cm), süt çocuğu (1–12 ay) ve çocuk (Motoyama/Khine kaflı, Cole kafsız, APLS) için ETT, oral derinlik, Miller/MAC bıçak, LMA ve renk kodlu i-gel hesabı.',
+    keywords: [
+      'pediatrik tüp',
+      'çocuk ett',
+      'yenidoğan entübasyon',
+      'süt çocuğu tüp',
+      'tochen',
+      'motoyama',
+      'khine',
+      'cole formülü',
+      'miller bıçak',
+      'pediatrik lma',
+      'pediatrik i-gel'
+    ],
     tabId: 'airway',
     popular: true
   },
