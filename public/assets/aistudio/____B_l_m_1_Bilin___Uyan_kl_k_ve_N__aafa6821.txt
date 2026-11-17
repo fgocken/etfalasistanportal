@@ -1,0 +1,192 @@
+### **Bölüm 1: Bilinç, Uyanıklık ve Nöroanatomi**
+
+**1\. Klinik anestezide "farkındalık" (awareness) terimi ile kognitif nörobilimdeki "bilinç" (consciousness) terimi birebir aynı anlamda kullanılır.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** Kognitif nörobilimde "awareness" yalnızca öznel deneyimi (bilinci) tanımlar[1]. Klinik anestezide ise "awareness" (intraoperatif farkındalık) terimi hem bilinci hem de operasyona ait **açık epizodik belleği (explicit episodic recall)** birlikte içerecek şekilde (teknik olarak hatalı bir biçimde) kullanılır[1].
+
+**2\. Genel anestezi altında rüya görmek "bağlantısız bilinç" (disconnected consciousness) örneğidir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Çevresel uyaranların (örneğin cerrahinin) deneyimlenmesi **"bağlantılı bilinç" (connected consciousness)** olarak adlandırılırken; dış dünyadan ve bedensel duyulardan kopuk, endojen olarak üretilen deneyimler (rüya gibi) **"bağlantısız bilinç" (disconnected consciousness)** olarak tanımlanır[1][2].
+
+**3\. Genel anesteziklerin bilinci kapatıcı (hipnotik) etkisi, spinal kord düzeyindeki motor nöronların baskılanmasıyla gerçekleşir.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** Anesteziklerin **hareketsizlik (immobility)** etkisi primer olarak spinal kord düzeyinde gerçekleşir[3][4]. Bilinç kaybı ve amnezi ise beyin sapı, hipotalamus, talamus ve serebral korteksi içeren supraspinal ağların modülasyonu ile ortaya çıkar[3].
+
+**4\. Hipotalamustaki ventrolateral preoptik alan (VLPO) nöronları GABAerjiktir ve uyanıklığı baskılayarak yavaş dalga uykusunu teşvik eder.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** VLPO ve medyan preoptik çekirdek (MnPO), kaudal hipotalamus ve beyin sapındaki uyanıklık merkezlerini (lokus seruleus, tuberomamiller çekirdek vb.) GABAerjik projeksiyonlarla inhibe eder[7]. Genel anestezikler bu uyku yapıcı çekirdekleri aktive eder[7].
+
+**5\. Kolinerjik LDT/PPT (laterodorsal/pedunkülopontin tegmental) çekirdekleri hem uyanıklıkta hem de REM uykusunda aktiftir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Lokus seruleus (noradrenalin) ve tuberomamiller çekirdek (histamin) gibi monoaminerjik merkezler sadece uyanıklıkta aktif olup REM uykusunda susarken; pons kaynaklı kolinerjik sistemler (LDT/PPT) korteksin aktive olduğu hem uyanıklık hem de REM döneminde yüksek aktivite gösterir[8][9].
+
+**6\. Oreksinerjik (hipokretinerjik) nöronlar lateral hipotalamusta yer alır ve anesteziden uyanmada (emergence) kritik role sahiptir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Oreksin nöronları uyanıklığı destekler. Genetik ve farmakolojik çalışmalar, oreksin sisteminin anesteziye girişten (indüksiyon) ziyade anesteziden **uyanma (emergence)** sürecinde belirleyici olduğunu ve "nöral atalet" (neural inertia) bariyerinin aşılmasında görev aldığını kanıtlamıştır[10].
+
+**7\. Nöral atalet (neural inertia) teorisine göre, anestezik indüksiyonu ile anesteziden derlenme simetrik ve birbirinin tam tersi nörobiyolojik yollarla gerçekleşir.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** İndüksiyon ve derlenme asimetriktir. Beyin, mevcut durumunu koruma eğiliminde bir histerezis bariyeri gösterir; indüksiyonda rol oynamayan oreksin gibi bazı sistemler derlenme sürecinde vazgeçilmezdir[10][11].
+
+---
+
+### **Bölüm 2: Talamokortikal Sistem ve Kortikal Dinamikler**
+
+**8\. Talamus, anesteziklerin bilinç kaybı oluşturmasında primer olarak primer duysal röle çekirdekleri üzerinden etki gösterir.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** Nörogörüntüleme ve elektrofizyolojik çalışmalar; spesifik primer duyusal çekirdeklerin kortikal bağlantılarının anestezi altında rölatif olarak korunduğunu, asıl kaybın **non-spesifik (yüksek düzey/assosiasyon) talamik çekirdekler** ile korteks arasındaki entegrasyonda gerçekleştiğini göstermiştir[12][13].
+
+**9\. Propofolün talamik retiküler nükleustaki GABAA reseptörleri üzerindeki etkisi, frontal korteks ile talamus arasında aşırı senkronize (hipersenkron) alfa ritmine yol açar.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Propofol, retiküler nükleus üzerinden talamokortikal devrede 8–13 Hz frekansında güçlü bir alfa osilasyonu kurar; bu ritmik hipersenkroni, kortikal alanlar arasındaki esnek bilgi alışverişini bloke eder[14].
+
+**10\. Genel anestezi altında bilinç kaybının en tutarlı nörofizyolojik göstergelerinden biri frontoparyetal bağlantısallığın (özellikle top-down bilgi akışının) bozulmasıdır.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Propofol, sevofluran ve ketamin gibi farklı moleküler hedeflere sahip ajanların ortak paydası; frontal ve parietal korteksler arasındaki fonksiyonel ve efektif geri bildirim (top-down) bağlantılarını koparmalarıdır[15][16].
+
+**11\. Transkraniyal manyetik stimülasyon (TMS) ve yüksek yoğunluklu EEG ile ölçülen nöronal pertürbasyon karmaşıklığı (Perturbational Complexity Index), anestezi altında azalır.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Uyanık beyinde TMS uyarısı tüm kortekse yayılan karmaşık dalgalar üretirken; anestezi ve NREM uykusunda lokalize, stereotipik ve kısa sürede sönen düşük karmaşıklıklı yavaş dalgalar oluşur[17][18].
+
+**12\. Derin anestezi altında kortikal tek-ünite (single-unit) nöronal ateşlemeleri tamamen durur ve sessizleşir.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** İntrakraniyal kayıtlarda propofol bilinç kaybı sonrası toplam nöronal ateşleme frekansı başlangıç düzeyine veya üzerine dönebilir; ancak ateşleme ritmi yavaş dalgalara kilitlenerek "açık" (on) ve "kapalı" (off) periyotlara parçalanır (fragmantasyon) ve mekânsal koordinasyonunu yitirir[17].
+
+**13\. Ketamin, subanestezik dozlarda EEG sinyal çeşitliliğini ve nörofizyolojik karmaşıklığı artırırken, tam anestezik dozlarda GABAerjik ajanlara benzer baskılanma periyotları gösterir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Ketamin doza bağımlı etki gösterir; subanestezik dozlarda psikedelik tabloyla uyumlu olarak karmaşıklık artışı izlenirken, anestezik dozlarda tipik GABAerjik paterne benzer döngüsel geçişler gözlenir[18].
+
+---
+
+### **Bölüm 3: Bellek Taksonomisi ve Nörobiyolojisi**
+
+**14\. Ünlü amnezi vakası H.M.'ye bilateral medial temporal lob (hipokampus ve amigdala) rezeksiyonu yapıldıktan sonra prosedürel (motor) öğrenme yeteneği tamamen kaybolmuştur.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** H.M., operasyon sonrası yeni açık (deklaratif) bellek oluşturamazken (ağır anterograd amnezi); el-göz koordinasyonuna dayalı motor görevleri (prosedürel bellek) ve ayna çizim testini başarıyla öğrenebilmiştir[19].
+
+**15\. Prosedürel bellek kaudat nükleus ve bazal ganglionlara bağımlıyken; açık epizodik bellek medial temporal lob ve hipokampusa bağımlıdır.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Prosedürel bellek kaudat nükleusa dayalı non-deklaratif bir sistemdir[21]. Cerrahi bir olayı hatırlamak gibi zamansal/mekânsal bağlamı olan epizodik anılar ise medial temporal lob (hipokampus) ve frontoparyetal ağlara bağımlıdır[6][22].
+
+**16\. Semantik bellek, zaman ve mekân bağlamı olmaksızın olgusal bilgilerin (örneğin Everest'in en yüksek dağ olduğu) hatırlanmasıdır.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Deklaratif bellek ikiye ayrılır: Kişisel deneyimleri içeren otobiyografik "epizodik" bellek ve genel kavramsal bilgileri içeren "semantik" bellek[22].
+
+**17\. Hipokampal CA1 bölgesinde uzun süreli potansiyalizasyonun (LTP) indüklenmesi için kritik intraselüler tetikleyici, NMDA reseptör aktivasyonu sonrası hücre içine kalsiyum (Ca²⁺) girişidir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Postsinaptik voltaja bağımlı NMDA reseptörlerinin açılmasıyla hücreye giren Ca²⁺, CaMKII (Kalsiyum-kalmodulin bağımlı kinaz II) enzimini aktive ve otofosforile ederek LTP kaskadını başlatır[23].
+
+**18\. Hipokampal theta ritmi (4–8 Hz), bellek kodlanması ve sinaptik plastisite için kritik bir nöronal osilasyondur.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Theta bandındaki ritmik stimülasyonlar fizyolojik LTP oluşumu için en elverişli paterndir ve anesteziklerin theta frekansını yavaşlatması amnestik etkileriyle doğrudan ilişkilidir[23][24].
+
+---
+
+### **Bölüm 4: Anesteziklerin Bellek Üzerine Etkileri ve İlaç Farklılıkları**
+
+**19\. İnhale anesteziklerin explicit amnezi oluşturma gücü, bilinç kaybı ve hareketsizlik oluşturma güçlerine göre daha düşük konsantrasyonlarda ortaya çıkar.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Hiyerarşi şöyledir: Amnezi en duyarlı basamaktır (\~0.2-0.25 MAC), ardından bilinç kaybı / hipnoz (\~0.4-0.5 MAC) ve en son cerrahi uyarana yanıtsızlık / hareketsizlik (1.0 MAC) gelir[6].
+
+**20\. Klinik dozlarda uygulanan propofol ve midazolam, insanlarda düzenli ve öngörülebilir bir retrograd amnezi penceresi oluşturur.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** İlaç verilmeden birkaç dakika önce öğrenilen kelime veya resimler test edildiğinde, anesteziklerin **retrograd amnezi yapmadığı** gösterilmiştir; anestezik amnezi neredeyse tamamen **anterograd** karakterdedir[27][28].
+
+**21\. "Retrograd kolaylaştırma" (retrograde facilitation), anestezik uygulanmasından hemen önce öğrenilen materyalin sonradan daha iyi hatırlanması fenomenidir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Propofol veya benzodiazepinler yeni bellek kodlamasını durdurarak "retrograd enterferansı" ortadan kaldırır; böylece beyin konsolidasyon kaynaklarını ilacın hemen öncesinde öğrenilen son bilgilere aktarır ve o anılar güçlenir[29].
+
+**22\. Wickelgren bellek modeline göre deksmedetomidin esas olarak konsolidasyon hızını artırarak unutmaya yol açar.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** Deksmedetomidin uyanıklığı (arousal) azaltarak bilginin güçlü şekilde **kodlanmasını (encoding)** bozar, konsolidasyon üzerinde belirgin etkisi yoktur[30][31]. Konsolidasyon yetmezliği ile hızlı bellek kaybına yol açan arketipik ajan **propofoldür**[30].
+
+**23\. Hipokampal piramidal nöronlardaki ekstrasinaptik α5 alt birimi içeren GABAA (α5-GABAA) reseptörleri, anestezik kaynaklı amnezide kilit rol oynar.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** α5-GABAA reseptörleri hipokampusta tonik inhibisyon sağlar; bu reseptörlerin genetik olarak delesyonu veya L-655,708 gibi ters agonistlerle bloke edilmesi, etomidat ve isofluranın amnestik etkilerini geri çevirir[32].
+
+**24\. Olay İlişkili Potansiyellerde (ERP), sedasyondan bağımsız gerçek amnestik etki gösteren ajanlar P3 ve N2P3 komplekslerinin genliğinde (amplitüd) azalmaya yol açar.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** P1N1 gibi erken dalgalar uyanıklık ve sedasyonla ilişkiliyken; P3 ve N2P3 gibi geç bilişsel dalgalar bellek süreçlerini yansıtır ve propofol/midazolam tarafından selektif olarak baskılanır[36][37].
+
+**25\. Sedatif dozda propofol uygulanan insanlarda, negatif duygusal uyaranlara karşı amigdala aktivasyonu belirgin olarak baskılanırken, hipokampus aktivasyonu korunur.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** fMRI çalışmalarında tam tersi gösterilmiştir: Propofol amigdalanın duygusal uyarana verdiği reaksiyonu baskılamaz; ancak amigdaladan hipokampusa giden fonksiyonel bağlantıyı ve **hipokampus aktivasyonunu selektif olarak bloke eder**[38][39].
+
+**26\. Ketamin, orta şiddetteki ağrılı uyaranlara ve negatif duygusal görsellere karşı amigdala aktivasyonunu diğer birçok ajana kıyasla daha güçlü baskılar.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Propofol ve midazolam amigdala afferent yanıtlarını görece korurken, ketamin negatif görsel uyaranlara ve ağrılı stimuluslara karşı amigdala reaktivitesini doğrudan baskılar[38].
+
+**27\. İmplisit (örtük) bellek süreçleri hipokampal plastisiteye bağımlı değildir ve bilinçli bir deneyim olmadan da oluşabilir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** İmplisit bellek (örneğin kelime kökü tamamlama veya priming), açık epizodik belleğin aksine hipokampus bağımlı değildir; bu nedenle anestezi altında bilinçli hatırlama olmaksızın implisit işlemleme gerçekleşebilir[26][40].
+
+**28\. İmplisit bellek araştırmalarında açık bellek kirlenmesini dışlamak için kullanılan altın standart yöntem "İşlem Ayrıştırma Prosedürü"dür (Process Dissociation Procedure - PDP).**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Basit kelime tamamlama testleri açık bellek sızıntılarına duyarlıdır; bu nedenle bilinçli (eksplisit) ve bilinçdışı (implisit) bellek katkılarını matematiksel olarak ayıran PDP yöntemi altın standart kabul edilir[40].
+
+---
+
+### **Bölüm 5: İntraoperatif Farkındalık, EEG ve İzlem**
+
+**29\. Genel anestezi altında açık hatırlama ile seyreden intraoperatif farkındalığın (AWR) insidansı rutin cerrahi popülasyonda yaklaşık 1-2 / 1000'dir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Prospektif olarak sorgulanan çalışmalarda (Brice protokolü ile) AWR insidansı yaklaşık binde 1 ila 2 arasında saptanmaktadır[41][42]. Spontan bildirimlerde ise bu oran çok daha düşüktür (1:10.000 – 1:20.000)[42][43].
+
+**30\. İzole Önkol Tekniği (Isolated Forearm Technique - IFT) ile saptanan intraoperatif bağlantılı bilinç insidansı, operasyon sonrası açık hatırlama (recall) insidansı ile aynıdır.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** IFT ile saptanan intraoperatif komut alma ve el sıkma yanıtı (bağlantılı bilinç), operasyon sonrası açık hatırlama oranından **yaklaşık iki kat büyüklük mertebesi (yaklaşık 10-20 kat) daha sıktır** (%5–10 civarı)[41][44]; çünkü hastaların büyük çoğunluğunda anesteziklerin oluşturduğu güçlü amnezi nedeniyle bu anlar sonradan hatırlanmaz[41][45].
+
+**31\. İntraoperatif farkındalığı araştırmak için kullanılan Brice anketinde yer alan standart sorulardan biri de "Ameliyat sırasında rüya gördünüz mü?" sorusudur.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Modifiye Brice protokolü 5 sorudan oluşur: Uyumadan önceki son hatıra, uyandıktan sonraki ilk hatıra, bu ikisi arasında hatırlanan bir şey olup olmadığı, **rüya görülüp görülmediği** ve operasyonla ilgili en kötü deneyim[46].
+
+**32\. EEG monitörlerinde cerrahi anestezi derinliğinin klasik göstergesi olan "alfa-delta" paterni, intraoperatif bağlantılı bilinci (IFT yanıtını) kesin olarak ekarte ettirir.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** Frontal EEG'de tipik alfa-delta paterni yeterli talamokortikal hiperpolarizasyonu gösterse de, IFT çalışmalarında klasik alfa-delta paterni varlığında dahi hastaların komutlara istemli motor yanıt verebildiği gösterilmiştir[47][48].
+
+**33\. Kas gevşetici uygulanmış tamamen uyanık bir hastada elektromiyogram (EMG) aktivitesinin kaybolması, Bispektral İndeks (BIS) değerini yanıltıcı şekilde genel anestezi aralığına düşürebilir.**
+
+* **Cevap:** **[DOĞRU]**
+* **Açıklama:** Schuller ve ark. çalışmasında, uyanık gönüllülere sadece kas gevşetici verildiğinde yüksek frekanslı EMG gürültüsünün ortadan kalkması nedeniyle BIS değerlerinin cerrahi anestezi aralığına (yalancı negatif) indiği gösterilmiştir[49][50].
+
+**34\. Propofol anestezisinde cerrahi insizyona motor yanıtı engellemek için gereken konsantrasyon, EEG'de burst supresyon oluşturan konsantrasyondan daha düşüktür.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** Propofolün burst supresyon oluşturan medyan hedef konsantrasyonu yaklaşık **5 mcg/mL** iken; opioid olmaksızın tek başına cerrahi insizyona hareketsizlik sağlamak için gereken konsantrasyon en az **15 mcg/mL**'dir (hareketsizlik spinal kord aracılıdır ve daha yüksek doz gerektirir)[51].
+
+**35\. Büyük randomize kontrollü klinik çalışmalarda (B-Unaware, BAG-RECALL), yüksek riskli hastalarda BIS kılavuzluğunun, hedefli end-tidal anestezik gaz (ETAG ≥0.7 MAC) protokolüne göre farkındalığı azaltmada üstün olduğu kanıtlanmıştır.**
+
+* **Cevap:** **[YANLIŞ]**
+* **Açıklama:** B-Unaware ve BAG-RECALL çalışmaları, yüksek riskli hasta gruplarında ETAG protokolü (alarmlı ≥0.7 MAC takibi) ile karşılaştırıldığında BIS monitörizasyonunun intraoperatif farkındalığı azaltmada ek bir üstünlük sağlamadığını göstermiştir[52][53]. (Ancak TIVA uygulanan hastalarda BIS takibi klinik izleme göre farkındalığı belirgin azaltmaktadır)[53][54].

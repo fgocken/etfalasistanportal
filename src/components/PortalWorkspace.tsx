@@ -317,10 +317,10 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   'question-bank': {
     id: 'question-bank',
     title: 'Soru Bankası',
-    badge: 'Hazırlanıyor',
+    badge: 'High-Yield D/Y',
     badgeHighlight: true,
-    desc: 'Anesteziyoloji ve Reanimasyon yeterlik / board sınavlarına yönelik konu bazlı testler, vaka soruları ve açıklamalı çözümler. İçeriği daha sonra eklenecektir.',
-    clinicalKey: 'Kısa süre içinde konu tarama soruları ve referanslı açıklamalar bu bölümde yer alacaktır.',
+    desc: 'Miller\'s Anesthesia kaynaklı yüksek verimli (high-yield) Doğru/Yanlış setleri, anlık açıklamalı çalışma, sınav modu, yanlış tekrarı ve yeni set ekleme.',
+    clinicalKey: 'Anlık çözüm + sınav analizi + metin yapıştırarak yeni set ekleme desteğiyle aktif.',
     icon: HelpCircle,
     iconBgDark: 'bg-indigo-500/15',
     iconBgLight: 'bg-indigo-50',

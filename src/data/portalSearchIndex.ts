@@ -205,9 +205,9 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     id: 'tool-question-bank',
     title: 'Soru Bankası',
     category: 'Kılavuzlar & Protokoller',
-    badge: 'Hazırlanıyor',
-    description: 'Anesteziyoloji yeterlik ve board sınavlarına yönelik soru bankası bölümü (içeriği daha sonra eklenecek).',
-    keywords: ['soru bankası', 'sorular', 'sınav', 'yeterlik', 'tard', 'edaic', 'board', 'quiz', 'test'],
+    badge: 'High-Yield D/Y',
+    description: 'Miller\'s Anesthesia kaynaklı yüksek verimli Doğru/Yanlış soru setleri, anlık çözüm, sınav modu, yanlış tekrarı ve yeni set ekleme.',
+    keywords: ['soru bankası', 'sorular', 'sınav', 'doğru yanlış', 'high yield', 'yeterlik', 'tard', 'edaic', 'board', 'miller', 'bilinç', 'bellek'],
     tabId: 'question-bank'
   },
 
