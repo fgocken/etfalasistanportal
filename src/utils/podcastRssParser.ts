@@ -91,6 +91,7 @@ function parseRichDescription(rawHtmlOrText: string): { text: string; links: Pod
 
   // Convert structural tags to clean line breaks, then strip remaining HTML tags
   const normalizedText = rawHtmlOrText
+    .replace(/([^\s>])<\s*a\b/gi, '$1 <a')
     .replace(/<\s*br\s*\/?>/gi, '\n')
     .replace(/<\/\s*li\s*>/gi, '\n')
     .replace(/<\/\s*(?:p|div|ul|ol|h[1-6]|blockquote)\s*>/gi, '\n\n')
@@ -103,18 +104,16 @@ function parseRichDescription(rawHtmlOrText: string): { text: string; links: Pod
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
-  // Also detect plain-text URLs if no anchor links existed
-  if (links.length === 0) {
-    const plainUrls = cleanedText.match(/https?:\/\/[^\s)<>]+/g) || [];
-    for (const rawUrl of plainUrls) {
-      const url = rawUrl.replace(/[.,;!?]+$/, '');
-      if (!seenUrls.has(url) && links.length < 6) {
-        seenUrls.add(url);
-        links.push({
-          url,
-          label: url.replace(/^https?:\/\/(www\.)?/, '').slice(0, 60)
-        });
-      }
+  // Also detect plain-text URLs not already captured from anchor tags
+  const plainUrls = cleanedText.match(/https?:\/\/[^\s)<>]+/g) || [];
+  for (const rawUrl of plainUrls) {
+    const url = rawUrl.replace(/[.,;!?]+$/, '');
+    if (!seenUrls.has(url) && links.length < 10) {
+      seenUrls.add(url);
+      links.push({
+        url,
+        label: url.replace(/^https?:\/\/(www\.)?/, '').slice(0, 60)
+      });
     }
   }
 

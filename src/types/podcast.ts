@@ -193,3 +193,97 @@ export function extractSpotifyEmbedUrl(rawUrl: string): string | null {
   if (!match) return null;
   return `https://open.spotify.com/embed/${match[1].toLowerCase()}/${match[2]}?utm_source=generator`;
 }
+
+export interface GoogleDocEmbedInfo {
+  docId: string;
+  originalUrl: string;
+  embedUrl: string;
+  openUrl: string;
+  label: string;
+}
+
+export function extractGoogleDocEmbed(rawUrl: string, label = ''): GoogleDocEmbedInfo | null {
+  if (!rawUrl) return null;
+  const trimmed = rawUrl.trim();
+
+  // Published Google Doc: https://docs.google.com/document/d/e/<PUB_ID>/pub
+  const pubMatch = trimmed.match(/docs\.google\.com\/document\/(?:u\/\d+\/)?d\/e\/([a-zA-Z0-9_-]+)/i);
+  if (pubMatch) {
+    const docId = `pub-${pubMatch[1]}`;
+    return {
+      docId,
+      originalUrl: trimmed,
+      embedUrl: `https://docs.google.com/document/d/e/${pubMatch[1]}/pub?embedded=true`,
+      openUrl: trimmed,
+      label: label && !/^docs\.google\.com/i.test(label) ? label : 'Google Doküman (Bölüm Notu)'
+    };
+  }
+
+  // Standard Google Doc: https://docs.google.com/document/d/<DOC_ID>/edit?...
+  const docMatch = trimmed.match(/docs\.google\.com\/document\/(?:u\/\d+\/)?d\/([a-zA-Z0-9_-]{10,})/i);
+  if (docMatch) {
+    const docId = docMatch[1];
+    return {
+      docId,
+      originalUrl: trimmed,
+      embedUrl: `https://docs.google.com/document/d/${docId}/preview`,
+      openUrl: `https://docs.google.com/document/d/${docId}/view`,
+      label: label && !/^docs\.google\.com/i.test(label) ? label : 'Google Doküman (Bölüm Notu)'
+    };
+  }
+
+  // Google Drive file preview: https://drive.google.com/file/d/<FILE_ID>/view
+  const driveFileMatch = trimmed.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{10,})/i);
+  if (driveFileMatch) {
+    const docId = driveFileMatch[1];
+    return {
+      docId,
+      originalUrl: trimmed,
+      embedUrl: `https://drive.google.com/file/d/${docId}/preview`,
+      openUrl: `https://drive.google.com/file/d/${docId}/view`,
+      label: label && !/^drive\.google\.com/i.test(label) ? label : 'Google Drive Dokümanı'
+    };
+  }
+
+  // Google Drive open?id=<FILE_ID>
+  const driveOpenMatch = trimmed.match(/drive\.google\.com\/open\?(?:[^#]*&)?id=([a-zA-Z0-9_-]{10,})/i);
+  if (driveOpenMatch) {
+    const docId = driveOpenMatch[1];
+    return {
+      docId,
+      originalUrl: trimmed,
+      embedUrl: `https://drive.google.com/file/d/${docId}/preview`,
+      openUrl: `https://drive.google.com/file/d/${docId}/view`,
+      label: label && !/^drive\.google\.com/i.test(label) ? label : 'Google Drive Dokümanı'
+    };
+  }
+
+  return null;
+}
+
+export function extractGoogleDocEmbedsFromEpisode(episode: PodcastEpisode): GoogleDocEmbedInfo[] {
+  const results: GoogleDocEmbedInfo[] = [];
+  const seenIds = new Set<string>();
+
+  for (const lnk of episode.links || []) {
+    const parsed = extractGoogleDocEmbed(lnk.url, lnk.label);
+    if (parsed && !seenIds.has(parsed.docId)) {
+      seenIds.add(parsed.docId);
+      results.push(parsed);
+    }
+  }
+
+  if (episode.descriptionText) {
+    const urlMatches = episode.descriptionText.match(/https?:\/\/[^\s)<>]+/g) || [];
+    for (const raw of urlMatches) {
+      const cleaned = raw.replace(/[.,;!?]+$/, '');
+      const parsed = extractGoogleDocEmbed(cleaned);
+      if (parsed && !seenIds.has(parsed.docId)) {
+        seenIds.add(parsed.docId);
+        results.push(parsed);
+      }
+    }
+  }
+
+  return results;
+}

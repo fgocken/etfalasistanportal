@@ -3,6 +3,8 @@ import {
   AlertTriangle,
   BookmarkCheck,
   CheckCircle2,
+  ChevronDown,
+  ChevronUp,
   Clock,
   ExternalLink,
   FileText,
@@ -21,6 +23,7 @@ import {
   VolumeX
 } from 'lucide-react';
 import {
+  extractGoogleDocEmbedsFromEpisode,
   extractSpotifyEmbedUrl,
   formatDurationClock,
   formatDurationShortTr,
@@ -182,6 +185,7 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
   const [activeGuid, setActiveGuid] = useState<string | null>(null);
   const [detailTab, setDetailTab] = useState<DetailTab>('notes');
   const [showSpotifyEmbed, setShowSpotifyEmbed] = useState<boolean>(false);
+  const [collapsedDocs, setCollapsedDocs] = useState<Record<string, boolean>>({});
 
   // Audio playback state
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -665,6 +669,10 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
     activeEpisode?.spotifyUrl || config?.spotifyShowUrl || activeEpisode?.episodeLink || '';
   const spotifyEmbedSrc = extractSpotifyEmbedUrl(
     activeEpisode?.spotifyUrl || config?.spotifyShowUrl || ''
+  );
+  const googleDocEmbeds = useMemo(
+    () => (activeEpisode ? extractGoogleDocEmbedsFromEpisode(activeEpisode) : []),
+    [activeEpisode]
   );
 
   return (
@@ -1364,6 +1372,97 @@ export const PodcastWorkspace: React.FC<PodcastWorkspaceProps> = ({ isDark }) =>
                     <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
                       Bu bölüm için RSS açıklamasında metin yer almıyor.
                     </p>
+                  )}
+
+                  {googleDocEmbeds.length > 0 && (
+                    <div className={`pt-3 border-t space-y-3 ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
+                      {googleDocEmbeds.map((docItem) => {
+                        const isCollapsed = Boolean(collapsedDocs[docItem.docId]);
+                        return (
+                          <div
+                            key={docItem.docId}
+                            className={`rounded-xl border overflow-hidden ${
+                              isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                            }`}
+                          >
+                            <div
+                              className={`px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 border-b ${
+                                isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                <FileText className="w-4 h-4 text-sky-500 shrink-0" />
+                                <span className={`text-xs font-bold truncate ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                                  {docItem.label}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-2 shrink-0">
+                                <a
+                                  href={docItem.openUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors whitespace-nowrap ${
+                                    isDark
+                                      ? 'bg-slate-900 border-slate-700 text-sky-300 hover:bg-slate-800'
+                                      : 'bg-slate-50 border-slate-200 text-sky-700 hover:bg-slate-100'
+                                  }`}
+                                >
+                                  <ExternalLink className="w-3 h-3" />
+                                  <span>Yeni Sekmede Aç</span>
+                                </a>
+
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setCollapsedDocs((prev) => ({
+                                      ...prev,
+                                      [docItem.docId]: !prev[docItem.docId]
+                                    }))
+                                  }
+                                  className={`inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors cursor-pointer whitespace-nowrap ${
+                                    isDark
+                                      ? 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                                  }`}
+                                >
+                                  {isCollapsed ? (
+                                    <>
+                                      <ChevronDown className="w-3 h-3" />
+                                      <span>Önizlemeyi Aç</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ChevronUp className="w-3 h-3" />
+                                      <span>Gizle</span>
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                            </div>
+
+                            {!isCollapsed && (
+                              <>
+                                <iframe
+                                  title={docItem.label}
+                                  src={docItem.embedUrl}
+                                  className="w-full h-[540px] border-0 bg-white"
+                                  loading="lazy"
+                                  allow="clipboard-read; clipboard-write"
+                                />
+                                <div
+                                  className={`px-3.5 py-2 text-[11px] border-t ${
+                                    isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-500'
+                                  }`}
+                                >
+                                  Doküman görüntülenemiyorsa Google Drive paylaşım ayarının &ldquo;Bağlantıya sahip herkes görüntüleyebilir&rdquo; olduğundan emin olun.
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   )}
 
                   {activeEpisode.links.length > 0 && (
