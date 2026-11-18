@@ -15,11 +15,13 @@ import {
   Filter,
   Eye,
   SlidersHorizontal,
-  BookmarkCheck
+  BookmarkCheck,
+  Syringe
 } from 'lucide-react';
 import { NERVE_BLOCKS_DATA, NerveBlock, BlockRegion } from '../../data/nerveBlocksData';
 import { LastCalculator } from './LastCalculator';
 import { SensoryMapViewer } from './SensoryMapViewer';
+import { SpinalAnesthesiaGuide } from './SpinalAnesthesiaGuide';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface NerveBlocksWorkspaceProps {
@@ -31,22 +33,36 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
   initialBlockId,
   isDark = true
 }) => {
-  const [activeTab, setActiveTab] = useState<'blocks' | 'last' | 'sensory'>('blocks');
+  const isInitialSpinal = initialBlockId === 'spinal' || initialBlockId === 'spinal-anestezi';
+  const isInitialLast = initialBlockId === 'last';
+  const [activeTab, setActiveTab] = useState<'blocks' | 'spinal' | 'last' | 'sensory'>(
+    isInitialSpinal ? 'spinal' : isInitialLast ? 'last' : 'blocks'
+  );
   const [selectedRegion, setSelectedRegion] = useState<BlockRegion | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [expandedBlockId, setExpandedBlockId] = useState<string | null>(initialBlockId || null);
+  const [expandedBlockId, setExpandedBlockId] = useState<string | null>(
+    isInitialSpinal || isInitialLast ? null : (initialBlockId || null)
+  );
 
   // Eğer URL'den veya haritadan özel bir blok seçilirse aç ve o sekmeye geç
   useEffect(() => {
     if (initialBlockId) {
-      setExpandedBlockId(initialBlockId);
-      setActiveTab('blocks');
-      setTimeout(() => {
-        const el = document.getElementById(`block-${initialBlockId}`);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 120);
+      if (initialBlockId === 'spinal' || initialBlockId === 'spinal-anestezi') {
+        setActiveTab('spinal');
+        setExpandedBlockId(null);
+      } else if (initialBlockId === 'last') {
+        setActiveTab('last');
+        setExpandedBlockId(null);
+      } else {
+        setExpandedBlockId(initialBlockId);
+        setActiveTab('blocks');
+        setTimeout(() => {
+          const el = document.getElementById(`block-${initialBlockId}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 120);
+      }
     }
   }, [initialBlockId]);
 
@@ -97,17 +113,17 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
               <span className="text-xs text-slate-400">Şişli Etfal Klinik Rehberi</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-              Bölgesel & Periferik Sinir Blokları
+              Bölgesel, Nöraksiyel (Spinal) &amp; Periferik Sinir Blokları
             </h1>
             <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
-              USG rehberliğinde ekstremite ve fasya plan blokları, sonoanatomi belirteçleri, kilo bazlı maksimum güvenli LA dozları ve acil ASRA/ESRA %20 İntralipid LAST kurtarma algoritması.
+              Spinal anestezi klinik talimatı (ASRA antikoagülan kuralları, Marcaine Heavy dozlaması, diferansiyel blok, Bromage &amp; kırmızı bayraklar), USG rehberliğinde periferik/fasya plan blokları ve LAST kurtarma algoritması.
             </p>
           </div>
 
           <div className="flex items-center gap-3 self-start lg:self-center">
             <ShareLinkButton
               type="arac"
-              id="nerve-blocks"
+              id={activeTab === 'spinal' ? 'nerve-blocks&blok=spinal-anestezi' : 'nerve-blocks'}
               title="Bölümü Paylaş"
               isDark={isDark}
               variant="compact"
@@ -119,7 +135,7 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
         <div className="flex flex-wrap items-center gap-2 mt-6 pt-5 border-t border-slate-800">
           <button
             onClick={() => setActiveTab('blocks')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
               activeTab === 'blocks'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -130,8 +146,20 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
           </button>
 
           <button
+            onClick={() => setActiveTab('spinal')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+              activeTab === 'spinal'
+                ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
+                : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Syringe className="w-4 h-4 text-cyan-300" />
+            Spinal Anestezi (Nöraksiyel)
+          </button>
+
+          <button
             onClick={() => setActiveTab('last')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
               activeTab === 'last'
                 ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -143,7 +171,7 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
 
           <button
             onClick={() => setActiveTab('sensory')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
               activeTab === 'sensory'
                 ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -412,10 +440,13 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
         </div>
       )}
 
-      {/* 2. SEKME: LAST & LOKAL ANESTEZİK HESAPLAYICI */}
+      {/* 2. SEKME: SPİNAL ANESTEZİ (NÖRAKSİYEL) */}
+      {activeTab === 'spinal' && <SpinalAnesthesiaGuide isDark={isDark} />}
+
+      {/* 3. SEKME: LAST & LOKAL ANESTEZİK HESAPLAYICI */}
       {activeTab === 'last' && <LastCalculator />}
 
-      {/* 3. SEKME: DUYU HARİTASI VE CERRAHİ BÖLGE */}
+      {/* 4. SEKME: DUYU HARİTASI VE CERRAHİ BÖLGE */}
       {activeTab === 'sensory' && (
         <SensoryMapViewer onSelectBlock={handleSelectFromMap} selectedBlockId={expandedBlockId} />
       )}

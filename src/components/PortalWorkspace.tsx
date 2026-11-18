@@ -225,8 +225,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   },
   'nerve-blocks': {
     id: 'nerve-blocks',
-    title: 'Sinir Blokları & LAST',
-    desc: 'USG eşliğinde periferik ve fasya plan blokları (ESP, TAP, PENG, ACB vb.), sonogramlar, kilo bazlı LA toksik dozları ve %20 İntralipid LAST kurtarma kılavuzu.',
+    title: 'Spinal, Sinir Blokları & LAST',
+    desc: 'Spinal anestezi talimatı (ASRA antikoagülan süreleri, Marcaine Heavy, Bromage), USG eşliğinde periferik/fasya blokları, LA toksik dozları ve %20 İntralipid LAST kurtarma kılavuzu.',
     clinicalKey: 'Lokal anestezik sistemik toksisitesinde (LAST) nörolojik/kardiyovasküler kollapsta acil İntralipid bolus ve infüzyon basamakları.',
     icon: Compass,
     iconBgDark: 'bg-indigo-500/15',
@@ -654,6 +654,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       preserveTreatmentProtocol?: boolean;
       preserveAirwayCard?: boolean;
       preserveEmergencyProtocol?: boolean;
+      preserveNerveBlock?: boolean;
     }
   ) => {
     setActiveTab(tabId);
@@ -668,6 +669,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
     if (!options?.preserveEmergencyProtocol) {
       setSelectedEmergencyProtocolId(null);
+    }
+    if (!options?.preserveNerveBlock) {
+      setSelectedNerveBlockId(null);
     }
     if (tabId === 'tools') {
       updateHashRoute(null, null);
@@ -791,6 +795,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [selectedPreopToolId, setSelectedPreopToolId] = useState<PreopToolId | null>(null);
   const [selectedAirwayCardId, setSelectedAirwayCardId] = useState<AirwayCardId | null>(null);
   const [selectedTreatmentProtocolId, setSelectedTreatmentProtocolId] = useState<string | null>(null);
+  const [selectedNerveBlockId, setSelectedNerveBlockId] = useState<string | null>(null);
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -850,6 +855,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         targetEmergencyId = 'ppeak-elevation';
       } else if (item.id === 'emergency-hypoxemia') {
         targetEmergencyId = 'hypoxemia';
+      } else if (item.id === 'emergency-emergence-delay') {
+        targetEmergencyId = 'emergence-delay';
       }
       setSelectedEmergencyProtocolId(targetEmergencyId);
       handleSelectTab('emergencies', { preserveEmergencyProtocol: true });
@@ -924,6 +931,19 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       } else {
         setSelectedAirwayCardId(null);
         handleSelectTab('airway');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'nerve-blocks') {
+      if (item.id === 'block-spinal-anestezi') {
+        setSelectedNerveBlockId('spinal-anestezi');
+        handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
+        updateHashRoute('arac', 'nerve-blocks&blok=spinal-anestezi');
+      } else if (item.id === 'calc-last-intralipid') {
+        setSelectedNerveBlockId('last');
+        handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
+      } else {
+        setSelectedNerveBlockId(null);
+        handleSelectTab('nerve-blocks');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -1909,11 +1929,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <NerveBlocksWorkspace 
             isDark={isDark}
             initialBlockId={
-              initialRoute?.type === 'blok'
+              selectedNerveBlockId ||
+              (initialRoute?.type === 'blok'
                 ? initialRoute.id
                 : (initialRoute?.type === 'arac' && initialRoute.id?.includes('blok=')
                     ? initialRoute.id.split('blok=')[1]
-                    : initialRoute?.subId || null)
+                    : initialRoute?.subId || null))
             }
           />
         )}

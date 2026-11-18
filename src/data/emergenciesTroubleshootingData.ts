@@ -1294,5 +1294,288 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
       'cpap',
       'fob'
     ]
+  },
+  {
+    id: 'emergence-delay',
+    title: 'Anestezi Sonrası Gecikmiş Uyanma (Emergence Delay)',
+    subtitle:
+      'Anesteziklerin kesilmesini takiben 30–60 dk içinde bilinç ve amaçlı yanıtın dönmemesi: önce "uyanık paralizi" (rezidüel NMB) ve hipoglisemi/hipoksemi/CO₂ narkozunu dışla; ardından farmakolojik, metabolik, termal ve akut intrakraniyal nedenleri sırayla tara.',
+    categoryLabel: 'Farmakolojik, Metabolik & Nörolojik Kriz',
+    urgency: 'urgent',
+    primaryAlarm:
+      'Klinik Alarm: Anestezikler kapatılalı > 30–45 dk oldu · Hasta uyarana yanıtsız / spontan solunum yetersiz / ekstübe edilemiyor → İLK OLARAK TOF & PARMAK UCU GLUKOZ & AKG KONTROLÜ YAP!',
+    physiologyFormula:
+      'Uyanma Hızı ∝ (Alveoler Ventilasyon + Hepatik/Renal Klirens) ÷ (Anestezik Yükü + Sıcaklık/CO₂/Metabolik Baskılanma)',
+    summary:
+      'Anestezi sonrası gecikmiş uyanmanın en sık nedeni mutlak veya göreceli rezidüel anestezik/opioid birikimidir; ancak ölümcül veya kalıcı sekelli nedenleri (hipoglisemi, şiddetli hiponatremi, CO₂ narkozu, akut inme/intrakraniyal kanama) atlamamak için sistematik yaklaşım şarttır. Kritik kural: Hasta komada değil, rezidüel nöromüsküler blokaj nedeniyle "uyanık paralizide" olabilir; bu nedenle ilk fiziksel değerlendirme mutlaka kantitatif TOF monitörizasyonu ile başlamalıdır.',
+    goldenSixtySeconds: [
+      'ABC ve Havayolu Güvencesi: ETT yerindeyse ekstübe etme; ekstübe hastada havayolunu jaw-thrust/maske ile koru. SpO₂, EtCO₂ ve hemodinamiyi (KB, KAH) anında stabilize et.',
+      'Yüksek Akımla Gaz Temizliği & Pompa Kontrolü: Taze gaz akımını (FGF) ≥ 10 L/dk %100 O₂’ye çıkar; vaporizatörün (0) ve N₂O’nun fiziksel olarak kapalı, TIVA/propofol/opioid/deksmedetomidin pompalarının durdurulmuş ve IV hatta birikmiş bolus olmadığını doğrula.',
+      'İLK İŞ Kantitatif TOF Monitörizasyonu: "Hasta uyumuyor, paralitik olabilir!" Adductor pollicis üzerinden TOFR ölç; TOFR < 0.90 ise acil Sugammadeks veya Neostigmin+Atropin ile antagonize et.',
+      'Vital Bulgular, Kor Sıcaklık & Pupil Muayenesi: EtCO₂ (> 55 mmHg CO₂ narkozu?), kor ısı (< 34–35°C hipotermi?) ve pupil (pinpoint = opioid; anizokori/fiks midriyazis = acil intrakraniyal olay!) kontrol et.',
+      'Acil Parmak Ucu Glukoz + Arteriyel Kan Gazı (AKG): 60 saniye içinde hipoglisemiyi (< 60 mg/dL) dışla; AKG ile pH, PaCO₂, PaO₂, Na⁺, K⁺, iCa²⁺ ve laktat değerlerini gör.',
+      'Dikkatli Antidot Titrasyonu: End-tidal volatil < 0.1–0.2 MAC ve TOFR ≥ 0.90 iken yanıt yoksa; miyozis/bradipnede Nalokson (40 mcg IV titre), benzodiazepin öyküsünde Flumazenil (0.2 mg IV titre) uygula.'
+    ],
+    differentialDiagnosis: [
+      {
+        condition: 'Rezidüel Nöromüsküler Blokaj (NMB) — "Uyanık Paralizi"',
+        mechanism: 'Farmakolojik (Kas Gevşetici)',
+        frequency: 'Acil',
+        clues:
+          'Hasta aslında uyanık ve ağrı/ses duyuyor olabilir ancak göz açamaz, el sıkamaz, öksüremez; sıklıkla eşlik eden taşikardi, hipertansiyon, terleme ve gözyaşı (otonom stres yanıtı) vardır.',
+        confirmatoryTest:
+          'Kantitatif akseleromiyografi/elektromiyografi ile TOFR < 0.90 (asla sadece 5 sn baş kaldırma gibi klinik testlere güvenmeyin).',
+        immediateAction:
+          'Steroidal ajanlarda (Roküronyum/Veküronyum) Sugammadeks 2–4 mg/kg IV; diğerlerinde TOFR ≥ 0.4 ise Neostigmin 0.04–0.07 mg/kg + Atropin/Glikopirolat. Bu arada sedasyon/analjezi sağla.'
+      },
+      {
+        condition: 'Opioid Fazlalığı / Göreceli Doz Aşımı',
+        mechanism: 'Farmakolojik (SSS & Solunum Depresyonu)',
+        frequency: 'Çok Yaygın',
+        clues:
+          'Pinpoint miyotik pupiller, bradipne (< 8–10/dk) ile birlikte derin ama seyrek solunum, yükselen EtCO₂. Uzun süreli Fentanil infüzyonunda CSHT eksponansiyel uzar (> 175–250+ dk); yaşlılık ve renal yetmezlikte (morfin-6-glukuronid) belirginleşir.',
+        confirmatoryTest:
+          'Sözlü/dokunsal uyarıyla geçici soluyup tekrar apneik hale geçmesi; düşük doz Nalokson testine dramatik yanıt.',
+        immediateAction:
+          'Nalokson 40 mcg IV boluslarla (2–3 dk arayla, maks ~400 mcg) titre et. KRİTİK: Nalokson yarı ömrü (30–60 dk), uzun etkili/birikmiş Fentanil/Morfin etki süresinden kısadır → en az 2 saat yeniden solunum depresyonu (re-narcotization) açısından izle!'
+      },
+      {
+        condition: 'Volatil Anestezik veya Propofol (TIVA) Birikimi & Uzun CSHT',
+        mechanism: 'Farmakolojik (Yavaş Washout / Bağlama Duyarlı Yarı Ömür)',
+        frequency: 'Çok Yaygın',
+        clues:
+          'Propofolün CSHT’si 1 saatte ~11 dk, 4 saatte ~25 dk, 8 saatte ~40 dk civarındadır; ancak uyanma için gereken %80 azalma (Decrement Time) 4–6+ saatlik TIVA sonrası 65–100+ dk’ya uzar. Obezite (TBW dozajı), yaşlılık veya düşük kalp debisinde gecikme belirginleşir (ayrıntılı grafik: İnfografikler → TIVA CSHT).',
+        confirmatoryTest:
+          'Gaz analizöründe End-Tidal anestezik (> 0.2–0.3 MAC), TCI pompasında tahmini etki-yeri konsantrasyonu (Ce) / Decrement Time ve IV hat/pompa kontrolleri.',
+        immediateAction:
+          'Vaporizatör ve TIVA pompalarının tamamen kapalı olduğunu teyit et, IV hattı yıka/değiştir (hatta birikmiş bolusu hastaya puşeleme!). Volatilde FGF ≥ 10 L/dk ile normokapnik washout sağla (aşırı hipokapni beyin kan akımını azaltıp klirensi yavaşlatır!).'
+      },
+      {
+        condition: 'Hipoglisemi (< 50–60 mg/dL)',
+        mechanism: 'Metabolik Acil (Nöroglikopeni)',
+        frequency: 'Acil',
+        clues:
+          'Uzun preoperatif açlık, preoperatif insülin/sülfonilüre alımı, pediyatrik hasta, ağır karaciğer yetmezliği, sepsis veya beta-bloker kullanımı (sempatik uyarıyı maskeler!). Terleme, taşikardi veya nöbet eşlik edebilir.',
+        confirmatoryTest:
+          'Yatak başı parmak ucu kapiller glukoz + AKG laboratuvar glukozu (< 60 mg/dL acil tedavi; < 40 mg/dL kritik).',
+        immediateAction:
+          'Derhal 50 mL %50 Dekstroz IV (veya 250 mL %10 Dekstroz IV; çocuklarda 2–5 mL/kg %10 Dekstroz) uygula; 15 dakika sonra kan şekerini yeniden ölç ve idame dekstroz infüzyonu başla.'
+      },
+      {
+        condition: 'Şiddetli Hiperkapni (CO₂ Narkozu) ve/veya Hipoksemi',
+        mechanism: 'Fizyolojik / Ventilatuar',
+        frequency: 'Acil',
+        clues:
+          'PaCO₂ > 70–80 mmHg düzeylerinde karbondioksit doğrudan anestezik etki gösterir; hasta hipoventile ettikçe CO₂ artar ve solunum dürtüsü daha da baskılanarak kısır döngüye girer (KOAH, OSA, opioid sonrası). Sıcak kızarık cilt, taşikardi/hipertansiyon veya ilerlemişse bradikardi/hipotansiyon.',
+        confirmatoryTest:
+          'Arteriyel Kan Gazı (pH < 7.25, PaCO₂ > 65–75 mmHg veya PaO₂ < 50 mmHg) ve EtCO₂ trendi.',
+        immediateAction:
+          'Kontrollü mekanik ventilasyon ile dakika ventilasyonunu artırarak PaCO₂’yi kademeli normale çek (kronik hiperkapnik hastada aşırı hızlı düşürme; post-hiperkapnik alkaloz ve aritmiden kaçın); %100 O₂ ile hipoksemiyi düzelt.'
+      },
+      {
+        condition: 'Perioperatif Hipotermi (< 34–35°C; < 33°C Soğuk Narkozu)',
+        mechanism: 'Fizyolojik / Termal Metabolik Yavaşlama',
+        frequency: 'Çok Yaygın',
+        clues:
+          'Uzun açık batın/toraks cerrahisi, soğuk irrigasyon/masif transfüzyon, ısıtıcı kullanılmaması; 33°C altında tek başına bilinç kapanır, her 1°C düşüş MAC’i %5–7 azaltır, ilaç/NMB metabolizması ve hepatik/renal klirens dramatik yavaşlar.',
+        confirmatoryTest:
+          'Özofageal, nazofaringeal veya mesane probu ile güvenilir kor sıcaklık ölçümü (periferik cilt ölçümüne güvenme).',
+        immediateAction:
+          'Aktif zorlamalı sıcak hava battaniyesi (forced-air warmer), ısıtılmış IV sıvılar ve ortam sıcaklığını artır. Hasta ≥ 35–35.5°C’ye ısınana kadar ekstübasyonu ertele ve NMB etkisinin uzayabileceğini unutma.'
+      },
+      {
+        condition: 'Akut İnme (SVO), İntrakraniyal Kanama veya Serebral Ödem',
+        mechanism: 'Nörolojik / Yapısal Acil',
+        frequency: 'Acil',
+        clues:
+          'Beyin, karotis, kalp/aort cerrahisi veya koagülopati/şiddetli intraoperatif hipertansiyon sonrası; anizokori, fiks/dilate pupiller, tek taraflı motor defisit/asimetri, dekortike/deserebre postür, Cushing triadı (hipertansiyon + bradikardi + düzensiz solunum).',
+        confirmatoryTest:
+          'Tüm farmakolojik/metabolik nedenler dışlandığında veya fokal nörolojik bulgu/pupil asimetrisi varsa ACİL kontrastsız Beyin BT (+ gerekirse BT anjiyografi).',
+        immediateAction:
+          'Havayolunu entübe halde koru, normokapni (PaCO₂ 35–40 mmHg) ve normoglisemi sağla, serebral perfüzyon basıncını koru (hipotansiyondan kaçın; KİBAS şüphesinde başı 30° yükselt, Mannitol/hipertonik salin düşün) ve acil Nöroloji/Beyin Cerrahisi konsültasyonu iste.'
+      },
+      {
+        condition: 'Ağır Elektrolit Bozuklukları (Hiponatremi / Hipermagnezemi / Hiperkalsemi)',
+        mechanism: 'Metabolik / İyonik Ensefalopati',
+        frequency: 'Acil',
+        clues:
+          'TURP/histeroskopi sonrası glisin/hipotonik irrigasyona bağlı akut hiponatremi (< 120 mmol/L → beyin ödemi, konfüzyon, nöbet); preeklampsi/eklampside MgSO₄ yüklemesine bağlı hipermagnezemi (> 4–6 mEq/L → derin refleks kaybı, NMB potansiyalizasyonu, SSS depresyonu).',
+        confirmatoryTest:
+          'Acil AKG/serum elektrolitleri (Na⁺, Mg²⁺, iCa²⁺, serum osmolalitesi).',
+        immediateAction:
+          'Semptomatik akut hiponatremide (%3 NaCl 100 mL IV 10 dk’da, gerekirse tekrarla; günlük artış < 8–10 mmol/L sınırında tut); hipermagnezemide MgSO₄ infüzyonunu durdur, Kalsiyum Glukonat 1 g IV (10 mL %10) ver.'
+      },
+      {
+        condition: 'Benzodiazepin Etkisinin Uzaması (Midazolam / Diazepam / Lorazepam)',
+        mechanism: 'Farmakolojik (GABA-A Agonizmi)',
+        frequency: 'Yaygın',
+        clues:
+          'Premedikasyonda veya sedasyonda yüksek/tekrarlayan benzodiazepin dozları, yaşlılık, hipoalbüminemi, karaciğer yetmezliği veya CYP3A4 inhibitörü ilaç kullanımı.',
+        confirmatoryTest:
+          'Anestezi kayıtlarında benzodiazepin zaman/doz incelemesi ve Flumazenil test dozuna hızlı uyanıklık yanıtı.',
+        immediateAction:
+          'Flumazenil 0.2 mg IV 15–30 sn’de uygula, gerekirse her 1 dakikada bir 0.2 mg tekrarla (genel maks 1 mg, nadiren 3 mg). KRİTİK UYARI: Kronik benzodiazepin kullananlarda ve TCA intoksikasyonunda NÖBET tetikleyebilir; yarı ömrü (~45–60 dk) kısa olduğu için yeniden sedasyon açısından izle.'
+      },
+      {
+        condition: 'Perioperatif Serebral Hipoperfüzyon / Anoksik-İskemik Ensefalopati',
+        mechanism: 'Hemodinamik / Hipoksik Hasar',
+        frequency: 'Acil',
+        clues:
+          'İntraoperatif uzamış ağır hipotansiyon (özellikle oturur/plaj sandalyesi pozisyonunda, ağır karotis stenozunda), masif kanama, kardiyak arrest veya ciddi desatürasyon epizodu öyküsü.',
+        confirmatoryTest:
+          'Anestezi akış çizelgesi/monitör trend incelemesi, laktat yüksekliği, troponin, Beyin BT/MRG ve EEG.',
+        immediateAction:
+          'OAB’yi bazal düzeylere/yeterli serebral perfüzyona optimize et, normoksi (hiperoksiden kaçın), normokapni, normoglisemi ve normotermi (ateşi önle) sağla; yoğun bakım takibi planla.'
+      },
+      {
+        condition: 'Santral Antikolinerjik Sendrom (SAS)',
+        mechanism: 'Farmakolojik (Santral Muskarinik Blokaj)',
+        frequency: 'Nadir',
+        clues:
+          'Skopolamin, atropin, antihistaminikler (prometazin/difenhidramin), trisiklik antidepresanlar veya ketamin/halojenli ajanlar sonrası ortaya çıkabilir; somnolans/koma VEYA ajitasyon/deliryum, midriyazis, kuru sıcak kızarık cilt, taşikardi ve idrar retansiyonu ("kuru/sıcak/deli/kör/kırmızı").',
+        confirmatoryTest:
+          'Klinik dışlama tanısı + kan-beyin bariyerini geçen Fizostigmin test dozuna dramatik yanıt.',
+        immediateAction:
+          'Fizostigmin 0.5–2 mg IV (veya 0.02–0.04 mg/kg) yavaşça (en fazla 1 mg/dk) uygula; bradikardi/bronkospazm için monitörize et (Neostigmin veya glikopirolat KBB’yi geçemediği için etkisizdir!).'
+      },
+      {
+        condition: 'Butirilkolinesteraz (Psödokolinesteraz) Eksikliği & Organ/Endokrin Krizler',
+        mechanism: 'Enzimatik Defekt veya Metabolik Komorbidite',
+        frequency: 'Nadir',
+        clues:
+          'Süksinilkolin veya mivakuryum indüksiyonu sonrası uzamış paralizi/apne (hasta aslında uyanık olabilir!); ayrıca üremik/hepatik ensefalopati, miksedem koması (hipotermi+bradikardi) veya adrenal kriz (refrakter hipotansiyon+hiponatremi+hipoglisemi).',
+        confirmatoryTest:
+          'TOF yanıtının olmaması + aile öyküsü (dibukain sayısı); BUN/Kreatinin, Amonyak, TSH/Serbest T4, Kortizol düzeyleri.',
+        immediateAction:
+          'Butirilkolinesteraz eksikliğinde hasta tamamen uyanık/paralitik olduğu için MUTLAKA sedasyon (propofol/midazolam) altında spontan TOF derlenene kadar mekanik ventilasyona devam et! Endokrin/organ krizlerinde nedene yönelik (hidrokortizon, levotiroksin, diyaliz) acil tedavi başlat.'
+      }
+    ],
+    algorithmicSteps: [
+      {
+        stepNumber: 1,
+        phase: '0–1. Dakika · ABC & Washout',
+        action: 'Havayolu, Oksijenasyon ve Anestezik Çıkışının Fiziksel Doğrulanması',
+        detail:
+          'SpO₂, EtCO₂ ve hemodinamiyi güvenceye al. Vaporizatör kadranının (0), N₂O valfinin ve tüm TIVA/analjezik/sedatif infüzyon pompalarının kapalı olduğunu fiziksel olarak gör. Yüksek taze gaz akımı (≥ 10 L/dk %100 O₂) ile kalan volatil ajanı temizle ve IV kateter yolunda birikmiş bolus ilacı kontrol et.',
+        checkTip: 'End-tidal volatil konsantrasyonu < 0.1–0.2 MAC düzeyine indi mi?'
+      },
+      {
+        stepNumber: 2,
+        phase: '1–3. Dakika · NMB Dışlaması',
+        action: 'Kantitatif TOF Ölçümü ile "Uyanık Paralizi"yi Dışla',
+        detail:
+          'Herhangi bir hastada uyanma gecikmesinde nörolojik depresyon varsaymadan önce mutlaka kantitatif TOF monitörü (adductor pollicis) bağla. Hasta bilinci tamamen açık ancak paralitik olabilir! TOFR < 0.90 ise uygun antagonisti hemen uygula.',
+        checkTip: 'TOFR ≥ 0.90 olmadan ekstübasyon ve gerçek bilinç değerlendirmesi yapılamaz.'
+      },
+      {
+        stepNumber: 3,
+        phase: '3–5. Dakika · Hızlı Lab & Isı',
+        action: 'Parmak Ucu Glukoz, Kor Sıcaklık ve Arteriyel Kan Gazı (AKG)',
+        detail:
+          'Yatak başı kapiller glukoz ölç (hipoglisemiyi 1 dakikada ekarte et), özofageal/nazofaringeal kor sıcaklığı kontrol et ve AKG ile PaCO₂ (CO₂ narkozu), PaO₂, pH, Na⁺, iCa²⁺ ve laktat değerlerini değerlendir.',
+        checkTip: 'Glukoz < 60 mg/dL, PaCO₂ > 65 mmHg, Na⁺ < 120 mmol/L veya T < 34.5°C var mı?'
+      },
+      {
+        stepNumber: 4,
+        phase: '5–10. Dakika · Antidot Titrasyonu',
+        action: 'Hedefe Yönelik Kademeli Antidot Denemesi',
+        detail:
+          'Opioid fazlalığı bulguları (miyozis, bradipne) varsa Nalokson 40 mcg IV boluslarla titre et. Benzodiazepin birikimi düşünülüyorsa Flumazenil 0.2 mg IV (kontrendikasyon yoksa) dene. Santral antikolinerjik sendrom bulgularında Fizostigmin 0.5–2 mg IV değerlendir.',
+        checkTip: 'Nalokson ve Flumazenilin kısa yarı ömrü nedeniyle PACU’da ≥ 2 saat yeniden sedasyon izlemi gerekir.'
+      },
+      {
+        stepNumber: 5,
+        phase: '10–20. Dakika · Nöro-Muayene',
+        action: 'Odaklı Nörolojik Değerlendirme & İlaç Gözden Geçirmesi',
+        detail:
+          'Pupil çapı, ışık refleksi, korneal/öğürme refleksi, grimace, ağrılı uyarana ekstremite yanıtında lateralizasyon (asimetri) ve Babinski işaretini değerlendir. Tüm anestezi kaydını, preoperatif aldığı ilaçları (klonidin, gabapentin, antidepresan) ve intraoperatif hipotansiyon/hipoksi/emboli olaylarını tara.',
+        checkTip: 'Anizokori, fiks midriyazis veya tek taraflı motor yanıtsızlık acil beyin görüntüleme endikasyonudur.'
+      },
+      {
+        stepNumber: 6,
+        phase: '> 20–30. Dakika · Görüntüleme & YBÜ',
+        action: 'Acil Kontrastsız Beyin BT, Nöroloji Konsültasyonu ve Yoğun Bakım Devri',
+        detail:
+          'Tüm farmakolojik, metabolik, solunumsal ve termal nedenler dışlanmasına rağmen hasta hâlâ yanıtsızsa; ETT güvencesinde, monitörize transportla ACİL kontrastsız Beyin BT çek. Non-konvülsif status epileptikus şüphesinde yatak başı EEG iste ve hastayı Yoğun Bakım Ünitesine devret.',
+        checkTip: 'İskemik inme şüphesinde erken tanı trombektomi/tromboliz penceresi için zamanla yarışır.'
+      }
+    ],
+    pearlsAndPitfalls: {
+      pearls: [
+        'Altın kural: Gecikmiş uyanma tablosunda İLK dışlanacak iki acil durum "uyanık paralizi" (rezidüel NMB — TOF ile) ve "hipoglisemi" (parmak ucu glukoz ile) dir.',
+        'Propofol TIVA sonrası CSHT 4 saatte ~25 dk, 8 saatte ~40 dk olsa da uyanma için %80 azalma (~65–110 dk) gerekir; tüm ajanların CSHT eğrileri için "Klinik İnfografikler → TIVA CSHT" modülüne bakın.',
+        'Hipotermi (< 35°C) tek başına derin uyanma gecikmesine yol açar; < 33°C’de volatil anestezikler tamamen atılsa dahi soğuk narkozu nedeniyle bilinç kapalı kalabilir.',
+        'Volatil temizliği için taze gaz akımını artırırken aşırı hiperventilasyon yapmayın: şiddetli hipokapni (PaCO₂ < 25 mmHg) serebral vazokonstriksiyon yaparak beyindeki anestezik washout’unu paradoksal olarak YAVAŞLATIR!'
+      ],
+      pitfalls: [
+        'TOF ölçmeden hastayı "hala uyuyor" sanıp beklemek veya agresif uyandırmaya çalışmak (uyanık paralizideki hastaya ağır psikolojik travma / PTSD yaşatır!).',
+        'Uzun TIVA vakalarında Remifentanil (~3–4 dk) yerine sürekli Fentanil/Midazolam infüzyonu kullanıp CSHT sıçramasıyla saatlerce süren derlenme gecikmesine yol açmak.',
+        'Opioid fazlalığında Naloksonu tek seferde yüksek doz (ör. 400 mcg) vermek: ani şiddetli ağrı, sempatik fırtına, hipertansif kriz, miyokard iskemisi ve negatif basınçlı/nörojenik pulmoner ödem tetikleyebilir.',
+        'Kronik benzodiazepin kullanan, epilepsi öyküsü olan veya trisiklik antidepresan almış hastaya kontrolsüz Flumazenil vererek refrakter status epileptikus tetiklemek; ayrıca kısa etkili antidotlar sonrası yeniden sedasyon (re-sedation) izlemini ihmal etmek.'
+      ]
+    },
+    equipmentChecklist: [
+      'Kantitatif Nöromüsküler Monitör (TOF / Adductor Pollicis)',
+      'Yatak başı glukometre & heparinize Arteriyel Kan Gazı (AKG + elektrolit + laktat) kiti',
+      'Kor sıcaklık probu (özofageal/nazofaringeal) & aktif ısıtıcı battaniye (forced-air warmer)',
+      'Antidotlar: Nalokson (40 mcg/mL dilüsyon), Flumazenil, Sugammadeks / Neostigmin+Atropin, Fizostigmin',
+      'Acil hipoglisemi tedavisi için %50 ve %10 Dekstroz IV solüsyonları + Hipermagnezemi için %10 Kalsiyum Glukonat',
+      'TCI/TIVA pompa logları & Penlight (pupil muayenesi) ve BT transportu için portatif monitör/ventilatör'
+    ],
+    references: [
+      {
+        citation:
+          'Hughes MA, Glass PS, Jacobs JR. Context-sensitive half-time in multicompartment pharmacokinetic models for intravenous anesthetic drugs. Anesthesiology. 1992;76(3):334–341.',
+        pmid: '1539843'
+      },
+      {
+        citation:
+          "Gropper MA, Eriksson LI, Fleisher LA, et al. (Eds.). Miller's Anesthesia. 10th ed. Elsevier; 2024. (Intravenous Anesthetics, Context-Sensitive Half-Time & Postanesthesia Care Unit: Delayed Emergence)."
+      },
+      {
+        citation:
+          "Butterworth JF, Mackey DC, Wasnick JD. Morgan & Mikhail's Clinical Anesthesiology. 7th ed. McGraw-Hill; 2022. (Chapter 9–10 Pharmacokinetics & Chapter 56 Postanesthetic Care — Failure to Regain Consciousness)."
+      },
+      {
+        citation:
+          'Cascella M, Bimonte S, Di Napoli R. Delayed Emergence from Anesthesia: What We Know and How We Act. Local Reg Anesth. 2020;13:195–206.',
+        pmid: '33204152'
+      },
+      {
+        citation:
+          'Apfelbaum JL, Silverstein JH, Chung FF, et al.; ASA Task Force on Postanesthetic Care. Practice guidelines for postanesthetic care: an updated report. Anesthesiology. 2013;118(2):291–307.',
+        pmid: '23364567'
+      },
+      {
+        citation:
+          'Fuchs-Buder T, Romero CS, Lewald H, et al. Peri-operative management of neuromuscular blockade: A guideline from the European Society of Anaesthesiology and Intensive Care (ESAIC). Eur J Anaesthesiol. 2023;40(2):82–94.',
+        pmid: '36377554'
+      }
+    ],
+    tags: [
+      'emergence delay',
+      'gecikmiş uyanma',
+      'delayed emergence',
+      'context sensitive half time',
+      'csht',
+      'bağlama duyarlı yarı ömür',
+      'tiva',
+      'tci',
+      'propofol',
+      'remifentanil',
+      'fentanil',
+      'sufentanil',
+      'decrement time',
+      'uyanık paralizi',
+      'tof',
+      'nalokson',
+      'flumazenil',
+      'fizostigmin',
+      'hipoglisemi',
+      'hipotermi',
+      'co2 narkozu',
+      'inme',
+      'troubleshooting'
+    ]
   }
 ];

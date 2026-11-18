@@ -530,6 +530,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'emergencies',
     popular: true
   },
+  {
+    id: 'emergency-emergence-delay',
+    title: 'Anestezi Sonrası Gecikmiş Uyanma (Emergence Delay)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · Uyanma Gecikmesi',
+    description: 'Anestezi kesildikten sonra > 30–45 dk yanıtsızlık: TOF (uyanık paralizi) & glukoz/AKG dışlaması; Propofol/opioid birikimi, Nalokson/Flumazenil/Fizostigmin titrasyonu, hipotermi, CO2 narkozu & Beyin BT.',
+    keywords: [
+      'emergence delay', 'gecikmiş uyanma', 'delayed emergence', 'uyanmama', 'derlenme gecikmesi',
+      'uyanık paralizi', 'rezidüel nmb', 'tof', 'sugammadeks', 'nalokson', 'flumazenil',
+      'fizostigmin', 'santral antikolinerjik sendrom', 'hipoglisemi', 'hipotermi', 'soğuk narkozu',
+      'co2 narkozu', 'hiponatremi', 'turp sendromu', 'hipermagnezemi', 'psödokolinesteraz',
+      'perioperatif inme', 'svo', 'beyin bt', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    popular: true
+  },
 
   // 3. Klinik İnfografikler
   {
@@ -719,6 +735,36 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'kussmaul',
       'splinting',
       'silent chest'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
+    id: 'info-tiva-csht',
+    title: 'TIVA Farmakokinetiği: Bağlama Duyarlı Yarı Ömür (CSHT)',
+    category: 'Klinik İnfografikler',
+    badge: 'TIVA · CSHT',
+    description: 'İnfüzyon süresine (0–8 sa) göre CSHT (%50) ve uyanma eşiği (%80 Decrement Time) interaktif simülatörü, 3-kompartman modeli ve Remifentanil, Propofol, Sufentanil, Alfentanil, Midazolam, Fentanil kıyası.',
+    keywords: [
+      'context sensitive half time', 'context sensitive half life', 'csht', 'bağlama duyarlı yarı ömür',
+      'tiva', 'tci', 'propofol', 'remifentanil', 'fentanil', 'sufentanil', 'alfentanil', 'midazolam',
+      'tiyopental', 'decrement time', 'yüzde 80 azalma', '3 kompartman', 'marsh', 'schnider', 'eleveld', 'minto',
+      'hughes glass jacobs', 'farmakokinetik', 'infüzyon süresi', 'infografik'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
+  {
+    id: 'info-spontaneous-vs-ppv',
+    title: 'Normal (Spontan) Solunum vs. Pozitif Basınçlı Ventilasyon (PBV) & Hemodinami',
+    category: 'Klinik İnfografikler',
+    badge: 'Fizyoloji · PBV',
+    description: 'Negatif vs. pozitif intratorasik basınç simülatörü, V/Q dağılımı, Guyton venöz dönüşü (PRA), PVR / RV afterload, LV transmural afterload azalması, PPV/SVV ve klinik senaryolar.',
+    keywords: [
+      'spontan solunum', 'normal solunum', 'pozitif basınçlı ventilasyon', 'pbv', 'ppv', 'mekanik ventilasyon',
+      'hemodinami', 'kardiyopulmoner etkileşim', 'venöz dönüş', 'guyton', 'msfp', 'pra', 'plevral basınç',
+      'pvr', 'pulmoner vasküler direnç', 'lv afterload', 'transmural basınç', 'peep', 'ivc kollapsı',
+      'svv', 'tamponad', 'akciğer ödemi', 'west zonları', 'infografik'
     ],
     tabId: 'infographics',
     popular: true
@@ -1146,11 +1192,27 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
   // Sinir Blokları ve LAST Modülü
   {
     id: 'tool-nerve-blocks-main',
-    title: 'Bölgesel ve Periferik Sinir Blokları Rehberi',
+    title: 'Bölgesel, Spinal ve Periferik Sinir Blokları Rehberi',
     category: 'Kılavuzlar & Protokoller',
-    badge: 'Rejyonel Anestezi',
-    description: 'USG eşliğinde üst ekstremite, alt ekstremite ve gövde/fasya plan blokları, sonoanatomi ve cerrahi endikasyonlar.',
-    keywords: ['sinir bloğu', 'rejyonel anestezi', 'periferik sinir', 'blok', 'usg blok', 'ultrason', 'anestezi', 'fasya plan', 'bölgesel anestezi', 'nysora'],
+    badge: 'Rejyonel & Nöraksiyel',
+    description: 'Spinal anestezi talimatı (Marcaine Heavy, ASRA antikoagülan kuralları, Bromage) ve USG eşliğinde üst/alt ekstremite, gövde/fasya plan blokları.',
+    keywords: ['sinir bloğu', 'rejyonel anestezi', 'spinal anestezi', 'nöraksiyel', 'periferik sinir', 'blok', 'usg blok', 'ultrason', 'anestezi', 'fasya plan', 'bölgesel anestezi', 'nysora'],
+    tabId: 'nerve-blocks',
+    popular: true
+  },
+  {
+    id: 'block-spinal-anestezi',
+    title: 'Spinal Anestezi Klinik Talimatı & Marcaine Heavy %0.5 Dozlama',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Nöraksiyel · Spinal',
+    description: 'Endikasyonlar, ASRA antikoagülan bekleme süreleri, Marcaine Heavy %0.5 dozu (S2-T4, gebe %25-30 azaltma), 23G vs 25G Quincke iğne & bevel yönü, Tuffier L3-L5, diferansiyel blok, Bezold-Jarisch, Bromage ve PDPH/hematom kırmızı bayrakları.',
+    keywords: [
+      'spinal anestezi', 'nöraksiyel', 'marcaine heavy', 'bupivakain heavy', 'hiperbarik bupivakain',
+      'saddle blok', 'tuffier çizgisi', 'quincke iğne', '25g turuncu', '23g siyah', 'bevel',
+      'pdph', 'postdural ponksiyon baş ağrısı', 'epidural kan yaması', 'spinal hematom', 'tns',
+      'bromage skalası', 'modifiye bromage', 'bezold jarisch', 'diferansiyel blok',
+      'asra antikoagülan', 'klipodogrel', 'klopidogrel', 'prasugrel', 'enoksaparin', 'doac', 'warfarin', 'sezaryen spinal'
+    ],
     tabId: 'nerve-blocks',
     popular: true
   },
@@ -1414,6 +1476,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Genel Cerrahi',
     description: 'Meme koruyucu cerrahide PECS I/II ve Serratus blokları, LMA ile genel anestezi, mavi boya (Patent Blue) enjeksiyonu ve yalancı SpO2 desatürasyonu, aksiller sinir stimülasyonu, neoadjuvan kardiyotoksisite ve ERAS ilkeleri.',
     keywords: ['meme koruyucu cerrahi', 'mkc', 'lumpektomi', 'parsiyel mastektomi', 'kuadrantektomi', 'slnb', 'sentinel lenf nodu', 'pecs bloğu', 'serratus bloğu', 'patent blue', 'metilen mavisi', 'genel cerrahi', 'onkoanestezi', 'jaffe', 'eras', 'prospect'],
+    tabId: 'procedures',
+    popular: true
+  },
+  {
+    id: 'proc-surgical-hemorrhoidectomy',
+    title: 'Cerrahi Hemoroidektomi (Surgical Hemorrhoidectomy)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Genel Cerrahi',
+    description: 'Hemoroidektomide Saddle (eyer) spinal blok, Prone Jackknife pozisyonu ve ETT güvenliği, anal dilatasyonda laringospazm / Brewer–Luckhardt vagal refleksi, postoperatif üriner retansiyon (POUR) önlemi, pudendal blok ve PROSPECT ağrı yönetimi.',
+    keywords: ['hemoroidektomi', 'surgical hemorrhoidectomy', 'hemoroid', 'anorektal cerrahi', 'milligan-morgan', 'ferguson', 'longo', 'stapler hemoroidopeksi', 'saddle blok', 'eyer spinal', 'prone jackknife', 'laringospazm', 'brewer-luckhardt', 'pour', 'üriner retansiyon', 'pudendal blok', 'diltiazem', 'gtn', 'genel cerrahi', 'kolorektal', 'jaffe', 'prospect', 'eras'],
     tabId: 'procedures',
     popular: true
   },

@@ -26,6 +26,8 @@ import { IvAccessInfographic } from './IvAccessInfographic';
 import { DifficultAirwayDASInfographic } from './DifficultAirwayDASInfographic';
 import { GastricUsgPerlasInfographic } from './GastricUsgPerlasInfographic';
 import { RespiratoryFailureInfographic } from './RespiratoryFailureInfographic';
+import { TivaCshtInfographic } from './TivaCshtInfographic';
+import { SpontaneousVsPpvInfographic } from './SpontaneousVsPpvInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -262,6 +264,40 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Tip 2', rate: 'PaCO₂ > 45', colorClass: 'text-violet-600 dark:text-violet-400', bgClass: 'bg-violet-500/10', borderClass: 'border-violet-500/30' },
       { label: 'Tip 3', rate: 'Postop FRC ↓', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
       { label: 'Tip 4', rate: 'Şok / Laktat', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'teal'
+  },
+  {
+    id: 'tiva-csht',
+    title: 'TIVA Farmakokinetiği: Bağlama Duyarlı Yarı Ömür (CSHT)',
+    source: 'Hughes et al. (1992) · Miller’s Anesthesia · Morgan & Mikhail',
+    sourceBadge: 'TIVA · CSHT',
+    category: 'Farmakokinetik & TIVA',
+    shortDesc: 'İnfüzyon süresine (0 → 8 saat) göre CSHT (%50) ve uyanma eşiği (%80 Decrement Time) simülatörü, 3-kompartman doluluk modeli, hasta faktörleri ve Remifentanil–Propofol–Fentanil kıyaslaması.',
+    pillsHeader: '4 Saatlik CSHT Değerleri:',
+    publisher: 'Anesthesiology / Miller’s / TCI',
+    riskPills: [
+      { label: 'Remifentanil', rate: '~3–4 dk', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Propofol', rate: '~25 dk', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Sufentanil', rate: '~32 dk', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Fentanil', rate: '~178 dk', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'teal'
+  },
+  {
+    id: 'spontaneous-vs-ppv',
+    title: 'Normal (Spontan) Solunum vs. Pozitif Basınçlı Ventilasyon (PBV) & Hemodinami',
+    source: 'West’s Respiratory · Miller’s Anesthesia · Marino ICU',
+    sourceBadge: 'Fizyoloji · PBV',
+    category: 'Solunum Fizyolojisi & Hemodinami',
+    shortDesc: 'Negatif vs. pozitif intratorasik basınç simülatörü, V/Q dağılımı, Guyton venöz dönüşü, PVR / RV afterload, LV transmural afterload azalması, PPV/SVV ve 4 kritik klinik senaryo.',
+    pillsHeader: 'Kardiyopulmoner Etkiler:',
+    publisher: 'West / Miller’s / Marino ICU',
+    riskPills: [
+      { label: 'Venöz Dönüş', rate: 'PBV’de ↓', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'PVR / RV Yükü', rate: 'PEEP’le ↑', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'LV Afterload', rate: 'Ptm ↓ (Faydalı)', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Sıvı Yanıtı', rate: 'PPV > %13', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
     ],
     accentColor: 'teal'
   }
@@ -571,6 +607,16 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {/* VIEW: Respiratory Failure Type 1-4 Infographic */}
       {activeInfographicId === 'respiratory-failure' && (
         <RespiratoryFailureInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: TIVA Pharmacokinetics & Context-Sensitive Half-Time Infographic */}
+      {activeInfographicId === 'tiva-csht' && (
+        <TivaCshtInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: Spontaneous Breathing vs Positive Pressure Ventilation Infographic */}
+      {activeInfographicId === 'spontaneous-vs-ppv' && (
+        <SpontaneousVsPpvInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}

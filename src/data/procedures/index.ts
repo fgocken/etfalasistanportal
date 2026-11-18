@@ -54,11 +54,12 @@ import { laryngectomyPartialTotal } from './laryngectomyPartialTotal';
 import { intubationForEpiglottitis } from './intubationForEpiglottitis';
 import { tracheostomyCricothyroidotomy } from './tracheostomyCricothyroidotomy';
 
-// 4) Genel Cerrahi — Hepatobiliyer → Meme Cerrahisi
+// 4) Genel Cerrahi — Hepatobiliyer → Meme Cerrahisi → Kolorektal & Anorektal
 import { laparoscopicCholecystectomy } from './laparoscopicCholecystectomy';
 import { openCholecystectomy } from './openCholecystectomy';
 import { breastBiopsy } from './breastBiopsy';
 import { breastConservingSurgery } from './breastConservingSurgery';
+import { surgicalHemorrhoidectomy } from './surgicalHemorrhoidectomy';
 
 // 5) Gastroenteroloji — Üst GİS → Alt GİS → İleri Girişimsel Endoskopi
 import { gastroscopy } from './gastroscopy';
@@ -133,6 +134,7 @@ export {
   openCholecystectomy,
   breastBiopsy,
   breastConservingSurgery,
+  surgicalHemorrhoidectomy,
   gastroscopy,
   colonoscopy,
   eus,
@@ -298,11 +300,12 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   intubationForEpiglottitis,
   tracheostomyCricothyroidotomy,
 
-  // Genel Cerrahi — Hepatobiliyer -> Meme Cerrahisi
+  // Genel Cerrahi — Hepatobiliyer -> Meme Cerrahisi -> Kolorektal & Anorektal
   laparoscopicCholecystectomy,
   openCholecystectomy,
   breastBiopsy,
   breastConservingSurgery,
+  surgicalHemorrhoidectomy,
 
   // Gastroenteroloji — Üst GİS -> Alt GİS -> İleri Girişimsel Endoskopi
   gastroscopy,

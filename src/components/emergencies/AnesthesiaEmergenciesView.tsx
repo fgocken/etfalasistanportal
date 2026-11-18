@@ -15,7 +15,8 @@ import {
   Sliders,
   Wrench,
   Search,
-  X
+  X,
+  Clock
 } from 'lucide-react';
 import { ANESTHESIA_EMERGENCIES_DATA } from '../../data/emergenciesData';
 import { EMERGENCY_TROUBLESHOOTING_ITEMS } from '../../data/emergenciesTroubleshootingData';
@@ -232,6 +233,15 @@ const TROUBLESHOOTING_PREVIEWS: TroubleshootingPreview[] = [
     tag: 'SpO₂ ↓ · Solunum & Oksijenasyon',
     footerNote: 'İlk 60 sn · 4 Pleth Eğrisi & 12 Neden',
     icon: Activity
+  },
+  {
+    id: 'emergence-delay',
+    category: 'metabolic-toxic',
+    title: 'Anestezi Sonrası Gecikmiş Uyanma (Emergence Delay)',
+    shortDesc: 'Anestezikler kesildikten > 30–45 dk sonra yanıtsızlık: Önce TOF (uyanık paralizi), parmak ucu glukoz ve AKG dışlaması; Propofol/opioid birikimi, Nalokson/Flumazenil/Fizostigmin titrasyonu, hipotermi, CO₂ narkozu ve acil Beyin BT.',
+    tag: 'Uyanma ↓ · Farmakolojik & Nörolojik',
+    footerNote: 'İlk 60 sn · 6 Adım & 12 Neden',
+    icon: Clock
   }
 ];
 
@@ -622,7 +632,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
             <div>
               <h4 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 <Wrench className="w-4 h-4 text-teal-500" />
-                <span>2. İntraoperatif Troubleshooting Meseleleri (Monitör, Devre &amp; Ventilatör)</span>
+                <span>2. İntraoperatif Troubleshooting Meseleleri (Monitör, Devre, Ventilatör &amp; Derlenme)</span>
               </h4>
               <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 Spesifik bir klinik tanı değil; intraoperatif parametre sapmalarında İlk 60 Saniye, dalga formu ve sistematik teknik/fizyolojik ayırıcı tanı algoritmaları.
