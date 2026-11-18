@@ -193,6 +193,20 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'mechanical-ventilation'
   },
   {
+    id: 'tool-monitoring',
+    title: 'Monitörizasyon',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Hazırlanıyor',
+    description: 'Monitörizasyon bölümü (içeriği hazırlanıyor).',
+    keywords: [
+      'monitörizasyon',
+      'monitorizasyon',
+      'monitör',
+      'izlem'
+    ],
+    tabId: 'monitoring'
+  },
+  {
     id: 'tool-podcast',
     title: 'Podcast (Çömez & İleri Düzey Kanallar)',
     category: 'Kılavuzlar & Protokoller',

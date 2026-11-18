@@ -40,6 +40,7 @@ export const VALID_TOOL_IDS = [
   'calculator',
   'abg',
   'mechanical-ventilation',
+  'monitoring',
   'intraop',
   'infusion',
   'preop',
