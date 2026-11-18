@@ -693,6 +693,36 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     tabId: 'infographics',
     popular: true
   },
+  {
+    id: 'info-respiratory-failure',
+    title: 'Solunum Yetmezliği Sınıflaması (Tip 1 – Tip 4)',
+    category: 'Klinik İnfografikler',
+    badge: 'Tip 1 – Tip 4',
+    description: 'Alveoler gaz & şant diyagramı, Alveoler Gaz Denklemi & A–a gradiyenti ayırıcı tanı simülatörü, hastalıkların erken/geç solunum yetmezliği geçişleri, anamnez, fizik muayene ve kırmızı bayraklar.',
+    keywords: [
+      'solunum yetmezliği',
+      'tip 1 solunum yetmezliği',
+      'tip 2 solunum yetmezliği',
+      'tip 3 solunum yetmezliği',
+      'tip 4 solunum yetmezliği',
+      'hipoksemik',
+      'hiperkapnik',
+      'perioperatif atelektazi',
+      'şok solunum yetmezliği',
+      'alveoler gaz denklemi',
+      'a-a gradiyenti',
+      'şant diyagramı',
+      'erken geç solunum yetmezliği',
+      'ölü boşluk',
+      'v/q uyumsuzluğu',
+      'asteriksis',
+      'kussmaul',
+      'splinting',
+      'silent chest'
+    ],
+    tabId: 'infographics',
+    popular: true
+  },
 
   // 4. Rehber & Nöbet
   {

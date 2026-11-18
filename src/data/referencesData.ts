@@ -136,7 +136,8 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
       'Sistematik Prosedür Yönetimi',
       'Güvenli Vasküler Erişim (İnvaziv Arteriyel)',
       'Yatak Başı Kan Gazı Analizi',
-      'Erişkin & Pediatrik Havayolu Ekipman Hesaplayıcılar'
+      'Erişkin & Pediatrik Havayolu Ekipman Hesaplayıcılar',
+      'Klinik İnfografikler (Solunum Yetmezliği Tip 1–4)'
     ],
     clinicalNote: 'Perioperatif sıvı fizyolojisi, otonomik farmakoloji, NORA, hava yolu komplikasyonları ve malign hipertermi ana başvuru kaynağı.'
   },
@@ -179,7 +180,8 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
       'Anestezi Acilleri',
       'Temel İlaç Monografları',
       'Yatak Başı Kan Gazı Analizi',
-      'Erişkin & Pediatrik Havayolu Ekipman Hesaplayıcılar'
+      'Erişkin & Pediatrik Havayolu Ekipman Hesaplayıcılar',
+      'Klinik İnfografikler (Solunum Yetmezliği Tip 1–4)'
     ],
     clinicalNote: 'İntraoperatif açlık açığı, 3. boşluk kayıpları, devre arızaları, asit-baz fizyolojisi ve pratik ameliyathane içi problem çözme algoritmaları.'
   },
@@ -1183,6 +1185,58 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     externalUrl: 'https://www.rcp.ac.uk/improving-care/resources/national-early-warning-score-news-2/',
     usedInModules: ['Yoğun Bakım Kabul Kriterleri (NEWS2 Skorlayıcı)'],
     clinicalNote: 'Klinik kötüleşmeyi erken yakalayan 7 parametreli NEWS2 puanlaması (Skor 5–6 orta risk / MET, ≥7 yüksek risk / acil YBÜ).'
+  },
+  {
+    id: 'icu-roussos-resp-failure-2003',
+    category: 'icu_vasoactive',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Roussos C, Koutsoukou A.',
+    title: 'Respiratory failure.',
+    publication: 'European Respiratory Journal Supplement. 2003;47:3s–14s.',
+    year: '2003',
+    pmid: '14621112',
+    doi: '10.1183/09031936.03.00038503',
+    usedInModules: ['Klinik İnfografikler (Solunum Yetmezliği Tip 1–4)'],
+    clinicalNote: 'Solunum yetmezliğinin klasik Tip 1 (hipoksemik), Tip 2 (hiperkapnik/pompa), Tip 3 (perioperatif atelektazi) ve Tip 4 (şok/hipoperfüzyon) fizyopatolojik sınıflaması.'
+  },
+  {
+    id: 'icu-hedenstierna-atelectasis-2010',
+    category: 'icu_vasoactive',
+    kind: 'Klinik İnceleme / Derleme',
+    authors: 'Hedenstierna G, Edmark L.',
+    title: 'Mechanisms of atelectasis in the perioperative period.',
+    publication: 'Best Practice & Research Clinical Anaesthesiology. 2010;24(2):157–169.',
+    year: '2010',
+    pmid: '20608554',
+    doi: '10.1016/j.bpa.2009.12.002',
+    usedInModules: ['Klinik İnfografikler (Solunum Yetmezliği Tip 1–4)'],
+    clinicalNote: 'Genel anestezi sırasında FRC kaybı, kompresyon ve absorpsiyon (yüksek FiO₂) atelektazisi mekanizmaları (Tip 3 solunum yetmezliği).'
+  },
+  {
+    id: 'icu-aubier-shock-fatigue-1981',
+    category: 'icu_vasoactive',
+    kind: 'Dönüm Noktası Çalışma / RKÇ',
+    authors: 'Aubier M, Trippenbach T, Roussos C.',
+    title: 'Respiratory muscle fatigue during cardiogenic shock.',
+    publication: 'Journal of Applied Physiology. 1981;51(2):499–508.',
+    year: '1981',
+    pmid: '7263456',
+    doi: '10.1152/jappl.1981.51.2.499',
+    usedInModules: ['Klinik İnfografikler (Solunum Yetmezliği Tip 1–4)'],
+    clinicalNote: 'Düşük kardiyak debi/şok altında solunum kaslarının perfüzyon yetersizliği, erken kas yorgunluğu ve mekanik ventilasyonun hayati organlara kanı geri yönlendirmesini (Tip 4) gösteren temel çalışma.'
+  },
+  {
+    id: 'icu-ers-ats-niv-2017',
+    category: 'icu_vasoactive',
+    kind: 'Uluslararası Kılavuz',
+    authors: 'Rochwerg B, Brochard L, Elliott MW, et al. (ERS/ATS Task Force).',
+    title: 'Official ERS/ATS clinical practice guidelines: noninvasive ventilation for acute respiratory failure.',
+    publication: 'European Respiratory Journal. 2017;50(2):1602426.',
+    year: '2017',
+    pmid: '28860265',
+    doi: '10.1183/13993003.02426-2016',
+    usedInModules: ['Klinik İnfografikler (Solunum Yetmezliği Tip 1–4)'],
+    clinicalNote: 'KOAH hiperkapnik alevlenme (pH ≤ 7.35), kardiyojenik pulmoner ödem ve postoperatif solunum yetmezliğinde NIV (BiPAP/CPAP) endikasyonları.'
   },
 
   // =========================================================================

@@ -32,6 +32,8 @@ export interface AbgInputValues {
   tempC: string;
   urcl: string;
   respChronicity: RespChronicity;
+  barometricPressure: string;
+  rq: string;
 }
 
 export interface AbgPreset {
@@ -67,7 +69,9 @@ export const DEFAULT_ABG_INPUTS: AbgInputValues = {
   measuredOsm: '',
   tempC: '37.0',
   urcl: '',
-  respChronicity: 'acute'
+  respChronicity: 'acute',
+  barometricPressure: '',
+  rq: ''
 };
 
 export const ABG_PRESETS: AbgPreset[] = [
@@ -257,6 +261,28 @@ export const ABG_PRESETS: AbgPreset[] = [
       tempC: '35.2',
       respChronicity: 'acute'
     }
+  },
+  {
+    id: 'opioid-hypovent',
+    label: 'Saf Hipoventilasyon (Opioid)',
+    summary: 'Akut respiratuar asidoz + Normal A–a gradiyentli hipoksemi',
+    values: {
+      ...DEFAULT_ABG_INPUTS,
+      ph: '7.26',
+      pco2: '64',
+      hco3: '28',
+      sbe: '',
+      na: '140',
+      k: '4.1',
+      cl: '102',
+      alb: '4.0',
+      lac: '1.1',
+      pao2: '58',
+      fio2: '0.21',
+      age: '38',
+      sao2: '89',
+      respChronicity: 'acute'
+    }
   }
 ];
 
@@ -313,6 +339,28 @@ export interface AnionGapAnalysis {
   interpretation: string;
 }
 
+export interface AlveolarOxygenAnalysis {
+  pb: number;
+  pbCustom: boolean;
+  rq: number;
+  rqCustom: boolean;
+  fio2Pct: number;
+  pio2: number;
+  pao2Alveolar: number;
+  pao2Arterial: number;
+  aaGradient: number;
+  expectedAaRoomAir: number | null;
+  adjustedAaUpper: number;
+  isAaElevated: boolean;
+  pfRatio: number;
+  pao2AlvPct: number;
+  pao2ArtPct: number;
+  aaBarPct: number;
+  diffTone: SeverityTone;
+  diffCategory: string;
+  diffDetail: string;
+}
+
 export interface AbgAnalysisResult {
   valid: boolean;
   errorMessage?: string;
@@ -349,6 +397,7 @@ export interface AbgAnalysisResult {
   fio2Normalized: number | null;
   aaGradient: number | null;
   expectedAa: number | null;
+  alveolarOxygen: AlveolarOxygenAnalysis | null;
   ardsCategory: string | null;
   cao2: number | null;
   lactateMmol: number | null;
@@ -439,6 +488,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
       fio2Normalized: null,
       aaGradient: null,
       expectedAa: null,
+      alveolarOxygen: null,
       ardsCategory: null,
       cao2: null,
       lactateMmol: null,
@@ -521,6 +571,8 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
   const tempC = parseNum(input.tempC);
   const urcl = parseNum(input.urcl);
   const chronic = input.respChronicity === 'chronic';
+  const rawPb = parseNum(input.barometricPressure);
+  const rawRq = parseNum(input.rq);
 
   const enteredSbe = parseNum(input.sbe);
   const sbeGiven = enteredSbe !== null;
@@ -882,20 +934,95 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     });
   }
 
-  // Step 6: Oxygenation, A–a Gradient, Berlin ARDS & CaO2
+  // Step 6: Oxygenation, Alveolar Gas Equation, A–a Gradient, Berlin ARDS & CaO2
   let pfRatio: number | null = null;
   let aaGradient: number | null = null;
   let expectedAa: number | null = null;
+  let alveolarOxygen: AlveolarOxygenAnalysis | null = null;
   let ardsCategory: string | null = null;
   let cao2: number | null = null;
 
   if (!isVbg && pao2 !== null && fio2Normalized !== null && fio2Normalized > 0) {
     pfRatio = pao2 / fio2Normalized;
-    const paO2Alveolar = fio2Normalized * 713 - pco2 / 0.8;
+    const fio2Pct = fio2Normalized * 100;
+    const pbCustom = rawPb !== null && rawPb >= 350 && rawPb <= 850;
+    const pb = pbCustom ? rawPb! : 760;
+    const rqCustom = rawRq !== null && rawRq >= 0.6 && rawRq <= 1.1;
+    const rq = rqCustom ? rawRq! : 0.8;
+
+    const pio2 = fio2Normalized * (pb - 47);
+    const paO2Alveolar = pio2 - pco2 / rq;
     aaGradient = paO2Alveolar - pao2;
     if (age !== null) {
       expectedAa = age / 4 + 4;
     }
+
+    const roomAirRefUpper = expectedAa ?? 15;
+    const adjustedAaUpper =
+      fio2Pct <= 21 ? roomAirRefUpper : roomAirRefUpper + (fio2Pct - 21) * 0.65;
+    const isAaElevated = aaGradient > adjustedAaUpper;
+    const isHypercapnic = pco2 > 45;
+    const isLowPio2 = pb < 680 || fio2Pct < 21;
+    const isHypoxemic = (fio2Pct <= 21 && pao2 < 60) || pfRatio < 300;
+
+    let diffTone: SeverityTone = 'ok';
+    let diffCategory = 'Normal Alveolo-Arteriyel Gaz Değişimi';
+    let diffDetail =
+      'A–a oksijen farkı ve PaCO₂, girilen yaş ve FiO₂ düzeyine göre fizyolojik sınırlar içindedir.';
+
+    if (!isAaElevated && isHypercapnic) {
+      diffTone = 'warn';
+      diffCategory = 'Normal A–a Gradiyenti + Hiperkapni → Saf Alveoler Hipoventilasyon (Tip 2)';
+      diffDetail =
+        'Akciğer parankimi sağlamdır; hipoksemi yüksek PaCO₂’nin alveolde oksijenin yerini almasından (PAO₂ ↓) kaynaklanır. Nedenler: Opioid/sedatif depresyonu, rezidüel NMB, nöromusküler zayıflık veya santral dürtü baskılanması.';
+    } else if (!isAaElevated && isLowPio2) {
+      diffTone = 'warn';
+      diffCategory = 'Normal A–a Gradiyenti + Normal/↓ PaCO₂ → Düşük İnspire O₂ Basıncı (PiO₂ ↓)';
+      diffDetail =
+        'Alveolokapiller gaz değişimi normaldir; hipoksemi düşük barometrik basınç (yüksek irtifa) veya düşük inspire oksijen basıncından kaynaklanır.';
+    } else if (isAaElevated && isHypercapnic) {
+      diffTone = 'bad';
+      diffCategory = 'Artmış A–a Gradiyenti + Hiperkapni → Mikst Patoloji (Parankim + Pompa Yetmezliği)';
+      diffDetail =
+        'Hem alveoler hipoventilasyon (PaCO₂ ↑) hem de intrapulmoner V/Q uyumsuzluğu/şant (A–a ↑) bir aradadır (örn. KOAH alevlenme + pnömoni, ağır astım yorgunluğu veya postop atelektazi + opioid).';
+    } else if (isAaElevated) {
+      diffTone = pfRatio < 200 ? 'bad' : 'warn';
+      diffCategory = 'Artmış A–a Gradiyenti → İntrapulmoner Gaz Değişimi Bozukluğu (Tip 1 / Tip 3)';
+      diffDetail =
+        'Sorun akciğer parankimi veya pulmoner dolaşımdadır: V/Q eşitsizliği (ek O₂’ye yanıtlı), sağdan-sola şant (ARDS/atelektazi — PEEP gerektirir) veya difüzyon bozukluğu.';
+    } else if (isHypoxemic) {
+      diffTone = 'warn';
+      diffCategory = 'Sınırda A–a Değerleri / Hipoksemi — Klinik Bağlamla Değerlendirin';
+      diffDetail =
+        'PaO₂ veya P/F düşük ancak A–a farkı eşikte; FiO₂ doğruluğunu ve ölçüm zamanlamasını kontrol edin.';
+    }
+
+    const safePio2 = Math.max(1, pio2);
+    const pao2AlvPct = Math.max(0, Math.min(100, (paO2Alveolar / safePio2) * 100));
+    const pao2ArtPct = Math.max(0, Math.min(pao2AlvPct, (pao2 / safePio2) * 100));
+    const aaBarPct = Math.max(0, pao2AlvPct - pao2ArtPct);
+
+    alveolarOxygen = {
+      pb,
+      pbCustom,
+      rq,
+      rqCustom,
+      fio2Pct,
+      pio2,
+      pao2Alveolar: paO2Alveolar,
+      pao2Arterial: pao2,
+      aaGradient,
+      expectedAaRoomAir: expectedAa,
+      adjustedAaUpper,
+      isAaElevated,
+      pfRatio,
+      pao2AlvPct,
+      pao2ArtPct,
+      aaBarPct,
+      diffTone,
+      diffCategory,
+      diffDetail
+    };
 
     if (pfRatio <= 100) {
       ardsCategory = peep !== null && peep >= 5 ? 'Ağır ARDS düzeyi (P/F ≤ 100)' : 'Ağır hipoksemi (P/F ≤ 100)';
@@ -909,21 +1036,26 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
 
     let oxTone: SeverityTone = pfRatio < 100 ? 'bad' : pfRatio < 300 ? 'warn' : 'ok';
     let oxText = `PaO₂/FiO₂ oranı ${formatTr(pfRatio, 0)} mmHg (${ardsCategory}${peep !== null ? `, PEEP ${formatTr(peep, 0)} cmH₂O` : ''}).`;
-    if (aaGradient !== null) {
-      oxText += ` A–a gradiyenti ${formatTr(aaGradient, 0)} mmHg`;
-      if (expectedAa !== null) {
-        const highAa = aaGradient > expectedAa + 5;
-        oxText += ` (yaşa göre beklenen ≈ ${formatTr(expectedAa, 0)} mmHg — ${
-          highAa ? 'yüksek: V/Q uyumsuzluğu, şant veya difüzyon bozukluğu' : 'beklenen sınırda'
-        }).`;
-        if (highAa && oxTone === 'ok') oxTone = 'warn';
-      } else {
-        oxText += '.';
-      }
+    oxText += ` Alveoler Gaz Denklemi: PiO₂ ${formatTr(pio2, 0)} → PAO₂ ${formatTr(paO2Alveolar, 0)} mmHg, A–a gradiyenti ${formatTr(aaGradient, 0)} mmHg`;
+    if (expectedAa !== null) {
+      oxText += ` (oda havası beklenen ≤ ${formatTr(expectedAa, 0)}${
+        fio2Pct > 21 ? `, FiO₂ düzeltmeli sınır ≤ ${formatTr(adjustedAaUpper, 0)}` : ''
+      } mmHg — ${
+        isAaElevated
+          ? isHypercapnic
+            ? 'yüksek: mikst parankimal defekt + hipoventilasyon'
+            : 'yüksek: V/Q uyumsuzluğu, şant veya difüzyon bozukluğu'
+          : isHypercapnic
+            ? 'normal sınırda: saf alveoler hipoventilasyon'
+            : 'beklenen sınırda'
+      }).`;
+      if (isAaElevated && oxTone === 'ok') oxTone = 'warn';
+    } else {
+      oxText += '.';
     }
     steps.push({
       tone: oxTone,
-      title: `Oksijenasyon & A–a Gradyenti`,
+      title: `Oksijenasyon, Alveoler Gaz Denklemi & A–a Gradyenti`,
       body: oxText
     });
   } else if (isVbg) {
@@ -1074,6 +1206,9 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     subLine,
     cag !== null ? `AG: ${formatTr(ag!)} mEq/L | Albümin Düzeltmeli AG: ${formatTr(cag)} mEq/L` : '',
     deltaRatio !== null ? `Delta Oranı: ${formatTr(deltaRatio, 2)} | Delta Gap: ${formatTr(deltaGap!, 1)}` : '',
+    alveolarOxygen
+      ? `Alveoler Gaz: PiO₂ ${formatTr(alveolarOxygen.pio2, 0)} → PAO₂ ${formatTr(alveolarOxygen.pao2Alveolar, 0)} → PaO₂ ${formatTr(alveolarOxygen.pao2Arterial, 0)} mmHg | A–a ${formatTr(alveolarOxygen.aaGradient, 0)} mmHg (${alveolarOxygen.diffCategory})`
+      : '',
     cao2 !== null ? `CaO₂: ${formatTr(cao2, 1)} mL/dL (Hb ${formatTr(hb!, 1)} g/dL, SaO₂ %${formatTr(sao2!, 0)})` : '',
     '',
     'Değerlendirme Basamakları:',
@@ -1132,6 +1267,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     fio2Normalized,
     aaGradient,
     expectedAa,
+    alveolarOxygen,
     ardsCategory,
     cao2,
     lactateMmol: lacMmol,

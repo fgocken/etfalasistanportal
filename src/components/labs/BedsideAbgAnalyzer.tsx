@@ -775,7 +775,7 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
             >
               <span className="flex items-center gap-1.5">
                 <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>İleri Parametreler (Hb, Glukoz, Isı, Osmolalite, PEEP)</span>
+                <span>İleri Parametreler (Hb, Glukoz, Isı, Osm., PEEP, PB/RQ)</span>
               </span>
               {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
@@ -955,6 +955,53 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                   />
                   <span className={helperTextClass}>&lt;20 yanıtlı · &gt;20 dirençli</span>
                 </div>
+
+                <div>
+                  <div className="flex items-center justify-between gap-1">
+                    <label className={labelTextClass} htmlFor="abg-pb">
+                      Barometrik PB (mmHg)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => updateField('barometricPressure', inputs.barometricPressure === '520' ? '' : '520')}
+                      className="text-[10px] font-mono text-teal-600 dark:text-teal-400 underline cursor-pointer"
+                    >
+                      {inputs.barometricPressure === '520' ? '760 Deniz' : '520 İrtifa'}
+                    </button>
+                  </div>
+                  <input
+                    id="abg-pb"
+                    type="number"
+                    step="1"
+                    min="350"
+                    max="850"
+                    placeholder="760 (Varsayılan)"
+                    inputMode="decimal"
+                    value={inputs.barometricPressure}
+                    onChange={(e) => updateField('barometricPressure', e.target.value)}
+                    className={inputBaseClass}
+                  />
+                  <span className={helperTextClass}>İsteğe bağlı · Deniz 760</span>
+                </div>
+
+                <div>
+                  <label className={labelTextClass} htmlFor="abg-rq">
+                    Solunum Katsayısı (RQ)
+                  </label>
+                  <input
+                    id="abg-rq"
+                    type="number"
+                    step="0.05"
+                    min="0.6"
+                    max="1.1"
+                    placeholder="0.80 (Varsayılan)"
+                    inputMode="decimal"
+                    value={inputs.rq}
+                    onChange={(e) => updateField('rq', e.target.value)}
+                    className={inputBaseClass}
+                  />
+                  <span className={helperTextClass}>İsteğe bağlı · Ref. 0,80</span>
+                </div>
               </div>
             )}
           </div>
@@ -1114,12 +1161,16 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                   <MetricTile
                     label="A–a Gradyenti"
                     value={`${formatTr(analysis.aaGradient, 0)} mmHg`}
-                    sub={analysis.expectedAa !== null ? `Beklenen ≈ ${formatTr(analysis.expectedAa, 0)}` : undefined}
-                    tone={
-                      analysis.expectedAa !== null && analysis.aaGradient > analysis.expectedAa + 5
-                        ? 'warn'
-                        : 'neutral'
+                    sub={
+                      analysis.alveolarOxygen
+                        ? analysis.alveolarOxygen.fio2Pct > 21
+                          ? `FiO₂ düz. sınır ≤ ${formatTr(analysis.alveolarOxygen.adjustedAaUpper, 0)}`
+                          : analysis.expectedAa !== null
+                            ? `Beklenen ≤ ${formatTr(analysis.expectedAa, 0)}`
+                            : undefined
+                        : undefined
                     }
+                    tone={analysis.alveolarOxygen?.isAaElevated ? 'warn' : 'neutral'}
                     isDark={isDark}
                   />
                 )}
@@ -1348,6 +1399,152 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                     <span className={`block text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                       Delta Gap = ΔAG − ΔHCO₃⁻ (Ref: −6 ile +6 mEq/L; alternatif Düzeltilmiş HCO₃⁻ = HCO₃⁻ + ΔAG, Ref: 22–26 mmol/L) · Delta Ratio = ΔAG / ΔHCO₃⁻ (&lt;0,4 saf NAGMA, 0,4–0,99 HAGMA+NAGMA, 1,0–2,0 saf HAGMA, &gt;2,0 ek metabolik alkaloz).
                     </span>
+                  </div>
+                </div>
+              )}
+
+              {/* 2C. Alveolar Gas Equation & Oxygen Cascade (A-a Gradient Differential) */}
+              {analysis.alveolarOxygen && (
+                <div
+                  className={`rounded-xl border p-4 space-y-3.5 ${
+                    isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <h4 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        <Wind className="w-4 h-4 text-sky-500 shrink-0" />
+                        <span>Alveoler Gaz Denklemi &amp; Oksijen Kaskadı (PiO₂ → PAO₂ → PaO₂)</span>
+                      </h4>
+                      <p className={`text-[11px] mt-0.5 font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        PB {formatTr(analysis.alveolarOxygen.pb, 0)} mmHg{analysis.alveolarOxygen.pbCustom ? ' (özel)' : ''} · RQ {formatTr(analysis.alveolarOxygen.rq, 2)}{analysis.alveolarOxygen.rqCustom ? ' (özel)' : ''} · FiO₂ %{formatTr(analysis.alveolarOxygen.fio2Pct, 0)}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowAdvanced(true)}
+                      className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border cursor-pointer transition-colors ${
+                        isDark
+                          ? 'bg-slate-950 border-slate-800 text-sky-400 hover:border-sky-500/50'
+                          : 'bg-slate-50 border-slate-200 text-sky-700 hover:bg-sky-50'
+                      }`}
+                    >
+                      PB / RQ Ayarla (İsteğe Bağlı)
+                    </button>
+                  </div>
+
+                  {/* 4 Equation Cascade Tiles */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-mono tabular-nums">
+                    <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                      <div className="text-[10.5px] font-sans text-slate-500 dark:text-slate-400">1. İnspire PiO₂</div>
+                      <div className="text-sm font-bold text-sky-600 dark:text-sky-400 mt-0.5">
+                        {formatTr(analysis.alveolarOxygen.pio2, 1)} mmHg
+                      </div>
+                      <div className="text-[10px] text-slate-400">
+                        {formatTr(analysis.alveolarOxygen.fio2Pct / 100, 2)} × ({formatTr(analysis.alveolarOxygen.pb, 0)} − 47)
+                      </div>
+                    </div>
+
+                    <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                      <div className="text-[10.5px] font-sans text-slate-500 dark:text-slate-400">2. Alveoler PAO₂</div>
+                      <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400 mt-0.5">
+                        {formatTr(analysis.alveolarOxygen.pao2Alveolar, 1)} mmHg
+                      </div>
+                      <div className="text-[10px] text-slate-400">
+                        {formatTr(analysis.alveolarOxygen.pio2, 0)} − ({formatTr(analysis.pco2, 0)} / {formatTr(analysis.alveolarOxygen.rq, 2)})
+                      </div>
+                    </div>
+
+                    <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                      <div className="text-[10.5px] font-sans text-slate-500 dark:text-slate-400">3. A–a Gradiyenti</div>
+                      <div
+                        className={`text-sm font-bold mt-0.5 ${
+                          analysis.alveolarOxygen.isAaElevated
+                            ? 'text-rose-600 dark:text-rose-400'
+                            : 'text-emerald-600 dark:text-emerald-400'
+                        }`}
+                      >
+                        {formatTr(analysis.alveolarOxygen.aaGradient, 1)} mmHg
+                      </div>
+                      <div className="text-[10px] text-slate-400">
+                        {analysis.alveolarOxygen.fio2Pct <= 21
+                          ? `Sınır ≤ ${formatTr(analysis.alveolarOxygen.adjustedAaUpper, 0)} mmHg`
+                          : `FiO₂ düz. sınır ≤ ${formatTr(analysis.alveolarOxygen.adjustedAaUpper, 0)}`}
+                      </div>
+                    </div>
+
+                    <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                      <div className="text-[10.5px] font-sans text-slate-500 dark:text-slate-400">4. PaO₂ / FiO₂ (P/F)</div>
+                      <div className="text-sm font-bold text-amber-600 dark:text-amber-400 mt-0.5">
+                        {formatTr(analysis.alveolarOxygen.pfRatio, 0)} mmHg
+                      </div>
+                      <div className="text-[10px] text-slate-400">
+                        {formatTr(analysis.alveolarOxygen.pao2Arterial, 0)} / {formatTr(analysis.alveolarOxygen.fio2Pct / 100, 2)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stacked Oxygen Cascade Visual Bar */}
+                  <div className={`p-3 rounded-lg border space-y-2 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50/80 border-slate-200'}`}>
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-semibold">
+                      <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>
+                        Oksijen Kaskadı (PiO₂ → PAO₂ → PaO₂)
+                      </span>
+                      <span className="font-mono text-slate-400">
+                        PiO₂ = {formatTr(analysis.alveolarOxygen.pio2, 0)} mmHg (%100)
+                      </span>
+                    </div>
+                    <div className="w-full h-5 rounded-lg overflow-hidden flex bg-slate-200 dark:bg-slate-800">
+                      <div
+                        style={{ width: `${analysis.alveolarOxygen.pao2ArtPct}%` }}
+                        className="bg-emerald-500 transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1"
+                        title={`Arteriyel PaO₂: ${formatTr(analysis.alveolarOxygen.pao2Arterial, 0)} mmHg`}
+                      >
+                        PaO₂ {formatTr(analysis.alveolarOxygen.pao2Arterial, 0)}
+                      </div>
+                      <div
+                        style={{ width: `${analysis.alveolarOxygen.aaBarPct}%` }}
+                        className={`${
+                          analysis.alveolarOxygen.isAaElevated ? 'bg-rose-500' : 'bg-sky-400'
+                        } transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1`}
+                        title={`A–a Gradiyenti: ${formatTr(analysis.alveolarOxygen.aaGradient, 1)} mmHg`}
+                      >
+                        A–a {formatTr(analysis.alveolarOxygen.aaGradient, 0)}
+                      </div>
+                      <div
+                        style={{ width: `${Math.max(0, 100 - analysis.alveolarOxygen.pao2AlvPct)}%` }}
+                        className="bg-violet-500/75 transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1"
+                        title={`PaCO₂ / RQ düşüşü: ${formatTr(analysis.pco2 / analysis.alveolarOxygen.rq, 1)} mmHg`}
+                      >
+                        CO₂/RQ
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-3.5 text-[10px] text-slate-500 dark:text-slate-400">
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-xs bg-emerald-500" /> Yeşil: Arteriyel PaO₂
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className={`w-2.5 h-2.5 rounded-xs ${analysis.alveolarOxygen.isAaElevated ? 'bg-rose-500' : 'bg-sky-400'}`} /> Mavi/Kırmızı: A–a Gradiyenti
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-xs bg-violet-500/75" /> Mor: Alveolde CO₂ payı (PaCO₂/RQ)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Differential Diagnosis Interpretation */}
+                  <div className={`p-3 rounded-lg border text-xs leading-relaxed space-y-1 ${stepToneStyle(analysis.alveolarOxygen.diffTone)}`}>
+                    <div className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {analysis.alveolarOxygen.diffCategory}
+                    </div>
+                    <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>
+                      {analysis.alveolarOxygen.diffDetail}
+                    </p>
+                    {analysis.alveolarOxygen.fio2Pct > 21 && (
+                      <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        Not: Klasik yaş formülü <code>(Yaş/4) + 4</code> oda havası (FiO₂ %21) içindir; yüksek FiO₂ altında normal A–a sınırı fizyolojik olarak genişler.
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
@@ -1824,7 +2021,7 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
             normalRange="Genç erişkin: 5–15 mmHg · Üst sınır ≈ (Yaş / 4) + 4 mmHg"
             definition="Alveol içindeki hesaplanan parsiyel oksijen basıncı (PAO₂) ile arter kanındaki ölçülen PaO₂ arasındaki basınç farkıdır."
             significance="Hipokseminin ekstrapulmoner hipoventilasyondan mı, yoksa intrinsik akciğer patolojisinden mi kaynaklandığını hızla ayırır."
-            formula="PAO₂ = FiO₂ × 713 − (PaCO₂ / 0,8)  |  A–a = PAO₂ − PaO₂"
+            formula="PAO₂ = FiO₂ × (PB − 47) − (PaCO₂ / RQ)  [Varsayılan: PB 760, RQ 0,8]  |  A–a = PAO₂ − PaO₂"
             interpretation={[
               { range: '≤ (Yaş / 4) + 4 mmHg', meaning: 'Hipoksemi varsa neden alveoler hipoventilasyon (opioid, NMB) veya düşük FiO₂’dir.' },
               { range: '> (Yaş / 4) + 4 mmHg', meaning: 'V/Q uyumsuzluğu, sağ-sol şant (atelektazi, emboli, ödem) veya difüzyon bozukluğu.' }

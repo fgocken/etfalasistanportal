@@ -25,6 +25,7 @@ import { FluidManagementStrategiesInfographic } from './FluidManagementStrategie
 import { IvAccessInfographic } from './IvAccessInfographic';
 import { DifficultAirwayDASInfographic } from './DifficultAirwayDASInfographic';
 import { GastricUsgPerlasInfographic } from './GastricUsgPerlasInfographic';
+import { RespiratoryFailureInfographic } from './RespiratoryFailureInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -246,6 +247,23 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Yüksek', rate: '> %5', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
     ],
     accentColor: 'violet'
+  },
+  {
+    id: 'respiratory-failure',
+    title: 'Solunum Yetmezliği Sınıflaması (Tip 1 – Tip 4)',
+    source: 'Roussos / Miller’s Anesthesia / ERS-ATS Kılavuzu',
+    sourceBadge: 'Tip 1 – Tip 4',
+    category: 'Solunum Fizyolojisi & YBÜ',
+    shortDesc: 'Alveoler gaz & şant diyagramı, Alveoler Gaz Denklemi & A–a gradiyenti simülatörü, hastalıkların erken-geç evre geçişleri, kritik anamnez/fizik muayene ve ilk müdahale.',
+    pillsHeader: '4 Klinik Solunum Yetmezliği Tipi:',
+    publisher: "Eur Respir J / Miller's Anesthesia",
+    riskPills: [
+      { label: 'Tip 1', rate: 'PaO₂ < 60', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Tip 2', rate: 'PaCO₂ > 45', colorClass: 'text-violet-600 dark:text-violet-400', bgClass: 'bg-violet-500/10', borderClass: 'border-violet-500/30' },
+      { label: 'Tip 3', rate: 'Postop FRC ↓', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Tip 4', rate: 'Şok / Laktat', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'teal'
   }
 ];
 
@@ -548,6 +566,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {/* VIEW 2E: 2024 AHA/ACC Surgical Urgency Infographic */}
       {activeInfographicId === 'surgical-urgency-2024' && (
         <SurgicalUrgency2024Infographic isDark={isDark} />
+      )}
+
+      {/* VIEW: Respiratory Failure Type 1-4 Infographic */}
+      {activeInfographicId === 'respiratory-failure' && (
+        <RespiratoryFailureInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}
