@@ -204,6 +204,10 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
 
       return {
         weightUsed: w,
+        aplsEstimatedWeightKg: null as number | null,
+        aplsFormulaExpr: null as string | null,
+        isUsingActualWeight: true,
+        isAgeAboveAplsValidation: false,
         weightSource: 'Girilen yenidoğan kilosu',
         cuffedEtt: cuffed,
         uncuffedEtt: uncuffed,
@@ -220,7 +224,8 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
       const months = Math.max(1, Math.min(12, parseFloat(infantMonths) || 6));
       const estW = +(months * 0.5 + 4.0).toFixed(1);
       const actualW = parseFloat(infantActualWeight);
-      const w = !Number.isNaN(actualW) && actualW > 0 ? actualW : estW;
+      const hasActual = !Number.isNaN(actualW) && actualW > 0;
+      const w = hasActual ? actualW : estW;
 
       const cuffed = months < 6 ? '3.0 mm' : '3.5 mm';
       const uncuffed = months < 6 ? '3.5 mm' : '3.5 – 4.0 mm';
@@ -230,9 +235,13 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
 
       return {
         weightUsed: w,
-        weightSource: !Number.isNaN(actualW) && actualW > 0
-          ? `Girilen gerçek kilo (APLS tahmini: ${estW} kg)`
-          : `Tahmini kilo: (${months} ay × 0.5) + 4 = ${estW} kg`,
+        aplsEstimatedWeightKg: estW,
+        aplsFormulaExpr: `(${months} ay × 0.5) + 4 = ${estW.toFixed(1)} kg`,
+        isUsingActualWeight: hasActual,
+        isAgeAboveAplsValidation: false,
+        weightSource: hasActual
+          ? `Girilen gerçek kilo (APLS tahmini: ${estW.toFixed(1)} kg)`
+          : `APLS Tahmini: (${months} ay × 0.5) + 4 = ${estW.toFixed(1)} kg`,
         cuffedEtt: cuffed,
         uncuffedEtt: uncuffed,
         depthCm: depth.toFixed(1),
@@ -246,9 +255,10 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
 
     // Child (> 1 year)
     const age = Math.max(1, Math.min(16, parseFloat(childAgeYears) || 5));
-    const estW = age <= 5 ? age * 2.0 + 8.0 : age * 3.0 + 7.0;
+    const estW = +(age <= 5 ? age * 2.0 + 8.0 : age * 3.0 + 7.0).toFixed(1);
     const actualW = parseFloat(childActualWeight);
-    const w = !Number.isNaN(actualW) && actualW > 0 ? actualW : estW;
+    const hasActual = !Number.isNaN(actualW) && actualW > 0;
+    const w = hasActual ? actualW : estW;
 
     const cuffedVal = roundToHalf(age / 4.0 + 3.5);
     const uncuffedVal = roundToHalf(age / 4.0 + 4.0);
@@ -260,14 +270,19 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
 
     const lma = getLmaSizeByWeight(w);
     const igel = getIgelSpecByWeight(w);
+    const aplsExpr = age <= 5
+      ? `(2 × ${age}) + 8 = ${estW.toFixed(1)} kg`
+      : `(3 × ${age}) + 7 = ${estW.toFixed(1)} kg`;
 
     return {
       weightUsed: w,
-      weightSource: !Number.isNaN(actualW) && actualW > 0
+      aplsEstimatedWeightKg: estW,
+      aplsFormulaExpr: aplsExpr,
+      isUsingActualWeight: hasActual,
+      isAgeAboveAplsValidation: age > 12,
+      weightSource: hasActual
         ? `Girilen gerçek kilo (APLS tahmini: ${estW.toFixed(1)} kg)`
-        : age <= 5
-          ? `APLS Tahmini Kilo: (2 × ${age}) + 8 = ${estW.toFixed(1)} kg`
-          : `APLS Tahmini Kilo: (3 × ${age}) + 7 = ${estW.toFixed(1)} kg`,
+        : `APLS Tahmini Kilo: ${aplsExpr}`,
       cuffedEtt: `${cuffedVal.toFixed(1)} mm`,
       uncuffedEtt: `${uncuffedVal.toFixed(1)} mm`,
       depthCm: depthVal.toFixed(1),
@@ -704,9 +719,11 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
           {pedGroup === 'infant' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <div className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   <label htmlFor="ped-infant-months">Yaş (1 – 12 Ay)</label>
-                  <span className="font-mono text-amber-500">{infantMonths} Ay</span>
+                  <span className="font-mono tabular-nums text-amber-600 dark:text-amber-400">
+                    {infantMonths} Ay · APLS ≈ {pedCalc.aplsEstimatedWeightKg?.toFixed(1)} kg
+                  </span>
                 </div>
                 <input
                   id="ped-infant-months"
@@ -734,7 +751,7 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
                     step="0.1"
                     min="2"
                     max="20"
-                    placeholder={`Boşsa APLS: ${((parseFloat(infantMonths) || 6) * 0.5 + 4).toFixed(1)} kg`}
+                    placeholder={`Boşsa APLS: ${pedCalc.aplsEstimatedWeightKg?.toFixed(1)} kg`}
                     value={infantActualWeight}
                     onChange={e => setInfantActualWeight(e.target.value)}
                     className={`w-full px-3 py-2 pr-11 text-sm font-mono tabular-nums font-bold rounded-xl border ${
@@ -750,9 +767,11 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
           {pedGroup === 'child' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <div className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   <label htmlFor="ped-child-age">Çocuk Yaşı (1 – 16 Yıl)</label>
-                  <span className="font-mono text-amber-500">{childAgeYears} Yaş</span>
+                  <span className="font-mono tabular-nums text-amber-600 dark:text-amber-400">
+                    {childAgeYears} Yaş · APLS ≈ {pedCalc.aplsEstimatedWeightKg?.toFixed(1)} kg
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <input
@@ -794,7 +813,7 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
                     step="0.5"
                     min="5"
                     max="120"
-                    placeholder="Boşsa APLS tahmini kilo kullanılır"
+                    placeholder={`Boşsa APLS: ${pedCalc.aplsEstimatedWeightKg?.toFixed(1)} kg`}
                     value={childActualWeight}
                     onChange={e => setChildActualWeight(e.target.value)}
                     className={`w-full px-3 py-2 pr-11 text-sm font-mono tabular-nums font-bold rounded-xl border ${
@@ -803,6 +822,63 @@ export const AirwayEquipmentSizer: React.FC<AirwayEquipmentSizerProps> = ({
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-400">kg</span>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Visible Age & APLS Estimated Weight Readout Strip */}
+          {pedGroup !== 'neonate' && pedCalc.aplsEstimatedWeightKg !== null && (
+            <div
+              className={`p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                isDark
+                  ? 'bg-amber-950/20 border-amber-500/30 text-slate-200'
+                  : 'bg-amber-50/70 border-amber-200 text-slate-800'
+              }`}
+            >
+              <div className="flex items-start sm:items-center gap-2.5">
+                <div
+                  className={`p-2 rounded-lg shrink-0 ${
+                    isDark ? 'bg-amber-500/15 text-amber-400' : 'bg-amber-100 text-amber-700'
+                  }`}
+                >
+                  <Weight className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+                    Yaş &amp; APLS Tahmini Kilo
+                  </div>
+                  <div className="text-xs font-mono tabular-nums text-slate-600 dark:text-slate-300 mt-0.5">
+                    {pedGroup === 'infant' ? `${infantMonths} Ay` : `${childAgeYears} Yaş`} → Formül:{' '}
+                    <strong className="text-slate-900 dark:text-white">{pedCalc.aplsFormulaExpr}</strong>
+                  </div>
+                  {pedCalc.isAgeAboveAplsValidation && (
+                    <div className="text-[11px] text-amber-700 dark:text-amber-300/90 mt-1">
+                      Not: APLS (3×Yaş+7) 6–12 yaş için valide edilmiştir; 12 yaş üstünde mümkünse gerçek kilo girilmelidir.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 sm:text-right shrink-0 pl-9 sm:pl-0">
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    APLS Tahmini
+                  </div>
+                  <div className="text-lg font-mono tabular-nums font-black text-amber-600 dark:text-amber-400">
+                    {pedCalc.aplsEstimatedWeightKg.toFixed(1)} kg
+                  </div>
+                </div>
+
+                {pedCalc.isUsingActualWeight && (
+                  <div className={`pl-4 border-l ${isDark ? 'border-slate-700' : 'border-amber-200'}`}>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      Hesapta Aktif (Gerçek)
+                    </div>
+                    <div className="text-lg font-mono tabular-nums font-black text-emerald-600 dark:text-emerald-400">
+                      {pedCalc.weightUsed.toFixed(1)} kg
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
