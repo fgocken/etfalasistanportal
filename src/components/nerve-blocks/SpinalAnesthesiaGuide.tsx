@@ -21,6 +21,7 @@ import {
   SpinalParamedianApproachCard,
   SpinalSpecialPopulationsDosingCard
 } from './SpinalAnesthesiaVisuals';
+import { ShareLinkButton } from '../common/ShareLinkButton';
 
 interface SpinalAnesthesiaGuideProps {
   isDark?: boolean;
@@ -224,7 +225,7 @@ const BROMAGE_SCALE = [
   }
 ];
 
-export const SpinalAnesthesiaGuide: React.FC<SpinalAnesthesiaGuideProps> = () => {
+export const SpinalAnesthesiaGuide: React.FC<SpinalAnesthesiaGuideProps> = ({ isDark = true }) => {
   const [selectedSurgeryId, setSelectedSurgeryId] = useState<SurgeryDoseId>('cesarean');
   const [isPregnant, setIsPregnant] = useState<boolean>(true);
   const [addFentanyl, setAddFentanyl] = useState<boolean>(true);
@@ -257,7 +258,7 @@ export const SpinalAnesthesiaGuide: React.FC<SpinalAnesthesiaGuideProps> = () =>
               T10 ve altı cerrahilerde standart nöraksiyel blok protokolü: ASRA antikoagülan kesilme süreleri, Marcaine Heavy %0.5 dozlama, 23G/25G Quincke iğne ve bevel kuralı, diferansiyel blok, Bezold-Jarisch uyarısı, Modifiye Bromage skalası ve post-op kırmızı bayraklar.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs font-mono shrink-0">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono shrink-0">
             <div className="px-3 py-2 rounded-xl bg-slate-950 border border-slate-800">
               <div className="text-[10px] text-slate-400">Ponksiyon Aralığı</div>
               <div className="font-bold text-teal-400">L3–L4 / L4–L5</div>
@@ -266,6 +267,13 @@ export const SpinalAnesthesiaGuide: React.FC<SpinalAnesthesiaGuideProps> = () =>
               <div className="text-[10px] text-slate-400">Medulla Sonu</div>
               <div className="font-bold text-amber-400">L1 – L2</div>
             </div>
+            <ShareLinkButton
+              type="blok"
+              id="spinal-anestezi"
+              title="Spinal Anestezi Klinik Talimatı Bağlantısını Kopyala"
+              isDark={isDark}
+              className="font-sans"
+            />
           </div>
         </div>
       </div>

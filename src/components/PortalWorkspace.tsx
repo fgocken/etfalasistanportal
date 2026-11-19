@@ -664,8 +664,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       setActiveTab('treatments');
     } else if (route?.type === 'blok') {
       setActiveTab('nerve-blocks');
+      setSelectedNerveBlockId(route.id || null);
     } else if (route?.type === 'arac' && route.id && route.id in ALL_CLINICAL_TOOLS) {
       setActiveTab(route.id as ToolTabId);
+      if (route.id === 'nerve-blocks') {
+        setSelectedNerveBlockId(route.subId || null);
+      }
     }
   }, [initialRoute]);
 
@@ -812,6 +816,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [selectedAirwayCardId, setSelectedAirwayCardId] = useState<AirwayCardId | null>(null);
   const [selectedTreatmentProtocolId, setSelectedTreatmentProtocolId] = useState<string | null>(null);
   const [selectedNerveBlockId, setSelectedNerveBlockId] = useState<string | null>(null);
+  const [activeNerveBlockSubId, setActiveNerveBlockSubId] = useState<string | null>(null);
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -953,10 +958,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       if (item.id === 'block-spinal-anestezi') {
         setSelectedNerveBlockId('spinal-anestezi');
         handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
-        updateHashRoute('arac', 'nerve-blocks&blok=spinal-anestezi');
+        updateHashRoute('blok', 'spinal-anestezi');
       } else if (item.id === 'calc-last-intralipid') {
         setSelectedNerveBlockId('last');
         handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
+        updateHashRoute('blok', 'last');
       } else {
         setSelectedNerveBlockId(null);
         handleSelectTab('nerve-blocks');
@@ -1491,10 +1497,33 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                       </p>
                     </div>
 
-                    <div className="pt-2.5 mt-3 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-between text-xs">
-                      <span className={`text-[11px] font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                        Klinik Protokol
-                      </span>
+                    <div className="pt-2.5 mt-3 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-between gap-2 text-xs">
+                      {tool.id === 'nerve-blocks' ? (
+                        <a
+                          href="#blok=spinal-anestezi"
+                          onClick={(e) => {
+                            if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setSelectedNerveBlockId('spinal-anestezi');
+                              handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
+                              updateHashRoute('blok', 'spinal-anestezi');
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                          }}
+                          title="Doğrudan Spinal Anestezi Klinik Talimatı & Doz / Güvenlik Rehberi'ni aç (#blok=spinal-anestezi)"
+                          className={`inline-flex items-center gap-1 font-semibold text-xs underline underline-offset-4 transition-colors ${
+                            isDark ? 'text-cyan-400 hover:text-cyan-300' : 'text-cyan-700 hover:text-cyan-800'
+                          }`}
+                        >
+                          <span>Spinal Talimatı</span>
+                          <span>→</span>
+                        </a>
+                      ) : (
+                        <span className={`text-[11px] font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                          Klinik Protokol
+                        </span>
+                      )}
                       <span className={`font-semibold text-xs flex items-center gap-1 ${
                         isDark ? 'text-teal-400 group-hover:translate-x-0.5 transition-transform' : 'text-teal-700 group-hover:translate-x-0.5 transition-transform'
                       }`}>
@@ -1527,10 +1556,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
             {activeTab !== 'infographics' && (
               <ShareLinkButton
-                type="arac"
-                id={activeTab}
+                type={activeTab === 'nerve-blocks' && activeNerveBlockSubId ? 'blok' : 'arac'}
+                id={activeTab === 'nerve-blocks' && activeNerveBlockSubId ? activeNerveBlockSubId : activeTab}
                 isDark={isDark}
-                title={`${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`}
+                title={
+                  activeTab === 'nerve-blocks' && activeNerveBlockSubId === 'spinal-anestezi'
+                    ? 'Spinal Anestezi Klinik Talimatı Bağlantısını Kopyala'
+                    : `${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`
+                }
               />
             )}
           </div>
@@ -1949,6 +1982,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {activeTab === 'nerve-blocks' && (
           <NerveBlocksWorkspace 
             isDark={isDark}
+            onActiveSubChange={setActiveNerveBlockSubId}
             initialBlockId={
               selectedNerveBlockId ||
               (initialRoute?.type === 'blok'

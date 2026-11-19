@@ -23,25 +23,29 @@ import { LastCalculator } from './LastCalculator';
 import { SensoryMapViewer } from './SensoryMapViewer';
 import { SpinalAnesthesiaGuide } from './SpinalAnesthesiaGuide';
 import { ShareLinkButton } from '../common/ShareLinkButton';
+import { updateHashRoute } from '../../utils/deepLink';
 
 interface NerveBlocksWorkspaceProps {
   initialBlockId?: string | null;
   isDark?: boolean;
+  onActiveSubChange?: (subId: string | null) => void;
 }
 
 export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({ 
   initialBlockId,
-  isDark = true
+  isDark = true,
+  onActiveSubChange
 }) => {
   const isInitialSpinal = initialBlockId === 'spinal' || initialBlockId === 'spinal-anestezi';
   const isInitialLast = initialBlockId === 'last';
+  const isInitialSensory = initialBlockId === 'sensory';
   const [activeTab, setActiveTab] = useState<'blocks' | 'spinal' | 'last' | 'sensory'>(
-    isInitialSpinal ? 'spinal' : isInitialLast ? 'last' : 'blocks'
+    isInitialSpinal ? 'spinal' : isInitialLast ? 'last' : isInitialSensory ? 'sensory' : 'blocks'
   );
   const [selectedRegion, setSelectedRegion] = useState<BlockRegion | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [expandedBlockId, setExpandedBlockId] = useState<string | null>(
-    isInitialSpinal || isInitialLast ? null : (initialBlockId || null)
+    isInitialSpinal || isInitialLast || isInitialSensory ? null : (initialBlockId || null)
   );
 
   // Eğer URL'den veya haritadan özel bir blok seçilirse aç ve o sekmeye geç
@@ -52,6 +56,9 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
         setExpandedBlockId(null);
       } else if (initialBlockId === 'last') {
         setActiveTab('last');
+        setExpandedBlockId(null);
+      } else if (initialBlockId === 'sensory') {
+        setActiveTab('sensory');
         setExpandedBlockId(null);
       } else {
         setExpandedBlockId(initialBlockId);
@@ -65,6 +72,31 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
       }
     }
   }, [initialBlockId]);
+
+  useEffect(() => {
+    const currentSub =
+      activeTab === 'spinal'
+        ? 'spinal-anestezi'
+        : activeTab === 'last'
+        ? 'last'
+        : activeTab === 'sensory'
+        ? 'sensory'
+        : expandedBlockId;
+    onActiveSubChange?.(currentSub);
+  }, [activeTab, expandedBlockId, onActiveSubChange]);
+
+  const handleTabChange = (nextTab: 'blocks' | 'spinal' | 'last' | 'sensory') => {
+    setActiveTab(nextTab);
+    if (nextTab === 'spinal') {
+      updateHashRoute('blok', 'spinal-anestezi');
+    } else if (nextTab === 'last') {
+      updateHashRoute('blok', 'last');
+    } else if (nextTab === 'sensory') {
+      updateHashRoute('blok', 'sensory');
+    } else {
+      updateHashRoute(expandedBlockId ? 'blok' : 'arac', expandedBlockId || 'nerve-blocks');
+    }
+  };
 
   // Filtrelenmiş Bloklar
   const filteredBlocks = useMemo(() => {
@@ -122,9 +154,21 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
 
           <div className="flex items-center gap-3 self-start lg:self-center">
             <ShareLinkButton
-              type="arac"
-              id={activeTab === 'spinal' ? 'nerve-blocks&blok=spinal-anestezi' : 'nerve-blocks'}
-              title="Bölümü Paylaş"
+              type={activeTab === 'blocks' && !expandedBlockId ? 'arac' : 'blok'}
+              id={
+                activeTab === 'spinal'
+                  ? 'spinal-anestezi'
+                  : activeTab === 'last'
+                  ? 'last'
+                  : activeTab === 'sensory'
+                  ? 'sensory'
+                  : expandedBlockId || 'nerve-blocks'
+              }
+              title={
+                activeTab === 'spinal'
+                  ? 'Spinal Anestezi Klinik Talimatı Bağlantısını Paylaş'
+                  : 'Bölümü Paylaş'
+              }
               isDark={isDark}
               variant="compact"
             />
@@ -133,9 +177,15 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
 
         {/* Ana Navigasyon Sekmeleri */}
         <div className="flex flex-wrap items-center gap-2 mt-6 pt-5 border-t border-slate-800">
-          <button
-            onClick={() => setActiveTab('blocks')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+          <a
+            href="#arac=nerve-blocks"
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                e.preventDefault();
+                handleTabChange('blocks');
+              }
+            }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer no-underline ${
               activeTab === 'blocks'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -143,11 +193,17 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
           >
             <Layers className="w-4 h-4" />
             Sinir Blokları Kütüphanesi ({NERVE_BLOCKS_DATA.length})
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab('spinal')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+          <a
+            href="#blok=spinal-anestezi"
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                e.preventDefault();
+                handleTabChange('spinal');
+              }
+            }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer no-underline ${
               activeTab === 'spinal'
                 ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -155,11 +211,17 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
           >
             <Syringe className="w-4 h-4 text-cyan-300" />
             Spinal Anestezi (Nöraksiyel)
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab('last')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+          <a
+            href="#blok=last"
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                e.preventDefault();
+                handleTabChange('last');
+              }
+            }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer no-underline ${
               activeTab === 'last'
                 ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -167,11 +229,17 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
           >
             <ShieldAlert className="w-4 h-4 text-rose-400" />
             Lokal Anestezik Doz & LAST İntralipid
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab('sensory')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+          <a
+            href="#blok=sensory"
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                e.preventDefault();
+                handleTabChange('sensory');
+              }
+            }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer no-underline ${
               activeTab === 'sensory'
                 ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -179,7 +247,7 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
           >
             <Compass className="w-4 h-4 text-teal-400" />
             Cerrahi Bölge & Duyu Haritası
-          </button>
+          </a>
         </div>
       </div>
 
@@ -244,7 +312,9 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
                     onClick={(e) => {
                       if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
                         e.preventDefault();
-                        setExpandedBlockId(isExpanded ? null : block.id);
+                        const nextId = isExpanded ? null : block.id;
+                        setExpandedBlockId(nextId);
+                        updateHashRoute(nextId ? 'blok' : 'arac', nextId || 'nerve-blocks');
                       }
                     }}
                     className="group p-5 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors no-underline text-inherit"

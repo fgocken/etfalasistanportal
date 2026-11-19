@@ -94,16 +94,27 @@ export function parseHashRoute(): ParsedHashRoute {
     return { type: 'infografik', id: infoMatch[1] };
   }
 
-  // 4. #arac=xyz veya #tool=xyz (veya #arac=treatments&tedavi=xyz)
-  const toolMatch = hash.match(/^(?:arac|araç|tool)=([a-zA-Z0-9_-]+)(?:&(?:tedavi|ilac|ilaç|sub)=([a-zA-Z0-9_-]+))?/i);
+  // 4. #arac=xyz veya #tool=xyz (veya #arac=treatments&tedavi=xyz, #arac=nerve-blocks&blok=xyz)
+  const toolMatch = hash.match(/^(?:arac|araç|tool)=([a-zA-Z0-9_-]+)(?:&(?:tedavi|ilac|ilaç|blok|block|sub)=([a-zA-Z0-9_-]+))?/i);
   if (toolMatch && toolMatch[1]) {
-    if (toolMatch[1] === 'treatments' && toolMatch[2]) {
+    const toolKey = toolMatch[1].toLowerCase();
+    if (toolKey === 'spinal' || toolKey === 'spinal-anestezi') {
+      return { type: 'blok', id: 'spinal-anestezi' };
+    }
+    if (toolKey === 'treatments' && toolMatch[2]) {
       return { type: 'tedavi', id: toolMatch[2] };
+    }
+    if (toolKey === 'nerve-blocks' && toolMatch[2]) {
+      return { type: 'blok', id: toolMatch[2] };
     }
     return { type: 'arac', id: toolMatch[1], subId: toolMatch[2] || null };
   }
 
-  // 5. Doğrudan kısa ad ile fallback kontrolü (örn. #rsi-vs-elective)
+  // 5. Doğrudan kısa ad ile fallback kontrolü (örn. #rsi-vs-elective, #spinal-anestezi)
+  if (hash.toLowerCase() === 'spinal' || hash.toLowerCase() === 'spinal-anestezi') {
+    return { type: 'blok', id: 'spinal-anestezi' };
+  }
+
   if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {
     return { type: 'infografik', id: hash };
   }
