@@ -144,10 +144,10 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   monitoring: {
     id: 'monitoring',
     title: 'Monitörizasyon',
-    badge: 'Hazırlanıyor',
+    badge: '13 Kart · Temel + İnvaziv + TEE + Klinik',
     badgeHighlight: true,
-    desc: 'Monitörizasyon modülü. İçeriği hazırlanmaktadır.',
-    clinicalKey: 'Klinik içerik bir sonraki adımda doldurulacaktır.',
+    desc: 'Perioperatif monitörizasyon kart panosu: ASA Standartları, SpO₂, Kapnografi, Spirometri, 3/5-Lead EKG, NIBP, İnvaziv Arter (IBP), CVP, PAC, TEE, Sıcaklık Probları, Klinik Refleksler (PRST) ve Nöromüsküler Değerlendirme.',
+    clinicalKey: 'Cihaz temelli 6 bölümlü görsel monitörler (SpO₂, EtCO₂, Spiro, EKG, NIBP, IBP, CVP, PAC, TEE, Isı) + yatak başı klinik değerlendirme testleri.',
     icon: HeartPulse,
     iconBgDark: 'bg-emerald-500/15',
     iconBgLight: 'bg-emerald-50',
@@ -488,6 +488,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
 };
 
 export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
+  'monitoring',
   'procedures',
   'icu',
   'abg',
@@ -508,10 +509,9 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'contacts',
   'ekt',
   'references',
-  'mechanical-ventilation',
-  'monitoring'
+  'mechanical-ventilation'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v27';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v28';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -721,8 +721,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and migrate existing order (moving mechanical-ventilation & monitoring to the end for now)
-      for (const oldKey of ['etfal_clinical_tools_order_v26', 'etfal_clinical_tools_order_v25', 'etfal_clinical_tools_order_v24', 'etfal_clinical_tools_order_v23', 'etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and migrate existing order (moving monitoring to the top and keeping mechanical-ventilation at the end)
+      for (const oldKey of ['etfal_clinical_tools_order_v27', 'etfal_clinical_tools_order_v26', 'etfal_clinical_tools_order_v25', 'etfal_clinical_tools_order_v24', 'etfal_clinical_tools_order_v23', 'etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
@@ -794,7 +794,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               updated.push('references');
             }
             const reordered = updated.filter(id => id !== 'mechanical-ventilation' && id !== 'monitoring');
-            reordered.push('mechanical-ventilation', 'monitoring');
+            reordered.unshift('monitoring');
+            reordered.push('mechanical-ventilation');
             if (reordered.length === DEFAULT_TOOL_ORDER.length && DEFAULT_TOOL_ORDER.every(id => reordered.includes(id))) {
               return reordered as ToolTabId[];
             }

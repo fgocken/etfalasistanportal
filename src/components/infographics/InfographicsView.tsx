@@ -28,6 +28,7 @@ import { GastricUsgPerlasInfographic } from './GastricUsgPerlasInfographic';
 import { RespiratoryFailureInfographic } from './RespiratoryFailureInfographic';
 import { TivaCshtInfographic } from './TivaCshtInfographic';
 import { SpontaneousVsPpvInfographic } from './SpontaneousVsPpvInfographic';
+import { AsaBasicMonitoringInfographic } from './AsaBasicMonitoringInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -300,6 +301,23 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Sıvı Yanıtı', rate: 'PPV > %13', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
     ],
     accentColor: 'teal'
+  },
+  {
+    id: 'asa-basic-monitoring',
+    title: 'ASA Temel Anestezi Monitörizasyon Standartları',
+    source: 'ASA Standards (2020) · ASA 2023 NMB · AAGBI 2021 · Miller’s',
+    sourceBadge: 'ASA Std I–II',
+    category: 'Monitörizasyon & Güvenlik',
+    shortDesc: 'Standart I (nitelikli personel) ve Standart II (Oksijenasyon, Ventilasyon/EtCO₂, Dolaşım/EKG/≤5 dk NIBP, Sıcaklık), Continuous vs. Continual ayrımı ve anestezi tipine göre canlı monitör simülatörü.',
+    pillsHeader: 'Standart II 4 Temel Alan:',
+    publisher: 'ASA / AAGBI / Miller’s',
+    riskPills: [
+      { label: 'Oksijenasyon', rate: 'FiO₂ + SpO₂', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Ventilasyon', rate: 'EtCO₂ + Alarm', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Dolaşım', rate: 'EKG + ≤5 dk', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Sıcaklık', rate: 'Koşullu', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+    ],
+    accentColor: 'emerald'
   }
 ];
 
@@ -617,6 +635,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {/* VIEW: Spontaneous Breathing vs Positive Pressure Ventilation Infographic */}
       {activeInfographicId === 'spontaneous-vs-ppv' && (
         <SpontaneousVsPpvInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: ASA Standards for Basic Anesthetic Monitoring Infographic */}
+      {activeInfographicId === 'asa-basic-monitoring' && (
+        <AsaBasicMonitoringInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}

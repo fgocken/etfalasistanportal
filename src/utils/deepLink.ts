@@ -33,7 +33,8 @@ export const VALID_INFOGRAPHIC_IDS = [
   'surgical-risk',
   'respiratory-failure',
   'tiva-csht',
-  'spontaneous-vs-ppv'
+  'spontaneous-vs-ppv',
+  'asa-basic-monitoring'
 ] as const;
 
 export type ValidInfographicId = typeof VALID_INFOGRAPHIC_IDS[number];

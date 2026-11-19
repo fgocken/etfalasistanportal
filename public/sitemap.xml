@@ -129,6 +129,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://etfalanestezi.vercel.app/arac/monitoring</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
 
   <!-- Nöraksiyel Anestezi ve Periferik Sinir Blokları -->
   <url>
@@ -312,6 +318,12 @@
     <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://etfalanestezi.vercel.app/infografik/asa-basic-monitoring</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 
   <!-- Tedaviler, Elektrolitler ve İlaç Monografları -->
