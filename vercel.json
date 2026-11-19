@@ -1,0 +1,19 @@
+{
+  "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml; charset=utf-8"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(arac|blok|infografik|tedavi)/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}

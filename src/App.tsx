@@ -49,17 +49,43 @@ export default function App() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  // Listen for hash changes (e.g. user navigation, browser back/forward, or clicked deep link)
+  // Listen for hash or pathname changes (e.g. user navigation, browser back/forward, or clicked deep link)
   useEffect(() => {
-    const handleHashChange = () => {
+    const syncCanonicalMeta = () => {
+      try {
+        const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+        let link = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+        if (!link) {
+          link = document.createElement('link');
+          link.rel = 'canonical';
+          document.head.appendChild(link);
+        }
+        link.href = canonicalUrl;
+        const ogUrl = document.querySelector<HTMLMetaElement>('meta[property="og:url"]');
+        if (ogUrl) {
+          ogUrl.content = canonicalUrl;
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    const handleRouteChange = () => {
+      syncCanonicalMeta();
       const route = parseHashRoute();
       if (route.type !== null && route.id !== null) {
         setInitialRoute(route);
         setCurrentView('portal');
       }
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+
+    syncCanonicalMeta();
+    window.addEventListener('hashchange', handleRouteChange);
+    window.addEventListener('popstate', handleRouteChange);
+    return () => {
+      window.removeEventListener('hashchange', handleRouteChange);
+      window.removeEventListener('popstate', handleRouteChange);
+    };
   }, []);
 
   // Initialize real-time cloud synchronization (Firebase Firestore)

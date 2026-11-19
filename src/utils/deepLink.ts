@@ -30,7 +30,10 @@ export const VALID_INFOGRAPHIC_IDS = [
   'padss',
   'surgical-urgency-2024',
   'surgical-urgency',
-  'surgical-risk'
+  'surgical-risk',
+  'respiratory-failure',
+  'tiva-csht',
+  'spontaneous-vs-ppv'
 ] as const;
 
 export type ValidInfographicId = typeof VALID_INFOGRAPHIC_IDS[number];
@@ -63,8 +66,11 @@ export const VALID_TOOL_IDS = [
 
 export type ValidToolId = typeof VALID_TOOL_IDS[number];
 
+const SPA_PATH_ROUTE_REGEX = /^\/(arac|blok|infografik|tedavi)\/([a-zA-Z0-9_-]+)\/?$/i;
+
 /**
- * Mevcut window.location.hash değerini çözümler.
+ * Mevcut window.location.hash, pathname (/arac/..., /blok/..., /infografik/..., /tedavi/...)
+ * veya query string değerini çözümler.
  */
 export function parseHashRoute(): ParsedHashRoute {
   if (typeof window === 'undefined') {
@@ -72,55 +78,71 @@ export function parseHashRoute(): ParsedHashRoute {
   }
 
   const hash = window.location.hash.replace(/^#/, '').trim();
-  if (!hash) {
-    return { type: null, id: null };
-  }
+  if (hash) {
+    // 1. #tedavi=xyz veya #ilac=xyz veya #protocol=xyz
+    const tedaviMatch = hash.match(/^(?:tedavi|ilac|ilaç|protocol)=([a-zA-Z0-9_-]+)/i);
+    if (tedaviMatch && tedaviMatch[1]) {
+      return { type: 'tedavi', id: tedaviMatch[1] };
+    }
 
-  // 1. #tedavi=xyz veya #ilac=xyz veya #protocol=xyz
-  const tedaviMatch = hash.match(/^(?:tedavi|ilac|ilaç|protocol)=([a-zA-Z0-9_-]+)/i);
-  if (tedaviMatch && tedaviMatch[1]) {
-    return { type: 'tedavi', id: tedaviMatch[1] };
-  }
+    // 2. #blok=xyz
+    const blokMatch = hash.match(/^(?:blok|block)=([a-zA-Z0-9_-]+)/i);
+    if (blokMatch && blokMatch[1]) {
+      return { type: 'blok', id: blokMatch[1] };
+    }
 
-  // 2. #blok=xyz
-  const blokMatch = hash.match(/^(?:blok|block)=([a-zA-Z0-9_-]+)/i);
-  if (blokMatch && blokMatch[1]) {
-    return { type: 'blok', id: blokMatch[1] };
-  }
+    // 3. #infografik=xyz veya #infographic=xyz
+    const infoMatch = hash.match(/^(?:infografik|infographic)=([a-zA-Z0-9_-]+)/i);
+    if (infoMatch && infoMatch[1]) {
+      return { type: 'infografik', id: infoMatch[1] };
+    }
 
-  // 3. #infografik=xyz veya #infographic=xyz
-  const infoMatch = hash.match(/^(?:infografik|infographic)=([a-zA-Z0-9_-]+)/i);
-  if (infoMatch && infoMatch[1]) {
-    return { type: 'infografik', id: infoMatch[1] };
-  }
+    // 4. #arac=xyz veya #tool=xyz (veya #arac=treatments&tedavi=xyz, #arac=nerve-blocks&blok=xyz)
+    const toolMatch = hash.match(/^(?:arac|araç|tool)=([a-zA-Z0-9_-]+)(?:&(?:tedavi|ilac|ilaç|blok|block|sub)=([a-zA-Z0-9_-]+))?/i);
+    if (toolMatch && toolMatch[1]) {
+      const toolKey = toolMatch[1].toLowerCase();
+      if (toolKey === 'spinal' || toolKey === 'spinal-anestezi') {
+        return { type: 'blok', id: 'spinal-anestezi' };
+      }
+      if (toolKey === 'treatments' && toolMatch[2]) {
+        return { type: 'tedavi', id: toolMatch[2] };
+      }
+      if (toolKey === 'nerve-blocks' && toolMatch[2]) {
+        return { type: 'blok', id: toolMatch[2] };
+      }
+      return { type: 'arac', id: toolMatch[1], subId: toolMatch[2] || null };
+    }
 
-  // 4. #arac=xyz veya #tool=xyz (veya #arac=treatments&tedavi=xyz, #arac=nerve-blocks&blok=xyz)
-  const toolMatch = hash.match(/^(?:arac|araç|tool)=([a-zA-Z0-9_-]+)(?:&(?:tedavi|ilac|ilaç|blok|block|sub)=([a-zA-Z0-9_-]+))?/i);
-  if (toolMatch && toolMatch[1]) {
-    const toolKey = toolMatch[1].toLowerCase();
-    if (toolKey === 'spinal' || toolKey === 'spinal-anestezi') {
+    // 5. Doğrudan kısa ad ile fallback kontrolü (örn. #rsi-vs-elective, #spinal-anestezi)
+    if (hash.toLowerCase() === 'spinal' || hash.toLowerCase() === 'spinal-anestezi') {
       return { type: 'blok', id: 'spinal-anestezi' };
     }
-    if (toolKey === 'treatments' && toolMatch[2]) {
-      return { type: 'tedavi', id: toolMatch[2] };
+
+    if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {
+      return { type: 'infografik', id: hash };
     }
-    if (toolKey === 'nerve-blocks' && toolMatch[2]) {
-      return { type: 'blok', id: toolMatch[2] };
+
+    if (VALID_TOOL_IDS.includes(hash as ValidToolId)) {
+      return { type: 'arac', id: hash };
     }
-    return { type: 'arac', id: toolMatch[1], subId: toolMatch[2] || null };
   }
 
-  // 5. Doğrudan kısa ad ile fallback kontrolü (örn. #rsi-vs-elective, #spinal-anestezi)
-  if (hash.toLowerCase() === 'spinal' || hash.toLowerCase() === 'spinal-anestezi') {
-    return { type: 'blok', id: 'spinal-anestezi' };
+  // 6. SEO / Sitemap temiz yol (pathname) desteği: /arac/abg, /blok/spinal-anestezi, /infografik/..., /tedavi/...
+  const pathMatch = window.location.pathname.match(SPA_PATH_ROUTE_REGEX);
+  if (pathMatch && pathMatch[1] && pathMatch[2]) {
+    const routeType = pathMatch[1].toLowerCase() as HashRouteType;
+    return { type: routeType, id: pathMatch[2] };
   }
 
-  if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {
-    return { type: 'infografik', id: hash };
-  }
-
-  if (VALID_TOOL_IDS.includes(hash as ValidToolId)) {
-    return { type: 'arac', id: hash };
+  // 7. Query string desteği: ?arac=abg, ?blok=spinal-anestezi vb.
+  if (window.location.search) {
+    const params = new URLSearchParams(window.location.search);
+    for (const key of ['tedavi', 'blok', 'infografik', 'arac'] as HashRouteType[]) {
+      const val = params.get(key);
+      if (val && /^[a-zA-Z0-9_-]+$/.test(val)) {
+        return { type: key, id: val };
+      }
+    }
   }
 
   return { type: null, id: null };
@@ -133,7 +155,8 @@ export function buildShareUrl(type: HashRouteType, id: string): string {
   if (typeof window === 'undefined') {
     return `#${type}=${id}`;
   }
-  const baseUrl = `${window.location.origin}${window.location.pathname}`;
+  const basePath = SPA_PATH_ROUTE_REGEX.test(window.location.pathname) ? '/' : window.location.pathname;
+  const baseUrl = `${window.location.origin}${basePath}`;
   return `${baseUrl}#${type}=${id}`;
 }
 
@@ -144,9 +167,12 @@ export function updateHashRoute(type: HashRouteType | null, id: string | null): 
   if (typeof window === 'undefined') return;
 
   try {
+    const isSpaPath = SPA_PATH_ROUTE_REGEX.test(window.location.pathname);
+    const normalizedPath = isSpaPath ? '/' : window.location.pathname;
+
     if (!type || !id) {
-      if (window.location.hash) {
-        history.replaceState(null, '', window.location.pathname + window.location.search);
+      if (window.location.hash || isSpaPath) {
+        history.replaceState(null, '', normalizedPath + window.location.search);
         try {
           window.dispatchEvent(new Event('hashchange'));
         } catch {
@@ -157,8 +183,8 @@ export function updateHashRoute(type: HashRouteType | null, id: string | null): 
     }
 
     const newHash = `#${type}=${id}`;
-    if (window.location.hash !== newHash) {
-      history.replaceState(null, '', `${window.location.pathname}${window.location.search}${newHash}`);
+    if (window.location.hash !== newHash || isSpaPath) {
+      history.replaceState(null, '', `${normalizedPath}${window.location.search}${newHash}`);
       try {
         window.dispatchEvent(new Event('hashchange'));
       } catch {
