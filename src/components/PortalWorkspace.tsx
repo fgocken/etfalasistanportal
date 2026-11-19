@@ -246,9 +246,9 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   },
   'nerve-blocks': {
     id: 'nerve-blocks',
-    title: 'Spinal, Sinir Blokları & LAST',
-    desc: 'Spinal anestezi talimatı (ASRA antikoagülan süreleri, Marcaine Heavy, Bromage), USG eşliğinde periferik/fasya blokları, LA toksik dozları ve %20 İntralipid LAST kurtarma kılavuzu.',
-    clinicalKey: 'Lokal anestezik sistemik toksisitesinde (LAST) nörolojik/kardiyovasküler kollapsta acil İntralipid bolus ve infüzyon basamakları.',
+    title: 'Nöraksiyel (Spinal, Epidural, Kaudal), Sinir Blokları & LAST',
+    desc: 'Nöraksiyel Anestezi Kütüphanesi (Spinal anestezi klinik talimatı, Epidural, KSE, Kaudal), USG eşliğinde periferik/fasya blokları, LA toksik dozları ve %20 İntralipid LAST kurtarma kılavuzu.',
+    clinicalKey: 'Nöraksiyel (Spinal/Epidural/Kaudal) blok standartları, USG periferik bloklar ve LAST krizinde İntralipid kurtarma basamakları.',
     icon: Compass,
     iconBgDark: 'bg-indigo-500/15',
     iconBgLight: 'bg-indigo-50',
@@ -955,7 +955,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (item.tabId === 'nerve-blocks') {
-      if (item.id === 'block-spinal-anestezi') {
+      if (item.id === 'tool-neuraxial-library') {
+        setSelectedNerveBlockId('neuraxial');
+        handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
+        updateHashRoute('blok', 'neuraxial');
+      } else if (item.id === 'block-spinal-anestezi') {
         setSelectedNerveBlockId('spinal-anestezi');
         handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
         updateHashRoute('blok', 'spinal-anestezi');

@@ -21,7 +21,7 @@ import {
 import { NERVE_BLOCKS_DATA, NerveBlock, BlockRegion } from '../../data/nerveBlocksData';
 import { LastCalculator } from './LastCalculator';
 import { SensoryMapViewer } from './SensoryMapViewer';
-import { SpinalAnesthesiaGuide } from './SpinalAnesthesiaGuide';
+import { NeuraxialLibraryView, NEURAXIAL_LIBRARY_ITEMS } from './NeuraxialLibraryView';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { updateHashRoute } from '../../utils/deepLink';
 
@@ -31,29 +31,58 @@ interface NerveBlocksWorkspaceProps {
   onActiveSubChange?: (subId: string | null) => void;
 }
 
+const resolveNeuraxialItemId = (rawId?: string | null): string | null => {
+  if (!rawId) return null;
+  const normalized = rawId.toLowerCase();
+  if (normalized === 'spinal' || normalized === 'spinal-anestezi') return 'spinal-anestezi';
+  if (normalized === 'epidural' || normalized === 'epidural-anestezi') return 'epidural-anestezi';
+  if (normalized === 'cse' || normalized === 'kse' || normalized === 'kombine-spinal-epidural') {
+    return 'kombine-spinal-epidural';
+  }
+  if (normalized === 'caudal' || normalized === 'kaudal' || normalized === 'kaudal-blok') {
+    return 'kaudal-blok';
+  }
+  return null;
+};
+
+const isNeuraxialRouteId = (rawId?: string | null): boolean => {
+  if (!rawId) return false;
+  const normalized = rawId.toLowerCase();
+  return (
+    normalized === 'neuraxial' ||
+    normalized === 'noraksiyel' ||
+    normalized === 'nöraksiyel' ||
+    resolveNeuraxialItemId(normalized) !== null
+  );
+};
+
 export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({ 
   initialBlockId,
   isDark = true,
   onActiveSubChange
 }) => {
-  const isInitialSpinal = initialBlockId === 'spinal' || initialBlockId === 'spinal-anestezi';
+  const initialNeuraxial = isNeuraxialRouteId(initialBlockId);
+  const initialNeuraxialItem = resolveNeuraxialItemId(initialBlockId);
   const isInitialLast = initialBlockId === 'last';
   const isInitialSensory = initialBlockId === 'sensory';
-  const [activeTab, setActiveTab] = useState<'blocks' | 'spinal' | 'last' | 'sensory'>(
-    isInitialSpinal ? 'spinal' : isInitialLast ? 'last' : isInitialSensory ? 'sensory' : 'blocks'
+
+  const [activeTab, setActiveTab] = useState<'blocks' | 'neuraxial' | 'last' | 'sensory'>(
+    initialNeuraxial ? 'neuraxial' : isInitialLast ? 'last' : isInitialSensory ? 'sensory' : 'blocks'
   );
   const [selectedRegion, setSelectedRegion] = useState<BlockRegion | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [expandedBlockId, setExpandedBlockId] = useState<string | null>(
-    isInitialSpinal || isInitialLast || isInitialSensory ? null : (initialBlockId || null)
+    initialNeuraxial || isInitialLast || isInitialSensory ? null : (initialBlockId || null)
   );
+  const [expandedNeuraxialId, setExpandedNeuraxialId] = useState<string | null>(initialNeuraxialItem);
 
   // Eğer URL'den veya haritadan özel bir blok seçilirse aç ve o sekmeye geç
   useEffect(() => {
     if (initialBlockId) {
-      if (initialBlockId === 'spinal' || initialBlockId === 'spinal-anestezi') {
-        setActiveTab('spinal');
+      if (isNeuraxialRouteId(initialBlockId)) {
+        setActiveTab('neuraxial');
         setExpandedBlockId(null);
+        setExpandedNeuraxialId(resolveNeuraxialItemId(initialBlockId));
       } else if (initialBlockId === 'last') {
         setActiveTab('last');
         setExpandedBlockId(null);
@@ -75,20 +104,25 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
 
   useEffect(() => {
     const currentSub =
-      activeTab === 'spinal'
-        ? 'spinal-anestezi'
+      activeTab === 'neuraxial'
+        ? expandedNeuraxialId || 'neuraxial'
         : activeTab === 'last'
         ? 'last'
         : activeTab === 'sensory'
         ? 'sensory'
         : expandedBlockId;
     onActiveSubChange?.(currentSub);
-  }, [activeTab, expandedBlockId, onActiveSubChange]);
+  }, [activeTab, expandedBlockId, expandedNeuraxialId, onActiveSubChange]);
 
-  const handleTabChange = (nextTab: 'blocks' | 'spinal' | 'last' | 'sensory') => {
+  const handleTabChange = (nextTab: 'blocks' | 'neuraxial' | 'last' | 'sensory') => {
     setActiveTab(nextTab);
-    if (nextTab === 'spinal') {
-      updateHashRoute('blok', 'spinal-anestezi');
+    if (nextTab === 'neuraxial') {
+      if (activeTab === 'neuraxial') {
+        setExpandedNeuraxialId(null);
+        updateHashRoute('blok', 'neuraxial');
+      } else {
+        updateHashRoute('blok', expandedNeuraxialId || 'neuraxial');
+      }
     } else if (nextTab === 'last') {
       updateHashRoute('blok', 'last');
     } else if (nextTab === 'sensory') {
@@ -145,10 +179,10 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
               <span className="text-xs text-slate-400">Şişli Etfal Klinik Rehberi</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-              Bölgesel, Nöraksiyel (Spinal) &amp; Periferik Sinir Blokları
+              Bölgesel, Nöraksiyel &amp; Periferik Sinir Blokları
             </h1>
             <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
-              Spinal anestezi klinik talimatı (ASRA antikoagülan kuralları, Marcaine Heavy dozlaması, diferansiyel blok, Bromage &amp; kırmızı bayraklar), USG rehberliğinde periferik/fasya plan blokları ve LAST kurtarma algoritması.
+              Nöraksiyel anestezi kütüphanesi (Spinal anestezi klinik talimatı, Epidural, KSE ve Kaudal blok modülleri), USG rehberliğinde periferik/fasya plan blokları ve LAST kurtarma algoritması.
             </p>
           </div>
 
@@ -156,8 +190,8 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
             <ShareLinkButton
               type={activeTab === 'blocks' && !expandedBlockId ? 'arac' : 'blok'}
               id={
-                activeTab === 'spinal'
-                  ? 'spinal-anestezi'
+                activeTab === 'neuraxial'
+                  ? expandedNeuraxialId || 'neuraxial'
                   : activeTab === 'last'
                   ? 'last'
                   : activeTab === 'sensory'
@@ -165,8 +199,10 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
                   : expandedBlockId || 'nerve-blocks'
               }
               title={
-                activeTab === 'spinal'
+                activeTab === 'neuraxial' && expandedNeuraxialId === 'spinal-anestezi'
                   ? 'Spinal Anestezi Klinik Talimatı Bağlantısını Paylaş'
+                  : activeTab === 'neuraxial'
+                  ? 'Nöraksiyel Anestezi Kütüphanesi Bağlantısını Paylaş'
                   : 'Bölümü Paylaş'
               }
               isDark={isDark}
@@ -196,21 +232,21 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
           </a>
 
           <a
-            href="#blok=spinal-anestezi"
+            href="#blok=neuraxial"
             onClick={(e) => {
               if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
                 e.preventDefault();
-                handleTabChange('spinal');
+                handleTabChange('neuraxial');
               }
             }}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer no-underline ${
-              activeTab === 'spinal'
+              activeTab === 'neuraxial'
                 ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
             }`}
           >
             <Syringe className="w-4 h-4 text-cyan-300" />
-            Spinal Anestezi (Nöraksiyel)
+            Nöraksiyel Anestezi Kütüphanesi ({NEURAXIAL_LIBRARY_ITEMS.length})
           </a>
 
           <a
@@ -510,8 +546,14 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
         </div>
       )}
 
-      {/* 2. SEKME: SPİNAL ANESTEZİ (NÖRAKSİYEL) */}
-      {activeTab === 'spinal' && <SpinalAnesthesiaGuide isDark={isDark} />}
+      {/* 2. SEKME: NÖRAKSİYEL ANESTEZİ KÜTÜPHANESİ */}
+      {activeTab === 'neuraxial' && (
+        <NeuraxialLibraryView
+          isDark={isDark}
+          expandedItemId={expandedNeuraxialId}
+          onExpandItem={setExpandedNeuraxialId}
+        />
+      )}
 
       {/* 3. SEKME: LAST & LOKAL ANESTEZİK HESAPLAYICI */}
       {activeTab === 'last' && <LastCalculator />}

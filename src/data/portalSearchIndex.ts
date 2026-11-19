@@ -1215,6 +1215,16 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'tool-neuraxial-library',
+    title: 'Nöraksiyel Anestezi Kütüphanesi (Spinal, Epidural, KSE, Kaudal)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Nöraksiyel Kütüphane',
+    description: 'Spinal anestezi klinik talimatı ve gelecekte eklenecek Lomber/Torakal Epidural, Kombine Spinal-Epidural (KSE) ve Kaudal blok protokolleri.',
+    keywords: ['nöraksiyel', 'noraksiyel', 'nöraksiyel kütüphane', 'epidural', 'kaudal', 'kombinasyon', 'kse', 'cse', 'spinal', 'tuohy', 'intratekal'],
+    tabId: 'nerve-blocks',
+    popular: true
+  },
+  {
     id: 'block-spinal-anestezi',
     title: 'Spinal Anestezi Klinik Talimatı & Marcaine Heavy %0.5 Dozlama',
     category: 'Kılavuzlar & Protokoller',
