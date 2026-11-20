@@ -190,12 +190,12 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
               : '~%65+';
 
   const cardClass = isDark
-    ? 'rounded-2xl border border-slate-800 bg-slate-900/75 p-4 sm:p-5 space-y-4'
-    : 'rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 space-y-4 shadow-xs';
+    ? 'rounded-2xl border border-slate-800 bg-slate-900/75 p-5 sm:p-6 space-y-5'
+    : 'rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-5 shadow-xs';
 
   const subCardClass = isDark
-    ? 'rounded-xl border border-slate-800 bg-slate-950/60 p-3.5'
-    : 'rounded-xl border border-slate-200 bg-slate-50/75 p-3.5';
+    ? 'rounded-xl border border-slate-800 bg-slate-950/60 p-4'
+    : 'rounded-xl border border-slate-200 bg-slate-50/75 p-4';
 
   return (
     <div className="space-y-6">
@@ -203,18 +203,18 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
       {/* BÖLÜM 1: EN BAŞTA — STOP-BANG HESAPLAYICI & RİSK YORUMLAMASI          */}
       {/* ===================================================================== */}
       <section className={cardClass}>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3.5 border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-500 flex items-center justify-center font-mono text-xs font-bold shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4 border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-500 flex items-center justify-center font-mono text-sm font-bold shrink-0">
               1
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   STOP-BANG Hesaplayıcı &amp; İki Aşamalı (2-Step) Risk Analizi
                 </h3>
                 <span
-                  className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${
+                  className={`text-xs font-mono font-bold uppercase px-2.5 py-0.5 rounded border ${
                     isDark
                       ? 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
                       : 'bg-indigo-50 text-indigo-700 border-indigo-200'
@@ -223,7 +223,7 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                   Chung 2016 · SASM
                 </span>
               </div>
-              <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              <p className={`text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 8 soruluk OSAS tarama ölçeği + 2-Step özgüllük yükseltmesi + Serum HCO₃⁻ / SpO₂ ile OHS taraması
               </p>
             </div>
@@ -232,22 +232,22 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
           <button
             type="button"
             onClick={resetAll}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer self-start sm:self-auto ${
+            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold border transition-colors cursor-pointer self-start sm:self-auto ${
               isDark
-                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
                 : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
             }`}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-4 h-4" />
             <span>Sıfırla</span>
           </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* Left 7 Cols: 8 STOP-BANG Interactive Questions */}
-          <div className="lg:col-span-7 space-y-3">
-            {/* STOP & BANG Group Labels */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="lg:col-span-7 space-y-3.5">
+            {/* STOP & BANG Interactive Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {STOP_BANG_QUESTIONS.map((q) => {
                 const checked = answers[q.key];
                 const isStop = q.group === 'STOP';
@@ -256,7 +256,7 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                     key={q.key}
                     type="button"
                     onClick={() => toggleAnswer(q.key)}
-                    className={`group text-left rounded-xl border p-3 transition-all cursor-pointer select-none ${
+                    className={`group text-left rounded-xl border p-3.5 transition-all cursor-pointer select-none ${
                       checked
                         ? isStop
                           ? isDark
@@ -271,40 +271,40 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
                         <span
-                          className={`w-7 h-7 rounded-lg font-mono font-bold text-sm flex items-center justify-center shrink-0 border ${
+                          className={`w-8 h-8 rounded-lg font-mono font-bold text-base flex items-center justify-center shrink-0 border ${
                             checked
                               ? isStop
                                 ? 'bg-indigo-600 text-white border-indigo-500'
                                 : 'bg-amber-500 text-white border-amber-400'
                               : isDark
-                                ? 'bg-slate-900 text-slate-300 border-slate-700'
-                                : 'bg-white text-slate-700 border-slate-200'
+                                ? 'bg-slate-900 text-slate-200 border-slate-700'
+                                : 'bg-white text-slate-800 border-slate-200'
                           }`}
                         >
                           {q.letter}
                         </span>
                         <div>
-                          <div className={`text-xs font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          <div className={`text-sm font-bold leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>
                             {q.trTitle}
                           </div>
-                          <span className="text-[10px] font-mono text-slate-400">{q.group}</span>
+                          <span className="text-xs font-mono text-slate-400">{q.group}</span>
                         </div>
                       </div>
                       <span
-                        className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border shrink-0 ${
+                        className={`text-xs font-mono font-bold px-2 py-0.5 rounded border shrink-0 ${
                           checked
                             ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/40'
                             : isDark
-                              ? 'bg-slate-900 text-slate-500 border-slate-800'
-                              : 'bg-white text-slate-400 border-slate-200'
+                              ? 'bg-slate-900 text-slate-400 border-slate-800'
+                              : 'bg-white text-slate-500 border-slate-200'
                         }`}
                       >
                         {checked ? 'EVET (+1)' : 'HAYIR'}
                       </span>
                     </div>
-                    <p className={`text-[11px] mt-2 leading-snug ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                    <p className={`text-xs sm:text-[13px] mt-2.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                       {q.detail}
                     </p>
                   </button>
@@ -313,8 +313,8 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
             </div>
 
             {/* Optional BMI + OHS Screening Helper Strip */}
-            <div className={`${subCardClass} space-y-2.5`}>
-              <div className="text-[11px] font-bold flex items-center justify-between">
+            <div className={`${subCardClass} space-y-3`}>
+              <div className="text-xs sm:text-sm font-bold flex flex-wrap items-center justify-between gap-2">
                 <span className={isDark ? 'text-slate-200' : 'text-slate-800'}>
                   Opsiyonel Hızlı VKİ &amp; OHS Tarama Parametreleri (Serum HCO₃⁻ &amp; Uyanık SpO₂)
                 </span>
@@ -322,45 +322,45 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                   <button
                     type="button"
                     onClick={applyBmiToForm}
-                    className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-600 text-white hover:bg-indigo-500 cursor-pointer"
+                    className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-indigo-600 text-white hover:bg-indigo-500 cursor-pointer"
                   >
                     VKİ {computedBmi.toFixed(1)} → B’ye Uygula
                   </button>
                 )}
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Kilo (kg)</label>
+                  <label className="text-xs text-slate-400 block mb-1">Kilo (kg)</label>
                   <input
                     type="number"
                     placeholder="ör. 112"
                     value={weightKg}
                     onChange={(e) => setWeightKg(e.target.value)}
-                    className={`w-full px-2.5 py-1.5 rounded-lg border text-xs font-mono ${
+                    className={`w-full px-3 py-2 rounded-lg border text-sm font-mono ${
                       isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-200 text-slate-900'
                     }`}
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Boy (cm)</label>
+                  <label className="text-xs text-slate-400 block mb-1">Boy (cm)</label>
                   <input
                     type="number"
                     placeholder="ör. 170"
                     value={heightCm}
                     onChange={(e) => setHeightCm(e.target.value)}
-                    className={`w-full px-2.5 py-1.5 rounded-lg border text-xs font-mono ${
+                    className={`w-full px-3 py-2 rounded-lg border text-sm font-mono ${
                       isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-200 text-slate-900'
                     }`}
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Venöz HCO₃⁻ (mEq/L)</label>
+                  <label className="text-xs text-slate-400 block mb-1">Venöz HCO₃⁻ (mEq/L)</label>
                   <input
                     type="number"
                     placeholder="Eşik ≥ 27"
                     value={serumHco3}
                     onChange={(e) => setSerumHco3(e.target.value)}
-                    className={`w-full px-2.5 py-1.5 rounded-lg border text-xs font-mono ${
+                    className={`w-full px-3 py-2 rounded-lg border text-sm font-mono ${
                       hasHighHco3
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : isDark
@@ -370,13 +370,13 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Uyanık Oda SpO₂ (%)</label>
+                  <label className="text-xs text-slate-400 block mb-1">Uyanık Oda SpO₂ (%)</label>
                   <input
                     type="number"
                     placeholder="Eşik < 94"
                     value={awakeSpo2}
                     onChange={(e) => setAwakeSpo2(e.target.value)}
-                    className={`w-full px-2.5 py-1.5 rounded-lg border text-xs font-mono ${
+                    className={`w-full px-3 py-2 rounded-lg border text-sm font-mono ${
                       hasLowAwakeSpo2
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : isDark
@@ -390,10 +390,10 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
           </div>
 
           {/* Right 5 Cols: Live Score Gauge, 2-Step Interpretation & OHS Flag */}
-          <div className="lg:col-span-5 space-y-3">
+          <div className="lg:col-span-5 space-y-3.5">
             {/* Score Hero Card */}
             <div
-              className={`rounded-2xl border p-4 space-y-3 ${
+              className={`rounded-2xl border p-4 sm:p-5 space-y-3.5 ${
                 riskLevel === 'high'
                   ? isDark
                     ? 'bg-rose-950/35 border-rose-500/45'
@@ -409,12 +409,12 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
             >
               <div className="flex items-center justify-between gap-2">
                 <div>
-                  <div className="text-[10px] font-mono uppercase tracking-wider font-bold text-slate-400">
+                  <div className="text-xs font-mono uppercase tracking-wider font-bold text-slate-400">
                     STOP-BANG Toplam Skoru
                   </div>
-                  <div className="flex items-baseline gap-2 mt-0.5">
+                  <div className="flex items-baseline gap-2 mt-1">
                     <span
-                      className={`text-3xl font-mono font-black tabular-nums ${
+                      className={`text-4xl font-mono font-black tabular-nums ${
                         riskLevel === 'high'
                           ? 'text-rose-500'
                           : riskLevel === 'intermediate'
@@ -424,13 +424,13 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                     >
                       {totalScore}
                     </span>
-                    <span className="text-sm font-mono text-slate-400">/ 8 Puan</span>
+                    <span className="text-base font-mono text-slate-400">/ 8 Puan</span>
                   </div>
                 </div>
 
                 <div className="text-right">
                   <div
-                    className={`inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase border ${
+                    className={`inline-block px-3.5 py-1.5 rounded-lg text-sm font-bold uppercase border ${
                       riskLevel === 'high'
                         ? 'bg-rose-500 text-white border-rose-400'
                         : riskLevel === 'intermediate'
@@ -444,14 +444,14 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                         ? 'ORTA OSAS RİSKİ'
                         : 'DÜŞÜK OSAS RİSKİ'}
                   </div>
-                  <div className="text-[10px] font-mono text-slate-400 mt-1">
+                  <div className="text-xs font-mono text-slate-400 mt-1.5">
                     STOP: {stopScore}/4 · BANG: {bangScore}/4
                   </div>
                 </div>
               </div>
 
               {/* Visual 8-Step Meter Bar */}
-              <div className="grid grid-cols-8 gap-1">
+              <div className="grid grid-cols-8 gap-1.5">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((step) => {
                   const filled = step <= totalScore;
                   const segColor =
@@ -459,7 +459,7 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                   return (
                     <div
                       key={step}
-                      className={`h-2 rounded-sm transition-all ${
+                      className={`h-2.5 rounded-sm transition-all ${
                         filled ? segColor : isDark ? 'bg-slate-800' : 'bg-slate-200'
                       }`}
                     />
@@ -469,7 +469,7 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
 
               {/* 2-Step Upgrade Explanation Badge */}
               {hasTwoStepUpgrade && (
-                <div className="rounded-lg bg-rose-500/15 border border-rose-500/40 px-2.5 py-2 text-[11px] text-rose-600 dark:text-rose-300 font-semibold">
+                <div className="rounded-lg bg-rose-500/15 border border-rose-500/40 px-3 py-2.5 text-xs sm:text-sm text-rose-600 dark:text-rose-200 font-semibold leading-relaxed">
                   <strong>2-Step Yükseltme Aktif:</strong> Skor 3–4 olmasına rağmen <strong>STOP ≥ 2</strong> ve{' '}
                   <strong>{[answers.G && 'Erkek', answers.B && 'VKİ > 35', answers.N && 'Boyun > 40 cm'].filter(Boolean).join(' + ')}</strong>{' '}
                   bulunduğu için hasta <strong>Yüksek Risk</strong> sınıfına alınır (Chung 2016).
@@ -477,14 +477,14 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
               )}
 
               {/* Probability Readouts */}
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                <div className={`rounded-lg border p-2 ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white/90 border-slate-200'}`}>
-                  <div className="text-[10px] text-slate-400">Orta–Ağır OSAS (AHI ≥ 15)</div>
-                  <div className="text-xs font-mono font-bold mt-0.5 text-indigo-500">{modSevereProb}</div>
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
+                <div className={`rounded-lg border p-2.5 ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white/90 border-slate-200'}`}>
+                  <div className="text-xs text-slate-400">Orta–Ağır OSAS (AHI ≥ 15)</div>
+                  <div className="text-sm font-mono font-bold mt-1 text-indigo-500">{modSevereProb}</div>
                 </div>
-                <div className={`rounded-lg border p-2 ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white/90 border-slate-200'}`}>
-                  <div className="text-[10px] text-slate-400">Ağır OSAS (AHI ≥ 30)</div>
-                  <div className="text-xs font-mono font-bold mt-0.5 text-rose-500">{severeProb}</div>
+                <div className={`rounded-lg border p-2.5 ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white/90 border-slate-200'}`}>
+                  <div className="text-xs text-slate-400">Ağır OSAS (AHI ≥ 30)</div>
+                  <div className="text-sm font-mono font-bold mt-1 text-rose-500">{severeProb}</div>
                 </div>
               </div>
             </div>
@@ -492,27 +492,27 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
             {/* OHS Red-Flag Banner (Dynamic) */}
             {ohsSuspected ? (
               <div
-                className={`rounded-xl border p-3.5 space-y-1.5 ${
-                  isDark ? 'bg-rose-950/50 border-rose-500 text-rose-200' : 'bg-rose-100/80 border-rose-400 text-rose-950'
+                className={`rounded-xl border p-4 space-y-2 ${
+                  isDark ? 'bg-rose-950/50 border-rose-500 text-rose-100' : 'bg-rose-100/80 border-rose-400 text-rose-950'
                 }`}
               >
-                <div className="flex items-center gap-2 text-xs font-bold text-rose-500">
+                <div className="flex items-center gap-2 text-sm font-bold text-rose-500">
                   <AlertTriangle className="w-4 h-4 shrink-0" />
                   <span>OHS (Obezite Hipoventilasyon Sendromu) Kırmızı Bayrağı!</span>
                 </div>
-                <p className="text-[11px] leading-relaxed">
+                <p className="text-sm leading-relaxed">
                   {hasHighHco3 && <>Serum <strong>HCO₃⁻ ≥ 27 mEq/L</strong> kronik respiratuvar asidozun renal kompansasyonunu gösterir. </>}
                   {hasLowAwakeSpo2 && <>Uyanık oda havasında <strong>SpO₂ &lt; %94</strong> gündüz hipoksemisi/hipoventilasyonunu işaret eder. </>}
                   <strong>Aksiyon:</strong> Elektif cerrahi öncesi <strong>Arter Kan Gazı (PaCO₂ ≥ 45?)</strong>, EKO (Pulmoner HT / RV) ve göğüs hastalıkları / perioperatif BiPAP optimizasyonu değerlendirilmelidir!
                 </p>
               </div>
             ) : (
-              <div className={`${subCardClass} text-[11px] space-y-1.5`}>
-                <div className="font-bold flex items-center gap-1.5 text-indigo-500">
-                  <Info className="w-3.5 h-3.5 shrink-0" />
+              <div className={`${subCardClass} space-y-2`}>
+                <div className="text-sm font-bold flex items-center gap-1.5 text-indigo-500">
+                  <Info className="w-4 h-4 shrink-0" />
                   <span>Klinik Karar &amp; Yorum Özeti</span>
                 </div>
-                <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
                   {riskLevel === 'low'
                     ? 'Düşük Risk (0–2): Orta-ağır OSAS olasılığı düşüktür (%90+ negatif öngörü değeri). Standart perioperatif anestezi yönetimi uygundur.'
                     : riskLevel === 'intermediate'
@@ -523,11 +523,11 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
             )}
 
             {/* Official 2-Step Rule Summary Box */}
-            <div className={`${subCardClass} text-[11px]`}>
-              <div className="font-bold text-slate-400 uppercase tracking-wider text-[10px] mb-1.5">
+            <div className={subCardClass}>
+              <div className="font-bold text-slate-400 uppercase tracking-wider text-xs mb-2">
                 Resmi Sınıflama Kuralları (Chung 2016)
               </div>
-              <ul className={`space-y-1 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+              <ul className={`space-y-1.5 text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
                 <li><strong className="text-emerald-500">• 0–2 Puan:</strong> Düşük Risk (Sensitivite &gt;%90, orta-ağır OSAS’ı dışlamada güçlü)</li>
                 <li><strong className="text-amber-500">• 3–4 Puan:</strong> Orta Risk (2-Step veya Serum HCO₃⁻ ≥ 28 mmol/L ile özgüllük %85+’a çıkar)</li>
                 <li><strong className="text-rose-500">• 5–8 Puan</strong> <em>veya</em> <strong>STOP ≥ 2 + (Erkek / VKİ&gt;35 / Boyun&gt;40):</strong> Yüksek Risk</li>
@@ -541,15 +541,15 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
       {/* BÖLÜM 2: OSAS VE OHS — TANIM VE TANI KRİTERLERİ                       */}
       {/* ===================================================================== */}
       <section className={cardClass}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-500 flex items-center justify-center font-mono text-xs font-bold shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-500 flex items-center justify-center font-mono text-sm font-bold shrink-0">
             2
           </div>
           <div>
-            <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
               OSAS ve OHS: Tanım ve Tanı Kriterleri
             </h3>
-            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+            <p className={`text-sm mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
               Obstrüktif Uyku Apne Sendromu (ICSD-3 / AHI) ile Obezite Hipoventilasyon Sendromunun (ATS 2019) Kesin Ayrımı
             </p>
           </div>
@@ -557,82 +557,82 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* OSAS Card */}
-          <div className={`${subCardClass} border-l-4 border-l-sky-500 space-y-3`}>
+          <div className={`${subCardClass} border-l-4 border-l-sky-500 space-y-3.5`}>
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <Moon className="w-4 h-4 text-sky-500" />
-                <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <Moon className="w-5 h-5 text-sky-500 shrink-0" />
+                <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   OSAS (Obstrüktif Uyku Apne Sendromu)
                 </h4>
               </div>
-              <span className="text-[10px] font-mono font-bold text-sky-500">PSG · AHI</span>
+              <span className="text-xs font-mono font-bold text-sky-500 shrink-0">PSG · AHI</span>
             </div>
 
-            <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
               Uyku sırasında devam eden solunum çabasına rağmen üst hava yolunun tekrarlayan tam (<strong>apne</strong>: ≥ 10 sn ≥ %90 akım kesilmesi)
               veya kısmi (<strong>hipopne</strong>: ≥ 10 sn ≥ %30 akım azalması + ≥ %3–4 desatürasyon veya mikro-uyanma) kollapsıyla karakterize sendromdur.
             </p>
 
             {/* ICSD-3 Criteria */}
-            <div className={`rounded-lg p-2.5 border text-xs space-y-1 ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
-              <div className="font-bold text-sky-500 text-[11px]">ICSD-3 Tanı Kriteri (Polisomnografi):</div>
-              <div className={isDark ? 'text-slate-300' : 'text-slate-700'}>
+            <div className={`rounded-lg p-3.5 border text-sm space-y-1.5 leading-relaxed ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+              <div className="font-bold text-sky-500 text-xs uppercase tracking-wide">ICSD-3 Tanı Kriteri (Polisomnografi):</div>
+              <div className={isDark ? 'text-slate-200' : 'text-slate-700'}>
                 • <strong>AHI ≥ 15 /saat</strong> (semptom olmasa dahi tanı koydurur) <strong>VEYA</strong>
               </div>
-              <div className={isDark ? 'text-slate-300' : 'text-slate-700'}>
+              <div className={isDark ? 'text-slate-200' : 'text-slate-700'}>
                 • <strong>AHI ≥ 5 /saat</strong> + gündüz uykululuk, tanıklı apne, boğulma hissi veya HT/KAH/AF/Tip 2 DM/inme varlığı.
               </div>
             </div>
 
             {/* AHI Severity Scale */}
-            <div className="grid grid-cols-3 gap-2 text-center font-mono">
-              <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-2">
-                <div className="text-[10px] text-emerald-500 font-bold">HAFİF</div>
-                <div className={`text-xs font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>AHI 5–14</div>
+            <div className="grid grid-cols-3 gap-2.5 text-center font-mono">
+              <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-2.5">
+                <div className="text-xs text-emerald-500 font-bold">HAFİF</div>
+                <div className={`text-sm font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>AHI 5–14</div>
               </div>
-              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2">
-                <div className="text-[10px] text-amber-500 font-bold">ORTA</div>
-                <div className={`text-xs font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>AHI 15–29</div>
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5">
+                <div className="text-xs text-amber-500 font-bold">ORTA</div>
+                <div className={`text-sm font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>AHI 15–29</div>
               </div>
-              <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-2">
-                <div className="text-[10px] text-rose-500 font-bold">AĞIR</div>
-                <div className={`text-xs font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>AHI ≥ 30</div>
+              <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-2.5">
+                <div className="text-xs text-rose-500 font-bold">AĞIR</div>
+                <div className={`text-sm font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>AHI ≥ 30</div>
               </div>
             </div>
           </div>
 
           {/* OHS Card */}
-          <div className={`${subCardClass} border-l-4 border-l-rose-500 space-y-3`}>
+          <div className={`${subCardClass} border-l-4 border-l-rose-500 space-y-3.5`}>
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-rose-500" />
-                <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" />
+                <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   OHS (Obezite Hipoventilasyon Sendromu)
                 </h4>
               </div>
-              <span className="text-[10px] font-mono font-bold text-rose-500">ATS 2019 · 3 Kriter</span>
+              <span className="text-xs font-mono font-bold text-rose-500 shrink-0">ATS 2019 · 3 Kriter</span>
             </div>
 
-            <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
               İzole OSAS’tan farklı olarak yalnızca uykuda değil, <strong>gündüz uyanıkken de kronik alveoler hipoventilasyon (hiperkapni)</strong> bulunan
               ve çok daha yüksek perioperatif solunum/kardiyopulmoner mortalite taşıyan sendromdur (<em>Pickwickian Sendromu</em>).
             </p>
 
             {/* ATS 2019 3 Mandatory Criteria */}
-            <div className={`rounded-lg p-2.5 border text-xs space-y-1.5 ${isDark ? 'bg-rose-950/25 border-rose-500/30' : 'bg-rose-50/70 border-rose-200'}`}>
-              <div className="font-bold text-rose-500 text-[11px]">Kesin Tanı İçin 3 Kriterin TAMAMI Gerekir:</div>
-              <div className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+            <div className={`rounded-lg p-3.5 border text-sm space-y-2 leading-relaxed ${isDark ? 'bg-rose-950/25 border-rose-500/30' : 'bg-rose-50/70 border-rose-200'}`}>
+              <div className="font-bold text-rose-500 text-xs uppercase tracking-wide">Kesin Tanı İçin 3 Kriterin TAMAMI Gerekir:</div>
+              <div className={isDark ? 'text-slate-100' : 'text-slate-800'}>
                 <strong>1. Obezite:</strong> VKİ <strong>≥ 30 kg/m²</strong>
               </div>
-              <div className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+              <div className={isDark ? 'text-slate-100' : 'text-slate-800'}>
                 <strong>2. Gündüz Uyanık Hiperkapni:</strong> Deniz seviyesinde AKG’de <strong>PaCO₂ ≥ 45 mmHg</strong> (ve renal kompansasyonla venöz <strong>HCO₃⁻ ≥ 27 mEq/L</strong>)
               </div>
-              <div className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+              <div className={isDark ? 'text-slate-100' : 'text-slate-800'}>
                 <strong>3. Dışlama:</strong> Hipoventilasyonu açıklayacak başka neden olmaması (ağır KOAH, kifoskolyoz, nöromüsküler hastalık, hipotiroidi, ilaç).
               </div>
             </div>
 
-            <div className={`text-[11px] font-medium ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
+            <div className={`text-sm font-medium leading-relaxed ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
               ★ OHS hastalarının <strong>~%90’ında eşlik eden OSAS</strong> vardır; %10’unda ise uykuda non-obstrüktif hipoventilasyon görülür.
             </div>
           </div>
@@ -640,12 +640,12 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
 
         {/* Comparison Table: OSAS vs OHS */}
         <div className="overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+          <table className="w-full text-sm border-collapse">
             <thead>
-              <tr className={isDark ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-100 text-slate-700'}>
-                <th className="text-left p-2.5 font-bold rounded-tl-lg">Klinik Parametre</th>
-                <th className="text-left p-2.5 font-bold text-sky-500">İzole OSAS</th>
-                <th className="text-left p-2.5 font-bold text-rose-500 rounded-tr-lg">OHS (Obezite Hipoventilasyon)</th>
+              <tr className={isDark ? 'bg-slate-800/80 text-slate-200' : 'bg-slate-100 text-slate-800'}>
+                <th className="text-left p-3 font-bold rounded-tl-lg">Klinik Parametre</th>
+                <th className="text-left p-3 font-bold text-sky-500">İzole OSAS</th>
+                <th className="text-left p-3 font-bold text-rose-500 rounded-tr-lg">OHS (Obezite Hipoventilasyon)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -682,9 +682,9 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
                 },
               ].map((row) => (
                 <tr key={row.param} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
-                  <td className={`p-2.5 font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{row.param}</td>
-                  <td className={`p-2.5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{row.osas}</td>
-                  <td className={`p-2.5 font-medium ${isDark ? 'text-rose-200' : 'text-rose-800'}`}>{row.ohs}</td>
+                  <td className={`p-3 font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{row.param}</td>
+                  <td className={`p-3 leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{row.osas}</td>
+                  <td className={`p-3 font-medium leading-relaxed ${isDark ? 'text-rose-200' : 'text-rose-800'}`}>{row.ohs}</td>
                 </tr>
               ))}
             </tbody>
@@ -696,96 +696,206 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
       {/* BÖLÜM 3: PATOFİZYOLOJİ — PERİOPERATİF YÖNETİMİ NEDEN ETKİLER?        */}
       {/* ===================================================================== */}
       <section className={cardClass}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-500 flex items-center justify-center font-mono text-xs font-bold shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-500 flex items-center justify-center font-mono text-sm font-bold shrink-0">
             3
           </div>
           <div>
-            <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
               Patofizyoloji: Perioperatif Yönetimi Neden Kritik Şekilde Etkiler?
             </h3>
-            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+            <p className={`text-sm mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
               Faringeal Kollaps (Pcrit), Opioid Hiperduyarlılığı, Kemoreseptör Küntleşmesi, Pulmoner HT ve Postop REM Rebound
             </p>
           </div>
         </div>
 
-        {/* Visual Pathophysiology Cascade SVG */}
-        <svg viewBox="0 0 880 205" className="w-full h-auto rounded-xl">
-          <rect x="0" y="0" width="880" height="205" rx="12" fill={isDark ? '#090d16' : '#f8fafc'} />
+        {/* 2×2 High-Readability Pathophysiology Grid: 1 & 2 on top row, 3 & 4 on bottom row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Card 1: Airway Collapse & FRC */}
+          <div
+            className={`rounded-2xl border p-5 flex flex-col justify-between gap-4 ${
+              isDark
+                ? 'bg-slate-950/75 border-sky-500/45'
+                : 'bg-sky-50/45 border-sky-300'
+            }`}
+          >
+            <div className="space-y-3">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-lg bg-sky-500/15 border border-sky-500/40 text-sky-500 font-mono text-sm font-black flex items-center justify-center shrink-0">
+                  1
+                </span>
+                <h4 className={`text-base font-extrabold tracking-tight ${isDark ? 'text-sky-300' : 'text-sky-800'}`}>
+                  FARİNGEAL KOLLAPS &amp; FRC ↓
+                </h4>
+              </div>
+              <ul className={`space-y-2 text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                <li>• Parafaringeal yağ birikimi ve yapısal olarak dar üst hava yolu lümeni</li>
+                <li>• Anestezikler, benzodiazepinler ve opioidler <strong>genioglossus / faringeal dilatör tonusunu</strong> siler → kritik kapanma basıncı (<strong>Pcrit</strong>) yükselir!</li>
+                <li>• Obezitede <strong>FRC (fonksiyonel rezidüel kapasite)</strong> ciddi azalır → oksijen deposu minimaldir</li>
+              </ul>
+            </div>
+            <div
+              className={`rounded-xl border p-3.5 space-y-1.5 ${
+                isDark
+                  ? 'bg-sky-500/10 border-sky-500/30 text-sky-100'
+                  : 'bg-sky-100/70 border-sky-300 text-sky-950'
+              }`}
+            >
+              <div className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-sky-300' : 'text-sky-700'}`}>
+                Anestezi Sonucu
+              </div>
+              <ul className="space-y-1 text-sm leading-snug">
+                <li>→ Zor maske ventilasyonu &amp; zor entübasyon (<strong>3–4×</strong> risk artışı)</li>
+                <li>→ İndüksiyon apnesinde saniyeler içinde hızlı desatürasyon</li>
+                <li>→ Ekstübasyon sonrası üst hava yolu obstrüksiyonu ve laringospazm</li>
+              </ul>
+            </div>
+          </div>
 
-          {/* Box 1: Airway Collapse & FRC */}
-          <rect x="14" y="14" width="204" height="177" rx="10" fill={isDark ? '#111827' : '#ffffff'} stroke="#0ea5e9" strokeWidth="1.3" />
-          <text x="26" y="34" fill="#38bdf8" fontSize="10" fontWeight="bold">1. FARİNGEAL KOLLAPS &amp; FRC ↓</text>
-          <text x="26" y="53" fill={isDark ? '#e2e8f0' : '#334155'} fontSize="8.8">• Parafaringeal yağ + dar lümen</text>
-          <text x="26" y="67" fill={isDark ? '#e2e8f0' : '#334155'} fontSize="8.8">• Anestezik/BZD/opioid genioglossus</text>
-          <text x="34" y="79" fill={isDark ? '#e2e8f0' : '#334155'} fontSize="8.8">tonusunu siler → Pcrit yükselir!</text>
-          <text x="26" y="96" fill={isDark ? '#e2e8f0' : '#334155'} fontSize="8.8">• Obezitede FRC ↓↓ (O₂ deposu az)</text>
-          <rect x="26" y="114" width="180" height="64" rx="6" fill="#0ea5e9" fillOpacity="0.14" />
-          <text x="34" y="130" fill="#38bdf8" fontSize="8.8" fontWeight="bold">Anestezi Sonucu:</text>
-          <text x="34" y="144" fill={isDark ? '#bae6fd' : '#0369a1'} fontSize="8.5">→ Zor maske &amp; zor entübasyon (3–4×)</text>
-          <text x="34" y="157" fill={isDark ? '#bae6fd' : '#0369a1'} fontSize="8.5">→ Apnede saniyeler içinde desatürasyon</text>
-          <text x="34" y="170" fill={isDark ? '#bae6fd' : '#0369a1'} fontSize="8.5">→ Ekstübasyon sonrası laringospazm</text>
+          {/* Card 2: Opioid Hypersensitivity & CO2 Narcosis */}
+          <div
+            className={`rounded-2xl border p-5 flex flex-col justify-between gap-4 ${
+              isDark
+                ? 'bg-rose-950/30 border-rose-500/45'
+                : 'bg-rose-50/60 border-rose-300'
+            }`}
+          >
+            <div className="space-y-3">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/40 text-rose-500 font-mono text-sm font-black flex items-center justify-center shrink-0">
+                  2
+                </span>
+                <h4 className={`text-base font-extrabold tracking-tight ${isDark ? 'text-rose-300' : 'text-rose-800'}`}>
+                  OPİOİD DUYARLILIĞI &amp; CO₂ NARKOZU
+                </h4>
+              </div>
+              <ul className={`space-y-2 text-sm leading-relaxed ${isDark ? 'text-rose-100' : 'text-rose-950'}`}>
+                <li>• Kronik aralıklı hipoksi → <strong>μ-opioid reseptör up-regülasyonu</strong> (çok düşük dozda derin solunum depresyonu ve apne!)</li>
+                <li>• OHS’de santral kemoreseptörlerin <strong>CO₂ duyarlılığı küntleşir</strong>; solunum dürtüsü büyük ölçüde hipoksik uyarana kayar!</li>
+                <li>• Yüksek akımlı ek O₂, hipoksik dürtüyü baskılar ve Haldane etkisiyle PaCO₂’yi hızla yükseltir</li>
+              </ul>
+            </div>
+            <div
+              className={`rounded-xl border p-3.5 space-y-1.5 ${
+                isDark
+                  ? 'bg-rose-500/15 border-rose-500/35 text-rose-100'
+                  : 'bg-rose-100/80 border-rose-300 text-rose-950'
+              }`}
+            >
+              <div className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-700'}`}>
+                Anestezi Sonucu
+              </div>
+              <ul className="space-y-1 text-sm leading-snug">
+                <li>→ Standart opioid dozlarında ani derin apne ve sedasyon</li>
+                <li>→ Aşırı O₂ + Haldane etkisi → <strong>hiperkapnik CO₂ narkozu</strong></li>
+                <li>→ Nazal O₂ altında SpO₂ %98 görünürken gizli hipoventilasyon ve arrest!</li>
+              </ul>
+            </div>
+          </div>
 
-          {/* Box 2: Opioid Hypersensitivity & CO2 Narcosis */}
-          <rect x="230" y="14" width="204" height="177" rx="10" fill={isDark ? '#2a1215' : '#fff1f2'} stroke="#f43f5e" strokeWidth="1.3" />
-          <text x="242" y="34" fill="#f43f5e" fontSize="10" fontWeight="bold">2. OPİOİD DUYARLILIĞI &amp; CO₂</text>
-          <text x="242" y="53" fill={isDark ? '#fecdd3' : '#881337'} fontSize="8.8">• Aralıklı hipoksi → μ-opioid reseptör</text>
-          <text x="250" y="65" fill={isDark ? '#fecdd3' : '#881337'} fontSize="8.8">up-regülasyonu (düşük dozda apne!)</text>
-          <text x="242" y="82" fill={isDark ? '#fecdd3' : '#881337'} fontSize="8.8">• OHS: Santral CO₂ duyusu küntleşir;</text>
-          <text x="250" y="94" fill={isDark ? '#fecdd3' : '#881337'} fontSize="8.8">solunum hipoksik dürtüye kayar!</text>
-          <rect x="242" y="114" width="180" height="64" rx="6" fill="#f43f5e" fillOpacity="0.18" />
-          <text x="250" y="130" fill="#fb7185" fontSize="8.8" fontWeight="bold">Anestezi Sonucu:</text>
-          <text x="250" y="144" fill={isDark ? '#fecdd3' : '#881337'} fontSize="8.5">→ Standart opioid dozunda derin apne</text>
-          <text x="250" y="157" fill={isDark ? '#fecdd3' : '#881337'} fontSize="8.5">→ Aşırı O₂ + Haldane → CO₂ narkozu</text>
-          <text x="250" y="170" fill={isDark ? '#fecdd3' : '#881337'} fontSize="8.5">→ O₂ altında SpO₂ %98 iken gizli apne!</text>
+          {/* Card 3: Cardiopulmonary & PHT / RV */}
+          <div
+            className={`rounded-2xl border p-5 flex flex-col justify-between gap-4 ${
+              isDark
+                ? 'bg-amber-950/25 border-amber-500/45'
+                : 'bg-amber-50/60 border-amber-300'
+            }`}
+          >
+            <div className="space-y-3">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/40 text-amber-500 font-mono text-sm font-black flex items-center justify-center shrink-0">
+                  3
+                </span>
+                <h4 className={`text-base font-extrabold tracking-tight ${isDark ? 'text-amber-300' : 'text-amber-900'}`}>
+                  KARDİYOVASKÜLER ETKİ &amp; PULMONER HT / RV
+                </h4>
+              </div>
+              <ul className={`space-y-2 text-sm leading-relaxed ${isDark ? 'text-amber-100' : 'text-amber-950'}`}>
+                <li>• Tekrarlayan hipoksi + hiperkapni → <strong>hipoksik pulmoner vazokonstriksiyon (HPV)</strong> → PVR ↑ ve Pulmoner HT</li>
+                <li>• Tıkalı hava yoluna karşı derin inspirasyon çabası (<strong>Müller manevrası</strong>) → şiddetli negatif intratorasik basınç → LV ard yükü ↑</li>
+                <li>• Kronik sempatik sinir sistemi aktivasyonu → dirençli HT, taşiaritmi ve AF</li>
+              </ul>
+            </div>
+            <div
+              className={`rounded-xl border p-3.5 space-y-1.5 ${
+                isDark
+                  ? 'bg-amber-500/15 border-amber-500/35 text-amber-100'
+                  : 'bg-amber-100/80 border-amber-300 text-amber-950'
+              }`}
+            >
+              <div className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
+                Anestezi Sonucu
+              </div>
+              <ul className="space-y-1 text-sm leading-snug">
+                <li>→ İndüksiyonda sistemik vazodilatasyon + PVR artışı → <strong>ağır RV yetmezliği</strong></li>
+                <li>→ Postoperatif atriyal fibrilasyon, miyokardiyal hasar (MINS) ve iskemi</li>
+                <li>→ Obstrüksiyon anında <strong>negatif basınçlı akciğer ödemi (NPPE)</strong>!</li>
+              </ul>
+            </div>
+          </div>
 
-          {/* Box 3: Cardiopulmonary & PHT */}
-          <rect x="446" y="14" width="204" height="177" rx="10" fill={isDark ? '#1c1910' : '#fffbeb'} stroke="#f59e0b" strokeWidth="1.3" />
-          <text x="458" y="34" fill="#f59e0b" fontSize="10" fontWeight="bold">3. KARDİYOVASKÜLER &amp; RV</text>
-          <text x="458" y="53" fill={isDark ? '#fde68a' : '#92400e'} fontSize="8.8">• Hipoksi + hiperkapni → HPV (PVR ↑)</text>
-          <text x="458" y="67" fill={isDark ? '#fde68a' : '#92400e'} fontSize="8.8">• Obstrüktif çaba (Müller) → Negatif</text>
-          <text x="466" y="79" fill={isDark ? '#fde68a' : '#92400e'} fontSize="8.8">intratorasik basınç → LV ard yük ↑</text>
-          <text x="458" y="96" fill={isDark ? '#fde68a' : '#92400e'} fontSize="8.8">• Kronik sempatik deşarj → HT, AF</text>
-          <rect x="458" y="114" width="180" height="64" rx="6" fill="#f59e0b" fillOpacity="0.16" />
-          <text x="466" y="130" fill="#fbbf24" fontSize="8.8" fontWeight="bold">Anestezi Sonucu:</text>
-          <text x="466" y="144" fill={isDark ? '#fef3c7' : '#78350f'} fontSize="8.5">→ İndüksiyonda ağır RV yetmezliği</text>
-          <text x="466" y="157" fill={isDark ? '#fef3c7' : '#78350f'} fontSize="8.5">→ Postop AF, MINS ve pulmoner ödem</text>
-          <text x="466" y="170" fill={isDark ? '#fef3c7' : '#78350f'} fontSize="8.5">→ Negatif basınçlı akciğer ödemi!</text>
-
-          {/* Box 4: REM Rebound (Postop Day 3-5) */}
-          <rect x="662" y="14" width="204" height="177" rx="10" fill={isDark ? '#1e1628' : '#faf5ff'} stroke="#a855f7" strokeWidth="1.3" />
-          <text x="674" y="34" fill="#c084fc" fontSize="10" fontWeight="bold">4. POSTOP "REM REBOUND"</text>
-          <text x="674" y="53" fill={isDark ? '#e9d5ff' : '#581c87'} fontSize="8.8">• Cerrahi + opioidler ilk 1–2 gece</text>
-          <text x="682" y="65" fill={isDark ? '#e9d5ff' : '#581c87'} fontSize="8.8">REM uykusunu baskılar</text>
-          <text x="674" y="82" fill={isDark ? '#e9d5ff' : '#581c87'} fontSize="8.8">• Postop 3–5. gecede yoğun REM</text>
-          <text x="682" y="94" fill={isDark ? '#e9d5ff' : '#581c87'} fontSize="8.8">rebound → derin faringeal atoni!</text>
-          <rect x="674" y="114" width="180" height="64" rx="6" fill="#a855f7" fillOpacity="0.16" />
-          <text x="682" y="130" fill="#d8b4fe" fontSize="8.8" fontWeight="bold">Anestezi Sonucu:</text>
-          <text x="682" y="144" fill={isDark ? '#f3e8ff' : '#581c87'} fontSize="8.5">→ Risk yalnızca PACU’da bitmez!</text>
-          <text x="682" y="157" fill={isDark ? '#f3e8ff' : '#581c87'} fontSize="8.5">→ 3–5. gecede serviste sessiz hipoksi</text>
-          <text x="682" y="170" fill={isDark ? '#f3e8ff' : '#581c87'} fontSize="8.5">→ Gece CPAP/BiPAP devamı hayati!</text>
-        </svg>
+          {/* Card 4: REM Rebound (Postop Day 3-5) */}
+          <div
+            className={`rounded-2xl border p-5 flex flex-col justify-between gap-4 ${
+              isDark
+                ? 'bg-purple-950/25 border-purple-500/45'
+                : 'bg-purple-50/60 border-purple-300'
+            }`}
+          >
+            <div className="space-y-3">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/40 text-purple-400 font-mono text-sm font-black flex items-center justify-center shrink-0">
+                  4
+                </span>
+                <h4 className={`text-base font-extrabold tracking-tight ${isDark ? 'text-purple-300' : 'text-purple-900'}`}>
+                  POSTOP “REM REBOUND” (3–5. GECE)
+                </h4>
+              </div>
+              <ul className={`space-y-2 text-sm leading-relaxed ${isDark ? 'text-purple-100' : 'text-purple-950'}`}>
+                <li>• Cerrahi stres, genel anestezikler ve opioidler ameliyat sonrası <strong>ilk 1–2 gecede</strong> REM uykusunu baskılar</li>
+                <li>• Postoperatif <strong>3–5. gecelerde</strong> telafi amaçlı yoğun <strong>REM uykusu geri tepmesi (REM rebound)</strong> yaşanır</li>
+                <li>• REM evresi, faringeal kaslarda <strong>en derin fizyolojik atoninin</strong> ve en uzun apne epizodlarının görüldüğü dönemdir</li>
+              </ul>
+            </div>
+            <div
+              className={`rounded-xl border p-3.5 space-y-1.5 ${
+                isDark
+                  ? 'bg-purple-500/15 border-purple-500/35 text-purple-100'
+                  : 'bg-purple-100/80 border-purple-300 text-purple-950'
+              }`}
+            >
+              <div className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-purple-300' : 'text-purple-800'}`}>
+                Anestezi Sonucu
+              </div>
+              <ul className="space-y-1 text-sm leading-snug">
+                <li>→ Perioperatif solunum riski <strong>yalnızca PACU’da bitmez!</strong></li>
+                <li>→ Postop 3–5. gecede yataklı serviste sessiz ağır hipoksi ve ani ölüm riski</li>
+                <li>→ Gece <strong>CPAP/BiPAP cihazının kesintisiz sürdürülmesi</strong> hayati önem taşır!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
         {/* Key Pathophysiology Pearls */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className={subCardClass}>
-            <div className="font-bold text-rose-500 mb-1 flex items-center gap-1.5">
-              <Activity className="w-3.5 h-3.5" />
-              <span>Neden "Sadece Nazal O₂ Vermek" Tehlikeli Bir Tuzaktır?</span>
+            <div className="text-sm font-bold text-rose-500 mb-2 flex items-center gap-2">
+              <Activity className="w-4 h-4 shrink-0" />
+              <span>Neden “Sadece Nazal O₂ Vermek” Tehlikeli Bir Tuzaktır?</span>
             </div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
               Ek oksijen, pulse oksimetreyi %96–99 bandında tutarak gelişen <strong>opioid ilişkili hipoventilasyonu ve hiperkapniyi maskeler</strong>.
               Özellikle OHS hastasında yüksek FiO₂, hipoksik vazokonstriksiyonu bozarak ölü boşluğu artırır (Haldane etkisi + V/Q bozulması) ve
               hasta ağrısız-sakin uyuyor sanılırken <strong>PaCO₂ 70–90 mmHg’ye çıkıp solunum arresti</strong> gelişebilir.
             </p>
           </div>
           <div className={subCardClass}>
-            <div className="font-bold text-sky-500 mb-1 flex items-center gap-1.5">
-              <Wind className="w-3.5 h-3.5" />
+            <div className="text-sm font-bold text-sky-500 mb-2 flex items-center gap-2">
+              <Wind className="w-4 h-4 shrink-0" />
               <span>Rezidüel Nöromüsküler Blokaj (RNMB) ile Sinerjik Çöküş</span>
             </div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
               Faringeal dilatör kaslar diyaframdan çok daha hassastır; TOFR 0.70–0.85 düzeyindeki hafif bir rezidüel blokaj bile normal bir hastada
               tolere edilebilirken, OSAS/OHS hastasında <strong>ani tam üst hava yolu obstrüksiyonuna ve negatif basınçlı pulmoner ödeme (NPPE)</strong> neden olur.
             </p>
@@ -797,15 +907,15 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
       {/* BÖLÜM 4: PERİOPERATİF REHBER ÖNERİLERİ (ASA & SASM & ATS)             */}
       {/* ===================================================================== */}
       <section className={cardClass}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 flex items-center justify-center font-mono text-xs font-bold shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 flex items-center justify-center font-mono text-sm font-bold shrink-0">
             4
           </div>
           <div>
-            <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
               Perioperatif Rehber Önerileri (ASA · SASM · ATS)
             </h3>
-            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+            <p className={`text-sm mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
               Preoperatif Optimizasyon &amp; Erteleme Kriterleri, İntraoperatif Hava Yolu / Analjezi ve Postoperatif İzlem Protokolü
             </p>
           </div>
@@ -813,78 +923,78 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Phase A: Preoperative */}
-          <div className={`${subCardClass} border-t-4 border-t-indigo-500 space-y-2.5`}>
+          <div className={`${subCardClass} border-t-4 border-t-indigo-500 space-y-3`}>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-indigo-500 uppercase tracking-wide">A. Preoperatif Faz</span>
-              <span className="text-[10px] font-mono text-slate-400">SASM 2016</span>
+              <span className="text-sm font-bold text-indigo-500 uppercase tracking-wide">A. Preoperatif Faz</span>
+              <span className="text-xs font-mono text-slate-400">SASM 2016</span>
             </div>
-            <ul className={`space-y-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 shrink-0 mt-0.5" />
+            <ul className={`space-y-2.5 text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                 <span><strong>Rutin Tarama:</strong> Tüm cerrahi hastalara STOP-BANG uygulanmalı; VKİ ≥ 30 ve STOP-BANG ≥ 3 ise <strong>venöz HCO₃⁻</strong> (≥ 27 mEq/L?) ve oda havası SpO₂ bakılmalıdır.</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                 <span><strong>Kompanse OSAS’ta Erteleme YOK:</strong> Kontrolsüz komorbiditesi olmayan şüpheli/tanılı OSAS hastasında yalnızca uyku testi (PSG) için elektif cerrahi ertelenmez.</span>
               </li>
-              <li className="flex gap-2">
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                 <span><strong>Erteleme / İleri Tetkik Endikasyonları:</strong> Şüpheli/tedavisiz <strong>OHS</strong> (PaCO₂ ≥ 45), <strong>pulmoner HT / sağ kalp yetmezliği</strong>, dinlenme hipoksemisi veya kontrolsüz kardiyak hastalık!</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                 <span><strong>PAP Cihazı Uyumu:</strong> Tanılı hastalar kendi CPAP/BiPAP cihaz ve maskelerini ameliyat günü hastaneye getirmelidir.</span>
               </li>
             </ul>
           </div>
 
           {/* Phase B: Intraoperative */}
-          <div className={`${subCardClass} border-t-4 border-t-emerald-500 space-y-2.5`}>
+          <div className={`${subCardClass} border-t-4 border-t-emerald-500 space-y-3`}>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-500 uppercase tracking-wide">B. İntraoperatif Faz</span>
-              <span className="text-[10px] font-mono text-slate-400">SASM 2018 · ASA</span>
+              <span className="text-sm font-bold text-emerald-500 uppercase tracking-wide">B. İntraoperatif Faz</span>
+              <span className="text-xs font-mono text-slate-400">SASM 2018 · ASA</span>
             </div>
-            <ul className={`space-y-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+            <ul className={`space-y-2.5 text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <span><strong>Rejyonel Anestezi Önceliği:</strong> Mümkünse lokal, periferik sinir bloğu veya nöraksiyel anestezi tercih edin (sedasyonu hafif tutun; sedasyonda <strong>EtCO₂ zorunlu!</strong>).</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <span><strong>Pozisyon &amp; Preoksijenasyon:</strong> <strong>Ramped / HELP</strong> (kulak tragus–sternum hizası), baş yukarı, <strong>CPAP/PEEP 5–10 cmH₂O</strong> ile preoksijenasyon ve videolaringoskopi hazırlığı.</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <span><strong>Opioid-Sparing &amp; Kısa Etkili Ajanlar:</strong> <strong>Benzodiazepinlerden KAÇIN!</strong> Multimodal analjezi (parasetamol, NSAİİ, ketamin, deksmedetomidin, lidokain, rejyonel bloklar) kullanın.</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <span><strong>Güvenli Ekstübasyon:</strong> <strong>Kantitatif TOF ≥ 0.90</strong> doğrulayın (sugammadeks öncelikli), <strong>tam uyanık</strong> ve <strong>yarı oturur (30–45°)</strong> pozisyonda ekstübe edin.</span>
               </li>
             </ul>
           </div>
 
           {/* Phase C: Postoperative */}
-          <div className={`${subCardClass} border-t-4 border-t-amber-500 space-y-2.5`}>
+          <div className={`${subCardClass} border-t-4 border-t-amber-500 space-y-3`}>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-500 uppercase tracking-wide">C. Postoperatif Faz</span>
-              <span className="text-[10px] font-mono text-slate-400">ASA · ATS</span>
+              <span className="text-sm font-bold text-amber-500 uppercase tracking-wide">C. Postoperatif Faz</span>
+              <span className="text-xs font-mono text-slate-400">ASA · ATS</span>
             </div>
-            <ul className={`space-y-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+            <ul className={`space-y-2.5 text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <span><strong>Erken PAP Başlatma:</strong> Hastanın CPAP/BiPAP cihazı PACU’da erken dönemde takılmalı; OHS’de <strong>BiPAP</strong> (IPAP/EPAP) ile hiperkapni önlenmelidir.</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <span><strong>Oksijen Titrasyonu &amp; Kapnografi:</strong> OHS’de aşırı O₂’den kaçının (hedef <strong>SpO₂ %88–92</strong>); sistemik/nöraksiyel opioid alanlarda sürekli <strong>SpO₂ + EtCO₂ + sedasyon skoru</strong> izleyin.</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <span><strong>PCA &amp; Sedatif Yasağı:</strong> IV PCA kullanılacaksa <strong>bazal (arka plan) infüzyon KONULMAZ!</strong> Eşzamanlı benzodiazepin/gabapentinoid-opioid kombinasyonundan kaçının.</span>
               </li>
-              <li className="flex gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+              <li className="flex gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <span><strong>PACU Çıkış &amp; Günübirlik Kuralı:</strong> Supin yatırmayın (yan/30–45°). PACU’da tekrarlayan apne/bradispne/SpO₂ &lt; %90 veya opioid-sedasyon uyumsuzluğu olanlar monitörize yatakta izlenir (postop 3–5. gün REM rebound uyarısı!).</span>
               </li>
             </ul>
@@ -893,13 +1003,13 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
 
         {/* High-Yield PACU Red Flags Box */}
         <div
-          className={`rounded-xl border p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+          className={`rounded-xl border p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
             isDark ? 'bg-rose-950/25 border-rose-500/35' : 'bg-rose-50/70 border-rose-200'
           }`}
         >
-          <div className="flex items-start gap-2.5 text-xs">
-            <ShieldAlert className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-            <div className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+          <div className="flex items-start gap-3 text-sm leading-relaxed">
+            <ShieldAlert className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+            <div className={isDark ? 'text-slate-100' : 'text-slate-800'}>
               <strong className="text-rose-500">PACU “Recurrent Respiratory Events” (Tekrarlayan Solunum Olayı) Kriterleri:</strong>{' '}
               30 dk’lık 2 ayrı periyotta <strong>apne ≥ 10 sn</strong>, <strong>bradispne &lt; 8/dk</strong>, <strong>SpO₂ &lt; %90</strong> veya{' '}
               <strong>ağrı-sedasyon uyumsuzluğu</strong> (şiddetli ağrıya rağmen derin sedasyon) gelişirse hasta yüksek postop arrest riskindedir →{' '}
@@ -909,13 +1019,13 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
         </div>
 
         {/* Footer References */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 pt-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 pt-1">
           <div
-            className={`lg:col-span-6 rounded-xl border p-3 flex items-start gap-2 text-xs ${
-              isDark ? 'bg-slate-950/70 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+            className={`lg:col-span-6 rounded-xl border p-3.5 flex items-start gap-2.5 text-sm leading-relaxed ${
+              isDark ? 'bg-slate-950/70 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-700'
             }`}
           >
-            <Stethoscope className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+            <Stethoscope className="w-4 h-4 text-indigo-500 shrink-0 mt-1" />
             <div>
               <strong className={isDark ? 'text-white' : 'text-slate-900'}>Klinik Özet Kuralı:</strong>{' '}
               STOP-BANG yüksek riskli her obez hastada <strong>“Bu hasta izole OSAS mı yoksa OHS mi?”</strong> sorusunu{' '}
@@ -923,8 +1033,8 @@ export const StopBangCalculator: React.FC<StopBangCalculatorProps> = ({ isDark }
             </div>
           </div>
           <div
-            className={`lg:col-span-6 rounded-xl border p-3 flex items-start gap-2 text-[11px] ${
-              isDark ? 'bg-slate-950/70 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
+            className={`lg:col-span-6 rounded-xl border p-3.5 flex items-start gap-2.5 text-xs sm:text-[13px] leading-relaxed ${
+              isDark ? 'bg-slate-950/70 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
             }`}
           >
             <BookOpen className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
