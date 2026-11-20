@@ -421,6 +421,7 @@ export interface AbgAnalysisResult {
   steps: AbgStep[];
   clinicalNotes: string[];
   copyReport: string;
+  stepsCopyReport: string;
   snapshot: AbgComparisonSnapshot;
 }
 
@@ -507,6 +508,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
       steps: [],
       clinicalNotes: [],
       copyReport: '',
+      stepsCopyReport: '',
       snapshot: {
         capturedAt: '',
         ph: 7.4,
@@ -655,16 +657,16 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     addDisorder('rA', 'primary');
     steps.push({
       tone: 'bad',
-      title: 'Karma Asidoz',
-      body: 'HCO₃⁻ düşük ve pCO₂ yüksek; solunumsal ve metabolik bileşenler birbirini kompanse etmiyor, pH’yı sinerjik olarak düşürüyor.'
+      title: `Primer Bozukluk: Karma Asidoz (HCO₃⁻ ${formatTr(hco3, 1)} mmol/L, pCO₂ ${formatTr(pco2, 1)} mmHg)`,
+      body: `HCO₃⁻ düşük (${formatTr(hco3, 1)} mmol/L) ve pCO₂ yüksek (${formatTr(pco2, 1)} mmHg); solunumsal ve metabolik bileşenler birbirini kompanse etmiyor, pH’yı sinerjik olarak düşürüyor.`
     });
   } else if (pattern === 'bk') {
     addDisorder('mK', 'primary');
     addDisorder('rK', 'primary');
     steps.push({
       tone: 'bad',
-      title: 'Karma Alkaloz',
-      body: 'HCO₃⁻ yüksek ve pCO₂ düşük; her iki sistem pH’yı birlikte yükseltiyor.'
+      title: `Primer Bozukluk: Karma Alkaloz (HCO₃⁻ ${formatTr(hco3, 1)} mmol/L, pCO₂ ${formatTr(pco2, 1)} mmHg)`,
+      body: `HCO₃⁻ yüksek (${formatTr(hco3, 1)} mmol/L) ve pCO₂ düşük (${formatTr(pco2, 1)} mmHg); her iki sistem pH’yı birlikte yükseltiyor.`
     });
   } else if (pattern) {
     addDisorder(pattern, 'primary');
@@ -674,6 +676,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     let highKey: DisorderKey = 'rA';
     let lowKey: DisorderKey = 'rK';
     let formulaText = '';
+    let primaryMetricText = '';
 
     if (pattern === 'mA') {
       expected = 1.5 * hco3 + 8;
@@ -681,28 +684,32 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
       observed = pco2;
       highKey = 'rA';
       lowKey = 'rK';
-      formulaText = `Winter formülü: beklenen pCO₂ ${formatTr(expected)} ± 2 mmHg (${formatTr(expected - 2)}–${formatTr(expected + 2)}), ölçülen ${formatTr(pco2)} mmHg`;
+      primaryMetricText = `HCO₃⁻ ${formatTr(hco3, 1)} mmol/L`;
+      formulaText = `Primer metabolik belirteç: HCO₃⁻ ${formatTr(hco3, 1)} mmol/L (SBE ${formatSignedTr(sbe, 1)} mEq/L). Winter formülü: beklenen pCO₂ ${formatTr(expected)} ± 2 mmHg (${formatTr(expected - 2)}–${formatTr(expected + 2)} mmHg), ölçülen ${formatTr(pco2)} mmHg`;
     } else if (pattern === 'mK') {
       expected = 40 + 0.7 * (hco3 - 24);
       tol = 5;
       observed = pco2;
       highKey = 'rA';
       lowKey = 'rK';
-      formulaText = `Metabolik alkaloz kompanzasyonu: beklenen pCO₂ ${formatTr(expected)} ± 5 mmHg (${formatTr(expected - 5)}–${formatTr(expected + 5)}), ölçülen ${formatTr(pco2)} mmHg`;
+      primaryMetricText = `HCO₃⁻ ${formatTr(hco3, 1)} mmol/L`;
+      formulaText = `Primer metabolik belirteç: HCO₃⁻ ${formatTr(hco3, 1)} mmol/L (SBE ${formatSignedTr(sbe, 1)} mEq/L). Metabolik alkaloz kompanzasyonu: beklenen pCO₂ ${formatTr(expected)} ± 5 mmHg (${formatTr(expected - 5)}–${formatTr(expected + 5)} mmHg), ölçülen ${formatTr(pco2)} mmHg`;
     } else if (pattern === 'rA') {
       expected = 24 + (chronic ? 0.35 : 0.1) * (pco2 - 40);
       tol = 3;
       observed = hco3;
       highKey = 'mK';
       lowKey = 'mA';
-      formulaText = `${chronic ? 'Kronik' : 'Akut'} respiratuar asidoz (Boston): beklenen HCO₃⁻ ${formatTr(expected)} ± 3 mmol/L, ölçülen ${formatTr(hco3)} mmol/L`;
+      primaryMetricText = `pCO₂ ${formatTr(pco2, 1)} mmHg`;
+      formulaText = `Primer solunumsal belirteç: pCO₂ ${formatTr(pco2, 1)} mmHg. ${chronic ? 'Kronik' : 'Akut'} respiratuar asidoz (Boston): beklenen HCO₃⁻ ${formatTr(expected)} ± 3 mmol/L, ölçülen ${formatTr(hco3)} mmol/L`;
     } else {
       expected = 24 - (chronic ? 0.4 : 0.2) * (40 - pco2);
       tol = 3;
       observed = hco3;
       highKey = 'mK';
       lowKey = 'mA';
-      formulaText = `${chronic ? 'Kronik' : 'Akut'} respiratuar alkaloz (Boston): beklenen HCO₃⁻ ${formatTr(expected)} ± 3 mmol/L, ölçülen ${formatTr(hco3)} mmol/L`;
+      primaryMetricText = `pCO₂ ${formatTr(pco2, 1)} mmHg`;
+      formulaText = `Primer solunumsal belirteç: pCO₂ ${formatTr(pco2, 1)} mmHg. ${chronic ? 'Kronik' : 'Akut'} respiratuar alkaloz (Boston): beklenen HCO₃⁻ ${formatTr(expected)} ± 3 mmol/L, ölçülen ${formatTr(hco3)} mmol/L`;
     }
 
     let compConclusion = 'Uygun kompanzasyon sınırları içinde.';
@@ -720,14 +727,14 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
 
     steps.push({
       tone: compTone,
-      title: `Primer Bozukluk: ${shortNames[pattern].charAt(0).toUpperCase() + shortNames[pattern].slice(1)}`,
+      title: `Primer Bozukluk: ${shortNames[pattern].charAt(0).toUpperCase() + shortNames[pattern].slice(1)} (${primaryMetricText})`,
       body: `${formulaText}. Değerlendirme: ${compConclusion}`
     });
   } else {
     steps.push({
       tone: 'ok',
-      title: 'Primer Bozukluk Taraması',
-      body: 'HCO₃⁻ (22–26 mmol/L) ve pCO₂ (35–45 mmHg) normal aralıkta; gizli yüksek anyon açığı kontrolü yapılıyor.'
+      title: `Primer Bozukluk Taraması (HCO₃⁻ ${formatTr(hco3, 1)} mmol/L, pCO₂ ${formatTr(pco2, 1)} mmHg)`,
+      body: `HCO₃⁻ ${formatTr(hco3, 1)} mmol/L (Ref: 22–26 mmol/L) ve pCO₂ ${formatTr(pco2, 1)} mmHg (Ref: 35–45 mmHg) normal aralıkta; gizli yüksek anyon açığı kontrolü yapılıyor.`
     });
   }
 
@@ -913,7 +920,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
       steps.push({
         tone: osmolalGap > 10 ? 'bad' : 'ok',
         title: `Osmolal Gap: ${formatSignedTr(osmolalGap)} mOsm/kg`,
-        body: `Hesaplanan serum osmolalitesi ${formatTr(calcOsmolality, 0)} mOsm/kg, ölçülen ${formatTr(measuredOsm, 0)} mOsm/kg. ${
+        body: `Ölçülen serum osmolalitesi ${formatTr(measuredOsm, 0)} mOsm/kg, hesaplanan ${formatTr(calcOsmolality, 0)} mOsm/kg. ${
           osmolalGap > 10
             ? 'Osmolal gap > 10 mOsm/kg — metanol, etilen glikol, izopropanol veya mannitol varlığını araştırın.'
             : 'Fizyolojik sınırda (< 10 mOsm/kg).'
@@ -1066,13 +1073,45 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     });
   }
 
-  if (hb !== null && sao2 !== null && pao2 !== null && !isVbg) {
-    cao2 = 1.34 * hb * (sao2 / 100) + 0.0031 * pao2;
-    if (cao2 < 12) {
+  if (!isVbg) {
+    if (hb !== null && sao2 !== null && pao2 !== null) {
+      cao2 = 1.34 * hb * (sao2 / 100) + 0.0031 * pao2;
+      if (cao2 < 9) {
+        steps.push({
+          tone: 'bad',
+          title: `Kritik Düşük Arteriyel Oksijen İçeriği (CaO₂): ${formatTr(cao2, 1)} mL O₂/dL`,
+          body: `Normal hedef 16–20 mL O₂/dL’dir. Hb (${formatTr(hb, 1)} g/dL) ve/veya SaO₂ (%${formatTr(sao2, 0)}) düşüklüğü doku oksijen sunumunu (DO₂) kritik düzeyde kısıtlıyor.`
+        });
+      } else if (cao2 < 12) {
+        steps.push({
+          tone: 'warn',
+          title: `Düşük Arteriyel Oksijen İçeriği (CaO₂): ${formatTr(cao2, 1)} mL O₂/dL`,
+          body: `Normal hedef 16–20 mL O₂/dL’dir. Hb (${formatTr(hb, 1)} g/dL) ve/veya SaO₂ (%${formatTr(sao2, 0)}) düşüklüğü doku oksijen sunumunu (DO₂) ciddi biçimde kısıtlıyor.`
+        });
+      } else if (cao2 < 16) {
+        steps.push({
+          tone: 'warn',
+          title: `Sınırda Düşük Arteriyel Oksijen İçeriği (CaO₂): ${formatTr(cao2, 1)} mL O₂/dL`,
+          body: `Normal hedef 16–20 mL O₂/dL’dir (Hb ${formatTr(hb, 1)} g/dL, SaO₂ %${formatTr(sao2, 0)}, PaO₂ ${formatTr(pao2, 0)} mmHg). Hafif azalmış oksijen taşıma kapasitesi; anemi veya hemodinamik instabilitede DO₂ izlenmelidir.`
+        });
+      } else if (cao2 <= 20) {
+        steps.push({
+          tone: 'ok',
+          title: `Arteriyel Oksijen İçeriği (CaO₂): ${formatTr(cao2, 1)} mL O₂/dL (Normal)`,
+          body: `Normal hedef 16–20 mL O₂/dL aralığındadır (Hb ${formatTr(hb, 1)} g/dL, SaO₂ %${formatTr(sao2, 0)}, PaO₂ ${formatTr(pao2, 0)} mmHg). Arteriyel oksijen taşıma kapasitesi yeterlidir.`
+        });
+      } else {
+        steps.push({
+          tone: 'neutral',
+          title: `Yüksek Arteriyel Oksijen İçeriği (CaO₂): ${formatTr(cao2, 1)} mL O₂/dL`,
+          body: `Normal hedef 16–20 mL O₂/dL’nin üzerindedir (Hb ${formatTr(hb, 1)} g/dL, SaO₂ %${formatTr(sao2, 0)}, PaO₂ ${formatTr(pao2, 0)} mmHg). Polisitemi, hemokonsantrasyon veya hiperoksi açısından değerlendirin.`
+        });
+      }
+    } else {
       steps.push({
-        tone: cao2 < 9 ? 'bad' : 'warn',
-        title: `Düşük Arteriyel Oksijen İçeriği (CaO₂): ${formatTr(cao2, 1)} mL O₂/dL`,
-        body: `Normal hedef 16–20 mL/dL'dir. Hb (${formatTr(hb, 1)} g/dL) ve/veya SaO₂ (%${formatTr(sao2, 0)}) düşüklüğü doku oksijen sunumunu (DO₂) ciddi biçimde kısıtlıyor.`
+        tone: 'neutral',
+        title: 'Arteriyel Oksijen İçeriği (CaO₂): Eksik Parametre',
+        body: 'Normal hedef 16–20 mL O₂/dL’dir. CaO₂ hesabı için ileri parametrelerden Hb (g/dL), SaO₂ (%) ve PaO₂ (mmHg) değerlerinin girilmesi gerekir.'
       });
     }
   }
@@ -1206,10 +1245,13 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     subLine,
     cag !== null ? `AG: ${formatTr(ag!)} mEq/L | Albümin Düzeltmeli AG: ${formatTr(cag)} mEq/L` : '',
     deltaRatio !== null ? `Delta Oranı: ${formatTr(deltaRatio, 2)} | Delta Gap: ${formatTr(deltaGap!, 1)}` : '',
+    osmolalGap !== null
+      ? `Osmolal Gap: ${formatSignedTr(osmolalGap, 0)} mOsm/kg (Ölçülen ${formatTr(measuredOsm!, 0)} − Hesaplanan ${formatTr(calcOsmolality!, 0)} mOsm/kg)`
+      : '',
     alveolarOxygen
       ? `Alveoler Gaz: PiO₂ ${formatTr(alveolarOxygen.pio2, 0)} → PAO₂ ${formatTr(alveolarOxygen.pao2Alveolar, 0)} → PaO₂ ${formatTr(alveolarOxygen.pao2Arterial, 0)} mmHg | A–a ${formatTr(alveolarOxygen.aaGradient, 0)} mmHg (${alveolarOxygen.diffCategory})`
       : '',
-    cao2 !== null ? `CaO₂: ${formatTr(cao2, 1)} mL/dL (Hb ${formatTr(hb!, 1)} g/dL, SaO₂ %${formatTr(sao2!, 0)})` : '',
+    cao2 !== null ? `CaO₂: ${formatTr(cao2, 1)} mL O₂/dL (Hb ${formatTr(hb!, 1)} g/dL, SaO₂ %${formatTr(sao2!, 0)})` : '',
     '',
     'Değerlendirme Basamakları:',
     ...steps.map((s, idx) => `${idx + 1}. ${s.title}: ${s.body}`),
@@ -1219,6 +1261,13 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
   ]
     .filter(Boolean)
     .join('\n');
+
+  const stepsCopyReport = [
+    `[ADIM ADIM AKG DEĞERLENDİRMESİ] ${headline}`,
+    subLine,
+    '',
+    ...steps.map((s, idx) => `${idx + 1}. ${s.title}\n   ${s.body}`)
+  ].join('\n');
 
   const snapshot: AbgComparisonSnapshot = {
     capturedAt: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
@@ -1286,6 +1335,7 @@ export function analyzeAbg(input: AbgInputValues): AbgAnalysisResult {
     steps,
     clinicalNotes,
     copyReport,
+    stepsCopyReport,
     snapshot
   };
 }

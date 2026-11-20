@@ -36,6 +36,7 @@ import { NorepinephrineProtocol } from './NorepinephrineProtocol';
 import { EpinephrineProtocol } from './EpinephrineProtocol';
 import { SevofluraneProtocol } from './SevofluraneProtocol';
 import { DesfluraneProtocol } from './DesfluraneProtocol';
+import { AcetazolamideProtocol } from './AcetazolamideProtocol';
 
 interface Props {
   isDark: boolean;
@@ -748,6 +749,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-amber-500/30' 
       }
     ]
+  },
+  {
+    id: 'acetazolamide',
+    category: 'medications',
+    categories: ['medications', 'electrolyte'],
+    categoryLabel: 'Karbonik Anhidraz İnh. / Diüretik',
+    badge: 'Diazomid · ADVOR · DIABOLO',
+    title: 'Asetazolamid (acetaZOLAMIDE)',
+    shortDesc: 'Proksimal tübülde karbonik anhidraz inhibisyonuyla bikarbonatüri; YBÜ dirençli metabolik alkalozu, ADVOR akut kalp yetmezliği dekonjesyonu, KİB / İİH / BOS kaçağı azaltımı ve akut glokom için altın standart ilaç monografisi ve renal güvenlik hesaplayıcısı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      { 
+        label: 'YBÜ Metabolik Alkaloz', 
+        value: '250 – 500 mg / gün', 
+        subtext: 'PO/NG veya IV · 1–3 gün kısa kür',
+        tooltip: 'Mazur RCT: Tek doz 500 mg IV, 4×250 mg IV kadar etkin HCO₃⁻ düşüşü sağlar',
+        colorClass: 'text-teal-700 dark:text-teal-300', 
+        bgClass: 'bg-teal-500/10', 
+        borderClass: 'border-teal-500/30' 
+      },
+      { 
+        label: 'ADVOR (Kalp Yetmezliği)', 
+        value: '500 mg IV 1×1 (3 gün)', 
+        subtext: 'Loop diüretiğe ek sequential blokaj',
+        tooltip: 'NEJM 2022 ADVOR çalışması: 3 günde tam dekonjesyon oranını anlamlı artırır',
+        colorClass: 'text-cyan-700 dark:text-cyan-300', 
+        bgClass: 'bg-cyan-500/10', 
+        borderClass: 'border-cyan-500/30' 
+      },
+      { 
+        label: 'KİB / BOS & Glokom', 
+        value: '250 – 500 mg × 2–4', 
+        subtext: 'BOS & aköz hümör üretimini ↓%50',
+        tooltip: 'NORDIC İİH protokolü, BOS rinoresi ve akut açı kapanması glokomu acil tedavisi',
+        colorClass: 'text-indigo-700 dark:text-indigo-300', 
+        bgClass: 'bg-indigo-500/10', 
+        borderClass: 'border-indigo-500/30' 
+      },
+      { 
+        label: 'Kritik Kontrendikasyon', 
+        value: 'Siroz & CrCl < 10 mL/dk', 
+        subtext: 'NH₃↑ (koma) · Salisilat zehir. YASAK',
+        tooltip: '%100 renal atılım; sirozda hepatik ensefalopatiyi, salisilat toksisitesinde SSS geçişini artırır',
+        colorClass: 'text-rose-700 dark:text-rose-300', 
+        bgClass: 'bg-rose-500/10', 
+        borderClass: 'border-rose-500/30' 
+      }
+    ]
   }
 ];
 
@@ -814,7 +866,9 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     noradrenalin: 'norepinephrine',
     adrenalin: 'epinephrine',
     sevofloran: 'sevoflurane',
-    desfloran: 'desflurane'
+    desfloran: 'desflurane',
+    asetazolamid: 'acetazolamide',
+    diazomid: 'acetazolamide'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1383,6 +1437,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 15: DESFLURAN MONOGRAFİSİ & MAC / CO2e HESAPLAYICISI */}
       {(activeProtocolId === 'desflurane' || activeProtocolId === 'desfloran') && (
         <DesfluraneProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 16: ASETAZOLAMİD MONOGRAFİSİ & RENAL / DOZ HESAPLAYICISI */}
+      {(activeProtocolId === 'acetazolamide' || activeProtocolId === 'asetazolamid' || activeProtocolId === 'diazomid') && (
+        <AcetazolamideProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}

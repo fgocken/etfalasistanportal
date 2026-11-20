@@ -32,7 +32,8 @@ import {
   Gauge,
   Headphones,
   HelpCircle,
-  HeartPulse
+  HeartPulse,
+  BookOpenCheck
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LiveClock } from './LiveClock';
@@ -61,11 +62,12 @@ import { MechanicalVentilationWorkspace } from './ventilation/MechanicalVentilat
 import { MonitoringWorkspace } from './monitoring/MonitoringWorkspace';
 import { PodcastWorkspace } from './podcast/PodcastWorkspace';
 import { QuestionBankWorkspace } from './question-bank/QuestionBankWorkspace';
+import { BasicsWorkspace } from './basics/BasicsWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
 import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
-export type ToolTabId = 'calculator' | 'abg' | 'mechanical-ventilation' | 'monitoring' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'podcast' | 'question-bank' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
+export type ToolTabId = 'calculator' | 'abg' | 'mechanical-ventilation' | 'monitoring' | 'basics' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'podcast' | 'question-bank' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
 
 export interface ToolItemDef {
   id: ToolTabId;
@@ -159,6 +161,25 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
     titleHoverLight: 'group-hover:text-emerald-800',
     ringClassDark: 'ring-1 ring-emerald-500/20',
     ringClassLight: 'ring-1 ring-emerald-500/10'
+  },
+  basics: {
+    id: 'basics',
+    title: 'Temel Bilgiler',
+    badge: 'Solunum Fizyolojisi · 8 Bölüm',
+    badgeHighlight: true,
+    desc: 'Anesteziyoloji ve reanimasyon temel bilimler kart panosu. İlk kart: Solunum Fizyolojisi — fonksiyonel anatomi, solunum mekaniği, hacimler/FRC, ventilasyon–difüzyon, pulmoner dolaşım–V/Q, gaz taşınımı, solunum kontrolü ve perioperatif sentez (8 bölüm + 5 şematik görsel).',
+    clinicalKey: "West's, Nunn's, Miller's ve Morgan & Mikhail kaynaklarından sistematik, sade düz okuma özeti.",
+    icon: BookOpenCheck,
+    iconBgDark: 'bg-sky-500/15',
+    iconBgLight: 'bg-sky-50',
+    iconColorDark: 'text-sky-400',
+    iconColorLight: 'text-sky-700',
+    borderHoverDark: 'hover:border-sky-500/40',
+    borderHoverLight: 'hover:border-sky-400',
+    titleHoverDark: 'group-hover:text-sky-300',
+    titleHoverLight: 'group-hover:text-sky-800',
+    ringClassDark: 'ring-1 ring-sky-500/20',
+    ringClassLight: 'ring-1 ring-sky-500/10'
   },
   intraop: {
     id: 'intraop',
@@ -489,6 +510,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
 
 export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'monitoring',
+  'basics',
   'procedures',
   'icu',
   'abg',
@@ -511,7 +533,7 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'references',
   'mechanical-ventilation'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v28';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v29';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -686,6 +708,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       preserveAirwayCard?: boolean;
       preserveEmergencyProtocol?: boolean;
       preserveNerveBlock?: boolean;
+      preserveBasicsCard?: boolean;
     }
   ) => {
     setActiveTab(tabId);
@@ -703,6 +726,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
     if (!options?.preserveNerveBlock) {
       setSelectedNerveBlockId(null);
+    }
+    if (!options?.preserveBasicsCard) {
+      setSelectedBasicsCardId(null);
     }
     if (tabId === 'tools') {
       updateHashRoute('arac', 'dashboard');
@@ -726,8 +752,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and migrate existing order (moving monitoring to the top and keeping mechanical-ventilation at the end)
-      for (const oldKey of ['etfal_clinical_tools_order_v27', 'etfal_clinical_tools_order_v26', 'etfal_clinical_tools_order_v25', 'etfal_clinical_tools_order_v24', 'etfal_clinical_tools_order_v23', 'etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and migrate existing order (moving monitoring & basics to the top and keeping mechanical-ventilation at the end)
+      for (const oldKey of ['etfal_clinical_tools_order_v28', 'etfal_clinical_tools_order_v27', 'etfal_clinical_tools_order_v26', 'etfal_clinical_tools_order_v25', 'etfal_clinical_tools_order_v24', 'etfal_clinical_tools_order_v23', 'etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
@@ -798,8 +824,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             if (!updated.includes('references')) {
               updated.push('references');
             }
-            const reordered = updated.filter(id => id !== 'mechanical-ventilation' && id !== 'monitoring');
-            reordered.unshift('monitoring');
+            const reordered = updated.filter(id => id !== 'mechanical-ventilation' && id !== 'monitoring' && id !== 'basics');
+            reordered.unshift('monitoring', 'basics');
             reordered.push('mechanical-ventilation');
             if (reordered.length === DEFAULT_TOOL_ORDER.length && DEFAULT_TOOL_ORDER.every(id => reordered.includes(id))) {
               return reordered as ToolTabId[];
@@ -823,6 +849,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [selectedTreatmentProtocolId, setSelectedTreatmentProtocolId] = useState<string | null>(null);
   const [selectedNerveBlockId, setSelectedNerveBlockId] = useState<string | null>(null);
   const [activeNerveBlockSubId, setActiveNerveBlockSubId] = useState<string | null>(null);
+  const [selectedBasicsCardId, setSelectedBasicsCardId] = useState<string | null>(null);
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -915,6 +942,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         targetTreatmentId = 'sevoflurane';
       } else if (item.id === 'treatment-desflurane-protocol') {
         targetTreatmentId = 'desflurane';
+      } else if (item.id === 'treatment-acetazolamide-protocol') {
+        targetTreatmentId = 'acetazolamide';
       } else if (item.id === 'treatment-magnesium-replacement' || item.id === 'treatment-hypomagnesemia-infographic') {
         targetTreatmentId = 'magnesium';
       } else if (item.id === 'treatment-potassium-replacement' || item.id === 'treatment-hypokalemia-infographic') {
@@ -978,6 +1007,15 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       } else {
         setSelectedNerveBlockId(null);
         handleSelectTab('nerve-blocks');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'basics') {
+      if (item.id === 'basics-respiratory-physiology') {
+        setSelectedBasicsCardId('respiratory-physiology');
+        handleSelectTab('basics', { preserveBasicsCard: true });
+      } else {
+        setSelectedBasicsCardId(null);
+        handleSelectTab('basics');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -1990,6 +2028,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* 2D. Monitörizasyon */}
         {activeTab === 'monitoring' && (
           <MonitoringWorkspace isDark={isDark} />
+        )}
+
+        {/* 2E. Temel Bilgiler */}
+        {activeTab === 'basics' && (
+          <BasicsWorkspace isDark={isDark} initialCardId={selectedBasicsCardId} />
         )}
 
         {/* 3. Intraop Fluid Management Strategies (Liberal, Restrictive, GDFT + Embedded Liberal Calculator) */}

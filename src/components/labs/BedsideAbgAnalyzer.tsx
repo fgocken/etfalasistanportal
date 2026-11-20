@@ -46,6 +46,7 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
   const [activePresetId, setActivePresetId] = useState<string>('normal');
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedSteps, setCopiedSteps] = useState<boolean>(false);
   const [pinnedBaseline, setPinnedBaseline] = useState<AbgComparisonSnapshot | null>(null);
 
   // Bedside Ventilator & Deficit Interactive Controls
@@ -160,14 +161,46 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
     setInputs((prev) => ({ ...prev, ureaMode: nextMode, bun: converted }));
   };
 
+  const copyTextToClipboard = async (text: string): Promise<boolean> => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {
+      // fallback below
+    }
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      return ok;
+    } catch {
+      return false;
+    }
+  };
+
   const handleCopyReport = async () => {
     if (!analysis.copyReport) return;
-    try {
-      await navigator.clipboard.writeText(analysis.copyReport);
+    const ok = await copyTextToClipboard(analysis.copyReport);
+    if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
-    } catch {
-      // ignore clipboard errors silently
+    }
+  };
+
+  const handleCopyStepsReport = async () => {
+    if (!analysis.stepsCopyReport) return;
+    const ok = await copyTextToClipboard(analysis.stepsCopyReport);
+    if (ok) {
+      setCopiedSteps(true);
+      setTimeout(() => setCopiedSteps(false), 1800);
     }
   };
 
@@ -1177,9 +1210,9 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                 {analysis.cao2 !== null && (
                   <MetricTile
                     label="Oksijen İçeriği (CaO₂)"
-                    value={`${formatTr(analysis.cao2, 1)} mL/dL`}
-                    sub="Normal 16–20"
-                    tone={analysis.cao2 < 10 ? 'bad' : analysis.cao2 < 13 ? 'warn' : 'neutral'}
+                    value={`${formatTr(analysis.cao2, 1)} mL O₂/dL`}
+                    sub="Normal: 16–20 mL O₂/dL"
+                    tone={analysis.cao2 < 9 ? 'bad' : analysis.cao2 < 16 ? 'warn' : 'neutral'}
                     isDark={isDark}
                   />
                 )}
@@ -1201,11 +1234,11 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                   }
                   sub={
                     analysis.osmolalGap !== null
-                      ? `Hesap: ${formatTr(analysis.calcOsmolality!, 0)} mOsm/kg`
+                      ? `Ölçülen: ${formatTr(analysis.measuredOsm!, 0)} · Hesap: ${formatTr(analysis.calcOsmolality!, 0)}`
                       : analysis.measuredOsm !== null
-                        ? 'Glukoz ve Üre/BUN gerekli'
+                        ? `Ölçülen: ${formatTr(analysis.measuredOsm, 0)} · Glukoz/Üre gerekli`
                         : analysis.calcOsmolality !== null
-                          ? `Hesap: ${formatTr(analysis.calcOsmolality, 0)} · Ölç. Osm. yok`
+                          ? `Ölç. Osm. yok · Hesap: ${formatTr(analysis.calcOsmolality, 0)}`
                           : 'Ölçülen Osm. girilmedi'
                   }
                   tone={analysis.osmolalGap !== null && analysis.osmolalGap > 10 ? 'bad' : 'neutral'}
@@ -1835,9 +1868,25 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
                   isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
                 }`}
               >
-                <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Adım Adım Sistematik Değerlendirme
-                </h4>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Adım Adım Sistematik Değerlendirme
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={handleCopyStepsReport}
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg border whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                      copiedSteps
+                        ? 'bg-emerald-600 border-emerald-600 text-white'
+                        : isDark
+                          ? 'bg-slate-950 border-slate-700 text-teal-300 hover:bg-slate-800 hover:border-teal-500/60'
+                          : 'bg-teal-50 border-teal-200 text-teal-800 hover:bg-teal-100'
+                    }`}
+                  >
+                    {copiedSteps ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedSteps ? 'Rapor Kopyalandı' : 'Raporu Kopyala'}</span>
+                  </button>
+                </div>
                 <ol className="space-y-2">
                   {analysis.steps.map((step, idx) => (
                     <li
@@ -2037,8 +2086,9 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
             significance="PaO₂ ve SpO₂ normalken dahi derin anemide veya masif kanamada CaO₂ çöker. Kalp debisi ile çarpılarak (DO₂ = CO × CaO₂) gerçek doku oksijen sunumunu ve eritrosit transfüzyon ihtiyacını belirler."
             formula="CaO₂ = (1,34 × Hb [g/dL] × SaO₂ [ondalık]) + (0,0031 × PaO₂ [mmHg])"
             interpretation={[
-              { range: '16–20 mL/dL', meaning: 'Normal arteriyel oksijen taşıma kapasitesi.' },
-              { range: '< 12 mL/dL', meaning: 'Belirgin azalmış CaO₂ (anemi veya desatürasyon; doku hipoksisini önlemek için DO₂ optimize edilmeli).' }
+              { range: '16–20 mL O₂/dL', meaning: 'Normal arteriyel oksijen taşıma kapasitesi.' },
+              { range: '12–15,9 mL O₂/dL', meaning: 'Sınırda düşük CaO₂ (hafif anemi veya desatürasyon; doku oksijen sunumu izlenmeli).' },
+              { range: '< 12 mL O₂/dL', meaning: 'Belirgin azalmış CaO₂ (anemi veya desatürasyon; doku hipoksisini önlemek için DO₂ optimize edilmeli).' }
             ]}
             isDark={isDark}
             className="md:col-span-2"
@@ -2126,7 +2176,7 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FootnoteCard
             number="9"
-            title="Serum Osmolalitesi (Hesaplanan & Ölçülen)"
+            title="Serum Osmolalitesi (Ölçülen & Hesaplanan)"
             normalRange="275–295 mOsm/kg (Efektif tonisite: 275–290)"
             definition="Plazma çözücü kilogramı başına düşen ozmotik aktif partikül yüküdür; başlıca bileşenleri Na⁺ (ve eşlik eden anyonlar), glukoz ve üredir."
             significance="Hipo/hipertonik bozuklukları ve DKA/HHS hiperosmolar durumları izler. Üre hücre zarını serbestçe geçtiği için efektif tonisite hesabında (2×Na⁺ + Glukoz/18) yer almaz; ancak laboratuvarda ölçülen osmolaliteyle karşılaştırmak için toplam hesaplanan osmolaliteye mutlaka eklenir."
