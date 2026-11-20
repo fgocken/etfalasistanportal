@@ -13,11 +13,13 @@ import {
   Clock,
   Footprints,
   Coffee,
-  Baby
+  Baby,
+  Moon
 } from 'lucide-react';
 import { MaceCalculator } from './MaceCalculator';
 import { AsaClassification } from '../asa/AsaClassification';
 import { DasiCalculator } from './DasiCalculator';
+import { StopBangCalculator } from './StopBangCalculator';
 import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
 import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
 
@@ -27,7 +29,7 @@ interface PreoperativeEvaluationProps {
   onOpenGastricUsg?: () => void;
 }
 
-export type PreopToolId = 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting';
+export type PreopToolId = 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting';
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -47,6 +49,27 @@ interface PreopCardItem {
 }
 
 const PREOP_CARDS: PreopCardItem[] = [
+  {
+    id: 'stop-bang',
+    title: 'STOP-BANG · OSAS & OHS Değerlendirmesi',
+    badge: '2-Step · SASM / ASA',
+    category: 'Uyku Apnesi & Solunum Riski',
+    shortDesc: '8 soruluk STOP-BANG hesaplayıcı (2-Step yükseltme + venöz HCO₃⁻ OHS taraması), OSAS & OHS tanı kriterleri, patofizyoloji ve ASA/SASM/ATS perioperatif yönetim rehberi.',
+    icon: Moon,
+    iconBgDark: 'bg-indigo-500/15',
+    iconBgLight: 'bg-indigo-50',
+    iconColorDark: 'text-indigo-400',
+    iconColorLight: 'text-indigo-600',
+    borderHoverDark: 'hover:border-indigo-500/40',
+    borderHoverLight: 'hover:border-indigo-400',
+    highlightsHeader: 'Tarama & Klinik Eşikler:',
+    highlights: [
+      { label: 'Yüksek Risk', value: '≥ 5 veya 2-Step', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'OHS Tarama', value: 'HCO₃⁻ ≥ 27', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'OSAS Tanı', value: 'AHI ≥ 15 / 5+', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Rehber', value: 'SASM · ASA · ATS', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' }
+    ]
+  },
   {
     id: 'mace',
     title: 'MACE Risk Hesaplayıcı',
@@ -324,6 +347,10 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
       )}
 
       {/* GÖRÜNÜM 2: AÇIK ARAÇ DETAYLARI (Tıklanınca Açılan Tam Görünüm) */}
+      {activeToolId === 'stop-bang' && (
+        <StopBangCalculator isDark={isDark} />
+      )}
+
       {activeToolId === 'mace' && (
         <MaceCalculator isDark={isDark} />
       )}

@@ -737,6 +737,37 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'calc-preop-stop-bang',
+    title: 'STOP-BANG Hesaplayıcı — OSAS & OHS Perioperatif Değerlendirme',
+    category: 'Hesaplayıcılar',
+    badge: 'STOP-BANG · OSAS/OHS',
+    description: '8 soruluk STOP-BANG (2-Step risk yükseltme + HCO₃⁻ OHS taraması), OSAS/OHS tanı kriterleri (AHI, PaCO₂ ≥ 45), patofizyoloji ve SASM/ASA/ATS perioperatif rehber önerileri.',
+    keywords: [
+      'stop-bang',
+      'stop bang',
+      'stopbang',
+      'osas',
+      'osa',
+      'obstrüktif uyku apnesi',
+      'uyku apnesi',
+      'ohs',
+      'obezite hipoventilasyon',
+      'pickwick',
+      'horlama',
+      'bikarbonat',
+      'hco3',
+      'ahi',
+      'sasm',
+      'cpap',
+      'bipap',
+      'rem rebound',
+      'chung',
+      'preop'
+    ],
+    tabId: 'preop',
+    popular: true
+  },
+  {
     id: 'guideline-mallampati',
     title: 'Mallampati Sınıflaması ve Zor Havayolu Kriterleri',
     category: 'Kılavuzlar & Protokoller',

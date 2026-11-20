@@ -196,8 +196,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   preop: {
     id: 'preop',
     title: 'Preoperatif Değerlendirme',
-    desc: 'Perioperatif MACE kardiyak risk analizi (RCRI & Gupta), Duke Activity Status Index (DASI / VO₂peak & METs) fonksiyonel kapasite hesaplayıcı ve güncel 2025/2026 ASA sınıflaması.',
-    clinicalKey: 'Elektif cerrahi öncesi objektif fonksiyonel kapasite (DASI) ve kardiyak morbidite öngörüsü sağlar.',
+    desc: 'STOP-BANG (OSAS & OHS) hesaplayıcı ve rehberi, MACE kardiyak risk analizi (RCRI & Gupta), Duke Activity Status Index (DASI / METs), açlık kılavuzları ve güncel 2025/2026 ASA sınıflaması.',
+    clinicalKey: 'Elektif cerrahi öncesi OSAS/OHS solunum riski (STOP-BANG), fonksiyonel kapasite (DASI) ve kardiyak morbidite öngörüsü sağlar.',
     icon: ClipboardCheck,
     iconBgDark: 'bg-blue-500/15',
     iconBgLight: 'bg-blue-50',
@@ -649,6 +649,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     if (route?.type === 'blok') {
       return 'nerve-blocks';
     }
+    if (route?.type === 'arac' && (route.id === 'dashboard' || route.id === 'tools')) {
+      return 'tools';
+    }
     if (route?.type === 'arac' && route.id && route.id in ALL_CLINICAL_TOOLS) {
       return route.id as ToolTabId;
     }
@@ -665,6 +668,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     } else if (route?.type === 'blok') {
       setActiveTab('nerve-blocks');
       setSelectedNerveBlockId(route.id || null);
+    } else if (route?.type === 'arac' && (route.id === 'dashboard' || route.id === 'tools')) {
+      setActiveTab('tools');
     } else if (route?.type === 'arac' && route.id && route.id in ALL_CLINICAL_TOOLS) {
       setActiveTab(route.id as ToolTabId);
       if (route.id === 'nerve-blocks') {
@@ -700,7 +705,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       setSelectedNerveBlockId(null);
     }
     if (tabId === 'tools') {
-      updateHashRoute(null, null);
+      updateHashRoute('arac', 'dashboard');
     } else if (tabId !== 'infographics') {
       updateHashRoute('arac', tabId);
     }
@@ -932,7 +937,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       handleSelectTab('intraop');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (item.tabId === 'preop') {
-      if (item.id === 'calc-preop-dasi') {
+      if (item.id === 'calc-preop-stop-bang') {
+        setSelectedPreopToolId('stop-bang');
+      } else if (item.id === 'calc-preop-dasi') {
         setSelectedPreopToolId('dasi');
       } else if (item.id === 'calc-mace-rcri' || item.id === 'calc-mace-gupta') {
         setSelectedPreopToolId('mace');
@@ -1081,7 +1088,19 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             </button>
             <div className={`h-4 w-px hidden sm:block ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`} />
             <h1 className={`text-sm font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              DASHBOARD
+              <a
+                href="#arac=dashboard"
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                    e.preventDefault();
+                    handleSelectTab('tools');
+                  }
+                }}
+                title="Dashboard (Yeni sekmede açmak için sağ tıklayın)"
+                className="hover:text-teal-500 transition-colors cursor-pointer"
+              >
+                DASHBOARD
+              </a>
             </h1>
           </div>
 
@@ -1102,9 +1121,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               <kbd className="hidden lg:inline text-[9px] font-mono opacity-60">⌘K</kbd>
             </button>
 
-            <button
-              type="button"
-              onClick={() => handleSelectTab('schedule')}
+            <a
+              href="#arac=schedule"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                  e.preventDefault();
+                  handleSelectTab('schedule');
+                }
+              }}
               title="Haftalık Çalışma Programı ve Salon Dağılımlarını Aç"
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold transition-all cursor-pointer shadow-2xs ${
                 activeTab === 'schedule'
@@ -1116,11 +1140,16 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             >
               <Calendar className="w-3.5 h-3.5 text-teal-500" />
               <span className="hidden sm:inline">Haftalık Program</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => handleSelectTab('roster')}
+            <a
+              href="#arac=roster"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                  e.preventDefault();
+                  handleSelectTab('roster');
+                }
+              }}
               title="Aylık Nöbet Çizelgesi Aracını Aç"
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold transition-all cursor-pointer shadow-2xs ${
                 activeTab === 'roster'
@@ -1132,7 +1161,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-teal-500" />
               <span className="hidden sm:inline">Nöbet Listesi</span>
-            </button>
+            </a>
             <LiveClock isDark={isDark} />
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
           </div>
@@ -1175,11 +1204,15 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             className="flex-1 flex items-center gap-1 overflow-x-auto py-2 no-scrollbar scroll-smooth"
           >
             {/* Fixed First Tab: Genel Bakış */}
-            <button
+            <a
               key="tools"
-              onClick={() => {
-                if (isJustDragged) return;
-                handleSelectTab('tools');
+              href="#arac=dashboard"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                  e.preventDefault();
+                  if (isJustDragged) return;
+                  handleSelectTab('tools');
+                }
               }}
               onDragOver={(e) => {
                 if (draggedToolId) {
@@ -1225,7 +1258,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                   : isDark ? 'text-slate-500' : 'text-slate-400'
               }`} />
               <span>Genel Bakış</span>
-            </button>
+            </a>
 
             {/* Draggable & Reorderable Tool Tabs */}
             {toolOrder.map((toolId) => {
@@ -1237,8 +1270,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               const isOver = dragOverToolId === t.id;
 
               return (
-                <button
+                <a
                   key={t.id}
+                  href={`#arac=${t.id}`}
                   draggable
                   onDragStart={(e) => {
                     setIsJustDragged(true);
@@ -1275,12 +1309,15 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                     setDragOverToolId(null);
                     setTimeout(() => setIsJustDragged(false), 150);
                   }}
-                  onClick={() => {
-                    if (isJustDragged) return;
-                    handleSelectTab(t.id as any);
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                      e.preventDefault();
+                      if (isJustDragged) return;
+                      handleSelectTab(t.id as any);
+                    }
                   }}
-                  title={`${t.title} — Sürükleyip bırakarak sekmelerin sırasını değiştirebilirsiniz`}
-                  className={`group flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0 transition-all cursor-grab active:cursor-grabbing select-none border ${
+                  title={`${t.title} — Yeni sekmede açmak için sağ tıklayın veya sırasını değiştirmek için sürükleyin`}
+                  className={`group flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0 transition-all cursor-pointer active:cursor-grabbing select-none border ${
                     isDragging
                       ? 'opacity-30 scale-95 border-dashed border-teal-500 bg-teal-500/5'
                       : isOver
@@ -1301,7 +1338,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                       : isDark ? 'text-slate-500' : 'text-slate-400'
                   }`} />
                   <span>{t.title}</span>
-                </button>
+                </a>
               );
             })}
           </div>
@@ -1415,7 +1452,6 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                       setDraggedToolId(null);
                       setDragOverToolId(null);
                     }}
-                    onClick={() => handleSelectTab(tool.id)}
                     className={`relative text-left p-5 rounded-xl border transition-all space-y-2 group flex flex-col justify-between cursor-pointer select-none ${
                       isDragging 
                         ? 'opacity-35 scale-95 border-dashed border-teal-500 bg-teal-500/5' 
@@ -1426,6 +1462,20 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                             : `bg-white border-slate-200 ${tool.borderHoverLight} text-slate-900 shadow-xs ${tool.ringClassLight || ''}`
                     }`}
                   >
+                    {/* Stretched Native Anchor Overlay: enables right-click "Open link in new tab", middle-click & Ctrl/Cmd+click */}
+                    <a
+                      href={`#arac=${tool.id}`}
+                      draggable={false}
+                      aria-label={tool.title}
+                      onClick={(e) => {
+                        if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                          e.preventDefault();
+                          handleSelectTab(tool.id);
+                        }
+                      }}
+                      className="absolute inset-0 z-10 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+                    />
+
                     <div>
                       {/* Top Action Row: Icon, Badge, Grip Handle & Reorder arrows */}
                       <div className="flex items-center justify-between mb-3">
@@ -1435,7 +1485,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                           <Icon className="w-5 h-5" />
                         </div>
 
-                        <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                        <div className="relative z-20 flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                           {tool.badge && (
                             <span className={`text-[11px] font-mono ${
                               tool.badgeHighlight 
@@ -1517,7 +1567,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                             }
                           }}
                           title="Doğrudan Spinal Anestezi Klinik Talimatı & Doz / Güvenlik Rehberi'ni aç (#blok=spinal-anestezi)"
-                          className={`inline-flex items-center gap-1 font-semibold text-xs underline underline-offset-4 transition-colors ${
+                          className={`relative z-20 inline-flex items-center gap-1 font-semibold text-xs underline underline-offset-4 transition-colors ${
                             isDark ? 'text-cyan-400 hover:text-cyan-300' : 'text-cyan-700 hover:text-cyan-800'
                           }`}
                         >
@@ -1546,9 +1596,14 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {/* Active Tool Navigation & Direct Share Bar */}
         {activeTab !== 'tools' && (
           <div className="flex items-center justify-between gap-3 mb-4">
-            <button
-              type="button"
-              onClick={() => handleSelectTab('tools')}
+            <a
+              href="#arac=dashboard"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                  e.preventDefault();
+                  handleSelectTab('tools');
+                }
+              }}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
                 isDark 
                   ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800' 
@@ -1557,7 +1612,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             >
               <ArrowLeft className="w-3.5 h-3.5 text-teal-500" />
               <span>← Tüm Bölümlere Dön</span>
-            </button>
+            </a>
 
             {activeTab !== 'infographics' && (
               <ShareLinkButton

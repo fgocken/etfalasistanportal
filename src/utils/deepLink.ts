@@ -41,6 +41,8 @@ export type ValidInfographicId = typeof VALID_INFOGRAPHIC_IDS[number];
 
 // Bilinen klinik araç kimlikleri
 export const VALID_TOOL_IDS = [
+  'dashboard',
+  'tools',
   'calculator',
   'abg',
   'mechanical-ventilation',
@@ -102,6 +104,9 @@ export function parseHashRoute(): ParsedHashRoute {
     const toolMatch = hash.match(/^(?:arac|araç|tool)=([a-zA-Z0-9_-]+)(?:&(?:tedavi|ilac|ilaç|blok|block|sub)=([a-zA-Z0-9_-]+))?/i);
     if (toolMatch && toolMatch[1]) {
       const toolKey = toolMatch[1].toLowerCase();
+      if (toolKey === 'dashboard' || toolKey === 'tools') {
+        return { type: 'arac', id: 'dashboard' };
+      }
       if (toolKey === 'spinal' || toolKey === 'spinal-anestezi') {
         return { type: 'blok', id: 'spinal-anestezi' };
       }
@@ -121,6 +126,10 @@ export function parseHashRoute(): ParsedHashRoute {
 
     if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {
       return { type: 'infografik', id: hash };
+    }
+
+    if (hash.toLowerCase() === 'dashboard' || hash.toLowerCase() === 'tools') {
+      return { type: 'arac', id: 'dashboard' };
     }
 
     if (VALID_TOOL_IDS.includes(hash as ValidToolId)) {

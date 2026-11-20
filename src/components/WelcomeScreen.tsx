@@ -328,10 +328,16 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           </div>
         </div>
 
-        {/* Primary Click to Proceed Action Button */}
+        {/* Primary Click to Proceed Action Link */}
         <div className="pt-1 sm:pt-2 w-full sm:w-auto">
-          <button
-            onClick={() => onProceed()}
+          <a
+            href="#arac=dashboard"
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                e.preventDefault();
+                onProceed({ type: 'arac', id: 'dashboard' });
+              }
+            }}
             className={`w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 active:scale-[0.98] group cursor-pointer ${
               isDark
                 ? 'bg-teal-500 hover:bg-teal-400 text-slate-950 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30'
@@ -340,7 +346,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           >
             <span>KABUL EDİYORUM , ONAYLIYORUM , İLERLE</span>
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 shrink-0" />
-          </button>
+          </a>
         </div>
       </div>
 

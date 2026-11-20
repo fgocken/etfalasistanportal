@@ -123,6 +123,9 @@ export default function App() {
       const route = parseHashRoute();
       if (route.type !== null && route.id !== null) {
         setInitialRoute(route);
+      } else {
+        updateHashRoute('arac', 'dashboard');
+        setInitialRoute({ type: 'arac', id: 'dashboard' });
       }
     }
     setCurrentView('portal');
