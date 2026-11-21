@@ -20,6 +20,22 @@ import { IbpMonitoringModule } from './IbpMonitoringModule';
 import { CvpMonitoringModule } from './CvpMonitoringModule';
 import { PacMonitoringModule } from './PacMonitoringModule';
 import { TeeMonitoringModule } from './TeeMonitoringModule';
+import { PulseContourAnalysisModule } from './PulseContourAnalysisModule';
+import { BisMonitoringModule } from './BisMonitoringModule';
+import { SedlinePsiMonitoringModule } from './SedlinePsiMonitoringModule';
+import { NirsCerebralOximetryModule } from './NirsCerebralOximetryModule';
+import { MultigasAgentAnalysisModule } from './MultigasAgentAnalysisModule';
+import { TranscutaneousCo2Module } from './TranscutaneousCo2Module';
+import { EsophagealPressureModule } from './EsophagealPressureModule';
+import { EvokedPotentialsModule } from './EvokedPotentialsModule';
+import { IcpMonitoringModule } from './IcpMonitoringModule';
+import { PeripheralNerveStimulatorModule } from './PeripheralNerveStimulatorModule';
+import { QuantitativeNmbMonitorsModule } from './QuantitativeNmbMonitorsModule';
+import { IntraoperativeUrineOutputModule } from './IntraoperativeUrineOutputModule';
+import { IntraoperativeAbgModule } from './IntraoperativeAbgModule';
+import { IntraoperativeBleedingMonitoringModule } from './IntraoperativeBleedingMonitoringModule';
+import { ViscoelasticHemostasisModule } from './ViscoelasticHemostasisModule';
+import { MedicalText } from '../basics/respiratory/MedicalText';
 
 interface MonitoringWorkspaceProps {
   isDark: boolean;
@@ -39,7 +55,22 @@ interface MonitoringCardItem {
     | 'ibp-monitoring'
     | 'cvp-monitoring'
     | 'pac-monitoring'
-    | 'tee-monitoring';
+    | 'tee-monitoring'
+    | 'pulse-contour-analysis'
+    | 'bis-monitoring'
+    | 'sedline-psi'
+    | 'nirs-cerebral-oximetry'
+    | 'multigas-agent-analysis'
+    | 'transcutaneous-co2'
+    | 'esophageal-pressure'
+    | 'evoked-potentials'
+    | 'icp-monitoring'
+    | 'peripheral-nerve-stimulator'
+    | 'quantitative-nmb-monitors'
+    | 'intraoperative-urine-output'
+    | 'intraoperative-abg'
+    | 'intraoperative-bleeding'
+    | 'viscoelastic-hemostasis';
   title: string;
   category: string;
   sourceBadge: string;
@@ -309,7 +340,7 @@ const MONITORING_MODULES: MonitoringCardItem[] = [
     category: 'Termoregülasyon',
     sourceBadge: '6 Bölüm · 6 Trend',
     shortDesc:
-      'NTC termistör, termokupl, IR & Zero-Heat-Flux (SpotOn) fiziği, canlı Sessler 3-fazlı hipotermi & ΔT simülatörü, nazofarenks/mesane/timpanik/rektal/cilt yerleşimi, 6 sıcaklık trend eğrisi ve MRG/koter/hosing güvenliği.',
+      'NTC termistör, termokupl, IR & Zero-Heat-Flux (SpotOn) fiziği, canlı Sessler 3-fazlı hipotermi & ΔT simülatörü, distal özofagus/nazofarenks/mesane/timpanik/rektal/cilt yerleşimi, 6 sıcaklık trend eğrisi ve MRG/koter/hosing güvenliği.',
     stripTitle: '6 Bölümlü Çerçeve Özeti:',
     publisher: 'Miller’s · Sessler · NICE NG65',
     accent: 'orange',
@@ -590,6 +621,621 @@ const MONITORING_MODULES: MonitoringCardItem[] = [
       },
     ],
   },
+  {
+    id: 'pulse-contour-analysis',
+    title: 'Nabız Kontur Analizi (SVV / PPV)',
+    category: 'Dinamik Hemodinami',
+    sourceBadge: 'Sistematik · Canlı Lab',
+    shortDesc:
+      'Windkessel & sistolik alan fiziği, canlı kalp–akciğer / Frank–Starling laboratuvarı, Ea_{dyn} (PPV/SVV), 8 geçerlilik ön koşulu denetleyicisi, Gri Bölge (%9–%13), TVC/PLR/EEOT testleri ve kalibre–kalibresiz sistemler.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'Michard · Cannesson · Saugel 2021',
+    accent: 'teal',
+    metrics: [
+      {
+        label: 'Gri Bölge',
+        value: '%9 – %13',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'Yanıtlı',
+        value: '> %13',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'Ea_{dyn}',
+        value: 'PPV / SVV',
+        colorClass: 'text-teal-600 dark:text-teal-400',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30',
+      },
+      {
+        label: 'Ön Koşul',
+        value: '8 Kriter',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+    ],
+  },
+  {
+    id: 'bis-monitoring',
+    title: 'BIS Monitörizasyonu (Bispektral İndeks & EEG)',
+    category: 'Anestezi Derinliği',
+    sourceBadge: 'Sistematik · EEG / DSA',
+    shortDesc:
+      'BetaRatio/SynchFastSlow/BSR fiziği, canlı ham frontal EEG + DSA spektrogram simülatörü, 4 elektrotlu Quatro sensör yerleşimi, Ketamin/Deksmedetomidin/Schuller NMB tuzakları ve B-Aware / BAG-RECALL / ENGAGES kanıtları.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'Purdon · B-Aware · BAG-RECALL',
+    accent: 'violet',
+    metrics: [
+      {
+        label: 'Cerrahi',
+        value: '40 – 60',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'SQI / EMG',
+        value: '>%50 · <50dB',
+        colorClass: 'text-violet-600 dark:text-violet-400',
+        bgClass: 'bg-violet-500/10',
+        borderClass: 'border-violet-500/30',
+      },
+      {
+        label: 'Hedef SR',
+        value: '%0 (BSR)',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'Gecikme',
+        value: '15–30 sn',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+    ],
+  },
+  {
+    id: 'sedline-psi',
+    title: 'SedLine / PSI (4-Kanal Bilateral EEG & DSA)',
+    category: 'Anestezi Derinliği',
+    sourceBadge: 'Sistematik · Bilateral',
+    shortDesc:
+      'PSI 25–50 hedefi (BIS 40–60 farkı), canlı 4-kanal Sol/Sağ ham EEG + Ayna Multitaper DSA ve ASYM laboratuvarı, 6 elektrotlu (Fp1/Fp2/F7/F8/CB/CT) sensör yerleşimi, karotis iskemi asimetrisi ve Next-Gen EMG direnci.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'Masimo · Prichep · Purdon',
+    accent: 'indigo',
+    metrics: [
+      {
+        label: 'Hedef PSI',
+        value: '25 – 50',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'Kanal',
+        value: '4-Ch Bilat.',
+        colorClass: 'text-indigo-600 dark:text-indigo-400',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30',
+      },
+      {
+        label: 'DSA / SEF',
+        value: 'L / R Ayna',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'Hedef SR',
+        value: '%0 · ASYM',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+    ],
+  },
+  {
+    id: 'nirs-cerebral-oximetry',
+    title: 'Serebral Oksimetri (NIRS / rSO₂)',
+    category: 'Serebral Perfüzyon',
+    sourceBadge: 'Sistematik · Denault',
+    shortDesc:
+      '700–900 nm muz şekilli SRS optik yolu, non-pulsatil (~%70–75 venöz) ölçüm, canlı bilateral rSO₂ trend & fizyoloji laboratuvarı, INVOS/FORE-SIGHT/O3 karşılaştırması, fenilefrin paradoksu ve Denault 7-basamaklı algoritması.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'Denault · Murkin · Bickler',
+    accent: 'sky',
+    metrics: [
+      {
+        label: 'Normal',
+        value: '%60 – %80',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'Bağıl Eşik',
+        value: 'Δ ≥ %20 ↓',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'Mutlak',
+        value: '< %50',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'Kompartman',
+        value: '~%70 Venöz',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+    ],
+  },
+  {
+    id: 'multigas-agent-analysis',
+    title: 'Anestezik Ajan Gaz Analizi (Multigaz)',
+    category: 'Solunum Gazları & MAC',
+    sourceBadge: 'Sistematik · MAC-Age',
+    shortDesc:
+      '8–12 µm NDIR parmak izi Auto-ID & paramanyetik O₂ fiziği, canlı Mapleson MAC-Age ve FiAA/EtAA laboratuvarı, HMEF sidestream örnekleme, düşük akım güvenliği, Mixed Agent tuzakları ve BAG-RECALL ≥ 0.7 MAC protokolü.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'Mapleson · BAG-RECALL · Feldman',
+    accent: 'amber',
+    metrics: [
+      {
+        label: 'IR Bant',
+        value: '8 – 12 µm',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'O₂ Sensör',
+        value: 'Paramanyetik',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'ETAG Alt',
+        value: '≥ 0.7 MAC',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'Pre-O₂',
+        value: 'EtO₂ ≥ %85',
+        colorClass: 'text-indigo-600 dark:text-indigo-400',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30',
+      },
+    ],
+  },
+  {
+    id: 'transcutaneous-co2',
+    title: 'Transkütanöz Karbondioksit (TcCO₂ / PtcCO₂)',
+    category: 'Non-İnvaziv Ventilasyon',
+    sourceBadge: 'Sistematik · AARC',
+    shortDesc:
+      'Stow–Severinghaus pH elektrodu & 42°C arteriyelizasyon fiziği, canlı PaCO₂–TcCO₂–EtCO₂ gradyan ve şok perfüzyon laboratuvarı, OLV/Jet/NIV/OSAS üstünlüğü, termal yanık rotasyonu ve AARC 2012 / Conway 2019 kanıtları.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'AARC 2012 · Conway · Oshibuchi',
+    accent: 'teal',
+    metrics: [
+      {
+        label: 'Sensör Isı',
+        value: '42 – 43 °C',
+        colorClass: 'text-orange-600 dark:text-orange-400',
+        bgClass: 'bg-orange-500/10',
+        borderClass: 'border-orange-500/30',
+      },
+      {
+        label: 'Gecikme',
+        value: '1 – 3 dk',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'Normal Δ',
+        value: '+2–5 mmHg',
+        colorClass: 'text-teal-600 dark:text-teal-400',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30',
+      },
+      {
+        label: 'Tuzak',
+        value: 'Şok ↑ / Yanık',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+    ],
+  },
+  {
+    id: 'esophageal-pressure',
+    title: 'Özofageal Basınç Monitörizasyonu (P_{es} / Transpulmoner Basınç)',
+    category: 'İleri Solunum Mekaniği',
+    sourceBadge: 'Sistematik · Baydur',
+    shortDesc:
+      'Göğüs duvarı (P_{cw}) ile akciğer stresini (P_{L} = P_{aw} − P_{es}) ayırma, canlı 3-trase P_{aw}/P_{es}/P_{L} & P-SILI laboratuvarı, Baydur oklüzyon doğrulama (0.8–1.2), morbid obez/İAH PEEP titrasyonu ve EPVent / EPVent-2 / PLUG kanıtları.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'PLUG · EPVent · Baydur',
+    accent: 'cyan',
+    metrics: [
+      {
+        label: 'P_{L,ee}',
+        value: '0 .. +2',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'P_{L,ei}',
+        value: '< 20–25',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'ΔP_{L}',
+        value: '< 10–12',
+        colorClass: 'text-cyan-600 dark:text-cyan-400',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30',
+      },
+      {
+        label: 'Baydur',
+        value: '0.8 – 1.2',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+    ],
+  },
+  {
+    id: 'evoked-potentials',
+    title: 'Uyarılmış Potansiyeller (SSEP & MEP · IONM)',
+    category: 'Nöromonitörizasyon',
+    sourceBadge: 'Sistematik · TIVA',
+    shortDesc:
+      'Dorsal kolon (SSEP · PSA) vs. kortikospinal yol (TcMEP / D-dalgası · ASA), canlı 3-kanallı SSEP/TcMEP/D-dalgası & anestezi laboratuvarı, TIVA farmakolojisi, Vitale alarm kontrol listesi ve ısırık bloğu güvenliği.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'ISIN · ASNM · ACNS · Vitale',
+    accent: 'violet',
+    metrics: [
+      {
+        label: 'SSEP Alarm',
+        value: '50% ↓ / 10% ↑',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'Rejim',
+        value: 'Saf TIVA',
+        colorClass: 'text-violet-600 dark:text-violet-400',
+        bgClass: 'bg-violet-500/10',
+        borderClass: 'border-violet-500/30',
+      },
+      {
+        label: 'NMB (MEP)',
+        value: 'TOF 4/4',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'Kriz MAP',
+        value: '≥ 85–90',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+    ],
+  },
+  {
+    id: 'icp-monitoring',
+    title: 'İntrakraniyal Basınç (ICP) Monitörizasyonu',
+    category: 'Nöroanestezi & Nöro-YBÜ',
+    sourceBadge: 'Sistematik · SIBICC',
+    shortDesc:
+      'Monro–Kellie doktrini & CPP = MAP − ICP, canlı P_{1}/P_{2}/P_{3} dalga morfolojisi ve kompliyans eğrisi laboratuvarı, EVD vs. parankimal prob & tragus sıfırlama, SIBICC Tier 0–3 algoritması ve BTF 4. Ed kanıtları.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'BTF 4. Ed · SIBICC · Czosnyka',
+    accent: 'indigo',
+    metrics: [
+      {
+        label: 'Eşik ICP',
+        value: '> 22 mmHg',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'Hedef CPP',
+        value: '60 – 70',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'Kompliyans',
+        value: 'P_{2} > P_{1}',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'Sıfırlama',
+        value: 'Tragus',
+        colorClass: 'text-indigo-600 dark:text-indigo-400',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30',
+      },
+    ],
+  },
+  {
+    id: 'peripheral-nerve-stimulator',
+    title: 'Periferik Sinir Stimülatörü (TOF · PTC · DBS)',
+    category: 'Nöromüsküler İzlem',
+    sourceBadge: 'ASA / ESAIC 2023',
+    shortDesc:
+      'TOF (2 Hz), PTC (50 Hz + 1 Hz), DBS_{3,3} fiziği, canlı nöromüsküler blok & Sugammadeks/Neostigmin laboratuvarı, ulnar sinir–adduktor pollisis yerleşimi, EMG vs. AMG ve kalitatif kör nokta.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'ASA 2023 · ESAIC 2023 · Naguib',
+    accent: 'emerald',
+    metrics: [
+      {
+        label: 'Ekstübasyon',
+        value: 'TOFR ≥ 0.90',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'Derin Blok',
+        value: 'PTC ≥ 1–2',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'Bölge',
+        value: 'Adduktor P.',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'Patern',
+        value: 'TOF·PTC·DBS',
+        colorClass: 'text-violet-600 dark:text-violet-400',
+        bgClass: 'bg-violet-500/10',
+        borderClass: 'border-violet-500/30',
+      },
+    ],
+  },
+  {
+    id: 'quantitative-nmb-monitors',
+    title: 'Kantitatif Nöromüsküler Monitörler (AMG · EMG · KMG)',
+    category: 'Kantitatif NMB Teknolojisi',
+    sourceBadge: 'Sistematik · 3-Kanal Lab',
+    shortDesc:
+      'Akseleromiyografi (F=m·a), Elektromiyografi (cMAP), Kinemiyografi (MechanoSensor) ve MMG fiziği, canlı 3-kanallı normalizasyon & örtülü kol laboratuvarı, Capron ≥ 1.00 kuralı ve cihaz seçim matriksi.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'Capron · Claudius · Bowdle · ASA 2023',
+    accent: 'sky',
+    metrics: [
+      {
+        label: 'EMG (Örtülü)',
+        value: 'cMAP · ≥0.90',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'AMG (Ham)',
+        value: 'TOFR ≥ 1.00',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'AMG (Norm.)',
+        value: 'nTOFR ≥ 0.90',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'KMG',
+        value: 'Piezo Şerit',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+    ],
+  },
+  {
+    id: 'intraoperative-urine-output',
+    title: 'İntraoperatif İdrar Çıkışı (Foley) Takibi',
+    category: 'Renal Perfüzyon & Sıvı',
+    sourceBadge: 'Yatak Başı · KDIGO',
+    shortDesc:
+      'Hızlı mL/kg/sa hesaplayıcı, oligüriye 4 basamaklı pratik yaklaşım (Foley kontrol → RPP → ADH/pnömoperitonyum → KDIGO diüretik kuralı), Mizota < 0.3 eşiği, kateter güvenliği ve idrar rengi tablosu.',
+    stripTitle: 'Pratik Eşikler & Kurallar:',
+    publisher: 'KDIGO · Mizota 2017 · RELIEF · ERAS',
+    accent: 'amber',
+    metrics: [
+      {
+        label: 'Erişkin',
+        value: '≥ 0.5 mL/kg',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'ABH Eşiği',
+        value: '< 0.3 mL/kg',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'Pediatrik',
+        value: '≥ 1.0 mL/kg',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'Balon',
+        value: '10 mL Su',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+    ],
+  },
+  {
+    id: 'intraoperative-abg',
+    title: 'İntraoperatif Arter Kan Gazı (AKG) Takibi',
+    category: 'Gaz Değişimi & Asit-Baz',
+    sourceBadge: 'Yatak Başı · AARC',
+    shortDesc:
+      'Örnekleme endikasyonları & sıklığı, akut kanamada Hb/Hct düşüş zamanlaması, Oksihemoglobin Dissosiyasyon Eğrisi (ODC / P₅₀), Alpha-Stat vs. pH-Stat ve pre-analitik SF/heparin/kabarcık tuzakları.',
+    stripTitle: 'Pratik Eşikler & Kurallar:',
+    publisher: 'AARC 2013 · Baird · SMART 2018',
+    accent: 'rose',
+    metrics: [
+      {
+        label: 'P(a−Et)CO₂',
+        value: '2–5 mmHg',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'ODC P₅₀',
+        value: '26.6 mmHg',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'iCa²⁺',
+        value: '1.15–1.30',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'CPB / Isı',
+        value: 'Alpha / pH',
+        colorClass: 'text-indigo-600 dark:text-indigo-400',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30',
+      },
+    ],
+  },
+  {
+    id: 'intraoperative-bleeding',
+    title: 'İntraoperatif Kanama Takibi (EBL · QBL · MABL)',
+    category: 'Hemostaz & Volüm',
+    sourceBadge: 'Yatak Başı · ESAIC',
+    shortDesc:
+      'EBV ve Gross MABL hesaplayıcı, aspiratör/spanç/gravimetrik (QBL) toplayıcı, görsel spanç & göllenme hacimleri, gizli kanama, ATLS 10, cerrahi vs. koagülopatik ayrım ve MTP (1:1:1 · ROTEM) uygulaması.',
+    stripTitle: 'Pratik Eşikler & Kurallar:',
+    publisher: 'Gross · Bose · ACOG 794 · ESAIC',
+    accent: 'red',
+    metrics: [
+      {
+        label: '4×4 Spanç',
+        value: '10 mL',
+        colorClass: 'text-red-600 dark:text-red-400',
+        bgClass: 'bg-red-500/10',
+        borderClass: 'border-red-500/30',
+      },
+      {
+        label: 'Batın Pedi',
+        value: '100–150 mL',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'QBL Tartım',
+        value: '1 g ≈ 1 mL',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'Fibrinojen',
+        value: '> 1.5–2 g/L',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+    ],
+  },
+  {
+    id: 'viscoelastic-hemostasis',
+    title: 'Viskoelastik Testler (TEG & ROTEM) Rehberliğinde Hemostaz',
+    category: 'Koagülasyon & Hemostaz',
+    sourceBadge: 'ESAIC 2023 · A5',
+    shortDesc:
+      'Normal TEG/ROTEM anatomisi, 12 klinik koagülopati patern atlası (dilüsyonel, hiperkoagülabilite, DIC, protamin overdozu, FXIII, PPH), Görlinger A5 algoritması, kör noktalar ve TEG/ROTEM yoksa hemostaz yönetimi.',
+    stripTitle: 'Sistematik İçerik Özeti:',
+    publisher: 'ESAIC 2023 · Rossaint · Görlinger',
+    accent: 'fuchsia',
+    metrics: [
+      {
+        label: 'Fibrinojen',
+        value: 'FIB A5 < 10',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+      {
+        label: 'Trombosit',
+        value: 'EX A5 < 35',
+        colorClass: 'text-sky-600 dark:text-sky-400',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30',
+      },
+      {
+        label: 'Faktör',
+        value: 'CT > 80 sn',
+        colorClass: 'text-violet-600 dark:text-violet-400',
+        bgClass: 'bg-violet-500/10',
+        borderClass: 'border-violet-500/30',
+      },
+      {
+        label: 'Lizis',
+        value: 'ML > %15',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+    ],
+  },
 ];
 
 export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark }) => {
@@ -619,7 +1265,7 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
                   ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
                   : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
               }`}
-              title="Monitörizasyon kart panosuna geri dön"
+              title="Monitörizasyon ve İntraoperatif Takip panosuna geri dön"
             >
               <ArrowLeft className="w-5 h-5 text-emerald-500" />
             </button>
@@ -638,7 +1284,7 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className={`text-base sm:text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                {selectedModule ? selectedModule.title : 'Monitörizasyon'}
+                {selectedModule ? <MedicalText text={selectedModule.title} /> : 'Monitörizasyon ve İntraoperatif Takip'}
               </h2>
               <span
                 className={`text-[11px] font-semibold px-2 py-0.5 rounded-md border ${
@@ -701,7 +1347,7 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
             <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               {selectedModule
                 ? 'Kart panosuna dönmek için sol üstteki geri butonunu kullanabilirsiniz.'
-                : 'Perioperatif Hasta Güvenliği & 6 Bölümlü Görsel Monitörizasyon Kartları'}
+                : 'Perioperatif Hasta Güvenliği, Monitörizasyon & İntraoperatif Takip Modülleri'}
             </p>
           </div>
         </div>
@@ -715,7 +1361,7 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
             title={
               selectedModule
                 ? `${selectedModule.title} Bağlantısını Paylaş`
-                : 'Monitörizasyon Bağlantısını Paylaş'
+                : 'Monitörizasyon ve İntraoperatif Takip Bağlantısını Paylaş'
             }
           />
           {activeModuleId && (
@@ -926,10 +1572,10 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
 
                     {/* Title & Summary */}
                     <h3 className={`text-sm font-bold transition-colors ${titleHoverClass} ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {card.title}
+                      <MedicalText text={card.title} />
                     </h3>
                     <p className={`text-xs mt-1.5 leading-relaxed line-clamp-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      {card.shortDesc}
+                      <MedicalText text={card.shortDesc} />
                     </p>
 
                     {/* Mini Preview Strip */}
@@ -945,10 +1591,10 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
                             className={`px-1 py-1 rounded-lg border text-[10px] font-mono ${metric.bgClass} ${metric.borderClass}`}
                           >
                             <div className={`font-semibold text-[9px] truncate ${metric.colorClass}`}>
-                              {metric.label}
+                              <MedicalText text={metric.label} />
                             </div>
                             <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400 truncate">
-                              {metric.value}
+                              <MedicalText text={metric.value} />
                             </div>
                           </div>
                         ))}
@@ -993,7 +1639,7 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
                 Yeni Monitörizasyon Kartları
               </div>
               <p className={`text-[11px] mt-1 max-w-[230px] leading-relaxed ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                Distal özofagus kor ısısı, kantitatif nöromüsküler (TOF), beyin derinlik izlemi (BIS/EEG) ve serebral oksimetri (NIRS) modülleri aynı görsel çerçeveyle buraya eklenecektir.
+                Ek yoğun bakım ve ileri perioperatif takip modülleri buraya eklenecektir.
               </p>
             </div>
           </div>
@@ -1039,6 +1685,51 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
       )}
       {activeModuleId === 'tee-monitoring' && (
         <TeeMonitoringModule isDark={isDark} />
+      )}
+      {activeModuleId === 'pulse-contour-analysis' && (
+        <PulseContourAnalysisModule isDark={isDark} />
+      )}
+      {activeModuleId === 'bis-monitoring' && (
+        <BisMonitoringModule isDark={isDark} />
+      )}
+      {activeModuleId === 'sedline-psi' && (
+        <SedlinePsiMonitoringModule isDark={isDark} />
+      )}
+      {activeModuleId === 'nirs-cerebral-oximetry' && (
+        <NirsCerebralOximetryModule isDark={isDark} />
+      )}
+      {activeModuleId === 'multigas-agent-analysis' && (
+        <MultigasAgentAnalysisModule isDark={isDark} />
+      )}
+      {activeModuleId === 'transcutaneous-co2' && (
+        <TranscutaneousCo2Module isDark={isDark} />
+      )}
+      {activeModuleId === 'esophageal-pressure' && (
+        <EsophagealPressureModule isDark={isDark} />
+      )}
+      {activeModuleId === 'evoked-potentials' && (
+        <EvokedPotentialsModule isDark={isDark} />
+      )}
+      {activeModuleId === 'icp-monitoring' && (
+        <IcpMonitoringModule isDark={isDark} />
+      )}
+      {activeModuleId === 'peripheral-nerve-stimulator' && (
+        <PeripheralNerveStimulatorModule isDark={isDark} />
+      )}
+      {activeModuleId === 'quantitative-nmb-monitors' && (
+        <QuantitativeNmbMonitorsModule isDark={isDark} />
+      )}
+      {activeModuleId === 'intraoperative-urine-output' && (
+        <IntraoperativeUrineOutputModule isDark={isDark} />
+      )}
+      {activeModuleId === 'intraoperative-abg' && (
+        <IntraoperativeAbgModule isDark={isDark} />
+      )}
+      {activeModuleId === 'intraoperative-bleeding' && (
+        <IntraoperativeBleedingMonitoringModule isDark={isDark} />
+      )}
+      {activeModuleId === 'viscoelastic-hemostasis' && (
+        <ViscoelasticHemostasisModule isDark={isDark} />
       )}
     </div>
   );

@@ -1310,7 +1310,7 @@ export const VasoactiveDecisionMatrixInfographic: React.FC<VasoactiveDecisionMat
               <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-slate-500/10 text-slate-500">Temel Kaynak</span>
             </div>
             <p className="text-[11px]">
-              Gropper MA, et al. <em>Miller's Anesthesia (9th Ed, Elsevier, 2020)</em>; Barash PG, et al. <em>Clinical Anesthesia (8th Ed, Wolters Kluwer)</em>. Otonom sinir sistemi, adrenerjik reseptör afiniteleri, miyokardiyal oksijen tüketimi ($MVO_2$) ve ekstravazasyon (Fentolamin) yönetimi.
+              Gropper MA, et al. <em>Miller's Anesthesia (9th Ed, Elsevier, 2020)</em>; Barash PG, et al. <em>Clinical Anesthesia (8th Ed, Wolters Kluwer)</em>. Otonom sinir sistemi, adrenerjik reseptör afiniteleri, miyokardiyal oksijen tüketimi (MVO₂) ve ekstravazasyon (Fentolamin) yönetimi.
             </p>
           </div>
         </div>

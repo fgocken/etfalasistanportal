@@ -277,9 +277,9 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
               'Nöronal nikotinik asetilkolin reseptörlerini (nAChR), NMDA glutamat reseptörlerini ve 5-HT₃ kanallarını inhibe ederek sinaptik eksitasyonu azaltır; presinaptik voltaj kapılı Na⁺ kanalları üzerinden glutamat salınımını baskılar.',
           },
           {
-            title: 'Periferik Düz Kas & K_ATP Önkoşullama',
+            title: 'Periferik Düz Kas & K-ATP Önkoşullama',
             detail:
-              'Bronş düz kaslarında hücre içi Ca²⁺ mobilizasyonunu azaltarak vagal/histaminik bronkokonstriksiyonu güçlü biçimde çözer. Miyokardda mitokondriyal/sarkolemmal K_ATP kanallarını açarak iskemik önkoşullama (preconditioning) sağlar.',
+              'Bronş düz kaslarında hücre içi Ca²⁺ mobilizasyonunu azaltarak vagal/histaminik bronkokonstriksiyonu güçlü biçimde çözer. Miyokardda mitokondriyal/sarkolemmal K-ATP kanallarını açarak iskemik önkoşullama (preconditioning) sağlar.',
           },
         ]}
       />

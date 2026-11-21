@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   ClipboardList,
   Flame,
-  Info,
   ShieldAlert,
   Sliders,
   Thermometer,
@@ -19,7 +18,7 @@ interface TemperatureProbesModuleProps {
 }
 
 type ThermalScenarioId = 'unwarmed-ga' | 'prewarmed-faw' | 'neuraxial' | 'shock' | 'mh';
-type ProbeSiteId = 'nasopharyngeal' | 'bladder' | 'zhf' | 'rectal' | 'axillary' | 'skin';
+type ProbeSiteId = 'distal-esophageal' | 'nasopharyngeal' | 'bladder' | 'zhf' | 'rectal' | 'axillary' | 'skin';
 type TrendPatternId = 'sessler-3phase' | 'prewarmed' | 'neuraxial' | 'shock-gradient' | 'mh' | 'irrigation-artifact';
 
 interface ThermalScenario {
@@ -157,6 +156,15 @@ interface ProbeSiteConfig {
 }
 
 const PROBE_SITES: ProbeSiteConfig[] = [
+  {
+    id: 'distal-esophageal',
+    label: 'Distal Özofagus (Kor)',
+    category: 'Kor',
+    biasVsCore: 0.0,
+    lagFactor: 0.02,
+    usesPeriphBlend: 0.0,
+    note: 'Entübe hastada klinik altın standarttır (±0.1–0.2 °C). Alt 1/3 özofagusta sol atriyum ve inen torasik aort arkasında yerleşir; en hızlı santral yanıtı verir. Sığ kalırsa soğuk trakeal gazdan etkilenir.',
+  },
   {
     id: 'nasopharyngeal',
     label: 'Nazofarengeal (Kor)',
@@ -378,11 +386,11 @@ const SITE_COMPARISON_TABLE: SiteComparisonRow[] = [
     caveat: 'Yüksek invaziv; sadece kardiyak/majör vakalarda zaten takılıysa.',
   },
   {
-    site: 'Distal Özofagus*',
+    site: 'Distal Özofagus',
     tier: 'Klinik Altın Standart',
-    accuracyLag: '±0.1–0.2 °C · Hızlı',
-    placement: 'Alt 1/3 özofagus (*ayrı kartta detay)',
-    caveat: 'Proksimalde kalırsa soğuk havayolu gazından etkilenir.',
+    accuracyLag: '±0.1–0.2 °C · En Hızlı',
+    placement: 'Alt 1/3 özofagus (~35–40 cm · en yüksek kalp sesi)',
+    caveat: 'Proksimalde (<24–28 cm) soğuk trakeal gazdan etkilenir; varis/striktürde kaçın.',
   },
   {
     site: 'Nazofarengeal',
@@ -430,7 +438,7 @@ const SITE_COMPARISON_TABLE: SiteComparisonRow[] = [
 
 export const TemperatureProbesModule: React.FC<TemperatureProbesModuleProps> = ({ isDark }) => {
   const [scenarioId, setScenarioId] = useState<ThermalScenarioId>('unwarmed-ga');
-  const [probeSiteId, setProbeSiteId] = useState<ProbeSiteId>('nasopharyngeal');
+  const [probeSiteId, setProbeSiteId] = useState<ProbeSiteId>('distal-esophageal');
   const [minutes, setMinutes] = useState<number>(60);
   const [activeTrendId, setActiveTrendId] = useState<TrendPatternId>('sessler-3phase');
 
@@ -496,17 +504,10 @@ export const TemperatureProbesModule: React.FC<TemperatureProbesModuleProps> = (
             </h3>
             <p className={`text-xs sm:text-sm leading-relaxed ${bodyColor}`}>
               Genel ve nöroaksiyel anestezi hipotalamik termoregülasyon eşiğini bozarak ilk saatte hızlı redistribüsyon hipotermisine
-              yol açar. Doğru <strong>kor probu seçimi</strong> (nazofarenks, mesane, timpanik, rektal, Zero-Heat-Flux) hipotermi ve
-              malign hipertermiyi yakalarken, eşzamanlı <strong>periferik sıcaklık</strong> izlemi (<span className="font-mono">ΔT</span>)
+              yol açar. Doğru <strong>kor probu seçimi</strong> (distal özofagus, nazofarenks, mesane, timpanik, rektal, Zero-Heat-Flux)
+              hipotermi ve malign hipertermiyi yakalarken, eşzamanlı <strong>periferik sıcaklık</strong> izlemi (<span className="font-mono">ΔT</span>)
               vazomotor tonusu ve doku perfüzyonunu ortaya koyar.
             </p>
-            <div className={`text-[11px] flex items-center gap-1.5 pt-1 ${isDark ? 'text-orange-300/90' : 'text-orange-700'}`}>
-              <Info className="w-3.5 h-3.5 shrink-0" />
-              <span>
-                <strong>Kapsam Notu:</strong> Distal özofagus kor ısısı ölçümü (anatomik kılavuz, kalp-trakea etkileşimi ve özofageal stetoskop)
-                ayrı bir monitörizasyon kartında müstakil olarak ele alınacaktır.
-              </span>
-            </div>
           </div>
 
           {/* 4-Metric Quick Reference Strip */}
@@ -1055,9 +1056,9 @@ export const TemperatureProbesModule: React.FC<TemperatureProbesModuleProps> = (
                     color: '#38bdf8',
                   },
                   {
-                    title: 'Distal Özofagus Kor Isısı (Ayrı Modül)',
-                    rule: 'Alt 1/3 özofagus yerleşimi, kardiyak ses kılavuzluğu ve trakeal hava artefaktları ayrı kartta yer alacaktır.',
-                    color: '#a855f7',
+                    title: 'Distal Özofagus (Klinik Altın Standart · Alt 1/3)',
+                    rule: 'Derinlik = 0.228×Boy(cm)−0.194 (~35–40 cm) veya özofageal stetoskopta en yüksek kalp sesi; sol atriyum/aort arkası.',
+                    color: '#f43f5e',
                   },
                 ].map((item, idx) => (
                   <g key={item.title} transform={`translate(16, ${38 + idx * 36})`}>
@@ -1073,6 +1074,47 @@ export const TemperatureProbesModule: React.FC<TemperatureProbesModuleProps> = (
                 ))}
               </g>
             </svg>
+          </div>
+        </div>
+
+        {/* Distal Esophageal Core Temperature Clinical Guide */}
+        <div className={`rounded-xl border p-4 space-y-2.5 ${mutedSurface}`}>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Thermometer className="w-4 h-4 text-rose-500" />
+              <span className={`text-xs font-bold ${headingColor}`}>
+                Distal Özofagus Kor Sıcaklığı: Anatomik Derinlik, Kalp–Trakea Etkileşimi ve Özofageal Stetoskop
+              </span>
+            </div>
+            <span className="text-[11px] font-mono tabular-nums text-rose-600 dark:text-rose-400">
+              L (cm) = 0.228 × Boy (cm) − 0.194
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs leading-relaxed">
+            <div className={`p-3 rounded-lg border ${cardSurface}`}>
+              <div className={`font-bold mb-1 ${headingColor}`}>1. Alt 1/3 Yerleşim &amp; Akustik Kılavuz</div>
+              <p className={bodyColor}>
+                Prob, sol atriyum ve inen torasik aortun hemen arkasındaki <strong>distal 1/3 özofagusa</strong> (erişkinde
+                insizörlerden <strong>~35–40 cm</strong>, burundan ~40–45 cm) yerleştirilir. Özofageal stetoskoplu problarda
+                <strong> kalp seslerinin en yüksek, solunum seslerinin en zayıf</strong> duyulduğu nokta ideal derinliktir.
+              </p>
+            </div>
+            <div className={`p-3 rounded-lg border ${cardSurface}`}>
+              <div className={`font-bold mb-1 ${headingColor}`}>2. Proksimal Yerleşim &amp; Trakeal Soğutma</div>
+              <p className={bodyColor}>
+                Prob proksimal/orta özofagusta (&lt;24–28 cm) kalırsa hemen önündeki trakea ve ana bronşlardan geçen kuru/soğuk
+                inspiratuvar gazlar ölçümü <strong>0.5–1.5 °C yalancı düşük</strong> gösterir. Açık torakotomide soğuk irrigasyon
+                veya soğuk kardiyopleji sırasında da geçici düşüşler izlenebilir.
+              </p>
+            </div>
+            <div className={`p-3 rounded-lg border ${cardSurface}`}>
+              <div className={`font-bold mb-1 ${headingColor}`}>3. Güvenlik &amp; Kontrendikasyonlar</div>
+              <p className={bodyColor}>
+                Yalnızca <strong>entübe</strong> (genel anestezi) hastalarda kullanılır; uyanık/SGA olgularda öğürme ve
+                aspirasyon riski taşır. <strong>Özofagus varisi, striktürü, yakın dönem özofagus/gastrik cerrahisi</strong> ve
+                ciddi koagülopatide nazofarengeal, mesane veya ZHF tercih edilmelidir.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -1420,6 +1462,13 @@ export const TemperatureProbesModule: React.FC<TemperatureProbesModuleProps> = (
             <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
               {[
                 {
+                  cause: 'Proksimal Özofagus Yerleşimi',
+                  effect: 'Yalancı Düşük (−1 °C)',
+                  col: 'text-sky-600 dark:text-sky-400',
+                  mech: 'Üst/orta özofagustaki prob trakeal soğuk taze gaz akımından etkilenir.',
+                  fix: 'Probu alt 1/3 özofagusa (~35–40 cm / en yüksek kalp sesi) ilerlet.',
+                },
+                {
                   cause: 'Nazofarengeal Hava Kaçağı',
                   effect: 'Yalancı Düşük',
                   col: 'text-sky-600 dark:text-sky-400',
@@ -1535,9 +1584,9 @@ export const TemperatureProbesModule: React.FC<TemperatureProbesModuleProps> = (
                 <text x="14" y="63" fontSize="9" fill={isDark ? '#cbd5e1' : '#334155'}>  Nazofarengeal prob KESİN YASAK (kraniyal geçiş!).</text>
                 <text x="14" y="84" fontSize="9.5" fontWeight="700" fill={isDark ? '#f8fafc' : '#0f172a'}>• Timpanik Temas Probu:</text>
                 <text x="14" y="99" fontSize="9" fill={isDark ? '#cbd5e1' : '#334155'}>  Kulak zarı perforasyonu ve otoraji riski.</text>
-                <text x="14" y="120" fontSize="9.5" fontWeight="700" fill={isDark ? '#f8fafc' : '#0f172a'}>• Rektal Prob:</text>
-                <text x="14" y="135" fontSize="9" fill={isDark ? '#cbd5e1' : '#334155'}>  Yenidoğan/nötropenik hastada perforasyon &amp;</text>
-                <text x="14" y="149" fontSize="9" fill={isDark ? '#cbd5e1' : '#334155'}>  bakteriyemi riski → nazikçe, kayganlaştırıcıyla.</text>
+                <text x="14" y="120" fontSize="9.5" fontWeight="700" fill={isDark ? '#f8fafc' : '#0f172a'}>• Özofagus &amp; Rektal Prob:</text>
+                <text x="14" y="135" fontSize="9" fill={isDark ? '#cbd5e1' : '#334155'}>  Varis/striktürde özofageal yasak; yenidoğan/</text>
+                <text x="14" y="149" fontSize="9" fill={isDark ? '#cbd5e1' : '#334155'}>  nötropenide rektal perforasyon riskine dikkat.</text>
               </g>
 
               {/* Panel 2: Thermal, Cautery & MRI Burns */}

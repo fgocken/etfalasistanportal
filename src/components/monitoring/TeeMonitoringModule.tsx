@@ -547,7 +547,7 @@ export const TeeMonitoringModule: React.FC<TeeMonitoringModuleProps> = ({ isDark
                 Doppler: Δf = (2 · f₀ · v · cos θ) / c   |   Bernoulli: ΔP = 4 · v²
               </text>
               <text x="26" y="168" fill={isDark ? '#f8fafc' : '#1e293b'} fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                Atım Hacmi (SV) = π · (D_LVOT / 2)² · VTI_LVOT   |   CO = SV × KH
+                Atım Hacmi (SV) = π · (D<tspan dy="2" fontSize="7">LVOT</tspan><tspan dy="-2"> / 2)² · VTI</tspan><tspan dy="2" fontSize="7">LVOT</tspan><tspan dy="-2">   |   CO = SV × KH</tspan>
               </text>
               <text x="26" y="186" fill="#fbbf24" fontSize="8.5" fontWeight="bold">
                 KRİTİK: Açı θ &gt; 20° hızı düşük ölçer! LVOT çapı karesel etki eder (2 mm hata ≈ %20 SV hatası)!
@@ -716,7 +716,12 @@ export const TeeMonitoringModule: React.FC<TeeMonitoringModuleProps> = ({ isDark
                   accent: 'accent-rose-500',
                 },
                 {
-                  label: 'TR Jet Hızı (v_TR)',
+                  id: 'tr-vel',
+                  label: (
+                    <>
+                      TR Jet Hızı (v<sub>TR</sub>)
+                    </>
+                  ),
                   val: `${trVelocity.toFixed(1)} m/s`,
                   min: 2.0,
                   max: 4.8,
@@ -726,6 +731,7 @@ export const TeeMonitoringModule: React.FC<TeeMonitoringModuleProps> = ({ isDark
                   accent: 'accent-amber-500',
                 },
                 {
+                  id: 'cvp-est',
                   label: 'Tahmini CVP / RAP',
                   val: `${cvpEst} mmHg`,
                   min: 4,
@@ -735,8 +741,8 @@ export const TeeMonitoringModule: React.FC<TeeMonitoringModuleProps> = ({ isDark
                   onChange: setCvpEst,
                   accent: 'accent-cyan-500',
                 },
-              ].map((ctrl) => (
-                <div key={ctrl.label} className="space-y-1">
+              ].map((ctrl, idx) => (
+                <div key={idx} className="space-y-1">
                   <div className="flex justify-between text-[11px]">
                     <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>{ctrl.label}</span>
                     <span className="font-mono font-bold tabular-nums text-purple-500">{ctrl.val}</span>

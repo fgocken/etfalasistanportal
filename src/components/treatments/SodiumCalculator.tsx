@@ -907,11 +907,15 @@ export const SodiumCalculator: React.FC<Props> = ({ isDark, hideReferences = fal
                   <span>Formüldeki (Na⁺ + K⁺) Toplam Katyonunun Klinik Önemi (Edelman İlkesi):</span>
                 </div>
                 <p className="leading-relaxed text-[11px] opacity-95">
-                  Serum sodyum konsantrasyonu tek başına sodyumla belirlenmez; <strong>Edelman formülüne</strong> göre serum osmolalitesi toplam değişebilir sodyum ve potasyumun vücut suyuna oranıdır: <code>Serum [Na⁺] ≈ (Na_e + K_e) / TBW</code>.
+                  Serum sodyum konsantrasyonu tek başına sodyumla belirlenmez; <strong>Edelman formülüne</strong> göre serum osmolalitesi toplam değişebilir sodyum ve potasyumun vücut suyuna oranıdır:{' '}
+                  <code>
+                    Serum [Na⁺] ≈ (Na<sub>e</sub> + K<sub>e</sub>) / TBW
+                  </code>
+                  .
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1 text-[11px]">
                   <div className="p-2.5 rounded bg-white/70 dark:bg-slate-900/70 border border-amber-300/40 dark:border-amber-700/40">
-                    <strong>Hücresel Katyon Takası:</strong> İnfüzyonla verilen her potasyum ($K^+$) iyonu $Na^+/K^+$ ATPaz pompasıyla hücre içine girerken, elektriksel dengeyi korumak için hücre içindeki sodyum ($Na^+$) ekstraselüler alana çıkar. <em>Yani verilen potasyum, tıpkı sodyum verilmiş gibi serum sodyumunu artırır.</em>
+                    <strong>Hücresel Katyon Takası:</strong> İnfüzyonla verilen her potasyum (K⁺) iyonu Na⁺/K⁺ ATPaz pompasıyla hücre içine girerken, elektriksel dengeyi korumak için hücre içindeki sodyum (Na⁺) ekstraselüler alana çıkar. <em>Yani verilen potasyum, tıpkı sodyum verilmiş gibi serum sodyumunu artırır.</em>
                   </div>
                   <div className="p-2.5 rounded bg-white/70 dark:bg-slate-900/70 border border-amber-300/40 dark:border-amber-700/40">
                     <strong>ODS Tehlikesi (Potasyum Hesaplanmazsa):</strong> Hiponatremi hastasına hipokalemi için torba içine KCl veya Kaliphos eklendiğinde bu potasyum hesaba katılmazsa, serum sodyumu hekimin tahmininden <strong>2 kat daha hızlı fırlayabilir</strong> ve fatal <strong>Osmotik Demiyelinizasyon Sendromuna (ODS)</strong> yol açar.

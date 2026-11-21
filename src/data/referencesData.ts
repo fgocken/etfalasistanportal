@@ -668,7 +668,7 @@ export const MASTER_PORTAL_REFERENCES: PortalReference[] = [
     pmid: '24950550',
     doi: '10.1093/bja/aeu151',
     usedInModules: ['Klinik İnfografikler (Gastrik USG Perlas 0–2)', 'Havayolu Yönetimi'],
-    clinicalNote: 'Perlas 0–2 kalitatif derecelendirme, RLD antral CSA formülü [27.0 + 14.6 × CSA_RLD − 1.28 × Yaş] ve ≥1.5 mL/kg yüksek aspirasyon riski eşik değeri.'
+    clinicalNote: 'Perlas 0–2 kalitatif derecelendirme, RLD antral CSA formülü [27.0 + 14.6 × RLD-CSA − 1.28 × Yaş] ve ≥1.5 mL/kg yüksek aspirasyon riski eşik değeri.'
   },
   {
     id: 'airway-perlas-2016',

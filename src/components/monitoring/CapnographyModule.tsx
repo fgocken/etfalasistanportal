@@ -685,7 +685,7 @@ export const CapnographyModule: React.FC<CapnographyModuleProps> = ({ isDark }) 
             >
               <div className="flex items-center justify-between text-xs mb-2">
                 <span className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                  Alveoler Ölü Boşluk (V_D / V_T) Etkisi
+                  Alveoler Ölü Boşluk (V<sub>D</sub> / V<sub>T</sub>) Etkisi
                 </span>
                 <span className="font-mono text-[11px] font-bold text-amber-500 tabular-nums">
                   Ölü Boşluk: %{activeGrad.deadSpacePct}

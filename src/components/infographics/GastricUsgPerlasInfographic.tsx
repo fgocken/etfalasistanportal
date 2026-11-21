@@ -546,7 +546,7 @@ export const GastricUsgPerlasInfographic: React.FC<GastricUsgPerlasInfographicPr
                 isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-600'
               }`}>
                 <div className="font-mono text-[10px] text-slate-400">
-                  Perlas Denklemi: GV = 27.0 + 14.6 × CSA_RLD − 1.28 × Yaş
+                  Perlas Denklemi: GV = 27.0 + 14.6 × CSA<sub>RLD</sub> − 1.28 × Yaş
                 </div>
                 {hasModifiers && (
                   <div className="text-amber-700 dark:text-amber-300 font-medium leading-snug">

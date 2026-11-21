@@ -650,7 +650,7 @@ export const PacMonitoringModule: React.FC<PacMonitoringModuleProps> = ({ isDark
               {/* Equation header */}
               <rect x="14" y="10" width="432" height="32" rx="6" fill={isDark ? '#1e293b' : '#eef2ff'} stroke={isDark ? '#334155' : '#c7d2fe'} />
               <text x="230" y="30" fill={isDark ? '#f8fafc' : '#1e293b'} fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-                CO = [ V_inj × (T_kan − T_inj) × K ] / ∫ ΔT(t) dt   (Ters Orantı!)
+                CO = [ V<tspan dy="2.5" fontSize="8">inj</tspan><tspan dy="-2.5"> × (T</tspan><tspan dy="2.5" fontSize="8">kan</tspan><tspan dy="-2.5"> − T</tspan><tspan dy="2.5" fontSize="8">inj</tspan><tspan dy="-2.5">) × K ] / ∫ ΔT(t) dt   (Ters Orantı!)</tspan>
               </text>
 
               {/* Axes */}

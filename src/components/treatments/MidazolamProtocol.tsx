@@ -1893,7 +1893,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
               • <strong>Geçimli Sıvılar:</strong> %0.9 NaCl (SF), %5 Dekstroz (D5W), %10 Dekstroz ve Ringer Laktat ile tam uyumludur.<br />
-              • <strong>Standart İnfüzyon Çözeltisi:</strong> 50 mg (10 mL 5 mg/mL ampul) çekilerek 50 mL'lik enjektöre SF ile tamamlanır $\rightarrow$ <strong>1.0 mg/mL</strong> derişim elde edilir.<br />
+              • <strong>Standart İnfüzyon Çözeltisi:</strong> 50 mg (10 mL 5 mg/mL ampul) çekilerek 50 mL'lik enjektöre SF ile tamamlanır → <strong>1.0 mg/mL</strong> derişim elde edilir.<br />
               • Hazırlanan infüzyon çözeltisi oda sıcaklığında 24 saat, buzdolabında (2–8°C) 48 saat kimyasal stabilitesini korur.
             </p>
           </div>

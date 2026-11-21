@@ -62,7 +62,7 @@ export const HypokalemiaInfographic: React.FC<Props> = ({ isDark }) => {
           "Ventriküler Fibrilasyon (VF) ve asistoli riski",
           "Digital toksisitesine belirgin duyarlılık artışı"
         ],
-        mechanism: "Gecikmiş repolarizasyon ve I_Kr potasyum akımının çökmesi erken ard-depolarizasyonlara (EAD) ve fatal reentry ventriküler aritmilere yol açar.",
+        mechanism: "Gecikmiş repolarizasyon ve IKr potasyum akımının çökmesi erken ard-depolarizasyonlara (EAD) ve fatal reentry ventriküler aritmilere yol açar.",
         ecgLab: "EKG: Belirgin U dalgaları (> 1 mm), PR uzaması, QRS genişlemesi, pseudo-uzamış QT (aslında QU aralığı) ve ventriküler fibrilasyon"
       }
     },

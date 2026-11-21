@@ -10,6 +10,20 @@
   .font-mono {
     font-family: 'JetBrains Mono', monospace;
   }
+  sub,
+  sup {
+    font-size: 0.72em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+    font-weight: 500;
+  }
+  sub {
+    bottom: -0.22em;
+  }
+  sup {
+    top: -0.38em;
+  }
 }
 
 /* Custom smooth scrollbar */

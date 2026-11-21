@@ -116,10 +116,10 @@ export const tracheostomyCricothyroidotomy: ProcedureDefinition = {
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG, SpO2, NIBP, EtCO2 ve Sıcaklık.',
-      'Sürekli Kapnografi (EtCO2): Kanül trakeaya girdikten sonra doğrulamada ve bronkospazm/hipoventilasyon tespitinde en kritik parametredir.',
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG, SpO₂, NIBP, EtCO₂ ve Sıcaklık.',
+      'Sürekli Kapnografi (EtCO₂): Kanül trakeaya girdikten sonra doğrulamada ve bronkospazm/hipoventilasyon tespitinde en kritik parametredir.',
       'Nöromusküler Monitörizasyon (TOF): Trakea diseksiyonu ve pencere açılması esnasında hastanın öksürmemesi için TOF 0/4 tam blokaj sürdürülür.',
-      'Ventilasyon Tepe Basınçları ($P_{peak}$): Kanül yalancı yola girdiğinde veya kaf aşırı şiştiğinde ani basınç yükselmesi saptanır.'
+      'Ventilasyon Tepe Basınçları (Ppeak): Kanül yalancı yola girdiğinde veya kaf aşırı şiştiğinde ani basınç yükselmesi saptanır.'
     ],
     vascularAccess: [
       'En az 1-2 adet geniş lümenli periferik intravenöz damar yolu (16-18G)',
