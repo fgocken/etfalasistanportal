@@ -510,7 +510,6 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
 
 export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'monitoring',
-  'basics',
   'procedures',
   'icu',
   'abg',
@@ -531,9 +530,10 @@ export const DEFAULT_TOOL_ORDER: ToolTabId[] = [
   'contacts',
   'ekt',
   'references',
-  'mechanical-ventilation'
+  'mechanical-ventilation',
+  'basics'
 ];
-export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v29';
+export const TOOL_ORDER_STORAGE_KEY = 'etfal_clinical_tools_order_v30';
 
 interface PortalWorkspaceProps {
   onBackToWelcome: () => void;
@@ -752,8 +752,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         }
       }
 
-      // Check previous storage versions and migrate existing order (moving monitoring & basics to the top and keeping mechanical-ventilation at the end)
-      for (const oldKey of ['etfal_clinical_tools_order_v28', 'etfal_clinical_tools_order_v27', 'etfal_clinical_tools_order_v26', 'etfal_clinical_tools_order_v25', 'etfal_clinical_tools_order_v24', 'etfal_clinical_tools_order_v23', 'etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
+      // Check previous storage versions and migrate existing order (keeping monitoring at top and moving mechanical-ventilation & basics to the end)
+      for (const oldKey of ['etfal_clinical_tools_order_v29', 'etfal_clinical_tools_order_v28', 'etfal_clinical_tools_order_v27', 'etfal_clinical_tools_order_v26', 'etfal_clinical_tools_order_v25', 'etfal_clinical_tools_order_v24', 'etfal_clinical_tools_order_v23', 'etfal_clinical_tools_order_v22', 'etfal_clinical_tools_order_v21', 'etfal_clinical_tools_order_v20', 'etfal_clinical_tools_order_v19', 'etfal_clinical_tools_order_v18', 'etfal_clinical_tools_order_v17', 'etfal_clinical_tools_order_v16', 'etfal_clinical_tools_order_v11', 'etfal_clinical_tools_order_v10', 'etfal_clinical_tools_order_v7', 'etfal_clinical_tools_order_v6', 'etfal_clinical_tools_order_v5', 'etfal_clinical_tools_order_v4']) {
         const prevSaved = localStorage.getItem(oldKey);
         if (prevSaved) {
           const parsedOld = JSON.parse(prevSaved);
@@ -825,8 +825,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               updated.push('references');
             }
             const reordered = updated.filter(id => id !== 'mechanical-ventilation' && id !== 'monitoring' && id !== 'basics');
-            reordered.unshift('monitoring', 'basics');
-            reordered.push('mechanical-ventilation');
+            reordered.unshift('monitoring');
+            reordered.push('mechanical-ventilation', 'basics');
             if (reordered.length === DEFAULT_TOOL_ORDER.length && DEFAULT_TOOL_ORDER.every(id => reordered.includes(id))) {
               return reordered as ToolTabId[];
             }
@@ -944,6 +944,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         targetTreatmentId = 'desflurane';
       } else if (item.id === 'treatment-acetazolamide-protocol') {
         targetTreatmentId = 'acetazolamide';
+      } else if (item.id === 'treatment-furosemide-protocol') {
+        targetTreatmentId = 'furosemide';
       } else if (item.id === 'treatment-magnesium-replacement' || item.id === 'treatment-hypomagnesemia-infographic') {
         targetTreatmentId = 'magnesium';
       } else if (item.id === 'treatment-potassium-replacement' || item.id === 'treatment-hypokalemia-infographic') {

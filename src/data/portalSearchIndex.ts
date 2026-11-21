@@ -1684,6 +1684,34 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-furosemide-protocol',
+    title: 'Furosemid (Lasix / Desal) Akut Pulmoner Ödem, DOSE, İnfüzyon & FST Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Lasix · Loop Diüretiği',
+    description: 'NKCC2 inhibisyonu; akut dekompanse kalp yetmezliği (ESC/DOSE), TACO, hiperkalemi, sürekli IV infüzyon pompası (5–40 mg/saat), Furosemid Stres Testi (FST) ve ototoksisite (≤ 4 mg/dk) güvenlik hesaplayıcısı.',
+    keywords: [
+      'furosemid',
+      'furosemide',
+      'lasix',
+      'desal',
+      'furomid',
+      'loop diüretik',
+      'kıvrım diüretiği',
+      'nkcc2',
+      'pulmoner ödem',
+      'taco',
+      'fst',
+      'furosemid stres testi',
+      'dose',
+      'clorotic',
+      'ototoksisite',
+      'hiperkalemi',
+      'infüzyon'
+    ],
+    tabId: 'treatments',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',

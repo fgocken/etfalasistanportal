@@ -37,6 +37,7 @@ import { EpinephrineProtocol } from './EpinephrineProtocol';
 import { SevofluraneProtocol } from './SevofluraneProtocol';
 import { DesfluraneProtocol } from './DesfluraneProtocol';
 import { AcetazolamideProtocol } from './AcetazolamideProtocol';
+import { FurosemideProtocol } from './FurosemideProtocol';
 
 interface Props {
   isDark: boolean;
@@ -800,6 +801,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30' 
       }
     ]
+  },
+  {
+    id: 'furosemide',
+    category: 'medications',
+    categories: ['medications', 'electrolyte'],
+    categoryLabel: 'Loop Diüretiği · NKCC2',
+    badge: 'Lasix · DOSE · FST',
+    title: 'Furosemid (furoSEMIDE)',
+    shortDesc: 'Henle çıkan kalın kolda NKCC2 inhibisyonuyla hızlı natriürez ve venodilatasyon; akut pulmoner ödem (ESC/DOSE), TACO, hiperkalemi, sürekli IV infüzyon pompası, Furosemid Stres Testi (FST) ve ototoksisite (≤ 4 mg/dk) güvenlik hesaplayıcısı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Standart Ampul',
+        value: '20 mg / 2 mL',
+        subtext: 'Lasix / Desal · 10 mg/mL · 40 mg tb',
+        tooltip: 'Standart IV ampul 20 mg/2 mL (10 mg/mL); yüksek doz infüzyon için 250 mg/25 mL flakon mevcuttur',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'IV İnfüzyon (YBÜ)',
+        value: '5 – 40 mg/saat',
+        subtext: '20–40 mg IV bolus sonrası pompa',
+        tooltip: 'DOSE çalışması: Sürekli infüzyon öncesi 20–40 mg IV yükleme bolusu gerekir; ışık koruması önerilir',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'FST Test Dozu',
+        value: '1,0 – 1,5 mg/kg IV',
+        subtext: '2 sa idrar < 200 mL → Evre 3 AKI',
+        tooltip: 'Chawla 2013: Loop-naif 1,0 mg/kg, son 7 günde loop alan 1,5 mg/kg IV; 2 saatlik idrar < 200 mL yüksek risk',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      },
+      {
+        label: 'Ototoksisite Sınırı',
+        value: '≤ 4 mg / dk',
+        subtext: 'Yüksek doz (> 80 mg) yavaş IV',
+        tooltip: '4 mg/dk üzerindeki hızlı yüksek doz IV uygulama (özellikle ABY ve aminoglikozid varlığında) ototoksisite yapar',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -868,7 +920,10 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     sevofloran: 'sevoflurane',
     desfloran: 'desflurane',
     asetazolamid: 'acetazolamide',
-    diazomid: 'acetazolamide'
+    diazomid: 'acetazolamide',
+    furosemid: 'furosemide',
+    lasix: 'furosemide',
+    desal: 'furosemide'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1442,6 +1497,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 16: ASETAZOLAMİD MONOGRAFİSİ & RENAL / DOZ HESAPLAYICISI */}
       {(activeProtocolId === 'acetazolamide' || activeProtocolId === 'asetazolamid' || activeProtocolId === 'diazomid') && (
         <AcetazolamideProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 17: FUROSEMİD MONOGRAFİSİ & DOSE / İNFÜZYON / FST HESAPLAYICISI */}
+      {(activeProtocolId === 'furosemide' || activeProtocolId === 'furosemid' || activeProtocolId === 'lasix' || activeProtocolId === 'desal') && (
+        <FurosemideProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
