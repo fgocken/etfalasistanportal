@@ -30,8 +30,10 @@ interface PediatricFastingRule {
   id: 'clear-fluids' | 'breast-milk' | 'formula' | 'solids';
   name: string;
   hours: number;
+  shortBadge: string;
   badgeLabel: string;
   badgeColor: string;
+  hourColorClass: string;
   targetGroup: string;
   examples: string[];
   recommendation: string;
@@ -41,42 +43,31 @@ interface PediatricFastingRule {
 
 const PEDIATRIC_RULES: PediatricFastingRule[] = [
   {
-    id: 'clear-fluids',
-    name: 'Berrak Sıvılar (Su, Elma Suyu, Şekerli Berrak Sıvılar)',
-    hours: 1,
-    badgeLabel: '1 Saat (Yeni Standart)',
-    badgeColor: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
-    targetGroup: 'Tüm yaş grupları (bebekler ve çocuklar)',
+    id: 'solids',
+    name: 'İnek Sütü & Katı Gıdalar (Hafif veya Ağır Öğünler)',
+    hours: 6,
+    shortBadge: 'Tam Açlık',
+    badgeLabel: '6 Saat',
+    badgeColor: 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30',
+    hourColorClass: 'text-rose-600 dark:text-rose-400',
+    targetGroup: 'Ek gıda alan bebekler ve büyük çocuklar',
     examples: [
-      'Su, berrak posasız elma suyu',
-      'Şekerli berrak sıvılar / berrak meyve aromalı içecekler',
-      'Sütsüz açık çay, berrak elektrolit solüsyonları (pediatrik)'
+      'İnek sütü, keçi sütü, yoğurt, sütlü tatlılar',
+      'Kahvaltı (ekmek, peynir, yumurta, zeytin)',
+      'Bebek bisküvisi, püre, çorba, makarna, etli yemekler'
     ],
-    recommendation: 'ESAIC 2022 & ESPA / APA: Elektif cerrahi indüksiyonuna 1 saat kalana kadar çocuklara berrak sıvı verilmeli ve özellikle susayan çocuklar teşvik edilmelidir.',
-    physiologicalRationale: 'Çocuklarda berrak sıvıların %95’i 30-45 dakika içinde mideden duodenuma geçer. 1 saatlik süre aspirasyon riskini artırmaksızın dehidratasyon ve ajitasyonu dramatik şekilde azaltır.',
-    aspirationSafety: 'Aspirasyon riski klasik 2 saat kuralı ile eşdeğerdir (GRADE 1C kanıt düzeyi).'
-  },
-  {
-    id: 'breast-milk',
-    name: 'Anne Sütü (Breast Milk)',
-    hours: 3,
-    badgeLabel: '3 Saat (Avrupa Kılavuzu)',
-    badgeColor: 'bg-teal-500/15 text-teal-700 dark:text-teal-300 border-teal-500/30',
-    targetGroup: 'Emzirilen bebekler ve küçük çocuklar',
-    examples: [
-      'Doğrudan anne memesiyle emzirme',
-      'Biberonla verilen sağılmış taze anne sütü'
-    ],
-    recommendation: 'ESAIC 2022 Kılavuzu: Anne sütü ile beslenen bebeklerde elektif anestezi öncesi 3 saatlik açlık yeterlidir (Klasik Amerikan yaklaşımı 4 saattir).',
-    physiologicalRationale: 'Anne sütündeki protein ve yağ profili bebek fizyolojisine kusursuz uyumludur; kazein oranı düşüktür ve inek sütü veya formül mamaya göre mideden çok daha hızlı boşalır.',
-    aspirationSafety: '3 saatlik açlık bebek midesinde rezidüel volümü güvenli sınırlara indirir.'
+    recommendation: 'İnek sütü ve her türlü katı gıda için anestezi öncesi en az 6 saat tam açlık şarttır.',
+    physiologicalRationale: 'İnek sütü mide asidinde yoğun kazein pıhtısı oluşturarak katı gıda gibi davranır. Yağlı/katı gıdalar çocuklarda 4-6 saatte ancak boşalabilir.',
+    aspirationSafety: '6 saatten erken indüksiyonda regürjitasyon ve pulmoner aspirasyon riski yüksektir.'
   },
   {
     id: 'formula',
     name: 'Bebek Maması (Formül Süt / Bebek Formülü)',
     hours: 4,
+    shortBadge: 'Formül Süt',
     badgeLabel: '4 Saat',
     badgeColor: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30',
+    hourColorClass: 'text-amber-600 dark:text-amber-400',
     targetGroup: 'Mama ile beslenen bebekler ve 1 yaş altı süt çocukları',
     examples: [
       'Standart toz/sıvı bebek mamaları (Formül 1, 2 vb.)',
@@ -87,20 +78,39 @@ const PEDIATRIC_RULES: PediatricFastingRule[] = [
     aspirationSafety: '4 saat sonrasında mide boşalması güvenli eşik değerlere ulaşır.'
   },
   {
-    id: 'solids',
-    name: 'İnek Sütü & Katı Gıdalar (Hafif veya Ağır Öğünler)',
-    hours: 6,
-    badgeLabel: '6 Saat',
-    badgeColor: 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30',
-    targetGroup: 'Ek gıda alan bebekler ve büyük çocuklar',
+    id: 'breast-milk',
+    name: 'Anne Sütü (Breast Milk)',
+    hours: 3,
+    shortBadge: 'Avrupa Kılavuzu',
+    badgeLabel: '3 Saat (Avrupa Kılavuzu)',
+    badgeColor: 'bg-teal-500/15 text-teal-700 dark:text-teal-300 border-teal-500/30',
+    hourColorClass: 'text-teal-600 dark:text-teal-400',
+    targetGroup: 'Emzirilen bebekler ve küçük çocuklar',
     examples: [
-      'İnek sütü, keçi sütü, yoğurt, sütlü tatlılar',
-      'Kahvaltı (ekmek, peynir, yumurta, zeytin)',
-      'Bebek bisküvisi, püre, çorba, makarna, etli yemekler'
+      'Doğrudan anne memesiyle emzirme',
+      'Biberonla verilen sağılmış taze anne sütü'
     ],
-    recommendation: 'İnek sütü ve her türlü katı gıda için anestezi öncesi en az 6 saat tam açlık şarttır.',
-    physiologicalRationale: 'İnek sütü mide asidinde yoğun kazein pıhtısı oluşturarak katı gıda gibi davranır. Yağlı/katı gıdalar çocuklarda 4-6 saatte ancak boşalabilir.',
-    aspirationSafety: '6 saatten erken indüksiyonda regürjitasyon ve pulmoner aspirasyon riski yüksektir.'
+    recommendation: 'ESAIC 2022 Kılavuzu: Anne sütü ile beslenen bebeklerde elektif anestezi öncesi 3 saatlik açlık yeterlidir (Klasik Amerikan yaklaşımı 4 saattir).',
+    physiologicalRationale: 'Anne sütündeki protein ve yağ profili bebek fizyolojisine kusursuz uyumludur; kazein oranı düşüktür ve inek sütü veya formül mamaya göre mideden çok daha hızlı boşalır.',
+    aspirationSafety: '3 saatlik açlık bebek midesinde rezidüel volümü güvenli sınırlara indirir.'
+  },
+  {
+    id: 'clear-fluids',
+    name: 'Berrak Sıvılar (Su, Elma Suyu, Şekerli Berrak Sıvılar)',
+    hours: 1,
+    shortBadge: 'Yeni Standart',
+    badgeLabel: '1 Saat (Yeni Standart)',
+    badgeColor: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
+    hourColorClass: 'text-emerald-600 dark:text-emerald-400',
+    targetGroup: 'Tüm yaş grupları (bebekler ve çocuklar)',
+    examples: [
+      'Su, berrak posasız elma suyu',
+      'Şekerli berrak sıvılar / berrak meyve aromalı içecekler',
+      'Sütsüz açık çay, berrak elektrolit solüsyonları (pediatrik)'
+    ],
+    recommendation: 'ESAIC 2022 & ESPA / APA: Elektif cerrahi indüksiyonuna 1 saat kalana kadar çocuklara berrak sıvı verilmeli ve özellikle susayan çocuklar teşvik edilmelidir.',
+    physiologicalRationale: 'Çocuklarda berrak sıvıların %95’i 30-45 dakika içinde mideden duodenuma geçer. 1 saatlik süre aspirasyon riskini artırmaksızın dehidratasyon ve ajitasyonu dramatik şekilde azaltır.',
+    aspirationSafety: 'Aspirasyon riski klasik 2 saat kuralı ile eşdeğerdir (GRADE 1C kanıt düzeyi).'
   }
 ];
 
@@ -170,9 +180,9 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
       <div className={`p-5 rounded-2xl border ${
         isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
       }`}>
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-amber-500" />
+            <Clock className="w-4 h-4 text-amber-500 shrink-0" />
             <h4 className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-white' : 'text-slate-900'}`}>
               Modern Pediatrik 6 - 4 - 3 - 1 Kuralı
             </h4>
@@ -182,7 +192,7 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
           </span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {PEDIATRIC_RULES.map((rule) => {
             const isSelected = rule.id === selectedRuleId;
             return (
@@ -190,7 +200,7 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
                 key={rule.id}
                 type="button"
                 onClick={() => setSelectedRuleId(rule.id)}
-                className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                className={`p-3.5 sm:p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between min-w-0 ${
                   isSelected
                     ? 'bg-amber-500/15 border-amber-500 ring-2 ring-amber-500/25 shadow-xs'
                     : isDark
@@ -198,26 +208,37 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
                       : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/60'
                 }`}
               >
-                <div>
-                  <div className="flex items-center justify-between gap-1 mb-2">
-                    <span className={`text-[10px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${rule.badgeColor}`}>
-                      {rule.badgeLabel}
+                <div className="space-y-2.5 min-w-0">
+                  {/* Üst satır: Sabit tek satır etiket */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className={`inline-block max-w-full truncate text-[10px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded border whitespace-nowrap ${rule.badgeColor}`}>
+                      {rule.shortBadge}
                     </span>
-                    <span className="text-xl font-mono font-black text-amber-600 dark:text-amber-400">
-                      {rule.hours} sa
+                    {isSelected && <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />}
+                  </div>
+
+                  {/* Orta satır: Kaymayan, hizalı büyük saat göstergesi */}
+                  <div className="flex items-baseline gap-1.5 whitespace-nowrap tabular-nums">
+                    <span className={`text-3xl sm:text-4xl font-mono font-black leading-none tracking-tight ${rule.hourColorClass}`}>
+                      {rule.hours}
+                    </span>
+                    <span className={`text-xs font-mono font-bold uppercase tracking-wider ${
+                      isDark ? 'text-slate-400' : 'text-slate-500'
+                    }`}>
+                      saat
                     </span>
                   </div>
 
-                  <div className={`text-xs font-bold leading-snug line-clamp-2 ${
+                  {/* Başlık */}
+                  <div className={`text-xs font-bold leading-snug line-clamp-2 min-h-[2.125rem] ${
                     isSelected ? 'text-amber-700 dark:text-amber-300' : isDark ? 'text-slate-200' : 'text-slate-800'
                   }`}>
                     {rule.name}
                   </div>
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-slate-200/50 dark:border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <div className="mt-3 pt-2 border-t border-slate-200/50 dark:border-slate-800 flex items-center justify-between gap-1 text-[10px] font-mono text-slate-400 min-w-0">
                   <span className="truncate">{rule.targetGroup}</span>
-                  {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0" />}
                 </div>
               </button>
             );
@@ -228,13 +249,13 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
         <div className={`mt-4 p-4 rounded-xl border ${
           isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
         }`}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/50 dark:border-slate-800 pb-3 mb-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${selectedRule.badgeColor}`}>
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 border-b border-slate-200/50 dark:border-slate-800 pb-3 mb-3">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border whitespace-nowrap shrink-0 ${selectedRule.badgeColor}`}>
                   {selectedRule.hours} Saat Açlık
                 </span>
-                <h5 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h5 className={`text-base font-bold leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   {selectedRule.name}
                 </h5>
               </div>
@@ -243,8 +264,8 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 self-start sm:self-auto shrink-0 text-xs font-mono">
-              <span className="text-slate-400">Güvenlik:</span>
+            <div className="text-xs font-mono leading-snug md:text-right md:max-w-sm">
+              <span className="text-slate-400 mr-1.5">Güvenlik:</span>
               <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                 {selectedRule.aspirationSafety}
               </span>

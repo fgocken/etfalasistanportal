@@ -6,6 +6,7 @@ import {
   Syringe, 
   Brain, 
   Droplet, 
+  Droplets,
   Zap, 
   Layers, 
   Sparkles, 
@@ -44,7 +45,7 @@ interface Props {
   initialProtocolId?: string | null;
 }
 
-type TreatmentCategory = 'medications' | 'general_anesthetics' | 'electrolyte' | 'vasoactive' | 'sedation' | 'hemostasis';
+type TreatmentCategory = 'medications' | 'general_anesthetics' | 'sedation' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 type SodiumViewMode = 'all' | 'calc' | 'infographic';
@@ -754,7 +755,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'acetazolamide',
     category: 'medications',
-    categories: ['medications', 'electrolyte'],
+    categories: ['medications', 'diuretics'],
     categoryLabel: 'Karbonik Anhidraz İnh. / Diüretik',
     badge: 'Diazomid · ADVOR · DIABOLO',
     title: 'Asetazolamid (acetaZOLAMIDE)',
@@ -805,7 +806,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'furosemide',
     category: 'medications',
-    categories: ['medications', 'electrolyte'],
+    categories: ['medications', 'diuretics'],
     categoryLabel: 'Loop Diüretiği · NKCC2',
     badge: 'Lasix · DOSE · FST',
     title: 'Furosemid (furoSEMIDE)',
@@ -904,6 +905,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
   const medCount = getCategoryCount('medications');
   const generalAnestheticsCount = getCategoryCount('general_anesthetics');
   const sedationCount = getCategoryCount('sedation');
+  const diureticsCount = getCategoryCount('diuretics');
   const electrolyteCount = getCategoryCount('electrolyte');
   const vasoactiveCount = getCategoryCount('vasoactive');
   const hemostasisCount = getCategoryCount('hemostasis');
@@ -1059,7 +1061,28 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               </span>
             </button>
 
-            {/* 3. Elektrolit & Sıvı Replasmanı */}
+            {/* 4. Diüretikler */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('diuretics')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'diuretics'
+                  ? isDark 
+                    ? 'bg-sky-500/20 text-sky-300 border border-sky-500/50 shadow-xs' 
+                    : 'bg-sky-50 text-sky-800 border border-sky-400 shadow-xs'
+                  : isDark 
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent' 
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <Droplets className="w-3.5 h-3.5 text-sky-500" />
+              <span>Diüretikler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-700 dark:text-sky-300 font-mono font-bold">
+                {diureticsCount} İlaç
+              </span>
+            </button>
+
+            {/* 5. Elektrolit & Sıvı Replasmanı */}
             <button
               type="button"
               onClick={() => setActiveCategory('electrolyte')}
@@ -1514,6 +1537,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
           </div>
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
             {activeCategory === 'general_anesthetics' && 'Genel Anestezikler (İnhalasyon & IV)'}
+            {activeCategory === 'diuretics' && 'Diüretikler'}
             {activeCategory === 'vasoactive' && 'İnfüzyon & Vazoaktif Protokolleri'}
             {activeCategory === 'sedation' && 'Sedoanaljezi & Nöromüsküler Blokaj'}
             {activeCategory === 'hemostasis' && 'Hemostaz & Kan Transfüzyon Yönetimi'}
