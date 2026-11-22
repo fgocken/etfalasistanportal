@@ -111,6 +111,9 @@ export function parseHashRoute(): ParsedHashRoute {
       if (toolKey === 'spinal' || toolKey === 'spinal-anestezi') {
         return { type: 'blok', id: 'spinal-anestezi' };
       }
+      if (toolKey === 'respiratory-physiology' || toolKey === 'solunum-fizyolojisi') {
+        return { type: 'arac', id: 'basics', subId: 'respiratory-physiology' };
+      }
       if (toolKey === 'treatments' && toolMatch[2]) {
         return { type: 'tedavi', id: toolMatch[2] };
       }
@@ -123,6 +126,9 @@ export function parseHashRoute(): ParsedHashRoute {
     // 5. Doğrudan kısa ad ile fallback kontrolü (örn. #rsi-vs-elective, #spinal-anestezi)
     if (hash.toLowerCase() === 'spinal' || hash.toLowerCase() === 'spinal-anestezi') {
       return { type: 'blok', id: 'spinal-anestezi' };
+    }
+    if (hash.toLowerCase() === 'respiratory-physiology' || hash.toLowerCase() === 'solunum-fizyolojisi') {
+      return { type: 'arac', id: 'basics', subId: 'respiratory-physiology' };
     }
 
     if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {
@@ -145,13 +151,15 @@ export function parseHashRoute(): ParsedHashRoute {
     return { type: routeType, id: pathMatch[2] };
   }
 
-  // 7. Query string desteği: ?arac=abg, ?blok=spinal-anestezi vb.
+  // 7. Query string desteği: ?arac=abg, ?arac=basics&sub=respiratory-physiology, ?blok=spinal-anestezi vb.
   if (window.location.search) {
     const params = new URLSearchParams(window.location.search);
+    const subParam = params.get('sub');
+    const validSub = subParam && /^[a-zA-Z0-9_-]+$/.test(subParam) ? subParam : null;
     for (const key of ['tedavi', 'blok', 'infografik', 'arac'] as HashRouteType[]) {
       const val = params.get(key);
       if (val && /^[a-zA-Z0-9_-]+$/.test(val)) {
-        return { type: key, id: val };
+        return { type: key, id: val, subId: validSub };
       }
     }
   }

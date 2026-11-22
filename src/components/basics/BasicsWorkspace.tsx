@@ -3,10 +3,12 @@ import { ArrowLeft, BookOpenCheck, ChevronRight, Wind } from 'lucide-react';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { RespiratoryPhysiologyWorkspace } from './RespiratoryPhysiologyWorkspace';
 import { MedicalText } from './respiratory/MedicalText';
+import { parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 
 interface BasicsWorkspaceProps {
   isDark: boolean;
   initialCardId?: string | null;
+  onActiveCardChange?: (cardId: BasicsCardId | null) => void;
 }
 
 export type BasicsCardId = 'respiratory-physiology';
@@ -42,10 +44,19 @@ const BASICS_CARDS: BasicsCardItem[] = [
   },
 ];
 
-export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({ isDark, initialCardId }) => {
-  const [selectedCardId, setSelectedCardId] = useState<BasicsCardId | null>(
-    initialCardId === 'respiratory-physiology' ? 'respiratory-physiology' : null
-  );
+export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
+  isDark,
+  initialCardId,
+  onActiveCardChange,
+}) => {
+  const [selectedCardId, setSelectedCardId] = useState<BasicsCardId | null>(() => {
+    if (initialCardId === 'respiratory-physiology') return 'respiratory-physiology';
+    const route = parseHashRoute();
+    if (route.type === 'arac' && route.id === 'basics' && route.subId === 'respiratory-physiology') {
+      return 'respiratory-physiology';
+    }
+    return null;
+  });
 
   useEffect(() => {
     if (initialCardId === 'respiratory-physiology') {
@@ -55,13 +66,40 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({ isDark, initia
     }
   }, [initialCardId]);
 
+  useEffect(() => {
+    const handleHash = () => {
+      const route = parseHashRoute();
+      if (route.type === 'arac' && route.id === 'basics') {
+        const nextCard: BasicsCardId | null =
+          route.subId === 'respiratory-physiology' ? 'respiratory-physiology' : null;
+        setSelectedCardId(nextCard);
+        onActiveCardChange?.(nextCard);
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, [onActiveCardChange]);
+
+  const handleSelectCard = (cardId: BasicsCardId) => {
+    setSelectedCardId(cardId);
+    onActiveCardChange?.(cardId);
+    updateHashRoute('arac', `basics&sub=${cardId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCloseCard = () => {
+    setSelectedCardId(null);
+    onActiveCardChange?.(null);
+    updateHashRoute('arac', 'basics');
+  };
+
   if (selectedCardId === 'respiratory-physiology') {
     return (
       <div className="space-y-5 animate-in fade-in duration-300">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <button
             type="button"
-            onClick={() => setSelectedCardId(null)}
+            onClick={handleCloseCard}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold border transition-colors cursor-pointer ${
               isDark
                 ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800'
@@ -74,8 +112,8 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({ isDark, initia
 
           <ShareLinkButton
             type="arac"
-            id="basics"
-            title="Temel Bilgiler Bağlantısı"
+            id="basics&sub=respiratory-physiology"
+            title="Solunum Fizyolojisi Bağlantısını Kopyala"
             isDark={isDark}
           />
         </div>
@@ -123,10 +161,7 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({ isDark, initia
           <button
             key={card.id}
             type="button"
-            onClick={() => {
-              setSelectedCardId(card.id);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onClick={() => handleSelectCard(card.id)}
             className={`group text-left rounded-2xl border p-5 sm:p-6 transition-all duration-200 flex flex-col justify-between gap-5 cursor-pointer ${
               isDark
                 ? 'bg-slate-900/80 border-slate-800 hover:border-sky-500/50 hover:bg-slate-900'

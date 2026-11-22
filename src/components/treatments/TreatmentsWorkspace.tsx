@@ -39,6 +39,9 @@ import { SevofluraneProtocol } from './SevofluraneProtocol';
 import { DesfluraneProtocol } from './DesfluraneProtocol';
 import { AcetazolamideProtocol } from './AcetazolamideProtocol';
 import { FurosemideProtocol } from './FurosemideProtocol';
+import { AtropineProtocol } from './AtropineProtocol';
+import { EphedrineProtocol } from './EphedrineProtocol';
+import { NaloxoneProtocol } from './NaloxoneProtocol';
 
 interface Props {
   isDark: boolean;
@@ -853,6 +856,159 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'atropine',
+    category: 'medications',
+    categories: ['medications', 'vasoactive'],
+    categoryLabel: 'Antikolinerjik · M₁–M₅',
+    badge: 'ACLS 1 mg · NMB · Antidot',
+    title: 'Atropin Sülfat (ATROPINE)',
+    shortDesc: 'Non-selektif muskarinik antagonist; AHA 2020 erişkin/pediatrik semptomatik bradikardi, intraoperatif vagal refleksler, Neostigmin NMB reversal, organofosfat doubling-dose atropinizasyon ve TR 0,25/0,5/1 mg ampul güvenlik hesaplayıcısı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Standart Ampuller',
+        value: '0,25 · 0,5 · 1 mg/mL',
+        subtext: 'Hepsi 1 mL — Etiketi teyit et!',
+        tooltip: 'Türkiye’de 3 farklı konsantrasyonun tamamı 1 mL ampuldür; çekmeden önce mg/mL değerini yüksek sesle teyit edin',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'ACLS Bradikardi',
+        value: '1,0 mg IV bolus',
+        subtext: 'q3–5 dk · Maks 3,0 mg',
+        tooltip: 'AHA 2020 ACLS güncellemesiyle erişkin semptomatik bradikardi başlangıç dozu 0,5 mg’dan 1,0 mg IV’ye yükseltilmiştir',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'NMB Reversal',
+        value: '0,4 mg / 1 mg Neo',
+        subtext: '0,015–0,02 mg/kg · Aynı enjektör',
+        tooltip: 'ASA 2023: Neostigmin muskarinik etkilerini bloke eder; kantitatif TOF ≥ 0,90 doğrulanmadan ekstübasyon yapılmaz',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'Paradoksal Eşik',
+        value: '< 0,5 mg YASAK',
+        subtext: 'Denerve kalp · Mobitz II/III dikkat',
+        tooltip: 'Erişkinde < 0,5 mg yavaş uygulama paradoksal bradikardi yapabilir; kalp naklinde ve infranodal AV blokta etkisizdir',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
+  },
+  {
+    id: 'ephedrine',
+    category: 'medications',
+    categories: ['medications', 'vasoactive'],
+    categoryLabel: 'Vazopresör · Karma α/β Agonist',
+    badge: '5 mg/mL · Taşiflaksi · Obstetrik',
+    title: 'Efedrin Hidroklorür (EPHEDRINE)',
+    shortDesc: 'Karma direkt + indirekt (NE salıcı) sempatomimetik; genel/nöroaksiyel anestezi hipotansiyonu (5–10 mg IV), TR 50 mg/1 mL ampul sulandırma (5 mg/mL), kümülatif 50 mg taşiflaksi takibi, MAOI/Linezolid alarmı ve sezaryen karar destek hesaplayıcısı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul & Dilüsyon',
+        value: '50 mg/mL → 5 mg/mL',
+        subtext: '1 amp + 9 mL SF · SULANDIRMADAN VERME!',
+        tooltip: 'Türkiye standart ampulü 50 mg/1 mL konsantredir; 9 mL %0,9 NaCl ile 10 mL’ye (5 mg/mL) sulandırılır',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Erişkin IV Bolus',
+        value: '5 – 10 mg IV',
+        subtext: '1–2 mL (5 mg/mL) · Süre 10–20 dk',
+        tooltip: 'Düşük/normal KTA eşlik eden anestezi ilişkili hipotansiyonda 3–5 dk’da bir tekrarlanır',
+        colorClass: 'text-purple-700 dark:text-purple-300',
+        bgClass: 'bg-purple-500/10',
+        borderClass: 'border-purple-500/30'
+      },
+      {
+        label: 'Taşiflaksi Tavanı',
+        value: 'Maks 50 mg IV',
+        subtext: '> 30 mg sonrası direkt ajana geç',
+        tooltip: 'Presinaptik NE depoları tükendiği için > 30–50 mg sonrası yanıt düşer → Noradrenalin / Fenilefrin’e geçin',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Obstetrik & MAOI',
+        value: 'Fetal pH↓ · MAOI YASAK',
+        subtext: 'Kinsella 2018 · Linezolid krizi!',
+        tooltip: 'Sezaryende 1. tercih Fenilefrin/Noradrenalin’dir; MAOI veya Linezolid alan hastada ölümcül hipertansif kriz yapar',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      }
+    ]
+  },
+  {
+    id: 'naloxone',
+    category: 'medications',
+    categories: ['medications', 'sedation'],
+    categoryLabel: 'Opioid Antagonisti · Antidot',
+    badge: 'PACU 40 mcg · 2/3 İnfüzyon',
+    title: 'Nalokson Hidroklorür (NALOXONE)',
+    shortDesc: 'Saf kompetitif μ-opioid antagonisti; postoperatif PACU solunum depresyonunda (OIRD) analjezi koruyucu 40 mcg mikro-titrasyon, Boyer 2/3 sürekli IV infüzyon pompası, renarkotizasyon takibi ve nöroaksiyel kaşıntı protokolü.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul & PACU Sulandırma',
+        value: '0,4 mg/mL → 40 mcg/mL',
+        subtext: '1 amp + 9 mL SF · Tam ampul VERME!',
+        tooltip: 'TR standart ampul 0,4 mg (400 mcg)/1 mL’dir; PACU’da 10 mL’ye sulandırıp 1 mL (40 mcg) dilimlerle titre edilir',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'PACU Titrasyonu (OIRD)',
+        value: '40 mcg (1 mL) IV',
+        subtext: 'q2–3 dk · Analjeziyi koru!',
+        tooltip: 'Dahan 2010: Yalnızca yeterli spontan ventilasyonu (SS ≥ 10–12/dk) sağlamak amaçlanır; KAH/kronik opioidde 20 mcg başla',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'Renarkotizasyon & İnfüzyon',
+        value: '30–60 dk · 2/3 Uyanma/sa',
+        subtext: 'Son doz sonrası ≥ 2 sa izlem şart',
+        tooltip: 'Boyer NEJM 2012: Etki süresi uzun etkili opioidlerden kısadır; sürekli infüzyon ilk uyanma dozunun 2/3’ü/saat',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Nöroaksiyel Kaşıntı',
+        value: '0,25–2 mcg/kg/sa',
+        subtext: 'Spinal/epidural morfin kaşıntısı',
+        tooltip: 'Murphy 2011 / Kjellberg 2001: ≤ 2 mcg/kg/saat hızında analjeziyi bozmadan opioid kaşıntısı ve PONV’u giderir',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      }
+    ]
   }
 ];
 
@@ -925,7 +1081,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     diazomid: 'acetazolamide',
     furosemid: 'furosemide',
     lasix: 'furosemide',
-    desal: 'furosemide'
+    desal: 'furosemide',
+    atropin: 'atropine',
+    'atropin-sulfat': 'atropine',
+    efedrin: 'ephedrine',
+    'efedrin-hcl': 'ephedrine',
+    nalokson: 'naloxone',
+    narcan: 'naloxone'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1525,6 +1687,21 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 17: FUROSEMİD MONOGRAFİSİ & DOSE / İNFÜZYON / FST HESAPLAYICISI */}
       {(activeProtocolId === 'furosemide' || activeProtocolId === 'furosemid' || activeProtocolId === 'lasix' || activeProtocolId === 'desal') && (
         <FurosemideProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 18: ATROPİN SÜLFAT MONOGRAFİSİ & ACLS / NMB / ORGANOFOSFAT HESAPLAYICISI */}
+      {(activeProtocolId === 'atropine' || activeProtocolId === 'atropin' || activeProtocolId === 'atropin-sulfat') && (
+        <AtropineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 19: EFEDRİN HİDROKLORÜR MONOGRAFİSİ & BOLUS / TAŞİFLAKSİ / OBSTETRİK HESAPLAYICISI */}
+      {(activeProtocolId === 'ephedrine' || activeProtocolId === 'efedrin' || activeProtocolId === 'efedrin-hcl') && (
+        <EphedrineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 20: NALOKSON HİDROKLORÜR MONOGRAFİSİ & PACU / BOYER İNFÜZYON / KAŞINTI HESAPLAYICISI */}
+      {(activeProtocolId === 'naloxone' || activeProtocolId === 'nalokson' || activeProtocolId === 'narcan') && (
+        <NaloxoneProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}

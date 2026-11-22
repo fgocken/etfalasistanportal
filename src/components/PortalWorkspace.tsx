@@ -694,6 +694,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       setActiveTab(route.id as ToolTabId);
       if (route.id === 'nerve-blocks') {
         setSelectedNerveBlockId(route.subId || null);
+      } else if (route.id === 'basics') {
+        setSelectedBasicsCardId(route.subId || null);
       }
     }
   }, [initialRoute]);
@@ -847,7 +849,13 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [selectedTreatmentProtocolId, setSelectedTreatmentProtocolId] = useState<string | null>(null);
   const [selectedNerveBlockId, setSelectedNerveBlockId] = useState<string | null>(null);
   const [activeNerveBlockSubId, setActiveNerveBlockSubId] = useState<string | null>(null);
-  const [selectedBasicsCardId, setSelectedBasicsCardId] = useState<string | null>(null);
+  const [selectedBasicsCardId, setSelectedBasicsCardId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'basics' && route.subId) {
+      return route.subId;
+    }
+    return null;
+  });
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -944,6 +952,12 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         targetTreatmentId = 'acetazolamide';
       } else if (item.id === 'treatment-furosemide-protocol') {
         targetTreatmentId = 'furosemide';
+      } else if (item.id === 'treatment-atropine-protocol') {
+        targetTreatmentId = 'atropine';
+      } else if (item.id === 'treatment-ephedrine-protocol') {
+        targetTreatmentId = 'ephedrine';
+      } else if (item.id === 'treatment-naloxone-protocol') {
+        targetTreatmentId = 'naloxone';
       } else if (item.id === 'treatment-magnesium-replacement' || item.id === 'treatment-hypomagnesemia-infographic') {
         targetTreatmentId = 'magnesium';
       } else if (item.id === 'treatment-potassium-replacement' || item.id === 'treatment-hypokalemia-infographic') {
@@ -1013,6 +1027,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       if (item.id === 'basics-respiratory-physiology') {
         setSelectedBasicsCardId('respiratory-physiology');
         handleSelectTab('basics', { preserveBasicsCard: true });
+        updateHashRoute('arac', 'basics&sub=respiratory-physiology');
       } else {
         setSelectedBasicsCardId(null);
         handleSelectTab('basics');
@@ -1655,11 +1670,19 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             {activeTab !== 'infographics' && (
               <ShareLinkButton
                 type={activeTab === 'nerve-blocks' && activeNerveBlockSubId ? 'blok' : 'arac'}
-                id={activeTab === 'nerve-blocks' && activeNerveBlockSubId ? activeNerveBlockSubId : activeTab}
+                id={
+                  activeTab === 'nerve-blocks' && activeNerveBlockSubId
+                    ? activeNerveBlockSubId
+                    : activeTab === 'basics' && selectedBasicsCardId
+                    ? `basics&sub=${selectedBasicsCardId}`
+                    : activeTab
+                }
                 isDark={isDark}
                 title={
                   activeTab === 'nerve-blocks' && activeNerveBlockSubId === 'spinal-anestezi'
                     ? 'Spinal Anestezi Klinik Talimatı Bağlantısını Kopyala'
+                    : activeTab === 'basics' && selectedBasicsCardId === 'respiratory-physiology'
+                    ? 'Solunum Fizyolojisi Bağlantısını Kopyala'
                     : `${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`
                 }
               />
@@ -2032,7 +2055,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
         {/* 2E. Temel Bilgiler */}
         {activeTab === 'basics' && (
-          <BasicsWorkspace isDark={isDark} initialCardId={selectedBasicsCardId} />
+          <BasicsWorkspace
+            isDark={isDark}
+            initialCardId={selectedBasicsCardId}
+            onActiveCardChange={setSelectedBasicsCardId}
+          />
         )}
 
         {/* 3. Intraop Fluid Management Strategies (Liberal, Restrictive, GDFT + Embedded Liberal Calculator) */}

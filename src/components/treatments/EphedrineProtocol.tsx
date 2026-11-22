@@ -1,0 +1,1201 @@
+import React, { useState, useId } from 'react';
+import {
+  Activity,
+  AlertTriangle,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  FlaskConical,
+  Gauge,
+  ShieldAlert,
+  Syringe,
+} from 'lucide-react';
+import {
+  AdverseEffectsBlock,
+  ContraindicationsGridBlock,
+  DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
+  MechanismOfActionBlock,
+  MonographCopyButton,
+  MonographQuickNav,
+  OrganImpairmentGridBlock,
+  PregnancyLactationBlock,
+  SpecialClinicalCautionsBlock,
+} from './shared/DrugMonographBlocks';
+
+interface Props {
+  isDark: boolean;
+}
+
+type CalcTab = 'intraop' | 'obstetric' | 'dilution_compare';
+type PatientGroup = 'adult' | 'pediatric';
+type DilutionMode = 5 | 10 | 1;
+
+export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
+  const [activeTab, setActiveTab] = useState<CalcTab>('intraop');
+  const [pkOpen, setPkOpen] = useState<boolean>(true);
+
+  // 1. İntraoperatif Bolus & Taşiflaksi Takip State
+  const [patientGroup, setPatientGroup] = useState<PatientGroup>('adult');
+  const [weightKg, setWeightKg] = useState<number>(75);
+  const [currentMap, setCurrentMap] = useState<number>(56);
+  const [currentHr, setCurrentHr] = useState<number>(58);
+  const [cumulativeMg, setCumulativeMg] = useState<number>(10);
+  const [dilutionMgMl, setDilutionMgMl] = useState<DilutionMode>(5);
+  const [hasMaoi, setHasMaoi] = useState<boolean>(false);
+  const [hasHocmOrAs, setHasHocmOrAs] = useState<boolean>(false);
+
+  // 2. Obstetrik (Sezaryen Spinal Hipotansiyon) Karar Destek State
+  const [obsBaselineSbp, setObsBaselineSbp] = useState<number>(120);
+  const [obsCurrentSbp, setObsCurrentSbp] = useState<number>(92);
+  const [obsHr, setObsHr] = useState<number>(64);
+  const [obsCumulativeEphedrine, setObsCumulativeEphedrine] = useState<number>(5);
+  const [obsFetalDistress, setObsFetalDistress] = useState<boolean>(false);
+
+  const wtId = useId();
+  const mapId = useId();
+  const hrId = useId();
+  const cumId = useId();
+  const obsBaseId = useId();
+  const obsCurrId = useId();
+  const obsHrId = useId();
+  const obsCumId = useId();
+
+  // --- 1. İNTRAOPERATİF BOLUS HESAPLAMALARI ---
+  const isTachyphylaxisRisk = patientGroup === 'adult' && cumulativeMg >= 30 && cumulativeMg < 50;
+  const isMaxCeilingReached = patientGroup === 'adult' && cumulativeMg >= 50;
+  const isTachycardic = currentHr >= 100;
+
+  const getIntraopRecommendation = () => {
+    if (patientGroup === 'pediatric') {
+      const pedWt = Math.min(weightKg, 50);
+      const lowMg = Math.min(5, Number((pedWt * 0.1).toFixed(2)));
+      const highMg = Math.min(10, Number((pedWt * 0.2).toFixed(2)));
+      const suggestedMg = currentMap < 50 ? highMg : lowMg;
+      const volMl = suggestedMg / dilutionMgMl;
+      return {
+        doseMg: suggestedMg,
+        rangeText: `${lowMg.toFixed(1)} – ${highMg.toFixed(1)} mg IV bolus (0,1 – 0,2 mg/kg · Tek doz maks 5–10 mg)`,
+        volText: `${volMl.toFixed(2)} mL (${dilutionMgMl} mg/mL enjektörden)`,
+        note: 'Pediatride hassas dozaj için 1 mg/mL sulandırma (5 mg/mL’den 2 mL + 8 mL SF) önerilir; önce hipovolemi ve anestezik derinliğini kontrol edin.',
+      };
+    }
+
+    // Erişkin
+    const suggestedMg = currentMap < 55 ? 10 : 5;
+    const remainingMg = Math.max(0, 50 - cumulativeMg);
+    const volMl = suggestedMg / dilutionMgMl;
+    return {
+      doseMg: suggestedMg,
+      rangeText: `5 – 10 mg IV bolus (Önerilen: ${suggestedMg} mg IV · 3–5 dk’da bir tekrar · Kalan tavan: ${remainingMg} mg)`,
+      volText: `${volMl.toFixed(1)} mL (${dilutionMgMl} mg/mL enjektörden · 50 mg/1 mL TR ampul sulandırılmış!)`,
+      note: isTachycardic
+        ? 'Bazal KTA ≥ 100/dk! Efedrin taşikardiyi artırıp miyokard O₂ tüketimini yükseltir → saf α₁ (Fenilefrin 50–100 mcg) veya Noradrenalin tercih edin.'
+        : 'KTA düşük/normal iken anestezi ilişkili hipotansiyonda (özellikle nöroaksiyel blok + bradikardi) Efedrin venöz dönüşü ve kalp debisini dengeli biçimde destekler.',
+    };
+  };
+
+  const intraopRec = getIntraopRecommendation();
+
+  // --- 2. OBSTETRİK KARAR DESTEK HESAPLAMALARI ---
+  const obsSbpPct = obsBaselineSbp > 0 ? Math.round((obsCurrentSbp / obsBaselineSbp) * 100) : 100;
+  const obsNeedsVasopressor = obsSbpPct < 90 || obsCurrentSbp < 100;
+  const obsPreferEphedrine = obsNeedsVasopressor && obsHr < 68 && !obsFetalDistress && obsCumulativeEphedrine < 20;
+
+  const getObsVerdict = () => {
+    if (!obsNeedsVasopressor) {
+      return {
+        tone: 'emerald' as const,
+        headline: 'SKB Hedef Aralıkta (≥ %90 Bazal) — Ek Bolus Gerekmiyor',
+        detail:
+          'Kinsella 2018 Uluslararası Konsensüsü: Sezaryende spinal sonrası SKB’yi bazalin ≥ %90’ında tutmak maternal bulantı-kusmayı ve fetal asidozu en aza indirir. Sol uterin tilt ve profilaktik infüzyonu sürdürün.',
+      };
+    }
+    if (obsFetalDistress) {
+      return {
+        tone: 'rose' as const,
+        headline: 'Fetal Distres / Asidoz Şüphesi — 1. Tercih FENİLEFRİN veya NORADRENALİN!',
+        detail:
+          'Efedrin plasentayı hızla geçip fetal β-adrenerjik metabolizmayı uyararak umblikal arter pH’sını düşürür ve laktatı artırır (Ngan Kee 2009). Fetal distres varlığında Fenilefrin (50–100 mcg IV) veya Noradrenalin (4–8 mcg IV) tercih edin; bradikardi gelişirse Atropin/Glikopirolat ekleyin.',
+      };
+    }
+    if (obsPreferEphedrine) {
+      return {
+        tone: 'teal' as const,
+        headline: 'Hipotansiyon + Düşük KTA (< 68/dk) — Efedrin 5 – 10 mg IV Uygun',
+        detail: `Maternal KTA ${obsHr}/dk ve SKB bazalin %${obsSbpPct}’i düzeyinde. Efedrin 5–10 mg IV (5 mg/mL enjektörden 1–2 mL) hem SKB’yi hem kalp hızını düzeltir. Kümülatif dozu mümkünse 15–20 mg altında tutun; yanıt yetersizse Noradrenalin/Fenilefrin infüzyonuna geçin.`,
+      };
+    }
+    return {
+      tone: 'amber' as const,
+      headline:
+        obsCumulativeEphedrine >= 20
+          ? 'Kümülatif Efedrin ≥ 20 mg — Fetal Asidemi Riski! Fenilefrin / Noradrenalin’e Geçin'
+          : 'Maternal KTA Normal/Yüksek (≥ 68/dk) — 1. Tercih FENİLEFRİN veya NORADRENALİN',
+      detail:
+        'Kinsella 2018 Konsensüsü: Normal veya yüksek maternal kalp hızında 1. basamak vazopresör Fenilefrin (50–100 mcg IV bolus veya 25–50 mcg/dk infüzyon) ya da düşük doz Noradrenalin (4–8 mcg IV bolus / 0,05 mcg/kg/dk infüzyon) olmalıdır. Efedrin yalnızca belirgin bradikardi eklendiğinde kurtarıcı olarak kullanılmalıdır.',
+    };
+  };
+
+  const obsVerdict = getObsVerdict();
+
+  const getReportText = () => {
+    if (activeTab === 'intraop') {
+      const alerts: string[] = [];
+      if (hasMaoi) {
+        alerts.push('MUTLAK KONTRENDİKASYON: Son 14 günde MAOI / Linezolid / Metilen Mavisi → EFEDRİN VERME! Ölümcül hipertansif kriz riski. Direkt düşük doz Fenilefrin/Noradrenalin titre et!');
+      }
+      if (hasHocmOrAs) {
+        alerts.push('KRİTİK UYARI: HOCM / Ciddi Aort Stenozu → β₁ inotropi/taşikardi çıkış yolu obstrüksiyonunu ve iskemiyi ağırlaştırır; saf α₁ Fenilefrin kullan!');
+      }
+      if (isMaxCeilingReached) {
+        alerts.push('TAVAN DOZ (≥ 50 mg) & TAŞİFLAKSİ: Endojen NE depoları tükenmiştir; ek efedrin etkisizdir → direkt vazopresöre (Noradrenalin / Fenilefrin) geçin!');
+      } else if (isTachyphylaxisRisk) {
+        alerts.push('TAŞİFLAKSİ UYARISI (30–49 mg): Kümülatif doz yükseliyor; yanıt azalıyorsa direkt vazopresör hazırlayın.');
+      }
+
+      return [
+        'EFEDRİN HİDROKLORÜR — İNTRAOPERATİF VAZOPRESÖR RAPORU',
+        `Hasta: ${patientGroup === 'adult' ? 'Erişkin' : 'Pediatrik'} (${weightKg} kg) | OAB: ${currentMap} mmHg | KTA: ${currentHr}/dk | Kümülatif Efedrin: ${cumulativeMg} mg`,
+        `Önerilen Bolus: ${intraopRec.rangeText}`,
+        `Hazırlama (${dilutionMgMl} mg/mL): ${intraopRec.volText} (TR 50 mg/1 mL ampul ASLA sulandırmadan verilmez!)`,
+        `Klinik Not: ${intraopRec.note}`,
+        alerts.length ? `Güvenlik Uyarıları:\n- ${alerts.join('\n- ')}` : 'Güvenlik Taraması: Kontrendikasyon bayrağı işaretlenmedi.',
+      ].join('\n');
+    }
+
+    if (activeTab === 'obstetric') {
+      return [
+        'OBSTETRİK SPİNAL HİPOTANSİYON — VAZOPRESÖR KARAR RAPORU (Kinsella 2018)',
+        `Bazal SKB: ${obsBaselineSbp} mmHg → Mevcut SKB: ${obsCurrentSbp} mmHg (%${obsSbpPct}) | Maternal KTA: ${obsHr}/dk | Kümülatif Efedrin: ${obsCumulativeEphedrine} mg | Fetal Distres: ${obsFetalDistress ? 'VAR' : 'Yok'}`,
+        `Karar: ${obsVerdict.headline}`,
+        `Açıklama: ${obsVerdict.detail}`,
+      ].join('\n');
+    }
+
+    return [
+      'EFEDRİN HİDROKLORÜR (TR 50 mg / 1 mL) — STANDART SULANDIRMA REÇETESİ',
+      'Erişkin Standart (5 mg/mL): 1 ampul (50 mg/1 mL) + 9 mL %0,9 NaCl = 10 mL enjektör → 1 mL = 5 mg, 2 mL = 10 mg (ISO Mor Etiket).',
+      'Pediatrik Hassas (1 mg/mL): Yukarıdaki 5 mg/mL enjektörden 2 mL (10 mg) + 8 mL %0,9 NaCl = 10 mL → 1 mL = 1 mg.',
+      'KRİTİK: 50 mg/1 mL ampulü ASLA sulandırmadan vermeyin; kümülatif 50 mg üstünde taşiflaksi gelişir → direkt vazopresöre (Noradrenalin / Fenilefrin) geçin.',
+    ].join('\n');
+  };
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-300">
+      {/* 1. KİMLİK & KLİNİK ÖZET HEADER */}
+      <section
+        id="sec-ozet"
+        className={`p-6 rounded-2xl border transition-all ${
+          isDark
+            ? 'bg-slate-900/90 border-purple-500/30 shadow-xl shadow-purple-950/20 text-slate-100'
+            : 'bg-white border-purple-200 shadow-lg shadow-purple-500/5 text-slate-900'
+        }`}
+      >
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-start gap-4">
+            <div className="p-3.5 rounded-2xl bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
+              <Gauge className="w-8 h-8" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/40 font-mono">
+                  Sempatomimetik · Karma Direkt + İndirekt α₁ / β₁ / β₂ Agonist
+                </span>
+                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/30">
+                  ATC: C01CA26
+                </span>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/30">
+                  TR Ampul: 50 mg / 1 mL (SULANDIR!)
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                Efedrin Hidroklorür (EPHEDRINE) Monografisi
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+                Non-katekolamin, karma etkili sempatomimetik vazopresör. <strong>Genel ve nöroaksiyel anesteziye bağlı hipotansiyonda</strong>{' '}
+                (özellikle düşük/normal kalp hızı eşlik ederken) venöz dönüşü, kalp hızını ve kardiyak debiyi dengeli biçimde artırır.{' '}
+                <strong>Taşiflaksi (NE depo tükenmesi)</strong>, <strong>MAOI hipertansif krizi</strong> ve{' '}
+                <strong>obstetrik fetal asidemi</strong> sınırları mutlaka gözetilmelidir.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2.5 shrink-0 font-mono tabular-nums">
+            <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="text-[10px] uppercase text-slate-500 font-bold">IV Etki / Süre</div>
+              <div className="text-sm font-extrabold text-purple-600 dark:text-purple-400">1–2 dk / 10–20 dk</div>
+              <div className="text-[10px] text-slate-500">Pik: 2 – 5 dk</div>
+            </div>
+            <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="text-[10px] uppercase text-slate-500 font-bold">Standart Sulandırma</div>
+              <div className="text-sm font-extrabold text-amber-600 dark:text-amber-400">5 mg / mL</div>
+              <div className="text-[10px] text-slate-500">50 mg + 9 mL SF (10 mL)</div>
+            </div>
+            <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="text-[10px] uppercase text-slate-500 font-bold">Erişkin Bolus</div>
+              <div className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">5 – 10 mg IV</div>
+              <div className="text-[10px] text-slate-500">Maks kümülatif: 50 mg</div>
+            </div>
+            <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="text-[10px] uppercase text-slate-500 font-bold">Kritik Sınır</div>
+              <div className="text-sm font-extrabold text-rose-600 dark:text-rose-400">TAŞİFLAKSİ &amp; MAOI</div>
+              <div className="text-[10px] text-slate-500">NE depoları tükenir!</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <MonographQuickNav
+            isDark={isDark}
+            items={[
+              { id: 'sec-etki', label: 'Etki Mekanizması' },
+              { id: 'sec-pkpd', label: 'PK / PD' },
+              { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+              { id: 'sec-dozlar', label: 'Endikasyonlar & Dozaj' },
+              { id: 'sec-hesaplayici', label: 'Doz & Obstetrik Hesaplayıcı' },
+              { id: 'sec-uyumluluk', label: 'TR Ampul & Sulandırma' },
+              { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
+              { id: 'sec-gebelik', label: 'Gebelik & Obstetrik' },
+              { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+              { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+              { id: 'sec-guvenlik', label: 'ISMP & Antidot' },
+              { id: 'sec-kaynaklar', label: 'Kaynakça' },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* 2. ETKİ MEKANİZMASI */}
+      <MechanismOfActionBlock
+        isDark={isDark}
+        summary="Efedrin, katekol halkası içermeyen (non-katekolamin) karma etkili bir sempatomimetiktir. Hem presinaptik sempatik sinir uçlarından endojen noradrenalin salımını tetikler (indirekt etki — baskın bileşen), hem de postsinaptik α₁, β₁ ve β₂ reseptörlerini doğrudan uyarır."
+        pillars={[
+          {
+            title: 'İndirekt Etki (Endojen Noradrenalin Salımı)',
+            detail:
+              'Presinaptik veziküllerden noradrenalin (NE) salımını artırarak pressör etkinin büyük bölümünü oluşturur. Bu mekanizma nedeniyle kısa aralıklarla tekrarlayan dozlarda NE depoları boşalır ve hızla TAŞİFLAKSİ (yanıt kaybı) gelişir.',
+          },
+          {
+            title: 'Kardiyovasküler β₁ + α₁ Dengesi',
+            detail:
+              'β₁ uyarısı ile kalp hızı (kronotropi) ve miyokard kontraktilitesi (inotropi) artar; α₁ uyarısı ile belirgin venokonstrüksiyon (preload/venöz dönüş artışı) ve hafif-orta arteriyoler vazokonstrüksiyon (SVR artışı) oluşur. Saf α₁ agonistlerin aksine kardiyak debiyi korur veya artırır.',
+          },
+          {
+            title: 'MAO/COMT Direnci, KBB & Plasenta Geçişi',
+            detail:
+              'Katekol halkası olmadığı için MAO ve COMT enzimleriyle hızlı yıkılmaz → etki süresi adrenalin/noradrenaline göre uzundur (10–20 dk). Lipofilik yapısıyla kan-beyin bariyerini (hafif uyanıklık/MAC artışı) ve plasentayı serbestçe geçer.',
+          },
+        ]}
+      />
+
+      {/* 3. FARMAKOKİNETİK / FARMAKODİNAMİK (PK/PD) */}
+      <section
+        id="sec-pkpd"
+        className={`rounded-2xl border p-5 sm:p-6 ${
+          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setPkOpen((v) => !v)}
+          className="w-full flex items-center justify-between gap-3 cursor-pointer"
+        >
+          <div className="flex items-center gap-2.5">
+            <Clock className={`h-5 w-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+            <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              Farmakokinetik &amp; Farmakodinamik (PK/PD) Profili
+            </h3>
+          </div>
+          {pkOpen ? <ChevronUp className="h-5 w-5 text-slate-400" /> : <ChevronDown className="h-5 w-5 text-slate-400" />}
+        </button>
+
+        {pkOpen && (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm font-mono tabular-nums">
+              <thead>
+                <tr className={`border-b ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                  <th className="py-2.5 pr-4 font-sans font-bold">Parametre</th>
+                  <th className="py-2.5 pr-4 font-sans font-bold">Değer</th>
+                  <th className="py-2.5 font-sans font-bold">Klinik Karşılığı</th>
+                </tr>
+              </thead>
+              <tbody className={`divide-y ${isDark ? 'divide-slate-800/80 text-slate-200' : 'divide-slate-100 text-slate-800'}`}>
+                <tr>
+                  <td className="py-2.5 pr-4 font-sans font-semibold">Etki Başlangıcı &amp; Pik (IV / IM)</td>
+                  <td className="py-2.5 pr-4 text-purple-600 dark:text-purple-400 font-bold">IV: 1–2 dk (pik 2–5 dk) · IM: 10–20 dk</td>
+                  <td className="py-2.5 font-sans text-xs">
+                    Fenilefrin/Noradrenalin’e göre (20–45 sn) daha yavaş başlar; ani şiddetli hipotansiyonda ek doz için 2–3 dk bekleyin (doz istifleme/rebound hipertansiyon riski!).
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-sans font-semibold">Pressör Etki Süresi</td>
+                  <td className="py-2.5 pr-4 font-bold">IV: 10 – 20 dk · IM: 30 – 60 dk</td>
+                  <td className="py-2.5 font-sans text-xs">
+                    Aralıklı IV bolus kullanımına uygundur; ancak uzun süren hipotansiyonda tekrarlayan boluslar taşiflaksi yaptığı için sürekli direkt vazopresör infüzyonu üstündür.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-sans font-semibold">Eliminasyon Yarı Ömrü (t½)</td>
+                  <td className="py-2.5 pr-4 font-bold">3 – 6 saat (İdrar pH bağımlı!)</td>
+                  <td className="py-2.5 font-sans text-xs">
+                    Asidik idrarda (pH ~5) t½ ~3 saate kısalır; alkali idrarda (pH ~6,3–8, ör. Asetazolamid / NaHCO₃) t½ 6 saatin üzerine uzar!
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-sans font-semibold">Metabolizma &amp; Atılım</td>
+                  <td className="py-2.5 pr-4 font-bold">%60 – 75 Renal (değişmeden)</td>
+                  <td className="py-2.5 font-sans text-xs">
+                    MAO/COMT ile yıkılmaz; minimal hepatik N-demetilasyon (norefedrin) ve deaminasyon. İleri böbrek yetmezliğinde birikim riski artar.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-sans font-semibold">Plasental Transfer (UV/MA Oranı)</td>
+                  <td className="py-2.5 pr-4 text-rose-600 dark:text-rose-400 font-bold">Yüksek (~1,13 · Serbest geçiş)</td>
+                  <td className="py-2.5 font-sans text-xs">
+                    Ngan Kee (2009): Fenilefrinin aksine plasentayı hızla geçer ve fetüste metabolik β-uyarım ile laktat artışı / umblikal arter pH düşüşü yapar.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-sans font-semibold">Kümülatif Tavan / Taşiflaksi Eşiği</td>
+                  <td className="py-2.5 pr-4 text-amber-600 dark:text-amber-400 font-bold">30 – 50 mg IV (Erişkin)</td>
+                  <td className="py-2.5 font-sans text-xs">
+                    Toplam 30 mg sonrası pressör yanıt belirgin azalır, 50 mg üzerine çıkmak yerine Noradrenalin veya Fenilefrin’e geçilmelidir.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {/* 4. MUTLAK VE RELATİF KONTRENDİKASYONLAR (ENDİKASYONLARDAN ÖNCE!) */}
+      <ContraindicationsGridBlock
+        isDark={isDark}
+        absoluteItems={[
+          'Son 14 gün içinde MAO inhibitörü kullanımı (tranilsipromin, fenelzin, selejilin, moklobemid ve antibiyotik LİNEZOLİD veya METİLEN MAVİSİ dahil!): Presinaptik birikmiş katekolaminlerin ani boşalmasıyla ölümcül hipertansif kriz ve intraserebral kanama!',
+          'Tanılı veya şüpheli feokromositoma, şiddetli kontrolsüz hipertansiyon, dar açılı glokom ve efedrine bilinen aşırı duyarlılık.',
+          'Dinamik sol ventrikül çıkış yolu obstrüksiyonu (HOCM / SAM) ve ciddi semptomatik aort stenozu: β₁ inotropi ve taşikardi obstrüksiyonu ile subendokardiyal iskemiyi dramatik biçimde kötüleştirir (saf α₁ Fenilefrin tercih edin!).',
+        ]}
+        relativeItems={[
+          'Bazal taşikardi (KTA > 100–110/dk), koroner arter hastalığı / akut koroner sendrom ve kontrolsüz taşiaritmi (AF/SVT/VT): Kalp hızı ve miyokard O₂ talebini artırır.',
+          'Obstetrik sezaryen spinal hipotansiyonunda maternal KTA normal/yüksek iken veya fetal distres varken 1. basamak kullanım (Kinsella 2018: Fenilefrin/Noradrenalin üstündür).',
+          'Hipertiroidizm/tirotoksikoz, trisiklik antidepresan (TSA) veya kokain kullanımı: Abartılı hipertansif yanıt ve ventriküler aritmi riski.',
+          'Düzeltilmemiş ciddi hipovolemi / aktif masif kanama ve oksitosin/metilergonovin (ergot alkaloidi) eş zamanlı kullanımı (şiddetli postpartum hipertansif kriz riski!).',
+        ]}
+        clinicalNote="Linezolid alan yoğun bakım veya ortopedi/enfeksiyon hastasında indirekt sempatomimetik (Efedrin) kullanmak klasik bir hipertansif kriz tuzağıdır — bu hastalarda mutlaka düşük doz direkt vazopresör (Fenilefrin veya Noradrenalin) titre edin!"
+      />
+
+      {/* 5. KLİNİK ENDİKASYONLAR VE DOZ REJİMLERİ */}
+      <section
+        id="sec-dozlar"
+        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
+          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+        }`}
+      >
+        <div className="flex items-center gap-2.5">
+          <Syringe className={`h-5 w-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri
+          </h3>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr className={`border-b ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                <th className="py-2.5 pr-4 font-bold">Klinik Endikasyon</th>
+                <th className="py-2.5 pr-4 font-bold">Önerilen Doz &amp; Yol</th>
+                <th className="py-2.5 font-bold">Klinik Uygulama İncileri</th>
+              </tr>
+            </thead>
+            <tbody className={`divide-y ${isDark ? 'divide-slate-800/80 text-slate-200' : 'divide-slate-100 text-slate-800'}`}>
+              <tr className="align-top">
+                <td className="py-3 pr-4 font-bold text-purple-600 dark:text-purple-400 min-w-[190px]">
+                  Genel / Nöroaksiyel Anestezi Hipotansiyonu (Erişkin)
+                </td>
+                <td className="py-3 pr-4 font-mono font-bold tabular-nums min-w-[190px]">
+                  5 – 10 mg IV bolus<br />
+                  <span className="text-[11px] font-normal text-slate-500">3–5 dk’da bir tekrar · Maks 50 mg</span>
+                </td>
+                <td className="py-3 text-xs leading-relaxed">
+                  <strong>POQI-3 (Sessler 2019):</strong> OAB &lt; 65 mmHg (veya bazalin &lt; %80’i) organ hasarı (AKI/MINS) riskini artırır.
+                  Efedrin, özellikle <strong>düşük-normal KTA</strong> eşlik eden geçici indüksiyon/spinal hipotansiyonunda idealdir.
+                </td>
+              </tr>
+              <tr className="align-top">
+                <td className="py-3 pr-4 font-bold text-rose-600 dark:text-rose-400">
+                  Spinal Anestezi + Bradikardi (Bezold-Jarisch)
+                </td>
+                <td className="py-3 pr-4 font-mono font-bold tabular-nums">
+                  5 – 10 mg IV bolus<br />
+                  <span className="text-[11px] font-normal text-slate-500">Gerekirse Atropin / düşük doz Adrenalin</span>
+                </td>
+                <td className="py-3 text-xs leading-relaxed">
+                  Sempatik blokajla venöz dönüş ve KTA birlikte düştüğünde hem α₁ venokonstrüksiyon hem β₁ kronotropi sağlar.
+                  Şiddetli bradikardi (&lt; 40/dk) ve derin hipotansiyonda vakit kaybetmeden Adrenalin (10–50 mcg IV) ekleyin.
+                </td>
+              </tr>
+              <tr className="align-top">
+                <td className="py-3 pr-4 font-bold text-amber-600 dark:text-amber-400">
+                  Obstetrik Sezaryen Spinal Hipotansiyonu (Kinsella 2018)
+                </td>
+                <td className="py-3 pr-4 font-mono font-bold tabular-nums">
+                  5 – 10 mg IV (Seçilmiş olgu)<br />
+                  <span className="text-[11px] font-normal text-slate-500">Yalnızca KTA düşükse · Toplam &lt; 15–20 mg</span>
+                </td>
+                <td className="py-3 text-xs leading-relaxed">
+                  <strong>Kinsella 2018 &amp; Lee 2002:</strong> 1. tercih Fenilefrin (veya Noradrenalin)’dir. Efedrin yalnızca bazal bradikardi veya
+                  Fenilefrin sonrası refleks bradikardi varlığında eklenir; yüksek dozda fetal metabolik asidemi yapar.
+                </td>
+              </tr>
+              <tr className="align-top">
+                <td className="py-3 pr-4 font-bold text-sky-600 dark:text-sky-400">
+                  Pediatrik İntraoperatif Hipotansiyon
+                </td>
+                <td className="py-3 pr-4 font-mono font-bold tabular-nums">
+                  0,1 – 0,2 mg/kg IV bolus<br />
+                  <span className="text-[11px] font-normal text-slate-500">Tek doz maks 5–10 mg (1 mg/mL dilüsyon)</span>
+                </td>
+                <td className="py-3 text-xs leading-relaxed">
+                  Çocukta hipotansiyonun en sık nedenleri derin anestezi ve hipovolemidir; önce sıvı bolusu ve MAC/infüzyon kontrolü yapılmalıdır.
+                </td>
+              </tr>
+              <tr className="align-top">
+                <td className="py-3 pr-4 font-bold text-teal-600 dark:text-teal-400">
+                  IM Uygulama (Seçilmiş / Uzamış Hafif Destek)
+                </td>
+                <td className="py-3 pr-4 font-mono font-bold tabular-nums">
+                  25 – 50 mg IM<br />
+                  <span className="text-[11px] font-normal text-slate-500">Başlangıç 10–20 dk · Süre 30–60 dk</span>
+                </td>
+                <td className="py-3 text-xs leading-relaxed">
+                  Emilimi ve süresi öngörülemez olduğundan (özellikle periferik vazokonstrüksiyon ve obstetride rebound hipertansiyon riski) modern anestezide rutin önerilmez; IV titrasyon standarttır.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* 6. ETKİLEŞİMLİ DOZ, TAŞİFLAKSİ & OBSTETRİK KARAR HESAPLAYICISI */}
+      <section
+        id="sec-hesaplayici"
+        className={`rounded-2xl border p-5 sm:p-6 space-y-5 ${
+          isDark ? 'border-purple-500/30 bg-slate-900/80' : 'border-purple-200 bg-white shadow-xs'
+        }`}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <Activity className={`h-5 w-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+            <div>
+              <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Etkileşimli Efedrin Bolus, Taşiflaksi &amp; Obstetrik Karar Hesaplayıcısı
+              </h3>
+              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                TR 50 mg/1 mL ampul sulandırma hacmi, kümülatif 50 mg tavan takibi ve sezaryen vazopresör seçimi
+              </p>
+            </div>
+          </div>
+
+          <MonographCopyButton isDark={isDark} getText={getReportText} label="Yatak Başı Rapor Kopyala" />
+        </div>
+
+        {/* 3 Mode Tabs */}
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              { id: 'intraop', label: '1. İntraoperatif Bolus & Taşiflaksi' },
+              { id: 'obstetric', label: '2. Obstetrik (Sezaryen) Karar Destek' },
+              { id: 'dilution_compare', label: '3. Sulandırma & Vazopresör Karşılaştırma' },
+            ] as const
+          ).map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
+                activeTab === tab.id
+                  ? isDark
+                    ? 'bg-purple-500/20 border-purple-400 text-purple-200'
+                    : 'bg-purple-50 border-purple-500 text-purple-900'
+                  : isDark
+                    ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* TAB 1: İNTRAOPERATİF BOLUS & TAŞİFLAKSİ */}
+        {activeTab === 'intraop' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <div className="lg:col-span-5 space-y-4">
+              <div className="grid grid-cols-2 gap-2">
+                {(
+                  [
+                    { id: 'adult', label: 'Erişkin (5–10 mg IV)' },
+                    { id: 'pediatric', label: 'Pediatrik (0,1–0,2 mg/kg)' },
+                  ] as const
+                ).map((g) => (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => {
+                      setPatientGroup(g.id);
+                      if (g.id === 'pediatric') {
+                        if (weightKg > 40) setWeightKg(18);
+                        setDilutionMgMl(1);
+                      } else {
+                        if (weightKg < 40) setWeightKg(75);
+                        setDilutionMgMl(5);
+                      }
+                    }}
+                    className={`px-3 py-2 rounded-xl text-xs font-bold border cursor-pointer transition-colors ${
+                      patientGroup === g.id
+                        ? isDark
+                          ? 'bg-purple-500/20 border-purple-400 text-purple-200'
+                          : 'bg-purple-50 border-purple-500 text-purple-900'
+                        : isDark
+                          ? 'bg-slate-950 border-slate-800 text-slate-300'
+                          : 'bg-slate-50 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    {g.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor={wtId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Hasta Kilosu (kg)
+                  </label>
+                  <input
+                    id={wtId}
+                    type="number"
+                    min={3}
+                    max={180}
+                    value={weightKg}
+                    onChange={(e) => setWeightKg(Math.max(3, Math.min(180, Number(e.target.value) || 3)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label htmlFor={cumId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Verilmiş Kümülatif Doz (mg)
+                  </label>
+                  <input
+                    id={cumId}
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={cumulativeMg}
+                    onChange={(e) => setCumulativeMg(Math.max(0, Math.min(100, Number(e.target.value) || 0)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor={mapId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Mevcut OAB (mmHg)
+                  </label>
+                  <input
+                    id={mapId}
+                    type="number"
+                    min={30}
+                    max={120}
+                    value={currentMap}
+                    onChange={(e) => setCurrentMap(Math.max(30, Math.min(120, Number(e.target.value) || 30)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label htmlFor={hrId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Mevcut KTA (/dk)
+                  </label>
+                  <input
+                    id={hrId}
+                    type="number"
+                    min={25}
+                    max={180}
+                    value={currentHr}
+                    onChange={(e) => setCurrentHr(Math.max(25, Math.min(180, Number(e.target.value) || 25)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              {/* Sulandırma Seçimi */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Hazırlanan Enjektör Konsantrasyonu
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {(
+                    [
+                      { val: 5, label: '5 mg/mL (Std)' },
+                      { val: 10, label: '10 mg/mL' },
+                      { val: 1, label: '1 mg/mL (Ped)' },
+                    ] as const
+                  ).map((d) => (
+                    <button
+                      key={d.val}
+                      type="button"
+                      onClick={() => setDilutionMgMl(d.val)}
+                      className={`py-2 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-colors ${
+                        dilutionMgMl === d.val
+                          ? isDark
+                            ? 'bg-amber-500/20 border-amber-400 text-amber-200'
+                            : 'bg-amber-50 border-amber-500 text-amber-900'
+                          : isDark
+                            ? 'bg-slate-950 border-slate-800 text-slate-400'
+                            : 'bg-slate-50 border-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Güvenlik Bayrakları */}
+              <div className="space-y-2 pt-1">
+                <label className="flex items-center gap-2 text-xs cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={hasMaoi}
+                    onChange={(e) => setHasMaoi(e.target.checked)}
+                    className="rounded border-slate-400 text-rose-600"
+                  />
+                  <span className="text-rose-600 dark:text-rose-400 font-semibold">
+                    Son 14 günde MAOI / Linezolid / Metilen Mavisi kullanımı
+                  </span>
+                </label>
+                <label className="flex items-center gap-2 text-xs cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={hasHocmOrAs}
+                    onChange={(e) => setHasHocmOrAs(e.target.checked)}
+                    className="rounded border-slate-400 text-rose-600"
+                  />
+                  <span className="text-rose-600 dark:text-rose-400 font-semibold">
+                    HOCM (LVOTO) veya Ciddi Aort Stenozu / Aktif Koroner İskemi
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 space-y-3">
+              {hasMaoi && (
+                <div className={`rounded-xl border p-3.5 text-xs flex items-start gap-2.5 ${isDark ? 'bg-rose-950/50 border-rose-500/50 text-rose-200' : 'bg-rose-50 border-rose-300 text-rose-950'}`}>
+                  <ShieldAlert className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-bold text-sm">DUR! MAOI / Linezolid Etkileşimi — Efedrin KONTRENDİKE!</div>
+                    <p className="mt-1 leading-relaxed">
+                      İndirekt noradrenalin boşalması şiddetli hipertansif kriz, intraserebral kanama ve ölümcül aritmiye yol açar.
+                      Doğrudan düşük doz <strong>direkt etkili vazopresör (Fenilefrin veya Noradrenalin)</strong> titre edin!
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {hasHocmOrAs && (
+                <div className={`rounded-xl border p-3.5 text-xs flex items-start gap-2.5 ${isDark ? 'bg-rose-950/40 border-rose-500/50 text-rose-200' : 'bg-rose-50 border-rose-300 text-rose-950'}`}>
+                  <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-bold text-sm">HOCM / Ciddi Aort Stenozu — Efedrin’den Kaçının!</div>
+                    <p className="mt-1 leading-relaxed">
+                      β₁ inotropi ve taşikardi çıkış yolu obstrüksiyonunu (SAM) ağırlaştırır ve diyastolik koroner perfüzyonu bozar.
+                      Bunun yerine <strong>saf α₁ agonisti Fenilefrin</strong> (50–100 mcg IV) tercih edin.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {isMaxCeilingReached && (
+                <div className={`rounded-xl border p-3.5 text-xs flex items-start gap-2.5 ${isDark ? 'bg-amber-950/40 border-amber-500/50 text-amber-200' : 'bg-amber-50 border-amber-300 text-amber-950'}`}>
+                  <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-bold text-sm">50 mg Kümülatif Tavan &amp; Taşiflaksi — Direkt Vazopresöre Geçin!</div>
+                    <p className="mt-1 leading-relaxed">
+                      Presinaptik endojen noradrenalin depoları tükenmiştir. Daha fazla efedrin vermek yerine{' '}
+                      <strong>Noradrenalin infüzyonu</strong> (0,02–0,1 mcg/kg/dk) veya <strong>Fenilefrin</strong> başlayın ve hipovolemi/kanamayı yeniden değerlendirin.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {!isMaxCeilingReached && isTachyphylaxisRisk && (
+                <div className={`rounded-xl border p-3 text-xs flex items-start gap-2 ${isDark ? 'bg-amber-950/30 border-amber-500/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'}`}>
+                  <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>Taşiflaksi Eşiği ({cumulativeMg} / 50 mg):</strong> Kümülatif doz 30 mg’ı aştı; yanıt azalıyorsa direkt vazopresör (Noradrenalin / Fenilefrin) hazırlayın.
+                  </span>
+                </div>
+              )}
+
+              {/* Sonuç Kutusu */}
+              <div className={`rounded-xl border p-4 space-y-3 ${isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
+                    {patientGroup === 'adult' ? 'Erişkin İntraoperatif Bolus' : 'Pediatrik İntraoperatif Bolus'}
+                  </span>
+                  <span className="font-mono text-lg font-extrabold tabular-nums text-slate-900 dark:text-white">
+                    {intraopRec.doseMg.toFixed(patientGroup === 'pediatric' ? 1 : 0)} mg IV
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+                    <div className="text-[10px] font-mono uppercase text-slate-400">Doz Rejimi</div>
+                    <div className="mt-1 font-semibold leading-relaxed">{intraopRec.rangeText}</div>
+                  </div>
+                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+                    <div className="text-[10px] font-mono uppercase text-slate-400">Çekilecek Hacim ({dilutionMgMl} mg/mL)</div>
+                    <div className="mt-1 font-mono font-bold text-amber-600 dark:text-amber-400 leading-relaxed">{intraopRec.volText}</div>
+                  </div>
+                </div>
+
+                {/* Erişkin Kümülatif Tavan Göstergesi */}
+                {patientGroup === 'adult' && (
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[11px] font-mono tabular-nums">
+                      <span className="text-slate-500">Kümülatif Tavan Kullanımı (50 mg)</span>
+                      <span className={`font-bold ${isMaxCeilingReached ? 'text-rose-500' : isTachyphylaxisRisk ? 'text-amber-500' : 'text-emerald-500'}`}>
+                        {cumulativeMg} / 50 mg (%{Math.min(100, Math.round((cumulativeMg / 50) * 100))})
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                      <div
+                        className={`h-full transition-all ${
+                          isMaxCeilingReached ? 'bg-rose-500' : isTachyphylaxisRisk ? 'bg-amber-500' : 'bg-purple-500'
+                        }`}
+                        style={{ width: `${Math.min(100, (cumulativeMg / 50) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className={`p-3 rounded-lg border text-xs leading-relaxed ${isDark ? 'bg-slate-900/70 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700'}`}>
+                  <strong>Klinik Değerlendirme:</strong> {intraopRec.note}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: OBSTETRİK SEZARYEN KARAR DESTEK */}
+        {activeTab === 'obstetric' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <div className="lg:col-span-5 space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor={obsBaseId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Bazal Maternal SKB (mmHg)
+                  </label>
+                  <input
+                    id={obsBaseId}
+                    type="number"
+                    min={85}
+                    max={180}
+                    value={obsBaselineSbp}
+                    onChange={(e) => setObsBaselineSbp(Math.max(85, Math.min(180, Number(e.target.value) || 85)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label htmlFor={obsCurrId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Mevcut SKB (mmHg)
+                  </label>
+                  <input
+                    id={obsCurrId}
+                    type="number"
+                    min={50}
+                    max={180}
+                    value={obsCurrentSbp}
+                    onChange={(e) => setObsCurrentSbp(Math.max(50, Math.min(180, Number(e.target.value) || 50)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor={obsHrId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Maternal KTA (/dk)
+                  </label>
+                  <input
+                    id={obsHrId}
+                    type="number"
+                    min={35}
+                    max={160}
+                    value={obsHr}
+                    onChange={(e) => setObsHr(Math.max(35, Math.min(160, Number(e.target.value) || 35)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label htmlFor={obsCumId} className="block text-xs font-semibold mb-1 text-slate-600 dark:text-slate-300">
+                    Verilen Efedrin (mg)
+                  </label>
+                  <input
+                    id={obsCumId}
+                    type="number"
+                    min={0}
+                    max={60}
+                    step={5}
+                    value={obsCumulativeEphedrine}
+                    onChange={(e) => setObsCumulativeEphedrine(Math.max(0, Math.min(60, Number(e.target.value) || 0)))}
+                    className={`w-full px-3 py-2 rounded-xl border text-sm font-mono font-bold tabular-nums ${
+                      isDark ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              <label className="flex items-center gap-2 text-xs cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  checked={obsFetalDistress}
+                  onChange={(e) => setObsFetalDistress(e.target.checked)}
+                  className="rounded border-slate-400 text-rose-600"
+                />
+                <span className="text-rose-600 dark:text-rose-400 font-semibold">
+                  Fetal distres / NST bozukluğu / acil sezaryen mevcut
+                </span>
+              </label>
+            </div>
+
+            <div className="lg:col-span-7 space-y-3">
+              <div
+                className={`rounded-xl border p-4 space-y-2.5 ${
+                  obsVerdict.tone === 'rose'
+                    ? isDark
+                      ? 'bg-rose-950/40 border-rose-500/50 text-rose-100'
+                      : 'bg-rose-50 border-rose-300 text-rose-950'
+                    : obsVerdict.tone === 'teal'
+                      ? isDark
+                        ? 'bg-teal-950/40 border-teal-500/50 text-teal-100'
+                        : 'bg-teal-50 border-teal-300 text-teal-950'
+                      : obsVerdict.tone === 'amber'
+                        ? isDark
+                          ? 'bg-amber-950/40 border-amber-500/50 text-amber-100'
+                          : 'bg-amber-50 border-amber-300 text-amber-950'
+                        : isDark
+                          ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-100'
+                          : 'bg-emerald-50 border-emerald-300 text-emerald-950'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="font-bold text-sm">{obsVerdict.headline}</span>
+                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-md bg-black/10 dark:bg-white/10 tabular-nums">
+                    SKB: Bazalin %{obsSbpPct}’i
+                  </span>
+                </div>
+                <p className="text-xs leading-relaxed opacity-95">{obsVerdict.detail}</p>
+              </div>
+
+              <div className={`rounded-xl border p-3.5 text-xs leading-relaxed ${isDark ? 'bg-slate-950/70 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+                <strong>Neden Obstetride Fenilefrin / Noradrenalin Önde?</strong> Ngan Kee (2009) ve Lee (2002) verileri, Efedrin’in plasentayı geçip fetüste
+                doğrudan β-adrenerjik metabolik uyarım yaparak umblikal arter laktatını artırdığını ve pH’yı düşürdüğünü göstermiştir.
+                Efedrin obstetride artık <em>bradikardiye eşlik eden hipotansiyon</em> veya Fenilefrin’in refleks bradikardisini dengelemek için seçici olarak kullanılır.
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: SULANDIRMA & VAZOPRESÖR KARŞILAŞTIRMA */}
+        {activeTab === 'dilution_compare' && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-purple-950/25 border-purple-500/30' : 'bg-purple-50/70 border-purple-200'}`}>
+                <div className="font-bold text-purple-700 dark:text-purple-300">Erişkin Standart Enjektör (5 mg/mL)</div>
+                <p className={`leading-relaxed font-mono ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                  1 ampul Efedrin (50 mg / 1 mL) + 9 mL %0,9 NaCl = <strong>10 mL (5 mg/mL)</strong>
+                </p>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  1 mL = 5 mg · 2 mL = 10 mg. ISO standart <strong>mor (lavanta)</strong> etiket yapıştırın ve konsantrasyonu yazın.
+                </p>
+              </div>
+
+              <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-sky-950/25 border-sky-500/30' : 'bg-sky-50/70 border-sky-200'}`}>
+                <div className="font-bold text-sky-700 dark:text-sky-300">Pediatrik Hassas Enjektör (1 mg/mL)</div>
+                <p className={`leading-relaxed font-mono ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                  5 mg/mL enjektörden 2 mL (10 mg) + 8 mL %0,9 NaCl = <strong>10 mL (1 mg/mL)</strong>
+                </p>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  10 kg çocukta 0,1–0,2 mg/kg = 1–2 mL; küçük çocuklarda aşırı doz hatasını önler.
+                </p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className={`border-b ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                    <th className="py-2 pr-3 font-bold">Özellik</th>
+                    <th className="py-2 pr-3 font-bold text-purple-600 dark:text-purple-400">Efedrin</th>
+                    <th className="py-2 pr-3 font-bold text-sky-600 dark:text-sky-400">Fenilefrin</th>
+                    <th className="py-2 font-bold text-rose-600 dark:text-rose-400">Noradrenalin</th>
+                  </tr>
+                </thead>
+                <tbody className={`divide-y ${isDark ? 'divide-slate-800/80 text-slate-200' : 'divide-slate-100 text-slate-800'}`}>
+                  <tr>
+                    <td className="py-2 pr-3 font-semibold">Reseptör / Etki</td>
+                    <td className="py-2 pr-3">Karma Direkt + İndirekt α₁, β₁, β₂</td>
+                    <td className="py-2 pr-3">Direkt saf α₁ agonist</td>
+                    <td className="py-2">Direkt güçlü α₁ + ılımlı β₁</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-3 font-semibold">Kalp Hızı (KTA) &amp; Debi</td>
+                    <td className="py-2 pr-3">KTA ↑ · Kardiyak debi ↑ / korunur</td>
+                    <td className="py-2 pr-3">Refleks bradikardi (KTA ↓) · CO ↓ olabilir</td>
+                    <td className="py-2">KTA nötr/hafif ↓ · CO korunur</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-3 font-semibold">Taşiflaksi Riski</td>
+                    <td className="py-2 pr-3 font-bold text-amber-600 dark:text-amber-400">YÜKSEK (&gt; 30–50 mg)</td>
+                    <td className="py-2 pr-3 text-emerald-600 dark:text-emerald-400">Yok (Direkt)</td>
+                    <td className="py-2 text-emerald-600 dark:text-emerald-400">Yok (Direkt)</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-3 font-semibold">Obstetrik Fetal pH</td>
+                    <td className="py-2 pr-3 text-rose-600 dark:text-rose-400">Daha düşük pH / laktat ↑</td>
+                    <td className="py-2 pr-3 text-emerald-600 dark:text-emerald-400">Üstün (1. tercih)</td>
+                    <td className="py-2 text-emerald-600 dark:text-emerald-400">Üstün (KTA’yı daha iyi korur)</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-3 font-semibold">İdeal Klinik Senaryo</td>
+                    <td className="py-2 pr-3">Hipotansiyon + düşük/normal KTA, geçici bolus</td>
+                    <td className="py-2 pr-3">Hipotansiyon + taşikardi, HOCM, AS, KAH</td>
+                    <td className="py-2">Sürekli infüzyon, septik/vazoplejik şok, dirençli IOH</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 7. HAZIRLAMA, TR AMPUL FORMLARI & UYUMLULUK */}
+      <section
+        id="sec-uyumluluk"
+        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
+          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+        }`}
+      >
+        <div className="flex items-center gap-2.5">
+          <FlaskConical className={`h-5 w-5 ${isDark ? 'text-amber-400' : 'text-amber-600'}`} />
+          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            Türkiye Ampul Formu, Sulandırma &amp; Y-Site Uyumluluk
+          </h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-rose-950/25 border-rose-500/40' : 'bg-rose-50/80 border-rose-200'}`}>
+            <div className="font-bold text-rose-700 dark:text-rose-300">KRİTİK: 50 mg / 1 mL (%5) Ampul!</div>
+            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Türkiye’de standart Efedrin HCl ampul <strong>50 mg / 1 mL</strong> konsantredir. <strong>ASLA sulandırmadan 1 mL IV puşe yapmayın!</strong>{' '}
+              10 kat doz aşımı şiddetli hipertansif kriz, pulmoner ödem ve beyin kanaması yapar.
+            </p>
+          </div>
+
+          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+            <div className="font-bold text-purple-700 dark:text-purple-300">Standart Ameliyathane Dilüsyonu</div>
+            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <strong>1 ampul (50 mg/1 mL) + 9 mL %0,9 NaCl = 10 mL (5 mg/mL)</strong>. Periferik damar yolundan güvenle puşe edilir (ekstravazasyon nekrozu riski Noradrenalin’e göre çok düşüktür, yine de serbest akan hattan verip SF flush yapın).
+            </p>
+          </div>
+
+          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+            <div className="font-bold text-sky-700 dark:text-sky-300">Y-Site Uyumluluk &amp; Geçimsizlik</div>
+            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <strong>Uyumlu:</strong> %0,9 NaCl, %5 Dekstroz, Ringer Laktat, Atropin, Lidokain, Fentanil.<br />
+              <strong>Geçimsiz:</strong> Alkali çözeltiler (<strong>Sodyum Bikarbonat</strong>, Tiyopental, Fenobarbital) — çökme ve inaktivasyon riski nedeniyle aynı hattan verme!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. BÖBREK VE KARACİĞER YETMEZLİĞİ */}
+      <OrganImpairmentGridBlock
+        isDark={isDark}
+        renalSummary="Ana atılım yolu böbrektir (%60–75 değişmeden); tek/düşük dozda ayar gerekmez ama ileri KBH’de tekrarlayan dozlarda birikim ve hipertansiyon uzar."
+        renalDetails={[
+          'İdrar pH’sı renal klirensi doğrudan belirler: Alkali idrarda (NaHCO₃, Asetazolamid, RTA) tübüler geri emilim artar ve t½ 6 saati aşar.',
+          'İleri KBH / anüride (eGFR < 30 mL/dk) tekrarlayan efedrin bolusları yerine kısa etkili direkt ajan (Noradrenalin/Fenilefrin) tercih edilmelidir.',
+        ]}
+        hepaticSummary="Karaciğer metabolizması minördür; tek/kısa süreli intraoperatif boluslarda doz ayarı gerekmez."
+        hepaticDetails={[
+          'İleri sirozda splanknik vazodilatasyon ve otonom disfonksiyon nedeniyle efedrin yanıtı öngörülemez olabilir → erken Noradrenalin infüzyonu üstündür.',
+        ]}
+      />
+
+      {/* 9. GEBELİK, OBSTETRİK VE LAKTASYON */}
+      <PregnancyLactationBlock
+        isDark={isDark}
+        pregnancySummary="Plasentayı serbestçe geçer (UV/MA ~1,13) — Sezaryen spinal hipotansiyonunda 1. tercih Fenilefrin/Noradrenalin’dir; Efedrin düşük KTA’da seçici kullanılır."
+        pregnancyDetails={[
+          'Ngan Kee (2009) & Lee (2002): Efedrin, uteroplasental kan akımını korusa da fetüste doğrudan β-adrenerjik metabolizmayı uyararak umblikal arter pH’sını düşürür ve laktatı yükseltir.',
+          'Kinsella (2018) Konsensüsü: Maternal bazal KTA düşükse veya Fenilefrin ile bradikardi geliştiyse 5–10 mg IV Efedrin güvenle eklenebilir; toplam dozu 15–20 mg altında tutmak fetal asidemi riskini azaltır.',
+          'Postpartum Metilergonovin (ergot) veya yüksek doz oksitosin ile eş zamanlı uygulamada şiddetli hipertansif kriz ve serebral vazospazm riskine dikkat!',
+        ]}
+        lactationSummary="Anne sütüne düşük miktarda geçer; perioperatif tek/düşük doz (5–20 mg) sonrası emzirmeyi kesmek gerekmez."
+        lactationDetails={[
+          'Yüksek veya tekrarlayan dozlarda sütteki geçiş yenidoğanda geçici huzursuzluk ve taşikardi yapabilir; kısa süreli gözlem yeterlidir.',
+        ]}
+      />
+
+      {/* 10. ÖNEMLİ OLUMSUZ ETKİLER */}
+      <AdverseEffectsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'Taşiflaksi (Hızlı Yanıt Kaybı)',
+            incidenceOrSeverity: 'Çok Sık · > 30–50 mg',
+            tone: 'amber',
+            detail:
+              'Presinaptik sempatik noradrenalin depolarının boşalmasına bağlıdır. Kümülatif 30–50 mg sonrası ek boluslarla basınç yükselmez; direkt vazopresöre geçiş şarttır.',
+          },
+          {
+            title: 'Taşikardi, Aritmi & Miyokard İskemisi',
+            incidenceOrSeverity: 'Sık · Doz Bağımlı',
+            tone: 'rose',
+            detail:
+              'β₁ uyarısına bağlı sinüs taşikardisi, SVT/AF hızlanması, PVC ve koroner arter hastalarında artan miyokard O₂ tüketimi sonucu iskemi (MINS).',
+          },
+          {
+            title: 'Rebound Hipertansiyon & İntrakraniyal Kanama',
+            incidenceOrSeverity: 'Doz İstifleme / Sulandırmama',
+            tone: 'rose',
+            detail:
+              'Etki başlangıcı 1–2 dk olduğundan aceleyle üst üste verilen boluslar veya 50 mg/1 mL ampulün sulandırılmadan uygulanması ani malign hipertansiyona yol açabilir.',
+          },
+          {
+            title: 'Fetal Metabolik Asidemi & SSS Uyarımı',
+            incidenceOrSeverity: 'Obstetrik & Perioperatif',
+            tone: 'amber',
+            detail:
+              'Obstetride yüksek dozda düşük umblikal arter pH; uyanık/rejyonel anestezide anksiyete, tremor, baş ağrısı, hafif MAC artışı ve akut idrar retansiyonu.',
+          },
+        ]}
+      />
+
+      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
+      <SpecialClinicalCautionsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'Neden 30–50 mg Sonrası Efedrin Çalışmaz? (Taşiflaksi)',
+            detail:
+              'Efedrin kendi reseptör etkisinden çok sinir ucundaki hazır noradrenalin depolarına bağımlıdır. Depolar tükendiğinde ek efedrin kan basıncını artırmaz; hemen direkt etkili Fenilefrin veya Noradrenalin’e geçin.',
+          },
+          {
+            title: 'Linezolid & Metilen Mavisi "Gizli MAOI" Tuzağı',
+            detail:
+              'Klasik psikiyatrik MAOI’ler dışında antibiyotik Linezolid ve vazoplejide kullanılan Metilen Mavisi güçlü MAO inhibitörleridir. Bu ilaçları alan hastaya Efedrin vermek ölümcül hipertansif kriz tetikleyebilir!',
+          },
+          {
+            title: 'Kronik Katekolamin Deplesyonu & Otonom Nöropati',
+            detail:
+              'Uzun süreli yoğun bakım/septik şok hastalarında, ağır diyabetik otonom nöropatide veya sempatolitik (rezerpin/metildopa) kullananlarda endojen NE depoları düşük olduğu için Efedrin etkisiz kalabilir.',
+          },
+          {
+            title: 'İdrar Alkalinizasyonu Yarı Ömrü İkiye Katlar',
+            detail:
+              'Efedrin zayıf bir bazdır; Sodyum Bikarbonat veya Asetazolamid ile idrar alkalileşirse non-iyonize fraksiyon tübüllerden geri emilir ve taşikardi/hipertansiyon etkisi beklenenden uzun sürer.',
+          },
+          {
+            title: 'Halotan / Yüksek Doz Uçucu Anestezik Aritmi Duyarlılığı',
+            detail:
+              'Modern ajanlarda (sevofluran/desfluran) çok nadir olsa da hipoksi, hiperkarbi veya elektrolit bozukluğu (hipokalemi) varlığında β₁ uyarısı ventriküler ektopileri tetikleyebilir.',
+          },
+          {
+            title: 'Efedrin + Ergot Alkaloidi (Metilergonovin) Sinerjisi',
+            detail:
+              'Postpartum atoni için Metilergonovin uygulanan hastada yakın zamanda yüksek doz Efedrin verilmişse şiddetli vazospazm, hipertansif ensefalopati veya inme gelişebilir.',
+          },
+        ]}
+      />
+
+      {/* 12. ISMP HIGH-ALERT & ANTİDOT */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="EPHEDRINE (50 mg/1 mL → 5 mg/mL SULANDIR!)"
+        confusionRiskWith="EPİNEFRİN (ADRENALİN) · FENİLEFRİN"
+        criticalAlerts={[
+          'ÖLÜMCÜL SES BENZERLİĞİ (LASA): "Efedrin" ve "Epinefrin" ameliyathanede en sık karıştırılan ilaç çiftidir! Sözlü istemde "E-FED-RİN (5 mg/mL)" şeklinde konsantrasyonla birlikte sesli doğrulama yapın.',
+          'Türkiye’deki 50 mg / 1 mL ampul ASLA sulandırılmadan uygulanmaz — her zaman 9 mL %0,9 NaCl ile 10 mL’ye (5 mg/mL) tamamlayın ve ISO mor (lavanta) vazopresör etiketi yapıştırın.',
+          'Pik etki 2–5 dakikada oturduğu için 1. dakikada yanıt görmeden üst üste 10–20 mg puşe etmeyin (rebound hipertansiyon tuzağı).',
+          'Kümülatif 50 mg tavanına ulaşıldığında ek efedrin yapmayın — Noradrenalin veya Fenilefrin’e geçin.',
+        ]}
+        antidoteOrRescue="Aşırı doz veya yanlışlıkla sulandırılmamış uygulamaya bağlı şiddetli hipertansiyon / taşiaritmide kısa etkili titre edilebilir IV ajanlar kullanılır: taşikardi baskınsa Esmolol (0,5 mg/kg IV bolus → 50–200 mcg/kg/dk), şiddetli hipertansiyonda Nikardipin (5 mg/saat başla) veya Nitrogliserin / Fentolamin (1–5 mg IV). MAOI etkileşimli hipertansif krizde tek başına β-bloker vermeyin (karşılanmamış α-vazokonstrüksiyon riski → önce α-bloker/vazodilatör!)."
+      />
+
+      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMLERİ */}
+      <DrugReferencesAndInteractionsBlock
+        isDark={isDark}
+        drugName="Efedrin Hidroklorür"
+        drugsComUrl="https://www.drugs.com/drug-interactions/ephedrine.html"
+        medscapeUrl="https://reference.medscape.com/drug/akovaz-ephedrine-342432"
+        references={[
+          {
+            authors: 'Kinsella SM, Carvalho B, Dyer RA, et al.',
+            title: 'International consensus statement on the management of hypotension with vasopressors during caesarean section under spinal anaesthesia',
+            journal: 'Anaesthesia. 2018;73(1):71–92',
+            year: 2018,
+            pmid: '29090733',
+            doi: '10.1111/anae.14080',
+            note: 'Sezaryen spinal hipotansiyonunda Fenilefrin’in 1. tercih olduğu, Efedrin’in ise düşük maternal kalp hızında seçici kullanılması gerektiğini tanımlayan uluslararası konsensüs.',
+          },
+          {
+            authors: 'Ngan Kee WD, Khaw KS, Tan PE, Ng FF, Karmakar MK, Gin T.',
+            title: 'Placental transfer and fetal metabolic effects of phenylephrine and ephedrine during spinal anesthesia for cesarean delivery',
+            journal: 'Anesthesiology. 2009;111(3):506–512',
+            year: 2009,
+            pmid: '19609145',
+            doi: '10.1097/ALN.0b013e3181b160a3',
+            note: 'Efedrin’in plasentayı serbestçe geçerek fetal metabolizmayı uyardığını ve umblikal arter laktat artışı / pH düşüşüne neden olduğunu kanıtlayan dönüm noktası RKÇ.',
+          },
+          {
+            authors: 'Lee A, Ngan Kee WD, Gin T.',
+            title: 'A quantitative, systematic review of randomized controlled trials of ephedrine versus phenylephrine for the management of hypotension during spinal anesthesia for cesarean delivery',
+            journal: 'Anesthesia & Analgesia. 2002;94(4):920–926',
+            year: 2002,
+            pmid: '11916798',
+            note: 'Efedrin ve Fenilefrin karşılaştırmalı sistematik derleme ve meta-analiz: Fenilefrin ile anlamlı olarak daha yüksek umblikal arter pH profili.',
+          },
+          {
+            authors: 'Sessler DI, Bloomstone JA, Aronson S, et al. (POQI-3 Workgroup).',
+            title: 'Perioperative Quality Initiative consensus statement on intraoperative blood pressure, risk and outcomes for elective surgery',
+            journal: 'British Journal of Anaesthesia. 2019;122(5):563–574',
+            year: 2019,
+            pmid: '30916004',
+            doi: '10.1016/j.bja.2019.01.013',
+            note: 'İntraoperatif OAB < 65 mmHg eşiğinin miyokardiyal ve böbrek hasarı (MINS/AKI) ile ilişkisini ve zamanında vazopresör yönetimini tanımlayan POQI-3 konsensüsü.',
+          },
+        ]}
+      />
+    </div>
+  );
+};
