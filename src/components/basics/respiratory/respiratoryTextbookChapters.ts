@@ -270,7 +270,7 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
     number: 'Bölüm 4',
     title: 'Alveoler Ventilasyon, Ölü Boşluk ve Gaz Difüzyonu',
     summary:
-      'Alveoler ventilasyon–PaCO_{2} ilişkisi, anatomik ve fizyolojik ölü boşluk (Bohr/Enghoff), Alveoler Gaz Denklemi, A–a O_{2} gradyenti, Fick difüzyon yasası ve perfüzyon-sınırlı vs. difüzyon-sınırlı gaz transferi.',
+      'Alveoler ventilasyon–PaCO_{2} ilişkisi, anatomik ve fizyolojik ölü boşluk (Bohr/Enghoff), Basitleştirilmiş Alveoler Gaz Denklemi, A–a O_{2} gradyenti, Fick difüzyon yasası, İkinci Gaz Etkisi ve Difüzyon Hipoksisi (Fink Etkisi).',
     sources: "West B.2–3 · Nunn's B.7–8 · Levitzky B.3, 6",
     subsections: [
       {
@@ -279,24 +279,25 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
           'Dakika ventilasyonu (\\dot{V}_{E} = f × V_{T}) tek başına CO_{2} eliminasyonunu göstermez; çünkü her soluğun bir kısmı gaz değişimine katılmayan ölü boşlukta (V_{D}) kalır. Gerçek gaz değişimini belirleyen parametre alveoler ventilasyondur: \\dot{V}_{A} = f × (V_{T} − V_{D}). Hızlı ve çok yüzeysel solunumda \\dot{V}_{E} normal görünse bile V_{T} ölü boşluğa yaklaştığı için \\dot{V}_{A} dramatik düşer ve hiperkapni gelişir.',
           'Kararlı durumda arteriyel CO_{2} basıncı metabolik CO_{2} üretimiyle (\\dot{V}CO_{2} ≈ 200 mL/dk) doğru, alveoler ventilasyonla ters orantılıdır (PaCO_{2} ∝ \\dot{V}CO_{2} / \\dot{V}_{A}). Dolayısıyla alveoler ventilasyon yarıya inerse PaCO_{2} iki katına çıkar; iki katına çıkarsa PaCO_{2} yarıya iner.',
           'Fizyolojik ölü boşluk iki bileşenden oluşur: iletici havayollarının oluşturduğu anatomik ölü boşluk (Fowler tek nefes N_{2} testi ile ölçülür, ≈ 150 mL) + ventile olup perfüze olmayan alveollerin oluşturduğu alveoler ölü boşluk. Sağlıklı kişide alveoler ölü boşluk ihmal edilebilir düzeydedir (V_{D}/V_{T} ≈ 0,25–0,30). Pulmoner emboli, düşük kardiyak debi, hipotansiyon, aşırı PEEP ve ARDS’de alveoler ölü boşluk keskin biçimde artar ve PaCO_{2} − EtCO_{2} farkı açılır (normal fark 2–5 mmHg).',
+          'Klinik bir nüans olarak klasik Bohr denkleminde pay ve paydada ortalama alveoler gaz basıncı (P_{A}CO_{2}) yer alır; klinik pratikte bunun yerine arteriyel PaCO_{2}’nin konulduğu Enghoff (modifiye Bohr) denklemi kullanılır. Ancak belirgin sağ-sol şant veya ağır düşük \\dot{V}/\\dot{Q} varlığında venöz karışım (P_{\\bar{v}}CO_{2}) PaCO_{2}’yi P_{A}CO_{2} üzerine yükselttiğinden, Enghoff formülü V_{D}/V_{T} oranını gerçek anatomik/alveoler ölü boşluktan daha yüksek gösterir; bu nedenle yüksek Enghoff V_{D}/V_{T} değeri salt ölü boşluğu değil toplam \\dot{V}/\\dot{Q} verimsizliğini (ölü boşluk + şant etkisi) yansıtır.',
         ],
         formulas: [
           {
             expression: '\\dot{V}_{A} = f × (V_{T} − V_{D})   |   PaCO_{2} = (\\dot{V}CO_{2} × 0,863) / \\dot{V}_{A}   |   V_{D} / V_{T} = (PaCO_{2} − P_{\\bar{E}CO_{2}}) / PaCO_{2}',
-            caption: 'Alveoler ventilasyon, PaCO_{2} hiperbolik denklemi ve Enghoff (modifiye Bohr) fizyolojik ölü boşluk denklemi.',
+            caption: 'Alveoler ventilasyon, PaCO_{2} hiperbolik denklemi ve Enghoff (modifiye Bohr) denklemi (belirgin sağ-sol şantta venöz karışım nedeniyle gerçek ölü boşluktan yüksek ölçer).',
           },
         ],
       },
       {
-        heading: '4.2. Alveoler Gaz Denklemi ve A–a O_{2} Gradyenti',
+        heading: '4.2. Basitleştirilmiş Alveoler Gaz Denklemi ve A–a O_{2} Gradyenti',
         paragraphs: [
-          'Oksijenlenmedeki bir bozukluğun salt hipoventilasyondan mı yoksa parankimal gaz değişim kusurundan mı (\\dot{V}/\\dot{Q} uyumsuzluğu, şant, difüzyon) kaynaklandığını ayırmanın temel aracı Alveoler Gaz Denklemi ve Alveoler–Arteriyel (A–a) O_{2} gradyentidir. Deniz seviyesinde (P_{atm} = 760 mmHg, P_{H_{2}O} = 47 mmHg) oda havası soluyan (F_{i}O_{2} = 0,21, PaCO_{2} = 40 mmHg, R = 0,8) bir erişkinde P_{A}O_{2} = 0,21 × (760 − 47) − (40 / 0,8) ≈ 150 − 50 = 100 mmHg’dir.',
+          'Oksijenlenmedeki bir bozukluğun salt hipoventilasyondan mı yoksa parankimal gaz değişim kusurundan mı (\\dot{V}/\\dot{Q} uyumsuzluğu, şant, difüzyon) kaynaklandığını ayırmanın temel aracı klinik pratikte sık kullanılan Basitleştirilmiş Alveoler Gaz Denklemi ve Alveoler–Arteriyel (A–a) O_{2} gradyentidir. Tam denklemde yer alan küçük solunum değişim düzeltme terimi (+ F_{i}O_{2} · [(1 − R)/R] · PaCO_{2} ≈ oda havasında +2 mmHg) ihmal edilerek deniz seviyesinde (P_{atm} = 760 mmHg, P_{H_{2}O} = 47 mmHg, F_{i}O_{2} = 0,21, PaCO_{2} = 40 mmHg, R = 0,8) pratik hesaplama P_{A}O_{2} = 0,21 × (760 − 47) − (40 / 0,8) ≈ 150 − 50 = 100 mmHg olarak yapılır.',
           'Normal A–a gradyenti (P_{A}O_{2} − PaO_{2}) genç erişkinde 5–10 mmHg’dir ve yaşla artar (yaklaşık üst sınır: Yaş/4 + 4 mmHg). Saf hipoventilasyon (opioid dozaşımı, nöromüsküler blok) veya düşük F_{i}O_{2}’de A–a gradyenti normal kalırken; \\dot{V}/\\dot{Q} uyumsuzluğu, sağ-sol şant ve difüzyon kusurunda A–a gradyenti belirgin biçimde genişler.',
         ],
         formulas: [
           {
             expression: 'P_{A}O_{2} = F_{i}O_{2} × (P_{atm} − P_{H_{2}O}) − (PaCO_{2} / R)   |   P(A−a)O_{2} = P_{A}O_{2} − PaO_{2}',
-            caption: 'Alveoler Gaz Denklemi (R = solunum değişim oranı ≈ 0,8; P_{H_{2}O} = 37 °C’de 47 mmHg).',
+            caption: 'Basitleştirilmiş Alveoler Gaz Denklemi (R = solunum değişim oranı ≈ 0,8; P_{H_{2}O} = 37 °C’de 47 mmHg; küçük [(1 − R)/R] · F_{i}O_{2} · PaCO_{2} terimi ihmal edilmiştir).',
           },
         ],
       },
@@ -313,6 +314,24 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
           },
         ],
       },
+      {
+        heading: '4.4. Konsantrasyon Etkisi, İkinci Gaz Etkisi ve Difüzyon Hipoksisi (Fink Etkisi)',
+        paragraphs: [
+          'Yüksek konsantrasyonda verilen bir gazın alveollerden pulmoner kapillere hızlı geçişi yalnızca kendi farmakokinetiğini değil, aynı alveolde bulunan diğer gazların kısmi basıncını ve hacim dinamiğini de doğrudan değiştirir. İnhalasyon anestezisinde bu iki yönlü kütle transferi indüksiyonda hızlandırıcı (Konsantrasyon ve İkinci Gaz Etkisi), derlenmede ise hipoksi oluşturucu (Fink Etkisi) sonuçlar doğurur.',
+          'İndüksiyon fazında yüksek fraksiyonda (ör. %70 N_{2}O) verilen gaz kana hızla emildiğinde alveol içi hacim büzülür. Bu küçülme iki mekanizmayla etki eder: geride kalan eşlikçi volatil anesteziğin (ör. sevofluran) ve O_{2}’nin alveoler fraksiyonel konsantrasyonu anlık olarak yükselir; ayrıca alveol hacmindeki azalma trakeadan içeriye pasif olarak ek inspiratuvar gaz karışımı çekilmesini (augmented inflow) sağlar. Buna Konsantrasyon Etkisi, eşlikçi volatil anesteziğin alveoler yükselme hızının (F_{A}/F_{i}) bu yolla hızlanmasına ise İkinci Gaz Etkisi denir.',
+          'Derlenme fazında N_{2}O kesilip hasta doğrudan oda havasına (%21 O_{2}, %79 N_{2}) geçirildiğinde ise süreç tersine döner (Difüzyon Hipoksisi / Fink Etkisi). N_{2}O’nun kan-gaz çözünürlük katsayısı (0,47) azotunkinden (0,014) ~34 kat yüksek olduğundan, dokulardan ve kandan alveollere çok hızlı ve yüksek hacimde N_{2}O boşalır. Bu ani gaz çıkışı hem alveoler O_{2}’yi seyreltir (P_{A}O_{2} düşer), hem de alveoler CO_{2}’yi seyreltip santral solunum dürtüsünü azaltarak hipoksiyi derinleştirir.',
+        ],
+        bullets: [
+          {
+            label: 'Konsantrasyon & İkinci Gaz Etkisi',
+            text: 'Başlangıçta yüksek F_{i}N_{2}O alımıyla volatil anesteziğin F_{A}/F_{i} yükselişi hızlanır; ancak aynı hızlı net gaz emilimi düşük \\dot{V}/\\dot{Q} birimlerinde alveol hacmini kritik eşiğin altına indirirse absorpsiyon atelektazisini de kolaylaştırır.',
+          },
+          {
+            label: 'Difüzyon Hipoksisi (Fink Etkisi)',
+            text: 'N_{2}O kesildikten sonraki ilk 5–10 dakikada N_{2}O’nun kandan alveole hızlı ters difüzyonu hem O_{2} hem CO_{2}’yi seyreltir. Önlemi son derece basittir: N_{2}O kapatıldıktan sonra en az 5–10 dakika %100 O_{2} uygulanması.',
+          },
+        ],
+      },
     ],
   },
   {
@@ -320,8 +339,8 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
     number: 'Bölüm 5',
     title: 'Pulmoner Dolaşım, West Zonları, HPV ve \\dot{V}/\\dot{Q} İlişkisi',
     summary:
-      'Düşük dirençli pulmoner yatak, hacme bağlı U-şekilli PVR, Hipoksik Pulmoner Vazokonstriksiyon (HPV), West Zon 1–3, \\dot{V}/\\dot{Q} dağılımı, şant denklemi ve hipokseminin 5 temel mekanizması.',
-    sources: "West B.4–5 · Nunn's B.6–7 · Miller's",
+      'Düşük dirençli pulmoner yatak, hacme bağlı U-şekilli PVR, Hipoksik Pulmoner Vazokonstriksiyon (HPV), West Zon 1–4, \\dot{V}/\\dot{Q} dağılımı, şant denklemi, hipokseminin 5 mekanizması ve akciğerin non-respiratuvar (metabolik/endokrin) fonksiyonları.',
+    sources: "West B.4–5 · Nunn's B.6–7, 11 · Miller's",
     subsections: [
       {
         heading: '5.1. Pulmoner Vasküler Direnç (PVR) ve Hipoksik Pulmoner Vazokonstriksiyon (HPV)',
@@ -336,18 +355,19 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
         },
       },
       {
-        heading: '5.2. West Zonları ve Pulmoner Perfüzyon Dağılımı',
+        heading: '5.2. West Zonları (1–4) ve Pulmoner Perfüzyon Dağılımı',
         paragraphs: [
-          'Dik pozisyonda yerçekimi hidrostatik etkiyle hem pulmoner arteriyel (P_{a}) hem pulmoner venöz (P_{v}) basıncı tabana doğru artırır. Alveoler basınç (P_{A}) ise her yerde yaklaşık eşittir. Bu üç basıncın sıralaması akciğeri üç fonksiyonel zona ayırır:',
+          'Dik pozisyonda yerçekimi hidrostatik etkiyle hem pulmoner arteriyel (P_{a}) hem pulmoner venöz (P_{v}) basıncı tabana doğru artırır. Alveoler basınç (P_{A}) ise her yerde yaklaşık eşittir. Bu üç basıncın sıralaması akciğeri üç ana fonksiyonel zona ayırır; ancak düşük akciğer hacimlerinde en bazal bölgede ekstra-alveoler damarları saran interstisyel basıncın (P_{isf}) yükselmesiyle akımın tekrar azaldığı bir Zon 4 (Hughes ve West) tanımlanır:',
         ],
         diagramId: 'west-zones-pvr',
         table: {
-          title: 'West Pulmoner Perfüzyon Zonları',
+          title: 'West Pulmoner Perfüzyon Zonları (Zon 1–4)',
           headers: ['Zon', 'Basınç İlişkisi', 'Akımı Belirleyen Fark', 'Klinik Durum ve Anestezi Etkisi'],
           rows: [
             ['Zon 1 (Apeks)', 'P_{A} > P_{a} > P_{v}', 'Akım yok (Alveoler ölü boşluk)', 'Sağlıklı uyanık kişide yoktur. Pozitif basınçlı ventilasyon (yüksek PEEP), hipovolemi veya hipotansiyonda P_{A} > P_{a} olur ve Zon 1 belirginleşir.'],
             ['Zon 2 (Orta)', 'P_{a} > P_{A} > P_{v}', 'P_{a} − P_{A} (Şelale / Starling etkisi)', 'Kapiller akım venöz basınçtan bağımsızdır; arteriyel ve alveoler basınç farkıyla belirlenir.'],
             ['Zon 3 (Taban)', 'P_{a} > P_{v} > P_{A}', 'P_{a} − P_{v} (Klasik direnç akımı)', 'Kapillerler sürekli açıktır ve en yüksek perfüzyon buradadır. Supin pozisyonda akciğerin büyük kısmı Zon 3’e geçer.'],
+            ['Zon 4 (En Bazal)', 'P_{a} > P_{isf} > P_{v} > P_{A}', 'P_{a} − P_{isf} (Ekstra-alveoler sıkışma)', 'Düşük akciğer hacimlerinde (RV’ye yakın), obezitede, Trendelenburg’da veya interstisyel ödemde artan P_{isf} ekstra-alveoler damarları sıkıştırarak akımı tabanda tekrar azaltır.'],
           ],
         },
       },
@@ -375,6 +395,27 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
           ],
         },
       },
+      {
+        heading: '5.4. Akciğerin Non-Respiratuvar (Metabolik, Endokrin ve Filtrasyon) Fonksiyonları',
+        paragraphs: [
+          'Pulmoner kapiller yatak kalp debisinin %100’ünü aldığından, akciğer yalnızca gaz değişim organı değil aynı zamanda sistemik arteriyel dolaşıma geçen vazoaktif maddeleri ve ilaçları düzenleyen dev bir metabolik filtre ve biyokimyasal reaktördür. Çok geniş endotel yüzeyi üzerinde yerleşen enzimler sayesinde bazı prohormonlar aktive edilirken pek çok vazoaktif mediyatör tek geçişte temizlenir.',
+          'Metabolik işlemlere ek olarak akciğer kapiller ağı venöz dolaşımdaki küçük pıhtı, yağ ve trombosit kümeleri için mekanik bir mikrofiltre görevi görür ve lokal endotelyal plazminojen aktivatörü salımıyla bunları eritir. Ayrıca fentanil, sufentanil, lidokain, propofol ve propranolol gibi lipofilik bazik amin ilaçlar ilk geçişte akciğer parankiminde geçici olarak sekestre edilip (first-pass pulmonary uptake) ardından yavaşça sistemik dolaşıma salınarak arteriyel pik konsantrasyonu tamponlar.',
+        ],
+        table: {
+          title: 'Pulmoner Vasküler Yatağın Vazoaktif Madde ve Endokrin İşlemesi',
+          headers: ['Fizyolojik İşlem', 'Başlıca Maddeler', 'Mekanizma ve Klinik Önemi'],
+          rows: [
+            ['Aktivasyon', 'Anjiyotensin I → Anjiyotensin II', 'Pulmoner endotel yüzeyindeki ACE (Anjiyotensin Dönüştürücü Enzim) aracılığıyla sistemik kan basıncı ve aldosteron düzenlenir.'],
+            ['Güçlü İnaktivasyon (~%80–95)', 'Bradikinin, Serotonin (5-HT), PGE_{2}, PGF_{2α}, Lökotrienler (LTC_{4}/D_{4})', 'Bradikinin aynı ACE enzimi (kininaz II) tarafından yıkılır; 5-HT aktif uptake + MAO ile, prostaglandinler ise 15-PGDH ile inaktive edilir.'],
+            ['Kısmi Klirens (~%25–30)', 'Norepinefrin (Noradrenalin)', 'Endotel hücresine aktif taşıma ve MAO/COMT yoluyla kısmen temizlenir.'],
+            ['Değişmeden Geçenler / Salınanlar', 'Epinefrin, Dopamin, İzoproterenol, Histamin, Anjiyotensin II, ADH, Oksitosin, PGI_{2}', 'Pulmoner kapillerden neredeyse kayıpsız geçer (veya endotelden PGI_{2}/NO sentezlenir); bu nedenle sistemik infüzyonda hızlı etki gösterir.'],
+          ],
+        },
+        clinicalNote: {
+          title: 'ACE İnhibitörü Öksürüğü ve Kardiyopulmoner Baypas (CPB)',
+          text: 'ACE inhibitörü kullanan hastalarda bradikinin ve P maddesinin pulmoner yıkımı azaldığından kuru öksürük ve nadiren perioperatif anjiyoödem gelişebilir. Öte yandan kardiyopulmoner baypas sırasında akciğer dolaşımının devre dışı kalması bu metabolik klirensi geçici olarak ortadan kaldırır; ayrıca pulmoner bazik amin sekestrasyonu nedeniyle propofol/fentanil bolusu sonrası sistemik pikler etkilenebilir.',
+        },
+      },
     ],
   },
   {
@@ -389,7 +430,7 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
         heading: '6.1. Oksijen Taşınımı (CaO_{2}, DO_{2}) ve Oksijen–Hemoglobin Dissosiyasyon Eğrisi',
         paragraphs: [
           'Kanda oksijen iki formda taşınır: yaklaşık %98–99’u hemoglobine geri dönüşümlü bağlı (1 g tam doymuş Hb ≈ 1,34 mL O_{2} bağlar; Hüfner sabiti), yalnızca %1–2’si plazmada fiziksel olarak çözünmüş haldedir (0,003 mL O_{2} / dL / mmHg PaO_{2}). Normalde Hb = 15 g/dL, SaO_{2} = %98, PaO_{2} = 100 mmHg iken CaO_{2} ≈ 19,7 + 0,3 = 20 mL O_{2}/dL’dir. Kardiyak debi 5 L/dk ise dokulara sunulan oksijen DO_{2} ≈ 1.000 mL/dk, tüketilen oksijen \\dot{V}O_{2} ≈ 250 mL/dk (ekstraksiyon oranı O_{2}ER ≈ %25, S_{\\bar{v}}O_{2} ≈ %75) olur.',
-          'Oksijen-hemoglobin dissosiyasyon eğrisi kooperatif bağlanma (allosterik T → R konformasyon geçişi) nedeniyle sigmoid (S) şeklindedir. Üstteki plato bölgesi (PaO_{2} > 60 mmHg, SaO_{2} > %90) alveoler yüklenmede güvenlik marjı sağlar; alttaki dik bölge (PaO_{2} 20–60 mmHg) ise periferik kapillerlerde küçük bir PO_{2} düşüşüyle dokulara bol miktarda O_{2} bırakılmasını kolaylaştırır.',
+          'Oksijen-hemoglobin dissosiyasyon eğrisi kooperatif bağlanma (allosterik T → R konformasyon geçişi) nedeniyle sigmoid (S) şeklindedir. Üstteki plato bölgesi (PO_{2} > 60 mmHg, SaO_{2} > %90) alveoler yüklenmede güvenlik marjı sağlar; alttaki dik bölge (PO_{2} 20–60 mmHg) ise periferik kapillerlerde küçük bir PO_{2} düşüşüyle dokulara bol miktarda O_{2} bırakılmasını kolaylaştırır.',
           'Hemoglobinin %50 doygunluğa ulaştığı PO_{2} değeri olan P_{50} normal erişkinde 26,8 mmHg’dir. Eğrinin sağa kayması (P_{50} ↑) Hb’nin O_{2}’ye ilgisini azaltarak dokulara O_{2} bırakılmasını kolaylaştırır; sola kayması (P_{50} ↓) ise O_{2}’yi sıkı tutarak doku salınımını zorlaştırır.',
         ],
         diagramId: 'oxyhb-cascade',
@@ -501,7 +542,7 @@ export const RESPIRATORY_TEXTBOOK_CHAPTERS: TextbookChapter[] = [
           title: 'Genel Anestezi ve Pozitif Basınçlı Ventilasyonun Fizyolojik Özeti',
           headers: ['Fizyolojik Parametre', 'Genel Anestezide Değişim', 'Temel Mekanizma', 'Koruyucu Klinik Müdahale'],
           rows: [
-            ['FRC', '%35–45 toplam düşüş', 'Supin pozisyon + diyafram tonusu kaybı + atelektazi', '25–30° RAMP, 5–8 cmH_{2}O PEEP, gerektiğinde recruitment'],
+            ['FRC', 'Dik pozisyona göre toplam %35–45 (supin uyanığa göre indüksiyonla ek %15–20)', 'Supin pozisyon + diyafram tonusu kaybı + atelektazi', '25–30° RAMP, 5–8 cmH_{2}O PEEP, gerektiğinde recruitment'],
             ['Kapanma Kapasitesi (CC)', 'CC > FRC kesişimi erkenleşir', 'FRC’nin CC altına inmesiyle bazal havayolu kapanması', 'PEEP ile FRC’yi CC üzerine taşımak; F_{i}O_{2}’yi gereksiz %100 tutmamak'],
             ['Atelektazi ve Şant', 'Hastaların ~%85–90’ında dorsal atelektazi; şant %5–15’e çıkar', 'Kompresyon + yüksek F_{i}O_{2} absorpsiyon atelektazisi', 'İndüksiyonda CPAP, idamede F_{i}O_{2} ≤ 0,80 (mümkünse 0,40–0,50) + PEEP'],
             ['Ölü Boşluk (V_{D}/V_{T})', 'Artar (0,30 → 0,40–0,50)', 'Pozitif basınçla Zon 1 artışı + devre/filtre ölü boşluğu', 'Gereksiz devre uzatmalarından kaçınmak, normovolemiyi korumak'],
