@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpenCheck, ChevronRight, Wind } from 'lucide-react';
+import { ArrowLeft, BookOpenCheck, ChevronRight, HeartPulse, Wind } from 'lucide-react';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { RespiratoryPhysiologyWorkspace } from './RespiratoryPhysiologyWorkspace';
+import { CardiovascularPhysiologyWorkspace } from './CardiovascularPhysiologyWorkspace';
 import { MedicalText } from './respiratory/MedicalText';
 import { parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 
@@ -11,7 +12,10 @@ interface BasicsWorkspaceProps {
   onActiveCardChange?: (cardId: BasicsCardId | null) => void;
 }
 
-export type BasicsCardId = 'respiratory-physiology';
+export type BasicsCardId = 'respiratory-physiology' | 'cardiovascular-physiology';
+
+const isValidBasicsCardId = (id: string | null | undefined): id is BasicsCardId =>
+  id === 'respiratory-physiology' || id === 'cardiovascular-physiology';
 
 interface BasicsCardItem {
   id: BasicsCardId;
@@ -20,6 +24,8 @@ interface BasicsCardItem {
   meta: string;
   shortDesc: string;
   publisher: string;
+  accent: 'sky' | 'rose';
+  icon: React.FC<{ className?: string }>;
   metrics: {
     label: string;
     value: string;
@@ -35,10 +41,29 @@ const BASICS_CARDS: BasicsCardItem[] = [
     shortDesc:
       'Fonksiyonel anatomi, statik ve dinamik solunum mekaniği, akciğer hacimleri ve FRC, alveoler ventilasyon–difüzyon, pulmoner dolaşım–West zonları–\\dot{V}/\\dot{Q}, O_{2}/CO_{2} taşınımı–oksijen kaskadı, solunum kontrolü ve genel anestezinin solunum fizyolojisine etkileri.',
     publisher: "West's · Nunn's · Miller's Anesthesia · Morgan & Mikhail · Levitzky",
+    accent: 'sky',
+    icon: Wind,
     metrics: [
       { label: 'Kapsam', value: '8 Tam Bölüm' },
       { label: 'Görseller', value: '5 Şematik Grafik' },
       { label: 'Referanslar', value: '5 Ana Textbook' },
+      { label: 'Format', value: 'Düz Okuma' },
+    ],
+  },
+  {
+    id: 'cardiovascular-physiology',
+    title: 'Kardiyovasküler Fizyoloji',
+    category: 'Fizyoloji · Sistematik Ders Özeti',
+    meta: '9 Bölüm · 6 Şematik Görsel · Düz Okuma',
+    shortDesc:
+      'Miyokardiyal ultrastrüktür ve ECC, aksiyon potansiyelleri, Wiggers ve LV P–V döngüsü, Frank–Starling ve Guyton venöz dönüş (P_{msf}), glikokaliks–Revize Starling, koroner perfüzyon–otoregülasyon, nörohumoral kontrol, şok/anestezikler, kapak hastalıkları (AS/AR/MS/MR/HOCM), vazopresör/inotrop ve IV vazodilatatör/hız kırıcı ajanlar.',
+    publisher: "Klabunde · Guyton & Hall · Miller's · Morgan & Mikhail · Kaplan's · Barash · Marino's · ESC",
+    accent: 'rose',
+    icon: HeartPulse,
+    metrics: [
+      { label: 'Kapsam', value: '9 Tam Bölüm' },
+      { label: 'Görseller', value: '6 Şematik Grafik' },
+      { label: 'Referanslar', value: '9 Kaynak' },
       { label: 'Format', value: 'Düz Okuma' },
     ],
   },
@@ -50,17 +75,17 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
   onActiveCardChange,
 }) => {
   const [selectedCardId, setSelectedCardId] = useState<BasicsCardId | null>(() => {
-    if (initialCardId === 'respiratory-physiology') return 'respiratory-physiology';
+    if (isValidBasicsCardId(initialCardId)) return initialCardId;
     const route = parseHashRoute();
-    if (route.type === 'arac' && route.id === 'basics' && route.subId === 'respiratory-physiology') {
-      return 'respiratory-physiology';
+    if (route.type === 'arac' && route.id === 'basics' && isValidBasicsCardId(route.subId)) {
+      return route.subId;
     }
     return null;
   });
 
   useEffect(() => {
-    if (initialCardId === 'respiratory-physiology') {
-      setSelectedCardId('respiratory-physiology');
+    if (isValidBasicsCardId(initialCardId)) {
+      setSelectedCardId(initialCardId);
     } else if (initialCardId === null) {
       setSelectedCardId(null);
     }
@@ -70,8 +95,7 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
     const handleHash = () => {
       const route = parseHashRoute();
       if (route.type === 'arac' && route.id === 'basics') {
-        const nextCard: BasicsCardId | null =
-          route.subId === 'respiratory-physiology' ? 'respiratory-physiology' : null;
+        const nextCard: BasicsCardId | null = isValidBasicsCardId(route.subId) ? route.subId : null;
         setSelectedCardId(nextCard);
         onActiveCardChange?.(nextCard);
       }
@@ -93,7 +117,8 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
     updateHashRoute('arac', 'basics');
   };
 
-  if (selectedCardId === 'respiratory-physiology') {
+  if (selectedCardId === 'respiratory-physiology' || selectedCardId === 'cardiovascular-physiology') {
+    const isCardio = selectedCardId === 'cardiovascular-physiology';
     return (
       <div className="space-y-5 animate-in fade-in duration-300">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -112,13 +137,21 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
 
           <ShareLinkButton
             type="arac"
-            id="basics&sub=respiratory-physiology"
-            title="Solunum Fizyolojisi Bağlantısını Kopyala"
+            id={`basics&sub=${selectedCardId}`}
+            title={
+              isCardio
+                ? 'Kardiyovasküler Fizyoloji Bağlantısını Kopyala'
+                : 'Solunum Fizyolojisi Bağlantısını Kopyala'
+            }
             isDark={isDark}
           />
         </div>
 
-        <RespiratoryPhysiologyWorkspace isDark={isDark} />
+        {isCardio ? (
+          <CardiovascularPhysiologyWorkspace isDark={isDark} />
+        ) : (
+          <RespiratoryPhysiologyWorkspace isDark={isDark} />
+        )}
       </div>
     );
   }
@@ -157,79 +190,120 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
 
       {/* Card Board Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {BASICS_CARDS.map((card) => (
-          <button
-            key={card.id}
-            type="button"
-            onClick={() => handleSelectCard(card.id)}
-            className={`group text-left rounded-2xl border p-5 sm:p-6 transition-all duration-200 flex flex-col justify-between gap-5 cursor-pointer ${
-              isDark
-                ? 'bg-slate-900/80 border-slate-800 hover:border-sky-500/50 hover:bg-slate-900'
-                : 'bg-white border-slate-200 hover:border-sky-400 hover:shadow-md'
-            }`}
-          >
-            <div className="space-y-3.5">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                      isDark ? 'bg-sky-500/15 text-sky-400' : 'bg-sky-50 text-sky-700'
-                    }`}
-                  >
-                    <Wind className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      {card.category} · <span className="text-teal-500 font-semibold">{card.meta}</span>
-                    </div>
-                    <h3
-                      className={`text-lg sm:text-xl font-bold mt-0.5 transition-colors ${
-                        isDark ? 'text-white group-hover:text-sky-300' : 'text-slate-900 group-hover:text-sky-700'
-                      }`}
-                    >
-                      {card.title}
-                    </h3>
-                  </div>
-                </div>
-
-                <ChevronRight
-                  className={`w-5 h-5 shrink-0 mt-1 transition-transform group-hover:translate-x-1 ${
-                    isDark ? 'text-slate-500 group-hover:text-sky-400' : 'text-slate-400 group-hover:text-sky-600'
-                  }`}
-                />
-              </div>
-
-              <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                <MedicalText text={card.shortDesc} />
-              </p>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                {card.metrics.map((m) => (
-                  <div
-                    key={m.label}
-                    className={`rounded-lg border px-2.5 py-2 ${
-                      isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
-                    }`}
-                  >
-                    <div className="text-[11px] text-slate-400">{m.label}</div>
-                    <div className={`text-xs font-mono font-bold tabular-nums mt-0.5 ${isDark ? 'text-sky-300' : 'text-sky-800'}`}>
-                      {m.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div
-              className={`pt-3.5 border-t flex flex-wrap items-center justify-between gap-2 text-xs ${
-                isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-500'
+        {BASICS_CARDS.map((card) => {
+          const IconComponent = card.icon;
+          const isRose = card.accent === 'rose';
+          return (
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => handleSelectCard(card.id)}
+              className={`group text-left rounded-2xl border p-5 sm:p-6 transition-all duration-200 flex flex-col justify-between gap-5 cursor-pointer ${
+                isDark
+                  ? isRose
+                    ? 'bg-slate-900/80 border-slate-800 hover:border-rose-500/50 hover:bg-slate-900'
+                    : 'bg-slate-900/80 border-slate-800 hover:border-sky-500/50 hover:bg-slate-900'
+                  : isRose
+                    ? 'bg-white border-slate-200 hover:border-rose-400 hover:shadow-md'
+                    : 'bg-white border-slate-200 hover:border-sky-400 hover:shadow-md'
               }`}
             >
-              <span className="truncate">{card.publisher}</span>
-              <span className="font-semibold text-sky-500 whitespace-nowrap">Özeti Oku →</span>
-            </div>
-          </button>
-        ))}
+              <div className="space-y-3.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+                        isRose
+                          ? isDark
+                            ? 'bg-rose-500/15 text-rose-400'
+                            : 'bg-rose-50 text-rose-700'
+                          : isDark
+                            ? 'bg-sky-500/15 text-sky-400'
+                            : 'bg-sky-50 text-sky-700'
+                      }`}
+                    >
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        {card.category} ·{' '}
+                        <span className={isRose ? 'text-rose-500 font-semibold' : 'text-teal-500 font-semibold'}>
+                          {card.meta}
+                        </span>
+                      </div>
+                      <h3
+                        className={`text-lg sm:text-xl font-bold mt-0.5 transition-colors ${
+                          isDark
+                            ? isRose
+                              ? 'text-white group-hover:text-rose-300'
+                              : 'text-white group-hover:text-sky-300'
+                            : isRose
+                              ? 'text-slate-900 group-hover:text-rose-700'
+                              : 'text-slate-900 group-hover:text-sky-700'
+                        }`}
+                      >
+                        {card.title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <ChevronRight
+                    className={`w-5 h-5 shrink-0 mt-1 transition-transform group-hover:translate-x-1 ${
+                      isDark
+                        ? isRose
+                          ? 'text-slate-500 group-hover:text-rose-400'
+                          : 'text-slate-500 group-hover:text-sky-400'
+                        : isRose
+                          ? 'text-slate-400 group-hover:text-rose-600'
+                          : 'text-slate-400 group-hover:text-sky-600'
+                    }`}
+                  />
+                </div>
+
+                <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  <MedicalText text={card.shortDesc} />
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                  {card.metrics.map((m) => (
+                    <div
+                      key={m.label}
+                      className={`rounded-lg border px-2.5 py-2 ${
+                        isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+                      }`}
+                    >
+                      <div className="text-[11px] text-slate-400">{m.label}</div>
+                      <div
+                        className={`text-xs font-mono font-bold tabular-nums mt-0.5 ${
+                          isRose
+                            ? isDark
+                              ? 'text-rose-300'
+                              : 'text-rose-800'
+                            : isDark
+                              ? 'text-sky-300'
+                              : 'text-sky-800'
+                        }`}
+                      >
+                        {m.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div
+                className={`pt-3.5 border-t flex flex-wrap items-center justify-between gap-2 text-xs ${
+                  isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-500'
+                }`}
+              >
+                <span className="truncate">{card.publisher}</span>
+                <span className={`font-semibold whitespace-nowrap ${isRose ? 'text-rose-500' : 'text-sky-500'}`}>
+                  Özeti Oku →
+                </span>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

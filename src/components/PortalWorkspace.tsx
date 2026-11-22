@@ -163,10 +163,10 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   basics: {
     id: 'basics',
     title: 'Temel Bilgiler',
-    badge: 'Solunum Fizyolojisi · 8 Bölüm',
+    badge: 'Solunum & Kardiyovasküler · 17 Bölüm',
     badgeHighlight: true,
-    desc: 'Anesteziyoloji ve reanimasyon temel bilimler kart panosu. İlk kart: Solunum Fizyolojisi — fonksiyonel anatomi, solunum mekaniği, hacimler/FRC, ventilasyon–difüzyon, pulmoner dolaşım–V/Q, gaz taşınımı, solunum kontrolü ve perioperatif sentez (8 bölüm + 5 şematik görsel).',
-    clinicalKey: "West's, Nunn's, Miller's ve Morgan & Mikhail kaynaklarından sistematik, sade düz okuma özeti.",
+    desc: 'Anesteziyoloji ve reanimasyon temel bilimler kart panosu: Solunum Fizyolojisi (8 bölüm + 5 şematik görsel) ve Kardiyovasküler Fizyoloji (9 bölüm + 6 şematik görsel).',
+    clinicalKey: "West's, Nunn's, Klabunde, Guyton & Hall, Miller's, Kaplan's ve Morgan & Mikhail kaynaklarından sistematik düz okuma özetleri.",
     icon: BookOpenCheck,
     iconBgDark: 'bg-sky-500/15',
     iconBgLight: 'bg-sky-50',
@@ -1028,6 +1028,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         setSelectedBasicsCardId('respiratory-physiology');
         handleSelectTab('basics', { preserveBasicsCard: true });
         updateHashRoute('arac', 'basics&sub=respiratory-physiology');
+      } else if (item.id === 'basics-cardiovascular-physiology') {
+        setSelectedBasicsCardId('cardiovascular-physiology');
+        handleSelectTab('basics', { preserveBasicsCard: true });
+        updateHashRoute('arac', 'basics&sub=cardiovascular-physiology');
       } else {
         setSelectedBasicsCardId(null);
         handleSelectTab('basics');
@@ -1683,6 +1687,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                     ? 'Spinal Anestezi Klinik Talimatı Bağlantısını Kopyala'
                     : activeTab === 'basics' && selectedBasicsCardId === 'respiratory-physiology'
                     ? 'Solunum Fizyolojisi Bağlantısını Kopyala'
+                    : activeTab === 'basics' && selectedBasicsCardId === 'cardiovascular-physiology'
+                    ? 'Kardiyovasküler Fizyoloji Bağlantısını Kopyala'
                     : `${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`
                 }
               />

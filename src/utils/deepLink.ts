@@ -114,6 +114,9 @@ export function parseHashRoute(): ParsedHashRoute {
       if (toolKey === 'respiratory-physiology' || toolKey === 'solunum-fizyolojisi') {
         return { type: 'arac', id: 'basics', subId: 'respiratory-physiology' };
       }
+      if (toolKey === 'cardiovascular-physiology' || toolKey === 'kardiyovaskuler-fizyoloji') {
+        return { type: 'arac', id: 'basics', subId: 'cardiovascular-physiology' };
+      }
       if (toolKey === 'treatments' && toolMatch[2]) {
         return { type: 'tedavi', id: toolMatch[2] };
       }
@@ -129,6 +132,9 @@ export function parseHashRoute(): ParsedHashRoute {
     }
     if (hash.toLowerCase() === 'respiratory-physiology' || hash.toLowerCase() === 'solunum-fizyolojisi') {
       return { type: 'arac', id: 'basics', subId: 'respiratory-physiology' };
+    }
+    if (hash.toLowerCase() === 'cardiovascular-physiology' || hash.toLowerCase() === 'kardiyovaskuler-fizyoloji') {
+      return { type: 'arac', id: 'basics', subId: 'cardiovascular-physiology' };
     }
 
     if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {
