@@ -1238,10 +1238,53 @@ const MONITORING_MODULES: MonitoringCardItem[] = [
   },
 ];
 
+const BASIC_MODULE_ORDER: MonitoringCardItem['id'][] = [
+  'asa-basic-monitoring',
+  'pulse-oximetry',
+  'ecg-monitoring',
+  'nibp-oscillometric',
+  'capnography',
+  'multigas-agent-analysis',
+  'spirometry',
+  'temperature-probes',
+  'intraoperative-bleeding',
+  'intraoperative-urine-output',
+  'clinical-reflexes',
+  'neuromuscular-clinical',
+];
+
+const ADVANCED_MODULE_ORDER: MonitoringCardItem['id'][] = [
+  'ibp-monitoring',
+  'intraoperative-abg',
+  'cvp-monitoring',
+  'bis-monitoring',
+  'peripheral-nerve-stimulator',
+  'quantitative-nmb-monitors',
+  'pulse-contour-analysis',
+  'nirs-cerebral-oximetry',
+  'sedline-psi',
+  'viscoelastic-hemostasis',
+  'tee-monitoring',
+  'icp-monitoring',
+  'evoked-potentials',
+  'pac-monitoring',
+  'transcutaneous-co2',
+  'esophageal-pressure',
+];
+
 export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark }) => {
   const [activeModuleId, setActiveModuleId] = useState<MonitoringCardItem['id'] | null>(null);
+  const [tierFilter, setTierFilter] = useState<'all' | 'basic' | 'advanced'>('all');
 
   const selectedModule = MONITORING_MODULES.find((item) => item.id === activeModuleId) ?? null;
+
+  const moduleMap = new Map(MONITORING_MODULES.map((m) => [m.id, m]));
+  const basicModules = BASIC_MODULE_ORDER.map((id) => moduleMap.get(id)).filter(
+    (m): m is MonitoringCardItem => Boolean(m)
+  );
+  const advancedModules = ADVANCED_MODULE_ORDER.map((id) => moduleMap.get(id)).filter(
+    (m): m is MonitoringCardItem => Boolean(m)
+  );
 
   return (
     <div
@@ -1382,269 +1425,380 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
       </div>
 
       {/* VIEW 1: Card Board Gallery */}
-      {!activeModuleId && (
-        <div className="space-y-4">
-          <div className={`flex items-center justify-between text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-            <span>İncelemek istediğiniz monitörizasyon kartının üzerine tıklayın:</span>
-            <span className="font-mono text-[11px]">{MONITORING_MODULES.length} Modül</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MONITORING_MODULES.map((card) => {
-              const accentCardClass =
-                card.accent === 'sky'
+      {!activeModuleId && (() => {
+        const renderCard = (card: MonitoringCardItem, orderBadge?: string) => {
+          const accentCardClass =
+            card.accent === 'sky'
+              ? isDark
+                ? 'bg-slate-900/90 border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-sky-500'
+                : 'bg-white border-slate-200 hover:border-sky-400 hover:shadow-md focus-visible:ring-sky-500'
+              : card.accent === 'amber'
+                ? isDark
+                  ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-amber-500'
+                  : 'bg-white border-slate-200 hover:border-amber-400 hover:shadow-md focus-visible:ring-amber-500'
+                : card.accent === 'teal'
                   ? isDark
-                    ? 'bg-slate-900/90 border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-sky-500'
-                    : 'bg-white border-slate-200 hover:border-sky-400 hover:shadow-md focus-visible:ring-sky-500'
-                  : card.accent === 'amber'
+                    ? 'bg-slate-900/90 border-slate-800 hover:border-teal-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-teal-500'
+                    : 'bg-white border-slate-200 hover:border-teal-400 hover:shadow-md focus-visible:ring-teal-500'
+                  : card.accent === 'rose'
                     ? isDark
-                      ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-amber-500'
-                      : 'bg-white border-slate-200 hover:border-amber-400 hover:shadow-md focus-visible:ring-amber-500'
-                    : card.accent === 'teal'
+                      ? 'bg-slate-900/90 border-slate-800 hover:border-rose-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-rose-500'
+                      : 'bg-white border-slate-200 hover:border-rose-400 hover:shadow-md focus-visible:ring-rose-500'
+                    : card.accent === 'indigo'
                       ? isDark
-                        ? 'bg-slate-900/90 border-slate-800 hover:border-teal-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-teal-500'
-                        : 'bg-white border-slate-200 hover:border-teal-400 hover:shadow-md focus-visible:ring-teal-500'
-                      : card.accent === 'rose'
+                        ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-indigo-500'
+                        : 'bg-white border-slate-200 hover:border-indigo-400 hover:shadow-md focus-visible:ring-indigo-500'
+                      : card.accent === 'orange'
                         ? isDark
-                          ? 'bg-slate-900/90 border-slate-800 hover:border-rose-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-rose-500'
-                          : 'bg-white border-slate-200 hover:border-rose-400 hover:shadow-md focus-visible:ring-rose-500'
-                        : card.accent === 'indigo'
+                          ? 'bg-slate-900/90 border-slate-800 hover:border-orange-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-orange-500'
+                          : 'bg-white border-slate-200 hover:border-orange-400 hover:shadow-md focus-visible:ring-orange-500'
+                        : card.accent === 'violet'
                           ? isDark
-                            ? 'bg-slate-900/90 border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-indigo-500'
-                            : 'bg-white border-slate-200 hover:border-indigo-400 hover:shadow-md focus-visible:ring-indigo-500'
-                          : card.accent === 'orange'
+                            ? 'bg-slate-900/90 border-slate-800 hover:border-violet-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-violet-500'
+                            : 'bg-white border-slate-200 hover:border-violet-400 hover:shadow-md focus-visible:ring-violet-500'
+                          : card.accent === 'cyan'
                             ? isDark
-                              ? 'bg-slate-900/90 border-slate-800 hover:border-orange-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-orange-500'
-                              : 'bg-white border-slate-200 hover:border-orange-400 hover:shadow-md focus-visible:ring-orange-500'
-                            : card.accent === 'violet'
+                              ? 'bg-slate-900/90 border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-cyan-500'
+                              : 'bg-white border-slate-200 hover:border-cyan-400 hover:shadow-md focus-visible:ring-cyan-500'
+                            : card.accent === 'red'
                               ? isDark
-                                ? 'bg-slate-900/90 border-slate-800 hover:border-violet-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-violet-500'
-                                : 'bg-white border-slate-200 hover:border-violet-400 hover:shadow-md focus-visible:ring-violet-500'
-                              : card.accent === 'cyan'
+                                ? 'bg-slate-900/90 border-slate-800 hover:border-red-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-red-500'
+                                : 'bg-white border-slate-200 hover:border-red-400 hover:shadow-md focus-visible:ring-red-500'
+                              : card.accent === 'blue'
                                 ? isDark
-                                  ? 'bg-slate-900/90 border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-cyan-500'
-                                  : 'bg-white border-slate-200 hover:border-cyan-400 hover:shadow-md focus-visible:ring-cyan-500'
-                                : card.accent === 'red'
+                                  ? 'bg-slate-900/90 border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-blue-500'
+                                  : 'bg-white border-slate-200 hover:border-blue-400 hover:shadow-md focus-visible:ring-blue-500'
+                                : card.accent === 'fuchsia'
                                   ? isDark
-                                    ? 'bg-slate-900/90 border-slate-800 hover:border-red-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-red-500'
-                                    : 'bg-white border-slate-200 hover:border-red-400 hover:shadow-md focus-visible:ring-red-500'
-                                  : card.accent === 'blue'
+                                    ? 'bg-slate-900/90 border-slate-800 hover:border-fuchsia-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-fuchsia-500'
+                                    : 'bg-white border-slate-200 hover:border-fuchsia-400 hover:shadow-md focus-visible:ring-fuchsia-500'
+                                  : card.accent === 'purple'
                                     ? isDark
-                                      ? 'bg-slate-900/90 border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-blue-500'
-                                      : 'bg-white border-slate-200 hover:border-blue-400 hover:shadow-md focus-visible:ring-blue-500'
-                                    : card.accent === 'fuchsia'
-                                      ? isDark
-                                        ? 'bg-slate-900/90 border-slate-800 hover:border-fuchsia-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-fuchsia-500'
-                                        : 'bg-white border-slate-200 hover:border-fuchsia-400 hover:shadow-md focus-visible:ring-fuchsia-500'
-                                      : card.accent === 'purple'
-                                        ? isDark
-                                          ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-purple-500'
-                                          : 'bg-white border-slate-200 hover:border-purple-400 hover:shadow-md focus-visible:ring-purple-500'
-                                        : isDark
-                                          ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-emerald-500'
-                                          : 'bg-white border-slate-200 hover:border-emerald-400 hover:shadow-md focus-visible:ring-emerald-500';
+                                      ? 'bg-slate-900/90 border-slate-800 hover:border-purple-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-purple-500'
+                                      : 'bg-white border-slate-200 hover:border-purple-400 hover:shadow-md focus-visible:ring-purple-500'
+                                    : isDark
+                                      ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50 hover:bg-slate-800/60 shadow-xs focus-visible:ring-emerald-500'
+                                      : 'bg-white border-slate-200 hover:border-emerald-400 hover:shadow-md focus-visible:ring-emerald-500';
 
-              const categoryBadgeClass =
-                card.accent === 'sky'
-                  ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300'
-                  : card.accent === 'amber'
-                    ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
-                    : card.accent === 'teal'
-                      ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
-                      : card.accent === 'rose'
-                        ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300'
-                        : card.accent === 'indigo'
-                          ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300'
-                          : card.accent === 'orange'
-                            ? 'bg-orange-500/15 text-orange-700 dark:text-orange-300'
-                            : card.accent === 'violet'
-                              ? 'bg-violet-500/15 text-violet-700 dark:text-violet-300'
-                              : card.accent === 'cyan'
-                                ? 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-300'
-                                : card.accent === 'red'
-                                  ? 'bg-red-500/15 text-red-700 dark:text-red-300'
-                                  : card.accent === 'blue'
-                                    ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300'
-                                    : card.accent === 'fuchsia'
-                                      ? 'bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-300'
-                                      : card.accent === 'purple'
-                                        ? 'bg-purple-500/15 text-purple-700 dark:text-purple-300'
-                                        : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300';
+          const categoryBadgeClass =
+            card.accent === 'sky'
+              ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300'
+              : card.accent === 'amber'
+                ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
+                : card.accent === 'teal'
+                  ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
+                  : card.accent === 'rose'
+                    ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300'
+                    : card.accent === 'indigo'
+                      ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300'
+                      : card.accent === 'orange'
+                        ? 'bg-orange-500/15 text-orange-700 dark:text-orange-300'
+                        : card.accent === 'violet'
+                          ? 'bg-violet-500/15 text-violet-700 dark:text-violet-300'
+                          : card.accent === 'cyan'
+                            ? 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-300'
+                            : card.accent === 'red'
+                              ? 'bg-red-500/15 text-red-700 dark:text-red-300'
+                              : card.accent === 'blue'
+                                ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300'
+                                : card.accent === 'fuchsia'
+                                  ? 'bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-300'
+                                  : card.accent === 'purple'
+                                    ? 'bg-purple-500/15 text-purple-700 dark:text-purple-300'
+                                    : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300';
 
-              const titleHoverClass =
-                card.accent === 'sky'
-                  ? 'group-hover:text-sky-600 dark:group-hover:text-sky-400'
-                  : card.accent === 'amber'
-                    ? 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
-                    : card.accent === 'teal'
-                      ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
-                      : card.accent === 'rose'
-                        ? 'group-hover:text-rose-600 dark:group-hover:text-rose-400'
-                        : card.accent === 'indigo'
-                          ? 'group-hover:text-indigo-600 dark:group-hover:text-indigo-400'
-                          : card.accent === 'orange'
-                            ? 'group-hover:text-orange-600 dark:group-hover:text-orange-400'
-                            : card.accent === 'violet'
-                              ? 'group-hover:text-violet-600 dark:group-hover:text-violet-400'
-                              : card.accent === 'cyan'
-                                ? 'group-hover:text-cyan-600 dark:group-hover:text-cyan-400'
-                                : card.accent === 'red'
-                                  ? 'group-hover:text-red-600 dark:group-hover:text-red-400'
-                                  : card.accent === 'blue'
-                                    ? 'group-hover:text-blue-600 dark:group-hover:text-blue-400'
-                                    : card.accent === 'fuchsia'
-                                      ? 'group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400'
-                                      : card.accent === 'purple'
-                                        ? 'group-hover:text-purple-600 dark:group-hover:text-purple-400'
-                                        : 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400';
+          const titleHoverClass =
+            card.accent === 'sky'
+              ? 'group-hover:text-sky-600 dark:group-hover:text-sky-400'
+              : card.accent === 'amber'
+                ? 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
+                : card.accent === 'teal'
+                  ? 'group-hover:text-teal-600 dark:group-hover:text-teal-400'
+                  : card.accent === 'rose'
+                    ? 'group-hover:text-rose-600 dark:group-hover:text-rose-400'
+                    : card.accent === 'indigo'
+                      ? 'group-hover:text-indigo-600 dark:group-hover:text-indigo-400'
+                      : card.accent === 'orange'
+                        ? 'group-hover:text-orange-600 dark:group-hover:text-orange-400'
+                        : card.accent === 'violet'
+                          ? 'group-hover:text-violet-600 dark:group-hover:text-violet-400'
+                          : card.accent === 'cyan'
+                            ? 'group-hover:text-cyan-600 dark:group-hover:text-cyan-400'
+                            : card.accent === 'red'
+                              ? 'group-hover:text-red-600 dark:group-hover:text-red-400'
+                              : card.accent === 'blue'
+                                ? 'group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                                : card.accent === 'fuchsia'
+                                  ? 'group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400'
+                                  : card.accent === 'purple'
+                                    ? 'group-hover:text-purple-600 dark:group-hover:text-purple-400'
+                                    : 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400';
 
-              const iconAccentClass =
-                card.accent === 'sky'
-                  ? 'text-sky-500'
-                  : card.accent === 'amber'
-                    ? 'text-amber-500'
-                    : card.accent === 'teal'
-                      ? 'text-teal-500'
-                      : card.accent === 'rose'
-                        ? 'text-rose-500'
-                        : card.accent === 'indigo'
-                          ? 'text-indigo-500'
-                          : card.accent === 'orange'
-                            ? 'text-orange-500'
-                            : card.accent === 'violet'
-                              ? 'text-violet-500'
-                              : card.accent === 'cyan'
-                                ? 'text-cyan-500'
-                                : card.accent === 'red'
-                                  ? 'text-red-500'
-                                  : card.accent === 'blue'
-                                    ? 'text-blue-500'
-                                    : card.accent === 'fuchsia'
-                                      ? 'text-fuchsia-500'
-                                      : card.accent === 'purple'
-                                        ? 'text-purple-500'
-                                        : 'text-emerald-500';
+          const iconAccentClass =
+            card.accent === 'sky'
+              ? 'text-sky-500'
+              : card.accent === 'amber'
+                ? 'text-amber-500'
+                : card.accent === 'teal'
+                  ? 'text-teal-500'
+                  : card.accent === 'rose'
+                    ? 'text-rose-500'
+                    : card.accent === 'indigo'
+                      ? 'text-indigo-500'
+                      : card.accent === 'orange'
+                        ? 'text-orange-500'
+                        : card.accent === 'violet'
+                          ? 'text-violet-500'
+                          : card.accent === 'cyan'
+                            ? 'text-cyan-500'
+                            : card.accent === 'red'
+                              ? 'text-red-500'
+                              : card.accent === 'blue'
+                                ? 'text-blue-500'
+                                : card.accent === 'fuchsia'
+                                  ? 'text-fuchsia-500'
+                                  : card.accent === 'purple'
+                                    ? 'text-purple-500'
+                                    : 'text-emerald-500';
 
-              const ctaAccentClass =
-                card.accent === 'sky'
-                  ? 'text-sky-600 dark:text-sky-400'
-                  : card.accent === 'amber'
-                    ? 'text-amber-600 dark:text-amber-400'
-                    : card.accent === 'teal'
-                      ? 'text-teal-600 dark:text-teal-400'
-                      : card.accent === 'rose'
-                        ? 'text-rose-600 dark:text-rose-400'
-                        : card.accent === 'indigo'
-                          ? 'text-indigo-600 dark:text-indigo-400'
-                          : card.accent === 'orange'
-                            ? 'text-orange-600 dark:text-orange-400'
-                            : card.accent === 'violet'
-                              ? 'text-violet-600 dark:text-violet-400'
-                              : card.accent === 'cyan'
-                                ? 'text-cyan-600 dark:text-cyan-400'
-                                : card.accent === 'red'
-                                  ? 'text-red-600 dark:text-red-400'
-                                  : card.accent === 'blue'
-                                    ? 'text-blue-600 dark:text-blue-400'
-                                    : card.accent === 'fuchsia'
-                                      ? 'text-fuchsia-600 dark:text-fuchsia-400'
-                                      : card.accent === 'purple'
-                                        ? 'text-purple-600 dark:text-purple-400'
-                                        : 'text-emerald-600 dark:text-emerald-400';
+          const ctaAccentClass =
+            card.accent === 'sky'
+              ? 'text-sky-600 dark:text-sky-400'
+              : card.accent === 'amber'
+                ? 'text-amber-600 dark:text-amber-400'
+                : card.accent === 'teal'
+                  ? 'text-teal-600 dark:text-teal-400'
+                  : card.accent === 'rose'
+                    ? 'text-rose-600 dark:text-rose-400'
+                    : card.accent === 'indigo'
+                      ? 'text-indigo-600 dark:text-indigo-400'
+                      : card.accent === 'orange'
+                        ? 'text-orange-600 dark:text-orange-400'
+                        : card.accent === 'violet'
+                          ? 'text-violet-600 dark:text-violet-400'
+                          : card.accent === 'cyan'
+                            ? 'text-cyan-600 dark:text-cyan-400'
+                            : card.accent === 'red'
+                              ? 'text-red-600 dark:text-red-400'
+                              : card.accent === 'blue'
+                                ? 'text-blue-600 dark:text-blue-400'
+                                : card.accent === 'fuchsia'
+                                  ? 'text-fuchsia-600 dark:text-fuchsia-400'
+                                  : card.accent === 'purple'
+                                    ? 'text-purple-600 dark:text-purple-400'
+                                    : 'text-emerald-600 dark:text-emerald-400';
 
-              return (
-                <button
-                  key={card.id}
-                  type="button"
-                  onClick={() => setActiveModuleId(card.id)}
-                  className={`group relative p-5 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between cursor-pointer select-none focus:outline-none focus-visible:ring-2 ${accentCardClass}`}
-                >
-                  <div>
-                    {/* Top Category & Source Badge */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${categoryBadgeClass}`}>
-                        {card.category}
-                      </span>
-                      <span className="text-[10px] text-slate-400 font-mono font-bold">
-                        {card.sourceBadge}
-                      </span>
-                    </div>
-
-                    {/* Title & Summary */}
-                    <h3 className={`text-sm font-bold transition-colors ${titleHoverClass} ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      <MedicalText text={card.title} />
-                    </h3>
-                    <p className={`text-xs mt-1.5 leading-relaxed line-clamp-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <MedicalText text={card.shortDesc} />
-                    </p>
-
-                    {/* Mini Preview Strip */}
-                    <div className={`mt-4 pt-3 border-t ${isDark ? 'border-slate-800/80' : 'border-slate-100'}`}>
-                      <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
-                        <Activity className={`w-3 h-3 ${iconAccentClass}`} />
-                        <span>{card.stripTitle}</span>
-                      </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-center">
-                        {card.metrics.map((metric, idx) => (
-                          <div
-                            key={idx}
-                            className={`px-1 py-1 rounded-lg border text-[10px] font-mono ${metric.bgClass} ${metric.borderClass}`}
-                          >
-                            <div className={`font-semibold text-[9px] truncate ${metric.colorClass}`}>
-                              <MedicalText text={metric.label} />
-                            </div>
-                            <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400 truncate">
-                              <MedicalText text={metric.value} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Card Footer */}
-                  <div
-                    className={`mt-4 pt-3 border-t flex items-center justify-between text-xs ${
-                      isDark ? 'border-slate-800' : 'border-slate-100'
-                    }`}
-                  >
-                    <span className="text-[11px] text-slate-400 font-medium truncate max-w-[150px] sm:max-w-none">
-                      {card.publisher}
-                    </span>
-                    <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform shrink-0 ${ctaAccentClass}`}>
-                      <span>Modülü Aç</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-
-            {/* Future Slot Card */}
-            <div
-              className={`rounded-2xl border border-dashed flex flex-col items-center justify-center text-center p-6 transition-colors ${
-                isDark
-                  ? 'border-slate-800 bg-slate-900/30 text-slate-500'
-                  : 'border-slate-200 bg-slate-50/50 text-slate-400'
-              }`}
+          return (
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => setActiveModuleId(card.id)}
+              className={`group relative p-5 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between cursor-pointer select-none focus:outline-none focus-visible:ring-2 ${accentCardClass}`}
             >
+              <div>
+                {/* Top Category & Source Badge */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    {orderBadge && (
+                      <span
+                        className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                          isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {orderBadge}
+                      </span>
+                    )}
+                    <span className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold truncate ${categoryBadgeClass}`}>
+                      {card.category}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 font-mono font-bold shrink-0">
+                    {card.sourceBadge}
+                  </span>
+                </div>
+
+                {/* Title & Summary */}
+                <h3 className={`text-sm font-bold transition-colors ${titleHoverClass} ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  <MedicalText text={card.title} />
+                </h3>
+                <p className={`text-xs mt-1.5 leading-relaxed line-clamp-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  <MedicalText text={card.shortDesc} />
+                </p>
+
+                {/* Mini Preview Strip */}
+                <div className={`mt-4 pt-3 border-t ${isDark ? 'border-slate-800/80' : 'border-slate-100'}`}>
+                  <div className="text-[10px] font-semibold text-slate-400 mb-1.5 flex items-center gap-1">
+                    <Activity className={`w-3 h-3 ${iconAccentClass}`} />
+                    <span>{card.stripTitle}</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-center">
+                    {card.metrics.map((metric, idx) => (
+                      <div
+                        key={idx}
+                        className={`px-1 py-1 rounded-lg border text-[10px] font-mono ${metric.bgClass} ${metric.borderClass}`}
+                      >
+                        <div className={`font-semibold text-[9px] truncate ${metric.colorClass}`}>
+                          <MedicalText text={metric.label} />
+                        </div>
+                        <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400 truncate">
+                          <MedicalText text={metric.value} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Card Footer */}
               <div
-                className={`p-3 rounded-xl mb-2 ${
-                  isDark ? 'bg-slate-800 text-slate-400' : 'bg-white text-slate-400 shadow-xs'
+                className={`mt-4 pt-3 border-t flex items-center justify-between text-xs ${
+                  isDark ? 'border-slate-800' : 'border-slate-100'
                 }`}
               >
-                <PlusCircle className="w-6 h-6 stroke-[1.5]" />
+                <span className="text-[11px] text-slate-400 font-medium truncate max-w-[150px] sm:max-w-none">
+                  {card.publisher}
+                </span>
+                <span className={`font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform shrink-0 ${ctaAccentClass}`}>
+                  <span>Modülü Aç</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </span>
               </div>
-              <div className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                Yeni Monitörizasyon Kartları
+            </button>
+          );
+        };
+
+        return (
+          <div className="space-y-7">
+            {/* Tier Filter Strip */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-1.5">
+                {(
+                  [
+                    { id: 'all', label: `Tümü (${MONITORING_MODULES.length})` },
+                    { id: 'basic', label: `Temel Monitörizasyon & Takip (${basicModules.length})` },
+                    { id: 'advanced', label: `İleri Yöntemler · Sıklık Sıralı (${advancedModules.length})` },
+                  ] as const
+                ).map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setTierFilter(opt.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                      tierFilter === opt.id
+                        ? isDark
+                          ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200'
+                          : 'bg-emerald-50 border-emerald-400 text-emerald-900'
+                        : isDark
+                          ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
-              <p className={`text-[11px] mt-1 max-w-[230px] leading-relaxed ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                Ek yoğun bakım ve ileri perioperatif takip modülleri buraya eklenecektir.
-              </p>
+              <span className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                İncelemek istediğiniz kartın üzerine tıklayın
+              </span>
             </div>
+
+            {/* SECTION 1: TEMEL MONİTÖRİZASYON VE RUTİN İNTRAOPERATİF TAKİP */}
+            {(tierFilter === 'all' || tierFilter === 'basic') && (
+              <section className="space-y-3.5">
+                <div
+                  className={`flex flex-wrap items-end justify-between gap-2 pb-2.5 border-b ${
+                    isDark ? 'border-slate-800' : 'border-slate-200'
+                  }`}
+                >
+                  <div>
+                    <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      01 · Temel Düzey
+                    </div>
+                    <h3 className={`text-base font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      Temel Monitörizasyon ve Rutin İntraoperatif Takip
+                    </h3>
+                    <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      ASA standartları, solunum ve dolaşım rutinleri, kanama/idrar takibi ve cihazsız klinik değerlendirme
+                    </p>
+                  </div>
+                  <span
+                    className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border ${
+                      isDark
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                        : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    }`}
+                  >
+                    {basicModules.length} Temel Modül
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {basicModules.map((card) => renderCard(card))}
+                </div>
+              </section>
+            )}
+
+            {/* SECTION 2: İLERİ MONİTÖRİZASYON YÖNTEMLERİ (SIKLIK SIRALI) */}
+            {(tierFilter === 'all' || tierFilter === 'advanced') && (
+              <section className="space-y-3.5">
+                <div
+                  className={`flex flex-wrap items-end justify-between gap-2 pb-2.5 border-b ${
+                    isDark ? 'border-slate-800' : 'border-slate-200'
+                  }`}
+                >
+                  <div>
+                    <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                      02 · İleri Düzey · Klinik Kullanım Sıklığına Göre Sıralı
+                    </div>
+                    <h3 className={`text-base font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      İleri Monitörizasyon Yöntemleri
+                    </h3>
+                    <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Ameliyathane ve yoğun bakımda en sık kullanılandan (IBP · AKG · CVP · BIS) en spesifik yöntemlere (PAC · TcCO₂ · Özofageal Basınç) sıralanmıştır
+                    </p>
+                  </div>
+                  <span
+                    className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border ${
+                      isDark
+                        ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300'
+                        : 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                    }`}
+                  >
+                    {advancedModules.length} İleri Modül · En Sık → Nadir
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {advancedModules.map((card, idx) => renderCard(card, `#${idx + 1}`))}
+
+                  {/* Future Slot Card */}
+                  <div
+                    className={`rounded-2xl border border-dashed flex flex-col items-center justify-center text-center p-6 transition-colors ${
+                      isDark
+                        ? 'border-slate-800 bg-slate-900/30 text-slate-500'
+                        : 'border-slate-200 bg-slate-50/50 text-slate-400'
+                    }`}
+                  >
+                    <div
+                      className={`p-3 rounded-xl mb-2 ${
+                        isDark ? 'bg-slate-800 text-slate-400' : 'bg-white text-slate-400 shadow-xs'
+                      }`}
+                    >
+                      <PlusCircle className="w-6 h-6 stroke-[1.5]" />
+                    </div>
+                    <div className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                      Yeni Monitörizasyon Kartları
+                    </div>
+                    <p className={`text-[11px] mt-1 max-w-[230px] leading-relaxed ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                      Ek yoğun bakım ve ileri perioperatif takip modülleri buraya eklenecektir.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            )}
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* VIEW 2: Active Module Details */}
       {activeModuleId === 'asa-basic-monitoring' && (
