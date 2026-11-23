@@ -1455,6 +1455,13 @@ export const GeriatricAndObesityBlock: React.FC<GeriatricAndObesityBlockProps> =
   );
 };
 
+export interface TissueOrganSystemCard {
+  systemTitle: string;
+  tissueTarget?: string;
+  accent?: 'rose' | 'teal' | 'indigo' | 'amber' | 'sky' | 'violet';
+  points: string[];
+}
+
 export interface DeepPharmacodynamicsProps {
   isDark: boolean;
   sectionId?: string;
@@ -1466,31 +1473,99 @@ export interface DeepPharmacodynamicsProps {
     summary: string;
     points: string[];
   };
-  organEffects: {
+  /**
+   * 2. Kademe (Yeni 4 Kademeli Hiyerarşik Model): Hücre İçi Sinyal Kaskadı, İkincil Haberciler & İyon/Organel Dinamiği
+   */
+  intracellularSignaling?: {
+    title?: string;
+    summary: string;
+    points: string[];
+  };
+  /**
+   * 3. Kademe (Yeni 4 Kademeli Hiyerarşik Model): Doku & Organ Sistemleri Düzeyinde Fizyolojik Yansıma (2x2 Eşit Kartlar)
+   */
+  tissueOrganSystems?: TissueOrganSystemCard[];
+  /**
+   * Geriye dönük uyumluluk için eski organEffects yapısı
+   */
+  organEffects?: {
     cns: string[];
     cvs: string[];
     respiratory: string[];
     other?: string[];
   };
   synergyAndCeiling: {
+    title?: string;
     summary?: string;
     points: string[];
   };
   clinicalPearls: string[];
+  clinicalPearlsTitle?: string;
 }
 
 export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
   isDark,
   sectionId = 'sec-derin-pd',
-  sectionTitle = 'Derin Farmakodinamik & Sistemik Fizyoloji Analizi',
-  subtitle = 'Reseptör alt tipleri, SSS/KVS/Solunum fizyolojisi, sinerji–tavan etkisi ve ileri klinik incelikler (Miller’s / Stoelting’s / Barash)',
+  sectionTitle = 'Derin Farmakodinamik & Çok Ölçekli Fizyoloji Analizi',
+  subtitle = '1) Hücre Zarı & Moleküler Hedef → 2) Hücre İçi Sinyal & İyon Kaskadı → 3) Doku & Organ Fizyolojisi → 4) Reseptör Kinetiği & Sinerji (Miller’s / Stoelting’s / Goodman & Gilman)',
   defaultOpen = false,
   receptorMechanism,
+  intracellularSignaling,
+  tissueOrganSystems,
   organEffects,
   synergyAndCeiling,
   clinicalPearls,
+  clinicalPearlsTitle,
 }) => {
   const [open, setOpen] = useState<boolean>(defaultOpen);
+  const isFourTier = Boolean(intracellularSignaling || (tissueOrganSystems && tissueOrganSystems.length > 0));
+
+  const getCardAccentClasses = (accent: TissueOrganSystemCard['accent'] = 'sky') => {
+    switch (accent) {
+      case 'rose':
+        return {
+          border: isDark ? 'border-rose-900/50 bg-rose-950/15' : 'border-rose-200 bg-rose-50/40',
+          title: isDark ? 'text-rose-300' : 'text-rose-900',
+          badge: isDark ? 'bg-rose-500/15 text-rose-300 border-rose-500/30' : 'bg-white text-rose-800 border-rose-300',
+          dot: isDark ? 'bg-rose-400' : 'bg-rose-600',
+        };
+      case 'teal':
+        return {
+          border: isDark ? 'border-teal-900/50 bg-teal-950/15' : 'border-teal-200 bg-teal-50/40',
+          title: isDark ? 'text-teal-300' : 'text-teal-900',
+          badge: isDark ? 'bg-teal-500/15 text-teal-300 border-teal-500/30' : 'bg-white text-teal-800 border-teal-300',
+          dot: isDark ? 'bg-teal-400' : 'bg-teal-600',
+        };
+      case 'indigo':
+        return {
+          border: isDark ? 'border-indigo-900/50 bg-indigo-950/15' : 'border-indigo-200 bg-indigo-50/40',
+          title: isDark ? 'text-indigo-300' : 'text-indigo-900',
+          badge: isDark ? 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30' : 'bg-white text-indigo-800 border-indigo-300',
+          dot: isDark ? 'bg-indigo-400' : 'bg-indigo-600',
+        };
+      case 'amber':
+        return {
+          border: isDark ? 'border-amber-900/50 bg-amber-950/15' : 'border-amber-200 bg-amber-50/40',
+          title: isDark ? 'text-amber-300' : 'text-amber-900',
+          badge: isDark ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-white text-amber-800 border-amber-300',
+          dot: isDark ? 'bg-amber-400' : 'bg-amber-600',
+        };
+      case 'violet':
+        return {
+          border: isDark ? 'border-violet-900/50 bg-violet-950/15' : 'border-violet-200 bg-violet-50/40',
+          title: isDark ? 'text-violet-300' : 'text-violet-900',
+          badge: isDark ? 'bg-violet-500/15 text-violet-300 border-violet-500/30' : 'bg-white text-violet-800 border-violet-300',
+          dot: isDark ? 'bg-violet-400' : 'bg-violet-600',
+        };
+      default:
+        return {
+          border: isDark ? 'border-sky-900/50 bg-sky-950/15' : 'border-sky-200 bg-sky-50/40',
+          title: isDark ? 'text-sky-300' : 'text-sky-900',
+          badge: isDark ? 'bg-sky-500/15 text-sky-300 border-sky-500/30' : 'bg-white text-sky-800 border-sky-300',
+          dot: isDark ? 'bg-sky-400' : 'bg-sky-600',
+        };
+    }
+  };
 
   return (
     <section
@@ -1544,7 +1619,7 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
             isDark ? 'border-slate-800' : 'border-slate-200'
           }`}
         >
-          {/* 1. Sütun: Reseptör / Moleküler Alt Tip & Sinyal İletimi */}
+          {/* 1. Kademe: Hücre Zarı & Moleküler Hedef (Membran & Reseptör / Kanal / Taşıyıcı Biyofiziği) */}
           <div
             className={`rounded-xl border p-4 ${
               isDark ? 'border-violet-900/40 bg-violet-950/15' : 'border-violet-200 bg-violet-50/40'
@@ -1553,7 +1628,7 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
             <div className="flex items-center gap-2">
               <Layers className={`h-4 w-4 ${isDark ? 'text-violet-300' : 'text-violet-700'}`} />
               <h4 className={`text-sm font-bold ${isDark ? 'text-violet-200' : 'text-violet-950'}`}>
-                1. {receptorMechanism.title || 'Reseptör Alt Tipleri & Moleküler Sinyal İletimi'}
+                1. {receptorMechanism.title || 'Hücre Zarı & Moleküler Hedef (Membran Reseptör / Kanal / Taşıyıcı Biyofiziği)'}
               </h4>
             </div>
             <p className={`mt-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
@@ -1569,88 +1644,161 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
             </ul>
           </div>
 
-          {/* 2. Sütun: Organ Sistemlerine Fizyolojik Etki (SSS · KVS · Solunum) */}
-          <div
-            className={`rounded-xl border p-4 ${
-              isDark ? 'border-slate-800 bg-slate-950/50' : 'border-slate-200 bg-slate-50/60'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Activity className={`h-4 w-4 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
-              <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                2. Organ Sistemlerine Fizyolojik Etki (SSS · KVS · Solunum)
-              </h4>
+          {/* 2. Kademe (Yeni): Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Hücresel Düzey Etki */}
+          {intracellularSignaling && (
+            <div
+              className={`rounded-xl border p-4 ${
+                isDark ? 'border-cyan-900/40 bg-cyan-950/15' : 'border-cyan-200 bg-cyan-50/40'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Zap className={`h-4 w-4 ${isDark ? 'text-cyan-300' : 'text-cyan-700'}`} />
+                <h4 className={`text-sm font-bold ${isDark ? 'text-cyan-200' : 'text-cyan-950'}`}>
+                  2. {intracellularSignaling.title || 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Hücresel Düzey Etki'}
+                </h4>
+              </div>
+              <p className={`mt-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                {intracellularSignaling.summary}
+              </p>
+              <ul className={`mt-2.5 space-y-1.5 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                {intracellularSignaling.points.map((pt, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-cyan-400' : 'bg-cyan-600'}`} />
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
+          )}
 
-            <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-3">
-              <div
-                className={`rounded-lg border p-3.5 ${
-                  isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-                }`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Brain className={`h-4 w-4 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-indigo-300' : 'text-indigo-800'}`}>
-                    SSS · Sedasyon / Hipnoz / EEG
-                  </span>
-                </div>
-                <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  {organEffects.cns.map((item, idx) => (
-                    <li key={idx}>• {item}</li>
-                  ))}
-                </ul>
+          {/* 3. Kademe (Yeni 2x2 Doku -> Organ Fizyoloji Gridi) VEYA Eski organEffects */}
+          {tissueOrganSystems && tissueOrganSystems.length > 0 ? (
+            <div
+              className={`rounded-xl border p-4 ${
+                isDark ? 'border-slate-800 bg-slate-950/50' : 'border-slate-200 bg-slate-50/60'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Activity className={`h-4 w-4 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
+                <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {intracellularSignaling ? '3.' : '2.'} Doku &amp; Organ Sistemleri Düzeyinde Fizyolojik Yansıma (Doku → Organ Eşleşmesi)
+                </h4>
               </div>
 
-              <div
-                className={`rounded-lg border p-3.5 ${
-                  isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-                }`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <HeartPulse className={`h-4 w-4 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-800'}`}>
-                    Kardiyovasküler Sistem
-                  </span>
-                </div>
-                <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  {organEffects.cvs.map((item, idx) => (
-                    <li key={idx}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div
-                className={`rounded-lg border p-3.5 ${
-                  isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-                }`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Wind className={`h-4 w-4 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-teal-300' : 'text-teal-800'}`}>
-                    Solunum &amp; Hava Yolu
-                  </span>
-                </div>
-                <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  {organEffects.respiratory.map((item, idx) => (
-                    <li key={idx}>• {item}</li>
-                  ))}
-                </ul>
+              <div className="mt-3 grid grid-cols-1 gap-3.5 lg:grid-cols-2">
+                {tissueOrganSystems.map((card, idx) => {
+                  const style = getCardAccentClasses(card.accent);
+                  return (
+                    <div
+                      key={idx}
+                      className={`rounded-xl border p-4 ${style.border}`}
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className={`text-xs sm:text-sm font-bold ${style.title}`}>
+                          {card.systemTitle}
+                        </span>
+                        {card.tissueTarget && (
+                          <span className={`rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold ${style.badge}`}>
+                            {card.tissueTarget}
+                          </span>
+                        )}
+                      </div>
+                      <ul className={`mt-2.5 space-y-1.5 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        {card.points.map((pt, pIdx) => (
+                          <li key={pIdx} className="flex items-start gap-2">
+                            <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${style.dot}`} />
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-
-            {organEffects.other && organEffects.other.length > 0 && (
-              <div
-                className={`mt-3 rounded-lg border p-3 text-xs leading-relaxed ${
-                  isDark ? 'border-slate-800 bg-slate-900/50 text-slate-300' : 'border-slate-200 bg-white text-slate-700'
-                }`}
-              >
-                <strong className={isDark ? 'text-slate-200' : 'text-slate-900'}>Diğer Sistemik Etkiler (Nöromüsküler / GIS / Endokrin): </strong>
-                {organEffects.other.join(' · ')}
+          ) : organEffects ? (
+            <div
+              className={`rounded-xl border p-4 ${
+                isDark ? 'border-slate-800 bg-slate-950/50' : 'border-slate-200 bg-slate-50/60'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Activity className={`h-4 w-4 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
+                <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  2. Organ Sistemlerine Fizyolojik Etki (SSS · KVS · Solunum)
+                </h4>
               </div>
-            )}
-          </div>
 
-          {/* 3. & 4. Sütunlar: Sinerji/Tavan Etkisi & Klinik-Farmakodinamik İncelikler */}
+              <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-3">
+                <div
+                  className={`rounded-lg border p-3.5 ${
+                    isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <Brain className={`h-4 w-4 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                    <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-indigo-300' : 'text-indigo-800'}`}>
+                      SSS · Sedasyon / Hipnoz / EEG
+                    </span>
+                  </div>
+                  <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    {organEffects.cns.map((item, idx) => (
+                      <li key={idx}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div
+                  className={`rounded-lg border p-3.5 ${
+                    isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <HeartPulse className={`h-4 w-4 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
+                    <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-800'}`}>
+                      Kardiyovasküler Sistem
+                    </span>
+                  </div>
+                  <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    {organEffects.cvs.map((item, idx) => (
+                      <li key={idx}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div
+                  className={`rounded-lg border p-3.5 ${
+                    isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <Wind className={`h-4 w-4 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
+                    <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-teal-300' : 'text-teal-800'}`}>
+                      Solunum &amp; Hava Yolu
+                    </span>
+                  </div>
+                  <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    {organEffects.respiratory.map((item, idx) => (
+                      <li key={idx}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {organEffects.other && organEffects.other.length > 0 && (
+                <div
+                  className={`mt-3 rounded-lg border p-3 text-xs leading-relaxed ${
+                    isDark ? 'border-slate-800 bg-slate-900/50 text-slate-300' : 'border-slate-200 bg-white text-slate-700'
+                  }`}
+                >
+                  <strong className={isDark ? 'text-slate-200' : 'text-slate-900'}>Diğer Sistemik Etkiler (Nöromüsküler / GIS / Endokrin): </strong>
+                  {organEffects.other.join(' · ')}
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          {/* 4. Kademe: Reseptör Kinetiği, Desensitizasyon / Taşiflaksi, Sinerji & Klinik-PD Tuzaklar */}
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div
               className={`rounded-xl border p-4 ${
@@ -1660,7 +1808,7 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
               <div className="flex items-center gap-2">
                 <Zap className={`h-4 w-4 ${isDark ? 'text-teal-300' : 'text-teal-700'}`} />
                 <h4 className={`text-sm font-bold ${isDark ? 'text-teal-200' : 'text-teal-950'}`}>
-                  3. Sinerji, Antagonizma &amp; Tavan Etkisi (Ceiling Effect)
+                  {isFourTier ? '4A.' : '3.'} {synergyAndCeiling.title || 'Reseptör Kinetiği, Desensitizasyon / Taşiflaksi & Tavan Etkisi'}
                 </h4>
               </div>
               {synergyAndCeiling.summary && (
@@ -1686,7 +1834,7 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
               <div className="flex items-center gap-2">
                 <Stethoscope className={`h-4 w-4 ${isDark ? 'text-amber-300' : 'text-amber-700'}`} />
                 <h4 className={`text-sm font-bold ${isDark ? 'text-amber-200' : 'text-amber-950'}`}>
-                  4. Klinik-Farmakodinamik İncelikler &amp; Tuzaklar
+                  {isFourTier ? '4B.' : '4.'} {clinicalPearlsTitle || 'Klinik-Farmakodinamik İncelikler & Tuzaklar'}
                 </h4>
               </div>
               <ul className={`mt-2.5 space-y-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>

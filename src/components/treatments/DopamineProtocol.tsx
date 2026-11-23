@@ -164,66 +164,6 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
             />
           </div>
         </div>
-
-        {/* Doz-Bağımlı 3 Reseptör Spektrumu Özet Kartları */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-teal-950/20 border-teal-900/50 text-teal-200' : 'bg-teal-50/70 border-teal-200 text-teal-950'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-1.5 font-bold text-sm text-teal-600 dark:text-teal-400">
-              <span className="flex items-center gap-1.5">
-                <Activity className="w-4 h-4 shrink-0" />
-                <span>D₁ / D₂ Dopaminerjik Faz</span>
-              </span>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-teal-500/15">1 – 3 mcg/kg/dk</span>
-            </div>
-            <p className="text-xs leading-relaxed">
-              Renal, mezenterik ve koroner yatakta D₁ aracılı vazodilatasyon ve proksimal tübülde Na⁺/K⁺-ATPaz
-              inhibisyonuyla natriürez. <strong>Dikkat (ANZICS 2000 &amp; KDIGO):</strong> GFR, RRT ihtiyacı veya sağkalımı
-              iyileştirmez; &quot;böbrek koruyucu doz&quot; olarak <strong>önerilmez (Sınıf III)</strong>.
-            </p>
-          </div>
-
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-amber-950/20 border-amber-900/50 text-amber-200' : 'bg-amber-50/70 border-amber-200 text-amber-950'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-1.5 font-bold text-sm text-amber-600 dark:text-amber-400">
-              <span className="flex items-center gap-1.5">
-                <HeartPulse className="w-4 h-4 shrink-0" />
-                <span>β₁-Adrenerjik İnotrop / Kronotrop</span>
-              </span>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-amber-500/15">3 – 10 mcg/kg/dk</span>
-            </div>
-            <p className="text-xs leading-relaxed">
-              Doğrudan postsinaptik β₁ uyarımı + sempatik sinir uçlarından <strong>endojen noradrenalin salınımı</strong>.
-              Sinoatriyal düğüm hızı (HR↑), miyokard kontraktilitesi (SV↑) ve Kardiyak Debi (CO↑) artar; atropine yanıtsız
-              semptomatik bradikardide temel terapötik penceredir.
-            </p>
-          </div>
-
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-200' : 'bg-rose-50/70 border-rose-200 text-rose-950'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-1.5 font-bold text-sm text-rose-600 dark:text-rose-400">
-              <span className="flex items-center gap-1.5">
-                <Zap className="w-4 h-4 shrink-0" />
-                <span>α₁-Adrenerjik Baskın Vazopresör</span>
-              </span>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-rose-500/15">10 – 20 mcg/kg/dk</span>
-            </div>
-            <p className="text-xs leading-relaxed">
-              Vasküler düz kasta α₁ reseptör uyarımı baskın hale geçer: Sistemik Vasküler Direnç (SVR↑), MAP↑ ve PCWP↑.
-              Renal/mezenterik D₁ vazodilatasyonunu maskeler; belirgin sinüs taşikardisi, AF/VT aritmi ve splanknik iskemi
-              riski taşır (&gt;20 mcg/kg/dk yerine Noradrenaline geçilir).
-            </p>
-          </div>
-        </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
@@ -1173,55 +1113,91 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 11. DERİN FARMAKODİNAMİK ANALİZ (id="pharmacodynamics", 4 Sütun)     */}
+      {/* 11. DERİN FARMAKODİNAMİK ANALİZ (id="pharmacodynamics", 4 Kademe)    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
         sectionId="pharmacodynamics"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Moleküler Hedef, Reseptör Bağlanma (D₁/D₂ > β₁ > α₁) & Hücresel Sinyal İletimi',
+          title: 'Hücre Zarı & Moleküler Hedef (GPCR Alt Tipleri: D₁/D₂ > β₁ > α₁ & Presinaptik NET Taşıyıcısı)',
           summary:
-            'Dopamin doz-bağımlı ardışık reseptör afinitesi (D₁/D₂ > β₁ > α₁) gösteren benzersiz bir endojen katekolamindir. Doğrudan reseptör uyarımına ek olarak, miyokardiyal inotropik etkisinin yaklaşık %50’sini presinaptik sempatik sinir terminallerinden endojen noradrenalin salınımı (indirekt sempatomimetik etki) yoluyla gerçekleştirir (Miller’s 10th Ed. / Stoelting’s 6th Ed.).',
+            'Dopamin (3,4-dihidroksifeniletilamin), hedef hücre zarlarında 7-transmembran (7-TM) G-proteini kenetli reseptör (GPCR) süper ailesinin üç farklı sınıfına konsantrasyon-bağımlı ardışık afiniteyle (D₁/D₂ [Ki ~0,5–2 µM] > β₁ [Ki ~5–10 µM] > α₁ [Ki >20 µM]) bağlanır ve aynı zamanda presinaptik sempatik nöron membranındaki Norepinefrin Taşıyıcısı (NET / Uptake-1) üzerinden hücre içine girerek veziküler noradrenalin ekzositozunu tetikler (Miller’s 10th Ed. / Stoelting’s 6th Ed.).',
           points: [
-            'D₁ ve β₁ Sinyal İletimi (Gs → Adenilat Siklaz↑ → cAMP↑ → PKA): D₁ reseptörleri renal, mezenterik ve koroner vasküler düz kasta cAMP/PKA üzerinden vazodilatasyon ve proksimal tübülde Na⁺/K⁺-ATPaz ile NHE3 inhibisyonu yaparak natriürez sağlar. Kardiyomiyositlerde β₁ uyarımı PKA aracılı L-tipi Ca²⁺ kanalı ve fosfolamban fosforilasyonu ile hücre içi Ca²⁺ geçişini artırarak pozitif inotropi, kronotropi ve dromotropi oluşturur.',
-            'D₂ Sinyal İletimi (Gi → Adenilat Siklaz↓ → cAMP↓): Presinaptik sempatik uçlarda D₂ otoreseptörleri düşük dozlarda noradrenalin salınımını modüle ederken; ön hipofiz laktotrof/tirotroflarında hormon sekresyonunu, karotid cisimcikte hipoksik yanıtı ve area postremada emezis eşiğini etkiler.',
-            'α₁ Sinyal İletimi (Gq/11 → Fosfolipaz C → IP₃ / DAG → Ca²⁺↑): Yüksek dozlarda (>10 mcg/kg/dk) vasküler düz kas α₁ reseptörlerine bağlanarak sarkoplazmik retikulumdan Ca²⁺ salınımı ve PKC aktivasyonu ile arteriyoler/venöz vazokonstriksiyon (SVR↑, PVR↑, PCWP↑) oluşturur.',
+            'Vasküler & Renal Tübüler Hücre Zarı (D₁-Benzeri Reseptörler: D₁ ve D₅): Renal afferent/efferent arteriyol, mezenterik ve koroner vasküler düz kas hücrelerinin postsinaptik sarkolemmasında ve böbrek proksimal kıvrımlı tübül (PCT) hücrelerinin apikal/bazolateral zarında yer alan D₁ reseptörlerine düşük plazma konsantrasyonlarında (1–3 mcg/kg/dk) bağlanarak heterotrimerik Gαs/olf alt birimini aktive eder.',
+            'Presinaptik Sempatik Sinir Ucu, Hipofiz & Glomus Hücre Zarı (D₂-Benzeri Reseptörler: D₂, D₃, D₄): Sempatik postgangliyonik akson varikozitelerinin presinaptik membranındaki D₂ otoreseptörlerine, ön hipofiz laktotrof/tirotrof hücre zarına, area postrema kemoreseptör tetik bölgesine (CTZ) ve karotid cisimcik Tip-I glomus hücre membranına bağlanarak pertussis toksinine duyarlı Gαi/o proteinini kenetler.',
+            'Kardiyomiyosit Sarkolemması & Presinaptik Sempatik Terminaller (β₁-Adrenerjik Reseptör & VMAT2/NET): Orta dozlarda (3–10 mcg/kg/dk) SA/AV düğüm pacemaker hücreleri ile ventriküler kardiyomiyosit sarkolemmasındaki β₁ reseptörlerini (Gαs) doğrudan uyarır; eşzamanlı olarak presinaptik sempatik sinir ucu zarındaki NET taşıyıcısıyla akson sitozolüne taşınıp sinaptik veziküllerden (VMAT2) endojen noradrenalini sinaptik aralığa boşaltır (kardiyak inotropik yanıtın ~%50’si bu indirekt presinaptik salınıma bağlıdır).',
+            'Vasküler Düz Kas Hücresi Sarkolemması (α₁A / α₁B / α₁D-Adrenerjik Reseptörler): Yüksek infüzyon hızlarında (>10–20 mcg/kg/dk) sistemik arteriyol, venül ve pulmoner damar düz kası sarkolemmasındaki postsinaptik α₁ reseptörlerine düşük afiniteli ancak yüksek kapasiteli bağlanarak Gαq/11 proteinini aktive eder ve periferik D₁ vazodilatasyonunu tamamen maskeler.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Sağlam kan-beyin bariyerini geçmez; santral sinir sisteminde doğrudan sedatif veya eksitatör EEG etkisi yoktur.',
-            'KBB dışındaki Area Postrema (CTZ) D₂ uyarımıyla özellikle bilinci açık hastalarda bulantı ve kusma tetikler.',
-          ],
-          cvs: [
-            'Düşük Doz (1–3 mcg/kg/dk): SVR hafif düşebilir veya değişmez; kalp hızı ve CO minimal etkilenir.',
-            'Orta Doz (3–10 mcg/kg/dk): β₁ uyarımı ve endojen NE salınımıyla SV, HR ve CO artar; miyokard oksijen tüketimi (MVO₂) ve sinüs düğümü otomatisitesi yükselir.',
-            'Yüksek Doz (>10–20 mcg/kg/dk): α₁ vazokonstriksiyon baskınlaşır; SVR, MAP, sol ventrikül dolum basıncı (PCWP) ve afterload yükselir, aritmi (AF/VT) riski keskin artar.',
-          ],
-          respiratory: [
-            'Karotid Cisimcik D₂ İnhibisyonu: Karotid cisimcikteki glomus hücrelerinde D₂ reseptörlerini uyararak hipoksiye karşı gelişen fizyolojik hiperventilasyon yanıtını (hipoksik ventilatuar dürtüyü) köreltir!',
-            'Yüksek dozlarda pulmoner vasküler direnci (PVR) ve pulmoner kapiller kama basıncını (PCWP) artırabilir.',
-          ],
-          other: [
-            'Renal & Splanknik: Düşük dozda tübüler natriürez ve kortikal kan akımı artışı sağlasa da medüller oksijen tüketimini artırır; yüksek dozda (>10 mcg/kg/dk) α₁ vazokonstriksiyon D₁ vazodilatasyonunu ezerek splanknik mukoza perfüzyonunu ve GFR’yi bozar.',
-            'Nöroendokrin & İmmünomodülatör: Ön hipofizde D₂ uyarımı ile Prolaktin, TSH ve Büyüme Hormonu (GH) sekresyonunu baskılar (ötiroid hasta sendromunu derinleştirir ve T-hücre aracılı hücresel immün fonksiyonu baskılar).',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Hücre zarındaki GPCR veya NET etkileşimi; hedef hücrenin tipine göre (kardiyomiyosit, vasküler düz kas, renal tübül epiteli, hipofiz hücresi) dört ayrı hücre içi biyokimyasal ve elektrofizyolojik kaskadı tetikler:',
+          points: [
+            'Kardiyomiyosit & SA Düğüm Hücresi İçi (β₁ → Gαs → AC↑ → cAMP↑ → PKA Kaskadı): Adenilat siklaz (AC Tip V/VI) aktivasyonuyla yükselen hücre içi cAMP, Protein Kinaz A’yı (PKA) aktive eder. PKA; (1) sarkolemmadaki L-tipi voltaj kapılı Ca²⁺ kanallarını (Cav1.2) fosforilleyerek Faz 2 platosunda hücre içine Ca²⁺ girişini artırır, (2) Sarkoplazmik Retikulum (SR) üzerindeki Riyanodin Reseptörlerini (RyR2) duyarlılaştırarak Ca²⁺-aracılı Ca²⁺ salınımını (CICR) büyütür ve Troponin-C’ye Ca²⁺ bağlanmasıyla aktin-miyozin çapraz köprü kuvvetini (pozitif inotropi) artırır, (3) SR zarındaki Fosfolamban’ı fosforilleyerek SERCA2a pompas üzerindeki inhibisyonu kaldırır ve diyastolik Ca²⁺ geri alımını hızlandırır (pozitif lusitropi), (4) SA düğümde cAMP doğrudan HCN4 (If "funny" akımı) kanallarına bağlanarak Faz 4 spontan diyastolik depolarizasyon eğimini dikleştirir (pozitif kronotropi).',
+            'Renal Proksimal Tübül Epiteli & Vasküler Düz Kas Hücresi İçi (D₁ → Gαs → cAMP / PKA → DARPP-32 & MLCK İnhibisyonu): Vasküler düz kas hücresinde yükselen cAMP/PKA, Miyozin Hafif Zincir Kinazı (MLCK) fosforilleyerek Ca²⁺-Kalmodulin kompleksine afinitesini düşürür ve BKCa (büyük iletkenlikli Ca²⁺-bağımlı K⁺) kanallarını açarak membranı hiperpolarize eder → düz kas gevşemesi. Böbrek proksimal tübül hücresinde ise PKA ve PKC aracılı DARPP-32 fosforilasyonu; apikal fırçamsı kenardaki Na⁺/H⁺ Değiştirici-3 (NHE3) ile bazolateral zardaki Na⁺/K⁺-ATPaz pompasının endositozla hücre içine çekilip inhibe olmasını sağlar → transselüler Na⁺ geri emilimi durur (hücresel natriürez).',
+            'Vasküler Düz Kas Hücresi İçi Yüksek Doz Kaskadı (α₁ → Gαq/11 → PLC-β → IP₃ / DAG → MLCK & Rho-Kinaz): Fosfolipaz C-β (PLC-β) membran PIP₂’sini parçalayarak İnozitol 1,4,5-Trisfosfat (IP₃) ve Diasilgliserol (DAG) üretir. IP₃, sarkoplazmik retikulum zarındaki IP₃R kanallarını açarak sitozolik [Ca²⁺]i konsantrasyonunu hızla yükseltir; Ca²⁺-Kalmodulin kompleksi MLCK’yı aktive ederek Miyozin Hafif Zincirini (MLC20) fosforiller. Eşzamanlı olarak DAG/PKC ve RhoA/Rho-Kinaz (ROCK) yolağı Miyozin Fosfatazı (MLCP) inhibe ederek Ca²⁺ duyarlılaşması ve tonik düz kas kontraksiyonu üretir.',
+            'Nöroendokrin & Presinaptik Hücre İçi (D₂ → Gαi/o → AC↓ → cAMP↓, GIRK K⁺ Açılması & N-Tipi Ca²⁺ Kapanması): Gαi alt birimi adenilat siklazı inhibe ederken, serbestleşen Gβγ kompleksi içeri doğrultucu K⁺ kanallarını (GIRK) açarak hücreyi hiperpolarize eder ve voltaj kapılı N/P/Q-tipi Ca²⁺ kanallarını kapatır → vezikül füzyonu (SNARE) durur; ön hipofizde Prolaktin/TSH/GH ekzositozu ve karotid cisimcik glomus hücrelerinde hipoksik nörotransmitter deşarjı baskılanır.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Miyokard Dokusu, İleti Sistemi & Koroner Yatak → Kalp Fizyolojisi',
+            tissueTarget: 'Kardiyomiyosit · SA/AV Düğüm · Purkinje Ağı',
+            accent: 'rose',
+            points: [
+              'Kontraktilite & Kardiyak Debi (3–10 mcg/kg/dk): Ventrikül miyokardında dP/dt(max), atım hacmi (SV) ve Kardiyak İndeks (CI) artar; ancak hücre içi Ca²⁺ yüklenmesi ve taşikardi nedeniyle miyokard oksijen tüketimi (MVO₂) belirgin yükselir.',
+              'İleti Sistemi & Aritmojenite (SOAP-II Mekanizması): SA düğümde Faz 4 eğiminin dikleşmesi, AV düğümde efektif refrakter periyodun kısalması ve Purkinje liflerinde gecikmiş ard-depolarizasyonlar (DAD) nedeniyle sinüs taşikardisi, hızlı ventrikül yanıtlı AF ve ventriküler taşiaritmi insidansı Noradrenalinin 2 katıdır (%24,1 vs %12,4).',
+              'Koroner Perfüzyon Dengesi: Epikardiyal ve direnç koroner damarlarda D₁ vazodilatasyon oluşsa da, yüksek dozlarda taşikardiye bağlı diyastolik dolum süresinin kısalması ve α₁ aracılı LVEDP/duvar gerilimi artışı subendokardiyal koroner perfüzyon basıncını (CPP = DBP − LVEDP) bozabilir.',
+            ],
+          },
+          {
+            systemTitle: 'Arteriyoler & Venöz Vasküler Düz Kas Dokusu → Sistemik & Pulmoner Dolaşım',
+            tissueTarget: 'Rezistans Arteriyoller · Venöz Kapasitans · Pulmoner Yatak',
+            accent: 'amber',
+            points: [
+              'Bifazik Rezistans Arteriyol Yanıtı: Düşük dozda (1–3 mcg/kg/dk) renal/mezenterik D₁ gevşemesiyle SVR sabit kalır veya hafif düşer; >10 mcg/kg/dk üzerinde ise α₁ kasılması tüm vasküler yataklarda baskınlaşarak SVR ve MAP’ı hızla yükseltir.',
+              'Venöz Kapasitans & Ventrikül Dolum Basınçları: Splanknik ve sistemik venöz düz kastaki α₁ reseptörleri arteriyollere göre daha düşük eşikte uyarılır; unstressed venöz hacmi stressed hacme çevirerek sağ kalbe venöz dönüşü, santral venöz basıncı (CVP) ve sol ventrikül diyastol sonu / pulmoner kapiller kama basıncını (PCWP) artırır (kardiyojenik pulmoner ödem riskini kötüleştirir).',
+              'Pulmoner Vasküler Yatak: Pulmoner arter düz kasında β₂ gevşeticisi zayıf, α₁ kasıcı etkisi belirgin olduğundan özellikle >10 mcg/kg/dk dozlarda Pulmoner Vasküler Direnci (PVR) ve sağ ventrikül afterload’unu artırır.',
+            ],
+          },
+          {
+            systemTitle: 'Nefron Tübül Epiteli, Renal & Splanknik Mikrodolaşım → Böbrek & GİS',
+            tissueTarget: 'Afferent/Efferent Arteriyol · Proksimal Tübül · Villus Mikrodolaşımı',
+            accent: 'teal',
+            points: [
+              'Renal Korteks vs Medulla Paradoksu (1–3 mcg/kg/dk): Afferent ve efferent arteriyollerde D₁ vazodilatasyonla renal kortikal kan akımı ve proksimal tübülde NHE3/Na⁺-K⁺-ATPaz inhibisyonuyla natriürez/diürez artar; ancak Henle kulpu kalın çıkan koluna (mTAL) ulaşan yüksek Na⁺ yükü medüller Na⁺/K⁺-ATPaz iş yükünü ve O₂ tüketimini artırarak hipoksik dış medullayı iskemik hasara açık hale getirir (ANZICS çalışmasında ABH koruması sağlamamasının temel fizyolojik nedeni).',
+              'Yüksek Doz Renal & Mezenterik Vazokonstriksiyon (>10 mcg/kg/dk): α₁ uyarımı renal ve mezenterik D₁ vazodilatasyonunu tamamen ezer; renal kan akımı, GFR ve idrar çıkışı düşer.',
+              'Splanknik Mukoza & Villus Perfüzyonu: Yüksek doz α₁ vazokonstriksiyon bağırsak villus uçlarındaki ters-akım (counter-current) mikrodolaşımını bozarak mukozal asidoz, bariyer yıkımı ve bakteriyel translokasyon riskini artırır.',
+            ],
+          },
+          {
+            systemTitle: 'Karotid Cisimcik, Hipotalamo-Hipofizer & Sirkümventriküler Doku → Solunum, Endokrin & SSS',
+            tissueTarget: 'Glomus Hücreleri · Ön Hipofiz · Area Postrema (CTZ)',
+            accent: 'indigo',
+            points: [
+              'Karotid Cisimcik & Solunum Kontrolü (Glomus Tip-I Hücresi): Periferik kemoreseptör glomus hücrelerinde D₂ reseptör aktivasyonu, hipoksiye (PaO₂ düşüşüne) yanıt olarak gelişen afferent sinir deşarjını inhibe eder → spontan soluyan hastada hipoksik ventilatuar dürtüyü %40–60 oranında köreltir ve pulmoner vazodilatasyonla V/Q uyumsuzluğunu (şantı) artırabilir.',
+              'Ön Hipofiz & İmmün Sistem (Median Eminens / Laktotrof & Tirotrof Dokusu): Kan-beyin bariyeri dışında kalan ön hipofizde D₂ uyarımı Prolaktin, TSH ve Büyüme Hormonu (GH) salınımını hızla baskılar; kritik hastalık "ötiroid hasta sendromunu" derinleştirir, katabolizmayı artırır ve prolaktin eksikliği üzerinden T-lenfosit/makrofaj aracılı hücresel bağışıklığı zayıflatır.',
+              'Kan-Beyin Bariyeri & Area Postrema (SSS): Polar katekolamin yapısı ve endotelyal MAO/COMT bariyeri nedeniyle sağlam KBB’yi geçmez (doğrudan sedasyon/EEG etkisi yoktur); ancak KBB dışındaki Area Postrema (CTZ) D₂ reseptörlerini uyararak bulantı ve kusma oluşturur.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Nöronal Depo Tükenmesi (Taşiflaksi), Asidoz Direnci & Tavan Etkisi',
           summary:
-            'Dopaminin indirekt sempatomimetik bileşeni (%50 endojen noradrenalin salınımı) nedeniyle katekolamin depolarının durumu ve reseptör doygunluğu klinik tavan etkisini belirler.',
+            'Dopaminin inotropik etkisinin ~%50’sinin presinaptik veziküler noradrenalin salınımına dayanması, uzun süreli infüzyonlarda ve ileri kalp yetmezliğinde reseptör/nörotransmitter kinetiğini belirleyen en kritik faktördür.',
           points: [
-            'Endojen Noradrenalin Depo Tükenmesi & Taşiflaksi: Uzun süreli şok (>24–48 saat) veya kronik ileri kalp yetmezliğinde miyokardiyal sempatik sinir uçlarındaki noradrenalin depoları tükendiğinden dopaminin inotropik yanıtı belirgin azalır; doğrudan etkili Dobutamin veya Noradrenalin ise etkinliğini korur.',
-            '20 mcg/kg/dk Tavan Eşiği: >20 mcg/kg/dk üzerinde ek hemodinamik kazanç sağlanamazken ağır α₁ vazokonstriksiyon ve aritmi toksisitesi katlanır; bu eşikte dopamin artırılmaz, Noradrenaline geçilir.',
-            'Asidoz & Hipoksi Direnci: pH < 7,15 altında adrenerjik reseptör afinitesi düşer ve ventriküler aritmi eşiği azalır.',
+            'Presinaptik Veziküler Noradrenalin Tükenmesi & Taşiflaksi: Uzamış şok (>24–48 saat) veya kronik dekompanse kalp yetmezliğinde miyokardiyal sempatik sinir terminallerindeki endojen noradrenalin vezikülleri boşalır; ayrıca β₁ reseptörlerinde GRK (G-proteini kenetli reseptör kinaz) fosforilasyonu ve β-arrestin aracılı internalizasyon (down-regülasyon) gelişir. Sonuçta dopaminin inotropik yanıtı hızla körelirken (taşiflaksi), doğrudan postsinaptik etkili Noradrenalin veya Dobutamin etkinliğini korur.',
+            '20 mcg/kg/dk Farmakodinamik Tavan Eşiği: >20 mcg/kg/dk üzerinde β₁ reseptörleri doygunluğa ulaşır ve ek kardiyak debi kazancı sağlanamaz; buna karşılık α₁ vazokonstriksiyon ve hücre içi Ca²⁺ yüklenmesi katlanarak malign aritmi ve doku iskemisi üretir (bu eşikte doz artırılmaz, Noradrenaline geçilir).',
+            'Metabolik Asidoz (pH < 7,15) & Hipoksi Etkisi: Ekstraselüler H⁺ iyon artışı GPCR ekstraselüler bağlanma oyuğunun konformasyonunu bozarak katekolamin-reseptör afinitesini düşürür, hücre içi Ca²⁺-Troponin-C bağlanmasını zayıflatır ve miyokardın fibrilasyon eşiğini azaltır.',
           ],
         }}
         clinicalPearls={[
-          'Neden "Böbrek Dozu" Tarih Oldu? Düşük doz dopamin idrar çıkışını (natriürezle) artırsa da çıkan tübüler Na⁺ yükü medüller kalın çıkan kolda O₂ tüketimini artırır ve hipovolemik/septik hastada aritmi ile hipofizer/immün baskılanmaya yol açar (ANZICS Lancet 2000).',
-          'Bradikardik Şok Nişi: Modern yoğun bakım ve acil tıpta dopaminin en rasyonel kullanım alanı atropine yanıtsız semptomatik bradikardi + hipotansiyon kombinasyonudur (5–20 mcg/kg/dk).',
-          'Weaning Sırasında Hipotansiyon: Dopamin kesilirken gelişen hipotansiyon çoğu zaman hipovolemi veya boşalmış endojen NE depolarına bağlıdır; yavaş azaltılmalı ve gerekirse düşük doz Noradrenalin ile köprülenmelidir.',
-          'Ekstravazasyon Aciliyeti: Yüksek konsantrasyonlu dopamin (özellikle ≥1600–4000 mcg/mL) periferik dokuya sızdığında α₁ vazospazm nedeniyle noradrenalin kadar ağır doku nekrozu yapabilir; Fentolamin antidotu aynı şekilde geçerlidir.',
+          'Neden "Böbrek Koruyucu Doz" (1–3 mcg/kg/dk) Çürütüldü? Proksimal tübülde D₁ aracılı natriürez idrar hacmini artırsa da Henle kulpu kalın çıkan koluna (mTAL) binen Na⁺ yükü medüller O₂ tüketimini artırır; ayrıca hipovolemik/septik hastada taşiaritmi, hipoksik solunum dürtüsü baskılanması ve hipofizer hormon/immün süpresyon yaparak zarar verir (ANZICS Lancet 2000).',
+          'Modern Klinikteki Tek Güçlü Nişi (Bradikardik Hipotansiyon): Atropine yanıtsız semptomatik bradikardi + hipotansiyon kombinasyonunda hem SA düğüm HCN4/β₁ kronotropisini hem de SV/MAP desteğini aynı anda sağladığı için transkutanöz/transvenöz pacemaker köprüsü olarak 5–20 mcg/kg/dk dozunda kullanılır (AHA/ACC/HRS 2018).',
+          'Weaning (Kesilme) Hipotansiyonu Mekanizması: İnfüzyon aniden kapatıldığında dopaminin yarı ömrü ~2 dakika olduğundan ekzojen destek hızla biterken, boşalmış presinaptik noradrenalin depoları ve down-regüle reseptörler bazal vasküler tonusu sürdüremez → kademeli (her 15–30 dk’da 1–2 mcg/kg/dk) azaltılmalıdır.',
+          'Ekstravazasyon Nekrozu & Fentolamin: Yüksek konsantrasyonlu dopamin (özellikle ≥1600–4000 mcg/mL) subkutan dokuya sızdığında lokal α₁→Gq→PLC→Ca²⁺ kaskadıyla şiddetli vaza vazorum spazmı ve koagülasyon nekrozu yapar; 12 saat içinde lokal Fentolamin (α-bloker) infiltrasyonu vazospazmı hücresel düzeyde çözer.',
         ]}
       />
 
