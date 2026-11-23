@@ -23,11 +23,15 @@ import {
   Zap
 } from 'lucide-react';
 import {
+  CompatibilityAndLineBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MonographCopyButton,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -1063,6 +1067,73 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v3.0)                      */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Remifentanil 5 mg Flakon (Ultiva / Jenerikler)',
+            presentation: 'IV infüzyon için liyofilize toz içeren cam flakon (Türkiye ameliyathane & YBÜ pratiğinde en yaygın form)',
+            concentration: '5 mg (5000 mcg) / flakon',
+            saltOrBaseNote: '5 mg remifentanil baza eşdeğer remifentanil hidroklorür + 15 mg GLİSİN taşıyıcı içerir (nöroaksiyel uygulama kesinlikle kontrendikedir).',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Remifentanil 2 mg Flakon (Bazı Hastane İhaleleri)',
+            presentation: 'IV infüzyon için liyofilize toz içeren cam flakon',
+            concentration: '2 mg (2000 mcg) / flakon',
+            saltOrBaseNote: '2 mg remifentanil baza eşdeğer + glisin taşıyıcı içerir. 5 mg flakonla karıştırıldığında 2.5 kat konsantrasyon hatası oluşur.',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          'Standart Erişkin (50 mcg/mL): 1 adet 5 mg flakon → 100 mL %0.9 NaCl veya %5 Dekstroz içine (ameliyathane & genel YBÜ standardı).',
+          'Konsantre / Sıvı Kısıtlamalı YBÜ (100 mcg/mL): 1 adet 5 mg flakon → 50 mL enjektör pompası içine.',
+          'Pediatrik / Seyreltik Titrasyon (20 mcg/mL): 1 adet 5 mg flakon → 250 mL %0.9 NaCl veya 2 mg flakon → 100 mL içine.',
+        ]}
+        concentrationTrapWarning="Hastane eczanesinden 2 mg ve 5 mg flakonlar aynı anda bulunabilir. Sulandırma öncesi flakon üzerindeki mg değeri çift kontrol edilmeli; enjektör/torba etiketine nihai konsantrasyon (mcg/mL) mutlaka yazılmalıdır."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v3.0)  */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="central-preferred"
+        accessSummary="Periferik veya santral IV hattan uygulanabilir; ancak ultra-kısa etki ve ölü boşluk (dead-space) riski nedeniyle tek yönlü çek-valf içeren ayrı, düşük ölü boşluklu bir lümen veya doğrudan katetere yakın port tercih edilir. Hızlı sıvı bolusu verilen ana hattan puşe edilmez."
+        phRange="2.5 – 3.5 (Asidik · Glisin tamponlu)"
+        osmolalityNote="Standart 20–100 mcg/mL dilüsyonlar izotoniktir; doku vezikanı değildir ancak asidik pH nedeniyle alkali ilaçlarla çökelir."
+        compatibleDiluents={[
+          '%0.9 Sodyum Klorür (İzotonik SF) — 24 saat stabil',
+          '%5 Dekstroz (D5W) — 24 saat stabil',
+          'Enjeksiyonluk Steril Su (sulandırma için) — 24 saat stabil',
+          'Ringer Laktat: Sadece 4 saat stabil (tercih edilmez)',
+        ]}
+        stabilityNote="Oda sıcaklığında (25 °C) SF veya D5W içinde 24 saat kimyasal olarak stabildir; Ringer Laktat içinde pH yüksekliği nedeniyle 4 saat sonra ester hidrolizi hızlanır."
+        ySiteCompatible={[
+          'Propofol',
+          'Midazolam',
+          'Deksmedetomidin',
+          'Norepinefrin',
+          'Epinefrin',
+          'Fentanil',
+          'Roküronyum',
+          'Cisatrakuryum',
+          'Ketamin',
+          'Lidokain',
+        ]}
+        ySiteIncompatible={[
+          'Kan / Eritrosit Süspansiyonu (esteraz yıkımı!)',
+          'Taze Donmuş Plazma (TDP)',
+          'Sodyum Bikarbonat (alkali hidroliz)',
+          'Amfoterisin B',
+          'Klorpromazin',
+        ]}
+        extravasationProtocol="Ekstravazasyon dokuda vezikan nekroz yapmaz; ancak asıl hayati tehlike 'ölü boşluk (dead-space) kazası'dır. İnfüzyon durdurulduğunda hat asla yıkama/flush edilmemeli; kateter uzatma hattı ayrılıp aspire edilerek veya tamamen çıkarılarak temizlenmelidir."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU                               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
@@ -1231,6 +1302,26 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v3.0)       */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="%50 Başlangıç Doz Azaltımı"
+        geriatricPoints={[
+          'Minto PK/PD modeline göre >65 yaş hastalarda santral dağılım hacmi (V1) ~%25, klirens ~%33 azalır ve santral μ-opioid duyarlılığı (EC50) ~%50 artar.',
+          'Hem indüksiyon bolusu hem de başlangıç infüzyon hızı yarıya (%50) düşürülmeli (ör. 0.05–0.1 mcg/kg/dk ile başla), klinik yanıta göre yavaş titre edilmelidir.',
+          'Kırılgan (frailty) ve hipovolemik yaşlı hastalarda hızlı bolustan tamamen kaçınılmalı; ciddi bradikardi ve hipotansiyon riskine karşı atropin/vazopresör hazır bulundurulmalıdır.',
+        ]}
+        obesityWeightScalarBadge="LBW (Tercih) veya IBW"
+        obesityPoints={[
+          'Remifentanilin dağılım hacmi ve klirensi toplam vücut ağırlığı (TBW) yerine yağsız vücut kütlesi (LBW) ile koreledir (Egan / Minto / SOBA kılavuzu).',
+          'BMI ≥ 30–40 kg/m² hastalarda tüm bolus ve infüzyon hesaplamaları LBW (Janmahasatian) veya IBW üzerinden yapılmalıdır.',
+          'TBW ile dozlama aşırı yüksek plazma zirvesine, ağır vagotonik bradikardiye, hipotansiyona ve göğüs duvarı rijiditesine yol açar.',
+        ]}
+        clinicalNote="Yukarıdaki etkileşimli hesaplayıcı içindeki Obezite Doz Ölçekleyici (SOBA / Miller's) kullanılarak hastanın LBW/IBW değeri tek tıkla hesaplamaya aktarılabilir."
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 9. GEBELİK VE LAKTASYON KILAVUZU                                     */}
@@ -1505,11 +1596,104 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 14. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v3.0) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <DeepPharmacodynamicsBlock
+        isDark={isDark}
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Selektif μ-Opioid (μ₁ / μ₂) Reseptör Sinyal İletimi & KBB Kinetiği',
+          summary:
+            'Remifentanil saf, yüksek afiniteli ve selektif bir μ-opioid reseptör agonistidir (κ ve δ afinitesi ihmal edilebilir düzeydedir). Düşük pKa (~7.07) sayesinde fizyolojik pH’ta yüksek non-iyonize fraksiyona sahiptir ve kan-beyin bariyerini 1–1.5 dakikada hızla dengeler (t½ke0 ≈ 1.0–1.6 dk).',
+          points: [
+            'Gi/Go İnhibitör G-Proteini Aktivasyonu: Adenilat siklazı inhibe ederek hücre içi cAMP’yi düşürür.',
+            'Presinaptik İnhibisyon: Voltaj-kapılı N-tipi Ca²⁺ kanallarını kapatarak spinal arka boynuzda P maddesi ve glutamat salınımını bloke eder.',
+            'Postsinaptik Hiperpolarizasyon: GIRK (G-protein-coupled inwardly rectifying K⁺) kanallarını açarak K⁺ efluksuna ve nöronal hiperpolarizasyona yol açar.',
+            'Reseptör Alt Tipi Ayrımı: μ₁ supraspinal analjeziden; μ₂ solunum depresyonu, santral vagotonik bradikardi, göğüs duvarı rijiditesi ve GİS motilite azalmasından sorumludur.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Doğrudan Hipnotik Değildir (GABA-A ve Amnezi Yoktur): Propofol veya benzodiazepinler gibi doğrudan kortikal GABAerjik inhibisyon yapmaz; tek başına yüksek dozlarda bile güvenilir bilinç kaybı ve amnezi sağlamaz.',
+            'Sedasyon Mekanizması — 1 (Supraspinal Uyanıklık Baskılanması): Beyin sapındaki locus coeruleus (noradrenerjik uyanıklık merkezi), asendan retiküler aktive edici sistem (ARAS) ve talamokortikal yollardaki μ-reseptör inhibisyonu ile santral uyarılma tonusunu düşürerek hafif–orta somnolans oluşturur.',
+            'Sedasyon Mekanizması — 2 (Analjezi-Temelli Sekonder Sedasyon / Analgosedasyon): Entübe YBÜ hastasında endotrakeal tüp, aspirasyon ve ağrı kaynaklı sürekli afferent nosiseptif girdiyi keserek kortikal uyarımı azaltır (SCCM PADIS "analgesia-first" prensibi).',
+            'Serebral Hemodinami & EEG: Normokapni korunduğunda CBF ve CMRO₂’yi hafif azaltır, ICP’yi yükseltmez (hiperkapni gelişirse CBF/ICP artar). Yüksek dozlarda EEG’de delta aktivitesine kayma yapsa da BIS skorunu güvenilir biçimde düşürmez.',
+          ],
+          cvs: [
+            'Santral Vagotonik Bradikardi: Direkt miyokard kontraktilite depresyonu minimaldir; ancak santral vagal çekirdek uyarımı ve sempatik tonusun baskılanmasıyla belirgin bradikardi (özellikle hızlı bolus sonrası veya β-bloker/deksmedetomidin ile) ve doza bağımlı hipotansiyon gelişir.',
+            'Histamin Salınımı Yoktur: Morfinin aksine mast hücresi degranülasyonu yapmaz; entübasyon ve cerrahi insizyona bağlı katekolamin stres yanıtını çok güçlü biçimde köreltir.',
+          ],
+          respiratory: [
+            'Medüller Solunum Merkezi (μ₂): CO₂ yanıt eğrisini sağa kaydırır, eğimini düşürür, apneik eşiği yükseltir ve hipoksik ventilatuvar yanıtı baskılar.',
+            'Göğüs Duvarı & Laringeal Rijidite ("Tahta Göğüs"): Hızlı bolus (>1 mcg/kg veya <30–60 sn) sonrası santral striatal dopaminerjik/GABAerjik yolaklar üzerinden kas rijiditesi gelişerek maske ventilasyonunu imkânsızlaştırabilir.',
+          ],
+          other: [
+            'Cerrahi stres hormonlarını (kortizol, epinefrin) güçlü baskılar',
+            'PONV riskini artırır',
+            'Gastrik boşalmayı geciktirir',
+            'Yüksek doz/uzun infüzyonda spinal NMDA fosforilasyonu ile akut tolerans & OIH tetikler',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Remifentanil tek başına tam genel anestezi oluşturamaz; gerçek gücü hipnotiklerle kurduğu güçlü farmakodinamik sinerjiden gelir.',
+          points: [
+            'İnhalasyon MAC Azaltımı & Tavan Etkisi (Ceiling Effect): Sevofluran/desfluran/izofluran MAC değerini ~%50–70 azaltır; ancak tavan etkisi nedeniyle doz ne kadar artırılırsa artırılsın MAC %100’e düşmez (tek başına anestezi sağlamaz).',
+            'Propofol–Remifentanil Sinerjisi (TİVA): Ağrılı uyarana hareket ve hemodinamik yanıtın baskılanmasında güçlü izobologram sinerjisi gösterir; propofol hedef konsantrasyonunu (Ce) belirgin düşürerek hızlı uyanma sağlar.',
+            'Nalokson Antagonizması: Saf kompetitif μ-antagonistidir; ancak remifentanilin CSHT’si 3–4 dk olduğundan çoğu vakada infüzyonu durdurup ventilasyon desteği vermek naloksonun yaratacağı ani ağrı/hipertansiyon fırtınasından daha güvenlidir.',
+          ],
+        }}
+        clinicalPearls={[
+          'İntraoperatif Farkındalık (Awareness) & BIS Tuzağı: Hasta yüksek doz remifentanil ile hareketsiz ve hemodinamik olarak sakin görünürken kortikal olarak uyanık kalabilir. TİVA’da yeterli hipnotik (propofol) veya inhalasyon ajanı + gerektiğinde işlenmiş EEG (BIS/PSI) zorunludur.',
+          'YBÜ’de Sedasyon Uğruna Doz Tırmandırma Hatası: Yetersiz sedasyonda remifentanili tek başına artırmak bilinç kaybı sağlamadan apne, rijidite, bradikardi ve OIH yapar; ek hipnotik/sedatif (propofol, deksmedetomidin veya midazolam) kombine edilmelidir.',
+          'Akut Opioid Kaynaklı Hiperaljezi (OIH) Önleme: >0.2–0.3 mcg/kg/dk hızlarda postoperatif ağrı ve opioid ihtiyacı artar; kademeli azaltma, erken köprü analjezi ve/veya düşük doz ketamin/magnezyum koruyucudur.',
+          'Kan Ürünleriyle Aynı Hattan Verme: Eritrositlerdeki non-spesifik esterazlar remifentanili daha infüzyon hattındayken parçalayarak ilacı etkisizleştirir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 14. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA      */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Remifentanil"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'İntratekal / Epidural Uygulama (Glisin İçeriği) & Aynı Hattan Kan Ürünleri',
+            mechanism: 'Glisin Nörotoksisitesi / Eritrosit Esteraz Hidrolizi',
+            clinicalEffect: 'Nöroaksiyel yolda motor disfonksiyon/nörotoksisite; kan ürünleriyle aynı hatta ilacın hızla inaktivasyonu.',
+            management: 'Nöroaksiyel uygulama kesinlikle yasaktır; kan/TDP transfüzyonundan tamamen ayrı IV hat kullanın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Propofol · Midazolam · İnhalasyon Anestezikleri',
+            mechanism: 'Güçlü Farmakodinamik (PD) Sinerji (SSS & KVS)',
+            clinicalEffect: 'Derin solunum depresyonu, apne, hipotansiyon ve MAC/propofol EC50’sinde %50–70 düşüş.',
+            management: 'Hipnotik ve inhalasyon dozlarını titre ederek azaltın; ancak farkındalık (awareness) önlemi için hipnotiği tamamen kesmeyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Beta-Blokerler (Esmolol/Metoprolol) · Deksmedetomidin · Kalsiyum Kanal Blokerleri',
+            mechanism: 'Aditif Santral Vagotoni + Sempatik Baskılanma',
+            clinicalEffect: 'Ciddi sinüs bradikardisi, AV blok, asistol ve dirençli hipotansiyon riski.',
+            management: 'Hızlı remifentanil bolusundan kaçının; atropin ve vazopresörü yatak başında hazır bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'Serotonerjik Ajanlar (SSRI, SNRI, Linezolid, Metilen Mavisi, MAOİ)',
+            mechanism: 'Serotonerjik Aşırı Aktivasyon (Fenilpiperidin Opioidi)',
+            clinicalEffect: 'Nadir ancak potansiyel serotonin sendromu (ajitasyon, klonus, hipertermi, otonomik instabilite).',
+            management: 'MAOİ/Linezolid alan hastalarda yakın nöromüsküler ve ısı takibi yapın; şüphede ilacı kesin.',
+          },
+          {
+            severity: 'C',
+            agent: 'Nöromüsküler Blokerler (Roküronyum / Süksinilkolin)',
+            mechanism: 'Opioid Kaynaklı Göğüs Duvarı Rijiditesi Maskelenmesi / Yönetimi',
+            clinicalEffect: 'NMB varlığında opioid rijiditesi görülmez; NMB yokken rijidite gelişirse ventilasyon zorlaşır.',
+            management: 'İndüksiyonda remifentanil bolusunu yavaş (>60 sn) uygulayın; ventilasyonu engelleyen rijiditede kısa etkili NMB uygulayın.',
+          },
+        ]}
         references={[
           {
             authors: 'Minto CF, Schnider TW, Egan TD, et al.',
@@ -1527,7 +1711,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             year: 1999,
             pmid: '10511072',
             doi: '10.1097/00000539-199910001-00003',
-            note: 'Doku/plazma esteraz hidrolizi ve sabit 3–4 dakikalık bağlam-duyarlı yarı ömür farmakokinetiği.',
+            note: 'Doku/plazma esteraz hidrolizi, sabit 3–4 dakikalık bağlam-duyarlı yarı ömür ve MAC/hipnotik sinerji farmakodinamiği.',
           },
           {
             authors: 'Devlin JW, Skrobik Y, Gélinas C, et al. (SCCM PADIS)',
@@ -1536,7 +1720,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             year: 2018,
             pmid: '30113379',
             doi: '10.1097/CCM.0000000000003299',
-            note: 'Yoğun bakımda analgosedasyon ve organ yetmezliğinde remifentanil kullanımı.',
+            note: 'Yoğun bakımda analgesia-first (analgosedasyon) stratejisi ve organ yetmezliğinde remifentanil kullanımı.',
           },
         ]}
         drugsComUrl="https://www.drugs.com/drug-interactions/remifentanil-index.html"

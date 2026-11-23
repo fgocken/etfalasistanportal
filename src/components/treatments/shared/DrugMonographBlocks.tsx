@@ -1,37 +1,52 @@
 import React, { useState } from 'react';
 import {
+  Activity,
   AlertOctagon,
   AlertTriangle,
   Baby,
   BookOpen,
+  Brain,
   Check,
+  ChevronDown,
+  ChevronUp,
   Copy,
+  Droplets,
   ExternalLink,
+  FlaskConical,
   HeartPulse,
+  Layers,
+  Pill,
+  Scale,
   ShieldAlert,
   Stethoscope,
+  Syringe,
+  Users,
+  Wind,
   Zap,
 } from 'lucide-react';
 
 /**
- * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v2.1)
+ * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v3.0)
  * -------------------------------------------------------------------------
  * Tedaviler ve İlaçlar modülüne eklenecek her yeni ilaç monografisi ve
  * güncellenen mevcut monografiler aşağıdaki çekirdek klinik sütunları
  * ve sıralamayı (Kontrendikasyonlar DAİMA Endikasyonlardan önce) içermelidir:
  *
  * 1. Kimlik, Klinik Özet Header & Etki Mekanizması (`MechanismOfActionBlock`)
- * 2. Farmakokinetik / Farmakodinamik (PK/PD) Profili (`tabular-nums` tablo)
+ * 2. Farmakokinetik / Farmakodinamik (PK/PD) Profili (Açılır-Kapanır Akordiyon)
  * 3. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`) — Endikasyonlardan ÖNCE
  * 4. Klinik Endikasyonlar ve Doz Rejimleri (Yetişkin, Pediatrik, Özel Senaryolar)
- * 5. Etkileşimli Doz & İnfüzyon Hesaplayıcı (Rapor Kopyala)
- * 6. Hazırlama, Dilüsyon, Stabilite ve Uyumluluk
- * 7. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`)
- * 8. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`)
- * 9. Önemli Olumsuz Etkiler (Adverse Effects) (`AdverseEffectsBlock`)
- * 10. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`)
- * 11. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock`)
- * 12. Kanıta Dayalı Kaynakça (PubMed/DOI tıklanabilir) & İlaç Etkileşimleri (`DrugReferencesAndInteractionsBlock`)
+ * 5. Etkileşimli Doz & İnfüzyon Hesaplayıcı (`MonographCopyButton` + `ObesityDosingScaler`)
+ * 6. Türkiye Preparat & Konsantrasyon Rehberi (`TurkeyFormulationBlock`)
+ * 7. Damar Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon (`CompatibilityAndLineBlock`)
+ * 8. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`)
+ * 9. Geriatri (>65 Yaş / Kırılganlık) & Obezite Doz Yönetimi (`GeriatricAndObesityBlock`)
+ * 10. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`)
+ * 11. Önemli Olumsuz Etkiler (`AdverseEffectsBlock`)
+ * 12. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`)
+ * 13. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock`)
+ * 14. Derin Farmakodinamik & Sistemik Fizyoloji Analizi (`DeepPharmacodynamicsBlock` — Akordiyon)
+ * 15. Şiddet Dereceli İlaç Etkileşimleri & Kanıta Dayalı Kaynakça (`DrugReferencesAndInteractionsBlock`)
  */
 export interface GoldStandardSectionSpec {
   id: string;
@@ -47,13 +62,16 @@ export const GOLD_STANDARD_SECTIONS: GoldStandardSectionSpec[] = [
   { id: 'sec-kontrendikasyon', order: 4, title: 'Mutlak vs Relatif Kontrendikasyonlar', requiredComponent: 'ContraindicationsGridBlock' },
   { id: 'sec-dozlar', order: 5, title: 'Endikasyonlar & Dozaj' },
   { id: 'sec-hesaplayici', order: 6, title: 'Doz & İnfüzyon Hesaplayıcı', requiredComponent: 'MonographCopyButton' },
-  { id: 'sec-uyumluluk', order: 7, title: 'Dilüsyon & Uyumluluk' },
-  { id: 'sec-organ', order: 8, title: 'Böbrek & Karaciğer Yetmezliği', requiredComponent: 'OrganImpairmentGridBlock' },
-  { id: 'sec-gebelik', order: 9, title: 'Gebelik & Laktasyon', requiredComponent: 'PregnancyLactationBlock' },
-  { id: 'sec-olumsuz', order: 10, title: 'Önemli Olumsuz Etkiler (Adverse Effects)', requiredComponent: 'AdverseEffectsBlock' },
-  { id: 'sec-ozel-durumlar', order: 11, title: 'Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar', requiredComponent: 'SpecialClinicalCautionsBlock' },
-  { id: 'sec-guvenlik', order: 12, title: 'ISMP High-Alert & Tall-Man Güvenliği', requiredComponent: 'HighAlertSafetyBlock' },
-  { id: 'sec-kaynaklar', order: 13, title: 'Kaynakça (PubMed/DOI) & Etkileşim', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
+  { id: 'sec-tr-preparat', order: 7, title: 'Türkiye Preparat & Konsantrasyon Rehberi', requiredComponent: 'TurkeyFormulationBlock' },
+  { id: 'sec-uyumluluk', order: 8, title: 'Damar Yolu, Y-Site Uyumluluk & Ekstravazasyon', requiredComponent: 'CompatibilityAndLineBlock' },
+  { id: 'sec-organ', order: 9, title: 'Böbrek & Karaciğer Yetmezliği', requiredComponent: 'OrganImpairmentGridBlock' },
+  { id: 'sec-geriatri-obezite', order: 10, title: 'Geriatri & Obezite Doz Yönetimi', requiredComponent: 'GeriatricAndObesityBlock' },
+  { id: 'sec-gebelik', order: 11, title: 'Gebelik & Laktasyon', requiredComponent: 'PregnancyLactationBlock' },
+  { id: 'sec-olumsuz', order: 12, title: 'Önemli Olumsuz Etkiler (Adverse Effects)', requiredComponent: 'AdverseEffectsBlock' },
+  { id: 'sec-ozel-durumlar', order: 13, title: 'Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar', requiredComponent: 'SpecialClinicalCautionsBlock' },
+  { id: 'sec-guvenlik', order: 14, title: 'ISMP High-Alert & Tall-Man Güvenliği', requiredComponent: 'HighAlertSafetyBlock' },
+  { id: 'sec-derin-pd', order: 15, title: 'Derin Farmakodinamik & Sistemik Fizyoloji Analizi', requiredComponent: 'DeepPharmacodynamicsBlock' },
+  { id: 'sec-kaynaklar', order: 16, title: 'İlaç Etkileşimleri & Kaynakça (PubMed/DOI)', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
 ];
 
 export interface MonographNavItem {
@@ -696,12 +714,21 @@ export interface VerifiedDrugReference {
   note?: string;
 }
 
+export interface StructuredDrugInteraction {
+  severity: 'X' | 'D' | 'C';
+  agent: string;
+  mechanism: string;
+  clinicalEffect: string;
+  management: string;
+}
+
 interface DrugReferencesAndInteractionsBlockProps {
   isDark: boolean;
   sectionId?: string;
   sectionTitle?: string;
   drugName: string;
   references: VerifiedDrugReference[];
+  structuredInteractions?: StructuredDrugInteraction[];
   drugsComUrl?: string;
   medscapeUrl?: string;
   drugsComLabel?: string;
@@ -711,14 +738,43 @@ interface DrugReferencesAndInteractionsBlockProps {
 export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInteractionsBlockProps> = ({
   isDark,
   sectionId = 'sec-kaynaklar',
-  sectionTitle = 'Kanıta Dayalı Kaynakça & İlaç Etkileşim Araçları',
+  sectionTitle = 'Şiddet Dereceli İlaç Etkileşimleri & Kanıta Dayalı Kaynakça',
   drugName,
   references,
+  structuredInteractions,
   drugsComUrl,
   medscapeUrl,
   drugsComLabel = 'Drugs.com Interaction Checker',
   medscapeLabel = 'Medscape Drug Reference & Interactions',
 }) => {
+  const severityStyles = (severity: StructuredDrugInteraction['severity']) => {
+    if (severity === 'X') {
+      return {
+        label: 'X · Kontrendike / Kaçın',
+        badge: isDark
+          ? 'border-rose-500/40 bg-rose-950/70 text-rose-300'
+          : 'border-rose-300 bg-rose-100 text-rose-800',
+        border: isDark ? 'border-rose-900/60 bg-rose-950/15' : 'border-rose-200 bg-rose-50/40',
+      };
+    }
+    if (severity === 'D') {
+      return {
+        label: 'D · Majör / Doz Modifikasyonu',
+        badge: isDark
+          ? 'border-amber-500/40 bg-amber-950/70 text-amber-300'
+          : 'border-amber-300 bg-amber-100 text-amber-800',
+        border: isDark ? 'border-amber-900/50 bg-amber-950/15' : 'border-amber-200 bg-amber-50/40',
+      };
+    }
+    return {
+      label: 'C · Orta / Yakın İzlem',
+      badge: isDark
+        ? 'border-sky-500/40 bg-sky-950/70 text-sky-300'
+        : 'border-sky-300 bg-sky-100 text-sky-800',
+      border: isDark ? 'border-slate-800 bg-slate-950/50' : 'border-slate-200 bg-slate-50/60',
+    };
+  };
+
   return (
     <section
       id={sectionId}
@@ -733,7 +789,60 @@ export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInter
         </h3>
       </div>
 
-      <div className="mt-4 space-y-2.5">
+      {structuredInteractions && structuredInteractions.length > 0 && (
+        <div className="mt-4 space-y-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Kritik Klinik İlaç Etkileşimleri (Şiddet Dereceli)
+            </p>
+            <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-semibold">
+              <span className={`rounded-md border px-2 py-0.5 ${isDark ? 'border-rose-500/30 bg-rose-950/50 text-rose-300' : 'border-rose-200 bg-rose-50 text-rose-700'}`}>
+                X: Kontrendike
+              </span>
+              <span className={`rounded-md border px-2 py-0.5 ${isDark ? 'border-amber-500/30 bg-amber-950/50 text-amber-300' : 'border-amber-200 bg-amber-50 text-amber-700'}`}>
+                D: Majör
+              </span>
+              <span className={`rounded-md border px-2 py-0.5 ${isDark ? 'border-sky-500/30 bg-sky-950/50 text-sky-300' : 'border-sky-200 bg-sky-50 text-sky-700'}`}>
+                C: Orta
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
+            {structuredInteractions.map((item, idx) => {
+              const style = severityStyles(item.severity);
+              return (
+                <div key={`${item.agent}-${idx}`} className={`rounded-xl border p-3.5 ${style.border}`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className={`text-xs sm:text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {item.agent}
+                    </span>
+                    <span className={`rounded-md border px-2 py-0.5 text-[10px] font-bold ${style.badge}`}>
+                      {style.label}
+                    </span>
+                  </div>
+                  <p className={`mt-1.5 text-[11px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                    Mekanizma: {item.mechanism}
+                  </p>
+                  <p className={`mt-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                    <strong>Klinik Etki:</strong> {item.clinicalEffect}
+                  </p>
+                  <p className={`mt-1 text-xs leading-relaxed ${isDark ? 'text-teal-300' : 'text-teal-800'}`}>
+                    <strong>Yönetim:</strong> {item.management}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-5 space-y-2.5">
+        {structuredInteractions && structuredInteractions.length > 0 && (
+          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Kanıta Dayalı Birincil Kaynaklar (PubMed / DOI)
+          </p>
+        )}
         {references.map((ref, idx) => {
           const primaryHref = ref.pmid
             ? `https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/`
@@ -873,6 +982,691 @@ export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInter
               />
             </a>
           )}
+        </div>
+      )}
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// v3.0 YAPISAL BLOKLAR: TR PREPARAT, DAMAR YOLU/Y-SITE, GERİATRİ-OBEZİTE,
+// VE AÇILIR-KAPANIR 4 SÜTUNLU DERİN FARMAKODİNAMİK ANALİZ
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface TurkeyPreparationItem {
+  name: string;
+  presentation: string;
+  concentration: string;
+  saltOrBaseNote?: string;
+  alertLevel?: 'high' | 'standard';
+}
+
+interface TurkeyFormulationBlockProps {
+  isDark: boolean;
+  sectionId?: string;
+  sectionTitle?: string;
+  preparations: TurkeyPreparationItem[];
+  standardDilutions?: string[];
+  concentrationTrapWarning?: string;
+}
+
+export const TurkeyFormulationBlock: React.FC<TurkeyFormulationBlockProps> = ({
+  isDark,
+  sectionId = 'sec-tr-preparat',
+  sectionTitle = 'Türkiye Preparatları & Konsantrasyon Güvenliği',
+  preparations,
+  standardDilutions,
+  concentrationTrapWarning,
+}) => {
+  return (
+    <section
+      id={sectionId}
+      className={`rounded-2xl border p-5 sm:p-6 ${
+        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <div className="flex items-center gap-2.5">
+        <Pill className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
+        <div>
+          <p className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-700'}`}>
+            TİTCK / Türkiye Klinik Pratiği · Formülasyon Doğrulama
+          </p>
+          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            {sectionTitle}
+          </h3>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+        {preparations.map((prep, idx) => {
+          const isHigh = prep.alertLevel === 'high';
+          return (
+            <div
+              key={`${prep.name}-${idx}`}
+              className={`rounded-xl border p-4 ${
+                isHigh
+                  ? isDark
+                    ? 'border-amber-500/40 bg-amber-950/20'
+                    : 'border-amber-300 bg-amber-50/70'
+                  : isDark
+                    ? 'border-slate-800 bg-slate-950/60'
+                    : 'border-slate-200 bg-slate-50/70'
+              }`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {prep.name}
+                </span>
+                <span
+                  className={`rounded-lg border px-2 py-0.5 font-mono text-[11px] font-semibold tabular-nums ${
+                    isDark
+                      ? 'border-slate-700 bg-slate-900 text-teal-300'
+                      : 'border-slate-200 bg-white text-teal-800'
+                  }`}
+                >
+                  {prep.concentration}
+                </span>
+              </div>
+              <p className={`mt-1.5 text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <strong>Form / Sunum:</strong> {prep.presentation}
+              </p>
+              {prep.saltOrBaseNote && (
+                <p className={`mt-1.5 text-xs leading-relaxed ${isDark ? 'text-amber-200/90' : 'text-amber-900'}`}>
+                  <strong>Tuz / Baz &amp; İçerik Notu:</strong> {prep.saltOrBaseNote}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {standardDilutions && standardDilutions.length > 0 && (
+        <div
+          className={`mt-4 rounded-xl border p-4 ${
+            isDark ? 'border-slate-800 bg-slate-950/50' : 'border-slate-200 bg-slate-50/80'
+          }`}
+        >
+          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Standart Sulandırma &amp; Hazırlama Şemaları
+          </p>
+          <ul className={`mt-2 space-y-1.5 text-xs sm:text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            {standardDilutions.map((dil, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-teal-400' : 'bg-teal-600'}`} />
+                <span>{dil}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {concentrationTrapWarning && (
+        <div
+          className={`mt-4 flex items-start gap-2.5 rounded-xl border p-3.5 text-xs sm:text-sm ${
+            isDark
+              ? 'border-rose-500/30 bg-rose-950/25 text-rose-200'
+              : 'border-rose-200 bg-rose-50 text-rose-900'
+          }`}
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
+          <p className="leading-relaxed">
+            <strong>Konsantrasyon / Karışma Tuzağı:</strong> {concentrationTrapWarning}
+          </p>
+        </div>
+      )}
+    </section>
+  );
+};
+
+interface CompatibilityAndLineBlockProps {
+  isDark: boolean;
+  sectionId?: string;
+  sectionTitle?: string;
+  accessRequirement: 'central-mandatory' | 'central-preferred' | 'peripheral-ok';
+  accessSummary: string;
+  phRange?: string;
+  osmolalityNote?: string;
+  compatibleDiluents: string[];
+  ySiteCompatible: string[];
+  ySiteIncompatible: string[];
+  stabilityNote?: string;
+  extravasationProtocol?: string;
+}
+
+export const CompatibilityAndLineBlock: React.FC<CompatibilityAndLineBlockProps> = ({
+  isDark,
+  sectionId = 'sec-uyumluluk',
+  sectionTitle = 'Damar Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon',
+  accessRequirement,
+  accessSummary,
+  phRange,
+  osmolalityNote,
+  compatibleDiluents,
+  ySiteCompatible,
+  ySiteIncompatible,
+  stabilityNote,
+  extravasationProtocol,
+}) => {
+  const accessBadge = (() => {
+    if (accessRequirement === 'central-mandatory') {
+      return {
+        label: 'Santral Venöz Kateter Zorunlu',
+        cls: isDark ? 'border-rose-500/40 bg-rose-950/60 text-rose-300' : 'border-rose-300 bg-rose-100 text-rose-800',
+      };
+    }
+    if (accessRequirement === 'central-preferred') {
+      return {
+        label: 'Ayrı Lümen / Santral Tercihli',
+        cls: isDark ? 'border-amber-500/40 bg-amber-950/60 text-amber-300' : 'border-amber-300 bg-amber-100 text-amber-800',
+      };
+    }
+    return {
+      label: 'Periferik veya Santral IV Uygun',
+      cls: isDark ? 'border-emerald-500/40 bg-emerald-950/60 text-emerald-300' : 'border-emerald-300 bg-emerald-100 text-emerald-800',
+    };
+  })();
+
+  return (
+    <section
+      id={sectionId}
+      className={`rounded-2xl border p-5 sm:p-6 ${
+        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2.5">
+          <Syringe className={`h-5 w-5 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
+          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            {sectionTitle}
+          </h3>
+        </div>
+        <span className={`inline-flex w-fit rounded-lg border px-2.5 py-1 text-xs font-bold ${accessBadge.cls}`}>
+          {accessBadge.label}
+        </span>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+        <div
+          className={`rounded-xl border p-3.5 md:col-span-2 ${
+            isDark ? 'border-slate-800 bg-slate-950/60' : 'border-slate-200 bg-slate-50/70'
+          }`}
+        >
+          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            Damar Yolu &amp; Hat Yönetimi
+          </p>
+          <p className={`mt-1.5 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            {accessSummary}
+          </p>
+        </div>
+
+        <div
+          className={`rounded-xl border p-3.5 ${
+            isDark ? 'border-slate-800 bg-slate-950/60' : 'border-slate-200 bg-slate-50/70'
+          }`}
+        >
+          <div className="flex items-center gap-1.5">
+            <Droplets className={`h-4 w-4 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
+            <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              pH &amp; Fizikokimya
+            </p>
+          </div>
+          {phRange && (
+            <p className={`mt-1.5 font-mono text-xs font-semibold ${isDark ? 'text-sky-300' : 'text-sky-800'}`}>
+              pH: {phRange}
+            </p>
+          )}
+          {osmolalityNote && (
+            <p className={`mt-1 text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              {osmolalityNote}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-3">
+        <div
+          className={`rounded-xl border p-3.5 ${
+            isDark ? 'border-slate-800 bg-slate-950/50' : 'border-slate-200 bg-slate-50/60'
+          }`}
+        >
+          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-teal-300' : 'text-teal-700'}`}>
+            Uyumlu Taşıyıcı Sıvılar
+          </p>
+          <ul className={`mt-2 space-y-1 text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            {compatibleDiluents.map((item, idx) => (
+              <li key={idx}>• {item}</li>
+            ))}
+          </ul>
+          {stabilityNote && (
+            <p className={`mt-2 border-t pt-2 text-[11px] ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+              <strong>Stabilite:</strong> {stabilityNote}
+            </p>
+          )}
+        </div>
+
+        <div
+          className={`rounded-xl border p-3.5 ${
+            isDark ? 'border-emerald-900/50 bg-emerald-950/15' : 'border-emerald-200 bg-emerald-50/50'
+          }`}
+        >
+          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-800'}`}>
+            Y-Site Uyumlu (Trissel&apos;s / Stabilis)
+          </p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {ySiteCompatible.map((drug, idx) => (
+              <span
+                key={idx}
+                className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${
+                  isDark
+                    ? 'border-emerald-500/30 bg-emerald-950/60 text-emerald-200'
+                    : 'border-emerald-200 bg-white text-emerald-900'
+                }`}
+              >
+                {drug}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className={`rounded-xl border p-3.5 ${
+            isDark ? 'border-rose-900/50 bg-rose-950/15' : 'border-rose-200 bg-rose-50/50'
+          }`}
+        >
+          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-800'}`}>
+            Y-Site Uyumsuz / Aynı Hattan Verme
+          </p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {ySiteIncompatible.map((drug, idx) => (
+              <span
+                key={idx}
+                className={`rounded-md border px-2 py-0.5 text-[11px] font-semibold ${
+                  isDark
+                    ? 'border-rose-500/30 bg-rose-950/60 text-rose-200'
+                    : 'border-rose-200 bg-white text-rose-900'
+                }`}
+              >
+                {drug}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {extravasationProtocol && (
+        <div
+          className={`mt-3 rounded-xl border p-3.5 text-xs sm:text-sm ${
+            isDark
+              ? 'border-amber-500/30 bg-amber-950/20 text-amber-200'
+              : 'border-amber-200 bg-amber-50/70 text-amber-950'
+          }`}
+        >
+          <strong>Ekstravazasyon / Ölü Boşluk Güvenliği:</strong> {extravasationProtocol}
+        </div>
+      )}
+    </section>
+  );
+};
+
+interface GeriatricAndObesityBlockProps {
+  isDark: boolean;
+  sectionId?: string;
+  sectionTitle?: string;
+  geriatricTitle?: string;
+  geriatricReductionBadge?: string;
+  geriatricPoints: string[];
+  obesityTitle?: string;
+  obesityWeightScalarBadge?: string;
+  obesityPoints: string[];
+  clinicalNote?: string;
+}
+
+export const GeriatricAndObesityBlock: React.FC<GeriatricAndObesityBlockProps> = ({
+  isDark,
+  sectionId = 'sec-geriatri-obezite',
+  sectionTitle = 'Geriatri (>65 Yaş / Kırılganlık) & Obezite Doz Yönetimi',
+  geriatricTitle = 'Geriatrik & Kırılgan Hasta (>65 Yaş · Frailty)',
+  geriatricReductionBadge,
+  geriatricPoints,
+  obesityTitle = 'Obezite Doz Ölçekleme (BMI ≥ 30–40 kg/m² · SOBA / Miller’s)',
+  obesityWeightScalarBadge,
+  obesityPoints,
+  clinicalNote,
+}) => {
+  return (
+    <section
+      id={sectionId}
+      className={`rounded-2xl border p-5 sm:p-6 ${
+        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <div className="flex items-center gap-2.5">
+        <Users className={`h-5 w-5 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          {sectionTitle}
+        </h3>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div
+          className={`rounded-xl border p-4 ${
+            isDark ? 'border-indigo-900/50 bg-indigo-950/15' : 'border-indigo-200 bg-indigo-50/50'
+          }`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h4 className={`text-sm font-bold ${isDark ? 'text-indigo-300' : 'text-indigo-900'}`}>
+              {geriatricTitle}
+            </h4>
+            {geriatricReductionBadge && (
+              <span
+                className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-bold ${
+                  isDark
+                    ? 'border-indigo-500/40 bg-indigo-950/70 text-indigo-200'
+                    : 'border-indigo-300 bg-white text-indigo-800'
+                }`}
+              >
+                {geriatricReductionBadge}
+              </span>
+            )}
+          </div>
+          <ul className={`mt-2.5 space-y-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            {geriatricPoints.map((pt, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-indigo-400' : 'bg-indigo-600'}`} />
+                <span>{pt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div
+          className={`rounded-xl border p-4 ${
+            isDark ? 'border-teal-900/50 bg-teal-950/15' : 'border-teal-200 bg-teal-50/50'
+          }`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              <Scale className={`h-4 w-4 ${isDark ? 'text-teal-300' : 'text-teal-700'}`} />
+              <h4 className={`text-sm font-bold ${isDark ? 'text-teal-300' : 'text-teal-900'}`}>
+                {obesityTitle}
+              </h4>
+            </div>
+            {obesityWeightScalarBadge && (
+              <span
+                className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-bold ${
+                  isDark
+                    ? 'border-teal-500/40 bg-teal-950/70 text-teal-200'
+                    : 'border-teal-300 bg-white text-teal-800'
+                }`}
+              >
+                {obesityWeightScalarBadge}
+              </span>
+            )}
+          </div>
+          <ul className={`mt-2.5 space-y-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            {obesityPoints.map((pt, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-teal-400' : 'bg-teal-600'}`} />
+                <span>{pt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {clinicalNote && (
+        <p className={`mt-3 text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+          <strong>Klinik Not:</strong> {clinicalNote}
+        </p>
+      )}
+    </section>
+  );
+};
+
+export interface DeepPharmacodynamicsProps {
+  isDark: boolean;
+  sectionId?: string;
+  sectionTitle?: string;
+  subtitle?: string;
+  defaultOpen?: boolean;
+  receptorMechanism: {
+    title?: string;
+    summary: string;
+    points: string[];
+  };
+  organEffects: {
+    cns: string[];
+    cvs: string[];
+    respiratory: string[];
+    other?: string[];
+  };
+  synergyAndCeiling: {
+    summary?: string;
+    points: string[];
+  };
+  clinicalPearls: string[];
+}
+
+export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
+  isDark,
+  sectionId = 'sec-derin-pd',
+  sectionTitle = 'Derin Farmakodinamik & Sistemik Fizyoloji Analizi',
+  subtitle = 'Reseptör alt tipleri, SSS/KVS/Solunum fizyolojisi, sinerji–tavan etkisi ve ileri klinik incelikler (Miller’s / Stoelting’s / Barash)',
+  defaultOpen = false,
+  receptorMechanism,
+  organEffects,
+  synergyAndCeiling,
+  clinicalPearls,
+}) => {
+  const [open, setOpen] = useState<boolean>(defaultOpen);
+
+  return (
+    <section
+      id={sectionId}
+      className={`overflow-hidden rounded-2xl border transition-all ${
+        isDark ? 'border-violet-900/50 bg-slate-900/80' : 'border-violet-200 bg-white shadow-xs'
+      }`}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        className={`flex w-full cursor-pointer items-center justify-between p-4 sm:p-5 text-left transition-colors ${
+          isDark ? 'hover:bg-slate-800/60' : 'hover:bg-violet-50/40'
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className={`rounded-xl p-2 ${
+              isDark ? 'bg-violet-500/15 text-violet-300' : 'bg-violet-100 text-violet-700'
+            }`}
+          >
+            <FlaskConical className="h-5 w-5" />
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className={`text-base sm:text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                {sectionTitle}
+              </h3>
+              <span
+                className={`rounded-md px-2 py-0.5 font-mono text-[11px] font-semibold ${
+                  isDark ? 'bg-slate-800 text-violet-300' : 'bg-violet-50 text-violet-700'
+                }`}
+              >
+                {open ? 'Gizle' : 'Tıkla & Göster'}
+              </span>
+            </div>
+            <p className={`mt-0.5 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              {subtitle}
+            </p>
+          </div>
+        </div>
+        <div className={`shrink-0 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+          {open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+        </div>
+      </button>
+
+      {open && (
+        <div
+          className={`space-y-4 border-t p-5 sm:p-6 ${
+            isDark ? 'border-slate-800' : 'border-slate-200'
+          }`}
+        >
+          {/* 1. Sütun: Reseptör / Moleküler Alt Tip & Sinyal İletimi */}
+          <div
+            className={`rounded-xl border p-4 ${
+              isDark ? 'border-violet-900/40 bg-violet-950/15' : 'border-violet-200 bg-violet-50/40'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Layers className={`h-4 w-4 ${isDark ? 'text-violet-300' : 'text-violet-700'}`} />
+              <h4 className={`text-sm font-bold ${isDark ? 'text-violet-200' : 'text-violet-950'}`}>
+                1. {receptorMechanism.title || 'Reseptör Alt Tipleri & Moleküler Sinyal İletimi'}
+              </h4>
+            </div>
+            <p className={`mt-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              {receptorMechanism.summary}
+            </p>
+            <ul className={`mt-2.5 space-y-1.5 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              {receptorMechanism.points.map((pt, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-violet-400' : 'bg-violet-600'}`} />
+                  <span>{pt}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 2. Sütun: Organ Sistemlerine Fizyolojik Etki (SSS · KVS · Solunum) */}
+          <div
+            className={`rounded-xl border p-4 ${
+              isDark ? 'border-slate-800 bg-slate-950/50' : 'border-slate-200 bg-slate-50/60'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Activity className={`h-4 w-4 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
+              <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                2. Organ Sistemlerine Fizyolojik Etki (SSS · KVS · Solunum)
+              </h4>
+            </div>
+
+            <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-3">
+              <div
+                className={`rounded-lg border p-3.5 ${
+                  isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+                }`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Brain className={`h-4 w-4 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-indigo-300' : 'text-indigo-800'}`}>
+                    SSS · Sedasyon / Hipnoz / EEG
+                  </span>
+                </div>
+                <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  {organEffects.cns.map((item, idx) => (
+                    <li key={idx}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div
+                className={`rounded-lg border p-3.5 ${
+                  isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+                }`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <HeartPulse className={`h-4 w-4 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
+                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-800'}`}>
+                    Kardiyovasküler Sistem
+                  </span>
+                </div>
+                <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  {organEffects.cvs.map((item, idx) => (
+                    <li key={idx}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div
+                className={`rounded-lg border p-3.5 ${
+                  isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
+                }`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Wind className={`h-4 w-4 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
+                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-teal-300' : 'text-teal-800'}`}>
+                    Solunum &amp; Hava Yolu
+                  </span>
+                </div>
+                <ul className={`mt-2 space-y-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  {organEffects.respiratory.map((item, idx) => (
+                    <li key={idx}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {organEffects.other && organEffects.other.length > 0 && (
+              <div
+                className={`mt-3 rounded-lg border p-3 text-xs leading-relaxed ${
+                  isDark ? 'border-slate-800 bg-slate-900/50 text-slate-300' : 'border-slate-200 bg-white text-slate-700'
+                }`}
+              >
+                <strong className={isDark ? 'text-slate-200' : 'text-slate-900'}>Diğer Sistemik Etkiler (Nöromüsküler / GIS / Endokrin): </strong>
+                {organEffects.other.join(' · ')}
+              </div>
+            )}
+          </div>
+
+          {/* 3. & 4. Sütunlar: Sinerji/Tavan Etkisi & Klinik-Farmakodinamik İncelikler */}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div
+              className={`rounded-xl border p-4 ${
+                isDark ? 'border-teal-900/50 bg-teal-950/15' : 'border-teal-200 bg-teal-50/40'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Zap className={`h-4 w-4 ${isDark ? 'text-teal-300' : 'text-teal-700'}`} />
+                <h4 className={`text-sm font-bold ${isDark ? 'text-teal-200' : 'text-teal-950'}`}>
+                  3. Sinerji, Antagonizma &amp; Tavan Etkisi (Ceiling Effect)
+                </h4>
+              </div>
+              {synergyAndCeiling.summary && (
+                <p className={`mt-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                  {synergyAndCeiling.summary}
+                </p>
+              )}
+              <ul className={`mt-2 space-y-1.5 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                {synergyAndCeiling.points.map((pt, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-teal-400' : 'bg-teal-600'}`} />
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div
+              className={`rounded-xl border p-4 ${
+                isDark ? 'border-amber-900/50 bg-amber-950/15' : 'border-amber-200 bg-amber-50/40'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Stethoscope className={`h-4 w-4 ${isDark ? 'text-amber-300' : 'text-amber-700'}`} />
+                <h4 className={`text-sm font-bold ${isDark ? 'text-amber-200' : 'text-amber-950'}`}>
+                  4. Klinik-Farmakodinamik İncelikler &amp; Tuzaklar
+                </h4>
+              </div>
+              <ul className={`mt-2.5 space-y-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                {clinicalPearls.map((pearl, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-amber-400' : 'bg-amber-600'}`} />
+                    <span>{pearl}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       )}
     </section>
