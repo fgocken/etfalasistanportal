@@ -2543,6 +2543,32 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-flumazenil-protocol',
+    title: 'Flumazenil (FLUMAZENIL · Anexate) Benzodiazepin Reversal, Pediatrik & Resedasyon İnfüzyon Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Benzodiazepin Antagonisti · Antidot',
+    description: 'Spesifik kompetitif GABA_A benzodiazepin antagonisti; prosedürel sedasyon/genel anestezi BZD reversali (0,2 mg IV q60 sn, maks 1 mg), pediatrik 0,01 mg/kg titrasyonu, resedasyon infüzyonu (0,1–0,4 mg/sa) ve TSA/kronik BZD nöbet kontrendikasyonları.',
+    keywords: [
+      'flumazenil',
+      'anexate',
+      'benzodiazepin antagonisti',
+      'benzodiazepin antidotu',
+      'bzd antidotu',
+      'antidot',
+      'midazolam antidotu',
+      'diazepam antidotu',
+      'dormicum antidotu',
+      'resedasyon',
+      'prosedürel sedasyon reversal',
+      'bzd zehirlenmesi',
+      '0,2 mg',
+      '0,5 mg/5 ml'
+    ],
+    tabId: 'treatments',
+    subId: 'flumazenil',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',

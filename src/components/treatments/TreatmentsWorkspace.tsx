@@ -42,13 +42,14 @@ import { FurosemideProtocol } from './FurosemideProtocol';
 import { AtropineProtocol } from './AtropineProtocol';
 import { EphedrineProtocol } from './EphedrineProtocol';
 import { NaloxoneProtocol } from './NaloxoneProtocol';
+import { FlumazenilProtocol } from './FlumazenilProtocol';
 
 interface Props {
   isDark: boolean;
   initialProtocolId?: string | null;
 }
 
-type TreatmentCategory = 'medications' | 'general_anesthetics' | 'sedation' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
+type TreatmentCategory = 'medications' | 'general_anesthetics' | 'sedation' | 'antidotes' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 type SodiumViewMode = 'all' | 'calc' | 'infographic';
@@ -962,7 +963,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'naloxone',
     category: 'medications',
-    categories: ['medications', 'sedation'],
+    categories: ['medications', 'sedation', 'antidotes'],
     categoryLabel: 'Opioid Antagonisti · Antidot',
     badge: 'PACU 40 mcg · 2/3 İnfüzyon',
     title: 'Nalokson Hidroklorür (NALOXONE)',
@@ -1007,6 +1008,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         colorClass: 'text-teal-700 dark:text-teal-300',
         bgClass: 'bg-teal-500/10',
         borderClass: 'border-teal-500/30'
+      }
+    ]
+  },
+  {
+    id: 'flumazenil',
+    category: 'medications',
+    categories: ['medications', 'sedation', 'antidotes'],
+    categoryLabel: 'Benzodiazepin Antagonisti · Antidot',
+    badge: '0,2 mg IV q60 sn · Maks 1 mg',
+    title: 'Flumazenil (FLUMAZENIL · Anexate)',
+    shortDesc: 'Spesifik kompetitif GABA_A benzodiazepin bağlanma bölgesi antagonisti; prosedürel sedasyon/genel anestezi BZD reversali (0,2 mg q60 sn, maks 1 mg), pediatrik 0,01 mg/kg protokolü, resedasyon takibi ve TSA/kronik BZD nöbet kontrendikasyonları.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul (Anexate)',
+        value: '0,5 mg / 5 mL (0,1 mg/mL)',
+        subtext: '1 mL = 0,1 mg · 2 mL = 0,2 mg',
+        tooltip: 'Türkiye standart ampul 0,5 mg/5 mL (ve 1 mg/10 mL) = 0,1 mg/mL (100 mcg/mL); direkt sulandırmadan veya SF/%5 Dekstroz ile uygulanır',
+        colorClass: 'text-purple-700 dark:text-purple-300',
+        bgClass: 'bg-purple-500/10',
+        borderClass: 'border-purple-500/30'
+      },
+      {
+        label: 'Prosedürel / PACU Reversal',
+        value: '0,2 mg (2 mL) IV / 15 sn',
+        subtext: 'q60 sn · Maks 1 mg (5 doz)',
+        tooltip: '45 sn bekle; hedef bilinç sağlanmazsa her 60 sn’de 0,1–0,2 mg tekrarla (prosedürel maks 1 mg, saf BZD intoksikasyonunda maks 3 mg)',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'Resedasyon & Yarı Ömür',
+        value: 't½ 40–80 dk · 0,1–0,4 mg/sa',
+        subtext: 'Son doz sonrası ≥ 2 sa izlem şart',
+        tooltip: 'Whitwam 1995: Etki süresi (30–60 dk) midazolam/diazepam/lorazepamdan kısadır; tekrarlayan resedasyonda 0,1–0,4 mg/saat infüzyon',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Mutlak Kontrendikasyon',
+        value: 'TSA & Kronik BZD Nöbeti!',
+        subtext: 'Geniş QRS / epilepsi → VERME!',
+        tooltip: 'Sivilotti 2016 / Penninga 2016: Trisiklik antidepresan (QRS > 100 ms), kronik BZD bağımlılığı ve bilinmeyen mikst intoksikasyonda refrakter status epileptikus ve ventriküler aritmi tetikler',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
       }
     ]
   }
@@ -1061,6 +1113,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
   const medCount = getCategoryCount('medications');
   const generalAnestheticsCount = getCategoryCount('general_anesthetics');
   const sedationCount = getCategoryCount('sedation');
+  const antidotesCount = getCategoryCount('antidotes');
   const diureticsCount = getCategoryCount('diuretics');
   const electrolyteCount = getCategoryCount('electrolyte');
   const vasoactiveCount = getCategoryCount('vasoactive');
@@ -1087,7 +1140,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     efedrin: 'ephedrine',
     'efedrin-hcl': 'ephedrine',
     nalokson: 'naloxone',
-    narcan: 'naloxone'
+    narcan: 'naloxone',
+    anexate: 'flumazenil'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1220,6 +1274,27 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <span>Sedoanaljezi &amp; Nöromüsküler</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono font-bold">
                 {sedationCount} İlaç
+              </span>
+            </button>
+
+            {/* 4. Antidotlar */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('antidotes')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'antidotes'
+                  ? isDark 
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-xs' 
+                    : 'bg-emerald-50 text-emerald-800 border border-emerald-400 shadow-xs'
+                  : isDark 
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent' 
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Antidotlar</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono font-bold">
+                {antidotesCount} İlaç
               </span>
             </button>
 
@@ -1704,6 +1779,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <NaloxoneProtocol isDark={isDark} />
       )}
 
+      {/* GÖRÜNÜM 21: FLUMAZENİL MONOGRAFİSİ & PROSEDÜREL REVERSAL / PEDİATRİK / ZEHİRLENME / İNFÜZYON HESAPLAYICISI */}
+      {(activeProtocolId === 'flumazenil' || activeProtocolId === 'anexate') && (
+        <FlumazenilProtocol isDark={isDark} />
+      )}
+
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
       {!activeProtocolId && filteredCards.length === 0 && (
         <div className={`p-8 rounded-xl border text-center space-y-3 ${
@@ -1714,6 +1794,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
           </div>
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
             {activeCategory === 'general_anesthetics' && 'Genel Anestezikler (İnhalasyon & IV)'}
+            {activeCategory === 'antidotes' && 'Antidotlar'}
             {activeCategory === 'diuretics' && 'Diüretikler'}
             {activeCategory === 'vasoactive' && 'İnfüzyon & Vazoaktif Protokolleri'}
             {activeCategory === 'sedation' && 'Sedoanaljezi & Nöromüsküler Blokaj'}
