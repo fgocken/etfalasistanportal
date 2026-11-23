@@ -26,29 +26,34 @@ import {
 } from 'lucide-react';
 
 /**
- * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v4.0)
+ * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v5.0)
  * -------------------------------------------------------------------------
  * Tedaviler ve İlaçlar modülüne eklenecek her yeni ilaç monografisi ve
  * güncellenen mevcut monografiler aşağıdaki çekirdek klinik sütunları
  * ve sıralamayı (Kontrendikasyonlar DAİMA Endikasyonlardan önce; tekrarsız
- * tek kaynak mimarisi) içermelidir:
+ * tek kaynak mimarisi ve 4 Kademeli Hücre Zarı → Hücre İçi → Doku → Organ
+ * Derin Farmakodinami Analizi) içermelidir:
  *
  * 1. Hızlı Bölüm Navigasyon Barı (`MonographQuickNav`) — En Üstte
  * 2. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock` — En Üstte, Varsayılan Kapalı Akordiyon)
- * 3. Kimlik, Klinik Özet Header & Etki Mekanizması (`MechanismOfActionBlock`)
- * 4. Farmakokinetik / Farmakodinamik (PK/PD) Profili (Varsayılan Kapalı Akordiyon)
- * 5. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`) — Endikasyonlardan ÖNCE
- * 6. Klinik Endikasyonlar ve Doz Rejimleri (Yetişkin, Pediatrik, Özel Senaryolar)
- * 7. Etkileşimli Doz & İnfüzyon Hesaplayıcı (`MonographCopyButton` + `ObesityDosingScaler`)
- * 8. Türkiye Preparat & Konsantrasyon Rehberi (`TurkeyFormulationBlock`) — Eski sulandırma tekrarını kaldırır
- * 9. Damar Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon (`CompatibilityAndLineBlock`)
- * 10. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`)
- * 11. Geriatri (>65 Yaş / Kırılganlık) & Obezite Doz Yönetimi (`GeriatricAndObesityBlock`)
- * 12. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`)
- * 13. Önemli Olumsuz Etkiler (`AdverseEffectsBlock`)
- * 14. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`)
- * 15. Derin Farmakodinamik & Sistemik Fizyoloji Analizi (`DeepPharmacodynamicsBlock` — Varsayılan Kapalı Akordiyon)
- * 16. Şiddet Dereceli İlaç Etkileşimleri & Kanıta Dayalı Kaynakça (`DrugReferencesAndInteractionsBlock`)
+ * 3. Kimlik, Klinik Özet Header & Yatak Başı Kısa Etki Mekanizması (`#sec-ozet` & `#sec-etki` / `MechanismOfActionBlock`)
+ * 4. Farmakokinetik (ADME) Özellikleri (`#sec-pkpd` — Varsayılan Kapalı Akordiyon)
+ * 5. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`, `#sec-kontrendikasyon`) — Endikasyonlardan ÖNCE
+ * 6. Klinik Endikasyonlar ve Doz Rejimleri (`#sec-endikasyon` / `#sec-dozlar` / `#sec-dozaj`)
+ * 7. Etkileşimli Doz & İnfüzyon Hesaplayıcı (`#sec-hesaplayici`, `MonographCopyButton` + `ObesityDosingScaler`)
+ * 8. Türkiye Preparat & Konsantrasyon Rehberi (`TurkeyFormulationBlock`, `#sec-tr-preparat`)
+ * 9. Damar Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon (`CompatibilityAndLineBlock`, `#sec-uyumluluk`)
+ * 10. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`, `#sec-organ`)
+ * 11. Geriatri (>65 Yaş / Kırılganlık) & Obezite Doz Yönetimi (`GeriatricAndObesityBlock`, `#sec-geriatri-obezite`)
+ * 12. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`, `#sec-gebelik`)
+ * 13. Önemli Olumsuz Etkiler (`AdverseEffectsBlock`, `#sec-olumsuz`)
+ * 14. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`, `#sec-ozel-durumlar`)
+ * 15. Derin Farmakodinamik & Çok Ölçekli Fizyoloji Analizi (`DeepPharmacodynamicsBlock`, `#sec-derin-pd` — Varsayılan Kapalı Akordiyon; üstteki kısa klinik özeti tekrar etmeden doğrudan 4 kademeli biyofiziksel/hücresel analiz):
+ *     - 1. Kademe (`receptorMechanism`): Hücre Zarı & Moleküler Hedef (Membran Reseptör / İyon Kanalı / Taşıyıcı / Enzim Bağlanma Bölgesi Biyofiziği)
+ *     - 2. Kademe (`intracellularSignaling`): Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği
+ *     - 3. Kademe (`tissueOrganSystems`): Doku & Organ Sistemleri Düzeyinde Fizyolojik Yansıma (2x2 Eşit Kartlar, Doku → Organ Eşleşmesi)
+ *     - 4. Kademe (`synergyAndCeiling` & `clinicalPearls`): Reseptör Kinetiği, Desensitizasyon/Taşiflaksi, Sinerji, Tavan Etkisi & Klinik Tuzaklar
+ * 16. Şiddet Dereceli İlaç Etkileşimleri & Kanıta Dayalı Kaynakça (`DrugReferencesAndInteractionsBlock`, `#sec-kaynaklar`)
  */
 export interface GoldStandardSectionSpec {
   id: string;
@@ -59,8 +64,8 @@ export interface GoldStandardSectionSpec {
 
 export const GOLD_STANDARD_SECTIONS: GoldStandardSectionSpec[] = [
   { id: 'sec-guvenlik', order: 1, title: 'ISMP High-Alert & Tall-Man Güvenliği (Akordiyon)', requiredComponent: 'HighAlertSafetyBlock' },
-  { id: 'sec-ozet', order: 2, title: 'Klinik Kimlik, Özet & Etki Mekanizması', requiredComponent: 'MechanismOfActionBlock' },
-  { id: 'sec-pkpd', order: 3, title: 'Farmakokinetik & Farmakodinamik (Akordiyon)' },
+  { id: 'sec-ozet', order: 2, title: 'Klinik Kimlik, Özet & Kısa Etki Mekanizması (#sec-etki)', requiredComponent: 'MechanismOfActionBlock' },
+  { id: 'sec-pkpd', order: 3, title: 'Farmakokinetik (ADME) Özellikleri (Akordiyon)' },
   { id: 'sec-kontrendikasyon', order: 4, title: 'Mutlak vs Relatif Kontrendikasyonlar', requiredComponent: 'ContraindicationsGridBlock' },
   { id: 'sec-dozlar', order: 5, title: 'Endikasyonlar & Dozaj' },
   { id: 'sec-hesaplayici', order: 6, title: 'Doz & İnfüzyon Hesaplayıcı', requiredComponent: 'MonographCopyButton' },
@@ -71,7 +76,7 @@ export const GOLD_STANDARD_SECTIONS: GoldStandardSectionSpec[] = [
   { id: 'sec-gebelik', order: 11, title: 'Gebelik & Laktasyon', requiredComponent: 'PregnancyLactationBlock' },
   { id: 'sec-olumsuz', order: 12, title: 'Önemli Olumsuz Etkiler (Adverse Effects)', requiredComponent: 'AdverseEffectsBlock' },
   { id: 'sec-ozel-durumlar', order: 13, title: 'Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar', requiredComponent: 'SpecialClinicalCautionsBlock' },
-  { id: 'sec-derin-pd', order: 14, title: 'Derin Farmakodinamik & Sistemik Fizyoloji Analizi (Akordiyon)', requiredComponent: 'DeepPharmacodynamicsBlock' },
+  { id: 'sec-derin-pd', order: 14, title: 'Derin Farmakodinamik & Çok Ölçekli Fizyoloji Analizi (4 Kademeli Akordiyon)', requiredComponent: 'DeepPharmacodynamicsBlock' },
   { id: 'sec-kaynaklar', order: 15, title: 'İlaç Etkileşimleri & Kaynakça (PubMed/DOI)', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
 ];
 

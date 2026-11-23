@@ -1362,51 +1362,87 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Henle Çıkan Kalın Kol (TAL) NKCC2 İnhibisyonu, OAT1/3 Sekresyonu & Koklear NKCC1',
+          title: 'Hücre Zarı & Moleküler Hedef (Bazolateral OAT1/OAT3 → Apikal TAL NKCC2 [SLC12A1], Makula Densa COX-2 & Koklear NKCC1)',
           summary:
-            'Furosemid plazma albüminine >%95 bağlandığı için glomerülden neredeyse hiç filtre edilmez; etki yerine ulaşması proksimal tübüldeki organik anyon taşıyıcılarının (OAT1/OAT3) aktif sekresyonuna bağlıdır. Tübüler lümende Henle kulpunun çıkan kalın kolundaki (TAL) NKCC2 (SLC12A1) kotransporterının klor bağlanma bölgesini kompetitif olarak bloke eder.',
+            'Furosemid (5-(aminosülfonil)-4-kloro-2-[(2-furanilmetil)amino]benzoik asit), plazma albüminine >%95–99 bağlandığı için glomerüler filtrasyonla tübül lümenine geçemez; hedef reseptörüne ulaşabilmesi için önce proksimal tübül bazolateral zarından aktif olarak sekrete edilmesi zorunludur (Goodman & Gilman / Miller’s 10th Ed.):',
           points: [
-            'NKCC2 Blokajı & Lümen-Pozitif Potansiyel Kaybı: Filtre edilen Na⁺’un %20–25’inin geri emilimini durdurur; ROMK aracılı lümen-pozitif elektriksel gradyan çöktüğü için paraselüler Ca²⁺ ve Mg²⁺ emilimi de engellenir.',
-            'Makula Densa & RAAS Aktivasyonu: Makula densadaki NKCC2’nin inhibisyonu tübüloglomerüler geri bildirimi (TGF) bozar ve renin-anjiyotensin-aldosteron sistemini (RAAS) uyarır.',
-            'Renal Prostaglandin (PGE₂/PGI₂) Sentezi: COX-2 aracılı vazodilatatör prostaglandin salınımını artırarak IV uygulamadan 5–15 dakika sonra — henüz diürez başlamadan — venöz kapasitansı genişletip preload’ı düşürür.',
-            'Koklear Stria Vascularis NKCC1 İnhibisyonu: Yüksek plazma piklerinde (>50 mcg/mL veya >4 mg/dk hızlı IV) iç kulaktaki NKCC1 taşıyıcısını bloke ederek endolenf K⁺ dengesini bozar ve ototoksisite yapar.',
+            'Proksimal Tübül Bazolateral & Apikal Zarı (OAT1 / OAT3 & MRP4 Organik Anyon Taşıyıcıları): Peritübüler kapiller kandaki albümine bağlı furosemid, proksimal kıvrımlı tübül (S1–S2 segmenti) bazolateral membranındaki Organik Anyon Taşıyıcı-1 ve 3 (OAT1 [SLC22A6] ve OAT3 [SLC22A8]) tarafından α-ketoglutarat karşıt-taşınımıyla hücre içine alınır ve apikal MRP4/UAT taşıyıcılarıyla tübüler lümene sekrete edilir.',
+            'Henle Kulpu Kalın Çıkan Kol (TAL) Apikal/Lüminal Zarı (NKCC2 / SLC12A1 Kotransporterı): İdrar lümenine ulaşan serbest furosemid, medüller ve kortikal kalın çıkan kol (TAL) epitel hücrelerinin apikal membranındaki elektroneutral Na⁺–K⁺–2Cl⁻ Kotransporter-2’nin (NKCC2 / SLC12A1) ikinci Cl⁻ bağlanma cebine kompetitif ve tersinir olarak bağlanarak iyon translokasyonunu durdurur.',
+            'Makula Densa Apikal NKCC2 & Renal Vasküler Endotel COX-2 Aktivasyonu: Jukstaglomerüler aparatın sensör hücreleri olan makula densa apikal zarındaki NKCC2 izoformlarını (NKCC2B/A) bloke ederek NaCl algılanmasını keser ve makula densa/renal medüller interstisyel hücrelerde Siklooksijenaz-2 (COX-2) ile Prostaglandin E₂ (PGE₂) ve Prostasiklin (PGI₂) sentezini uyarır.',
+            'İç Kulak Koklear Stria Vascularis Bazolateral Zarı (NKCC1 / SLC12A2 İzoformu): Yüksek plazma konsantrasyonlarında (>50 mcg/mL; hızlı IV puşe veya ağır KBH’da) iç kulak stria vascularis marjinal hücrelerinin bazolateral zarındaki sekretuar NKCC1 (SLC12A2) kotransporterını off-target olarak inhibe eder (ototoksisitenin moleküler hedefi).',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Direkt SSS depresyonu yoktur; ancak nöroşirürjide koroid pleksus Na⁺/Cl⁻ taşınımını hafif azaltarak ve sistemik dehidratasyonla mannitole adjuvan KİB düşüşü sağlayabilir.',
-            'İç kulak (VIII. kranial sinir / koklea): Hızlı yüksek doz IV uygulamada geri dönüşlü veya kalıcı sensörinöral işitme kaybı, tinnitus ve vertigo.',
-          ],
-          cvs: [
-            'Erken Venodilatasyon (5–15 dk): Prostaglandin aracılı sistemik venöz göllenme ile sol ventrikül diyastol sonu basıncını (LVEDP) ve pulmoner kapiller kama basıncını (PAOP) hızla indirir — akut pulmoner ödemdeki ani rahatlamanın temelidir.',
-            'Volüm Deplesyonu & Aritmi: Aşırı diürez preload çöküşü ve hipotansiyon yapar; indüklediği hipokalemi ve hipomagnezemi QTc uzaması ve Torsades de Pointes’i tetikler.',
-          ],
-          respiratory: [
-            'Pulmoner Konjesyonun Çözülmesi: Hidrostatik akciğer ödemi (ADHF / TACO) vakalarında ekstravasküler akciğer suyunu ve şantı azaltarak oksijenasyonu hızla iyileştirir.',
-            'Kontraksiyon Metabolik Alkalozu: Oluşturduğu hipokloremik alkaloz medüller solunum dürtüsünü baskılayıp kompansatuvar hipoventilasyon (PaCO₂↑) yaratarak YBÜ mekanik ventilasyon weaning’ini geciktirebilir.',
-          ],
-          other: [
-            'Renal/Metabolik: Hipokloremik-hipokalemik kontraksiyon metabolik alkalozu, hiperürisemi (OAT yarışması), hipomagnezemi ve kalsiürez',
-            'KDIGO ABH Kuralı: Oligürik ABH’yi non-oligürik forma çevirmek renal iyileşmeyi veya mortaliteyi İYİLEŞTİRMEZ (Ho–Sheridan BMJ 2006)',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Apikal NKCC2 blokajı ve makula densa COX-2 uyarımı; TAL epitel hücresi, makula densa–jukstaglomerüler eksen, distal toplayıcı tübül hücreleri ve vasküler endotel içinde dört ardışık hücresel kaskadı tetikler:',
+          points: [
+            'TAL Hücresi İçi İyon Trafiği & ROMK Aracılı +10 mV Lümen-Pozitif Transepitelyal Potansiyelin Çöküşü: Fizyolojik durumda NKCC2 ile hücre içine giren K⁺’un apikal ROMK (Kir1.1) kanallarından lümene geri sızması ve Cl⁻’un bazolateral ClC-Kb/Barttin kanallarından interstisyuma çıkması lümende +10 mV’luk pozitif elektriksel potansiyel üretir. Furosemid NKCC2’yi kilitlediğinde hücre içi Na⁺/Cl⁻ girişi ve ROMK K⁺ geri döngüsü durur → +10 mV lümen-pozitif potansiyel sıfırlanır ve sıkı bağlantılardan (claudin-16/19) paraselüler Ca²⁺ ve Mg²⁺ geri emilimi tamamen çöker.',
+            'Makula Densa Hücre İçi nNOS / COX-2 → PGE₂ → Afferent Arteriyol & Venöz Kapasitans Gevşemesi (TGF Blokajı): Makula densada hücre içi NaCl girişinin durması; (1) adenozin/ATP salınımını keserek Tübüloglomerüler Geri Bildirim (TGF) vazokonstriksiyonunu bloke eder, (2) hücre içi COX-2 ve mikrozomal PGE sentaz-1 üzerinden PGE₂ ve PGI₂ salınımını tetikler. PGE₂/PGI₂, vasküler düz kas EP₂/EP₄ ve IP reseptörleri (Gαs → cAMP↑ → PKA↑ → MLCK inhibisyonu) üzerinden IV bolustan 5–15 dakika sonra (diürez başlamadan önce!) sistemik venöz kapasitans damarlarını ve renal afferent arteriyolü gevşetir.',
+            'Jukstaglomerüler Hücre İçi cAMP Artışı & RAAS Aktivasyonu: Makula densadan salınan PGE₂, jukstaglomerüler granüler hücrelerde Gαs–adenilat siklaz–cAMP–PKA kaskadını uyararak prorenin/renin ekzositozunu başlatır → Anjiyotensin-II ve adrenal zona glomerulozadan Aldosteron sentezi yükselir.',
+            'Distal Kıvrımlı Tübül (DCT) & Toplayıcı Kanal (Esas / İnterkale Hücre) İçi İyon Değişimi: Henle kulpundan kaçan yüksek Na⁺ ve Cl⁻ yükü distal nefrona çarptığında; Esas (Principal) hücrelerde apikal ENaC kanallarından hızlanan Na⁺ geri emilimi lümende güçlü negatif (-40 mV) potansiyel oluşturur. Aldosteron etkisiyle bazolateral Na⁺/K⁺-ATPaz ve apikal ROMK/BK kanalları üzerinden K⁺ sekresyonu, α-İnterkale hücrelerde ise apikal H⁺-ATPaz / H⁺-K⁺-ATPaz üzerinden H⁺ sekresyonu ve bazolateral HCO₃⁻ üretimi hızlanır (hücresel hipokalemi ve kontraksiyon metabolik alkalozu).',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Nefron Tübül Epiteli & Medüller İnterstisyum → Böbrek & Diürez Fizyolojisi',
+            tissueTarget: 'Proksimal Tübül (OAT1/3) · Henle TAL · Medüller Hipertonisite',
+            accent: 'teal',
+            points: [
+              'Ters-Akım Çarpan (Counter-Current Multiplier) Sisteminin Silinmesi & Serbest Su Klirensi: TAL su geçirmez olduğu için normalde medüller interstisyel hipertonisiteyi (1200 mOsm/kg) inşa eden "seyreltici segment"tir. Furosemid bu segmentte filtre edilen Na⁺’un %20–25’inin emilimini durdurduğunda medüller ozmotik gradyan yıkanır; ADH varlığında dahi toplayıcı kanallarda idrar konsantre edilemez ve bol izostenürik (~300 mOsm/kg) diürez oluşur.',
+              'Medüller Oksijen Tüketimi (mTAL Korunması) vs ABH Gerçeği: NKCC2 blokajı bazolateral Na⁺/K⁺-ATPaz iş yükünü azaltarak hipoksik dış medullada tübüler O₂ tüketimini düşürse de, KDIGO ve Ho–Sheridan meta-analizine göre klinik ABH’yi önlemez veya RRT ihtiyacını azaltmaz; Furosemid Stres Testi (FST: 1–1,5 mg/kg IV → 2 saatte ≥200 mL idrar) ise proksimal OAT + TAL rezervini ölçen fonksiyonel biyobelirteçtir.',
+              'Proksimal OAT1/OAT3 Yarışması (Üremi, NSAİİ & Hiperürisemi): İleri KBH’da biriken endojen üremik organik asitler ve NSAİİ’ler OAT1/3 için furosemid ile yarışarak lümene sekresyonunu azaltır (tavan doz 160–200 mg’a çıkar); tersine furosemid de ürik asit sekresyonunu azaltarak hiperürisemi/gut tetikler.',
+            ],
+          },
+          {
+            systemTitle: 'Distal Nefron & Ekstraselüler Sıvı Kompartmanı → Elektrolit & Asit-Baz Fizyolojisi',
+            tissueTarget: 'TAL Paraselüler Bağlantı · Distal Tübül (DCT) · Toplayıcı Kanal',
+            accent: 'amber',
+            points: [
+              'Kalsiürez & Magnezüri (Tiyazidlerden Temel Farkı): +10 mV lümen-pozitif potansiyelin kaybıyla idrarla Ca²⁺ ve Mg²⁺ atılımı %50–70 artar → malign hiperkalsemi tedavisinde (%0,9 NaCl hidrasyonu sonrası) avantaj sağlarken, yoğun bakımda dirençli hipomagnezemi ve prematüre yenidoğanlarda nefrokalsinoz/osteopeni oluşturur.',
+              'Kaliürez & Miyokardiyal Aritmojenite: Distal toplayıcı kanala yüksek Na⁺ akışı + volüm kaybına bağlı sekonder hiperaldosteronizm güçlü K⁺ kaybı yaratır; eşzamanlı hipomagnezemi Na⁺/K⁺-ATPaz ve ROMK inhibisyonunu bozarak Mg²⁺ düzeltilmeden düzelmeyen refrakter hipokalemiye ve Torsades de Pointes / digoksin toksisitesine zemin hazırlar.',
+              'Hipokloremik Kontraksiyon Metabolik Alkalozu (SID Artışı): İdrarla HCO₃⁻ içermeyen, NaCl’den zengin sıvı atılması ekstraselüler hacmi daraltırken plazma güçlü iyon farkını (SID = [Na⁺] − [Cl⁻]) genişletir ve α-interkale hücrelerden H⁺ atılımıyla serum HCO₃⁻ >30–36 mmol/L’ye yükselir (YBÜ hastasında santral solunum dürtüsünü baskılar).',
+            ],
+          },
+          {
+            systemTitle: 'Venöz Kapasitans Damarları, Miyokard & Pulmoner İnterstisyum → Kardiyopulmoner Fizyoloji',
+            tissueTarget: 'Sistemik Venöz Yatak · Sol Ventrikül Preload · Alveolokapiller Membran',
+            accent: 'rose',
+            points: [
+              'Bifazik Hemodinamik Yanıt — Faz 1 (5–15. dk Erken Venodilatasyon): IV bolustan hemen sonra renal COX-2/PGE₂/PGI₂ salınımıyla sistemik venöz kapasitans artar; henüz 1 mL diürez olmadan sağ atriyal basınç, pulmoner kapiller kama basıncı (PCWP / LVEDP) ve dispne hızla düşer (Dikkat: NSAİİ alan veya anefrik hastada bu erken venodilatasyon kaybolur!).',
+              'Faz 2 (30–120. dk Natriüretik Dekonjesyon) & Nörohormonal Paradoks: Pik diürezle intravasküler ve pulmoner interstisyel sıvı (EVLW) boşalır, akciğer kompliyansı ve PaO₂/FiO₂ düzelir (ADHF ve TACO’da hayat kurtarıcı). Ancak övolemik veya sağ ventrikül infarktı/tamponad/TRALI hastasında hızlı yüksek doz bolus; RAAS/sempatik deşarjla geçici SVR artışı ve ardından preload çöküşüyle ağır hipotansiyon/kardiyojenik şok yapar.',
+              'Pulmoner Parankim & Solunum Mekaniği: Alveoler ve peribronşiyal ödemin çözülmesiyle hava yolu direnci ve şant fraksiyonu düşer; ancak kronik yüksek doz kullanımda gelişen metabolik alkaloz (HCO₃⁻↑) medüller kemoreseptörleri baskılayarak kompansatuvar hipoventilasyon (PaCO₂↑) ve uzamış mekanik ventilasyon yaratır.',
+            ],
+          },
+          {
+            systemTitle: 'Koklear Stria Vascularis, Koroid Pleksus & Splanknik/Hepatik Doku → Kulak, SSS & GİS Fizyolojisi',
+            tissueTarget: 'Stria Vascularis (NKCC1) · Koroid Pleksus · Portal-Hepatik Eksen',
+            accent: 'indigo',
+            points: [
+              'Koklear Stria Vascularis & Endolenfatik Potansiyel Çöküşü (Ototoksisite): İç kulak stria vascularis marjinal hücrelerindeki bazolateral NKCC1 inhibe olduğunda, skala media endolenfine K⁺ sekresyonu durur, +80 mV endolenfatik potansiyel çöker ve dış tüy hücrelerinde ödem gelişir (>4 mg/dk hızlı IV infüzyon, eGFR <30 veya eşzamanlı aminoglikozid/vankomisin ile akut/kalıcı sensörinöral işitme kaybı).',
+              'Koroid Pleksus & Beyin Ödemi (KİBAS Adjuvanı): Doğrudan sedatif veya EEG baskılayıcı etkisi yoktur (KBB’yi anlamlı geçmez); ancak nöroşirürjide koroid pleksus bazolateral/apikal Cl⁻ taşınımını kısmen yavaşlatarak ve Mannitol/Hipertonik NaCl’ün yarattığı ozmotik su çekişini sistemik diürezle tamamlayarak KİB düşüşüne yardımcı olur.',
+              'Hepatik Amonyogenez & Sirotik Asit Fizyolojisi: Böbrek korteksinde hipokalemi ve hücre içi asidoz, proksimal tübülde glutaminaz enzimini aktive ederek renal amonyak (NH₃/NH₄⁺) üretimini artırır; eşlik eden metabolik alkalozda NH₄⁺ → lipofilik NH₃’e dönüşüp kan-beyin bariyerini aşarak sirotik hastada hepatik ensefalopatiyi tetikler (sirotik asitte aşırı diürez ise HRS’yi başlatır).',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Dik Eşik–Tavan (Threshold–Ceiling) Kinetiği, Diüretik Frenleme (Braking / DCT Hipertrofisi) & Sequential Nefron Blokajı',
           summary:
-            'Furosemid dik bir “eşik (threshold) – tavan (ceiling)” doz-yanıt eğrisine sahiptir; eşik aşılmadan diürez başlamaz, tavan aşıldıktan sonra tek dozu büyütmek natriürezi artırmaz ancak ototoksisiteyi katlar.',
+            'Furosemidin klinik farmakodinamisi log-lineer değil, dik bir sigmoidal "ya hep ya hiç" (threshold–ceiling) eğrisi izler; tübüler direnç geliştiğinde tek başına dozu tavanın üzerine çıkarmak yerine farklı nefron segmentlerini hedefleyen sinerjik kombinasyonlar zorunludur:',
           points: [
-            'Diüretik Frenleme (Braking) & Direnç Mekanizması: Kronik loop kullanımında distal tübül epitel hipertrofisi ve proksimal Na⁺ geri emilimi artışı gelişir; tek başına furosemid dozunu tırmandırmak yerine ardışık (sequential) nefron blokajı uygulanır.',
-            'ADVOR Sinerjisi (Proksimal Blokaj — Asetazolamid): Proksimal tübülde Na⁺/HCO₃⁻ emilimini kırarak Henle’ye ulaşan sodyum yükünü artırır ve 3 günde tam dekonjesyon oranını anlamlı yükseltir (NEJM 2022).',
-            'CLOROTIC Sinerjisi (Distal Blokaj — Tiyazid/Metolazon): Distal kıvrımlı tübülde (NCC) kompansatuvar Na⁺ geri emilimini bloke ederek güçlü sinerjik natriürez sağlar (ancak K⁺/Mg²⁺ kaybı dramatik artar!).',
-            'NSAİİ Antagonizması: İndometazin/ibuprofen/ketorolak renal PGE₂ sentezini bloke ederek hem venodilatasyonu hem de diüretik yanıtı belirgin köreltir.',
+            'Tübüler Eşik (Threshold) ve Tavan (Ceiling) Doz Biyofiziği: İdrar lümenindeki furosemid konsantrasyonu minimum eşiği (~10 mcg/mL) aşana dek natriürez sıfıra yakındır; maksimum NKCC2 doygunluğunu sağlayan tavan doza (normal böbrekte 40–80 mg IV; eGFR <30 mL/dk veya ağır ADHF’de 160–200 mg IV) ulaşıldığında ise fraksiyonel Na⁺ atılımı (FENa) %20–25’te platoya ulaşır — tek dozu 200 mg üzerine çıkarmak diürezi artırmaz, yalnızca koklear NKCC1 ototoksisitesini katlar.',
+            'Post-Diüretik Na⁺ Retansiyonu & Kronik Frenleme Fenomeni (Distal DCT Hipertrofisi): IV furosemidin etkisi 2–3 saatte bittiğinde, tübüler ilaç düzeyi eşiğin altına düşer düşmez RAAS ve sempatik aktivasyonla sonraki 18 saatte şiddetli "post-diüretik Na⁺ tutulumu" başlar (sürekli IV infüzyonun veya günde ≥2–3 dozun mantığı). Kronik kullanımda ise Henle’den kaçan yüksek Na⁺ yükü Distal Kıvrımlı Tübül (DCT) epitel hücrelerinde hiperplazi/hipertrofi ve NCC (Na⁺-Cl⁻ kotransporter) ekspresyonunu 2–3 kat artırarak diüretik direnci (braking) üretir.',
+            'Ardışık (Sequential) Nefron Blokajı Sinerjisi (ADVOR & CLOROTIC): Diüretik direncini kırmak için; (1) Proksimal tübülde NHE3/CA-IV’ü bloke eden Asetazolamid (ADVOR NEJM 2022: 500 mg 1×1, 3 gün) eklendiğinde proksimal Na⁺ kaçışı Henle’ye sunumu artırır ve post-diüretik alkalozu önler; veya (2) Hipertrofiye DCT’deki NCC’yi bloke eden Tiyazid/Metolazon (CLOROTIC Eur Heart J 2023) eklendiğinde tübüler Na⁺ geri emilimi iki kilit noktadan kırılır (ancak K⁺/Mg²⁺ kaybı çok yakından izlenmelidir!).',
           ],
         }}
         clinicalPearls={[
-          'Sülfonamid Çapraz Reaksiyon Miti (Strom NEJM 2003 · AAAAI): Furosemid non-antibiyotik (arilamin halkası olmayan) bir sülfonamiddir; TMP-SMX gibi antibiyotik sülfonamid alerjisi olanlarda gerçek çapraz reaksiyon kanıtlanmamıştır (ağır SJS/TEN/DRESS veya doğrudan furosemid anafilaksisi hariç).',
-          'Yükleme Bolusu Olmadan Sürekli İnfüzyon Hatası: Bolus yapılmadan doğrudan 5–10 mg/saat infüzyon başlanırsa tübüler eşiğe saatlerce ulaşılamaz; daima önce 20–40 mg IV yükleme bolusu verin.',
-          'Furosemid Stres Testi (FST) ile RRT Zamanlaması: Övolemik Evre 1–2 ABH hastasında 1,0–1,5 mg/kg IV sonrası 2 saatte < 200 mL idrar çıkışı, Evre 3 ABH ve diyaliz ihtiyacını %87 duyarlılıkla öngörür.',
-          'Alkali pH (~9,0) Y-Site Çökelme Kuralı: Noradrenalin, adrenalin, dopamin, dobutamin, midazolam veya amiodaron hattından puşe edilen furosemid anında çökelir ve vazopressör kaybına yol açar.',
+          'Neden Sürekli IV İnfüzyondan Önce Yükleme Bolusu (20–40 mg IV) Şarttır? Doğrudan 5–10 mg/saat sürekli infüzyon başlanırsa, Vd ve yüksek albümin bağlanması nedeniyle proksimal OAT sekresyonu saatlerce tübüler "eşik (threshold)" konsantrasyona ulaşamaz; daima önce 20–40 mg IV bolus ile eşiği aşın, hemen ardından infüzyonu başlatın.',
+          'ESC 2021 Spot İdrar Sodyumu (UNa) Kuralı: Akut dekompanse kalp yetmezliğinde IV furosemid bolusundan 2 saat sonra spot idrar Na⁺ <50–70 mEq/L veya ilk 6 saatlik idrar çıkışı <100–150 mL/saat ise mevcut doz tübüler eşiği aşamamıştır — 24 saat beklemeyin, dozu derhal 2 katına (tavan 200 mg) çıkarın veya Asetazolamid/Tiyazid ekleyin.',
+          'Ototoksisite Hız Sınırı (≤ 4 mg/dk) Biyofiziği: 120 mg IV furosemidi 1 dakikada puşe etmek plazma pikini >100 mcg/mL’ye fırlatarak stria vascularis NKCC1 taşıyıcılarını felç eder; aynı 120 mg dozu 30 dakikada (4 mg/dk) infüze etmek ise tübüler NKCC2 doygunluğunu korurken koklear pik eşiği aşmaz.',
+          'Hipoalbüminemi & Nefrotik Direnç: Serum albümini <2,0–2,5 g/dL olduğunda furosemid Vd’si ekstravasküler interstisyuma kaçar ve peritübüler OAT1/3’e sunulan ilaç azalır; derin hipoalbüminemik dirençli ödemde 100 mL %20 Albümin + IV Furosemid kombinasyonu nefrona ilaç teslimatını restore edebilir.',
         ]}
       />
 

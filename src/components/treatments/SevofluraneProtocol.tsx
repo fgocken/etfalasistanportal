@@ -976,53 +976,87 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'GABA-A, Glisin, TREK-1 K₂P Kanalları, NMDA İnhibisyonu & RyR1 MH Tetiklenmesi',
+          title: 'Hücre Zarı & Moleküler Hedef (GABA-A / Glisin Amfifilik Cepleri, K2P [TREK-1/TASK-1/3], Nav/Cav & RyR1)',
           summary:
-            'Sevofluran kortikal ve spinal nöronal ağlarda çoklu ligand-kapılı ve sızıntı iyon kanallarını allosterik olarak modüle eder (Miller’s / Stoelting’s). Hipnoz ve amnezi ağırlıklı olarak korteks/talamus/hipokampüsteki GABA-A aktivasyonundan, cerrahi uyarana immobilite (MAC) ise omurilikteki Glisin, K₂P ve eksitatör kanal inhibisyonundan kaynaklanır.',
+            'Sevofluran (florlu izopropil metil eter), nöronal, kardiyomiyosit ve düz kas hücre zarlarındaki çoklu transmembran iyon kanallarının amfifilik/hidrofobik ceplerine bağlanarak allosterik modülasyon yapar (Miller’s 10th Ed. / Stoelting’s 6th Ed.). Kortikal-talamik ağlarda bilinç kaybı ve amneziyi, spinal kord ön boynuz ve dorsal boynuz nöronlarında ise cerrahi uyarana hareketsizliği (MAC / immobilite) üretir.',
           points: [
-            'GABA-A & Glisin Potansiyalizasyonu: Transmembran TM2–TM3 hidrofobik ceplerine bağlanarak Cl⁻ iletkenliğini uzatır ve postsinaptik hiperpolarizasyon oluşturur.',
-            'TREK-1 / TASK İki-Porlu Potasyum (K₂P) Kanalları: Arka plan K⁺ sızıntı akımını artırarak dinlenim membran potansiyelini hiperpolarize eder ve nöronal ateşleme eşiğini yükseltir.',
-            'Eksitatör İnhibisyon: NMDA glutamat reseptörlerini, nöronal nAChR’leri ve presinaptik Na⁺ kanallarını baskılayarak eksitatör nörotransmitter salınımını azaltır.',
-            'RyR1 & Malign Hipertermi (MHAUS): Genetik RYR1/CACNA1S mutasyonu taşıyan iskelet kasında sarkoplazmik retikulum Ca²⁺ salınım kanalını (RyR1) kontrolsüz açık tutarak fulminan hipermetabolik krizi tetikler.',
+            'Postsinaptik İnhibitör Cys-Loop Reseptörleri (GABA-A & Glisin TM2–TM3 Cepleri): Kortikal, talamik ve hipokampal nöron zarındaki GABA-A reseptörlerinin (α/β alt birimleri) ve spinal kord internöron/motor nöron zarındaki strychnine-duyarlı Glisin reseptörlerinin transmembran TM2–TM3 amfifilik oyuklarına bağlanarak agoniste afiniteyi artırır ve Cl⁻ kanalı açık kalma süresini uzatır.',
+            'İki-Porlu Arka Plan Potasyum Kanalları (K2P: TREK-1, TASK-1, TASK-3): Nöronal ve motor nöron plazma zarındaki iki-porlu sızıntı K⁺ kanallarının (özellikle C-terminal sitoplazmik ve transmembran segmentleri üzerinden TREK-1, TASK-1 ve TASK-3) açık kalma olasılığını doğrudan artırır.',
+            'Presinaptik Voltaj Kapılı Nav / Cav & Postsinaptik Eksitatör Reseptörler (NMDA, AMPA, nAChR, 5-HT₃): Presinaptik terminal zarındaki voltaj kapılı Na⁺ (Nav1.2/1.6) ve P/Q/N-tipi Ca²⁺ kanallarını inhibe eder; postsinaptik NMDA/AMPA glutamat reseptörlerini, santral ve kas-tipi nikotinik ACh reseptörlerini (nAChR) baskılar. Hava yolu nosiseptif TRPA1 kanallarını UYARMAZ (non-pungent profil).',
+            'İskelet Kası Sarkoplazmik Retikulum (SR) Riyanodin Reseptörü-1 (RyR1) & Dihidropiridin (CACNA1S) Kompleksi: Genetik mutasyon taşıyan iskelet kası liflerinde T-tübül/SR kavşağındaki RyR1 Ca²⁺ salınım kanalını doğrudan duyarlılaştırarak Malign Hipertermi (MH) tetikleyicisi olarak davranır.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'MAC & CBF/CMRO₂ Ayrışması (Uncoupling): < 1.0 MAC’ta serebral metabolizma (CMRO₂) düşüşüne paralel olarak serebral kan akımı (CBF) dengede kalır ve CO₂ reaktivitesi korunur; > 1.0 MAC’ta direkt serebral vazodilatasyon baskın çıkarak CBF ve KİB’i artırır.',
-            'Epileptiform EEG Aktivitesi: Yüksek konsantrasyonlarda (%6–8 maske indüksiyonu) ve özellikle hipokapni varlığında kortikal spike-wave ve polisipike epileptiform deşarjlar oluşturabilir; 1.5–2.0 MAC’ta burst suppression gelişir.',
-            'Serebral Koruma & Uyarılmış Potansiyeller: MEP (motor uyarılmış potansiyel) genliğini > 0.5 MAC’ta belirgin baskılar; SSEP genliğini azaltır, latansı uzatır.',
-          ],
-          cvs: [
-            'SVR Azalması & Stabil Kalp Hızı: Doza bağımlı sistemik vasküler direnç (SVR) ve MAP düşüşü yapar; Desfluranın aksine hızlı konsantrasyon artışında sempatik taşikardi/hipertansiyon krizi OLUŞTURMAZ.',
-            'Miyokardiyal Önkoşullama (Preconditioning): Sarkolemmal ve mitokondriyal K-ATP kanallarının aktivasyonu ile iskemik reperfüzyon hasarına karşı miyokardiyal koruma sağlar.',
-            'QTc Uzaması: IKr potasyum kanal inhibisyonuyla ventriküler repolarizasyonu uzatır; konjenital LQTS’de dikkat gerektirir.',
-          ],
-          respiratory: [
-            'Non-Pungent & Güçlü Bronkodilatasyon: Hava yolu irritasyonu yapmaz, öksürük/laringospazmı tetiklemez; bronş düz kasında hücre içi Ca²⁺ düşürerek intraoperatif bronkospazm ve status astmatikusta ilk tercih volatildir.',
-            'Ventilasyon & HPV: Tidal volümü azaltır, solunum frekansını artırır (hızlı-yüzeyel solunum), PaCO₂ yükselir; hipoksik/hiperkapnik solunum dürtüsünü ve > 1 MAC’ta hipoksik pulmoner vazokonstriksiyonu (HPV) baskılar.',
-          ],
-          other: [
-            'Uterin düz kas gevşemesi (> 1.0 MAC’ta oksitosin direnci ve postpartum atoni riski)',
-            'Hepatik arter tampon yanıtını (HABR) ve renal kan akımını makul düzeyde korur',
-            'CYP2E1 ile %2–5 metabolize olur (inorganik F⁻ ve HFIP glukuronid)',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Membran iyon kanallarındaki bu çoklu etkileşim; nöron, kardiyomiyosit, vasküler/bronşiyal düz kas ve iskelet kası hücreleri içinde dört belirgin biyofiziksel ve biyokimyasal kaskadı tetikler:',
+          points: [
+            'Nöron İçi Hiperpolarizasyon & Presinaptik SNARE Ekzositoz Blokajı: Artmış Cl⁻ içe akımı (GABA-A/Glisin) ve sürekli arka plan K⁺ dışa çıkışı (K2P: TREK-1/TASK) nöron zarını hiperpolarize eder, membran direncini (input resistance) düşürerek şant inhibisyonu yaratır. Presinaptik terminalde Nav/Cav blokajıyla aksiyon potansiyeli genliği ve veziküler [Ca²⁺]i piki düşer; SNARE (syntaxin-1A) kompleksi üzerinden glutamat ekzositozu baskılanır.',
+            'Kardiyomiyosit & Vasküler/Bronşiyal Düz Kas Hücresi İçi Ca²⁺ Dinamiği: Kardiyomiyosit ve damar/bronş düz kası sarkolemmasında L-tipi Ca²⁺ (Cav1.2) akımını azaltır, SR Ca²⁺ depolanmasını ve IP₃-aracılı Ca²⁺ salınımını kısıtlar → bronş ve arteriyol düz kasında Miyozin Hafif Zincir Kinaz (MLCK) aktivasyonu düşerek gevşeme oluşur; ventrikül miyokardında ise hERG (IKr) K⁺ kanalı inhibisyonuyla Faz 3 repolarizasyon (QTc) uzar.',
+            'Miyokardiyal İskemik Önkoşullama (PKC-ε → mitoK-ATP & ROS Sinyal Kaskadı): Kardiyomiyosit içinde G-proteini/adenozin reseptör kenetlenmesiyle Protein Kinaz C-epsilon (PKC-ε) ve Akt/PI3K yolağını aktive eder; iç mitokondri zarındaki ATP-duyarlı K⁺ kanallarını (mitoK-ATP) açarak mitokondriyal Ca²⁺ aşırı yüklenmesini ve mitokondriyal permeabilite geçiş poru (mPTP) açılmasını önler (iskemi-reperfüzyon koruması).',
+            'Malign Hipertermi Hücre İçi Felaketi (Mutant RyR1 → Kontrolsüz SR Ca²⁺ Deşarjı): RYR1/CACNA1S mutasyonlu iskelet kasında SR lümeninden sitozole durdurulamayan Ca²⁺ seli başlatır → aktin-miyozin kalıcı kontraksiyonu (rijidite), SERCA pompasının aşırı ATP tüketimi, glikojenoliz/glikoliz patlaması, aşırı CO₂/laktat/ısı üretimi ve sarkolemma yıkımı (rabdomiyoliz, hiperkalemi).',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Kortiko-Talamik Ağ, Spinal Kord & Serebral Vasküler Doku → SSS & Beyin Fizyolojisi',
+            tissueTarget: 'Piramidal Nöron · Spinal Ön Boynuz · Serebral Arteriyol',
+            accent: 'indigo',
+            points: [
+              'Kortikal Hipnoz vs Spinal İmmobilite (MAC) & Nöromonitörizasyon: Talamokortikal GABA-A/K2P baskılanması bilinç kaybı ve amneziyi (~0.34 MAC-awake) sağlarken, spinal kord ventral boynuz motor nöronlarının Glisin/TREK-1 ile inhibisyonu cerrahi immobiliteyi (1.0 MAC) üretir ve >0.5 MAC üzerinde kortikospinal Motor Uyarılmış Potansiyelleri (MEP) siler.',
+              'Serebral Otoregülasyon & Akım-Metabolizma Eşleşmesi (CBF / CMRO₂): Serebral metabolik oksijen tüketimini (CMRO₂) doza bağımlı düşürür; <1.0 MAC altında serebral otoregülasyon ve CO₂ reaktivitesi korunurken, >1.0 MAC üzerinde vasküler düz kas Cav1.2 blokajı baskın çıkarak direkt serebral vazodilatasyon, CBF artışı ve KİB yükselmesi (uncoupling) yapar.',
+              'Yüksek Konsantrasyon Epileptiform EEG & Emergence Deliryumu: %6–8 hızlı maske indüksiyonunda (özellikle hipokapni eşlik ediyorsa) kortikal GABAerjik ara nöronların asenkron inhibisyonuyla spike-wave epileptiform EEG deşarjları oluşabilir; pediatride hızlı yıkama sonrası kortikal-subkortikal asenkron uyanma %10–30 emergence ajitasyonuna yol açar.',
+            ],
+          },
+          {
+            systemTitle: 'Miyokard Dokusu, İleti Sistemi & Sistemik Arteriyol Düz Kası → Kardiyovasküler Fizyoloji',
+            tissueTarget: 'Ventrikül Miyokardı · Rezistans Arteriyoller · IKr (hERG) Kanalı',
+            accent: 'rose',
+            points: [
+              'Sistemik Vasküler Direnç (SVR) & Sempatik Stabilite: Rezistans arteriyol düz kasında doza bağımlı gevşeme ile SVR ve MAP’ı %15–25 düşürür; Desfluranın aksine hava yolu TRPA1 irritasyonu yapmadığı için konsantrasyon hızla artırılsa bile refleks sempatik fırtına veya taşikardi OLUŞTURMAZ (kalp hızı >1.5 MAC’a kadar stabildir).',
+              'Miyokard Kontraktilitesi & İskemik Önkoşullama (Preconditioning): Sarkolemmal L-tipi Ca²⁺ akımını hafif baskılayarak doza bağımlı ılımlı negatif inotropi yapar; buna karşın PKC-ε / mitoK-ATP aracılı anestezik önkoşullama sayesinde koroner cerrahi ve KAH hastalarında miyokardiyal stunning ve infarkt alanını küçültür.',
+              'Elektrofizyoloji & Repolarizasyon (QTc Uzaması): Ventrikül miyokardında gecikmiş doğrultucu K⁺ akımını (IKr / hERG) inhibe ederek aksiyon potansiyeli süresini ve QTc aralığını uzatır; epikardiyal katekolamin aritmojenik duyarlılaştırması ise Halotana göre çok düşüktür.',
+            ],
+          },
+          {
+            systemTitle: 'Hava Yolu Mukozası, Bronş Düz Kası & Pulmoner Vasküler Yatak → Solunum Fizyolojisi',
+            tissueTarget: 'Trakeobronşiyal Epitel · Bronş Düz Kası · Pulmoner Arteriyol',
+            accent: 'teal',
+            points: [
+              'Non-Pungent Hava Yolu Toleransı & Güçlü Bronkodilatasyon: Hava yolu C-lif nosiseptörlerini (TRPA1/TRPV1) uyarmadığı için öksürük, nefes tutma veya laringospazm tetiklemez (pediatrik/erişkin maske indüksiyonunda altın standart). Bronş düz kasında voltaj kapılı Ca²⁺ girişini ve vagal ACh salınımını bloke ederek status astmatikus ve intraoperatif bronkospazmı güçlü biçimde çözer.',
+              'Solunum Paterni & Kemoreseptör Baskılanması: Diyafram ve interkostal motor nöron çıktılarını azaltarak tidal volümü (VT) düşürür, solunum frekansını artırır (hızlı-yüzeyel solunum); ölü boşluk/VT oranı artar ve PaCO₂ yükselir. Karotid cisimcik Tip-I glomus hücrelerinde TASK-1/3 kanallarını etkileyerek hipoksik ventilatuar yanıtı 0.1 MAC’ta dahi %50–70 köreltir.',
+              'Hipoksik Pulmoner Vazokonstriksiyon (HPV): Pulmoner arteriyol düz kasında >1.0 MAC konsantrasyonlarda HPV refleksini ~%30–50 baskılayarak tek akciğer ventilasyonunda (OLV) intrapulmoner şant fraksiyonunu (Qs/Qt) artırabilir.',
+            ],
+          },
+          {
+            systemTitle: 'Hepatorenal Parankim, Uterus Düz Kası & İskelet Kası Dokusu → Organ & Metabolik Fizyoloji',
+            tissueTarget: 'Hepatosit (CYP2E1) · Renal Tübül · Miyometriyum · İskelet Kası',
+            accent: 'amber',
+            points: [
+              'Hepatik Kan Akımı, CYP2E1 Deflorinasyonu & Compound A: Hepatik arter tampon yanıtını (HABR) korur; karaciğerde %2–5 oranında CYP2E1 ile inorganik F⁻ ve HFIP’ye yıkılır (Halotan benzeri immün TFA-protein hapteni üretmez). Kuru/kuvvetli baz (KOH/NaOH) CO₂ absorbanı ile düşük akımda oluşan fluorometil-2,2-difloro-1-(triflorometil)vinil eter (Compound A) insanda yüksek eşik nedeniyle klinik nefrotoksisite yapmaz ve modern NaOH-free absorbanda sıfırdır.',
+              'Miyometriyum (Uterus Düz Kası) Gevşemesi: Uterus düz kası sarkolemmasında L-tipi Ca²⁺ kanallarını inhibe ederek >1.0 MAC üzerinde doza bağımlı uterin relaksasyon ve oksitosin direnci yapar (sezaryende postpartum atoni ve kanama riskini önlemek için ≤0.5–0.75 MAC sınırı).',
+              'Nöromüsküler Kavşak (NMJ) & İskelet Kası: Motor son plakta postsinaptik nAChR inhibisyonu, spinal motor nöron depresyonu ve kas kan akımı artışıyla non-depolarizan NMB’leri %25–50 potansiyalize eder; RYR1 mutant iskelet kasında ise fulminan Malign Hipertermiyi tetikler.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'MAC Aditivitesi, Opioid MAC-Sparing Tavan Etkisi, Yaş/Isı Kinetiği & NMB Sinerjisi',
           summary:
-            'Sevofluran tek başına tam genel anestezi (hipnoz + amnezi + immobilite) sağlayabilir; ancak opioidler, N₂O ve α₂-agonistlerle belirgin MAC azaltıcı sinerji kurar.',
+            'Sevofluran tek başına tam genel anestezi (hipnoz, amnezi ve cerrahi immobilite) sağlayabilen tam etkili bir ajandır; ancak çoklu ajan kombinasyonlarında belirgin farmakodinamik aditivite ve sinerji sergiler:',
           points: [
-            'N₂O Aditif MAC Etkisi: %60 N₂O (~0.58 MAC) eklendiğinde gereken EtSevo doğrusal olarak azalır (%2.05’ten ~%0.85’e).',
-            'Opioid & Deksmedetomidin MAC-Sparing Sinerjisi: Fentanil/Remifentanil Sevofluran MAC değerini %25–50 düşürür (ancak opioid tavan etkisi nedeniyle MAC %100 sıfırlanamaz; farkındalık riski için yeterli hipnotik şarttır).',
-            'Nöromüsküler Bloker (NMB) Potansiyalizasyonu: Non-depolarizan NMB’lerin (roküronyum, veküronyum, sisatrakuryum) ED95’ini %25–50 azaltır ve blok süresini uzatır.',
+            'Volatil & N₂O Doğrusal MAC Aditivitesi: İnhalasyon anesteziklerinin spinal immobilite (MAC) etkileri tam aditiftir; örneğin %60 N₂O (~0.58 MAC) eklendiğinde 1.0 toplam MAC için gereken Sevofluran fraksiyonu doğrusal olarak %2.05’ten ~%0.85’e düşer.',
+            'Opioid & α₂-Agonist MAC-Sparing Sinerjisi ve Tavan (Ceiling) Etkisi: Fentanil/Remifentanil ve Deksmedetomidin dorsal boynuz nosiseptif iletimini baskılayarak Sevofluran MAC ve MAC-BAR değerini %25–60 oranında düşürür; ancak opioidler kortikal hipnoz sağlamadığı için MAC düşüşü ~%60–70’te platoya (tavan etkisine) ulaşır — farkındalığı (awareness) önlemek için daima ≥0.5–0.7 MAC (veya BIS 40–60) hipnotik bileşen korunmalıdır.',
+            'Yaş (Mapleson) & Hipotermi Kinetiği: 40 yaşından sonra nöronal sinaps yoğunluğu ve membran akışkanlığı değişimiyle her dekatta MAC ~%6 azalır; ayrıca vücut sıcaklığındaki her 1 °C düşüş hem doku çözünürlüğünü artırarak hem de CMRO₂’yi düşürerek MAC gereksinimini ~%5 azaltır.',
           ],
         }}
         clinicalPearls={[
-          'Pediatrik Emergence Deliryumu (PAED) Yönetimi: Hızlı ağrısız uyanma çocuklarda %10–30 ajitasyon yapar; uyanmadan 10 dk önce 0.3–0.5 mcg/kg IV Deksmedetomidin veya 1 mg/kg Propofol profilaksisi insidansı yarıdan fazla azaltır.',
-          'Compound A Gerçeği vs Kuru Absorban Tehlikesi: Modern KOH/NaOH-free absorbanlarda (Amsorb/Drägersorb Free) Compound A oluşumu sıfırdır; asıl gerçek tehlike kurumuş eski tip absorbanda ekzotermik yanma (>100 °C) ve CO üretimidir.',
-          'Nöromonitörizasyon (MEP) Vakaları: Omurga/kraniyal MEP monitörizasyonunda Sevofluran > 0.5 MAC sinyali siler; bu vakalarda Propofol–Remifentanil TIVA tercih edilir.',
-          'Hipotermi & Yaş Tuzağı: 75 yaşında ve 34.5 °C hipotermik bir hastada 1.0 MAC %2.05 değil ~%1.45’tir; yaş ve ısı düzeltmesi yapılmazsa derin burst suppression ve vazopressör gereksinimi doğar.',
+          'Pediatrik Emergence Deliryumu (PAED) Fizyolojisi & Profilaksisi: Düşük kan/gaz katsayısı (0.65) nedeniyle çocuklarda talamokortikal ağlar kognitif entegrasyon tam kurulmadan hızla uyanır (%10–30 ajitasyon); vaka bitiminden 10 dk önce 0.3–0.5 mcg/kg IV Deksmedetomidin, 1 mcg/kg Fentanil veya 1 mg/kg Propofol verilmesi bu asenkron uyanmayı önler.',
+          'Compound A Efsanesi vs Gerçek Kuru Absorban Tehlikesi: Modern kalsiyum hidroksit bazlı (KOH/NaOH içermeyen; Amsorb Plus / Drägersorb Free) absorbanlarda Compound A ve CO oluşumu pratik olarak sıfırdır ve 0.5 L/dk minimal akım güvenlidir. Asıl ölümcül tehlike, hafta sonu O₂ açık unutulup tamamen kurumuş eski tip KOH/NaOH absorbanla Sevofluranın >100 °C ekzotermik reaksiyona girerek devre yangını ve akciğer hasarı yapmasıdır.',
+          'Omurga / Kraniyal MEP Monitörizasyon Kuralı: Sevofluran >0.5 MAC üzerinde spinal ön boynuz α-motor nöronlarındaki TREK-1 ve Glisin kanallarını güçlü biçimde aktive ederek transkraniyal MEP dalgalarını siler; kritik MEP takibinde Propofol–Remifentanil TIVA’ya geçilmelidir.',
+          'Yaşlı & Hipotermik Hastada Aşırı Doz Tuzağı: 75 yaşında, 34.5 °C hipotermik ve Remifentanil infüzyonu alan bir hastada %2.0 EtSevo vermek gerçekte ~2.2 MAC derinliğine karşılık gelir (derin burst suppression, postoperatif deliryum ve vazoplejik şok riski!).',
         ]}
       />
 

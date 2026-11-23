@@ -357,7 +357,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex flex-wrap items-center gap-2">
-                <span>Farmakokinetik &amp; Farmakodinamik (PK/PD) Özellikleri</span>
+                <span>Farmakokinetik (ADME) Özellikleri</span>
                 <span className="text-xs font-mono tabular-nums text-amber-700 dark:text-amber-400">
                   t½: 1–2 dk · COMT / MAO
                 </span>
@@ -1422,51 +1422,88 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Doza Bağımlı Pan-Adrenerjik Reseptör Profili (β₂ → β₁ → α₁) & Sinyal İletimi',
+          title: 'Hücre Zarı & Moleküler Hedef (Pan-Adrenerjik GPCR Spektrumu: β₂ ≥ β₁ > α₁ / α₂)',
           summary:
-            'Adrenalin (epinefrin) tüm α (α₁, α₂) ve β (β₁, β₂) adrenoseptörlerine yüksek afinite gösteren doğal adrenal medulla hormonudur. Klinik yanıtı, plazma konsantrasyonuna göre değişen reseptör hiyerarşisi belirler (Miller’s / Stoelting’s / AHA ACLS).',
+            'Adrenalin (L-(−)-epinefrin), adrenal medulla kromaffin hücrelerinde feniletanolamin N-metiltransferaz (PNMT) enzimiyle noradrenaline bir N-metil grubu eklenmesiyle sentezlenen endojen nörohormondur. Bu N-metil grubu sayesinde hedef hücre zarlarındaki tüm 7-transmembran (7-TM) adrenerjik GPCR alt tiplerine konsantrasyon-bağımlı afinite hiyerarşisiyle (β₂ [Kd ~0,1–0,3 µM] ≥ β₁ [Kd ~0,3–0,8 µM] > α₁A/B/D & α₂A/B/C [Kd ~1–5 µM]) bağlanan en güçlü non-selektif pan-adrenerjik agonisttir (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman).',
           points: [
-            'Düşük Doz (0.01–0.05 mcg/kg/dk) — β₂ & β₁ Baskın (Gs → Adenilat Siklaz → cAMP↑ → PKA): İskelet kası arteriyollerinde β₂ vazodilatasyon (diyastolik KB ve SVR hafif düşebilir), güçlü bronkodilatasyon, mast hücre stabilizasyonu ve miyokardiyal β₁ inotropi/kronotropi.',
-            'Orta Doz (0.05–0.15 mcg/kg/dk) — Dengeli β₁ + α₁ İnopressör: Kardiyak debi, sistolik basınç ve MAP eşzamanlı yükselir; post-KPB düşük debi ve kardiyojenik şokta optimal bölgedir.',
-            'Yüksek Doz (>0.15 mcg/kg/dk) & ACLS Bolusu (1 mg) — α₁ Baskın (Gq → PLC → IP₃/DAG → Ca²⁺↑): Yaygın arteriyoler/venöz vazokonstriksiyon ile SVR keskin artar; KPR’de aort diyastolik basıncını yükselterek koroner perfüzyon basıncını (CPP) sağlar.',
-            'Anafilakside Eşsiz Mast Hücre Mekanizması: Mast hücresi ve bazofil üzerindeki β₂ reseptörlerini uyararak hücre içi cAMP’yi yükseltir ve histamin, triptaz, lökotrien degranülasyonunu doğrudan durdurur.',
+            'Bronşiyal Düz Kas, Mast Hücresi, İskelet Kası & Hepatosit Zarı (β₂-Adrenoseptör — En Yüksek Afinite): Düşük plazma konsantrasyonlarında (0,01–0,05 mcg/kg/dk) trakeobronşiyal düz kas sarkolemması, doku mast hücreleri/bazofil plazma zarı, iskelet kası yatağı rezistans arteriyolleri, iskelet kası sarkolemması ve hepatosit membranındaki β₂ reseptörlerine yüksek afiniteyle bağlanarak stimülatör Gαs proteinini kenetler.',
+            'Kardiyomiyosit, SA/AV Düğüm & Purkinje Lifleri Sarkolemması (β₁-Adrenoseptör): Sinoatriyal (SA) ve atriyoventriküler (AV) düğüm pacemaker hücreleri, His-Purkinje ileti sistemi ve ventriküler/atriyal kardiyomiyosit sarkolemmasındaki β₁ reseptörlerine (ve ikincil olarak kardiyak β₂ reseptörlerine) bağlanarak Gαs alt birimini aktive eder.',
+            'Sistemik Arteriyoler, Venöz & Mukozal Düz Kas Sarkolemması (α₁A/B/D-Adrenoseptörler — Yüksek Kapasite): Orta (0,05–0,15 mcg/kg/dk) ve yüksek (>0,15 mcg/kg/dk veya 1 mg ACLS bolusu) konsantrasyonlarda kutanöz, mukozal, renal, splanknik arteriyoller ve sistemik kapasitans venlerinin sarkolemmasındaki yüksek kapasiteli α₁ reseptörlerini doyurarak Gαq/11 proteinini aktive eder ve periferik β₂ vazodilatasyonunu tamamen baskılar.',
+            'Pankreas Adacık β-Hücresi, Trombosit & Presinaptik Nöron Zarı (α₂A/B/C-Adrenoseptörler): Pankreas Langerhans adacığı β-hücresi zarındaki α₂A reseptörlerine (Gαi/o) bağlanarak insülin sekresyonunu baskılar; postsinaptik vasküler α₂B reseptörleriyle vazokonstriksiyonu destekler ve trombosit zarındaki α₂A reseptörleriyle agregasyonu kolaylaştırır.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Polar katekolamin yapısı nedeniyle kan-beyin bariyerini anlamlı geçmez; ancak uyanık hastada periferik sempatik uyarım ve β-aracılı tremor/çarpıntı üzerinden belirgin anksiyete, huzursuzluk ve baş ağrısı oluşturabilir.',
-            'KPR sırasında α₁ vazokonstriksiyonu ile serebral perfüzyonu korur; ancak PARAMEDIC2 verileri aşırı yüksek/tekrarlayan bolusların serebral mikrosirkülasyonu bozabileceğini düşündürmektedir.',
-          ],
-          cvs: [
-            'Pozitif İnotropi, Kronotropi, Dromotropi & Batmotropi (β₁): Atım hacmi, kalp hızı, AV iletim hızı ve ektopik odak uyarılabilirliği artar; miyokard oksijen tüketimi (MVO₂) belirgin yükselir.',
-            'Bifazik Kan Basıncı Yanıtı: Düşük dozda sistolik KB artarken β₂ vazodilatasyonla diyastolik KB düşer (nabız basıncı genişler); yüksek dozda α₁ hakimiyetiyle hem sistolik hem diyastolik KB yükselir.',
-          ],
-          respiratory: [
-            'Güçlü β₂ Bronkodilatasyon: Bronş düz kasını hızla gevşeterek anafilaksi ve yaşamı tehdit eden status astmatikusta hava yolu direncini düşürür.',
-            'Lokal α₁ Mukozal Vazokonstriksiyon: Nebülize L-epinefrin subglottik/laringeal mukozal ödemi 10–30 dk içinde azaltır (post-ekstübasyon stridor / krup); ancak 2 saat sonra rebound ödem riski vardır.',
-          ],
-          other: [
-            'β₂-Aracılı Tip-B Laktik Asidoz: İskelet kasında cAMP↑ → Na⁺/K⁺-ATPaz aktivasyonu ve aerobik glikoliz hızlanması sonucu pirüvat/laktat üretimi artar (hipoperfüzyon olmadan laktat 2–5 mmol/L olabilir).',
-            'Hipokalemi & Hiperglisemi: β₂ ile K⁺ hücre içine sürüklenir (0.5–1.0 mEq/L düşüş); hepatik glikojenoliz + pankreatik α₂ insülin inhibisyonu ile hiperglisemi gelişir.',
-            'Renal & Splanknik: Yüksek dozlarda renal arteriyoler vazokonstriksiyon ve splanknik hipoperfüzyon oluşturur.',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Adrenalinin hücre zarındaki β₁/β₂ (Gαs), α₁ (Gαq/11) ve α₂ (Gαi/o) reseptörlerini uyarması; kalp, damar düz kası, hava yolu, mast hücresi ve iskelet kası/karaciğerde dört temel hücre içi biyokimyasal kaskadı tetikler:',
+          points: [
+            'Kardiyomiyosit & SA Düğüm Hücresi İçi (β₁/β₂ → Gαs → AC V/VI → cAMP↑ → PKA → Cav1.2, RyR2, PLB & HCN4): Yükselen cAMP ve PKA; (1) T-tübül L-tipi Ca²⁺ kanallarını (Cav1.2) fosforilleyerek Faz 2 Ca²⁺ girişini (ICa,L) artırır, (2) SR üzerindeki Riyanodin Reseptörü-2’yi (RyR2) fosforilleyerek sistolik Ca²⁺ deşarjını (CICR) ve aktin-miyozin çapraz köprü gücünü (pozitif inotropi) büyütür, (3) Fosfolamban (PLB) fosforilasyonuyla SERCA2a üzerinden diyastolik SR Ca²⁺ geri alımını hızlandırır (pozitif lusitropi), (4) SA düğümde cAMP doğrudan HCN4 (If pacemaker) kanallarını açarak Faz 4 diyastolik depolarizasyon eğimini dikleştirir (pozitif kronotropi) ve AV düğümde ICa,L artışıyla iletimi hızlandırır (pozitif dromotropi).',
+            'Bronşiyal/Vasküler Düz Kas & Mast Hücresi İçi (β₂ → Gαs → cAMP↑ → PKA/Epac → MLCK İnhibisyonu & Degranülasyon Arresti): Bronş ve iskelet kası arteriyol düz kasında PKA, Miyozin Hafif Zincir Kinazı (MLCK) fosforilleyerek Ca²⁺-Kalmodulin afinitesini düşürür, MLCP’yi aktive eder ve sarkolemmal BKCa (Ca²⁺-bağımlı K⁺) kanallarını açıp membranı hiperpolarize ederek hızlı gevşeme (bronkodilatasyon/vazodilatasyon) sağlar. Mast hücresi ve bazofil içinde ise cAMP/PKA artışı, IgE-FcεRI çapraz bağlanmasının tetiklediği PLCγ/Ca²⁺ akışını ve SNARE-bağımlı granül ekzositozunu bloke ederek histamin, triptaz, lökotrien-C₄ ve PGD₂ salınımını hücresel düzeyde durdurur.',
+            'Vasküler Düz Kas Hücresi İçi Yüksek Doz Kaskadı (α₁ → Gαq/11 → PLC-β → IP₃/DAG → SR IP₃R Ca²⁺ & RhoA/ROCK): PLC-β membran PIP₂’sini IP₃ ve DAG’a ayırır. IP₃ sarkoplazmik retikulum IP₃R kanallarından sitozole Ca²⁺ boşaltır → Ca²⁺-Kalmodulin → MLCK aktivasyonu → MLC₂₀ fosforilasyonu (fazik vazokonstriksiyon); eşzamanlı DAG/PKC/CPI-17 ve RhoA/Rho-Kinaz (ROCK) yolağı Miyozin Fosfatazı (MLCP) inhibe ederek Ca²⁺ duyarlılaşması ve güçlü tonik kasılma üretir.',
+            'İskelet Kası & Hepatosit İçi Metabolik Kaskad (β₂ → cAMP/PKA → Glikojen Fosforilaz Kinaz & Na⁺/K⁺-ATPaz → Tip-B Laktat & K⁺ Şifti): İskelet kası ve karaciğerde PKA, Glikojen Fosforilaz Kinazı fosforilleyerek Glikojen Fosforilaz-b’yi aktif "a" formuna çevirir (hızlı glikojenoliz). Eşzamanlı olarak sarkolemmal 3Na⁺/2K⁺-ATPaz pompasının PKA aracılı aşırı aktivasyonu, bir yandan ekstraselüler K⁺ iyonlarını hızla hücre içine çekerek hipokalemi yaparken, diğer yandan ürettiği ADP ile fosfofruktokinaz-1 (PFK-1) üzerinden aerobik glikolizi aşırı hızlandırır → mitokondriyal pirüvat dehidrogenaz (PDH) kapasitesini aşan pirüvat, Laktat Dehidrogenaz (LDH) ile doku hipoksisi olmaksızın L-laktata dönüşür (Tip-B hiperlaktatemi).',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Miyokard Dokusu, İleti Sistemi & Koroner Yatak → Kalp & Resüsitasyon Fizyolojisi',
+            tissueTarget: 'Ventrikül Miyokardı · SA/AV/Purkinje · Aort Kökü & Koronerler',
+            accent: 'rose',
+            points: [
+              'Güçlü İnotropi, Kronotropi & Kardiyak Debi (CO): Tüm doz aralıklarında atım hacmini (SV), dP/dt(max)’ı ve kalp hızını artırarak kardiyak indeks (CI) artışında en potent katekolamindir; ancak hücre içi Ca²⁺ yükü ve taşikardi nedeniyle miyokard oksijen tüketimini (MVO₂) dramatik artırır.',
+              'Kardiyak Arrestte (ACLS) Koroner Perfüzyon Basıncı (CPP = AoDBP − RAP): Arrest sırasında kalp masajı yapılırken 1 mg IV adrenalin bolusu, periferik vasküler yatakta güçlü α₁ kasılmasıyla kanı santral kompartmana yönlendirir ve aort diyastolik basıncını (AoDBP > 25–30 mmHg) yükselterek ROSC (spontan dolaşımın geri dönüşü) için şart olan miyokardiyal koroner kan akımını sağlar (PARAMEDIC2).',
+              'Batmotropi & Aritmojenite: Purkinje liflerinde Faz 4 spontan depolarizasyonu hızlandırır, aksiyon potansiyeli süresini kısaltır ve SR’den diastolik RyR2 Ca²⁺ sızıntısıyla gecikmiş ard-depolarizasyonlar (DAD) üreterek sinüs taşikardisi, AF, multifokal VEA, VT ve VF eşiğini düşürür.',
+            ],
+          },
+          {
+            systemTitle: 'Sistemik Arteriyoler, İskelet Kası & Splanknik Vasküler Doku → Bifazik Dolaşım',
+            tissueTarget: 'İskelet Kası Arteriyolü (β₂) · Kutanöz/Mezenterik/Renal Yatak (α₁)',
+            accent: 'amber',
+            points: [
+              'Doz-Bağımlı Bifazik SVR & Nabız Basıncı Yanıtı: Düşük dozda (0,01–0,05 mcg/kg/dk) iskelet kası arteriyollerindeki yüksek afiniteli β₂ vazodilatasyon baskın olduğundan diyastolik kan basıncı (DBP) ve SVR hafif düşer, sistolik basınç (β₁ SV↑) yükselir ve nabız basıncı genişler; >0,10–0,15 mcg/kg/dk üzerinde ise yaygın α₁ kasılmasıyla hem SBP hem DBP ve MAP keskin yükselir.',
+              'Lokal Hemostaz & Lokal Anestezik (LA) Emilim Geciktirmesi (1:200.000 = 5 mcg/mL): Subkutan, mukozal ve epidural/perinöral dokudaki vaza nervorum ve kapiller yatakta α₁ vazokonstriksiyon yaparak cerrahi saha kanamasını azaltır, lokal anesteziklerin sistemik dolaşıma geçiş pikini (Cmax) düşürür ve nöronal blok süresini uzatır.',
+              'Splanknik & Renal Mikrodolaşım Redistribüsyonu: Yüksek doz infüzyonda (>0,15–0,20 mcg/kg/dk) mezenterik ve renal arteriyoler α₁ vazokonstriksiyonu kan akımını kalp ve iskelet kasına yönlendirirken bağırsak mukozası perfüzyonunu ve GFR’yi geçici olarak azaltır.',
+            ],
+          },
+          {
+            systemTitle: 'Trakeobronşiyal Düz Kas, Laringeal Mukoza & Mast Hücre Dokusu → Solunum & İmmün',
+            tissueTarget: 'Bronş Düz Kası (β₂) · Subglottik Mukoza (α₁) · Mast Hücresi',
+            accent: 'teal',
+            points: [
+              'Anafilakside Fizyolojik Antidot Üçlüsü: (1) Mast hücresi ve bazofil β₂-cAMP uyarımıyla medyatör (histamin/triptaz/lökotrien) salınımını kaynağında durdurur, (2) Bronş düz kasında hızlı β₂ gevşemeyle akut bronkospazmı çözer, (3) α₁ vazokonstriksiyonla üst hava yolu mukozal ödemini ve vasküler permeabilite artışını (endotelyal VE-cadherin stabilizasyonu) tersine çevirir.',
+              'Subglottik / Laringeal Mukoza & Nebülize Etki: İnhale/nebülize L-epinefrin (0,5 mL/kg 1:1.000, maks 5 mL) post-ekstübasyon stridor ve ağır krupta laringotrakeal mukoza venüllerinde lokal α₁ vazokonstriksiyon yaparak 10–30 dakikada ödemi indirir ve hava yolu çapını genişletir.',
+              'Pulmoner Vasküler & Bronşiyal Sekresyon Etkisi: Bronşiyal bez sekresyonlarını azaltır, mukosiliyer klirensi hızlandırır; ancak çok yüksek IV boluslarda (ör. LAST arrestinde 1 mg bolus) sistemik kanın pulmoner yatağa ani şifti ve pulmoner venokonstrüksiyonla nörojenik/hidrostatik pulmoner ödem tetikleyebilir.',
+            ],
+          },
+          {
+            systemTitle: 'İskelet Kası, Karaciğer, Pankreas & Serebral Mikrodolaşım → Metabolizma & SSS',
+            tissueTarget: 'İskelet Kası Sarkolemması · Hepatosit · Pankreas Adacığı · KBB',
+            accent: 'indigo',
+            points: [
+              'Tip-B Hiperlaktatemi & Glisemik Fırtına (CATS Çalışması Bulgusu): İskelet kasında β₂-aracılı aerobik glikolizle doku hipoperfüzyonu olmadan plazma laktatı 2–6 mmol/L yükselir (4–6 saatte pik yapıp 12–24 saatte spontan geriler). Karaciğerde β₂/α₁ glikojenoliz + glukoneogenez, yağ dokusunda β₃ lipoliz ve pankreas β-hücresinde α₂A aracılı insülin baskılanmasıyla belirgin hiperglisemi gelişir.',
+              'Transselüler Potasyum (K⁺) Şifti: İskelet kası sarkolemmasındaki Na⁺/K⁺-ATPaz pompasının β₂ uyarımıyla ekstraselüler K⁺ hızla hücre içine çekilir; serum K⁺ düzeyi 0,5–1,0 mEq/L düşerek ventriküler aritmi eşiğini tehlikeli biçimde azaltır.',
+              'Kan-Beyin Bariyeri (KBB) & Serebral Mikrodolaşım: Polar yapısı nedeniyle sağlam KBB’yi geçmez (uyanık hastadaki tremor, çarpıntı ve ölüm korkusu/anksiyete periferik β₂ kas iğciği ve kardiyak aferent uyarım kaynaklıdır). KPR sırasında büyük serebral arter perfüzyon basıncını yükseltir, ancak tekrarlayan yüksek dozlar kortikal kapiller yatakta α₁ mikrovasküler daralma yapabilir.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, "Epinefrin Reversal", LAST Toksisite Etkileşimi & Asidoz Direnci',
           summary:
-            'Adrenalin acil resüsitasyonda vazgeçilmez olmakla birlikte, reseptör duyarsızlaşması, asidoz direnci ve β-bloker/LAST etkileşimleri kritik farmakodinamik sınırlardır.',
+            'Adrenalinin pan-adrenerjik doğası; reseptör blokajı, lokal anestezik toksisitesi (LAST) ve ağır asidemi varlığında hemodinamik yanıtın yönünü tamamen değiştiren benzersiz farmakodinamik etkileşimler yaratır.',
           points: [
-            'Şiddetli Asidoz (pH < 7.15) & Reseptör Desensitizasyonu: Asidemi adrenerjik reseptör konformasyonunu ve Gs sinyal iletimini bozarak katekolamin yanıtını köreltir; ventilasyon ve asit-baz düzeltilmeden doz tırmandırmak aritmi riskini artırır.',
-            'Non-Selektif β-Blokerlerde "Epinefrin Reversal" / Karşılanmamış α₁ Krizi & Glukagon Kurtarması: Propranolol gibi non-selektif β-bloker alan hastada adrenalinin β₂ vazodilatasyonu bloke olduğundan α₁ vazokonstriksiyonu şiddetli hipertansiyon ve refleks bradikardi yapar; anafilakside β-bloker direncinde β-reseptörünü baypas ederek doğrudan adenilat siklazı uyaran Glukagon (1–5 mg IV) eklenir.',
-            'LAST (Lokal Anestezik Toksisitesi) Antagonizması: Bupivakain/ropivakain arrestinde standart 1 mg adrenalin %20 İntralipid resüsitasyonunu bozar, pulmoner ödem ve refrakter VF tetikler → ASRA 2020 kuralı: ≤ 1 mcg/kg modifiye bolus.',
+            'Non-Selektif β-Bloker Varlığında "Karşılanmamış (Unopposed) α₁ Krizi" & Glukagon Baypası: Propranolol/Karvedilol gibi non-selektif β-bloker alan hastada adrenalinin vazodilatör β₂ ve inotropik β₁ reseptörleri bloke olduğundan, tüm moleküller α₁ reseptörlerine yüklenir → şiddetli malign hipertansiyon, aşırı afterload nedeniyle akut sol kalp yetmezliği ve baroreseptör aracılı derin vagal bradikardi/AV blok gelişir. Anafilakside β-bloker direncinde, β₁ reseptörünü tamamen baypas edip kendi GPCR’si üzerinden kardiyak Gαs → AC → cAMP üreten Glukagon (1–5 mg IV) kullanılır.',
+            'Fenotiyazin / α₁-Bloker Varlığında "Dale’in Epinefrin Reversal Fenomeni": Klorpromazin, ketiapin, risperidon veya fentolamin/doksazosin gibi güçlü α₁-antagonist etkisi olan ilaçlarla zehirlenmiş hastada adrenalinin α₁ vazokonstriksiyonu bloke olurken β₂ vazodilatasyonu serbest kalır → adrenalin verildiğinde kan basıncı yükselmek yerine paradoksal olarak DAHA DA DÜŞER (bu hastalarda saf α₁/β₁ etkili Noradrenalin veya Vazopressin tercih edilir!).',
+            'LAST (Lokal Anestezik Sistemik Toksisitesi) & %20 İntralipid Antagonizması (ASRA 2020): Bupivakain ile bloke olmuş kardiyak Nav1.5 ve mitokondriyal karnitin-açilkarnitin translokaz varlığında standart 1 mg (10–15 mcg/kg) adrenalin; aşırı α₁ afterload artışı, şiddetli pulmoner ödem, refrakter ventriküler fibrilasyon yapar ve lipid emülsiyonunun ("lipid sink/shuttle") bupivakaini miyokarddan temizleme kinetiğini bozar → LAST arrestinde tek doz tavanı ≤ 1 mcg/kg (maks 100 mcg) ile sınırlandırılmıştır.',
+            'Ağır Asidemi (pH < 7,15) & GRK/β-Arrestin Desensitizasyonu: Ekstraselüler [H⁺] artışı GPCR bağlanma afinitesini ve adenilat siklaz katalitik hızını %50’den fazla düşürür; uzamış yüksek doz infüzyonda ise GRK2 fosforilasyonu ile β₁/β₂ reseptörleri dakikalar-saatler içinde internalize olur.',
           ],
         }}
         clinicalPearls={[
-          'Tip-B Laktat vs Gerçek Şok Ayrımı: Adrenalin infüzyonu başlandıktan sonra yükselen laktat tek başına "şok kötüleşiyor" demek değildir; ScvO₂, veno-arteriyel PCO₂ farkı, kapiller dolum ve idrar çıkışı ile değerlendirin.',
-          'Hipokalemi Aritmi Tuzağı: Adrenalin infüzyonunda potasyum hızla hücre içine kayar; K⁺ < 3.5 mEq/L iken yüksek doz epinefrin malign VT/VF eşiğini dramatik biçimde düşürür.',
-          'Anafilakside IM Vastus Lateralis vs Deltoid/SC: Orta-dış uyluk (M. vastus lateralis) derin IM enjeksiyonu, subkutan veya deltoid enjeksiyona göre pik plazma konsantrasyonuna ~4 kat daha hızlı ulaşır.',
-          'Epidural Test Dozu (15 mcg): Beta-bloker alan hastalarda KTA artışı (+10/dk) maskelenebilir; bu hastalarda SKB artışı (≥ +15 mmHg) ve T-dalgası amplitüd değişimi daha güvenilir intravasküler göstergedir.',
+          'Tip-B Laktat vs Gerçek Hipoperfüzyon (Tip-A) Ayrımı: Adrenalin infüzyonu başlandıktan sonra laktatın 2–5 mmol/L’ye çıkması β₂-Na⁺/K⁺-ATPaz glikolizinin beklenen fizyolojik sonucudur ("yalancı laktat"); eğer MAP ≥ 65 mmHg, ScvO₂ > %70, P(v-a)CO₂ < 6 mmHg, kapiller dolum < 3 sn ve idrar çıkışı iyiyse bu artış şokun kötüleştiğini göstermez.',
+          'Anafilakside Neden Noradrenalin Değil, Mutlak Adrenalin? Noradrenalinin β₂ afinitesi ihmal edilebilir düzeydedir; bu yüzden mast hücresi degranülasyonunu (β₂→cAMP↑) durduramaz ve bronkospazmı çözemez. Anafilakside orta-dış uyluk (M. vastus lateralis) derin IM enjeksiyonu, deltoid veya subkutan dokuya göre ~4 kat yüksek ve hızlı (8 dk) pik plazma konsantrasyonu sağlar.',
+          'Hipokalemi Aritmi Tuzağı: Sürekli adrenalin infüzyonu K⁺’u iskelet kası içine sürükler; seri kan gazında K⁺ ≥ 4,0 mEq/L ve Mg²⁺ ≥ 2,0 mg/dL tutulmadan doz tırmandırmak malign VT/VF riskini katlar.',
+          'Epidural Test Dozu (3 mL 1:200.000 = 15 mcg Adrenalin): İntravasküler kaçışta 20–40 saniye içinde β₁ uyarımıyla KTA ≥ +10–15 atım/dk artış yapar; ancak β-bloker alan, ileri yaşlı veya genel anestezi/yüksek opioid altındaki hastalarda KTA yanıtı köreleceğinden SKB ≥ +15 mmHg artışı veya EKG’de T dalgası amplitüd değişimi izlenmelidir.',
         ]}
       />
 

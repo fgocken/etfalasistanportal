@@ -118,7 +118,7 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
         isDark={isDark}
         items={[
           { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
-          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
           { id: 'sec-pkpd', label: 'Farmakokinetik' },
           { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
           { id: 'sec-endikasyon', label: 'Endikasyonlar' },
@@ -159,7 +159,7 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 1. BAŞLIK & FARMAKOLOJİK KATEGORİ (#sec-ozet)                        */}
+      {/* 1. BAŞLIK, FARMAKOLOJİK KATEGORİ & YATAK BAŞI ETKİ MEKANİZMASI      */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-ozet"
@@ -209,6 +209,66 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
                 ].join('\n')
               }
             />
+          </div>
+        </div>
+
+        {/* Yatak Başı Klinik Etki Mekanizması & Doz-Bağımlı 3 Reseptör Spektrumu (#sec-etki) */}
+        <div id="sec-etki" className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-teal-950/20 border-teal-900/50 text-teal-200' : 'bg-teal-50/70 border-teal-200 text-teal-950'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-1.5 font-bold text-sm text-teal-600 dark:text-teal-400">
+              <span className="flex items-center gap-1.5">
+                <Activity className="w-4 h-4 shrink-0" />
+                <span>D₁ / D₂ Dopaminerjik Faz</span>
+              </span>
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-teal-500/15">1 – 3 mcg/kg/dk</span>
+            </div>
+            <p className="text-xs leading-relaxed">
+              Renal, mezenterik ve koroner yatakta D₁ aracılı vazodilatasyon ve proksimal tübülde natriürez.{' '}
+              <strong>Dikkat (ANZICS 2000 &amp; KDIGO):</strong> GFR, RRT ihtiyacı veya sağkalımı iyileştirmez;
+              &quot;böbrek koruyucu doz&quot; olarak <strong>önerilmez (Sınıf III)</strong>.
+            </p>
+          </div>
+
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-amber-950/20 border-amber-900/50 text-amber-200' : 'bg-amber-50/70 border-amber-200 text-amber-950'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-1.5 font-bold text-sm text-amber-600 dark:text-amber-400">
+              <span className="flex items-center gap-1.5">
+                <HeartPulse className="w-4 h-4 shrink-0" />
+                <span>β₁-Adrenerjik İnotrop / Kronotrop</span>
+              </span>
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-amber-500/15">3 – 10 mcg/kg/dk</span>
+            </div>
+            <p className="text-xs leading-relaxed">
+              Doğrudan postsinaptik β₁ uyarımı + sempatik sinir uçlarından <strong>endojen noradrenalin salınımı</strong>.
+              Sinoatriyal düğüm hızı (HR↑), miyokard kontraktilitesi (SV↑) ve Kardiyak Debi (CO↑) artar; atropine yanıtsız
+              semptomatik bradikardide temel terapötik penceredir.
+            </p>
+          </div>
+
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-200' : 'bg-rose-50/70 border-rose-200 text-rose-950'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-1.5 font-bold text-sm text-rose-600 dark:text-rose-400">
+              <span className="flex items-center gap-1.5">
+                <Zap className="w-4 h-4 shrink-0" />
+                <span>α₁-Adrenerjik Baskın Vazopresör</span>
+              </span>
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-rose-500/15">10 – 20 mcg/kg/dk</span>
+            </div>
+            <p className="text-xs leading-relaxed">
+              Vasküler düz kasta α₁ reseptör uyarımı baskın hale geçer: Sistemik Vasküler Direnç (SVR↑), MAP↑ ve PCWP↑.
+              Renal/mezenterik D₁ vazodilatasyonunu maskeler; belirgin sinüs taşikardisi, AF/VT aritmi ve splanknik iskemi
+              riski taşır (&gt;20 mcg/kg/dk yerine Noradrenaline geçilir).
+            </p>
           </div>
         </div>
       </section>

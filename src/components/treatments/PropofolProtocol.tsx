@@ -1757,54 +1757,88 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'GABA-A β-Alt Birim Allosterik Modülasyonu, Direkt Agonizm & İyon Kanal Etkileri',
+          title: 'Hücre Zarı & Moleküler Hedef (GABA-A β₂/β₃ Transmembran Bağlanma Oyuğu [TM2–TM3 M286/N265], Direkt Kanal Açılımı & HCN1/Glisin Modülasyonu)',
           summary:
-            'Propofol (2,6-diizopropilfenol) yüksek lipofilik yapısı sayesinde 1 kol-beyin dolaşım süresinde (30–45 sn) kan-beyin bariyerini geçer. Esas etkisini pentamerik GABA-A reseptörlerinin β-alt birimlerine (özellikle β₂ ve β₃) bağlanarak gösterir.',
+            'Propofol (2,6-diizopropilfenol), yüksek lipofilik yapısı (logP ~3,8) sayesinde tek bir kol-beyin dolaşım süresinde (30–45 sn) kan-beyin bariyerini geçer ve nöronal postsinaptik zara yerleşir. Pentamerik ligand-kapılı iyon kanalı süper ailesinden GABA-A reseptörlerinin β₂ ve β₃ alt birimlerinin transmembran (TM2–TM3) hidrofobik oyuğuna (özellikle β₃-N265 ve β₂-M286 amino asit rezidülerine) bağlanarak hem pozitif allosterik modülasyon hem de yüksek konsantrasyonlarda direkt kanal açılımı (agonizm) üretir (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman 14th Ed.).',
           points: [
-            'Pozitif Allosterik Modülasyon (β₂/β₃): Benzodiazepinlerin aksine α/γ ara yüzüne değil β-alt birimine bağlanır; GABA’nın reseptörden ayrılma hızını yavaşlatarak Cl⁻ kanalının AÇIK KALMA SÜRESİNİ uzatır ve nöronu hiperpolarize eder.',
-            'Yüksek Dozda Direkt GABA-A Agonizmi: Terapötik yüksek plazma düzeylerinde endojen GABA yokluğunda dahi Cl⁻ kanalını doğrudan açabilir (bu nedenle benzodiazepinlerdeki tavan etkisini göstermez ve EEG izoelektrik sessizliği oluşturabilir).',
-            'Ek Moleküler Hedefler: Kortikal NMDA reseptörlerini zayıfça inhibe eder, talamokortikal HCN1 (hiperpolarizasyonla aktive katyon) kanallarını bloke eder ve spinal glisin reseptörlerini potansiyalize eder.',
-            'İntrinsik Analjezi Yoktur: Spinal/supraspinal nosiseptif iletimi kesmez; cerrahi uyarana otonomik yanıtı baskılamak için opioid/rejyonel blok gerektirir.',
+            'Postsinaptik GABA-A β₂ / β₃ Transmembran Kaviteleri (TM2–TM3 M286 / N265 Rezidüleri): Benzodiazepinlerin bağlandığı ekstraselüler α/γ₂ arayüzünden tamamen farklı olarak, lipid çift tabaka içindeki β⁺/α⁻ transmembran alt birim arayüzüne bağlanır; β₃-N265 mutasyonu propofolün immobilizasyon/genel anestezik etkisini, β₂-N265 mutasyonu ise sedatif etkisini ortadan kaldırır.',
+            'Pozitif Allosterik Modülasyon vs Yüksek Konsantrasyonda Direkt Gating (Agonizm): Düşük-orta klinik konsantrasyonlarda (Ce 1–3 mcg/mL) endojen GABA’nın reseptörden ayrışma hızını (koff) yavaşlatarak kanalın açık kalma süresini uzatır; yüksek indüksiyon/status epileptikus konsantrasyonlarında (Ce > 4–6 mcg/mL) ise ortamda endojen GABA olmasa dahi Cl⁻ kanal porunu doğrudan açar (bu sayede benzodiazepinlerin aksine fizyolojik tavan etkisi yoktur ve izoelektrik EEG üretebilir).',
+            'Talamokortikal HCN1 Kanalları, Spinal Glisin & Kortikal NMDA Reseptörleri: Piramidal ve talamokortikal pacemaker nöron membranındaki Hiperpolarizasyonla Aktive Siklik Nükleotid-Kapılı (HCN1) katyon kanallarını inhibe ederek (Ih akımını keserek) kortikal uyarılabilirliği baskılar; spinal arka boynuz ve beyin sapındaki inhibitör Glisin reseptörlerini (GlyR α₁) potansiyalize eder ve NMDA glutamat reseptörlerini zayıfça inhibe eder.',
+            'Vasküler Düz Kas, Kardiyomiyosit & Area Postrema Membran Hedefleri: Damar düz kası ve kardiyomiyosit sarkolemmasında L-tipi voltaj kapılı Ca²⁺ kanallarını (Cav1.2) doğrudan inhibe eder; kemoreseptör tetik bölgesi (CTZ / Area Postrema) membranında 5-HT₃ ve D₂ reseptör sinyalini baskılayarak intrinsik antiemetik etki gösterir. Nosiseptif ağrı yolaklarında analjezik reseptör hedefi YOKTUR.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Hipnoz & EEG/BIS: Doza bağımlı bilinç kaybı ve anterograd amnezi sağlar. EEG’de düşük dozda β aktivasyonu, orta dozda frontal α–δ koheransı (BIS 40–60), yüksek dozda burst-supresyon ve izoelektrik hat oluşturur.',
-            'Serebral Hemodinami: CMRO₂ (%36’ya kadar) ve CBF’yi paralel azaltır; serebral otoregülasyon ve CO₂ reaktivitesi korunur, ICP düşer (ancak MAP düşüşü CPP’yi tehdit edebilir).',
-            'Antikonvülzan & Antiemetik Etki: GABAerjik güçlenme ile refrakter status epileptikusu baskılar (ancak indüksiyonda nadir subkortikal miyoklonus görülebilir). Subhipnotik dozlarda area postrema/5-HT₃ modülasyonu ile güçlü antiemetik etki gösterir.',
-          ],
-          cvs: [
-            'Vazodilatasyon (SVR ↓) & Venodilatasyon (Preload ↓): Santral sempatik vazokonstriktör tonusu baskılar ve endotel bağımlı/bağımsız düz kas gevşemesi yaparak arteriyel ve venöz dilatasyon oluşturur; MAP %25–40 düşebilir.',
-            'Barorefleks Körelmesi & Vagotoni: Baroreseptör refleks yanıtını sıfırladığı için hipotansiyona refleks taşikardi eşlik etmez; santral vagal baskınlık nedeniyle (özellikle remifentanil/fentanil ile) ciddi bradikardi ve asistoli gelişebilir.',
-            'Miyokard Kontraktilitesi: Doza bağımlı direkt negatif inotropik etki (intraselüler Ca²⁺ akışı azalması); hipovolemik, yaşlı veya düşük EF’li hastalarda belirgindir.',
-          ],
-          respiratory: [
-            'Medüller Solunum Depresyonu & Apne: İndüksiyon bolusunun ardından %50–80 hastada 30–60 sn apne gelişir; tidal volüm ve solunum sayısı düşer, CO₂ yanıt eğrisi sağa kayar ve hipoksik ventilatuvar yanıt (karotid cisim) baskılanır.',
-            'Havayolu Refleksleri & Bronkodilatasyon: Faringeal ve laringeal refleksleri tiyopental/etomidattan daha güçlü baskılar (LMA yerleşimi için idealdir); hafif bronkodilatör etkilidir ve hipoksik pulmoner vazokonstriksiyonu (HPV) korumaya meyillidir.',
-          ],
-          other: [
-            'Malign Hipertermi tetiklemez (MH-güvenli TIVA ajanı)',
-            'Adrenal steroidogenezi baskılamaz (etomidatın aksine)',
-            'LCT/MCT emülsiyonu nedeniyle 1.1 kcal/mL lipid yükü ve hipertrigliseridemi riski',
-            'İnaktif fenol-kinol metabolitleri benign yeşil idrar yapabilir',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Membran reseptör ve kanal etkileşimleri; santral nöronlarda Cl⁻ akımı kaynaklı elektrofizyolojik şant inhibisyonu, vasküler/miyokardiyal hücrelerde sitozolik Ca²⁺ düşüşü ve yüksek doz uzamış maruziyette (PRIS) mitokondriyal yağ asidi oksidasyonu ile elektron transport zinciri blokajını tetikler:',
+          points: [
+            'Nöron İçi Cl⁻ Akımı (ICl), Membran Hiperpolarizasyonu & Şant İnhibisyonu: GABA-A kanal porunun açık kalma süresinin (mean open time) 3–5 kat uzamasıyla hücre içine masif Cl⁻ iyon akışı (ICl) gerçekleşir. Postsinaptik membran potansiyeli dinlenim değerinden (−65 mV) klorür denge potansiyeline (−70 ila −75 mV) hiperpolarize olur; membran direnci (Rm) düşerek eksitatör postsinaptik potansiyellerin (EPSP) aksiyon potansiyeli eşiğine ulaşmasını engelleyen "elektriksel şant inhibisyonu" gelişir.',
+            'Vasküler Düz Kas & Endotel Hücresi İçi ([Ca²⁺]i Düşüşü & eNOS/NO-PGI₂ Salınımı): Vasküler düz kas hücresinde sarkolemmal L-tipi Ca²⁺ (Cav1.2) kanallarının blokajı ve sarkoplazmik retikulumdan IP₃-aracılı Ca²⁺ salınımının baskılanmasıyla sitozolik [Ca²⁺]i düşer, MLCK aktivitesi azalır. Eşzamanlı olarak vasküler endotelde endotelyal Nitrik Oksit Sentaz (eNOS) uyarımıyla NO ve prostasiklin (PGI₂) salınımı artarak düz kas içinde Guanilat Siklaz → cGMP → PKG kaskadını aktive eder (çift mekanizmalı vazodilatasyon).',
+            'Kardiyomiyosit İçi Ca²⁺ Dinamiği & PRIS’te Sodyum/Kalsiyum Kanal Blokajı: Kardiyomiyositlerde transsarkolemmal L-tipi Ca²⁺ akımını (ICa,L), SR Ca²⁺ yükünü ve miofibriler Ca²⁺ duyarlılığını doz-bağımlı azaltır; toksik/PRIS konsantrasyonlarında ise kardiyak Nav1.5 hızlı Na⁺ kanallarını ve Cav1.2’yi bloke ederek sağ ventrikül çıkış yolunda (RVOT) transmural repolarizasyon dispersiyonu ve V1–V3’te "coved-type" Brugada EKG paterni üretir.',
+            'Mitokondriyal Biyoenerjetik Toksisite Kaskadı (PRIS Mekanizması — CPT-1 & Kompleks I/II/IV İnhibisyonu): Yüksek doz (>4 mg/kg/saat) ve uzun süreli (>48 saat) infüzyonda serbest propofol ve lipid yükü; dış mitokondri zarındaki Karnitin Palmitoiltransferaz-1 (CPT-1) enzimini inhibe ederek uzun zincirli serbest yağ asitlerinin (FFA) mitokondri matriksine girişini (β-oksidasyonu) durdurur, aynı zamanda iç mitokondri zarında Koenzim Q’yu (Ubikinon) bozarak Elektron Transport Zinciri Kompleks I, II ve IV’ü bloke eder → sitozolde toksik açilkarnitin/FFA birikimi, oksidatif fosforilasyonun çöküşü, ağır ATP tükenmesi, anaerobik laktik asidoz ve iskelet/kalp kasında lizozomal/sarkolemmal yıkım (rabdomiyoliz) meydana gelir.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Talamokortikal Ağ, Serebral Vasküler Yatak & Area Postrema → SSS & EEG Fizyolojisi',
+            tissueTarget: 'Piramidal Korteks · Talamus · Serebral Arteriyol · CTZ',
+            accent: 'indigo',
+            points: [
+              'Talamokortikal Senkronizasyon & EEG/BIS Spektrumu: Kortikal GABAerjik internöronların ve talamik retiküler çekirdeğin (TRN) potansiyalizasyonuyla düşük dozda paradoksal β (13–25 Hz) aktivasyonu, cerrahi anestezi dozunda (BIS 40–60) karakteristik frontal α (8–12 Hz) ve yavaş δ (0,5–4 Hz) faz-genlik koheransı, yüksek dozda (status epileptikus) ise burst-supresyon ve tam izoelektrik kortikal sessizlik oluşur.',
+              'Serebral Metabolizma-Akım Eşleşmesi (CMRO₂-CBF Coupling) & ICP: Nöronal sinaptik aktivitenin durmasıyla Serebral Oksijen Tüketimi (CMRO₂) %30–40 düşer; metabolik otoregülasyon korunduğu için paralel serebral vazokonstriksiyon gelişerek Serebral Kan Akımı (CBF) ve Kafa İçi Basıncı (ICP) azalır (ancak sistemik MAP düşüşü aşırı olursa Serebral Perfüzyon Basıncı [CPP = MAP − ICP] bozulabilir).',
+              'Antikonvülzan & İntrinsik Antiemetik Doku Etkisi: Hipokampal ve neokortikal odaklarda GABA-A/glisin aracılı hiperpolarizasyon refrakter status epileptikusu durdururken, subhipnotik plazma düzeyleri (10–20 mg bolus veya TIVA) Area Postrema (CTZ) ve nucleus tractus solitarius’ta 5-HT₃/D₂ deşarjını baskılayarak güçlü postoperatif bulantı-kusma (PONV) koruması sağlar.',
+            ],
+          },
+          {
+            systemTitle: 'Damar Düz Kası, Baroreseptör Arkı & Miyokard Dokusu → Kardiyovasküler Fizyoloji',
+            tissueTarget: 'Arteriyol / Venül Düz Kası · Karotid Sinüs · SA/AV Düğüm',
+            accent: 'rose',
+            points: [
+              'Arteriyoler Vazodilatasyon (SVR ↓) & Venöz Kapasitans Artışı (Preload ↓): Rostral ventrolateral medullada (RVLM) santral sempatik vazomotor çıkışın baskılanması ve vasküler düz kasta Cav1.2/NO aracılı gevşeme sonucu hem arteriyoler direnç (SVR %20–35 ↓) hem de splanknik/sistemik venöz dönüş (preload ve LVEDP ↓) düşer; indüksiyon sonrası MAP %25–40 azalabilir.',
+              'Baroreseptör Refleks Sıfırlanması (Resetting) & Santral Vagotoni: Karotid sinüs ve aortik ark baroreseptör refleks arkını santral nucleus tractus solitarius düzeyinde köreltir; bu nedenle derin hipotansiyona kompanzatuvar refleks taşikardi EŞLİK ETMEZ. Aksine vagal tonus baskınlığı (özellikle remifentanil/fentanil veya roküronyum ile) SA/AV düğümü yavaşlatarak derin sinüs bradikardisi, kavşak ritmi ve asistoli tetikleyebilir.',
+              'Miyokard Kontraktilitesi & Oksijen Dengesi: Sarkolemmal Ca²⁺ girişinin azalmasıyla doz-bağımlı direkt negatif inotropi oluşturur (sağlıklı gençte hafif, hipovolemik/yaşlı veya EF <%35 kalp yetmezliğinde belirgin); öte yandan afterload, preload ve kalp hızı azaldığı için koroner perfüzyon basıncı korunduğu sürece miyokard O₂ tüketimini (MVO₂) düşürür.',
+            ],
+          },
+          {
+            systemTitle: 'Medüller Solunum Merkezi, Faringeal Kaslar & Bronş Düz Kası → Solunum Fizyolojisi',
+            tissueTarget: 'Pre-Bötzinger Kompleksi · Genioglossus · Bronş Düz Kası',
+            accent: 'teal',
+            points: [
+              'Pre-Bötzinger Solunum Merkezi & CO₂/Hipoksi Yanıtı: Medüller solunum ritim jeneratöründeki GABAerjik inhibisyonla tidal volüm ve solunum frekansı düşer, PaCO₂–ventilasyon yanıt eğrisi sağa kayar ve eğimi azalır; ayrıca karotid cisimcik Tip-I glomus hücrelerini baskılayarak hipoksik ventilatuar dürtüyü köreltir. İndüksiyon bolusunun ardından %50–80 hastada 30–90 sn santral apne gelişir.',
+              'Faringeal/Laringeal Refleks Baskılanması & Üst Havayolu Kollapsı: Hipoglossal ve vagal motor çekirdeklerin inhibisyonuyla genioglossus tonusu azalır (sedasyonda dil kökü obstrüksiyonu); buna karşılık laringeal ve faringeal koruyucu refleksleri tiyopental, etomidat ve ketaminden çok daha güçlü baskıladığı için kas gevşetici olmadan Laringeal Maske (LMA) yerleştirilmesinde altın standarttır.',
+              'Bronş Düz Kası & Pulmoner Vasküler Yatak: Vagal bronkokonstriktör refleksleri ve bronş düz kası hücre içi Ca²⁺ artışını baskılayarak hafif-orta bronkodilatasyon sağlar (astım/KOAH indüksiyonunda güvenli) ve volatil anesteziklerin aksine Hipoksik Pulmoner Vazokonstriksiyon (HPV) refleksini belirgin bozmaz.',
+            ],
+          },
+          {
+            systemTitle: 'Çizgili Kas Mitokondrisi, Hepato-Renal & Endokrin Doku → Sistemik & Metabolik Organlar',
+            tissueTarget: 'İskelet/Kalp Kası Mitokondrisi · Hepatosit · Adrenal Korteks',
+            accent: 'amber',
+            points: [
+              'İskelet & Kalp Kası Mitokondrisi (PRIS Organ Hasarı): CPT-1 ve ETC Kompleks I/II/IV blokajıyla ATP üretimi duran çizgili kas ve miyokard dokusunda sarkolemma bütünlüğü bozulur → masif rabdomiyoliz (CK > 10.000 U/L, miyoglobinürik ABH), hücre dışına K⁺ sızıntısı (refrakter hiperkalemi), hepatik yağlanma ve katekolamine dirençli biventriküler miyokardiyal çöküş gelişir.',
+              'Hepatik & Ekstrahepatik (Pulmoner/Renal) Biyotransformasyon Dokusu: Sistemik klirensi (1,5–2,2 L/dk) hepatik kan akımını (~1,5 L/dk) aşar; karaciğerde CYP2B6/UGT1A9 ile 4-hidroksipropofol ve glukuronid/sülfat konjugatlarına yıkılırken %30–40 oranında böbrek ve akciğer dokusunda ekstrahepatik glukuronidasyona uğrar (bu nedenle siroz ve KBY’de tek doz kinetiği korunur; fenol-kinol metabolitleri idrarı benign yeşile boyar).',
+              'Adrenal Korteks, İskelet Kası RyR1 & Lipid Metabolizması: Etomidatın aksine adrenal kortekste 11β-hidroksilazı inhibe etmez (kortizol sentezi korunur) ve iskelet kası Riyanodin Reseptörü-1’i (RyR1) tetiklemez (Malign Hipertermi hastalarında kesin güvenli TIVA ajanıdır); ancak %10 soya yağı emülsiyonu (1,1 kcal/mL) hepatik/plazma lipoprotein lipaz kapasitesini aşarsa hipertrigliseridemi (>400 mg/dL) ve akut pankreatit yapabilir.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Tavan Etkisi Yokluğu (Direkt Gating), Opioid Sinerjisi & CSHT Dinamiği',
           summary:
-            'Propofol opioidler ve benzodiazepinlerle belirgin farmakodinamik (izobologram) sinerji kurarken, tek başına yüksek dozlarda tavan etkisi olmadan derin kardiyorespiratuvar depresyon yapar.',
+            'Propofolün GABA-A β₂/β₃ alt biriminde hem allosterik modülatör hem de yüksek dozda direkt kanal açıcı (agonist) olarak davranması, benzodiazepinlerden farklı olarak farmakodinamik bir tavan etkisinin (ceiling effect) bulunmamasına ve doz artışıyla derin koma/izoelektrik EEG’ye kesintisiz ilerlemesine yol açar.',
           points: [
-            'Propofol–Opioid Sinerjisi (TIVA): Remifentanil veya fentanil eklenmesi propofolün bilinç kaybı (EC50) ve cerrahi hareketsizlik konsantrasyonunu %30–50 azaltır; ancak apne ve vagotonik bradikardi/hipotansiyon sinerjik olarak derinleşir.',
-            'Propofol–Midazolam Ko-indüksiyonu: Düşük doz midazolam (1–2 mg) propofol indüksiyon dozunu ~%20–30 azaltır ancak derlenmeyi hafif uzatabilir.',
-            'Spesifik Antidot Yoktur: GABA-A β-alt birim etkisini geri çeviren bir antagonist bulunmaz; doz aşımı/apne yönetimi kısa redistribüsyon süresince havayolu ve vazopresör desteğine dayanır.',
+            'Fizyolojik Tavan Etkisi Yokluğu (Midazolam GABA Tavanı vs Propofol Direkt Gating): Midazolam yalnızca endojen GABA varlığında Cl⁻ kanal açılma frekansını artırabildiğinden sinaptik GABA doygunluğa ulaştığında tavan etkisine girer; propofol ise yüksek konsantrasyonlarda β₂/β₃ alt birimini doğrudan açarak (direct gating) GABA’dan bağımsız Cl⁻ akımı üretir → doz yükseldikçe burst-supresyon, izoelektrik EEG, apne ve kardiyovasküler kollaps sınır olmaksızın derinleşir.',
+            'Propofol–Opioid Supra-Aditif (İzobologram) Sinerjisi: Remifentanil veya fentanil (µ-opioid → Gαi/o → spinal/supraspinal glutamat ve P maddesi baskılanması) ile propofol (kortikal/talamik GABA-A β₂/β₃ hiperpolarizasyonu) kombine edildiğinde, cerrahi uyarana hareketsizlik ve bilinç kaybı için gereken propofol EC₅₀ konsantrasyonu %35–55 düşer; ancak apne ve santral vagotonik bradikardi/hipotansiyon da aynı oranda sinerjik derinleşir.',
+            'Bağlam Duyarlı Yarı Ömür (CSHT) & Derin Yağ Kompartmanı (V₃) Kinetiği: Çok yüksek metabolik klirensi (~2 L/dk) ve yavaş derin yağ kompartmanı (V₃) geri dönüşü sayesinde 8 saatlik TIVA sonunda bile CSHT < 40 dakika kalır; ancak >48–72 saatlik YBÜ infüzyonlarında derin yağ dokusu doygunluğa ulaştığından (veya obezde TBW ile dozlandığında) eliminasyon yavaş V₃ boşalmasına bağımlı hale gelir ve uyanma uzar.',
+            'Spesifik Farmakolojik Antagonist Yokluğu: Flumazenil yalnızca ekstraselüler α/γ₂ benzodiazepin cebini bloke eder; propofolün bağlandığı transmembran β₂/β₃ kavitesini geri çeviren klinik bir antidot yoktur (geri dönüş tamamen hızlı redistribüsyon [t½α 2–4 dk] ve yüksek hepatik/ekstrahepatik klirense dayanır).',
           ],
         }}
         clinicalPearls={[
-          'PRIS (Propofol İnfüzyon Sendromu) Mitokondriyal Mekanizması: Yüksek doz (>4 mg/kg/saat) ve uzun süreli (>48 saat) infüzyonda propofol mitokondriyal solunum zincirinde Kompleks I/II/IV’ü ve karnitin palmitoiltransferaz-1 (CPT-1) üzerinden uzun zincirli yağ asidi β-oksidasyonunu bloke eder; ATP tükenmesi sonucu laktik asidoz, rabdomiyoliz, Brugada benzeri EKG ve refrakter kardiyak arrest gelişir.',
-          'Katekolamin ve Steroid Sinerjisi (PRIS Tetikleyicileri): Kritik travmatik beyin hasarı, yüksek doz katekolamin vazopresör ve sistemik kortikosteroid kullanımı PRIS riskini katlar (lipoliz ve serbest yağ asidi yükünü artırır).',
-          'Enjeksiyon Ağrısını Önleme: Antekübital geniş ven + MCT/LCT formülasyon + venöz oklüzyon altında 20–40 mg lidokain ön enjeksiyonu ağrı insidansını %70’ten < %10’a düşürür.',
-          'Bağlama Duyarlı Yarı Ömür (CSHT): 8 saatlik infüzyon sonunda dahi CSHT < 40 dk kalır (midazolamdan çok üstün); ancak çok günlü YBÜ infüzyonlarında periferik yağ kompartmanı doyduğundan uyanma gecikebilir.',
+          'PRIS (Propofol İnfüzyon Sendromu) Kaskadı & Erken Uyarı Triadı: >4 mg/kg/saat (>67 mcg/kg/dk) ve >48 saat infüzyonda (özellikle TBI + yüksek doz katekolamin + kortikosteroid alanlarda) CPT-1 ve Kompleks I/II/IV blokajıyla gelişen açıklanamayan yüksek anyon açıklı laktik asidoz, CK yükselişi (>5.000–10.000 U/L) ve V1–V3’te Brugada benzeri coved ST elevasyonu PRIS’in habercisidir; infüzyon saniyeler içinde kesilip CRRT/VA-ECMO değerlendirilmelidir.',
+          'Neden Hipotansiyona Taşikardi Eşlik Etmez? Propofol hem periferik vazodilatasyon (SVR ↓, preload ↓) yapar hem de santral baroreseptör refleksini sıfırlar; bu nedenle MAP 50 mmHg’ya düşse bile kalp hızı artmaz, hatta remifentanil eşliğinde derin bradikardi/asistoli gelişebilir (profilaktik efedrin/atropin veya norepinefrin puşesi hazır tutulmalıdır).',
+          'Enjeksiyon Ağrısının Biyofiziksel Mekanizması & Önlenmesi: Ağrıyı lipid damlacıkları değil, emülsiyonun sulu fazında serbest kalan fenol halkalı propofol monomerlerinin venöz endoteldeki TRPA1/TRPV1 nosiseptörlerini ve kallikrein-kinin/bradikinini uyarması yapar; geniş antekübital ven + turnike (30–60 sn venöz oklüzyon) altında 0,5 mg/kg (20–40 mg) %1 Lidokain ön uygulaması ağrıyı %70’ten <%10’a indirir.',
+          '1,1 kcal/mL Lipid Yükü & TPN/Enteral Kalori Düşümü: %1 Propofol (10 mg/mL) ve %2 Propofol (20 mg/mL) aynı taşıyıcıyı (%10 soya yağı = 0,1 g yağ/mL = 1,1 kcal/mL) içerir; %2 formülasyon kullanmak aynı ilaç dozunda hastaya verilen günlük lipid ve sıvı hacmini YARI YARIYA (%50) azaltır.',
         ]}
       />
 

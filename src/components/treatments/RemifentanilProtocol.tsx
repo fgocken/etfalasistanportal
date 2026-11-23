@@ -1482,54 +1482,87 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Selektif μ-Opioid (μ₁ / μ₂) Reseptör Sinyal İletimi & KBB Kinetiği',
+          title: 'Hücre Zarı & Moleküler Hedef (7-TM μ-Opioid Reseptörü [MOR / OPRM1], Esteraz Biyofiziği & NMDA/5-HT Etkileşimi)',
           summary:
-            'Remifentanil saf, yüksek afiniteli ve selektif bir μ-opioid reseptör agonistidir (κ ve δ afinitesi ihmal edilebilir düzeydedir). Düşük pKa (~7.07) sayesinde fizyolojik pH’ta yüksek non-iyonize fraksiyona sahiptir ve kan-beyin bariyerini 1–1.5 dakikada hızla dengeler (t½ke0 ≈ 1.0–1.6 dk).',
+            'Remifentanil (metil 4-(metoksikarbonil)-4-[(1-oksopropil)fenilamino]-1-piperidinpropanoat), presinaptik ve postsinaptik nöron membranındaki 7-transmembran (7-TM) G-proteini kenetli μ-opioid reseptörünün (MOR / OPRM1) ortosterik bağlanma cebine yüksek afinite ve seçicilikle (Ki ≈ 1,2–2,6 nM; κ ve δ reseptör afinitesi >1000 kat daha düşük) bağlanan saf tam agonisttir. Düşük pKa (~7,07) değeri sayesinde fizyolojik pH’ta (7,4) ~%68 oranında non-iyonize (yüksüz) baz formunda bulunur ve kan-beyin bariyerini 1–1,5 dakikada dengeler (t½ke0 ≈ 1,1–1,6 dk) (Miller’s 10th Ed. / Stoelting’s 6th Ed.).',
           points: [
-            'Gi/Go İnhibitör G-Proteini Aktivasyonu: Adenilat siklazı inhibe ederek hücre içi cAMP’yi düşürür.',
-            'Presinaptik İnhibisyon: Voltaj-kapılı N-tipi Ca²⁺ kanallarını kapatarak spinal arka boynuzda P maddesi ve glutamat salınımını bloke eder.',
-            'Postsinaptik Hiperpolarizasyon: GIRK (G-protein-coupled inwardly rectifying K⁺) kanallarını açarak K⁺ efluksuna ve nöronal hiperpolarizasyona yol açar.',
-            'Reseptör Alt Tipi Ayrımı: μ₁ supraspinal analjeziden; μ₂ solunum depresyonu, santral vagotonik bradikardi, göğüs duvarı rijiditesi ve GİS motilite azalmasından sorumludur.',
+            'Nöronal Membran MOR (OPRM1) Ortosterik Bağlanma Cebi & Gαi/o Kenetlenmesi: Primer afferent C ve Aδ nosiseptörlerinin presinaptik terminalleri, spinal kord arka boynuz lamina I/II (substantia gelatinosa) projeksiyon nöronları, periaquaduktal gri cevher (PAG), rostral ventromedüller (RVM) çekirdekler ve pre-Bötzinger solunum merkezi nöron zarındaki MOR reseptörlerinin TM3/TM6/TM7 heliks cebine bağlanarak pertussis toksinine duyarlı heterotrimerik Gαi/o proteinlerinin GDP→GTP değişimini tetikler.',
+            'Eritrosit & Doku Non-Spesifik Karboksilesteraz (CES) Biyofiziği: Piperidin halkasına bağlı propanoik asit metil ester yan zinciri, dolaşımdaki eritrosit membran/sitozol esterazları ve yaygın doku karboksilesterazları tarafından enzimatik hidrolizle karboksilik asit metabolitine (GI-90291; MOR afinitesi ~1/4600) parçalanır. Bu yıkım plazma bütirilkolinesterazından (psödokolinesteraz) ve hepatik CYP enzimlerinden tamamen bağımsızdır.',
+            'Postsinaptik NMDA (NR1/NR2B) Reseptör Çapraz-Konuşması (Cross-Talk): Yüksek doz veya uzamış MOR uyarımı, arka boynuz postsinaptik membranında μ-opioid reseptörü ile aynı lipid salında (lipid raft) komşu olan glutamaterjik NMDA (özellikle NR2B alt birimi) kanallarının tirozin/serin fosforilasyonu üzerinden Mg²⁺ blokajını kaldırarak paradoksal reseptör hipereksitabilitesine zemin hazırlar.',
+            'Ticari Formülasyon Glisin Taşıyıcısı & Serotonerjik (SERT) Etkileşim: Liyofilize flakondaki 15 mg glisin tamponu spinal kord inhibitör glisin reseptörleri (GlyR) üzerinde doğrudan nörotoksik/motor paralitik etki gösterdiğinden nöroaksiyel membranlara teması mutlak kontrendikedir. Fenilpiperidin halkası zayıf presinaptik 5-HT geri alım (SERT) etkileşimi göstererek MAOİ/SSRI varlığında sinaptik serotonin birikimine katkıda bulunabilir.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Doğrudan Hipnotik Değildir (GABA-A ve Amnezi Yoktur): Propofol veya benzodiazepinler gibi doğrudan kortikal GABAerjik inhibisyon yapmaz; tek başına yüksek dozlarda bile güvenilir bilinç kaybı ve amnezi sağlamaz.',
-            'Sedasyon Mekanizması — 1 (Supraspinal Uyanıklık Baskılanması): Beyin sapındaki locus coeruleus (noradrenerjik uyanıklık merkezi), asendan retiküler aktive edici sistem (ARAS) ve talamokortikal yollardaki μ-reseptör inhibisyonu ile santral uyarılma tonusunu düşürerek hafif–orta somnolans oluşturur.',
-            'Sedasyon Mekanizması — 2 (Analjezi-Temelli Sekonder Sedasyon / Analgosedasyon): Entübe YBÜ hastasında endotrakeal tüp, aspirasyon ve ağrı kaynaklı sürekli afferent nosiseptif girdiyi keserek kortikal uyarımı azaltır (SCCM PADIS "analgesia-first" prensibi).',
-            'Serebral Hemodinami & EEG: Normokapni korunduğunda CBF ve CMRO₂’yi hafif azaltır, ICP’yi yükseltmez (hiperkapni gelişirse CBF/ICP artar). Yüksek dozlarda EEG’de delta aktivitesine kayma yapsa da BIS skorunu güvenilir biçimde düşürmez.',
-          ],
-          cvs: [
-            'Santral Vagotonik Bradikardi: Direkt miyokard kontraktilite depresyonu minimaldir; ancak santral vagal çekirdek uyarımı ve sempatik tonusun baskılanmasıyla belirgin bradikardi (özellikle hızlı bolus sonrası veya β-bloker/deksmedetomidin ile) ve doza bağımlı hipotansiyon gelişir.',
-            'Histamin Salınımı Yoktur: Morfinin aksine mast hücresi degranülasyonu yapmaz; entübasyon ve cerrahi insizyona bağlı katekolamin stres yanıtını çok güçlü biçimde köreltir.',
-          ],
-          respiratory: [
-            'Medüller Solunum Merkezi (μ₂): CO₂ yanıt eğrisini sağa kaydırır, eğimini düşürür, apneik eşiği yükseltir ve hipoksik ventilatuvar yanıtı baskılar.',
-            'Göğüs Duvarı & Laringeal Rijidite ("Tahta Göğüs"): Hızlı bolus (>1 mcg/kg veya <30–60 sn) sonrası santral striatal dopaminerjik/GABAerjik yolaklar üzerinden kas rijiditesi gelişerek maske ventilasyonunu imkânsızlaştırabilir.',
-          ],
-          other: [
-            'Cerrahi stres hormonlarını (kortizol, epinefrin) güçlü baskılar',
-            'PONV riskini artırır',
-            'Gastrik boşalmayı geciktirir',
-            'Yüksek doz/uzun infüzyonda spinal NMDA fosforilasyonu ile akut tolerans & OIH tetikler',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'MOR aktivasyonu ile heterotrimerik Gi/o proteininin Gαi ve Gβγ alt birimlerine ayrışması; presinaptik akson terminalinde vezikül ekzositozunu durduran, postsinaptik dendritte ise membranı hiperpolarize eden iki yönlü bir hücre içi elektrokimyasal kaskad başlatır:',
+          points: [
+            'Gαi/o → Adenilat Siklaz (AC) İnhibisyonu → cAMP↓ → PKA↓ Kaskadı: Aktif Gαi alt birimi membrana bağlı Adenilat Siklaz (Tip I/V/VI) enzimini doğrudan inhibe eder. Hücre içi siklik AMP (cAMP) konsantrasyonunun düşmesiyle Protein Kinaz A (PKA) aktivitesi baskılanır; nosiseptörlerde voltaj kapılı Na⁺ kanallarının (Nav1.7/1.8), TRPV1 katyon kanallarının ve CREB transkripsiyon faktörünün fosforilasyonu azalır.',
+            'Presinaptik Gβγ → N/P/Q-Tipi Ca²⁺ (Cav2.2) Kanal Blokajı & SNARE Ekzositoz Durması: Serbestleşen Gβγ dimerleri, spinal arka boynuz lamina I/II’deki primer afferent C ve Aδ terminallerinin presinaptik zarında yer alan voltaj kapılı N-tipi (Cav2.2) ve P/Q-tipi (Cav2.1) kalsiyum kanallarına doğrudan bağlanarak kanalın açılma olasılığını düşürür. Akson ucuna Ca²⁺ girişi kesilince sinaptotagmin-SNARE vezikül füzyon kompleksi tetiklenemez; Glutamat, P Maddesi (Substance P) ve CGRP içeren sinaptik veziküllerin ekzositozu bloke edilir.',
+            'Postsinaptik Gβγ → GIRK (Kir3.1/3.2) Kanal Aktivasyonu → K⁺ Efluksu & Hiperpolarizasyon: Postsinaptik spinotalamik projeksiyon nöronlarında ve beyin sapı çekirdeklerinde Gβγ alt birimi, G-proteini kenetli içeri doğrultucu potasyum kanallarına (GIRK / Kir3) doğrudan bağlanarak kanalı açar. Hücre dışına hızlı K⁺ çıkışı (efluksu) dinlenim membran potansiyelini −70 mV’un altına (hiperpolarizasyon) çekerek eksitatör postsinaptik potansiyellerin (EPSP) aksiyon potansiyeli eşiğine ulaşmasını engeller.',
+            'PKC-γ Aktivasyonu, β-Arrestin-2 & NMDA Hücre İçi Ca²⁺/NO Kaskadı (Akut OIH Mekanizması): Sürekli yüksek doz (>0,25–0,3 mcg/kg/dk) MOR uyarımı G-proteini kenetli reseptör kinazları (GRK2/3) ve β-arrestin-2’yi devreye sokarken, hücre içi Protein Kinaz C-gamma (PKC-γ) ve Src tirozin kinaz aracılığıyla NMDA (NR2B) reseptörlerini fosforiller → postsinaptik sitozole Ca²⁺ akışı, Kalmodulin/CaMKII ve nöronal Nitrik Oksit Sentaz (nNOS → NO) üretimi artarak akut tolerans ve opioid ilişkili hiperaljezi (OIH) gelişir.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Spinal Arka Boynuz, Beyin Sapı & Talamokortikal Ağ → SSS & Analjezi',
+            tissueTarget: 'Lamina I/II · PAG–RVM · Locus Coeruleus',
+            accent: 'indigo',
+            points: [
+              'Asendan Nosiseptif Kapı Kapanması & Desendan İnhibisyon: Spinal arka boynuz lamina I/II’de Aδ/C-lifi→spinotalamik sinaps iletimi kesilirken; periaquaduktal gri cevher (PAG) ve RVM’deki tonik GABAerjik internöronların MOR aracılı inhibisyonu (disinhibisyon), medullaspinal serotonerjik/noradrenerjik desendan ağrı baskılayıcı yolu aktive eder.',
+              'Sedasyon vs Hipnoz/Amnezi Ayrımı (Locus Coeruleus): Locus coeruleus noradrenerjik nöronlarının GIRK aracılı hiperpolarizasyonu ve afferent ağrı girdisinin kesilmesiyle analgosedasyon (SCCM PADIS "analgesia-first") sağlar; ancak kortikal GABA-A reseptörlerini etkilemediğinden tek başına güvenilir hipnoz veya amnezi OLUŞTURMAZ.',
+              'Serebral Hemodinami & Edinger-Westphal Miyozisi: Normokapni korunduğunda serebral kan akımı (CBF), CMRO₂ ve kafa içi basıncını (ICP) hafif düşürür ve otoregülasyonu korur; okulomotor sinir Edinger-Westphal parasempatik çekirdeğindeki GABAerjik inhibisyonu kaldırarak toplu iğne başı (pinpoint) miyozis yapar.',
+            ],
+          },
+          {
+            systemTitle: 'Pre-Bötzinger Kompleksi, Kemoreseptörler & Striatal Motor Ağ → Solunum & Toraks',
+            tissueTarget: 'Pre-Bötzinger · Karotid Cisimcik · Nükleus Ambiguus',
+            accent: 'rose',
+            points: [
+              'Pre-Bötzinger Solunum Pacemaker İnhibisyonu: Medüller pre-Bötzinger kompleksindeki inspiratuar ritim üreten nöronlarda GIRK açılması ve cAMP düşüşüyle solunum frekansı yavaşlar (tidal hacim başlangıçta korunur, ardından düşer); PaCO₂–ventilasyon yanıt eğrisi sağa ve aşağı kayar, apneik eşik yükselir.',
+              'Üst Hava Yolu Refleks Süpresyonu & Antitüssif Etki: Nükleus traktus solitarius (NTS) ve laringeal/trakeal mekanoreseptör arkını güçlü biçimde baskılayarak endotrakeal tüp toleransı, laringoskopi/bronkoskopi sırasında öksürük ve öğürme refleksi kontrolü sağlar.',
+              'Toraks & Laringeal Rijidite ("Tahta Göğüs / Wooden Chest"): Hızlı IV bolus (>1 mcg/kg veya <30–60 sn) bazal gangliyon/striatal ve pontin nükleus raphe magnus dopaminerjik-GABAerjik devrelerini akut etkileyerek torakoabdominal kaslarda ve özellikle vokal kordlarda (glottik kapanma!) santral spastisite yaratarak BVM ventilasyonunu imkânsızlaştırır.',
+            ],
+          },
+          {
+            systemTitle: 'Medüller Vagal Çekirdek, Sempatik Merkez & Miyokard → Kardiyovasküler Sistem',
+            tissueTarget: 'Nükleus Ambiguus · RVLM · SA/AV Düğüm',
+            accent: 'amber',
+            points: [
+              'Santral Vagotoni & Sempatolizis: Medüller nükleus ambiguus/dorsal motor vagal çekirdeğin disinhibisyonu ve rostral ventrolateral medulla (RVLM) sempatik çıkışının baskılanmasıyla SA düğüm hızı ve AV iletim yavaşlar → belirgin sinüs bradikardisi ve sistemik vasküler direnç (SVR) düşüşü.',
+              'Sıfır Histamin Deşarjı & Korunmuş Miyokard Kontraktilitesi: Morfin ve meperidinin aksine kutanöz/vasküler mast hücrelerinden histamin salınımı YAPMAZ ve kardiyomiyosit L-tipi Ca²⁺ akımını doğrudan deprese etmez; cerrahi insizyon ve entübasyona bağlı katekolamin/kortizol fırtınasını doz-bağımlı bloke eder.',
+              'Ön-Yük Bağımlılığı & Hipovolemik/Ortostatik Hipotansiyon: Venöz kapasitans artışıyla venöz dönüş azalır; hipovolemik hastada veya β-bloker/kalsiyum kanal blokeri/deksmedetomidin eşzamanlı kullanımında derin bradikardi ve asistoliye ilerleyebilir (Atropin/Glikopirolat ile hızla geri döner).',
+            ],
+          },
+          {
+            systemTitle: 'Eritrosit/Doku Esterazları, Enterik Pleksus & Biliyer Düz Kas → Metabolik & GİS',
+            tissueTarget: 'Eritrosit Esterazları · Miyenterik Pleksus · LES & Oddi',
+            accent: 'teal',
+            points: [
+              'Eritrosit & Doku Esteraz Klirensi (~40–50 mL/kg/dk): Karaciğer kan akımını aşan ekstrahepatik klirensi sayesinde an체patik fazda (karaciğer nakli), ağır sirozda ve anürik böbrek yetmezliğinde dahi sabit 3–4 dakikalık CSHT değişmez; kan ürünleriyle aynı hattan verilirse hat içinde eritrosit esterazlarıyla parçalanır.',
+              'Alt Özofagus Sfinkteri (LES) & Enterik Miyenterik Pleksus: Miyenterik (Auerbach) pleksusta asetilkolin salınımını inhibe ederek gastrik boşalmayı yavaşlatır, LES tonusunu düşürür ve primer özofagus peristaltizmini bozar (spontan soluyan MAC sedasyonunda subklinik regürjitasyon riski!).',
+              'Oddi Sfinkteri & Area Postrema (CTZ / PONV): Biliyer düz kas ve Oddi sfinkter tonusunu artırabilir; area postrema kemoreseptör tetik bölgesi (CTZ) ve vestibüler çekirdek uyarımıyla postoperatif bulantı-kusma (PONV) tetikler (ancak ultra-kısa yarı ömrü nedeniyle etkisi infüzyon sonrası hızla azalır).',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Akut Tolerans / Hiperaljezi (OIH), Hipnotik Sinerjisi & Tavan Etkisi',
           summary:
-            'Remifentanil tek başına tam genel anestezi oluşturamaz; gerçek gücü hipnotiklerle kurduğu güçlü farmakodinamik sinerjiden gelir.',
+            'Remifentanil tek başına tam genel anestezi oluşturamaz; klinik mükemmelliği propofol ve volatil anesteziklerle kurduğu supra-aditif (sinerjistik) etkileşimden ve sabit 3–4 dakikalık bağlam-duyarlı yarı ömründen (CSHT) kaynaklanır.',
           points: [
-            'İnhalasyon MAC Azaltımı & Tavan Etkisi (Ceiling Effect): Sevofluran/desfluran/izofluran MAC değerini ~%50–70 azaltır; ancak tavan etkisi nedeniyle doz ne kadar artırılırsa artırılsın MAC %100’e düşmez (tek başına anestezi sağlamaz).',
-            'Propofol–Remifentanil Sinerjisi (TİVA): Ağrılı uyarana hareket ve hemodinamik yanıtın baskılanmasında güçlü izobologram sinerjisi gösterir; propofol hedef konsantrasyonunu (Ce) belirgin düşürerek hızlı uyanma sağlar.',
-            'Nalokson Antagonizması: Saf kompetitif μ-antagonistidir; ancak remifentanilin CSHT’si 3–4 dk olduğundan çoğu vakada infüzyonu durdurup ventilasyon desteği vermek naloksonun yaratacağı ani ağrı/hipertansiyon fırtınasından daha güvenlidir.',
+            'Volatil Anestezik MAC Azaltımı & Tavan Etkisi (Ceiling Effect): Sevofluran, desfluran ve izofluranın MAC (ve özellikle MAC-BAR) değerini plazma konsantrasyonu 1–4 ng/mL aralığında eksponansiyel olarak %50–70 oranında düşürür; ancak >8–10 ng/mL üzerinde MOR doygunluğu nedeniyle belirgin bir tavan etkisine (ceiling effect) ulaşır — doz ne kadar artırılırsa artırılsın MAC %100 sıfırlanmaz ve tek başına bilinç kaybı/amnezi garanti etmez.',
+            'Propofol–Remifentanil TİVA İzobologram Sinerjisi (Minto–Schnider): Propofol (GABA-A kortikal hipnoz/amnezi) ile remifentanil (MOR spinal/supraspinal anti-nosisepsiyon) güçlü supra-aditif sinerji gösterir: laringoskopi ve cerrahi insizyona hareket/otonomik yanıt için gereken propofol hedef konsantrasyonunu (Ce) %40–60 düşürerek uzun cerrahiler sonunda dahi 5–10 dakikada ekstübasyon sağlar.',
+            'Akut Reseptör Desensitizasyonu & Opioid-İlişkili Hiperaljezi (OIH): >0,25–0,30 mcg/kg/dk yüksek hızlarda ≥2–3 saat infüzyon; GRK/β-arrestin-2 aracılı hızlı MOR internalizasyonu (akut taşiflaksi) ve PKC-γ/Src aracılı spinal NMDA (NR2B) reseptör aktivasyonu tetikler. İnfüzyon aniden kapatıldığında esterazlarla MOR agonizması 5 dakikada sıfırlanırken, fosforile NMDA kanalları açık kalarak postoperatif "akut ağrı fırtınası" ve hiperaljezi üretir (önlem: düşük doz Ketamin 0,15–0,3 mg/kg/saat, Magnezyum, kademeli weaning ve 30–45 dk önce uzun etkili köprü analjezi).',
           ],
         }}
         clinicalPearls={[
-          'İntraoperatif Farkındalık (Awareness) & BIS Tuzağı: Hasta yüksek doz remifentanil ile hareketsiz ve hemodinamik olarak sakin görünürken kortikal olarak uyanık kalabilir. TİVA’da yeterli hipnotik (propofol) veya inhalasyon ajanı + gerektiğinde işlenmiş EEG (BIS/PSI) zorunludur.',
-          'YBÜ’de Sedasyon Uğruna Doz Tırmandırma Hatası: Yetersiz sedasyonda remifentanili tek başına artırmak bilinç kaybı sağlamadan apne, rijidite, bradikardi ve OIH yapar; ek hipnotik/sedatif (propofol, deksmedetomidin veya midazolam) kombine edilmelidir.',
-          'Akut Opioid Kaynaklı Hiperaljezi (OIH) Önleme: >0.2–0.3 mcg/kg/dk hızlarda postoperatif ağrı ve opioid ihtiyacı artar; kademeli azaltma, erken köprü analjezi ve/veya düşük doz ketamin/magnezyum koruyucudur.',
-          'Kan Ürünleriyle Aynı Hattan Verme: Eritrositlerdeki non-spesifik esterazlar remifentanili daha infüzyon hattındayken parçalayarak ilacı etkisizleştirir.',
+          'İntraoperatif Farkındalık (Awareness) & BIS Tuzağı: Yüksek doz remifentanil alan hasta hareketsiz, bradikardik ve normotansif görünürken kortikal olarak tamamen uyanık olabilir ve BIS skoru düşmeyebilir! TİVA’da propofol infüzyon hattının ayrılmadığından emin olunmalı ve mutlaka hipnotik ajan + işlenmiş EEG (BIS/PSI) kullanılmalıdır.',
+          'Ölü Boşluk (Dead-Space) Solunum Arresti: Ameliyat sonunda hasta uyandırılıp servise/PACU’ya gönderilirken IV uzatma hattında kalan 1–2 mL remifentanil (50–100 mcg!) antibiyotik veya SF yıkamasıyla (flush) hastaya puşe edilirse 45 saniye içinde tahta göğüs rijiditesi ve solunum arresti gelişir — infüzyon bitiminde uzatma hattı mutlaka çıkarılmalı veya enjektörle geri aspire edilmelidir.',
+          'Akut Ağrı Fırtınası & 30–45 Dakika Köprü Kuralı: Sabit 3–4 dk CSHT nedeniyle pompa kapatıldıktan 5–10 dk sonra plazmada hiç analjezik kalmaz. Majör cerrahide cilt kapatılmadan 30–45 dk önce IV Morfin (0,1–0,15 mg/kg), Fentanil, Parasetamol + NSAİİ veya rejyonel blok uygulanmamışsa hasta ekstübasyonda şiddetli ağrı, ajitasyon, hipertansiyon ve taşikardi krizine girer.',
+          'Kan Transfüzyonu Hattı İnaktivasyonu: Eritrosit süspansiyonu veya Taze Donmuş Plazma (TDP) ile aynı Y-site lümeninden yavaş hızda verildiğinde, kan ürünlerindeki non-spesifik esterazlar remifentanili daha hastaya ulaşmadan set içinde hidrolize ederek etkisizleştirir.',
         ]}
       />
 

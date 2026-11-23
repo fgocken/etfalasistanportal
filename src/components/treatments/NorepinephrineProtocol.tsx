@@ -311,7 +311,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <span>Farmakokinetik &amp; Farmakodinamik (PK/PD) Özellikleri</span>
+                <span>Farmakokinetik (ADME) Özellikleri</span>
                 <span className="text-xs font-normal px-2 py-0.5 rounded font-mono bg-rose-500/15 text-rose-700 dark:text-rose-300">
                   t½: 1–2 dk (Ultra-kısa)
                 </span>
@@ -1447,52 +1447,87 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Adrenoseptör Seçiciliği (α₁ >> β₁ > β₂) & Hücre İçi Sinyal İletimi',
+          title: 'Hücre Zarı & Moleküler Hedef (GPCR Alt Tipleri: α₁A/B/D >> β₁ ≈ α₂ >> β₂ & Presinaptik NET)',
           summary:
-            'Noradrenalin sempatik postgangliyonik sinir uçlarının primer nörotransmitteridir. Vasküler düz kastaki α₁-adrenoseptörlere en yüksek afiniteyle bağlanır, kardiyak β₁-reseptörlerini ılımlı uyarır ve vasküler/bronşiyal β₂-reseptörlere etkisi ihmal edilebilir düzeydedir (Miller’s / Stoelting’s / Barash).',
+            'Noradrenalin (L-(−)-norepinefrin), sempatik postgangliyonik nöroefektör kavşağın primer endojen katekolamin nörotransmitteridir. Hedef hücre zarlarında 7-transmembran (7-TM) G-proteini kenetli adrenoseptör (GPCR) ailesine keskin seçicilik hiyerarşisiyle (α₁ [Ki ~0,1–0,3 µM] >> β₁ [Ki ~0,5–1 µM] ≈ α₂ [Ki ~0,2–0,5 µM] >> β₂ [Ki >10–30 µM, ihmal edilebilir]) bağlanır ve sinaptik aralıktan presinaptik Norepinefrin Taşıyıcısı (NET / SLC6A2 / Uptake-1) ile yüksek afiniteli geri alınır (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman).',
           points: [
-            'α₁-Reseptör (Gq/11 → Fosfolipaz C → IP₃ / DAG → Ca²⁺↑): Arteriyoler rezistans damarları ve splanknik/kutanöz kapasitans venlerinde güçlü kasılma sağlayarak hem SVR’yi hem venöz dönüşü artırır.',
-            'α₂-Reseptör (Gi → cAMP↓): Postsinaptik vasküler α₂b vazokonstriksiyona katkı verir; presinaptik α₂a ise negatif geri bildirimle endojen NE salınımını düzenler.',
-            'β₁-Reseptör (Gs → Adenilat Siklaz → cAMP↑ → PKA → L-tipi Ca²⁺ akımı & Fosfolamban fosforilasyonu): Miyokard kontraktilitesini (inotropi) ve lusitropiyi destekler; ancak in vivo baroreseptör refleksi kronotropik artışı çoğunlukla dengeler.',
-            'Minimal β₂ Aktivitesi: Adrenalinin aksine iskelet kası vazodilatasyonu, bronkodilatasyon, β₂-aracılı hipokalemi veya Tip-B laktik asidoz oluşturmaz.',
+            'Vasküler Düz Kas Hücresi Sarkolemması (Postsinaptik α₁A, α₁B ve α₁D-Adrenoseptörler): Rezistans arteriyolleri (mezenterik, renal, kutanöz, iskelet kası), splanknik/sistemik kapasitans venülleri ve koroner epikardiyal damar düz kası sarkolemmasındaki α₁A (arteriyoler/splanknik baskın), α₁B ve α₁D (aort/epikardiyal koroner) alt tiplerine yüksek afiniteyle bağlanarak heterotrimerik Gαq/11 proteininde GDP→GTP değişimini tetikler.',
+            'Presinaptik Sempatik Varikozite & Postsinaptik Venül/Arteriyol Zarı (α₂A/2B/2C-Adrenoseptörler & NET Taşıyıcısı): Postsinaptik vasküler düz kas zarındaki ekstrasinaptik α₂B reseptörlerini (Gαi/o) uyararak özellikle venöz ve kutanöz yatakta α₁ vazokonstriksiyonunu güçlendirir; presinaptik akson terminalindeki α₂A otoreseptörleri üzerinden endojen veziküler ekzositozu negatif geri bildirimle sınırlar. Sinaptik aralıktaki serbest noradrenalinin %75–80’i Na⁺/Cl⁻ bağımlı presinaptik NET (Uptake-1) simporteri ile akson sitozolüne geri taşınır.',
+            'Kardiyomiyosit, SA/AV Düğüm & Jukstaglomerüler Hücre Zarı (β₁-Adrenoseptörler): Ventriküler/atriyal kardiyomiyosit sarkolemması, sinoatriyal (SA) ve atriyoventriküler (AV) düğüm pacemaker hücre zarı üzerindeki β₁ reseptörlerine (toplam kardiyak β-reseptörlerin ~%75–80’i) bağlanarak stimülatör Gαs alt birimini aktive eder.',
+            'Bronşiyal, Vasküler & İskelet Kası Sarkolemması (β₂-Adrenoseptör — Eser Afinite Farkı): Adrenalinin aksine azot atomu üzerinde N-metil grubu taşımadığı için β₂ reseptör bağlanma cebine afinitesi >50–100 kat düşüktür; bu moleküler yapı farkı nedeniyle klinik dozlarda iskelet kası arteriyollerinde β₂ vazodilatasyon, bronkodilatasyon veya sarkolemmal/hepatik β₂ metabolik fırtına (Tip-B laktat) oluşturmaz.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Polar katekolamin yapısı nedeniyle kan-beyin bariyerini (KBB) anlamlı düzeyde geçmez; doğrudan sedasyon, hipnoz veya EEG/BIS değişikliği oluşturmaz.',
-            'Serebral Hemodinami: Serebral otoregülasyon sınırları (MAP ~60–150 mmHg) korunduğu sürece doğrudan serebral vazokonstriksiyon yapmaz; şokta MAP’ı yükselterek serebral perfüzyon basıncını (CPP = MAP − ICP) restore eder.',
-          ],
-          cvs: [
-            'Stressed Venöz Hacim & Preload Rekrütmanı: Venöz kapasitans yataklarını (özellikle splanknik venleri) daraltarak "unstressed" kan hacmini "stressed" hacme çevirir; ortalama sistemik dolum basıncını (Pmsf) ve venöz dönüşü artırarak sıvı yükü olmadan kardiyak debiye destek olur (Hamzaoui / ESICM).',
-            'Baroreseptör Refleks Bradikardi: Güçlü α₁-aracılı MAP yükselmesi karotis sinüs ve arkus aorta baroreseptörlerini uyararak vagal tonusu artırır; bu refleks β₁ kronotropisini maskeleyerek kalp hızını sabit tutar veya hafif düşürür.',
-            'Koroner Perfüzyon & Ventriküler Coupling: Aort diyastolik basıncını yükselterek sol ve sağ koroner arter perfüzyonunu artırır; ancak yüksek dozlarda aşırı afterload (Ea↑) ventrikülo-arteriyel eşleşmeyi bozarak zayıf sol ventrikülde stroke volümü düşürebilir.',
-          ],
-          respiratory: [
-            'Pulmoner damar yatağında hafif α₁ vazokonstriksiyon (PVR↑) yapabilir; ancak sistemik SVR artışı PVR artışından belirgin yüksek olduğundan sağ ventrikül koroner perfüzyon gradientini korur.',
-            'β₂ etkisi minimal olduğundan akut bronkospazm veya anafilaktik hava yolu obstrüksiyonunda bronkodilatasyon sağlamaz (bu durumda 1. tercih Adrenalindir).',
-          ],
-          other: [
-            'Renal: Hipovolemide GFR’yi düşürürken, vazoplejik/septik şokta efferent arteriyolü afferentten daha fazla daraltarak glomerüler filtrasyon basıncını ve idrar çıkışını artırır.',
-            'Splanknik & Mikrosirkülasyon: Yüksek dozlarda (>0.5 mcg/kg/dk) mezenterik/mukozal kan akımı ve periferik kapiller perfüzyon bozulabilir.',
-            'Metabolik: Adrenaline kıyasla laktat, glukoz ve potasyum üzerine bozucu etkisi çok daha sınırlıdır.',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Sarkolemmadaki α₁ (Gαq/11), α₂B (Gαi/o) ve β₁ (Gαs) reseptör kenetlenmesi, vasküler düz kas hücresi ve kardiyomiyosit içinde birbirini tamamlayan üç ana biyokimyasal ve iyonik kaskadı ateşler:',
+          points: [
+            'Vasküler Düz Kas Hücresi İçi Fazik & Tonik Kasılma Kaskadı (α₁ → Gαq/11 → PLC-β → IP₃ / DAG → SR Ca²⁺ & RhoA/ROCK): Aktive Gαq/11, membran bağlı Fosfolipaz C-β’yı (PLC-β) uyararak PIP₂’yi İnozitol 1,4,5-Trisfosfat (IP₃) ve Diasilgliserol’e (DAG) parçalar. (1) IP₃, sarkoplazmik retikulum (SR) zarındaki IP₃R kanallarını açarak sitozolik [Ca²⁺]i düzeyini hızla yükseltir; Ca²⁺, Kalmodulin’e (4 Ca²⁺:1 CaM) bağlanarak Miyozin Hafif Zincir Kinazı (MLCK) aktive eder ve Miyozin Hafif Zincirini (MLC₂₀-Ser19) fosforilleyerek aktin-miyozin çapraz köprü döngüsünü (fazik kasılma) başlatır. (2) DAG, Protein Kinaz C’yi (PKC) ve L-tipi/TRPC6 Ca²⁺ kanallarını aktive ederken, eşzamanlı Gα12/13 → RhoGEF → RhoA → Rho-Kinaz (ROCK) ve PKC → CPI-17 yolağı Miyozin Hafif Zincir Fosfatazın (MLCP / MYPT1 alt birimi) aktivitesini baskılar → hücre içi Ca²⁺ düşse bile MLC₂₀ fosforilasyonu korunur (Ca²⁺ duyarlılaşması ve kesintisiz tonik vazokonstriksiyon).',
+            'Vasküler Düz Kas Hücresi İçi Yardımcı Kaskad (Postsinaptik α₂B → Gαi/o → AC↓ → cAMP↓): Gαi alt birimi adenilat siklazı inhibe ederek bazal cAMP/PKA düzeyini düşürür (PKA’nın MLCK üzerindeki frenleyici fosforilasyonunu kaldırır); serbestleşen Gβγ alt birimi ise voltaj kapılı L-tipi Ca²⁺ kanallarından ekstraselüler Ca²⁺ girişini kolaylaştırarak özellikle splanknik kapasitans venlerinde α₁ kasılmasını sinerjik olarak tahkim eder.',
+            'Ventriküler Kardiyomiyosit İçi İnotropi & Lusitropi Kaskadı (β₁ → Gαs → AC V/VI → cAMP↑ → PKA): Adenilat siklaz Tip V/VI tarafından üretilen cAMP, Protein Kinaz A’yı (PKA) aktive eder. PKA; (1) T-tübül sarkolemmasındaki L-tipi Ca²⁺ kanallarını (Cav1.2) fosforilleyerek aksiyon potansiyeli Faz 2 platosunda içeri Ca²⁺ akımını (ICa,L) artırır, (2) SR zarındaki Riyanodin Reseptörü-2’yi (RyR2) fosforilleyerek Ca²⁺-aracılı Ca²⁺ salınımını (CICR) büyütür ve Troponin-C’ye bağlanan Ca²⁺ miktarını artırır (pozitif inotropi), (3) SR zarındaki Fosfolamban’ı (PLB-Ser16) fosforilleyerek SERCA2a pompası üzerindeki inhibisyonu kaldırır ve diyastolik Ca²⁺ sekestrasyonunu hızlandırır, aynı zamanda Troponin-I fosforilasyonuyla diyastolik gevşemeyi çabuklaştırır (pozitif lusitropi).',
+            'SA/AV Düğüm Pacemaker Hücresi İçi & Baroreseptör Vagal Karşı-Denge (HCN4 If vs M₂-GIRK IK,ACh): SA düğümde β₁ aracılı cAMP artışı doğrudan HCN4 hiperpolarizasyonla aktive olan siklik nükleotid kapılı kanallara bağlanarak Faz 4 diyastolik depolarizasyon eğimini (If akımı) dikleştirir; ancak in vivo ortamda α₁ vazokonstriksiyonla yükselen MAP karotis sinüs/aortik ark baroreseptörlerini gerdiğinden, N. vagus ucundan salınan ACh kardiyak M₂ (Gαi/o → Gβγ → GIRK1/4 [IK,ACh] K⁺ kanalı açılması ve cAMP↓) kaskadını devreye sokarak SA düğümü hiperpolarize eder ve doğrudan β₁ taşikardisini maskeler.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Rezistans Arteriyol & Venöz Kapasitans Düz Kas Dokusu → Sistemik Hemodinami',
+            tissueTarget: 'Arteriyoler Düz Kas · Splanknik Venöz Kapasitans · Aort',
+            accent: 'rose',
+            points: [
+              'Arteriyoler Rezistans & MAP Restorasyonu: Tüm periferik rezistans yataklarında (deri, iskelet kası, splanknik) keskin α₁ kasılmasıyla Sistemik Vasküler Direnci (SVR) artırır; hem sistolik hem diyastolik arter basıncını (DBP) ve dolayısıyla Ortalama Arter Basıncını (MAP) hızla yükseltir (β₂ vazodilatasyon olmadığı için nabız basıncı daralmaz ve diyastolik basınç düşmez).',
+              'Venöz Kapasitans & Otolog Preload Rekrütmanı (Unstressed → Stressed Hacim): Splanknik ve kutanöz venöz düz kas hücreleri yüksek α₁/α₂ yoğunluğuna sahiptir; noradrenalin venöz kapasitansı daraltarak dolaşıma katılmayan "unstressed" kan hacmini (~600–800 mL) aktif "stressed" hacme dönüştürür → Ortalama Sistemik Dolum Basıncını (Pmsf), sağ kalbe venöz dönüş gradientini (Pmsf − CVP) ve kalp debisini dışarıdan aşırı sıvı yüklemeden artırır (Hamzaoui / ESICM).',
+              'Arteriyel Elastans (Ea) & Ventrikülo-Arteriyel Eşleşme (VA Coupling): Erken/orta dozlarda arteriyel tonusu ve preload’u optimize ederek VA eşleşmeyi (Ea/Ees oranını) düzeltir; ancak çok yüksek dozlarda (>0,5–1,0 mcg/kg/dk) aşırı afterload (Ea↑↑) sol ventrikül ejeksiyonuna direnç oluşturarak ağır sistolik yetmezlikli kalpte atım hacmini (SV) düşürebilir.',
+            ],
+          },
+          {
+            systemTitle: 'Miyokard Dokusu, İleti Sistemi & Koroner Vasküler Yatak → Kalp Fizyolojisi',
+            tissueTarget: 'Ventrikül Miyokardı · SA/AV Düğüm · Koroner Yatak',
+            accent: 'amber',
+            points: [
+              'İnotropik Destek & Sağ Ventrikül (RV) Korunması: β₁-aracılı kontraktilite artışı sol ve sağ ventrikül Ees (end-sistolik elastans) değerini artırır; pulmoner hipertansiyon veya RV yetmezliğinde aort kök basıncını (SVR > PVR) yükselterek sağ ventrikül serbest duvarının sistolo-diyastolik koroner perfüzyonunu kurtarır ve interventriküler septumun sola şiftini (D-shape) azaltır.',
+              'Baroreseptör Refleks & Düşük Aritmojenite (SOAP-II Üstünlüğü): Güçlü MAP artışının tetiklediği baroreseptör vagal refleks, doğrudan β₁ kronotropisini dengeleyerek kalp hızını sabit tutar veya hafif düşürür; bu sayede diyastolik dolum süresi korunur ve Dopamin/Adrenaline kıyasla taşiaritmi insidansı yarı yarıya düşüktür (SOAP-II: %12,4 vs %24,1).',
+              'Koroner Perfüzyon Basıncı (CPP = DBP − LVEDP): Aort diyastolik basıncını (DBP) güçlü şekilde yükseltirken, metabolik otoregülasyon (adenozin/NO) sayesinde koroner akım artar; sol ventrikül subendokardiyal perfüzyonu için en elverişli vazopressör profilini sunar.',
+            ],
+          },
+          {
+            systemTitle: 'Glomerüler Arteriyoller, Splanknik Mikrodolaşım & Karaciğer → Böbrek, GİS & Metabolizma',
+            tissueTarget: 'Afferent/Efferent Arteriyol · Mezenterik Villus · İskelet Kası/KC',
+            accent: 'teal',
+            points: [
+              'Renal Glomerüler Hemodinami (Efferent > Afferent Tonus Restorasyonu): Septik/vazoplejik şokta patolojik olarak genişlemiş olan renal efferent arteriyoldeki α₁ reseptör yanıtıyla intraglomerüler filtrasyon basıncını ve Renal Perfüzyon Basıncını (RPP = MAP − CVP) restore ederek GFR ve idrar çıkışını artırır; ancak düzeltilmemiş hipovolemide afferent vazokonstriksiyonla renal kan akımını düşürür.',
+              'Splanknik & Dijital Mikrodolaşım Eşiği: Normotansif düzeye (MAP 65–70 mmHg) titrasyonda mezenterik ve sublingual mikrosirkülasyonu korur; fakat hipovolemik hastada veya >0,5 mcg/kg/dk yüksek dozlarda bağırsak villus uçlarında ve akral (parmak ucu) kapiller yataklarda vazospazm/iskemi riski doğar.',
+              'Temiz Metabolik Profil (Tip-B Laktat Yokluğu): İskelet kası ve hepatosit membranındaki β₂ reseptörlerini anlamlı uyarmadığı için sarkolemmal Na⁺/K⁺-ATPaz bağımlı aerobik glikoliz fırtınası, iyatrojenik Tip-B hiperlaktatemi veya ağır hipokalemi oluşturmaz → Noradrenalin altında yükselen laktat doğrudan gerçek doku hipoperfüzyonu (Tip-A) göstergesidir.',
+            ],
+          },
+          {
+            systemTitle: 'Serebral, Pulmoner & Uteroplasental Vasküler Doku → Beyin, Akciğer & Plasenta',
+            tissueTarget: 'Serebral Otoregülasyon · Pulmoner Arter · Uteroplasental Yatak',
+            accent: 'indigo',
+            points: [
+              'Kan-Beyin Bariyeri (KBB) & Serebral Perfüzyon Basıncı (CPP = MAP − ICP): Polar katekolamin yapısı ve serebral endotelyal MAO/COMT enzimatik bariyeri nedeniyle sağlam KBB’yi geçmez; pial/intraserebral damarlarda α₁ yoğunluğu düşük olduğundan serebral vazokonstriksiyon yapmadan MAP’ı yükselterek travmatik beyin hasarı ve şokta CPP’yi restore eder (yalnızca KBB yıkılmışsa lokal serebral vazokonstriksiyon ve CMRO₂ artışı yapabilir).',
+              'Pulmoner Vasküler Direnç (PVR/SVR Oranı): Pulmoner arteriyol düz kasında α₁ reseptör yoğunluğu sistemik arteriyollere göre çok daha düşüktür; bu nedenle PVR’de yalnızca minimal artış yaparken SVR’yi güçlü artırır ve PVR/SVR oranını düşürerek sağ-sol şantı ve RV iskemisini önler.',
+              'Uteroplasental Dolaşım & Plasental Enzim Bariyeri: Plasental sinsityotrofoblastlardaki yoğun COMT ve MAO enzimleri maternal noradrenalini hızla yıkarak fetüse geçişini engeller; düşük-orta dozlarda (obstetrik spinal hipotansiyonda 4–8 mcg bolus veya 0,05 mcg/kg/dk) maternal KTA ve CO’yu Fenilefrinden daha iyi koruyarak uteroplasental perfüzyonu ve umblikal arter pH’sını optimize eder.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, GRK/β-Arrestin Desensitizasyonu, Asidoz Direnci & Çoklu Vazopressör Sinerjisi',
           summary:
-            'Noradrenalinin mutlak bir farmakolojik tavan dozu tanımlanmasa da, artan dozlarda adrenerjik reseptör duyarsızlaşması ve mikrosirkülatuar toksisite nedeniyle çoklu mekanizmalı (katekolamin-koruyucu) vazopresör stratejisi esastır (SSC 2021 / ESICM).',
+            'Noradrenalinin farmakolojik bir mutlak tavan dozu tanımlanmamış olsa da, uzamış yüksek doz maruziyeti ve ağır metabolik asidoz altında hücresel reseptör duyarsızlaşması ve mikrosirkülatuar toksisite geliştiğinden "de-katekolaminizasyon / çoklu reseptör sinerjisi" (SSC 2021 / ESICM) esastır.',
           points: [
-            'Şiddetli Asidozda (pH < 7.15) Katekolamin Direnci & Reseptör Downregülasyonu: Asidemi ve uzamış yüksek doz katekolamin maruziyeti β/α reseptör fosforilasyonu (GRK/β-arrestin) ve internalizasyonuna yol açarak pressör yanıtı köreltir; eşzamanlı asit-baz/ventilasyon optimizasyonu şarttır.',
-            'Vazopressin (V1a) & Hidrokortizon Sinerjisi: Noradrenalin >0.25–0.50 mcg/kg/dk düzeyine çıktığında eklenen Vazopressin (0.03 U/dk) katekolaminden bağımsız V1a reseptörleriyle etki eder ve asidozdan daha az etkilenir; IV Hidrokortizon (200 mg/gün) ise adrenerjik reseptör ekspresyonunu yeniden artırarak (upregülasyon) şoktan çıkışı hızlandırır.',
-            'Non-Selektif β-Bloker Etkileşimi: β₁/β₂ blokajı altında noradrenalinin α₁ vazokonstriksiyonu karşılanmamış (unopposed) kalarak şiddetli hipertansiyon ve derin refleks bradikardi/kalp yetmezliği oluşturabilir.',
+            'GRK / β-Arrestin Aracılı α₁/β₁ Desensitizasyon & Sepsis Kaynaklı iNOS/KATP Vazoplejisi: Yüksek doz (>0,25–0,50 mcg/kg/dk) ve uzamış infüzyonda G-proteini kenetli reseptör kinazlar (GRK2/3) sarkolemmadaki α₁ ve β₁ reseptörlerini fosforiller; β-arrestin bağlanmasıyla reseptörler klatrin kaplı veziküllerle hücre içine çekilir (internalizasyon / down-regülasyon). Eşzamanlı olarak septik şokta aşırı nitrik oksit (iNOS → cGMP → MLCP aktivasyonu) ve ATP-duyarlı K⁺ (KATP) kanallarının açılması membranı hiperpolarize ederek α₁ Ca²⁺ sinyalini köreltir.',
+            'Metabolik Asidoz (pH < 7,15) & H⁺ İyon Direnci: Ekstraselüler [H⁺] artışı, α₁-adrenoseptörün ekstraselüler bağlanma cebindeki protonasyonu değiştirerek noradrenalin bağlanma afinitesini (Kd↑) düşürür ve hücre içi Ca²⁺-Kalmodulin/Troponin-C etkileşimini zayıflatır.',
+            'Vazopressin (V₁a) + Hidrokortizon Moleküler Sinerjisi (SSC 2021 Eşiği: 0,25–0,50 mcg/kg/dk Baz): Vazopressin, adrenerjik reseptörden tamamen bağımsız V₁a (Gαq/11) reseptörlerini uyarır, asidozda aktivitesini korur, vasküler KATP kanallarını kapatır ve iNOS/cGMP yolağını baskılar; IV Hidrokortizon (200 mg/gün) ise nükleer glukokortikoid reseptörleri (GRE) üzerinden α₁-adrenoseptör mRNA transkripsiyonunu ve membran ekspresyonunu saatler içinde yeniden artırarak (up-regülasyon) katekolamin duyarlılığını geri kazandırır.',
           ],
         }}
         clinicalPearls={[
-          'Septik şokta erken noradrenalin (sıvı resüsitasyonuyla eşzamanlı) yalnızca SVR’yi değil, venöz kapasitansı azaltarak preload’u da artırır ve pozitif sıvı dengesi/akciğer ödemi riskini azaltır.',
-          '2:1 Baz/Bitartrat Hatasını Önleyin: Yurtdışı literatürde bazı Avrupa merkezleri dozu bitartrat (2×), ABD ve SSC 2021 kılavuzu ise baz (1×) cinsinden verir — Türkiye’de 1 ampul = 4 mg baz (8 mg bitartrat) standardı esas alınmalıdır.',
-          'İskemi & Laktat Yorumu: Noradrenalin altında yükselen laktat "masum Tip-B" değildir; aşırı vazokonstriksiyon, düzeltilmemiş hipovolemi, düşük kardiyak debi veya mezenterik iskemiyi dışlayın.',
-          'Vazoplejik şokta (KPB çıkışı, ACEI/ARB) yüksek doz noradrenaline rağmen direnç sürüyorsa Vazopressin, Hidrokortizon ve seçilmiş olgularda Metilen Mavisi / Hidroksokobalamin değerlendirilmelidir.',
+          'Venöz Preload Rekrütmanı ("Sıvısız Otolog Transfüzyon"): Septik şokta erken başlanan noradrenalin yalnızca arterleri sıkmaz; splanknik venöz kapasitansı daraltarak ~600–800 mL unstressed kanı aktif dolaşıma katar (Pmsf↑) ve pozitif sıvı yükü / doku ödemi ihtiyacını azaltır.',
+          '2:1 Baz/Bitartrat Hatasını Önleyin (ESICM 2024 Konsensüsü): Türkiye’deki 4 mL ampul 8 mg noradrenalin bitartrat (= 4 mg noradrenalin BAZ) içerir. SSC 2021 kılavuzundaki 0,25–0,50 mcg/kg/dk Vazopressin ekleme eşiği BAZ cinsindendir (bitartrat hesabıyla 0,50–1,0 mcg/kg/dk’ya karşılık gelir).',
+          'Noradrenalin Altında Laktat Yükselişi = Gerçek Hipoperfüzyon (Tip-A): Adrenalinin aksine noradrenalinin β₂ etkisi minimaldir; infüzyon altında laktat yükseliyorsa bunu "masum ilaç etkisi" saymayın — düzeltilmemiş hipovolemi, düşük kardiyak debi (eko/ScvO₂ kontrolü!) veya mezenterik/dijital iskemiyi araştırın.',
+          'Weaning (Kesilme) Sıralaması Tuzağı: Noradrenalin + Vazopressin alan şoktan çıkan hastada önce Noradrenalin güvenli düşük düzeye (≤0,05–0,10 mcg/kg/dk) indirilir, Vazopressin EN SON kesilir; erken vazopressin kesilmesi yüksek oranda rebound hipotansiyona yol açar.',
         ]}
       />
 

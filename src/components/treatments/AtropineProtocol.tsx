@@ -1202,52 +1202,88 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Kompetitif Non-Selektif Muskarinik Antagonizma (M₁–M₅) & Kardiyak M₂ Sinyal İletimi',
+          title: 'Hücre Zarı & Moleküler Hedef (Non-Selektif M₁–M₅ Muskarinik GPCR Kompetitif Antagonizması)',
           summary:
-            'Atropin doğal belladona alkaloidi (tersiyer amin esteri) olup postgangliyonik parasempatik efektör organlardaki ve santral sinir sistemindeki M₁–M₅ muskarinik asetilkolin reseptörlerini geri dönüşümlü ve kompetitif olarak bloke eder. Klinik dozlarda otonom gangliyon ve nöromüsküler kavşaktaki nikotinik reseptörlere etkisi ihmal edilebilir düzeydedir (Miller’s / Stoelting’s / Barash).',
+            'Atropin (d,l-hiyosiyamin; tropik asit ve tropin tersiyer amin esteri, pKa ~9,8), postgangliyonik parasempatik kolinerjik nöroefektör kavşaklarda, otonom gangliyonlarda ve santral sinir sisteminde yer alan 7-transmembran (7-TM) muskarinik asetilkolin reseptörlerinin (mAChR) beş alt tipine de (M₁, M₂, M₃, M₄, M₅) yüksek ve birbirine yakın afiniteyle (Ki ~0,5–2 nM) bağlanan geri dönüşümlü kompetitif antagonisttir (invers agonist/nötral antagonist). Klinik dozlarda iskelet kası nöromüsküler kavşağı (NM) ve otonom gangliyonlardaki (NN) nikotinik iyonotropik ACh reseptörlerine afinitesi yoktur (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman).',
           points: [
-            'Kardiyak M₂ Blokajı (Gi/Go Antagonizması): SA ve AV düğümde vagal asetilkolinin M₂ üzerinden açtığı GIRK (IK,ACh) K⁺ kanallarını ve adenilat siklaz inhibisyonunu ortadan kaldırır → cAMP↑, spontan faz-4 depolarizasyon hızlanır (pozitif kronotropi) ve AV düğüm iletimi hızlanır (PR kısalır).',
-            'Ekzokrin & Düz Kas M₃ Blokajı (Gq Antagonizması): IP₃/DAG ve hücre içi Ca²⁺ artışını engelleyerek tükürük, bronşiyal ve ter bezi sekresyonlarını baskılar; bronş, GİS, safra ve mesane düz kaslarını gevşetir.',
-            'Santral & Presinaptik M₁/M₄/M₅ Blokajı: Lipofilik tersiyer amin yapısı sayesinde kan-beyin bariyerini geçerek kortikal ve hipokampal muskarinik iletimi bloke eder (kognitif disfonksiyon/deliryum mekanizması).',
-            'Kompetitif Doğa (Organofosfat): Aşırı sinaptik ACh birikiminde atropin kompetitif olduğu için yüksek dozlara çıkılarak (onlarca–yüzlerce mg) muskarinik reseptörler yeniden bloke edilebilir; ancak nikotinik kas felcini düzeltmez.',
+            'SA ve AV Düğüm Pacemaker & Atriyal Kardiyomiyosit Sarkolemması (M₂ Reseptörü — Gαi/o Kenetli): Sinoatriyal (SA) düğüm P hücreleri, atriyoventriküler (AV) düğüm geçiş hücreleri ve atriyal miyokard sarkolemmasında yoğunlaşan M₂ reseptörlerinin ortosterik bağlanma cebinde endojen asetilkolin (ACh) ile yarışarak Gαi/o proteininin aktivasyonunu bloke eder (His-Purkinje ve ventrikül miyokardında M₂ yoğunluğu ve vagal innervasyon ihmal edilebilir düzeydedir).',
+            'Bronşiyal, GİS, Üriner, İris Sfinkter Düz Kası & Ekzokrin Bez Bazal Zarı (M₃ Reseptörü — Gαq/11 Kenetli): Trakeobronşiyal düz kas, gastrointestinal longitudinal/sirküler düz kas, mesane detrüsör kası, iris M. sphincter pupillae / siliyer kas sarkolemması ile tükürük, bronşiyal ve ekrin ter bezlerinin bazolateral zarındaki M₃ reseptörlerine bağlanarak Gαq/11 kenetlenmesini durdurur.',
+            'Presinaptik Kolinerjik Varikozite & Otonom Gangliyon Zarı (M₁ / M₂ / M₄ Otoreseptörleri): Postgangliyonik parasempatik sinir uçlarındaki presinaptik inhibitör M₁/M₂/M₄ otoreseptörlerini çok düşük plazma konsantrasyonlarında (<0,5 mg IV) bloke ederek negatif geri bildirimi kaldırır ve geçici olarak sinaptik ACh salınımını artırabilir (düşük doz paradoksal bradikardinin membran mekanizması).',
+            'Serebral Korteks, Hipokampus & Vestibüler Çekirdek Nöron Zarı (Santral M₁, M₄, M₅ & Tersiyer Amin KBB Geçişi): Kuaterner amonyum yapılı Glikopirolatın (kalıcı pozitif yüklü N⁺) aksine, yüksüz lipofilik tersiyer amin fraksiyonu kan-beyin bariyeri (KBB) lipid çift tabakasını ve plasental membranı kolayca geçerek kortikal/hipokampal postsinaptik M₁ (Gαq/11) ve striatal M₄ (Gαi/o) reseptörlerini bloke eder.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Kan-Beyin Bariyeri (KBB) Geçişi & Santral Antikolinerjik Sendrom (SAS): Kuaterner amin olan Glikopirolatın aksine tersiyer amin Atropin KBB’yi kolayca geçer; özellikle yaşlılarda postoperatif deliryum, ajitasyon, halüsinasyonlar veya tersine açıklanamayan somnolans/uyanma gecikmesi oluşturabilir (antidot: KBB’yi geçen Fizostigmin).',
-            'Terapötik dozlarda minimal medüller stimülasyon yapar; toksik dozlarda konfüzyon, nöbet ve koma gelişir.',
-          ],
-          cvs: [
-            'SA/AV Düğüm Vagolizisi: İstirahat vagal tonusu yüksek genç erişkinlerde kalp hızını belirgin artırır; bebeklerde ve ileri yaşlılarda bazal vagal tonus daha düşük olduğundan kronotropik yanıt daha küçüktür.',
-            'Ventriküler Kontraktilite & Kan Basıncı: Ventrikül miyokardında parasempatik innervasyon çok az olduğundan doğrudan inotropik etkisi yoktur; kan basıncı genelde değişmez ancak aşırı taşikardi diyastolik doluşu kısaltıp koroner iskemiyi tetikleyebilir.',
-          ],
-          respiratory: [
-            'Bronkodilatasyon & Anatomik Ölü Boşluk (Vd/Vt) Artışı: M₃ blokajı ile büyük hava yolları genişler (hava yolu direnci↓), ancak anatomik ölü boşluk %20–30 kadar artabilir.',
-            'Sekresyon Viskozitesi & Mukosiliyer Klirens: Bronşiyal bez sekresyon hacmini azaltırken mukusu koyulaştırır ve mukosiliyer klirensi yavaşlatır (uzun YBÜ/KOAH hastalarında mukus tıkacı riski).',
-          ],
-          other: [
-            'GİS & Özofagus: Alt özofagus sfinkter (LES) basıncını düşürerek (reflü/aspirasyon riski↑), gastrik boşalmayı ve bağırsak peristaltizmini yavaşlatır.',
-            'Göz & Termoregülasyon: İris sfinkteri ve siliyer kas blokajıyla midriyazis/siklopileji (akut dar açılı glokom krizi riski); ekrin ter bezlerinin blokajıyla anhidroz ve özellikle çocuklarda hipertermi ("atropin ateşi").',
-            'Obstetrik: Plasentayı 1–2 dakikada geçer → fetal taşikardi ve NST’de beat-to-beat variabilite kaybı.',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Atropinin hücre zarında ACh bağlanmasını engellemesi; kalp pacemaker hücrelerinde vagal hiperpolarizasyon frenini kaldırırken, düz kas ve salgı bezlerinde IP₃/Ca²⁺ bağımlı kasılma ve ekzositoz kaskadını susturur:',
+          points: [
+            'SA/AV Düğüm Pacemaker Hücresi İçi (M₂ Blokajı → GIRK1/4 [IK,ACh] K⁺ Kanalı Kapanması & cAMP / HCN4 If / Cav1.2 Restorasyonu): Fizyolojik vagal uyarıda ACh-M₂ etkileşimi Gαi/o’yu ayırır: serbestleşen Gβγ alt birimi doğrudan sarkolemmadaki ACh-duyarlı içeri doğrultucu K⁺ kanallarını (GIRK1/4; IK,ACh) açarak potasyum çıkışıyla membranı hiperpolarize eder (maksimum diyastolik potansiyeli daha negatif yapar) ve Gαi alt birimi adenilat siklazı (AC) inhibe ederek cAMP’yi düşürür. Atropin M₂’yi bloke ettiğinde: (1) GIRK K⁺ kanalları kapanır ve hiperpolarizasyon kalkar, (2) Hücre içi cAMP yeniden yükselerek HCN4 kanallarını açar ve Faz 4 pacemaker depolarizasyon akımını (If) dikleştirir (pozitif kronotropi), (3) PKA aracılı L-tipi Ca²⁺ (Cav1.2; ICa,L) akımı restore olarak AV düğüm aksiyon potansiyeli Faz 0 iletim hızını artırır ve efektif refrakter periyodu kısaltır (pozitif dromotropi).',
+            'Bronşiyal, GİS, Detrüsör & İris Düz Kas Hücresi İçi (M₃ Blokajı → Gαq/11 İnhibisyonu → PLC-β↓ → IP₃/DAG↓ → SR Ca²⁺↓ & MLCK İnaktivasyonu): M₃ reseptörünün bloke edilmesiyle Fosfolipaz C-β (PLC-β) inaktif kalır; PIP₂’den IP₃ ve DAG üretimi durur. Sarkoplazmik retikulum (SR) IP₃R kanallarından sitozole Ca²⁺ salınımı kesilir, Ca²⁺-Kalmodulin kompleksi oluşamaz, Miyozin Hafif Zincir Kinaz (MLCK) inaktif kalır ve MLC₂₀ fosforilasyonu düşerek düz kas gevşemesi (bronkodilatasyon, GİS hipomotilitesi, detrüsör gevşemesi ve iris sfinkter gevşemesiyle pasif α₁-radikal kas hakimiyetine bağlı midriyazis) gerçekleşir.',
+            'Ekzokrin Salgı Bezi Asiner Hücresi İçi (M₃ Blokajı → [Ca²⁺]i↓ → TMEM16A/ANO1 Cl⁻ Kanalı & AQP5 Su Sekresyonu Durması): Tükürük, bronşiyal mukoza ve ekrin ter bezi asiner hücrelerinde M₃-IP₃-Ca²⁺ sinyalinin kesilmesi; apikal zardaki Ca²⁺-bağımlı klorür kanallarının (TMEM16A / Anoktamin-1) ve bazolateral K⁺ kanallarının açılmasını engeller, Akuaporin-5 (AQP5) su kanallarının apikal membrana translokasyonunu ve müsin granül ekzositozunu durdurur → seröz/sulu salgı kesilir (güçlü antisiyalogog etki ve anhidroz).',
+            'Vasküler Endotel Hücresi İçi (Endotelyal M₃ → eNOS / NO-cGMP Blokajı vs Kutanöz "Atropin Flush"): Sağlam damar endotelinde M₃ blokajı Ca²⁺-Kalmodulin bağımlı endotelyal Nitrik Oksit Sentaz (eNOS) aktivasyonunu önler (ancak sistemik damarlar bazal kolinerjik tonus almadığından SVR değişmez). Toksik dozlarda ise ekrin terlemenin durmasına (anhidroz) karşı gelişen kompensatuar termoregülatuar vazodilatasyon ve lokal histamin/kallikrein salınımıyla yüz ve gövdede kutanöz kapiller genişleme ("atropin flush") oluşur.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'SA/AV Düğüm, İleti Sistemi & Miyokard Dokusu → Kardiyovasküler Fizyoloji',
+            tissueTarget: 'SA Düğüm P Hücresi · AV Düğüm · Atriyal/Ventriküler Miyokard',
+            accent: 'rose',
+            points: [
+              'Bazal Vagal Tonus Bağımlı Kronotropi & Dromotropi: SA düğüm ateşleme hızını ve AV düğüm iletimini artırarak (PR mesafesi kısalır) sinüs bradikardisi, vagal sinüs arresti ve AV nodal (suprahisian / Mobitz Tip I Wenckebach) blokları hızla çözer. Bazal vagal tonusu yüksek genç erişkinlerde KTA artışı en belirginken (+30–40/dk), vagal tonusu fizyolojik olarak düşük olan bebeklerde ve ileri yaşlılarda kronotropik yanıt daha sınırlıdır.',
+              'His-Purkinje (İnfranodal) & Ventrikül Miyokardı Yanıtsızlığı: His demeti, sağ/sol dallar ve ventrikül miyokardı anlamlı M₂ kolinerjik innervasyon almaz; bu nedenle geniş QRS’li Mobitz Tip II veya 3. derece (tam) infranodal AV bloklarda atropin bloğu çözemez, aksine atriyal hızı (P dalga frekansını) artırıp hasta His-Purkinje sistemine gelen impuls yükünü çoğaltarak (2:1 → 3:1/4:1 blok) ventriküler hızı paradoksal olarak düşürebilir.',
+              'Hemodinami & Miyokard O₂ Dengesi (MVO₂): Doğrudan vasküler tonus (SVR) veya ventriküler kontraktilite (inotropi) etkisi olmadığından normokardik hastada kan basıncını değiştirmez; ancak vagal bradikardiye bağlı düşük kardiyak debiyi (CO = HR × SV) hızla restore eder. Koroner arter hastalarında aşırı taşikardi (>110/dk) diyastolik koroner dolum süresini kısaltıp MVO₂’yi artırarak subendokardiyal iskemi tetikleyebilir.',
+            ],
+          },
+          {
+            systemTitle: 'Trakeobronşiyal Düz Kas & Submukozal Salgı Bezleri → Solunum Sistemi',
+            tissueTarget: 'Bronş Düz Kası (M₃) · Submukozal Bezler · Mukosiliyer Epitel',
+            accent: 'teal',
+            points: [
+              'Büyük Hava Yolu Bronkodilatasyonu & Anatomik Ölü Boşluk (Vd/Vt) Artışı: N. vagus kaynaklı bazal bronkomotor tonusu ve refleks bronkospazmı (entübasyon, aspirasyon, organofosfat veya Neostigmin kaynaklı) büyük ve orta çaplı bronşlarda M₃ blokajıyla çözer; hava yolu direnci düşerken bronş çapı genişlediği için anatomik ölü boşluk (Vd/Vt) %20–30 artar.',
+              'Antisiyalogog Etki vs Mukus Tıkacı (Sekresyon Viskozitesi): Nazofaringeal, oral ve trakeobronşiyal seröz sekresyonları güçlü biçimde kurutur (fiberoptik entübasyon, ketamin anestezisi ve Neostigmin reversal’de istenen etki); ancak seröz sıvı azalırken mukus viskozitesi arttığı ve siliyer vuru frekansı yavaşladığı için KOAH/YBÜ hastalarında mukus tıkacı ve atelektazi riskini artırabilir.',
+              'Organofosfat "Kolinerjik Boğulma" Kurtarması: Organofosfat ve karbamat zehirlenmesinde alveolleri dolduran masif bronkore ve şiddetli M₃ bronkokonstriksiyonu kurutarak oksijenasyonu ve ventilasyonu kurtaran tek fizyolojik antidottur.',
+            ],
+          },
+          {
+            systemTitle: 'Kortikal/Hipokampal Kolinerjik Ağ, İris & Ekrin Ter Bezleri → SSS, Göz & Termoregülasyon',
+            tissueTarget: 'Kan-Beyin Bariyeri · İris Sfinkter/Siliyer Kas · Ekrin Ter Bezi',
+            accent: 'indigo',
+            points: [
+              'Kan-Beyin Bariyeri (KBB) Geçişi & Santral Antikolinerjik Sendrom (SAS): Lipofilik tersiyer amin yapısıyla KBB’yi geçerek retiküler aktive edici sistem, bazal ön beyin ve hipokampustaki M₁ reseptörlerini bloke eder → özellikle kolinerjik rezervi azalmış yaşlılarda (>65 yaş) postoperatif deliryum, ajitasyon, görsel halüsinasyonlar, dizartri veya tam tersine somnolans/derlenmede gecikme oluşturur.',
+              'İris M. Sphincter Pupillae & M. Ciliaris (Midriyazis & Siklopleji): İris sfinkter kasındaki M₃ blokajı pupillayı dilate eder (midriyazis) ve siliyer kası gevşeterek lensi uzak görmeye sabitleyip yakın akomodasyonu felç eder (siklopleji). Dar iridokorneal açılı hastalarda dilate iris kökünün Schlemm kanalını (trabeküler ağı) kapatmasıyla akut açı kapanması glokomu krizi tetiklenebilir.',
+              'Ekrin Ter Bezleri & Termoregülasyon ("Atropin Ateşi"): Sempatik postgangliyonik olmasına rağmen nörotransmitteri ACh olan ekrin ter bezlerindeki M₃ reseptörlerini bloke ederek terlemeyi (evaporatif ısı kaybını) durdurur; özellikle infantlarda, çocuklarda ve sıcak ortamda/örtü altında hipertermiye yol açar.',
+            ],
+          },
+          {
+            systemTitle: 'GİS Düz Kası, Üriner Detrüsör & Uteroplasental Doku → GİS, Üroloji & Obstetrik',
+            tissueTarget: 'Alt Özofagus Sfinkteri (LES) · Miyenterik Pleksus · Detrüsör · Plasenta',
+            accent: 'amber',
+            points: [
+              'Alt Özofagus Sfinkteri (LES) & Gastrointestinal Motilite: Auerbach (miyenterik) ve Meissner pleksuslarındaki M₃/M₁ kolinerjik uyarımı baskılayarak alt özofagus sfinkter (LES) tonusunu düşürür (gastroözofageal reflü riskini artırır, ancak asit hacmini çok yüksek dozlara kadar tam kesmez), mide boşalmasını geciktirir ve bağırsak peristaltizmini yavaşlatır (postoperatif ileus).',
+              'Mesane Detrüsör Kası & Üriner Sfinkter: Mesane duvarındaki detrüsör düz kasında M₃ aracılı kasılmayı baskılarken trigon ve internal sfinkter tonusunu yüksek bırakır → prostat hiperplazisi (BPH) olan hastalarda postoperatif akut idrar retansiyonu yapar.',
+              'Plasental Geçiş & Obstetrik NMB Reversal Kuralı: Tersiyer amin yapısıyla plasentayı 1–2 dakika içinde geçerek fetal SA düğüm M₂ reseptörlerini bloke eder (fetal taşikardi ve NST’de beat-to-beat variabilite azalması). Gebe hastada non-obstetrik cerrahi sonunda Neostigmin (plasentayı kısmen geçer) verilecekse, plasentayı geçemeyen Glikopirolat fetüsü derin kolinerjik bradikardiden koruyamayacağı için mutlaka plasentayı geçen ATROPİN ile kombine edilmelidir.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Düşük Doz Paradoksal Bradikardi, Denerve Kalp & 3 mg Vagolitik Tavan',
           summary:
-            'Atropinin kardiyak vagolitik etkisi 3 mg (0,04 mg/kg) tavanına ulaşır; ancak düşük doz paradoksal bradikardi, denerve kalp ve infranodal AV blok mutlak farmakodinamik tuzaklardır (AHA ACLS 2020).',
+            'Atropinin presinaptik vs postsinaptik muskarinik reseptörlere doz-bağımlı afinite farkı, kardiyak vagal denervasyon fizyolojisi ve kompetitif kinetiği, klinikte hayati önem taşıyan dört farmakodinamik kuralı belirler:',
           points: [
-            'Düşük Doz Paradoksal Bradikardi (< 0,5 mg IV Erişkin): 0,5 mg altındaki dozların yavaş verilmesi, presinaptik inhibitör M₁ otoreseptörlerini bloke ederek (veya santral vagal çekirdek uyarımıyla) sinaptik ACh salımını geçici artırıp kalp hızını DAHA DA düşürebilir.',
-            'Kardiyak Vagolitik Tavan (0,04 mg/kg ≈ 3 mg) vs Organofosfat İstisnası: ACLS bradikardide 3 mg kümülatif doz tam kardiyak vagal blokaj sağlar, üstü etkisizdir. Oysa organofosfat zehirlenmesinde devasa ACh aşırılığı nedeniyle 3 mg tavanı GEÇERSİZDİR (kompetitif antagonizma).',
-            'Kalp Nakli (Denerve Kalp) & İnfranodal AV Blok (Mobitz II / 3. Derece Geniş QRS): Denerve kalpte vagal innervasyon olmadığından atropin etkisizdir ve paradoksal sinüs arresti/AV blok bildirilmiştir. His-Purkinje düzeyindeki infranodal bloklarda ise SA düğüm hızını artırıp AV iletim oranını bozarak ventriküler hızı kötüleştirir → Pacing/İzoproterenol/Adrenalin!',
-            'Fizostigmin Antagonizması: KBB’yi geçen tersiyer amin asetilkolinesteraz inhibitörü Fizostigmin (0,5–1 mg yavaş IV) santral antikolinerjik deliryumu dakikalar içinde geri çevirir (Neostigmin KBB’yi geçemediği için SAS’ta etkisizdir; QRS ≥100 ms veya TSA alımında Fizostigmin kontrendikedir!).',
+            'Düşük Doz (< 0,5 mg IV Erişkin) Paradoksal Bradikardi Mekanizması: Çok düşük doz atropin (<0,4–0,5 mg) veya çok yavaş IV infüzyon verildiğinde, ilaç postsinaptik SA düğüm M₂ reseptörlerini bloke edecek eşiğe ulaşmadan önce presinaptik parasempatik sinir ucundaki yüksek afiniteli inhibitör M₁ otoreseptörlerini bloke eder (veya KBB’yi geçip medulla oblongata dorsal motor vagal çekirdeğini uyarır). Presinaptik frenin kalkmasıyla sinaptik aralığa fazladan ACh salınır ve paradoksal olarak bradikardi derinleşir veya AV blok gelişir (AHA ACLS bu nedenle ilk dozu 1,0 mg IV hızlı bolusa çıkarmıştır).',
+            'Kardiyak Vagolitik Tavan Dozu (0,04 mg/kg ≈ 3,0 mg) vs Organofosfat İstisnası: Normal fizyolojide kümülatif 0,04 mg/kg (~3 mg erişkin) atropin dozu SA ve AV düğümdeki tüm M₂ reseptörlerini %100 doyurarak tam vagolizis sağlar; 3 mg’a yanıt vermeyen bradikardide ek atropin etkisizdir. Ancak organofosfat/karbamat zehirlenmesinde sinaptik aralıkta milimolar düzeyde ACh biriktiği için kompetitif kütle-etki yasası (mass-action law) gereği 3 mg tavanı GEÇERSİZDİR ve reseptörü geri kazanmak için 50–100+ mg kümülatif atropin gerekebilir.',
+            'Kalp Nakli (Denerve Kalp) Yanıtsızlığı & Paradoksal Arrest: Ortotopik kalp transplantasyonunda cerrahi olarak N. vagus lifleri kesildiğinden donör SA düğümü üzerinde bazal tonik vagal fren yoktur → atropin kalp hızını artıramaz. Dahası, denervasyon aşırı duyarlılığı veya presinaptik otoreseptör aracılı lokal ACh salınımı nedeniyle denerve kalpte atropin sonrası paradoksal sinüs arresti ve yüksek dereceli AV blok gelişebilir (bu hastalarda doğrudan β-agonist [İzoproterenol / Adrenalin], Teofilin/Aminofilin veya Pacing kullanılır!).',
+            'Fizostigmin vs Neostigmin (KBB Kinetiği & Antidot Sinerjisi): Neostigmin/Piridostigmin kuaterner amonyum (N⁺) taşıdığından yalnızca periferde (nöromüsküler kavşak ve periferik M₂/M₃) yarışır; oysa Fizostigmin tersiyer amin yapısıyla KBB’yi geçerek santral sinapslarda ACh düzeyini artırır ve Atropine bağlı Santral Antikolinerjik Sendromu (SAS) 5–10 dakikada tersine çevirir.',
           ],
         }}
         clinicalPearls={[
-          'AHA ACLS 2020 Güncellemesi: Erişkin semptomatik bradikardide eski 0,5 mg dozu yerine doğrudan 1,0 mg IV (q3–5 dk, maks 3 mg) önerilir; asistoli ve NEA (PEA) protokollerinden rutin atropin çıkarılmıştır.',
-          'Neostigmin + Atropin Zamanlama Farkı: Atropin 2–4 dakikada pik yaparken Neostigmin 7–10 dakikada pik yapar; bu nedenle ortak enjektör sonrası ilk dakikalarda geçici taşikardi normaldir.',
-          'Gebe Hastada Non-Obstetrik Cerrahi NMB Reversal: Neostigmin plasentayı geçtiği halde Glikopirolat geçmez; fetüste bradikardiyi önlemek için gebede Neostigmin ile birlikte plasentayı geçen ATROPİN tercih edilir.',
-          'Pediatrik Bradikardide İlk Soru "Hipoksi mi?": Çocukta bradikardinin bir numaralı nedeni hipoksidir — önce %100 O₂ ventilasyon, KTA < 60 ise CPR + Adrenalin; Atropin yalnızca artmış vagal tonus veya primer AV blokta 1. tercihtir.',
+          'AHA ACLS 2020 Doz Güncellemesi (0,5 mg → 1,0 mg IV): Erişkin semptomatik bradikardide başlangıç dozu artık 0,5 mg değil doğrudan 1,0 mg IV hızlı bolustur (3–5 dakikada bir tekrar, maksimum 3,0 mg). Asistoli ve Nabızsız Elektriksel Aktivite (NEA/PEA) arrest protokollerinden rutin atropin kanıt yokluğu nedeniyle tamamen çıkarılmıştır.',
+          'Neostigmin + Atropin Farmakokinetik Eşleşme Farkı: Aynı enjektörde verildiklerinde Atropin’in vagolitik etkisi 1–2 dakikada başlayıp 2–4 dakikada pik yaparken, Neostigmin’in kolinerjik (bradikardik) etkisi 2–3 dakikada başlayıp 7–10 dakikada pik yapar → bu nedenle enjeksiyondan sonraki ilk 2–3 dakikada KTA artışı, 7–10. dakikada ise KTA’nın bazale/hafif altına inişi görülür (geç bradikardi için EKG izlemi sürdürülmelidir).',
+          'Organofosfat Zehirlenmesinde "Pupilla Değil, Akciğer" Kuralı (Eddleston Lancet 2008): Atropinizasyonun (her 5 dk’da 2 katına çıkan 2 → 4 → 8 → 16 mg bolus merdiveni) birincil hedefi midriyazis sağlamak DEĞİLDİR; akciğer oskültasyonunda bronkorenin (rallerin/ronküslerin) tamamen kuruması, KTA > 80/dk ve SKB > 80 mmHg olmasıdır. Ayrıca atropin nikotinik reseptörleri etkilemediği için diyafram ve solunum kası felcini (intermediate sendrom) düzeltmez — Pralidoksim (2-PAM) ve mekanik ventilasyon ihmal edilmemelidir.',
+          'Spinal Anestezi Bezold-Jarisch Refleksi: Yüksek nöroaksiyel blokta venöz göllenmeye bağlı "boş ventrikülün hiperdinamik kasılması" kardiyak mekanoreseptörleri uyararak ani derin vagal bradikardi + hipotansiyon/asistoli tetikler; tek başına Atropin venöz dönüşü düzeltmez — eşzamanlı Efedrin (10–15 mg) veya hemen düşük doz Adrenalin (10–50 mcg IV) + bacak elevasyonu hayat kurtarır.',
         ]}
       />
 

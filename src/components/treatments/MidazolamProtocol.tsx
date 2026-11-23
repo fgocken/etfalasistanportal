@@ -2023,52 +2023,88 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'GABA-A Benzodiazepin (α/γ) Bölgesi, Reseptör Alt Tip Seçiciliği & pH-Bağımlı Halka Dinamiği',
+          title: 'Hücre Zarı & Moleküler Hedef (Pentamerik GABA-A Ekstraselüler α₁,₂,₃,₅ / γ₂ Arayüzü BZD Bağlanma Cebi & pH-Bağımlı İmidazol Halkası)',
           summary:
-            'Midazolam suda çözünür bir imidazobenzodiazepindir. Asidik ampul pH’ında (<4) açık olan imidazol halkası fizyolojik kan pH’ında (7.4) hızla kapanır; molekül ileri derecede lipofilik hale gelerek 1.5–3 dakikada kan-beyin bariyerini geçer.',
+            'Midazolam, asidik ampul ortamında (pH < 4,0) açık imidazol halkası sayesinde suda çözünür (propilen glikol gerektirmeyen) bir benzersiz imidazobenzodiazepindir; fizyolojik kan pH’ında (7,4) imidazol halkası geri dönüşümlü olarak kapanır, molekül hızla yüksek lipofilik forma geçerek kan-beyin bariyerini aşar ve postsinaptik nöron zarındaki pentamerik GABA-A reseptör kompleksinin ekstraselüler N-terminal alanında α₁, α₂, α₃ veya α₅ alt birimi ile γ₂ alt birimi arasındaki spesifik Benzodiazepin (BZD) bağlanma cebine (α-His101/His102 rezidüsü) yüksek afiniteyle bağlanır (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman 14th Ed.).',
           points: [
-            'Pozitif Allosterik Modülasyon (Frekans Artışı): GABA-A reseptöründe α ve γ₂ alt birimleri arasındaki BZD bağlanma cebine tutunur; endojen GABA’nın afinitesini artırarak Cl⁻ kanalının AÇILMA SIKLIĞINI (frekansını) artırır (propofol/barbitüratlar ise açık kalma süresini uzatır).',
-            'Tavan Etkisi (Ceiling Effect): Endojen GABA varlığına bağımlıdır; yüksek dozlarda dahi doğrudan Cl⁻ kanalını açamaz. Bu nedenle tek başına yüksek dozlarda bile propofol gibi EEG izoelektrik sessizliği yaratmaz.',
-            'α Alt Birim Farmakodinamik Ayrımı: α₁ alt birimi sedasyon, anterograd amnezi ve antikonvülzan etkiden; α₂ ve α₃ alt birimleri anksiyoliz ve santral kas gevşemesinden sorumludur.',
-            'İntrinsik Analjezi Yoktur: Nosiseptif iletimi kesmez; ağrılı işlemlerde opioid veya lokal anestezi gerektirir.',
+            'Ekstraselüler α⁺/γ₂⁻ Benzodiazepin Bağlanma Cebi (Ortotopik GABA Bağlanma Bölgesinden Ayrı): Endojen GABA reseptörün iki ayrı β⁺/α⁻ ekstraselüler arayüzüne bağlanırken, midazolam tekil α⁺/γ₂⁻ ekstraselüler arayüz cebine tutunur (α₄ ve α₆ alt birimleri His yerine Arg rezidüsü içerdiğinden benzodiazepinlere duyarsızdır).',
+            'α₁ Alt Birim İzotip Seçiciliği (Korteks, Talamus & Hipokampus — %60 GABA-A Havuzu): Serebral korteks, talamus ve serebellumda yoğunlaşan α₁βγ₂ reseptörlerinin modülasyonu; sedasyon, hipnoz, anterograd amnezi (hipokampal CA1 uzun-süreli potansiyalizasyon [LTP] baskılanması) ve antikonvülzan aktiviteden birincil derecede sorumludur.',
+            'α₂, α₃ ve α₅ Alt Birim İzotip Seçiciliği (Limbik Sistem & Spinal Kord): Amigdala ve hipokampustaki α₂βγ₂ reseptörleri anksiyolizden; spinal kord motor internöronları ve beyin sapı retiküler formasyondaki α₂/α₃βγ₂ reseptörleri santral kas gevşemesinden; hipokampal ekstra-sinaptik α₅βγ₂ reseptörleri ise bellek kodlama/kognitif baskılanmadan sorumludur.',
+            'Periferik & Nosiseptif Membran Özellikleri: Propofolün aksine vasküler düz kasta L-tipi Ca²⁺ kanalları üzerinde güçlü direkt blokajı yoktur ve nosiseptif Aδ/C liflerinde analjezik reseptör hedefi BULUNMAZ (saf sedatif-amnezik-antikonvülzandır).',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Sedasyon, Anterograd Amnezi & Antikonvülzan Etki: Güçlü anterograd amnezi sağlar (retrograd amnezi yapmaz). Limbik sistem ve kortikal yayılımı baskılayarak status epileptikusta 1. basamak antikonvülzandır.',
-            'Serebral Hemodinami & EEG: CMRO₂ ve CBF’yi propofole göre daha ılımlı (~%20–30) azaltır, CO₂ reaktivitesini korur ve ICP’yi yükseltmez (hiperkapni önlendiği sürece). EEG’de β aktivitesini artırır; BIS değerini propofol kadar öngörülebilir düşürmez.',
-            'Deliryum & Paradoksal Eksitasyon: Kortikal inhibitör ağlarda dengesizlik ve kolinerjik/GABAerjik disfonksiyonla YBÜ deliryum riskini belirgin artırır (SCCM PADIS). Çocuk/yaşlıda %1–2 paradoksal ajitasyon görülebilir.',
-          ],
-          cvs: [
-            'Hafif–Orta Vazodilatasyon (SVR ↓): Propofole kıyasla miyokard kontraktilitesini daha iyi korur; ancak özellikle hipovolemik, yaşlı veya opioid ile kombine edilen hastalarda SVR düşüşü ve venöz göllenmeye bağlı belirgin hipotansiyon gelişebilir.',
-            'Barorefleks Etkisi: Baroreseptör refleksini kısmen baskılar; kalp hızında hafif refleks artış veya nötr seyir izlenir.',
-          ],
-          respiratory: [
-            'CO₂ Yanıt Eğrisinin Baskılanması: Doza bağımlı olarak medüller solunum merkezinin CO₂ duyarlılığını azaltır ve apneik eşiği yükseltir (hızlı IV bolus veya KOAH/OSA’da ani apne).',
-            'Üst Havayolu Tonusu Kaybı: Faringeal dilatatör kas tonusunu (özellikle genioglossus) azaltarak obstrüktif uyku apneli ve obez hastalarda hızla üst havayolu tıkanmasına yol açar.',
-          ],
-          other: [
-            'Spinal internöronlarda glisin/GABA potansiyalizasyonu ile santral kas gevşemesi (Miyastenia Gravis’te tehlikeli)',
-            'Adrenal steroidogenezi baskılamaz ve Malign Hipertermi tetiklemez',
-            'Aktif 1-OH-midazolam glukuronid böbrek yetmezliğinde birikerek uzamış koma yapar',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Midazolamın α/γ₂ cebine bağlanması tek başına iyon kanalını açamaz; reseptörde allosterik konformasyonel bir kayma yaratarak endojen GABA’nın bağlanma afinitesini artırır ve Cl⁻ kanalının AÇILMA SIKLIĞINI (frekansını) yükselterek nöronal hiperpolarizasyon üretir:',
+          points: [
+            'Allosterik Konformasyonel Kayma & Cl⁻ Kanal Açılma Frekansı Artışı (Propofol Süre Uzatımı vs Midazolam Frekans Artışı): α/γ₂ arayüzündeki bağlanma, reseptörün TM2 sarmallarında yapısal bükülme oluşturarak endojen GABA’nın β/α bölgesine bağlanma afinitesini (Kd düşüşü) 2–3 kat artırır. Propofol ve barbitüratlar kanalın açık kalma süresini (duration) uzatırken, midazolam birim zamanda Cl⁻ kanalının açılma sıklığını (frequency of channel opening) artırır.',
+            'Hücre İçi Cl⁻ Akışı (ICl), Postsinaptik Hiperpolarizasyon & IPSP Güçlenmesi: Kanal açılma frekansının artmasıyla ekstraselüler aralıktan nöron sitozolüne negatif yüklü Cl⁻ iyonları (ICl) akar; zar potansiyeli dinlenim değerinden (−65 mV) klorür denge potansiyeline (−75 mV) doğru hiperpolarize olur. İnhibitör postsinaptik potansiyellerin (IPSP) genliği büyür ve eksitatör glutamaterjik/sempatomimetik aksiyon potansiyeli ateşlemesi durdurulur.',
+            'Endojen GABA Bağımlılığı & Fizyolojik Tavan Etkisi (Ceiling Effect): Midazolam yüksek konsantrasyonlarda dahi GABA yokluğunda Cl⁻ porunu doğrudan açamaz (direkt agonizmi yoktur). Sinaptik aralıktaki mevcut endojen GABA tüm reseptörleri doyurduğunda (~%20–30 maksimum GABA-A iletkenlik artışı) kanal açılma frekansı fizyolojik bir tavana ulaşır; bu nedenle tek başına midazolam ile izoelektrik EEG oluşmaz.',
+            'Hipokampal CA1 Sinaptik Plastisite (LTP) & Kronik Maruziyette Reseptör/GABA-A Uncoupling Kaskadı: Hipokampal piramidal nöronlarda α₁/α₅ aracılı hiperpolarizasyon, voltaj-bağımlı Mg²⁺ bloğunun kalkmasını önleyerek NMDA-Ca²⁺-CaMKII bağımlı Uzun Süreli Potansiyalizasyonu (LTP) bloke eder (yeni bellek izi yazılamaz → anterograd amnezi). >48–72 saatlik sürekli YBÜ infüzyonunda ise GABA-A alt birimlerinin endositozla internalizasyonu ve α/γ₂ allosterik kenet kaybı (uncoupling) gelişerek tolerans ve ani kesilmede eksitatör yoksunluk fırtınası doğar.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Kortiko-Limbik Ağ, Hipokampus & Serebral Dolaşım → SSS, Bellek & EEG Fizyolojisi',
+            tissueTarget: 'Hipokampus CA1 · Amigdala · Neokorteks · Serebral Yatak',
+            accent: 'indigo',
+            points: [
+              'Anterograd Amnezi, Anksiyoliz & Antikonvülzan Ağ Baskılanması: Hipokampal CA1 ve amigdalada α₁/α₂/α₅-GABA-A potansiyalizasyonuyla enjeksiyon anından itibaren güçlü anterograd amnezi (retrograd amnezi yapmaz) ve anksiyoliz üretir; kortikal ve limbik yüksek frekanslı epileptiform yayılımı saniyeler içinde kırarak status epileptikusta (RAMPART: 10 mg IM veya IV bolus) 1. basamak nöbet durdurucu etki gösterir.',
+              'Serebral Hemodinami (CMRO₂ / CBF) & EEG/BIS Davranışı: CMRO₂ ve CBF’yi doz-bağımlı ancak propofolden daha ılımlı (%20–30) düşürür, vazomotor CO₂ reaktivitesini korur ve normokapnide ICP’yi artırmaz; ancak GABA-A tavan etkisi nedeniyle izoelektrik EEG üretemez. EEG’de frontal yüksek frekanslı β (14–30 Hz) spindle aktivitesini artırdığı için BIS değerini propofol kadar doğrusal düşürmez.',
+              'Kortikal İnhibitör Ağ Dengesizliği, YBÜ Deliryumu & Paradoksal Eksitasyon: Fizyolojik yavaş dalga (NREM Evre 3) ve REM uyku mimarisini bozması ve talamokortikal GABAerjik/kolinerjik disfonksiyon yaratması nedeniyle yoğun bakım deliryumu için bağımsız risk faktörüdür (SCCM PADIS 2018); pediatrik ve geriatrik hastalarda (%1–2) subkortikal disinhibisyonla paradoksal ajitasyon/öfke atağı tetikleyebilir.',
+            ],
+          },
+          {
+            systemTitle: 'RVLM Sempatik Merkezi, Venöz Kapasitans & Miyokard → Kardiyovasküler Fizyoloji',
+            tissueTarget: 'Medüller Vazomotor Merkez · Kapasitans Venleri · Miyokard',
+            accent: 'rose',
+            points: [
+              'Santral Sempatoliz & Venöz Göllenme (SVR ↓, Preload ↓): Sağlıklı övolemik bireyde hemodinamiyi minimal değiştirirken, rostral ventrolateral medullada (RVLM) sempatik çıkışı azaltarak sistemik vasküler direnci (SVR %10–20 ↓) ve venöz kapasitans tonusunu düşürür; hipovolemik, yaşlı, perikardiyal tamponadlı veya opioid ile kombine edilen hastalarda belirgin hipotansiyon gelişir.',
+              'Miyokard Kontraktilitesi & Barorefleks Korunumu: Propofol ve tiyopentalin aksine kardiyomiyosit Ca²⁺ akımı üzerinde klinik dozlarda anlamlı direkt negatif inotropik etkisi yoktur ve baroreseptör refleks arkını tamamen sıfırlamaz (hipotansiyona hafif refleks kalp hızı artışı yanıt verebilir).',
+              'Sempatomimetik Fırtına & Katekolamin Krizinin Kırılması: Kokain, metamfetamin, sentetik kannabinoid (bonzai) intoksikasyonu veya deliryum tremens’te santral GABAerjik tonusu restore ederek hipotalamik/medüller katekolamin deşarjını kaynağında susturur → karşılanmamış α₁ vazokonstriksiyon riski yaratmadan taşikardi, hipertansiyon ve koroner vazospazmı çözer.',
+            ],
+          },
+          {
+            systemTitle: 'Medüller Solunum Merkezi & Üst Havayolu Dilatatör Kasları → Solunum Fizyolojisi',
+            tissueTarget: 'Pre-Bötzinger Kompleksi · Hipoglossal Çekirdek / Genioglossus',
+            accent: 'teal',
+            points: [
+              'Medüller Kemoreseptör Baskılanması & Hiperkapnik/Hipoksik Yanıt: Beyin sapı solunum merkezinde dakika ventilasyonunu ve tidal volümü azaltır; PaCO₂–ventilasyon yanıt eğrisinin eğimini düşürür ve özellikle KOAH, yaşlı veya hızlı IV bolusta (<1–2 dk) santral apne üretir.',
+              'Faringeal Kas Hipotonisi & Üst Havayolu Kollapsı: Hipoglossal motor nöronlardaki α₂/α₃-GABA-A inhibisyonuyla genioglossus ve damak kaslarının tonusu erken evrede kaybolur → obez ve Obstrüktif Uyku Apnesi (OSA) hastalarında sedasyonun ilk dakikalarında mekanik üst havayolu tıkanması gelişir.',
+              'Opioidlerle Supra-Aditif Solunum Depresyonu: Tek başına sağlıklı erişkinde apne insidansı düşükken, µ-opioid agonistleriyle (fentanil/remifentanil/morfin) eşzamanlı verildiğinde medüller ritim merkezi ve karotid cisimcik hipoksik yanıtı aynı anda çökerek hipoksemik apne riskini ~4 kat artırır.',
+            ],
+          },
+          {
+            systemTitle: 'Hepato-İntestinal CYP3A4, Renal Glomerül & Spinal Motor Doku → Sistemik Organlar',
+            tissueTarget: 'Hepatosit CYP3A4 · Renal Filtrasyon · Spinal Renshaw Hücresi',
+            accent: 'amber',
+            points: [
+              'Hepatik/İntestinal CYP3A4 Biyotransformasyonu & Siroz Etkisi: Karaciğer ve bağırsak duvarında CYP3A4/3A5 ile hızla 1-hidroksimidazolama (1-OH-midazolam; ana ilacın ~%50–60’ı kadar farmakolojik aktif!) hidroksillenir ve ardından UGT1A4/2B4 ile glukuronidlenir; ileri sirozda (Child-Pugh C), düşük kardiyak debide veya CYP3A4 inhibitörleriyle (klaritromisin, azoller, diltiazem) sistemik klirens %50–90 çöker.',
+              'Renal Glomerüler Eliminasyon & Aktif 1-OH-Midazolam Glukuronid Birikimi: Aktif metabolit 1-OH-midazolam glukuronid (%60–80) böbreklerden glomerüler filtrasyonla atılır ve GABA-A reseptöründe belirgin sedatif aktiviteye sahiptir; eGFR < 30 mL/dk (ABH/KBY) hastalarında >24–48 saat infüzyonda bu aktif konjugat plazmada 5–10 kat birikerek infüzyon kapatıldıktan sonra günlerce süren derin üremik/farmakolojik koma yapar.',
+              'Spinal Kord Polisinaaptik İnternöronları & Adrenal/Nöromüsküler Doku: Spinal kord Renshaw hücreleri ve ara nöronlarda α₂/α₃-GABA-A potansiyalizasyonuyla santral iskelet kası gevşemesi sağlar (status epileptikus ve tetanoz spazmlarında faydalı; Miyastenia Gravis’te solunum kas güçsüzlüğünü ağırlaştırır). Adrenal korteks steroidogenezini baskılamaz ve Malign Hipertermi tetiklemez.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, GABA Tavan Etkisi, Opioid Supra-Aditif Sinerjisi, Flumazenil Kinetiği & CSHT',
           summary:
-            'Midazolam tek başına bir tavan etkisine sahip olsa da opioidler, propofol ve alkol ile ölümcül düzeyde farmakodinamik sinerji gösterir.',
+            'Midazolamın reseptör kinetiğini belirleyen üç temel klinik eksen; endojen GABA doygunluğuna bağlı fizyolojik tavan etkisi, opioid/propofol ile kurduğu güçlü supra-aditif sinerji ve kompetitif antagonist Flumazenil ile arasındaki yarı ömür uyumsuzluğudur.',
           points: [
-            'Opioid–Midazolam Sinerjisi: Fentanil/remifentanil/morfin ile kombine edildiğinde solunum depresyonu ve hipoksemik apne riski aditif değil SİNERJİKTİR (~4 kat artış); indüksiyon/sedasyon dozları karşılıklı %50 azaltılmalıdır.',
-            'Propofol & İnhalasyon Ajanlarıyla Ko-indüksiyon: 1–2 mg midazolam propofol indüksiyon dozunu ~%20–30 ve inhalasyon MAC değerini ~%15–25 düşürür.',
-            'Kompetitif Antagonist — Flumazenil: GABA-A BZD cebinde yüksek afiniteli kompetitif antagonisttir; sedasyon ve solunum depresyonunu 1–2 dk içinde geri çevirir ancak kısa yarı ömrü (~40–80 dk) nedeniyle re-sedasyon riski taşır.',
+            'Midazolamın Fizyolojik GABA Tavanı vs Propofolün Direkt Kanal Açılımı: Midazolam yalnızca endojen GABA’nın reseptöre bağlanma afinitesini ve Cl⁻ kanal açılma frekansını artırabildiği için, sinaptik GABA tüm reseptörleri doyurduğunda farmakodinamik bir tavan etkisine (ceiling effect) ulaşır (genel anestezi/izoelektrik EEG için tek başına yetersizdir); buna karşılık Propofol β₂/β₃ alt birimini doğrudan açabildiği için tavansız derin koma üretir.',
+            'Opioid–Midazolam Supra-Aditif (4×) Apne Sinerjisi & Ko-İndüksiyon: Midazolam (GABA-A Cl⁻ frekans artışı) ile opioidler (µ-reseptör Gαi/o K⁺ açılımı ve Ca²⁺ blokajı) veya propofol (GABA-A β₂/β₃ süre uzatımı) farklı moleküler hedeflerden aynı nöronal ağları hiperpolarize eder → ko-indüksiyonda propofol EC₅₀’sini %25–35 düşürürken, opioid birlikteliğinde apne ve hipoksemi riskini aditif değil 4 kat sinerjik artırır (her iki doz %50 azaltılmalıdır).',
+            'Flumazenil Kompetitif Antagonizması & Re-Sedasyon Kinetik Tuzağı: Flumazenil (Anexate), GABA-A α/γ₂ BZD cebine yüksek afiniteyle ancak intrinsik aktivite göstermeden (sıfır etkinlik) bağlanan spesifik kompetitif antagonisttir; 0,2–1 mg IV titrasyonla sedasyon ve apneyi 60–120 saniyede çözer. Ancak Flumazenilin eliminasyon yarı ömrü (~40–80 dk) midazolam (2–6 saat) ve aktif 1-OH-midazolam glukuronidden çok daha kısa olduğu için 45–90 dakika sonra antagonist reseptörden ayrılır ve hasta tekrar derin komaya/apneye (re-sedasyon) girebilir.',
+            'Bağlam Duyarlı Yarı Ömür (CSHT) Patlaması: Tek IV bolusta redistribüsyonla (t½α ~4–15 dk) etki 30–60 dakikada sonlanırken; yüksek lipofilisite (Vd 1–3 L/kg), obezitede genişleyen yağ kompartmanı ve YBÜ’de azalmış CYP3A4/renal klirens nedeniyle >48 saatlik sürekli infüzyonda CSHT 30 dakikadan saatler–günler düzeyine fırlar.',
           ],
         }}
         clinicalPearls={[
-          'Böbrek Yetmezliğinde 1-OH-Midazolam Glukuronid Tuzağı: Ana ilaç hepatik CYP3A4 ile 1-OH-midazolama (~%50 aktif) çevrilir, ardından glukuronidlenerek böbrekten atılır. eGFR < 30 mL/dk hastalarda bu aktif glukuronid birikerek infüzyon kapatıldıktan sonra günlerce süren koma yapar.',
-          'CSHT (Bağlama Duyarlı Yarı Ömür) Uzaması: 2 saatlik infüzyonda ~30 dk olan CSHT, lipofilik yağ kompartmanı doldukça >48 saatlik YBÜ infüzyonlarında saatler–günler düzeyine çıkar.',
-          'CYP3A4 İlaç Etkileşim Patlaması: Klaritromisin, vorikonazol, flukonazol, diltiazem, verapamil ve ritonavir/pakslovid gibi güçlü CYP3A4 inhibitörleri midazolam düzeyini 5–15 kat artırarak derin ve uzamış komaya neden olur.',
-          'Paradoksal Reaksiyon Yönetimi: Özellikle çocuk ve yaşlıda midazolam sonrası gelişen ajitasyonda ek midazolam vermek tabloyu ağırlaştırır; düşük doz flumazenil (0.1–0.2 mg) veya alternatif ajan (deksmedetomidin/haloperidol) düşünülmelidir.',
+          'Neden Kronik BZD Bağımlısında ve TCA Zehirlenmesinde Flumazenil Kontrendikedir? Kronik BZD kullanımında veya polisiklik/trisiklik antidepresan (TCA) intoksikasyonunda GABA-A reseptörleri down-regüle ve eksitatör sistem aşırı yüklüdür; Flumazenil ile BZD korumasının saniyeler içinde kaldırılması durdurulamayan refrakter Status Epileptikus ve ventriküler taşiaritmi tetikler.',
+          'Böbrek Yetmezliği (eGFR < 30 mL/dk) "Uyanmayan YBÜ Hastası" Tuzağı: Midazolam karaciğerde yıkılır diye böbrek yetmezliğinde güvenli sanılması en sık YBÜ hatasıdır! Aktif metabolit 1-OH-midazolam glukuronid böbrekten atılır; KBY/ABH hastasında >24–48 saat infüzyonda birikerek infüzyon kapatıldıktan sonra 3–7 gün süren derin koma yapar (Flumazenil test dozuyla tanı doğrulanabilir).',
+          '5 Kat Konsantrasyon Farkı (1 mg/mL vs 5 mg/mL Ampul): Türkiye’de 5 mg/5 mL (1 mg/mL) ve 5 mg/1 mL veya 15 mg/3 mL (5 mg/mL) ampuller yan yana bulunur. IV prosedürel sedasyonda 5 mg/mL ampulü mutlaka 1 mg/mL’ye (1 mL ampul + 4 mL SF = 5 mg/5 mL) sulandırarak 0,5–1 mg yavaş fraksiyonlarla uygulayın; IM/İntranazal status epileptikusta ise hacmi küçük tutmak için sulandırılmamış 5 mg/mL ampul (10 mg = 2 mL) kullanın.',
+          'Paradoksal Ajitasyon (%1–2 Çocuk ve Yaşlı): Midazolam sonrası gelişen disinhibisyon ve öfke atağında "sedasyon yetmedi" düşüncesiyle ek midazolam yapmak tabloyu ağırlaştırır; tedavide düşük doz Flumazenil (0,1–0,2 mg IV) veya GABA dışı alternatif (deksmedetomidin / ketamin / haloperidol) tercih edilir.',
         ]}
       />
 

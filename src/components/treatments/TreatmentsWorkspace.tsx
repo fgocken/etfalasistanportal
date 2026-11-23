@@ -44,6 +44,7 @@ import { EphedrineProtocol } from './EphedrineProtocol';
 import { NaloxoneProtocol } from './NaloxoneProtocol';
 import { FlumazenilProtocol } from './FlumazenilProtocol';
 import { DopamineProtocol } from './DopamineProtocol';
+import { DobutamineProtocol } from './DobutamineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1113,6 +1114,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'dobutamine',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'İnodilatör (β₁ >> β₂) · Katekolamin',
+    badge: 'Kardiyojenik & Septik Şok 2–20 mcg/kg/dk',
+    title: 'Dobutamin Hidroklorür (DOBUTamin · Dobutasel)',
+    shortDesc: 'Doğrudan β₁-adrenerjik ağırlıklı rasemik inodilatör; kardiyojenik şok (ESC 2021 / DOREMI), septik kardiyomiyopati (SSC 2021 Noradrenalin + Dobutamin), KPB sonrası düşük debi (LCOS), stres ekokardiyografi ve β₂ vazodilatasyon/LVOTO yönetimi.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Flakon & Standart Çözelti',
+        value: '250 mg / 20 mL (12,5 mg/mL)',
+        subtext: '250 mL’de 1000 veya 2000 mcg/mL',
+        tooltip: '1 flakon (250 mg / 20 mL) + 230 mL SF/%5 Dekstroz = 1000 mcg/mL (1 mg/mL); 50 mL enjektörde 1 flakon + 30 mL = 5000 mcg/mL (5 mg/mL)',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'İnodilatör İdame Dozu',
+        value: '2 – 20 mcg/kg/dk',
+        subtext: 'Optimal: 5–10 mcg/kg/dk (CO↑ PCWP↓)',
+        tooltip: 'ESC 2021 / DOREMI NEJM 2021: Doğrudan β₁ inotropi + hafif β₂ vazodilatasyon ile SV ve CO artırırken LVEDP/PCWP ve SVR’yi düşürür',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'İnodilatör Hipotansiyon Tuzağı',
+        value: 'Vazopresör DEĞİLDİR (SVR↓)',
+        subtext: 'MAP < 65 ise Noradrenalin ile ver!',
+        tooltip: 'SSC 2021 / CATS Lancet 2007: β₂ vazodilatasyon nedeniyle derin hipotansiyonda tek başına başlanırsa MAP’ı düşürür; Noradrenaline eklenir',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Mutlak Kontrendikasyon & LASA',
+        value: 'IHSS / LVOTO & DOPamin!',
+        subtext: 'Dinamik LVOT obstrüksiyonunda VERME!',
+        tooltip: 'Hipertrofik kardiyomiyopati (HOCM/IHSS) ve Takotsubo LVOTO’da gradyenti artırarak şoku derinleştirir; DOPamin ile LASA çift kontrol şarttır',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -1196,7 +1248,10 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     anexate: 'flumazenil',
     dopamin: 'dopamine',
     dopmin: 'dopamine',
-    dopadren: 'dopamine'
+    dopadren: 'dopamine',
+    dobutamin: 'dobutamine',
+    dobutasel: 'dobutamine',
+    dobuthaver: 'dobutamine'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1842,6 +1897,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 22: DOPAMİN HİDROKLORÜR MONOGRAFİSİ & D1/β1/α1 DOZ-BAĞIMLI İNFÜZYON HESAPLAYICISI */}
       {(activeProtocolId === 'dopamine' || activeProtocolId === 'dopamin' || activeProtocolId === 'dopmin' || activeProtocolId === 'dopadren') && (
         <DopamineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 23: DOBUTAMİN HİDROKLORÜR MONOGRAFİSİ & İNODİLATÖR (β1 >> β2) İNFÜZYON HESAPLAYICISI */}
+      {(activeProtocolId === 'dobutamine' || activeProtocolId === 'dobutamin' || activeProtocolId === 'dobutasel' || activeProtocolId === 'dobuthaver') && (
+        <DobutamineProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}

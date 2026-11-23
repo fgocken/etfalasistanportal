@@ -2163,51 +2163,87 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           ========================================================================= */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Kullanım & Durum-Bağımlı (Use/State-Dependent) Nav Kanal Blokajı + Anti-İnflamatuar Etki',
+          title: 'Hücre Zarı & Moleküler Hedef (Voltaj-Kapılı Na⁺ Kanalları [Nav1.7/1.8/1.9 & Nav1.5] D4S6 İç Poru, pKa 7,9 Transmembran Difüzyon & Gαq-GPCR)',
           summary:
-            'Lidokain, hücre zarını non-iyonize (lipofilik) formda geçtikten sonra hücre içinde tekrar katyonik (iyonize) hale dönerek voltaj-kapılı sodyum kanallarının (periferik Nav1.7/1.8/1.9 ve kardiyak Nav1.5) iç S6 poruna bağlanır.',
+            'Lidokain (2-(dietilamino)-N-(2,6-dimetilfenil)asetamid; pKa = 7,9), amfipatik bir tersiyer amin amid lokal anestezik ve Vaughan Williams Sınıf Ib antiaritmiktir. Ekstraselüler fizyolojik pH’ta (7,4) ~%24 oranında bulunan yüksüz (non-iyonize) baz formu (B) nöronal akson membranı veya kardiyomiyosit sarkolemmasının hidrofobik lipid çift katmanını difüzyonla geçer; aksoplazma/sitozol içinde yeniden protonlanarak katyonik aktif forma (BH⁺) dönüşür ve voltaj-kapılı Na⁺ kanallarının (periferik Nav1.7/1.8/1.9 ve kardiyak Nav1.5) α-alt biriminin IV. domain S6 transmembran segmentindeki (D4S6; Phe1760 ve Tyr1767 rezidüleri) sitoplazmik iç por ağzına bağlanır (Miller’s 10th Ed. / Stoelting’s 6th Ed.).',
           points: [
-            'Durum ve Kullanım Bağımlı Blokaj (Modulated Receptor Hypothesis): Dinlenim halindeki (kapalı) kanallara afinitesi düşüktür; açık ve özellikle inaktive durumdaki kanallara yüksek afiniteyle bağlanır. Hızlı ateşleyen nosiseptörlerde ve iskemik/taşikardik miyokardda blokaj katlanır (Sınıf Ib antiaritmik üstünlüğü).',
-            'Hızlı Ayrılma Kinetiği (Fast Off-Rate): Bupivakainin aksine diyastolde Nav1.5 kanallarından hızla ayrılır; bu nedenle kardiyotoksisite/CNS toksisite oranı (CC/CNS ~7:1) bupivakaine (~2:1) göre çok daha geniştir ve LAST gelişirse resüsitasyona daha iyi yanıt verir.',
-            'Anti-İnflamatuar & Anti-Hiperaljezik Sistemik Mekanizma: Düşük sistemik plazma konsantrasyonlarında (1–4 mcg/mL) Gq-kenetli reseptör sinyallemesini, NMDA fosforilasyonunu, nötrofil priming/adezyonunu ve pro-inflamatuar sitokin (IL-6, TNF-α, IL-1β) salınımını baskılayarak postoperatif ileusu ve santral sensitizasyonu azaltır.',
+            'Modüle Reseptör Hipotezi & Durum/Kullanım-Bağımlı (Use-Dependent / Phasic) Blokaj: Dinlenim (kapalı / resting) halindeki Na⁺ kanallarına afinitesi çok düşüktür (Kd ~300–1000 µM); buna karşın depolarizasyonla açılan (open) ve özellikle inaktive (inactivated) konformasyondaki kanallara ~20–50 kat daha yüksek afiniteyle (Kd ~10–30 µM) bağlanır. Hızlı ateşleyen ağrı liflerinde ve taşikardik/iskemik depolarize miyokardda blokaj frekans-bağımlı olarak katlanır.',
+            'Hızlı Kanal İçi Giriş-Çıkış Kinetiği ("Fast-In, Fast-Out" · τ_recovery ≈ 0,1–0,3 sn): Bupivakainin ("fast-in, slow-out", τ > 1,5–3 sn) aksine, lidokain diyastolik repolarizasyon sırasında Nav1.5 iç porundan milisaniyeler içinde ayrılır. Bu sayede normal kalp hızlarında ve sağlıklı (dinlenim potansiyeli −90 mV olan) ventrikül dokusunda iletimi bozmazken, kısmen depolarize (−70 mV) iskemik odakları seçici olarak susturur.',
+            'Hidrofilik (İç Por) vs Hidrofobik (Membran Fenestrasyonu) Erişim Yolu: Katyonik form (BH⁺) yalnızca kanal açıkken sitoplazmik aktivasyon kapısından iç pora girebilirken, lipofilik yüksüz baz formu (B) kanalın yan lipid fenestrasyonlarından dinlenim halinde de bağlanma bölgesine sızabilir.',
+            'Sistemik IV İnfüzyonda Polimorfonükleer Nötrofil (PMN) & Gαq-GPCR Membran Hedefi: Terapötik düşük plazma konsantrasyonlarında (1–4 mcg/mL = 4–15 µM, yani aksonal blok eşiğinin çok altında) lökosit, endotel ve dorsal boynuz glia hücre zarındaki Gαq/11-kenetli GPCR’lerin (muskarinik M1/M3, tromboksan A2, PAF ve lizofosfatidat reseptörleri) sinyal iletimini, glisin taşıyıcısını (GlyT1) ve postsinaptik NMDA reseptör fosforilasyonunu allosterik olarak inhibe eder.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Bifazik LAST MSS Prodromu → Nöbetler → Koma: 5–10 mcg/mL düzeyinde önce kortikal inhibitör GABAerjik internöronlar bloke olur (disinhibisyon): perioral/dil uyuşması, metalik tat, tinnitus, dizartri, anksiyete ve kas seğirmeleri gelişir.',
-            '10–15 mcg/mL düzeyinde eksitatör yollar hakim olur ve jeneralize tonik-klonik nöbetler başlar; ardından tüm kortikal aktivitenin baskılanmasıyla koma ve medüller solunum arresti gelişir.',
-            'Terapötik IV Düzeyde (1–4 mcg/mL): Hafif sedasyon, öksürük/laringeal refleks baskılanması ve serebral vazokonstriksiyon (CBF/ICP hafif azalması) sağlar.',
-          ],
-          cvs: [
-            'Terapötik Sınıf Ib Antiaritmik Etki: İskemik Purkinje/ventrikül dokusunda faz 0 depolarizasyonu yavaşlatır, aksiyon potansiyeli süresini (APD) ve etkin refrakter periyodu (ERP) kısaltarak reentry aritmilerini kırar.',
-            'LAST Kardiyotoksisitesi (> 15–25 mcg/mL): Yaygın Nav1.5 blokajıyla PR/QRS genişlemesi, Brugada-benzeri ST elevasyonu, ileri AV blok, negatif inotropi, derin vazoplejik hipotansiyon, polimorfik VT/VF ve dirençli asistoli gelişir.',
-          ],
-          respiratory: [
-            'Terapötik IV Dozda: Medüller solunum dürtüsünü korur; trakeal irritabiliteyi ve entübasyon/ekstübasyona bağlı refleks bronkospazm ile öksürüğü güçlü biçimde baskılar.',
-            'LAST / Yüksek Dozda: Hipoksik ventilatuvar yanıtı köreltir ve MSS depresyonuyla birlikte santral apneye yol açar; asidoz ve hiperkapni gelişirse LAST toksisitesi daha da derinleşir (kısır döngü!).',
-          ],
-          other: [
-            'Nöromüsküler blokerlerin (roküronyum/vekuronyum) etkisini hafif potansiyalize eder',
-            'Postoperatif bağırsak motilitesini korur ve ileus süresini kısaltır',
-            'İntraoperatif propofol ve volatil anestezik (MAC) ihtiyacını %10–25 azaltır',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Lidokainin iç por bağlanması ve hücre içi sinyal etkileşimi; periferik aksonlarda, ventriküler kardiyomiyositlerde, nötrofillerde ve toksik dozlarda mitokondri iç zarında dört farklı biyofiziksel kaskad oluşturur:',
+          points: [
+            'Periferik Aksonlarda Faz 0 Na⁺ Akımı (INa) Durması & Eşik Potansiyel (−55 mV) Blokajı: D4S6 iç porunda inaktivasyon kapısını (III–IV hücre içi halkası) kapalı konformasyonda kilitleyerek hücre içine hızlı Na⁺ akışını durdurur. Yerel depolarizasyon −55 mV eşik potansiyeline ulaşamaz, aksiyon potansiyeli rejenerasyonu (güvenlik faktörü < 1) çöker ve Ranvier boğumları arasındaki saltatuar/sürekli iletim tam ancak geri dönüşümlü olarak kesilir.',
+            'Kardiyomiyosit & Purkinje Hücresi İçi (Sınıf Ib: Faz 2 Geç INa Blokajı → APD↓ & ERP↓): İskemik Purkinje ve ventrikül miyositlerinde Faz 0 maksimum yükselme hızını (Vmax / dV/dtmax) yavaşlatır ve Faz 4 anormal spontan diyastolik depolarizasyon eğimini (otomatisiteyi) bastırır. Eşzamanlı olarak Faz 2 platosundaki "geç/persistan Na⁺ akımını" (late INa) bloke edip K⁺ dışa akışını koruduğu için Aksiyon Potansiyeli Süresini (APD) ve Efektif Refrakter Periyodu (ERP) kısaltır; ancak ERP/APD oranını artırarak mikro-reentry halkalarını kırar.',
+            'Nötrofil & Dorsal Boynuz Hücresi İçi Anti-İnflamatuar Kaskad (Gαq → PLC/PKC↓ & NF-κB↓): Gαq protein blokajıyla hücre içi IP₃/Ca²⁺ salınımı ve Protein Kinaz C (PKC) aktivasyonu baskılanır → PMN nötrofillerinde süperoksit (ROS) üretimi, CD11b/CD18 integrin ekspresyonu ve endotelyal ICAM-1 adezyonu ("neutrophil priming") durur; makrofajlarda NF-κB translokasyonu ve pro-inflamatuar sitokin (IL-1β, IL-6, TNF-α, HMGB1) deşarjı azalır.',
+            'Toksik Konsantrasyonlarda (>15–25 mcg/mL) Mitokondriyal Biyoenerjetik Çöküş & Ca²⁺/K⁺ Kanal Blokajı: Yüksek sitozolik konsantrasyonlarda kardiyomiyosit sarkolemmasındaki L-tipi Ca²⁺ (Cav1.2) ve gecikmiş doğrultucu K⁺ (Kv / hERG) kanallarını da bloke eder; mitokondri iç zarında Karnitin-Açilkarnitin Translokaz (CACT) enzimini ve Kompleks I/III elektron taşıma zincirini inhibe ederek oksidatif fosforilasyonu (ATP sentezini) çökerterek dirençli elektromekanik disosiyasyon (LAST arresti) üretir.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Periferik Sinir Lifleri & Spinal Arka Boynuz Dokusu → Somatik/Otonomik Sinir Sistemi',
+            tissueTarget: 'C & Aδ Nosiseptörler · B Sempatik Lifler · Aα/Aβ Motor Lifler',
+            accent: 'indigo',
+            points: [
+              'Diferansiyel Sinir Lifi Blokaj Hiyerarşisi: Akson çapı, miyelinizasyon, internodal mesafe ve ateşleme frekansına bağlı olarak önce yüksek frekanslı ince B (pregangliyonik sempatik → vazodilatasyon/cilt ısınması) ve C / Aδ lifleri (ağrı ve sıcaklık), ardından Aγ/Aβ (dokunma/propriyosepsiyon) ve en son kalın miyelinli Aα motor lifleri bloke olur.',
+              'Enfekte/Asidik Dokuda Blok Başarısızlığı (Henderson-Hasselbalch Biyofiziği): pKa = 7,9 olduğundan fizyolojik pH’ta (7,4) membranı geçebilen yüksüz baz oranı %24 iken, pürülan abse/iskemik dokuda (pH 6,0) bu oran %1,2’ye düşer (%98,8’i ekstraselüler alanda BH⁺ olarak hapsolur). 9 mL Lidokain + 1 mL %8,4 NaHCO₃ alkalinizasyonu pH’yı ~7,8’e çekerek non-iyonize fraksiyonu %44’e çıkarır ve blok başlangıcını <1–2 dakikaya indirir.',
+              'Spinal Subaraknoid Doku & Geçici Nörolojik Semptomlar (TNS): İntratekal yüksek konsantrasyonlu (%2–5) lidokain cauda equina çıplak aksonlarında direkt sitozolik Ca²⁺ artışı ve radiküler nöroinflamasyon yaparak %10–30 oranında gluteal/alt ekstremite TNS ağrısı oluşturur.',
+            ],
+          },
+          {
+            systemTitle: 'Kortikal İnhibitör İnternöronlar & Eksitatör Piramidal Ağ → Santral Sinir Sistemi (LAST)',
+            tissueTarget: 'GABAerjik İnternöronlar · Amigdala/Hipokampus · Medüller Merkez',
+            accent: 'rose',
+            points: [
+              'Terapötik Pencere (1–4 mcg/mL): Kortikal ve talamik aşırı uyarılabilirliği yatıştırarak hafif sedasyon, santral anti-hiperaljezi, serebral metabolik hız (CMRO₂) / kafa içi basıncı (ICP) artışı kontrolü ve antikonvülzan etki sağlar.',
+              'Bifazik LAST Faz 1 — Eksitasyon & Tonik-Klonik Nöbetler (5–15 mcg/mL): Kan-beyin bariyerini geçen serbest lidokain önce amigdala ve serebral korteksteki ince inhibitör GABAerjik internöronların Na⁺ kanallarını bloke eder; karşılıksız kalan eksitatör glutamaterjik piramidal nöron deşarjıyla (disinhibisyon) perioral uyuşma, metalik tat, tinnitus, nistagmus, fasikülasyon ve jeneralize tonik-klonik nöbetler patlak verir.',
+              'Bifazik LAST Faz 2 — Jeneralize MSS Depresyonu (>15 mcg/mL): Plazma düzeyi daha da yükseldiğinde eksitatör nöronların da Na⁺ kanalları tamamen bloke olur; elektriksel sessizlik, derin koma ve medüller solunum arresti gelişir.',
+            ],
+          },
+          {
+            systemTitle: 'His-Purkinje Ağı, Ventrikül Miyokardı & Vasküler Düz Kas → Kardiyovasküler Sistem',
+            tissueTarget: 'İskemik Ventrikül/Purkinje · SA/AV Düğüm · Arteriyoler Düz Kas',
+            accent: 'amber',
+            points: [
+              'İskemik Ventriküler Antiaritmik Seçicilik (1,5–5 mcg/mL): Normal atriyal, SA ve AV düğüm dokusunda aksiyon potansiyeli Faz 0’ı yavaş Ca²⁺ akımına (ICa-L) bağımlı olduğundan ve ventrikülde hızlı ayrılma kinetiği gösterdiğinden normal PR/QRS/QT süresini değiştirmez; yalnızca iskemik/depolarize ventrikül ve Purkinje dokusunda VF/VT odaklarını baskılar.',
+              'LAST Kardiyotoksisitesi (>15–25 mcg/mL) & CC/CNS Oranı (~7:1): Aşırı dozlarda sağlıklı Nav1.5, Cav1.2 ve mitokondriyal CACT blokajıyla PR uzaması, QRS genişlemesi, Brugada-benzeri ST değişikliği, tam AV blok, negatif inotropi ve refrakter asistoli/VF yapar (ancak CC/CNS oranı ~7,1 olduğundan bupivakainin ~2,0 oranına kıyasla kardiyak kollaps öncesi MSS uyarı penceresi çok daha belirgindir).',
+              'Bifazik Vasküler Düz Kas Tonusu: Düşük lokal konsantrasyonlarda endotelyal eNOS/NO inhibisyonu ve düz kas Ca²⁺ girişiyle hafif vazokonstriksiyon yaparken, yüksek/klinik infiltrasyon dozlarında sempatik B-lifi blokajı ve düz kas Cav1.2 blokajıyla lokal vazodilatasyon oluşturur (bu nedenle sistemik emilimi yavaşlatmak için 1:200.000 epinefrin eklenir).',
+            ],
+          },
+          {
+            systemTitle: 'Trakeobronşiyal Mukoza, Mezenterik/Enterik Pleksus & Hepatik Sinüzoid → Solunum, GİS & KC',
+            tissueTarget: 'Hava Yolu C-Lifleri · Miyenterik Pleksus · Hepatik CYP1A2/3A4',
+            accent: 'teal',
+            points: [
+              'Hava Yolu Refleks Süpresyonu & Bronkoproteksiyon: Laringeal ve trakeobronşiyal mukozadaki hızlı adapte olan irritan reseptörleri (RAR) ve vagal C-lifi afferentlerini bloke ederek entübasyon/ekstübasyon sırasında laringospazm, öksürük ("bucking") ve refleks bronkokonstriksiyonu önler.',
+              'Postoperatif İleus Çözülmesi & Enterik Motilite Korunumu: Sistemik IV infüzyon (Foo 2021) peritoneal cerrahi travmaya bağlı mezenterik nötrofil infiltrasyonunu, sempatik splanknik hiperaktiviteyi ve opioid tüketimini (%30–40) azaltarak miyenterik pleksus fonksiyonunu korur ve postoperatif ileus süresini 12–24 saat kısaltır.',
+              'Akım-Bağımlı Hepatik Klirens (CYP1A2/3A4 → MEGX → GX): Yüksek hepatik ekstraksiyon oranı (~0,65–0,70) nedeniyle klirensi doğrudan karaciğer kan akımına bağımlıdır; kalp yetmezliği, şok veya sirozda yıkım yarıya düşer ve konvülzan aktivitesi lidokainin %80’ine eşit olan aktif MEGX metaboliti böbrek yetmezliğinde birikir.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Asidoz İyon Tuzağı (Ion Trapping), Aditif LAST Kuralı & %20 İntralipid "Lipid Shuttle" Biyofiziği',
           summary:
-            'Lidokain hem periferik rejyonel blokta hem de sistemik multimodal anestezide güçlü bir adjuvan/sparing ajandır; ancak tüm lokal anesteziklerin sistemik toksisitesi ADİTİFTİR.',
+            'Lidokainin güvenli klinik kullanımı; asidozun serbest ilaç ve kanal bağlanması üzerindeki dramatik etkisini, tüm lokal anesteziklerin kümülatif (aditif) toksisitesini ve %20 İntralipid kurtarma mekanizmasını bilmeyi gerektirir.',
           points: [
-            'İnhalasyon MAC & Opioid Sparing: Perioperatif sistemik IV lidokain sevofluran/desfluran MAC değerini ~%10–25 ve postoperatif opioid ihtiyacını ~%30–40 azaltır (Weibel Cochrane 2018; Foo 2021).',
-            'Nöromüsküler Bloker (NMB) Potansiyalizasyonu: Presinaptik ACh salınımını azaltarak ve postsinaptik reseptörü duyarsızlaştırarak non-depolarizan NMB süresini hafifçe uzatabilir.',
-            'Lokal Anestezik Aditif Toksisite Kuralı: Farklı lokal anesteziklerin (ör. bupivakain TAP bloku + IV lidokain infüzyonu) LAST toksisitesi toplanır! Foo 2021 kılavuzu bloktan sonraki ilk 4 saatte IV lidokain başlanmasını KESİNLİKLE yasaklar.',
+            'Asidoz & Hiperkapni Kısır Döngüsü (AAG Ayrışması + İntraselüler/Fetal İyon Tuzağı): Nöbet veya hipoventilasyona bağlı gelişen respiratuar/metabolik asidoz (pH < 7,20) üç mekanizmayla LAST’ı ölümcülleştirir: (1) Plazma α₁-asit glikoproteine (AAG) bağlanma afinitesini düşürerek serbest toksik lidokain fraksiyonunu %30–50 artırır, (2) Serebral vazodilatasyonla beyne giden lidokain akımını yükseltir, (3) Nöron, kardiyomiyosit veya asidotik fetüs içine giren yüksüz baz (B), düşük hücre içi pH’ta katyonik forma (BH⁺) dönüşerek dışarı çıkamaz ve Na⁺ kanalı iç porunda hapsolur ("ion trapping").',
+            'Aditif Lokal Anestezik Toksisitesi & Foo 2021 Tavan Kuralları: Farklı lokal anesteziklerin (ör. Bupivakain/Ropivakain ile yapılan TAP, ESP, brakiyal pleksus veya yara yeri infiltrasyonu + sistemik IV Lidokain) Na⁺ kanalı blokajı ve LAST eşiği %100 ADİTİFTİR! Foo 2021 uluslararası konsensüsü gereği perioperatif IV lidokain IBW üzerinden ≤1,5 mg/kg/saat (mutlak tavan ≤120 mg/saat, süre ≤24 saat) ile sınırlandırılır ve herhangi bir rejyonel blokla arasında en az 4 saat boşluk bırakılır.',
+            'ASRA 2020 %20 İntralipid ("Lipid Sink" + "Lipid Shuttle" + İnotropik/Mitokondriyal Kurtarma): Damar içine verilen %20 soya yağı emülsiyonu; (1) Plazmada negatif yüklü bir "lipid fazı" oluşturarak amfipatik lidokain/bupivakain moleküllerini yüksek elektrostatik/hidrofobik afiniteyle yakalar ve kalp/beyin dokusundan çekip karaciğer (detoksifikasyon) ile iskelet kasına (depolama) taşır ("Lipid Shuttle"), (2) Kardiyomiyositlerde CACT inhibisyonunu aşarak serbest yağ asidi oksidasyonunu, Akt/GSK-3β sağkalım yolağını ve L-tipi Ca²⁺ akımını (doğrudan pozitif inotropi) restore eder.',
           ],
         }}
         clinicalPearls={[
-          'ASRA LAST 2020 Lipid Shuttle Mekanizması: %20 İntralipid yalnızca "lipid sink" (ilacı plazmada hapsetme) değil, aynı zamanda "lipid shuttle" ile lidokaini kalp/beyinden karaciğer/kasa taşır ve kardiyotonik/inotropik destek sağlar — Propofol ASLA İntralipid yerine geçmez!',
-          'Enfekte Dokuda Blok Başarısızlığı (pKa 7.9): Asidik abse ortamında (pH 6,0) non-iyonize fraksiyon %24’ten %1,2’ye düşer; 9:1 NaHCO₃ tamponlaması veya proksimal sinir bloğu gerekir.',
-          'Spinal TNS (Geçici Nörolojik Semptom) Tarihi Dersi: İntratekal lidokain sonrası %10–30 oranında şiddetli gluteal/bacak radiküler ağrı (TNS) geliştiğinden günümüzde spinal anestezide rutin olarak tercih edilmez.',
-          'İlk Belirti Nöbet Olmayabilir: Genel anestezi altındaki hastada MSS prodromu (metalik tat, tinnitus) maskelenir; LAST’ın ilk bulgusu ani QRS genişlemesi, bradikardi veya açıklanamayan refrakter hipotansiyon/arrest olabilir!',
+          'Neden LAST Resüsitasyonunda Propofol, Vazopresin, β-Bloker, KKB ve Yüksek Doz Adrenalin Yasaktır? Propofol %10 lipid içinde çözünmüş güçlü bir kardiyodepresan/vazodilatördür (100 mL İntralipid dozu vermek için 200 mL = 2000 mg propofol gerekir ki hastayı öldürür!). Yüksek doz Adrenalin (>1 mcg/kg) ve Vazopresin ise afterload’u artırıp koroner perfüzyonu ve İntralipid’in "lipid shuttle" klirensini bozarak refrakter VF ve pulmoner ödem yapar (ASRA 2020).',
+          'Aritmal %10 (500 mg/5 mL) vs Aritmal %2 (100 mg/5 mL) LASA Felaketi: Türkiye’de her iki ampul de 5 mL hacmindedir; ancak %10’luk ampul 100 mg/mL (toplam 500 mg!) içerir. Arrest veya RSI sırasında yanlışlıkla %2 sanılarak 5 mL %10 Aritmal puşe edilmesi (70 kg hastada >7 mg/kg saf IV bolus!) 30 saniye içinde jeneralize nöbet ve asistoli üretir.',
+          'Mukozal Sprey (Vemcaine %10: 1 puf = 10 mg) Emilim Hızı Tuzağı: Faringeal, laringeal ve trakeobronşiyal mukoza hepatik ilk-geçiş metabolizmasını (first-pass) bypass eder ve zengin kapiller ağıyla IV enjeksiyona yakın hızda emilim gösterir; uyanık fiberoptik entübasyon veya endoskopide kontrolsüz >20–30 puf (200–300 mg) sıkılması klasik LAST nöbeti tetikler.',
+          'Amiodaron vs Lidokain (AHA/ERC ACLS Perspektifi): Şoka dirençli VF/pVT kardiyak arrestinde Amiodaron (300 mg → 150 mg) ile Lidokain (1–1,5 mg/kg → 0,5–0,75 mg/kg) hastaneden sağkalımda eşdeğer kabul edilir (ALPS RCT, NEJM 2016); ancak akut miyokard iskemisine bağlı ventriküler aritmilerde Lidokainin iskemik depolarize dokuya seçici Sınıf Ib "fast-in/fast-out" mekanizması fizyolojik avantaj sağlar.',
         ]}
       />
 

@@ -944,52 +944,87 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'GABA-A, Glisin, TREK-1 K₂P Kanalları, NMDA İnhibisyonu, TRPA1 & RyR1 MH Tetiklenmesi',
+          title: 'Hücre Zarı & Moleküler Hedef (GABA-A / Glisin, K2P [TREK-1/TASK-1/3], Nav/Cav, Hava Yolu TRPA1/TRPV1 & RyR1)',
           summary:
-            'Desfluran tam florlu metil etil eter yapısıyla (CHF₂–O–CHF–CF₃) santral sinir sisteminde inhibitör reseptörleri güçlendirip eksitatör sinaptik iletimi baskılar (Miller’s / Stoelting’s / Barash). Ek olarak hava yolundaki nosiseptif TRPA1 iyon kanallarını doğrudan aktive etmesi klinik profilini Sevoflurandan keskin biçimde ayırır.',
+            'Desfluran (CHF₂–O–CHF–CF₃), izoflurandaki tek klor atomunun flor ile yer değiştirmesiyle elde edilmiş tam florlu metil etil eter genel anesteziğidir (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Barash). Santral sinir sisteminde inhibitör/eksitatör iyon kanallarını modüle ederken, Sevoflurandan farklı olarak üst/alt solunum yolu nosiseptif TRPA1 ve TRPV1 katyon kanallarını doğrudan aktive eder.',
           points: [
-            'GABA-A & Glisin Potansiyalizasyonu: Kortikal/talamik GABA-A reseptörlerinde Cl⁻ akımını uzatarak hipnoz ve amnezi; spinal Glisin reseptörleriyle motor nöron inhibisyonu (immobilite / MAC) oluşturur.',
-            'TREK-1 / TASK İki-Porlu Potasyum (K₂P) Kanalları & NMDA İnhibisyonu: K⁺ sızıntı akımını artırarak membranı hiperpolarize eder; NMDA glutamat ve nöronal nAChR kanallarını baskılar.',
-            'TRPA1 İrritan Reseptör Aktivasyonu: Hava yolu C-liflerindeki TRPA1 kanallarını uyararak refleks öksürük, laringospazm, bronkospazm ve hızlı > 1 MAC artışta santral sempatik deşarjı (Ebert 1993) tetikler.',
-            'RyR1 Malign Hipertermi Tetiklenmesi (MHAUS): Yatkın kas liflerinde sarkoplazmik retikulum RyR1 kanalından kontrolsüz Ca²⁺ salınımına yol açarak fulminan hipermetabolik krizi başlatır.',
+            'Postsinaptik İnhibitör Cys-Loop Reseptörleri (GABA-A & Glisin TM2–TM3 Amfifilik Cepleri): Kortikal, talamik ve hipokampal nöronlardaki GABA-A reseptörlerine ve spinal kord ön/arka boynuzundaki Glisin reseptörlerinin transmembran amfifilik oyuklarına bağlanarak Cl⁻ iletkenliğini ve kanal açık kalma süresini uzatır.',
+            'İki-Porlu Arka Plan Potasyum Kanalları (K2P: TREK-1, TASK-1, TASK-3): Nöronal ve spinal motor nöron plazma zarındaki TREK-1, TASK-1 ve TASK-3 sızıntı K⁺ kanallarını açarak dinlenim membran potansiyelini hiperpolarize eder.',
+            'Presinaptik Nav / Cav & Postsinaptik NMDA / AMPA / nAChR İnhibisyonu: Presinaptik voltaj kapılı Na⁺ (Nav) ve Ca²⁺ (Cav) kanallarını inhibe ederek eksitatör nörotransmitter salınımını azaltır; postsinaptik NMDA/AMPA glutamat ve nöronal/kas-tipi nikotinik ACh (nAChR) reseptörlerini baskılar.',
+            'Hava Yolu Nosiseptif TRPA1 / TRPV1 Aktivasyonu & İskelet Kası SR RyR1 Duyarlılaştırması: Trakeobronşiyal C-lif uçlarındaki TRPA1 (Transient Receptor Potential Ankyrin-1) ve TRPV1 kanallarını doğrudan uyarır (keskin koku, laringospazm ve sempatik fırtına tetikleyicisi). Genetik yatkın iskelet kasında ise sarkoplazmik retikulum RyR1 kanalını açarak Malign Hipertermiyi (MH) tetikler.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'CBF / CMRO₂ Ayrışması & KİB: CMRO₂’yi doza bağımlı azaltır; ancak > 0.8–1.0 MAC’ta direkt serebral vazodilatasyonla serebral kan akımını (CBF) ve KİB’i Sevoflurana göre bir miktar daha belirgin artırabilir.',
-            'EEG & Burst Suppression: Sevofluran gibi epileptiform spike-wave aktivitesi belirgin değildir; ~1.5–2.0 MAC düzeyinde doz bağımlı EEG baskılanması ve burst suppression oluşturur.',
-            'Hızlı FA/FI & Uyanma Kinetiği: 0.42–0.45 kan/gaz katsayısı sayesinde alveolar konsantrasyon değişiklikleri beyne saniyeler–dakikalar içinde yansır.',
-          ],
-          cvs: [
-            'SVR Düşüşü vs Sempatik Deşarj (Taşikardi/HT): Sabit konsantrasyonda doza bağımlı SVR ve MAP düşüşü yapar; ancak > 1 MAC (%6) üzerine hızlı artışta trakeopulmoner reseptör uyarısıyla plazma adrenalin/noradrenalini ~2–3 kat yükseltip geçici şiddetli taşikardi ve hipertansiyon krizi oluşturur.',
-            'Miyokardiyal Önkoşullama: K-ATP kanalları üzerinden iskemik önkoşullama sağlar; ancak sempatik taşikardi KAH hastalarında miyokard O₂ tüketimini artırarak bu faydayı gölgeleyebilir.',
-          ],
-          respiratory: [
-            'Keskin Koku & Hava Yolu İrritasyonu: > %6 konsantrasyonda öksürük, nefes tutma, hipersalivasyon, laringospazm ve bronkospazm tetikler — inhalasyon indüksiyonunda ve aktif bronkospazmda KULLANILMAZ.',
-            'Ventilasyon & HPV: Tidal volümü azaltır, PaCO₂’yi yükseltir ve > 1 MAC’ta hipoksik pulmoner vazokonstriksiyonu (HPV) baskılar.',
-          ],
-          other: [
-            'Metabolizma yalnızca %0.02 (TFA, F⁻ ve Compound A pratik olarak sıfır — hepatorenal açıdan en inert halojenli)',
-            'Uterin düz kası > 1.0 MAC’ta gevşetir (postpartum atoni riski)',
-            'Çevresel etki: GWP₁₀₀ = 2540 (atmosferik ömür ~14 yıl — sürdürülebilir anestezi kılavuzları minimal akım veya alternatif ajan önerir)',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Membran iyon kanallarındaki bu etkileşimler; santral nöronlar, hava yolu C-lifleri, kardiyomiyosit/vasküler düz kas ve iskelet kası hücreleri içinde dört belirgin sinyal kaskadını başlatır:',
+          points: [
+            'Nöron İçi Hiperpolarizasyon & Presinaptik SNARE Ekzositoz İnhibisyonu: GABA-A/Glisin aracılı Cl⁻ girişi ve K2P (TREK-1/TASK) aracılı K⁺ çıkışı nöronu hiperpolarize eder; presinaptik terminalde Nav/Cav blokajıyla vezikül füzyon proteini SNARE (syntaxin-1A) kompleksi inhibe olarak sinaptik aralığa glutamat ekzositozu durur.',
+            'Hava Yolu Nosiseptör (TRPA1) → Ca²⁺/Na⁺ Girişi → Nörojenik İnflamasyon & Santral Sempatik Deşarj: >1 MAC (%6) veya hızlı konsantrasyon artışında hava yolu C-liflerindeki TRPA1 kanallarından hücre içine masif Ca²⁺/Na⁺ girişi olur → P Maddesi (Substance P) ve CGRP salınımıyla lokal bronkokonstriksiyon/ödem gelişirken, vagal/glossopharyngeal afferentler üzerinden beyin sapı vazomotor merkez (RVLM) uyarılarak sempatik sinir aktivitesi (SNA) ve plazma adrenalin/noradrenalin düzeyi 2–3 kat fırlar (Ebert 1993).',
+            'Kardiyomiyosit & Vasküler Düz Kas Hücresi İçi Ca²⁺ Dinamiği ve PKC-ε / mitoK-ATP Önkoşullama: Vasküler düz kasta sarkolemmal L-tipi Ca²⁺ (Cav1.2) akımını azaltıp eNOS/NO bağımlı cGMP’yi artırarak bazal arteriyoler vazodilatasyon üretir. Miyokardda ise PKC-ε translokasyonu ve mitokondriyal K-ATP (mitoK-ATP) kanalı açılmasıyla iskemik önkoşullama (preconditioning) sağlar.',
+            'Malign Hipertermi Hücre İçi Kaskadı (Mutant RyR1/CACNA1S → Kontrolsüz SR Ca²⁺ Salınımı): Yatkın iskelet kasında SR’den sitozole durdurulamayan Ca²⁺ deşarjı → kalıcı aktin-miyozin kasılması, SERCA/Na⁺-K⁺-ATPaz pompalarının aşırı ATP yıkımı, aerobik/anaerobik hipermetabolizma (EtCO₂↑↑, laktat↑↑, ısı↑↑) ve rabdomiyoliz/hiperkalemi.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Kortiko-Talamik Ağ, Spinal Kord & Serebral Vasküler Doku → SSS & Beyin Fizyolojisi',
+            tissueTarget: 'Talamokortikal Nöron · Spinal Ön Boynuz · Serebral Arteriyol',
+            accent: 'indigo',
+            points: [
+              'Ultra-Hızlı Alveol–Beyin Dengelenmesi (FA/FI) & Uyanma: 0.42–0.45 kan/gaz ve 1.3 beyin/kan katsayısı sayesinde vaporizatör ayarları beyin dokusu parsiyel basıncına saniyeler–dakikalar içinde yansır; uzun cerrahiler ve morbid obezitede ekstübasyon ve yutkunma/öksürük reflekslerinin dönüşü Sevofluran ve İzoflurandan belirgin hızlıdır.',
+              'Serebral Metabolizma (CMRO₂) vs Serebral Vazodilatasyon & KİB: CMRO₂’yi doza bağımlı düşürür ve Sevofluran gibi epileptiform spike-wave EEG deşarjı üretmez (~1.5–2.0 MAC’ta burst suppression yapar). Ancak >0.8–1.0 MAC üzerinde serebral arteriyol düz kasını Sevoflurana kıyasla daha güçlü gevşeterek otoregülasyonu bozar, CBF ve KİB’i artırır (normokapni/hafif hipokapni ile dengelenmelidir).',
+              'Spinal Motor Nöron Baskılanması & Nöromonitörizasyon: Spinal ön boynuz motor nöronlarında Glisin ve TREK-1 aktivasyonuyla >0.5 MAC üzerinde transkraniyal Motor Uyarılmış Potansiyelleri (MEP) güçlü şekilde baskılar.',
+            ],
+          },
+          {
+            systemTitle: 'Miyokard Dokusu, Sempatik Otonom Ağ & Sistemik Vasküler Yatak → Kardiyovasküler Fizyoloji',
+            tissueTarget: 'Rezistans Arteriyoller · Sempatik Gangliyon / Adrenal Medulla · Miyokard',
+            accent: 'rose',
+            points: [
+              'Sabit Konsantrasyonda Vazodilatasyon vs Hızlı Artışta Sempatik Fırtına (Ebert Fenomeni): Sabit idame konsantrasyonlarında arteriyoler düz kası gevşeterek SVR ve MAP’ı doza bağımlı düşürür, kardiyak indeks korunur. Ancak EtDes >1 MAC (%6) üzerine hızla çıkarıldığında trakeopulmoner TRPA1 reseptörlerinden tetiklenen santral sempatik deşarjla 1–4 dakika içinde kalp hızı (+30–50 atım/dk) ve MAP (+20–40 mmHg) fırlar.',
+              'Koroner Perfüzyon & Miyokardiyal Oksijen Dengesi: Sempatik hiperaktivite fazında taşikardi ve artmış duvar gerilimi miyokard O₂ tüketimini (MVO₂) keskin artırırken diyastolik koroner dolum süresini kısaltır → KAH veya kritik aort stenozu olan hastalarda subendokardiyal iskemi tetiklenebilir ("koroner çalma" yapmaz ancak taşikardi iskemisi yapar).',
+              'Anestezik İskemik Önkoşullama & Repolarizasyon: mitoK-ATP kanalları üzerinden güçlü miyokardiyal önkoşullama sağlar; diğer halojenli eterler gibi hERG (IKr) inhibisyonuyla QTc aralığını hafif-orta düzeyde uzatabilir.',
+            ],
+          },
+          {
+            systemTitle: 'Trakeobronşiyal Mukoza, Laringeal Refleks Arkı & Pulmoner Yatak → Solunum Fizyolojisi',
+            tissueTarget: 'Hava Yolu TRPA1 C-Lifleri · Laringeal Kaslar · Bronş Düz Kası',
+            accent: 'teal',
+            points: [
+              'Keskin Koku (Pungency), Laringospazm & Bronkospazm: >%6 (1 MAC) konsantrasyonda hava yolu TRPA1 nosiseptörlerini uyararak öksürük, nefes tutma, hipersalivasyon ve çocuklarda %50’ye varan laringospazm tetikler (maske indüksiyonu MUTLAK KONTRENDİKE!). Sigara içen, astımlı veya reaktif hava yolu olan hastalarda bronkospazmı tetikler / ağırlaştırır.',
+              'Ventilatuar Depresyon & Kemoreseptör Yanıtı: Diyafram/interkostal aktiviteyi baskılayarak tidal volümü düşürür, solunum hızını artırır (dakika ventilasyonu düşer, PaCO₂ yükselir); <0.1–0.2 MAC düzeyinde dahi karotid cisimcik hipoksik solunum dürtüsünü derin biçimde baskılar.',
+              'Hipoksik Pulmoner Vazokonstriksiyon (HPV): Pulmoner arteriyol düz kasında >1.0 MAC düzeyinde HPV refleksini %30–50 inhibe ederek tek akciğer ventilasyonunda şant fraksiyonunu artırabilir.',
+            ],
+          },
+          {
+            systemTitle: 'Hepatorenal Parankim, Yağ Dokusu, Miyometriyum & İskelet Kası → Organ & Metabolik Fizyoloji',
+            tissueTarget: 'Hepatosit · Adipoz Doku · Miyometriyum · Motor Son Plak (NMJ)',
+            accent: 'amber',
+            points: [
+              'Minimum Biyotransformasyon (%0.02) & Hepatorenal İnertlik: Güçlü C–F bağları nedeniyle CYP2E1 ile yalnızca %0.02 oranında metabolize olur → serum F⁻ yükselmez, Compound A üretmez ve TFA-protein immün hepatit riski tüm halojenliler içinde en düşüktür; hepatik arter kan akımını ve renal perfüzyonu korur.',
+              'Adipoz Doku Kinetiği (Yağ/Gaz = 18.7) & Morbid Obezite Avantajı: Yağ dokusu çözünürlüğü Sevofluranın (48) yarısından, İzofluranın (91) dörtte birinden düşüktür; 4–8 saatlik süper-obez bariatrik vakalarda yağ kompartmanına sekestrasyon minimaldir ve postoperatif rezidüel sedasyon/hipoventilasyon riskini azaltır.',
+              'Nöromüsküler Kavşak (NMJ) & Miyometriyum: Postsinaptik nAChR inhibisyonu ve spinal motor nöron depresyonuyla non-depolarizan NMB’leri tüm volatiller içinde en güçlü potansiyalize eden ajandır (%30–50 ED95 düşüşü); >1.0 MAC’ta uterus düz kasını gevşeterek postpartum atoni riskini artırır.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Sempatik Fırtına Eşiği (>1 MAC), Opioid/Esmolol Küntleştirme Sinerjisi & Kuru Absorban CO Kinetiği',
           summary:
-            'Desfluran tek başına tam genel anestezi sağlar; ancak sempatik deşarj eşiği (%6) altında kalabilmek için opioidler ve/veya N₂O ile kombine edilmesi klinik pratikte esastır.',
+            'Desfluranın çok düşük kan/gaz çözünürlüğü hızlı titrasyon imkanı verse de, >1 MAC (%6) üzerindeki hızlı konsantrasyon artışlarında ortaya çıkan TRPA1-aracılı sempatik hiperaktivite nedeniyle adjuvanlarla sinerjik kullanım zorunludur:',
           points: [
-            'Opioid / Esmolol / Klonidin Sinerjisi: Fentanil/Remifentanil hem Desfluran MAC’ını %25–50 düşürerek EtDes’i <%6 güvenli bölgede tutar hem de sempatik taşikardi/hipertansiyon yanıtını etkin biçimde köreltir.',
-            'N₂O Aditif MAC Katkısı: %60 N₂O (~0.58 MAC) eklendiğinde 1.0 MAC için gereken EtDes %6.0’dan ~%2.8’e iner.',
-            'Nöromüsküler Bloker (NMB) Potansiyalizasyonu: Non-depolarizan NMB’lerin (roküronyum, veküronyum, sisatrakuryum) etkisini %30–50 oranında güçlendirir ve süresini uzatır.',
+            'Sempatik Hiperaktivite Eşiği (%6) & Adaptasyon Kinetiği: EtDes %4’ten bir anda %8–10’a çıkarıldığında sempatik sinir deşarjı 1–2 dakikada pik yapar ve 4–6 dakikada baroreseptör/reseptör adaptasyonuyla sönümlenir; ancak konsantrasyon %0.5–1.0/dk gibi yavaş basamaklarla artırıldığında veya öncesinde Fentanil (1.5–2 mcg/kg), Remifentanil ya da Esmolol verildiğinde bu sempatik fırtına %70–90 oranında engellenir.',
+            'Opioid & N₂O MAC-Sparing Sinerjisi: Fentanil/Remifentanil Desfluran MAC değerini %30–50 düşürerek cerrahi idamenin %3.0–4.5 EtDes (0.5–0.75 MAC) gibi hava yolu irritasyonu ve sempatik pik eşiğinin (%6) tamamen altındaki güvenli pencerede yürütülmesini sağlar. %60 N₂O ise ~0.58 MAC aditif katkı verir.',
+            'Kuru Absorbanda Baz-Katalizli CHF₂ Yıkımı (Masif CO Üretimi): Desfluran molekülündeki diflorometil eter (–O–CHF₂) grubu, tamamen kurumuş kuvvetli baz (KOH/NaOH) içeren Baralyme veya klasik soda lime ile temas ettiğinde hidrojen koparılmasıyla tüm volatiller içinde en yüksek konsantrasyonda Karbonmonoksit (CO) gazı üretir (Fang 1995) — kalsiyum hidroksit bazlı KOH/NaOH-free absorbanda (Amsorb Plus) bu reaksiyon sıfırdır.',
           ],
         }}
         clinicalPearls={[
-          'Sempatik Krizi Önlemenin 3 Kuralı: (1) Kadranı asla tek hamlede %6’nın üstüne fırlatma, %1–2 basamaklarla çık; (2) Cerrahi uyaran öncesi opioid/esmolol/propofol ile küntleştir; (3) KAH veya aort stenozunda alternatif ajan düşün.',
-          'Pazartesi Sabahı COHb Tuzağı (Fang Anesth Analg 1995): Hafta sonu O₂ akışı açık unutulan kurumuş Baralyme/soda lime ile Desfluran masif CO üretir; standart SpO₂ %99 normal görünür! KOH/NaOH-free absorban (Amsorb/Drägersorb Free) kullanın.',
-          'Bronkospazm Gelişirse Desfluranı Artırma, KAPAT: Hava yolu direnci artan hastada Desfluranı derinleştirmek TRPA1 irritasyonunu artırıp bronkospazmı ağırlaştırır; derhal Sevofluran veya IV Propofole geçin.',
-          'Yüksek İrtifa & Elektrik Kesintisi: TEC-6 elektrik kesilirse 10–15 sn’de kapanır; yüksek rakımda ise hacim yüzdesi (%) verdiği için aynı parsiyel basıncı (MAC) korumak adına kadran yukarı ayarlanmalıdır.',
+          'Sempatik Fırtınayı Önlemenin 3 Altın Kuralı: (1) Cerrahi insizyon öncesi anesteziyi derinleştirmek için Desfluran kadranını asla bir anda %8–12’ye çevirmeyin (%1–2 yavaş basamaklarla çıkın); (2) Hızlı derinleştirme gerekiyorsa IV Propofol veya Fentanil/Remifentanil bolusu kullanın; (3) İdamede opioid desteğiyle EtDes’i %3.5–5.5 bandında tutun.',
+          'İntraoperatif Bronkospazm Tuzağı: Entübe hastada wheezing ve yüksek Ppeak geliştiğinde "volatili açıp bronkodilatasyon yapayım" düşüncesiyle Desfluranı %8–10’a yükseltmek TRPA1 irritasyonuyla bronkospazmı daha da kilitler! Derhal Desfluranı kapatıp Sevofluran veya IV Propofole geçin.',
+          'Pazartesi Sabahı İlk Vaka COHb Zehirlenmesi: Hafta sonu taze gaz akışı açık unutulan anestezi cihazında kuruyan klasik soda lime, sabah ilk vakada Desfluran açıldığında hastaya >1000 ppm CO verir; standart puls oksimetre COHb’yi O₂Hb sandığı için SpO₂ %99–100 yalancı normal görünür! Şüphede CO-oksimetreli AKG alın.',
+          'Yüksek Rakım (İrtifa) & TEC-6 Fizik Kuralı: Isıtmalı/basınçlı TEC-6 sabit hacim yüzdesi (%) verir; yüksek rakımda barometrik basınç düştüğünden aynı alveolar kısmi basıncı (MAC) sağlamak için kadran % ayarı deniz seviyesine göre yukarı düzeltilmelidir: Kadran(irtifa) = Kadran(deniz) × (760 / P_barometrik).',
         ]}
       />
 

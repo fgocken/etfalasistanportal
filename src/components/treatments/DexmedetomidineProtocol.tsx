@@ -1568,53 +1568,88 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Ultra-Selektif α₂-Adrenoseptör (α₂A / α₂B / α₂C) Alt Tipleri & LC → VLPO Uyku Yolağı',
+          title: 'Hücre Zarı & Moleküler Hedef (7-TM α₂A / α₂B / α₂C-Adrenerjik GPCR [α₂:α₁ = 1620:1; Gαi/o] & İmidazolin I₁/I₂ Reseptörleri)',
           summary:
-            'Deksmedetomidin, α₂:α₁ seçiciliği 1620:1 olan (klonidinin ~8 katı) imidazol türevi tam α₂-adrenoseptör agonistidir. Tüm α₂ alt tipleri inhibitör Gi/Go proteini ile kenetlidir; adenilat siklazı inhibe eder, intraselüler cAMP’yi düşürür, voltaj-kapılı Ca²⁺ kanallarını kapatır ve GIRK K⁺ kanallarını açarak nöronal hiperpolarizasyon oluşturur.',
+            'Deksmedetomidin (medetomidinin aktif dekstro-izomeri), α₂:α₁ bağlanma seçiciliği 1620:1 olan (klonidinin [220:1] ~8 katı) ultra-selektif bir imidazol türevi tam α₂-adrenerjik agonisti ve imidazolin (I₁/I₂) reseptör ligandıdır. Beyin sapı Locus Coeruleus (LC), medulla spinalis arka boynuz Substantia Gelatinosa (Lamina II), rostral ventrolateral medulla (RVLM) ve periferik damar düz kası zarlarındaki 7-transmembran (7-TM) α₂A, α₂B ve α₂C G-proteini kenetli reseptörlerine (GPCR) bağlanarak pertussis toksinine duyarlı heterotrimerik Gαi/o proteinlerini aktive eder (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman 14th Ed.).',
           points: [
-            'α₂A Alt Tipi (Locus Coeruleus & Spinal Arka Boynuz): Sedasyon, anksiyoliz, sempatoliz (hipotansiyon/bradikardi), supraspinal ve spinal analjezi (P maddesi ve glutamat salınım inhibisyonu) ile titreme (shivering) eşiğinin düşürülmesinden sorumludur.',
-            'α₂B Alt Tipi (Periferik Damar Düz Kası & Renal Toplayıcı Tübül): Damar düz kasındaki postsinaptik α₂B aktivasyonu doğrudan vazokonstriksiyon yaparak hızlı bolus sonrası geçici hipertansiyonu oluşturur; böbrekte V₂/cAMP direnciyle serbest su diürezini (DI benzeri poliüri) tetikler.',
-            'α₂C Alt Tipi (SSS Modülasyonu): Startle (irkilme) refleksi, kognitif işleme ve spinal analjezik modülasyonda rol oynar.',
-            'Locus Coeruleus (LC) → VLPO NREM Uyku Devresi: LC noradrenerjik nöronlarının inhibisyonu, ventrolateral preoptik çekirdek (VLPO) üzerindeki tonik inhibisyonu kaldırır; VLPO’dan salınan GABA/galanin tuberomammiller çekirdeği baskılayarak fizyolojik NREM Evre 2–3 benzeri uyku (EEG uyku iğcikleri) başlatır.',
+            'Locus Coeruleus, RVLM & Spinal Arka Boynuz Nöron Zarı (α₂A-Adrenerjik Reseptör — Ana Terapötik Hedef): Beyin sapındaki en büyük noradrenerjik çekirdek olan Locus Coeruleus (LC) nöronlarının somatodendritik postsinaptik ve presinaptik otoreseptör zarlarında, RVLM vazomotor merkezinde ve spinal kord arka boynuzu (Substantia Gelatinosa) primer afferent Aδ/C terminalleri ile ikinci sıra projeksiyon nöronlarında yoğunlaşan α₂A reseptörlerini uyarır → fizyolojik NREM benzeri sedasyon, anksiyoliz, santral sempatoliz ve spinal/supraspinal analjeziden sorumludur.',
+            'Vasküler Düz Kas Sarkolemması & Renal Toplayıcı Tübül Zarı (α₂B-Adrenerjik Reseptör): Periferik direnç arteriyollerinin ve venüllerin postsinaptik düz kas zarında yer alan α₂B reseptörleri (özellikle hızlı IV yükleme bolusuyla oluşan yüksek pik plazma konsantrasyonlarında) doğrudan vazokonstriksiyonu tetikler; ayrıca hipotalamus/hipofiz ve böbrek kortikal toplayıcı tübül epitel zarında su dengesini modüle eder ve santral termoregülasyon (titreme eşiği) kontrolüne katılır.',
+            'Striatum, Hipokampus & Dorsal Kök Gangliyonu Zarı (α₂C-Adrenerjik Reseptör): Bazal gangliyonlar, limbik korteks, adrenal medulla kromafin hücreleri ve spinal arka boynuzdaki α₂C reseptörlerini uyararak akustik/dokunsal irkilme (startle) yanıtını, soğuk kaynaklı vazokonstriksiyonu, adrenal epinefrin deşarjını ve dopaminerjik/adrenerjik stres işlemesini baskılar.',
+            'Beyin Sapı & Mitokondriyal İmidazolin (I₁ / I₂) Bağlanma Bölgeleri: İmidazol halkası sayesinde RVLM ve nucleus reticularis lateralis’teki non-adrenerjik İmidazolin-1 (I₁) reseptörlerine (santral hipotansif/sempatolitik sinerji) ve astrosit/mitokondri zarındaki İmidazolin-2 (I₂) bağlanma bölgelerine (nöroprotektif anti-apoptotik sinyal) bağlanır.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Kooperatif NREM Benzeri Sedasyon & EEG: Propofol/midazolamdan farklı olarak kortikal GABA-A’yı doğrudan baskılamaz; EEG’de doğal NREM uykusuna benzeyen yavaş delta dalgaları ve 12–16 Hz uyku iğcikleri (sleep spindles) oluşturur. Hasta sesle kolayca uyandırılıp nörolojik muayeneye koopere olabilir.',
-            'Deliryum Profili & Serebral Hemodinami: Doğal uyku mimarisini koruduğu ve antikolinerjik/GABAerjik yük getirmediği için YBÜ deliryum insidansını belirgin azaltır (SEDCOM / PADIS). CBF’yi vazokonstriksiyonla hafif azaltır, CMRO₂’yi minimal etkiler, ICP’yi artırmaz.',
-            'Analjezik & Anti-Shivering Etki: Spinal arka boynuz α₂A aktivasyonuyla opioid ihtiyacını %30–50 azaltır; hipotalamik termoregülasyon eşiğini düşürerek postoperatif titremeyi etkin biçimde durdurur.',
-          ],
-          cvs: [
-            'Klasik Bifazik Kan Basıncı Yanıtı: Hızlı yükleme bolusu sonrası yüksek pik plazma düzeyi önce periferik vasküler α₂B reseptörlerini uyararak geçici hipertansiyon ve refleks bradikardi yapar; ardından santral medüller/LC α₂A sempatolizi baskın çıkarak SVR düşüşü, hipotansiyon ve kalıcı sinüs bradikardisi oluşturur.',
-            'İletim Sistemi & Asistoli Riski: SA nod otomatizmasını ve AV nod iletimini yavaşlatır; yüksek vagal tonuslu genç erişkinlerde, pacemaker’sız 2.–3. derece AV blokta veya remifentanil/β-bloker birlikteliğinde sinüs arresti/asistoli gelişebilir.',
-          ],
-          respiratory: [
-            'Minimal Solunum Depresyonu: Medüller solunum merkezinin CO₂ duyarlılığını ve dakika ventilasyonunu klinik dozlarda korur; apne riski propofol/opioid/midazolama göre son derece düşüktür.',
-            'Üst Havayolu Tonusu: Doğal NREM uykusundaki gibi derin sedasyonda (RASS ≤ -3) veya OSA’lı hastalarda faringeal kas gevşemesiyle horlama ve parsiyel üst havayolu obstrüksiyonu görülebilir (çene itme/CPAP ile kolayca açılır).',
-          ],
-          other: [
-            'Hipofizer AVP salınımını ve renal AQP2 kanallarını baskılayarak poliüri/hipernatremi (DI benzeri tablo) yapabilir',
-            'Hipotalamik termoregülasyon bozukluğu ile antibiyotiğe yanıtsız santral ilaç ateşi (hipertermi)',
-            'Adrenal steroidogenezi klinik olarak anlamlı baskılamaz (etomidattan farklı)',
-            'Endojen katekolamin salınımını azaltarak cerrahi stres yanıtını köreltir',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'α₂-GPCR aktivasyonuyla ayrışan heterotrimerik Gαi/o ve Gβγ alt birimleri; nöron içinde cAMP/PKA baskılanması, GIRK K⁺ kanalı açılmasıyla hiperpolarizasyon ve N/P-tipi Ca²⁺ kanalı blokajıyla veziküler ekzositoz durmasını tetiklerken, yüksek konsantrasyonda damar düz kasında Gαq/i aracılı Ca²⁺ girişi üretir:',
+          points: [
+            'Sitozolik Adenilat Siklaz İnhibisyonu (Gαi/o → AC ↓ → cAMP ↓ → PKA ↓ Kaskadı): Aktive olan Gαi/o alt birimi membran bağlı Adenilat Siklazı (AC) doğrudan inhibe eder; hücre içi siklik AMP (cAMP) sentezi düşer ve cAMP-bağımlı Protein Kinaz A (PKA) aktivitesi baskılanır → hedef iyon kanallarının ve sinaptik vezikül proteinlerinin bazal fosforilasyonu azalır.',
+            'Somatodendritik GIRK (Kir3) Kanal Açılımı & Nöronal Hiperpolarizasyon (Gβγ → K⁺ Çıkışı ↑): Serbestleşen Gβγ dimeri, postsinaptik/somatodendritik zardaki G-Proteini Kapılı İçeri Doğrultucu Potasyum (GIRK / Kir3) kanallarına doğrudan bağlanarak kanalı açar → hücre dışına K⁺ iyon çıkışı (efluksu) hızlanır, Locus Coeruleus ve spinal arka boynuz projeksiyon nöronlarının zar potansiyeli −60 mV’tan −75 mV’a hiperpolarize olur ve spontan aksiyon potansiyeli ateşlemesi tamamen susar.',
+            'Presinaptik N/P/Q-Tipi Ca²⁺ Kanal Blokajı & Vezikül Ekzositozunun Durması (Gβγ → Cav2.2 ↓ → NE / Glutamat / P Maddesi ↓): Presinaptik akson terminalinde Gβγ kompleksi voltaj-kapılı N-tipi (Cav2.2) ve P/Q-tipi (Cav2.1) Ca²⁺ kanallarını doğrudan inhibe eder ve SNARE (SNAP-25) füzyon kompleksini frenler → sinaptik veziküllerden Noradrenalin (sempatik sinir uçları ve LC), Glutamat ve P Maddesi / CGRP (spinal arka boynuz nosiseptif Aδ/C terminalleri) ekzositozu durur.',
+            'Vasküler Düz Kas α₂B Ca²⁺ Girişi (Faz-1 Hipertansiyon) vs Renal Toplayıcı Tübül AQP2 İnhibisyonu: Yüksek plazma konsantrasyonlarında (>1,5–2 ng/mL; hızlı IV bolus) damar düz kası α₂B reseptörleri Gαi/Gαq üzerinden L-tipi Ca²⁺ girişini ve PLC-IP₃-Ca²⁺-MLCK kaskadını tetikleyerek geçici düz kas kontraksiyonu yapar. Böbrek toplayıcı tübül esas (principal) hücrelerinde ise α₂B → Gαi → cAMP ↓ kaskadı, Vazopressin V₂ reseptörünün (Gαs → cAMP ↑ → PKA) Akuaporin-2 (AQP2) su kanallarını apikal zara yerleştirme sinyalini antagonize eder (hücresel ADH direnci).',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Locus Coeruleus → VLPO Uyku Devresi & Spinal Arka Boynuz → SSS, NREM Uyku & Analjezi',
+            tissueTarget: 'Locus Coeruleus · Preoptik VLPO · Lamina II (Substantia Gelatinosa)',
+            accent: 'indigo',
+            points: [
+              'LC → VLPO Devresi & Doğal NREM Evre 2–3 Benzeri Kooperatif Uyku: Locus Coeruleus (LC) noradrenerjik nöronlarının hiperpolarize olarak susması, hipotalamik Ventrolateral Preoptik Çekirdek (VLPO) üzerindeki tonik noradrenerjik inhibisyonu kaldırır (disinhibisyon). Aktive olan VLPO nöronları GABA ve Galanin salgılayarak histaminerjik Tuberomammiller Çekirdeği (TMN) ve uyanıklık ağlarını kapatır → kortikal GABA-A reseptörlerini yapay olarak boğmadan fizyolojik NREM Evre 2–3 uykusu (EEG’de yavaş δ dalgaları ve 12–16 Hz uyku iğcikleri [sleep spindles]) başlar; hasta sesli uyaranla anında uyanıp komuta uyar ve uyaran kesilince tekrar uykuya döner.',
+              'Deliryumdan Koruma (SEDCOM/MENDS) & Serebral Hemodinami: Fizyolojik NREM uyku mimarisini koruduğu, antikolinerjik yük taşımadığı ve kortikal GABAerjik ağ disfonksiyonu/nöroinflamasyon (mikroglial TLR4/NF-κB) oluşturmadığı için YBÜ deliryum insidansını midazolam ve lorazepama kıyasla belirgin düşürür. Serebral damarlarda hafif α₂B vazokonstriksiyon ve metabolik azalmayla CBF’yi ~%20–30 düşürürken ICP’yi artırmaz ve kraniyotomide uyanık nörolojik muayeneye izin verir.',
+              'Spinal/Supraspinal Opioid-Sparing Analjezi & Hipotalamik Anti-Shivering Etki: Spinal kord Substantia Gelatinosa’da presinaptik P maddesi/glutamat salınımını kesip postsinaptik WDR nöronlarını GIRK ile hiperpolarize ederek opioid tüketimini %30–50 azaltır; preoptik hipotalamusta ise vazokonstriksiyon ve titreme (shivering) eşik sıcaklığını düşürerek postoperatif titremeyi meperidin kadar etkin durdurur (nadiren santral α₂ termoregülasyon kaymasıyla enfeksiyon dışı "ilaç ateşi" yapabilir).',
+            ],
+          },
+          {
+            systemTitle: 'Vasküler Düz Kas (α₂B), RVLM Vazomotor Merkez & SA/AV Düğüm → Kardiyovasküler Fizyoloji',
+            tissueTarget: 'Arteriyoler α₂B · RVLM Sempatik Çekirdek · SA/AV İleti Sistemi',
+            accent: 'rose',
+            points: [
+              'Klasik Bifazik Hemodinamik Yanıt (Faz-1 Periferik α₂B Hipertansiyon → Faz-2 Santral α₂A Hipotansiyon): Hızlı IV yükleme bolusu (<10 dk) verildiğinde yüksek plazma pik konsantrasyonu önce damar düz kasındaki postsinaptik α₂B reseptörlerini uyararak 5–15 dk süren sistemik vazokonstriksiyon (SVR ↑, MAP ↑) ve barorefleks aracılı derin bradikardi oluşturur (Faz 1). İlaç kan-beyin bariyerini geçip LC ve RVLM’deki α₂A/I₁ reseptörlerini doyurduğunda ise santral sempatik çıkış ve plazma noradrenalin düzeyi %60–80 düşer → vasküler endotelyal eNOS/NO salınımı ve sempatolizle kalıcı vazodilatasyon (SVR ↓, MAP %15–30 ↓) baskınlaşır (Faz 2).',
+              'SA/AV Düğüm İletisi, Vagomimetik Baskınlık & Asistoli Riski: Kardiyak sempatik hızlandırıcı liflerde presinaptik noradrenalin salınımının durması ve nucleus ambiguus’ta santral parasempatik (vagal) tonusun karşılıksız kalmasıyla SA düğüm Faz 4 eğimi yavaşlar ve AV düğüm refrakter periyodu uzar → doz-bağımlı sinüs bradikardisi (%25–40); pacemaker’sız 2./3. derece AV blokta, hasta sinüs sendromunda veya β-bloker/diltiazem/remifentanil birlikteliğinde kavşak kaçış ritmi ve sinüs arresti/asistoli gelişebilir.',
+              'Miyokard Oksijen Dengesi (MVO₂) & Perioperatif Kardiyoproteksiyon: Direkt miyokardiyal negatif inotropik etkisi minimaldir (kalp debisi yalnızca bradikardi ve hipovolemik preload düşüşüyle azalır); cerrahi stres kaynaklı katekolamin fırtınasını ve taşikardiyi baskıladığı için diyastolik koroner perfüzyon süresini uzatır ve miyokard O₂ tüketimini (MVO₂) düşürür.',
+            ],
+          },
+          {
+            systemTitle: 'Pre-Bötzinger Solunum Merkezi, Karotid Cisimcik & Üst Havayolu → Solunum Fizyolojisi',
+            tissueTarget: 'Medüller Solunum Merkezi · Faringeal Genioglossus · Bronş Düz Kası',
+            accent: 'teal',
+            points: [
+              'Medüller Solunum Dürtüsü & Hiperkapnik/Hipoksik Yanıtın Korunumu: Propofol, midazolam ve opioidlerden farklı olarak medüller pre-Bötzinger solunum ritim merkezi üzerinde GABA-A veya µ-opioid aracılı depresyon yapmaz; dakika ventilasyonu, solunum frekansı ve PaCO₂–ventilasyon yanıt eğrisinin eğimi terapötik dozlarda (0,2–1,4 mcg/kg/saat) doğal NREM uykusu düzeyinde korunur (extübasyon sürecinde infüzyonu kapatmadan ventilatörden ayırma [weaning] ve NIV uyumunda altın standarttır).',
+              'Üst Havayolu (Orofaringeal) Kas Tonusu & Uyanık Fiberoptik Entübasyon: Doğal NREM uykusunda olduğu gibi yüksek dozlarda (RASS ≤ −3) veya Obstrüktif Uyku Apneli (OSA) hastalarda genioglossus/faringeal dilatatör kaslarda hafif gevşeme ve horlama/parsiyel üst havayolu kollapsı oluşabilir ancak çene itme veya sesli uyarıyla anında açılır; antisialagog (sekresyon azaltıcı) etkisi ve solunumu koruması sayesinde uyanık fiberoptik entübasyonda idealdir.',
+              'Bronşiyal Tonus & Pulmoner Vasküler Yatak: Histamin/asetilkolin kaynaklı refleks bronkokonstriksiyonu hafifletir ve Hipoksik Pulmoner Vazokonstriksiyon (HPV) refleksini bozmaz.',
+            ],
+          },
+          {
+            systemTitle: 'Hipotalamo-Hipofizer AVP, Renal Toplayıcı Tübül, Karaciğer & Endokrin → Sistemik Organlar',
+            tissueTarget: 'Supraoptik Çekirdek (AVP) · Toplayıcı Tübül (AQP2) · Hepatosit CYP2A6/UGT',
+            accent: 'amber',
+            points: [
+              'Hipotalamo-Hipofizer AVP Baskılanması & Renal Toplayıcı Tübül AQP2 Direnci (Poliüri / DI Sendromu): Hipotalamik supraoptik ve paraventriküler çekirdeklerde α₂A uyarımıyla arka hipofizden Arginin Vazopressin (AVP / ADH) sekresyonunu baskılar (santral DI bileşeni); eşzamanlı olarak böbrek kortikal toplayıcı tübüllerinde α₂B → Gαi → cAMP düşüşüyle V₂ reseptör-Akuaporin-2 (AQP2) su geri emilimini bloke eder (nefrojenik DI bileşeni) ve ANP salınımını artırır → masif serbest su diürezi (poliüri > 4 mL/kg/saat, idrar dansitesi < 1.005) ve hipernatremi gelişebilir.',
+              'Hepatik UGT1A4/2B10 & CYP2A6 Biyotransformasyonu (Saf Hepatik Klirens): İlacın >%95’i karaciğerde doğrudan N-glukuronidasyon (UGT2B10, UGT1A4) ve CYP2A6 aracılı alifatik hidroksilasyon (3-hidroksi-deksmedetomidin) ile tamamen İNAKTİF metabolitlere dönüştürülerek idrarla (%95) atılır; böbrek yetmezliğinde (KBY/CRRT) aktif metabolit birikimi olmazken, Child-Pugh B/C sirozda serbest fraksiyon artar ve eliminasyon yarı ömrü 2,5 saatten 7,5 saate uzar.',
+              'Endokrin (Adrenal Korteks / Pankreas β-Hücresi) & Gastrointestinal Motilite: Etomidatın imidazol halkasına benzese de klinik infüzyon dozlarında adrenal korteks 11β-hidroksilazı ve ACTH yanıtını anlamlı baskılamaz. Pankreas adacık β-hücrelerindeki α₂A reseptörlerini uyararak insülin sekresyonunu geçici azaltabilir (hafif hiperglisemi), tükürük bezlerinde α₂ uyarımıyla kserostomi (ağız kuruluğu) yapar ve enterik pleksusta asetilkolin salınımını azaltarak GİS motilitesini hafif yavaşlatır.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Bifazik α₂B → α₂A Konsantrasyon Dinamiği, Sedasyon Tavan Etkisi, Taşiflaksi & Sinerji',
           summary:
-            'Deksmedetomidin, inhalasyon anestezikleri ve opioidlerle güçlü koruyucu (sparing) sinerji gösterirken, tek başına genel anestezi/derin koma oluşturamayan belirgin bir sedasyon tavan etkisine sahiptir.',
+            'Deksmedetomidinin farmakodinamik kinetiğini; plazma konsantrasyonuna göre yer değiştiren periferik α₂B vazokonstriksiyon vs santral α₂A sempatoliz dengesi, GABA-A dışı mekanizmaya bağlı kesin sedasyon tavan etkisi ve >48 saatte gelişen GPCR down-regülasyonu belirler.',
           points: [
-            'MAC & Opioid Azaltımı: İnhalasyon ajanlarının MAC değerini %30–50, intraoperatif/postoperatif opioid ve propofol gereksinimini %30–50 oranında azaltır.',
-            'Sedasyon Tavan Etkisi (Ceiling Effect): Doz 1.4 mcg/kg/saat üzerine çıkarılsa bile güvenilir bilinç kaybı ve amnezi sağlamaz; aksine ağır bradikardi, hipertansiyon (α₂B) ve hipotansiyon artar. Derin sedasyon (RASS -4/-5, NMB altında) için tek başına KULLANILMAZ.',
-            'Spesifik İnsan Antidotu Yoktur: Veteriner hekimlikte kullanılan atipamezol insanlarda ruhsatlı değildir; aşırı doz/bradikardi yönetimi infüzyonu kesme, atropin/glikopirolat ve sıvı/vazopresör desteğine dayanır.',
+            'Bifazik α₂B → α₂A Konsantrasyon-Yanıt Kinetiği: Düşük-orta kararlı plazma konsantrasyonlarında (0,3–1,2 ng/mL; yavaş idame infüzyonu) yüksek afiniteli santral α₂A reseptörleri baskındır ve net etki sempatoliz + vazodilatasyondur (MAP ↓, HR ↓). Ancak hızlı yükleme bolusuyla veya çok yüksek infüzyon hızlarında (>1,5–2,0 ng/mL) periferik damar düz kasındaki düşük afiniteli α₂B reseptörleri devreye girerek santral vazodilatasyonu yener ve sistemik hipertansiyon + refleks bradikardi üretir (bu nedenle YBÜ’de yükleme bolusu atlanır!).',
+            'Kesin Sedasyon Tavan Etkisi (Ceiling Effect — NMB Altında Tek Başına Kullanılmaz!): LC → VLPO endojen NREM uyku yolağı üzerinden çalıştığı ve kortikal piramidal nöronları doğrudan GABA-A (propofol) veya NMDA (ketamin) gibi susturmadığı için, doz 1,4 mcg/kg/saat tavanının üzerine çıkarılsa bile genel anestezi, derin koma (RASS −4/−5) veya güvenilir anterograd amnezi OLUŞTURAMAZ; bu nedenle nöromüsküler bloker (paralizi) altındaki hastada tek başına kullanılması ağır farkındalık (awareness) hatasıdır.',
+            'MAC-Sparing & Opioid/Propofol Sinerjisi: Farklı reseptör yolağı (α₂A → Gi/o → GIRK) kullandığı için volatil anesteziklerin MAC değerini, propofolün EC₅₀ konsantrasyonunu ve opioidlerin analjezik doz gereksinimini supra-aditif olarak %30–50 oranında azaltır (ancak remifentanil veya β-blokerlerle vagotonik bradikardi sinerjisi gösterir).',
+            'GPCR Desensitizasyonu (Taşiflaksi) & Rebound Çekilme Kinetiği: >48–72 saat süren kesintisiz infüzyonlarda LC ve RVLM’deki α₂A reseptörleri GRK (G-proteini kenetli reseptör kinaz) ile fosforillenir, β-arrestin bağlanarak Gαi/o kenetlenmesini koparır (uncoupling) ve reseptör endositozla hücre içine çekilir (down-regülasyon → klinik tolerans/taşiflaksi). Bu aşamada infüzyon aniden kesilirse, baskıdan kurtulan sempatik nöronlardan masif noradrenalin deşarjı (rebound hipertansiyon, taşikardi, ajitasyon) patlar → 24–48 saatte kademeli azaltılmalı veya enteral Klonidin (0,1–0,3 mg/gün) köprüsü kurulmalıdır.',
           ],
         }}
         clinicalPearls={[
-          'SPICE III ≤ 65 Yaş Mortalite Paradoksu: SPICE III çalışmasında genel mortalite farksızken ≤ 65 yaş kritik hastalarda 90 günlük mortalite artış sinyali saptanmıştır (EMA 2022 uyarısı); > 65 yaş ve postoperatif hastalarda ise fayda sinyali öne çıkmıştır.',
-          'Açıklanamayan YBÜ Ateşinde "Deksmedetomidin İlaç Ateşi": Kültürleri negatif, prokalsitonini düşük ve antibiyotiğe yanıtsız yüksek ateşli YBÜ hastasında deksmedetomidin akla gelmelidir; kesilince ateş 6–12 saatte normale döner.',
-          'Tolerans, Taşifilaksi & Klonidin Köprüsü: > 48–72 saatlik infüzyonlarda α₂ reseptör down-regülasyonu gelişir; ani kesilme rebound hipertansiyon, taşikardi ve ajitasyon yapar. 24–48 saatte kademeli azaltma veya enteral klonidin (0.1–0.3 mg/gün) ile geçiş gerekir.',
-          'NMB (Nöromüsküler Bloker) Altında Tek Başına Kullanmayın: Amnezi ve bilinç kaybı garantisi vermediğinden paralize hastada farkındalık (awareness) riski taşır; propofol/midazolam ile kombine edilmelidir.',
+          'SPICE III ≤ 65 Yaş Mortalite Paradoksu (EMA 2022 Uyarısı): 3.904 hastalı SPICE III çalışmasında >65 yaş ve postoperatif YBÜ hastalarında deksmedetomidin sağkalım ve deliryum avantajı sağlarken, ≤65 yaş non-operatif kritik hastalarda 90 günlük mortalitede artış sinyali saptanmıştır; genç septik/kritik hastada derin sedasyon gerekiyorsa propofol öncelikli düşünülmelidir.',
+          'Açıklanamayan Poliüri + Hipernatremide "Deksmedetomidin Kaynaklı DI": YBÜ’de deksmedetomidin alan hastada idrar çıkışı aniden >300–400 mL/saate (>4 mL/kg/saat) fırlar, idrar dansitesi <1.005’e düşer ve serum Na⁺ >145–150 mEq/L’ye yükselirse santral AVP baskılanması + renal α₂B-AQP2 direnci gelişmiştir; infüzyon kesildiğinde poliüri 12–24 saat içinde tamamen normale döner.',
+          'Kültür-Negatif YBÜ Ateşinde "Santral α₂ İlaç Ateşi": Prokalsitonin ve kültürleri negatif olmasına rağmen 39–40 °C ateşi devam eden hastada hipotalamik α₂ termoregülasyon kaymasına bağlı deksmedetomidin ateşi akla gelmelidir; ilaç kesildikten sonra 6–12 saat içinde defervesans (ateşin düşmesi) tanı koydurucudur.',
+          'İnsanlarda Spesifik Antidot Yokluğu & Bradikardi/Hipotansiyon Yönetimi: Veterinerlikteki spesifik α₂-antagonist Atipamezol insanlarda onaylı değildir; aşırı bradikardi/AV blokta infüzyon kapatılır, Atropin 0,5–1 mg IV (veya glikopirolat / efedrin / geçici pacemaker) uygulanır, vazodilatatör hipotansiyonda ise önce kristaloid bolusu ve düşük doz Noradrenalin verilir.',
         ]}
       />
 

@@ -1201,51 +1201,87 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Karma Direkt (α₁, β₁, β₂) & İndirekt (Presinaptik NE Salımı) Sinyal Mekanizması',
+          title: 'Hücre Zarı & Moleküler Hedef (Presinaptik NET / VMAT2 Substratı & Postsinaptik α₁ / β₁ / β₂ GPCR)',
           summary:
-            'Efedrin katekol halkası içermeyen (non-katekolamin) karma etkili sempatomimetiktir. Hem postsinaptik α₁/β₁/β₂ reseptörlerini doğrudan uyarır hem de baskın bileşen olarak noradrenalin taşıyıcısı (NET) üzerinden presinaptik sinir ucuna girerek veziküllerden endojen noradrenalin salımını tetikler (Miller’s / Stoelting’s / Barash).',
+            'Efedrin (L-eritro-2-(metilamino)-1-fenilpropan-1-ol), fenil halkasında 3,4-dihidroksi (katekol) grubu bulunmayan ve α-karbonunda metil yan zinciri taşıyan non-katekolamin fenilizopropilamin türevidir. Hem presinaptik sempatik akson varikozitesi zarındaki Norepinefrin Taşıyıcısına (NET / SLC6A2 / Uptake-1; Ki ~0,5–2 µM) yüksek afiniteli substrat olarak bağlanıp veziküler noradrenalin salınımını tetikler (~%60–75 baskın indirekt etki), hem de postsinaptik sarkolemmadaki α₁, β₁ ve β₂ adrenoseptörlerine düşük-orta afiniteyle (Ki ~10–50 µM) doğrudan parsiyel/tam agonist olarak kenetlenir (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman).',
           points: [
-            'İndirekt Mekanizma (Baskın Pressör Bileşen): Presinaptik sempatik varikozitelerden endojen NE salınımını artırır; bu yüzden etki gücü hastanın sinir ucu NE rezervlerine bağımlıdır.',
-            'Direkt Mekanizma: Postsinaptik α₁ (Gq → IP₃/DAG → Ca²⁺↑) ve β₁/β₂ (Gs → cAMP↑) reseptörlerini düşük–orta afiniteyle doğrudan aktive eder.',
-            'MAO/COMT Direnci: Molekülde katekol hidroksil grupları bulunmadığından MAO ve COMT ile yıkılmaz; IV pressör süresi (10–20 dk) ve eliminasyon yarı ömrü (3–6 saat) katekolaminlerden çok daha uzundur.',
-            'Taşiflaksi Fizyolojisi: Tekrarlayan boluslar presinaptik NE depolarını hızla tüketir ve efedrinin kendisi postsinaptik reseptörleri kısmen işgal ederek (parsiyel/zayıf agonist etki) ek dozların yanıtını söndürür.',
+            'Presinaptik Sempatik Sinir Ucu Zarı & Sinaptik Vezikül Membranı (NET / SLC6A2 & VMAT2 Substrat Değişimi): Na⁺/Cl⁻ bağımlı presinaptik NET simporteri tarafından endojen noradrenalin yerine yarışmalı olarak akson sitozolüne taşınır; ardından sinaptik vezikül membranındaki Veziküler Monoamin Taşıyıcı-2 (VMAT2 / SLC18A2) üzerinden asidik vezikül lümenine girer.',
+            'Vasküler Düz Kas Hücresi Sarkolemması (Postsinaptik α₁A/B/D-Adrenoseptörler): Özellikle splanknik ve sistemik kapasitans venülleri ile rezistans arteriyollerinin sarkolemmasındaki α₁ reseptörlerini, hem sinaptik aralığa boşalttığı endojen noradrenalin aracılığıyla hem de doğrudan Gαq/11 kenetlenmesiyle aktive eder.',
+            'Kardiyomiyosit & SA/AV Düğüm Sarkolemması (Postsinaptik β₁-Adrenoseptörler): SA düğüm pacemaker hücreleri ve ventrikül miyokardındaki β₁ reseptörlerini (Gαs) hem salınan endojen noradrenalin hem de doğrudan bağlanmayla uyarır.',
+            'Bronşiyal, Vasküler & Plasental/Fetal Hücre Zarları (β₂-Adrenoseptör & MAO/COMT Enzim Direnci): Katekol halkası olmadığı için endotelyal/hepatik COMT için substrat değildir ve α-metil karbonu sayesinde mitokondriyal MAO-A/B deaminasyonuna dirençlidir; bu lipofilik yapı kan-beyin bariyeri (KBB) endotel zarını ve plasental sinsityotrofoblast membranını yıkılmadan pasif difüzyonla geçmesini sağlar.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Lipofilik non-katekolamin yapısı sayesinde kan-beyin bariyerini (KBB) kolayca geçer; santral noradrenerjik uyanıklık merkezlerini uyararak inhalasyon anesteziklerinin MAC değerini hafif artırabilir ve uyanık hastada anksiyete, tremor, uykusuzluk oluşturabilir.',
-            'Serebral perfüzyonu MAP artışı üzerinden destekler; ancak aşırı hipertansiyonda serebral otoregülasyon aşılabilir.',
-          ],
-          cvs: [
-            'Venokonstrüksiyon & Preload Artışı: Kapasitans venlerini daraltarak venöz dönüşü (preload) belirgin artırır; özellikle spinal/epidural sempatik blokajda kalp debisini (CO) ve atım hacmini korur.',
-            'Pozitif Kronotropi & İnotropi (β₁): Kalp hızı, kontraktilite ve sistolik/diyastolik basınç eşzamanlı yükselir; saf α₁ Fenilefrin’in aksine refleks bradikardi yapmaz, ancak MVO₂’yi artırır.',
-          ],
-          respiratory: [
-            'Hafif–orta β₂ bronkodilatasyon sağlar (tarihsel olarak astımda kullanılmıştır, günümüzde yerini selektif β₂ agonistlere bırakmıştır).',
-            'Pulmoner arter basıncında (PAP) hafif artış yapabilir.',
-          ],
-          other: [
-            'Obstetrik / Fetal Metabolizma: Plasentayı serbestçe geçer (UV/MA ~1,13) ve fetüste β-adrenerjik metabolik aktivasyonu uyararak fetal O₂ tüketimini, laktatı ve baz açığını artırır (umblikal arter pH↓ — Ngan Kee 2009).',
-            'Genitoüriner: Mesane sfinkterinde α₁ kasılması ve detrüsör β₂ gevşemesiyle postoperatif akut idrar retansiyonuna (özellikle BPH’lı erkeklerde) katkıda bulunur.',
-            'Renal Atılım: %60–75 değişmeden idrarla atılır; zayıf baz (pKa ~9.6) olduğundan alkali idrarda geri emilim artar ve yarı ömrü 2 katına çıkar.',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Efedrinin presinaptik vezikül içi proton gradientini yıkmasıyla başlayan nörokimyasal deşarj, postsinaptik düz kas ve miyokard hücrelerinde Ca²⁺ ve cAMP bağımlı ikincil haberci kaskadlarını harekete geçirir:',
+          points: [
+            'Presinaptik Sinaptik Vezikül İçi ("Weak Base" Proton Gradient Yıkımı & Ters-NET Taşınımı): Zayıf baz (pKa ~9,6) olan efedrin VMAT2 üzerinden asidik sinaptik vezikül içine (pH ~5,5) girdiğinde H⁺ iyonlarını bağlayarak vezikül içi pH gradientini (V-ATPaz proton motor gücünü) nötralize eder. Vezikül içinde kromogranin matriksinden kopan serbest noradrenalin sitozole sızar ve fosforile olmuş NET taşıyıcısının ters yönde çalışmasıyla (reverse transport / Ca²⁺-bağımsız non-ekzositotik efluks) sinaptik aralığa boşalır.',
+            'Kardiyomiyosit & SA Düğüm Hücresi İçi (β₁ → Gαs → AC → cAMP↑ → PKA → Cav1.2, RyR2, PLB & HCN4): Sinaptik aralığa salınan noradrenalin ve efedrinin β₁ uyarımıyla yükselen cAMP/PKA; L-tipi Ca²⁺ kanallarını (Cav1.2) ve SR Riyanodin Reseptörlerini (RyR2) fosforilleyerek sistolik Ca²⁺ transientini büyütür (inotropi), Fosfolamban fosforilasyonuyla SERCA2a Ca²⁺ geri alımını hızlandırır (lusitropi) ve SA düğümde HCN4 (If) pacemaker kanallarını açarak Faz 4 diyastolik depolarizasyonu hızlandırır (kronotropi).',
+            'Venöz & Arteriyoler Düz Kas Hücresi İçi (α₁ → Gαq/11 → PLC-β → IP₃/DAG → SR Ca²⁺ & MLCK / RhoA-ROCK): PLC-β aktivasyonuyla oluşan IP₃ sarkoplazmik retikulum IP₃R kanallarından Ca²⁺ salınımı yapar; Ca²⁺-Kalmodulin kompleksi MLCK’yı aktive ederek MLC₂₀’yi fosforillerken, DAG/PKC ve RhoA/ROCK yolağı Miyozin Fosfatazı (MLCP) inhibe ederek özellikle venöz kapasitans yataklarında uzun süreli (10–20 dk) tonik kasılma oluşturur.',
+            'Bronş Düz Kası & Fetal Hepatosit/Adiposit Hücre İçi (β₂/β₁ → Gαs → cAMP/PKA → MLCK İnhibisyonu & Glikojenoliz/Lipoliz): Bronş düz kasında cAMP/PKA artışı MLCK’yı inhibe ederek gevşeme sağlar; fetüs dokularında ise efedrinin doğrudan β-reseptör uyarımı glikojen fosforilaz ve hormon-duyarlı lipazı aktive ederek hücresel O₂ tüketimini, glikolizi, pirüvat/laktat üretimini ve H⁺ birikimini artırır.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Venöz Kapasitans, Rezistans Arteriyol & Miyokard Dokusu → Kardiyovasküler Sistem',
+            tissueTarget: 'Splanknik Venöz Kapasitans · Arteriyol · SA Düğüm & Miyokard',
+            accent: 'rose',
+            points: [
+              'Selektif Venokonstrüksiyon & Preload Restorasyonu: Efedrin, splanknik ve kutanöz kapasitans venlerini rezistans arteriyollerine kıyasla daha güçlü kasar; spinal/epidural sempatik blokaj veya genel anestezi indüksiyonunda göllenen unstressed venöz kanı sağ kalbe geri kazandırarak (Pmsf↑, preload↑) atım hacmini (SV) korur.',
+              'Dengeli Kronotropi/İnotropi & Kardiyak Debi (CO): Saf α₁ agonist (Fenilefrin) uygulamasında görülen baroreseptör refleks bradikardi ve kardiyak debi düşüşünün aksine, eşzamanlı β₁ uyarımıyla kalp hızını ve kontraktiliteyi artırarak CO’yu yükseltir; ancak taşikardik veya koroner arter hastalığı olan olgularda miyokard O₂ tüketimini (MVO₂) artırarak subendokardiyal iskemi (MINS) tetikleyebilir.',
+              'Yavaş Başlangıç (1–2 dk) & Uzamış Pressör Plato (10–20 dk): Presinaptik NET üzerinden hücre içine giriş ve veziküler NE deplasmanı zaman aldığından pik pressör etki 2–5 dakikada oturur (Fenilefrin/Noradrenalinde 30–45 sn) ve MAO/COMT ile yıkılmadığı için 10–20 dakika sürer.',
+            ],
+          },
+          {
+            systemTitle: 'Uteroplasental Vasküler Yatak & Fetal Dokular → Obstetrik & Fetal Fizyoloji',
+            tissueTarget: 'Uterin Spiral Arterler · Sinsityotrofoblast · Fetal Miyokard/KC',
+            accent: 'amber',
+            points: [
+              'Uterin Arter β₂ Korunması vs Serbest Plasental Geçiş (UV/MA ~1,13): Uterin arterlerde α₁ kasılmasını β₂ vazodilatasyonla dengelediği için uteroplasental kan akımını korur; ancak lipofilik ve MAO/COMT’ye dirençli yapısı nedeniyle plasental enzimatik bariyere takılmadan fetüse bire bir oranında (umblikal ven / maternal arter oranı ~1,13) geçer.',
+              'Fetal β-Adrenerjik Metabolik Asidemi Mekanizması (Ngan Kee 2009): Fetüse geçen efedrin, fetal dokularda doğrudan β-adrenerjik hipermetabolizma, glikojenoliz ve anaerobik/aerobik glikoliz fırtınası başlatarak umblikal arter pH’sını düşürür, PCO₂’yi, laktatı ve baz açığını (base deficit) artırır (bu nedenle sezaryende normal KTA’da 1. tercih Fenilefrin veya Noradrenalindir).',
+              'Fetal Kardiyotokografi (NST) Yansıması: Maternal efedrin bolusu sonrası 5–10 dakika içinde fetüste geçici sinüs taşikardisi ve kalp hızı variabilitesinde artış gözlenebilir.',
+            ],
+          },
+          {
+            systemTitle: 'Santral Noradrenerjik Ağ, Bronş & Üriner Sfinkter Dokusu → SSS, Solunum & Ürogenital',
+            tissueTarget: 'Kan-Beyin Bariyeri · Retiküler Aktivasyon (RAS) · Mesane Sfinkteri',
+            accent: 'indigo',
+            points: [
+              'Kan-Beyin Bariyeri (KBB) Geçişi & MAC Artışı: Non-katekolamin lipofilik yapısıyla KBB’yi hızla geçerek locus coeruleus ve retiküler aktive edici sistemde (RAS) santral noradrenalin/dopamin salınımını artırır → uyanık hastada anksiyete, ajitasyon ve tremor yaparken, genel anestezide volatil anesteziklerin Minimum Alveoler Konsantrasyon (MAC) gereksinimini %10–20 artırabilir.',
+              'Bronşiyal Düz Kas & Pulmoner Yatak: Bronş düz kasında β₂-cAMP yoluyla hafif-orta bronkodilatasyon ve nazal/faringeal mukozada α₁ dekonjesyon sağlar; pulmoner arter basıncını (PAP) hafif yükseltebilir.',
+              'Mesane Trigon/Sfinkter & Detrüsör Düz Kası: İnternal üretral sfinkter ve prostat kapsülündeki α₁A reseptörlerini kasarken detrüsör düz kasındaki β₂ reseptörlerini gevşetir → özellikle benign prostat hiperplazisi (BPH) olan yaşlı erkeklerde postoperatif akut idrar retansiyonu riskini artırır.',
+            ],
+          },
+          {
+            systemTitle: 'Renal Tübül Epiteli & Sempatik Varikozite Depoları → Böbrek & Nörotransmitter Homeostazı',
+            tissueTarget: 'Distal Renal Tübül (pH-Bağımlı) · Presinaptik Vezikül Havuzu',
+            accent: 'teal',
+            points: [
+              'Renal Tübüler İyon Tuzağı & İdrar pH Bağımlı Eliminasyon: %60–75 oranında karaciğerde metabolize olmadan böbrekten değişmemiş ilaç olarak süzülür. Zayıf baz (pKa ~9,6) olduğundan asidik idrarda (pH ~5,0) iyonize (BH⁺) kalarak hızla atılır (t½ ~3 saat); alkali idrarda (pH > 6,5–7,5; NaHCO₃ veya Asetazolamid kullanımı) non-iyonize lipofilik form tübül epitelinden pasif geri emilerek eliminasyon yarı ömrünü >6–10 saate çıkarır.',
+              'Presinaptik Veziküler Havuz Dinamiği: Sempatik sinir ucunda yalnızca "kolay salınabilir (readily releasable)" sitoplazmik/veziküler noradrenalin havuzunu boşaltabilir; tirozin hidroksilaz üzerinden yeni noradrenalin sentezi saatler sürdüğü için ardışık boluslarda vezikül havuzu hızla tükenir.',
+              'Renal Perfüzyon Dengesi: Düşük-orta intraoperatif boluslarda (5–10 mg) kardiyak debiyi ve MAP’ı birlikte yükselterek renal kan akımını ve GFR’yi saf α₁ agonistlere göre daha dengeli korur.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Veziküler NE Deplesyonu (Taşiflaksi), MAOI Fırtınası & Tavan Etkisi',
           summary:
-            'Efedrinin klinik etkinliği 30–50 mg kümülatif tavanla sınırlıdır; öte yandan MAOI/Linezolid varlığında aşırı sinerjik hipertansif kriz potansiyeli taşır.',
+            'Efedrinin pressör etkisinin ~%60–75’inin presinaptik endojen noradrenalin salınımına bağımlı olması, hem akut taşiflaksi/tavan etkisinin hem de MAO inhibitörleriyle gelişen ölümcül ilaç etkileşiminin moleküler temelini oluşturur.',
           points: [
-            'Kümülatif Tavan & Taşiflaksi (30–50 mg): Endojen NE depoları tükendikten sonra doz tırmandırmak fayda sağlamaz; direkt etkili vazopresöre (Noradrenalin veya Fenilefrin) geçiş zorunludur.',
-            'MAOI / Linezolid / Metilen Mavisi Sinerjisi (Kontrendike): MAO inhibisyonu sinir ucunda devasa NE birikimine yol açar; tek bir 5–10 mg efedrin bolusu bu deponun tamamını boşaltarak fatal hipertansif krize neden olabilir.',
-            'Kronik Sempatik Deplesyon & β-Blokerler: Uzamış şokta, ağır diyabetik otonom nöropatide veya rezerpin kullanımında efedrin etkisizdir; non-selektif β-bloker varlığında ise α₁ vazokonstriksiyonu karşılanmamış kalarak hipertansiyonu şiddetlendirebilir.',
+            'Presinaptik Veziküler NE Tükenmesi & Akut Taşiflaksi (30–50 mg Kümülatif Tavan): Kısa aralıklarla tekrarlanan IV boluslar (toplam >30–50 mg) sempatik varikozitelerdeki hazır veziküler noradrenalin havuzunu tamamen boşaltır. Ek olarak, yarı ömrü uzun (3–6 saat) olan efedrin postsinaptik α₁/β₁ reseptörlerini düşük intrinsik aktiviteli (zayıf/parsiyel agonist) olarak işgal etmeye devam ederek kalan endojen katekolaminlerin bağlanmasını da kompetitif olarak perdeler → kan basıncı yanıtı tamamen söner (taşiflaksi) ve doğrudan postsinaptik etkili Noradrenalin veya Fenilefrin’e geçiş zorunlu hale gelir.',
+            'Kronik Katekolamin Deplesyonu Durumlarında Primer Yanıtsızlık: Uzamış septik/kardiyojenik şok (>24 saat YBÜ), ileri evre kalp yetmezliği, ağır diyabetik otonom nöropati, spinal kord kesisi veya rezerpin/kronik kokain kullanımı olan hastalarda bazal presinaptik NE depoları zaten boşalmış olduğundan efedrin ilk dozdan itibaren etkisiz kalır.',
+            'MAOI / Linezolid / Metilen Mavisi Varlığında Masif Katekolamin Fırtınası (Mutlak Kontrendike): Mitokondriyal MAO-A enzimi inhibe edildiğinde (moklobemid, selegilin, fenelzin, antibiyotik Linezolid veya vazopleji tedavisinde verilen IV Metilen Mavisi) presinaptik sitozol ve veziküllerde normalin 5–10 katı noradrenalin birikir. Bu hastaya tek bir 5–10 mg efedrin bolusu verildiğinde, birikmiş devasa NE havuzu saniyeler içinde sinaptik aralığa boşalarak malign hipertansif kriz, intraserebral kanama ve akut sol ventrikül yetmezliği üretir.',
           ],
         }}
         clinicalPearls={[
-          'Doz İstifleme (Stacking) Tuzağı: Efedrinin pik etkisi 2–5 dakikada oturur (Fenilefrin/NE gibi 30–45 sn değil!). 1. dakikada yanıt görmeden art arda 10 mg puşeler yapmak 4. dakikada 220/120 mmHg rebound hipertansiyon yaratır.',
-          'Sezaryen Spinal Hipotansiyonda Altın Kural (Kinsella 2018): Normal/yüksek maternal KTA’da 1. tercih Fenilefrin veya Noradrenalin’dir; Efedrin yalnızca bradikardi eşlik ettiğinde ve kümülatif <15–20 mg sınırında kullanılmalıdır.',
-          'HOCM / SAM & Ciddi Aort Stenozu: β₁ inotropi ve taşikardi sol ventrikül çıkış yolu gradientini dramatik biçimde artırır — bu hastalarda Efedrin yerine saf α₁ Fenilefrin kullanın.',
-          'Linezolid Alan Hastayı Her Zaman Sorgulayın: YBÜ veya ortopedi enfeksiyonu nedeniyle Linezolid alan hastada indirekt sempatomimetik (Efedrin) mutlak kontrendikedir.',
+          'Doz İstifleme (Dose Stacking) Tuzağı: Efedrinin presinaptik NET üzerinden hücreye girip NE salması 1–2 dakika, pik pressör etkisi ise 2–5 dakika sürer (Fenilefrin/Noradrenalin gibi 30–45 saniyede pik yapmaz!). 1. dakikada "tansiyon çıkmadı" diyerek ikinci/üçüncü 10 mg bolusu puşe etmek, 4. dakikada 220/120 mmHg rebound hipertansiyon ve intrakraniyal kanama/miyokard iskemisi yaratır.',
+          'Sezaryen Spinal Hipotansiyonunda Kinsella 2018 & Ngan Kee Kuralı: Plasentayı serbestçe geçip (UV/MA ~1,13) fetal β-adrenerjik laktik asidemi yaptığı için sezaryende normal/yüksek maternal KTA’da 1. tercih Fenilefrin veya Noradrenalindir; Efedrin (5–10 mg IV) yalnızca maternal bradikardi (KTA < 60–65/dk) eşlik ettiğinde ve kümülatif <15–20 mg sınırında seçilir.',
+          'HOCM (SAM) ve Ciddi Aort Stenozunda Neden Kontrendike? β₁ inotropi ve taşikardi, hipertrofik obstrüktif kardiyomiyopatide dinamik sol ventrikül çıkış yolu (LVOT) obstrüksiyonunu ve mitral ön yaprakçığın sistolik öne hareketini (SAM) ağırlaştırır; ciddi aort stenozunda ise diyastolik koroner dolum süresini kısaltarak dramatik subendokardiyal iskemi ve arrest tetikler (bu hastalarda saf α₁ Fenilefrin kullanılır!).',
+          'Linezolid & Metilen Mavisi "Gizli MAOI" Sorgulaması: Ameliyathaneye gelen ortopedi, yanık veya YBÜ hastasında VRE/MRSA için kullanılan Linezolid antibiyotiği geri dönüşümlü non-selektif MAO inhibitörüdür — bu hastalarda hipotansiyon tedavisinde Efedrin kesinlikle kullanılmaz, düşük doz direkt Noradrenalin veya Fenilefrin titre edilir.',
         ]}
       />
 

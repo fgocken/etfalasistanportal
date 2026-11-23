@@ -1888,52 +1888,87 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Selektif μ₁ / μ₂ Opioid Reseptör Sinyal İletimi, Yüksek Lipofilisite & Yükselen CSHT',
+          title: 'Hücre Zarı & Moleküler Hedef (7-TM μ-Opioid Reseptörü [MOR / OPRM1], Lipofilik Membran Partisyonu & SERT Etkileşimi)',
           summary:
-            'Fentanil, morfine göre 80–100 kat daha potent, yüksek lipofilik (oktanol/su partisyon katsayısı ~813) sentetik bir 4-anilinopiperidin μ-opioid agonistidir. Tek bolusta hızlı etki sonlanması metabolizmadan değil, santral kompartmandan kas/yağ dokusuna redistribüsyondan kaynaklanır.',
+            'Fentanil (N-fenil-N-[1-(2-feniletil)piperidin-4-il]propanamid), presinaptik ve postsinaptik nöron membranındaki 7-transmembran (7-TM) G-proteini kenetli μ-opioid reseptörünün (MOR / OPRM1) ortosterik bağlanma cebine çok yüksek afiniteyle (Ki ≈ 0,39–1,35 nM; morfine göre 80–100 kat klinik potens) bağlanan yüksek lipofilik sentetik tam agonisttir. Oktanol/su partisyon katsayısı ~813 (morfinin ~1,4’üne kıyasla ~600–1000 kat yüksek) ve pKa değeri 8,43’tür; fizyolojik pH’ta (7,4) ~%8,5 non-iyonize fraksiyonu bulunsa da aşırı lipid çözünürlüğü sayesinde nöronal fosfolipid çift katmanını ve kan-beyin bariyerini hızla geçer (t½ke0 ≈ 4,7–6,6 dk) (Miller’s 10th Ed. / Stoelting’s 6th Ed.).',
           points: [
-            'Gi/Go İnhibitör G-Protein Yolağı: Adenilat siklaz inhibisyonu (cAMP↓), presinaptik N-tipi Ca²⁺ kanal kapanması (P maddesi ve glutamat salınımı↓) ve postsinaptik GIRK K⁺ kanal açılmasıyla nöronal hiperpolarizasyon oluşturur.',
-            'Reseptör Alt Tipi Ayrımı: μ₁ supraspinal/spinal analjeziden; μ₂ medüller solunum depresyonu, santral vagotonik bradikardi, göğüs duvarı rijiditesi ve enterik peristaltizm inhibisyonundan sorumludur.',
-            'Süreye Bağlı Yükselen CSHT (Context-Sensitive Half-Time): 2 saatlik infüzyon sonunda CSHT ~30–45 dk iken, periferik yağ depolarının dolmasıyla 4 saatte ~200–250 dk’ya, > 8 saatte 300+ dk’ya yükselir (remifentanilin sabit 3–4 dk’lık CSHT’sinin aksine!).',
+            'Presinaptik & Postsinaptik Nöron Membranı MOR (OPRM1) Bağlanma Cebi: Spinal kord arka boynuz lamina I/II (substantia gelatinosa), primer afferent C/Aδ terminalleri, periaquaduktal gri cevher (PAG), rostral ventromedüller (RVM) çekirdekler ve pre-Bötzinger solunum kompleksindeki 7-TM MOR reseptörlerinin transmembran heliks cebine (Asp147 tuz köprüsü) bağlanarak heterotrimerik Gαi/o proteinlerini aktive eder.',
+            'Yüksek Lipofilik Membran Difüzyonu & Akciğer İlk-Geçiş Sekestrasyonu: IV enjeksiyon sonrası lipofilik fentanil moleküllerinin ~%75’i pulmoner kapiller endotel zarında ilk geçişte geçici olarak tutulur (pulmoner first-pass uptake) ve ardından sistemik dolaşıma salınarak beyin, kalp ve geniş periferik kas/adipoz doku membranlarına (Vdss ≈ 3–5 L/kg) dağılır.',
+            'Presinaptik Serotonin Taşıyıcısı (SERT / 5-HTT) & 5-HT1A Etkileşimi: Fenilpiperidin (4-anilinopiperidin) kimyasal iskeleti nedeniyle morfin/hidromorfon gibi fenantren opioidlerden farklı olarak nöronal membrandaki Serotonin Geri Alım Taşıyıcısına (SERT) zayıf-orta afiniteyle bağlanır ve 5-HT1A otoreseptör etkileşimi gösterir → MAOİ, Linezolid veya SSRI/SNRI varlığında sinaptik 5-HT konsantrasyonunu artırarak Serotonin Sendromu tetikleyebilir.',
+            'Sıfır Mast Hücresi MRGPRX2 Aktivasyonu (Histamin Salınımı Yokluğu): Morfin ve meperidinin aksine kutanöz ve vasküler mast hücresi membranındaki MRGPRX2 (Mas-ilişkili GPCR) reseptörlerini uyarmaz; bu sayede plazma histamin deşarjına, IgE-bağımsız anaflaktoid vazodilatasyona veya bronkokonstriksiyona yol açmaz.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Sedasyon vs. Hipnoz / Amnezi Ayrımı: GABA-A reseptörlerine bağlanmaz; locus coeruleus ve ARAS üzerindeki μ-inhibitör etki ve afferent nosiseptif girdinin kesilmesiyle sedasyon/analgosedasyon sağlar ancak tek başına güvenilir bilinç kaybı ve amnezi OLUŞTURMAZ.',
-            'Serebral Hemodinami & EEG: Normokapni korunduğunda CBF ve CMRO₂’yi hafif azaltır, ICP’yi artırmaz; ancak spontan solunumda hiperkapni gelişirse serebral vazodilatasyonla ICP hızla yükselir. Yüksek dozlarda EEG’de yavaş yüksek amplitüdlü delta dalgaları izlenir.',
-            'Miyozis: Edinger-Westphal çekirdeğinin parasempatik uyarımıyla toplu iğne başı pupil (pinpoint) oluşturur (tolerans gelişmez).',
-          ],
-          cvs: [
-            'Kardiyovasküler Stabilite & Histamin Yokluğu: Direkt miyokard kontraktilite depresyonu minimaldir ve mast hücresinden histamin salınımı yapmaz; hemodinamik açıdan kırılgan/kardiyak hastalarda tercih sebebidir.',
-            'Santral Vagal Bradikardi: Medüller vagal çekirdek uyarımıyla doza bağımlı sinüs bradikardisi (özellikle β-bloker, deksmedetomidin veya hızlı bolusta) gelişebilir; atropine hızla yanıt verir.',
-          ],
-          respiratory: [
-            'Medüller Solunum Depresyonu (μ₂): CO₂ yanıt eğrisini sağa kaydırır, eğimini düşürür, apneik eşiği yükseltir ve hipoksik ventilatuvar yanıtı baskılar. Pik solunum depresyonu IV bolustan 5–15 dk sonra belirginleşir.',
-            'Göğüs Duvarı & Laringeal Rijidite ("Tahta Göğüs"): Hızlı IV puşe sonrası santral striatal/GABAerjik yolaklar üzerinden göğüs duvarı ve vokal kord spazmı yaparak ventilasyonu engelleyebilir; tedavi kısa etkili NMB veya naloksondur.',
-          ],
-          other: [
-            'Biliyer basınç artışı ve Oddi sfinkter spazmı',
-            'Gastrik boşalma gecikmesi, ileus ve konstipasyon',
-            'Cerrahi stres hormonlarının (kortizol, katekolamin) güçlü baskılanması',
-            'Zayıf 5-HT geri alım inhibisyonu nedeniyle serotonerjik ilaçlarla serotonin sendromu riski',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'MOR’un Gαi/o ve Gβγ alt birimlerini ayrıştırmasıyla başlayan hücre içi sinyal iletimi; nosiseptif nöronlarda eksitatör nörotransmitter ekzositozunu ve aksiyon potansiyeli ateşlemesini üç ana elektrokimyasal mekanizmayla susturur:',
+          points: [
+            'Gαi/o → Adenilat Siklaz (AC) İnhibisyonu → cAMP↓ → PKA↓ & HCN Blokajı: Aktif Gαi alt birimi membrana bağlı Adenilat Siklaz enzimini inhibe ederek hücre içi cAMP düzeyini düşürür. Azalan Protein Kinaz A (PKA) aktivitesi; voltaj kapılı Na⁺ (Nav1.7/1.8) ve TRPV1 kanallarının fosforilasyonunu azaltır, ayrıca hiperpolarizasyonla aktive olan siklik nükleotid kapılı (HCN) pacemaker kanallarının açılmasını baskılar.',
+            'Presinaptik Gβγ → N/P/Q-Tipi Ca²⁺ (Cav2.2) Kanal Kapanması & SNARE Vezikül Blokajı: Serbestleşen Gβγ alt birimi, spinal arka boynuz lamina I/II’deki C ve Aδ nosiseptör akson uçlarında voltaj kapılı N-tipi (Cav2.2) kalsiyum kanallarına doğrudan bağlanarak depolarizasyon kaynaklı Ca²⁺ girişini bloke eder. Sitozolik Ca²⁺ yükselmeyince sinaptotagmin-SNARE kompleksi aktive olamaz ve sinaptik aralığa Glutamat, P Maddesi (Substance P) ile CGRP vezikül ekzositozu durur.',
+            'Postsinaptik Gβγ → GIRK (Kir3.1/3.2) Kanal Açılması → K⁺ Efluksu & Hiperpolarizasyon: Postsinaptik spinotalamik traktus projeksiyon nöronlarında, locus coeruleus’ta ve pre-Bötzinger solunum nöronlarında Gβγ kompleksi içeri doğrultucu GIRK (Kir3) potasyum kanallarını açar. Hücre dışına K⁺ akışı membran potansiyelini hiperpolarize ederek nöronun uyarılma eşiğini yükseltir.',
+            'GRK2/3 Fosforilasyonu, β-Arrestin-2 & Kronik cAMP Süperaktivasyonu: Uzamış YBÜ infüzyonlarında (>48–72 saat) G-proteini kenetli reseptör kinazlar (GRK2/3) MOR’un C-terminalini fosforiller ve β-arrestin-2 bağlanmasıyla reseptör klatrin kaplı veziküllerle hücre içine (endositoz) çekilir. Hücre buna kompansatuar olarak Adenilat Siklaz ve PKA sentezini yukarı regüle eder (infüzyon aniden kesildiğinde veya Nalokson verildiğinde "cAMP overshoot" ile akut yoksunluk ve sempatik fırtına patlak verir).',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Spinal Arka Boynuz, Beyin Sapı & Serebral Vasküler Yatak → SSS & Analjezi',
+            tissueTarget: 'Lamina I/II · PAG–RVM · Locus Coeruleus · Edinger-Westphal',
+            accent: 'indigo',
+            points: [
+              'Spinal & Supraspinal Analjezi + Nöroaksiyel Segmental Etki: Arka boynuz lamina I/II’de asendan ağrı iletimini keserken PAG–RVM GABAerjik internöronlarını inhibe ederek desendan inhibitör yolağı çalıştırır. Epidural/intratekal (koruyucusuz PF form!) uygulandığında yüksek lipofilisitesiyle BOS’tan hızla spinal kord substantia gelatinosa’ya geçer; morfine göre çok daha hızlı (5–10 dk) segmental analjezi sağlar ve rostral BOS yayılımı az olduğundan geç (>12 sa) solunum depresyonu riski düşüktür.',
+              'Analgosedasyon vs Kortikal Hipnoz Ayrımı: Locus coeruleus ve ARAS üzerindeki MOR inhibisyonuyla sedasyon ve endotrakeal tüp toleransı sağlar; ancak GABA-A klorür kanallarını açmadığından tek başına yüksek dozlarda dahi güvenilir amnezi ve genel anestezi hipnozu OLUŞTURMAZ.',
+              'Serebral Hemodinami (CBF / ICP) & Miyozis: Normokapnik ventilasyon altında serebral metabolik hızı (CMRO₂), serebral kan akımını (CBF) ve kafa içi basıncını (ICP) hafif düşürür; Edinger-Westphal çekirdeği uyarımıyla pinpoint miyozis yapar.',
+            ],
+          },
+          {
+            systemTitle: 'Pre-Bötzinger Solunum Merkezi, Karotid Cisimcik & Striatal Ağ → Solunum & Toraks',
+            tissueTarget: 'Pre-Bötzinger · Kemoreseptörler · Torakoabdominal & Laringeal Kaslar',
+            accent: 'rose',
+            points: [
+              'Medüller Solunum Depresyonu & CO₂ Eğrisi Sağa Kayması: Pre-Bötzinger kompleksi ve pontin pnömotaksik merkezdeki MOR aktivasyonuyla PaCO₂–dakika ventilasyon yanıt eğrisi sağa kayar ve eğimi düşer; apneik PaCO₂ eşiği yükselir ve karotid cisimcik hipoksik ventilatuar dürtüsü körelir (IV bolustan 5–15 dk sonra pik yapar, analjeziden daha uzun sürer!).',
+              'Toraks & Vokal Kord Rijiditesi ("Tahta Göğüs / Wooden Chest"): Hızlı IV bolus (>3–5 mcg/kg veya <1–2 dk puşe) striatal/bazal gangliyon ve nükleus raphe magnus devreleri üzerinden göğüs duvarı, diyafram ve özellikle laringeal adduktör kaslarda (glottik kapanma!) şiddetli santral rijidite yaratarak maske (BVM) ventilasyonunu imkânsızlaştırır.',
+              'Hava Yolu Refleks Bloku & Bronkomotor Güvenlik: Trakeobronşiyal irritan reseptörleri ve öksürük refleks arkını güçlü biçimde baskılar; histamin salınımı yapmadığından astım ve KOAH hastalarında bronkospazm tetiklemez.',
+            ],
+          },
+          {
+            systemTitle: 'Medüller Vagal Çekirdek, Sempatik Sinir Sistemi & Miyokard → Kardiyovasküler Sistem',
+            tissueTarget: 'Nükleus Ambiguus · RVLM · Kardiyomiyosit · Kapasitans Damarlar',
+            accent: 'amber',
+            points: [
+              'Hemodinamik Stabilite & Sıfır Miyokardiyal Depresyon: Terapötik ve yüksek anestezik dozlarda dahi kardiyomiyosit kontraktilitesini (dP/dt), baroreseptör refleksini veya koroner otoregülasyonu doğrudan bozmaz; mast hücresi histamin deşarjı yapmadığından vazoplejik hipotansiyon oluşturmaz (kardiyak cerrahi ve şok indüksiyonunda morfine temel üstünlüğü).',
+              'Santral Vagotonik Bradikardi: Medüller nükleus ambiguus uyarımıyla SA düğüm hızını ve AV düğüm iletimini yavaşlatarak doz-bağımlı sinüs bradikardisi yapar (atropine hızla yanıt verir).',
+              'Sempatik Stres Yanıtı Blokajı & Hipovolemik Maskenin Kalkması: Laringoskopi ve cerrahi insizyona bağlı hipotalamo-hipofizer ve sempatoadrenal katekolamin deşarjını köreltir; ancak kanamalı/hipovolemik veya yüksek sempatik tonusa bağımlı hastada merkezi sempatik tonusu düşürerek gizli hipovolemik hipotansiyonu açığa çıkarabilir.',
+            ],
+          },
+          {
+            systemTitle: 'Adipoz/Kas Depoları, Hepatik CYP3A4, Enterik Pleksus & Safra Yolu → Metabolik & GİS',
+            tissueTarget: 'Adipoz & İskelet Kası · Hepatik CYP3A4 · Miyenterik Pleksus & Oddi',
+            accent: 'teal',
+            points: [
+              'Üç-Kompartmanlı Redistribüsyon & Yükselen CSHT: Tek IV bolusun 30–60 dakikada bitmesi yıkımdan değil, beyinden inaktif kas ve yağ dokusuna redistribüsyondan kaynaklanır. Sürekli infüzyonda (>4–8 saat) bu derin periferik depolar (Vd ~4 L/kg) doyduğunda ilaç yağdan plazmaya geri döner ve CSHT 30 dakikadan 200–300+ dakikaya fırlar!',
+              'Hepatik CYP3A4 Biyotransformasyonu (İnaktif Norfentanil): Karaciğerde yüksek ekstraksiyon oranıyla (%70–80) CYP3A4 üzerinden oksidatif N-dealkilasyonla inaktif norfentanile yıkılır; aktif/toksik metaboliti olmadığı için ağır böbrek yetmezliğinde (morfinin M6G birikiminin aksine) çok daha güvenlidir.',
+              'Enterik Miyenterik Pleksus, Oddi Spazmı & Mesane Sfinkteri: Enterik nöronlarda ACh salınımını baskılayarak gastrik boşalmayı yavaşlatır, postoperatif ileus/konstipasyon, Oddi sfinkter spazmı (biliyer kolik basıncı artışı) ve detrusor inhibisyonuyla üriner retansiyon oluşturur.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Yükselen CSHT, İkinci Pik Fenomeni, Hipnotik Sinerjisi & Tavan Etkisi',
           summary:
-            'Fentanil, tek başına tam genel anestezi sağlayamayan ancak hipnotikler ve volatil anesteziklerle güçlü sinerji oluşturan bir analjezik omurgadır.',
+            'Fentanilin klinik farmakodinamisini yönetmek; hipnotiklerle olan güçlü supra-aditif sinerjisini kullanırken, yüksek lipofilisitesinin yarattığı zaman-bağımlı doku birikimini (CSHT) ve solunum depresyonu riskini öngörmeye dayanır.',
           points: [
-            'İnhalasyon MAC Azaltımı & Tavan Etkisi (Ceiling Effect): Sevofluran/desfluran/izofluran MAC değerini ~%50–65 azaltır; ancak tavan etkisi nedeniyle doz ne kadar artırılırsa artırılsın MAC %100’e düşmez (tek başına bilinç kaybı ve amnezi garantisi vermez).',
-            'Propofol–Fentanil & Midazolam Sinerjisi: Ağrılı uyarana hareket/hemodinamik yanıtı ve propofol/midazolam EC50’sini belirgin düşürür; ancak spontan soluyan hastada (PSA/MAC) derin hipoventilasyon ve apne riskini katlar.',
-            'Nalokson Antagonizması & Renarkotizasyon: Saf kompetitif μ-antagonisti naloksonla hızla geri döner; ancak fentanilin doku redistribüsyonu ve uzayan CSHT’si nedeniyle nalokson etkisi (30–60 dk) bittiğinde renarkotizasyon gelişebilir.',
+            'Volatil Anestezik MAC Azaltımı & Tavan Etkisi (Ceiling Effect): Plazma fentanil düzeyi 1–3 ng/mL aralığında sevofluran, desfluran ve izofluran MAC değerini %50–65 oranında düşürür; ancak >10–30 ng/mL üzerindeki çok yüksek dozlarda dahi MOR doygunluğu nedeniyle MAC azaltımı ~%70–80’de plato çizer (tavan etkisi) — tek başına tam anestezi ve amnezi sağlamaz.',
+            'Propofol / Midazolam Supra-Aditif Sinerjisi (Ko-İndüksiyon & PSA): GABA-A pozitif allosterik modülatörleri (propofol, midazolam) ile MOR agonisti fentanil birlikte verildiğinde hipnotik EC50 gereksinimi %40–60 düşer; ancak spontan soluyan hastada (endoskopi/PSA) medüller CO₂ duyarsızlığı ile faringeal kas kollapsı birleşerek apne riskini 4–8 kat artırır.',
+            'İkinci Pik (Secondary Peak / Enterohepatik & Kas Sekestrasyonu) ve Renarkotizasyon: Yüksek doz intraoperatif fentanil sonrası PACU’da hasta ısındığında ve hareket ettiğinde, iskelet kası, akciğer ve asidik gastrik sıvıda (iyon tuzağı) sekestre olan fentanil sistemik dolaşıma yeniden katılarak ("second peak") ameliyattan 1–3 saat sonra gecikmiş solunum arresti yapabilir; ayrıca Naloksonun yarı ömrü (30–60 dk) fentanilin terminal yarı ömründen (3,5–8 saat) çok kısa olduğu için erken renarkotizasyon gelişir.',
           ],
         }}
         clinicalPearls={[
-          'İntraoperatif Farkındalık (Awareness) Tuzağı: Yüksek doz fentanil tekniğinde dahi tek başına hipnoz/amnezi garanti değildir; mutlaka yeterli volatil ajan veya propofol + gerektiğinde işlenmiş EEG (BIS/PSI) eşlik etmelidir.',
-          'İkinci Pik (Secondary Peak) Fenomeni: Yüksek lipofilisite nedeniyle kas, akciğer ve gastrik mukozada sekestre olan fentanil, postoperatif dönemde dolaşıma geri dönerek PACU’da geç solunum depresyonuna yol açabilir.',
-          'Nöroaksiyel Kullanımda Koruyucusuz (PF) Zorunluluğu: Spinal/epidural uygulamada lipofilik yapısı sayesinde segmental hızlı etki sağlar ve morfine göre geç rostral solunum depresyonu riski düşüktür; ancak daima koruyucusuz (PF) ampul kullanılmalıdır.',
-          'Transdermal (TTS) Isı Tuzağı: Ateş, ısıtıcı battaniye veya sıcak kompres transdermal fentanil salımını dramatik artırarak opioid-toleran hastada dahi ölümcül doz aşımına yol açabilir.',
+          'Remifentanil vs Fentanil CSHT Uçurumu: 8 saatlik bir ameliyat veya YBÜ sedasyonu sonunda Remifentanil kapatıldığında plazma düzeyi 3–4 dakikada yarıya inerken, Fentanil kapatıldığında yağ dokusu depolarından geri salınım nedeniyle plazma düzeyinin yarıya inmesi (CSHT) 240–300 dakika (4–5 saat!) sürer.',
+          'Böbrek Yetmezliğinde Morfine Göre Moleküler Üstünlük: Morfin karaciğerde çok güçlü aktif bir μ-agonisti olan Morfin-6-Glukuronid (M6G) ve nörotoksik M3G’ye dönüşüp böbrek yetmezliğinde birikerek günler süren narkoz yaparken; Fentanil CYP3A4 ile tamamen İNAKTİF norfentanile yıkıldığından eGFR <30 mL/dk hastada tercih edilen opioiddir.',
+          'Transdermal Flaster (Durogesic TTS) & Isı/Subkutan Depo Tuzağı: TTS flaster takıldıktan sonra cilt altında bir lipofilik depo oluşması ve sistemik etkinin başlaması 12–24 saat sürer, flaster çıkarıldıktan sonra da cilt altı depodan emilim 17–24 saat devam eder! Yüksek ateş (>39°C) veya flaster üzerine sıcak battaniye temas etmesi kutanöz perfüzyonu artırarak salımı 2–3 katına çıkarır ve ölümcül apne yapar.',
+          'CYP3A4 İnhibitörleri ve Serotonerjik İlaç Etkileşimi: Klaritromisin, vorikonazol/flukonazol, diltiazem veya ritonavir alan hastada fentanil hepatik klirensi bloke olarak beklenen sürenin 2–3 katı solunum depresyonu yapar; Linezolid, metilen mavisi veya MAOİ kullanan hastada ise fenilpiperidin SERT blokajı nedeniyle Serotonin Sendromu tetikler.',
         ]}
       />
 

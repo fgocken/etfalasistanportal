@@ -1080,52 +1080,87 @@ export const FlumazenilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 14. DERİN FARMAKODİNAMİK (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'GABA-A α/γ2 BZD Bölgesinde Nötr Allosterik Modülasyon & Kompetitif Antagonizma',
+          title: 'Hücre Zarı & Moleküler Hedef (Pentamerik GABA-A Reseptörü Ekstraselüler α₁,₂,₃,₅ / γ₂ Allosterik BZD Cebi & Alt-Birim Seçiciliği)',
           summary:
-            'Flumazenil, GABA-A reseptörünün α ve γ2 alt birimleri arasındaki benzodiyazepin bağlanma bölgesine bağlanan nötr allosterik modülatör / kompetitif antagonisttir. GABA bağlanma bölgesini, barbitürat, propofol, nörosteroid ve etanol bölgelerini etkilemez.',
+            'Flumazenil (etil 8-floro-5,6-dihidro-5-metil-6-okso-4H-imidazo[1,5-a][1,4]benzodiyazepin-3-karboksilat; Ro 15-1788), postsinaptik nöron membranındaki pentamerik ligand-kapılı klorür kanalı olan GABA-A reseptör kompleksinin (2α : 2β : 1γ₂ stokiyometrisi) ekstraselüler N-terminal alanında, α₁/α₂/α₃/α₅ alt birimi (+) yüzü ile γ₂ alt birimi (−) yüzü arasındaki yüksek afiniteli allosterik Benzodiyazepin (BZD) bağlanma cebine (α₁-His101 rezidüsü) Ki ≈ 0,8–1,2 nM afiniteyle bağlanan kompetitif antagonisttir (nötr allosterik modülatör) (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Whitwam 1995).',
           points: [
-            'Alt Tip Profili: α1 içeren reseptörlerde (sedasyon, amnezi) selektif antagonizma; α2/α3/α5 içeren reseptörlerde zayıf parsiyel agonist etki bildirilmiştir — klinik dozlarda belirgin intrinsik etki yoktur.',
-            'Kompetitif Yer Değiştirme: BZD agonistlerini (midazolam, diazepam, lorazepam), Z-ilaçlarını ve remimazolamı bağlanma bölgesinden uzaklaştırarak GABA kaynaklı Cl⁻ kanal açılma sıklığındaki pozitif modülasyonu sonlandırır.',
-            'Bağımlılıkta Zayıf Parsiyel Ters Agonizma: Kronik BZD maruziyetiyle adapte olmuş reseptörlerde ani GABAerjik ton kaybı ve zayıf ters agonist etki yoksunluk ve nöbet eşiği düşüşüne yol açar.',
+            'α₁,₂,₃,₅ / γ₂ Allosterik BZD Cebi vs Ortosterik GABA Bağlanma Bölgesi Ayrımı: Klasik benzodiyazepinleri (midazolam, diazepam, lorazepam), ultra-kısa etkili remimazolamı ve non-BZD "Z-ilaçlarını" (zolpidem, zopiklon, zaleplon — α₁/γ₂ seçici) allosterik cepten kompetitif olarak uzaklaştırır; buna karşın β+/α− ara yüzündeki ortosterik endojen GABA bağlanma bölgesine DOKUNMAZ ve bazal fizyolojik GABAerjik Cl⁻ iletimini bloke etmez.',
+            'α Alt-Birim Farmakodinamik Profili (α₁,₂,₃,₅ Duyarlı vs α₄/α₆ Duyarsız): α₁ (kortikal sedasyon, anterograd amnezi ve antikonvülzan etki) alt birimi üzerinde saf nötr antagonist iken; α₂/α₃ (anksiyoliz, miyorölaksasyon) ve α₅ (hipokampal bellek) alt birimlerinde ihmal edilebilir düzeyde zayıf parsiyel intrinsik aktivite gösterir. Histidin yerine Arjinin taşıyan ekstrasinaptik α₄ ve α₆ alt birimlerine ise ne BZD’ler ne de flumazenil bağlanır.',
+            'Propofol, Barbitürat, Etomidat, Volatil Anestezik & Etanol Bölgelerinden Tam Bağımsızlık: GABA-A reseptörünün transmembran β₂/β₃ alt birim ceplerine bağlanan Propofol ve Etomidat’ı, kanal açılma süresini uzatan Barbitüratları, nörosteroidleri, inhalasyon anesteziklerini veya μ-opioid reseptörlerini (MOR) kesinlikle antagonize etmez.',
+            'Hızlı KBB Geçişi & PET Reseptör Doluluk (Occupancy) Kinetiği: Orta lipofilisite ve düşük plazma protein bağlanması (~%50) sayesinde IV enjeksiyondan 1–2 dakika sonra serebral korteks GABA-A reseptörlerine ulaşır; 0,2 mg IV doz BZD reseptörlerinin ~%40–50’sini, 0,6–1,0 mg kümülatif doz ise >%75–85’ini işgal ederek klinik sedasyonu tersine çevirir.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Sedasyonu amneziden daha güvenilir geri döndürür; uyanık görünen hastada anterograd amnezi ve psikomotor yavaşlık sürebilir.',
-            'Normal bireyde serebral kan akımını (CBF) artırmaz; ancak kafa travmalı hastada KİB ve CBF artışı bildirilmiştir.',
-            'Nöbet eşiği: BZD antikonvülzan korumasını kaldırır; kronik kullanıcıda ve proconvulsant ko-ingestanda nöbet tetikler.',
-          ],
-          cvs: [
-            'Tek başına genellikle hemodinamik olarak nötrdür.',
-            'Ani reversalde katekolamin artışı → hipertansiyon, taşikardi ve supraventriküler aritmi.',
-            'TSA zehirlenmesinde BZD’nin "maskelediği" kardiyotoksisiteyi (geniş QRS, ventriküler aritmi) açığa çıkarabilir.',
-          ],
-          respiratory: [
-            'BZD kaynaklı ventilatuvar depresyonun (CO₂ yanıtı) geri dönüşü tutarsızdır; özellikle opioid ko-uygulamasında yetersiz kalır.',
-            'Asıl hipoventilasyon mekanizması olan üst hava yolu tonus kaybı hava yolu manevralarıyla yönetilmelidir.',
-          ],
-          other: [
-            'Propofol/sevofluran anestezisi sırasında spesifik olmayan "analeptik" uyanma etkisi bildirilmiştir',
-            'Opioid, barbitürat, etanol ve NMB etkisini antagonize etmez',
-            'Oral biyoyararlanım ~%16; klinik kullanım yalnızca IV',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Flumazenilin ekstraselüler α/γ₂ cebinden BZD agonistini uzaklaştırması, postsinaptik nöronda Cl⁻ iyon akışını ve membran potansiyelini milisaniyeler içinde normalize ederken; kronik BZD toleransı veya TSA varlığında patolojik eksitatör Ca²⁺/Na⁺ deşarjını serbest bırakır:',
+          points: [
+            'GABA-Kapılı Cl⁻ Kanal Açılma Frekansının (f_open) Normalizasyonu: Benzodiyazepinler GABA’nın reseptöre afinitesini artırarak Cl⁻ kanalının açılma frekansını (sıklığını) yükseltir ve hücre içine aşırı Cl⁻ girişiyle membranı −75 / −80 mV’a hiperpolarize eder. Flumazenil BZD’yi cepten çıkararak Cl⁻ kanal açılma frekansını bazal endojen GABA düzeyine geri indirir → postsinaptik membran dinlenim potansiyeline (−65 mV) döner ve piramidal nöron ateşlemesi yeniden başlar.',
+            'Bazal Endojen GABAerjik Tonusun Korunması (Pikrotoksin/Bikukullin’den Farkı): Ortosterik GABA antagonisti (bikukullin) veya Cl⁻ kanal por blokeri (pikrotoksin) olmadığı için, BZD bulunmayan sağlıklı bir nöronda bazal Cl⁻ iletkenliğini kapatmaz ve kendi başına konvülsiyon üretmez.',
+            'Kronik BZD Toleransında Hücresel Adaptasyon & Akut Nöbet Kaskadı (Down-Regüle GABA-A + Up-Regüle NMDA/Cav): Uzun süreli BZD maruziyetinde nöronlar; (1) GABA-A α₁/γ₂ alt birimlerini fosforilleyip endositozla hücre içine çekerek (down-regülasyon) ve allosterik kenetlenmeyi bozarak ("uncoupling") inhibitör kapasiteyi azaltır, (2) Kompansatuar olarak eksitatör glutamaterjik NMDA/AMPA reseptörlerini ve L-tipi voltaj kapılı Ca²⁺ kanallarını yukarı regüle eder. Flumazenil verildiğinde kalan son Cl⁻ hiperpolarizasyon kalkanı da aniden çöker (+ adapte reseptörde zayıf ters agonizma) → hücre içine kontrolsüz Na⁺ ve Ca²⁺ akışı, CaMKII aktivasyonu ve durdurulamayan senkronize epileptiform deşarj (status epileptikus) başlar.',
+            'Prokonvülzan Ko-İngestanlarda (Trisiklik Antidepresan / TSA) Maskenin Kalkması: TSA zehirlenmesinde presinaptik NE/5-HT geri alım blokajı, muskarinik M1 ve histaminerjik H1 blokajı ile GABA-A inhibisyonu kortikal nöbet eşiğini düşürürken; alınan eşzamanlı BZD yüksek Cl⁻ akımıyla bu nöbeti bastırmaktadır. Flumazenil bu Cl⁻ frenini kaldırdığı anda jeneralize nöbet patlak verir; nöbetin yarattığı laktik/respiratuar asidoz (pH↓) ise TSA’nın α₁-asit glikoproteinden ayrılmasına ve kardiyak Nav1.5 kanallarına bağlanmasına ("ion trapping") yol açarak geniş QRS’li ölümcül ventriküler taşikardi/fibrilasyon başlatır.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Talamokortikal Ağ, ARAS & Hipokampal CA1 Devresi → Santral Sinir Sistemi',
+            tissueTarget: 'Serebral Korteks (α₁) · Hipokampus (α₅) · Amigdala (α₂/α₃)',
+            accent: 'violet',
+            points: [
+              'Diferansiyel Geri Dönüş (Sedasyon / Hipnoz >> Anterograd Amnezi): Asendan retiküler aktive edici sistem (ARAS) ve talamokortikal α₁-GABA-A reseptörlerindeki BZD işgalini %50–70 düşürmek hastanın gözünü açıp sözlü komutlara uyması (sedasyon reversalı) için yeterlidir; ancak hipokampal CA1 piramidal nöronlarındaki (α₅/α₁) uzun süreli potansiyalizasyon (LTP) baskılanması ve psikomotor yavaşlık tam silinmediğinden, uyanık görünen hastada anterograd amnezi devam eder!',
+              'Midazolam Paradoks Eksitasyonunun (Disinhibisyon) Çözülmesi: Çocuklarda ve yaşlılarda midazolamın kortikal/limbik inhibitör internöronları seçici baskılamasıyla gelişen paradoksal ajitasyon, ağlama ve saldırganlık tablosunu 0,1–0,2 mg düşük doz flumazenil 1–2 dakikada dramatik biçimde sakinleştirir.',
+              'Serebral Hemodinami (CBF / CMRO₂) & Kafa İçi Basıncı (KİB): Sağlıklı bireyde CBF ve ICP üzerinde nötrdür; ancak ağır kafa travması veya intrakraniyal kitle nedeniyle BZD sedasyonu altında tutulan hastada flumazenil verilmesi, CMRO₂ ve sempatik kan basıncı sıçramasıyla KİB’i (ICP) tehlikeli biçimde yükseltir.',
+            ],
+          },
+          {
+            systemTitle: 'Faringeal Dilatatör Kaslar & Medüller Solunum Merkezi → Solunum & Hava Yolu',
+            tissueTarget: 'Genioglossus / Üst Hava Yolu (α₂/α₃) · Medüller Merkez · Karotid Cisimcik',
+            accent: 'teal',
+            points: [
+              'Üst Hava Yolu Obstrüksiyonunun Çözülmesi vs Santral CO₂ Yanıtı Tutarsızlığı: Benzodiyazepin hipoventilasyonunun birincil mekanizması genioglossus ve faringeal dilatatör kasların (α₂/α₃ miyorölaksasyon) gevşemesine bağlı üst hava yolu kollapsıdır. Flumazenil bilinci ve faringeal kas tonusunu hızla düzelterek obstrüktif apneyi açar; ancak medüller santral PaCO₂ yanıt eğrisi ve hipoksik ventilatuar dürtü üzerindeki geri dönüşü tam ve güvenilir değildir.',
+              'Opioid + BZD Sinerjistik Solunum Depresyonunda Kısmi Etki: Midazolam + Fentanil uygulanan hastada flumazenil yalnızca BZD’nin supra-aditif çarpanını kaldırır; pre-Bötzinger kompleksi üzerindeki doğrudan MOR (μ₂) solunum depresyonu devam eder (bu nedenle kombine sedasyon apnesinde ÖNCE BVM ventilasyon + Nalokson uygulanır).',
+              'Koruyucu Hava Yolu Refleksleri & Resedasyon Aspirasyonu: Yutkunma, öksürük ve laringeal adduktör refleksleri geri kazandırır; ancak 30–60 dakika sonra gelişen resedasyonda hava yolu tekrar kapanabileceği için erken oral besleme veya monitörsüz bırakma aspirasyon riski taşır.',
+            ],
+          },
+          {
+            systemTitle: 'Otonomik Sempatik Çekirdekler, Miyokard & İleti Sistemi → Kardiyovasküler Sistem',
+            tissueTarget: 'RVLM Sempatik Tonus · SA/AV İleti Sistemi · Koroner Yatak',
+            accent: 'rose',
+            points: [
+              'İntrinsik Kardiyovasküler Nötrlük vs Akut Sempatik Deşarj: Doğrudan miyokardiyal inotropi, kronotropi veya vasküler düz kas tonusu üzerinde farmakolojik etkisi yoktur. Ancak anestezi veya yoğun bakım sedasyonundan hızlı/yüksek doz (≥0,5–1 mg tek puşe) uyandırılan hastada ani anksiyete ve sempatoadrenal katekolamin deşarjıyla hipertansiyon, sinüs taşikardisi ve MVO₂ artışı tetikler.',
+              'Supraventriküler Taşiaritmiler (SVT) & Penninga 2016 Bulgusu: Şüpheli BZD intoksikasyonu RCT meta-analizinde (Penninga 2016) flumazenil grubunda plaseboya kıyasla ciddi advers olay riski 3,81 kat yüksek bulunmuş olup, konvülsiyonla birlikte en sık ciddi kardiyak komplikasyon supraventriküler taşiaritmiler (SVT / AF) olmuştur.',
+              'Siklo-Antidepresan (TSA) Kardiyotoksisitesinin Provokasyonu: Karışık zehirlenmede flumazenil sonrası gelişen nöbet, hipoksi ve asidoz; TSA’nın miyokardiyal Nav1.5 blokajını hızlandırarak QRS genişlemesi (>100 ms), sağ dal bloğu (aVR’de R dalgası), ventriküler taşikardi ve refrakter hipotansiyonu açığa çıkarır.',
+            ],
+          },
+          {
+            systemTitle: 'Hepatik Sinüzoid Karboksilesterazları & Periferik Dağılım → Karaciğer & Metabolizma',
+            tissueTarget: 'Hepatik Karboksilesterazlar · Portal/Sistemik Dolaşım · Böbrek Atılımı',
+            accent: 'amber',
+            points: [
+              'Akım-Bağımlı Yüksek Hepatik Ekstraksiyon (~0,60) & Kısa Terminal Yarı Ömür (t½ ≈ 40–80 dk): Karaciğerde yüksek kapasiteli hepatik karboksilesterazlar tarafından etil ester bağının hidroliziyle tamamen İNAKTİF flumazenil karboksilik aside (ve glukuronid konjugatına) yıkılır; toplam plazma klirensi (~500–1300 mL/dk) doğrudan hepatik kan akımına bağımlıdır.',
+              'Sirozda Yarı Ömür Uzaması & Hepatik Ensefalopati Tartışması: Orta karaciğer yetmezliğinde (Child-Pugh B) klirens %50 düşer (t½ ~1,3 sa), ağır sirozda (Child-Pugh C) klirens %75 düşerek t½ ~2,4 saate uzar. Sirotik hepatik ensefalopatide artmış endojen "benzodiyazepin-benzeri" ligandları ve nörosteroid/GABA tonusunu geçici olarak (<1–2 saat) iyileştirebilse de sağkalım faydası olmadığından rutin önerilmez.',
+              'Böbrek Yetmezliğinde Aktif Midazolam Metaboliti (α-OH-Midazolam Glukuronid) Tuzağı: Flumazenilin kendi kinetiği böbrek yetmezliğinden etkilenmez; ancak eGFR <30 mL/dk olan hastada midazolamın sedatif açıdan aktif glukuronid metaboliti vücutta günlerce biriktiğinden, tek doz flumazenil sonrası ağır ve tekrarlayan resedasyon gelişir.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Aşılabilir (Surmountable) Antagonizma, Resedasyon Biyofiziği & 5 mg Tanısal Tavan Kuralı',
           summary:
-            'Flumazenil–BZD etkileşimi kompetitif ve aşılabilirdir: sonuç, iki ilacın reseptördeki göreli konsantrasyonuna ve süre uyumsuzluğuna bağlıdır.',
+            'Flumazenil ile benzodiyazepinler arasındaki ilişki "kütle etkisi yasasına" (Law of Mass Action) dayanan klasik, geri dönüşümlü ve aşılabilir (surmountable) bir kompetitif yarışmadır.',
           points: [
-            'Aşılabilir Antagonizma: Yüksek BZD yükü flumazenil etkisini aşar; flumazenil sonrası nöbet tedavisinde de bu nedenle yüksek BZD dozu gerekir.',
-            'Süre Uyumsuzluğu: Flumazenil (t½ ~50 dk) uzun etkili BZD’lerden önce elimine olur → resedasyon; tekrar doz veya infüzyon gerekebilir.',
-            'Spesifiklik Tavanı: Opioid solunum depresyonuna etkisi yoktur — karışık sedasyonda nalokson gerekir. Remimazolam etkisini de çevirir (ED90 ~77 mcg bildirilmiştir).',
+            'Sağa Kaymış Schild Eğrisi & Nöbet Kurtarmasında Yüksek BZD Gereksinimi: Flumazenil varlığında BZD doz-yanıt eğrisi maksimum etki (Emax) değişmeden paralel olarak sağa kayar. Bu biyofiziksel özelliğin hayati klinik sonucu şudur: Flumazenil verildikten sonra hastada yoksunluk nöbeti gelişirse, reseptördeki flumazenil blokajını aşabilmek (surmount) için standarttan daha yüksek doz IV Midazolam/Lorazepam veya BZD cebinden bağımsız çalışan Propofol / Fenobarbital uygulanması gerekir.',
+            'Farmakokinetik Süre Uyumsuzluğu (t½ ~50 dk) → Resedasyon Mekaniği: Flumazenil beyinden hızla dağılır (t½α 4–11 dk) ve karaciğerde hızla yıkılır (t½β ~50 dk). Oysa Diazepam (t½ 20–50 sa + aktif desmetildiazepam 100 sa), Lorazepam (t½ 10–20 sa) ve yüksek doz/uzamış Midazolam (t½ 2–6 sa, obezde ve YBÜ’de çok daha uzun) plazmada ve beyinde kalmaya devam eder → flumazenil konsantrasyonu eşik altına indiği anda (20–120 dk sonra) BZD molekülleri α/γ₂ cebini yeniden işgal ederek hastayı tekrar komaya/hipoventilasyona sokar.',
+            'Kümülatif Tavan Eşiği (Prosedürel 1 mg · Zehirlenme 3–5 mg) & Remimazolam Reversalı: Prosedürel sedasyonda 0,2 mg’lık (2 mL) adımlarla 1 mg’a (zehirlenmede 3 mg, nadiren 5 mg) ulaşıldığında serebral BZD reseptörlerinin >%80–90’ı doygunluğa ulaşır. Kümülatif 3–5 mg IV flumazenile rağmen bilinç açılmıyorsa, komanın nedeni GABA-A BZD cebi DEĞİLDİR (tavan etkisi). Öte yandan plazma doku esterazlarıyla yıkılan yeni ultra-kısa etkili BZD Remimazolam’ın sedasyonu 0,2–0,5 mg flumazenille hızla çevrilir; ancak yüksek doz remimazolam sonrası erken flumazenil verilirse yine resedasyon görülebilir.',
           ],
         }}
         clinicalPearls={[
-          '"2 mL Kuralı": Ampul 0,1 mg/mL — erişkin ilk doz 2 mL (0,2 mg); tam 5 mL ampul 2,5 kat fazladır.',
-          '5 mg Kuralı: Kümülatif 5 mg’a yanıt yoksa sedasyonun nedeni BZD değildir.',
-          'Uyanık ≠ Güvenli: Flumazenil sonrası uyanan hasta solunum depresyonu, amnezi ve resedasyon açısından ≥ 2 saat izlenmelidir.',
-          'Koma kokteyli yok: Bilinmeyen zehirlenmede flumazenil yerine hava yolu, destek tedavisi ve EKG değerlendirmesi önceliklidir.',
+          'Neden Flumazenil "Koma Kokteyli"nden Çıkarıldı? (Penninga 2016 & Sivilotti 2016): Acil servise bilinci kapalı gelen ve ne aldığı bilinmeyen hastada saf BZD zehirlenmesi nadiren ölümcüldür (destek tedavisiyle sağkalım >%99); buna karşın ampirik flumazenil verilmesi gizli TSA/bupropion/tramadol ko-ingestiyonunda veya kronik BZD bağımlısında durdurulamayan status epileptikus ve ventriküler aritmi tetikler (ciddi advers olay RR 3,81!). Uygulama öncesi 12-derivasyon EKG (QRS < 100 ms, normal QTc) ve kronik BZD/epilepsi dışlaması mutlak şarttır.',
+          '"2 mL (0,2 mg) / 15 Saniye + 45 Saniye Bekle" Titrasyon Kuralı: Türkiye’deki 5 mL’lik Anexate® ampulü 0,5 mg (10 mL’lik ampul 1 mg) içerir. İlk doz tam ampul DEĞİL, yalnızca 2 mL’dir (0,2 mg). Beyin-plazma dengelenmesi ve pik etki 6–10 dakika sürdüğünden, her 2 mL’lik dozdan sonra en az 45–60 saniye beklenmeli; hasta tam uyanıklığa değil, hava yolunu koruyup sözlü uyarana yanıt verecek düzeye gelince titrasyon durdurulmalıdır.',
+          '"Uyanık Hasta ≠ Taburcu Edilebilir Hasta" (Amnezi & 2 Saat Gözlem Kuralı): Flumazenil sonrası sedasyonu açılıp yatakta oturan hasta, α₅-hipokampal amnezi devam ettiği için taburcu edilirse verilen hiçbir tıbbi talimatı hatırlamaz ve 45 dakika sonra evde/araçta resedasyona girerek solunum obstrüksiyonu yaşar — son flumazenil dozundan sonra en az 2 saat PACU/acil servis gözlemi zorunludur.',
+          'Paralize Hastada Farkındalık (Awareness) Felaketi: Genel anestezi bitiminde veya YBÜ’de hastaya roküronyum/vekuronyum verilmişse, kantitatif TOF monitörizasyonuyla (TOF oranı ≥ 0,9) nöromüsküler bloğun tam kalktığı doğrulanmadan (veya Sugammadeks/Neostigmin uygulanmadan) ASLA flumazenil verilmemelidir; aksi halde hasta kasları felçli olduğu halde bilinci tamamen açık kalarak korkunç bir psikolojik travma yaşar.',
         ]}
       />
 

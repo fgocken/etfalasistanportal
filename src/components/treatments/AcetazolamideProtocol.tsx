@@ -1121,51 +1121,87 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Proksimal Tübül Sitozolik (CA-II) & Lüminal (CA-IV) Karbonik Anhidraz İnhibisyonu',
+          title: 'Hücre Zarı & Moleküler Hedef (Apikal/Bazolateral Membran CA-IV & Sitozolik CA-II Çinko [Zn²⁺] Aktif Bölge İnhibisyonu)',
           summary:
-            'Asetazolamid çinko-metalloenzim olan sitozolik CA-II ve apikal fırçamsı kenar membran-bağlı CA-IV izoenzimlerinin güçlü, geri dönüşümlü non-kompetitif inhibitörüdür. H₂O + CO₂ ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻ reaksiyonunu yavaşlatarak hem proksimal nefronda bikarbonat geri emilimini hem de koroid pleksus ve siliyer cisimdeki sekresyonu baskılar.',
+            'Asetazolamid (N-(5-sülfamoil-1,3,4-tiyadiazol-2-il)asetamid), serbest –SO₂NH₂ (sülfonamid) ucuyla Karbonik Anhidraz (CA) metalloenzimlerinin katalitik oyuğundaki prostetik Çinko iyonuna (Zn²⁺) dördüncü koordinasyon bağıyla non-kompetitif ve yüksek afiniteyle (Ki ~10 nM) bağlanarak su/hidroksil iyonunun Zn²⁺ merkezine erişimini bloke eder (Goodman & Gilman / Miller’s 10th Ed.):',
           points: [
-            'Proksimal Tübül (NHE3 Blokajı): Lüminal CA-IV inhibisyonu H₂CO₃ dehidratasyonunu, sitozolik CA-II inhibisyonu ise hücre içi H⁺ üretimini azaltır; apikal Na⁺/H⁺ değiştirici (NHE3) durur ve filtre edilen HCO₃⁻’ın geri emilimi çöker.',
-            'İdrar Alkalinizasyonu & Kaliürez: Proksimalden kaçan Na⁺ ve HCO₃⁻ (emilemeyen anyon) distal nefrona ulaşarak lümen-negatif potansiyeli artırır ve belirgin K⁺ sekresyonu (hipokalemi) oluşturur.',
-            'Koroid Pleksus & Siliyer Cisim: Epitel hücrelerindeki CA-II inhibisyonu Na⁺/HCO₃⁻ taşınımını baskılayarak BOS ve aköz hümör üretim hızını ~%40–50 düşürür.',
-            'Eritrosit CA-II Etkisi: Yüksek dozlarda eritrosit içi karbonik anhidrazın >%99 inhibisyonu doku-akciğer CO₂ taşınımını yavaşlatıp venöz/doku PCO₂’yi yükseltebilir.',
+            'Böbrek Proksimal Kıvrımlı Tübül (PCT) Apikal Fırçamsı Kenar & Bazolateral Zarı (Membran-Bağlı CA-IV): Proksimal tübül (S1–S2) epitel hücrelerinin lüminal fırçamsı kenarına glikozilfosfatidilinozitol (GPI) çapasıyla bağlı ekstraselüler Karbonik Anhidraz Tip IV (CA-IV) ve bazolateral membranla ilişkili CA-IV/CA-XII izoenzimlerini doğrudan inhibe eder.',
+            'Proksimal Tübül Epiteli Sitoplazması (Sitozolik CA-II): Proksimal tübül hücrelerinin sitozolünde çok yüksek konsantrasyonda bulunan çözünür Karbonik Anhidraz Tip II (CA-II) izoenzimini inhibe eder (anlamlı fizyolojik diürez için enzimin >%99’unun bloke edilmesi şarttır).',
+            'Koroid Pleksus Ependimal Epiteli & Göz Siliyer Cisim Non-Pigmente Epiteli (CA-II / CA-IV / CA-XII): Beyin ventriküllerindeki koroid pleksus epitel hücreleri ile göz siliyer cismi (corpus ciliare) non-pigmente epitel hücrelerindeki sitozolik CA-II ve membran CA-IV/XII izoenzimlerini bloke eder.',
+            'Eritrosit Sitozolü (CA-I & CA-II) ve Periferik/Santral Kemoreseptör Hücreleri: Eritrosit içindeki CA-I ve yüksek hızlı CA-II’ye yüksek afiniteyle bağlanarak CO₂ hidratasyon/dehidratasyonunu (Hamburger fenomeni) yavaşlatır.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'BOS Üretimi & KİB Azalması: Koroid pleksusta BOS sekresyonunu ~%40–50 azaltır (İİH, BOS kaçağı/rinore, geçici şant köprülemesi).',
-            'Serebral Vazodilatasyon: Yüksek doz IV uygulama doku/kapiller PCO₂ artışı üzerinden geçici serebral kan akımı (CBF) artışı yapabilir (serebrovasküler rezerv stres testlerinde kullanılır).',
-            'Parestezi & Somnolans: Periferik sinir CA inhibisyonu parmak ucu/perioral uyuşma yapar; böbrek yetmezliğinde birikim ağır somnolans ve konfüzyon oluşturur.',
-          ],
-          cvs: [
-            'Direkt inotropik veya vazopressör etkisi yoktur; tek başına zayıf diüretik olduğundan belirgin hipotansiyon yapmaz.',
-            'Loop diüretiğe eklendiğinde (ADVOR) etkili volüm yükü boşaltımı ve kardiyak doluş basıncı düşüşü sağlar; ancak indüklediği hipokalemi aritmi eşiğini düşürür.',
-          ],
-          respiratory: [
-            'Santral Kemoreseptör & Solunum Uyarımı: Oluşturduğu hiperkloremik metabolik asidoz BOS pH’sını düşürerek medüller kemoreseptörleri uyarır, dakika ventilasyonunu ve PaO₂’yi artırır (yüksek irtifa AMS profilaksisi ve santral uyku apnesi).',
-            'İleri KOAH / Solunum Kas Yorgunluğu Uyarısı: Dakika ventilasyonunu artıramayan ağır KOAH hastasında eritrosit CA inhibisyonu hiperkapniyi (PaCO₂↑) ve asidemiyi kötüleştirebilir (DIABOLO JAMA 2016).',
-          ],
-          other: [
-            'Renal/Metabolik: Hiperkloremik normal anyon açıklı metabolik asidoz (NAGMA), alkali idrar (pH > 7,5), hipositratüri → kalsiyum fosfat böbrek taşı',
-            'Hepatik Ensefalopati Tetiklenmesi: Alkali idrarda NH₄⁺ → lipofilik NH₃ dönüşümü ile renal amonyak geri emilimi artar (sirozda MUTLAK KONTRENDİKE)',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'CA-IV ve CA-II’nin >%99 oranında inhibisyonu, H₂O + CO₂ ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻ tersinir reaksiyon hızını ~10.000 kat düşürerek dört hedef hücre tipinde transselüler iyon taşınımını kilitler:',
+          points: [
+            'Proksimal Tübül Hücresi İçi H⁺ Tükenmesi → Apikal NHE3 & Bazolateral NBCe1 Durması: Sitozolik CA-II bloke olduğunda hücre içinde H₂O + CO₂’den H⁺ ve HCO₃⁻ üretilemez. Hücre içi H⁺ substratı tükendiği anda apikal zardaki Na⁺/H⁺ Değiştirici-3 (NHE3 / SLC9A3) ve H⁺-ATPaz durur; eşzamanlı olarak lüminal CA-IV bloke olduğu için glomerülden filtre edilen HCO₃⁻ lümende H₂CO₃ → CO₂ + H₂O’ya dönüştürülüp hücre içine geri alınamaz ve bazolateral elektrojenik Na⁺/3HCO₃⁻ kotransporterı (NBCe1 / SLC4A4) üzerinden kana HCO₃⁻ çıkışı kesilir.',
+            'Distal Nefron (Toplayıcı Kanal Esas Hücresi) İçi Lümen-Negatif Potansiyel & Aldosteron-Aracılı Kaliürez: Proksimal tübülden geri emilemeyen HCO₃⁻ (%25–30), Na⁺ ve su Henle kulpunu geçip kortikal toplayıcı kanala ulaştığında; HCO₃⁻ toplayıcı kanalda "emilemeyen anyon (non-reabsorbable anion)" gibi davranır. Esas (Principal) hücrelerde ENaC üzerinden Na⁺ geri emilirken lümende kalan HCO₃⁻ güçlü bir lümen-negatif (-50 mV) elektriksel potansiyel yaratarak apikal ROMK/BK kanallarından idrara masif K⁺ sekresyonunu (kaliürez) çeker.',
+            'Koroid Pleksus & Siliyer Cisim Epitel Hücresi İçi Sekresyon Blokajı: Koroid pleksus ependim hücresinde ve siliyer cisim non-pigmente epitelinde hücre içi HCO₃⁻ ve H⁺ oluşumu durduğunda, bazolateral Na⁺/H⁺ ve Cl⁻/HCO₃⁻ değiştiricileri ile apikal Na⁺/K⁺-ATPaz ve HCO₃⁻ çıkış kanalları arasındaki ozmotik eşleşme bozulur → ventrikül boşluğuna BOS ve arka kamaraya aköz hümör sekresyonu %40–50 oranında düşer.',
+            'Eritrosit İçi Hamburger (Cl⁻/HCO₃⁻) Kayması & Medüller Kemoreseptör Hücre İçi pH Düşüşü: Sistemik plazma HCO₃⁻ düşüşü (hiperkloremik metabolik asidoz) kan-beyin bariyerini yavaşça geçerek interstisyel BOS pH’sını düşürür ve medüller santral kemoreseptör nöronlarında TASK-1/ASIC kanalları üzerinden solunum dürtüsünü uyarır. Yüksek dozlarda ise eritrosit içi CA-II blokajı AE1 (Band-3 Cl⁻/HCO₃⁻ değiştirici) hızını kısıtlayarak periferik dokularda PCO₂ birikimine ve serebral arteriyol düz kasında hücre içi H⁺/NO aracılı vazodilatasyona yol açar.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Proksimal Kıvrımlı Tübül, Makula Densa & Toplayıcı Kanal → Böbrek & Diürez Fizyolojisi',
+            tissueTarget: 'Proksimal Tübül (S1–S2) · Makula Densa · Kortikal Toplayıcı Kanal',
+            accent: 'teal',
+            points: [
+              'Bikarbonatüri, İdrar Alkalinizasyonu & Fraksiyonel Na⁺ Atılımı: Normalde proksimal tübülde %85’i geri emilen filtre edilmiş HCO₃⁻’ın %25–30’u idrarla atılır; idrar pH’sı 30 dakika içinde ≥7,5–8,0’a yükselir, fraksiyonel Na⁺ atılımı (FENa) %3–5 artar. Ancak kaçan NaCl’ün büyük kısmı Henle kulpu (NKCC2) tarafından yakalandığı için tek başına zayıf bir diüretiktir.',
+              'Tübüloglomerüler Geri Bildirim (TGF) Aktivasyonu & GFR Azalması: Proksimalden kaçan yüksek Na⁺ ve Cl⁻ yükü makula densaya çarptığında TGF refleksini uyararak afferent arteriyol vazokonstriksiyonu yapar ve glomerüler filtrasyon hızını (GFR) %10–20 düşürür.',
+              'Hipositratüri & Kalsiyum Fosfat Nefrolitiyazisi: Sistemik metabolik asidoz proksimal tübül hücrelerinde sitrat geri emilimini ve mitokondriyal sitrat kullanımını artırarak idrar sitratını (doğal taş inhibitörü) sıfırlar; alkali idrar (pH >7,5) + hipositratüri + kalsiürez birleştiğinde çözünmeyen Kalsiyum Fosfat (apatit/bruşit) taşları çöker.',
+            ],
+          },
+          {
+            systemTitle: 'Ekstraselüler Tampon Sistemi & Hepatik-Renal Amonyak Ekseni → Asit-Baz & Elektrolit Fizyolojisi',
+            tissueTarget: 'Plazma HCO₃⁻/Cl⁻ Dengesi (SID) · Distal K⁺ Kanalı · Renal NH₃/NH₄⁺',
+            accent: 'amber',
+            points: [
+              'Hiperkloremik Normal Anyon Açıklı Metabolik Asidoz (NAGMA / Proksimal Tip-2 RTA): İdrarla NaHCO₃ kaybedildikçe ekstraselüler hacim korunmak üzere böbrek Cl⁻ geri emilimini artırır → plazma [HCO₃⁻] düşerken [Cl⁻] bire bir yükselir (Anyon Açığı = [Na⁺] − ([Cl⁻] + [HCO₃⁻]) normal kalır; Stewart modelinde Güçlü İyon Farkı [SID] daralır).',
+              'Belirgin Kaliürez & Hipokalemi: Tüm diüretikler içinde filtre edilen Na⁺ başına en yüksek oranda K⁺ kaybettiren ajanlardan biridir (lümen-negatif HCO₃⁻ çekimi + aldosteron); özellikle loop diüretikle kombine edildiğinde (ADVOR) hızlı hipokalemi gelişir.',
+              'İdrar Alkalinizasyonuyla Renal Amonyak (NH₃) Tuzaklanmasının Kaybı (Sirozda Komaya Gidiş!): Asidik idrarda suda çözünen NH₄⁺ iyonu olarak hapsedilip atılan amonyak, asetazolamidin oluşturduğu alkali idrarda (pH >7,5) lipofilik serbest NH₃ gazına dönüşür (NH₄⁺ ⇌ NH₃ + H⁺) ve tübül duvarından peritübüler kana geri emilir → sirotik hastada sistemik hiperamonyemi ve hepatik ensefalopatiyi tetikler (MUTLAK KONTRENDİKE!).',
+            ],
+          },
+          {
+            systemTitle: 'Venöz Konjesyon, Medüller Solunum Merkezi & Eritrosit Dokusu → Kardiyopulmoner Fizyoloji',
+            tissueTarget: 'Proksimal+Henle Nefron · Medüller Kemoreseptör · Eritrosit (CA-II)',
+            accent: 'rose',
+            points: [
+              'ADVOR Sequential Nefron Blokajı & Dekonjesyon (Kardiyovasküler): Kronik kalp yetmezliğinde nörohormonal (RAAS/sempatik) aktivasyon proksimal tübül Na⁺ geri emilimini %60’tan %75–80’e çıkararak Henle kulpuna (furosemid hedefine) Na⁺ ulaşmasını engeller. Asetazolamid (500 mg 1×1) bu proksimal barajı yıkarak furosemidin natriüretik etkinliğini ve 3 günde tam dekonjesyonu %30,5’ten %42,2’ye yükseltir (Mullens NEJM 2022).',
+              'Santral Kemoreseptör Uyarımı, Yüksek İrtifa (AMS) & Weaning: Oluşturduğu hafif metabolik asidoz (HCO₃⁻↓, H⁺↑) medüller santral kemoreseptörleri uyararak tidal volüm ve dakika ventilasyonunu artırır → yüksek irtifada hipoksiye bağlı solunumsal alkaloz frenini kırarak gece periyodik solunumunu (Cheyne-Stokes) önler ve aklimatizasyonu hızlandırır; YBÜ’de ise post-diüretik metabolik alkalozun solunum dürtüsü üzerindeki baskısını kaldırır.',
+              'İleri KOAH / Solunum Kas Yorgunluğunda Eritrosit CA-II Tuzağı (DIABOLO): Dakika ventilasyonunu artırma rezervi olmayan ağır hiperkapnik KOAH hastasında yüksek doz asetazolamid, eritrosit CA-II’sini bloke ederek doku-alveol CO₂ transferini bozar ve PaCO₂ yükselmesiyle asidemiyi derinleştirebilir.',
+            ],
+          },
+          {
+            systemTitle: 'Koroid Pleksus, Siliyer Cisim & Serebral Mikrodolaşım → Göz & Nöro-Oftalmolojik Fizyoloji',
+            tissueTarget: 'Koroid Pleksus Ependimi · Siliyer Epitel · Serebral Arteriyol',
+            accent: 'indigo',
+            points: [
+              'Siliyer Cisim & Akut Glokomda Göz İçi Basıncı (GİB) Düşüşü: Siliyer cisim non-pigmente epitelinde CA-II/IV/XII inhibisyonuyla arka kamaraya HCO₃⁻ ve Na⁺ sekresyonunu durdurarak aköz hümör yapım hızını %40–60 azaltır; akut açı kapanması glokomunda kornea ödemini çözmek ve optik sinir iskemisini önlemek için GİB’i hızla indirir.',
+              'Koroid Pleksus, İİH (NORDIC) & BOS Rinoresi: Beyin ventriküllerinde koroid pleksus BOS üretimini %40–50 oranında azaltarak İdiyopatik İntrakraniyal Hipertansiyonda (İİH; NORDIC JAMA 2014, maks 4 g/gün) papilödemi geriletir ve kafa tabanı kırığı/endoskopik hipofiz cerrahisi sonrası BOS kaçağı (rinore/otore) debisini düşürür.',
+              'Serebral Vazodilatasyon & Periferik Duyusal Sinir Etkisi (Parestezi / Disguzi): Doğrudan sedatif veya genel anestezik EEG etkisi yoktur; ancak yüksek doz IV bolusta (1000 mg) beyin kapiller PCO₂ artışıyla serebral kan akımını (CBF) %30–50 artırır (Diamox serebrovasküler rezerv testi; akut KİBAS krizinde ise bu geçici CBF artışı nedeniyle dikkat!). Dil ve kutanöz duyusal sinir uçlarındaki CA inhibisyonu ise tipik el-ayak/ağız çevresi parestezisi ve gazlı içeceklerde metalik tat (disguzi) oluşturur.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: '>%99 Enzim Doygunluk Kuralı, HCO₃⁻ < 15–18 mEq/L Kendini Sınırlayan Tavan Etkisi & ADVOR Sinerjisi',
           summary:
-            'Asetazolamid tek başına 48–72 saat içinde kendini sınırlayan zayıf bir diüretiktir; ancak loop diüretiklerle birleştirildiğinde güçlü bir sequential nefron blokajı sinerjisi oluşturur.',
+            'Asetazolamidin enzim kinetiği ve nefron fizyolojisi iki benzersiz farmakodinamik kural tarafından yönetilir: "tam doygunluk eşiği" ve "48–72 saatte kendini sınırlayan (self-limiting) bikarbonat tavanı":',
           points: [
-            '48–72 Saatte Diüretik Tolerans (Self-Limiting Etki): Plazma HCO₃⁻ düzeyi düştükçe glomerülden filtre edilen bikarbonat yükü azalır ve proksimal diürez 2–3 gün içinde kendiliğinden söner — bu nedenle YBÜ alkalozunda ve ADVOR’da 1–3 günlük kısa kürler uygulanır.',
-            'ADVOR Sequential Nefron Blokajı (NEJM 2022): Kronik/yüksek doz furosemid kullanımında proksimal tübül kompansatuvar Na⁺ geri emilimini artırarak diüretik direnci yaratır; asetazolamid bu proksimal kapıyı açarak Henle’ye Na⁺ sunar ve furosemid yanıtını dramatik artırır.',
-            'Diğer CA İnhibitörleriyle Toksik Sinerji: Topiramat veya zonisamid ile kombinasyon derin metabolik asidoz ve nefrolitiyazis riskini katlar.',
+            '>%99.5 Karbonik Anhidraz İnhibisyon Eşiği ("Fractional Inhibition" Kuralı): Proksimal tübül ve koroid pleksusta CA-II enzimi fizyolojik ihtiyacın ~1000 katı kapasitede bulunur; enzimin %90’ı bloke edilse bile kalan %10’luk aktif enzim HCO₃⁻ geri emilimini tam hızda sürdürür. Klinik diürez ve BOS/GİB azalması ancak enzim aktivitesinin >%99–99.5’i inhibe edildiğinde (~5 mg/kg veya 250–500 mg dozda) başlar; 500 mg IV/PO üzerinde ise renal CA tamamen doyduğu için tek dozu 1000 mg’a çıkarmak ek natriürez sağlamaz (Mazur RCT: tek doz 500 mg = 4×250 mg).',
+            'HCO₃⁻ < 15–18 mEq/L Kendini Sınırlayan (Self-Limiting) Diüretik Frenleme (48–72 Saat): Asetazolamid kullanımıyla 2–3 gün içinde plazma [HCO₃⁻] düzeyi 15–18 mEq/L’nin altına indiğinde; (1) glomerülden filtre edilen toplam HCO₃⁻ yükü azalır ve CA-bağımsız mekanizmalarla (kalan NHE3 ve pasif H₂CO₃ difüzyonu) tamamen geri emilebilir hale gelir, (2) gelişen hücre içi asidoz glutaminaz ve CA-bağımsız H⁺ sekresyonunu uyarır → bikarbonatüri ve diüretik etki 48–72 saatte kendiliğinden durur (bu nedenle ADVOR ve YBÜ alkalozunda 1–3 günlük kısa kürler uygulanır).',
+            'Loop Diüretiklerle (Furosemid) Karşılıklı Tamamlayıcı Sinerji: Furosemid hipokloremik metabolik alkaloz ve proksimal Na⁺ emilim artışı yaparken, Asetazolamid hiperkloremik metabolik asidoz ve proksimal Na⁺/HCO₃⁻ blokajı yapar → ikisi birleştiğinde hem diüretik direnci kırılır (ADVOR) hem de asit-baz dengesi nötralize olur (ancak K⁺ kaybı aditif olarak artar!).',
           ],
         }}
         clinicalPearls={[
-          'Sülfonamid Çapraz Reaksiyon Miti (Strom NEJM 2003 · AAAAI): Asetazolamid non-antibiyotik (arilamin halkası içermeyen) bir sülfonamiddir; TMP-SMX gibi antibiyotik sülfonamid döküntüsü asetazolamid için gerçek çapraz kontrendikasyon oluşturmaz (ağır SJS/TEN/DRESS veya doğrudan asetazolamid anafilaksisi hariç).',
-          'Salisilat Zehirlenmesinde ÖLÜMCÜL HATA: İdrarı alkalize etmek için asla asetazolamid kullanılmaz! Oluşturduğu sistemik asidemi salisilatın kan-beyin bariyerine geçişini artırıp fatal SSS toksisitesi yapar — yalnızca IV NaHCO₃ kullanılır.',
-          'Türkiye Klinik Pratiği (Diazomid 250 mg TB): IV 500 mg flakon TR’de ruhsatlı/rutin mevcut değildir; ancak oral biyoyararlanım >%90 olduğundan fonksiyonel GİS’te 2 × 250 mg PO/NG tablet ile ADVOR ve YBÜ alkaloz protokolleri etkin biçimde uygulanabilir.',
-          'Kontraksiyon Alkalozunda Önce KCl + SF: İdrar Cl⁻ < 20 mEq/L olan hipovolemik metabolik alkalozda asetazolamid vermek hipovolemiyi ve hipokalemiyi derinleştirir; önce %0,9 NaCl + KCl replase edin.',
+          'Salisilat Zehirlenmesinde Neden KESİNLİKLE Kontrendikedir? Salisilat (aspirin, pKa = 3.0) zehirlenmesinde amaç idrarı alkalize ederek renal atılımı artırmak VE kan pH’sını hafif alkali tutarak salisilatın beyne geçişini önlemektir. Asetazolamid idrarı alkalize eder ANCAK kanda metabolik asidoz (pH↓) yapar; kan pH’sı 7,40’tan 7,20’ye düştüğünde non-iyonize (lipofilik) salisilat fraksiyonu ikiye katlanarak kan-beyin bariyerini sel gibi aşar ve ölümcül beyin ödemi/nöbet yapar! (Yalnızca IV NaHCO₃ kullanılır).',
+          'Türkiye Klinik Pratiği (Diazomid 250 mg TB ile ADVOR & YBÜ Alkaloz Uygulaması): Uluslararası ADVOR (NEJM 2022) ve Mazur çalışmalarında 500 mg IV flakon kullanılmış olsa da, Türkiye’de IV form rutin mevcut değildir. Asetazolamidin oral biyoyararlanımı >%90 olduğundan, ileus/malabsorpsiyon olmayan YBÜ ve KKY hastalarında 2 × 250 mg Diazomid tablet (PO veya ezilerek NG/OG tüpten) klinik olarak eşdeğer bikarbonatüri ve dekonjesyon sağlar.',
+          'Klor-Duyarlı vs Klor-Dirençli Metabolik Alkaloz Ayrımı: NG drenaj, kusma veya geçmiş diüretik kullanımına bağlı hipovolemik metabolik alkalozda (spot idrar Cl⁻ < 20 mEq/L) asetazolamid vermek hipovolemiyi ve K⁺ kaybını ağırlaştırır (tedavisi %0,9 NaCl + KCl’dir). Asetazolamid yalnızca övolemik/hipervolemik hastada (kalp yetmezliği, devam eden loop diüretik ihtiyacı, pH > 7,48 ve HCO₃⁻ > 30 mmol/L) endikedir.',
+          'Topiramat / Zonisamid ile Gizli Çift Karbonik Anhidraz Blokajı: Migren veya epilepsi için Topiramat ya da Zonisamid kullanan bir hastaya İİH, glokom veya alkaloz için Asetazolamid eklenmesi şiddetli NAGMA asidozu, hiperamonyemik ensefalopati ve bilateral kalsiyum fosfat böbrek taşı riskini katlar.',
         ]}
       />
 

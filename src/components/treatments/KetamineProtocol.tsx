@@ -1857,52 +1857,88 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Non-Kompetitif NMDA Kanal Bloku, HCN1 Kanalları & Multimodal (μ/κ/σ/Monoaminerjik) Sinyal İletimi',
+          title: 'Hücre Zarı & Moleküler Hedef (Heterotetramerik NMDA [GluN1/GluN2A–D] Kanal Por İçi Fensiklidin [PCP] Bölgesi, HCN1 Kanalları & NET/σ₁ Etkileşimi)',
           summary:
-            'Ketamin, fensiklidin (arilsikloheksilamin) türevi kiral bir moleküldür (rasemik karışım: S(+)-ketamin [esketamin] NMDA reseptörüne R(−)-ketamine göre 3–4 kat daha yüksek afinite gösterir). Propofol ve benzodiazepinlerden farklı olarak GABA-A üzerinden değil, eksitatör glutamaterjik NMDA reseptör blokajı ve HCN1 kanal inhibisyonu ile benzersiz disosiyatif anestezi oluşturur.',
+            'Ketamin, kiral bir arilsikloheksilamin türevidir (S(+)-ketamin [Esketamin] enantiyomeri, NMDA kanal poruna R(−)-ketamine kıyasla 3–4 kat daha yüksek afinite [Ki ~0,3–0,5 µM vs ~1,2 µM] gösterir). Propofol ve benzodiazepinlerin aksine GABA-A reseptörüne bağlanmaz; santral nöron zarlarındaki heterotetramerik NMDA (GluN1 / GluN2A–D) iyonotropik glutamat reseptörlerinin transmembran poru içindeki Fensiklidin (PCP) bağlanma bölgesine açık-kanal blokeri (uncompetitive open-channel pore blocker) olarak yerleşir ve eşzamanlı olarak kortikal HCN1 kanalları ile presinaptik monoamin taşıyıcılarını modüle eder (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Goodman & Gilman 14th Ed.).',
           points: [
-            'Non-Kompetitif Açık-Kanal NMDA Antagonizmi: Glutamat bağlanmasıyla açılan NMDA reseptör kanalının içindeki fensiklidin (PCP) bölgesine bağlanarak Ca²⁺/Na⁺ akışını bloke eder; spinal arka boynuzda “wind-up” fenomenini, santral sensitizasyonu ve opioid kaynaklı hiperaljeziyi (OIH) kırar.',
-            'HCN1 (Hiperpolarizasyonla Aktive Katyon) Kanal İnhibisyonu: Kortikal piramidal nöronlardaki HCN1 kanallarının blokajı ketaminin hipnotik ve talamokortikal disosiyatif etkisine temel katkı sağlar.',
-            'Opioid (μ / κ / δ) & Sigma (σ) Reseptör Etkileşimi: μ ve κ opioid reseptörleriyle zayıf agonistik/modülatör etkileşim analjeziye, σ reseptörleri ve kolinerjik/dopaminerjik modülasyon ise psikomimetik etkilere ve antidepresan AMPA/BDNF/mTOR sinyal kaskadına katkıda bulunur.',
-            'Nöronal Katekolamin Geri Alım (NET) İnhibisyonu: Santral sempatik çıkışı artırır ve periferik nöronal noradrenalin geri alımını inhibe ederek indirekt sempatomimetik yanıt oluşturur.',
+            'NMDA (GluN1/GluN2A–D) Transmembran Kanal Por İçi Fensiklidin (PCP) Bağlanma Bölgesi: Reseptörün M2 por-oluşturucu ilmeğindeki asparajin halkası (N-site; fizyolojik Mg²⁺ bloğu bölgesi) yakınındaki derin hidrofobik PCP cebine bağlanır. Bağlanabilmesi için önce glutamat ve ko-agonist glisinin (veya D-serinin) ekstraselüler bölgeye bağlanarak kanal kapısını açması ve zarın kısmen depolarize olarak Mg²⁺ tıkaçını uzaklaştırması gerekir ("use-dependent / open-channel trapping block").',
+            'GABAerjik İnhibitör İnternöronlar vs Spinal Arka Boynuz WDR Nöron Seçiciliği: Düşük-orta (subanestezik) konsantrasyonlarda yüksek ateşleme hızına sahip tonik aktif kortikal/limbik GABAerjik inhibitör internöronlar üzerindeki GluN2C/2D-içeren NMDA reseptörlerini öncelikli bloke eder (kortikal piramidal nöronların disinhibisyonu); spinal kord arka boynuzunda (Lamina I–II ve V) ise geniş dinamik aralıklı (Wide-Dynamic-Range / WDR) projeksiyon nöronlarının postsinaptik NMDA kanallarını kapatır.',
+            'Talamokortikal HCN1 Pacemaker Kanalları & Sigma-1 (σ₁) / Opioid / Kolinerjik Membran Hedefleri: Kortikal ve talamik piramidal nöron zarındaki Hiperpolarizasyonla Aktive Siklik Nükleotid-Kapılı 1 (HCN1) katyon kanallarını inhibe ederek hipnotik ve talamokortikal disosiyatif kopukluğa doğrudan katkıda bulunur; endoplazmik retikulum/plazma zarı σ₁ şaperon reseptörlerini, µ/κ-opioid reseptörlerini ve santral/bronşiyal muskarinik (M₁–M₃) / nikotinik asetilkolin reseptörlerini modüle eder.',
+            'Presinaptik Sempatik Sinir Ucu NET Taşıyıcısı & Bronş/Vasküler L-Tipi Ca²⁺ Kanalları: Sempatik sinir terminallerinde Norepinefrin Taşıyıcısını (NET / Uptake-1) inhibe ederek sinaptik katekolamin konsantrasyonunu yükseltir; bronş düz kası ve kardiyomiyosit sarkolemmasında ise L-tipi voltaj kapılı Ca²⁺ (Cav1.2) kanallarını doğrudan inhibe eder.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Disosiyatif Anestezi & EEG/BIS Tuzağı: Talamokortikal ve limbik sistemler arasında fonksiyonel kopukluk yaratır; gözler açık, nistagmuslu ve kataleptik görünüm altında derin somatik analjezi ve amnezi sağlar. EEG’de yüksek frekanslı γ (30–80 Hz) ve θ salınımlarını artırdığı için BIS skorunu YAPAY OLARAK YÜKSEK gösterir (BIS güvenilmezdir!).',
-            'Serebral Hemodinami & ICP Miti: Normokapni korunduğunda (mekanik ventilasyon) kafa içi basıncını (ICP) kritik yükseltmez; MAP’ı koruyarak serebral perfüzyon basıncını (CPP) sürdürür (travmatik beyin hasarı + şokta güvenli).',
-            'Emergence Deliryumu & Psikomimetik Etki: Erişkinlerin %10–20’sinde uyanmada canlı rüya, disfori ve halüsinasyon yapar (çocuklarda %3–5); 1–2 mg IV midazolam veya propofol (Ketofol) ile > %70 önlenir.',
-          ],
-          cvs: [
-            'İndirekt Sempatomimetik Stimülasyon: Sağlam sempatik rezerve sahip hastalarda kalp hızı, MAP, pulmoner arter basıncı, kardiyak debi ve miyokard O₂ tüketimini (MVO₂) artırır — hemorajik şok ve travma RSI’sinde hemodinamik avantaj sağlar.',
-            'Direkt Miyokard Depresyonu Paradoksu: Ketamin izole miyokardda aslında direkt negatif inotroptur! Endojen katekolamin depoları tükenmiş kronik septik/kardiyojenik şok veya ağır travma hastalarında sempatik kompansasyon oluşamaz ve paradoksal ağır hipotansiyon/kardiyak kollaps gelişebilir.',
-          ],
-          respiratory: [
-            'Spontan Solunum & Güçlü Bronkodilatasyon: Medüller CO₂ yanıtını ve fonksiyonel rezidüel kapasiteyi (FRC) klinik dozlarda korur. Katekolamin salınımı ve direkt bronş düz kası Ca²⁺ inhibisyonuyla güçlü bronkodilatasyon sağlar (status asthmaticus’ta altın standart).',
-            'Hipersalivasyon, Laringospazm & Geçici Apne: Faringeal/laringeal refleksler kısmen korunsa da tam aspirasyon güvenliği vermez; artmış tükürük sekresyonu çocuklarda laringospazma (%0.3–1), hızlı IV bolus (<30 sn) ise 1–2 dk geçici apneye yol açabilir.',
-          ],
-          other: [
-            'Malign Hipertermi tetiklemez; adrenal steroidogenezi baskılamaz',
-            'Kas tonusunu artırabilir (tonik-klonik olmayan miyoklonus, blefarospazm)',
-            'Uzamış yüksek doz / kronik kullanımda ülseratif sistit (ketamin üropatisi) ve safra yolu dilatasyonu (kolanjiopati)',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'NMDA porunun ve HCN1 kanallarının kapanması; spinal arka boynuzda Ca²⁺-CaMKII-nNOS-NO "wind-up" kaskadını durdururken, prefrontal kortekste AMPA-BDNF-mTOR sinaptogenez yolağını ateşler ve kardiyomiyositlerde sempatik deşarjla maskelenen hücresel Ca²⁺ baskılanması üretir:',
+          points: [
+            'Spinal Arka Boynuz WDR Nöronu İçi (Ca²⁺/Na⁺ Akışının Durması → CaMKII, PKC & nNOS/NO-cGMP Wind-Up Kaskadı İnhibisyonu): NMDA kanal porunun tıkanmasıyla postsinaptik nörona Ca²⁺ ve Na⁺ girişi kesilir. Sitozolik [Ca²⁺]i yükselişinin durması; (1) Kalsiyum/Kalmodulin-Bağımlı Protein Kinaz II (CaMKII) ve Protein Kinaz C (PKC) aktivasyonunu, (2) nöronal Nitrik Oksit Sentaz (nNOS) → NO → solübl Guanilat Siklaz → cGMP retrograd sinyal kaskadını ve (3) µ-opioid reseptörlerinin PKC-aracılı fosforilasyon/desensitizasyonunu bloke eder → "wind-up" fenomeni, santral sensitizasyon, allodini ve opioid kaynaklı hiperaljezi (OIH) hücresel düzeyde kırılır.',
+            'Prefrontal Korteks & Hipokampus İçi (GABAerjik İnternöron Bloku → Glutamat/AMPA Akışı → BDNF–TrkB–mTORC1 Kaskadı): Tonik GABAerjik internöronlardaki NMDA blokajı piramidal glutamaterjik nöronları serbest bırakır (disinhibisyon); presinaptik uçtan salınan glutamat postsinaptik AMPA reseptörlerini uyarır. AMPA aracılı depolarizasyon voltaj-kapılı Ca²⁺ kanallarını açarak Beyin Kaynaklı Nörotrofik Faktör (BDNF) ekzositozunu, TrkB reseptör otofosforilasyonunu ve PI3K–Akt–mTORC1 (mammalian target of rapamycin) ile eEF2 (ökaryotik elongasyon faktörü-2) kinaz inhibisyonunu tetikler → hızlı dendritik diken (spine) protein sentezi ve antidepresan/nöroplastik sinaptogenez gerçekleşir (aktif metabolit (2R,6R)-hidroksinorketamin [HNK] de AMPA üzerinden bu yolağı destekler).',
+            'Talamokortikal Piramidal Nöron İçi (HCN1 / Ih Akımı Blokajı & Elektriksel Disosiyasyon): HCN1 kanallarının kapanmasıyla hiperpolarizasyonla aktive olan içeri yönlü Na⁺/K⁺ pacemaker akımı (Ih) kesilir, dendritik membran giriş direnci değişir ve talamus ile neokorteks faz-kilitlemesi koparılırken limbik (hipokampal/amigdalar) ağlarda yüksek frekanslı γ (30–80 Hz) ve θ osilasyonları ortaya çıkar.',
+            'Kardiyomiyosit vs Bronş Düz Kas Hücresi İçi Ca²⁺ Dinamiği: İzole kardiyomiyosit içinde sarkolemmal L-tipi Ca²⁺ akımını (ICa,L) ve sarkoplazmik retikulum Ca²⁺ salınımını doğrudan baskılar (intrinsik negatif inotropi); ancak sağlam hastada santral sempatik deşarj ve NET blokajıyla yükselen noradrenalin kardiyomiyosit β₁ → Gαs → cAMP → PKA kaskadını uyararak bu depresyonu fazlasıyla örter. Bronş düz kas hücresinde ise hem L-tipi Ca²⁺ girişi/muskarinik Gαq-IP₃ kaskadı doğrudan bloke edilir hem de dolaşımdaki katekolaminler β₂ → Gαs → cAMP → PKA → MLCK inhibisyonu yaparak çift mekanizmalı gevşeme üretir.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Talamokortikal-Limbik Ağ, Spinal Arka Boynuz & Serebral Yatak → SSS, Ağrı & EEG',
+            tissueTarget: 'Talamus–Korteks · Limbik Sistem · Lamina I–V WDR · Serebral Damar',
+            accent: 'indigo',
+            points: [
+              'Talamokortikal-Limbik Disosiyasyon & EEG/BIS Paradoksu: Talamustan somatosensoryel kortekse giden duyusal girdi kesilirken limbik sistem ve retiküler aktive edici sistem (RAS) açık kalır → hasta gözleri açık, horizontal/rotatuar nistagmuslu ve kataleptik görünürken ağrıyı algılamaz ve hatırlamaz. Kortikal yüksek frekanslı gama (30–80 Hz) ve teta dalgalarını artırdığı için BIS / Entropi monitörünü YAPAY OLARAK YÜKSEK (60–80) gösterir (BIS derinlik takibinde güvenilmezdir!).',
+              'Spinal/Supraspinal Multimodal Analjezi & Anti-Hiperaljezi: Propofol, etomidat ve midazolamdan farklı olarak tek başına güçlü somatik analjezi sağlayan TEK IV indüksiyon ajanıdır; spinal arka boynuz WDR nöronlarında NMDA wind-up blokajıyla yanık, travma, nöropatik ağrı ve kronik opioid toleransında/OIH’de ağrı iletimini keser.',
+              'Serebral Hemodinami (CBF, CMRO₂, ICP & CPP): Tarihsel "KİBAS kontrendikasyonu" çürütülmüştür; normokapnik mekanik ventilasyon altında ICP’yi kritik yükseltmez, aksine sistemik MAP’ı düşürmediği için Travmatik Beyin Hasarı (TBI) + hemorajik/septik şok birlikteliğinde Serebral Perfüzyon Basıncını (CPP = MAP − ICP) propofolden daha güvenle korur.',
+            ],
+          },
+          {
+            systemTitle: 'Sempatik Sinir Uçları, Miyokard Dokusu & Pulmoner Damar → Kardiyovasküler Fizyoloji',
+            tissueTarget: 'Santral Otonom Çekirdekler · NET · Kardiyomiyosit · Pulmoner Arter',
+            accent: 'rose',
+            points: [
+              'İndirekt Sempatomimetik Yanıt (Sağlam Sempatik Rezerv): Santral otonomik sempatik deşarj artışı ve periferik nöronal NET (Uptake-1) geri alım blokajıyla plazma noradrenalin/adrenalin düzeyi yükselir → enjeksiyondan 2–5 dk sonra Kalp Hızı (%15–30 ↑), MAP, Kardiyak İndeks (CI) ve SVR artar; akut hemorajik şok, travma ve perikardiyal tamponad RSI indüksiyonunda hayat kurtarıcıdır.',
+              'Katekolamin Deplesyonlu Şok Paradoksu (Maskelenmiş Negatif İnotropinin Açığa Çıkışı): Ketamin miyokard dokusunda intrinsik olarak direkt negatif inotroptur (Cav1.2 ve SR Ca²⁺ depresyonu). Uzun süreli septik şok, ileri kardiyojenik şok veya yoğun bakımda günlerdir yüksek doz vazopresör alan hastalarda presinaptik katekolamin vezikülleri boşalmış ve β₁ reseptörleri down-regüle olduğundan sempatik kompansasyon çalışmaz → ketaminin direkt miyokard depresan etkisi maskesiz kalarak ani derin hipotansiyon ve kardiyak arrest yapabilir (doz 0,5–1,2 mg/kg’a düşürülmelidir!).',
+              'Miyokard Oksijen Tüketimi (MVO₂) & Pulmoner Vasküler Direnç (PVR): Taşikardi, artmış kontraktilite ve afterload nedeniyle miyokard O₂ tüketimini (MVO₂) ve pulmoner arter basıncını (PVR) artırır; bu nedenle akut koroner sendrom, ciddi koroner arter hastalığı, aort diseksiyonu ve ağır sağ kalp yetmezliği/pulmoner hipertansiyonda dikkatli olunmalı veya kaçınılmalıdır.',
+            ],
+          },
+          {
+            systemTitle: 'Bronş Düz Kası, Medüller Solunum Merkezi & Üst Havayolu → Solunum Fizyolojisi',
+            tissueTarget: 'Trakeobronşiyal Düz Kas · Pre-Bötzinger · Faringeal/Tükürük Bezleri',
+            accent: 'teal',
+            points: [
+              'Güçlü Bronkodilatasyon (Status Asthmaticus Altın Standardı): Hem dolaşımdaki katekolaminlerin bronşiyal β₂ reseptörlerini uyarması hem de bronş düz kasında L-tipi Ca²⁺ girişi ve vagal M₃ muskarinik bronkokonstriksiyonun direkt blokajıyla havayolu direncini hızla düşürür; refrakter status asthmaticus RSI indüksiyonu ve mekanik ventilasyon sedasyonunda 1. tercihtir.',
+              'Medüller Solunum Merkezi & CO₂ Yanıtının Korunumu: Propofol, opioidler ve midazolamın aksine medüller pre-Bötzinger solunum merkezinin hiperkapnik (PaCO₂) ventilatuar yanıtını ve fonksiyonel rezidüel kapasiteyi (FRC / interkostal kas tonusunu) terapötik dozlarda korur; ancak yüksek dozun çok hızlı IV puşesi (<30 sn) geçici (1–2 dk) santral apne yapabilir.',
+              'Üst Havayolu Tonusu, Hipersalivasyon & Laringospazm: Genioglossus ve faringeal dilatatör kas tonusunu büyük ölçüde korusa da tam aspirasyon güvenliği sağlamaz. Kolinerjik/otonomik uyarımla tükürük ve trakeobronşiyal mukus sekresyonunu artırır; faringeal sekresyonların vokal kordları uyarması özellikle çocuklarda refleks laringospazm (%0,3–1) tetikleyebilir (gerekirse glikopirolat/atropin).',
+            ],
+          },
+          {
+            systemTitle: 'Hepatik CYP2B6/3A4, Ürotelyum, Safra Yolları & İskelet Kası → Sistemik Organlar',
+            tissueTarget: 'Hepatosit CYP2B6/3A4 · Mesane Ürotelyumu · Safra Kanalı · Çizgili Kas',
+            accent: 'amber',
+            points: [
+              'Hepatik Biyotransformasyon & Aktif Norketamin / HNK Metabolitleri: Yüksek hepatik ekstraksiyon oranıyla (~0,9; karaciğer kan akımına bağımlı) CYP2B6 ve CYP3A4 tarafından N-demetilasyonla aktif Norketamine (ana ilacın ~%20–30’u kadar analjezik/hipnotik güçte) ve ardından hidroksinorketamin (HNK) ile glukuronid konjugatlarına dönüştürülerek idrarla (%90) atılır; ileri sirozda ve eGFR < 30 mL/dk’da >24–48 saat infüzyonda norketamin birikerek uyanmayı uzatır.',
+              'Ürotelyum & Safra Yolu Epiteli (Ketamin Üropatisi & Kolanjiopati): Yüksek doz uzamış YBÜ infüzyonlarında veya kronik suistimalde idrarla atılan ketamin/norketamin metabolitleri mesane ürotelyumunda doğrudan sitotoksisite, mikrovasküler hasar ve mast hücre infiltrasyonu yaparak steril hemorajik/ülseratif sistit ve hidronefroza; safra yollarında ise Oddi sfinkteri NMDA/düz kas etkisiyle biliyer dilatasyon ve kolestatik KC enzim artışına (ketamin kolanjiopatisi) yol açabilir.',
+              'İskelet Kası Tonusu, Göz & Nöroendokrin/İmmün Sistem: Subkortikal ekstrapiramidal aktivasyonla çizgili kas tonusunu artırır (katalepsi, tonik-klonik olmayan rastgele miyoklonik sıçramalar, nistagmus ve hafif göz içi basıncı artışı). Adrenal korteks kortizol sentezini baskılamaz, Malign Hipertermi tetiklemez ve TLR4/NF-κB inhibisyonuyla proinflamatuar sitokinleri (IL-6, TNF-α) azaltır.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Açık-Kanal Trapping Bloku, Katekolamin Tükenmesi, Ketofol & Opioid-Sparing Sinerji',
           summary:
-            'Ketamin, opioidlerle güçlü analjezik sinerji ve propofolle ideal hemodinamik/solunumsal karşılıklı denge (Ketofol) kurar.',
+            'Ketaminin farmakodinamik profili; NMDA porundaki voltaj/kullanım-bağımlı "trapping" kinetiği, sub-dissosiyatif dozlardan tam disosiyatif anesteziye geçiş eşiği ve GABAerjik ajanlarla (Propofol/Midazolam) kurduğu tamamlayıcı denge üzerine kuruludur.',
           points: [
-            'Opioid-Sparing & OIH Tersine Çevirme: Sub-dissosiyatif infüzyon (0.1–0.3 mg/kg/saat) postoperatif ve YBÜ opioid tüketimini %30–50 azaltır, remifentanil/kronik opioid kaynaklı hiperaljeziyi (OIH) NMDA blokajı ile önler.',
-            'Ketofol (Ketamin + Propofol) Karşılıklı Dengeleme: Ketamin propofolün hipotansiyon ve apne riskini nötralize ederken, propofol ketaminin emergence deliryumu, bulantı ve taşikardisini baskılar.',
-            'Spesifik Antidot Yoktur: NMDA blokajını geri çeviren bir antagonist bulunmaz; aşırı dozda havayolu/ventilasyon desteği, emergence ajitasyonunda ise GABAerjik ajan (midazolam 1–2 mg IV veya küçük propofol bolusu) kullanılır.',
+            'Açık-Kanal "Trapping" Kinetiği & Sub-Dissosiyatif vs Tam Disosiyatif Eşik: Düşük plazma konsantrasyonlarında (0,1–0,3 mg/kg; plazma ~100–200 ng/mL) yalnızca patolojik yüksek frekansla ateşleyen spinal arka boynuz nosiseptif NMDA kanalları ve tonik kortikal GABAerjik internöronlar bloke olur (bilinç korunurken saf anti-hiperaljezi/analjezi); plazma düzeyi >1.000–2.000 ng/mL’yi (1–2 mg/kg IV veya 4–5 mg/kg IM) aştığında ise talamokortikal NMDA ve HCN1 kanalları doygunluğa ulaşarak "tavan" niteliğinde tam disosiyatif anestezi başlar (bu eşiğin üzerinde ek doz derinliği artırmaz, yalnızca uyanma süresini uzatır!).',
+            'Katekolamin Deplesyonunda Hemodinamik Tersine Dönüş (Unmasking Kinetics): Sağlam hastada sempatik NET blokajı ve santral sempatik çıkış, ketaminin kardiyomiyosit Cav1.2 üzerindeki direkt negatif inotropik etkisini maskeler; ancak presinaptik noradrenalin vezikülleri tükenmiş uzamış şokta bu maske kalkar ve doz-bağımlı miyokardiyal depresyon açığa çıkar.',
+            'Ketofol (Ketamin + Propofol) Karşılıklı Farmakodinamik Nötralizasyon Sinerjisi: Propofol (GABA-A β₂/β₃ hiperpolarizasyonu) ketaminin kortikal GABAerjik internöron disinhibisyonuna bağlı psikotomimetik "emergence" halüsinasyonlarını, taşikardisini, hipertansiyonunu ve bulantısını baskılarken; ketamin (NMDA blokajı + sempatik tonus) propofolün SVR düşüşünü, hipotansiyonunu, apnesini ve analjezi eksikliğini dengeler.',
+            'Opioid Toleransı & Opioid Kaynaklı Hiperaljezi (OIH) Geri Döndürme Sinerjisi: Yüksek doz remifentanil veya kronik opioid maruziyetinde C-liflerinden salınan glutamat spinal NMDA reseptörlerini aktive ederek PKC/NO üzerinden µ-opioid reseptörlerini duyarsızlaştırır (OIH/tolerans); düşük doz ketamin infüzyonu (0,1–0,3 mg/kg/saat) bu kısır döngüyü kırarak opioid duyarlılığını restore eder ve opioid tüketimini %30–50 düşürür.',
           ],
         }}
         clinicalPearls={[
-          'BIS / Entropi Monitörü Yanılgısı: Ketamin tek başına veya TIVA’ya eklendiğinde kortikal gama dalgalarını artırarak BIS değerini 60–80’lere çıkarabilir; hastanın yüzeyel anesteziye geçtiği sanılarak gereksiz yüksek doz propofol/sevofluran verilmemelidir.',
-          'Katekolamin Tükenmiş Şok Kuralı: Günlerdir yüksek doz norepinefrin alan septik şok veya kardiyojenik şok hastasında RSI için ketamin 2 mg/kg yerine 0.75–1.2 mg/kg’a düşürülmeli ve vazopresör infüzyonu açık tutulmalıdır.',
-          'S-Ketamin (Esketamin) 2× Potens Farkı: S(+)-ketamin rasemik ketaminden ~2 kat güçlüdür ve daha hızlı derlenme sağlar; flakon etiketinde rasemik vs S-ketamin ayrımı mutlaka doğrulanmalıdır.',
-          'Sub-Dissosiyatif Ağrı Bolusunu 15 Dakikada Verin: 0.15–0.3 mg/kg akut ağrı bolusu hızlı puşe edilirse hastada rahatsız edici disfori/baş dönmesi yapar; 100 mL SF içinde 10–15 dakikada infüze edildiğinde analjezi korunurken yan etki dramatik düşer.',
+          'BIS Monitörü Tuzağı (Yüksek BIS = Yüzeyel Anestezi Değildir!): Genel anestezi veya TIVA sırasında hastaya 0,5 mg/kg ketamin eklendiğinde kortikal 30–80 Hz gama aktivitesi arttığı için BIS değeri 45’ten 70–75’e fırlayabilir; bunu "hasta uyanıyor" sanarak propofol veya sevofluran dozunu artırmak ağır hipotansiyona yol açar.',
+          'Sub-Dissosiyatif Analjezi Bolusunu Neden 15 Dakikada İnfüze Etmeliyiz? 0,2–0,3 mg/kg (15–20 mg) akut ağrı dozu 30 saniyede IV puşe yapılırsa beyin pik konsantrasyonu disosiyatif eşiği aşarak hastada korkutucu gerçeklik algısı kaybı, baş dönmesi ve nistagmus yapar; aynı doz 100 mL SF içinde 15 dakikada verildiğinde analjezik etkinlik birebir korunurken psikomimetik yan etki %80 azalır.',
+          'Disosiyatif Eşik Tavanı (1,5–2 mg/kg IV / 4–5 mg/kg IM): Ketamin bir kez tam disosiyasyon eşiğine ulaştığında (1,5–2 mg/kg IV) daha yüksek doz (örn. 3–4 mg/kg IV) vermek "daha derin" sedasyon sağlamaz; yalnızca ilaç redistribüsyonunu ve uyanma süresini uzatır.',
+          'Emergence Reaksiyonu (Uyanma Deliryumu) Patofizyolojisi & Tedavisi: Beyinden ketamin temizlenirken işitsel ve görsel talamokortikal çekirdekler farklı hızlarda normale döndüğünden erişkinlerin %10–20’sinde canlı halüsinasyon ve ajitasyon gelişir; sessiz/loş derlenme ortamı ve GABAerjik internöron tonusunu yerine koyan 1–2 mg IV Midazolam (veya küçük doz Propofol) tabloyu dakikalar içinde çözer.',
         ]}
       />
 

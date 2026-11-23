@@ -1125,51 +1125,87 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 14. DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
-          title: 'Saf Kompetitif μ > κ > δ Opioid Reseptör Antagonizması & Kısa Etki Kinetiği',
+          title: 'Hücre Zarı & Moleküler Hedef (7-TM Opioid Reseptörleri [μ >> κ ≥ δ] Kompetitif Ortosterik Antagonizması & Ters Agonizma Biyofiziği)',
           summary:
-            'Nalokson, oksimorfonun N-allil türevidir ve intrinsik agonist aktivitesi SIFIR olan saf kompetitif opioid reseptör antagonistidir (afinite sırası: μ >> κ > δ). Opioid varlığı yoksa fizyolojik dozlarda belirgin bir farmakolojik etki oluşturmaz.',
+            'Nalokson (17-allil-4,5α-epoksi-3,14-dihidroksimorfinan-6-on), oksimorfonun azot atomundaki metil grubunun bir N-allil (-CH₂-CH=CH₂) köküyle değiştirilmesiyle elde edilen, 7-transmembran (7-TM) G-proteini kenetli opioid reseptör ailesinin tüm alt tiplerine bağlanan ancak intrinsik Gαi/o aktivitesi SIFIR olan saf kompetitif ortosterik antagonisttir. Reseptör afinite hiyerarşisi μ-opioid reseptörü (MOR / OPRM1; Ki ≈ 0,8–1,1 nM) >> κ-opioid reseptörü (KOR / OPRK1; Ki ≈ 2–12 nM) ≥ δ-opioid reseptörü (DOR / OPRD1; Ki ≈ 16–25 nM) şeklindedir. Yüksek lipofilisite ve pKa 7,94 özelliğiyle kan-beyin bariyerini 60–90 saniyede geçerek beyin/plazma oranını hızla >1’in üzerine çıkarır (Miller’s 10th Ed. / Stoelting’s 6th Ed. / Boyer NEJM 2012).',
           points: [
-            'Reseptör Yer Değiştirmesi (Competitive Displacement): Lipofilik yapısıyla KBB’yi 1–2 dk’da geçerek pre-Bötzinger solunum merkezi ve spinal arka boynuzdaki μ-opioid reseptörlerinden agonisti uzaklaştırır; Gi/Go kaynaklı cAMP baskılanmasını ve K⁺ hiperpolarizasyonunu anında sonlandırır.',
-            'Kısa Etki Süresi → Renarkotizasyon Mekaniği: Hızlı santral redistribüsyon ve yüksek hepatik glukuronidasyon (UGT2B7) nedeniyle klinik etki süresi 30–60 dk’dır; morfin, metadon, uzun salımlı oral opioidler ve uzamış fentanil infüzyonundan çok daha kısa olduğu için opioid reseptöre tekrar bağlanır.',
-            'Reseptör Ayrılma Hızı (k_off) Farkı: Buprenorfin gibi reseptöre çok sıkı bağlanan parsiyel agonistlerde veya ultra-potent fentanil analoglarında standart tek bolus reseptörü tam boşaltamaz; yüksek doz + sürekli infüzyon gerekir (Dahan 2010).',
+            'MOR (OPRM1) Ortosterik Bağlanma Cebi & Sterik Konformasyon Kilidi: Nöronal membrandaki MOR’un TM3 (Asp147) ve TM6/TM7 hidrofobik cebine bağlanır; ancak hacimli N-allil yan zinciri TM6 heliksinin hücre içi Gαi/o kenetlenmesi için gereken dışa doğru dönme hareketini sterik olarak engeller → reseptörü inaktif konformasyonda kilitler.',
+            'Nötr Antagonist vs Bağımlı Durumda Ters Agonist (Inverse Agonist) Davranışı: Opioid-naif (opioidsiz) bireyde bazal MOR aktivitesi düşük olduğundan klinik dozlarda nötr antagonist gibi davranır ve fizyolojik etki üretmez. Buna karşın kronik opioid maruziyetinde bazal konstitütif (ligand-bağımsız) aktivitesi artmış MOR popülasyonunda "ters agonist" (inverse agonist) gibi davranarak bazal Gαi/o tonusunu bile sıfırın altına çeker.',
+            'Kütle Etkisi Yasası (Law of Mass Action) & k_off (Ayrılma Hızı) Kinetiği: Kompetitif yer değiştirme hızı hem nalokson konsantrasyonuna hem de mevcut opioid agonistinin reseptörden ayrılma sabitine (k_off) bağlıdır. Morfin ve fentanil (hızlı-orta k_off) hızla yer değiştirirken, çok yavaş k_off değerine sahip Buprenorfin (parsiyel MOR agonisti; t½_dissociation ~40–160 dk) veya ultra-potent karfentanil standart nalokson boluslarına direnç gösterir (Dahan 2010).',
+            'Non-Opioid Membran Reseptörlerinden Tam Bağımsızlık: Pentamerik GABA-A (benzodiyazepin/propofol/barbitürat), NMDA (ketamin), α₂-adrenerjik (deksmedetomidin/klonidin/ksilazin) veya nikotinik ACh (nöromüsküler bloker) reseptörlerine bağlanmaz.',
           ],
         }}
-        organEffects={{
-          cns: [
-            'Opioid Kaynaklı Sedasyon & Miyozisin Hızlı Geri Dönüşü: Locus coeruleus ve ARAS üzerindeki μ-inhibitör freni kaldırarak 1–2 dakikada uyanıklık ve pupiller dilatasyon sağlar; ancak benzodiyazepin, propofol veya alkol sedasyonuna etkisi YOKTUR.',
-            'Akut Ağrı & Ajitasyon Rebound’u: Postoperatif hastada μ₁ supraspinal analjezinin aniden silinmesi şiddetli nosiseptif deşarja, deliryuma ve kronik opioid kullanıcısında akut yoksunluk/nöbet eşiği düşüşüne yol açar.',
-            'Serebral Kan Akımı (CBF/ICP): Hiperkapnik vazodilatasyonu düzeltse de ani hipertansif fırtına ve şiddetli ağrı intrakraniyal anevrizma veya yeni kraniyotomi hastasında kafa içi kanama riski yaratır.',
-          ],
-          cvs: [
-            'Akut Katekolamin Fırtınası: Ani opioid antagonizması (özellikle yüksek tek bolusta) plazma epinefrin/norepinefrin düzeylerini katlayarak şiddetli hipertansiyon, sinüs taşikardisi, ventriküler ektopi/VF ve miyokard iskemisi (MINS) tetikler.',
-            'Non-Kardiyojenik (Flash) Pulmoner Ödem: Masif sempatik deşarjın yarattığı pulmoner venokonstriksiyon + kapiller hidrostatik basınç artışı ve kapalı glottise karşı derin inspiratuvar çaba (negatif basınçlı ödem) ani pembe köpüklü balgam ve ağır hipoksemiye yol açar.',
-          ],
-          respiratory: [
-            'Pre-Bötzinger Kompleksi & CO₂ Yanıtı: Medüller solunum merkezindeki μ₂ baskısını kaldırarak dakika ventilasyonunu, solunum sayısını ve hiperkapnik/hipoksik kemoreseptör duyarlılığını 1–2 dk’da geri getirir.',
-            'Laringospazm & Aspirasyon Riski: Hızlı tam geri dönüşte akut yoksunluğa bağlı kusma ve hiperreaktif hava yolu refleksleri gelişebilir; hava yolu aspirasyondan korunmalıdır.',
-          ],
-          other: [
-            'Nöroaksiyel kaşıntı/PONV’yi santral μ-modülasyonuyla ≤ 2 mcg/kg/saat dozda analjeziyi koruyarak giderir',
-            'Oral < %2 biyoyararlanımı sayesinde enterik μ-reseptörlerini selektif bloke eder (OIC)',
-            'Doğrudan NMB veya GABAerjik ajanları antagonize etmez',
+        intracellularSignaling={{
+          title: 'Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği',
+          summary:
+            'Naloksonun MOR bağlanma cebinden opioid agonistini uzaklaştırması, Gαi/o ve Gβγ alt birimlerinin ayrışmasını saniyeler içinde durdurarak hücre içinde üç kritik elektrokimyasal "fren kalkması" (disinhibisyon) ve kronik bağımlıda "cAMP süperaktivasyonu" yaratır:',
+          points: [
+            'Postsinaptik GIRK (Kir3.1/3.2) Kanallarının Kapanması → Membran Repolarizasyonu / Depolarizasyon: Gβγ dimerlerinin GIRK potasyum kanallarından ayrılmasıyla hücre dışına K⁺ sızıntısı (hiperpolarizasyon akımı) anında kesilir. Pre-Bötzinger solunum pacemaker nöronları ve locus coeruleus uyanıklık nöronları −75 mV’tan −55 mV ateşleme eşiğine geri yükselerek spontan aksiyon potansiyeli deşarjına yeniden başlar.',
+            'Presinaptik N/P/Q-Tipi Ca²⁺ (Cav2.2) Kanallarının Yeniden Açılması → SNARE Ekzositoz Restorasyonu: Presinaptik akson terminallerinde Gβγ aracılı Cav2.2 kanal inhibisyonu kalkar; depolarizasyonla hücre içine yeniden Ca²⁺ girer ve sinaptotagmin-SNARE kompleksi üzerinden Glutamat, P Maddesi, Noradrenalin ve Asetilkolin vezikül ekzositozu geri döner.',
+            'Adenilat Siklaz (AC) Disinhibisyonu & Akut "cAMP Overshoot / Süperaktivasyonu": Gαi freninin kalkmasıyla membrana bağlı Adenilat Siklaz yeniden ATP’den cAMP üretmeye başlar. Kronik opioid kullanan veya yüksek doz opioid infüzyonu alan hastalarda kompansatuar olarak yukarı regüle olmuş AC Tip I/VIII ve PKA, nalokson verildiğinde bazalin 5–10 katı üzerinde patlayıcı bir hücre içi cAMP ve PKA fırtınası ("cAMP overshoot") üretir.',
+            'Locus Coeruleus & Sempatoadrenal Nöronlarda CREB/PKA Hiperaktivasyonu: cAMP/PKA patlaması, katyon kanallarını ve voltaj kapılı Na⁺/Ca²⁺ kanallarını aşırı fosforilleyerek locus coeruleus ve rostral ventrolateral medulla (RVLM) sempatik nöronlarında kontrolsüz yüksek frekanslı ateşleme ve adrenal medulladan masif katekolamin (epinefrin/norepinefrin) ekzositozu tetikler.',
           ],
         }}
+        tissueOrganSystems={[
+          {
+            systemTitle: 'Pre-Bötzinger Solunum Merkezi, Karotid Cisimcik & Göğüs Duvarı → Solunum Sistemi',
+            tissueTarget: 'Pre-Bötzinger Kompleksi · Kemoreseptörler · Striatal/Laringeal Motor Ağ',
+            accent: 'teal',
+            points: [
+              'Pre-Bötzinger Ritim & CO₂/Hipoksi Duyarlılığının Restorasyonu (1–2 dk): Medüller solunum merkezi ve karotid cisimcik Tip-I glomus hücrelerindeki MOR inhibisyonunu kaldırarak PaCO₂–ventilasyon yanıt eğrisinin eğimini ve sola kaymasını 1–2 dakika içinde normale döndürür; önce tidal hacim ve ardından solunum sayısı (SS ≥ 10–12/dk) yükselir.',
+              'Opioid Kaynaklı Toraks & Vokal Kord Rijiditesinin ("Wooden Chest") Çözülmesi: Hızlı fentanil/remifentanil bolusuna bağlı nükleus raphe magnus ve bazal gangliyon/striatal MOR hiperaktivasyonunu bloke ederek torakoabdominal ve laringeal glottik spazmı santral düzeyde çözer.',
+              'Negatif Basınçlı & Katekolamin Aracılı Akut "Flash" Pulmoner Ödem: Yüksek doz/hızlı nalokson bolusu sonrası aniden uyanan hastada kapalı glottise veya üst hava yolu obstrüksiyonuna karşı yapılan şiddetli inspiratuar çaba (Müller manevrası → aşırı negatif intratorasik basınç) ile masif sempatik pulmoner venokonstriksiyon birleşerek alveolokapiller membranı yırtar ve dakikalar içinde pembe köpüklü non-kardiyojenik pulmoner ödem oluşturur.',
+            ],
+          },
+          {
+            systemTitle: 'RVLM Sempatik Çekirdek, Adrenal Medulla & Miyokard/Vasküler Yatak → Kardiyovasküler Sistem',
+            tissueTarget: 'RVLM & Sempatik Gangliyonlar · Koroner Yatak · Pulmoner/Sistemik Venler',
+            accent: 'rose',
+            points: [
+              'Sempatoadrenal Katekolamin Fırtınası & Afterload Sıçraması: Yüksek doz nalokson (≥0,4 mg tek puşe) ile analjezinin aniden silinmesi plazma noradrenalin ve adrenalin düzeylerini saniyeler içinde 10–30 kat artırır → sistemik vasküler direnç (SVR), arteriyel kan basıncı ve kalp hızı patlayıcı biçimde fırlar.',
+              'Miyokard Oksijen Tüketimi (MVO₂) Artışı, MINS & Ventriküler Aritmiler: Taşikardi ve akut sol ventrikül duvar gerilimi (afterload) artışı subendokardiyal koroner perfüzyonu bozarak koroner arter hastalarında perioperatif miyokard hasarı (MINS), akut koroner sendrom ve özellikle hipoksik/hiperkapnik miyokardda VT/VF tetikler.',
+              'Pulmoner Kapiller Hidrostatik Yüklenme: Alfa-1 aracılı sistemik vazokonstriksiyon kanı periferden santral/pulmoner vasküler yatağa kaydırırken pulmoner venüller kasılır; sol atriyum ve pulmoner kapiller kama basıncı (PCWP) hızla yükselerek flash pulmoner ödeme hidrostatik zemin hazırlar.',
+            ],
+          },
+          {
+            systemTitle: 'Locus Coeruleus, Spinal Arka Boynuz & Serebral Dolaşım → Santral Sinir Sistemi',
+            tissueTarget: 'Locus Coeruleus · Lamina I/II & Trigeminal Çekirdek · Serebral Damarlar',
+            accent: 'indigo',
+            points: [
+              'Analjezi Koruyucu Pencere vs Akut Ağrı Krizinin Nörobiyolojisi: Düşük doz mikro-titrasyonda (20–40 mcg IV) beyin sapı solunum merkezindeki (μ₂) depresyon seçici olarak çözülürken spinal/supraspinal analjezi (μ₁) büyük ölçüde korunur; tam ampul (400 mcg) verildiğinde ise lamina I/II ve PAG’daki tüm MOR’lar boşalarak cerrahi hastayı akut ağrı ve deliryum krizine sokar.',
+              'Spinal Trigeminal Çekirdek ("Kaşıntı Merkezi") & Area Postrema (PONV): Nöroaksiyel morfinin medüller dorsal boynuz / spinal trigeminal çekirdekteki kaşıntı nöronları (GRP reseptör yolu) üzerindeki disinhibisyonunu 0,25–2,0 mcg/kg/saat düşük dozda bloke ederek analjeziyi bozmadan santral opioid kaşıntısını ve bulantıyı keser (Murphy 2011; Kjellberg 2001).',
+              'Serebral Kan Akımı (CBF), KİB & Yenidoğan/Tramadol Nöbet Eşiği: Ani uyanma ve hipertansif pik CBF ve kafa içi basıncını (ICP) yükselterek intrakraniyal anevrizma veya yeni kraniyotomi hastasında kanama riski yaratır; opioid bağımlısı anne yenidoğanında ve meperidin/tramadol intoksikasyonunda nöbet tetikleyebilir.',
+            ],
+          },
+          {
+            systemTitle: 'Enterik Miyenterik Pleksus, Hepatik UGT2B7 & Beyin-Plazma Kompartmanı → GİS & Metabolizma',
+            tissueTarget: 'Miyenterik Pleksus · Hepatik Sinüzoid (UGT2B7) · KBB Dağılımı',
+            accent: 'amber',
+            points: [
+              'Hızlı Beyin-Plazma Redistribüsyonu (Renarkotizasyonun Farmakokinetik Kökü): Nalokson çok yüksek lipofilisitesiyle beyne hızla girer ancak 20–30 dakika içinde beyin dokusundan periferik kompartmana geri dağılır ve karaciğerde UGT2B7 glukuronidasyonuyla hızla temizlenir (etki süresi 30–60 dk). Morfin, metadon veya yağdan salınan fentanil beyinde kaldığından hasta 45 dk sonra yeniden apneye girer.',
+              'Hepatik İlk-Geçiş Yıkımı (%98+) & Enterik Selektif OIC Tedavisi: Oral verildiğinde bağırsak duvarı ve karaciğerde UGT2B7 ile %98’den fazla ilk-geçiş glukuronidasyonuna (nalokson-3-glukuronid) uğradığından sistemik dolaşıma geçmez; yalnızca miyenterik pleksustaki enterik MOR’ları bloke ederek santral analjeziyi bozmadan opioid ilişkili konstipasyonu (OIC) çözer.',
+              'Akut GİS Yoksunluk Hipermotilitesi & Kusma/Aspirasyon: Kronik opioid kullanıcısında parenteral yüksek doz nalokson enterik pleksusta ani ACh ve serotonin deşarjı yaratarak şiddetli abdominal kramp, patlayıcı diyare ve fışkırır tarzda kusma (korunmasız hava yolunda ölümcül aspirasyon!) başlatır.',
+            ],
+          },
+        ]}
         synergyAndCeiling={{
+          title: 'Reseptör Kinetiği, Renarkotizasyon Biyofiziği, Buprenorfin Direnci (k_off) & Boyer 2/3 İnfüzyon Modeli',
           summary:
-            'Naloksonun klinik sanatını belirleyen şey "kompetitif doz-yanıt dengesi"dir: düşük dozlar solunum depresyonu ve kaşıntıyı seçici biçimde düzeltirken, yüksek dozlar analjeziyi tamamen silip sempatik fırtına yaratır.',
+            'Nalokson tedavisinde klinik başarı; "reseptör doluluk oranı (occupancy)" ile "ayrılma kinetiği (k_off)" arasındaki zamansal uyumsuzluğu yönetmeye dayanır.',
           points: [
-            'Analjezi Koruma Penceresi (Dahan 2010): PACU’da 20–40 mcg IV mikro-titrasyon (veya kaşıntıda 0,25–2,0 mcg/kg/saat) μ₂ kaynaklı solunum depresyonu/kaşıntıyı hafifletirken postoperatif analjeziyi büyük ölçüde korur.',
-            'Renarkotizasyon Penceresi & Boyer 2/3 İnfüzyon Kuralı: İlk uyanma dozunun 2/3’ünün saatlik sürekli infüzyon olarak başlanması (+ 15. dk’da ilk bolusun 1/2’si köprü bolusu) uzun etkili opioidlerde plazma antagonizmasını sabit tutar.',
-            'Parsiyel Agonist Direnci: Buprenorfin yüksek μ-afinitesi nedeniyle tipik 0,4 mg bolusa direnç gösterebilir; bu durumda 2–4+ mg kademeli doz ve sürekli infüzyon gerekir.',
+            'Diferansiyel Reseptör Doluluk Eşiği (Solunum Kurtarma vs Tam Analjezi Silinmesi): Pre-Bötzinger solunum merkezinde yeterli spontan ventilasyonu geri kazandırmak için MOR popülasyonunun yalnızca %20–30’undan agonisti uzaklaştırmak (20–40 mcg IV mikro-titrasyon) yeterlidir; buna karşın >200–400 mcg tek bolus reseptörlerin >%80–90’ını aniden boşaltarak analjeziyi sıfırlar ve sempatik taşma (cAMP overshoot) üretir (Dahan 2010).',
+            'Buprenorfin "Çan Eğrisi" & Yavaş k_off Direnci: Buprenorfin MOR’a sub-nanomolar afiniteyle bağlanır ve reseptörden ayrılma yarı ömrü (~40–160 dk) naloksonun beyin kalış süresinden (~30 dk) çok daha uzundur. Bu nedenle buprenorfin solunum depresyonunda standart 0,4 mg nalokson etkisiz kalır; reseptörleri açılan boşluklarda yakalayabilmek için 2–4 mg yükleme ve mutlaka sürekli IV infüzyon (4–8 mg/saat’e varan; ancak >10 mg üzerinde çan eğrisi/paradoksal azalma olabileceği unutulmadan) gerekir.',
+            'Boyer (NEJM 2012) "2/3 Uyanma Dozu / Saat" Farmakokinetik Modeli: Naloksonun görünür dağılım hacmi ve 30–80 dakikalık eliminasyon yarı ömrü nedeniyle, hastanın solunumunu/bilincini açan ilk etkili kümülatif bolusun (ör. 0,6 mg) her saat 2/3’ünün (0,4 mg/saat) sürekli IV infüzyon olarak verilmesi (+ infüzyonun 15. dakikasında dağılım çukurunu doldurmak için ilk bolusun 1/2’si köprü bolusu), santral kompartmandaki antagonist konsantrasyonunu sabit tutarak renarkotizasyonu matematiksel olarak engeller.',
           ],
         }}
         clinicalPearls={[
-          'Önce Oksijen ve BVM Ventilasyon: Hipoksemi/hiperkapni varlığında naloksonun katekolamin fırtınası ve ventriküler aritmi riski katlanır; ilaç hazırlanırken hastayı mutlaka %100 O₂ ile ventile edin.',
-          'PACU’da 0,4 mg Tam Ampul Tuzağı: Postoperatif hastada 0,4 mg doğrudan puşe etmek neredeyse her zaman şiddetli ağrı şoku, hipertansiyon ve cerrahi sütür/kanama stresine yol açar; daima 40 mcg/mL sulandırıp 1 mL titre edin.',
-          'Yanıtsız Hastada 10 mg Kuralı: Kümülatif 10 mg naloksona rağmen solunum/bilinç açılmıyorsa (ultra-potent sentetik opioidler hariç) altta yatan neden opioid dışı bir patolojidir (rezidüel NMB, benzodiyazepin, ksilazin, hipoglisemi, inme).',
-          'Taburculuk / Servis Transferi Hatası: Naloksonla uyanan hasta asla 30–60 dakika içinde monitörsüz servise gönderilmez; son dozdan sonra en az 2 saat renarkotizasyon takibi şarttır.',
+          'Neden Hipoksik/Hiperkapnik Hastada Nalokson Öncesi BVM Ventilasyon Hayati Şarttır? Şiddetli hiperkapni (PaCO₂ > 65 mmHg) ve hipoksi altında miyokard zaten yüksek endojen katekolamin ve asidoz yükü altındadır; BVM ile CO₂ düşürülmeden yüksek doz nalokson puşe edilirse gelişen ani sempatik deşarj ventriküler fibrilasyon (VF) ve flash pulmoner ödemi doğrudan tetikler.',
+          'PACU "40 mcg (1 mL) Mikro-Titrasyon" Sanatı: 1 ampul (0,4 mg / 1 mL) Naloksonu 9 mL SF ile 10 mL’ye tamamlayın (40 mcg/mL). Her 2–3 dakikada bir yalnızca 1 mL (40 mcg; KAH veya kronik opioid kullanıcısında 0,5 mL = 20 mcg) verin. Hedef hastanın gözünü açıp konuşması DEĞİL, solunum sayısının ≥10–12/dk ve EtCO₂’nin güvenli aralığa gelmesidir.',
+          'Nalokson-İlişkili Flash Pulmoner Ödemde Furosemid Tuzağı: Bu tablo sol kalp yetmezliği veya hipervolemi değil, masif katekolamin venokonstriksiyonu + negatif intratorasik basınca bağlı alveolokapiller sızıntıdır (non-kardiyojenik ARDS benzeri). Tedavinin temeli agresif diürez değil, derhal pozitif basınçlı ventilasyon (NIV / CPAP veya entübasyon + yüksek PEEP) ve oksijenasyondur.',
+          'Polimadde & Ksilazin / Benzodiyazepin / Rezidüel NMB Ayırıcı Tanısı: Kümülatif 2–10 mg naloksona yanıt vermeyen postoperatif veya acil servis hastasında ısrarla nalokson tekrarlamak yerine; TOF cihazıyla rezidüel nöromüsküler blokajı, benzodiyazepin/alkol/ksilazin ko-ingestiyonunu, hipoglisemiyi, ağır hiperkapnik narkozu veya akut intrakraniyal olayı dışlayın.',
         ]}
       />
 

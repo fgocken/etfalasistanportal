@@ -2596,6 +2596,31 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-dobutamine-protocol',
+    title: 'Dobutamin Hidroklorür (DOBUTamin · Dobutasel) β1/β2 İnodilatör İnfüzyon, Kardiyojenik Şok & Stres Eko Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'İnodilatör (β₁ >> β₂) · Katekolamin',
+    description: 'Doğrudan β1-adrenerjik ağırlıklı rasemik inodilatör; kardiyojenik şok (2–20 mcg/kg/dk, DOREMI / ESC 2021), septik kardiyomiyopati (SSC 2021 Noradrenalin + Dobutamin), TR 250 mg/20 mL flakon sulandırma, stres eko (5–40 mcg/kg/dk) ve LVOTO kontrendikasyonu.',
+    keywords: [
+      'dobutamin',
+      'dobutamine',
+      'dobutasel',
+      'dobuthaver',
+      'inodilatör',
+      'inotrop',
+      'kardiyojenik şok',
+      'septik kardiyomiyopati',
+      'düşük kardiyak debi',
+      'lcos',
+      'doremi',
+      'stres ekokardiyografi',
+      '250 mg/20 ml'
+    ],
+    tabId: 'treatments',
+    subId: 'dobutamine',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',
