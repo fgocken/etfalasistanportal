@@ -74,6 +74,122 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
     };
   }, [cylinderWaterVol, cylinderPressureBar, cylinderReserveBar, cylinderFlowLpm]);
 
+  // Estimated FiO2 & PaO2/FiO2 (P/F) Calculator State
+  type Fio2DeviceId = 'nasal_cannula' | 'simple_mask' | 'nrbm' | 'venturi' | 'hfnc_direct';
+  const [fio2Device, setFio2Device] = useState<Fio2DeviceId>('nasal_cannula');
+  const [fio2FlowInput, setFio2FlowInput] = useState<string>('4');
+  const [fio2DirectInput, setFio2DirectInput] = useState<string>('40');
+  const [venturiPresetFio2, setVenturiPresetFio2] = useState<number>(28);
+  const [pao2Input, setPao2Input] = useState<string>('');
+
+  const fio2Calc = useMemo(() => {
+    const flow = Math.max(0, parseFloat(fio2FlowInput.replace(',', '.')) || 0);
+    const directPct = Math.min(100, Math.max(21, parseFloat(fio2DirectInput.replace(',', '.')) || 21));
+    const pao2 = parseFloat(pao2Input.replace(',', '.'));
+
+    let estFio2Pct = 21;
+    let rangeNote = '';
+    let warning: string | null = null;
+    let isFixedFio2 = false;
+
+    if (fio2Device === 'nasal_cannula') {
+      if (flow <= 0) {
+        estFio2Pct = 21;
+        rangeNote = 'Oda havası (%21)';
+      } else {
+        const clampedFlow = Math.min(flow, 6);
+        estFio2Pct = Math.round(20 + clampedFlow * 4);
+        rangeNote = 'Yaklaşık formül: %20 + (4 × Akım L/dk) · Taşipnede gerçek FiO₂ düşer.';
+        if (flow > 6) {
+          warning =
+            'Nazal kanülde > 6 L/dk akım FiO₂’yi anlamlı artırmaz; mukozal kuruluk, epistaksis ve frontal sinüs ağrısı yapar. 6 L/dk baz alınmıştır.';
+        }
+      }
+    } else if (fio2Device === 'simple_mask') {
+      if (flow < 5) {
+        estFio2Pct = 35;
+        rangeNote = '5–10 L/dk aralığında ~%35–%55';
+        warning =
+          'GÜVENLİK UYARISI: Basit yüz maskesinde < 5 L/dk akımda ekspiratuvar CO₂ maskeden yıkanamaz ve CO₂ geri solunumu (rebreathing) oluşur! Minimum 5 L/dk açın.';
+      } else {
+        const clamped = Math.min(flow, 10);
+        estFio2Pct = Math.round(35 + (clamped - 5) * 4);
+        rangeNote = '5–10 L/dk aralığında ~%35–%55 (değişken performanslı).';
+        if (flow > 10) {
+          warning = 'Basit maskede > 10 L/dk akım ek FiO₂ artışı sağlamaz; daha yüksek FiO₂ için NRBM veya HFNC seçin.';
+        }
+      }
+    } else if (fio2Device === 'nrbm') {
+      if (flow < 10) {
+        estFio2Pct = 60;
+        rangeNote = '10–15 L/dk aralığında ~%60–%85 (ideal sızdırmazlıkta ~%90)';
+        warning =
+          'GÜVENLİK UYARISI: Rezervuarlı geri solumasız maskede < 10 L/dk akımda torba çöker ve CO₂ birikimi riski doğar! Torba tam şiş kalacak şekilde 10–15 L/dk açın.';
+      } else {
+        const clamped = Math.min(flow, 15);
+        estFio2Pct = Math.round(60 + (clamped - 10) * 5);
+        rangeNote = '10–15 L/dk aralığında ~%60–%85 (maske sızdırmazlığı ve valf bütünlüğüne göre ~%90’a çıkabilir).';
+      }
+    } else if (fio2Device === 'venturi') {
+      estFio2Pct = venturiPresetFio2;
+      isFixedFio2 = true;
+      rangeNote = 'Sabit performanslı (HAFOE): Adaptörün belirttiği minimum O₂ akımı sağlandığında kesin FiO₂ verir.';
+    } else {
+      estFio2Pct = Math.round(directPct);
+      isFixedFio2 = true;
+      rangeNote = 'HFNC (≥ 30–60 L/dk) veya mekanik ventilatörde blender üzerinden ayarlanan kesin FiO₂.';
+    }
+
+    const fio2Decimal = estFio2Pct / 100;
+    const hasPao2 = !Number.isNaN(pao2) && pao2 > 0;
+    const pfRatio = hasPao2 ? Math.round(pao2 / fio2Decimal) : null;
+
+    let pfCategory: { label: string; tone: 'emerald' | 'sky' | 'amber' | 'rose'; detail: string } | null = null;
+    if (pfRatio !== null) {
+      if (pfRatio > 400) {
+        pfCategory = {
+          label: 'Normal Oksijenasyon (> 400)',
+          tone: 'emerald',
+          detail: 'Belirgin hipoksemik gaz değişim bozukluğu saptanmadı.',
+        };
+      } else if (pfRatio > 300) {
+        pfCategory = {
+          label: 'Hafif Gaz Değişim Bozukluğu (301–400)',
+          tone: 'sky',
+          detail: 'Sınırda azalmış P/F; klinik trend ve altta yatan neden izlenmelidir.',
+        };
+      } else if (pfRatio > 200) {
+        pfCategory = {
+          label: 'Hafif Hipoksemi · Hafif ARDS Aralığı (201–300)',
+          tone: 'amber',
+          detail: 'Berlin ARDS tanısı için PEEP/CPAP ≥ 5 cmH₂O (veya Global ARDS 2024: HFNC ≥ 30 L/dk) ve radyolojik kriterler gerekir.',
+        };
+      } else if (pfRatio > 100) {
+        pfCategory = {
+          label: 'Orta Hipoksemi · Orta ARDS Aralığı (101–200)',
+          tone: 'rose',
+          detail: 'Ciddi oksijenasyon bozukluğu; HFNC/NIV veya invaziv akciğer koruyucu ventilasyon açısından yakın izlem gerekir.',
+        };
+      } else {
+        pfCategory = {
+          label: 'Ağır Hipoksemi · Ağır ARDS Aralığı (≤ 100)',
+          tone: 'rose',
+          detail: 'Kritik refrakter hipoksemi; akciğer koruyucu MV, PEEP titrasyonu, pron pozisyon ve ECMO kriterleri değerlendirilir.',
+        };
+      }
+    }
+
+    return {
+      estFio2Pct,
+      fio2Decimal,
+      rangeNote,
+      warning,
+      isFixedFio2,
+      pfRatio,
+      pfCategory,
+    };
+  }, [fio2Device, fio2FlowInput, fio2DirectInput, venturiPresetFio2, pao2Input]);
+
   const selectedProfile =
     OXYGEN_TARGET_PROFILES.find((p) => p.id === selectedProfileId) || OXYGEN_TARGET_PROFILES[0];
 
@@ -461,6 +577,304 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Interactive Estimated FiO2 & PaO2/FiO2 (P/F) Calculator */}
+            <div className={`rounded-xl border p-4 sm:p-5 space-y-4 ${subtlePanel}`}>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <div className="space-y-0.5">
+                  <h4 className={`text-sm sm:text-base font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <Calculator className="w-4 h-4 text-sky-500 shrink-0" />
+                    <span>
+                      Tahmini <MedicalText text="FiO_{2}" /> ve <MedicalText text="P_{a}O_{2}/FiO_{2}" /> (P/F) Hesaplayıcısı
+                    </span>
+                  </h4>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                    Cihazı ve açılan <MedicalText text="O_{2}" /> akımını seçin; isteğe bağlı{' '}
+                    <MedicalText text="P_{a}O_{2}" /> (mmHg) girerek tahmini P/F oranını hesaplayın.
+                  </p>
+                </div>
+                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                  BTS 2017 · Berlin / Global ARDS
+                </span>
+              </div>
+
+              {/* Device Selector Pills */}
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                {(
+                  [
+                    { id: 'nasal_cannula', label: 'Nazal Kanül', sub: '1–6 L/dk', defaultFlow: '4' },
+                    { id: 'simple_mask', label: 'Basit Maske', sub: '5–10 L/dk', defaultFlow: '6' },
+                    { id: 'nrbm', label: 'Rezervuarlı (NRBM)', sub: '10–15 L/dk', defaultFlow: '15' },
+                    { id: 'venturi', label: 'Ventüri (HAFOE)', sub: 'Sabit %24–60', defaultFlow: '' },
+                    { id: 'hfnc_direct', label: 'HFNC / Ventilatör', sub: 'Doğrudan FiO₂', defaultFlow: '' },
+                  ] as const
+                ).map((dev) => {
+                  const active = fio2Device === dev.id;
+                  return (
+                    <button
+                      key={dev.id}
+                      type="button"
+                      onClick={() => {
+                        setFio2Device(dev.id);
+                        if (dev.defaultFlow) setFio2FlowInput(dev.defaultFlow);
+                      }}
+                      className={`text-left rounded-lg border p-2.5 transition-colors cursor-pointer ${
+                        active
+                          ? isDark
+                            ? 'bg-sky-950/60 border-sky-500 text-white'
+                            : 'bg-sky-50 border-sky-600 text-slate-900'
+                          : isDark
+                            ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                            : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="text-xs font-bold leading-snug">{dev.label}</div>
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">{dev.sub}</div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Inputs + Results */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                {/* Inputs Column */}
+                <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {(fio2Device === 'nasal_cannula' || fio2Device === 'simple_mask' || fio2Device === 'nrbm') && (
+                    <div className="space-y-1.5">
+                      <label
+                        htmlFor="fio2-flow-in"
+                        className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                      >
+                        Oksijen Akım Hızı (L/dk)
+                      </label>
+                      <input
+                        id="fio2-flow-in"
+                        type="number"
+                        min="0"
+                        max="20"
+                        step="0.5"
+                        value={fio2FlowInput}
+                        onChange={(e) => setFio2FlowInput(e.target.value)}
+                        className={`w-full px-3 py-2 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                          isDark
+                            ? 'bg-slate-900 border-slate-700 text-white'
+                            : 'bg-white border-slate-300 text-slate-900'
+                        }`}
+                      />
+                      <div className="flex flex-wrap gap-1">
+                        {(fio2Device === 'nasal_cannula'
+                          ? [1, 2, 3, 4, 5, 6]
+                          : fio2Device === 'simple_mask'
+                            ? [5, 6, 7, 8, 10]
+                            : [10, 12, 15]
+                        ).map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setFio2FlowInput(String(val))}
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-pointer ${
+                              Number(fio2FlowInput) === val
+                                ? 'bg-sky-600 border-sky-600 text-white'
+                                : isDark
+                                  ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            {val} L
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {fio2Device === 'venturi' && (
+                    <div className="space-y-1.5">
+                      <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                        Ventüri Adaptörü (<MedicalText text="FiO_{2}" />)
+                      </div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[24, 28, 31, 35, 40, 60].map((v) => (
+                          <button
+                            key={v}
+                            type="button"
+                            onClick={() => setVenturiPresetFio2(v)}
+                            className={`py-1.5 rounded-lg text-xs font-mono font-bold border cursor-pointer ${
+                              venturiPresetFio2 === v
+                                ? 'bg-sky-600 border-sky-600 text-white'
+                                : isDark
+                                  ? 'bg-slate-900 border-slate-800 text-slate-300'
+                                  : 'bg-white border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            %{v}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {fio2Device === 'hfnc_direct' && (
+                    <div className="space-y-1.5">
+                      <label
+                        htmlFor="fio2-direct-in"
+                        className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                      >
+                        Ayarlanan <MedicalText text="FiO_{2}" /> (%)
+                      </label>
+                      <input
+                        id="fio2-direct-in"
+                        type="number"
+                        min="21"
+                        max="100"
+                        step="5"
+                        value={fio2DirectInput}
+                        onChange={(e) => setFio2DirectInput(e.target.value)}
+                        className={`w-full px-3 py-2 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                          isDark
+                            ? 'bg-slate-900 border-slate-700 text-white'
+                            : 'bg-white border-slate-300 text-slate-900'
+                        }`}
+                      />
+                      <div className="flex flex-wrap gap-1">
+                        {[21, 30, 40, 50, 60, 80, 100].map((v) => (
+                          <button
+                            key={v}
+                            type="button"
+                            onClick={() => setFio2DirectInput(String(v))}
+                            className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-pointer ${
+                              Number(fio2DirectInput) === v
+                                ? 'bg-sky-600 border-sky-600 text-white'
+                                : isDark
+                                  ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            %{v}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Optional PaO2 Input */}
+                  <div className="space-y-1.5">
+                    <label
+                      htmlFor="fio2-pao2-in"
+                      className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                    >
+                      <MedicalText text="P_{a}O_{2}" /> (mmHg) — Opsiyonel (P/F için)
+                    </label>
+                    <input
+                      id="fio2-pao2-in"
+                      type="number"
+                      min="10"
+                      max="600"
+                      step="1"
+                      placeholder="Örn: 75"
+                      value={pao2Input}
+                      onChange={(e) => setPao2Input(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-white placeholder:text-slate-600'
+                          : 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
+                      }`}
+                    />
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                      Arteriyel kan gazı <MedicalText text="P_{a}O_{2}" /> değeri girilirse P/F otomatik hesaplanır.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Output Column */}
+                <div
+                  className={`lg:col-span-6 rounded-xl border p-3.5 space-y-2.5 ${
+                    isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
+                  }`}
+                >
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className={`rounded-lg border p-2.5 ${subtlePanel}`}>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        {fio2Calc.isFixedFio2 ? 'Kesin FiO₂' : 'Tahmini FiO₂'}
+                      </div>
+                      <div className="flex items-baseline gap-1.5 mt-0.5">
+                        <span className="text-2xl font-mono font-black tabular-nums text-sky-600 dark:text-sky-400">
+                          %{fio2Calc.estFio2Pct}
+                        </span>
+                        <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                          ({fio2Calc.fio2Decimal.toFixed(2).replace('.', ',')})
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className={`rounded-lg border p-2.5 ${subtlePanel}`}>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        {fio2Calc.isFixedFio2 ? 'P/F Oranı' : 'Tahmini P/F Oranı'}
+                      </div>
+                      {fio2Calc.pfRatio !== null ? (
+                        <div className="flex items-baseline gap-1 mt-0.5">
+                          <span
+                            className={`text-2xl font-mono font-black tabular-nums ${
+                              fio2Calc.pfCategory?.tone === 'rose'
+                                ? 'text-rose-600 dark:text-rose-400'
+                                : fio2Calc.pfCategory?.tone === 'amber'
+                                  ? 'text-amber-600 dark:text-amber-400'
+                                  : fio2Calc.pfCategory?.tone === 'emerald'
+                                    ? 'text-emerald-600 dark:text-emerald-400'
+                                    : 'text-sky-600 dark:text-sky-400'
+                            }`}
+                          >
+                            {fio2Calc.pfRatio}
+                          </span>
+                          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">mmHg</span>
+                        </div>
+                      ) : (
+                        <div className="text-xs text-slate-400 mt-2 font-medium">
+                          <MedicalText text="P_{a}O_{2}" /> giriniz
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {fio2Calc.pfCategory && (
+                    <div
+                      className={`rounded-lg border px-3 py-2 text-xs leading-relaxed ${
+                        fio2Calc.pfCategory.tone === 'rose'
+                          ? isDark
+                            ? 'bg-rose-950/30 border-rose-500/40 text-rose-200'
+                            : 'bg-rose-50 border-rose-200 text-rose-900'
+                          : fio2Calc.pfCategory.tone === 'amber'
+                            ? isDark
+                              ? 'bg-amber-950/30 border-amber-500/40 text-amber-200'
+                              : 'bg-amber-50 border-amber-200 text-amber-900'
+                            : fio2Calc.pfCategory.tone === 'emerald'
+                              ? isDark
+                                ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
+                                : 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                              : isDark
+                                ? 'bg-sky-950/30 border-sky-500/40 text-sky-200'
+                                : 'bg-sky-50 border-sky-200 text-sky-900'
+                      }`}
+                    >
+                      <div className="font-bold">{fio2Calc.pfCategory.label}</div>
+                      <div className="text-[11px] mt-0.5 opacity-90">{fio2Calc.pfCategory.detail}</div>
+                    </div>
+                  )}
+
+                  {fio2Calc.warning && (
+                    <div className="rounded-lg border border-rose-500/40 bg-rose-500/10 p-2.5 text-xs text-rose-700 dark:text-rose-200 flex items-start gap-2">
+                      <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-500" />
+                      <span>{fio2Calc.warning}</span>
+                    </div>
+                  )}
+
+                  <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                    {fio2Calc.rangeNote}
+                    {!fio2Calc.isFixedFio2 &&
+                      ' Değişken performanslı cihazlarda FiO₂ tahmini olduğu için P/F oranı yaklaşık değerlendirme sunar.'}
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
