@@ -26,27 +26,29 @@ import {
 } from 'lucide-react';
 
 /**
- * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v3.0)
+ * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v4.0)
  * -------------------------------------------------------------------------
  * Tedaviler ve İlaçlar modülüne eklenecek her yeni ilaç monografisi ve
  * güncellenen mevcut monografiler aşağıdaki çekirdek klinik sütunları
- * ve sıralamayı (Kontrendikasyonlar DAİMA Endikasyonlardan önce) içermelidir:
+ * ve sıralamayı (Kontrendikasyonlar DAİMA Endikasyonlardan önce; tekrarsız
+ * tek kaynak mimarisi) içermelidir:
  *
- * 1. Kimlik, Klinik Özet Header & Etki Mekanizması (`MechanismOfActionBlock`)
- * 2. Farmakokinetik / Farmakodinamik (PK/PD) Profili (Açılır-Kapanır Akordiyon)
- * 3. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`) — Endikasyonlardan ÖNCE
- * 4. Klinik Endikasyonlar ve Doz Rejimleri (Yetişkin, Pediatrik, Özel Senaryolar)
- * 5. Etkileşimli Doz & İnfüzyon Hesaplayıcı (`MonographCopyButton` + `ObesityDosingScaler`)
- * 6. Türkiye Preparat & Konsantrasyon Rehberi (`TurkeyFormulationBlock`)
- * 7. Damar Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon (`CompatibilityAndLineBlock`)
- * 8. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`)
- * 9. Geriatri (>65 Yaş / Kırılganlık) & Obezite Doz Yönetimi (`GeriatricAndObesityBlock`)
- * 10. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`)
- * 11. Önemli Olumsuz Etkiler (`AdverseEffectsBlock`)
- * 12. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`)
- * 13. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock`)
- * 14. Derin Farmakodinamik & Sistemik Fizyoloji Analizi (`DeepPharmacodynamicsBlock` — Akordiyon)
- * 15. Şiddet Dereceli İlaç Etkileşimleri & Kanıta Dayalı Kaynakça (`DrugReferencesAndInteractionsBlock`)
+ * 1. Hızlı Bölüm Navigasyon Barı (`MonographQuickNav`) — En Üstte
+ * 2. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock` — En Üstte, Varsayılan Kapalı Akordiyon)
+ * 3. Kimlik, Klinik Özet Header & Etki Mekanizması (`MechanismOfActionBlock`)
+ * 4. Farmakokinetik / Farmakodinamik (PK/PD) Profili (Varsayılan Kapalı Akordiyon)
+ * 5. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`) — Endikasyonlardan ÖNCE
+ * 6. Klinik Endikasyonlar ve Doz Rejimleri (Yetişkin, Pediatrik, Özel Senaryolar)
+ * 7. Etkileşimli Doz & İnfüzyon Hesaplayıcı (`MonographCopyButton` + `ObesityDosingScaler`)
+ * 8. Türkiye Preparat & Konsantrasyon Rehberi (`TurkeyFormulationBlock`) — Eski sulandırma tekrarını kaldırır
+ * 9. Damar Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon (`CompatibilityAndLineBlock`)
+ * 10. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`)
+ * 11. Geriatri (>65 Yaş / Kırılganlık) & Obezite Doz Yönetimi (`GeriatricAndObesityBlock`)
+ * 12. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`)
+ * 13. Önemli Olumsuz Etkiler (`AdverseEffectsBlock`)
+ * 14. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`)
+ * 15. Derin Farmakodinamik & Sistemik Fizyoloji Analizi (`DeepPharmacodynamicsBlock` — Varsayılan Kapalı Akordiyon)
+ * 16. Şiddet Dereceli İlaç Etkileşimleri & Kanıta Dayalı Kaynakça (`DrugReferencesAndInteractionsBlock`)
  */
 export interface GoldStandardSectionSpec {
   id: string;
@@ -56,9 +58,9 @@ export interface GoldStandardSectionSpec {
 }
 
 export const GOLD_STANDARD_SECTIONS: GoldStandardSectionSpec[] = [
-  { id: 'sec-ozet', order: 1, title: 'Klinik Kimlik & Özet' },
-  { id: 'sec-etki', order: 2, title: 'Etki Mekanizması', requiredComponent: 'MechanismOfActionBlock' },
-  { id: 'sec-pkpd', order: 3, title: 'Farmakokinetik & Farmakodinamik' },
+  { id: 'sec-guvenlik', order: 1, title: 'ISMP High-Alert & Tall-Man Güvenliği (Akordiyon)', requiredComponent: 'HighAlertSafetyBlock' },
+  { id: 'sec-ozet', order: 2, title: 'Klinik Kimlik, Özet & Etki Mekanizması', requiredComponent: 'MechanismOfActionBlock' },
+  { id: 'sec-pkpd', order: 3, title: 'Farmakokinetik & Farmakodinamik (Akordiyon)' },
   { id: 'sec-kontrendikasyon', order: 4, title: 'Mutlak vs Relatif Kontrendikasyonlar', requiredComponent: 'ContraindicationsGridBlock' },
   { id: 'sec-dozlar', order: 5, title: 'Endikasyonlar & Dozaj' },
   { id: 'sec-hesaplayici', order: 6, title: 'Doz & İnfüzyon Hesaplayıcı', requiredComponent: 'MonographCopyButton' },
@@ -69,9 +71,8 @@ export const GOLD_STANDARD_SECTIONS: GoldStandardSectionSpec[] = [
   { id: 'sec-gebelik', order: 11, title: 'Gebelik & Laktasyon', requiredComponent: 'PregnancyLactationBlock' },
   { id: 'sec-olumsuz', order: 12, title: 'Önemli Olumsuz Etkiler (Adverse Effects)', requiredComponent: 'AdverseEffectsBlock' },
   { id: 'sec-ozel-durumlar', order: 13, title: 'Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar', requiredComponent: 'SpecialClinicalCautionsBlock' },
-  { id: 'sec-guvenlik', order: 14, title: 'ISMP High-Alert & Tall-Man Güvenliği', requiredComponent: 'HighAlertSafetyBlock' },
-  { id: 'sec-derin-pd', order: 15, title: 'Derin Farmakodinamik & Sistemik Fizyoloji Analizi', requiredComponent: 'DeepPharmacodynamicsBlock' },
-  { id: 'sec-kaynaklar', order: 16, title: 'İlaç Etkileşimleri & Kaynakça (PubMed/DOI)', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
+  { id: 'sec-derin-pd', order: 14, title: 'Derin Farmakodinamik & Sistemik Fizyoloji Analizi (Akordiyon)', requiredComponent: 'DeepPharmacodynamicsBlock' },
+  { id: 'sec-kaynaklar', order: 15, title: 'İlaç Etkileşimleri & Kaynakça (PubMed/DOI)', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
 ];
 
 export interface MonographNavItem {
@@ -161,6 +162,7 @@ interface HighAlertSafetyBlockProps {
   confusionRiskWith: string;
   criticalAlerts: string[];
   antidoteOrRescue: string;
+  defaultOpen?: boolean;
 }
 
 export const HighAlertSafetyBlock: React.FC<HighAlertSafetyBlockProps> = ({
@@ -171,17 +173,27 @@ export const HighAlertSafetyBlock: React.FC<HighAlertSafetyBlockProps> = ({
   confusionRiskWith,
   criticalAlerts,
   antidoteOrRescue,
+  defaultOpen = false,
 }) => {
+  const [open, setOpen] = useState<boolean>(defaultOpen);
+
   return (
     <section
       id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
+      className={`overflow-hidden rounded-2xl border transition-all ${
         isDark
           ? 'border-rose-900/60 bg-rose-950/20'
           : 'border-rose-200 bg-rose-50/70'
       }`}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        className={`flex w-full cursor-pointer flex-col gap-3 p-4 sm:p-5 text-left transition-colors sm:flex-row sm:items-center sm:justify-between ${
+          isDark ? 'hover:bg-rose-950/35' : 'hover:bg-rose-100/60'
+        }`}
+      >
         <div className="flex items-start gap-3">
           <div
             className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border ${
@@ -193,66 +205,86 @@ export const HighAlertSafetyBlock: React.FC<HighAlertSafetyBlockProps> = ({
             <AlertOctagon className="h-5 w-5" />
           </div>
           <div>
-            <p className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-700'}`}>
-              ISMP High-Alert Medication · Çift Kontrol Zorunlu
-            </p>
-            <h3 className={`mt-0.5 text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-700'}`}>
+                ISMP High-Alert Medication · Çift Kontrol Zorunlu
+              </p>
+              <span
+                className={`rounded-md px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+                  isDark ? 'bg-rose-950/80 text-rose-200' : 'bg-white text-rose-700 border border-rose-200'
+                }`}
+              >
+                {open ? 'Gizle' : 'Tıkla & Göster'}
+              </span>
+            </div>
+            <h3 className={`mt-0.5 text-base sm:text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
               {sectionTitle}
             </h3>
           </div>
         </div>
 
-        <div
-          className={`rounded-xl border px-3.5 py-2 font-mono text-xs ${
-            isDark
-              ? 'border-rose-500/30 bg-slate-950/70 text-rose-200'
-              : 'border-rose-200 bg-white text-rose-900'
-          }`}
-        >
-          <span className={`block text-[10px] uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-            ISMP Tall-Man Etiketleme
-          </span>
-          <span className="font-bold tracking-wide">{tallManName}</span>
-          <span className={`mx-1.5 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>vs</span>
-          <span className="font-semibold">{confusionRiskWith}</span>
+        <div className="flex items-center gap-3 self-end sm:self-center">
+          <div
+            className={`rounded-xl border px-3 py-1.5 font-mono text-xs ${
+              isDark
+                ? 'border-rose-500/30 bg-slate-950/70 text-rose-200'
+                : 'border-rose-200 bg-white text-rose-900'
+            }`}
+          >
+            <span className={`block text-[10px] uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              ISMP Tall-Man Etiketleme
+            </span>
+            <span className="font-bold tracking-wide">{tallManName}</span>
+            <span className={`mx-1.5 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>vs</span>
+            <span className="font-semibold">{confusionRiskWith}</span>
+          </div>
+          <div className={`shrink-0 ${isDark ? 'text-rose-300' : 'text-rose-600'}`}>
+            {open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+          </div>
         </div>
-      </div>
+      </button>
 
-      <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
+      {open && (
         <div
-          className={`rounded-xl border p-4 lg:col-span-2 ${
-            isDark ? 'border-slate-800 bg-slate-950/60' : 'border-rose-200/80 bg-white'
+          className={`grid grid-cols-1 gap-3 border-t p-4 sm:p-5 lg:grid-cols-3 ${
+            isDark ? 'border-rose-900/40' : 'border-rose-200/80'
           }`}
         >
-          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-            Kritik Uygulama ve Karışma Riski Önlemleri
-          </p>
-          <ul className={`mt-2.5 space-y-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-            {criticalAlerts.map((alert, idx) => (
-              <li key={idx} className="flex items-start gap-2">
-                <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-rose-400' : 'bg-rose-600'}`} />
-                <span>{alert}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+          <div
+            className={`rounded-xl border p-4 lg:col-span-2 ${
+              isDark ? 'border-slate-800 bg-slate-950/60' : 'border-rose-200/80 bg-white'
+            }`}
+          >
+            <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Kritik Uygulama ve Karışma Riski Önlemleri
+            </p>
+            <ul className={`mt-2.5 space-y-2 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              {criticalAlerts.map((alert, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? 'bg-rose-400' : 'bg-rose-600'}`} />
+                  <span>{alert}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <div
-          className={`rounded-xl border p-4 ${
-            isDark ? 'border-amber-500/30 bg-amber-950/20' : 'border-amber-200 bg-amber-50/80'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <ShieldAlert className={`h-4 w-4 ${isDark ? 'text-amber-300' : 'text-amber-700'}`} />
-            <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
-              Doz Aşımı / Antidot & Kurtarma
+          <div
+            className={`rounded-xl border p-4 ${
+              isDark ? 'border-amber-500/30 bg-amber-950/20' : 'border-amber-200 bg-amber-50/80'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <ShieldAlert className={`h-4 w-4 ${isDark ? 'text-amber-300' : 'text-amber-700'}`} />
+              <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
+                Doz Aşımı / Antidot &amp; Kurtarma
+              </p>
+            </div>
+            <p className={`mt-2.5 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              {antidoteOrRescue}
             </p>
           </div>
-          <p className={`mt-2.5 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-            {antidoteOrRescue}
-          </p>
         </div>
-      </div>
+      )}
     </section>
   );
 };

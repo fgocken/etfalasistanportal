@@ -29,6 +29,7 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MonographCopyButton,
+  MonographQuickNav,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
@@ -117,9 +118,52 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
   return (
     <div className="space-y-8 font-sans">
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0)                                   */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozlar', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON)     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="remiFENTANIL"
+        confusionRiskWith="FENTANİL · SUFENTANİL · ALFENTANİL"
+        antidoteOrRescue="Nalokson HCl + Acil Pozitif Basınçlı Ventilasyon: İnfüzyonu derhal durdurun ve hattaki ölü boşluğu (dead-space) yıkamayın! Apne/göğüs duvarı rijiditesinde %100 O₂ ile BVM ventilasyonu; rijidite ventilasyonu engelliyorsa kısa etkili NMB (süksinilkolin/roküronyum) veya Nalokson 40–80 mcg IV titre edin."
+        criticalAlerts={[
+          'Kırmızı Reçete & Bağımsız Çift Kontrol: Uluslararası kontrole tabi ultra-potent narkotik analjeziktir; yanlış pompa programlaması dakikalar içinde fatal solunum arrestine yol açar.',
+          'Ölü Boşluk (Dead-Space) Kazası: Remifentanil hattı asla hızlı sıvı bolusu verilen ana hattan puşe edilmez; hasta uyandıktan sonra hatta kalan kalıntı tek seferde giderek ani apne/rijidite yapabilir.',
+          'Nöroaksiyel Kontrendikasyon (Glisin): Ticari flakonlar nörotoksik glisin içerir; intratekal veya epidural yoldan asla uygulanmaz ve nöroaksiyel enjektörlerle temas ettirilmez.',
+          'Obez hastalarda (VKİ ≥ 30) daima LBW veya IBW ile dozlanır; TBW ile dozlama ağır bradikardi ve hipotansiyon riskidir. İnfüzyon bitiminde hat tamamen çıkarılmalı veya izole temizlenmelidir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 1. BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI                  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-ozet"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -181,6 +225,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 2. FARMAKOKİNETİK BÖLÜMÜ (AÇILIP KAPANABİLİR AKORDİYON)             */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -297,6 +342,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. KONTRENDİKASYONLAR                                               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-kontrendikasyon"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -365,6 +411,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 4. ENDİKASYONLAR VE OFF-LABEL KULLANIMLAR                          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-endikasyon"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -434,6 +481,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 5. UYGULAMA YOLLARI, ERİŞKİN VE PEDİATRİK DOZ REJİMLERİ            */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-dozlar"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -596,6 +644,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 6. İNTERAKTİF İNFÜZYON VE DOZ HESAPLAYICISI                         */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-hesaplayici"
         className={`p-5 sm:p-7 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900 border-rose-500/30 ring-1 ring-rose-500/20'
@@ -1067,36 +1116,30 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v3.0)                      */}
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                      */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <TurkeyFormulationBlock
         isDark={isDark}
         preparations={[
           {
-            name: 'Remifentanil 5 mg Flakon (Ultiva / Jenerikler)',
-            presentation: 'IV infüzyon için liyofilize toz içeren cam flakon (Türkiye ameliyathane & YBÜ pratiğinde en yaygın form)',
+            name: 'Remifentanil 5 mg Flakon (Ultiva / Ruhsatlı Tek Türkiye Formu)',
+            presentation: 'IV infüzyon için beyaz liyofilize toz içeren cam flakon (Türkiye piyasasında 1 mg ve 2 mg flakonlar ruhsatlı değildir; yalnızca 5 mg flakon bulunur)',
             concentration: '5 mg (5000 mcg) / flakon',
             saltOrBaseNote: '5 mg remifentanil baza eşdeğer remifentanil hidroklorür + 15 mg GLİSİN taşıyıcı içerir (nöroaksiyel uygulama kesinlikle kontrendikedir).',
             alertLevel: 'high',
           },
-          {
-            name: 'Remifentanil 2 mg Flakon (Bazı Hastane İhaleleri)',
-            presentation: 'IV infüzyon için liyofilize toz içeren cam flakon',
-            concentration: '2 mg (2000 mcg) / flakon',
-            saltOrBaseNote: '2 mg remifentanil baza eşdeğer + glisin taşıyıcı içerir. 5 mg flakonla karıştırıldığında 2.5 kat konsantrasyon hatası oluşur.',
-            alertLevel: 'standard',
-          },
         ]}
         standardDilutions={[
-          'Standart Erişkin (50 mcg/mL): 1 adet 5 mg flakon → 100 mL %0.9 NaCl veya %5 Dekstroz içine (ameliyathane & genel YBÜ standardı).',
-          'Konsantre / Sıvı Kısıtlamalı YBÜ (100 mcg/mL): 1 adet 5 mg flakon → 50 mL enjektör pompası içine.',
-          'Pediatrik / Seyreltik Titrasyon (20 mcg/mL): 1 adet 5 mg flakon → 250 mL %0.9 NaCl veya 2 mg flakon → 100 mL içine.',
+          'İlk Sulandırma (Reconstitution): 5 mg liyofilize toz flakon önce 5 mL %0.9 NaCl veya Enjeksiyonluk Su ile tamamen çözülür (1 mg/mL stok elde edilir).',
+          'Standart Erişkin (50 mcg/mL): Sulandırılmış 5 mg flakon (5 mL) + 95 mL %0.9 NaCl veya %5 Dekstroz → toplam 100 mL (ameliyathane & genel YBÜ standardı).',
+          'Konsantre / Sıvı Kısıtlamalı YBÜ (100 mcg/mL): Sulandırılmış 5 mg flakon → 50 mL enjektör pompası içinde SF ile 50 mL’ye tamamlanır.',
+          'Pediatrik / Seyreltik Titrasyon (20 mcg/mL): Sulandırılmış 5 mg flakon → 250 mL %0.9 NaCl torbasına eklenir (5000 mcg / 250 mL).',
         ]}
-        concentrationTrapWarning="Hastane eczanesinden 2 mg ve 5 mg flakonlar aynı anda bulunabilir. Sulandırma öncesi flakon üzerindeki mg değeri çift kontrol edilmeli; enjektör/torba etiketine nihai konsantrasyon (mcg/mL) mutlaka yazılmalıdır."
+        concentrationTrapWarning="Sulandırılmadan KESİNLİKLE enjekte edilmez; daima infüzyon pompası ile kontrollü uygulanmalıdır. Enjektör veya torba etiketine hazırlanan nihai konsantrasyon (20, 50 veya 100 mcg/mL) mutlaka açıkça yazılmalıdır."
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v3.0)  */}
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0)  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <CompatibilityAndLineBlock
         isDark={isDark}
@@ -1137,6 +1180,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 7. BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU                               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-organ"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1344,6 +1388,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 10. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-olumsuz"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1406,162 +1451,6 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 10. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR                 */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className="w-5 h-5 text-teal-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar
-          </h2>
-        </div>
-
-        <div className="space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Postoperatif Analjezi Geçiş Planlaması:</strong> Cerrahi
-              sona ermeden 30-45 dakika önce uzun etkili bir analjezik (morfin, tramadol, parasetamol, NSAİİ veya rejyonel blok)
-              uygulanmalıdır. Remifentanil kapatıldığında geride hiç analjezik etkisi kalmaz!
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Geriatrik / Yaşlı Hastalar:</strong> 65 yaş üzeri
-              hastalarda farmakodinamik duyarlılık 2 kat artar, santral kompartman hacmi küçülür. Başlangıç dozu ve infüzyon
-              hızları <strong>%50 oranında azaltılmalıdır</strong>.
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Obez Hastalarda Dozlama:</strong> Remifentanil lipofilik
-              olmasına karşın aşırı yağ dokusuna belirgin dağılmaz. Doz mutlaka <strong>İdeal Vücut Ağırlığı (IBW)</strong> veya
-              yağsız vücut kütlesi (Lean Body Mass) üzerinden hesaplanmalıdır; total ağırlıkla dozlama ölümcül aşırı doza yol açar.
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Hızlı Bolustan Kesinlikle Kaçınma:</strong> İndüksiyon bolusları
-              asla 30 saniyeden kısa sürede enjekte edilmemelidir. Anestezi uzmanı hazırda atropin ve kas gevşetici bulundurmalıdır.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 11. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ                */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Pill className="w-5 h-5 text-indigo-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            IV Uygulama ve Sulandırma / Hazırlama Şekilleri
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block">
-              Piyasa Formları ve Seyreltme Protokolü
-            </span>
-            <ul className="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400">
-              <li>
-                <strong>Türkiye Piyasa Formu:</strong> Türkiye'de sadece <strong>5 mg beyaz liyofilize toz içeren flakon (Ultiva 5 mg)</strong> ruhsatlıdır (1 mg ve 2 mg flakonlar Türkiye piyasasında yer almamaktadır).
-              </li>
-              <li>
-                <strong>Standart Çözelti (50 mcg/mL):</strong> 5 mg flakon önce 5 mL SF ile sulandırılır, ardından 95 mL %0.9 NaCl (veya %5 Dekstroz) ile <strong>100 mL'ye tamamlanır</strong>.
-              </li>
-              <li>
-                <strong>Seyreltik Çözelti (20 mcg/mL):</strong> 5 mg flakon sulandırılıp 250 mL %0.9 NaCl torbasına eklenir (5000 mcg / 250 mL).
-              </li>
-              <li>
-                <strong>Konsantre Çözelti (100 mcg/mL):</strong> 5 mg flakon 50 mL enjektörde SF ile 50 mL'ye tamamlanır (YBÜ / Santral Yol).
-              </li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-rose-500/5 space-y-2">
-            <span className="font-bold text-rose-700 dark:text-rose-300 block flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4" />
-              <span>Hayati Sulandırma &amp; Uygulama Kuralları</span>
-            </span>
-            <ul className="space-y-1.5 list-disc list-inside text-slate-700 dark:text-slate-300">
-              <li>
-                <strong>Sulandırılmadan KESİNLİKLE enjekte edilmez!</strong> Daima infüzyon pompası ile kontrollü uygulanmalıdır.
-              </li>
-              <li>
-                <strong>Kan Ürünleri ile Karıştırılmaz:</strong> Kan/plazma ile aynı damar yolundan verilmemelidir (kan esterazları ilacı infüzyon hattında parçalar).
-              </li>
-              <li>
-                <strong>İnfüzyon Hattının Yıkanması (Flushing) Riski:</strong> İnfüzyon kapatıldıktan sonra damar yolu hızlıca
-                yıkanırsa hatta kalan remifentanil bolus halinde giderek ani apne ve bradikardiye neden olabilir. Hat kapatılmalı
-                veya dikkatle aspire edilmelidir.
-              </li>
-              <li>
-                Geçimlilik: %0.9 NaCl, %5 Dekstroz, Ringer Laktat ile 24 saat oda sıcaklığında stabildir.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 12. İLAÇ GÜVENLİĞİ VE YÜKSEK RİSKLİ İLAÇ (HIGH-ALERT) DURUMLARI     */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <ShieldCheck className="w-5 h-5 text-indigo-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            İlaç Güvenliği ve Yüksek Riskli İlaç (ISMP High-Alert) Uyarıları
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs sm:text-sm">
-          <div className="p-3.5 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-rose-500/5 space-y-1">
-            <span className="font-bold text-rose-700 dark:text-rose-300 block">Kırmızı Reçete &amp; Narkotik</span>
-            <p className="text-slate-600 dark:text-slate-400 text-xs">
-              Uluslararası kontrole tabi narkotik analjeziktir. Yanlış programlama dakikalar içinde fatal solunum arrestine
-              yol açar. Bağımsız çift kontrol zorunludur.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-500/5 space-y-1">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Nörotoksisite (Glisin)</span>
-            <p className="text-slate-600 dark:text-slate-400 text-xs">
-              Glisin taşıyıcısı içerdiğinden intratekal/epidural verildiğinde geri dönüşsüz spinal hasara yol açar.
-              Nöraksiyel enjektörlerle asla temas etmemelidir.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-500/5 space-y-1">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Hızlı Kesilme &amp; Hiperaljezi</span>
-            <p className="text-slate-600 dark:text-slate-400 text-xs">
-              Analjezi infüzyon kapandıktan 5–10 dakika içinde biter. Uzun cerrahi sonrası köprü analjezik
-              (parasetamol, NSAİİ, tramadol/morfin) verilmezse akut opioid kaynaklı hiperaljezi gelişir.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <SpecialClinicalCautionsBlock
         isDark={isDark}
         items={[
@@ -1573,7 +1462,12 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
           {
             title: 'Akut Opioid Kaynaklı Hiperaljezi (OIH) & Köprü Analjezi Zorunluluğu',
             detail:
-              'Özellikle > 0,2–0,3 mcg/kg/dk yüksek doz ve uzun infüzyon sonrası NMDA reseptör aktivasyonu ile postoperatif hiperaljezi gelişebilir. İnfüzyon kapatılmadan 20–30 dk önce mutlaka köprü analjezik (morfin/fentanil/parasetamol/NSAİİ veya düşük doz ketamin) uygulanmalıdır.',
+              'Özellikle > 0,2–0,3 mcg/kg/dk yüksek doz ve uzun infüzyon sonrası NMDA reseptör aktivasyonu ile postoperatif hiperaljezi gelişebilir. İnfüzyon kapatılmadan 30–45 dk önce mutlaka uzun etkili köprü analjezik (morfin/fentanil/parasetamol/NSAİİ, rejyonel blok veya düşük doz ketamin) uygulanmalıdır.',
+          },
+          {
+            title: 'Hızlı Bolustan Kesinlikle Kaçınma (> 30–60 sn İnfüzyon Kuralı)',
+            detail:
+              'İndüksiyon bolusları asla 30 saniyeden kısa sürede enjekte edilmemelidir (tercihen ≥ 60 sn). Göğüs duvarı rijiditesi ve ani vagotonik bradikardiye karşı yatak başında atropin ve kısa etkili NMB hazır bulundurulmalıdır.',
           },
           {
             title: 'İntratekal / Epidural Uygulama KESİNLİKLE KONTRENDİKEDİR (Glisin Taşıyıcı)',
@@ -1583,20 +1477,8 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      <HighAlertSafetyBlock
-        isDark={isDark}
-        tallManName="remiFENTANIL (Ultra-Potent Opioid · Ayrı Hat + Çek-Valf!)"
-        confusionRiskWith="FENTANİL · SUFENTANİL · ALFENTANİL"
-        antidoteOrRescue="Nalokson HCl + Acil Pozitif Basınçlı Ventilasyon: İnfüzyonu derhal durdurun ve hattaki ölü boşluğu (dead-space) yıkamayın! Apne/göğüs duvarı rijiditesinde %100 O₂ ile BVM ventilasyonu; rijidite ventilasyonu engelliyorsa kısa etkili NMB (süksinilkolin/roküronyum) veya Nalokson 40–80 mcg IV titre edin."
-        criticalAlerts={[
-          'Ölü Boşluk (Dead-Space) Kazası: Remifentanil hattı asla hızlı sıvı bolusu verilen ana hattan puşe edilmez; hasta uyandıktan sonra hatta kalan kalıntı tek seferde giderek ani apne/rijidite yapabilir.',
-          'Obez hastalarda (VKİ ≥ 30) daima LBW veya IBW ile dozlanır; TBW ile dozlama ağır bradikardi ve hipotansiyon riskidir.',
-          'İnfüzyon bitiminde hat tamamen çıkarılmalı veya izole şekilde temizlenmelidir.',
-        ]}
-      />
-
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v3.0) */}
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
