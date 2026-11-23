@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Activity,
   ArrowLeft,
@@ -7,6 +7,7 @@ import {
   PlusCircle,
 } from 'lucide-react';
 import { ShareLinkButton } from '../common/ShareLinkButton';
+import { updateHashRoute } from '../../utils/deepLink';
 import { AsaBasicMonitoringInfographic } from '../infographics/AsaBasicMonitoringInfographic';
 import { PulseOximetryModule } from './PulseOximetryModule';
 import { CapnographyModule } from './CapnographyModule';
@@ -38,8 +39,12 @@ import { IntraoperativeBleedingMonitoringModule } from './IntraoperativeBleeding
 import { ViscoelasticHemostasisModule } from './ViscoelasticHemostasisModule';
 import { MedicalText } from '../basics/respiratory/MedicalText';
 
+export type MonitoringModuleId = MonitoringCardItem['id'];
+
 interface MonitoringWorkspaceProps {
   isDark: boolean;
+  initialModuleId?: string | null;
+  onActiveModuleChange?: (id: MonitoringModuleId | null) => void;
 }
 
 interface MonitoringCardItem {
@@ -1316,9 +1321,32 @@ const ADVANCED_MODULE_ORDER: MonitoringCardItem['id'][] = [
   'esophageal-pressure',
 ];
 
-export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark }) => {
-  const [activeModuleId, setActiveModuleId] = useState<MonitoringCardItem['id'] | null>(null);
+const isValidMonitoringModuleId = (id?: string | null): id is MonitoringModuleId =>
+  Boolean(id && MONITORING_MODULES.some((m) => m.id === id));
+
+export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({
+  isDark,
+  initialModuleId = null,
+  onActiveModuleChange,
+}) => {
+  const [activeModuleId, setActiveModuleIdState] = useState<MonitoringModuleId | null>(
+    isValidMonitoringModuleId(initialModuleId) ? initialModuleId : null
+  );
   const [tierFilter, setTierFilter] = useState<'all' | 'basic' | 'advanced'>('all');
+
+  useEffect(() => {
+    if (initialModuleId === undefined) return;
+    setActiveModuleIdState(isValidMonitoringModuleId(initialModuleId) ? initialModuleId : null);
+  }, [initialModuleId]);
+
+  const setActiveModuleId = (nextId: MonitoringModuleId | null) => {
+    setActiveModuleIdState(nextId);
+    onActiveModuleChange?.(nextId);
+    updateHashRoute('arac', nextId ? `monitoring&sub=${nextId}` : 'monitoring');
+    if (nextId) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const selectedModule = MONITORING_MODULES.find((item) => item.id === activeModuleId) ?? null;
 
@@ -1442,7 +1470,13 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
         <div className="flex items-center gap-2 self-start sm:self-auto">
           <ShareLinkButton
             type={activeModuleId === 'asa-basic-monitoring' ? 'infografik' : 'arac'}
-            id={activeModuleId === 'asa-basic-monitoring' ? 'asa-basic-monitoring' : 'monitoring'}
+            id={
+              activeModuleId === 'asa-basic-monitoring'
+                ? 'asa-basic-monitoring'
+                : activeModuleId
+                  ? `monitoring&sub=${activeModuleId}`
+                  : 'monitoring'
+            }
             isDark={isDark}
             variant="compact"
             title={

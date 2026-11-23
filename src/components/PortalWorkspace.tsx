@@ -683,8 +683,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
     if (route?.type === 'infografik') {
       setActiveTab('infographics');
+      setSelectedInfographicId(route.id || null);
     } else if (route?.type === 'tedavi') {
       setActiveTab('treatments');
+      setSelectedTreatmentProtocolId(route.id || null);
     } else if (route?.type === 'blok') {
       setActiveTab('nerve-blocks');
       setSelectedNerveBlockId(route.id || null);
@@ -698,6 +700,16 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         setSelectedBasicsCardId(route.subId || null);
       } else if (route.id === 'mechanical-ventilation') {
         setSelectedVentilationCardId(route.subId || null);
+      } else if (route.id === 'monitoring') {
+        setSelectedMonitoringModuleId(route.subId || null);
+      } else if (route.id === 'procedures') {
+        setSelectedProcedureId(route.subId || null);
+      } else if (route.id === 'vascular-access') {
+        setSelectedVascularSubId(route.subId || null);
+      } else if (route.id === 'icu') {
+        setSelectedIcuSubId(route.subId || null);
+      } else if (route.id === 'emergencies') {
+        setSelectedEmergencyProtocolId(route.subId || null);
       }
     }
   }, [initialRoute]);
@@ -712,6 +724,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       preserveNerveBlock?: boolean;
       preserveBasicsCard?: boolean;
       preserveVentilationCard?: boolean;
+      preserveMonitoringModule?: boolean;
+      preserveProcedure?: boolean;
+      preserveVascularSub?: boolean;
+      preserveIcuSub?: boolean;
+      preserveInfographic?: boolean;
     }
   ) => {
     setActiveTab(tabId);
@@ -735,6 +752,21 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
     if (!options?.preserveVentilationCard) {
       setSelectedVentilationCardId(null);
+    }
+    if (!options?.preserveMonitoringModule) {
+      setSelectedMonitoringModuleId(null);
+    }
+    if (!options?.preserveProcedure) {
+      setSelectedProcedureId(null);
+    }
+    if (!options?.preserveVascularSub) {
+      setSelectedVascularSubId(null);
+    }
+    if (!options?.preserveIcuSub) {
+      setSelectedIcuSubId(null);
+    }
+    if (!options?.preserveInfographic) {
+      setSelectedInfographicId(null);
     }
     if (tabId === 'tools') {
       updateHashRoute('arac', 'dashboard');
@@ -869,6 +901,41 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
     return null;
   });
+  const [selectedMonitoringModuleId, setSelectedMonitoringModuleId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'monitoring' && route.subId) {
+      return route.subId;
+    }
+    return null;
+  });
+  const [selectedProcedureId, setSelectedProcedureId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'procedures' && route.subId) {
+      return route.subId;
+    }
+    return null;
+  });
+  const [selectedVascularSubId, setSelectedVascularSubId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'vascular-access' && route.subId) {
+      return route.subId;
+    }
+    return null;
+  });
+  const [selectedIcuSubId, setSelectedIcuSubId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'icu' && route.subId) {
+      return route.subId;
+    }
+    return null;
+  });
+  const [selectedInfographicId, setSelectedInfographicId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'infografik' && route.id) {
+      return route.id;
+    }
+    return null;
+  });
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -888,182 +955,111 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isSearchModalOpen]);
 
+  // Declarative deep-link dispatcher: driven directly by item.tabId + item.subId
   const handleSelectSearchResult = (item: PortalSearchItem) => {
+    const subId = item.subId ?? null;
+
     if (item.tabId === 'disclaimer') {
       onOpenDisclaimer();
-    } else if (item.tabId === 'infographics') {
-      if (item.id.startsWith('info-')) {
-        const infoId = item.id.replace('info-', '');
-        updateHashRoute('infografik', infoId);
-      }
-      handleSelectTab('infographics');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'emergencies') {
-      let targetEmergencyId: string | null = null;
-      if (item.id === 'emergency-malignant-hyperthermia') {
-        targetEmergencyId = 'mh';
-      } else if (item.id === 'emergency-pulmonary-embolism') {
-        targetEmergencyId = 'pe';
-      } else if (item.id === 'emergency-venous-air-embolism') {
-        targetEmergencyId = 'vae';
-      } else if (item.id === 'emergency-last-toxicity') {
-        targetEmergencyId = 'last';
-      } else if (item.id === 'emergency-anaphylaxis-shock') {
-        targetEmergencyId = 'anaphylaxis';
-      } else if (item.id === 'emergency-perioperative-acls') {
-        targetEmergencyId = 'acls';
-      } else if (item.id === 'emergency-massive-transfusion') {
-        targetEmergencyId = 'mtp';
-      } else if (item.id === 'emergency-tension-pneumothorax') {
-        targetEmergencyId = 'tension-pneumothorax';
-      } else if (item.id === 'emergency-airway-fire') {
-        targetEmergencyId = 'airway-fire';
-      } else if (item.id === 'emergency-etco2-elevation') {
-        targetEmergencyId = 'etco2-elevation';
-      } else if (item.id === 'emergency-etco2-decrease') {
-        targetEmergencyId = 'etco2-decrease';
-      } else if (item.id === 'emergency-fico2-elevation') {
-        targetEmergencyId = 'fico2-elevation';
-      } else if (item.id === 'emergency-ppeak-elevation') {
-        targetEmergencyId = 'ppeak-elevation';
-      } else if (item.id === 'emergency-hypoxemia') {
-        targetEmergencyId = 'hypoxemia';
-      } else if (item.id === 'emergency-emergence-delay') {
-        targetEmergencyId = 'emergence-delay';
-      }
-      setSelectedEmergencyProtocolId(targetEmergencyId);
-      handleSelectTab('emergencies', { preserveEmergencyProtocol: true });
-      if (targetEmergencyId) {
-        updateHashRoute('arac', `emergencies&sub=${targetEmergencyId}`);
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'treatments') {
-      let targetTreatmentId: string | null = null;
-      if (item.id === 'treatment-epinephrine-protocol') {
-        targetTreatmentId = 'epinephrine';
-      } else if (item.id === 'treatment-norepinephrine-protocol') {
-        targetTreatmentId = 'norepinephrine';
-      } else if (item.id === 'treatment-dexmedetomidine-protocol') {
-        targetTreatmentId = 'dexmedetomidine';
-      } else if (item.id === 'treatment-remifentanil-protocol') {
-        targetTreatmentId = 'remifentanil';
-      } else if (item.id === 'treatment-fentanyl-protocol') {
-        targetTreatmentId = 'fentanyl';
-      } else if (item.id === 'treatment-propofol-protocol') {
-        targetTreatmentId = 'propofol';
-      } else if (item.id === 'treatment-midazolam-protocol') {
-        targetTreatmentId = 'midazolam';
-      } else if (item.id === 'treatment-lidocaine-protocol') {
-        targetTreatmentId = 'lidocaine';
-      } else if (item.id === 'treatment-ketamine-protocol') {
-        targetTreatmentId = 'ketamine';
-      } else if (item.id === 'treatment-sevoflurane-protocol') {
-        targetTreatmentId = 'sevoflurane';
-      } else if (item.id === 'treatment-desflurane-protocol') {
-        targetTreatmentId = 'desflurane';
-      } else if (item.id === 'treatment-acetazolamide-protocol') {
-        targetTreatmentId = 'acetazolamide';
-      } else if (item.id === 'treatment-furosemide-protocol') {
-        targetTreatmentId = 'furosemide';
-      } else if (item.id === 'treatment-atropine-protocol') {
-        targetTreatmentId = 'atropine';
-      } else if (item.id === 'treatment-ephedrine-protocol') {
-        targetTreatmentId = 'ephedrine';
-      } else if (item.id === 'treatment-naloxone-protocol') {
-        targetTreatmentId = 'naloxone';
-      } else if (item.id === 'treatment-magnesium-replacement' || item.id === 'treatment-hypomagnesemia-infographic') {
-        targetTreatmentId = 'magnesium';
-      } else if (item.id === 'treatment-potassium-replacement' || item.id === 'treatment-hypokalemia-infographic') {
-        targetTreatmentId = 'potassium';
-      } else if (item.id === 'treatment-sodium-correction-calculator' || item.id === 'treatment-hyponatremia-infographic') {
-        targetTreatmentId = 'sodium';
-      }
-      setSelectedTreatmentProtocolId(targetTreatmentId);
-      handleSelectTab('treatments', { preserveTreatmentProtocol: true });
-      if (targetTreatmentId) {
-        updateHashRoute('tedavi', targetTreatmentId);
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'intraop') {
-      if (item.id === 'calc-intraop-npo' || item.id === 'calc-tissue-trauma') {
-        setIntraopInitialStrategy('liberal');
-      } else {
-        setIntraopInitialStrategy('liberal');
-      }
-      handleSelectTab('intraop');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'preop') {
-      if (item.id === 'calc-preop-stop-bang') {
-        setSelectedPreopToolId('stop-bang');
-      } else if (item.id === 'calc-preop-dasi') {
-        setSelectedPreopToolId('dasi');
-      } else if (item.id === 'calc-mace-rcri' || item.id === 'calc-mace-gupta') {
-        setSelectedPreopToolId('mace');
-      } else if (item.id.includes('asa')) {
-        setSelectedPreopToolId('asa');
-      } else {
-        setSelectedPreopToolId(null);
-      }
-      handleSelectTab('preop', { preservePreopTool: true });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'airway') {
-      if (item.id === 'airway-adult-equipment-sizer') {
-        setSelectedAirwayCardId('adult-equipment-sizer');
-        handleSelectTab('airway', { preserveAirwayCard: true });
-      } else if (item.id === 'airway-pediatric-equipment-sizer') {
-        setSelectedAirwayCardId('pediatric-equipment-sizer');
-        handleSelectTab('airway', { preserveAirwayCard: true });
-      } else {
-        setSelectedAirwayCardId(null);
-        handleSelectTab('airway');
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'nerve-blocks') {
-      if (item.id === 'tool-neuraxial-library') {
-        setSelectedNerveBlockId('neuraxial');
-        handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
-        updateHashRoute('blok', 'neuraxial');
-      } else if (item.id === 'block-spinal-anestezi') {
-        setSelectedNerveBlockId('spinal-anestezi');
-        handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
-        updateHashRoute('blok', 'spinal-anestezi');
-      } else if (item.id === 'calc-last-intralipid') {
-        setSelectedNerveBlockId('last');
-        handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
-        updateHashRoute('blok', 'last');
-      } else {
-        setSelectedNerveBlockId(null);
-        handleSelectTab('nerve-blocks');
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'basics') {
-      if (item.id === 'basics-respiratory-physiology') {
-        setSelectedBasicsCardId('respiratory-physiology');
-        handleSelectTab('basics', { preserveBasicsCard: true });
-        updateHashRoute('arac', 'basics&sub=respiratory-physiology');
-      } else if (item.id === 'basics-cardiovascular-physiology') {
-        setSelectedBasicsCardId('cardiovascular-physiology');
-        handleSelectTab('basics', { preserveBasicsCard: true });
-        updateHashRoute('arac', 'basics&sub=cardiovascular-physiology');
-      } else {
-        setSelectedBasicsCardId(null);
-        handleSelectTab('basics');
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (item.tabId === 'mechanical-ventilation') {
-      if (item.id === 'tool-respiratory-support-oxygen-therapy') {
-        setSelectedVentilationCardId('oxygen-therapy');
-        handleSelectTab('mechanical-ventilation', { preserveVentilationCard: true });
-        updateHashRoute('arac', 'mechanical-ventilation&sub=oxygen-therapy');
-      } else {
-        setSelectedVentilationCardId(null);
-        handleSelectTab('mechanical-ventilation');
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      handleSelectTab(item.tabId);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
+
+    switch (item.tabId) {
+      case 'infographics': {
+        const targetInfoId = subId || (item.id.startsWith('info-') ? item.id.replace('info-', '') : null);
+        setSelectedInfographicId(targetInfoId);
+        handleSelectTab('infographics', { preserveInfographic: true });
+        if (targetInfoId) {
+          updateHashRoute('infografik', targetInfoId);
+        }
+        break;
+      }
+      case 'monitoring': {
+        setSelectedMonitoringModuleId(subId);
+        handleSelectTab('monitoring', { preserveMonitoringModule: true });
+        updateHashRoute('arac', subId ? `monitoring&sub=${subId}` : 'monitoring');
+        break;
+      }
+      case 'procedures': {
+        setSelectedProcedureId(subId);
+        handleSelectTab('procedures', { preserveProcedure: true });
+        updateHashRoute('arac', subId ? `procedures&sub=${subId}` : 'procedures');
+        break;
+      }
+      case 'vascular-access': {
+        setSelectedVascularSubId(subId);
+        handleSelectTab('vascular-access', { preserveVascularSub: true });
+        updateHashRoute('arac', subId ? `vascular-access&sub=${subId}` : 'vascular-access');
+        break;
+      }
+      case 'icu': {
+        setSelectedIcuSubId(subId);
+        handleSelectTab('icu', { preserveIcuSub: true });
+        updateHashRoute('arac', subId ? `icu&sub=${subId}` : 'icu');
+        break;
+      }
+      case 'emergencies': {
+        setSelectedEmergencyProtocolId(subId);
+        handleSelectTab('emergencies', { preserveEmergencyProtocol: true });
+        if (subId) {
+          updateHashRoute('arac', `emergencies&sub=${subId}`);
+        }
+        break;
+      }
+      case 'treatments': {
+        setSelectedTreatmentProtocolId(subId);
+        handleSelectTab('treatments', { preserveTreatmentProtocol: true });
+        if (subId) {
+          updateHashRoute('tedavi', subId);
+        }
+        break;
+      }
+      case 'nerve-blocks': {
+        setSelectedNerveBlockId(subId);
+        handleSelectTab('nerve-blocks', { preserveNerveBlock: true });
+        if (subId) {
+          updateHashRoute('blok', subId);
+        }
+        break;
+      }
+      case 'basics': {
+        setSelectedBasicsCardId(subId);
+        handleSelectTab('basics', { preserveBasicsCard: true });
+        if (subId) {
+          updateHashRoute('arac', `basics&sub=${subId}`);
+        }
+        break;
+      }
+      case 'mechanical-ventilation': {
+        setSelectedVentilationCardId(subId);
+        handleSelectTab('mechanical-ventilation', { preserveVentilationCard: true });
+        if (subId) {
+          updateHashRoute('arac', `mechanical-ventilation&sub=${subId}`);
+        }
+        break;
+      }
+      case 'preop': {
+        setSelectedPreopToolId((subId as PreopToolId) || null);
+        handleSelectTab('preop', { preservePreopTool: true });
+        break;
+      }
+      case 'airway': {
+        setSelectedAirwayCardId((subId as AirwayCardId) || null);
+        handleSelectTab('airway', { preserveAirwayCard: true });
+        break;
+      }
+      case 'intraop': {
+        setIntraopInitialStrategy('liberal');
+        handleSelectTab('intraop');
+        break;
+      }
+      default: {
+        handleSelectTab(item.tabId);
+        break;
+      }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const saveToolOrder = (newOrder: ToolTabId[]) => {
@@ -2087,7 +2083,11 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
         {/* 2D. Monitörizasyon */}
         {activeTab === 'monitoring' && (
-          <MonitoringWorkspace isDark={isDark} />
+          <MonitoringWorkspace
+            isDark={isDark}
+            initialModuleId={selectedMonitoringModuleId}
+            onActiveModuleChange={setSelectedMonitoringModuleId}
+          />
         )}
 
         {/* 2E. Temel Bilgiler */}
@@ -2163,7 +2163,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
         {/* 9B. Güvenli Vasküler Erişim */}
         {activeTab === 'vascular-access' && (
-          <VascularAccessWorkspace isDark={isDark} />
+          <VascularAccessWorkspace
+            isDark={isDark}
+            initialSubModule={selectedVascularSubId}
+          />
         )}
 
         {/* 10. Anestezi Acilleri */}
@@ -2183,7 +2186,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         {activeTab === 'infographics' && (
           <InfographicsView 
             isDark={isDark} 
-            initialInfographicId={initialRoute?.type === 'infografik' ? initialRoute.id : null}
+            initialInfographicId={
+              selectedInfographicId ||
+              (initialRoute?.type === 'infografik' ? initialRoute.id : null)
+            }
           />
         )}
 
@@ -2214,7 +2220,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
 
         {/* 11. Yoğun Bakım (ICU) Tool */}
         {activeTab === 'icu' && (
-          <IcuWorkspace isDark={isDark} />
+          <IcuWorkspace
+            isDark={isDark}
+            initialSubId={selectedIcuSubId}
+          />
         )}
 
         {/* 12. Sistematik Prosedür Bazlı Anestezi Yönetimi */}
@@ -2222,9 +2231,10 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <ProceduresWorkspace 
             isDark={isDark} 
             initialProcedureId={
-              initialRoute?.type === 'arac' && initialRoute.id === 'procedures'
+              selectedProcedureId ||
+              (initialRoute?.type === 'arac' && initialRoute.id === 'procedures'
                 ? initialRoute.subId || null
-                : null
+                : null)
             }
           />
         )}

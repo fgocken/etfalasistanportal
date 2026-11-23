@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShieldCheck, Compass, Crosshair, Activity, Droplet, AlertTriangle, Syringe } from 'lucide-react';
 import { IvAccessInfographic } from '../infographics/IvAccessInfographic';
 import { UsgCvcModule } from './UsgCvcModule';
@@ -7,9 +7,10 @@ import { ArterialCannulationModule } from './ArterialCannulationModule';
 
 interface VascularAccessWorkspaceProps {
   isDark: boolean;
+  initialSubModule?: string | null;
 }
 
-type VascularSubModuleId = 'peripheral-iv' | 'usg-cvc' | 'landmark-cvc' | 'arterial' | 'diva' | 'clabsi';
+export type VascularSubModuleId = 'peripheral-iv' | 'usg-cvc' | 'landmark-cvc' | 'arterial' | 'diva' | 'clabsi';
 
 interface SubModuleTab {
   id: VascularSubModuleId;
@@ -71,8 +72,23 @@ const SUB_MODULES: SubModuleTab[] = [
   },
 ];
 
-export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = ({ isDark }) => {
-  const [activeSubModule, setActiveSubModule] = useState<VascularSubModuleId>('peripheral-iv');
+const isValidVascularSubModule = (id?: string | null): id is VascularSubModuleId =>
+  Boolean(id && SUB_MODULES.some((m) => m.id === id));
+
+export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = ({
+  isDark,
+  initialSubModule,
+}) => {
+  const [activeSubModule, setActiveSubModule] = useState<VascularSubModuleId>(
+    isValidVascularSubModule(initialSubModule) ? initialSubModule : 'peripheral-iv'
+  );
+
+  useEffect(() => {
+    if (isValidVascularSubModule(initialSubModule)) {
+      setActiveSubModule(initialSubModule);
+    }
+  }, [initialSubModule]);
+
   const currentTab = SUB_MODULES.find((m) => m.id === activeSubModule) || SUB_MODULES[0];
 
   return (

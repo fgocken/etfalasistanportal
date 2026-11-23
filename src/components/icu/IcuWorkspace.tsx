@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Activity, 
   ChevronRight, 
@@ -17,13 +17,35 @@ import { IcuAdmissionCriteriaView, IcuCriteriaTabType } from './IcuAdmissionCrit
 
 interface IcuWorkspaceProps {
   isDark: boolean;
+  initialSubId?: string | null;
 }
 
 type IcuSubView = 'hub' | 'admission_criteria' | 'scoring';
 
-export const IcuWorkspace: React.FC<IcuWorkspaceProps> = ({ isDark }) => {
-  const [currentView, setCurrentView] = useState<IcuSubView>('hub');
-  const [targetTab, setTargetTab] = useState<IcuCriteriaTabType>('priority');
+const VALID_ICU_TABS: IcuCriteriaTabType[] = ['priority', 'diagnosis', 'objective', 'levels', 'scoring'];
+const isValidIcuTab = (id?: string | null): id is IcuCriteriaTabType =>
+  Boolean(id && VALID_ICU_TABS.includes(id as IcuCriteriaTabType));
+
+export const IcuWorkspace: React.FC<IcuWorkspaceProps> = ({ isDark, initialSubId = null }) => {
+  const [currentView, setCurrentView] = useState<IcuSubView>(() => {
+    if (isValidIcuTab(initialSubId)) {
+      return initialSubId === 'scoring' ? 'scoring' : 'admission_criteria';
+    }
+    return 'hub';
+  });
+  const [targetTab, setTargetTab] = useState<IcuCriteriaTabType>(
+    isValidIcuTab(initialSubId) ? initialSubId : 'priority'
+  );
+
+  useEffect(() => {
+    if (initialSubId === undefined) return;
+    if (isValidIcuTab(initialSubId)) {
+      setTargetTab(initialSubId);
+      setCurrentView(initialSubId === 'scoring' ? 'scoring' : 'admission_criteria');
+    } else if (initialSubId === null) {
+      setCurrentView('hub');
+    }
+  }, [initialSubId]);
 
   const openApp = (view: 'admission_criteria' | 'scoring', tab: IcuCriteriaTabType = 'priority') => {
     setTargetTab(tab);

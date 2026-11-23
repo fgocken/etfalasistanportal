@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
   BookOpen, 
@@ -242,6 +242,20 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
   );
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProcedureId, setSelectedProcedureId] = useState<string | null>(initialProcedureId || null);
+
+  useEffect(() => {
+    if (initialProcedureId === undefined) return;
+    if (initialProcedureId) {
+      const proc = getProcedureById(initialProcedureId);
+      if (proc) {
+        setSelectedSpecialty(proc.specialty);
+        setSelectedProcedureId(proc.id);
+        setSearchQuery('');
+        return;
+      }
+    }
+    setSelectedProcedureId(null);
+  }, [initialProcedureId]);
 
   // Arama sonuçları
   const filteredProcedures = useMemo(() => {

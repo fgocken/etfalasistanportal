@@ -16,6 +16,8 @@ export interface PortalSearchItem {
   description: string;
   keywords: string[];
   tabId: ToolTabId | 'tools' | 'disclaimer';
+  /** Alt modül / kart / protokol derin bağlantı kimliği */
+  subId?: string;
   popular?: boolean;
 }
 
@@ -239,6 +241,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'havayolu yangını'
     ],
     tabId: 'mechanical-ventilation',
+    subId: 'oxygen-therapy',
     popular: true
   },
   {
@@ -273,6 +276,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'nöromüsküler'
     ],
     tabId: 'monitoring',
+    subId: 'asa-basic-monitoring',
     popular: true
   },
   {
@@ -306,6 +310,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'oksijenasyon'
     ],
     tabId: 'monitoring',
+    subId: 'pulse-oximetry',
     popular: true
   },
   {
@@ -340,6 +345,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'beta açısı'
     ],
     tabId: 'monitoring',
+    subId: 'capnography',
     popular: true
   },
   {
@@ -375,6 +381,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'barotravma'
     ],
     tabId: 'monitoring',
+    subId: 'spirometry',
     popular: true
   },
   {
@@ -414,6 +421,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'pacemaker'
     ],
     tabId: 'monitoring',
+    subId: 'ecg-monitoring',
     popular: true
   },
   {
@@ -450,6 +458,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'ioh'
     ],
     tabId: 'monitoring',
+    subId: 'nibp-oscillometric',
     popular: true
   },
   {
@@ -490,6 +499,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'pre-warming'
     ],
     tabId: 'monitoring',
+    subId: 'temperature-probes',
     popular: true
   },
   {
@@ -524,6 +534,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'guedel'
     ],
     tabId: 'monitoring',
+    subId: 'clinical-reflexes',
     popular: true
   },
   {
@@ -553,6 +564,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'asa 2023'
     ],
     tabId: 'monitoring',
+    subId: 'neuromuscular-clinical',
     popular: true
   },
   {
@@ -591,6 +603,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'allen testi'
     ],
     tabId: 'monitoring',
+    subId: 'ibp-monitoring',
     popular: true
   },
   {
@@ -633,6 +646,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'mikroşok'
     ],
     tabId: 'monitoring',
+    subId: 'cvp-monitoring',
     popular: true
   },
   {
@@ -676,6 +690,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'pulmoner hipertansiyon'
     ],
     tabId: 'monitoring',
+    subId: 'pac-monitoring',
     popular: true
   },
   {
@@ -718,6 +733,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'bite block'
     ],
     tabId: 'monitoring',
+    subId: 'tee-monitoring',
     popular: true
   },
   {
@@ -757,6 +773,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'windkessel'
     ],
     tabId: 'monitoring',
+    subId: 'pulse-contour-analysis',
     popular: true
   },
   {
@@ -794,6 +811,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'soğuk salin bolusu'
     ],
     tabId: 'monitoring',
+    subId: 'transpulmonary-thermodilution',
     popular: true
   },
   {
@@ -828,6 +846,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'ketamin bis'
     ],
     tabId: 'monitoring',
+    subId: 'bis-monitoring',
     popular: true
   },
   {
@@ -856,6 +875,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'o3 nirs'
     ],
     tabId: 'monitoring',
+    subId: 'sedline-psi',
     popular: true
   },
   {
@@ -888,6 +908,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'otoregülasyon'
     ],
     tabId: 'monitoring',
+    subId: 'nirs-cerebral-oximetry',
     popular: true
   },
   {
@@ -926,6 +947,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'ndir'
     ],
     tabId: 'monitoring',
+    subId: 'multigas-agent-analysis',
     popular: true
   },
   {
@@ -958,6 +980,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'aarc 2012'
     ],
     tabId: 'monitoring',
+    subId: 'transcutaneous-co2',
     popular: true
   },
   {
@@ -991,6 +1014,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'özofageal balon'
     ],
     tabId: 'monitoring',
+    subId: 'esophageal-pressure',
     popular: true
   },
   {
@@ -1024,6 +1048,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'sloan'
     ],
     tabId: 'monitoring',
+    subId: 'evoked-potentials',
     popular: true
   },
   {
@@ -1057,6 +1082,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'czosnyka'
     ],
     tabId: 'monitoring',
+    subId: 'icp-monitoring',
     popular: true
   },
   {
@@ -1101,6 +1127,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'viby-mogensen'
     ],
     tabId: 'monitoring',
+    subId: 'peripheral-nerve-stimulator',
     popular: true
   },
   {
@@ -1143,6 +1170,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'esaic 2023'
     ],
     tabId: 'monitoring',
+    subId: 'quantitative-nmb-monitors',
     popular: true
   },
   {
@@ -1181,6 +1209,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'steril su balon'
     ],
     tabId: 'monitoring',
+    subId: 'intraoperative-urine-output',
     popular: true
   },
   {
@@ -1221,6 +1250,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'smart'
     ],
     tabId: 'monitoring',
+    subId: 'intraoperative-abg',
     popular: true
   },
   {
@@ -1259,6 +1289,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'esaic 2023'
     ],
     tabId: 'monitoring',
+    subId: 'intraoperative-bleeding',
     popular: true
   },
   {
@@ -1320,6 +1351,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'teg rotem yoksa'
     ],
     tabId: 'monitoring',
+    subId: 'viscoelastic-hemostasis',
     popular: true
   },
   {
@@ -1350,6 +1382,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Resmi tanımlar, erişkin, pediatrik ve obstetrik klinik örneklerle güncel ASA risk derecelendirmesi.',
     keywords: ['asa', 'asa sınıflaması', 'asa 1', 'asa 2', 'asa 3', 'asa 4', 'asa 5', 'asa 6', 'fiziksel durum', 'sigara', 'diyabet', 'koah', 'gebe'],
     tabId: 'preop',
+    subId: 'asa',
     popular: true
   },
   {
@@ -1359,7 +1392,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'ASA-E',
     description: 'Gecikmenin yaşamı veya uzvu tehdit ettiği durumlarda ASA skoruna eklenen acil cerrahi (E) kodu.',
     keywords: ['asa e', 'acil eki', 'emergency modifier', 'acil cerrahi asa skoru', 'uzuv tehdidi'],
-    tabId: 'preop'
+    tabId: 'preop',
+    subId: 'asa'
   },
   {
     id: 'calc-mace-rcri',
@@ -1369,6 +1403,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Revised Cardiac Risk Index ile yüksek riskli cerrahi, KAH, KKY, SVO, diyabet ve kreatinin üzerinden MACE riski tahmini.',
     keywords: ['mace', 'rcri', 'lee skoru', 'kardiyak risk', 'preoperatif kardiyak', 'kalp riski', 'kky', 'iskemi', 'kreatinin', 'cerrahi risk', 'acc aha'],
     tabId: 'preop',
+    subId: 'mace',
     popular: true
   },
   {
@@ -1379,6 +1414,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Gupta perioperatif kardiyak risk indeksi: Yaş, fonksiyonel durum, ASA ve prosedür riski ile lojistik regresyon MACE tahmini.',
     keywords: ['gupta', 'nsqip', 'mica', 'mace', 'kardiyak risk', 'fonksiyonel kapasite', 'asa skoru', 'cerrahi prosedür', 'lojistik regresyon'],
     tabId: 'preop',
+    subId: 'mace',
     popular: true
   },
   {
@@ -1389,6 +1425,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: '12 soruluk objektif fiziksel aktivite skoru, VO₂peak (mL/kg/dk), METs hesabı ve METS çalışması (DASI ≤34) perioperatif kardiyak risk değerlendirmesi.',
     keywords: ['dasi', 'duke', 'duke activity status index', 'met', 'mets', 'vo2peak', 'fonksiyonel kapasite', 'merdiven çıkma', 'egzersiz toleransı', 'wijeysundera', 'preop'],
     tabId: 'preop',
+    subId: 'dasi',
     popular: true
   },
   {
@@ -1420,6 +1457,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'preop'
     ],
     tabId: 'preop',
+    subId: 'stop-bang',
     popular: true
   },
   {
@@ -1440,6 +1478,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Berrak sıvılar (2 saat), anne sütü (4 saat), bebek maması (6 saat), hafif yemek (6 saat), katı/yağlı gıdalar (8 saat).',
     keywords: ['açlık süreleri', 'npo', 'açlık kılavuzu', 'berrak sıvılar', 'su', 'anne sütü', 'bebek maması', 'katı gıda', 'aspirasyon profilaksisi'],
     tabId: 'infographics',
+    subId: 'adult-fasting',
     popular: true
   },
   {
@@ -1483,6 +1522,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'rabdomiyoliz', 'chct', 'mhaus', 'kriz yönetimi', 'anestezi acili'
     ],
     tabId: 'emergencies',
+    subId: 'mh',
     popular: true
   },
   {
@@ -1499,6 +1539,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'va-ecmo', 'embolektomi', 'trendelenburg', 'anestezi acili', 'kriz yönetimi', 'acil protokol'
     ],
     tabId: 'emergencies',
+    subId: 'pe',
     popular: true
   },
   {
@@ -1517,6 +1558,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'anestezi acili', 'kriz yönetimi', 'acil protokol'
     ],
     tabId: 'emergencies',
+    subId: 'vae',
     popular: true
   },
   {
@@ -1533,6 +1575,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'kardiyak arrest', 'lipid doz hesaplama', 'anestezi acili', 'kriz yönetimi', 'acil protokol'
     ],
     tabId: 'emergencies',
+    subId: 'last',
     popular: true
   },
   {
@@ -1550,6 +1593,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'anestezi acili', 'kriz yönetimi', 'acil protokol'
     ],
     tabId: 'emergencies',
+    subId: 'anaphylaxis',
     popular: true
   },
   {
@@ -1566,6 +1610,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'anestezi acili', 'kriz yönetimi', 'acil protokol', 'kod mavi'
     ],
     tabId: 'emergencies',
+    subId: 'acls',
     popular: true
   },
   {
@@ -1582,6 +1627,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'lethal triad', 'lethal diamond', 'taco', 'trali', '4f pcc', 'anestezi acili', 'acil protokol'
     ],
     tabId: 'emergencies',
+    subId: 'mtp',
     popular: true
   },
   {
@@ -1598,6 +1644,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'lung point', 'svk pnömotoraks', 'supraklaviküler blok', 'n2o yasağı', 'kapnotoraks', 'anestezi acili', 'acil protokol'
     ],
     tabId: 'emergencies',
+    subId: 'tension-pneumothorax',
     popular: true
   },
   {
@@ -1613,6 +1660,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'co2 söndürücü', 'bronkoskopi', 'karboksihemoglobin', 'cohb', 'inhalasyon yanığı', 'anestezi acili', 'acil protokol'
     ],
     tabId: 'emergencies',
+    subId: 'airway-fire',
     popular: true
   },
   {
@@ -1628,6 +1676,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'malign hipertermi', 'turnike açılması', 'bikarbonat', 'anestezi acili', 'troubleshooting'
     ],
     tabId: 'emergencies',
+    subId: 'etco2-elevation',
     popular: true
   },
   {
@@ -1643,6 +1692,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'hiperventilasyon', 'hipotermi', 'sample line', 'su tutucu', 'ölü boşluk', 'anestezi acili', 'troubleshooting'
     ],
     tabId: 'emergencies',
+    subId: 'etco2-decrease',
     popular: true
   },
   {
@@ -1658,6 +1708,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'karbonmonoksit', 'compound a', 'slurred downstroke', 'anestezi acili', 'troubleshooting'
     ],
     tabId: 'emergencies',
+    subId: 'fico2-elevation',
     popular: true
   },
   {
@@ -1673,6 +1724,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'oto peep', 'breath stacking', 'pnömoperitonyum', 'opioid rijiditesi', 'anestezi acili', 'troubleshooting'
     ],
     tabId: 'emergencies',
+    subId: 'ppeak-elevation',
     popular: true
   },
   {
@@ -1689,6 +1741,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'endobronşiyal entübasyon', 'tansiyon pnömotoraks', 'anestezi acili', 'troubleshooting'
     ],
     tabId: 'emergencies',
+    subId: 'hypoxemia',
     popular: true
   },
   {
@@ -1705,6 +1758,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'perioperatif inme', 'svo', 'beyin bt', 'anestezi acili', 'troubleshooting'
     ],
     tabId: 'emergencies',
+    subId: 'emergence-delay',
     popular: true
   },
 
@@ -1722,6 +1776,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       '7 fr svk', 'üç lümenli', 'distal lümen', 'medial lümen', 'proksimal lümen', 'diva', 'zor damar yolu', 'basınçlı torba'
     ],
     tabId: 'infographics',
+    subId: 'iv-access',
     popular: true
   },
   {
@@ -1751,6 +1806,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'ssc 2021', 'vasst', 'soap ii'
     ],
     tabId: 'infographics',
+    subId: 'vasoactive-decision-matrix',
     popular: true
   },
   {
@@ -1765,6 +1821,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'cormack lehane', 'videolaringoskop', 'uyanık entübasyon', 'ati', 'krikotiroidotomi', 'sad', 'lma'
     ],
     tabId: 'infographics',
+    subId: 'difficult-airway-das',
     popular: true
   },
   {
@@ -1779,6 +1836,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'aspirasyon riski', 'karar destek', 'i-aim', 'antrum'
     ],
     tabId: 'infographics',
+    subId: 'gastric-usg-perlas',
     popular: true
   },
   {
@@ -1793,6 +1851,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'nodesat', 'apneik oksijenasyon', 'bmv yasağı', 'sugammadeks 16', 'cico', 'zor havayolu'
     ],
     tabId: 'infographics',
+    subId: 'rsi-vs-elective',
     popular: true
   },
   {
@@ -1807,6 +1866,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'hafif öğün', 'katı gıda', 'süt', 'eras', 'maltodekstrin', 'karbonhidrat yüklemesi'
     ],
     tabId: 'infographics',
+    subId: 'adult-fasting',
     popular: true
   },
   {
@@ -1821,6 +1881,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'pediatrik aspirasyon', 'pediatrik anestezi'
     ],
     tabId: 'infographics',
+    subId: 'pediatric-fasting',
     popular: true
   },
   {
@@ -1835,6 +1896,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'servise transfer', 'motor aktivite', 'spo2', 'solunum', 'dolaşım', 'rezidüel blok', 'faz 1'
     ],
     tabId: 'infographics',
+    subId: 'modified-aldrete',
     popular: true
   },
   {
@@ -1848,6 +1910,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'home readiness', 'ponv', 'taburculuk skoru', 'ambulatory surgery', 'mobilizasyon', 'postoperatif ağrı', 'idrar çıkışı', 'refakatçi'
     ],
     tabId: 'infographics',
+    subId: 'padss',
     popular: true
   },
   {
@@ -1858,6 +1921,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Acil (<2 sa), İvedi (2-24 sa), Zamana Duyarlı (≤3 ay) ve Elektif (>3 ay) cerrahiler; MACE ve preop strateji yönetimi.',
     keywords: ['acil cerrahi', 'ivedi cerrahi', 'zamana duyarlı cerrahi', 'elektif cerrahi', 'aha acc 2024', 'cerrahi aciliyet', 'mace', 'zamanlama', 'aort anevrizması', 'apandisit', 'kolesistit', 'kanser cerrahisi', 'katarakt', 'protez'],
     tabId: 'infographics',
+    subId: 'surgical-urgency-2024',
     popular: true
   },
   {
@@ -1868,6 +1932,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: '30 günlük kardiyovasküler olay (MACE) riskine göre Düşük (<%1), Orta (%1-5) ve Yüksek (>%5) riskli cerrahi operasyonlar.',
     keywords: ['esc 2022', 'cerrahi risk', 'düşük risk', 'orta risk', 'yüksek risk', '30 günlük mace', 'kardiyak risk', 'cerrahi operasyonlar'],
     tabId: 'infographics',
+    subId: 'esc-surgical-risk',
     popular: true
   },
   {
@@ -1898,6 +1963,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'silent chest'
     ],
     tabId: 'infographics',
+    subId: 'respiratory-failure',
     popular: true
   },
   {
@@ -1913,6 +1979,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'hughes glass jacobs', 'farmakokinetik', 'infüzyon süresi', 'infografik'
     ],
     tabId: 'infographics',
+    subId: 'tiva-csht',
     popular: true
   },
   {
@@ -1928,6 +1995,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'svv', 'tamponad', 'akciğer ödemi', 'west zonları', 'infografik'
     ],
     tabId: 'infographics',
+    subId: 'spontaneous-vs-ppv',
     popular: true
   },
   {
@@ -1943,6 +2011,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'tof', 'aagbi', 'infografik'
     ],
     tabId: 'infographics',
+    subId: 'asa-basic-monitoring',
     popular: true
   },
 
@@ -1986,6 +2055,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Mathews et al. 2022 eGFR kademeli modelle 10 mL %15 (1.5g) MgSO4 ampul dozu, infüzyon süresi ve flebit güvenliği.',
     keywords: ['magnezyum', 'mgso4', 'magnezyum sülfat', 'replasman', 'hipomagnezemi', 'egfr', 'böbrek', 'ampul hesabı', 'flebit', 'infüzyon süresi', 'mathews', 'elektrolit', 'tedavi'],
     tabId: 'treatments',
+    subId: 'magnesium',
     popular: true
   },
   {
@@ -1996,6 +2066,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Torsades de Pointes, QT uzaması, Chvostek & Trousseau belirtileri, ROMK refrakter hipokalemi ve PTH refrakter hipokalsemi mekanizmaları.',
     keywords: ['hipomagnezemi', 'torsades', 'torsades de pointes', 'qt uzaması', 'ekg', 'chvostek', 'trousseau', 'tetani', 'romk', 'refrakter hipokalemi', 'refrakter hipokalsemi', 'st çökmesi', 'u dalgası', 'magnezyum'],
     tabId: 'treatments',
+    subId: 'magnesium',
     popular: true
   },
   {
@@ -2006,6 +2077,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: '%7.5 KCl (10 mL = 10 mEq) ve Kaliphos (10 mL = 30 mEq K⁺ + 60 mEq Fosfat) ampul dozu, periferik/SVK derişim sınırları ve infüzyon hızı.',
     keywords: ['potasyum', 'kcl', 'kaliphos', 'potasyum fosfat', 'fosfat', 'replasman', 'hipokalemi', 'flebit', 'svk', 'periferik damar yolu', 'egfr', 'romk', 'infüzyon hızı'],
     tabId: 'treatments',
+    subId: 'potassium',
     popular: true
   },
   {
@@ -2016,6 +2088,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'U dalgası, ST depresyonu, T düzleşmesi, asendan flask paralizi, paralitik ileus ve metabolik alkaloz patofizyolojisi.',
     keywords: ['hipokalemi', 'potasyum', 'u dalgası', 'ekg', 'paralitik ileus', 'asendan felç', 'paralizi', 'rabdomiyoliz', 'metabolik alkaloz', 'kardiyak arrest'],
     tabId: 'treatments',
+    subId: 'potassium',
     popular: true
   },
   {
@@ -2026,6 +2099,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'MDCalc standardında Adrogué-Madias formülüyle %3 NaCl hipertonik salin infüzyon hızı, Serbest Su Açığı, Glukoz düzeltmeli Na ve ODS güvenlik eşikleri.',
     keywords: ['sodyum', 'sodium', 'hiponatremi', 'hipernatremi', 'adrogue', 'madias', 'adrogue madias', 'mdcalc', 'hipertonik salin', '%3 nacl', 'ods', 'osmotik demiyelinizasyon', 'serbest su açığı', 'free water deficit', 'glukoz düzeltmeli sodyum', 'katz', 'hillier', 'elektrolit'],
     tabId: 'treatments',
+    subId: 'sodium',
     popular: true
   },
   {
@@ -2036,6 +2110,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Hiponatremi (beyin ödemi, nöbet, %3 acil bolus, ODS, dDAVP geri indirme) ve Hipernatremi (serebral büzüşme, damar yırtılması, etyolojik hacim yaklaşımları, serebral ödemden korunma, Santral DI dDAVP) protokolleri.',
     keywords: ['sodyum', 'hiponatremi', 'hipernatremi', 'ods', 'santral pontin miyelinozis', 'beyin ödemi', 'acil bolus', '%3 salin', 'ddavp', 'desmopressin', 'diabetes insipidus', 'santral di', 'serbest su açığı', 'overcorrection', 'aşırı düzeltme', 'serebral ödem'],
     tabId: 'treatments',
+    subId: 'sodium',
     popular: true
   },
   {
@@ -2064,6 +2139,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'katekolamin'
     ],
     tabId: 'treatments',
+    subId: 'norepinephrine',
     popular: true
   },
   {
@@ -2098,6 +2174,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'katekolamin'
     ],
     tabId: 'treatments',
+    subId: 'epinephrine',
     popular: true
   },
   {
@@ -2122,6 +2199,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'infüzyon pompası'
     ],
     tabId: 'treatments',
+    subId: 'dexmedetomidine',
     popular: true
   },
   {
@@ -2145,6 +2223,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'infüzyon pompası'
     ],
     tabId: 'treatments',
+    subId: 'remifentanil',
     popular: true
   },
   {
@@ -2169,6 +2248,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'infüzyon pompası'
     ],
     tabId: 'treatments',
+    subId: 'fentanyl',
     popular: true
   },
   {
@@ -2192,6 +2272,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'infüzyon pompası'
     ],
     tabId: 'treatments',
+    subId: 'propofol',
     popular: true
   },
   {
@@ -2215,6 +2296,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'premedikasyon'
     ],
     tabId: 'treatments',
+    subId: 'midazolam',
     popular: true
   },
   {
@@ -2239,6 +2321,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'maksimum doz'
     ],
     tabId: 'treatments',
+    subId: 'lidocaine',
     popular: true
   },
   {
@@ -2262,6 +2345,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'şok indüksiyonu'
     ],
     tabId: 'treatments',
+    subId: 'ketamine',
     popular: true
   },
   {
@@ -2285,6 +2369,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'düşük akım'
     ],
     tabId: 'treatments',
+    subId: 'sevoflurane',
     popular: true
   },
   {
@@ -2310,6 +2395,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'obezite uyanma'
     ],
     tabId: 'treatments',
+    subId: 'desflurane',
     popular: true
   },
   {
@@ -2336,6 +2422,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'dağ hastalığı'
     ],
     tabId: 'treatments',
+    subId: 'acetazolamide',
     popular: true
   },
   {
@@ -2364,6 +2451,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'infüzyon'
     ],
     tabId: 'treatments',
+    subId: 'furosemide',
     popular: true
   },
   {
@@ -2393,6 +2481,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'santral antikolinerjik sendrom'
     ],
     tabId: 'treatments',
+    subId: 'atropine',
     popular: true
   },
   {
@@ -2421,6 +2510,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       '5 mg/ml'
     ],
     tabId: 'treatments',
+    subId: 'ephedrine',
     popular: true
   },
   {
@@ -2449,6 +2539,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       '40 mcg'
     ],
     tabId: 'treatments',
+    subId: 'naloxone',
     popular: true
   },
   {
@@ -2480,6 +2571,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'havayolu ekipmanı'
     ],
     tabId: 'airway',
+    subId: 'adult-equipment-sizer',
     popular: true
   },
   {
@@ -2502,6 +2594,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'pediatrik i-gel'
     ],
     tabId: 'airway',
+    subId: 'pediatric-equipment-sizer',
     popular: true
   },
   // Sinir Blokları ve LAST Modülü
@@ -2523,6 +2616,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Spinal anestezi klinik talimatı ve gelecekte eklenecek Lomber/Torakal Epidural, Kombine Spinal-Epidural (KSE) ve Kaudal blok protokolleri.',
     keywords: ['nöraksiyel', 'noraksiyel', 'nöraksiyel kütüphane', 'epidural', 'kaudal', 'kombinasyon', 'kse', 'cse', 'spinal', 'tuohy', 'intratekal'],
     tabId: 'nerve-blocks',
+    subId: 'neuraxial',
     popular: true
   },
   {
@@ -2539,6 +2633,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'asra antikoagülan', 'klipodogrel', 'klopidogrel', 'prasugrel', 'enoksaparin', 'doac', 'warfarin', 'sezaryen spinal'
     ],
     tabId: 'nerve-blocks',
+    subId: 'spinal-anestezi',
     popular: true
   },
   {
@@ -2549,6 +2644,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Kilo bazlı maksimum güvenli LA dozu (bupivakain, ropivakain, lidokain) ve ASRA/ESRA %20 İntralipid bolus + infüzyon kurtarma dozu.',
     keywords: ['last', 'intralipid', 'lipid rescue', 'lokal anestezik toksisitesi', 'toksisite', 'bupivakain dozu', 'marcaine', 'ropivakain', 'lidokain', 'kardiyotoksisite', 'kurtarma'],
     tabId: 'nerve-blocks',
+    subId: 'last',
     popular: true
   },
   {
@@ -2559,6 +2655,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'VATS, torakotomi, kosta kırıkları, meme cerrahisi ve omurga cerrahilerinde geniş kraniyokaudal yayılımlı fasya plan analjezisi.',
     keywords: ['esp', 'erector spinae', 'torakal esp', 'kosta kırığı', 'vats', 'toraks cerrahisi', 'meme cerrahisi', 'lomber esp', 'fasya plan'],
     tabId: 'nerve-blocks',
+    subId: 'esp',
     popular: true
   },
   {
@@ -2569,6 +2666,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Total diz artroplastisinde kuadriseps motor gücünü koruyarak düşme riskini azaltan ve erken mobilizasyon sağlayan subsartoryal blok.',
     keywords: ['adduktor kanal', 'acb', 'safen sinir', 'diz protezi', 'total diz artroplastisi', 'motor koruyucu', 'erken mobilizasyon', 'kuadriseps koruma'],
     tabId: 'nerve-blocks',
+    subId: 'adduktor-kanal',
     popular: true
   },
   {
@@ -2578,7 +2676,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'PENG Bloğu',
     description: 'Kalça kırıklarında motor zaaf yapmaksızın derin eklem analjezisi sağlayan yenilikçi perikapsüler blok tekniği.',
     keywords: ['peng bloğu', 'peng', 'kalça kırığı', 'femur boyun kırığı', 'total kalça', 'artroplasti', 'motor koruyucu kalça'],
-    tabId: 'nerve-blocks'
+    tabId: 'nerve-blocks',
+    subId: 'peng'
   },
   {
     id: 'block-tap',
@@ -2587,7 +2686,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'TAP Bloğu',
     description: 'Sezaryen, apendektomi ve alt karın cerrahilerinde somatik karın duvarı ağrısını kesen fasyal blokaj.',
     keywords: ['tap bloğu', 'tap', 'sezaryen analjezi', 'apendektomi', 'alt batın', 'karın duvarı', 'internal oblik', 'transversus abdominis'],
-    tabId: 'nerve-blocks'
+    tabId: 'nerve-blocks',
+    subId: 'tap'
   },
   {
     id: 'block-isb-interskalen',
@@ -2596,7 +2696,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'ISB · Omuz',
     description: 'Omuz artroskopisi ve artroplastisi için C5-C7 düzeyinde altın standart brakiyal pleksus bloğu.',
     keywords: ['interskalen', 'isb', 'omuz artroskopisi', 'omuz protezi', 'brakiyal pleksus', 'frenik sinir', 'c5 c6'],
-    tabId: 'nerve-blocks'
+    tabId: 'nerve-blocks',
+    subId: 'interskalen'
   },
   {
     id: 'block-popliteal-siyatik',
@@ -2605,7 +2706,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Popliteal Siyatik',
     description: 'Ayak bileği kırıkları, aşil tendon onarımı ve diyabetik ayak cerrahisinde derin ve uzun süreli anestezi.',
     keywords: ['popliteal siyatik', 'siyatik blok', 'ayak cerrahisi', 'ayak bileği kırığı', 'aşil tendon', 'tibial sinir', 'peroneal sinir'],
-    tabId: 'nerve-blocks'
+    tabId: 'nerve-blocks',
+    subId: 'popliteal-siyatik'
   },
   {
     id: 'anesthesia-emergencies',
@@ -2645,6 +2747,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'SCCM, ESICM ve Sağlık Bakanlığı rehberliğinde Yoğun Bakım Endikasyonları: Triyaj Modeli, 9 Organ Sistemi ve Kritik Eşikler.',
     keywords: ['yoğun bakım', 'ybü', 'icu', 'kabul kriterleri', 'yatış endikasyonu', 'sccm', 'esicm', 'yoğun bakım endikasyonları', 'triyaj'],
     tabId: 'icu',
+    subId: 'priority',
     popular: true
   },
   {
@@ -2654,7 +2757,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Triyaj',
     description: 'Maksimum reversibilite ve faydaya göre yoğun bakım yatış önceliklendirmesi ve DNR/DNI sınırları.',
     keywords: ['priority 1', 'priority 2', 'priority 3', 'priority 4', 'öncelik 1', 'öncelik 2', 'sccm triyaj', 'reversibilite', 'dnr', 'dni'],
-    tabId: 'icu'
+    tabId: 'icu',
+    subId: 'priority'
   },
   {
     id: 'icu-objective-thresholds',
@@ -2663,7 +2767,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Kritik Eşikler',
     description: 'Vital bulgular, kan gazı, laktat, PaO2/FiO2, elektrolitler ve EKG kritik eşik değer kontrol listesi.',
     keywords: ['kritik eşikler', 'objektif parametreler', 'kan gazı', 'laktat', 'pao2 fio2', 'pf oranı', 'asidoz', 'vital eşikler', 'hipotansiyon'],
-    tabId: 'icu'
+    tabId: 'icu',
+    subId: 'objective'
   },
   {
     id: 'icu-levels-scoring',
@@ -2672,7 +2777,8 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     badge: 'Basamak & Skorlama',
     description: 'T.C. Sağlık Bakanlığı YBÜ basamak standartları ve SOFA, NEWS2, APACHE fizyolojik skorlama kılavuzu.',
     keywords: ['1 basamak', '2 basamak', '3 basamak', 'sofa skoru', 'news2', 'apache', 'basamak standartları', 'organ yetmezliği'],
-    tabId: 'icu'
+    tabId: 'icu',
+    subId: 'levels'
   },
   {
     id: 'proc-systematic-management',
@@ -2692,6 +2798,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Laparoskopik kolesistektomide anestezi teknikleri, CO2 pnömoperitoneum yönetimi, trokar girişi, vagal bradikardi, derin nöromusküler blokaj ve multimodal analjezi.',
     keywords: ['laparoskopik kolesistektomi', 'kolesistektomi', 'safra kesesi', 'lap-kole', 'genel cerrahi', 'jaffe', 'eras', 'prospect', 'trokar', 'pnömoperitoneum'],
     tabId: 'procedures',
+    subId: 'lap-chole',
     popular: true
   },
   {
@@ -2702,6 +2809,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Açık kolesistektomide anestezi teknikleri, subkostal Kocher insizyonu ekartasyonu, torakal epidural analjezi, derin nöromusküler blokaj, vasküler erişim ve ERAS prensipleri.',
     keywords: ['açık kolesistektomi', 'kolesistektomi', 'kocher insizyonu', 'subkostal', 'safra kesesi', 'açık batın', 'genel cerrahi', 'jaffe', 'eras', 'prospect', 'torakal epidural'],
     tabId: 'procedures',
+    subId: 'open-chole',
     popular: true
   },
   {
@@ -2712,6 +2820,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Uyanık kraniyotomide Asleep-Awake-Asleep (AAA) ve MAC teknikleri, Skalp Bloğu, Deksmedetomidin/Remifentanil infüzyonu, kortikal haritalama, nöbet yönetimi ve ERAS ilkeleri.',
     keywords: ['uyanık kraniyotomi', 'kraniyotomi', 'awake craniotomy', 'beyin cerrahisi', 'nöroşirürji', 'elokent alan', 'gliom', 'skalp bloğu', 'deksmedetomidin', 'jaffe', 'eras', 'prospect', 'snacc'],
     tabId: 'procedures',
+    subId: 'awake-craniotomy',
     popular: true
   },
   {
@@ -2722,6 +2831,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Serebral anevrizma kliplenmesinde TIVA/GETA teknikleri, transmural basınç dengesi, intraoperatif rüptür ve adenozin asistol protokolü, geçici klipleme ve burst süpresyon, AHA/ASA & SNACC rehberleri.',
     keywords: ['kraniyotomi anevrizma', 'anevrizma kliplenmesi', 'intrakraniyel anevrizma', 'serebral anevrizma', 'sak', 'subaraknoid kanama', 'beyin cerrahisi', 'nöroşirürji', 'adenozin asistoli', 'geçici klip', 'burst süpresyon', 'tiva', 'mannitol', 'jaffe', 'aha asa', 'snacc'],
     tabId: 'procedures',
+    subId: 'craniotomy-aneurysm',
     popular: true
   },
   {
@@ -2732,6 +2842,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Akut iskemik inmede cerrahi trombektomi/embolektomi, pre-rekanalizasyon MAP ≥85-90 mmHg, post-rekanalizasyon reperfüzyon kanaması koruması (MAP <85 mmHg), IV tPA/heparin reversal ve AHA/ASA & SNACC ilkeleri.',
     keywords: ['kraniyotomi embolektomi', 'serebral embolektomi', 'inme cerrahisi', 'akut iskemik inme', 'trombektomi', 'mca embolektomi', 'büyük damar oklüzyonu', 'lvo', 'beyin cerrahisi', 'nöroşirürji', 'tpa reversal', 'kriyopresipitat', 'penumbra', 'rekanalizasyon', 'reperfüzyon kanaması', 'jaffe', 'aha asa', 'snacc', 'eso'],
     tabId: 'procedures',
+    subId: 'craniotomy-embolectomy',
     popular: true
   },
   {
@@ -2742,6 +2853,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Gastroskopide Propofol bazlı derin sedasyon, mikroakım EtCO2 kapnografi, sol lateral pozisyon, krikofarengeal geçiş, laringospazm ve aspirasyon yönetimi, ASGE/ASA kılavuzları.',
     keywords: ['gastroskopi', 'ögd', 'özofagogastroduodenoskopi', 'üst gis', 'endoskopi', 'gastroenteroloji', 'propofol', 'sedasyon', 'nora', 'aspirasyon', 'jaffe', 'asge'],
     tabId: 'procedures',
+    subId: 'gastroscopy',
     popular: true
   },
   {
@@ -2752,6 +2864,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Kolonoskopide Propofol bazlı sedasyon + Fentanil/Ketofol analjezisi, fleksura geçişleri ve mezenterik traksiyonda vagal stimülasyon/bradikardi yönetimi, medikal CO2 insüflasyonu.',
     keywords: ['kolonoskopi', 'alt gis', 'polipektomi', 'kolon kanseri', 'gastroenteroloji', 'propofol', 'sedasyon', 'nora', 'fentanil', 'vagal bradikardi', 'jaffe', 'asge', 'esge'],
     tabId: 'procedures',
+    subId: 'colonoscopy',
     popular: true
   },
   {
@@ -2762,6 +2875,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'ERCP anestezisinde endotrakeal genel anestezi vs derin sedasyon, prone pozisyon yönetimi, Oddi sfinkterotomi kanaması, floroskopi güvenliği ve post-ERCP pankreatit (PEP) profilaksisi.',
     keywords: ['ercp', 'kolanjit', 'koledok taşı', 'sfinkterotomi', 'gastroenteroloji', 'prone pozisyon', 'duodenoskop', 'post ercp pankreatit', 'pep', 'nora', 'jaffe', 'asge', 'esge'],
     tabId: 'procedures',
+    subId: 'ercp',
     popular: true
   },
   {
@@ -2772,6 +2886,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'EUS ve biyopsi anestezi yönetimi, MAC / derin sedasyon, pankreas/lenf nodu iğne girişinde mutlak hasta hareketsizliği, çölyak pleksus nörolizinde hipotansiyon yönetimi.',
     keywords: ['eus', 'endosonografi', 'endoskopik ultrasonografi', 'eus fna', 'eus fnb', 'çölyak blok', 'çölyak nöroliz', 'pankreas biyopsisi', 'gastroenteroloji', 'nora', 'jaffe', 'asge', 'esge'],
     tabId: 'procedures',
+    subId: 'eus',
     popular: true
   },
   {
@@ -2782,6 +2897,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'EKT anestezisinde Propofol / Metodeksital indüksiyonu, Süksinilkolin nöromusküler blokajı, hiperventilasyon, izole manşon tekniği, bifazik otonomik yanıt (bradikardi/sempatik fırtına) yönetimi.',
     keywords: ['ekt', 'ect', 'elektrokonvülsif', 'psikiyatri', 'şizofreni', 'depresyon', 'katatoni', 'süksinilkolin', 'propofol', 'metodeksital', 'cuff', 'nora', 'jaffe', 'apa'],
     tabId: 'procedures',
+    subId: 'ekt',
     popular: true
   },
   {
@@ -2792,6 +2908,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Meme biyopsilerinde MAC / sedoanaljezi yönetimi, lokal anestezik toksisitesi (LAST), epinefrin yanıtı, tel lokalizasyonu ve vazo-vagal senkop, spesimen mamografisi bekleme aralığı ve ERAS prensipleri.',
     keywords: ['meme biyopsisi', 'eksizyonel biyopsi', 'tel ile işaretli biyopsi', 'wlbb', 'meme cerrahisi', 'genel cerrahi', 'tru-cut', 'insizyonel biyopsi', 'bi-rads', 'sedasyon', 'mac', 'jaffe', 'eras', 'prospect'],
     tabId: 'procedures',
+    subId: 'breast-biopsy',
     popular: true
   },
   {
@@ -2802,6 +2919,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Meme koruyucu cerrahide PECS I/II ve Serratus blokları, LMA ile genel anestezi, mavi boya (Patent Blue) enjeksiyonu ve yalancı SpO2 desatürasyonu, aksiller sinir stimülasyonu, neoadjuvan kardiyotoksisite ve ERAS ilkeleri.',
     keywords: ['meme koruyucu cerrahi', 'mkc', 'lumpektomi', 'parsiyel mastektomi', 'kuadrantektomi', 'slnb', 'sentinel lenf nodu', 'pecs bloğu', 'serratus bloğu', 'patent blue', 'metilen mavisi', 'genel cerrahi', 'onkoanestezi', 'jaffe', 'eras', 'prospect'],
     tabId: 'procedures',
+    subId: 'breast-conserving-surgery',
     popular: true
   },
   {
@@ -2812,6 +2930,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Hemoroidektomide Saddle (eyer) spinal blok, Prone Jackknife pozisyonu ve ETT güvenliği, anal dilatasyonda laringospazm / Brewer–Luckhardt vagal refleksi, postoperatif üriner retansiyon (POUR) önlemi, pudendal blok ve PROSPECT ağrı yönetimi.',
     keywords: ['hemoroidektomi', 'surgical hemorrhoidectomy', 'hemoroid', 'anorektal cerrahi', 'milligan-morgan', 'ferguson', 'longo', 'stapler hemoroidopeksi', 'saddle blok', 'eyer spinal', 'prone jackknife', 'laringospazm', 'brewer-luckhardt', 'pour', 'üriner retansiyon', 'pudendal blok', 'diltiazem', 'gtn', 'genel cerrahi', 'kolorektal', 'jaffe', 'prospect', 'eras'],
     tabId: 'procedures',
+    subId: 'surgical-hemorrhoidectomy',
     popular: true
   },
   {
@@ -2822,6 +2941,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Üst servikal (C1-C2) odontoid vida fiksasyonu ve anterior füzyonda uyanık fiberoptik entübasyon, İONM (MEP/SSEP), çift C-kollu skopi, TIVA ve retrofaringeal ödem/kaff kaçak testi yönetimi.',
     keywords: ['anterior fusion', 'upper cervical spine', 'c1-c2', 'c1 c2', 'odontoid', 'dens kırığı', 'dens fraktürü', 'odontoid vida', 'atlantoaksiyel', 'uyanık fiberoptik', 'afoi', 'ionm', 'mep', 'ssep', 'vertebral arter', 'retrofaringeal ödem', 'cuff leak test', 'nöroşirürji', 'jaffe', 'eras'],
     tabId: 'procedures',
+    subId: 'anterior-upper-cervical-fusion',
     popular: true
   },
   {
@@ -2832,6 +2952,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Üst servikal (O-C2, C1-C2) posterior enstrümantasyon (Harms/Magerl), prone çevirme, uyanık fiberoptik, İONM (MEP/SSEP), TIVA, Mayfield tespiti ve görme kaybı (ION) koruması.',
     keywords: ['posterior fusion', 'upper cervical spine', 'c1-c2 posterior', 'harms tekniği', 'magerl', 'transartiküler vida', 'lateral mass vida', 'oksipitoservikal', 'prone pozisyon', 'mayfield çivili başlık', 'uyanık fiberoptik', 'ionm', 'mep', 'ssep', 'vertebral arter', 'tiva', 'iskemik optik nöropati', 'görme kaybı', 'jaffe', 'eras'],
     tabId: 'procedures',
+    subId: 'posterior-upper-cervical-fusion',
     popular: true
   },
   {
@@ -2842,6 +2963,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Serebral AVM ve kavernom mikrocerrahisinde TIVA, İONM (MEP/SSEP), Normal Perfüzyon Basıncı Çöküşü (NPPB), oklüzif hiperemi, post-rezeksiyon hipotansiyon ve pürüzsüz uyanma.',
     keywords: ['craniotomy', 'vascular malformations', 'avm', 'arteriyovenöz malformasyon', 'kavernom', 'cavernoma', 'kavernöz hemanjiom', 'nppb', 'spetzler-martin', 'normal perfusion pressure breakthrough', 'oklüzif hiperemi', 'icg anjiyografi', 'tiva', 'esmolol', 'nöroşirürji', 'jaffe', 'eras'],
     tabId: 'procedures',
+    subId: 'craniotomy-vascular-malformation',
     popular: true
   },
   {
@@ -2852,6 +2974,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Moyamoya ve kompleks anevrizmalarda STA-MCA bypass; normokapni (PaCO2 38-42), geçici kliplemede indüklenmiş hipertansiyon (MAP 90-100), TIVA, ICG anjiyografi ve serebral hiperperfüzyon önlemi.',
     keywords: ['ec-ic bypass', 'craniotomy', 'extracranial intracranial bypass', 'sta-mca', 'moyamoya', 'moyamoya hastalığı', 'revaskülarizasyon', 'serebral bypass', 'indüklenmiş hipertansiyon', 'tiva', 'icg anjiyografi', 'charbel', 'serebral hiperperfüzyon', 'chs', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'craniotomy-ec-ic-bypass',
     popular: true
   },
   {
@@ -2862,6 +2985,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Supratentoryal beyin tümörlerinde TIVA, İONM (MEP/SSEP/Phase Reversal), gevşek beyin (slack brain) yönetimi, Mannitol/Hipertonik Salin, hafif hiperventilasyon, CUSA ve pürüzsüz uyanma.',
     keywords: ['craniotomy for tumor', 'craniotomy tumor', 'beyin tümörü', 'gliom', 'glioblastoma', 'menenjiyom', 'meningioma', 'metastaz', 'supratentoryal tümör', 'kibas', 'mannitol', 'slack brain', 'tiva', 'cusa', 'mayfield', 'pürüzsüz uyanma', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'craniotomy-tumor',
     popular: true
   },
   {
@@ -2872,6 +2996,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Akut epidural, subdural hematom ve dekompresif kraniektomide MILS ile RSI, hipotansiyondan kaçınma (MAP ≥ 80), CPP ≥ 60-70, normokapni, hipertonik salin, MTP ve kranium açılışı.',
     keywords: ['craniotomy for trauma', 'craniotomy trauma', 'nörotravma', 'kafa travması', 'epidural hematom', 'edh', 'subdural hematom', 'sdh', 'dekompresif kraniektomi', 'tbi', 'btf', 'brain trauma foundation', 'mils', 'rsi', 'hipertonik salin', 'cpp', 'kibas', 'jaffe', 'atls', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'craniotomy-trauma',
     popular: true
   },
   {
@@ -2882,6 +3007,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Trigeminal nevralji ve hemifasiyal spazmda retrosigmoid MVD; BAEP işitme izlemi (Dalga V), kas gevşeticisiz TIVA, trigemino-kardiyak refleks ve pürüzsüz uyanma.',
     keywords: ['microvascular decompression', 'mvd', 'cranial nerve decompression', 'jannetta', 'trigeminal nevralji', 'hemifasiyal spazm', 'glossofaringeal nevralji', 'retrosigmoid', 'park-bench', 'baep', 'abr', 'fasiyal emg', 'lateral spread response', 'trigemino-kardiyak refleks', 'tiva', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'craniotomy-microvascular-decompression',
     popular: true
   },
   {
@@ -2892,6 +3018,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Ön kafa tabanı BOS fistülü ve kranializasyonda oral OGT (nazal tüp yasağı), N2O kontrendikasyonu, lomber drenaj, intratekal flöresein, Valsalva ve pürüzsüz uyanma.',
     keywords: ['bifrontal craniotomy', 'csf leak', 'bos fistülü', 'bos rinoresi', 'ön kafa kaidesi', 'lamina kribrosa', 'frontal sinüs kranializasyonu', 'perikranyal flep', 'lomber drenaj', 'intratekal flöresein', 'ngt kontrendikasyonu', 'n2o yasağı', 'valsalva', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'bifrontal-craniotomy-csf-leak',
     popular: true
   },
   {
@@ -2902,6 +3029,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Endoskopik hipofiz cerrahisi; akromegali zor hava yolu, nazal epinefrin yanıtı, ICA hasar önlemi, Valsalva ile tümör indirilmesi, boğaz tamponu ve DI takibi.',
     keywords: ['transsphenoidal', 'pituitary tumor', 'hipofiz adenomu', 'hipofizektomi', 'endonazal hipofiz', 'akromegali', 'cushing', 'prolaktinoma', 'diyabetes insipidus', 'throat pack', 'karotid arter', 'valsalva', 'hadad flebi', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'transsphenoidal-pituitary-resection',
     popular: true
   },
   {
@@ -2912,6 +3040,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Hidrosefali şant cerrahisinde subkütan tünelleme sempatik yanıtı, laparoskopi ve KİBAS etkileşimi, aşırı drenaj önlemi, VA şant hava embolisi/aritmi ve sterilite.',
     keywords: ['ventricular shunt', 'vp shunt', 'va shunt', 'ventriküloperitoneal şant', 'ventriküloatrial şant', 'hidrosefali', 'normal basınçlı hidrosefali', 'nph', 'subkütan tünelleme', 'laparoskopik şant', 'overdrainage', 'şant enfeksiyonu', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'ventricular-shunt-procedures',
     popular: true
   },
   {
@@ -2922,6 +3051,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Chiari malformasyonunda foramen magnum dekompresyonu; servikal nötral entübasyon, prone pozisyon çene-göğüs 2 parmak kuralı, İONM (MEP/SSEP), VAE ve santral apne takibi.',
     keywords: ['chiari malformation', 'craniocervical decompression', 'chiari dekompresyonu', 'foramen magnum dekompresyonu', 'suboksipital kraniektomi', 'c1 laminektomi', 'siringomiyeli', 'duraplasti', 'prone pozisyon', 'ionm', 'mep', 'ssep', 'baep', 'santral apne', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'craniocervical-decompression-chiari',
     popular: true
   },
   {
@@ -2932,6 +3062,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Derin yerleşimli kitle ve tümörlerde stereotaktik biyopsi; çerçeveli hava yolu güvenliği, burr-hole, dural koagülasyon, beyin şifti önlemi ve Ommaya rezervuarı.',
     keywords: ['stereotactic biopsy', 'stereotaktik beyin biyopsisi', 'tümör biyopsisi', 'derin beyin lezyonu', 'leksell çerçeve', 'crw', 'burr-hole', 'ommaya rezervuarı', 'kist aspirasyonu', 'lenfoma', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'stereotactic-neurosurgery',
     popular: true
   },
   {
@@ -2942,6 +3073,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Parkinson, tremor ve distonide DBS, GPi pallidotomisi ve Vim talamotomisi; MER uyanık testleme, test/kalıcı RF lezyonlama, optik traktus/kapsül kontrolü ve IPG.',
     keywords: ['deep brain stimulation', 'dbs', 'pallidotomy', 'thalamotomy', 'pallidotomi', 'talamotomi', 'beyin pili', 'parkinson', 'esansiyel tremor', 'distoni', 'stn', 'gpi', 'vim', 'mer', 'mikroelektrot kaydı', 'radyofrekans lezyonlama', 'uyanık dbs', 'deksmedetomidin', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'stereotactic-dbs-pallidotomy-thalamotomy',
     popular: true
   },
   {
@@ -2952,6 +3084,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Dirençli epilepside sol VNS implantasyonu; daima sol vagus kuralı, diseksiyonda bradikardi/asistoli yönetimi, elektrot test uyarımı ve servikal hematom önlemi.',
     keywords: ['vagal nerve stimulation', 'vns', 'vagus siniri', 'vagal stimülasyon', 'dirençli epilepsi', 'epilepsi cerrahisi', 'sol vagus', 'bradikardi', 'asistoli', 'lennox-gastaut', 'depresyon', 'lead interrogation', 'jaffe', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'vagal-nerve-stimulation',
     popular: true
   },
   {
@@ -2962,6 +3095,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Kronik ağrı ve spastisitede SCS, İTP (Baklofen/Morfin pompası) ve MCS; uyanık parestezi haritalaması, akut baklofen toksisitesi/yoksunluğu, SSEP faz dönüşümü ve epidural hematom önlemi.',
     keywords: ['surgical analgesics', 'spinal cord stimulation', 'scs', 'intrathecal pump', 'itb', 'baklofen pompası', 'ağrı pompası', 'omurilik pili', 'motor cortex stimulation', 'mcs', 'motor korteks stimülasyonu', 'fbss', 'crps', 'refleks sempatik distrofi', 'talamik ağrı', 'morfin pompası', 'jaffe', 'nacc', 'pacc', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'surgical-analgesics-scs-itp-mcs',
     popular: true
   },
   {
@@ -2972,6 +3106,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Dirençli epilepside temporal lobektomi ve amigdalohipokampektomi; ECoG anestezi etkileşimi, masada akut nöbet soğuk SF protokolü, AED etkileşimleri ve pürüzsüz uyanma.',
     keywords: ['epilepsy surgery', 'epilepsi cerrahisi', 'temporal lobektomi', 'amigdalohipokampektomi', 'atl', 'ah', 'mezial temporal skleroz', 'ecog', 'elektrokortikografi', 'diken dalga', 'fokal epilepsi', 'kortikal haritalama', 'cold saline', 'jaffe', 'ilae', 'aes', 'snacc', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'epilepsy-surgery',
     popular: true
   },
   {
@@ -2982,6 +3117,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Serebral palsi ve spastisitede SDR ve DREZotomi; sıfır kas gevşetici kuralı, kökçük EMG stimülasyonu, S2-S4 sfinkter koruması, pediatrik hipotermi ve spazm analjezisi.',
     keywords: ['surgery for spasticity', 'spastisite cerrahisi', 'selektif dorsal rizotomi', 'sdr', 'drez', 'drezotomi', 'periferik nörotomi', 'serebral palsi', 'spastik dipleji', 'kökçük stimülasyonu', 'emg', 'anal sfinkter', 'jaffe', 'aacpdm', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'surgery-for-spasticity',
     popular: true
   },
   {
@@ -2992,6 +3128,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Trigeminal nevraljide perkütan RFT, balon mikrokompresyonu ve gliserol; trigeminokardiyak refleks (TCR) asistoli alarmı, uyut-uyandır-uyut sedasyonu, kornea refleksi ve ICA koruması.',
     keywords: ['percutaneous trigeminal neuralgia', 'trigeminal nevralji', 'perkütan rizotomi', 'radyofrekans rizotomi', 'rft', 'balon mikrokompresyonu', 'gliserol rizolizisi', 'meckel mağarası', 'gasser ganglionu', 'foramen ovale', 'hartel tekniği', 'trigeminokardiyak refleks', 'tcr', 'asistoli', 'kornea refleksi', 'jaffe', 'aans', 'cns', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'percutaneous-trigeminal-neuralgia',
     popular: true
   },
   {
@@ -3002,6 +3139,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'C3-C7 servikal miyelopati ve fıtıklarda ACDF ve ACCF; MILS entübasyon, ekartör sonrası tüp kaf deflasyonu (RLN koruması), MEP/SSEP TIVA ve acil boyun hematomu protokolü.',
     keywords: ['anterior cervical fusion', 'acdf', 'accf', 'servikal diskektomi', 'korpektomi', 'anterior servikal füzyon', 'c3-c7', 'servikal miyelopati', 'smith-robinson', 'recurrent laryngeal nerve', 'rln', 'retrofaringeal hematom', 'mils', 'jaffe', 'csrs', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'anterior-mid-lower-cervical-fusion',
     popular: true
   },
   {
@@ -3012,6 +3150,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'C3-T1 posterior laminektomi ve lateral mas vidalaması; Mayfield çivi fiksasyonu, prone sıfır göz basısı (POVL önleme), TIVA MEP/SSEP ve kaf kaçak testi.',
     keywords: ['posterior cervical fusion', 'lateral mass', 'lateral mas vidalama', 'c3-c7', 'c7-t1', 'laminektomi', 'laminoplasti', 'mayfield', 'povl', 'magerl', 'vertebral arter', 'servikal miyelopati', 'jaffe', 'csrs', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'posterior-mid-lower-cervical-fusion',
     popular: true
   },
   {
@@ -3022,6 +3161,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'C7-T3 omurga tümör ve travmalarında transsternal dekompresyon; innominate arter ekartasyonu, sol radiyal arter kuralı, duktus torasikus ve gecikmiş ekstübasyon.',
     keywords: ['anterior cervicothoracic', 'servikotorasik omurga', 'transsternal', 'manubriotomi', 'c7-t3', 'korpektomi', 'innominate arter', 'sol radiyal arter', 'duktus torasikus', 'watershed iskemi', 'jaffe', 'csrs', 'nass', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'anterior-cervicothoracic-spine-surgery',
     popular: true
   },
   {
@@ -3032,6 +3172,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'T3-T12 kalsifiye disk ve kırıklarda torakotomi/VATS; tek akciğer ventilasyonu (DLT/OLV), Adamkiewicz arteri parapleji riski, lateral dekübitüs ve torasik epidural analjezi.',
     keywords: ['anterior thoracic spine', 'torasik omurga', 'torakotomi', 'vats', 'torakal diskektomi', 'korpektomi', 't3-t12', 'adamkiewicz arteri', 'tek akciger ventilasyonu', 'olv', 'dlt', 'lateral dekübitüs', 'jaffe', 'srs', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'anterior-thoracic-spine-surgery',
     popular: true
   },
   {
@@ -3042,6 +3183,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'T1-T12 torasik stenoz, kırık ve kifoskoliozda posterior füzyon ve osteotomiler; prone karın serbestliği (Batson pleksusu), sıfır göz basısı (POVL), İONM ve TXA.',
     keywords: ['posterior thoracic spine', 'torasik omurga', 'laminektomi', 'kostotransversektomi', 'pedikül vidası', 'kifoz', 'skolyoz', 'osteotomi', 'pso', 'vcr', 'batson pleksusu', 'povl', 'adamkiewicz', 'jaffe', 'srs', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'posterior-thoracic-spine-surgery',
     popular: true
   },
   {
@@ -3052,6 +3194,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'L1-S1 bel kayması ve disk dejenerasyonunda ALIF/OLIF; sol ana iliak ven kanama alarmı, süperior hipogastrik pleksus ve retrograd ejakülasyon koruması, çift ayak pulse oksimetresi.',
     keywords: ['anterior lumbar spine', 'alif', 'olif', 'xlif', 'retroperitoneal', 'l1-s1', 'l4-l5', 'l5-s1', 'sol ana iliak ven', 'retrograd ejakülasyon', 'hipogastrik pleksus', 'ayak nabız oksimetresi', 'lomber pleksus emg', 'jaffe', 'nass', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'anterior-lumbar-lumbosacral-spine-surgery',
     popular: true
   },
   {
@@ -3062,6 +3205,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'L1-S1 kanal darlığı, bel fıtığı ve bel kaymasında laminektomi, TLIF ve pedikül vidalama; prone karın serbestliği (Batson pleksusu), tetiklenmiş vida EMG, dural yırtık ve pürüzsüz uyanma.',
     keywords: ['posterior lumbar spine', 'lomber omurga', 'laminektomi', 'diskektomi', 'tlif', 'plif', 'pedikül vidası', 'spondilolistezis', 'bel kayması', 'batson pleksusu', 'triggered emg', 'dural yırtık', 'bos kaçağı', 'kauda ekuina', 'povl', 'jaffe', 'nass', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'posterior-lumbar-spine-surgery',
     popular: true
   },
   {
@@ -3072,6 +3216,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Lomber skolyoz, düz bel ve lumbosakral instabilitede çok seviyeli pedikül vidalama, S2AI pelvik fiksasyon ve PSO osteotomisi; süperior gluteal arter/siyatik çentik alarmı, masif kanama ve POVL savunması.',
     keywords: ['posterior lumbar fusion', 'enstrümantasyon', 'pedikül vidası', 's2ai', 'iliak vida', 'pelvik fiksasyon', 'tlif', 'plif', 'pso', 'spo', 'osteotomi', 'flat back', 'lomber skolyoz', 'deformite', 'siyatik çentik', 'triggered emg', 'povl', 'jaffe', 'nass', 'srs', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'posterior-lumbar-fusion-instrumentation',
     popular: true
   },
   {
@@ -3082,6 +3227,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Rijit kifoskolyoz, spondilopitozis ve tümör spondilektomisinde 360 derece füzyon; çift pozisyon değişimi/tüp güvenliği, kümülatif masif kanama, Adamkiewicz ve POVL koruması.',
     keywords: ['combined anterior posterior', '360 derece füzyon', 'torakolomber', 'torakotomi', 'retroperitoneal', 'korpektomi', 'pedikül vidası', 's2ai', 'adamkiewicz', 'resüsitasyon molası', 'pozisyon değişimi', 'dlt', 'masif kanama', 'povl', 'jaffe', 'srs', 'nass', 'snacc', 'eras', 'nöroşirürji'],
     tabId: 'procedures',
+    subId: 'combined-anterior-posterior-thoracolumbar-instrumentation',
     popular: true
   },
   {
@@ -3092,6 +3238,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Semptomatik ve kritik karotis darlığında plak endarterektomisi; klempleme iskemisi ve şant kararı, karotis sinüs vagal refleksi, serebral hiperperfüzyon ve akut boyun hematomu yönetimi.',
     keywords: ['carotid endarterectomy', 'kea', 'cea', 'karotis', 'inme', 'şah damarı', 'stump pressure', 'güdük basıncı', 'şant', 'javid', 'karotis sinüs', 'hiperperfüzyon sendromu', 'chs', 'boyun hematomu', 'servikal pleksus bloğu', 'jaffe', 'esvs', 'svs', 'kvc', 'vasküler'],
     tabId: 'procedures',
+    subId: 'carotid-endarterectomy',
     popular: true
   },
   {
@@ -3102,6 +3249,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Fakoemülsifikasyon ve katlanabilir İOL implantasyonu; okülokardiyak refleks (Aschner), açık gözde öksürük ve ekspulsif kanama, beyin sapı anestezisi ve gevşek iris sendromu (IFIS).',
     keywords: ['cataract extraction', 'katarakt', 'fako', 'phacoemulsification', 'iol', 'göz içi lens', 'okülokardiyak refleks', 'aschner fenomeni', 'ekspulsif koroid kanaması', 'retrobulber blok', 'sub-tenon', 'peribulber', 'ifis', 'tamsulosin', 'topikal anestezi', 'jaffe', 'aao', 'escrs', 'göz cerrahisi'],
     tabId: 'procedures',
+    subId: 'cataract-extraction-iol-insertion',
     popular: true
   },
   {
@@ -3112,6 +3260,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Tam kat (PKP) ve lameller kornea nakli (DALK/DMEK); açık küre evresinde sıfır hareket/öksürük disiplini, pürüzsüz ekstübasyon, azot protoksit (N2O) yasağı ve Flieringa halkası vagal refleksi.',
     keywords: ['corneal transplant', 'keratoplasti', 'kornea nakli', 'pkp', 'penetran keratoplasti', 'dalk', 'dsaek', 'dmek', 'flieringa halkası', 'açık küre', 'open globe', 'ekspulsif koroid kanaması', 'sf6 gazı', 'n2o yasağı', 'pürüzsüz ekstübasyon', 'jaffe', 'aao', 'escrs', 'göz cerrahisi'],
     tabId: 'procedures',
+    subId: 'corneal-transplant',
     popular: true
   },
   {
@@ -3122,6 +3271,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Post-entübasyon stenozu ve trakea tümörlerinde laringotrakeal rezeksiyon; çapraz-saha (Cross-Field) ventilasyonu, çene-sternum sütürü (Guardian Suture), sıfır öksürükle masada pürüzsüz erken ekstübasyon.',
     keywords: ['tracheal resection', 'cricotracheal resection', 'trakeal rezeksiyon', 'krikotrakeal rezeksiyon', 'pits', 'trakeal stenoz', 'subglottik stenoz', 'cross-field ventilation', 'çapraz saha ventilasyonu', 'guardian suture', 'çene dikişi', 'innominat arter', 'bubble test', 'masada ekstübasyon', 'jaffe', 'sts', 'eacts', 'göğüs cerrahisi', 'kbb', 'kulak burun boğaz', 'laringoloji'],
     tabId: 'procedures',
+    subId: 'tracheal-and-cricotracheal-resection',
     popular: true
   },
   {
@@ -3132,6 +3282,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'İleri evre larinks kanserinde parsiyel ve total larenjektomi; çapraz-saha (Cross-Field) ventilasyonu, karotis sinüs vagal refleksi önlemi, kalıcı stoma ve ömür boyu oral entübasyon imkansızlığı disiplini.',
     keywords: ['laryngectomy', 'larenjektomi', 'total larenjektomi', 'parsiyel larenjektomi', 'larinks kanseri', 'supraglottik larenjektomi', 'hemilarenjektomi', 'cross-field ventilation', 'kalıcı stoma', 'end-tracheostomy', 'karotis sinüs refleksi', 'faringorafi', 'neofarinks', 'jaffe', 'nccn', 'ahns', 'ntsp', 'kbb', 'baş boyun cerrahisi'],
     tabId: 'procedures',
+    subId: 'laryngectomy-partial-and-total',
     popular: true
   },
   {
@@ -3142,6 +3293,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Pediatrik ve erişkin adenotonsillektomi; Oral RAE tüp, Crowe-Davis ağız açacağı basıncı, agresif PONV profilaksisi, laringospazm savunması ve kanayan tonsil (Bleeding Tonsil) protokolü.',
     keywords: ['tonsillectomy', 'adenoidectomy', 'tonsillektomi', 'adenoidektomi', 'bademcik', 'geniz eti', 'oral rae tüp', 'crowe-davis', 'boyle-davis', 'bleeding tonsil', 'kanayan tonsil', 'ponv', 'laringospazm', 'osas', 'jaffe', 'aao-hns', 'kbb', 'çocuk cerrahisi'],
     tabId: 'procedures',
+    subId: 'tonsillectomy-and-adenoidectomy',
     popular: true
   },
   {
@@ -3152,6 +3304,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     description: 'Transfemoral ve alternatif perkütan aort kapak replasmanı; Hızlı Ventriküler Pacing (RVP 180-220 bpm), MAC sedasyon vs GETA, retroperitoneal kanama, paravalvüler kaçak ve iletim blokları yönetimi.',
     keywords: ['tavi', 'tavr', 'transkateter aort kapak implantasyonu', 'transcatheter aortic valve replacement', 'aort darlığı', 'aortic stenosis', 'kardiyoloji', 'kvc', 'heart team', 'rvp', 'rapid ventricular pacing', 'edwards sapien', 'medtronic evolut', 'pacing', 'paravalvüler kaçak', 'pvl', 'jaffe', 'tam av blok', 'lbbb', 'mac', 'bilinçli sedasyon', 'perkütan kapak'],
     tabId: 'procedures',
+    subId: 'transcatheter-aortic-valve-implantation',
     popular: true
   },
   // EKT Vaka Takip & Zamanlayıcı Tool
@@ -3293,6 +3446,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'myatra'
     ],
     tabId: 'vascular-access',
+    subId: 'arterial',
     popular: true
   },
   // Kaynaklar ve İleri Okuma
@@ -3386,6 +3540,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'levitzky'
     ],
     tabId: 'basics',
+    subId: 'respiratory-physiology',
     popular: true
   },
   {
@@ -3495,6 +3650,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
       'marino'
     ],
     tabId: 'basics',
+    subId: 'cardiovascular-physiology',
     popular: true
   },
   {
