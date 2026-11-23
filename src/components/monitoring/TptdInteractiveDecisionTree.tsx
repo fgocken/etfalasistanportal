@@ -656,12 +656,12 @@ export const TptdInteractiveDecisionTree: React.FC<TptdInteractiveDecisionTreePr
       if (!src || !dst) return null;
       const sRect = src.getBoundingClientRect();
       const dRect = dst.getBoundingClientRect();
-      const x1 = sRect.right - stageRect.left;
-      const y1 = sRect.top + sRect.height / 2 - stageRect.top;
-      const x2 = dRect.left - stageRect.left;
-      const y2 = dRect.top + dRect.height / 2 - stageRect.top;
-      const cx = (x1 + x2) / 2;
-      return `M ${x1} ${y1} C ${cx} ${y1}, ${cx} ${y2}, ${x2} ${y2}`;
+      const x1 = sRect.left + sRect.width / 2 - stageRect.left;
+      const y1 = sRect.bottom - stageRect.top;
+      const x2 = dRect.left + dRect.width / 2 - stageRect.left;
+      const y2 = dRect.top - stageRect.top;
+      const cy = (y1 + y2) / 2;
+      return `M ${x1} ${y1} C ${x1} ${cy}, ${x2} ${cy}, ${x2} ${y2}`;
     };
 
     // Passive curves first
@@ -1030,15 +1030,15 @@ export const TptdInteractiveDecisionTree: React.FC<TptdInteractiveDecisionTreePr
 
       {/* Main Split: Visual Interactive Tree + Bedside Decision Card */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
-        {/* Interactive 4-Column SVG Tree */}
+        {/* Interactive 4-Tier Vertical (Top-to-Bottom) SVG Tree */}
         <div
-          className={`xl:col-span-7 rounded-xl border p-3.5 overflow-x-auto ${
+          className={`xl:col-span-7 rounded-xl border p-3.5 sm:p-4 ${
             isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200'
           }`}
         >
-          <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
             <span className={`text-xs font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-              Karar Akışı Haritası
+              Karar Akışı Haritası (Yukarıdan Aşağıya)
             </span>
             <span className="text-[11px] text-slate-400">
               Düğümlere tıklayarak yolu değiştirebilirsiniz
@@ -1047,7 +1047,7 @@ export const TptdInteractiveDecisionTree: React.FC<TptdInteractiveDecisionTreePr
 
           <div
             ref={stageRef}
-            className="relative min-w-[620px] grid grid-cols-4 gap-5 py-1"
+            className="relative flex flex-col gap-7 py-1"
           >
             {/* SVG Connectors */}
             <svg
@@ -1068,167 +1068,181 @@ export const TptdInteractiveDecisionTree: React.FC<TptdInteractiveDecisionTreePr
                         ? '#334155'
                         : '#cbd5e1'
                   }
-                  strokeWidth={curve.active ? 3 : 1.4}
-                  strokeOpacity={curve.active ? 1 : 0.5}
+                  strokeWidth={curve.active ? 3 : 1.3}
+                  strokeOpacity={curve.active ? 1 : 0.45}
                 />
               ))}
             </svg>
 
-            {/* Col 1: CI */}
-            <div className="relative z-10 flex flex-col justify-around gap-3">
-              <div
-                className={`text-center text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-1 rounded-md border ${
-                  isDark
-                    ? 'bg-slate-950 border-slate-800 text-slate-400'
-                    : 'bg-slate-50 border-slate-200 text-slate-500'
-                }`}
-              >
-                1. Perfüzyon (CI)
+            {/* Tier 1: CI */}
+            <div className="relative z-10 space-y-1.5">
+              <div className="flex justify-center">
+                <span
+                  className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-400'
+                      : 'bg-slate-50 border-slate-200 text-slate-500'
+                  }`}
+                >
+                  1. Perfüzyon (CI)
+                </span>
               </div>
-              <button
-                ref={setNodeRef('node-ci-low')}
-                type="button"
-                onClick={() => setCi('low')}
-                className={nodeCardCls(ci === 'low')}
-              >
-                <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
-                  Düşük Debi
-                </div>
-                <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  CI &lt; 3,0
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Hipoperfüzyon riski</div>
-              </button>
+              <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+                <button
+                  ref={setNodeRef('node-ci-low')}
+                  type="button"
+                  onClick={() => setCi('low')}
+                  className={nodeCardCls(ci === 'low')}
+                >
+                  <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
+                    Düşük Debi
+                  </div>
+                  <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    CI &lt; 3,0 <span className="text-[10px] font-normal">L/dk/m²</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Hipoperfüzyon riski</div>
+                </button>
 
-              <button
-                ref={setNodeRef('node-ci-high')}
-                type="button"
-                onClick={() => setCi('high')}
-                className={nodeCardCls(ci === 'high')}
-              >
-                <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
-                  Yeterli / Yüksek
-                </div>
-                <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  CI ≥ 3,0
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Normal / hiperdinamik</div>
-              </button>
+                <button
+                  ref={setNodeRef('node-ci-high')}
+                  type="button"
+                  onClick={() => setCi('high')}
+                  className={nodeCardCls(ci === 'high')}
+                >
+                  <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
+                    Yeterli / Yüksek
+                  </div>
+                  <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    CI ≥ 3,0 <span className="text-[10px] font-normal">L/dk/m²</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Normal / hiperdinamik</div>
+                </button>
+              </div>
             </div>
 
-            {/* Col 2: GEDVI */}
-            <div className="relative z-10 flex flex-col justify-around gap-2.5">
-              <div
-                className={`text-center text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-1 rounded-md border ${
-                  isDark
-                    ? 'bg-slate-950 border-slate-800 text-slate-400'
-                    : 'bg-slate-50 border-slate-200 text-slate-500'
-                }`}
-              >
-                2. Önyük (GEDVI)
+            {/* Tier 2: GEDVI */}
+            <div className="relative z-10 space-y-1.5">
+              <div className="flex justify-center">
+                <span
+                  className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-400'
+                      : 'bg-slate-50 border-slate-200 text-slate-500'
+                  }`}
+                >
+                  2. Volümetrik Önyük (GEDVI)
+                </span>
               </div>
-              <button
-                ref={setNodeRef('node-gedvi-low')}
-                type="button"
-                onClick={() => setGedvi('low')}
-                className={nodeCardCls(gedvi === 'low')}
-              >
-                <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
-                  Düşük Önyük
-                </div>
-                <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  &lt; 680 <span className="text-[10px] font-normal">mL/m²</span>
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Volümetrik dolum ↓</div>
-              </button>
+              <div className="grid grid-cols-3 gap-2.5">
+                <button
+                  ref={setNodeRef('node-gedvi-low')}
+                  type="button"
+                  onClick={() => setGedvi('low')}
+                  className={nodeCardCls(gedvi === 'low')}
+                >
+                  <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
+                    Düşük Önyük
+                  </div>
+                  <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    &lt; 680 <span className="text-[10px] font-normal">mL/m²</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Dolum azalmış</div>
+                </button>
 
-              <button
-                ref={setNodeRef('node-gedvi-normal')}
-                type="button"
-                onClick={() => setGedvi('normal')}
-                className={nodeCardCls(gedvi === 'normal')}
-              >
-                <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
-                  Normal Önyük
-                </div>
-                <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  680–800
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Hedef aralıkta</div>
-              </button>
+                <button
+                  ref={setNodeRef('node-gedvi-normal')}
+                  type="button"
+                  onClick={() => setGedvi('normal')}
+                  className={nodeCardCls(gedvi === 'normal')}
+                >
+                  <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
+                    Normal Önyük
+                  </div>
+                  <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    680–800
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Hedef aralıkta</div>
+                </button>
 
-              <button
-                ref={setNodeRef('node-gedvi-high')}
-                type="button"
-                onClick={() => setGedvi('high')}
-                className={nodeCardCls(gedvi === 'high')}
-              >
-                <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
-                  Yüksek Önyük
-                </div>
-                <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  &gt; 800 <span className="text-[10px] font-normal">mL/m²</span>
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Volüm fazlası / dilatasyon</div>
-              </button>
+                <button
+                  ref={setNodeRef('node-gedvi-high')}
+                  type="button"
+                  onClick={() => setGedvi('high')}
+                  className={nodeCardCls(gedvi === 'high')}
+                >
+                  <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
+                    Yüksek Önyük
+                  </div>
+                  <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    &gt; 800 <span className="text-[10px] font-normal">mL/m²</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Volüm fazlası</div>
+                </button>
+              </div>
             </div>
 
-            {/* Col 3: EVLWI */}
-            <div className="relative z-10 flex flex-col justify-around gap-3">
-              <div
-                className={`text-center text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-1 rounded-md border ${
-                  isDark
-                    ? 'bg-slate-950 border-slate-800 text-slate-400'
-                    : 'bg-slate-50 border-slate-200 text-slate-500'
-                }`}
-              >
-                3. Akciğer (EVLWI)
+            {/* Tier 3: EVLWI */}
+            <div className="relative z-10 space-y-1.5">
+              <div className="flex justify-center">
+                <span
+                  className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-400'
+                      : 'bg-slate-50 border-slate-200 text-slate-500'
+                  }`}
+                >
+                  3. Ekstravasküler Akciğer Suyu (EVLWI)
+                </span>
               </div>
-              <button
-                ref={setNodeRef('node-evlwi-low')}
-                type="button"
-                onClick={() => setEvlwi('low')}
-                className={nodeCardCls(evlwi === 'low')}
-              >
-                <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
-                  Kuru / Sınırda
-                </div>
-                <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  EVLWI &lt; 10
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Sıvı toleransı mevcut</div>
-              </button>
+              <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+                <button
+                  ref={setNodeRef('node-evlwi-low')}
+                  type="button"
+                  onClick={() => setEvlwi('low')}
+                  className={nodeCardCls(evlwi === 'low')}
+                >
+                  <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
+                    Kuru / Sınırda
+                  </div>
+                  <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    EVLWI &lt; 10 <span className="text-[10px] font-normal">mL/kg</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Sıvı toleransı mevcut</div>
+                </button>
 
-              <button
-                ref={setNodeRef('node-evlwi-high')}
-                type="button"
-                onClick={() => setEvlwi('high')}
-                className={nodeCardCls(evlwi === 'high')}
-              >
-                <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
-                  Pulmoner Ödem
-                </div>
-                <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  EVLWI ≥ 10
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Belirgin akciğer suyu</div>
-              </button>
+                <button
+                  ref={setNodeRef('node-evlwi-high')}
+                  type="button"
+                  onClick={() => setEvlwi('high')}
+                  className={nodeCardCls(evlwi === 'high')}
+                >
+                  <div className="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">
+                    Pulmoner Ödem
+                  </div>
+                  <div className={`text-xs font-mono font-extrabold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    EVLWI ≥ 10 <span className="text-[10px] font-normal">mL/kg</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">Belirgin akciğer suyu</div>
+                </button>
+              </div>
             </div>
 
-            {/* Col 4: Mechanism (PVPI when wet, SVRI 3-tier when dry) */}
-            <div className="relative z-10 flex flex-col justify-around gap-2.5">
-              <div
-                className={`text-center text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-1 rounded-md border ${
-                  isDark
-                    ? 'bg-slate-950 border-slate-800 text-slate-400'
-                    : 'bg-slate-50 border-slate-200 text-slate-500'
-                }`}
-              >
-                {evlwi === 'high' ? '4. Ödem Tipi (PVPI)' : '4. Direnç (SVRI)'}
+            {/* Tier 4: Mechanism (PVPI when wet, SVRI 3-tier when dry) */}
+            <div className="relative z-10 space-y-1.5">
+              <div className="flex justify-center">
+                <span
+                  className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                    isDark
+                      ? 'bg-slate-950 border-slate-800 text-slate-400'
+                      : 'bg-slate-50 border-slate-200 text-slate-500'
+                  }`}
+                >
+                  {evlwi === 'high' ? '4. Ödem Mekanizması (PVPI)' : '4. Vasküler Direnç / Tonus (SVRI)'}
+                </span>
               </div>
 
               {evlwi === 'high' ? (
-                <>
+                <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
                   <button
                     ref={setNodeRef('node-mech-pvpi_hydro')}
                     type="button"
@@ -1258,9 +1272,9 @@ export const TptdInteractiveDecisionTree: React.FC<TptdInteractiveDecisionTreePr
                     </div>
                     <div className="text-[10px] text-slate-400 mt-0.5">ARDS / Kapiller kaçak</div>
                   </button>
-                </>
+                </div>
               ) : (
-                <>
+                <div className="grid grid-cols-3 gap-2.5">
                   <button
                     ref={setNodeRef('node-mech-svri_low')}
                     type="button"
@@ -1305,7 +1319,7 @@ export const TptdInteractiveDecisionTree: React.FC<TptdInteractiveDecisionTreePr
                     </div>
                     <div className="text-[10px] text-slate-400 mt-0.5">Vazokonstriksiyon</div>
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>

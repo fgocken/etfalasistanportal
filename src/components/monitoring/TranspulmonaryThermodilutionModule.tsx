@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -7,9 +7,7 @@ import {
   Droplets,
   Gauge,
   Info,
-  RotateCcw,
   ShieldAlert,
-  Sliders,
   ThermometerSnowflake,
   XCircle,
 } from 'lucide-react';
@@ -25,7 +23,6 @@ type SectionFilter =
   | 'intro'
   | 'physics'
   | 'parameters'
-  | 'simulator'
   | 'algorithms'
   | 'pitfalls'
   | 'references';
@@ -162,245 +159,6 @@ const GLOSSARY_GROUPS: GlossaryGroup[] = [
           'Dört kalp boşluğunun toplam dolum hacmine kıyasla kalbin fırlattığı kan oranıdır (4 × SV / GEDV). Hem sağ hem sol ventrikülün ortak ejeksiyon göstergesidir.',
       },
     ],
-  },
-];
-
-type TptdPresetId =
-  | 'normal'
-  | 'hypovolemic'
-  | 'early_septic'
-  | 'septic_overload'
-  | 'septic_cardiomyopathy'
-  | 'cardiogenic_edema'
-  | 'ards_permeability'
-  | 'obstructive_rv';
-
-interface TptdPreset {
-  id: TptdPresetId;
-  label: string;
-  shortTag: string;
-  ci: number;
-  gedvi: number;
-  evlwi: number;
-  pvpi: number;
-  gef: number;
-  svri: number;
-  svv: number;
-  txCode: string;
-  summary: string;
-}
-
-const TPTD_PRESETS: TptdPreset[] = [
-  {
-    id: 'normal',
-    label: 'Övolemik / Dengeli',
-    shortTag: 'Normal',
-    ci: 3.4,
-    gedvi: 740,
-    evlwi: 6.0,
-    pvpi: 1.8,
-    gef: 30,
-    svri: 1950,
-    svv: 7,
-    txCode: 'İzlem',
-    summary: 'Fizyolojik önyük, debi, tonus ve kuru akciğer.',
-  },
-  {
-    id: 'hypovolemic',
-    label: 'Hipovolemik / Hemorajik Şok',
-    shortTag: 'Önyük ↓ · V+',
-    ci: 1.9,
-    gedvi: 520,
-    evlwi: 5.5,
-    pvpi: 1.9,
-    gef: 32,
-    svri: 2850,
-    svv: 19,
-    txCode: 'V+',
-    summary: 'Düşük GEDVI + yüksek SVV + kuru akciğer (EVLWI < 7) + kompansatuvar vazokonstriksiyon.',
-  },
-  {
-    id: 'early_septic',
-    label: 'Erken Hiperdinamik Septik Şok',
-    shortTag: 'Vazopleji + Önyük ↓',
-    ci: 4.3,
-    gedvi: 590,
-    evlwi: 7.5,
-    pvpi: 2.6,
-    gef: 31,
-    svri: 1050,
-    svv: 16,
-    txCode: 'V+ / VP',
-    summary: 'Çökmüş SVRI + rölatif hipovolemi; kontrollü sıvı ve erken noradrenalin birlikte gerekir.',
-  },
-  {
-    id: 'septic_overload',
-    label: 'Septik Vazopleji + Sıvı Fazlası',
-    shortTag: 'Vazopleji + Ödem',
-    ci: 4.4,
-    gedvi: 890,
-    evlwi: 13.0,
-    pvpi: 3.5,
-    gef: 27,
-    svri: 980,
-    svv: 8,
-    txCode: 'VP + V−',
-    summary: 'Sıvı yüklemesine bağlı yüksek GEDVI/EVLWI + kapiller kaçak; sıvı kesilir, vazopresör ve de-resüsitasyon planlanır.',
-  },
-  {
-    id: 'septic_cardiomyopathy',
-    label: 'Septik Kardiyomyopati (Mikst Şok)',
-    shortTag: 'Vazopleji + Pompa ↓',
-    ci: 2.0,
-    gedvi: 820,
-    evlwi: 11.5,
-    pvpi: 3.2,
-    gef: 17,
-    svri: 1150,
-    svv: 9,
-    txCode: 'VP + Cat',
-    summary: 'Hem düşük SVRI (vazopleji) hem düşük GEF/CFI (miyokardiyal depresyon); noradrenalin + inotrop (dobutamin) gerekir.',
-  },
-  {
-    id: 'cardiogenic_edema',
-    label: 'Kardiyojenik (Hidrostatik) Ödem',
-    shortTag: 'Pompa ↓ · PVPI < 3',
-    ci: 1.8,
-    gedvi: 980,
-    evlwi: 14.5,
-    pvpi: 2.1,
-    gef: 15,
-    svri: 2650,
-    svv: 7,
-    txCode: 'Cat + V−',
-    summary: 'Yüksek GEDVI, çok düşük CI/GEF ve hidrostatik akciğer ödemi (PVPI < 3,0); inotrop + dekonjesyon.',
-  },
-  {
-    id: 'ards_permeability',
-    label: 'ARDS (Permeabilite) Ödemi',
-    shortTag: 'Kaçak · PVPI ≥ 3',
-    ci: 2.9,
-    gedvi: 640,
-    evlwi: 16.0,
-    pvpi: 4.3,
-    gef: 28,
-    svri: 1550,
-    svv: 10,
-    txCode: 'V− / Akciğer Koru',
-    summary: 'Normal/düşük GEDVI’ye rağmen ağır alveolo-kapiller kaçak (EVLWI ↑↑, PVPI ≥ 3,0); restriktif sıvı + ARDS ventilasyonu.',
-  },
-  {
-    id: 'obstructive_rv',
-    label: 'Obstrüktif Şok / Masif PE · Tamponad',
-    shortTag: 'TPTD Tuzak · EKO!',
-    ci: 1.7,
-    gedvi: 680,
-    evlwi: 5.0,
-    pvpi: 1.6,
-    gef: 18,
-    svri: 2900,
-    svv: 14,
-    txCode: 'EKO! + Neden Tedavi',
-    summary: 'Düşük CI + yüksek SVRI; masif PE’de EVLWI yanlış düşük çıkabilir ve SVV RV yetmezliği nedeniyle yanlış pozitiftir!',
-  },
-];
-
-interface AlgorithmBranch {
-  group: 'low_ci' | 'normal_high_ci';
-  ciCond: string;
-  preloadCond: string;
-  evlwiCond: string;
-  code: string;
-  codeTone: 'emerald' | 'amber' | 'rose' | 'sky' | 'indigo';
-  actionTitle: string;
-  protocol: string;
-  target: string;
-}
-
-const TREATMENT_ALGORITHM_BRANCHES: AlgorithmBranch[] = [
-  {
-    group: 'low_ci',
-    ciCond: 'CI < 3,0 (veya < 2,5 + hipoperfüzyon)',
-    preloadCond: 'GEDVI < 700 veya SVV/PPV ≥ %10–13 (PLR +)',
-    evlwiCond: 'EVLWI < 10 mL/kg PBW',
-    code: 'V+',
-    codeTone: 'sky',
-    actionTitle: 'Sıvı Yüklemesi (Önyük Optimizasyonu)',
-    protocol:
-      '250–500 mL dengeli kristaloid bolusu verin. Her bolus sonrası SV artışı (≥ %10) ve SVV/PPV düşüşünü doğrulayın.',
-    target: 'GEDVI 700–800 · SVV < %10 · CI ≥ 2,8–3,0',
-  },
-  {
-    group: 'low_ci',
-    ciCond: 'CI < 3,0 (veya < 2,5 + hipoperfüzyon)',
-    preloadCond: 'GEDVI < 700 veya PLR (+)',
-    evlwiCond: 'EVLWI ≥ 10 mL/kg PBW (Akciğer Ödemi Var!)',
-    code: 'V+! / Cat',
-    codeTone: 'amber',
-    actionTitle: 'Çok Dikkatli Mini Sıvı Bolusu + Erken İnotrop / Vazopresör',
-    protocol:
-      'Sıvı toleransı sınırdadır. Yalnızca 100–250 mL kontrollü test bolusu (veya hiperonkotik albümin) uygulayın; PVPI ≥ 3,0 ise hızla sıvıyı kısıtlayıp erken vazoaktif/inotropik desteğe geçin.',
-    target: 'CI ≥ 2,5 sağlanınca sıvıyı durdur · EVLWI artışını engelle',
-  },
-  {
-    group: 'low_ci',
-    ciCond: 'CI < 3,0 (veya < 2,5 + hipoperfüzyon)',
-    preloadCond: 'GEDVI ≥ 700–800 (Önyük Yeterli) · SVV < %10',
-    evlwiCond: 'EVLWI < 10 mL/kg PBW',
-    code: 'Cat / EKO!',
-    codeTone: 'indigo',
-    actionTitle: 'İnotropik Destek & Acil Yatak Başı EKO',
-    protocol:
-      'CFI < 4,5 veya GEF < %25 ise inotrop (dobutamin / adrenalin / milrinon) başlayın. Eşzamanlı yatak başı EKO ile akut RV yetmezliği, tamponad veya masif PE’yi dışlayın.',
-    target: 'CI ≥ 2,8 · CFI ≥ 4,5 · Laktat klirensi ↑',
-  },
-  {
-    group: 'low_ci',
-    ciCond: 'CI < 3,0 (Kardiyojenik / Konjestif)',
-    preloadCond: 'GEDVI > 800 (Yüksek Doluluk)',
-    evlwiCond: 'EVLWI ≥ 10 mL/kg PBW (PVPI < 3,0)',
-    code: 'Cat + V−',
-    codeTone: 'rose',
-    actionTitle: 'İnotrop + Aktif Dekonjesyon (Negatif Denge)',
-    protocol:
-      'Sıvı KESİNLİKLE vermeyin. İnotrop (dobutamin / levosimendan) + MAP uygunsa vazodilatör + IV diüretik veya CRRT ultrafiltrasyon ile volüm boşaltın. Refrakter vakada mekanik destek (IABP/Impella/VA-ECMO) değerlendirin.',
-    target: 'EVLWI < 10 · GEDVI < 800 · CI > 2,5',
-  },
-  {
-    group: 'normal_high_ci',
-    ciCond: 'CI ≥ 3,0 + Hipotansiyon (MAP < 65 mmHg)',
-    preloadCond: 'GEDVI < 700 veya SVV ≥ %10–13 (PLR +)',
-    evlwiCond: 'EVLWI < 10 mL/kg PBW',
-    code: 'V+ / VP',
-    codeTone: 'sky',
-    actionTitle: 'Kontrollü Sıvı + Erken Vazopresör (Noradrenalin)',
-    protocol:
-      'Özellikle SVRI < 1400 ise sadece sıvı ile MAP yükselmeyecektir. 250–500 mL dengeli kristaloid verirken eşzamanlı Noradrenalin infüzyonu titre edin.',
-    target: 'MAP ≥ 65 mmHg · SVV < %10 · SVRI 1700–2400',
-  },
-  {
-    group: 'normal_high_ci',
-    ciCond: 'CI ≥ 3,0 + Hipotansiyon (MAP < 65 mmHg)',
-    preloadCond: 'GEDVI ≥ 700–800 · SVV < %10',
-    evlwiCond: 'EVLWI < 10 mL/kg PBW',
-    code: 'VP',
-    codeTone: 'emerald',
-    actionTitle: 'Saf Vazopresör Titrasyonu (Sıvı Verme)',
-    protocol:
-      'Sorun volüm eksikliği değil vazoplejidir (SVRI ↓↓). Ek sıvı verilmez; Noradrenalin (yüksek dozda Vazopresin eklemesi) ile perfüzyon basıncı sağlanır.',
-    target: 'MAP ≥ 65 mmHg · EVLWI < 10 korunması',
-  },
-  {
-    group: 'normal_high_ci',
-    ciCond: 'CI ≥ 3,0 (Yeterli / Yüksek Debi)',
-    preloadCond: 'GEDVI Normal veya Yüksek',
-    evlwiCond: 'EVLWI ≥ 10 mL/kg PBW',
-    code: 'V− / VP',
-    codeTone: 'rose',
-    actionTitle: 'Sıvı Kısıtlaması, De-Resüsitasyon ve ARDS Yönetimi',
-    protocol:
-      'Ek sıvıyı kesin. Hemodinami/MAP elverdiğinde IV furosemid veya CRRT ultrafiltrasyon ile kontrollü negatif denge (V−) uygulayın. PVPI ≥ 3,0 ise akciğer koruyucu ventilasyon (Vt 6 mL/kg PBW, PEEP, pron) ve kaynak kontrolüne odaklanın.',
-    target: 'EVLWI < 10 · PaO_{2}/FiO_{2} ↑ · Sıvı dengesi ≤ 0',
   },
 ];
 
@@ -629,136 +387,6 @@ export const TranspulmonaryThermodilutionModule: React.FC<TranspulmonaryThermodi
 }) => {
   const [sectionFilter, setSectionFilter] = useState<SectionFilter>('all');
 
-  // Interactive Hemodynamic Phenotype Simulator State
-  const [activePreset, setActivePreset] = useState<TptdPresetId | 'custom'>('normal');
-  const [ci, setCi] = useState<number>(3.4);
-  const [gedvi, setGedvi] = useState<number>(740);
-  const [evlwi, setEvlwi] = useState<number>(6.0);
-  const [pvpi, setPvpi] = useState<number>(1.8);
-  const [gef, setGef] = useState<number>(30);
-  const [svri, setSvri] = useState<number>(1950);
-  const [svv, setSvv] = useState<number>(7);
-
-  const applyPreset = (preset: TptdPreset) => {
-    setActivePreset(preset.id);
-    setCi(preset.ci);
-    setGedvi(preset.gedvi);
-    setEvlwi(preset.evlwi);
-    setPvpi(preset.pvpi);
-    setGef(preset.gef);
-    setSvri(preset.svri);
-    setSvv(preset.svv);
-  };
-
-  // Clinical Decision Synthesis from live parameters
-  const diagnosis = useMemo(() => {
-    const itbvi = Math.round(gedvi * 1.25);
-    const pbvi = Math.max(80, itbvi - gedvi);
-    const cfiNum = (ci * 1000) / Math.max(300, gedvi);
-    const cfi = cfiNum.toFixed(1);
-
-    let title = 'Övolemik / Dengeli Hemodinamik Profil';
-    let tone: 'emerald' | 'amber' | 'rose' | 'sky' = 'emerald';
-    let txCode = 'İzlem';
-    let mechanism =
-      'Kardiyak indeks, volümetrik önyük (GEDVI), akciğer suyu (EVLWI), permeabilite (PVPI) ve sistemik direnç (SVRI) fizyolojik sınırlardadır.';
-    let action =
-      'Rutin idame stratejisine devam edin. Hipotansiyon gelişirse SVV/PPV veya pasif bacak kaldırma (PLR) ile dinamik yanıtı doğrulayın.';
-    let fluidSafety = 'Güvenli (Dinamik Test ile Değerlendirin)';
-
-    if (activePreset === 'obstructive_rv') {
-      title = 'Obstrüktif Şok / Masif PE veya Tamponad (TPTD Tuzak Profili)';
-      tone = 'rose';
-      txCode = 'EKO! + Neden Tedavi';
-      mechanism =
-        'CI belirgin düşük, SVRI yüksek ve GEF azalmıştır. Masif PE’de perfüze olmayan akciğer alanları yüzünden EVLWI olduğundan DÜŞÜK çıkabilir; akut RV yetmezliğinde SVV/PPV yanlış pozitif (> %13) yükselerek yanıltıcı sıvı yüklemesine sürükleyebilir.';
-      action =
-        'Derhal yatak başı EKO/TEE yapın (RV dilatasyonu, D-şekilli septum, perikardiyal tamponad). Kontrolsüz sıvı yüklemeyin; obstrüksiyon nedenini (tromboliz/trombektomi, perikardiyosentez) tedavi edin ve RV perfüzyonu için noradrenalinle MAP’i koruyun.';
-      fluidSafety = 'DİKKAT — Yüksek SVV Yanlış Pozitif Olabilir · Önce EKO!';
-    } else if (ci < 2.5 && svri < 1400 && (gef < 22 || cfiNum < 4.0)) {
-      title = 'Septik Kardiyomyopati (Mikst Vazoplejik + Miyokardiyal Depresyon)';
-      tone = 'rose';
-      txCode = 'VP + Cat';
-      mechanism =
-        'Hem sistemik vasküler direnç çökmüştür (SVRI < 1400) hem de miyokardiyal kontraktilite baskılanmıştır (CI < 2,5, GEF < %22 / CFI < 4,0).';
-      action =
-        'Tek başına sıvı veya tek başına vazopresör yetersizdir. Noradrenalin (MAP ≥ 65) + Dobutamin (inotrop) kombinasyonu başlatın; EVLWI ≥ 10 ise sıvıyı kesin ve yatak başı EKO ile biventriküler fonksiyonu doğrulayın.';
-      fluidSafety =
-        evlwi >= 10 ? 'SIVI VERMEYİN (EVLWI ↑) — Vazopresör + İnotrop' : 'Sınırlı Tolerans — Önce VP + İnotrop';
-    } else if (evlwi >= 10 && pvpi >= 3.0) {
-      title =
-        svri < 1400
-          ? 'Septik Vazopleji + Permeabilite Akciğer Ödemi (Sıvı Fazlası / Kapiller Kaçak)'
-          : 'Permeabilite Tipi Pulmoner Ödem (ARDS / İnflamatuar Kapiller Kaçak)';
-      tone = 'rose';
-      txCode = svri < 1400 ? 'VP + V−' : 'V− / Akciğer Koru';
-      mechanism =
-        'EVLWI belirgin yüksek (≥ 10 mL/kg PBW) ve PVPI ≥ 3,0 olması alveolo-kapiller bariyer hasarına bağlı kapiller kaçağı gösterir.';
-      action =
-        svri < 1400
-          ? 'Ek sıvı yüklemesini KESİN. Noradrenalin ile MAP ≥ 65 mmHg sağlayın; hemodinami tolere ettikçe diüretik/CRRT ile negatif sıvı dengesine (V−) geçin ve akciğer koruyucu ventilasyon uygulayın.'
-          : 'Sıvı yüklemesinden KESİN KAÇININ. Akciğer koruyucu ventilasyon (Vt 6 mL/kg PBW, uygun PEEP), negatif/nötr sıvı dengesi (V−) ve sepsis/ARDS nedeninin tedavisine odaklanın.';
-      fluidSafety = 'YÜKSEK RİSK — Ek Sıvı Kontrendikeye Yakındır (EVLWI ↑ + PVPI ≥ 3)';
-    } else if (evlwi >= 10 && pvpi < 3.0) {
-      title = 'Kardiyojenik / Hidrostatik Pulmoner Ödem (Yüksek Dolum Basıncı)';
-      tone = 'amber';
-      txCode = ci < 2.5 || gef < 22 ? 'Cat + V−' : 'V−';
-      mechanism =
-        'EVLWI ≥ 10 mL/kg PBW olmasına karşın PVPI < 3,0 kalmıştır; kapiller membran görece sağlamdır, ödem yüksek hidrostatik basınç ve sol kalp dolum/pompa yetersizliğine bağlıdır.';
-      action =
-        'Sıvı vermeyin; IV diüretik veya CRRT ultrafiltrasyon ile dekonjesyon (V−) sağlayın. CI < 2,5 veya GEF < %22 ise inotropik destek (dobutamin/levosimendan) ekleyin ve yatak başı EKO yapın.';
-      fluidSafety = 'SIVI VERMEYİN — Dekonjesyon (V−) & İnotrop (Cat)';
-    } else if ((gedvi < 650 || svv >= 13) && evlwi < 10 && svri < 1400) {
-      title = 'Erken Hiperdinamik Septik Şok (Vazopleji + Rölatif Hipovolemi)';
-      tone = 'amber';
-      txCode = 'V+ / VP';
-      mechanism =
-        'Düşük SVRI (< 1400) nedeniyle venöz kapasitans artmış ve rölatif hipovolemi (düşük GEDVI / yüksek SVV) oluşmuştur; akciğerler henüz kurudur (EVLWI < 10).';
-      action =
-        '250–500 mL dengeli kristaloid bolusu ile önyükü toparlarken (V+), MAP < 65 mmHg ise gecikmeden Noradrenalin (VP) başlatın. EVLWI ≥ 10 sınırına yaklaşılırsa sıvıyı durdurun.';
-      fluidSafety = 'Kontrollü Sıvı + Erken Vazopresör (V+ / VP)';
-    } else if ((gedvi < 650 || svv >= 13) && evlwi < 10) {
-      title = 'Hipovolemik / Hemorajik Şok (Düşük Volümetrik Önyük)';
-      tone = 'sky';
-      txCode = 'V+';
-      mechanism =
-        'GEDVI düşük (< 650 mL/m²) ve dinamik varyasyon yüksek (SVV ≥ %13); EVLWI normal (< 10) olduğu için akciğer parankimi sıvı yüklemesini iyi tolere eder.';
-      action =
-        '250–500 mL dengeli kristaloid (kanamada kan ürünleri) bolusu uygulayın (V+). Her bolus sonrası SV/CI artışı ve SVV < %10 hedefini kontrol edin; GEDVI 700–800 bandında durun.';
-      fluidSafety = 'Sıvı Toleransı Yüksek — Bolus Uygulanabilir (V+)';
-    } else if (ci < 2.5 && gedvi >= 700 && evlwi < 10) {
-      title = 'İzole Düşük Debili Miyokardiyal Disfonksiyon (Kuru Akciğer)';
-      tone = 'amber';
-      txCode = 'Cat / EKO!';
-      mechanism =
-        'Önyük yeterli (GEDVI ≥ 700) ve akciğer suyu normal (< 10) olmasına rağmen CI düşük (< 2,5) ve CFI/GEF azalmıştır.';
-      action =
-        'Ek sıvı yerine inotropik destek (Cat) başlatın ve yatak başı EKO ile bölgesel duvar hareket kusuru, RV yetmezliği veya kapak patolojisini araştırın.';
-      fluidSafety = 'Sıvı Yanıtsız — İnotrop & EKO Öncelikli';
-    } else if (svri < 1400 && ci >= 3.0) {
-      title = 'Saf Hiperdinamik Vazopleji (Övolemik Dağılım Profili)';
-      tone = 'amber';
-      txCode = 'VP';
-      mechanism =
-        'Düşük SVRI (< 1400 dyn·s·cm⁻⁵·m²) nedeniyle sistemik direnç düşmüştür; önyük (GEDVI) yeterlidir ve kalp debisi kompansatuvar yüksektir.';
-      action =
-        'Gereksiz sıvı yüklemesinden kaçının; MAP ≥ 65 mmHg hedefi için Noradrenalin (gerekirse Vazopresin) titre edin (VP).';
-      fluidSafety = 'Sıvı Gerekmiyor — Vazopresör (VP) Öncelikli';
-    }
-
-    return {
-      itbvi,
-      pbvi,
-      cfi,
-      txCode,
-      title,
-      tone,
-      mechanism,
-      action,
-      fluidSafety,
-    };
-  }, [activePreset, ci, gedvi, evlwi, pvpi, gef, svri, svv]);
-
   const showSection = (id: Exclude<SectionFilter, 'all'>) =>
     sectionFilter === 'all' || sectionFilter === id;
 
@@ -826,10 +454,9 @@ export const TranspulmonaryThermodilutionModule: React.FC<TranspulmonaryThermodi
               { id: 'intro', label: '00 · Tanım, Mantık & Sözlük' },
               { id: 'physics', label: '01 · Fizik & Termodilüsyon Eğrisi' },
               { id: 'parameters', label: '02 · Volümetrik Parametreler' },
-              { id: 'simulator', label: '03 · 8 Hemodinamik Profil & Lab' },
-              { id: 'algorithms', label: '04 · Tedavi Algoritmaları' },
-              { id: 'pitfalls', label: '05 · Protokol, Tuzaklar & Sınav' },
-              { id: 'references', label: '06 · Literatür' },
+              { id: 'algorithms', label: '03 · Tedavi Karar Ağacı & ROSE' },
+              { id: 'pitfalls', label: '04 · Protokol, Tuzaklar & Sınav' },
+              { id: 'references', label: '05 · Literatür' },
             ] as const
           ).map((tab) => (
             <button
@@ -1769,430 +1396,23 @@ export const TranspulmonaryThermodilutionModule: React.FC<TranspulmonaryThermodi
       )}
 
       {/* =================================================================== */}
-      {/* 03. İNTERAKTİF PROFİL İNCELEYİCİ & ÖDEM AYIRICI TANI                 */}
-      {/* =================================================================== */}
-      {showSection('simulator') && (
-        <section className="space-y-6">
-          <div className="space-y-1.5">
-            <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
-              Bölüm 03 · 8 Hemodinamik Profil & Etkileşimli Laboratuvar
-            </div>
-            <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Yatak Başı TPTD Hemodinamik Profilleri (<MedicalText text="CI" /> · <MedicalText text="GEDVI" /> · <MedicalText text="EVLWI" /> · <MedicalText text="PVPI" /> · <MedicalText text="SVV" />)
-            </h3>
-            <p className={`text-sm leading-relaxed max-w-4xl ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-              Aşağıdaki 8 temel klinik profilden birini seçin veya parametre kaydırıcılarıyla kendi hastanızın değerlerini
-              girin. <strong>Kardiyojenik (Hidrostatik) Ödem</strong> veya <strong>ARDS (Permeabilite) Ödemi</strong>{' '}
-              profillerinden biri seçildiğinde pulmoner ödem ayırıcı tanı tablosu otomatik açılır.
-            </p>
-          </div>
-
-          <div
-            className={`rounded-2xl border p-4 sm:p-5 space-y-5 ${
-              isDark ? 'bg-slate-950/75 border-slate-800' : 'bg-slate-50/70 border-slate-200'
-            }`}
-          >
-            {/* Preset Selector Row (All 8 Hemodynamic Profiles) */}
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-1.5">
-                {TPTD_PRESETS.map((preset) => (
-                  <button
-                    key={preset.id}
-                    type="button"
-                    onClick={() => applyPreset(preset)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
-                      activePreset === preset.id
-                        ? isDark
-                          ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200'
-                          : 'bg-cyan-50 border-cyan-400 text-cyan-900'
-                        : isDark
-                          ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                          : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => applyPreset(TPTD_PRESETS[0])}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${
-                  isDark
-                    ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
-                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Sıfırla</span>
-              </button>
-            </div>
-
-            {/* Sliders Grid + Live Diagnostic Output */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-              {/* Sliders */}
-              <div
-                className={`lg:col-span-5 rounded-xl border p-4 space-y-3 ${
-                  isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-                }`}
-              >
-                <div className="flex items-center gap-2 text-xs font-bold text-cyan-600 dark:text-cyan-400">
-                  <Sliders className="w-4 h-4" />
-                  <span>Parametreleri Ayarla</span>
-                </div>
-
-                {[
-                  {
-                    label: 'Kardiyak İndeks (CI)',
-                    unit: 'L/dk/m^{2}',
-                    val: ci,
-                    min: 1.2,
-                    max: 5.5,
-                    step: 0.1,
-                    onChange: setCi,
-                    format: (v: number) => v.toFixed(1),
-                  },
-                  {
-                    label: 'GEDVI (Volümetrik Önyük)',
-                    unit: 'mL/m^{2}',
-                    val: gedvi,
-                    min: 400,
-                    max: 1200,
-                    step: 10,
-                    onChange: setGedvi,
-                    format: (v: number) => `${v}`,
-                  },
-                  {
-                    label: 'EVLWI (Akciğer Suyu)',
-                    unit: 'mL/kg PBW',
-                    val: evlwi,
-                    min: 3,
-                    max: 24,
-                    step: 0.5,
-                    onChange: setEvlwi,
-                    format: (v: number) => v.toFixed(1),
-                  },
-                  {
-                    label: 'PVPI (Kapiller Permeabilite)',
-                    unit: 'oran',
-                    val: pvpi,
-                    min: 0.8,
-                    max: 6.0,
-                    step: 0.1,
-                    onChange: setPvpi,
-                    format: (v: number) => v.toFixed(1),
-                  },
-                  {
-                    label: 'GEF (Global EF)',
-                    unit: '%',
-                    val: gef,
-                    min: 10,
-                    max: 45,
-                    step: 1,
-                    onChange: setGef,
-                    format: (v: number) => `%${v}`,
-                  },
-                  {
-                    label: 'SVRI (Art Yük / Tonus)',
-                    unit: 'dyn·s·cm^{-5}·m^{2}',
-                    val: svri,
-                    min: 700,
-                    max: 3400,
-                    step: 50,
-                    onChange: setSvri,
-                    format: (v: number) => `${v}`,
-                  },
-                  {
-                    label: 'SVV / PPV (Sıvı Yanıtlılığı)',
-                    unit: '%',
-                    val: svv,
-                    min: 3,
-                    max: 28,
-                    step: 1,
-                    onChange: setSvv,
-                    format: (v: number) => `%${v}`,
-                  },
-                ].map((ctrl) => (
-                  <div key={ctrl.label} className="space-y-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className={isDark ? 'text-slate-300 font-medium' : 'text-slate-700 font-medium'}>
-                        {ctrl.label}
-                      </span>
-                      <span className="font-mono tabular-nums font-bold text-cyan-600 dark:text-cyan-400">
-                        {ctrl.format(ctrl.val)}{' '}
-                        <span className="text-[10px] font-normal text-slate-400">
-                          <MedicalText text={ctrl.unit} />
-                        </span>
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min={ctrl.min}
-                      max={ctrl.max}
-                      step={ctrl.step}
-                      value={ctrl.val}
-                      onChange={(e) => {
-                        if (activePreset === 'obstructive_rv') {
-                          setActivePreset('custom');
-                        }
-                        ctrl.onChange(Number(e.target.value));
-                      }}
-                      className="w-full accent-cyan-500 cursor-pointer"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Clinical Synthesis & Conditional Differential Table */}
-              <div className="lg:col-span-7 space-y-4">
-                {/* Computed Metrics Bar */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
-                    <div className="text-[10px] font-mono text-slate-400">Türetilen ITBVI</div>
-                    <div className={`text-base font-mono tabular-nums font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {diagnosis.itbvi} <span className="text-[10px] font-normal text-slate-400"><MedicalText text="mL/m^{2}" /></span>
-                    </div>
-                  </div>
-                  <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
-                    <div className="text-[10px] font-mono text-slate-400">Türetilen PBVI</div>
-                    <div className={`text-base font-mono tabular-nums font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {diagnosis.pbvi} <span className="text-[10px] font-normal text-slate-400"><MedicalText text="mL/m^{2}" /></span>
-                    </div>
-                  </div>
-                  <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
-                    <div className="text-[10px] font-mono text-slate-400">Hesaplanan CFI</div>
-                    <div
-                      className={`text-base font-mono tabular-nums font-bold ${
-                        Number(diagnosis.cfi) < 4.0
-                          ? 'text-rose-500'
-                          : isDark
-                            ? 'text-emerald-400'
-                            : 'text-emerald-700'
-                      }`}
-                    >
-                      {diagnosis.cfi} <span className="text-[10px] font-normal text-slate-400"><MedicalText text="dk^{-1}" /></span>
-                    </div>
-                  </div>
-                  <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
-                    <div className="text-[10px] font-mono text-slate-400">Tedavi Kodu</div>
-                    <div className="text-sm font-mono font-bold mt-0.5 text-cyan-600 dark:text-cyan-400">
-                      {diagnosis.txCode}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Live Diagnosis Card */}
-                <div
-                  className={`rounded-xl border p-4 space-y-3 ${
-                    diagnosis.tone === 'rose'
-                      ? isDark
-                        ? 'bg-rose-950/25 border-rose-500/40'
-                        : 'bg-rose-50 border-rose-200'
-                      : diagnosis.tone === 'amber'
-                        ? isDark
-                          ? 'bg-amber-950/25 border-amber-500/40'
-                          : 'bg-amber-50 border-amber-200'
-                        : diagnosis.tone === 'sky'
-                          ? isDark
-                            ? 'bg-sky-950/25 border-sky-500/40'
-                            : 'bg-sky-50 border-sky-200'
-                          : isDark
-                            ? 'bg-emerald-950/25 border-emerald-500/40'
-                            : 'bg-emerald-50 border-emerald-200'
-                  }`}
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {diagnosis.title}
-                    </div>
-                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-black/10 dark:bg-white/10">
-                      {diagnosis.fluidSafety}
-                    </span>
-                  </div>
-
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                    <strong>Fizyopatolojik Yorum:</strong> {diagnosis.mechanism}
-                  </p>
-
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                    <strong>Yatak Başı Klinik Karar:</strong> {diagnosis.action}
-                  </p>
-                </div>
-
-                {/* Conditional Pulmonary Edema Differential Matrix (ONLY shown when Cardiogenic or ARDS preset is selected) */}
-                {(activePreset === 'cardiogenic_edema' || activePreset === 'ards_permeability') && (
-                  <div
-                    className={`rounded-xl border overflow-x-auto ${
-                      isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200'
-                    }`}
-                  >
-                    <table className="w-full text-left border-collapse text-xs">
-                      <thead>
-                        <tr className={`border-b ${isDark ? 'border-slate-800 text-slate-300' : 'border-slate-200 text-slate-700'}`}>
-                          <th className="py-2.5 px-3 font-semibold">Ayırıcı Parametre</th>
-                          <th
-                            className={`py-2.5 px-3 font-semibold text-amber-600 dark:text-amber-400 ${
-                              activePreset === 'cardiogenic_edema'
-                                ? isDark
-                                  ? 'bg-amber-500/10'
-                                  : 'bg-amber-50'
-                                : ''
-                            }`}
-                          >
-                            Kardiyojenik (Hidrostatik) Ödem
-                          </th>
-                          <th
-                            className={`py-2.5 px-3 font-semibold text-rose-600 dark:text-rose-400 ${
-                              activePreset === 'ards_permeability'
-                                ? isDark
-                                  ? 'bg-rose-500/10'
-                                  : 'bg-rose-50'
-                                : ''
-                            }`}
-                          >
-                            ARDS (Permeabilite) Ödemi
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className={`divide-y ${isDark ? 'divide-slate-800 text-slate-300' : 'divide-slate-100 text-slate-700'}`}>
-                        <tr>
-                          <td className="py-2 px-3 font-mono font-bold">EVLWI (mL/kg PBW)</td>
-                          <td className={`py-2 px-3 font-mono ${activePreset === 'cardiogenic_edema' ? (isDark ? 'bg-amber-500/5 font-semibold' : 'bg-amber-50/50 font-semibold') : ''}`}>
-                            ≥ 10 (Artmış)
-                          </td>
-                          <td className={`py-2 px-3 font-mono ${activePreset === 'ards_permeability' ? (isDark ? 'bg-rose-500/5 font-semibold' : 'bg-rose-50/50 font-semibold') : ''}`}>
-                            ≥ 10 (Sıklıkla &gt; 12–15)
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 px-3 font-mono font-bold">PVPI (EVLW / PBV)</td>
-                          <td className={`py-2 px-3 font-mono font-bold text-amber-600 dark:text-amber-300 ${activePreset === 'cardiogenic_edema' ? (isDark ? 'bg-amber-500/5' : 'bg-amber-50/50') : ''}`}>
-                            &lt; 3,0 (Genelde 1,0–2,5)
-                          </td>
-                          <td className={`py-2 px-3 font-mono font-bold text-rose-600 dark:text-rose-300 ${activePreset === 'ards_permeability' ? (isDark ? 'bg-rose-500/5' : 'bg-rose-50/50') : ''}`}>
-                            ≥ 3,0 (Kapiller Kaçak!)
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 px-3 font-mono font-bold">GEDVI (<MedicalText text="mL/m^{2}" />)</td>
-                          <td className={`py-2 px-3 font-mono ${activePreset === 'cardiogenic_edema' ? (isDark ? 'bg-amber-500/5 font-semibold' : 'bg-amber-50/50 font-semibold') : ''}`}>
-                            ↑ (&gt; 800–900)
-                          </td>
-                          <td className={`py-2 px-3 font-mono ${activePreset === 'ards_permeability' ? (isDark ? 'bg-rose-500/5 font-semibold' : 'bg-rose-50/50 font-semibold') : ''}`}>
-                            Normal veya Düşük (&lt; 800)
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 px-3 font-mono font-bold">GEF / CFI</td>
-                          <td className={`py-2 px-3 font-mono ${activePreset === 'cardiogenic_edema' ? (isDark ? 'bg-amber-500/5 font-semibold' : 'bg-amber-50/50 font-semibold') : ''}`}>
-                            ↓ (GEF &lt; %20 · CFI &lt; 4,0)
-                          </td>
-                          <td className={`py-2 px-3 font-mono ${activePreset === 'ards_permeability' ? (isDark ? 'bg-rose-500/5 font-semibold' : 'bg-rose-50/50 font-semibold') : ''}`}>
-                            Normal (Septik kardiyomyopati yoksa)
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Complete 8-Profile Reference Matrix */}
-          <div className="space-y-2.5">
-            <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Tüm TPTD Hemodinamik Profilleri — Karşılaştırmalı Özet Tablosu (8 Klinik Fenotip)
-            </h4>
-            <div
-              className={`rounded-xl border overflow-x-auto ${
-                isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-slate-200'
-              }`}
-            >
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr
-                    className={`border-b ${
-                      isDark ? 'border-slate-800 bg-slate-900/90 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
-                    }`}
-                  >
-                    <th className="py-2.5 px-3 font-semibold">Hemodinamik Profil</th>
-                    <th className="py-2.5 px-2.5 font-semibold text-center">CI</th>
-                    <th className="py-2.5 px-2.5 font-semibold text-center">GEDVI</th>
-                    <th className="py-2.5 px-2.5 font-semibold text-center">EVLWI</th>
-                    <th className="py-2.5 px-2.5 font-semibold text-center">PVPI</th>
-                    <th className="py-2.5 px-2.5 font-semibold text-center">GEF / CFI</th>
-                    <th className="py-2.5 px-2.5 font-semibold text-center">SVRI</th>
-                    <th className="py-2.5 px-2.5 font-semibold text-center">SVV/PPV</th>
-                    <th className="py-2.5 px-3 font-semibold">Öncelikli Eylem</th>
-                  </tr>
-                </thead>
-                <tbody className={`divide-y ${isDark ? 'divide-slate-800 text-slate-300' : 'divide-slate-100 text-slate-700'}`}>
-                  {TPTD_PRESETS.map((p) => {
-                    const isSelected = activePreset === p.id;
-                    return (
-                      <tr
-                        key={p.id}
-                        onClick={() => applyPreset(p)}
-                        className={`cursor-pointer transition-colors ${
-                          isSelected
-                            ? isDark
-                              ? 'bg-cyan-500/10'
-                              : 'bg-cyan-50/70'
-                            : isDark
-                              ? 'hover:bg-slate-900/70'
-                              : 'hover:bg-slate-50'
-                        }`}
-                      >
-                        <td className="py-2.5 px-3 min-w-[190px]">
-                          <div className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{p.label}</div>
-                          <div className="text-[11px] text-slate-400 mt-0.5">{p.summary}</div>
-                        </td>
-                        <td className="py-2.5 px-2.5 text-center font-mono tabular-nums font-semibold">
-                          {p.ci.toFixed(1)}
-                        </td>
-                        <td className="py-2.5 px-2.5 text-center font-mono tabular-nums">{p.gedvi}</td>
-                        <td className="py-2.5 px-2.5 text-center font-mono tabular-nums font-semibold">
-                          {p.evlwi.toFixed(1)}
-                        </td>
-                        <td className="py-2.5 px-2.5 text-center font-mono tabular-nums font-semibold">
-                          {p.pvpi.toFixed(1)}
-                        </td>
-                        <td className="py-2.5 px-2.5 text-center font-mono tabular-nums">%{p.gef}</td>
-                        <td className="py-2.5 px-2.5 text-center font-mono tabular-nums">{p.svri}</td>
-                        <td className="py-2.5 px-2.5 text-center font-mono tabular-nums">%{p.svv}</td>
-                        <td className="py-2.5 px-3 font-mono font-bold text-cyan-600 dark:text-cyan-400 whitespace-nowrap">
-                          {p.txCode}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =================================================================== */}
-      {/* 04. TPTD SONUÇLARINA GÖRE TEDAVİ YÖNETİM ALGORİTMALARI              */}
+      {/* 03. TPTD SONUÇLARINA GÖRE TEDAVİ KARAR AĞACI VE ROSE MODELİ         */}
       {/* =================================================================== */}
       {showSection('algorithms') && (
         <section className="space-y-6">
           <div className="space-y-1.5">
             <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
-              Bölüm 04 · Tedavi Yönetim Algoritmaları (PiCCO / VolumeView Karar Ağacı)
+              Bölüm 03 · Tedavi Karar Ağacı &amp; Faz Bazlı Sıvı Yönetimi (PiCCO / VolumeView)
             </div>
             <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Termodilüsyon Sonuçlarına Göre Yatak Başı Tedavi Karar Ağacı ve De-Resüsitasyon Protokolü
+              Termodilüsyon Sonuçlarına Göre Yatak Başı Tedavi Karar Ağacı ve ROSE Sıvı Yönetimi
             </h3>
             <p className={`text-sm leading-relaxed max-w-4xl ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
               TPTD ölçümü yalnızca tanı koymak için değil, sistematik hedefe yönelik tedavi (GDT) yürütmek için
               kullanılır. Klinik karar akışı dört ardışık basamağı izler: <strong>(1) Akım (<MedicalText text="CI" />)</strong>{' '}
-              → <strong>(2) Volümetrik Önyük &amp; Sıvı Yanıtlılığı (<MedicalText text="GEDVI" /> / <MedicalText text="SVV" /> / PLR)</strong>{' '}
-              → <strong>(3) Akciğer Sıvı Toleransı (<MedicalText text="EVLWI" /> &amp; <MedicalText text="PVPI" />)</strong>{' '}
-              → <strong>(4) Kontraktilite &amp; Tonus (<MedicalText text="CFI/GEF" /> &amp; <MedicalText text="SVRI" />)</strong>.
+              → <strong>(2) Volümetrik Önyük (<MedicalText text="GEDVI" />)</strong>{' '}
+              → <strong>(3) Akciğer Sıvı Toleransı (<MedicalText text="EVLWI" />)</strong>{' '}
+              → <strong>(4) Ödem Mekanizması / Vasküler Direnç (<MedicalText text="PVPI" /> &amp; <MedicalText text="SVRI" />)</strong>.
             </p>
           </div>
 
@@ -2221,146 +1441,112 @@ export const TranspulmonaryThermodilutionModule: React.FC<TranspulmonaryThermodi
             ))}
           </div>
 
-          {/* Interactive 4-Column Visual Decision Tree */}
+          {/* Interactive 4-Tier Vertical Visual Decision Tree */}
           <TptdInteractiveDecisionTree isDark={isDark} />
-
-          {/* Decision Tree Branch A (Low CI) & Branch B (Normal/High CI) */}
-          {(
-            [
-              {
-                key: 'low_ci' as const,
-                title: 'Dal A · Düşük Kardiyak İndeks (CI < 3,0 L/dk/m^{2} veya Hipoperfüzyon ile < 2,5)',
-                subtitle: 'Öncelik akımı (DO_{2}) artırmaktır: Önce önyük eksikliği ve akciğer toleransı ayrılır, ardından inotropi ve dekonjesyon planlanır.',
-              },
-              {
-                key: 'normal_high_ci' as const,
-                title: 'Dal B · Normal / Yüksek Kardiyak İndeks (CI ≥ 3,0 L/dk/m^{2} + Hipotansiyon veya Ödem)',
-                subtitle: 'Akım yeterlidir; temel sorun sistemik vazopleji (SVRI ↓) veya aşırı sıvı/kapiller kaçak (EVLWI ≥ 10) yönetimidir.',
-              },
-            ]
-          ).map((branchGroup) => (
-            <div key={branchGroup.key} className="space-y-3">
-              <div>
-                <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  <MedicalText text={branchGroup.title} />
-                </h4>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  <MedicalText text={branchGroup.subtitle} />
-                </p>
-              </div>
-
-              <div
-                className={`rounded-xl border overflow-x-auto ${
-                  isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-slate-200'
-                }`}
-              >
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr
-                      className={`border-b ${
-                        isDark ? 'border-slate-800 bg-slate-900/90 text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
-                      }`}
-                    >
-                      <th className="py-2.5 px-3 font-semibold">Önyük & Dinamik Yanıt</th>
-                      <th className="py-2.5 px-3 font-semibold">Akciğer Suyu (EVLWI)</th>
-                      <th className="py-2.5 px-3 font-semibold text-center">Kod</th>
-                      <th className="py-2.5 px-3 font-semibold">Klinik Müdahale Protokolü</th>
-                      <th className="py-2.5 px-3 font-semibold">Hedef Sonlanım</th>
-                    </tr>
-                  </thead>
-                  <tbody className={`divide-y ${isDark ? 'divide-slate-800 text-slate-300' : 'divide-slate-100 text-slate-700'}`}>
-                    {TREATMENT_ALGORITHM_BRANCHES.filter((b) => b.group === branchGroup.key).map((b) => {
-                      const badgeCls =
-                        b.codeTone === 'rose'
-                          ? 'bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30'
-                          : b.codeTone === 'amber'
-                            ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30'
-                            : b.codeTone === 'indigo'
-                              ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border-indigo-500/30'
-                              : b.codeTone === 'emerald'
-                                ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
-                                : 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/30';
-                      return (
-                        <tr key={`${b.group}-${b.preloadCond}-${b.evlwiCond}`} className="align-top">
-                          <td className="py-3 px-3 font-mono text-[11px] min-w-[165px]">
-                            <MedicalText text={b.preloadCond} />
-                          </td>
-                          <td className="py-3 px-3 font-mono text-[11px] min-w-[155px]">
-                            <MedicalText text={b.evlwiCond} />
-                          </td>
-                          <td className="py-3 px-3 text-center whitespace-nowrap">
-                            <span className={`inline-block px-2 py-0.5 rounded border font-mono font-bold text-[11px] ${badgeCls}`}>
-                              {b.code}
-                            </span>
-                          </td>
-                          <td className="py-3 px-3 min-w-[260px] space-y-1">
-                            <div className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{b.actionTitle}</div>
-                            <p className="leading-relaxed">
-                              <MedicalText text={b.protocol} />
-                            </p>
-                          </td>
-                          <td className="py-3 px-3 font-mono text-[11px] font-semibold text-cyan-600 dark:text-cyan-400 min-w-[160px]">
-                            <MedicalText text={b.target} />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ))}
 
           {/* ROSE 4-Phase Fluid Stewardship with TPTD */}
           <div
-            className={`rounded-xl border p-4 sm:p-5 space-y-3.5 ${
+            className={`rounded-xl border p-4 sm:p-5 space-y-4 ${
               isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50/70 border-slate-200'
             }`}
           >
-            <div className="space-y-0.5">
-              <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                ROSE Faz Bazlı Sıvı Yönetimi ve De-Resüsitasyon Protokolünde TPTD Kullanımı
+            <div className="space-y-1.5">
+              <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+                Zaman Bazlı Çerçeve · Malbrain ROSE Modeli
+              </div>
+              <h4 className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Kritik Hastada Sıvı Tedavisinin 4 Evresi (ROSE) ve TPTD’nin Rolü
               </h4>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                Malbrain ve ark. (ROSE modeli) şokun fazına göre sıvı stratejisinin nasıl yön değiştirdiğini tanımlar:
+              <p className={`text-xs leading-relaxed max-w-4xl ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                Yukarıdaki karar ağacı hastanın <strong>o anki</strong> ölçümüne yanıt verir. <strong>ROSE modeli</strong> ise
+                sepsis, majör travma, yanık veya büyük cerrahi sonrası yoğun bakımda izlenen kritik bir hastada{' '}
+                <strong>günler içinde sıvı stratejisinin nasıl yön değiştirdiğini</strong> anlatır: ilk saatlerde hayat kurtaran
+                sıvı, şok düzeldikten sonra organ ödemine yol açtığı için aktif olarak geri alınmalıdır (<em>de-resüsitasyon</em>).
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
               {[
                 {
-                  phase: 'R · Resüsitasyon (Kurtarma)',
-                  rule: 'CI ↓ + PLR/SVV (+) + EVLWI < 10',
-                  body: 'İlk saatlerde hayat kurtarıcı kontrollü 250 mL boluslarla (V+) doku perfüzyonu ve akım hızla toparlanır.',
+                  badge: 'FAZ 1 · R',
+                  phase: 'Resüsitasyon (Kurtarma)',
+                  when: 'İlk dakikalar – ilk saatler · Akut şok / ağır hipoperfüzyon',
+                  goal: 'Hayat kurtarıcı hızlı doku perfüzyonu ve ortalama arter basıncını sağlamak.',
+                  tptdRole:
+                    'Bu aşamada henüz TPTD takılı olmayabilir. Takılıysa düşük GEDVI (< 680) + kuru akciğer (EVLWI < 10) sıvı yüklemesini destekler; yüksek SVRI varsa kanama/hipovolemi, düşük SVRI varsa erken vazopresör ihtiyacı netleşir.',
+                  stopRule: 'MAP ≥ 65 mmHg sağlanıp akut dolaşım çökmesi toparlanınca Faz 2’ye geçilir.',
+                  accent: 'border-t-sky-500',
+                  badgeCls: 'bg-sky-500/15 text-sky-600 dark:text-sky-300 border-sky-500/30',
                 },
                 {
-                  phase: 'O · Optimizasyon',
-                  rule: 'GEDVI 700–800 · EVLWI 8–10 sınırı',
-                  body: 'Her sıvı bolusu öncesi mutlaka dinamik test (SVV/PLR) yapılır; EVLWI 10’a yaklaştığında sıvı tolerans sınırına ulaşıldığı kabul edilir.',
+                  badge: 'FAZ 2 · O',
+                  phase: 'Optimizasyon',
+                  when: 'Saatler içinde · Şok kısmen kontrol altında, organ perfüzyonu hassas',
+                  goal: 'Gereksiz sıvı yüklemeden kalp debisini (CI) ve oksijen sunumunu optimize etmek.',
+                  tptdRole:
+                    'TPTD’nin en kritik olduğu fazdır. Her 250 mL bolus öncesi dinamik yanıt (SVV/PPV veya PLR) doğrulanır. GEDVI önyük doluluğunu, EVLWI ise akciğerin sıvı tolerans sınırını (≥ 10 mL/kg) gösterir. PVPI ≥ 3,0 ise kapiller kaçak nedeniyle sıvı erken sınırlandırılır.',
+                  stopRule: 'Dinamik test negatifleştiğinde veya EVLWI ≥ 10’a ulaştığında sıvı yüklemesi durdurulur.',
+                  accent: 'border-t-amber-500',
+                  badgeCls: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30',
                 },
                 {
-                  phase: 'S · Stabilizasyon',
-                  rule: 'Sıfır Denge · Vazopresör / İnotrop',
-                  body: 'Dinamik test negatifse idame dışı sıvı verilmez; organ perfüzyon basıncı (MAP ≥ 65) vazopresör ve inotroplarla sürdürülür.',
+                  badge: 'FAZ 3 · S',
+                  phase: 'Stabilizasyon',
+                  when: 'Günler içinde · Şok geriliyor, vazoaktif ihtiyaç sabit veya azalıyor',
+                  goal: 'Pozitif sıvı birikimini durdurmak ve sıfır (nötr) sıvı dengesini korumak.',
+                  tptdRole:
+                    'İdame dışı sıvı verilmez; ilaç infüzyonları yoğunlaştırılır. Tansiyon veya debi desteği gerekirse sıvı yerine TPTD’deki SVRI ve CFI/GEF verilerine göre vazopresör veya inotrop titre edilir.',
+                  stopRule: 'Vazopresör dozu belirgin azalıp laktat normale indiğinde Faz 4’e (de-resüsitasyon) geçilir.',
+                  accent: 'border-t-indigo-500',
+                  badgeCls: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border-indigo-500/30',
                 },
                 {
-                  phase: 'E · Evakuasyon (De-Resüsitasyon)',
-                  rule: 'Şok stabil + EVLWI ≥ 10 → V−',
-                  body: 'Vazopresör ihtiyacı azaldığında birikmiş ödemi atmak için diüretik/ultrafiltrasyonla negatif denge sağlanır; aşırı dehidratasyonu önlemek için seri GEDVI ve PLR izlenir.',
+                  badge: 'FAZ 4 · E',
+                  phase: 'Evakuasyon (De-Resüsitasyon)',
+                  when: 'Toparlanma dönemi · Şok stabil ancak dokularda/akciğerde fazla sıvı birikmiş',
+                  goal: 'Birikmiş interstisyel ve pulmoner ödemi aktif negatif sıvı dengesiyle (V−) uzaklaştırmak.',
+                  tptdRole:
+                    'EVLWI ≥ 10 veya GEDVI > 800 sürüyorsa IV diüretik ya da CRRT ultrafiltrasyon ile kontrollü sıvı çekilir. Seri GEDVI, CI ve PLR takibiyle hastayı aşırı kurutmadan (hipoperfüzyona sokmadan) EVLWI < 10 hedefine inilir.',
+                  stopRule: 'EVLWI < 10, GEDVI 680–800 ve klinik ödem çözüldüğünde aktif sıvı çekimi sonlandırılır.',
+                  accent: 'border-t-emerald-500',
+                  badgeCls: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
                 },
               ].map((step) => (
                 <div
                   key={step.phase}
-                  className={`rounded-lg border p-3.5 space-y-1.5 ${
-                    isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-white border-slate-200'
+                  className={`rounded-xl border border-t-4 ${step.accent} p-3.5 flex flex-col gap-2.5 ${
+                    isDark ? 'bg-slate-950/75 border-slate-800' : 'bg-white border-slate-200'
                   }`}
                 >
-                  <div className="text-xs font-bold text-cyan-600 dark:text-cyan-400">{step.phase}</div>
-                  <div className="text-[11px] font-mono font-semibold text-amber-600 dark:text-amber-300">
-                    {step.rule}
+                  <div className="space-y-1">
+                    <span className={`inline-block font-mono font-bold text-[10px] px-2 py-0.5 rounded border ${step.badgeCls}`}>
+                      {step.badge}
+                    </span>
+                    <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {step.phase}
+                    </div>
+                    <div className="text-[11px] font-medium text-slate-400 leading-snug">
+                      {step.when}
+                    </div>
                   </div>
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    {step.body}
-                  </p>
+
+                  <div className="space-y-1.5 text-xs leading-relaxed">
+                    <p className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+                      <strong className="text-cyan-600 dark:text-cyan-400">Hedef:</strong> {step.goal}
+                    </p>
+                    <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
+                      <strong className={isDark ? 'text-slate-100' : 'text-slate-800'}>TPTD Kullanımı:</strong>{' '}
+                      <MedicalText text={step.tptdRole} />
+                    </p>
+                  </div>
+
+                  <div
+                    className={`mt-auto pt-2 border-t text-[11px] leading-snug ${
+                      isDark ? 'border-slate-800 text-amber-300/90' : 'border-slate-100 text-amber-800'
+                    }`}
+                  >
+                    <strong>Geçiş / Dur:</strong> <MedicalText text={step.stopRule} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -2369,13 +1555,13 @@ export const TranspulmonaryThermodilutionModule: React.FC<TranspulmonaryThermodi
       )}
 
       {/* =================================================================== */}
-      {/* 05. PROTOKOL, TUZAKLAR, KIYASLAMA & BOARD SINAV İNCİLERİ             */}
+      {/* 04. PROTOKOL, TUZAKLAR, KIYASLAMA & BOARD SINAV İNCİLERİ             */}
       {/* =================================================================== */}
       {showSection('pitfalls') && (
         <section className="space-y-6">
           <div className="space-y-1.5">
             <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
-              Bölüm 05 · Uygulama Protokolü, Hata Kaynakları & Sınav İncileri
+              Bölüm 04 · Uygulama Protokolü, Hata Kaynakları & Sınav İncileri
             </div>
             <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
               Ölçüm Protokolü, Fiziksel Artefaktlar, PAC/Nabız Konturu Kıyaslaması ve Güvenlik Bariyerleri
@@ -2581,7 +1767,7 @@ export const TranspulmonaryThermodilutionModule: React.FC<TranspulmonaryThermodi
         >
           <div className={`flex items-center gap-2 text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
             <BookOpen className="w-4 h-4 text-cyan-500" />
-            <span>06. Kanıta Dayalı Kaynaklar, Landmark Çalışmalar ve Rehberler</span>
+            <span>05. Kanıta Dayalı Kaynaklar, Landmark Çalışmalar ve Rehberler</span>
           </div>
           <ol className="space-y-2.5 text-xs leading-relaxed">
             {REFERENCES.map((ref, idx) => (
