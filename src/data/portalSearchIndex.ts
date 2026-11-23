@@ -2569,6 +2569,33 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-dopamine-protocol',
+    title: 'Dopamin Hidroklorür (DOPamin · Dopmin) D1/β1/α1 İnfüzyon, Bradikardi & SOAP-II Şok Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'İnopressör / Kronotrop · Katekolamin',
+    description: 'Endojen noradrenalin prekürsörü ve doz-bağımlı D1/D2 → β1 → α1 agonisti; atropine yanıtsız semptomatik bradikardi (5–20 mcg/kg/dk), TR 200 mg/5 mL ampul sulandırma, SOAP-II aritmi kanıtı, ANZICS renal doz çürütmesi ve Fentolamin ekstravazasyon protokolü.',
+    keywords: [
+      'dopamin',
+      'dopamine',
+      'dopmin',
+      'dopadren',
+      'dopasel',
+      'dobetal',
+      'inotrop',
+      'vazopressör',
+      'inopressör',
+      'bradikardi infüzyon',
+      'renal doz dopamin',
+      'soap-ii',
+      'ekstravazasyon',
+      'fentolamin',
+      '200 mg/5 ml'
+    ],
+    tabId: 'treatments',
+    subId: 'dopamine',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',

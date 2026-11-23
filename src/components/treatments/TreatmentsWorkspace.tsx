@@ -43,6 +43,7 @@ import { AtropineProtocol } from './AtropineProtocol';
 import { EphedrineProtocol } from './EphedrineProtocol';
 import { NaloxoneProtocol } from './NaloxoneProtocol';
 import { FlumazenilProtocol } from './FlumazenilProtocol';
+import { DopamineProtocol } from './DopamineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1061,6 +1062,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'dopamine',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'İnopressör / Kronotrop · Katekolamin',
+    badge: 'Bradikardi 5–20 mcg/kg/dk · D1/β1/α1',
+    title: 'Dopamin Hidroklorür (DOPamin · Dopmin)',
+    shortDesc: 'Endojen noradrenalin prekürsörü ve doz-bağımlı D1/D2 → β1 → α1 agonisti; atropine yanıtsız semptomatik bradikardi (AHA 5–20 mcg/kg/dk), SOAP-II aritmi/kardiyojenik şok kanıtı, ANZICS "renal doz" çürütmesi ve Fentolamin ekstravazasyon protokolü.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul & Standart Sulandırma',
+        value: '200 mg / 5 mL (40 mg/mL)',
+        subtext: '250 mL’de 800 veya 1600 mcg/mL',
+        tooltip: '1 amp (200 mg) + 245 mL SF/%5 Dekstroz = 800 mcg/mL; 2 amp (400 mg) / 250 mL = 1600 mcg/mL; 50 mL enjektörde 1 amp = 4000 mcg/mL (SVK şart!)',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'β1 İnotrop / Bradikardi',
+        value: '5 – 10 mcg/kg/dk',
+        subtext: 'ACLS Bradikardi: 5–20 mcg/kg/dk',
+        tooltip: 'AHA/ACC/HRS: Atropine yanıtsız semptomatik bradikardi ve düşük CO’da β1 inotropik/kronotropik etki + presinaptik noradrenalin salınımı',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'α1 Vazopressör & SOAP-II',
+        value: '10 – 20 mcg/kg/dk',
+        subtext: '%24,1 Aritmi · Şokta 1. tercih DEĞİL!',
+        tooltip: 'De Backer NEJM 2010 (SOAP-II): Noradrenaline göre 2 kat aritmi (%24,1 vs %12,4) ve kardiyojenik şokta artmış mortalite; >20 mcg/kg/dk çıkma!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: '"Renal Doz" & LASA Uyarısı',
+        value: '1–3 mcg/kg/dk ÖNERİLMEZ',
+        subtext: 'DOPamin ≠ DOBUTamin · Bolus VERME!',
+        tooltip: 'Bellomo Lancet 2000 (ANZICS): Düşük doz dopamin ABH veya RRT’yi önlemez (Sınıf III). DOBUTamin ile en sık karışan LASA inotroptur',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -1141,7 +1193,10 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     'efedrin-hcl': 'ephedrine',
     nalokson: 'naloxone',
     narcan: 'naloxone',
-    anexate: 'flumazenil'
+    anexate: 'flumazenil',
+    dopamin: 'dopamine',
+    dopmin: 'dopamine',
+    dopadren: 'dopamine'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1782,6 +1837,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 21: FLUMAZENİL MONOGRAFİSİ & PROSEDÜREL REVERSAL / PEDİATRİK / ZEHİRLENME / İNFÜZYON HESAPLAYICISI */}
       {(activeProtocolId === 'flumazenil' || activeProtocolId === 'anexate') && (
         <FlumazenilProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 22: DOPAMİN HİDROKLORÜR MONOGRAFİSİ & D1/β1/α1 DOZ-BAĞIMLI İNFÜZYON HESAPLAYICISI */}
+      {(activeProtocolId === 'dopamine' || activeProtocolId === 'dopamin' || activeProtocolId === 'dopmin' || activeProtocolId === 'dopadren') && (
+        <DopamineProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
