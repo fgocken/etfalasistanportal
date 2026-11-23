@@ -54,13 +54,13 @@ function renderTokens(input: string, keyPrefix = 't'): React.ReactNode[] {
       );
     } else if (subContent !== undefined) {
       nodes.push(
-        <sub key={key} className="text-[0.74em] leading-none font-normal align-baseline relative top-[0.24em]">
+        <sub key={key} className="text-[0.72em] leading-none align-baseline relative top-[0.18em]">
           {renderTokens(subContent, `${key}-sub`)}
         </sub>
       );
     } else if (supContent !== undefined) {
       nodes.push(
-        <sup key={key} className="text-[0.74em] leading-none font-normal align-baseline relative -top-[0.38em]">
+        <sup key={key} className="text-[0.72em] leading-none align-baseline relative -top-[0.34em]">
           {renderTokens(supContent, `${key}-sup`)}
         </sup>
       );

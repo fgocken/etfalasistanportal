@@ -117,6 +117,14 @@ export function parseHashRoute(): ParsedHashRoute {
       if (toolKey === 'cardiovascular-physiology' || toolKey === 'kardiyovaskuler-fizyoloji') {
         return { type: 'arac', id: 'basics', subId: 'cardiovascular-physiology' };
       }
+      if (
+        toolKey === 'solunumsal-destek' ||
+        toolKey === 'respiratory-support' ||
+        toolKey === 'oksijen-tedavisi' ||
+        toolKey === 'oxygen-therapy'
+      ) {
+        return { type: 'arac', id: 'mechanical-ventilation', subId: 'oxygen-therapy' };
+      }
       if (toolKey === 'treatments' && toolMatch[2]) {
         return { type: 'tedavi', id: toolMatch[2] };
       }
@@ -135,6 +143,13 @@ export function parseHashRoute(): ParsedHashRoute {
     }
     if (hash.toLowerCase() === 'cardiovascular-physiology' || hash.toLowerCase() === 'kardiyovaskuler-fizyoloji') {
       return { type: 'arac', id: 'basics', subId: 'cardiovascular-physiology' };
+    }
+    if (
+      hash.toLowerCase() === 'solunumsal-destek' ||
+      hash.toLowerCase() === 'oksijen-tedavisi' ||
+      hash.toLowerCase() === 'oxygen-therapy'
+    ) {
+      return { type: 'arac', id: 'mechanical-ventilation', subId: 'oxygen-therapy' };
     }
 
     if (VALID_INFOGRAPHIC_IDS.includes(hash as ValidInfographicId)) {

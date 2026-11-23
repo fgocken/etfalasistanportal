@@ -126,11 +126,11 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   },
   'mechanical-ventilation': {
     id: 'mechanical-ventilation',
-    title: 'Mekanik Ventilasyon',
-    badge: 'Hazırlanıyor',
+    title: 'Solunumsal Destek',
+    badge: 'Oksijen Tedavisi Aktif',
     badgeHighlight: true,
-    desc: 'İnvaziv ve non-invaziv mekanik ventilasyon modları, akciğer koruyucu stratejiler, ARDS PEEP titrasyonu, driving pressure ve weaning protokolleri. İçeriği hazırlanmaktadır.',
-    clinicalKey: 'Klinik içerik bir sonraki adımda doldurulacaktır.',
+    desc: 'Solunumsal destek kart panosu: Klinik ve Perioperatif Oksijen Tedavisi (BTS hedefleri, CaO₂/DO₂/VO₂ formülleri, KOAH hiperkapni fizyolojisi, Ventüri/HAFOE, preoksijenasyon, apneik O₂), HFNC, NIV ve mekanik ventilasyon modülleri.',
+    clinicalKey: '01 · Klinik ve Perioperatif Oksijen Tedavisi modülü yayında: hedef SpO₂, temel formüller, ekipmanlar ve perioperatif güvenlik.',
     icon: Gauge,
     iconBgDark: 'bg-sky-500/15',
     iconBgLight: 'bg-sky-50',
@@ -146,7 +146,7 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   monitoring: {
     id: 'monitoring',
     title: 'Monitörizasyon ve İntraoperatif Takip',
-    desc: 'Perioperatif monitörizasyon ve intraoperatif takip panosu: ASA Standartları, SpO₂, Kapnografi, Spirometri, EKG, NIBP, IBP, CVP, PAC, TEE, SVV/PPV, BIS, SedLine/PSI, NIRS, Multigaz, TcCO₂, Özofageal Basınç, SSEP/MEP, ICP, TOF/AMG/EMG, Foley İdrar, AKG, Kanama Takibi ve TEG/ROTEM.',
+    desc: 'Perioperatif monitörizasyon ve intraoperatif takip panosu: ASA Standartları, SpO₂, Kapnografi, Spirometri, EKG, NIBP, IBP, CVP, PAC, TEE, SVV/PPV, Transpulmoner Termodilüsyon (PiCCO / VolumeView), BIS, SedLine/PSI, NIRS, Multigaz, TcCO₂, Özofageal Basınç, SSEP/MEP, ICP, TOF/AMG/EMG, Foley İdrar, AKG, Kanama Takibi ve TEG/ROTEM.',
     clinicalKey: 'Temel, invaziv hemodinamik, nöromonitörizasyon, solunum mekaniği ve intraoperatif yatak başı takip modülleri.',
     icon: HeartPulse,
     iconBgDark: 'bg-emerald-500/15',
@@ -696,6 +696,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
         setSelectedNerveBlockId(route.subId || null);
       } else if (route.id === 'basics') {
         setSelectedBasicsCardId(route.subId || null);
+      } else if (route.id === 'mechanical-ventilation') {
+        setSelectedVentilationCardId(route.subId || null);
       }
     }
   }, [initialRoute]);
@@ -709,6 +711,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       preserveEmergencyProtocol?: boolean;
       preserveNerveBlock?: boolean;
       preserveBasicsCard?: boolean;
+      preserveVentilationCard?: boolean;
     }
   ) => {
     setActiveTab(tabId);
@@ -729,6 +732,9 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
     if (!options?.preserveBasicsCard) {
       setSelectedBasicsCardId(null);
+    }
+    if (!options?.preserveVentilationCard) {
+      setSelectedVentilationCardId(null);
     }
     if (tabId === 'tools') {
       updateHashRoute('arac', 'dashboard');
@@ -852,6 +858,13 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [selectedBasicsCardId, setSelectedBasicsCardId] = useState<string | null>(() => {
     const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
     if (route?.type === 'arac' && route.id === 'basics' && route.subId) {
+      return route.subId;
+    }
+    return null;
+  });
+  const [selectedVentilationCardId, setSelectedVentilationCardId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'mechanical-ventilation' && route.subId) {
       return route.subId;
     }
     return null;
@@ -1035,6 +1048,16 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       } else {
         setSelectedBasicsCardId(null);
         handleSelectTab('basics');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.tabId === 'mechanical-ventilation') {
+      if (item.id === 'tool-respiratory-support-oxygen-therapy') {
+        setSelectedVentilationCardId('oxygen-therapy');
+        handleSelectTab('mechanical-ventilation', { preserveVentilationCard: true });
+        updateHashRoute('arac', 'mechanical-ventilation&sub=oxygen-therapy');
+      } else {
+        setSelectedVentilationCardId(null);
+        handleSelectTab('mechanical-ventilation');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -1679,6 +1702,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                     ? activeNerveBlockSubId
                     : activeTab === 'basics' && selectedBasicsCardId
                     ? `basics&sub=${selectedBasicsCardId}`
+                    : activeTab === 'mechanical-ventilation' && selectedVentilationCardId
+                    ? `mechanical-ventilation&sub=${selectedVentilationCardId}`
                     : activeTab
                 }
                 isDark={isDark}
@@ -1689,6 +1714,8 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
                     ? 'Solunum Fizyolojisi Bağlantısını Kopyala'
                     : activeTab === 'basics' && selectedBasicsCardId === 'cardiovascular-physiology'
                     ? 'Kardiyovasküler Fizyoloji Bağlantısını Kopyala'
+                    : activeTab === 'mechanical-ventilation' && selectedVentilationCardId === 'oxygen-therapy'
+                    ? 'Klinik ve Perioperatif Oksijen Tedavisi Bağlantısını Kopyala'
                     : `${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`
                 }
               />
@@ -2049,9 +2076,13 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           <BedsideAbgAnalyzer isDark={isDark} />
         )}
 
-        {/* 2C. Mekanik Ventilasyon */}
+        {/* 2C. Solunumsal Destek */}
         {activeTab === 'mechanical-ventilation' && (
-          <MechanicalVentilationWorkspace isDark={isDark} />
+          <MechanicalVentilationWorkspace
+            isDark={isDark}
+            initialCardId={selectedVentilationCardId}
+            onActiveCardChange={setSelectedVentilationCardId}
+          />
         )}
 
         {/* 2D. Monitörizasyon */}

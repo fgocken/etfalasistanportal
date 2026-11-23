@@ -21,6 +21,7 @@ import { CvpMonitoringModule } from './CvpMonitoringModule';
 import { PacMonitoringModule } from './PacMonitoringModule';
 import { TeeMonitoringModule } from './TeeMonitoringModule';
 import { PulseContourAnalysisModule } from './PulseContourAnalysisModule';
+import { TranspulmonaryThermodilutionModule } from './TranspulmonaryThermodilutionModule';
 import { BisMonitoringModule } from './BisMonitoringModule';
 import { SedlinePsiMonitoringModule } from './SedlinePsiMonitoringModule';
 import { NirsCerebralOximetryModule } from './NirsCerebralOximetryModule';
@@ -57,6 +58,7 @@ interface MonitoringCardItem {
     | 'pac-monitoring'
     | 'tee-monitoring'
     | 'pulse-contour-analysis'
+    | 'transpulmonary-thermodilution'
     | 'bis-monitoring'
     | 'sedline-psi'
     | 'nirs-cerebral-oximetry'
@@ -663,6 +665,47 @@ const MONITORING_MODULES: MonitoringCardItem[] = [
     ],
   },
   {
+    id: 'transpulmonary-thermodilution',
+    title: 'Transpulmoner Termodilüsyon (TPTD · PiCCO / VolumeView)',
+    category: 'İleri Hemodinami',
+    sourceBadge: 'Sistematik · Profil Lab',
+    shortDesc:
+      'Stewart–Hamilton & MTt/DSt fiziği, GEDVI (volümetrik önyük) ve PBW indeksli EVLWI (akciğer suyu), PVPI ≥ 3,0 ile kardiyojenik vs. ARDS ödem ayrımı, canlı profil laboratuvarı ve femoral/PE/ECMO tuzakları.',
+    stripTitle: 'Volümetrik & Permeabilite Özeti:',
+    publisher: 'Sakka · Monnet · ESICM 2014',
+    accent: 'cyan',
+    metrics: [
+      {
+        label: 'GEDVI',
+        value: '680–800',
+        colorClass: 'text-cyan-600 dark:text-cyan-400',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30',
+      },
+      {
+        label: 'EVLWI',
+        value: '3–7 PBW',
+        colorClass: 'text-emerald-600 dark:text-emerald-400',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30',
+      },
+      {
+        label: 'PVPI (ARDS)',
+        value: '≥ 3,0',
+        colorClass: 'text-rose-600 dark:text-rose-400',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30',
+      },
+      {
+        label: 'GEF / CFI',
+        value: '%25–35',
+        colorClass: 'text-amber-600 dark:text-amber-400',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30',
+      },
+    ],
+  },
+  {
     id: 'bis-monitoring',
     title: 'BIS Monitörizasyonu (Bispektral İndeks & EEG)',
     category: 'Anestezi Derinliği',
@@ -1261,6 +1304,7 @@ const ADVANCED_MODULE_ORDER: MonitoringCardItem['id'][] = [
   'peripheral-nerve-stimulator',
   'quantitative-nmb-monitors',
   'pulse-contour-analysis',
+  'transpulmonary-thermodilution',
   'nirs-cerebral-oximetry',
   'sedline-psi',
   'viscoelastic-hemostasis',
@@ -1842,6 +1886,9 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({ isDark
       )}
       {activeModuleId === 'pulse-contour-analysis' && (
         <PulseContourAnalysisModule isDark={isDark} />
+      )}
+      {activeModuleId === 'transpulmonary-thermodilution' && (
+        <TranspulmonaryThermodilutionModule isDark={isDark} />
       )}
       {activeModuleId === 'bis-monitoring' && (
         <BisMonitoringModule isDark={isDark} />

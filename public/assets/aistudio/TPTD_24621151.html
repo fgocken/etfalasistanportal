@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transpulmoner Termodilusyon (PiCCO) Klinik Karar Ağacı</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --border: #dce3ec;
+      --text: #16202a;
+      --text-muted: #526273;
+      --primary: #0f62fe;
+      --primary-soft: #edf4ff;
+      --teal: #0d7a6c;
+      --teal-soft: #e6f5f3;
+      --amber: #b45309;
+      --amber-soft: #fef3c7;
+      --rose: #be123c;
+      --rose-soft: #ffe4e6;
+      --slate: #334155;
+      --slate-soft: #f1f5f9;
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    header p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .mode-switch {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Kontrol Paneli */
+    .controls-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .segmented {
+      display: flex;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .segmented button {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 7px 6px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .segmented button.selected {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 1px 4px rgba(15, 98, 254, 0.25);
+    }
+
+    /* Sayısal Giriş Paneli */
+    .numeric-panel {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .numeric-panel.visible {
+      display: grid;
+    }
+
+    .num-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .num-field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .num-field input {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--surface-alt);
+    }
+
+    .num-field input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    /* Ana Çalışma Alanı */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.65fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 1080px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Görsel Karar Ağacı Alanı */
+    .tree-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .tree-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .tree-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .tree-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .tree-stage {
+      position: relative;
+      min-width: 680px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      padding: 8px 4px;
+    }
+
+    svg#tree-connectors {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .tree-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      gap: 14px;
+      z-index: 2;
+    }
+
+    .col-title {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      padding: 5px 8px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+
+    .node {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      opacity: 0.48;
+      position: relative;
+    }
+
+    .node:hover {
+      opacity: 0.9;
+      border-color: #94a3b8;
+    }
+
+    .node.active {
+      opacity: 1;
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 3px 10px rgba(15, 98, 254, 0.14);
+    }
+
+    .node.secondary-relevant {
+      opacity: 0.78;
+    }
+
+    .node-param {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .node.active .node-param {
+      color: var(--primary);
+    }
+
+    .node-val {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 2px 0;
+    }
+
+    .node-desc {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* Klinik Sonuç Kartı */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .badge-volume { background: var(--primary-soft); color: var(--primary); }
+    .badge-inotrope { background: var(--rose-soft); color: var(--rose); }
+    .badge-vasopressor { background: var(--amber-soft); color: var(--amber); }
+    .badge-negative { background: var(--teal-soft); color: var(--teal); }
+    .badge-neutral { background: var(--slate-soft); color: var(--slate); }
+
+    .result-title {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .path-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--slate);
+    }
+
+    .action-box {
+      background: var(--surface-alt);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .action-box h3 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .action-box p {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .protocol-list {
+      padding-left: 18px;
+      font-size: 0.87rem;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .warning-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 11px 13px;
+      font-size: 0.82rem;
+      color: #78350f;
+    }
+
+    .warning-box strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #92400e;
+    }
+
+    /* Referans Tablosu */
+    .ref-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+
+    .ref-card h2 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      min-width: 640px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--surface-alt);
+      font-weight: 700;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Transpulmoner Termodilusyon (PiCCO / TPTD) Klinik Karar Ağacı</h1>
+        <p>Debi (CI), Önyük (GEDI), Ekstravasküler Akciğer Suyu (ELWI) ve Permeabilite/Direnç (PVPI/SVRI) bazlı yatak başı algoritması</p>
+      </div>
+      <div class="mode-switch">
+        <button class="btn" id="toggle-numeric-btn" type="button">Sayısal Değer Gir</button>
+        <button class="btn" id="reset-btn" type="button">Sıfırla</button>
+      </div>
+    </header>
+
+    <!-- Kontrol Paneli -->
+    <section class="controls-card">
+      <div class="controls-grid">
+        <div class="control-group">
+          <div class="control-label">
+            <span>1. Kardiyak İndeks (CI)</span>
+            <span>L/dk/m²</span>
+          </div>
+          <div class="segmented" data-param="ci">
+            <button type="button" data-val="low" class="selected">&lt; 3,0 (Düşük)</button>
+            <button type="button" data-val="high">&ge; 3,0 (Normal/Yüksek)</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>2. Önyük (GEDI)</span>
+            <span>mL/m²</span>
+          </div>
+          <div class="segmented" data-param="gedi">
+            <button type="button" data-val="low" class="selected">&lt; 680</button>
+            <button type="button" data-val="normal">680–800</button>
+            <button type="button" data-val="high">&gt; 800</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>3. Akciğer Suyu (ELWI)</span>
+            <span>mL/kg (PBW)</span>
+          </div>
+          <div class="segmented" data-param="elwi">
+            <button type="button" data-val="low" class="selected">&lt; 10 (Ödem Yok)</button>
+            <button type="button" data-val="high">&ge; 10 (Ödem Var)</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>4. Permeabilite / Direnç</span>
+            <span>PVPI &middot; SVRI</span>
+          </div>
+          <div class="segmented" data-param="mech">
+            <button type="button" data-val="hydro" class="selected">PVPI &le; 3,0 / SVRI &lt; 1.700</button>
+            <button type="button" data-val="perm">PVPI &gt; 3,0 / SVRI &ge; 1.700</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opsiyonel Sayısal Değer Girişi -->
+      <div class="numeric-panel" id="numeric-panel">
+        <div class="num-field">
+          <label for="in-ci">CI (L/dk/m²)</label>
+          <input type="number" id="in-ci" step="0.1" placeholder="Örn: 2,4" />
+        </div>
+        <div class="num-field">
+          <label for="in-gedi">GEDI (mL/m²)</label>
+          <input type="number" id="in-gedi" step="10" placeholder="Örn: 610" />
+        </div>
+        <div class="num-field">
+          <label for="in-elwi">ELWI (mL/kg PBW)</label>
+          <input type="number" id="in-elwi" step="0.5" placeholder="Örn: 8,0" />
+        </div>
+        <div class="num-field">
+          <label for="in-pvpi">PVPI</label>
+          <input type="number" id="in-pvpi" step="0.1" placeholder="Örn: 2,2" />
+        </div>
+        <div class="num-field">
+          <label for="in-svri">SVRI (dyn&middot;s&middot;cm⁻⁵&middot;m²)</label>
+          <input type="number" id="in-svri" step="50" placeholder="Örn: 1550" />
+        </div>
+        <div class="num-field">
+          <button class="btn active" id="apply-numeric-btn" type="button">Değerleri Uygula</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ana Görsel Ağaç ve Sonuç Kartı -->
+    <div class="main-grid">
+      <section class="tree-card">
+        <div class="tree-header">
+          <h2>Etkileşimli Karar Akışı</h2>
+          <span class="tree-hint">Düğümlere tıklayarak da yolu değiştirebilirsiniz</span>
+        </div>
+
+        <div class="tree-stage" id="tree-stage">
+          <svg id="tree-connectors"></svg>
+
+          <!-- Sütun 1: CI -->
+          <div class="tree-col">
+            <div class="col-title">1. Perfüzyon (CI)</div>
+            <div class="node" id="node-ci-low" data-param="ci" data-val="low">
+              <div class="node-param">Kardiyak İndeks</div>
+              <div class="node-val">CI &lt; 3,0 L/dk/m²</div>
+              <div class="node-desc">Düşük debi / Hipoperfüzyon</div>
+            </div>
+            <div class="node" id="node-ci-high" data-param="ci" data-val="high">
+              <div class="node-param">Kardiyak İndeks</div>
+              <div class="node-val">CI &ge; 3,0 L/dk/m²</div>
+              <div class="node-desc">Normal veya hiperdinamik akım</div>
+            </div>
+          </div>
+
+          <!-- Sütun 2: GEDI -->
+          <div class="tree-col">
+            <div class="col-title">2. Önyük (GEDI)</div>
+            <div class="node" id="node-gedi-low" data-param="gedi" data-val="low">
+              <div class="node-param">Düşük Önyük</div>
+              <div class="node-val">GEDI &lt; 680 mL/m²</div>
+              <div class="node-desc">Volümetrik dolum azalmış</div>
+            </div>
+            <div class="node" id="node-gedi-normal" data-param="gedi" data-val="normal">
+              <div class="node-param">Normal Önyük</div>
+              <div class="node-val">GEDI 680–800 mL/m²</div>
+              <div class="node-desc">Önyük hedef aralıkta</div>
+            </div>
+            <div class="node" id="node-gedi-high" data-param="gedi" data-val="high">
+              <div class="node-param">Yüksek Önyük</div>
+              <div class="node-val">GEDI &gt; 800 mL/m²</div>
+              <div class="node-desc">Artmış diyastol sonu volüm</div>
+            </div>
+          </div>
+
+          <!-- Sütun 3: ELWI -->
+          <div class="tree-col">
+            <div class="col-title">3. Akciğer Ödemi</div>
+            <div class="node" id="node-elwi-low" data-param="elwi" data-val="low">
+              <div class="node-param">Ödem Yok / Sınırda</div>
+              <div class="node-val">ELWI &lt; 10 mL/kg</div>
+              <div class="node-desc">Akciğer sıvı toleransı mevcut</div>
+            </div>
+            <div class="node" id="node-elwi-high" data-param="elwi" data-val="high">
+              <div class="node-param">Pulmoner Ödem</div>
+              <div class="node-val">ELWI &ge; 10 mL/kg</div>
+              <div class="node-desc">Belirgin ekstravasküler sıvı</div>
+            </div>
+          </div>
+
+          <!-- Sütun 4: Mekanizma (PVPI / SVRI) -->
+          <div class="tree-col">
+            <div class="col-title">4. Mekanizma</div>
+            <div class="node" id="node-mech-hydro" data-param="mech" data-val="hydro">
+              <div class="node-param" id="mech-hydro-title">Hidrostatik / Vazoplejik</div>
+              <div class="node-val" id="mech-hydro-val">PVPI &le; 3,0 &middot; SVRI &lt; 1.700</div>
+              <div class="node-desc" id="mech-hydro-desc">Basınç kaynaklı ödem veya düşük tonus</div>
+            </div>
+            <div class="node" id="node-mech-perm" data-param="mech" data-val="perm">
+              <div class="node-param" id="mech-perm-title">Permeabilite / Normal Tonus</div>
+              <div class="node-val" id="mech-perm-val">PVPI &gt; 3,0 &middot; SVRI &ge; 1.700</div>
+              <div class="node-desc" id="mech-perm-desc">Kapiller kaçak (ARDS) veya korunmuş tonus</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Klinik Karar Kartı -->
+      <aside class="result-card" id="result-card">
+        <span class="badge badge-volume" id="res-badge">VOLÜM (V!)</span>
+        <div class="result-title" id="res-title">Hipovolemik Şok / Sıvı Açığı</div>
+        <div class="path-pills" id="res-pills"></div>
+
+        <div class="action-box" id="res-action-box">
+          <h3>Öncelikli Yatak Başı Müdahale</h3>
+          <p id="res-action">Kristalloid veya kan ürünü yüklemesi yapın; yanıtı SVV/PPV veya PLR ile doğrulayın.</p>
+        </div>
+
+        <div>
+          <strong style="font-size: 0.84rem; color: var(--text-muted); text-transform: uppercase;">Uygulama ve İzlem Adımları</strong>
+          <ul class="protocol-list" id="res-steps"></ul>
+        </div>
+
+        <div class="warning-box" id="res-warning-box">
+          <strong>Kritik Yatak Başı Uyarısı</strong>
+          <span id="res-warning"></span>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Referans Aralıkları Tablosu -->
+    <section class="ref-card">
+      <h2>Transpulmoner Termodilusyon Referans Aralıkları</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Parametre</th>
+            <th>Açılımı</th>
+            <th>Normal Aralık</th>
+            <th>Klinik Yorum</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>CI</strong></td>
+            <td>Kardiyak İndeks</td>
+            <td>3,0–5,0 L/dk/m²</td>
+            <td>Sistemik kan akımı ve doku perfüzyon yeterliliği</td>
+          </tr>
+          <tr>
+            <td><strong>GEDI</strong></td>
+            <td>Global Diyastol Sonu Volüm İndeksi</td>
+            <td>680–800 mL/m²</td>
+            <td>Statik volümetrik önyük (preload) göstergesi</td>
+          </tr>
+          <tr>
+            <td><strong>ELWI</strong></td>
+            <td>Ekstravasküler Akciğer Suyu İndeksi</td>
+            <td>3,0–7,0 mL/kg (PBW)</td>
+            <td>Pulmoner ödem yükü (&ge; 10 mL/kg belirgin ödem)</td>
+          </tr>
+          <tr>
+            <td><strong>PVPI</strong></td>
+            <td>Pulmoner Vasküler Permeabilite İndeksi</td>
+            <td>1,0–3,0</td>
+            <td>Hidrostatik (&le; 3,0) vs. Permeabilite/ARDS (&gt; 3,0) ayrımı</td>
+          </tr>
+          <tr>
+            <td><strong>CFI / GEF</strong></td>
+            <td>Kardiyak Fonksiyon İndeksi / Global EF</td>
+            <td>4,5–6,5 /dk &middot; %25–35</td>
+            <td>Miyokardiyal kontraktilite göstergesi</td>
+          </tr>
+          <tr>
+            <td><strong>SVRI</strong></td>
+            <td>Sistemik Vasküler Rezistans İndeksi</td>
+            <td>1.700–2.400 dyn&middot;s&middot;cm⁻⁵&middot;m²</td>
+            <td>Ardyük (afterload) ve vazomotor tonus</td>
+          </tr>
+          <tr>
+            <td><strong>SVV / PPV</strong></td>
+            <td>Atım Volümü / Nabız Basıncı Varyasyonu</td>
+            <td>&lt; %12–13</td>
+            <td>Dinamik sıvı yanıtlılığı (kontrollü MV + sinüs ritmi şartıyla)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    const state = {
+      ci: "low",
+      gedi: "low",
+      elwi: "low",
+      mech: "hydro"
+    };
+
+    const scenarios = {
+      // CI LOW (< 3,0)
+      "low-low-low-hydro": {
+        badge: "VOLÜM (V!)",
+        badgeClass: "badge-volume",
+        borderColor: "#0f62fe",
+        title: "Hipovolemik Şok / Akut Sıvı Açığı",
+        action: "Kristalloid veya kan ürünü yüklemesi uygulayın (250–500 mL bolus); yanıtı SVV/PPV veya PLR ile izleyin.",
+        steps: [
+          "Mekanik ventilasyonda sinüs ritmi varsa SVV/PPV > %12–13 olmasını doğrulayın.",
+          "Bolus sonrası CI artışı (%10–15) ve GEDI yükselişini kontrol edin.",
+          "Kanama şüphesi varsa hemoglobin ve laktat klirensini eşzamanlı izleyin."
+        ],
+        warning: "Aritmi, spontan solunum veya düşük tidal volüm (< 7 mL/kg) varsa SVV/PPV güvenilir değildir; Pasif Bacak Kaldırma (PLR) testi kullanın."
+      },
+      "low-low-low-perm": {
+        badge: "VOLÜM (V!)",
+        badgeClass: "badge-volume",
+        borderColor: "#0f62fe",
+        title: "Hipovolemik Şok (Kompanse Vazokonstriksiyon Eşlikli)",
+        action: "Önyükü yerine koymak için kontrollü sıvı yüklemesi yapın; yüksek SVRI sıvı sonrası gerileyecektir.",
+        steps: [
+          "Düşük debiye yanıt olarak SVRI refleks yükselmiş olabilir; doğrudan vazodilatör vermeyin.",
+          "250–500 mL dengeli kristalloid bolusu ile GEDI'yi 680 mL/m² üzerine taşıyın.",
+          "Önyük düzeldikten sonra CI hâlâ < 3,0 ise CFI/GEF değerini kontrol edin."
+        ],
+        warning: "Sıvı açığı kapatılmadan vazodilatör başlanması derin hipotansiyona yol açar."
+      },
+      "low-low-high-hydro": {
+        badge: "KISITLI VOLÜM TESTİ",
+        badgeClass: "badge-amber",
+        borderColor: "#b45309",
+        title: "İntravasküler Hipovolemi + Eşlik Eden Hidrostatik Ödem",
+        action: "Küçük hacimli (100–250 mL) sıvı testi veya PLR uygulayın; ELWI artıyorsa sıvıyı hemen durdurun.",
+        steps: [
+          "GEDI < 680 olsa da ELWI ≥ 10 mL/kg olduğu için agresif yüklemeden kaçının.",
+          "CFI (< 4,5 /dk) ve GEF (< %25) değerlerini değerlendirerek gizli pompa disfonksiyonunu dışlayın.",
+          "MAP < 65 mmHg ise erken noradrenalin desteğiyle koroner perfüzyonu koruyun."
+        ],
+        warning: "Bu profil genellikle aşırı diürez sonrası kalp yetmezliği veya kapiller kaçak başlangıcında görülür."
+      },
+      "low-low-high-perm": {
+        badge: "DİKKATLİ VOLÜM (V!)",
+        badgeClass: "badge-amber",
+        borderColor: "#b45309",
+        title: "Hipovolemi + ARDS / Kapiller Kaçak (PVPI > 3,0)",
+        action: "Küçük boluslarla (250 mL) titre ederek sıvı verin; her bolus sonrası ELWI artışını ve PaO₂/FiO₂ oranını izleyin.",
+        steps: [
+          "PVPI > 3,0 alveolokapiller bariyer hasarını gösterir; verilen sıvının akciğere kaçma riski yüksektir.",
+          "Sıvı yanıtlılığı kaybolduğu an (CI artmıyor veya ELWI > 2 mL/kg artıyorsa) yüklemeyi sonlandırın.",
+          "Perfüzyon basıncı için noradrenalin eklemeyi geciktirmeyin."
+        ],
+        warning: "ELWI mutlaka Öngörülen Vücut Ağırlığı (PBW) üzerinden hesaplanmalıdır; obez hastalarda gerçek kilo ELWI'yi düşük gösterir."
+      },
+      "low-normal-low-hydro": {
+        badge: "İNOTROP (KAT!)",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Normovolemik Pompa Yetersizliği",
+        action: "İnotropik destek (dobutamin veya milrinon) başlayın; önyük yeterli olduğu için rutin sıvı yüklemeyin.",
+        steps: [
+          "CFI (< 4,5 /dk) ve GEF (< %25) düşüklüğünü doğrulayın.",
+          "SVV/PPV > %13 ve PLR pozitif ise tek seferlik 250 mL sınırlı sıvı testi yapılabilir.",
+          "İnotrop sonrası hipotansiyon gelişirse noradrenalin ile MAP ≥ 65 mmHg hedefleyin."
+        ],
+        warning: "Normal GEDI'ye rağmen agresif sıvı verilmesi, debiyi artırmadan doğrudan pulmoner ödeme zemin hazırlar."
+      },
+      "low-normal-low-perm": {
+        badge: "İNOTROP (KAT!)",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Normovolemik Pompa Yetersizliği (Yüksek Ardyük)",
+        action: "İnotrop başlayın ve yüksek SVRI söz konusuysa ardyükü (afterload) azaltmayı değerlendirin.",
+        steps: [
+          "Miyokard kontraktilitesi (CFI/GEF) düşük ve sistemik direnç yüksekse sol ventrikül boşalması zorlaşır.",
+          "Kan basıncı elveriyorsa vazodilatör veya inodilatör (milrinon/levosimendan) seçeneklerini değerlendirin.",
+          "ScvO₂ ve laktat takibi ile doku oksijenasyon yanıtını izleyin."
+        ],
+        warning: "Ardyük azaltımı sırasında diyastolik kan basıncı ve koroner perfüzyon basıncı yakından izlenmelidir."
+      },
+      "low-normal-high-hydro": {
+        badge: "İNOTROP + DİÜRETİK",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Akut Sol Ventrikül Disfonksiyonu + Hidrostatik Ödem",
+        action: "İnotropik destek ile kontraktiliteyi artırın ve kontrollü negatif sıvı dengesi sağlayın.",
+        steps: [
+          "Sıvı yüklemesi kontrendikedir; ELWI ≥ 10 ve PVPI ≤ 3,0 hidrostatik ödemi doğrular.",
+          "Dobutamin/levosimendan ile CI'yi ≥ 3,0 L/dk/m² hedefine yaklaştırın.",
+          "Hemodinami stabilize olur olmaz diüretik infüzyonu ile ELWI'yi düşürün."
+        ],
+        warning: "MAP < 65 mmHg iken agresif diürez böbrek perfüzyonunu bozabilir; önce inotrop/vazopresör ile perfüzyonu sağlayın."
+      },
+      "low-normal-high-perm": {
+        badge: "İNOTROP + KONSERVATİF SIVI",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Septik Kardiyomiyopati + ARDS (Permeabilite Ödemi)",
+        action: "İnotrop desteği ekleyin, sıvı balansını nötr/negatif tutun ve akciğer koruyucu ventilasyon uygulayın.",
+        steps: [
+          "Sepsiste miyokard depresyonu (düşük CI/CFI) ile kapiller kaçak (PVPI > 3,0) bir arada bulunabilir.",
+          "Noradrenalin + dobutamin kombinasyonu ile hem MAP hem CI hedeflerini tutturun.",
+          "Sıvı alımını minimumda tutarak ELWI artışını sınırlayın."
+        ],
+        warning: "PVPI > 3,0 varlığında verilen her fazla kristalloid alveoler ödemi ağırlaştırır."
+      },
+      "low-high-low-hydro": {
+        badge: "İNOTROP (KAT!)",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Kardiyojenik Şok (Henüz Belirgin Akciğer Ödemi Yok)",
+        action: "Sıvı vermeyi kesin; inotropik ajan başlayın ve ardyükü optimize edin.",
+        steps: [
+          "GEDI > 800 mL/m² kalbin Frank-Starling eğrisinin düz kısmında olduğunu gösterir.",
+          "CFI ve GEF değerleri ile miyokardiyal disfonksiyon derecesini izleyin.",
+          "Altta yatan iskemik, aritmik veya kapak patolojisini hızla tedavi edin."
+        ],
+        warning: "ELWI henüz < 10 mL/kg olsa bile GEDI > 800 olduğu için eklenecek sıvı doğrudan akciğer ödemine yol açar."
+      },
+      "low-high-low-perm": {
+        badge: "İNOTROP + ARDYÜK KONTROLÜ",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Kardiyojenik Şok (Yüksek Önyük ve Yüksek SVRI)",
+        action: "İnotrop başlayın, sıvı vermeyin; yüksek SVRI varsa ardyükü azaltarak atım hacmini artırın.",
+        steps: [
+          "Yüksek GEDI ve yüksek SVRI kombinasyonu zayıf ventrikül üzerinde ciddi mekanik yük oluşturur.",
+          "İnotropik desteğe ek olarak kan basıncı izin veriyorsa ardyük azaltımı planlayın.",
+          "Gerekirse erken mekanik dolaşım desteği kriterlerini değerlendirin."
+        ],
+        warning: "Sıvı bolusu bu tabloda kesinlikle kontrendikedir."
+      },
+      "low-high-high-hydro": {
+        badge: "İNOTROP + NEGATİF BALANS",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Dekompanse Kardiyojenik Şok + Hidrostatik Pulmoner Ödem",
+        action: "İnotrop başlayın ve diüretik veya ultrafiltrasyon (RRT) ile aktif negatif sıvı dengesi sağlayın.",
+        steps: [
+          "Klasik 'ıslak ve soğuk' kardiyojenik şok profilidir (CI düşük, GEDI yüksek, ELWI yüksek, PVPI ≤ 3,0).",
+          "Dobutamin/milrinon ile debiyi artırırken kıvrım diüretikleri veya RRT ile sıvı uzaklaştırın.",
+          "Tedavi yanıtını ELWI ve GEDI düşüşü ile objektif olarak takip edin."
+        ],
+        warning: "Diüretiğe dirençli olgularda erken ultrafiltrasyon geciktirilmemelidir."
+      },
+      "low-high-high-perm": {
+        badge: "İNOTROP + AKTİF NEGATİF BALANS",
+        badgeClass: "badge-inotrope",
+        borderColor: "#be123c",
+        title: "Miks Şok: Kardiyojenik Disfonksiyon + Permeabilite Ödemi",
+        action: "İnotrop + vazopresör ile perfüzyonu korurken kontrollü negatif sıvı dengesi uygulayın.",
+        steps: [
+          "Hem dolum basınçları/volümleri yüksek (GEDI > 800) hem de kapiller kaçak (PVPI > 3,0) mevcuttur.",
+          "Sıvı yüklemesinden kesin kaçının; noradrenalin desteği altında sıvı çekmeyi hedefleyin.",
+          "Akciğer koruyucu mekanik ventilasyon ve PEEP titrasyonu uygulayın."
+        ],
+        warning: "Hemodinamik instabilite nedeniyle bolus diüretik yerine yavaş sürekli infüzyon veya CRRT tercih edilmelidir."
+      },
+
+      // CI HIGH (>= 3,0)
+      "high-low-low-hydro": {
+        badge: "VOLÜM + VAZOPRESÖR",
+        badgeClass: "badge-vasopressor",
+        borderColor: "#b45309",
+        title: "Erken / Hiperdinamik Septik Şok (Göreceli Hipovolemi)",
+        action: "Sıvı yanıtlıysa kristalloid yükleyin; MAP < 65 mmHg ise erken noradrenalin ekleyin.",
+        steps: [
+          "Yüksek CI'ye rağmen düşük GEDI ve düşük SVRI (< 1.700) vazodilatasyon + venöz göllenmeyi gösterir.",
+          "SVV/PPV > %12–13 veya PLR pozitif ise dengeli kristalloid ile önyükü destekleyin.",
+          "Gereksiz aşırı sıvı birikimini önlemek için erken noradrenalin ile venöz dönüşü artırın."
+        ],
+        warning: "CI normal/yüksek diye hipoperfüzyonu dışlamayın; laktat, idrar çıkışı ve kapiller dolumu izleyin."
+      },
+      "high-low-low-perm": {
+        badge: "SIVI REPLASMANI",
+        badgeClass: "badge-volume",
+        borderColor: "#0f62fe",
+        title: "Kompanse Hipovolemi (Korunmuş Debi ve Tonus)",
+        action: "Doku hipoperfüzyonu bulgusu (yüksek laktat, oligüri) varsa kontrollü sıvı replasmanı yapın.",
+        steps: [
+          "CI ≥ 3,0 ve SVRI ≥ 1.700 olduğu için hasta volüm açığını taşikardi/kontraktilite ile kompanse etmektedir.",
+          "Perfüzyon belirteçleri normalse agresif yükleme yerine idame sıvı yeterlidir.",
+          "Hipoperfüzyon bulgusu varsa 250–500 mL bolus sonrası yanıtı değerlendirin."
+        ],
+        warning: "Tek başına düşük GEDI, hipoperfüzyon bulgusu yoksa zorunlu bolus endikasyonu değildir."
+      },
+      "high-low-high-hydro": {
+        badge: "VAZOPRESÖR + KISITLI SIVI",
+        badgeClass: "badge-vasopressor",
+        borderColor: "#b45309",
+        title: "Vazopleji + İntravasküler Açık ve Eşlik Eden Akciğer Ödemi",
+        action: "Noradrenalin ile SVRI/MAP'ı düzeltin; sıvı yüklemesini yalnızca PLR pozitifse çok küçük boluslarla yapın.",
+        steps: [
+          "Noradrenalin venöz kapasitans damarlarını daraltarak 'oto-transfüzyon' etkisiyle GEDI'yi artırabilir.",
+          "ELWI ≥ 10 olduğu için yüksek hacimli kristalloid yüklemesinden kaçının.",
+          "Hemodinami stabilize olunca negatif balans planlayın."
+        ],
+        warning: "Vazoplejik hastalarda sadece sıvı vererek tansiyon yükseltmeye çalışmak ağır pulmoner ödemle sonuçlanır."
+      },
+      "high-low-high-perm": {
+        badge: "VAZOPRESÖR ÖNCELİKLİ",
+        badgeClass: "badge-vasopressor",
+        borderColor: "#b45309",
+        title: "Septik Şok + ARDS (Kapiller Kaçak ve Göreceli Hipovolemi)",
+        action: "Erken noradrenalin başlayın; sıvıyı sadece dinamik test pozitifse ve küçük hacimlerle verin.",
+        steps: [
+          "PVPI > 3,0 nedeniyle damar içi sıvı hızla interstisyuma kaçmaktadır.",
+          "Vazopresör desteğiyle perfüzyon basıncını sağlamak sıvı ihtiyacını belirgin azaltır.",
+          "Her sıvı denemesinde ELWI ve oksijenasyon parametrelerini kontrol edin."
+        ],
+        warning: "Agresif sıvı resüsitasyonu bu grupta mekanik ventilasyon süresini ve mortaliteyi artırır."
+      },
+      "high-normal-low-hydro": {
+        badge: "VAZOPRESÖR",
+        badgeClass: "badge-vasopressor",
+        borderColor: "#b45309",
+        title: "Vazoplejik Şok (Normovolemik Vazodilatasyon)",
+        action: "Noradrenalin (gerekirse vazopresin) ile SVRI ve MAP'ı hedefe çekin; gereksiz sıvı vermeyin.",
+        steps: [
+          "CI ≥ 3,0 ve GEDI 680–800 ile kalp debisi ve önyük yeterlidir; temel sorun düşük SVRI (< 1.700) değeridir.",
+          "Sıvı yüklemesi vazoplejiyi düzeltmez, yalnızca doku ödemine yol açar.",
+          "Refrakter vazoplejide vazopresin veya metilen mavisi / kortikosteroid seçeneklerini değerlendirin."
+        ],
+        warning: "Normovolemik vazoplejide hipotansiyonun tedavisi sıvı değil vazopresördür."
+      },
+      "high-normal-low-perm": {
+        badge: "HEMODİNAMİK DENGE",
+        badgeClass: "badge-neutral",
+        borderColor: "#334155",
+        title: "Normovolemik ve Normotansif Hemodinamik Profil",
+        action: "Mevcut idame tedavisini sürdürün; ek sıvı bolusu veya vazoaktif ajan gereksinimi yoktur.",
+        steps: [
+          "CI, GEDI, ELWI ve SVRI parametrelerinin tamamı hedef aralıklardadır.",
+          "Vazoaktif destek alıyorsa kademeli azaltma (weaning) açısından değerlendirin.",
+          "Laktat ve idrar çıkışı ile perfüzyonun sürdüğünü doğrulayın."
+        ],
+        warning: "Normal parametrelerde rutin sıvı yüklemesi yapılmamalıdır."
+      },
+      "high-normal-high-hydro": {
+        badge: "HAFİF NEGATİF BALANS",
+        badgeClass: "badge-negative",
+        borderColor: "#0d7a6c",
+        title: "Rezidüel Hidrostatik Ödem / Diyastolik Kompliyans Azalması",
+        action: "Sıvı kısıtlaması ve düşük doz diüretik ile ELWI < 10 mL/kg hedefine inin.",
+        steps: [
+          "Debi ve önyük normal olmasına rağmen akciğer suyu yüksektir (PVPI ≤ 3,0).",
+          "İdame sıvıları azaltın ve pozitif sıvı dengesini sonlandırın.",
+          "Diürez sırasında GEDI'nin 680 mL/m² altına düşmemesine dikkat edin."
+        ],
+        warning: "Hızlı diürez intravasküler hipovolemiye yol açarsa CI düşebilir."
+      },
+      "high-normal-high-perm": {
+        badge: "KONSERVATİF SIVI",
+        badgeClass: "badge-negative",
+        borderColor: "#0d7a6c",
+        title: "Normovolemik ARDS / Sepsis Kaynaklı Akciğer Ödemi",
+        action: "Konservatif sıvı stratejisi uygulayın; hemodinami elveriyorsa negatif balans hedefleyin.",
+        steps: [
+          "ELWI ≥ 10 ve PVPI > 3,0 izole/baskın pulmoner permeabilite ödemini doğrular.",
+          "FACTT protokolüne uygun şekilde idame sıvıları kısıtlayın ve gereksiz infüzyonları yoğunlaştırın.",
+          "Koruyucu mekanik ventilasyon (düşük tidal volüm, uygun PEEP) ile oksijenasyonu optimize edin."
+        ],
+        warning: "ARDS'de normal GEDI varlığında bile negatif/nötr sıvı dengesi ventilatörsüz gün sayısını artırır."
+      },
+      "high-high-low-hydro": {
+        badge: "SIVI KISITLAMASI",
+        badgeClass: "badge-negative",
+        borderColor: "#0d7a6c",
+        title: "İntravasküler Hipervolemi (Vazodilatasyon Eşlikli)",
+        action: "Sıvı yüklemesini durdurun; düşük SVRI nedeniyle hipotansiyon varsa vazopresör kullanın.",
+        steps: [
+          "GEDI > 800 mL/m² volüm rezervinin dolduğunu gösterir; ek sıvı debiyi artırmaz.",
+          "Akciğer ödemi (ELWI ≥ 10) gelişmeden pozitif sıvı dengesini sonlandırın.",
+          "İdrar çıkışı yeterliyse spontan negatif balans izlenebilir."
+        ],
+        warning: "Bu aşamada verilecek ek sıvı doğrudan ELWI yükselmesine neden olur."
+      },
+      "high-high-low-perm": {
+        badge: "SIVI KISITLAMASI",
+        badgeClass: "badge-negative",
+        borderColor: "#0d7a6c",
+        title: "İntravasküler Hipervolemi (Henüz Akciğer Ödemi Gelişmemiş)",
+        action: "Tüm gereksiz sıvı infüzyonlarını durdurun ve negatif sıvı dengesine geçin.",
+        steps: [
+          "GEDI > 800 mL/m² hipervolemiyi gösterir; hastanın sıvı yanıtlılığı yoktur.",
+          "Akciğer ödemi sınırına yaklaşılmadan sıvı kısıtlaması ve gerekirse diüretik planlayın.",
+          "Kardiyak indeks iyi olduğu için negatif balans genellikle iyi tolere edilir."
+        ],
+        warning: "Yüksek GEDI varlığında sıvı testi yapmak fizyolojik olarak anlamsız ve zararlıdır."
+      },
+      "high-high-high-hydro": {
+        badge: "NEGATİF BALANS",
+        badgeClass: "badge-negative",
+        borderColor: "#0d7a6c",
+        title: "Volüm Yüklenmesi (Hipervolemik Hidrostatik Pulmoner Ödem)",
+        action: "Diüretik veya ultrafiltrasyon (RRT) ile aktif negatif sıvı dengesi sağlayın.",
+        steps: [
+          "CI korunmuş, GEDI > 800 ve ELWI ≥ 10 (PVPI ≤ 3,0) klasik iyatrojenik veya böbrek kaynaklı sıvı yüklenmesidir.",
+          "Kıvrım diüretikleri ile saatlik negatif balans hedefi belirleyin.",
+          "Oligürik/anürik hastada erken ultrafiltrasyon (RRT) ile ELWI ve GEDI'yi düşürün."
+        ],
+        warning: "Hedef ELWI < 10 mL/kg ve GEDI 680–800 mL/m² aralığına geri dönmektir."
+      },
+      "high-high-high-perm": {
+        badge: "NEGATİF BALANS + PEEP",
+        badgeClass: "badge-negative",
+        borderColor: "#0d7a6c",
+        title: "Hipervolemi + ARDS (Komplike Pulmoner Ödem)",
+        action: "Aktif negatif sıvı dengesi sağlayın; tansiyon düşerse noradrenalin desteğiyle sıvı çekmeye devam edin.",
+        steps: [
+          "Hem hidrostatik aşırı yük (GEDI > 800) hem de kapiller kaçak (PVPI > 3,0) bir aradadır.",
+          "Diüretik veya RRT ile intravasküler basıncı düşürmek alveoler ödemi belirgin azaltır.",
+          "Akciğer koruyucu ventilasyon ve uygun PEEP titrasyonunu sürdürün."
+        ],
+        warning: "Bu profilde pozitif sıvı dengesi mortalite ile güçlü biçimde ilişkilidir."
+      }
+    };
+
+    function updateMechanismLabels() {
+      const hTitle = document.getElementById("mech-hydro-title");
+      const hVal = document.getElementById("mech-hydro-val");
+      const hDesc = document.getElementById("mech-hydro-desc");
+      const pTitle = document.getElementById("mech-perm-title");
+      const pVal = document.getElementById("mech-perm-val");
+      const pDesc = document.getElementById("mech-perm-desc");
+
+      if (state.elwi === "high") {
+        hTitle.textContent = "Hidrostatik Ödem";
+        hVal.textContent = "PVPI ≤ 3,0";
+        hDesc.textContent = "Basınç veya volüm kaynaklı ödem";
+        pTitle.textContent = "Permeabilite Ödemi";
+        pVal.textContent = "PVPI > 3,0";
+        pDesc.textContent = "ARDS / Kapiller kaçak sendromu";
+      } else {
+        hTitle.textContent = "Düşük Vasküler Direnç";
+        hVal.textContent = "SVRI < 1.700";
+        hDesc.textContent = "Vazodilatasyon / Vazopleji";
+        pTitle.textContent = "Normal / Yüksek Direnç";
+        pVal.textContent = "SVRI ≥ 1.700";
+        pDesc.textContent = "Korunmuş veya artmış ardyük";
+      }
+    }
+
+    function drawConnectors() {
+      const svg = document.getElementById("tree-connectors");
+      const stage = document.getElementById("tree-stage");
+      const stageRect = stage.getBoundingClientRect();
+      svg.innerHTML = "";
+
+      const pairs = [
+        [`node-ci-${state.ci}`, `node-gedi-${state.gedi}`, true],
+        [`node-gedi-${state.gedi}`, `node-elwi-${state.elwi}`, true],
+        [`node-elwi-${state.elwi}`, `node-mech-${state.mech}`, true]
+      ];
+
+      // Arka plan pasif bağlantılar
+      const cols = [
+        ["node-ci-low", "node-ci-high"],
+        ["node-gedi-low", "node-gedi-normal", "node-gedi-high"],
+        ["node-elwi-low", "node-elwi-high"],
+        ["node-mech-hydro", "node-mech-perm"]
+      ];
+
+      for (let c = 0; c < cols.length - 1; c++) {
+        cols[c].forEach(srcId => {
+          cols[c + 1].forEach(dstId => {
+            const isActive = pairs.some(p => p[0] === srcId && p[1] === dstId);
+            if (!isActive) {
+              appendCurve(svg, stageRect, srcId, dstId, "#dce3ec", 1.5, 0.55);
+            }
+          });
+        });
+      }
+
+      // Aktif bağlantılar
+      pairs.forEach(([srcId, dstId]) => {
+        appendCurve(svg, stageRect, srcId, dstId, "#0f62fe", 3.2, 1);
+      });
+    }
+
+    function appendCurve(svg, stageRect, srcId, dstId, color, width, opacity) {
+      const src = document.getElementById(srcId);
+      const dst = document.getElementById(dstId);
+      if (!src || !dst) return;
+
+      const sRect = src.getBoundingClientRect();
+      const dRect = dst.getBoundingClientRect();
+
+      const x1 = sRect.right - stageRect.left;
+      const y1 = sRect.top + sRect.height / 2 - stageRect.top;
+      const x2 = dRect.left - stageRect.left;
+      const y2 = dRect.top + dRect.height / 2 - stageRect.top;
+      const cx = (x1 + x2) / 2;
+
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", `M ${x1} ${y1} C ${cx} ${y1}, ${cx} ${y2}, ${x2} ${y2}`);
+      path.setAttribute("fill", "none");
+      path.setAttribute("stroke", color);
+      path.setAttribute("stroke-width", width);
+      path.setAttribute("stroke-opacity", opacity);
+      svg.appendChild(path);
+    }
+
+    function render() {
+      // Segmented butonları güncelle
+      document.querySelectorAll(".segmented").forEach(group => {
+        const param = group.dataset.param;
+        group.querySelectorAll("button").forEach(btn => {
+          btn.classList.toggle("selected", btn.dataset.val === state[param]);
+        });
+      });
+
+      // Ağaç düğümlerini güncelle
+      document.querySelectorAll(".node").forEach(node => {
+        const param = node.dataset.param;
+        const val = node.dataset.val;
+        node.classList.toggle("active", state[param] === val);
+      });
+
+      updateMechanismLabels();
+
+      // Klinik senaryoyu yükle
+      const key = `${state.ci}-${state.gedi}-${state.elwi}-${state.mech}`;
+      const data = scenarios[key];
+
+      const badge = document.getElementById("res-badge");
+      badge.textContent = data.badge;
+      badge.className = `badge ${data.badgeClass}`;
+
+      document.getElementById("res-title").textContent = data.title;
+      document.getElementById("res-action").textContent = data.action;
+      document.getElementById("res-action-box").style.borderLeftColor = data.borderColor;
+      document.getElementById("res-warning").textContent = data.warning;
+
+      // Seçili parametre etiketleri
+      const pills = document.getElementById("res-pills");
+      const ciText = state.ci === "low" ? "CI < 3,0" : "CI ≥ 3,0";
+      const gediText = state.gedi === "low" ? "GEDI < 680" : state.gedi === "normal" ? "GEDI 680–800" : "GEDI > 800";
+      const elwiText = state.elwi === "low" ? "ELWI < 10" : "ELWI ≥ 10";
+      const mechText = state.elwi === "high"
+        ? (state.mech === "hydro" ? "PVPI ≤ 3,0" : "PVPI > 3,0")
+        : (state.mech === "hydro" ? "SVRI < 1.700" : "SVRI ≥ 1.700");
+
+      pills.innerHTML = [ciText, gediText, elwiText, mechText]
+        .map(t => `<span class="pill">${t}</span>`)
+        .join("");
+
+      const stepsUl = document.getElementById("res-steps");
+      stepsUl.innerHTML = data.steps.map(s => `<li>${s}</li>`).join("");
+
+      requestAnimationFrame(drawConnectors);
+    }
+
+    // Segmented kontrol tıklamaları
+    document.querySelectorAll(".segmented button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const param = btn.parentElement.dataset.param;
+        state[param] = btn.dataset.val;
+        render();
+      });
+    });
+
+    // Ağaç düğümü tıklamaları
+    document.querySelectorAll(".node").forEach(node => {
+      node.addEventListener("click", () => {
+        const param = node.dataset.param;
+        const val = node.dataset.val;
+        state[param] = val;
+        render();
+      });
+    });
+
+    // Sayısal giriş paneli aç/kapa
+    document.getElementById("toggle-numeric-btn").addEventListener("click", function () {
+      const panel = document.getElementById("numeric-panel");
+      panel.classList.toggle("visible");
+      this.classList.toggle("active");
+    });
+
+    // Sayısal değerleri eşiklere dönüştür
+    document.getElementById("apply-numeric-btn").addEventListener("click", () => {
+      const ci = parseFloat(document.getElementById("in-ci").value);
+      const gedi = parseFloat(document.getElementById("in-gedi").value);
+      const elwi = parseFloat(document.getElementById("in-elwi").value);
+      const pvpi = parseFloat(document.getElementById("in-pvpi").value);
+      const svri = parseFloat(document.getElementById("in-svri").value);
+
+      if (!isNaN(ci)) state.ci = ci < 3.0 ? "low" : "high";
+      if (!isNaN(gedi)) state.gedi = gedi < 680 ? "low" : gedi <= 800 ? "normal" : "high";
+      if (!isNaN(elwi)) state.elwi = elwi < 10 ? "low" : "high";
+
+      if (state.elwi === "high" && !isNaN(pvpi)) {
+        state.mech = pvpi <= 3.0 ? "hydro" : "perm";
+      } else if (state.elwi === "low" && !isNaN(svri)) {
+        state.mech = svri < 1700 ? "hydro" : "perm";
+      }
+
+      render();
+    });
+
+    // Sıfırla
+    document.getElementById("reset-btn").addEventListener("click", () => {
+      state.ci = "low";
+      state.gedi = "low";
+      state.elwi = "low";
+      state.mech = "hydro";
+      ["in-ci", "in-gedi", "in-elwi", "in-pvpi", "in-svri"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
+      render();
+    });
+
+    window.addEventListener("resize", drawConnectors);
+    window.addEventListener("load", render);
+  </script>
+</body>
+</html>
