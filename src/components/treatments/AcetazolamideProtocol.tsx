@@ -7,21 +7,21 @@ import {
   ChevronDown,
   ChevronUp,
   Clock,
-  Droplet,
   Eye,
   HeartPulse,
-  Info,
   Mountain,
   Pill,
   ShieldAlert,
   Stethoscope,
-  Syringe,
   Wind,
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
   MonographCopyButton,
@@ -29,6 +29,7 @@ import {
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -54,7 +55,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
   const [baselineK, setBaselineK] = useState<number>(3.9);
   const [hasCirrhosis, setHasCirrhosis] = useState<boolean>(false);
   const [route, setRoute] = useState<RouteMode>('po_ng');
-  const [pkOpen, setPkOpen] = useState<boolean>(true);
+  const [pkOpen, setPkOpen] = useState<boolean>(false);
 
   const weightId = useId();
   const crClId = useId();
@@ -84,7 +85,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           maxDaily: 'Maks 250 mg/doz · 1.000 mg/gün',
           prepNote:
             route === 'iv'
-              ? `${(singleDoseMg / 100).toFixed(2)} mL (100 mg/mL sulandırılmış çözelti) yavaş IV puşe veya 15–30 dk infüzyon.`
+              ? `${(singleDoseMg / 100).toFixed(2)} mL (100 mg/mL sulandırılmış çözelti) yavaş IV puşe veya 15–30 dk infüzyon. (TR Notu: IV form Türkiye’de ruhsatlı/rutin mevcut değildir; NG/oral Diazomid 250 mg tb kullanın.)`
               : `Diazomid 250 mg tb'den ${singleDoseMg} mg eşdeğeri (oral süspansiyon veya NG/OG ile 10–15 mL su içinde).`,
         };
       }
@@ -101,7 +102,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           maxDaily: '15–25 mg/kg/gün (Maks 1.000 mg/gün)',
           prepNote:
             route === 'iv'
-              ? `${(perDose / 100).toFixed(2)} mL (100 mg/mL çözelti) 15–30 dk IV infüzyon.`
+              ? `${(perDose / 100).toFixed(2)} mL (100 mg/mL çözelti) 15–30 dk IV infüzyon. (TR Notu: IV form TR’de rutin bulunmaz.)`
               : `250 mg tabletten eczane/yatak başı bölünmüş süspansiyon (${perDose} mg/doz).`,
         };
       }
@@ -116,7 +117,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           maxDaily: 'Maks 30 mg/kg/gün veya 1.000 mg/gün',
           prepNote:
             route === 'iv'
-              ? `${(singleDoseMg / 100).toFixed(2)} mL (100 mg/mL çözelti) yavaş IV.`
+              ? `${(singleDoseMg / 100).toFixed(2)} mL (100 mg/mL çözelti) yavaş IV. (TR Notu: IV form TR’de rutin bulunmaz.)`
               : `Oral/NG ile ${singleDoseMg} mg.`,
         };
       }
@@ -146,7 +147,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
         maxDaily: '500–1.000 mg/gün (2–3 gün sonra diüretik tolerans gelişir)',
         prepNote:
           route === 'iv'
-            ? `${singleDoseMg} mg (${(singleDoseMg / 100).toFixed(1)} mL, 100 mg/mL WFI çözeltisi) 50 mL SF içinde 15–30 dk IV infüzyon veya yavaş puşe.`
+            ? `${singleDoseMg} mg (${(singleDoseMg / 100).toFixed(1)} mL, 100 mg/mL WFI çözeltisi) 50 mL SF içinde 15–30 dk IV infüzyon veya yavaş puşe. (TR Notu: IV form Türkiye’de ruhsatlı/rutin mevcut değildir; >%90 biyoyararlanımlı Diazomid 250 mg tb NG/PO uygulanır.)`
             : `Diazomid 250 mg tb × ${singleDoseMg / 250} adet PO veya ezilerek 15 mL suyla NG/OG tüpten (tüp öncesi/sonrası 20 mL suyla yıka).`,
       };
     }
@@ -157,15 +158,15 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
         title: 'Akut Dekompanse Kalp Yetmezliği + Volüm Yükü (ADVOR)',
         singleDoseMg,
         doseDisplay: isRenalRestricted
-          ? '250 mg (CrCl 10–50 uyarlaması) · Standart ADVOR: 500 mg IV'
-          : '500 mg IV bolus (Loop diüretiğe ek)',
+          ? '250 mg (CrCl 10–50 uyarlaması) · Standart ADVOR: 500 mg'
+          : '500 mg 1×1 (Loop diüretiğe ek)',
         interval: 'Günde 1 kez (1×1)',
         duration: '3 gün boyunca (veya tam dekonjesyon sağlanana dek)',
         maxDaily: '500 mg/gün (IV furosemid / loop diüretik ile kombine)',
         prepNote:
           route === 'iv'
-            ? `ADVOR protokolü: 500 mg IV (5 mL WFI ile sulandırılıp yavaş IV bolus veya 50 mL SF içinde 15 dk infüzyon). Bazal HCO₃⁻ ≥ 27 mmol/L hastalarında fayda en belirgindir.`
-            : `IV form yoksa oral/NG 500 mg (2 × 250 mg Diazomid tb) yüksek biyoyararlanımla (>%90) alternatif olarak kullanılabilir.`,
+            ? `ADVOR orijinal IV protokolü: 500 mg IV (5 mL WFI ile sulandırılıp yavaş IV bolus veya 50 mL SF içinde 15 dk infüzyon). TR Klinik Notu: IV form Türkiye’de ruhsatlı/rutin mevcut değildir — pratikte yüksek biyoyararlanımlı (>%90) 2 × 250 mg Diazomid tablet PO/NG uygulanır.`
+            : `Türkiye klinik pratiği: IV form TR’de bulunmadığından 500 mg (2 × 250 mg Diazomid tb) PO/NG yüksek biyoyararlanımla (>%90) ADVOR adaptasyonu olarak kullanılır.`,
       };
     }
 
@@ -180,7 +181,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
         maxDaily: 'NORDIC protokolünde tolere edildikçe maks 4.000 mg/gün (CrCl > 50)',
         prepNote:
           route === 'iv'
-            ? `${singleDoseMg} mg IV (15–30 dk infüzyon) — oral alamayan nöroşirürji hastalarında.`
+            ? `${singleDoseMg} mg IV (15–30 dk infüzyon) — yurt dışı/özel ithal form mevcutsa. (TR’de rutin olarak yalnızca oral Diazomid 250 mg tb bulunur.)`
             : `Diazomid 250 mg tb × ${singleDoseMg / 250} adet sabah-akşam yemekle (GİS toleransını artırır).`,
       };
     }
@@ -196,7 +197,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
         maxDaily: 'Maks 1.000 mg/24 saat',
         prepNote:
           route === 'iv'
-            ? `Acil GİB düşüşü için ${singleDoseMg} mg yavaş IV puşe (etki 2 dk'da başlar, 15 dk'da pik yapar).`
+            ? `Uluslararası acil protokol: ${singleDoseMg} mg yavaş IV puşe (etki 2 dk'da başlar, 15 dk'da pik). TR Notu: IV form TR’de rutin mevcut olmadığından bulantı/kusma kontrolüyle oral Diazomid 250 mg tb + IV Mannitol uygulanır.`
             : `Bulantı/kusma yoksa Diazomid 250 mg tb × ${singleDoseMg / 250} adet oral yükleme (etki 1 sa, pik 2–4 sa).`,
       };
     }
@@ -228,7 +229,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
       'ASETAZOLAMİD (acetaZOLAMIDE) YATAK BAŞI DOZ RAPORU',
       `Senaryo: ${plan.title} (${isPediatric ? 'Pediatrik' : 'Erişkin'}, ${weightKg} kg)`,
       `Böbrek / Elektrolit: CrCl ${crCl} mL/dk | Bazal HCO₃⁻ ${baselineHco3} mmol/L | K⁺ ${baselineK} mEq/L | Siroz: ${hasCirrhosis ? 'EVET' : 'Hayır'}`,
-      `Uygulama Yolu: ${route === 'iv' ? 'IV (500 mg liyofilize flakon, 100 mg/mL WFI)' : 'Oral / NG-OG (Diazomid 250 mg tablet)'}`,
+      `Uygulama Yolu: ${route === 'iv' ? 'IV (Uluslararası 500 mg liyofilize flakon — TR’de rutin mevcut değil!)' : 'Oral / NG-OG (Diazomid 250 mg tablet — TR tek ruhsatlı form)'}`,
       hasAbsoluteBlock
         ? 'KARAR: MUTLAK KONTRENDİKASYON NEDENİYLE UYGULAMA ÖNERİLMEZ!'
         : `Önerilen Doz: ${plan.doseDisplay} | Aralık: ${plan.interval}`,
@@ -242,6 +243,45 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-dozlar', label: 'Endikasyon & Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Doz Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Uygulama & Uyumluluk' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON · v4.0) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        sectionTitle="İlaç Güvenliği, Tall-Man Lettering & Doz Aşımı Yönetimi"
+        tallManName="acetaZOLAMIDE"
+        confusionRiskWith="acetoHEXAMIDE · acetaminophen"
+        criticalAlerts={[
+          'Siroz / hepatik ensefalopati riski ve ileri böbrek yetmezliği (CrCl < 10 mL/dk) uygulanmadan önce mutlaka dışlanmalıdır.',
+          'Doğrudan asetazolamid anafilaksisi veya ağır SCAR (SJS/TEN/DRESS) öyküsü mutlak engeldir (ancak TMP-SMX gibi antibiyotik sülfonamid döküntüsü gerçek çapraz kontrendikasyon değildir — Strom NEJM 2003).',
+          'Türkiye’de rutin olarak yalnızca oral Diazomid 250 mg tablet mevcuttur; özel ithal/yurt dışı IV 500 mg flakon yüksek alkali pH (~9,2) taşır — asla IM enjekte edilmez ve vazopressör/midazolam lümeninden verilmez.',
+          'Uygulama öncesi ve 12–24 saat sonrasında mutlaka serum K⁺, Na⁺, Cl⁻ ve AKG (pH, HCO₃⁻, PaCO₂) izlenmeli; topiramat, zonisamid veya yüksek doz salisilat ile eş zamanlı kullanımdan kaçınılmalıdır.',
+        ]}
+        antidoteOrRescue="Spesifik antidot yoktur. Doz aşımında derin hiperkloremik metabolik asidoz, hipokalemi, somnolans ve konfüzyon gelişir. İlaç kesilir; seri AKG ve elektrolit takibiyle IV KCl replasmanı ve pH < 7,15 ağır asidemide IV Sodyum Bikarbonat desteği sağlanır. İleri böbrek yetmezliğindeki ciddi zehirlenmede hemodiyaliz klirensi hızlandırır."
+      />
+
       {/* 1. KİMLİK & KLİNİK ÖZET HEADER */}
       <section
         id="sec-ozet"
@@ -251,7 +291,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
             : 'bg-white border-teal-200 shadow-lg shadow-teal-500/5 text-slate-900'
         }`}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="p-3.5 rounded-2xl bg-teal-500/15 text-teal-600 dark:text-teal-400 border border-teal-500/30 flex items-center justify-center shrink-0">
               <Pill className="w-8 h-8" />
@@ -265,7 +305,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
                   ATC: S01EC01
                 </span>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                  DİAZOMİD 250 mg TB · IV 500 mg FLAKON
+                  TR: YALNIZCA DİAZOMİD 250 mg TB (IV FORM TR’DE YOK)
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
@@ -292,9 +332,9 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
                 ADVOR (KY)
               </div>
               <div className="text-sm font-bold font-mono text-sky-600 dark:text-sky-400 mt-0.5 tabular-nums">
-                500 mg IV 1×1
+                500 mg 1×1
               </div>
-              <div className="text-[10px] text-slate-500 dark:text-slate-400">Loop diüretiğe ek · 3 gün</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400">Loop’a ek · TR’de PO/NG</div>
             </div>
             <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
               <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -315,26 +355,6 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
               <div className="text-[10px] text-slate-500 dark:text-slate-400">CrCl &lt;10 &amp; Siroz: YASAK</div>
             </div>
           </div>
-        </div>
-
-        <div className="pt-4">
-          <MonographQuickNav
-            isDark={isDark}
-            items={[
-              { id: 'sec-etki', label: 'Etki Mekanizması' },
-              { id: 'sec-pkpd', label: 'PK/PD Profili' },
-              { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-              { id: 'sec-dozlar', label: 'Endikasyon & Dozaj' },
-              { id: 'sec-hesaplayici', label: 'Doz Hesaplayıcı' },
-              { id: 'sec-uyumluluk', label: 'Hazırlama & Uyumluluk' },
-              { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-              { id: 'sec-gebelik', label: 'Gebelik / Laktasyon' },
-              { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-              { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
-              { id: 'sec-guvenlik', label: 'ISMP & Antidot' },
-              { id: 'sec-kaynaklar', label: 'Kaynakça' },
-            ]}
-          />
         </div>
       </section>
 
@@ -448,7 +468,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           'Belirgin hiponatremi (Na⁺ < 130 mEq/L) veya düzeltilmemiş hipokalemi (K⁺ < 3,0 mEq/L).',
           'Hiperkloremik (normal anyon açıklı) metabolik asidoz veya pH < 7,30 asidemi.',
           'Adrenokortikal yetmezlik (Addison hastalığı — elektrolit dengesizliği ve şok riskini artırır).',
-          'Sülfonamid sınıfına şiddetli aşırı duyarlılık öyküsü (anafilaksi, Stevens-Johnson sendromu, TEN, aplastik anemi).',
+          'Doğrudan asetazolamide anafilaksi veya geçmişte ağır SCAR (Stevens-Johnson sendromu, TEN, DRESS, aplastik anemi) öyküsü (Not: antibiyotik sülfonamid [TMP-SMX] döküntüsü gerçek çapraz kontrendikasyon değildir — Strom NEJM 2003).',
           'Kronik non-konjestif açı kapanması glokomunda uzun süreli kullanım (organik açı kapanmasını maskeler).',
         ]}
         relativeItems={[
@@ -890,49 +910,65 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      {/* 7. HAZIRLAMA, DİLÜSYON, STABİLİTE VE UYUMLULUK */}
-      <section
-        id="sec-uyumluluk"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Syringe className={`h-5 w-5 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Türkiye Formülasyonları, Hazırlama, Stabilite ve Y-Site Uyumluluğu
-          </h3>
-        </div>
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Diazomid 250 mg Çentikli Tablet (Türkiye’deki Tek Ruhsatlı / Rutin Form!)',
+            presentation: 'Oral kullanım için 250 mg çentikli tablet — Türkiye piyasasında ruhsatlı ve hastanelerde rutin olarak bulunan YALNIZCA oral tablet formudur',
+            concentration: '250 mg / tablet',
+            saltOrBaseNote: 'Oral biyoyararlanımı > %90 (mükemmel GİS emilimi)! Entübe/YBÜ hastalarında tablet ezilip 10–20 mL suyla süspanse edilerek NG/OG tüpten etkin biçimde uygulanabilir (tüp öncesi/sonrası 20 mL suyla yıkanır).',
+            alertLevel: 'high',
+          },
+          {
+            name: 'IV 500 mg Liyofilize Flakon (Türkiye’de Ruhsatlı / Rutin Mevcut DEĞİL!)',
+            presentation: 'Uluslararası literatürde (ADVOR, Mazur, acil glokom) geçen 500 mg sodyum tuzu liyofilize flakon formu Türkiye’de ruhsatlı değildir ve rutin hastane stoklarında bulunmaz',
+            concentration: 'TR’de Rutin Yok (Yurt Dışı: 100 mg/mL WFI)',
+            saltOrBaseNote: 'Önemli TR Klinik Notu: IV form yalnızca özel yurt dışı ilaç temini (TEB/TİTCK) ile sınırlı olgularda bulunur. Pratikte fonksiyonel GİS/NG yolu olan hastalarda oral/NG Diazomid 250 mg tb (500 mg = 2 tablet) >%90 biyoyararlanımla IV’ye yakın plazma düzeyi sağlar.',
+            alertLevel: 'high',
+          },
+        ]}
+        standardDilutions={[
+          'Türkiye Standart Oral / NG-OG Uygulama: Diazomid 250 mg tablet (125 mg = ½ tb, 250 mg = 1 tb, 500 mg = 2 tb). NG/OG için ince toz haline getirilip 15–20 mL su ile süspanse edilir.',
+          'Uluslararası / Özel İthal IV Hazırlama (500 mg Flakon Mevcutsa): En az 5 mL steril enjeksiyonluk su (WFI) ile sulandırılır (100 mg/mL, pH ~9,2). Yavaş IV puşe (100–500 mg/dk, 1–5 dk) veya 50–100 mL %0,9 NaCl / %5 Dekstroz içinde 15–30 dk infüzyon olarak uygulanır.',
+        ]}
+        concentrationTrapWarning="Türkiye’de IV Asetazolamid (Diamox IV) rutin olarak mevcut değildir; order yazarken '500 mg IV' istemi hastane eczanesinde karşılanamaz! Fonksiyonel GİS’i olan hastalarda 2 × 250 mg Diazomid tb (PO/NG) planlayın; özel ithal IV form kullanılıyorsa ASLA intramüsküler (IM) enjekte etmeyin (alkali pH ~9,2 şiddetli ağrı ve doku nekrozu yapar)."
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
-          <div className={`rounded-xl border p-4 space-y-2 ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
-            <p className={`font-bold text-sm ${isDark ? 'text-teal-300' : 'text-teal-800'}`}>
-              Oral &amp; NG/OG (Diazomid 250 mg TB)
-            </p>
-            <p>
-              Türkiye’de rutin klinik kullanımda <strong>Diazomid 250 mg çentikli tablet</strong> bulunur. Biyoyararlanımı &gt;%90 olduğundan entübe/YBÜ hastalarında tablet ezilip 10–20 mL suyla süspanse edilerek NG/OG tüpten etkin biçimde uygulanabilir (tüp öncesi/sonrası suyla yıkanır).
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-2 ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
-            <p className={`font-bold text-sm ${isDark ? 'text-sky-300' : 'text-sky-800'}`}>
-              IV Hazırlama (500 mg Liyofilize Flakon)
-            </p>
-            <p>
-              500 mg sodyum tuzu flakonu en az <strong>5 mL steril enjeksiyonluk su (WFI)</strong> ile sulandırılır (<strong>100 mg/mL</strong>, pH ~9,2). Yavaş IV puşe (100–500 mg/dk hızında, 1–5 dk) veya 50–100 mL %0,9 NaCl / %5 Dekstroz içinde 15–30 dk infüzyon olarak verilir. <strong>IM uygulanmaz</strong> (alkali pH doku nekrozu ve şiddetli ağrı yapar).
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-2 ${isDark ? 'bg-slate-950/60 border-rose-900/40 text-slate-300' : 'bg-rose-50/50 border-rose-200 text-slate-700'}`}>
-            <p className={`font-bold text-sm ${isDark ? 'text-rose-300' : 'text-rose-800'}`}>
-              Stabilite &amp; Y-Site Uyumsuzluğu
-            </p>
-            <p>
-              Koruyucu içermeyen sulandırılmış çözelti oda sıcaklığında <strong>12 saat</strong>, 2–8 °C’de <strong>24 saat</strong> stabildir. Yüksek alkali pH (~9,2) nedeniyle <strong>noradrenalin, adrenalin, dopamin, dobutamin, midazolam ve diltiazem</strong> ile aynı lümenden verilmez (çökelme / inaktivasyon).
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* UYGULAMA YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        sectionTitle="Uygulama Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon"
+        accessRequirement="peripheral-ok"
+        accessSummary="Türkiye klinik pratiğinde standart uygulama yolu ORAL veya NG/OG tüptür (Diazomid 250 mg tablet, >%90 biyoyararlanım). Yurt dışı/özel ithal 500 mg IV flakon mevcutsa periferik veya santral IV hattan uygulanabilir; ancak yüksek alkali pH (~9,2) nedeniyle katekolaminler ve asidik ilaçlardan ayrı lümenden verilmeli ve ASLA intramüsküler (IM) uygulanmamalıdır."
+        phRange="IV Çözelti: ~9,2 (Kuvvetli Alkali)"
+        osmolalityNote="100 mg/mL WFI sulandırılmış IV çözelti izotonik–hafif hiperozmolar ve yüksek alkalidir; IM enjeksiyon şiddetli ağrı ve steril apse/nekroz yapar."
+        compatibleDiluents={[
+          'Oral / NG-OG (TR Standart): 10–20 mL içme suyu veya steril su (enteral tüp öncesi/sonrası 20 mL suyla yıkama)',
+          'IV İlk Sulandırma (İthal Flakon): En az 5 mL Steril Enjeksiyonluk Su (WFI) → 100 mg/mL',
+          'IV İnfüzyon Taşıyıcıları: %0,9 NaCl (SF) veya %5 Dekstroz (50–100 mL içinde 15–30 dk)',
+        ]}
+        stabilityNote="Diazomid 250 mg tablet 15–25 °C oda sıcaklığında nemden korunarak saklanır. Koruyucu içermeyen sulandırılmış IV çözelti oda sıcaklığında 12 saat, buzdolabında (2–8 °C) 24 saat stabildir."
+        ySiteCompatible={[
+          '%0,9 NaCl (SF)',
+          '%5 Dekstroz',
+          'Potasyum Klorür (KCl)',
+          'Sodyum Bikarbonat',
+          'Heparin',
+          'Sefazolin / Piperasilin-Tazobaktam',
+        ]}
+        ySiteIncompatible={[
+          'Noradrenalin (Alkali İnaktivasyon!)',
+          'Adrenalin (Epinefrin)',
+          'Dopamin / Dobutamin',
+          'Midazolam',
+          'Diltiazem',
+          'Multivitamin / Asidik TPN',
+          'İntramüsküler (IM) Enjeksiyon YASAK',
+        ]}
+        extravasationProtocol="IV formun (pH ~9,2) ekstravazasyonunda yüksek alkalinite nedeniyle lokal doku irritasyonu ve nekroz gelişebilir: infüzyonu derhal durdurun, kateterden aspire etmeye çalışın, ekstremiteyi eleve edin ve soğuk kompres uygulayın. IM uygulama kesinlikle kontrendikedir."
+      />
 
       {/* 8. BÖBREK & KARACİĞER YETMEZLİĞİ */}
       <OrganImpairmentGridBlock
@@ -949,6 +985,24 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           'Child-Pugh B/C veya portal hipertansiyon/siroz: İdrar alkalinizasyonu tübülde amonyum (NH₄⁺) iyonunu lipofilik amonyağa (NH₃) dönüştürür ve sistemik geri emilimi artırır.',
           'Hızlı hiperamonyemi ve hepatik ensefalopati / koma presipitasyonu nedeniyle sirotik asitte asla diüretik olarak tercih edilmez (spironolakton + furosemid seçilir).',
         ]}
+      />
+
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="CrCl’ye Göre Aralık Uzat · Ağır Asidoz Riski"
+        geriatricPoints={[
+          'Asetazolamid %100 böbrekten değişmeden atıldığından >65 yaş hastalarda fizyolojik GFR düşüşü ilaç birikimine, derin hiperkloremik metabolik asidoza (pH < 7,25), somnolans, konfüzyon ve düşmelere yol açabilir.',
+          'Yaşlılarda mutlaka Cockcroft-Gault CrCl hesaplanmalı; CrCl 10–50 mL/dk aralığında doz aralığı ≥ 12 saat olmalı ve 250 mg/doz ile başlanmalıdır.',
+          'Elektrolit kaybı (K⁺, Na⁺) ve dehidratasyon yaşlılarda deliryum ve ortostatik hipotansiyonu hızla tetikler; 12–24 saat içinde AKG ve elektrolit kontrolü şarttır.',
+        ]}
+        obesityWeightScalarBadge="Sabit Erişkin Dozu · İİH’de Yüksek Doz Toleransı"
+        obesityPoints={[
+          'Erişkinlerde obeziteye göre mg/kg artışı yapılmaz; sabit endikasyon dozları (250–500 mg/doz) uygulanır.',
+          'İdiyopatik İntrakraniyal Hipertansiyon (İİH) ağırlıklı olarak obez genç erişkinlerde görülür: NORDIC IIHTT çalışmasında (JAMA 2014) 500 mg × 2/gün başlanıp tolere edildikçe 4.000 mg/gün’e kadar çıkılmasının kilo kaybıyla sinerjik olarak görme alanını iyileştirdiği gösterilmiştir.',
+          'Yüksek doz kronik İİH tedavisinde hipokalemi, metabolik asidoz ve kalsiyum fosfat böbrek taşı açısından periyodik izlem ve hidrasyon gerekir.',
+        ]}
+        clinicalNote="Yaşlı hastalarda gizli böbrek yetmezliği (normal görünen serum kreatinin + düşük kas kütlesi) asetazolamid toksisitesinin en sık nedenidir."
       />
 
       {/* 9. GEBELİK & LAKTASYON */}
@@ -1044,7 +1098,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           {
             title: 'ADVOR Sequential Nefron Blokajı',
             detail:
-              'Akut dekompanse kalp yetmezliğinde yüksek doz loop diüretik proksimal Na⁺ emilimini artırarak direnç yaratır; 500 mg IV asetazolamid 3 gün eklendiğinde natriürez ve tam dekonjesyon anlamlı artar.',
+              'Akut dekompanse kalp yetmezliğinde yüksek doz loop diüretik proksimal Na⁺ emilimini artırarak direnç yaratır; 500 mg asetazolamid (TR’de oral/NG 2×250 mg Diazomid tb) 3 gün eklendiğinde natriürez ve tam dekonjesyon anlamlı artar.',
           },
           {
             title: 'Nöroanestezi & Ventriküler Şant Preop Hazırlığı',
@@ -1064,25 +1118,98 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 12. ISMP GÜVENLİK, TALL-MAN LETTERING & DOZ AŞIMI */}
-      <HighAlertSafetyBlock
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        sectionTitle="İlaç Güvenliği, Tall-Man Lettering & Doz Aşımı Yönetimi"
-        tallManName="acetaZOLAMIDE"
-        confusionRiskWith="acetoHEXAMIDE / acetaminophen"
-        criticalAlerts={[
-          'Sülfonamid çapraz reaksiyon öyküsü (SJS/TEN/anafilaksi), siroz ve CrCl < 10 mL/dk uygulanmadan önce mutlaka kontrol edilmelidir.',
-          'IV 500 mg flakon yüksek alkali pH (~9,2) taşır; asla IM enjekte edilmemeli ve vazopressör/midazolam lümeninden verilmemelidir.',
-          'Uygulama öncesi ve 12–24 saat sonrasında mutlaka serum K⁺, Na⁺, Cl⁻ ve AKG (pH, HCO₃⁻, PaCO₂) izlenmelidir.',
-          'Topiramat, zonisamid veya yüksek doz aspirin (salisilat) kullanan hastalarda eş zamanlı reçetelendirmeden kaçınılmalıdır.',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Proksimal Tübül Sitozolik (CA-II) & Lüminal (CA-IV) Karbonik Anhidraz İnhibisyonu',
+          summary:
+            'Asetazolamid çinko-metalloenzim olan sitozolik CA-II ve apikal fırçamsı kenar membran-bağlı CA-IV izoenzimlerinin güçlü, geri dönüşümlü non-kompetitif inhibitörüdür. H₂O + CO₂ ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻ reaksiyonunu yavaşlatarak hem proksimal nefronda bikarbonat geri emilimini hem de koroid pleksus ve siliyer cisimdeki sekresyonu baskılar.',
+          points: [
+            'Proksimal Tübül (NHE3 Blokajı): Lüminal CA-IV inhibisyonu H₂CO₃ dehidratasyonunu, sitozolik CA-II inhibisyonu ise hücre içi H⁺ üretimini azaltır; apikal Na⁺/H⁺ değiştirici (NHE3) durur ve filtre edilen HCO₃⁻’ın geri emilimi çöker.',
+            'İdrar Alkalinizasyonu & Kaliürez: Proksimalden kaçan Na⁺ ve HCO₃⁻ (emilemeyen anyon) distal nefrona ulaşarak lümen-negatif potansiyeli artırır ve belirgin K⁺ sekresyonu (hipokalemi) oluşturur.',
+            'Koroid Pleksus & Siliyer Cisim: Epitel hücrelerindeki CA-II inhibisyonu Na⁺/HCO₃⁻ taşınımını baskılayarak BOS ve aköz hümör üretim hızını ~%40–50 düşürür.',
+            'Eritrosit CA-II Etkisi: Yüksek dozlarda eritrosit içi karbonik anhidrazın >%99 inhibisyonu doku-akciğer CO₂ taşınımını yavaşlatıp venöz/doku PCO₂’yi yükseltebilir.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'BOS Üretimi & KİB Azalması: Koroid pleksusta BOS sekresyonunu ~%40–50 azaltır (İİH, BOS kaçağı/rinore, geçici şant köprülemesi).',
+            'Serebral Vazodilatasyon: Yüksek doz IV uygulama doku/kapiller PCO₂ artışı üzerinden geçici serebral kan akımı (CBF) artışı yapabilir (serebrovasküler rezerv stres testlerinde kullanılır).',
+            'Parestezi & Somnolans: Periferik sinir CA inhibisyonu parmak ucu/perioral uyuşma yapar; böbrek yetmezliğinde birikim ağır somnolans ve konfüzyon oluşturur.',
+          ],
+          cvs: [
+            'Direkt inotropik veya vazopressör etkisi yoktur; tek başına zayıf diüretik olduğundan belirgin hipotansiyon yapmaz.',
+            'Loop diüretiğe eklendiğinde (ADVOR) etkili volüm yükü boşaltımı ve kardiyak doluş basıncı düşüşü sağlar; ancak indüklediği hipokalemi aritmi eşiğini düşürür.',
+          ],
+          respiratory: [
+            'Santral Kemoreseptör & Solunum Uyarımı: Oluşturduğu hiperkloremik metabolik asidoz BOS pH’sını düşürerek medüller kemoreseptörleri uyarır, dakika ventilasyonunu ve PaO₂’yi artırır (yüksek irtifa AMS profilaksisi ve santral uyku apnesi).',
+            'İleri KOAH / Solunum Kas Yorgunluğu Uyarısı: Dakika ventilasyonunu artıramayan ağır KOAH hastasında eritrosit CA inhibisyonu hiperkapniyi (PaCO₂↑) ve asidemiyi kötüleştirebilir (DIABOLO JAMA 2016).',
+          ],
+          other: [
+            'Renal/Metabolik: Hiperkloremik normal anyon açıklı metabolik asidoz (NAGMA), alkali idrar (pH > 7,5), hipositratüri → kalsiyum fosfat böbrek taşı',
+            'Hepatik Ensefalopati Tetiklenmesi: Alkali idrarda NH₄⁺ → lipofilik NH₃ dönüşümü ile renal amonyak geri emilimi artar (sirozda MUTLAK KONTRENDİKE)',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Asetazolamid tek başına 48–72 saat içinde kendini sınırlayan zayıf bir diüretiktir; ancak loop diüretiklerle birleştirildiğinde güçlü bir sequential nefron blokajı sinerjisi oluşturur.',
+          points: [
+            '48–72 Saatte Diüretik Tolerans (Self-Limiting Etki): Plazma HCO₃⁻ düzeyi düştükçe glomerülden filtre edilen bikarbonat yükü azalır ve proksimal diürez 2–3 gün içinde kendiliğinden söner — bu nedenle YBÜ alkalozunda ve ADVOR’da 1–3 günlük kısa kürler uygulanır.',
+            'ADVOR Sequential Nefron Blokajı (NEJM 2022): Kronik/yüksek doz furosemid kullanımında proksimal tübül kompansatuvar Na⁺ geri emilimini artırarak diüretik direnci yaratır; asetazolamid bu proksimal kapıyı açarak Henle’ye Na⁺ sunar ve furosemid yanıtını dramatik artırır.',
+            'Diğer CA İnhibitörleriyle Toksik Sinerji: Topiramat veya zonisamid ile kombinasyon derin metabolik asidoz ve nefrolitiyazis riskini katlar.',
+          ],
+        }}
+        clinicalPearls={[
+          'Sülfonamid Çapraz Reaksiyon Miti (Strom NEJM 2003 · AAAAI): Asetazolamid non-antibiyotik (arilamin halkası içermeyen) bir sülfonamiddir; TMP-SMX gibi antibiyotik sülfonamid döküntüsü asetazolamid için gerçek çapraz kontrendikasyon oluşturmaz (ağır SJS/TEN/DRESS veya doğrudan asetazolamid anafilaksisi hariç).',
+          'Salisilat Zehirlenmesinde ÖLÜMCÜL HATA: İdrarı alkalize etmek için asla asetazolamid kullanılmaz! Oluşturduğu sistemik asidemi salisilatın kan-beyin bariyerine geçişini artırıp fatal SSS toksisitesi yapar — yalnızca IV NaHCO₃ kullanılır.',
+          'Türkiye Klinik Pratiği (Diazomid 250 mg TB): IV 500 mg flakon TR’de ruhsatlı/rutin mevcut değildir; ancak oral biyoyararlanım >%90 olduğundan fonksiyonel GİS’te 2 × 250 mg PO/NG tablet ile ADVOR ve YBÜ alkaloz protokolleri etkin biçimde uygulanabilir.',
+          'Kontraksiyon Alkalozunda Önce KCl + SF: İdrar Cl⁻ < 20 mEq/L olan hipovolemik metabolik alkalozda asetazolamid vermek hipovolemiyi ve hipokalemiyi derinleştirir; önce %0,9 NaCl + KCl replase edin.',
         ]}
-        antidoteOrRescue="Spesifik antidot yoktur. Doz aşımında derin hiperkloremik metabolik asidoz, hipokalemi, somnolans ve konfüzyon gelişir. İlaç kesilir; seri AKG ve elektrolit takibiyle IV KCl replasmanı ve pH < 7,15 ağır asidemide IV Sodyum Bikarbonat desteği sağlanır. İleri böbrek yetmezliğindeki ciddi zehirlenmede hemodiyaliz klirensi hızlandırır."
       />
 
-      {/* 13. KANITA DAYALI KAYNAKÇA & ETKİLEŞİM ARAÇLARI */}
+      {/* 13. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Asetazolamid"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Yüksek Doz Salisilatlar (Aspirin > 2–3 g/gün / Salisilat Zehirlenmesi)',
+            mechanism: 'Sistemik Asidemi → Non-İyonize Salisilatın KBB Geçişinde Artış + Renal Tübüler Yarışma',
+            clinicalEffect: 'Şiddetli SSS toksisitesi (deliryum, nöbet, koma), derin metabolik asidoz ve ölüm.',
+            management: 'Eş zamanlı kullanımdan kesinlikle kaçının; salisilat zehirlenmesinde idrar alkalinizasyonu için yalnızca IV NaHCO₃ kullanın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Diğer Karbonik Anhidraz İnhibitörleri (Topiramat, Zonisamid)',
+            mechanism: 'Aditif Sistemik & Renal Karbonik Anhidraz İnhibisyonu',
+            clinicalEffect: 'Ağır hiperkloremik metabolik asidoz, hipositratüri ve yüksek kalsiyum fosfat nefrolitiyazis riski.',
+            management: 'Kombinasyondan kaçının; zorunluysa yakın AKG, elektrolit ve renal taş izlemi yapın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Loop & Tiyazid Diüretikler (Furosemid, Hidroklorotiyazid) · Kortikosteroidler',
+            mechanism: 'Sinerjik Distal Na⁺/HCO₃⁻ Sunumu ile Masif Kaliürez',
+            clinicalEffect: 'ADVOR’da istenen güçlü dekonjesyon yanında hızlı ve derin hipokalemi (aritmi/digoksin toksisitesi).',
+            management: 'Kombinasyonda günlük (YBÜ’de 6–12 saatlik) serum K⁺ ve Mg²⁺ takibi + proaktif replasman uygulayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Lityum · Yüksek Doz Metotreksat · Fenitoin / Karbamazepin',
+            mechanism: 'Renal Proksimal Na⁺/Li⁺ Atılım Artışı; İdrar Alkalinizasyonu & CYP/Protein Etkileşimi',
+            clinicalEffect: 'Lityum düzeyi düşer (tedavi başarısızlığı); fenitoin/karbamazepin osteomalazisi ağırlaşır; metotreksat klirensi değişebilir.',
+            management: 'Terapötik ilaç düzeylerini (TDM) izleyin ve ilgili klinikle doz ayarı yapın.',
+          },
+          {
+            severity: 'C',
+            agent: 'Amfetaminler · Kinidin · Metenamin (Alkali İdrar Etkileşimi)',
+            mechanism: 'Alkali İdrarda (pH > 7,5) Zayıf Baz İlaçların Pasif Geri Emilim Artışı',
+            clinicalEffect: 'Kinidin/amfetamin toksisitesi artabilir; metenaminin antibakteriyel etkinliği kaybolur.',
+            management: 'Eş zamanlı kullanımda toksisite bulgularını izleyin; metenamin ile birlikte kullanmayın.',
+          },
+        ]}
         references={[
           {
             authors: 'Mullens W, Dauw J, Martens P, Verbrugge FH, Nijst P, Meekers E, et al. (ADVOR Study Group)',

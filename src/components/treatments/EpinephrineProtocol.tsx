@@ -25,13 +25,21 @@ import {
   Check
 } from 'lucide-react';
 import {
+  AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
+  SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -65,8 +73,6 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
 
   // Akordiyon State'leri
   const [pkOpen, setPkOpen] = useState<boolean>(false);
-  const [extravasationOpen, setExtravasationOpen] = useState<boolean>(true);
-  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
 
   // Erişilebilirlik ID'leri
   const weightInputId = useId();
@@ -143,9 +149,9 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
   const pushDoseVol10McgMl = Number((pushDoseBolusMcg / 10).toFixed(1));
   const nebulizedLepiMl = Math.min(5.0, Number((weightKg * 0.5).toFixed(1))); // 0.5 mL/kg 1:1000 maks 5 mL
 
-  // Pano Özeti Kopyalama
-  const handleCopySummary = async () => {
-    const lines = [
+  // Pano Özeti Kopyalama (MonographCopyButton)
+  const getSummaryText = () =>
+    [
       `ADRENALİN (EPİNEFRİN) KLİNİK DOZ ÖZETİ`,
       `Hasta Ağırlığı: ${weightKg} kg`,
       `İnfüzyon Çözeltisi: ${concentrationMcgMl} mcg/mL`,
@@ -157,20 +163,53 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       `Acil Referanslar (${weightKg} kg):`,
       `- Anafilaksi IM (1:1.000): ${anaphImDoseMg.toFixed(2)} mg (${anaphImVol1to1k} mL IM)`,
       `- LAST Modifiye ACLS (≤1 mcg/kg): Maks ${lastMaxBolusMcg} mcg IV (${lastBolusVol10McgMl} mL [10 mcg/mL])`,
-      `- Push-Dose Köprü (10 mcg/mL): ${pushDoseBolusMcg} mcg = ${pushDoseVol10McgMl} mL IV`
+      `- Push-Dose Köprü (10 mcg/mL): ${pushDoseBolusMcg} mcg = ${pushDoseVol10McgMl} mL IV`,
     ].join('\n');
-
-    try {
-      await navigator.clipboard.writeText(lines);
-      setCopiedSummary(true);
-      setTimeout(() => setCopiedSummary(false), 2000);
-    } catch {
-      // ignore clipboard errors
-    }
-  };
 
   return (
     <div className="space-y-8 font-sans">
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0)                                   */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
+          { id: 'sec-acildoz', label: 'Acil Dozlar' },
+          { id: 'sec-rejyonel', label: 'LA Katkı & Test' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON)     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="EPINEPHrine"
+        confusionRiskWith="NORepinephrine · EPHEDRINE"
+        criticalAlerts={[
+          'Türkiye 1 mL Ampul Ayrımı (4 Kat Hata Riski): Türkiye piyasasında 0.25 mg/1 mL, 0.5 mg/1 mL ve 1 mg/1 mL (1:1.000) ampullerin TAMAMI 1 mL hacmindedir; çekmeden önce mg/mL değeri sesli okunmalıdır.',
+          '1:1.000 vs 1:10.000 (10 Kat – 100 Kat Fatal Doz Hatası): 1:1.000 (1 mg/mL) konsantre ampulün anafilakside veya hipotansiyonda seyreltilmeden IV puşesi ventriküler fibrilasyon, akut pulmoner ödem ve intrakraniyal kanama yapar! IV anafilaksi/push-dose için 1:10.000 (100 mcg/mL) veya 1:100.000 (10 mcg/mL) seyreltme zorunludur.',
+          'LAST Arrest Kuralı (ASRA 2020): Lokal anestezik sistemik toksisitesine bağlı arrestte standart 1 mg IV adrenalin VERİLMEZ; ≤ 1 mcg/kg (maks 100 mcg) modifiye doz kullanılır.',
+          'Alkali İnaktivasyon & Oksidasyon: Sodyum Bikarbonat (%8.4 NaHCO₃) ile aynı lümenden asla verilmez; ışık/hava temasıyla pembe/kahverengi adrenokroma dönen çözeltiler derhal imha edilir.',
+        ]}
+        antidoteOrRescue="Ekstravazasyonda infüzyonu kapatın, kanülden aspire edin ve 12 saat içinde 5–10 mg Fentolamin (10–15 mL SF) SC çember şeklinde infiltre edin (Fentolamin yoksa Terbutalin 1 mg/10 mL SF lokal infiltrasyon veya topikal %2 Nitrogliserin + ılık kompres; BUZ/SOĞUK ASLA UYGULANMAZ!). İyatrojenik aşırı dozda hipertansif kriz/taşiaritmi için kısa etkili α-bloker (Fentolamin) veya Labetalol/Esmolol titre edilir."
+      />
+
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 1. BAŞLIK, FARMAKOLOJİK KATEGORİ & BİFAZİK RESEPTÖR PROFİLİ         */}
       {/* ─────────────────────────────────────────────────────────────────── */}
@@ -294,24 +333,6 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
-
-      <MonographQuickNav
-        isDark={isDark}
-        items={[
-          { id: 'sec-etki', label: 'Etki Mekanizması' },
-          { id: 'sec-pkpd', label: 'Farmakokinetik' },
-          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
-          { id: 'sec-acildoz', label: 'Endikasyonlar & Acil Dozlar' },
-          { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
-          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
-          { id: 'sec-uyumluluk', label: 'Çözelti & Ekstravazasyon' },
-          { id: 'sec-guvenlik', label: 'ISMP High-Alert' },
-          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
-        ]}
-      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. FARMAKOKİNETİK & METABOLİZMA (AKORDİYON)                         */}
@@ -443,20 +464,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
-            <button
-              type="button"
-              onClick={handleCopySummary}
-              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
-                copiedSummary
-                  ? 'bg-emerald-600 border-emerald-600 text-white'
-                  : isDark
-                  ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
-                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              {copiedSummary ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedSummary ? 'Kopyalandı' : 'Rapor Kopyala'}</span>
-            </button>
+            <MonographCopyButton isDark={isDark} getText={getSummaryText} label="Rapor Kopyala" />
             <button
               type="button"
               onClick={() => {
@@ -523,6 +531,16 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
                 </div>
               </div>
             </div>
+
+            <ObesityDosingScaler
+              isDark={isDark}
+              drugName="Adrenalin (İnfüzyon)"
+              recommendedScalar="AdjBW"
+              secondaryScalar={{ type: 'IBW', context: 'Morbid Obez' }}
+              rationale="Resüsitasyon (ACLS 1 mg IV / Anafilaksi 0.5 mg IM) sabit dozlu olsa da, sürekli infüzyonda morbid obezlerde AdjBW veya IBW kullanılması aşırı taşiaritmi ve laktat yükselmesini önler (SOBA / Miller's)."
+              currentWeightKg={weightKg}
+              onApplyWeight={(w) => setWeightKg(Math.min(150, Math.max(5, w)))}
+            />
 
             {/* 2. Çözelti Hazırlama Şeması */}
             <div>
@@ -1143,6 +1161,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 5. LOKAL ANESTEZİK KATKISI & TEST DOZU REHBERİ                       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-rejyonel"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
         }`}
@@ -1192,13 +1211,98 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
               Kullanılmaması Gereken Durumlar
             </span>
             <p className="text-rose-900 dark:text-rose-200 mt-1.5 leading-relaxed">
-              Penis bloğu, periferik vasküler hastalıklı parmak/ayak ucu, kulak kepçesi ve burun ucu infiltrasyonlarında
+              Penis bloğu, periferik vasküler hastalıklı/Raynaud parmak-ayak ucu, kulak kepçesi ve burun ucu infiltrasyonlarında
               iskemik nekroz riski nedeniyle adrenalin katkısından kaçınılmalıdır. Ayrıca non-selektif β-bloker (ör.
               propranolol) alanlarda yüksek doz emilim hipertansif krize yol açabilir.
             </p>
           </div>
         </div>
       </section>
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                      */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Adrenalin 0.25 mg / 1 mL Ampul (Biofarma / Galen / Osel)',
+            presentation: '1 mL steril cam ampul (düşük konsantrasyon; sıklıkla pediatri/düşük doz stok)',
+            concentration: '0.25 mg/mL (250 mcg/mL · 1:4.000)',
+            saltOrBaseNote: 'DİKKAT: 1 mL hacmindedir — 1 mg/1 mL ampul ile dış görünüşü benzer olabilir; ACLS/anafilakside 4 kat eksik doz hatasına yol açar!',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Adrenalin 0.5 mg / 1 mL Ampul (TR Ruhsatlı)',
+            presentation: '1 mL steril cam ampul (erişkin IM anafilaksi tek dozuna eşdeğer)',
+            concentration: '0.5 mg/mL (500 mcg/mL · 1:2.000)',
+            saltOrBaseNote: '1 mL hacmindedir; 1 mg/mL ampul ile karıştırılırsa 2 kat eksik veya fazla doz hatası oluşur.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Adrenalin 1 mg / 1 mL Ampul (1:1.000 — Standart Konsantre)',
+            presentation: '1 mL steril cam ampul (ACLS 1 mg IV, anafilaksi 0.5 mL IM, nebülizasyon ve infüzyon hazırlama)',
+            concentration: '1 mg/mL (1.000 mcg/mL · 1:1.000)',
+            saltOrBaseNote: 'Epinefrin baz (tartrat/HCl tuzu) 1 mg/mL eşdeğeridir. Anafilakside veya hipotansiyonda ASLA sulandırılmadan IV puşe edilmez!',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Klinik Seyreltme Stokları: 1:10.000 & Push-Dose 1:100.000',
+            presentation: '10 mL veya 100 mL enjektör/torba içinde yatak başı hazırlanır',
+            concentration: '100 mcg/mL (1:10.000) · 10 mcg/mL (1:100.000)',
+            saltOrBaseNote: '1:10.000 = 1 mg + 9 mL SF (PALS arrest & ağır IV anafilaksi); 1:100.000 = 1 mg / 100 mL SF (ameliyathane IV anafilaksi & push-dose köprü).',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          '1:10.000 (100 mcg/mL): 1 ampul (1 mg/1 mL) + 9 mL %0.9 SF = 10 mL (Pediatrik PALS arrest 0.1 mL/kg; ağır Evre III–IV IV anafilaksi 1–2 mL).',
+          'Push-Dose / 1:100.000 (10 mcg/mL): 1 ampul (1 mg/1 mL) + 99 mL SF (= 100 mL torba) veya 1:10.000’den 1 mL + 9 mL SF (ameliyathane Evre II–III IV anafilaksi & LAST modifiye bolus).',
+          'Standart YBÜ İnfüzyonu (80 mcg/mL): 4 ampul (4 mg / 4 mL) + 46 mL D5W veya SF = 50 mL enjektör.',
+          'Düşük Doz Titrasyon (40 mcg/mL) / Ondalık (100 mcg/mL): 2 mg / 50 mL veya 5 mg / 50 mL enjektör.',
+          'Torba / Geçici Periferik İnfüzyon: 4 mg / 250 mL (16 mcg/mL) veya 1 mg / 100 mL (10 mcg/mL).',
+        ]}
+        concentrationTrapWarning="Adrenalin kaynaklı iyatrojenik mortalitenin 1 numaralı nedeni, 1:1.000 (1 mg/mL) ampulün seyreltilmeden 1:10.000 veya Push-Dose yerine doğrudan IV puşe edilmesidir (10×–100× doz aşımı → VF, akut pulmoner ödem, intrakraniyal kanama). Ayrıca Türkiye'deki 0.25, 0.5 ve 1 mg ampullerin HEPSİ 1 mL'dir — kırmadan önce mutlaka mg değerini okuyun!"
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0)  */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="central-preferred"
+        accessSummary="Sürekli infüzyonlarda ayrı lümenden Santral Venöz Kateter (SVK) esastır. Acil durumlarda SVK beklenirken antekübital veya proksimal önkol geniş periferik venlerinden (≥20G; el sırtı/ayak yasak) düşük konsantrasyon (10–16 mcg/mL) geçici olarak başlanabilir. Kardiyak arrestte periferik IV/IO bolus sonrası mutlaka 20 mL SF flush ve kol elevasyonu uygulanır."
+        phRange="2.2 – 5.0 (Asidik · Işık ve O₂ ile Hızla Oksitlenir)"
+        osmolalityNote="Güçlü α₁ vazokonstriktör/vezikan: Periferik doku ekstravazasyonunda ciddi lokal iskemi ve cilt nekrozu gelişir."
+        compatibleDiluents={[
+          '%5 Dekstroz (D5W) — Tercih edilen taşıyıcı (oksidasyonu yavaşlatır)',
+          '%5 Dekstroz + %0.9 NaCl (D5NS) — 24 saat stabil',
+          '%0.9 Sodyum Klorür (SF) — Acil ve sürekli infüzyonda yaygın, ≤24 saat',
+        ]}
+        stabilityNote="Işık ve hava temasıyla hızla oksitlenip pembe veya kahverengi ADRENOKROMA dönüşür; renklenmiş veya partiküllü çözelti derhal imha edilir. İnfüzyon en geç 24 saatte bir yenilenmelidir."
+        ySiteCompatible={[
+          'Norepinefrin',
+          'Dobutamin',
+          'Vazopressin',
+          'Milrinon',
+          'Fentanil',
+          'Remifentanil',
+          'Midazolam',
+          'Propofol',
+          'Deksmedetomidin',
+          'Heparin',
+          'Potasyum Klorür',
+          'Kalsiyum Klorür / Glukonat',
+        ]}
+        ySiteIncompatible={[
+          'Sodyum Bikarbonat (%8.4 NaHCO₃ — saniyeler içinde alkali inaktivasyon!)',
+          'Aminofilin',
+          'Furosemid',
+          'Tiyopental',
+          'Amfoterisin B',
+          'Pantoprazol / Alkali çözeltiler',
+        ]}
+        extravasationProtocol="Ekstravazasyon geliştiğinde 12 SAAT İÇİNDE müdahale edin: (1) İnfüzyonu hemen kapatın, kanülü çekmeden enjektörle dokudaki/kanüldeki ilacı aspire edin. (2) Antidot: 5–10 mg Fentolamin'i 10–15 mL SF içinde seyreltip 25–27G ince iğneyle soluk/soğuk alan çevresine çoklu noktadan SC infiltre edin (hiperemi sağlanana dek). (3) Fentolamin yoksa: Terbutalin 1 mg / 10 mL SF SC infiltrasyon veya topikal %2 Nitrogliserin pomad. (4) Ekstremiteyi eleve edin ve kuru ILIK kompres uygulayın — SOĞUK / BUZ ASLA KULLANMAYIN!"
+      />
 
       <OrganImpairmentGridBlock
         isDark={isDark}
@@ -1211,6 +1315,25 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         hepaticDetails={[
           'Karaciğer hastalığında β₂ aracılı glikojenoliz ve laktat klirensi yavaşladığından Tip-B laktat artışı daha belirgin ve uzun sürebilir.',
           'Hedef MAP ve kardiyak debi yanıtına göre klinik titre edilir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0)       */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="İnfüzyonda Düşük Başlangıç · Aritmi/İskemi Takibi"
+        geriatricPoints={[
+          'Kardiyak arrest (1 mg IV) ve anafilaksi (0.5 mg IM) acillerinde yaşa göre doz düşürülmez — hayat kurtarıcı standart doz uygulanır.',
+          '>65 yaş hastalarda koroner arter hastalığı, sol ventrikül hipertrofisi ve atrial fibrilasyon yatkınlığı yüksektir; ameliyathanede IV anafilaksi titrasyonu ve sürekli infüzyonda en düşük etkin doz (ör. 10–20 mcg IV bolus veya 0.01–0.02 mcg/kg/dk başlangıç) ile yavaş titre edilmelidir.',
+          'Lokal anestezik katkılı infiltrasyonlarda (KBB/dental) ciddi KAH/hipertansif yaşlılarda total epinefrin ≤ 40 mcg ile sınırlandırılmalıdır.',
+        ]}
+        obesityWeightScalarBadge="Resüsitasyon: Sabit Doz · İnfüzyon: AdjBW / IBW"
+        obesityPoints={[
+          'Kardiyak arrest (ACLS 1 mg IV/IO) ve erişkin anafilaksi (0.5 mg IM) dozları vücut ağırlığına göre artırılmaz — sabit doz uygulanır (AHA ACLS / WAO). Ancak obez uylukta IM enjeksiyon için daha uzun iğne (≥38 mm) gerekebilir.',
+          'Sürekli IV infüzyonda (mcg/kg/dk) epinefrin hidrofilik olduğundan dağılım hacmi yağ dokusuna orantılı artmaz; BMI ≥ 30–40 kg/m² hastalarda TBW yerine AdjBW veya IBW (ya da mcg/dk sabit skala) kullanılması taşiaritmi, miyokard iskemisi ve şiddetli Tip-B laktik asidoz riskini azaltır (SOBA / Miller’s).',
+          'LAST modifiye ACLS bolusunda ≤ 1 mcg/kg hesabı tavan 100 mcg ile sınırlıdır.',
         ]}
       />
 
@@ -1229,326 +1352,167 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 8. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS) & ETKİLEŞİMLER          */}
+      {/* ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS · v4.0)                      */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-olumsuz"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <HeartPulse className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Önemli Olumsuz Etkiler (Adverse Effects) &amp; İlaç Etkileşimleri
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs mb-5">
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-white block mb-1">
-              Tip-B Laktat Artışı (Yalancı Hipoperfüzyon)
-            </span>
-            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-              β₂ stimülasyonu ile kas/karaciğerde aerobik glikoliz hızlanır ve laktat 2–5 mmol/L yükselebilir. Bu durum
-              her zaman doku hipoksisi değildir; ScvO₂, kapiller dolum ve idrar çıkışı ile birlikte yorumlanmalıdır.
-            </p>
-          </div>
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-white block mb-1">
-              Hipokalemi &amp; Hiperglisemi
-            </span>
-            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-              β₂ aracılı Na⁺/K⁺-ATPaz aktivasyonu potasyumu hızla hücre içine kaydırarak <strong>hipokalemi</strong> ve
-              aritmi eşiğini düşürür. Glikojenoliz ve insülin baskılanması nedeniyle kan şekeri yükselir.
-            </p>
-          </div>
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-white block mb-1">
-              Taşiaritmi &amp; Miyokard İskemisi
-            </span>
-            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-              Sinüs taşikardisi, ventriküler ektopi, AF, VT/VF tetikleyebilir. Kalp hızı ve kontraktilite artışı
-              miyokardiyal oksijen ihtiyacını (MVO₂) belirgin yükselterek KAH hastalarında iskemiyi provoke edebilir.
-            </p>
-          </div>
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-white block mb-1">
-              Asidozda Katekolamin Direnci
-            </span>
-            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-              Şiddetli asidemide (pH &lt; 7.15) adrenerjik reseptör afinitesi düşer; yüksek doz adrenaline rağmen
-              hemodinamik yanıt alınamaz (ventilasyon ve asit-baz düzeltilmesi gerekir).
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs leading-relaxed">
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-amber-950/20 border-amber-900/50' : 'bg-amber-50/70 border-amber-200'}`}>
-            <span className="font-bold text-amber-800 dark:text-amber-300 block mb-1">
-              Non-Selektif Beta-Blokerler (Propranolol)
-            </span>
-            β₁ ve β₂ reseptörleri bloke olduğu için adrenalinin α₁ vazokonstriktör etkisi <em>karşılanmamış</em>{' '}
-            kalır → şiddetli hipertansif kriz ve refleks bradikardi! Anafilakside adrenalin direnci gelişirse{' '}
-            <strong>Glukagon 1–5 mg IV</strong> verilir.
-          </div>
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-amber-950/20 border-amber-900/50' : 'bg-amber-50/70 border-amber-200'}`}>
-            <span className="font-bold text-amber-800 dark:text-amber-300 block mb-1">
-              Halojenli İnhalasyon Anestezikleri
-            </span>
-            Miyokardı katekolamin kaynaklı ventriküler aritmilere duyarlı hale getirir (Halotan &gt; İzofluran &gt;
-            Sevofluran/Desfluran). KBB infiltrasyonlarında total doz sınırına mutlaka uyulmalıdır.
-          </div>
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-amber-950/20 border-amber-900/50' : 'bg-amber-50/70 border-amber-200'}`}>
-            <span className="font-bold text-amber-800 dark:text-amber-300 block mb-1">
-              MAOI / TCA / Kokain Toksisitesi
-            </span>
-            Nöronal geri alım veya yıkım bloke olduğundan katekolamin etkisi katlanarak artar; şiddetli hipertansiyon
-            ve malign aritmi gelişebilir.
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 9. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR           */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-ozel-durumlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1.5">
-              1. Septik Şokta Neden 1. Basamak Noradrenalin, 2. Basamak Adrenalin?
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              CATS RKÇ (Annane et al., Lancet 2007) mortalitede benzer sonuç verse de adrenalin kolunda{' '}
-              <strong>geçici laktik asidoz, taşiaritmi ve insülin direnci</strong> belirgin yüksek bulunmuştur. SSC
-              2021 kılavuzu septik şokta özellikle <strong>düşük kardiyak debinin eşlik ettiği</strong> durumlarda
-              adrenalini 2. veya 3. basamak ek ajan (veya dobutamin + noradrenalin alternatifi) olarak önerir.
-            </p>
-          </div>
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1.5">
-              2. Anafilakside Tek Mutlak Birinci Tercih: Adrenalin
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Noradrenalin sadece α₁ ile vazokonstriksiyon yapar; oysa anafilakside mast hücre/bazofil medyatör
-              salınımını (β₂ ile cAMP artırarak) durduran, bronkospazmı ve laringeal ödemi çözen tek ajan{' '}
-              <strong>Adrenalindir</strong>. Gecikmiş adrenalin anafilaksi ölümlerinin bir numaralı nedenidir.
-            </p>
-          </div>
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1.5">
-              3. Kardiyak Cerrahi &amp; Post-KPB Düşük Debi Sendromu
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Kardiyopulmoner baypas (KPB) çıkışında düşük doz adrenalin (<strong>0.02–0.08 mcg/kg/dk</strong>),
-              hem sağ/sol ventrikül kontraktilitesini artırır hem de hafif vazotonus sağlar. Aşırı taşikardi gelişirse
-              Milrinon + Noradrenalin kombinasyonuna geçilir.
-            </p>
-          </div>
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1.5">
-              4. İnfüzyon Sırasında Elektrolit &amp; Asit-Baz Takibi
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Sürekli infüzyon başlanan hastalarda kan gazında <strong>K⁺ düşüşü</strong> (hipokalemi) ve{' '}
-              <strong>glukoz yüksekliği</strong> sık görülür; K⁺ takibi yapılmadan β-agonist yüklemesi aritmi
-              eşiklerini tehlikeli biçimde düşürür.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 7. ÇÖZELTİ HAZIRLAMA, UYUMLULUK & PERİFERİK DAMAR GÜVENLİĞİ         */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-uyumluluk"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <Droplet className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Çözelti Stabilitesi, Kimyasal Geçimsizlik &amp; Ekstravazasyon Yönetimi
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mb-5">
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Taşıyıcı Sıvı: D5W veya %0.9 SF</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              <strong>%5 Dextroz (D5W)</strong>, D5W + %0.9 SF veya acilde <strong>%0.9 NaCl (SF)</strong> içinde
-              hazırlanır. Sürekli infüzyonda 24 saatte bir yenilenmelidir. Işık ve hava temasıyla hızla oksitlenip{' '}
-              <strong>pembe / kahverengi adrenokroma</strong> dönüşür; renklenmiş çözelti derhal imha edilir.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-950/20 border-rose-900/50' : 'bg-rose-50/70 border-rose-200'}`}>
-            <h4 className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              <span>Alkali Geçimsizlik: NaHCO₃ Yasağı</span>
-            </h4>
-            <p className="text-rose-900 dark:text-rose-200 leading-relaxed">
-              <strong>%8.4 Sodyum Bikarbonat (NaHCO₃)</strong>, aminofilin, furosemid ve tiyopental ile{' '}
-              <strong>ASLA aynı Y-port/lümenden</strong> verilmez! Alkali pH adrenalini saniyeler içinde inaktive eder.
-              KPR sırasında bikarbonat verilecekse öncesinde ve sonrasında hat SF ile yıkanmalıdır.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <ShieldAlert className="w-4 h-4 text-amber-500" />
-              <span>Damar Yolu Tercihi</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Uzun süreli sürekli infüzyonda <strong>Santral Venöz Kateter (SVK)</strong> esastır. Acilde SVK
-              beklenirken antekübital veya önkol geniş periferik venlerinden (≥ 20G) düşük konsantrasyon (10–16 mcg/mL)
-              geçici olarak başlanabilir.
-            </p>
-          </div>
-        </div>
-
-        {/* Ekstravazasyon Akordiyonu */}
-        <div className={`rounded-xl border overflow-hidden ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
-          <button
-            type="button"
-            onClick={() => setExtravasationOpen(!extravasationOpen)}
-            aria-expanded={extravasationOpen}
-            className={`w-full p-4 flex items-center justify-between text-left cursor-pointer transition-colors ${
-              isDark ? 'bg-slate-800/60 hover:bg-slate-800' : 'bg-slate-50 hover:bg-slate-100'
-            }`}
-          >
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-300">
-              <AlertOctagon className="w-4 h-4 shrink-0" />
-              <span>Ekstravazasyon Geliştiğinde Acil Fentolamin Kurtarma Protokolü (12 Saat İçinde)</span>
-            </div>
-            {extravasationOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-          </button>
-
-          {extravasationOpen && (
-            <div className="p-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-xs border-t border-slate-200 dark:border-slate-700">
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">1. Durdur &amp; Aspire Et</span>
-                İnfüzyonu hemen kapatın; kanülü çekmeden önce enjektörle kanül içindeki/dokudaki ilacı aspire edin.
-              </div>
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">2. Antidot: Fentolamin</span>
-                <strong>5 – 10 mg Fentolamin</strong>, 10–15 mL SF içinde seyreltilir (veya yoksa topikal %2 Nitrogliserin).
-              </div>
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">3. Subkutan İnfiltrasyon</span>
-                25–27G ince iğne ile soluk/soğuk alan çevresine çoklu noktadan SC enjekte edin (hiperemi sağlanana dek).
-              </div>
-              <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">4. Elevasyon &amp; Sıcaklık</span>
-                Ekstremiteyi eleve edin, kuru ılık kompres uygulayın. <strong>SOĞUK / BUZ ASLA KULLANMAYIN!</strong>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <HighAlertSafetyBlock
+      <AdverseEffectsBlock
         isDark={isDark}
-        tallManName="EPINEPHrine"
-        confusionRiskWith="NORepinephrine / Ephedrine"
-        criticalAlerts={[
-          '1:1.000 (1 mg/mL) ampuller Türkiye kliniklerinde 0.25 mg, 0.5 mg ve 1 mg olmak üzere hep 1 mL hacmindedir — puşe öncesi etiket mutlaka okunmalıdır.',
-          '1:1.000 konsantre ampulün doğrudan IV puşesi anafilakside fatal aritmi ve pulmoner ödem yapar; IV kullanım için 1:10.000 (100 mcg/mL) veya Push-Dose (10 mcg/mL) olarak seyreltilmelidir.',
-          'Alkali çözeltilerle (NaHCO₃) aynı lümenden verilmez; oksidasyonla pembe/kahverengi adrenokroma dönen çözeltiler imha edilir.',
+        items={[
+          {
+            title: 'Tip-B Laktat Artışı (Yalancı Hipoperfüzyon)',
+            incidenceOrSeverity: 'Çok Sık · β₂ Aracılı',
+            tone: 'amber',
+            detail:
+              'β₂ stimülasyonu ile kas/karaciğerde aerobik glikoliz hızlanır ve laktat 2–5 mmol/L yükselebilir. Her zaman doku hipoksisi değildir; ScvO₂, kapiller dolum ve idrar çıkışı ile birlikte yorumlanmalıdır.',
+          },
+          {
+            title: 'Hipokalemi & Hiperglisemi',
+            incidenceOrSeverity: 'Sık · Metabolik',
+            tone: 'indigo',
+            detail:
+              'β₂ aracılı Na⁺/K⁺-ATPaz aktivasyonu potasyumu hızla hücre içine kaydırarak hipokalemi oluşturur ve aritmi eşiğini düşürür. Glikojenoliz + insülin baskılanmasıyla kan şekeri yükselir.',
+          },
+          {
+            title: 'Taşiaritmi & Miyokard İskemisi',
+            incidenceOrSeverity: 'Doz Bağımlı · Yüksek Risk',
+            tone: 'rose',
+            detail:
+              'Sinüs taşikardisi, ventriküler ektopi, AF, VT/VF tetikleyebilir. Kalp hızı ve kontraktilite artışı MVO₂’yi belirgin yükselterek KAH hastalarında iskemiyi provoke edebilir.',
+          },
+          {
+            title: 'Asidozda Direnç & Ekstravazasyon Nekrozu',
+            incidenceOrSeverity: 'pH < 7.15 / Periferik',
+            tone: 'rose',
+            detail:
+              'Şiddetli asidemide (pH < 7.15) adrenerjik reseptör afinitesi düşer; yüksek dozda splanknik/renal vazokonstriksiyon ve periferik sızıntıda lokal cilt nekrozu gelişebilir.',
+          },
         ]}
-        antidoteOrRescue="Ekstravazasyonda 12 saat içinde 5–10 mg Fentolamin SC infiltrasyon (veya %2 Nitrogliserin). Sistemik hipertansif kriz/taşiaritmi için kısa etkili α-bloker (Fentolamin) veya esmolol/labetalol titre edilir."
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 2. TÜRKİYE AMPUL FORMLARI & 10 KAT DOZ HATASI GÜVENLİK UYARISI       */}
+      {/* KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0)       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-100' : 'bg-rose-50/70 border-rose-200 text-rose-950'
-        }`}
-      >
-        <div className="flex items-start gap-3">
-          <AlertOctagon className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
-          <div className="space-y-3 w-full">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <h2 className="text-sm sm:text-base font-bold text-rose-700 dark:text-rose-300">
-                Kritik İlaç Güvenliği: 1:1.000 vs 1:10.000 Karışıklığı &amp; Türkiye Ampul Formları
-              </h2>
-              <span className="text-xs font-mono font-semibold text-rose-700 dark:text-rose-300">
-                Yüksek Riskli İlaç (ISMP)
-              </span>
-            </div>
-            <p className="text-xs sm:text-sm leading-relaxed text-rose-900 dark:text-rose-200">
-              Adrenalin kaynaklı iyatrojenik mortalitenin en sık nedeni <strong>1:1.000 (1 mg/mL)</strong> konsantre
-              ampulün, seyreltilmeden <strong>1:10.000 (0.1 mg/mL)</strong> veya Push-Dose yerine doğrudan IV puşe
-              edilmesidir (10 kat – 100 kat aşırı doz → ventriküler fibrilasyon, akut pulmoner ödem, intrakraniyal
-              kanama).
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">TR Standart Ampuller</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  0.25 · 0.5 · 1.0 mg / 1 mL
-                </span>
-                <span className="block text-[11px] text-rose-700 dark:text-rose-300 mt-1">
-                  Üçü de 1 mL hacimdedir; etiket mg değerini mutlaka okuyun!
-                </span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">1:1.000 (1 mg/mL)</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  1.000 mcg / mL
-                </span>
-                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                  Erişkin ACLS (1 mg IV), Anafilaksi IM (0.5 mL), Nebülizasyon.
-                </span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">1:10.000 (0.1 mg/mL)</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  100 mcg / mL
-                </span>
-                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                  1 mg (1 mL) + 9 mL SF. Pediatrik PALS &amp; IV anafilaksi titrasyon stoğu.
-                </span>
-              </div>
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/70 border-rose-900/40' : 'bg-white border-rose-200'}`}>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">Push-Dose (1:100.000)</span>
-                <span className="block font-mono tabular-nums font-bold text-slate-900 dark:text-white mt-0.5">
-                  10 mcg / mL
-                </span>
-                <span className="block text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                  1 mg / 100 mL SF. Ameliyathane IV anafilaksi &amp; hipotansiyon bolusu.
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <SpecialClinicalCautionsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'Septik Şokta Neden 1. Basamak Noradrenalin, 2. Basamak Adrenalin?',
+            detail:
+              'CATS RKÇ (Annane et al., Lancet 2007) mortalitede benzer sonuç verse de adrenalin kolunda geçici laktik asidoz, taşiaritmi ve insülin direnci belirgin yüksek bulunmuştur. SSC 2021 kılavuzu özellikle düşük kardiyak debinin eşlik ettiği septik şokta adrenalini 2. veya 3. basamak ek ajan olarak önerir.',
+          },
+          {
+            title: 'Anafilakside Tek Mutlak Birinci Tercih: Adrenalin',
+            detail:
+              'Noradrenalin sadece α₁ ile vazokonstriksiyon yapar; oysa anafilakside mast hücre/bazofil medyatör salınımını (β₂ → cAMP↑) durduran, bronkospazmı ve laringeal ödemi çözen tek ajan Adrenalindir. Gecikmiş adrenalin anafilaksi ölümlerinin bir numaralı nedenidir.',
+          },
+          {
+            title: 'Kardiyak Cerrahi & Post-KPB Düşük Debi Sendromu',
+            detail:
+              'Kardiyopulmoner baypas (KPB) çıkışında düşük doz adrenalin (0.02–0.08 mcg/kg/dk), hem sağ/sol ventrikül kontraktilitesini artırır hem de hafif vazotonus sağlar. Aşırı taşikardi gelişirse Milrinon + Noradrenalin kombinasyonuna geçilir.',
+          },
+          {
+            title: 'İnfüzyon Sırasında Elektrolit (K⁺) & Asit-Baz Takibi',
+            detail:
+              'Sürekli infüzyon başlanan hastalarda kan gazında K⁺ düşüşü (hipokalemi) ve glukoz yüksekliği sık görülür; K⁺ takibi yapılmadan β-agonist yüklemesi malign ventriküler aritmi eşiğini tehlikeli biçimde düşürür.',
+          },
+        ]}
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 10. KANITA DAYALI KAYNAKÇA                                          */}
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <DeepPharmacodynamicsBlock
+        isDark={isDark}
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Doza Bağımlı Pan-Adrenerjik Reseptör Profili (β₂ → β₁ → α₁) & Sinyal İletimi',
+          summary:
+            'Adrenalin (epinefrin) tüm α (α₁, α₂) ve β (β₁, β₂) adrenoseptörlerine yüksek afinite gösteren doğal adrenal medulla hormonudur. Klinik yanıtı, plazma konsantrasyonuna göre değişen reseptör hiyerarşisi belirler (Miller’s / Stoelting’s / AHA ACLS).',
+          points: [
+            'Düşük Doz (0.01–0.05 mcg/kg/dk) — β₂ & β₁ Baskın (Gs → Adenilat Siklaz → cAMP↑ → PKA): İskelet kası arteriyollerinde β₂ vazodilatasyon (diyastolik KB ve SVR hafif düşebilir), güçlü bronkodilatasyon, mast hücre stabilizasyonu ve miyokardiyal β₁ inotropi/kronotropi.',
+            'Orta Doz (0.05–0.15 mcg/kg/dk) — Dengeli β₁ + α₁ İnopressör: Kardiyak debi, sistolik basınç ve MAP eşzamanlı yükselir; post-KPB düşük debi ve kardiyojenik şokta optimal bölgedir.',
+            'Yüksek Doz (>0.15 mcg/kg/dk) & ACLS Bolusu (1 mg) — α₁ Baskın (Gq → PLC → IP₃/DAG → Ca²⁺↑): Yaygın arteriyoler/venöz vazokonstriksiyon ile SVR keskin artar; KPR’de aort diyastolik basıncını yükselterek koroner perfüzyon basıncını (CPP) sağlar.',
+            'Anafilakside Eşsiz Mast Hücre Mekanizması: Mast hücresi ve bazofil üzerindeki β₂ reseptörlerini uyararak hücre içi cAMP’yi yükseltir ve histamin, triptaz, lökotrien degranülasyonunu doğrudan durdurur.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Polar katekolamin yapısı nedeniyle kan-beyin bariyerini anlamlı geçmez; ancak uyanık hastada periferik sempatik uyarım ve β-aracılı tremor/çarpıntı üzerinden belirgin anksiyete, huzursuzluk ve baş ağrısı oluşturabilir.',
+            'KPR sırasında α₁ vazokonstriksiyonu ile serebral perfüzyonu korur; ancak PARAMEDIC2 verileri aşırı yüksek/tekrarlayan bolusların serebral mikrosirkülasyonu bozabileceğini düşündürmektedir.',
+          ],
+          cvs: [
+            'Pozitif İnotropi, Kronotropi, Dromotropi & Batmotropi (β₁): Atım hacmi, kalp hızı, AV iletim hızı ve ektopik odak uyarılabilirliği artar; miyokard oksijen tüketimi (MVO₂) belirgin yükselir.',
+            'Bifazik Kan Basıncı Yanıtı: Düşük dozda sistolik KB artarken β₂ vazodilatasyonla diyastolik KB düşer (nabız basıncı genişler); yüksek dozda α₁ hakimiyetiyle hem sistolik hem diyastolik KB yükselir.',
+          ],
+          respiratory: [
+            'Güçlü β₂ Bronkodilatasyon: Bronş düz kasını hızla gevşeterek anafilaksi ve yaşamı tehdit eden status astmatikusta hava yolu direncini düşürür.',
+            'Lokal α₁ Mukozal Vazokonstriksiyon: Nebülize L-epinefrin subglottik/laringeal mukozal ödemi 10–30 dk içinde azaltır (post-ekstübasyon stridor / krup); ancak 2 saat sonra rebound ödem riski vardır.',
+          ],
+          other: [
+            'β₂-Aracılı Tip-B Laktik Asidoz: İskelet kasında cAMP↑ → Na⁺/K⁺-ATPaz aktivasyonu ve aerobik glikoliz hızlanması sonucu pirüvat/laktat üretimi artar (hipoperfüzyon olmadan laktat 2–5 mmol/L olabilir).',
+            'Hipokalemi & Hiperglisemi: β₂ ile K⁺ hücre içine sürüklenir (0.5–1.0 mEq/L düşüş); hepatik glikojenoliz + pankreatik α₂ insülin inhibisyonu ile hiperglisemi gelişir.',
+            'Renal & Splanknik: Yüksek dozlarda renal arteriyoler vazokonstriksiyon ve splanknik hipoperfüzyon oluşturur.',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Adrenalin acil resüsitasyonda vazgeçilmez olmakla birlikte, reseptör duyarsızlaşması, asidoz direnci ve β-bloker/LAST etkileşimleri kritik farmakodinamik sınırlardır.',
+          points: [
+            'Şiddetli Asidoz (pH < 7.15) & Reseptör Desensitizasyonu: Asidemi adrenerjik reseptör konformasyonunu ve Gs sinyal iletimini bozarak katekolamin yanıtını köreltir; ventilasyon ve asit-baz düzeltilmeden doz tırmandırmak aritmi riskini artırır.',
+            'Non-Selektif β-Blokerlerde "Epinefrin Reversal" / Karşılanmamış α₁ Krizi & Glukagon Kurtarması: Propranolol gibi non-selektif β-bloker alan hastada adrenalinin β₂ vazodilatasyonu bloke olduğundan α₁ vazokonstriksiyonu şiddetli hipertansiyon ve refleks bradikardi yapar; anafilakside β-bloker direncinde β-reseptörünü baypas ederek doğrudan adenilat siklazı uyaran Glukagon (1–5 mg IV) eklenir.',
+            'LAST (Lokal Anestezik Toksisitesi) Antagonizması: Bupivakain/ropivakain arrestinde standart 1 mg adrenalin %20 İntralipid resüsitasyonunu bozar, pulmoner ödem ve refrakter VF tetikler → ASRA 2020 kuralı: ≤ 1 mcg/kg modifiye bolus.',
+          ],
+        }}
+        clinicalPearls={[
+          'Tip-B Laktat vs Gerçek Şok Ayrımı: Adrenalin infüzyonu başlandıktan sonra yükselen laktat tek başına "şok kötüleşiyor" demek değildir; ScvO₂, veno-arteriyel PCO₂ farkı, kapiller dolum ve idrar çıkışı ile değerlendirin.',
+          'Hipokalemi Aritmi Tuzağı: Adrenalin infüzyonunda potasyum hızla hücre içine kayar; K⁺ < 3.5 mEq/L iken yüksek doz epinefrin malign VT/VF eşiğini dramatik biçimde düşürür.',
+          'Anafilakside IM Vastus Lateralis vs Deltoid/SC: Orta-dış uyluk (M. vastus lateralis) derin IM enjeksiyonu, subkutan veya deltoid enjeksiyona göre pik plazma konsantrasyonuna ~4 kat daha hızlı ulaşır.',
+          'Epidural Test Dozu (15 mcg): Beta-bloker alan hastalarda KTA artışı (+10/dk) maskelenebilir; bu hastalarda SKB artışı (≥ +15 mmHg) ve T-dalgası amplitüd değişimi daha güvenilir intravasküler göstergedir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA (v4.0)   */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Adrenalin (Epinefrin)"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Sodyum Bikarbonat (%8.4 NaHCO₃) & Alkali IV Çözeltiler (Aynı Lümen)',
+            mechanism: 'Alkali pH Kaynaklı Hızlı Oksidatif İnaktivasyon',
+            clinicalEffect: 'Adrenalin saniyeler içinde adrenokroma oksitlenip etkinliğini tamamen kaybeder (KPR sırasında kritik başarısızlık).',
+            management: 'Asla aynı hattan/Y-porttan vermeyin; KPR’de NaHCO₃ öncesi ve sonrası hattı mutlaka 20 mL SF ile yıkayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Non-Selektif Beta-Blokerler (Propranolol · Karvedilol · Nadolol)',
+            mechanism: 'β₁/β₂ Blokajı Altında Karşılanmamış α₁ Vazokonstriksiyon',
+            clinicalEffect: 'Şiddetli hipertansif kriz, refleks bradikardi/AV blok; anafilakside standart adrenalin tedavisine direnç.',
+            management: 'Lokal infiltrasyonda adrenalinden kaçının; anafilakside adrenalin yanıtı yetersizse Glukagon 1–5 mg IV ekleyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Halojenli İnhalasyon Anestezikleri (Halotan >> İzofluran > Sevofluran)',
+            mechanism: 'Miyokardiyal Katekolamin Aritmi Duyarlılaşması',
+            clinicalEffect: 'Ventriküler ektopi, bigemini, VT ve VF riski (özellikle KBB mukozal infiltrasyonlarında).',
+            management: 'Sevofluran/desfluran altında dahi total infiltrasyon dozunu sınırlandırın (sağlıklı ≤200 mcg, KAH ≤40 mcg) ve normokapniyi koruyun.',
+          },
+          {
+            severity: 'D',
+            agent: 'MAOI (Linezolid · Metilen Mavisi) · TCA · Kokain',
+            mechanism: 'Nöronal Geri Alım (NET) & MAO Yıkım Blokajı',
+            clinicalEffect: 'Abartılı hipertansif yanıt, taşiaritmi ve miyokard iskemisi.',
+            management: 'İnfüzyon veya bolus dozlarını en düşük düzeyden başlatıp yakın EKG ve arter basıncı monitörizasyonuyla titre edin.',
+          },
+          {
+            severity: 'C',
+            agent: 'K⁺ Düşüren Ajanlar (Loop Diüretikler · İnsülin · Yüksek Doz Salbutamol)',
+            mechanism: 'Aditif Hipokalemi (β₂ Na⁺/K⁺-ATPaz Aktivasyonu)',
+            clinicalEffect: 'Belirgin hipokalemi ve QT uzaması / ventriküler taşiaritmi riskinde artış.',
+            management: 'Sürekli epinefrin infüzyonunda kan gazı ile K⁺ takibi yapın ve K⁺ ≥ 4.0 mEq/L hedefleyin.',
+          },
+        ]}
         references={[
           {
             authors: 'Panchal AR, Bartos JA, Cabañas JG, et al.',

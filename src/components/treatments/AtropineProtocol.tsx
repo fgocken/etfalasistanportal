@@ -12,8 +12,11 @@ import {
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
   MonographCopyButton,
@@ -21,6 +24,7 @@ import {
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -34,7 +38,7 @@ type NmbDepth = 'shallow' | 'moderate';
 
 export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState<CalcTab>('bradycardia');
-  const [pkOpen, setPkOpen] = useState<boolean>(true);
+  const [pkOpen, setPkOpen] = useState<boolean>(false);
 
   // 1. Bradikardi (ACLS / PALS / İntraoperatif) State
   const [bradyScenario, setBradyScenario] = useState<BradyScenario>('acls_adult');
@@ -187,6 +191,44 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-dozlar', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="ATROPINE (0,25 · 0,5 · 1 mg/1 mL)"
+        confusionRiskWith="EPINEPHrine (ADRENALİN) · ADENOSINE · ATRACURIUM"
+        criticalAlerts={[
+          'Türkiye’de 3 Farklı 1 mL Ampul (4 Kat Hata Riski!): 0,25 mg/1 mL, 0,5 mg/1 mL ve 1 mg/1 mL Atropin ampullerinin TAMAMI 1 mL hacimdedir — kırmadan önce mg/mL değerini mutlaka sesli okuyun.',
+          'Paradoksal Bradikardi Tuzağı (< 0,5 mg): Erişkinde bradikardi için < 0,5 mg (ör. tek bir 0,25 mg ampul) uygulamayın; presinaptik M₁ otoreseptör blokajıyla paradoksal bradikardiye yol açar (AHA ACLS ilk dozu 1,0 mg IV).',
+          'Ameliyathane LASA & Renk Kodu: Aynı 1 mL cam ampul boyutundaki Adrenalin ve Neostigmin ile karıştırmamak için ISO yeşil (antikolinerjik) enjektör etiketi yapıştırın.',
+          'Asistoli / NEA (PEA) & Denerve Kalp: Asistoli/NEA arrestinde rutin atropin artık YOKTUR; kalp nakli (denerve kalp) hastasında ise etkisizdir ve paradoksal sinüs arresti/AV blok yapabilir!',
+        ]}
+        antidoteOrRescue="Ağır Santral Antikolinerjik Sendrom / deliryumda spesifik antidot FİZOSTİGMİN’dir (0,5–1,0 mg IV 2–5 dk’da yavaş; yanıt yoksa 10–15 dk sonra tekrar, pediatride 0,02 mg/kg maks 0,5 mg — Dawson & Buckley 2016). QRS genişlemesi (≥ 100 ms) veya TSA eş alımı varsa Fizostigmin KONTRENDİKEDİR → Benzodiyazepin (Midazolam/Diazepam), aktif soğutma ve destek tedavisi uygulanır."
+      />
+
       {/* 1. KİMLİK & KLİNİK ÖZET HEADER */}
       <section
         id="sec-ozet"
@@ -196,7 +238,7 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
             : 'bg-white border-emerald-200 shadow-lg shadow-emerald-500/5 text-slate-900'
         }`}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="p-3.5 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
               <HeartPulse className="w-8 h-8" />
@@ -247,26 +289,6 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
               <div className="text-[10px] text-slate-500">Deliryum · Antidot: Fizostigmin</div>
             </div>
           </div>
-        </div>
-
-        <div className="mt-4">
-          <MonographQuickNav
-            isDark={isDark}
-            items={[
-              { id: 'sec-etki', label: 'Etki Mekanizması' },
-              { id: 'sec-pkpd', label: 'PK / PD' },
-              { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-              { id: 'sec-dozlar', label: 'Endikasyonlar & Dozaj' },
-              { id: 'sec-hesaplayici', label: 'Doz Hesaplayıcı' },
-              { id: 'sec-uyumluluk', label: 'TR Ampuller & Uyumluluk' },
-              { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-              { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
-              { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-              { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
-              { id: 'sec-guvenlik', label: 'ISMP & Antidot' },
-              { id: 'sec-kaynaklar', label: 'Kaynakça' },
-            ]}
-          />
         </div>
       </section>
 
@@ -982,46 +1004,78 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
-      {/* 7. HAZIRLAMA, TR AMPUL FORMLARI & UYUMLULUK */}
-      <section
-        id="sec-uyumluluk"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
-      >
-        <div className="flex items-center gap-2.5">
-          <FlaskConical className={`h-5 w-5 ${isDark ? 'text-amber-400' : 'text-amber-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Türkiye Ampul Formları, Hazırlama &amp; Y-Site Uyumluluk
-          </h3>
-        </div>
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Atropin Sülfat 0,25 mg / 1 mL Ampul (TR Ruhsatlı)',
+            presentation: '1 mL berrak steril cam ampul (Osel / Galen / Biofarma — ağırlıklı pediatri & düşük doz stok)',
+            concentration: '0,25 mg / mL (250 mcg/mL)',
+            saltOrBaseNote:
+              'DİKKAT: Erişkin bradikardide tek başına 1 ampul (0,25 mg) VERİLMEZ (paradoksal bradikardi riski)! 1 mg ACLS dozu için tam 4 ampul gerekir.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Atropin Sülfat 0,5 mg / 1 mL Ampul (TR Standart Ameliyathane)',
+            presentation: '1 mL berrak steril cam ampul (en yaygın ameliyathane/NMB reversal formu)',
+            concentration: '0,5 mg / mL (500 mcg/mL)',
+            saltOrBaseNote:
+              'Erişkin ACLS 1 mg ilk dozu için 2 ampul (2 mL); Neostigmin (0,5 mg/1 mL) ile NMB reversal’de pratik oran her 2,5 mg Neostigmin’e ~1 mg Atropin (2 ampul).',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Atropin Sülfat 1 mg / 1 mL Ampul (TR Acil / Toksikoloji)',
+            presentation: '1 mL berrak steril cam ampul (ACLS bradikardi & organofosfat atropinizasyonu)',
+            concentration: '1 mg / mL (1.000 mcg/mL)',
+            saltOrBaseNote:
+              '0,25 mg/mL ampul ile aynı 1 mL hacimdedir — 4 kat doz aşımı riskine karşı kırılmadan önce etiket yüksek sesle okunmalıdır.',
+            alertLevel: 'high',
+          },
+        ]}
+        standardDilutions={[
+          'Erişkin Acil / İntraoperatif Bolus: Sulandırmadan doğrudan hızlı IV puşe + 10–20 mL %0,9 NaCl flush (ISO Yeşil antikolinerjik etiket).',
+          'Pediatrik Hassas Enjektör (0,1 mg/mL = 100 mcg/mL): 1 mg Atropin (1 mL) + 9 mL %0,9 NaCl = 10 mL (0,02 mg/kg = 0,2 mL/kg).',
+          'Neostigmin + Atropin Ortak Enjektörü: 1 mg Neostigmin için 0,4 mg Atropin aynı enjektörde kimyasal olarak stabildir (1–2 dk yavaş IV).',
+          'Organofosfat İdame İnfüzyonu: 20–50 mg Atropin / 50 mL %0,9 NaCl veya %5 Dekstroz (0,4–1 mg/mL) — saatte toplam atropinizasyon dozunun %10–20’si hızında titre edilir.',
+        ]}
+        concentrationTrapWarning="Türkiye piyasasındaki 0,25 mg, 0,5 mg ve 1 mg Atropin ampullerinin TAMAMI 1 mL hacimdedir! 0,25 mg ile 1 mg ampulün karıştırılması 4 kat doz hatasına (erişkinde <0,5 mg ile paradoksal bradikardi veya pediatride 4× antikolinerjik toksisite) yol açar."
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-amber-950/20 border-amber-500/30' : 'bg-amber-50/70 border-amber-200'}`}>
-            <div className="font-bold text-amber-700 dark:text-amber-300">Türkiye’de 3 Farklı 1 mL Ampul!</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              Piyasada <strong>0,25 mg/1 mL</strong>, <strong>0,5 mg/1 mL</strong> ve <strong>1 mg/1 mL</strong> ampullerin tamamı 1 mL’dir!
-              Çekmeden önce etiketi yüksek sesle teyit edin; 4 kat doz hatası en sık ameliyathane hatasıdır.
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-            <div className="font-bold text-emerald-700 dark:text-emerald-300">Dilüsyon &amp; Uygulama Yolları</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              Erişkinde sulandırmadan hızlı IV puşe + SF flush uygulanabilir. Pediatride hassas doz için 1 mg + 9 mL SF (= <strong>0,1 mg/mL</strong>) hazırlanabilir.
-              Yalnızca IV/IO yoksa son çare endotrakeal tüp (ETT): IV dozun 2–2,5 katı, 5–10 mL SF ile.
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-            <div className="font-bold text-sky-700 dark:text-sky-300">Y-Site Uyumluluk &amp; Geçimsizlik</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              <strong>Uyumlu:</strong> %0,9 NaCl, %5 Dekstroz, Neostigmin (aynı enjektörde stabil!), Fentanil, Midazolam, Morfin.<br />
-              <strong>Geçimsiz:</strong> Alkali çözeltiler (<strong>Sodyum Bikarbonat</strong>, Tiyopental, Noradrenalin alkali/stabilite riski) — aynı lümenden verme!
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Periferik IV, santral IV veya IO yoldan hızlı bolus uygulanabilir; ardından mutlaka 10–20 mL %0,9 NaCl flush yapılmalıdır. Yalnızca IV/IO erişim sağlanamayan acillerde son çare olarak endotrakeal tüpten (ETT) IV dozun 2–2,5 katı (5–10 mL SF ile) verilebilir."
+        phRange="3.0 – 6.5 (Asidik · Sülfat Tuzu)"
+        osmolalityNote="Standart ampuller izotonik/hafif hipotoniktir; doku vezikanı değildir ve ekstravazasyonda nekroz beklenmez."
+        compatibleDiluents={[
+          '%0,9 Sodyum Klorür (İzotonik SF) — 24 saat stabil',
+          '%5 Dekstroz (D5W) — 24 saat stabil',
+          'Ringer Laktat (RL) — 24 saat stabil',
+        ]}
+        stabilityNote="Oda sıcaklığında ve ışıktan korunarak saklanır. Neostigmin ile aynı enjektörde karıştırıldığında fiziksel ve kimyasal olarak stabildir; organofosfat infüzyon çözeltileri 24 saatte bir yenilenmelidir."
+        ySiteCompatible={[
+          'Neostigmin (aynı enjektörde stabil!)',
+          'Fentanil',
+          'Midazolam',
+          'Morfin',
+          'Propofol',
+          'Efedrin',
+          'Lidokain',
+          'Ketamin',
+          'Roküronyum',
+          'Ondansetron',
+        ]}
+        ySiteIncompatible={[
+          'Sodyum Bikarbonat (%8.4 NaHCO₃ — alkali çökme/hidroliz!)',
+          'Tiyopental',
+          'Noradrenalin (alkali/stabilite riski — ayrı lümen)',
+          'Diazepam',
+          'Pantoprazol / Alkali çözeltiler',
+        ]}
+        extravasationProtocol="Atropin vezikan değildir ve lokal doku nekrozu yapmaz; periferik sızıntıda infüzyonu durdurup ekstremiteyi eleve etmek yeterlidir. Ancak sistemik emilim gecikeceğinden bradikardi tedavisinde yeni ve güvenli IV/IO hat derhal sağlanmalıdır."
+      />
 
       {/* 8. BÖBREK VE KARACİĞER YETMEZLİĞİ */}
       <OrganImpairmentGridBlock
@@ -1037,6 +1091,23 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
           'Yaklaşık %50’si karaciğerde enzimatik hidrolizle (tropin ve tropik asit) metabolize olur.',
           'Siroz/hepatik ensefalopatiye yatkın hastalarda tersiyer amin SSS geçişi konfüzyonu ağırlaştırabilir.',
           'NMB reversal için ağır karaciğer yetmezliğinde antikolinerjik deliryum riski nedeniyle mümkünse Glikopirolat veya Sugammadeks tercih edilir.',
+        ]}
+      />
+
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="Yüksek Deliryum Riski (AGS Beers) · t½ 2× Uzar"
+        geriatricPoints={[
+          '>65 yaş hastalarda atropin eliminasyon yarı ömrü (t½) 2–4 saatten 6–10 saate kadar uzar ve santral kolinerjik rezerv azaldığından tersiyer aminin KBB geçişi postoperatif deliryum ve Santral Antikolinerjik Sendrom (SAS) riskini dramatik biçimde artırır (AGS Beers Kriterleri).',
+          'NMB reversal veya antisiyalogog gereksiniminde yaşlı/demanslı hastalarda KBB’yi geçmeyen kuaterner amin Glikopirolat (veya Sugammadeks) öncelikli tercih edilmelidir; ancak hayatı tehdit eden ACLS bradikardisinde standart 1 mg IV dozdan kaçınılmaz.',
+          'Yaşlılarda koroner arter hastalığı (taşikardiye bağlı iskemi), benign prostat hiperplazisi (akut idrar retansiyonu), paralitik ileus ve dar açılı glokom açısından postoperatif yakın izlem gerekir.',
+        ]}
+        obesityWeightScalarBadge="ACLS: Sabit 1 mg · NMB Reversal: IBW/AdjBW (Maks 1.5–2 mg)"
+        obesityPoints={[
+          'Erişkin semptomatik bradikardide (AHA ACLS) doz vücut ağırlığına göre artırılmaz — sabit 1,0 mg IV bolus (maks kümülatif 3,0 mg) uygulanır.',
+          'Neostigmin + Atropin NMB geri dönüşünde (0,015–0,02 mg/kg) BMI ≥ 30–40 kg/m² obez hastalarda TBW yerine IBW veya AdjBW kullanılmalı ve atropin dozu 1,5–2,0 mg tavanıyla sınırlandırılmalıdır (SOBA / ASA 2023).',
+          'Pediatrik obezitede 0,02 mg/kg hesabı IBW üzerinden yapılmalı ve çocukta 0,5 mg / adolesanda 1,0 mg tek doz tavanı aşılmamalıdır.',
         ]}
       />
 
@@ -1128,26 +1199,101 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 12. ISMP HIGH-ALERT & ANTİDOT */}
-      <HighAlertSafetyBlock
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        tallManName="ATROPINE (0,25 · 0,5 · 1 mg/mL)"
-        confusionRiskWith="ADRENALİN · ADENOZİN · ATRAKÜRYUM"
-        criticalAlerts={[
-          'Türkiye’de 0,25 mg/mL, 0,5 mg/mL ve 1 mg/mL Atropin ampullerinin hepsi 1 mL hacimdedir — 4 katlık konsantrasyon hatasını önlemek için kırılmadan önce etiket mg/mL değerini mutlaka sesli okuyun.',
-          'Erişkinde bradikardi için < 0,5 mg (ör. tek bir 0,25 mg ampul) uygulamayın: paradoksal bradikardiye yol açabilir (AHA ACLS ilk dozu 1,0 mg IV).',
-          'Ameliyathane ilaç tepsisinde aynı yeşil/beyaz etiketli ampullerle (özellikle Adrenalin ve Neostigmin) karıştırmamak için ISO renk kodlu enjektör etiketi (antikolinerjik: yeşil) yapıştırın.',
-          'Asistoli veya NEA (PEA) kardiyak arrestte rutin atropin artık kılavuzlarda YOKTUR — CPR ve Adrenalin’i geciktirmeyin.',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Kompetitif Non-Selektif Muskarinik Antagonizma (M₁–M₅) & Kardiyak M₂ Sinyal İletimi',
+          summary:
+            'Atropin doğal belladona alkaloidi (tersiyer amin esteri) olup postgangliyonik parasempatik efektör organlardaki ve santral sinir sistemindeki M₁–M₅ muskarinik asetilkolin reseptörlerini geri dönüşümlü ve kompetitif olarak bloke eder. Klinik dozlarda otonom gangliyon ve nöromüsküler kavşaktaki nikotinik reseptörlere etkisi ihmal edilebilir düzeydedir (Miller’s / Stoelting’s / Barash).',
+          points: [
+            'Kardiyak M₂ Blokajı (Gi/Go Antagonizması): SA ve AV düğümde vagal asetilkolinin M₂ üzerinden açtığı GIRK (IK,ACh) K⁺ kanallarını ve adenilat siklaz inhibisyonunu ortadan kaldırır → cAMP↑, spontan faz-4 depolarizasyon hızlanır (pozitif kronotropi) ve AV düğüm iletimi hızlanır (PR kısalır).',
+            'Ekzokrin & Düz Kas M₃ Blokajı (Gq Antagonizması): IP₃/DAG ve hücre içi Ca²⁺ artışını engelleyerek tükürük, bronşiyal ve ter bezi sekresyonlarını baskılar; bronş, GİS, safra ve mesane düz kaslarını gevşetir.',
+            'Santral & Presinaptik M₁/M₄/M₅ Blokajı: Lipofilik tersiyer amin yapısı sayesinde kan-beyin bariyerini geçerek kortikal ve hipokampal muskarinik iletimi bloke eder (kognitif disfonksiyon/deliryum mekanizması).',
+            'Kompetitif Doğa (Organofosfat): Aşırı sinaptik ACh birikiminde atropin kompetitif olduğu için yüksek dozlara çıkılarak (onlarca–yüzlerce mg) muskarinik reseptörler yeniden bloke edilebilir; ancak nikotinik kas felcini düzeltmez.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Kan-Beyin Bariyeri (KBB) Geçişi & Santral Antikolinerjik Sendrom (SAS): Kuaterner amin olan Glikopirolatın aksine tersiyer amin Atropin KBB’yi kolayca geçer; özellikle yaşlılarda postoperatif deliryum, ajitasyon, halüsinasyonlar veya tersine açıklanamayan somnolans/uyanma gecikmesi oluşturabilir (antidot: KBB’yi geçen Fizostigmin).',
+            'Terapötik dozlarda minimal medüller stimülasyon yapar; toksik dozlarda konfüzyon, nöbet ve koma gelişir.',
+          ],
+          cvs: [
+            'SA/AV Düğüm Vagolizisi: İstirahat vagal tonusu yüksek genç erişkinlerde kalp hızını belirgin artırır; bebeklerde ve ileri yaşlılarda bazal vagal tonus daha düşük olduğundan kronotropik yanıt daha küçüktür.',
+            'Ventriküler Kontraktilite & Kan Basıncı: Ventrikül miyokardında parasempatik innervasyon çok az olduğundan doğrudan inotropik etkisi yoktur; kan basıncı genelde değişmez ancak aşırı taşikardi diyastolik doluşu kısaltıp koroner iskemiyi tetikleyebilir.',
+          ],
+          respiratory: [
+            'Bronkodilatasyon & Anatomik Ölü Boşluk (Vd/Vt) Artışı: M₃ blokajı ile büyük hava yolları genişler (hava yolu direnci↓), ancak anatomik ölü boşluk %20–30 kadar artabilir.',
+            'Sekresyon Viskozitesi & Mukosiliyer Klirens: Bronşiyal bez sekresyon hacmini azaltırken mukusu koyulaştırır ve mukosiliyer klirensi yavaşlatır (uzun YBÜ/KOAH hastalarında mukus tıkacı riski).',
+          ],
+          other: [
+            'GİS & Özofagus: Alt özofagus sfinkter (LES) basıncını düşürerek (reflü/aspirasyon riski↑), gastrik boşalmayı ve bağırsak peristaltizmini yavaşlatır.',
+            'Göz & Termoregülasyon: İris sfinkteri ve siliyer kas blokajıyla midriyazis/siklopileji (akut dar açılı glokom krizi riski); ekrin ter bezlerinin blokajıyla anhidroz ve özellikle çocuklarda hipertermi ("atropin ateşi").',
+            'Obstetrik: Plasentayı 1–2 dakikada geçer → fetal taşikardi ve NST’de beat-to-beat variabilite kaybı.',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Atropinin kardiyak vagolitik etkisi 3 mg (0,04 mg/kg) tavanına ulaşır; ancak düşük doz paradoksal bradikardi, denerve kalp ve infranodal AV blok mutlak farmakodinamik tuzaklardır (AHA ACLS 2020).',
+          points: [
+            'Düşük Doz Paradoksal Bradikardi (< 0,5 mg IV Erişkin): 0,5 mg altındaki dozların yavaş verilmesi, presinaptik inhibitör M₁ otoreseptörlerini bloke ederek (veya santral vagal çekirdek uyarımıyla) sinaptik ACh salımını geçici artırıp kalp hızını DAHA DA düşürebilir.',
+            'Kardiyak Vagolitik Tavan (0,04 mg/kg ≈ 3 mg) vs Organofosfat İstisnası: ACLS bradikardide 3 mg kümülatif doz tam kardiyak vagal blokaj sağlar, üstü etkisizdir. Oysa organofosfat zehirlenmesinde devasa ACh aşırılığı nedeniyle 3 mg tavanı GEÇERSİZDİR (kompetitif antagonizma).',
+            'Kalp Nakli (Denerve Kalp) & İnfranodal AV Blok (Mobitz II / 3. Derece Geniş QRS): Denerve kalpte vagal innervasyon olmadığından atropin etkisizdir ve paradoksal sinüs arresti/AV blok bildirilmiştir. His-Purkinje düzeyindeki infranodal bloklarda ise SA düğüm hızını artırıp AV iletim oranını bozarak ventriküler hızı kötüleştirir → Pacing/İzoproterenol/Adrenalin!',
+            'Fizostigmin Antagonizması: KBB’yi geçen tersiyer amin asetilkolinesteraz inhibitörü Fizostigmin (0,5–1 mg yavaş IV) santral antikolinerjik deliryumu dakikalar içinde geri çevirir (Neostigmin KBB’yi geçemediği için SAS’ta etkisizdir; QRS ≥100 ms veya TSA alımında Fizostigmin kontrendikedir!).',
+          ],
+        }}
+        clinicalPearls={[
+          'AHA ACLS 2020 Güncellemesi: Erişkin semptomatik bradikardide eski 0,5 mg dozu yerine doğrudan 1,0 mg IV (q3–5 dk, maks 3 mg) önerilir; asistoli ve NEA (PEA) protokollerinden rutin atropin çıkarılmıştır.',
+          'Neostigmin + Atropin Zamanlama Farkı: Atropin 2–4 dakikada pik yaparken Neostigmin 7–10 dakikada pik yapar; bu nedenle ortak enjektör sonrası ilk dakikalarda geçici taşikardi normaldir.',
+          'Gebe Hastada Non-Obstetrik Cerrahi NMB Reversal: Neostigmin plasentayı geçtiği halde Glikopirolat geçmez; fetüste bradikardiyi önlemek için gebede Neostigmin ile birlikte plasentayı geçen ATROPİN tercih edilir.',
+          'Pediatrik Bradikardide İlk Soru "Hipoksi mi?": Çocukta bradikardinin bir numaralı nedeni hipoksidir — önce %100 O₂ ventilasyon, KTA < 60 ise CPR + Adrenalin; Atropin yalnızca artmış vagal tonus veya primer AV blokta 1. tercihtir.',
         ]}
-        antidoteOrRescue="Ağır Santral Antikolinerjik Sendrom / deliryumda spesifik antidot FİZOSTİGMİN’dir (0,5–1,0 mg IV 2–5 dk’da yavaş; yanıt yoksa 10–15 dk sonra tekrar, pediatride 0,02 mg/kg maks 0,5 mg — Dawson & Buckley 2016). QRS genişlemesi (≥ 100 ms) veya TSA eş alımı varsa Fizostigmin KONTRENDİKEDİR → Benzodiyazepin (Midazolam/Diazepam) ve soğutma + destek tedavisi uygulanır."
       />
 
-      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMLERİ */}
+      {/* 13. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Atropin Sülfat"
         drugsComUrl="https://www.drugs.com/drug-interactions/atropine.html"
         medscapeUrl="https://reference.medscape.com/drug/atropine-iv-im-343093"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Sodyum Bikarbonat (%8.4 NaHCO₃) / Tiyopental (Aynı Lümen) & Kalp Nakli (Denerve Kalp)',
+            mechanism: 'Alkali Kimyasal Geçimsizlik / Vagal Denervasyon Paradoksal Yanıtı',
+            clinicalEffect: 'Alkali çözeltilerle çökelme/inaktivasyon; kalp nakli hastasında etkisizlik ve paradoksal sinüs arresti/AV blok.',
+            management: 'Alkali ilaçlarla aynı hattan vermeyin; kalp nakli hastasında atropin yerine İzoproterenol, Adrenalin veya Pacing kullanın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Antikolinerjik Yükü Yüksek İlaçlar (TCA · 1. Kuşak Antihistaminikler · Antipsikotikler · Skopolamin)',
+            mechanism: 'Aditif Santral & Periferik Muskarinik Blokaj',
+            clinicalEffect: 'Ağır Santral Antikolinerjik Sendrom (deliryum, halüsinasyon, hipertermi), paralitik ileus ve akut idrar retansiyonu.',
+            management: 'Yaşlılarda ek atropinden kaçının (Glikopirolat tercih edin); ağır SAS gelişirse QRS dar (<100 ms) ve TSA yoksa Fizostigmin değerlendirin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Kolinesteraz İnhibitörleri (Neostigmin · Piridostigmin · Fizostigmin · Donepezil)',
+            mechanism: 'Kompetitif Muskarinik Antagonizma (Terapötik / Zıt Etki)',
+            clinicalEffect: 'NMB reversal’de Neostigminin muskarinik yan etkilerini bloke eder; demans ilacı (Donepezil) alan yaşlıda kognitif bozulmayı tetikleyebilir.',
+            management: 'NMB reversal’de 1 mg Neostigmin : 0,4 mg Atropin oranında kombine edin; demans hastasında mümkünse Sugammadeks/Glikopirolat seçin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Potasyum Klorür (Katı Oral Formlar) & GİS Motilite Bozukluğu',
+            mechanism: 'GİS Peristaltizm İnhibisyonu & Mukozal Temas Uzaması',
+            clinicalEffect: 'GİS ülserasyonu, perforasyon ve paralitik ileusun ağırlaşması.',
+            management: 'Obstrüktif GİS patolojisi veya katı oral KCl kullanımı olanlarda tekrarlayan antikolinerjik dozlarından kaçının.',
+          },
+          {
+            severity: 'C',
+            agent: 'Sempatomimetikler (Efedrin · Adrenalin) · Ketamin · Digoksin',
+            mechanism: 'Aditif Taşikardi / GİS Emilim & AV İletim Modülasyonu',
+            clinicalEffect: 'Belirgin sinüs taşikardisi ve miyokard O₂ tüketiminde artış; KAH hastalarında iskemi riski.',
+            management: 'Sürekli EKG ve ST segmenti izlemi yapın; bazal KTA > 105/dk ise atropin yerine Glikopirolat/Sugammadeks değerlendirin.',
+          },
+        ]}
         references={[
           {
             authors: 'Panchal AR, Bartos JA, Cabañas JG, et al.',

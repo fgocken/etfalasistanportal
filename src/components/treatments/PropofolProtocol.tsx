@@ -27,8 +27,15 @@ import {
   AlertOctagon
 } from 'lucide-react';
 import {
+  CompatibilityAndLineBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographCopyButton,
+  MonographQuickNav,
+  SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -263,8 +270,47 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-6">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozlar', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON · v4.0) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="PROPOFOL (%1 [10 mg/mL] vs %2 [20 mg/mL] DİKKAT!)"
+        confusionRiskWith="Propofol %2 (20 mg/mL) ↔ Propofol %1 (10 mg/mL) · İntralipid %20"
+        antidoteOrRescue="Spesifik Antidot YOK — PRIS Acil Yönetim & Destek: Propofolün farmakolojik antidotu yoktur; kısa etki süresine güvenilerek solunum/hemodinami desteklenir. PRIS şüphesinde (açıklanamayan laktik asidoz, rabdomiyoliz, Brugada benzeri EKG, hiperkalemi) infüzyonu DERHAL kesin, alternatif sedasyona geçin, agresif hemodinamik destek ve gerekirse CRRT/ECMO planlayın."
+        criticalAlerts={[
+          'Yetkili Uygulayıcı & Havayolu Hazırlığı Zorunluluğu: Yalnızca anesteziyoloji, yoğun bakım veya ileri havayolu yönetiminde sertifikalı hekimler tarafından; entübasyon seti, aspiratör, O₂ ve resüsitasyon ilaçları hazırda bulundurularak uygulanmalıdır.',
+          'Aseptik 6/12 Saat Kuralı: Antimikrobiyal koruyucu içermeyen lipid emülsiyonudur; enjektöre çekilen veya seyreltilen propofol ≤ 6 saatte, orijinal flakon ve infüzyon hattı ≤ 12 saatte değiştirilir (bakteriyel kontaminasyon ve sepsis riski).',
+          'PRIS Tavanı & Pediatrik YBÜ Yasağı: Erişkin YBÜ sedasyonunda > 4 mg/kg/saat ve > 48 saat infüzyondan kaçının; 16 yaş altında uzun süreli YBÜ sedasyonu KESİNLİKLE kontrendikedir.',
+          '%1 vs %2 Karışma Riski & Kan Ürünleri: Propofol %1 (10 mg/mL) ile %2 (20 mg/mL) flakonları karıştırılmamalı (%2 yalnızca TIVA/YBÜ pompası için etiketlenmeli); aynı hattan kan/plazma ürünleri asla verilmemelidir.',
+        ]}
+      />
+
       {/* 1. ÜST BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI (EN YUKARIDA) */}
       <div
+        id="sec-ozet"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900/90 border-slate-800 text-slate-100 shadow-xl'
@@ -337,6 +383,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 2. FARMAKOKİNETİK PROFİLİ (AKORDİYON: TIKLAYINCA AÇILIR) */}
       <div
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -421,6 +468,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 3. KONTRENDİKASYONLARI */}
       <div
+        id="sec-kontrendikasyon"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -478,6 +526,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 4. ENDİKASYONLARI VE OFF-LABEL KULLANIMLARI */}
       <div
+        id="sec-endikasyon"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -572,6 +621,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 5. UYGULAMA YOLLARI VE ERİŞKİN / PEDİATRİK DOZ REJİMLERİ */}
       <div
+        id="sec-dozlar"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -841,6 +891,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 6. İNTERAKTİF İNFÜZYON POMPASI VE ÇOK YOLLU HESAPLAYICISI (DOZ REJİMLERİNDEN HEMEN SONRA) */}
       <div
+        id="sec-hesaplayici"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900 border-teal-500/40 text-slate-100 shadow-xl'
@@ -858,6 +909,20 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
               </h2>
             </div>
           </div>
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() =>
+              [
+                `PROPOFOL İNFÜZYON ÖZETİ`,
+                `Hesaplama Ağırlığı: ${effectiveWeightKg} kg`,
+                `Formülasyon: ${emulsionType === 'propofol_1' ? '%1 (10 mg/mL)' : '%2 (20 mg/mL)'}`,
+                `Hedef Doz: ${calculatedDoseMgKgHr.toFixed(2)} mg/kg/saat (${calculatedDoseMcgKgMin.toFixed(1)} mcg/kg/dk)`,
+                `Saatlik İlaç: ${hourlyDoseMg.toFixed(1)} mg/saat`,
+                `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat (~${dropsPerMin.toFixed(0)} gtt/dk)`,
+                `24 Saatlik Lipid/Kalori Yükü: ${dailyVolumeMl.toFixed(0)} mL/gün · ${dailyCaloriesKcal.toFixed(0)} kcal · ${dailyFatGrams.toFixed(1)} g yağ`,
+              ].join('\n')
+            }
+          />
         </div>
 
         {/* Hesaplayıcı Araç Sekmeleri */}
@@ -1336,8 +1401,82 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </div>
 
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Propofol %1 — 200 mg / 20 mL Ampul (Diprivan / Propofol-Lipuro / Fresenius / Predapol)',
+            presentation: 'IV enjeksiyon/infüzyon için süt beyazı izotonik yağ içinde su (LCT veya MCT/LCT) emülsiyonu; 20 mL cam ampul',
+            concentration: '10 mg/mL (%1)',
+            saltOrBaseNote: '1 mL = 10 mg propofol + 0.1 g yağ (1.1 kcal/mL). MCT/LCT (Lipuro) formları sulu fazdaki serbest propofolü azaltarak enjeksiyon ağrısını belirgin düşürür.',
+            alertLevel: 'standard',
+          },
+          {
+            name: 'Propofol %1 — 500 mg / 50 mL & 1000 mg / 100 mL Flakon',
+            presentation: 'TIVA ve YBÜ sürekli infüzyonları için 50 mL ve 100 mL cam flakon veya önceden doldurulmuş TCI şırıngası',
+            concentration: '10 mg/mL (%1)',
+            saltOrBaseNote: 'Antimikrobiyal koruyucu içermez (veya sadece bakteriostatik EDTA/sülfit içerir — bakterisidal değildir). Enjektöre çekildiğinde ≤6 saat, orijinal flakon ≤12 saat.',
+            alertLevel: 'standard',
+          },
+          {
+            name: 'Propofol %2 — 1000 mg / 50 mL Flakon (Yüksek Konsantrasyon · DİKKAT!)',
+            presentation: 'Sıvı kısıtlaması olan erişkin YBÜ veya yüksek doz TIVA hastalarında lipid/sıvı yükünü yarıya indirmek için 50 mL cam flakon',
+            concentration: '20 mg/mL (%2)',
+            saltOrBaseNote: '%1 forma göre 2 KAT KONSANTREDİR (aynı hacimde 2 kat propofol, ancak aynı 1.1 kcal/mL lipid yoğunluğu → mg başına yarı lipid yükü!). 16 yaş altında ve bolus indüksiyonda önerilmez.',
+            alertLevel: 'high',
+          },
+        ]}
+        standardDilutions={[
+          'Standart Uygulama: Propofol kural olarak seyreltilmeden doğrudan orijinal %1 (10 mg/mL) veya %2 (20 mg/mL) flakon/şırıngasından uygulanır.',
+          'Zorunlu Seyreltme (Yalnızca %5 Dekstroz): Seyreltme gerekiyorsa YALNIZCA %5 Dekstroz (D5W) ile ve nihai konsantrasyon ≥ 2 mg/mL olacak şekilde (en fazla 1 kısım %1 propofol + 4 kısım D5W) hazırlanır; ≤ 6 saatte tüketilir.',
+          'Asla %0.9 NaCl (SF) ile Torbada Seyreltmeyin: Elektrolitler yağ emülsiyonunun zeta potansiyelini bozarak yağ damlacıklarının birleşmesine (coalescence) ve yağ embolisine yol açabilir.',
+          'Filtre Kuralı: Standart 0.22 µm bakteri filtreleri lipid emülsiyonunu tıkar; filtre kullanılacaksa por çapı ≥ 1.2 µm (tercihen 5 µm) lipid-uyumlu filtre kullanılmalıdır.',
+        ]}
+        concentrationTrapWarning="Propofol %1 (10 mg/mL) ile Propofol %2 (20 mg/mL) flakonları dış görünüm olarak ikisi de süt beyazıdır ve 2 KAT DOZ HATASI riski taşır! Ayrıca Intralipid %20 torbalarıyla karıştırılmamalı, her şırınga/pompa mutlaka konsantrasyonu (%1 veya %2) belirtilerek etiketlenmelidir."
+      />
+
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="central-preferred"
+        accessSummary="Geniş periferik ven (tercihen antekübital fossa — el sırtı küçük venlerde %70 enjeksiyon ağrısı) veya santral venöz kateter (SVK) ayrı lümeninden uygulanır. Lipid emülsiyonu nedeniyle sürekli YBÜ infüzyonlarında ayrı, özel bir lümen tercih edilir; kan/plazma ürünleri ile aynı hattan ASLA verilmez."
+        phRange="7.0 – 8.5 (Nötr-Hafif Alkali Lipid Emülsiyonu)"
+        osmolalityNote="~300 mOsm/kg (izotonik). Enjeksiyon ağrısının nedeni ozmolalite değil, sulu fazdaki serbest propofolün vasküler endotel kallikrein-kinin sistemini uyarmasıdır (lidokain 20–40 mg ön uygulama ağrıyı azaltır)."
+        compatibleDiluents={[
+          'Seyreltilmeden doğrudan uygulama (Tercih edilen)',
+          '%5 Dekstroz (D5W) — yalnızca ≥ 2 mg/mL konsantrasyonda, ≤ 6 saat stabil',
+          'Y-site taşıyıcı olarak %0.9 NaCl, D5W veya Ringer Laktat (torbada ön karıştırma yapılmaz)',
+        ]}
+        stabilityNote="Antimikrobiyal koruyucu içermez (bakteri/Candida üreme vasatı!). Orijinal flakon ve infüzyon seti en geç 12 saatte, enjektöre çekilen veya D5W ile seyreltilen propofol en geç 6 saatte değiştirilmelidir."
+        ySiteCompatible={[
+          'Remifentanil',
+          'Fentanil',
+          'Deksmedetomidin',
+          'Midazolam (kısa Y-site)',
+          'Ketamin',
+          'Lidokain',
+          'Norepinefrin',
+          'Epinefrin',
+          'Süksinilkolin',
+        ]}
+        ySiteIncompatible={[
+          'Kan / Eritrosit / TDP / Trombosit',
+          'Atrakuryum / Mivakuryum',
+          'Kalsiyum Klorür / Glukonat',
+          'Siprofloksasin',
+          'Amikasin / Gentamisin / Tobramisin',
+          'Diazepam',
+          'Amfoterisin B',
+          'Metoklopramid',
+          'Fenitoin',
+        ]}
+        extravasationProtocol="İzotonik ve nötr pH’lı olduğundan doku nekrozu nadirdir; ancak nadir lokal irritasyon, flebit veya yumuşak doku hasarı bildirilmiştir. Ekstravazasyonda infüzyonu durdurun, kateterden aspire edin, ekstremiteyi eleve edin ve soğuk kompres uygulayın. Set değişimi sırasında ölü boşlukta kalan lipid/ilaç kalıntısını hızlı yıkamayın."
+      />
+
       {/* 7. BÖBREK YETMEZLİĞİNDE DOZ REVİZYONLARI */}
       <div
+        id="sec-organ"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -1433,8 +1572,27 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="%30–50 Başlangıç Doz Azaltımı"
+        geriatricPoints={[
+          'Yaşlı (>65 yaş) ve kırılgan (frail) hastalarda santral dağılım hacmi (V1) ve klerens azalırken beyin GABA-A duyarlılığı artar (Schnider PK/PD modeli); indüksiyon dozu 1.0–1.5 mg/kg (bazı çok kırılgan/ASA IV olgularda 0.5–1.0 mg/kg) düzeyine düşürülmelidir.',
+          'İndüksiyon bolusu hızlı puşe yerine 10 saniyede bir 10–20 mg fraksiyonel titrasyonla verilmelidir; baroreseptör refleksi körelttiği için derin hipotansiyona kompanzatuvar taşikardi eşlik etmez (bradikardi ile kollaps riski).',
+          'İdame TIVA/YBÜ infüzyon hızları genç erişkinlere göre %20–40 daha düşük başlatılmalı ve BIS/RASS eşliğinde titre edilmelidir.',
+        ]}
+        obesityWeightScalarBadge="İndüksiyon: LBW · İdame: AdjBW / TBW"
+        obesityPoints={[
+          'SOBA ve Miller’s Anesthesia kılavuzları: Obez hastalarda (BMI ≥ 30–40 kg/m²) indüksiyon bolusu KESİNLİKLE yağsız vücut kütlesi (LBW) üzerinden hesaplanır; TBW ile indüksiyon derin hipotansiyon ve kardiyak kollaps yapar.',
+          'İdame infüzyonunda yüksek lipofilisite ve artan kardiyak debi nedeniyle periferik dağılım ve klerens artar; bu nedenle idame hızı AdjBW (Düzeltilmiş Vücut Ağırlığı) veya TCI Eleveld / Schnider (LBW) modeliyle titre edilir.',
+          'Obez hastalarda obstrüktif uyku apnesi (OSA) sık olduğundan prosedürel sedasyonda (MAC) sürekli kapnografi ve havayolu hazırlığı zorunludur.',
+        ]}
+        clinicalNote="Yukarıdaki etkileşimli hesaplayıcı içindeki Obezite Doz Ölçekleyici ile hastanın LBW/AdjBW değeri tek tıkla hesaplamaya aktarılabilir."
+      />
+
       {/* 9. GEBELİK VE LAKTASYON KILAVUZU */}
       <div
+        id="sec-gebelik"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -1482,6 +1640,7 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 10. O İLACA ÖZEL ÖNEMLİ OLUMSUZ ETKİLER */}
       <div
+        id="sec-olumsuz"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -1568,148 +1727,128 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4 text-teal-600 dark:text-teal-400">
-          <Info className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Klinisyenin İlaca ve Belirli Klinik Durumlara Göre Dikkat Etmesi Gerekenler</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-teal-500" />
-              <span>12 Saatlik Flakon ve Hat Değişim Kuralı (Asepsi Zorunluluğu)</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Propofol formülasyonu antimikrobiyal koruyucu içermez ve oda sıcaklığında mikroorganizmalar (özellikle Staphylococcus aureus ve Candida albicans) için mükemmel bir üreme vasatıdır. <strong>Flakon açıldıktan sonra infüzyon hattı ve kalan ilaç en geç 12 saat içinde atılmalı ve yenilenmelidir.</strong>
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
-              <Brain className="w-4 h-4 text-teal-500" />
-              <span>Serebral Perfüzyon Basıncı (CPP = MAP - ICP) Dengesi</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Propofol kafa içi basıncı (ICP) düşürür; ancak sistemik arteryel basıncı (MAP) daha fazla düşürürse net serebral perfüzyon basıncı (CPP) tehlikeli şekilde düşebilir! Beyin hasarlı kritik hastalarda MAP &gt; 65–70 mmHg tutulacak şekilde eşzamanlı norepinefrin titre edilmelidir.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
-              <Flame className="w-4 h-4 text-teal-500" />
-              <span>1.1 kcal / mL Kalori Yükü ve Nütrisyon Entegrasyonu</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Günde 500 mL propofol alan bir hasta 550 kcal saf yağ enerjisi alır. Klinik diyetisyen veya yoğun bakım hekimi enteral/parenteral beslenme planında lipid yükünü bu miktar kadar kısmalıdır; aksi halde aşırı kalori yükü karaciğer steatozuna neden olur.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
-              <ShieldAlert className="w-4 h-4 text-teal-500" />
-              <span>Yaşlı Hastalarda Refleks Taşikardisiz Ağır Hipotansiyon</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Yaşlı ve hipovolemik hastalarda indüksiyon bolusları 10 saniyede bir 10–20 mg gibi fraksiyonel adımlarla verilmelidir. Hipotansiyon geliştiğinde kompansatris refleks taşikardi köreldiği için bradikardi ile birlikte akut kardiyovasküler kollaps gelişebilir.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 12. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4 text-teal-600 dark:text-teal-400">
-          <Layers className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">IV Uygulama, Sulandırma ve Hazırlama Kuralları</h2>
-        </div>
-
-        <div className="space-y-3 text-xs">
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
-              Hazır Formülasyonlar (%1 vs %2)
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>%1 Propofol (10 mg/mL):</strong> 20 mL ampul (200 mg), 50 mL flakon (500 mg) ve 100 mL flakon (1000 mg). Genel cerrahi indüksiyonu ve sedasyon için standart formdur.<br />
-              • <strong>%2 Propofol (20 mg/mL):</strong> 50 mL flakon (1000 mg). Yoğun bakımda sıvı kısıtlaması olan veya yüksek doz TIVA alan hastalarda sıvı ve lipid yükünü yarı yarıya azaltmak için tercih edilir. (16 yaş altı çocuklarda önerilmez).
-            </p>
-          </div>
-
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
-              Seyreltme Kuralları (Yalnızca %5 Dekstroz!)
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • Propofol kural olarak seyreltilmeden doğrudan orijinal flakon/şırıngasından verilir.<br />
-              • Eğer seyreltme gerekiyorsa <strong>yalnızca %5 Dekstroz (D5W)</strong> çözeltisi ile yapılabilir. Minimum konsantrasyon <strong>2 mg/mL</strong> olmalıdır (1 kısım %1 propofol + 4 kısım %5 Dekstroz).<br />
-              • <strong>Önemli Uyarı:</strong> Asla %0.9 NaCl (SF) ile torbada seyreltilerek uzun süre bekletilmemelidir; elektrolitler emülsiyon stabilitesini bozarak lipid küreciklerinin birleşmesine (coalescence) neden olur.
-            </p>
-          </div>
-
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
-              Filtre Zorunluluğu (≥ 1.2 µm Lipid Filtresi)
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Standart IV setlerdeki 0.22 mikron filtreler lipid emülsiyonunu süzer ve infüzyonu tıkar. Propofol infüzyonunda filtre kullanılacaksa <strong>en az 1.2 mikron por çapına sahip lipid-uyumlu filtreler</strong> kullanılmalıdır.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 13. İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4 text-rose-600 dark:text-rose-400">
-          <ShieldAlert className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">İlaç Güvenliği İlişkili Durumlar (ISMP High-Alert)</h2>
-        </div>
-
-        <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900'} space-y-2.5 text-xs`}>
-          <div className="flex items-center gap-2 font-bold text-sm text-rose-800 dark:text-rose-300">
-            <AlertOctagon className="w-4 h-4 text-rose-500 shrink-0" />
-            <span>ISMP High-Alert İlaç Sınıflandırması &amp; Havayolu Güvenliği</span>
-          </div>
-          <p className="leading-relaxed text-slate-700 dark:text-slate-300">
-            1. <strong>Yetkili Uygulayıcı Zorunluluğu:</strong> Propofol yalnızca anesteziyoloji veya yoğun bakım uzmanları ile ileri havayolu yönetimi konusunda eğitimli ve sertifikalı hekimler tarafından uygulanmalıdır.
-          </p>
-          <p className="leading-relaxed text-slate-700 dark:text-slate-300">
-            2. <strong>Acil Ekipman Hazırlığı:</strong> Uygulama yapılan her ortamda (ameliyathane, YBÜ, endoskopi ünitesi) endotrakeal entübasyon seti, laringoskop, aspiratör, yüksek akımlı oksijen kaynağı ve resüsitasyon ilaçları hazır bulundurulmalıdır.
-          </p>
-          <p className="leading-relaxed text-slate-700 dark:text-slate-300">
-            3. <strong>Karışım Uyarısı:</strong> Propofol emülsiyonu asla aynı hat üzerinden kan veya plazma ürünleriyle verilmemelidir. Eşzamanlı IV infüzyonlarda fizikokimyasal geçimsizlik nedeniyle ayrı lümen kullanılmalıdır.
-          </p>
-        </div>
-      </div>
-
-      <HighAlertSafetyBlock
+      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0) */}
+      <SpecialClinicalCautionsBlock
         isDark={isDark}
-        tallManName="PROPOFOL (%1 [10 mg/mL] vs %2 [20 mg/mL] DİKKAT!)"
-        confusionRiskWith="Propofol %2 (20 mg/mL) ↔ Propofol %1 (10 mg/mL) · İntralipid %20"
-        antidoteOrRescue="Spesifik Antidot YOK — PRIS Acil Yönetim & Destek: Propofolün farmakolojik antidotu yoktur; kısa etki süresine güvenilerek solunum/hemodinami desteklenir. PRIS şüphesinde (açıklanamayan laktik asidoz, rabdomiyoliz, Brugada benzeri EKG, hiperkalemi) infüzyonu DERHAL kesin, alternatif sedasyona geçin, agresif hemodinamik destek ve gerekirse CRRT/ECMO planlayın."
-        criticalAlerts={[
-          'Aseptik 6/12 Saat Kuralı: Enjektöre çekilen propofol ≤ 6 saatte, orijinal flakon infüzyonu ≤ 12 saatte değiştirilir (bakteriyel kontaminasyon ve sepsis riski).',
-          'PRIS Tavanı: Erişkin YBÜ sedasyonunda > 4 mg/kg/saat ve > 48 saat infüzyondan kaçının; 16 yaş altında uzun süreli YBÜ sedasyonu KESİNLİKLE kontrendikedir.',
-          'Propofol %1 ile %2 flakonları karıştırılmamalı; %2 yalnızca TIVA/YBÜ pompası için etiketlenmelidir.',
+        items={[
+          {
+            title: 'Aseptik 6 / 12 Saat Flakon ve Hat Değişim Kuralı',
+            detail:
+              'Antimikrobiyal koruyucu içermeyen lipid emülsiyonu oda sıcaklığında S. aureus ve Candida albicans için ideal üreme vasatıdır. Enjektöre çekilen veya D5W ile seyreltilen propofol ≤ 6 saatte, orijinal flakon ve infüzyon hattı en geç 12 saatte atılıp yenilenmelidir.',
+          },
+          {
+            title: 'Serebral Perfüzyon Basıncı (CPP = MAP − ICP) Dengesi',
+            detail:
+              'Propofol CMRO₂ ve ICP’yi etkin biçimde düşürür; ancak sistemik MAP’ı daha fazla düşürürse net serebral perfüzyon basıncı (CPP) tehlikeli biçimde azalır. Travmatik beyin hasarında MAP > 65–70 mmHg tutulacak şekilde eşzamanlı norepinefrin titre edilmelidir.',
+          },
+          {
+            title: '1.1 kcal/mL Lipid Kalori Yükü & Nütrisyon Entegrasyonu',
+            detail:
+              'Günde 500 mL %1 propofol alan bir YBÜ hastası 550 kcal (50 g saf yağ) ek enerji alır. Enteral/TPN beslenme planından eşdeğer lipid/kalori düşülmeli, uzamış infüzyonda 48–72 saatte bir serum trigliserit (>400 mg/dL → kes) izlenmelidir.',
+          },
+          {
+            title: 'Yumurta / Soya Alerjisi Miti & Yeşil İdrar',
+            detail:
+              'Gıda tipi yumurta veya soya alerjisi propofol için kontrendikasyon DEĞİLDİR (AAAAI/AAGBI). Uzamış infüzyonda görülen yeşil/kahverengi idrar inaktif fenol-kinol metabolitlerine bağlı tamamen benign bir bulgudur; böbrek hasarı göstermez.',
+          },
         ]}
       />
 
-      {/* 14. KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ SORGULAMA */}
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
+        isDark={isDark}
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'GABA-A β-Alt Birim Allosterik Modülasyonu, Direkt Agonizm & İyon Kanal Etkileri',
+          summary:
+            'Propofol (2,6-diizopropilfenol) yüksek lipofilik yapısı sayesinde 1 kol-beyin dolaşım süresinde (30–45 sn) kan-beyin bariyerini geçer. Esas etkisini pentamerik GABA-A reseptörlerinin β-alt birimlerine (özellikle β₂ ve β₃) bağlanarak gösterir.',
+          points: [
+            'Pozitif Allosterik Modülasyon (β₂/β₃): Benzodiazepinlerin aksine α/γ ara yüzüne değil β-alt birimine bağlanır; GABA’nın reseptörden ayrılma hızını yavaşlatarak Cl⁻ kanalının AÇIK KALMA SÜRESİNİ uzatır ve nöronu hiperpolarize eder.',
+            'Yüksek Dozda Direkt GABA-A Agonizmi: Terapötik yüksek plazma düzeylerinde endojen GABA yokluğunda dahi Cl⁻ kanalını doğrudan açabilir (bu nedenle benzodiazepinlerdeki tavan etkisini göstermez ve EEG izoelektrik sessizliği oluşturabilir).',
+            'Ek Moleküler Hedefler: Kortikal NMDA reseptörlerini zayıfça inhibe eder, talamokortikal HCN1 (hiperpolarizasyonla aktive katyon) kanallarını bloke eder ve spinal glisin reseptörlerini potansiyalize eder.',
+            'İntrinsik Analjezi Yoktur: Spinal/supraspinal nosiseptif iletimi kesmez; cerrahi uyarana otonomik yanıtı baskılamak için opioid/rejyonel blok gerektirir.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Hipnoz & EEG/BIS: Doza bağımlı bilinç kaybı ve anterograd amnezi sağlar. EEG’de düşük dozda β aktivasyonu, orta dozda frontal α–δ koheransı (BIS 40–60), yüksek dozda burst-supresyon ve izoelektrik hat oluşturur.',
+            'Serebral Hemodinami: CMRO₂ (%36’ya kadar) ve CBF’yi paralel azaltır; serebral otoregülasyon ve CO₂ reaktivitesi korunur, ICP düşer (ancak MAP düşüşü CPP’yi tehdit edebilir).',
+            'Antikonvülzan & Antiemetik Etki: GABAerjik güçlenme ile refrakter status epileptikusu baskılar (ancak indüksiyonda nadir subkortikal miyoklonus görülebilir). Subhipnotik dozlarda area postrema/5-HT₃ modülasyonu ile güçlü antiemetik etki gösterir.',
+          ],
+          cvs: [
+            'Vazodilatasyon (SVR ↓) & Venodilatasyon (Preload ↓): Santral sempatik vazokonstriktör tonusu baskılar ve endotel bağımlı/bağımsız düz kas gevşemesi yaparak arteriyel ve venöz dilatasyon oluşturur; MAP %25–40 düşebilir.',
+            'Barorefleks Körelmesi & Vagotoni: Baroreseptör refleks yanıtını sıfırladığı için hipotansiyona refleks taşikardi eşlik etmez; santral vagal baskınlık nedeniyle (özellikle remifentanil/fentanil ile) ciddi bradikardi ve asistoli gelişebilir.',
+            'Miyokard Kontraktilitesi: Doza bağımlı direkt negatif inotropik etki (intraselüler Ca²⁺ akışı azalması); hipovolemik, yaşlı veya düşük EF’li hastalarda belirgindir.',
+          ],
+          respiratory: [
+            'Medüller Solunum Depresyonu & Apne: İndüksiyon bolusunun ardından %50–80 hastada 30–60 sn apne gelişir; tidal volüm ve solunum sayısı düşer, CO₂ yanıt eğrisi sağa kayar ve hipoksik ventilatuvar yanıt (karotid cisim) baskılanır.',
+            'Havayolu Refleksleri & Bronkodilatasyon: Faringeal ve laringeal refleksleri tiyopental/etomidattan daha güçlü baskılar (LMA yerleşimi için idealdir); hafif bronkodilatör etkilidir ve hipoksik pulmoner vazokonstriksiyonu (HPV) korumaya meyillidir.',
+          ],
+          other: [
+            'Malign Hipertermi tetiklemez (MH-güvenli TIVA ajanı)',
+            'Adrenal steroidogenezi baskılamaz (etomidatın aksine)',
+            'LCT/MCT emülsiyonu nedeniyle 1.1 kcal/mL lipid yükü ve hipertrigliseridemi riski',
+            'İnaktif fenol-kinol metabolitleri benign yeşil idrar yapabilir',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Propofol opioidler ve benzodiazepinlerle belirgin farmakodinamik (izobologram) sinerji kurarken, tek başına yüksek dozlarda tavan etkisi olmadan derin kardiyorespiratuvar depresyon yapar.',
+          points: [
+            'Propofol–Opioid Sinerjisi (TIVA): Remifentanil veya fentanil eklenmesi propofolün bilinç kaybı (EC50) ve cerrahi hareketsizlik konsantrasyonunu %30–50 azaltır; ancak apne ve vagotonik bradikardi/hipotansiyon sinerjik olarak derinleşir.',
+            'Propofol–Midazolam Ko-indüksiyonu: Düşük doz midazolam (1–2 mg) propofol indüksiyon dozunu ~%20–30 azaltır ancak derlenmeyi hafif uzatabilir.',
+            'Spesifik Antidot Yoktur: GABA-A β-alt birim etkisini geri çeviren bir antagonist bulunmaz; doz aşımı/apne yönetimi kısa redistribüsyon süresince havayolu ve vazopresör desteğine dayanır.',
+          ],
+        }}
+        clinicalPearls={[
+          'PRIS (Propofol İnfüzyon Sendromu) Mitokondriyal Mekanizması: Yüksek doz (>4 mg/kg/saat) ve uzun süreli (>48 saat) infüzyonda propofol mitokondriyal solunum zincirinde Kompleks I/II/IV’ü ve karnitin palmitoiltransferaz-1 (CPT-1) üzerinden uzun zincirli yağ asidi β-oksidasyonunu bloke eder; ATP tükenmesi sonucu laktik asidoz, rabdomiyoliz, Brugada benzeri EKG ve refrakter kardiyak arrest gelişir.',
+          'Katekolamin ve Steroid Sinerjisi (PRIS Tetikleyicileri): Kritik travmatik beyin hasarı, yüksek doz katekolamin vazopresör ve sistemik kortikosteroid kullanımı PRIS riskini katlar (lipoliz ve serbest yağ asidi yükünü artırır).',
+          'Enjeksiyon Ağrısını Önleme: Antekübital geniş ven + MCT/LCT formülasyon + venöz oklüzyon altında 20–40 mg lidokain ön enjeksiyonu ağrı insidansını %70’ten < %10’a düşürür.',
+          'Bağlama Duyarlı Yarı Ömür (CSHT): 8 saatlik infüzyon sonunda dahi CSHT < 40 dk kalır (midazolamdan çok üstün); ancak çok günlü YBÜ infüzyonlarında periferik yağ kompartmanı doyduğundan uyanma gecikebilir.',
+        ]}
+      />
+
+      {/* 14. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Propofol"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Kan / Eritrosit / TDP Transfüzyonu (Aynı IV Hat) & Pediatrik (<16 Yaş) Uzun Süreli YBÜ Sedasyonu',
+            mechanism: 'Fizikokimyasal Emülsiyon İnstabilitesi / Mitokondriyal PRIS Toksisitesi',
+            clinicalEffect: 'Aynı hatta kan ürünleri lipid agregasyonu ve hemoliz/tıkanma yapar; <16 yaş YBÜ sedasyonunda fatal PRIS riski.',
+            management: 'Kan ürünlerinden tamamen ayrı lümen kullanın; <16 yaşta uzun süreli YBÜ sedasyonunda propofol kullanmayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Opioidler (Remifentanil, Fentanil, Morfin) · Midazolam',
+            mechanism: 'Güçlü Farmakodinamik Sinerji (SSS, Solunum & Vagal Tonus)',
+            clinicalEffect: 'Derin apne, hipotansiyon, barorefleks kaybına bağlı ağır bradikardi ve asistoli riski.',
+            management: 'Propofol indüksiyon ve idame dozlarını %25–50 azaltarak titre edin; atropin ve vazopresör hazır bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'Yüksek Doz Katekolaminler (Norepinefrin/Epinefrin) & Sistemik Kortikosteroidler (Uzamış YBÜ)',
+            mechanism: 'Artmış Lipoliz + Mitokondriyal β-Oksidasyon Bloku (PRIS Tetiklemesi)',
+            clinicalEffect: 'PRIS (laktik asidoz, rabdomiyoliz, Brugada paterni, kardiyak kollaps) gelişim riskinde belirgin artış.',
+            management: 'Propofol hızını ≤ 4 mg/kg/saat ve süreyi mümkünse < 48 saat tutun; günlük laktat, CK, trigliserit ve EKG izleyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Antihipertansifler · ACEi / ARB · Beta-Blokerler · Kalsiyum Kanal Blokerleri',
+            mechanism: 'Aditif Vazodilatasyon + Negatif İnotropi / Kronotropi',
+            clinicalEffect: 'İndüksiyon sonrası dirençli hipotansiyon ve bradikardi.',
+            management: 'İndüksiyonu 10–20 mg fraksiyonlarla yavaş titre edin; vazopresör (efedrin/fenilefrin/norepinefrin) hazır tutun.',
+          },
+          {
+            severity: 'C',
+            agent: 'Valproik Asit · Rifampisin · Güçlü CYP2B6 / UGT1A9 Modülatörleri',
+            mechanism: 'Hepatik Glukuronidasyon ve Oksidasyon Modülasyonu',
+            clinicalEffect: 'Valproat propofol klirensini azaltarak etkiyi ve hipotansiyonu artırabilir; rifampisin gereksinimi hafif değiştirebilir.',
+            management: 'Klinik yanıta ve BIS/RASS skoruna göre yavaş doz titrasyonu yapın.',
+          },
+        ]}
         references={[
           {
             authors: 'Schnider TW, Minto CF, Gambus PL, et al.',

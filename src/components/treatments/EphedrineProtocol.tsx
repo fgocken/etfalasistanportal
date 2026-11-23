@@ -12,8 +12,11 @@ import {
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
   MonographCopyButton,
@@ -21,6 +24,7 @@ import {
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -33,7 +37,7 @@ type DilutionMode = 5 | 10 | 1;
 
 export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState<CalcTab>('intraop');
-  const [pkOpen, setPkOpen] = useState<boolean>(true);
+  const [pkOpen, setPkOpen] = useState<boolean>(false);
 
   // 1. İntraoperatif Bolus & Taşiflaksi Takip State
   const [patientGroup, setPatientGroup] = useState<PatientGroup>('adult');
@@ -183,6 +187,44 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-dozlar', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik & Obstetrik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="EPHEDRINE (50 mg/1 mL → 5 mg/mL SULANDIR!)"
+        confusionRiskWith="EPINEPHrine (ADRENALİN) · PHENYLEPHRINE"
+        criticalAlerts={[
+          'ÖLÜMCÜL SES BENZERLİĞİ (LASA): "Efedrin" ve "Epinefrin" ameliyathanede en sık karıştırılan ilaç çiftidir! Sözlü istemde "E-FED-RİN (5 mg/mL)" şeklinde konsantrasyonla birlikte sesli doğrulama yapın.',
+          'Türkiye’deki 50 mg / 1 mL (%5) ampul ASLA sulandırılmadan uygulanmaz — her zaman 9 mL %0,9 NaCl ile 10 mL’ye (5 mg/mL) tamamlayın ve ISO mor (lavanta) vazopresör etiketi yapıştırın.',
+          'Pik etki 2–5 dakikada oturduğu için 1. dakikada yanıt görmeden üst üste 10–20 mg puşe etmeyin (doz istifleme / rebound hipertansiyon tuzağı).',
+          'Kümülatif 50 mg tavanına ulaşıldığında ek efedrin yapmayın (NE depoları tükenir → taşiflaksi) — Noradrenalin veya Fenilefrin’e geçin.',
+        ]}
+        antidoteOrRescue="Aşırı doz veya yanlışlıkla sulandırılmamış uygulamaya bağlı şiddetli hipertansiyon / taşiaritmide kısa etkili titre edilebilir IV ajanlar kullanılır: taşikardi baskınsa Esmolol (0,5 mg/kg IV bolus → 50–200 mcg/kg/dk), şiddetli hipertansiyonda Nikardipin (5 mg/saat başla) veya Nitrogliserin / Fentolamin (1–5 mg IV). MAOI/Linezolid etkileşimli hipertansif krizde tek başına β-bloker vermeyin (karşılanmamış α-vazokonstrüksiyon riski → önce α-bloker/vazodilatör!)."
+      />
+
       {/* 1. KİMLİK & KLİNİK ÖZET HEADER */}
       <section
         id="sec-ozet"
@@ -192,7 +234,7 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
             : 'bg-white border-purple-200 shadow-lg shadow-purple-500/5 text-slate-900'
         }`}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="p-3.5 rounded-2xl bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
               <Gauge className="w-8 h-8" />
@@ -243,26 +285,6 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
               <div className="text-[10px] text-slate-500">NE depoları tükenir!</div>
             </div>
           </div>
-        </div>
-
-        <div className="mt-4">
-          <MonographQuickNav
-            isDark={isDark}
-            items={[
-              { id: 'sec-etki', label: 'Etki Mekanizması' },
-              { id: 'sec-pkpd', label: 'PK / PD' },
-              { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-              { id: 'sec-dozlar', label: 'Endikasyonlar & Dozaj' },
-              { id: 'sec-hesaplayici', label: 'Doz & Obstetrik Hesaplayıcı' },
-              { id: 'sec-uyumluluk', label: 'TR Ampul & Sulandırma' },
-              { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-              { id: 'sec-gebelik', label: 'Gebelik & Obstetrik' },
-              { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-              { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
-              { id: 'sec-guvenlik', label: 'ISMP & Antidot' },
-              { id: 'sec-kaynaklar', label: 'Kaynakça' },
-            ]}
-          />
         </div>
       </section>
 
@@ -997,45 +1019,66 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
-      {/* 7. HAZIRLAMA, TR AMPUL FORMLARI & UYUMLULUK */}
-      <section
-        id="sec-uyumluluk"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
-      >
-        <div className="flex items-center gap-2.5">
-          <FlaskConical className={`h-5 w-5 ${isDark ? 'text-amber-400' : 'text-amber-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Türkiye Ampul Formu, Sulandırma &amp; Y-Site Uyumluluk
-          </h3>
-        </div>
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Efedrin HCl 50 mg / 1 mL Ampul (%5 — Türkiye Standart Formu)',
+            presentation: '1 mL berrak steril enjeksiyonluk çözelti içeren cam ampul (Osel / Galen / Biofarma)',
+            concentration: '50 mg / mL (%5 Konsantre)',
+            saltOrBaseNote:
+              'KRİTİK: Türkiye’deki ticari ampul 50 mg/1 mL konsantredir ve ASLA sulandırılmadan doğrudan IV puşe yapılmaz! 1 mL = 10 erişkin başlangıç dozudur.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Ameliyathane Standart Seyreltilmiş Enjektörleri (Yatak Başı)',
+            presentation: '10 mL enjektörde %0,9 NaCl ile seyreltilmiş kullanıma hazır çözelti (ISO Mor / Lavanta Etiket)',
+            concentration: '5 mg/mL (Erişkin) · 1 mg/mL (Pediatrik)',
+            saltOrBaseNote:
+              'Erişkin standardı 5 mg/mL (1 mL = 5 mg, 2 mL = 10 mg); pediatrik hassas dozlama 1 mg/mL ile yapılır.',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          'Erişkin Standart (5 mg/mL): 1 ampul Efedrin (50 mg / 1 mL) + 9 mL %0,9 NaCl = 10 mL enjektör → 1 mL = 5 mg, 2 mL = 10 mg.',
+          'Pediatrik Hassas (1 mg/mL): Yukarıdaki 5 mg/mL enjektörden 2 mL (10 mg) + 8 mL %0,9 NaCl = 10 mL → 1 mL = 1 mg (0,1–0,2 mg/kg için).',
+          'Yüksek Konsantrasyon Alternatifi (10 mg/mL): 1 ampul (50 mg) + 4 mL SF = 5 mL (hata riski daha yüksek olduğundan rutin 5 mg/mL önerilir).',
+        ]}
+        concentrationTrapWarning="50 mg/1 mL ampulün sulandırılmadan 1 mL IV verilmesi 10 kat doz aşımına, ani malign hipertansiyona, akut pulmoner ödeme ve intraserebral kanamaya yol açar! Ayrıca Efedrin ile Epinefrin (Adrenalin) LASA (ses benzerliği) açısından ameliyathanede en sık karıştırılan çiftlerden biridir."
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-rose-950/25 border-rose-500/40' : 'bg-rose-50/80 border-rose-200'}`}>
-            <div className="font-bold text-rose-700 dark:text-rose-300">KRİTİK: 50 mg / 1 mL (%5) Ampul!</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              Türkiye’de standart Efedrin HCl ampul <strong>50 mg / 1 mL</strong> konsantredir. <strong>ASLA sulandırmadan 1 mL IV puşe yapmayın!</strong>{' '}
-              10 kat doz aşımı şiddetli hipertansif kriz, pulmoner ödem ve beyin kanaması yapar.
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-            <div className="font-bold text-purple-700 dark:text-purple-300">Standart Ameliyathane Dilüsyonu</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              <strong>1 ampul (50 mg/1 mL) + 9 mL %0,9 NaCl = 10 mL (5 mg/mL)</strong>. Periferik damar yolundan güvenle puşe edilir (ekstravazasyon nekrozu riski Noradrenalin’e göre çok düşüktür, yine de serbest akan hattan verip SF flush yapın).
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-            <div className="font-bold text-sky-700 dark:text-sky-300">Y-Site Uyumluluk &amp; Geçimsizlik</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              <strong>Uyumlu:</strong> %0,9 NaCl, %5 Dekstroz, Ringer Laktat, Atropin, Lidokain, Fentanil.<br />
-              <strong>Geçimsiz:</strong> Alkali çözeltiler (<strong>Sodyum Bikarbonat</strong>, Tiyopental, Fenobarbital) — çökme ve inaktivasyon riski nedeniyle aynı hattan verme!
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Serbest akan periferik veya santral IV hattan güvenle bolus uygulanabilir. Bolus sonrası hattaki ölü boşluğu temizlemek ve etkiyi hızlandırmak için 5–10 mL %0,9 NaCl ile yıkayın (flush)."
+        phRange="4.5 – 7.0 (Hafif Asidik · Stabil)"
+        osmolalityNote="5 mg/mL SF dilüsyonu izotoniktir; non-katekolamin yapısı nedeniyle doku vezikan nekroz riski Noradrenalin/Adrenalin’e göre çok düşüktür."
+        compatibleDiluents={[
+          '%0,9 Sodyum Klorür (İzotonik SF) — 24 saat stabil',
+          '%5 Dekstroz (D5W) — 24 saat stabil',
+          'Ringer Laktat (RL) — 24 saat stabil',
+        ]}
+        stabilityNote="Oda sıcaklığında ve ışıktan korunarak saklanır; 5 mg/mL SF dilüsyonu ameliyathane koşullarında 24 saat kimyasal olarak stabildir."
+        ySiteCompatible={[
+          'Atropin',
+          'Lidokain',
+          'Fentanil',
+          'Midazolam',
+          'Propofol',
+          'Roküronyum',
+          'Oksitosin (fiziksel uyumlu; KB yakından izlenir)',
+          'Ondansetron',
+        ]}
+        ySiteIncompatible={[
+          'Sodyum Bikarbonat (%8.4 NaHCO₃ — alkali çökme/inaktivasyon!)',
+          'Tiyopental',
+          'Fenobarbital',
+          'Hidrokortizon (yüksek konsantrasyonda değişken)',
+        ]}
+        extravasationProtocol="Ekstravazasyon nekroz riski direkt güçlü α₁ katekolaminlere göre düşüktür; ancak sızıntı şüphesinde enjeksiyonu durdurun, ekstremiteyi eleve edin ve lokal solukluk/iskemi gelişirse ılık kompres ile gerekirse 5–10 mg Fentolamin SC infiltrasyon değerlendirin."
+      />
 
       {/* 8. BÖBREK VE KARACİĞER YETMEZLİĞİ */}
       <OrganImpairmentGridBlock
@@ -1048,6 +1091,23 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
         hepaticSummary="Karaciğer metabolizması minördür; tek/kısa süreli intraoperatif boluslarda doz ayarı gerekmez."
         hepaticDetails={[
           'İleri sirozda splanknik vazodilatasyon ve otonom disfonksiyon nedeniyle efedrin yanıtı öngörülemez olabilir → erken Noradrenalin infüzyonu üstündür.',
+        ]}
+      />
+
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="Küçük Bolus (2.5–5 mg) · İskemi & Taşikardi Riski"
+        geriatricPoints={[
+          '>65 yaş ve kırılgan hastalarda baroreseptör tamponlama kapasitesi azaldığından standart 10 mg bolus abartılı hipertansiyon, taşikardi ve miyokard iskemisi (MINS) tetikleyebilir; 2,5–5 mg küçük titre boluslarla başlanmalıdır.',
+          'Yaşlılarda koroner arter hastalığı, paroksismal AF, BPH (akut idrar retansiyonu) ve dar açılı glokom sıklığı yüksektir; taşikardi eşlik eden hipotansiyonda saf α₁ Fenilefrin veya düşük doz Noradrenalin daha güvenlidir.',
+          'Lipofilik yapısı kan-beyin bariyerini geçtiğinden uyanık/rejyonel anestezide yaşlı hastalarda anksiyete, ajitasyon ve postoperatif deliryuma katkı verebilir; ayrıca yaşa bağlı azalan GFR nedeniyle tekrarlayan dozlarda etki süresi uzar.',
+        ]}
+        obesityWeightScalarBadge="Erişkin Sabit Titre Bolus (5–10 mg) · LBW/IBW Referans"
+        obesityPoints={[
+          'Erişkin obez hastalarda (BMI ≥ 30–40 kg/m²) efedrin toplam vücut ağırlığına (TBW) göre ölçeklenmez — standart 5–10 mg IV titre boluslarla başlanır ve kümülatif 50 mg tavanı AŞILMAZ (SOBA / Miller’s).',
+          'Ağırlık bazlı hesaplama gereken adolesan/özel olgularda TBW yerine LBW veya IBW esas alınmalıdır; aşırı bolus obezitede sık görülen hipertansiyon ve sol ventrikül diyastolik disfonksiyonunu ağırlaştırır.',
+          'Uzayan hipotansiyonda tekrarlayan efedrin bolusları taşiflaksi yaratacağından erken Noradrenalin/Fenilefrin infüzyonuna (AdjBW/IBW) geçilmelidir.',
         ]}
       />
 
@@ -1138,26 +1198,100 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 12. ISMP HIGH-ALERT & ANTİDOT */}
-      <HighAlertSafetyBlock
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        tallManName="EPHEDRINE (50 mg/1 mL → 5 mg/mL SULANDIR!)"
-        confusionRiskWith="EPİNEFRİN (ADRENALİN) · FENİLEFRİN"
-        criticalAlerts={[
-          'ÖLÜMCÜL SES BENZERLİĞİ (LASA): "Efedrin" ve "Epinefrin" ameliyathanede en sık karıştırılan ilaç çiftidir! Sözlü istemde "E-FED-RİN (5 mg/mL)" şeklinde konsantrasyonla birlikte sesli doğrulama yapın.',
-          'Türkiye’deki 50 mg / 1 mL ampul ASLA sulandırılmadan uygulanmaz — her zaman 9 mL %0,9 NaCl ile 10 mL’ye (5 mg/mL) tamamlayın ve ISO mor (lavanta) vazopresör etiketi yapıştırın.',
-          'Pik etki 2–5 dakikada oturduğu için 1. dakikada yanıt görmeden üst üste 10–20 mg puşe etmeyin (rebound hipertansiyon tuzağı).',
-          'Kümülatif 50 mg tavanına ulaşıldığında ek efedrin yapmayın — Noradrenalin veya Fenilefrin’e geçin.',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Karma Direkt (α₁, β₁, β₂) & İndirekt (Presinaptik NE Salımı) Sinyal Mekanizması',
+          summary:
+            'Efedrin katekol halkası içermeyen (non-katekolamin) karma etkili sempatomimetiktir. Hem postsinaptik α₁/β₁/β₂ reseptörlerini doğrudan uyarır hem de baskın bileşen olarak noradrenalin taşıyıcısı (NET) üzerinden presinaptik sinir ucuna girerek veziküllerden endojen noradrenalin salımını tetikler (Miller’s / Stoelting’s / Barash).',
+          points: [
+            'İndirekt Mekanizma (Baskın Pressör Bileşen): Presinaptik sempatik varikozitelerden endojen NE salınımını artırır; bu yüzden etki gücü hastanın sinir ucu NE rezervlerine bağımlıdır.',
+            'Direkt Mekanizma: Postsinaptik α₁ (Gq → IP₃/DAG → Ca²⁺↑) ve β₁/β₂ (Gs → cAMP↑) reseptörlerini düşük–orta afiniteyle doğrudan aktive eder.',
+            'MAO/COMT Direnci: Molekülde katekol hidroksil grupları bulunmadığından MAO ve COMT ile yıkılmaz; IV pressör süresi (10–20 dk) ve eliminasyon yarı ömrü (3–6 saat) katekolaminlerden çok daha uzundur.',
+            'Taşiflaksi Fizyolojisi: Tekrarlayan boluslar presinaptik NE depolarını hızla tüketir ve efedrinin kendisi postsinaptik reseptörleri kısmen işgal ederek (parsiyel/zayıf agonist etki) ek dozların yanıtını söndürür.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Lipofilik non-katekolamin yapısı sayesinde kan-beyin bariyerini (KBB) kolayca geçer; santral noradrenerjik uyanıklık merkezlerini uyararak inhalasyon anesteziklerinin MAC değerini hafif artırabilir ve uyanık hastada anksiyete, tremor, uykusuzluk oluşturabilir.',
+            'Serebral perfüzyonu MAP artışı üzerinden destekler; ancak aşırı hipertansiyonda serebral otoregülasyon aşılabilir.',
+          ],
+          cvs: [
+            'Venokonstrüksiyon & Preload Artışı: Kapasitans venlerini daraltarak venöz dönüşü (preload) belirgin artırır; özellikle spinal/epidural sempatik blokajda kalp debisini (CO) ve atım hacmini korur.',
+            'Pozitif Kronotropi & İnotropi (β₁): Kalp hızı, kontraktilite ve sistolik/diyastolik basınç eşzamanlı yükselir; saf α₁ Fenilefrin’in aksine refleks bradikardi yapmaz, ancak MVO₂’yi artırır.',
+          ],
+          respiratory: [
+            'Hafif–orta β₂ bronkodilatasyon sağlar (tarihsel olarak astımda kullanılmıştır, günümüzde yerini selektif β₂ agonistlere bırakmıştır).',
+            'Pulmoner arter basıncında (PAP) hafif artış yapabilir.',
+          ],
+          other: [
+            'Obstetrik / Fetal Metabolizma: Plasentayı serbestçe geçer (UV/MA ~1,13) ve fetüste β-adrenerjik metabolik aktivasyonu uyararak fetal O₂ tüketimini, laktatı ve baz açığını artırır (umblikal arter pH↓ — Ngan Kee 2009).',
+            'Genitoüriner: Mesane sfinkterinde α₁ kasılması ve detrüsör β₂ gevşemesiyle postoperatif akut idrar retansiyonuna (özellikle BPH’lı erkeklerde) katkıda bulunur.',
+            'Renal Atılım: %60–75 değişmeden idrarla atılır; zayıf baz (pKa ~9.6) olduğundan alkali idrarda geri emilim artar ve yarı ömrü 2 katına çıkar.',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Efedrinin klinik etkinliği 30–50 mg kümülatif tavanla sınırlıdır; öte yandan MAOI/Linezolid varlığında aşırı sinerjik hipertansif kriz potansiyeli taşır.',
+          points: [
+            'Kümülatif Tavan & Taşiflaksi (30–50 mg): Endojen NE depoları tükendikten sonra doz tırmandırmak fayda sağlamaz; direkt etkili vazopresöre (Noradrenalin veya Fenilefrin) geçiş zorunludur.',
+            'MAOI / Linezolid / Metilen Mavisi Sinerjisi (Kontrendike): MAO inhibisyonu sinir ucunda devasa NE birikimine yol açar; tek bir 5–10 mg efedrin bolusu bu deponun tamamını boşaltarak fatal hipertansif krize neden olabilir.',
+            'Kronik Sempatik Deplesyon & β-Blokerler: Uzamış şokta, ağır diyabetik otonom nöropatide veya rezerpin kullanımında efedrin etkisizdir; non-selektif β-bloker varlığında ise α₁ vazokonstriksiyonu karşılanmamış kalarak hipertansiyonu şiddetlendirebilir.',
+          ],
+        }}
+        clinicalPearls={[
+          'Doz İstifleme (Stacking) Tuzağı: Efedrinin pik etkisi 2–5 dakikada oturur (Fenilefrin/NE gibi 30–45 sn değil!). 1. dakikada yanıt görmeden art arda 10 mg puşeler yapmak 4. dakikada 220/120 mmHg rebound hipertansiyon yaratır.',
+          'Sezaryen Spinal Hipotansiyonda Altın Kural (Kinsella 2018): Normal/yüksek maternal KTA’da 1. tercih Fenilefrin veya Noradrenalin’dir; Efedrin yalnızca bradikardi eşlik ettiğinde ve kümülatif <15–20 mg sınırında kullanılmalıdır.',
+          'HOCM / SAM & Ciddi Aort Stenozu: β₁ inotropi ve taşikardi sol ventrikül çıkış yolu gradientini dramatik biçimde artırır — bu hastalarda Efedrin yerine saf α₁ Fenilefrin kullanın.',
+          'Linezolid Alan Hastayı Her Zaman Sorgulayın: YBÜ veya ortopedi enfeksiyonu nedeniyle Linezolid alan hastada indirekt sempatomimetik (Efedrin) mutlak kontrendikedir.',
         ]}
-        antidoteOrRescue="Aşırı doz veya yanlışlıkla sulandırılmamış uygulamaya bağlı şiddetli hipertansiyon / taşiaritmide kısa etkili titre edilebilir IV ajanlar kullanılır: taşikardi baskınsa Esmolol (0,5 mg/kg IV bolus → 50–200 mcg/kg/dk), şiddetli hipertansiyonda Nikardipin (5 mg/saat başla) veya Nitrogliserin / Fentolamin (1–5 mg IV). MAOI etkileşimli hipertansif krizde tek başına β-bloker vermeyin (karşılanmamış α-vazokonstrüksiyon riski → önce α-bloker/vazodilatör!)."
       />
 
-      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMLERİ */}
+      {/* 13. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Efedrin Hidroklorür"
         drugsComUrl="https://www.drugs.com/drug-interactions/ephedrine.html"
         medscapeUrl="https://reference.medscape.com/drug/akovaz-ephedrine-342432"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'MAOI (Fenelzin · Tranilsipromin · Selejilin) · LİNEZOLİD · METİLEN MAVİSİ',
+            mechanism: 'Presinaptik Birikmiş NE Depolarının Ani Masif Boşalımı',
+            clinicalEffect: 'Ölümcül hipertansif kriz, intraserebral kanama, akut pulmoner ödem ve malign aritmi.',
+            management: 'Son 14 gün içinde MAOI/Linezolid/Metilen Mavisi alan hastada EFEDRİN KESİNLİKLE VERİLMEZ; düşük doz direkt Fenilefrin/Noradrenalin titre edin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Ergot Alkaloidleri (Metilergonovin) & Yüksek Doz Oksitosin (Obstetrik)',
+            mechanism: 'Sinerjik Periferik & Serebral Vazokonstriksiyon',
+            clinicalEffect: 'Postpartum şiddetli hipertansif kriz, serebral vazospazm ve inme riski.',
+            management: 'Aynı dönemde kombinasyondan kaçının; mecburiyette dakika dakika kan basıncı izleyin ve vazodilatör hazır bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'Trisiklik Antidepresanlar (TCA) · SNRI · Kokain',
+            mechanism: 'Presinaptik NET (Uptake-1) Blokajı',
+            clinicalEffect: 'Düzensiz/abartılı hipertansif yanıt ve ventriküler taşiaritmi riski (veya kronik TCA’da öngörülemez azalmış/artmış yanıt).',
+            management: 'Küçük titre boluslarla (2.5–5 mg) veya direkt etkili kısa süreli vazopresörlerle yönetin.',
+          },
+          {
+            severity: 'D',
+            agent: 'İdrar Alkalileştiriciler (Sodyum Bikarbonat · Asetazolamid)',
+            mechanism: 'Renal Tübüler Geri Emilim Artışı (Zayıf Baz)',
+            clinicalEffect: 'Efedrin eliminasyon yarı ömrü 2 katına (>6 saat) uzar; uzamış taşikardi, hipertansiyon ve tremor.',
+            management: 'Alkali idrarlı hastalarda tekrarlayan efedrin boluslarından kaçının; direkt kısa etkili vazopresöre geçin.',
+          },
+          {
+            severity: 'C',
+            agent: 'Halojenli İnhalasyon Anestezikleri & Non-Selektif Beta-Blokerler',
+            mechanism: 'Miyokardiyal Aritmi Duyarlılaşması / Karşılanmamış α₁',
+            clinicalEffect: 'Ventriküler ektopi (özellikle hipoksi/hiperkapnide) veya β-bloker altında aşırı kan basıncı yükselişi.',
+            management: 'Sürekli EKG ve KB monitörizasyonu altında en düşük etkin dozu uygulayın.',
+          },
+        ]}
         references={[
           {
             authors: 'Kinsella SM, Carvalho B, Dyer RA, et al.',

@@ -34,10 +34,16 @@ import {
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographCopyButton,
   MonographQuickNav,
+  OrganImpairmentGridBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -259,9 +265,54 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* =========================================================================
+          HIZLI BÖLÜM NAVİGASYON BARI (v4.0)
+          ========================================================================= */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozaj', label: 'Dozaj Tablosu' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-last', label: 'LAST Aşamaları' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* =========================================================================
+          ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON)
+          ========================================================================= */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="LIDOCAINE (Aritmal %2 vs %10 AMPUL KARIŞTIRMA!)"
+        confusionRiskWith="Aritmal %10 (500 mg/5 mL) ↔ Aritmal %2 (100 mg/5 mL) · Jetokain (+Adrenalin) · Bupivakain"
+        antidoteOrRescue="ASRA LAST 2020 — %20 Lipid Emülsiyonu (Intralipid): ≥ 70 kg erişkinde SABİT 100 mL bolus (2–3 dk) + 200–250 mL / 15–20 dk infüzyon (< 70 kg: 1,5 mL/kg bolus + 0,25 mL/kg/dk). Propofol İntralipid yerine GEÇMEZ; vazopresin, kalsiyum kanal blokerleri ve β-blokerlerden kaçının, epinefrin boluslarını ≤ 1 mcg/kg küçültün."
+        criticalAlerts={[
+          'Aritmal %10 (500 mg/5 mL = 100 mg/mL) ampul ASLA doğrudan IV puşe edilmez; yalnızca seyreltilmiş infüzyon hazırlığı içindir. Yanlışlıkla %2 (20 mg/mL) sanılıp puşelenmesi anında fatal LAST arresti yapar.',
+          'Adrenalinli (Jetokain) vs Adrenalinsiz (Aritmal / Jetokain Simplex) Ayrımı: Epinefrinli formlar asla IV infüzyon, IVRA (Bier bloku) veya uç organ (parmak/burun/kulak/penis) infiltrasyonunda kullanılmaz.',
+          'Foo 2021 Konsensüsü: Perioperatif IV lidokain infüzyonu IBW ile ≤ 1,5 mg/kg/saat ve mutlak tavan ≤ 120 mg/saat (≤ 24 saat) sınırında tutulur.',
+          'Rejyonel blok / lokal infiltrasyon ile IV lidokain infüzyonu eşzamanlı uygulanmaz (bloktan sonra ≥ 4 saat bekleme penceresi).',
+        ]}
+      />
+
+      {/* =========================================================================
           BÖLÜM 1: ÜST BAŞLIK VE HIZLI İLAÇ KİMLİK ÖZETİ
           ========================================================================= */}
-      <div
+      <section
+        id="sec-ozet"
         className={`p-6 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900/90 border-blue-500/30 shadow-xl shadow-blue-950/20 text-slate-100'
@@ -356,29 +407,10 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             <span className="text-xs font-black text-rose-700 dark:text-rose-300 block mt-0.5 font-mono">
               %20 İntralipid
             </span>
-            <span className="text-[10px] text-rose-500 dark:text-rose-400 block mt-0.5">1.5 mL/kg IV bolus</span>
+            <span className="text-[10px] text-rose-500 dark:text-rose-400 block mt-0.5">≥70 kg: 100 mL · &lt;70: 1.5 mL/kg</span>
           </div>
         </div>
-      </div>
-
-      <MonographQuickNav
-        isDark={isDark}
-        items={[
-          { id: 'sec-etki', label: 'Etki Mekanizması' },
-          { id: 'sec-pkpd', label: 'Farmakokinetik' },
-          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
-          { id: 'sec-dozaj', label: 'Dozaj Tablosu' },
-          { id: 'sec-hesaplayici', label: 'Doz & LAST Hesaplayıcı' },
-          { id: 'sec-populasyon', label: 'Özel Popülasyonlar' },
-          { id: 'sec-pregnancy', label: 'Gebelik & Laktasyon' },
-          { id: 'sec-last', label: 'LAST İntralipid' },
-          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
-          { id: 'sec-tamponlama', label: 'Tamponlama' },
-          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
-        ]}
-      />
+      </section>
 
       {/* =========================================================================
           BÖLÜM 2: FARMAKODİNAMİK VE ETKİ MEKANİZMASI
@@ -528,17 +560,17 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
 
               <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
                 <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
-                  Dağılım Hacmi (Vd)
+                  Dağılım Hacmi (Vd) &amp; Klirens
                 </span>
-                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">1.3 – 1.5 L/kg</span>
-                <p className="text-[11px] text-slate-500 mt-1">Hızla vasküler organlara (beyin, kalp, akciğer) ve ardından kas/yağa dağılır.</p>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">1.1 – 1.5 L/kg · 10–12 mL/kg/dk</span>
+                <p className="text-[11px] text-slate-500 mt-1">Hepatik ekstraksiyon oranı ~0.7; hızla vasküler organlara ve ardından kas/yağa dağılır.</p>
               </div>
 
               <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
                 <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
                   Protein Bağlanması
                 </span>
-                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">%60 – %80</span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">%65 (%60 – %80)</span>
                 <p className="text-[11px] text-slate-500 mt-1">
                   Esas olarak α₁-asit glikoproteine (AAG) ve sekonder albümine bağlanır. Asidozda serbest fraksiyon katlanır.
                 </p>
@@ -557,97 +589,10 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 space-y-2">
-              <span className="font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                Hepatik Biyotransformasyon &amp; Toksik MEGX Metaboliti:
-              </span>
-              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-                • <strong>Hepatik CYP1A2 ve CYP3A4 Dealkilasyonu:</strong> Lidokain karaciğerde mikrozomal enzimler tarafından <em>monoetilglisinksilidid (MEGX)</em> ve ardından <em>glisinksilidid (GX)</em>'e dönüştürülür.
-              </p>
-              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-                • <strong>MEGX Toksisitesi:</strong> MEGX, lidokainin yaklaşık %80'i kadar antiaritmik ve konvülzan potansiyele sahiptir. Böbrek yetmezliğinde veya 24 saatten uzun süren sistemik IV infüzyonlarda MEGX birikerek santral sinir sistemi toksisitesini (sedasyon, nöbet) presipite eder.
-              </p>
-              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-                • <strong>Ekskresyon:</strong> Dozun %90'ından fazlası karaciğerde metabolize edildikten sonra metabolitler halinde idrarla atılır; &lt;%10 değişmemiş ilaç olarak böbreklerden atılır.
-              </p>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* =========================================================================
-          BÖLÜM 12: FARMAKOKİNETİK VE DİNAMİK İNTERAKTİF SİMÜLATÖR
-          ========================================================================= */}
-      <section
-        className={`p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-              <Activity className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                Farmakokinetik &amp; Doku pH İnteraktif Simülatörü
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                pKa 7.9 kimyası: Doku pH'sının non-iyonize lipofilik fraksiyon ve etki hızına etkisi
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setPkOpen(!pkOpen)}
-            className="flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
-          >
-            <span>{pkOpen ? 'Simülatörü Gizle' : 'Simülatörü Genişlet'}</span>
-            {pkOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
-        </div>
-
-        {pkOpen && (
-          <div className="space-y-4 pt-2 text-xs">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Dağılım Hacmi (Vd)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  1.1 – 1.5 L/kg
-                </span>
-                <span className="text-[10px] text-slate-500">Geniş doku penetrasyonu</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Yarılanma Ömrü (t½)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  1.5 – 2.0 Saat
-                </span>
-                <span className="text-[10px] text-slate-500">Sirozda 4–5 saate uzar</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Klirens &amp; Ekstraksiyon</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  10 – 12 mL/kg/dk
-                </span>
-                <span className="text-[10px] text-slate-500">Hepatik ekstraksiyon oranı: 0.7</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Plazma Protein Bağlanması</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  %65
-                </span>
-                <span className="text-[10px] text-slate-500">Alfa-1 asit glikoprotein (AAG)</span>
-              </div>
-            </div>
-
-            {/* pH Henderson-Hasselbalch Tablosu */}
+            {/* pH Henderson-Hasselbalch Tablosu (pKa 7.9) */}
             <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 space-y-2">
-              <span className="font-bold text-blue-700 dark:text-blue-300 block">
-                Doku pH'sına Göre Aktif Non-İyonize (Membrandan Geçebilen) Baz Fraksiyonu:
+              <span className="font-bold text-blue-700 dark:text-blue-300 block text-xs">
+                pKa 7.9 Kimyası — Doku pH&apos;sına Göre Aktif Non-İyonize (Membrandan Geçebilen) Baz Fraksiyonu:
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
                 <div className="p-3 rounded-lg bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
@@ -668,6 +613,21 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
                   <span className="text-[10px] text-slate-500 font-sans block mt-0.5">Ultra hızlı başlangıç (&lt;60 sn); ağrısız!</span>
                 </div>
               </div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 space-y-2">
+              <span className="font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                Hepatik Biyotransformasyon &amp; Toksik MEGX Metaboliti:
+              </span>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>Hepatik CYP1A2 ve CYP3A4 Dealkilasyonu:</strong> Lidokain karaciğerde mikrozomal enzimler tarafından <em>monoetilglisinksilidid (MEGX)</em> ve ardından <em>glisinksilidid (GX)</em>&apos;e dönüştürülür.
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>MEGX Toksisitesi:</strong> MEGX, lidokainin yaklaşık %80&apos;i kadar antiaritmik ve konvülzan potansiyele sahiptir. Böbrek yetmezliğinde veya 24 saatten uzun süren sistemik IV infüzyonlarda MEGX birikerek santral sinir sistemi toksisitesini (sedasyon, nöbet) presipite eder.
+              </p>
+              <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+                • <strong>Ekskresyon:</strong> Dozun %90&apos;ından fazlası karaciğerde metabolize edildikten sonra metabolitler halinde idrarla atılır; &lt;%10 değişmemiş ilaç olarak böbreklerden atılır.
+              </p>
             </div>
           </div>
         )}
@@ -865,12 +825,12 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
                 <span>6. Perioperatif IV Analjezi (Opioid Sparing)</span>
               </span>
               <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-bold">
-                1.0 – 2.0 mg/kg/sa
+                ≤ 1.5 mg/kg/sa (Maks 120 mg/sa)
               </span>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300">
-              Major abdominal, kolorektal ve torasik cerrahide multimodal analjezi parçası.
-              İndüksiyonda 1–1.5 mg/kg IV yükleme, ardından 1.0–2.0 mg/kg/saat sürekli infüzyon. İleusu azaltır ve derlenmeyi hızlandırır.
+              Major abdominal, kolorektal ve torasik cerrahide multimodal analjezi parçası (Foo 2021).
+              İndüksiyonda ≤ 1.5 mg/kg IBW yavaş yükleme (≥10 dk, maks 120 mg), ardından ≤ 1.5 mg/kg/saat IBW (tavan ≤ 120 mg/saat, ≤ 24 saat) sürekli infüzyon.
             </p>
           </div>
 
@@ -999,13 +959,13 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
                 <td className="p-3">Laringoskopiye bağlı KİB artışı, taşikardi ve bronkospazm refleksini küntleştirir.</td>
               </tr>
               <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                <td className="p-3 font-semibold text-slate-900 dark:text-white">Perioperatif IV İnfüzyon (Opioid Sparing)</td>
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">Perioperatif IV İnfüzyon (Foo 2021)</td>
                 <td className="p-3 font-mono">2 mg/mL (SF içi)</td>
                 <td className="p-3 font-mono font-bold text-teal-600 dark:text-teal-400">
-                  <DoseHover doseText="1.0 – 2.0 mg/kg/sa" equivText="70 kg için 70 – 140 mg/saat (35 – 70 mL/sa)" explanation="1.5 mg/kg IV yükleme sonrası" />
+                  <DoseHover doseText="≤ 1.5 mg/kg/sa IBW" equivText="70 kg IBW için ≤ 105 mg/sa (52.5 mL/sa) · Mutlak tavan 120 mg/sa" explanation="Foo et al. Anaesthesia 2021: ≤ 1.5 mg/kg IBW yükleme (≥10 dk, maks 120 mg) sonrası" />
                 </td>
-                <td className="p-3 font-mono text-teal-600 dark:text-teal-400 font-bold">≤ 200 mg/sa</td>
-                <td className="p-3">Kolorektal ve batın cerrahisinde ileusu önler. Cerrahi bitiminde veya PACU'da 24. saate kadar sürdürülebilir.</td>
+                <td className="p-3 font-mono text-teal-600 dark:text-teal-400 font-bold">≤ 120 mg/sa (≤ 24 sa)</td>
+                <td className="p-3">Kolorektal/batın cerrahisinde ileusu önler. Foo 2021 konsensüsü: IBW ile hesaplanır, rejyonel bloktan ≥4 saat sonra başlanır, 24 saati aşmaz.</td>
               </tr>
               <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                 <td className="p-3 font-semibold text-slate-900 dark:text-white">ACLS Kardiyak Arrest (VF/pVT)</td>
@@ -1014,7 +974,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
                   <DoseHover doseText="1.0 – 1.5 mg/kg IV" equivText="İlk doz: 70–100 mg (3.5–5 mL %2). Ek doz: 0.5–0.75 mg/kg" explanation="Amiodaron alternatifi" />
                 </td>
                 <td className="p-3 font-mono text-rose-600 dark:text-rose-400 font-bold">3.0 mg/kg (Toplam)</td>
-                <td className="p-3">3. şok sonrası refrakter VF/pVT'de uygulanır. Kümülatif maksimum doz 3 mg/kg'dır (örn. 70 kg için 210 mg).</td>
+                <td className="p-3">3. şok sonrası refrakter VF/pVT&apos;de uygulanır. Kümülatif maksimum doz 3 mg/kg&apos;dır (örn. 70 kg için 210 mg).</td>
               </tr>
               <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                 <td className="p-3 font-semibold text-slate-900 dark:text-white">Nabızlı Stabil VT İdame</td>
@@ -1069,6 +1029,45 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
               </p>
             </div>
           </div>
+
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() => {
+              if (activeCalcTool === 'local_infiltration') {
+                return [
+                  'LİDOKAİN — LOKAL İNFİLTRASYON GÜVENLİK ÖZETİ',
+                  `Ağırlık (IBW): ${weightKg} kg | Solüsyon: ${solutionType === 'with_epinephrine' ? 'Adrenalinli (%' : 'Saf (%'}${concentrationPercent})`,
+                  `Maksimum Güvenli Doz: ${calculatedMaxDoseMg.toFixed(1)} mg (${maxVolumeMl.toFixed(1)} mL)`,
+                  `Planlanan Hacim: ${plannedVolumeMl} mL = ${plannedDoseMg} mg (%${plannedDosePercent})`,
+                  `9:1 Tamponlama: ${bufferLidoMl} mL Lidokain + ${bufferBicarbMl} mL %8.4 NaHCO3`,
+                ].join('\n');
+              }
+              if (activeCalcTool === 'acls_arrhythmia') {
+                return [
+                  'LİDOKAİN — ACLS / ARİTMİ / RSI ÖZETİ',
+                  `Ağırlık: ${weightKg} kg | 1. Arrest Dozu: ${arrestInitialMg.toFixed(1)} mg (${arrestInitialMl_2pct.toFixed(1)} mL %2)`,
+                  `Ek Doz: ${arrestRepeatMg.toFixed(1)} mg | Maks Kümülatif: ${arrestMaxCumulativeMg.toFixed(1)} mg`,
+                  `VT İdame (${vtInfusionMgMin} mg/dk): ${vtPumpMlHr_2mgml.toFixed(1)} mL/sa (2 mg/mL) | ${vtPumpMlHr_pure20mgml.toFixed(1)} mL/sa (%2)`,
+                ].join('\n');
+              }
+              if (activeCalcTool === 'systemic_infusion') {
+                return [
+                  'LİDOKAİN — PERİOPERATİF IV ANALJEZİ (FOO 2021)',
+                  `Ağırlık (IBW): ${weightKg} kg`,
+                  `Yükleme (≥10 dk, maks 120 mg): ${ivLoadTotalMg} mg (${ivLoadMl_2pct} mL %2)`,
+                  `İdame (≤ 120 mg/sa tavan): ${ivMaintTotalMgHr} mg/saat → ${ivPumpRateMlHr} mL/saat (${ivBagConcMgMl} mg/mL)`,
+                  `24 Saatlik Kümülatif: ${iv24HourCumulativeMg} mg`,
+                ].join('\n');
+              }
+              return [
+                'ASRA LAST 2020 — %20 İNTRALİPİD KURTARMA ÖZETİ',
+                `Ağırlık: ${weightKg} kg`,
+                `1. Bolus (2–3 dk): ${intralipidBolusMl} mL (${weightKg >= 70 ? '≥70 kg sabit 100 mL' : '1.5 mL/kg'})`,
+                `Sürekli İnfüzyon: ${intralipidInfusionRateMlHr} mL/saat (${intralipidInfusionRateMlMin} mL/dk)`,
+                `Maksimum Tavan (12 mL/kg): ${intralipidMaxCeilingMl} mL`,
+              ].join('\n');
+            }}
+          />
         </div>
 
         {/* Araç Seçim Sekmeleri */}
@@ -1648,7 +1647,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
                   {iv24HourCumulativeMg} mg
                 </div>
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  İnfüzyon genellikle cerrahi bitiminde veya PACU'da (maksimum 24–48 saat) sonlandırılır.
+                  Foo 2021 Konsensüsü: İnfüzyon cerrahi bitiminde veya PACU&apos;da en geç <strong>24. saatte</strong> sonlandırılmalıdır (tavan ≤ 120 mg/saat).
                 </p>
               </div>
             </div>
@@ -1664,7 +1663,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
               <ShieldAlert className="w-6 h-6 text-rose-600 shrink-0 mt-0.5" />
               <div className="space-y-1 text-xs">
                 <span className="font-bold text-rose-700 dark:text-rose-300 block text-sm">
-                  ASRA (American Society of Regional Anesthesia) LAST Kurtarma Algoritması
+                  ASRA (American Society of Regional Anesthesia) LAST 2020 Kurtarma Algoritması
                 </span>
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                   Lokal anestezik sistemik toksisitesi geliştiğinde (bilinç kaybı, inatçı nöbetler, ventriküler aritmiler, kardiyak arrest) derhal hava yolu güvenliği sağlanmalı ve <strong>%20 Lipid Emülsiyonu (İntralipid)</strong> başlanmalıdır.
@@ -1709,7 +1708,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
                         : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
                     }`}
                   >
-                    Standart: 0.25 mL/kg/dk (15 mL/kg/sa)
+                    Standart: {weightKg >= 70 ? '200–250 mL / 15–20 dk' : '0.25 mL/kg/dk (15 mL/kg/sa)'}
                   </button>
                   <button
                     type="button"
@@ -1720,7 +1719,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
                         : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
                     }`}
                   >
-                    İnatçı Hipotansiyon: 0.5 mL/kg/dk
+                    İnatçı Hipotansiyon: {weightKg >= 70 ? 'Hızlandırılmış (~1200 mL/sa)' : '0.5 mL/kg/dk'}
                   </button>
                 </div>
               </div>
@@ -1730,13 +1729,13 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="p-4 rounded-xl bg-rose-500/15 border border-rose-500/40 space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-rose-700 dark:text-rose-300">
-                  1. İntralipid Bolusu (1.5 mL/kg)
+                  1. İntralipid Bolusu ({weightKg >= 70 ? 'Sabit 100 mL' : '1.5 mL/kg'})
                 </span>
                 <div className="text-3xl font-black font-mono text-rose-800 dark:text-rose-200">
                   {intralipidBolusMl} mL
                 </div>
                 <p className="text-[10.5px] text-slate-600 dark:text-slate-300 leading-tight">
-                  1 dakikada IV hızlı puşe. 70 kg için ortalama 100 mL torba puşelenir.
+                  ASRA 2020: 2–3 dakikada IV bolus ({weightKg >= 70 ? '≥70 kg sabit 100 mL' : '<70 kg: 1.5 mL/kg'}).
                 </p>
               </div>
 
@@ -1803,83 +1802,129 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
-          BÖLÜM 11: ÖZEL POPÜLASYONLAR VE DOZ AYARLARI
+          TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)
           ========================================================================= */}
-      <section
-        id="sec-populasyon"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Özel Popülasyonlar &amp; Doz Modifikasyonları (Böbrek / Karaciğer Dahil)
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Pediatri, geriatri, karaciğer yetmezliği, gebelik ve böbrek fonksiyonları
-            </p>
-          </div>
-        </div>
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Aritmal %2 Ampul (100 mg / 5 mL & 40 mg / 2 mL — Adrenalinsiz)',
+            presentation: '5 mL (100 mg) veya 2 mL (40 mg) cam ampul — IV bolus (ACLS/RSI), IV infüzyon ve saf lokal/rejyonel kullanım',
+            concentration: '20 mg/mL (%2)',
+            saltOrBaseNote: 'Koruyucusuz saf lidokain HCl; ACLS arrest (1–1,5 mg/kg), RSI premedikasyonu ve perioperatif IV analjezi hazırlığında standart formdur.',
+            alertLevel: 'standard',
+          },
+          {
+            name: 'Aritmal %10 Ampul (500 mg / 5 mL — YALNIZCA İNFÜZYON SEYRELTMESİ!)',
+            presentation: '5 mL yüksek konsantre cam ampul (yalnızca 250–500 mL SF/D5W içinde seyreltilerek IV infüzyon hazırlamak içindir)',
+            concentration: '100 mg/mL (%10)',
+            saltOrBaseNote: 'Aritmal %2’den 5 KAT DAHA KONSANTREDİR! Doğrudan IV puşe edilmesi anında masif LAST, nöbet ve kardiyak arrest yapar!',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Jetokain Ampul (+Adrenalin) vs Jetokain Simplex / Jetmonal (Adrenalinsiz)',
+            presentation: 'Jetokain 2 mL: 40 mg (%2) Lidokain + 0,025 mg (1:80.000) Epinefrin · Jetokain Simplex %2 (40 mg/2 mL) adrenalinsizdir',
+            concentration: '20 mg/mL (%2) · ± Epinefrin',
+            saltOrBaseNote: 'ADRENALİNLİ vs ADRENALİNSİZ AYRIMI: Epinefrinli formlar (Jetokain) asla IV yoldan, IVRA (Bier bloku) veya uç organlara (parmak, burun ucu, kulak memesi, penis) uygulanmaz; ayrıca sodyum metabisülfit koruyucu içerir (pH 3,5–4,5).',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Vemcaine %10 Sprey & Anestol %5 Pomad (Topikal Formlar)',
+            presentation: 'Vemcaine %10 sprey 50 mL şişe (1 puf = 10 mg) · Anestol %5 pomad 30 g tüp (50 mg/g)',
+            concentration: '10 mg/puf · %5 Pomad',
+            saltOrBaseNote: 'Mukozal emilim (orofarinks/trakea) IV enjeksiyona yakın hızdadır; sıkılan puf sayısı mutlaka sayılmalı ve toplam toksik sınır (4,5 mg/kg) aşılmamalıdır.',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          'Standart IV İnfüzyon Torbası (2 mg/mL): 1000 mg lidokain (2 ampul %10 Aritmal = 10 mL veya 10 ampul %2 Aritmal = 50 mL) → 500 mL %0,9 NaCl veya %5 Dekstroz içinde.',
+          'Konsantre IV İnfüzyon Torbası (4 mg/mL): 2000 mg lidokain → 500 mL %0,9 NaCl içinde (sıvı kısıtlamalı YBÜ hastasında).',
+          'Saf Perfüzör Enjektörü (20 mg/mL): 50 mL saf %2 Aritmal (1000 mg / 50 mL) — yüksek konsantrasyon etiketi ve pompa tavan kilidi (≤ 120 mg/saat) zorunludur.',
+          'Ağrısız Lokal Tamponlama (Alkalinizasyon — 9:1): 9 mL %1–%2 Lidokain + 1 mL %8,4 Sodyum Bikarbonat (enjeksiyon yanmasını giderir, etkiyi < 2 dk’ya indirir; 10:1’den fazla bikarbonat eklenirse çökelir ve bulanıklaşır — bulanık çözelti ASLA enjekte edilmez!).',
+        ]}
+        concentrationTrapWarning="Aritmal %2 (100 mg/5 mL) ile Aritmal %10 (500 mg/5 mL) ampulleri fiziksel olarak birbirine çok benzer! %10’luk ampul acil arabasından ayrı tutulmalı, ASLA doğrudan IV puşe edilmemelidir. Adrenalinli Jetokain ampulü de IV/IVRA/uç organ enjeksiyonundan kesinlikle ayrılmalıdır."
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Karaciğer Yetmezliği</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lidokain %90 oranında hepatik CYP1A2 ve CYP3A4 enzimleri ile elimine edilir.
-              Siroz ve karaciğer yetmezliğinde yarı ömür 1.5 saatten 5 saate uzar; klerens %60 azalır. Sürekli infüzyon dozu <strong>%40–50 azaltılmalıdır</strong>.
-            </p>
-          </div>
+      {/* =========================================================================
+          DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0)
+          ========================================================================= */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Periferik veya santral IV hattan uygulanabilir (ACLS arrestte IO yol uygundur). Perioperatif sürekli IV analjezi infüzyonunda yanlışlıkla hızlı puşe edilmesini önlemek için ayrı, çek-valfli ve sarı/mavi etiketli perfüzör hattı kullanılmalıdır."
+        phRange="5.0 – 7.0 (Saf) · 3.3 – 5.5 (Adrenalinli)"
+        osmolalityNote="Standart 2–4 mg/mL SF/D5W dilüsyonları izotoniktir. Adrenalinli solüsyonlardaki düşük pH (metabisülfit) enjeksiyon ağrısına neden olur; oda sıcaklığında (20–25 °C) ışıktan korunarak saklanır ve dondurulmaz."
+        compatibleDiluents={[
+          '%0,9 Sodyum Klorür (İzotonik SF) — 24 saat stabil',
+          '%5 Dekstroz (D5W) — 24 saat stabil',
+          'Ringer Laktat — 24 saat stabil',
+        ]}
+        stabilityNote="SF veya D5W içinde hazırlanan 2–4 mg/mL IV infüzyonlar oda sıcaklığında 24 saat stabildir. %20 İntralipid acil arabasında oda sıcaklığında kullanıma hazır bulundurulmalıdır."
+        ySiteCompatible={[
+          'Amiodaron (yakın EKG izlemi ile)',
+          'Epinefrin',
+          'Norepinefrin',
+          'Dopamin',
+          'Dobutamin',
+          'Fentanil',
+          'Remifentanil',
+          'Propofol',
+          'Midazolam',
+          'Heparin',
+          'Potasyum Klorür',
+        ]}
+        ySiteIncompatible={[
+          'Fenitoin (alkali çökelme)',
+          'Tiyopental (alkali presipitasyon)',
+          'Amfoterisin B',
+          'Sodyum Bikarbonat (> 10:1 oranda lidokain bazı çöker!)',
+          'Sefazolin / Ampisilin (yüksek konsantrasyonda)',
+        ]}
+        extravasationProtocol="Saf lidokain doku vezikanı değildir; ancak adrenalinli formun ekstravazasyonu veya uç organ enjeksiyonu vazospastik iskemi yapabilir (tedavi: sıcak kompres + gerekirse lokal fentolamin infiltrasyonu). Asıl hayati risk IV infüzyon hattının kazara puşelenmesine bağlı akut LAST gelişimidir — şüphede infüzyonu anında durdurup %20 İntralipid başlatın."
+      />
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Geriatri (Yaşlı Hastalar)</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Azalmış hepatik kan akımı ve düşük kardiyak debi nedeniyle klerens düşer. MSS toksisite eşiği daha düşüktür.
-              İnfüzyon ve maksimum lokal dozlar <strong>%20–25 oranında azaltılmalıdır</strong>.
-            </p>
-          </div>
+      {/* =========================================================================
+          BÖBREK VE KARACİĞER YETMEZLİĞİNDE DOZ YÖNETİMİ (v4.0)
+          ========================================================================= */}
+      <OrganImpairmentGridBlock
+        isDark={isDark}
+        renalSummary="Lidokainin kendisi hepatik yolla elimine edilir (<%10 değişmemiş renal atılım), ancak aktif toksik metabolitleri (MEGX ve GX) böbrekle atılır."
+        renalDetails={[
+          'Tek doz lokal infiltrasyon veya ACLS arrest boluslarında renal doz azaltımı gerekmez.',
+          'Ağır KBH/ABY (eGFR < 30 mL/dk) olgularında > 24 saat süren sürekli IV infüzyonlarda MEGX ve GX birikerek ajitasyon, sedasyon ve nöbet eşiğini düşürür — infüzyon süresini ≤ 24 saat ile sınırlayın ve yakın nörolojik izlem yapın.',
+        ]}
+        hepaticSummary="Yüksek hepatik ekstraksiyon oranlı (%60–70, CYP1A2/3A4) ilaçtır; siroz ve düşük kardiyak debide klirens %50–60 düşer, t½ 4–10 saate uzar!"
+        hepaticDetails={[
+          'Child-Pugh B–C sirozda veya düşük debili kalp yetmezliğinde sürekli IV infüzyon dozu %40–50 azaltılmalıdır.',
+          'Tekrarlayan rejyonel/lokal blok dozlarında toplam tavan doz %30–40 daraltılmalı ve erken MSS toksisite bulguları (tinnitus, metalik tat) sık sorgulanmalıdır.',
+        ]}
+      />
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Gebelik &amp; Laktasyon</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              FDA Kategori B. Plasentayı kolayca geçer. Fetal asidoz durumunda "iyon tuzağı" (ion trapping) gelişerek fetal dolaşımda lidokain birikebilir.
-              Laktasyonda anne sütüne çok düşük oranlarda geçer, emzirmeye genellikle engel değildir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Pediatrik Kullanım</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lokal infiltrasyonda saf form için <strong>3 mg/kg</strong>, adrenalinli form için maksimum <strong>4–5 mg/kg</strong> aşılmamalıdır.
-              ACLS arrestinde 1 mg/kg IV/IO uygulanır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Böbrek Yetmezliği</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lidokainin kendisi karaciğerde metabolize olsa da aktif metabolitleri (MEGX ve GX) böbrekle atılır.
-              Ağır KBY olgularında uzun süreli infüzyonda bu metabolitler birikerek santral toksisiteye (ajitasyon, nöbet) katkıda bulunabilir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Obez Hastalar</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Lidokain orta derecede lipofiliktir. Toksisiteden kaçınmak için maksimum lokal ve sürekli IV infüzyon dozları <strong>İdeal Vücut Ağırlığı (İVA)</strong> üzerinden hesaplanmalıdır.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* =========================================================================
+          GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0)
+          ========================================================================= */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="%20–25 Doz Azaltımı"
+        geriatricPoints={[
+          '>65 yaş ve kırılgan (frailty) hastalarda hepatik kan akımı, kardiyak debi ve α₁-asit glikoprotein rezervi azaldığı için serbest lidokain fraksiyonu artar ve MSS/kardiyak toksisite eşiği düşer.',
+          'Maksimum lokal infiltrasyon/blok tavanları ve sürekli IV infüzyon hızları %20–25 oranında azaltılmalıdır (hesaplayıcıdaki "Geriatrik / Kırılgan" profili 0,8x uygular).',
+          'Yaşlılarda gizli SA/AV ileti sistemi hastalığı sık olduğundan IV lidokain infüzyonu süresince sürekli EKG (PR/QRS) monitörizasyonu zorunludur.',
+        ]}
+        obesityWeightScalarBadge="IBW (Zorunlu) + Foo 2021 ≤ 120 mg/sa Tavan"
+        obesityPoints={[
+          'Foo et al. (Anaesthesia 2021) uluslararası konsensüsü ve ASRA 2020 rehberine göre obez hastalarda (BMI ≥ 30–40 kg/m²) tüm perioperatif IV lidokain ve lokal anestezik tavan hesaplamaları İdeal Vücut Ağırlığı (IBW) üzerinden yapılmalıdır.',
+          'Perioperatif IV analjezi için yükleme dozu ≤ 1,5 mg/kg IBW (≥ 10 dk, maks 120 mg), idame hızı ≤ 1,5 mg/kg/saat IBW ve hasta kaç kg olursa olsun MUTLAK TAVAN ≤ 120 mg/saat (≤ 24 saat) sınırını aşmamalıdır.',
+          'TBW ile dozlama aşırı yüksek plazma zirvesine ve ani LAST (nöbet/kardiyak arrest) gelişimine yol açar; ASRA 2020 LAST kurtarmasında ≥ 70 kg erişkinlerde sabit 100 mL %20 İntralipid bolusu uygulanır.',
+        ]}
+        clinicalNote="Yukarıdaki hesaplayıcıdaki Obezite Doz Ölçekleyici (IBW) kullanılarak hastanın ideal kilosu tek tıkla tüm 4 araca aktarılabilir."
+      />
 
       {/* =========================================================================
           BÖLÜM 11: GEBELİK VE LAKTASYON KILAVUZU
           ========================================================================= */}
       <section
-        id="sec-pregnancy"
+        id="sec-gebelik"
         className={`p-6 rounded-2xl border space-y-6 ${
           isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
         }`}
@@ -1935,7 +1980,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
               <span>Laktasyon &amp; Emzirme Güvenliği</span>
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Anne sütüne geçiş düşüktür (Süt/Plazma oranı ~0.4; Relatif İnfant Dozu [RID] &lt; %1.5). Maternal lokal veya kısa süreli sistemik uygulamadan sonra sütü sağmaya ("pump and dump") gerek yoktur; anne bebeği güvenle emzirebilir.
+              Anne sütüne geçiş düşüktür (Süt/Plazma oranı ~0.4; Relatif İnfant Dozu [RID] &lt; %1.5). Maternal lokal veya kısa süreli sistemik uygulamadan sonra sütü sağmaya (&quot;pump and dump&quot;) gerek yoktur; anne bebeği güvenle emzirebilir.
             </p>
           </div>
 
@@ -2027,69 +2072,6 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      {/* =========================================================================
-          BÖLÜM 7: HAZIRLAMA, SEYRELTME VE STABİLİTE (TAMPONLAMA)
-          ========================================================================= */}
-      <section
-        id="sec-tamponlama"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
-            <Droplet className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              IV Uygulama, Hazırlama, Seyreltme &amp; Tamponlama Tekniği
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Ticari ampul formları, tamponlama kimyası ve infüzyon çözeltisi stabilitesi
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Türkiye Piyasa Formları</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• <strong>Aritmal %2:</strong> 100 mg / 5 mL ampul (20 mg/mL)</li>
-              <li>• <strong>Aritmal %10:</strong> 500 mg / 5 mL ampul (100 mg/mL - Yalnızca IV infüzyon seyreltmesi için!)</li>
-              <li>• <strong>Jetokain Ampul:</strong> 40 mg Lidokain + 0.025 mg Epinefrin (2 mL)</li>
-              <li>• <strong>Vemcaine %10 Sprey:</strong> 50 mL şişe (1 puf = 10 mg)</li>
-              <li>• <strong>Anestol Pomad %5:</strong> 30 g tüp (topikal deri)</li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 space-y-2">
-            <span className="font-bold text-blue-700 dark:text-blue-300 block">
-              Tamponlama Protokolü (Alkalinizasyon)
-            </span>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              Lidokain hidroklorür solüsyonunun pH'sı 5.0–6.5'tir (adrenalinli formlarda koruyucu sodyum metabisülfit nedeniyle pH 3.5–4.5'e kadar düşer).
-              Enjeksiyon yanmasını önlemek ve etkiyi 2 dakikanın altına indirmek için:
-            </p>
-            <div className="p-2 rounded bg-white/60 dark:bg-slate-900/60 font-mono font-bold text-blue-800 dark:text-blue-200 text-center">
-              9 mL %1 Lidokain + 1 mL %8.4 NaHCO₃
-            </div>
-            <p className="text-[10px] text-slate-500">
-              Dikkat: 10:1 oranından fazla bikarbonat eklenirse lidokain bazı çöker ve solüsyon bulanıklaşır (bulanık solüsyon kesinlikle enjekte edilmez).
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Seyreltici Uyumluluğu &amp; Saklama</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• %0.9 NaCl ve %5 Dekstroz ile tam geçimlidir.</li>
-              <li>• Oda sıcaklığında (20–25°C) ışıktan korunarak saklanır.</li>
-              <li>• Adrenalinli solüsyonlar ısı ve ışıktan korunmalıdır; dondurulmamalıdır.</li>
-              <li>• %20 İntralipid acil arabasında oda sıcaklığında hazır bekletilmelidir.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS) */}
       <AdverseEffectsBlock
         isDark={isDark}
@@ -2164,36 +2146,114 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
               'Aritmal %2 (100 mg/5 mL) ile Aritmal %10 (500 mg/5 mL) ampulleri birbirine benzerdir. %10’luk ampulün yanlışlıkla direkt IV puşe edilmesi anında masif LAST ve kardiyak arreste yol açar; sadece infüzyon seyreltmesi içindir.',
           },
           {
-            title: 'Perioperatif IV İnfüzyon Güvenlik Sınırları',
+            title: 'Perioperatif IV İnfüzyon Güvenlik Sınırları (Foo 2021)',
             detail:
-              'Analjezik IV Lidokain infüzyonu (1–2 mg/kg/saat) İdeal Vücut Ağırlığı (İVA) üzerinden hesaplanmalı, rejyonel bloklarla (TAP, erektör spina vb.) eşzamanlı verilirken toplam toksik doz hesaba katılmalıdır (bloktan sonraki 4 saatte IV Lidokain başlatılmaz).',
+              'Analjezik IV Lidokain infüzyonu İdeal Vücut Ağırlığı (IBW) üzerinden ≤ 1,5 mg/kg/saat ve mutlak tavan ≤ 120 mg/saat (≤ 24 saat) sınırında tutulmalıdır. Rejyonel bloklarla (TAP, ESP vb.) eşzamanlı uygulanmaz; bloktan sonra ≥ 4 saat bekleme penceresi zorunludur.',
           },
           {
-            title: 'Fetal Asidozda İyon Tuzağı (Ion Trapping)',
+            title: 'Fetal Asidozda İyon Tuzağı & Pediatrik Tavan',
             detail:
-              'Obstetrik epidural/bloklarda fetal asfiksi varsa bazik lidokain plasentadan geçip asidik fetal kanda iyonize olarak hapsolur ve neonatal kardiyodepresyon/hipotoni yaratabilir.',
+              'Obstetrik epidural/bloklarda fetal asfiksi varsa bazik lidokain asidik fetal kanda iyonize olarak hapsolur. Pediatrik lokal infiltrasyonda saf lidokain 3 mg/kg, adrenalinli form 4–5 mg/kg sınırını aşmamalıdır.',
           },
-        ]}
-      />
-
-      <HighAlertSafetyBlock
-        isDark={isDark}
-        tallManName="LIDOCAINE (Aritmal %2 vs %10 AMPUL KARIŞTIRMA!)"
-        confusionRiskWith="Aritmal %10 (500 mg/5 mL) ↔ Aritmal %2 (100 mg/5 mL) · Bupivakain"
-        antidoteOrRescue="ASRA LAST 2020 — %20 Lipid Emülsiyonu (Intralipid): ≥ 70 kg erişkinde SABİT 100 mL bolus (2–3 dk) + 200–250 mL / 15–20 dk infüzyon (< 70 kg: 1,5 mL/kg bolus + 0,25 mL/kg/dk). Propofol İntralipid yerine GEÇMEZ; vazopresin ve kalsiyum kanal blokerlerinden kaçının, epinefrin boluslarını ≤ 1 mcg/kg küçültün."
-        criticalAlerts={[
-          'Aritmal %10 (500 mg/5 mL) ampul ASLA doğrudan IV puşe edilmez; yalnızca seyreltilmiş infüzyon hazırlığı içindir.',
-          'Foo 2021 Konsensüsü: Perioperatif IV lidokain infüzyonu IBW ile ≤ 1,5 mg/kg/saat ve mutlak ≤ 120 mg/saat (≤ 24 saat) sınırında tutulur.',
-          'Rejyonel blok / lokal infiltrasyon ile IV lidokain infüzyonu eşzamanlı uygulanmaz (bloktan sonra ≥ 4 saat bekleme penceresi).',
         ]}
       />
 
       {/* =========================================================================
-          BÖLÜM 13: KANITA DAYALI KAYNAKÇA VE KILAVUZLAR
+          DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0)
+          ========================================================================= */}
+      <DeepPharmacodynamicsBlock
+        isDark={isDark}
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Kullanım & Durum-Bağımlı (Use/State-Dependent) Nav Kanal Blokajı + Anti-İnflamatuar Etki',
+          summary:
+            'Lidokain, hücre zarını non-iyonize (lipofilik) formda geçtikten sonra hücre içinde tekrar katyonik (iyonize) hale dönerek voltaj-kapılı sodyum kanallarının (periferik Nav1.7/1.8/1.9 ve kardiyak Nav1.5) iç S6 poruna bağlanır.',
+          points: [
+            'Durum ve Kullanım Bağımlı Blokaj (Modulated Receptor Hypothesis): Dinlenim halindeki (kapalı) kanallara afinitesi düşüktür; açık ve özellikle inaktive durumdaki kanallara yüksek afiniteyle bağlanır. Hızlı ateşleyen nosiseptörlerde ve iskemik/taşikardik miyokardda blokaj katlanır (Sınıf Ib antiaritmik üstünlüğü).',
+            'Hızlı Ayrılma Kinetiği (Fast Off-Rate): Bupivakainin aksine diyastolde Nav1.5 kanallarından hızla ayrılır; bu nedenle kardiyotoksisite/CNS toksisite oranı (CC/CNS ~7:1) bupivakaine (~2:1) göre çok daha geniştir ve LAST gelişirse resüsitasyona daha iyi yanıt verir.',
+            'Anti-İnflamatuar & Anti-Hiperaljezik Sistemik Mekanizma: Düşük sistemik plazma konsantrasyonlarında (1–4 mcg/mL) Gq-kenetli reseptör sinyallemesini, NMDA fosforilasyonunu, nötrofil priming/adezyonunu ve pro-inflamatuar sitokin (IL-6, TNF-α, IL-1β) salınımını baskılayarak postoperatif ileusu ve santral sensitizasyonu azaltır.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Bifazik LAST MSS Prodromu → Nöbetler → Koma: 5–10 mcg/mL düzeyinde önce kortikal inhibitör GABAerjik internöronlar bloke olur (disinhibisyon): perioral/dil uyuşması, metalik tat, tinnitus, dizartri, anksiyete ve kas seğirmeleri gelişir.',
+            '10–15 mcg/mL düzeyinde eksitatör yollar hakim olur ve jeneralize tonik-klonik nöbetler başlar; ardından tüm kortikal aktivitenin baskılanmasıyla koma ve medüller solunum arresti gelişir.',
+            'Terapötik IV Düzeyde (1–4 mcg/mL): Hafif sedasyon, öksürük/laringeal refleks baskılanması ve serebral vazokonstriksiyon (CBF/ICP hafif azalması) sağlar.',
+          ],
+          cvs: [
+            'Terapötik Sınıf Ib Antiaritmik Etki: İskemik Purkinje/ventrikül dokusunda faz 0 depolarizasyonu yavaşlatır, aksiyon potansiyeli süresini (APD) ve etkin refrakter periyodu (ERP) kısaltarak reentry aritmilerini kırar.',
+            'LAST Kardiyotoksisitesi (> 15–25 mcg/mL): Yaygın Nav1.5 blokajıyla PR/QRS genişlemesi, Brugada-benzeri ST elevasyonu, ileri AV blok, negatif inotropi, derin vazoplejik hipotansiyon, polimorfik VT/VF ve dirençli asistoli gelişir.',
+          ],
+          respiratory: [
+            'Terapötik IV Dozda: Medüller solunum dürtüsünü korur; trakeal irritabiliteyi ve entübasyon/ekstübasyona bağlı refleks bronkospazm ile öksürüğü güçlü biçimde baskılar.',
+            'LAST / Yüksek Dozda: Hipoksik ventilatuvar yanıtı köreltir ve MSS depresyonuyla birlikte santral apneye yol açar; asidoz ve hiperkapni gelişirse LAST toksisitesi daha da derinleşir (kısır döngü!).',
+          ],
+          other: [
+            'Nöromüsküler blokerlerin (roküronyum/vekuronyum) etkisini hafif potansiyalize eder',
+            'Postoperatif bağırsak motilitesini korur ve ileus süresini kısaltır',
+            'İntraoperatif propofol ve volatil anestezik (MAC) ihtiyacını %10–25 azaltır',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Lidokain hem periferik rejyonel blokta hem de sistemik multimodal anestezide güçlü bir adjuvan/sparing ajandır; ancak tüm lokal anesteziklerin sistemik toksisitesi ADİTİFTİR.',
+          points: [
+            'İnhalasyon MAC & Opioid Sparing: Perioperatif sistemik IV lidokain sevofluran/desfluran MAC değerini ~%10–25 ve postoperatif opioid ihtiyacını ~%30–40 azaltır (Weibel Cochrane 2018; Foo 2021).',
+            'Nöromüsküler Bloker (NMB) Potansiyalizasyonu: Presinaptik ACh salınımını azaltarak ve postsinaptik reseptörü duyarsızlaştırarak non-depolarizan NMB süresini hafifçe uzatabilir.',
+            'Lokal Anestezik Aditif Toksisite Kuralı: Farklı lokal anesteziklerin (ör. bupivakain TAP bloku + IV lidokain infüzyonu) LAST toksisitesi toplanır! Foo 2021 kılavuzu bloktan sonraki ilk 4 saatte IV lidokain başlanmasını KESİNLİKLE yasaklar.',
+          ],
+        }}
+        clinicalPearls={[
+          'ASRA LAST 2020 Lipid Shuttle Mekanizması: %20 İntralipid yalnızca "lipid sink" (ilacı plazmada hapsetme) değil, aynı zamanda "lipid shuttle" ile lidokaini kalp/beyinden karaciğer/kasa taşır ve kardiyotonik/inotropik destek sağlar — Propofol ASLA İntralipid yerine geçmez!',
+          'Enfekte Dokuda Blok Başarısızlığı (pKa 7.9): Asidik abse ortamında (pH 6,0) non-iyonize fraksiyon %24’ten %1,2’ye düşer; 9:1 NaHCO₃ tamponlaması veya proksimal sinir bloğu gerekir.',
+          'Spinal TNS (Geçici Nörolojik Semptom) Tarihi Dersi: İntratekal lidokain sonrası %10–30 oranında şiddetli gluteal/bacak radiküler ağrı (TNS) geliştiğinden günümüzde spinal anestezide rutin olarak tercih edilmez.',
+          'İlk Belirti Nöbet Olmayabilir: Genel anestezi altındaki hastada MSS prodromu (metalik tat, tinnitus) maskelenir; LAST’ın ilk bulgusu ani QRS genişlemesi, bradikardi veya açıklanamayan refrakter hipotansiyon/arrest olabilir!',
+        ]}
+      />
+
+      {/* =========================================================================
+          BÖLÜM 13: ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA
           ========================================================================= */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Lidokain"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Diğer Lokal Anestezikler (Bupivakain · Ropivakain · Prilokain — Eşzamanlı Rejyonel Blok + IV İnfüzyon)',
+            mechanism: 'Aditif Nav Kanal Blokajı & Kümülatif LAST Toksisitesi',
+            clinicalEffect: 'Bireysel dozlar sınır içinde görünse dahi toplam serbest lokal anestezik yükü nöbet ve kardiyak kollaps eşiğini aşar.',
+            management: 'Rejyonel blok/infiltrasyon ile IV lidokain infüzyonunu eşzamanlı uygulamayın; blok ile IV infüzyon arasında ≥ 4 saat boşluk bırakın (Foo 2021).',
+          },
+          {
+            severity: 'D',
+            agent: 'Amiodaron · Sınıf I Antiaritmikler (Propafenon · Flekainid · Prokainamid)',
+            mechanism: 'Aditif Kardiyak İleti Blokajı + CYP3A4/1A2 İnhibisyonu',
+            clinicalEffect: 'QRS genişlemesi, ileri AV blok, sinüs arresti ve lidokain klirensinde düşüşle LAST/nöbet riski.',
+            management: 'Sınıf I ajanları kombine etmeyin; amiodaronla birlikte kullanım zorunluysa sürekli EKG izlemi ve %30–50 doz azaltımı yapın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Beta-Blokerler (Propranolol · Metoprolol · Esmolol) & Simetidin',
+            mechanism: 'Hepatik Kan Akımı Azalması + CYP1A2/3A4 İnhibisyonu',
+            clinicalEffect: 'Lidokain hepatik ekstraksiyonu düşer; sürekli infüzyonda plazma düzeyi yükselir ve bradikardi/AV blok derinleşir.',
+            management: 'Sürekli IV infüzyon dozunu azaltın, erken MSS toksisitesi ve PR/QRS uzamasını yakından izleyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Güçlü CYP1A2 / CYP3A4 İnhibitörleri (Fluvoksamin · Siprofloksasin · Eritromisin · Vorikonazol)',
+            mechanism: 'Hepatik N-Dealkilasyon İnhibisyonu',
+            clinicalEffect: 'Lidokain plazma konsantrasyonu belirgin yükselir, eliminasyon yarı ömrü uzar.',
+            management: 'Uzamış IV infüzyondan kaçının veya hızı %30–50 düşürün.',
+          },
+          {
+            severity: 'C',
+            agent: 'Nöromüsküler Blokerler (Roküronyum · Vekuronyum · Atrakuryum)',
+            mechanism: 'Presinaptik ACh Salınımı & Postsinaptik Membran Etkileşimi',
+            clinicalEffect: 'Yüksek doz IV lidokain non-depolarizan NMB süresini hafifçe uzatabilir.',
+            management: 'Ekstübasyon öncesi kantitatif TOF (Train-of-Four ≥ 0,9) monitörizasyonu doğrulayın.',
+          },
+        ]}
         references={[
           {
             authors: 'Neal JM, Neal EJ, Weinberg GL',

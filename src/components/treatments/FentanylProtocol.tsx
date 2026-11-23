@@ -26,8 +26,15 @@ import {
   FileText
 } from 'lucide-react';
 import {
+  CompatibilityAndLineBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographCopyButton,
+  MonographQuickNav,
+  SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -137,9 +144,52 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
   return (
     <div className="space-y-6">
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0)                                  */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozlar', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON)    */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="FENTANYL (50 mcg/mL · Ultra-Potent Opioid)"
+        confusionRiskWith="REMİFENTANİL · SUFENTANİL · ALFENTANİL · MORFİN"
+        antidoteOrRescue="Nalokson HCl (PACU Mikro-Titrasyon: 20–40 mcg IV): Solunum depresyonunda önce hava yolu/BVM ventilasyon; PACU’da 20–40 mcg IV q2–3 dk titre edin (tam ampul puşe edilmez!). Göğüs duvarı rijiditesi BVM ventilasyonunu engelliyorsa kısa etkili NMB (süksinilkolin/roküronyum) veya Nalokson uygulayın. Fentanil süresi naloksondan uzun olduğundan en az 2–4 saat renarkotizasyon takibi zorunludur."
+        criticalAlerts={[
+          'Kırmızı Reçete & Bağımsız Çift Kontrol: T.C. Sağlık Bakanlığı Renkli Reçete Sistemi kapsamında çift kilitli narkotik dolapta saklanır; devir-teslim ve zayi tutanakları çift imzayla kayıt altına alınır.',
+          'mg vs. mcg (1000 Kat) Birim Hatası: 1 mg = 1000 mcg’dir; 1 mg fentanil verilmesi ölümcül doz aşımıdır! Tüm istem ve pompa etiketleri açıkça "mcg" (mikrogram) yazılmalıdır.',
+          'Hızlı Yüksek Doz Bolus (> 3–5 mcg/kg veya < 1–2 dk): Akut göğüs duvarı ve vokal kord rijiditesine ("tahta göğüs") yol açarak maske ventilasyonunu imkânsızlaştırabilir.',
+          'Uzamış İnfüzyonda Yükselen CSHT & Ölü Boşluk Kazası: > 4–8 saat infüzyonda CSHT 200–300+ dk’ya uzar; fentanil hattı asla hızlı yıkanmaz. MAOİ/Linezolid/SSRI ile Serotonin Sendromu ve opioid-naif olguda TTS flaster yasağı unutulmamalıdır.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 1: BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-ozet"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -216,6 +266,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* BÖLÜM 2: FARMAKOKİNETİK (AÇILIR-KAPANIR AKORDİYON) */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -338,6 +389,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* BÖLÜM 3: KONTRENDİKASYONLAR */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-kontrendikasyon"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -421,6 +473,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* BÖLÜM 4: ENDİKASYONLAR VE OFF-LABEL KULLANIMLAR                     */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-endikasyon"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -487,6 +540,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* BÖLÜM 5: UYGULAMA YOLLARI VE DOZ REJİMLERİ (ERİŞKİN & PEDİATRİK)   */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-dozlar"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -856,28 +910,6 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
               </div>
             </div>
           </div>
-
-          {/* Geriatrik ve Obezite Kılavuzları */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
-            <div className="p-3 rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50/40 dark:bg-amber-950/20">
-              <span className="font-bold text-xs text-amber-700 dark:text-amber-300 block mb-1">
-                Geriatrik Popülasyon (&gt;65 Yaş):
-              </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                Karaciğer klerensi %30-50 düşer, santral sinir sistemi duyarlılığı belirgin artar. Tüm bolus ve idame infüzyon dozları{' '}
-                <strong>%50 oranında azaltılmalı</strong>, titrasyon aralıkları uzatılmalıdır.
-              </p>
-            </div>
-            <div className="p-3 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-50/40 dark:bg-indigo-950/20">
-              <span className="font-bold text-xs text-indigo-700 dark:text-indigo-300 block mb-1">
-                Obezite ve Kilo Hesabı:
-              </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                Fentanil yüksek lipofilik olsa da klerens santral kompartman hacmi ile ilişkilidir. Aşırı doz ve kümülasyonu önlemek için{' '}
-                <strong>İdeal Vücut Ağırlığı (IBW)</strong> veya <strong>Yağsız Vücut Ağırlığı (LBW)</strong> esas alınmalıdır.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -885,6 +917,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* BÖLÜM 6: ⚡ FENTANİL İNFÜZYON POMPASI & DOZ HESAPLAYICISI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-hesaplayici"
         className={`p-5 sm:p-7 rounded-2xl border transition-all ${
           isDark
             ? 'bg-gradient-to-br from-slate-900 via-rose-950/20 to-slate-900 border-rose-900/40'
@@ -912,6 +945,23 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
 
           <div className="flex items-center gap-2">
+            <MonographCopyButton
+              isDark={isDark}
+              getText={() =>
+                [
+                  'FENTANİL İNFÜZYON ÖZETİ',
+                  `Hesaplama Ağırlığı (LBW/IBW): ${weightKg} kg`,
+                  `Çözelti Konsantrasyonu: ${concentrationMcgMl.toFixed(1)} mcg/mL`,
+                  `İdame Dozu: ${doseMcgKgHr.toFixed(2)} mcg/kg/saat (${doseMcgHr.toFixed(1)} mcg/saat | ${doseMcgKgMin.toFixed(3)} mcg/kg/dk)`,
+                  `Pompa Akış Hızı: ${infusionRateMlHr.toFixed(2)} mL/saat`,
+                  giveBolus
+                    ? `Yükleme Bolus: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(2)} mL, ${bolusDurationMin} dk)`
+                    : 'Yükleme Bolus: Devre dışı',
+                  `Tahmini CSHT (${infusionDurationHours} sa): ~${Math.round(cshtEstimateMinutes)} dk`,
+                  `24 Saatlik Tüketim: ${consumption24HrMg.toFixed(2)} mg (~${Math.ceil(vialsNeeded500mcg)} adet 500 mcg/10 mL ampul)`,
+                ].join('\n')
+              }
+            />
             <button
               type="button"
               onClick={() => {
@@ -921,7 +971,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
                 setCustomDoseValue(1.0);
                 setGiveBolus(false);
                 setBolusDoseMcgKg(1.0);
-                setBolusDurationMin(10);
+                setBolusDurationMin(2);
                 setInfusionDurationHours(12);
               }}
               className="p-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer transition-colors"
@@ -1368,9 +1418,93 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Fentanil Sitrat 100 mcg / 2 mL Ampul (Talinat · Fentaver · Fentanest · Fentanyl-PF)',
+            presentation: '2 mL berrak enjeksiyonluk çözelti içeren cam ampul (IV / IM / nöroaksiyel için koruyucusuz PF form)',
+            concentration: '50 mcg/mL (0,05 mg/mL)',
+            saltOrBaseNote: '50 mcg fentanil baza eşdeğer 78,5 mcg fentanil sitrat/mL içerir. Nöroaksiyel (spinal/epidural) uygulamada MUTLAKA koruyucusuz (PF) ampul doğrulanmalıdır.',
+            alertLevel: 'standard',
+          },
+          {
+            name: 'Fentanil Sitrat 500 mcg / 10 mL Ampul / Flakon (Talinat · Fentaver)',
+            presentation: '10 mL berrak enjeksiyonluk çözelti (ameliyathane & YBÜ infüzyon hazırlığı için; TR’de 1000 mcg/20 mL formu ruhsatlı değildir)',
+            concentration: '50 mcg/mL (0,05 mg/mL)',
+            saltOrBaseNote: 'Tek ampulde 500 mcg (0,5 mg) bulunur; erişkin opioid-naif hastada yanlışlıkla tek puşede verilmesi fatal apne ve göğüs duvarı rijiditesi yapar!',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Transdermal Flaster (Durogesic TTS: 12 · 25 · 50 · 75 · 100 mcg/saat)',
+            presentation: '72 saatlik sürekli salım sağlayan transdermal matriks flaster',
+            concentration: '12 – 100 mcg/saat',
+            saltOrBaseNote: 'YALNIZCA kronik opioid-toleran hastalarda (≥ 60 mg/gün oral morfin eşdeğeri ≥ 1 hafta) kullanılır; akut/postop ağrıda KESİNLİKLE KONTRENDİKEDİR.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Dilaltı Tablet (Abstral 100 · 200 · 400 mcg)',
+            presentation: 'Kronik kanser ağrısı alevlenmeleri (breakthrough pain) için transmukozal sublingual tablet',
+            concentration: '100 – 400 mcg/tablet',
+            saltOrBaseNote: 'Opioid-naif olguda kesinlikle kontrendikedir; diğer transmukozal formlarla 1:1 mcg dönüştürülmez.',
+            alertLevel: 'high',
+          },
+        ]}
+        standardDilutions={[
+          'Standart Erişkin YBÜ / PCA (10 mcg/mL): 1 ampul 500 mcg (10 mL) + 40 mL %0,9 NaCl = 50 mL perfüzör enjektörü.',
+          'Konsantre / Sıvı Kısıtlamalı YBÜ (20 mcg/mL): 2 ampul 500 mcg (20 mL) + 30 mL %0,9 NaCl = 50 mL perfüzör enjektörü.',
+          'Pediatrik / Düşük Doz Titrasyon (2 mcg/mL): 1 ampul 100 mcg (2 mL) + 48 mL %0,9 NaCl = 50 mL perfüzör enjektörü.',
+          'Saf Konsantre (50 mcg/mL): Seyreltilmeden 500 mcg/10 mL veya 100 mcg/2 mL ampuller (yalnızca ciddi sıvı kısıtlamalı ARDS/KY veya intranazal MAD uygulamasında).',
+        ]}
+        concentrationTrapWarning="Her iki Türkiye ampulü de 50 mcg/mL konsantrasyondadır ancak toplam içerik 5 kat farklıdır (2 mL = 100 mcg vs 10 mL = 500 mcg). Tüm istemler daima 'mcg' (asla 'mg' değil) olarak yazılmalı, enjektör etiketine nihai konsantrasyon (10, 20 veya 50 mcg/mL) açıkça işlenmelidir."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Periferik veya santral IV hattan uygulanabilir; ancak sürekli YBÜ infüzyonunda ölü boşluk (dead-space) kazasını önlemek için ayrı, düşük ölü boşluklu ve çek-valfli lümen tercih edilir. Fentanil giden hat asla hızlı sıvı bolusu ile yıkanmamalıdır."
+        phRange="4.0 – 7.5 (Hafif Asidik)"
+        osmolalityNote="İzotonik seyreltmede doku vezikanı değildir; yüksek lipofilisitesi nedeniyle PVC torba/setlere minimal adsorpsiyon gösterebilir ancak klinik olarak ihmal edilebilir düzeydedir."
+        compatibleDiluents={[
+          '%0,9 Sodyum Klorür (İzotonik SF) — 24–48 saat stabil',
+          '%5 Dekstroz (D5W) — 24–48 saat stabil',
+          'Ringer Laktat — 24 saat stabil',
+        ]}
+        stabilityNote="SF veya D5W içinde hazırlanan 2–50 mcg/mL çözeltiler oda sıcaklığında (20–25 °C) en az 24–48 saat kimyasal olarak stabildir; ışıktan korunması önerilir."
+        ySiteCompatible={[
+          'Propofol',
+          'Midazolam',
+          'Deksmedetomidin',
+          'Norepinefrin',
+          'Epinefrin',
+          'Dopamin',
+          'Dobutamin',
+          'Ketamin',
+          'Roküronyum',
+          'Cisatrakuryum',
+          'Lidokain',
+          'Heparin',
+        ]}
+        ySiteIncompatible={[
+          'Tiyopental (alkali presipitasyon)',
+          'Metoheksital (alkali presipitasyon)',
+          'Fenitoin (çökelme)',
+          'Azitromisin',
+          'Sodyum Bikarbonat (yüksek konsantrasyonda çökelme riski)',
+        ]}
+        extravasationProtocol="Ekstravazasyon dokuda vezikan nekroz yapmaz; ancak asıl hayati tehlike 'ölü boşluk (dead-space) yıkaması'dır. Fentanil infüzyonu verilen hat hızlı SF bolusuyla yıkanırsa lümende bekleyen ilaç tek seferde giderek ani apne ve göğüs duvarı rijiditesine yol açabilir — infüzyon bitiminde uzatma hattını ayırın veya aspire ederek temizleyin."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 7: BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU KILAVUZU */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-organ"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1548,9 +1682,30 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0)      */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="%50 Başlangıç Doz Azaltımı"
+        geriatricPoints={[
+          '>65 yaş ve kırılgan (frailty) hastalarda hepatik kan akımı ve CYP3A4 klirensi %30–50 azalırken santral μ-opioid duyarlılığı (EC50) belirgin artar; terminasyon yarı ömrü belirgin uzar.',
+          'Tüm başlangıç IV bolusları (ör. 0,5–1 mcg/kg veya 25–50 mcg) ve sürekli infüzyon hızları en az %50 azaltılmalı, titrasyon aralıkları uzatılmalıdır.',
+          'Yaşlılarda uzun süreli infüzyon ve postoperatif PCA’da uzamış sedasyon, deliryum ve geç solunum depresyonu riski yüksek olduğundan sık RASS/solunum takibi gerekir.',
+        ]}
+        obesityWeightScalarBadge="LBW (Tercih) · Uzun İnfüzyonda Kümülasyon!"
+        obesityPoints={[
+          'SOBA ve Miller’s Anesthesia kılavuzlarına göre fentanilin santral dağılımı ve erken pik konsantrasyonu Yağsız Vücut Ağırlığı (LBW) ile koreledir; indüksiyon/bolus ve başlangıç infüzyonları LBW (veya IBW) üzerinden hesaplanmalıdır.',
+          'Yüksek lipofilisitesi nedeniyle obez hastalarda tekrarlayan boluslar veya > 2–4 saatlik infüzyonlar geniş adipoz dokuda hızla birikerek bağlam duyarlı yarı ömrü (CSHT) 4–6+ saate çıkarır.',
+          'TBW ile dozlama postoperatif uzamış apne, üst hava yolu obstrüksiyonu (OSA) ve ekstübasyon gecikmesine yol açar; uzun vakalarda remifentanil veya multimodal opioid-sparing rejimler tercih edilmelidir.',
+        ]}
+        clinicalNote="Yukarıdaki etkileşimli hesaplayıcı içindeki Obezite Doz Ölçekleyici (SOBA / Miller's) kullanılarak hastanın LBW değeri tek tıkla pompa hesabına aktarılabilir."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 9: GEBELİK VE LAKTASYON KILAVUZU                             */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-gebelik"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1596,9 +1751,9 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
               3. Laktasyon, Anne Sütü &amp; Emzirme Güvenliği
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Süte Geçiş Düşüktür:</strong> Relatif infant dozu (RID) &lt;%3 düzeyindedir (klinik güvenlilik eşiği olan %10'un çok altındadır).<br />
-              • <strong>Emzirmeye Dönüş:</strong> Cerrahi veya doğum sonrası tek bir anestezi indüksiyon/bolus dozunun ardından anne tamamen uyanıp koopere olduğunda doğrudan emzirmeye başlayabilir; sütü sağıp dökme ("pump &amp; dump") rutini önerilmez.<br />
-              • <strong>Tekrarlayan Doz Uyarısı:</strong> YBÜ'de veya postop IV-PCA'de tekrarlayan yüksek dozlarda bebeğin aşırı sedasyon, emme güçlüğü ve apne açısından izlenmesi gerekir.
+              • <strong>Süte Geçiş Düşüktür:</strong> Relatif infant dozu (RID) &lt;%3 düzeyindedir (klinik güvenlilik eşiği olan %10&apos;un çok altındadır).<br />
+              • <strong>Emzirmeye Dönüş:</strong> Cerrahi veya doğum sonrası tek bir anestezi indüksiyon/bolus dozunun ardından anne tamamen uyanıp koopere olduğunda doğrudan emzirmeye başlayabilir; sütü sağıp dökme (&quot;pump &amp; dump&quot;) rutini önerilmez.<br />
+              • <strong>Tekrarlayan Doz Uyarısı:</strong> YBÜ&apos;de veya postop IV-PCA&apos;de tekrarlayan yüksek dozlarda bebeğin aşırı sedasyon, emme güçlüğü ve apne açısından izlenmesi gerekir.
             </p>
           </div>
         </div>
@@ -1608,6 +1763,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* BÖLÜM 10: ÖNEMLİ OLUMSUZ ETKİLER */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-olumsuz"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1676,7 +1832,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
               Tolerans &amp; Fiziksel Çekilme
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              YBÜ'de &gt;5-7 gün süren sürekli infüzyonlarda reseptör duyarsızlaşması ve akut tolerans gelişir.
+              YBÜ&apos;de &gt;5-7 gün süren sürekli infüzyonlarda reseptör duyarsızlaşması ve akut tolerans gelişir.
               İnfüzyon aniden kesildiğinde ajitasyon, terleme, taşikardi, hipertansiyon ve taşipne ile seyreden akut çekilme tablosu oluşur.
             </p>
           </div>
@@ -1694,223 +1850,136 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 11: KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
+      {/* KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0)       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-500/10 text-indigo-500">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar
-            </h2>
-            <p className="text-xs text-slate-500">
-              Kümülasyon, hızlı bolustan sakınma, CYP3A4 etkileşimi, histamin avantajı ve nalokson protokolü
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-3 text-xs sm:text-sm">
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
-              1. Kümülasyon (Akümülasyon) ve Weaning / Ekstübasyon Gecikmesi:
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Remifentanilin tersine fentanil doku esterazlarıyla parçalanmaz; karaciğerden metabolize edilir.
-              Yoğun bakımda 48 saatten uzun süre fentanil infüzyonu alan mekanik ventilasyon hastalarında ilaç vücut yağ
-              dokularında doymuş durumdadır. İnfüzyon kapatıldıktan sonra hastanın uyanması ve solunum dürtüsünün geri
-              gelmesi <strong>4 ila 12 saat</strong> sürebilir. Bu nedenle weaning planlanan hastalarda infüzyon önceden kapatılmalı
-              veya kısa etkili alternatiflere geçilmelidir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
-              2. Hızlı IV Puşeden Kaçınma Kuralı:
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Fentanil bolus dozları asla hızlı IV puşe (şok bolus) şeklinde verilmemelidir. Hızlı verilen 100 mcg dahi
-              erişkinde ciddi göğüs duvarı kas rijiditesine yol açarak maskeyle havalandırmayı imkansızlaştırabilir.
-              Tüm IV bolus enjeksiyonlar <strong>en az 1 – 2 dakikaya yayılarak</strong> yavaşça uygulanmalıdır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
-              3. Güçlü CYP3A4 İnhibitörleri ile Ölümcül Toksisite Riski:
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Hastanın kullandığı veya başlanan ilaçlar (Klaritromisin, Flukonazol, Vorikonazol, Diltiazem, Verapamil,
-              Ritonavir, Greyfurt suyu) fentanilin hepatik metabolizmasını bloke eder. Bu kombinasyonlarda standart fentanil
-              dozları bile plazma düzeyini 2-3 katına çıkararak uzamış koma ve ölümcül solunum arresti yaratabilir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block text-xs">
-              4. Morfine Göre Histamin Avantajı:
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Morfin mast hücrelerinden histamin deşarjına yol açarak bronkokonstriksiyon ve sistemik vazodilatasyon (hipotansiyon)
-              yaparken; fentanil klinik dozlarda <strong>histamin salınımına yol açmaz</strong>. Reaktif havayolu hastalığı (astım, KOAH)
-              veya hemodinamik kararsızlığı olan septik/kardiyak hastalarda fentanil morfine kıyasla kardiyovasküler açıdan çok daha güvenlidir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-rose-50/40 dark:bg-rose-950/20 space-y-1.5">
-            <span className="font-bold text-rose-900 dark:text-rose-100 block text-xs">
-              5. Yatak Başı Nalokson ve Havayolu Hazırlığı:
-            </span>
-            <p className="text-rose-800 dark:text-rose-200 text-xs leading-relaxed">
-              Fentanil uygulanan her klinikte (ameliyathane, YBÜ, sedasyon odası) yatak başında mutlaka <strong>Nalokson ampul</strong>,
-              balon-valf-maske (Ambu) ve entübasyon ekipmanı hazır bulunmalıdır. Opioid aşırı dozunda Nalokson 0.04 – 0.4 mg IV
-              titre edilerek verilmeli; fentanilin etki süresi naloksondan (30-90 dk) daha uzun olabileceğinden hasta relaps
-              solunum depresyonu açısından en az 2-4 saat yakından izlenmelidir.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 12: IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-teal-500/10 text-teal-500">
-            <Droplet className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              IV Uygulama ve Sulandırma / Hazırlama Şekilleri
-            </h2>
-            <p className="text-xs text-slate-500">
-              Standart seyreltme konsantrasyonları, geçimli sıvılar, stabilite ve yıkama kuralları
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block">
-              1. Standart İnfüzyon Seyreltmesi (10 mcg/mL)
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Ticari Form:</strong> Türkiye'de 500 mcg / 10 mL ve 100 mcg / 2 mL ampuller bulunur (her ikisi de 50 mcg/mL derişimdedir; 1000 mcg/20 mL formu yoktur).<br />
-              • <strong>Hazırlanışı:</strong> 1 adet 500 mcg (10 mL) Fentanil ampul çekilir ve 40 mL %0.9 NaCl (SF) eklenerek 50 mL'lik perfuzör enjektöründe tamamlanır.<br />
-              • <strong>Son Konsantrasyon:</strong> 10 mcg/mL.<br />
-              • Genel cerrahi ve standart yoğun bakım infüzyonları için en güvenli ve önerilen protokoldür.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block">
-              2. Konsantre &amp; Pediatrik Seyreltmeler
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Konsantre (20 mcg/mL):</strong> 2 adet 500 mcg (20 mL) ampul + 30 mL SF ile 50 mL'ye tamamlanır.<br />
-              • <strong>Pediatrik / Düşük Doz (2 mcg/mL):</strong> 1 adet 100 mcg (2 mL) ampul + 48 mL SF ile 50 mL perfuzöre tamamlanır.<br />
-              • <strong>50 mcg/mL (Seyreltilmemiş):</strong> Saf ampul (500 mcg/10 mL veya 100 mcg/2 mL) çekilerek titre edilir (sıvı kısıtlamalı ARDS/KY olgularında).
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block">
-              3. Geçimlilik, Stabilite &amp; Hat Yıkama
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Geçimli Mayiler:</strong> %0.9 NaCl (SF), %5 Dekstroz (D5W), Ringer Laktat ile tam geçimlidir.<br />
-              • <strong>Geçimsizlik:</strong> Tiyopental ve metoheksital gibi alkali barbitüratlarla aynı hattan verilmemelidir (presipitasyon).<br />
-              • <strong>Ölü Boşluk Yıkama Uyarısı:</strong> Fentanil giden damaryolu hattı hızla yıkanmamalıdır; lümendeki fentanilin
-              aniden hastaya gitmesi ani apne ve göğüs rijiditesi yaratabilir.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 13: İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-rose-500/10 text-rose-500">
-            <ShieldAlert className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              İlaç Güvenliği ve High-Alert Uyarıları
-            </h2>
-            <p className="text-xs text-slate-500">
-              ISMP High-Alert statüsü, kırmızı reçete mevzuatı, birim hatası önleme ve gebelik
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
-          <div className="p-3.5 rounded-xl border border-rose-300 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20 space-y-1">
-            <span className="font-bold text-rose-600 dark:text-rose-400 block">ISMP High-Alert Medication</span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Uluslararası Güvenli İlaç Uygulamaları Enstitüsü (ISMP) tarafından hata yapıldığında hastada kalıcı hasar veya
-              ölüm riski en yüksek olan ilaçlar sınıfında listelenmiştir.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl border border-rose-300 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20 space-y-1">
-            <span className="font-bold text-rose-600 dark:text-rose-400 block">Kırmızı Reçete &amp; Narkotik Takip</span>
-            <p className="text-slate-600 dark:text-slate-300">
-              T.C. Sağlık Bakanlığı Renkli Reçete Sistemi kapsamında Kırmızı Reçeteye tabidir. Çift kilitli narkotik dolabında
-              saklanmalı, devir teslimleri ve zayi tutanakları çift hemşire/hekim imzası ile kayıt altına alınmalıdır.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl border border-amber-300 dark:border-amber-900/50 bg-amber-50/40 dark:bg-amber-950/20 space-y-1">
-            <span className="font-bold text-amber-600 dark:text-amber-400 block">mg vs. mcg Birim Karışıklığı</span>
-            <p className="text-slate-600 dark:text-slate-300">
-              En ölümcül medikal hatalardan biri miligram (mg) ile mikrogram (mcg) birimlerinin karışmasıdır. 1 mg = 1000 mcg'dir.
-              1 mg fentanil verilmesi (1000 mcg) ölümcül doz aşımıdır! Tüm istemler açıkça "mcg" veya "mikrogram" yazılmalıdır.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl border border-indigo-300 dark:border-indigo-900/50 bg-indigo-50/40 dark:bg-indigo-950/20 space-y-1">
-            <span className="font-bold text-indigo-600 dark:text-indigo-400 block">Gebelik &amp; Laktasyon (Kat. C)</span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Plasentayı hızla geçer. Doğum eyleminde yüksek doz verilirse yenidoğanda belirgin solunum depresyonu yapar
-              (bebeğe nalokson hazır olmalıdır). Anne sütüne geçer; laktasyonda 24 saat ara verilmesi önerilir.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* BÖLÜM 14: KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <HighAlertSafetyBlock
+      <SpecialClinicalCautionsBlock
         isDark={isDark}
-        tallManName="FENTANYL (50 mcg/mL · Ultra-Potent Opioid)"
-        confusionRiskWith="REMİFENTANİL · SUFENTANİL · ALFENTANİL · MORFİN"
-        antidoteOrRescue="Nalokson HCl (PACU Mikro-Titrasyon: 20–40 mcg IV): Solunum depresyonunda önce hava yolu/BVM ventilasyon; PACU’da 20–40 mcg IV q2–3 dk titre edin (tam ampul puşe edilmez!). Göğüs duvarı rijiditesi BVM ventilasyonunu engelliyorsa kısa etkili NMB (süksinilkolin/roküronyum) veya Nalokson uygulayın."
-        criticalAlerts={[
-          'Hızlı yüksek doz bolus (> 3–5 mcg/kg) akut göğüs duvarı / vokal kord rijiditesine ("tahta göğüs") yol açabilir.',
-          'Uzun süreli infüzyonlarda CSHT hızla uzar (4 saatte ~250 dk); ekstübasyon öncesi erken azaltım gerekir.',
-          'MAOI, linezolid, metilen mavisi ve SSRI/SNRI kullanan hastalarda Serotonin Sendromu açısından dikkatli olunmalıdır.',
+        items={[
+          {
+            title: 'Kümülasyon & Weaning / Ekstübasyon Gecikmesi (Yükselen CSHT)',
+            detail:
+              'Remifentanilin tersine fentanil hepatik CYP3A4 ile metabolize edilir ve geniş adipoz dokuya dağılır. YBÜ’de > 48 saat infüzyon alan hastalarda uyanma ve spontan solunumun dönüşü 4–12 saat sürebilir; weaning öncesi erken azaltım veya kısa etkili alternatife geçiş planlanmalıdır.',
+          },
+          {
+            title: 'Hızlı IV Puşeden Kaçınma Kuralı (≥ 1–2 Dakika)',
+            detail:
+              'Hızlı verilen 100 mcg dahi erişkinde ciddi göğüs duvarı ve vokal kord rijiditesine ("tahta göğüs") yol açarak maske ventilasyonunu imkânsızlaştırabilir. Tüm IV boluslar en az 1–2 dakikaya yayılarak yavaşça uygulanmalıdır.',
+          },
+          {
+            title: 'Güçlü CYP3A4 İnhibitörleri ile Ölümcül Toksisite',
+            detail:
+              'Klaritromisin, flukonazol, vorikonazol, diltiazem, verapamil ve ritonavir gibi güçlü CYP3A4 inhibitörleri fentanil klirensini bloke ederek standart dozlarda dahi 2–3 kat plazma yükselmesine ve fatal apneye yol açabilir.',
+          },
+          {
+            title: 'Morfine Göre Histamin Avantajı (Astım / Hemodinamik İnstabilite)',
+            detail:
+              'Klinik dozlarda mast hücresi histamin deşarjına yol açmaz; reaktif hava yolu hastalığı (astım, KOAH) veya hemodinamik açıdan instabil septik/kardiyak olgularda morfine kıyasla çok daha güvenlidir.',
+          },
+          {
+            title: 'Yatak Başı Nalokson & Renarkotizasyon Gözlemi',
+            detail:
+              'Fentanil uygulanan her alanda Nalokson (40 mcg/mL sulandırılmış), BVM ve entübasyon ekipmanı hazır bulundurulmalıdır. Fentanilin etki süresi naloksondan (30–60 dk) uzun olduğundan reversal sonrası en az 2–4 saat monitörlü izlem şarttır.',
+          },
         ]}
       />
 
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <DeepPharmacodynamicsBlock
+        isDark={isDark}
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Selektif μ₁ / μ₂ Opioid Reseptör Sinyal İletimi, Yüksek Lipofilisite & Yükselen CSHT',
+          summary:
+            'Fentanil, morfine göre 80–100 kat daha potent, yüksek lipofilik (oktanol/su partisyon katsayısı ~813) sentetik bir 4-anilinopiperidin μ-opioid agonistidir. Tek bolusta hızlı etki sonlanması metabolizmadan değil, santral kompartmandan kas/yağ dokusuna redistribüsyondan kaynaklanır.',
+          points: [
+            'Gi/Go İnhibitör G-Protein Yolağı: Adenilat siklaz inhibisyonu (cAMP↓), presinaptik N-tipi Ca²⁺ kanal kapanması (P maddesi ve glutamat salınımı↓) ve postsinaptik GIRK K⁺ kanal açılmasıyla nöronal hiperpolarizasyon oluşturur.',
+            'Reseptör Alt Tipi Ayrımı: μ₁ supraspinal/spinal analjeziden; μ₂ medüller solunum depresyonu, santral vagotonik bradikardi, göğüs duvarı rijiditesi ve enterik peristaltizm inhibisyonundan sorumludur.',
+            'Süreye Bağlı Yükselen CSHT (Context-Sensitive Half-Time): 2 saatlik infüzyon sonunda CSHT ~30–45 dk iken, periferik yağ depolarının dolmasıyla 4 saatte ~200–250 dk’ya, > 8 saatte 300+ dk’ya yükselir (remifentanilin sabit 3–4 dk’lık CSHT’sinin aksine!).',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Sedasyon vs. Hipnoz / Amnezi Ayrımı: GABA-A reseptörlerine bağlanmaz; locus coeruleus ve ARAS üzerindeki μ-inhibitör etki ve afferent nosiseptif girdinin kesilmesiyle sedasyon/analgosedasyon sağlar ancak tek başına güvenilir bilinç kaybı ve amnezi OLUŞTURMAZ.',
+            'Serebral Hemodinami & EEG: Normokapni korunduğunda CBF ve CMRO₂’yi hafif azaltır, ICP’yi artırmaz; ancak spontan solunumda hiperkapni gelişirse serebral vazodilatasyonla ICP hızla yükselir. Yüksek dozlarda EEG’de yavaş yüksek amplitüdlü delta dalgaları izlenir.',
+            'Miyozis: Edinger-Westphal çekirdeğinin parasempatik uyarımıyla toplu iğne başı pupil (pinpoint) oluşturur (tolerans gelişmez).',
+          ],
+          cvs: [
+            'Kardiyovasküler Stabilite & Histamin Yokluğu: Direkt miyokard kontraktilite depresyonu minimaldir ve mast hücresinden histamin salınımı yapmaz; hemodinamik açıdan kırılgan/kardiyak hastalarda tercih sebebidir.',
+            'Santral Vagal Bradikardi: Medüller vagal çekirdek uyarımıyla doza bağımlı sinüs bradikardisi (özellikle β-bloker, deksmedetomidin veya hızlı bolusta) gelişebilir; atropine hızla yanıt verir.',
+          ],
+          respiratory: [
+            'Medüller Solunum Depresyonu (μ₂): CO₂ yanıt eğrisini sağa kaydırır, eğimini düşürür, apneik eşiği yükseltir ve hipoksik ventilatuvar yanıtı baskılar. Pik solunum depresyonu IV bolustan 5–15 dk sonra belirginleşir.',
+            'Göğüs Duvarı & Laringeal Rijidite ("Tahta Göğüs"): Hızlı IV puşe sonrası santral striatal/GABAerjik yolaklar üzerinden göğüs duvarı ve vokal kord spazmı yaparak ventilasyonu engelleyebilir; tedavi kısa etkili NMB veya naloksondur.',
+          ],
+          other: [
+            'Biliyer basınç artışı ve Oddi sfinkter spazmı',
+            'Gastrik boşalma gecikmesi, ileus ve konstipasyon',
+            'Cerrahi stres hormonlarının (kortizol, katekolamin) güçlü baskılanması',
+            'Zayıf 5-HT geri alım inhibisyonu nedeniyle serotonerjik ilaçlarla serotonin sendromu riski',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Fentanil, tek başına tam genel anestezi sağlayamayan ancak hipnotikler ve volatil anesteziklerle güçlü sinerji oluşturan bir analjezik omurgadır.',
+          points: [
+            'İnhalasyon MAC Azaltımı & Tavan Etkisi (Ceiling Effect): Sevofluran/desfluran/izofluran MAC değerini ~%50–65 azaltır; ancak tavan etkisi nedeniyle doz ne kadar artırılırsa artırılsın MAC %100’e düşmez (tek başına bilinç kaybı ve amnezi garantisi vermez).',
+            'Propofol–Fentanil & Midazolam Sinerjisi: Ağrılı uyarana hareket/hemodinamik yanıtı ve propofol/midazolam EC50’sini belirgin düşürür; ancak spontan soluyan hastada (PSA/MAC) derin hipoventilasyon ve apne riskini katlar.',
+            'Nalokson Antagonizması & Renarkotizasyon: Saf kompetitif μ-antagonisti naloksonla hızla geri döner; ancak fentanilin doku redistribüsyonu ve uzayan CSHT’si nedeniyle nalokson etkisi (30–60 dk) bittiğinde renarkotizasyon gelişebilir.',
+          ],
+        }}
+        clinicalPearls={[
+          'İntraoperatif Farkındalık (Awareness) Tuzağı: Yüksek doz fentanil tekniğinde dahi tek başına hipnoz/amnezi garanti değildir; mutlaka yeterli volatil ajan veya propofol + gerektiğinde işlenmiş EEG (BIS/PSI) eşlik etmelidir.',
+          'İkinci Pik (Secondary Peak) Fenomeni: Yüksek lipofilisite nedeniyle kas, akciğer ve gastrik mukozada sekestre olan fentanil, postoperatif dönemde dolaşıma geri dönerek PACU’da geç solunum depresyonuna yol açabilir.',
+          'Nöroaksiyel Kullanımda Koruyucusuz (PF) Zorunluluğu: Spinal/epidural uygulamada lipofilik yapısı sayesinde segmental hızlı etki sağlar ve morfine göre geç rostral solunum depresyonu riski düşüktür; ancak daima koruyucusuz (PF) ampul kullanılmalıdır.',
+          'Transdermal (TTS) Isı Tuzağı: Ateş, ısıtıcı battaniye veya sıcak kompres transdermal fentanil salımını dramatik artırarak opioid-toleran hastada dahi ölümcül doz aşımına yol açabilir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA (v4.0)  */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Fentanil"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'MAO İnhibitörleri (Son 14 Gün) · Linezolid · Metilen Mavisi',
+            mechanism: 'Serotonerjik Aşırı Aktivasyon (Fenilpiperidin SRI Etkisi + MAO İnhibisyonu)',
+            clinicalEffect: 'Hayatı tehdit eden Serotonin Sendromu (hiperpireksi, klonus, rijidite, otonomik fırtına, koma).',
+            management: 'MAOİ ile eşzamanlı veya son 14 gün içinde kontrendikedir; linezolid/metilen mavisi zorunluysa morfin/hidromorfon gibi non-fenilpiperidin opioid seçin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Güçlü CYP3A4 İnhibitörleri (Klaritromisin · Vorikonazol · Flukonazol · Ritonavir · Diltiazem)',
+            mechanism: 'Hepatik CYP3A4 N-Dealkilasyon İnhibisyonu',
+            clinicalEffect: 'Fentanil klirensi dramatik düşer; plazma düzeyi 2–3 kat artarak uzamış koma ve fatal solunum depresyonu gelişir.',
+            management: 'İnfüzyon/bolus dozlarını %50 azaltın, yakın kapnografi/sedasyon takibi yapın veya CYP3A4 bağımsız remifentanile geçin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Benzodiyazepinler (Midazolam/Diazepam) · Propofol · Alkol · Gabapentinoidler',
+            mechanism: 'Güçlü Farmakodinamik (PD) SSS & Solunum Merkezi Sinerjisi',
+            clinicalEffect: 'Derin sedasyon, üst hava yolu obstrüksiyonu, ağır hipoventilasyon, apne ve hipotansiyon riskinde katlanma.',
+            management: 'PSA/MAC’ta dozları titre ederek azaltın, sürekli kapnografi (EtCO₂) + SpO₂ izlemi yapın ve yatak başında BVM + Nalokson bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'SSRI / SNRI Antidepresanlar (Sertralin · Fluoksetin · Venlafaksin · Duloksetin)',
+            mechanism: 'Aditif Santral Serotonerjik Aktivite',
+            clinicalEffect: 'Özellikle yüksek doz veya uzamış YBÜ infüzyonunda nöromüsküler hiperaktivite (klonus, tremor), ajitasyon ve hipertermi.',
+            management: 'Kullanım kontrendike değildir ancak Hunter serotonin toksisitesi bulguları açısından yakın izlem gerekir.',
+          },
+          {
+            severity: 'C',
+            agent: 'Beta-Blokerler · Deksmedetomidin · Kalsiyum Kanal Blokerleri',
+            mechanism: 'Aditif Santral Vagotoni + Sempatolitik Etki',
+            clinicalEffect: 'Belirgin sinüs bradikardisi ve hipotansiyon (özellikle hızlı indüksiyon boluslarında).',
+            management: 'Bolusları ≥ 1–2 dk’da yavaş uygulayın; atropin ve vazopresörü hazır bulundurun.',
+          },
+        ]}
         references={[
           {
             authors: 'Peng PW, Sandler AN',

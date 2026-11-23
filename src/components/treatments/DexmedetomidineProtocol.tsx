@@ -22,10 +22,16 @@ import {
   BookOpen
 } from 'lucide-react';
 import {
+  CompatibilityAndLineBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographCopyButton,
+  MonographQuickNav,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -104,9 +110,52 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
   return (
     <div className="space-y-8 font-sans">
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0)                                   */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozlar', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON)     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="dexmedeTOMIDINE (4 mcg/mL Standart Seyreltme)"
+        confusionRiskWith="Deksametazon · Dobutamin · Klonidin · Precedex ↔ Prevacid / Peridex"
+        antidoteOrRescue="Spesifik Klinik Antidot YOK (Atipamezol Veteriner) — Destekleyici Tedavi: İnfüzyonu derhal durdurun. Semptomatik bradikardide Atropin 0,5–1 mg IV (veya glikopirolat), hipotansiyonda dengeli kristaloid + vazopresör (noradrenalin/efedrin) uygulayın."
+        criticalAlerts={[
+          '200 mcg/2 mL Konsantre Flakon ASLA Sulandırılmadan Puşe Edilmez: Standart 4 mcg/mL (200 mcg / 50 mL SF) elektronik infüzyon pompası ve bağımsız hemşire çift kontrolü (independent double-check) ile uygulanır.',
+          'Pacemaker’sız İleri AV Blok & Ciddi Bradikardi: 2. veya 3. derece AV blok, hasta sinüs sendromu ve başlangıç KTA < 50/dk durumlarında infüzyon başlatılmamalıdır.',
+          'Hızlı Yükleme Bolusu Riski: < 10–20 dakikada hızlı IV bolus periferik α₂B uyarısıyla bifazik geçici hipertansiyon, ardından derin bradikardi/asistoli tetikler; YBÜ ve kırılgan/yaşlı hastalarda yükleme atlanır.',
+          'SPICE III ≤ 65 Yaş Mortalite Uyarısı (EMA 2022): ≤ 65 yaş kritik YBÜ hastalarında artmış 90 günlük mortalite sinyali nedeniyle endikasyon ve alternatif sedatifler (propofol) dikkatle tartılmalıdır.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 1. BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI                  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-ozet"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -169,6 +218,7 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 2. FARMAKOKİNETİK BÖLÜMÜ (AÇILIP KAPANABİLİR AKORDİYON)             */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -283,6 +333,7 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. KONTRENDİKASYONLAR                                               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-kontrendikasyon"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -350,6 +401,7 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 4. ENDİKASYONLAR VE OFF-LABEL KULLANIMLAR                          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-endikasyon"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -425,6 +477,7 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 5. UYGULAMA YOLLARI, ERİŞKİN VE PEDİATRİK DOZ REJİMLERİ            */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-dozlar"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -577,6 +630,7 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 6. İNTERAKTİF İNFÜZYON VE DOZ HESAPLAYICISI                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-hesaplayici"
         className={`p-5 sm:p-7 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900 border-teal-500/30 ring-1 ring-teal-500/20'
@@ -600,25 +654,43 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              setWeightKg(70);
-              setPrepType('vial_50');
-              setEnableBolus(false);
-              setBolusDoseMcgKg(1.0);
-              setBolusDurationMin(10);
-              setMaintenanceDoseMcgKgHr(0.7);
-            }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
-              isDark
-                ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700'
-                : 'bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-200'
-            }`}
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Varsayılana Sıfırla</span>
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <MonographCopyButton
+              isDark={isDark}
+              getText={() =>
+                [
+                  `DEKSMEDETOMİDİN İNFÜZYON ÖZETİ`,
+                  `Hesaplama Ağırlığı: ${weightKg} kg`,
+                  `Çözelti Konsantrasyonu: ${concentrationMcgMl.toFixed(1)} mcg/mL`,
+                  `İdame Dozu: ${maintenanceDoseMcgKgHr.toFixed(2)} mcg/kg/saat (${hourlyDoseMcg.toFixed(1)} mcg/saat)`,
+                  `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat`,
+                  enableBolus
+                    ? `Yükleme Bolusu: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(0)} mcg / ${totalBolusVolumeMl.toFixed(1)} mL, ${bolusDurationMin} dk)`
+                    : `Yükleme Bolusu: Devre dışı`,
+                  `24 Saatlik Tüketim: ${dailyTotalMcg.toFixed(0)} mcg (~${dailyVialsNeeded.toFixed(1)} adet 200 mcg flakon)`,
+                ].join('\n')
+              }
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setWeightKg(70);
+                setPrepType('vial_50');
+                setEnableBolus(false);
+                setBolusDoseMcgKg(1.0);
+                setBolusDurationMin(10);
+                setMaintenanceDoseMcgKgHr(0.7);
+              }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
+                isDark
+                  ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700'
+                  : 'bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-200'
+              }`}
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Varsayılana Sıfırla</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1034,9 +1106,77 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                      */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Deksmedetomidin 200 mcg / 2 mL Konsantre Flakon (Precedex / Sedadex / Dekstomid / Hipnodex)',
+            presentation: 'IV infüzyon için berrak, renksiz konsantre çözelti içeren 2 mL cam flakon (Türkiye’de en yaygın ruhsatlı hastane formu)',
+            concentration: '100 mcg/mL (KONSANTRE!)',
+            saltOrBaseNote: '200 mcg deksmedetomidin baza eşdeğer 236 mcg deksmedetomidin HCl içerir. Sulandırılmadan IV puşe KESİNLİKLE YAPILMAZ (fatal bradikardi / AV tam blok!).',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Deksmedetomidin 200 mcg / 50 mL & 400 mcg / 100 mL Hazır İnfüzyon',
+            presentation: 'Kullanıma hazır (premixed) %0.9 NaCl içinde 50 mL veya 100 mL cam flakon / torba (mevcut olduğu merkezlerde)',
+            concentration: '4 mcg/mL (Hazır)',
+            saltOrBaseNote: 'Doğrudan infüzyon pompasına bağlanır; ek seyreltme gerektirmez.',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          'Standart Erişkin (4 mcg/mL): 1 flakon (200 mcg / 2 mL) + 48 mL %0.9 NaCl veya %5 Dekstroz → toplam 50 mL (enjektör pompası standardı).',
+          'Yüksek Hacimli YBÜ (4 mcg/mL): 2 flakon (400 mcg / 4 mL) + 96 mL SF/D5W → toplam 100 mL.',
+          'Sıvı Kısıtlı YBÜ (8 mcg/mL — Santral Tercihli): 1 flakon (200 mcg / 2 mL) + 23 mL SF → toplam 25 mL (veya 2 flakon → 50 mL); yüksek konsantrasyon etiketi zorunludur.',
+          'İntranazal Pediatrik Premedikasyon (Off-Label): 100 mcg/mL konsantre formdan mukozal atomizer (MAD) ile 1–2 mcg/kg (burun deliği başına küçük hacim).',
+        ]}
+        concentrationTrapWarning="200 mcg/2 mL konsantre flakon (100 mcg/mL), standart 4 mcg/mL infüzyon çözeltisinin 25 KATIDIR! Konsantre flakon asla doğrudan IV puşe edilmez; her enjektör/torba üzerine 4 mcg/mL veya 8 mcg/mL konsantrasyonu mutlaka yazılmalıdır."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0)  */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Standart 4 mcg/mL dilüsyon periferik veya santral IV hattan elektronik infüzyon/şırınga pompasıyla güvenle uygulanır. Sıvı kısıtlı hastalarda 8 mcg/mL konsantre rejim için ayrı santral lümen tercih edilir. Ölü boşluk (dead-space) yıkaması yapılmamalıdır."
+        phRange="4.5 – 7.0 (Hafif Asidik – Nötr)"
+        osmolalityNote="4 mcg/mL SF/D5W dilüsyonu izotoniktir (~290–300 mOsm/kg); venöz irritasyon ve flebit potansiyeli çok düşüktür."
+        compatibleDiluents={[
+          '%0.9 Sodyum Klorür (İzotonik SF) — 24 saat stabil',
+          '%5 Dekstroz (D5W) — 24 saat stabil',
+          'Ringer Laktat (RL) & %20 Mannitol — uyumlu',
+        ]}
+        stabilityNote="Hazırlanan 4 mcg/mL dilüsyon oda sıcaklığında (20–25 °C) 24 saat, buzdolabında (2–8 °C) 48 saat stabildir. Doğal kauçuk içeren setlerde hafif adsorpsiyon olabileceğinden PVC/sentetik setler tercih edilir."
+        ySiteCompatible={[
+          'Propofol',
+          'Midazolam',
+          'Remifentanil',
+          'Fentanil',
+          'Morfin',
+          'Ketamin',
+          'Norepinefrin',
+          'Epinefrin',
+          'Dopamin',
+          'Dobutamin',
+          'Roküronyum',
+          'Cisatrakuryum',
+        ]}
+        ySiteIncompatible={[
+          'Amfoterisin B (çökelme!)',
+          'Diazepam (çökelme!)',
+          'Kan / Eritrosit / Plazma Ürünleri (uyumluluk kanıtlanmamıştır — ayrı hat)',
+        ]}
+        extravasationProtocol="Non-vezikandır; ekstravazasyon doku nekrozu yapmaz. İnfüzyonu durdurup kateteri aspire edin, ekstremiteyi eleve edin. Asıl hat güvenliği kuralı: deksmedetomidin hattından hızlı sıvı/ilaç puşesi yapmayın (ölü boşluktaki ilaç tek seferde giderek ani bradikardi/hipertansiyon yapar)."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU                               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-organ"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1206,6 +1346,26 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0)       */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="Yükleme Atla · %25–50 Doz Azaltımı"
+        geriatricPoints={[
+          'Yaşlı (>65 yaş), kırılgan (frail) veya diyabetik otonom nöropatili hastalarda sempatik rezerv azalmıştır; bradikardi, AV blok ve hipotansiyon riski gençlere göre belirgin yüksektir.',
+          'Yükleme bolusu KESİNLİKLE ATLANMALI (prosedürel sedasyonda zorunluysa ≤ 0.5 mcg/kg 15–20 dk’da); idame infüzyonu düşük hızdan (0.2 mcg/kg/saat) başlatılarak ≥ 30 dk aralıklarla yavaş titre edilmelidir.',
+          'SPICE III Yaş Etkileşimi: >65 yaş kritik YBÜ hastalarında (özellikle postoperatif/deliryum riskli olgularda) deksmedetomidin olumlu mortalite/deliryum profili gösterirken, ≤65 yaş grupta EMA 2022 uyarısı akılda tutulmalıdır.',
+        ]}
+        obesityWeightScalarBadge="AdjBW (Tercih) veya LBW"
+        obesityPoints={[
+          'SOBA ve Miller’s Anesthesia kılavuzları: Morbid obez hastalarda (BMI ≥ 30–40 kg/m²) deksmedetomidinin klerensi TBW ile doğrusal artmaz; TBW üzerinden dozlama aşırı yüksek plazma düzeylerine, derin bradikardiye ve uzamış sedasyona yol açar.',
+          'Doz hesaplamasında Düzeltilmiş Vücut Ağırlığı (AdjBW) veya Yağsız Vücut Kütlesi (LBW) kullanılmalıdır.',
+          'Solunum dürtüsünü koruduğu için obez/OSA hastalarında avantajlıdır; ancak RASS -3 ve daha derin sedasyonda faringeal gevşemeye bağlı parsiyel üst havayolu obstrüksiyonu gelişebileceği unutulmamalıdır.',
+        ]}
+        clinicalNote="Yukarıdaki etkileşimli hesaplayıcı içindeki Obezite Doz Ölçekleyici ile hastanın AdjBW/LBW değeri tek tıkla hesaplamaya aktarılabilir."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 9. GEBELİK VE LAKTASYON KILAVUZU                                     */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <PregnancyLactationBlock
@@ -1226,6 +1386,7 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 10. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
+        id="sec-olumsuz"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -1364,169 +1525,8 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 10. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR                 */}
+      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0)    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className="w-5 h-5 text-teal-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar
-          </h2>
-        </div>
-
-        <div className="space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Hipovolemi:</strong> Damar içi hacmi tükenmiş
-              hastalarda santral vazomotor tonus baskılandığında derin refrakter hipotansiyon ortaya çıkabilir. İlaç
-              başlanmadan önce volüm resüsitasyonu tamamlanmalıdır.
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Eşzamanlı Bradikardizan İlaçlar:</strong> Beta
-              blokerler (metoprolol, esmolol), non-dihidropiridin kalsiyum kanal blokerleri (diltiazem, verapamil),
-              digoksin veya amiodaron alan hastalarda deksmedetomidin ile sinergistik bradikardi ve asistoli riski
-              katlanır.
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Otonomik Nöropati ve Yaşlı Hastalar:</strong> Sempatik
-              rezervi sınırlı olan diyabetik otonom nöropatili veya geriatrik hastalarda bradikardik ve hipotansif yanıtlar
-              çok daha belirgindir.
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-            <span className="font-bold text-teal-600 dark:text-teal-400 shrink-0">•</span>
-            <div>
-              <strong className="text-slate-900 dark:text-slate-100">Solunum Avantajı ve Havayolu:</strong> Opioidler veya
-              GABA-erjik sedatiflerden farklı olarak solunum güdüsünü korur. Ancak derin sedasyonda (RASS -3 veya daha
-              derin) veya anatomik havayolu obstrüksiyonu olanlarda (uyku apnesi) orofaringeal gevşeme ve parsiyel obstrüksiyon
-              olabileceği akılda tutulmalıdır.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 11. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ                */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Pill className="w-5 h-5 text-indigo-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            IV Uygulama ve Sulandırma / Hazırlama Şekilleri
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-slate-100 block">
-              Piyasa Formları ve Standart Çözelti
-            </span>
-            <ul className="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400">
-              <li>
-                <strong>200 mcg / 50 mL Hazır Flakon:</strong> Kullanıma hazır infüzyon çözeltisi (Konsantrasyon:{' '}
-                <strong>4 mcg/mL</strong>).
-              </li>
-              <li>
-                <strong>400 mcg / 100 mL Hazır Flakon:</strong> Kullanıma hazır infüzyon çözeltisi (Konsantrasyon:{' '}
-                <strong>4 mcg/mL</strong>).
-              </li>
-              <li>
-                <strong>200 mcg / 2 mL Konsantre Ampul:</strong> 48 mL %0.9 NaCl (SF) veya %5 Dekstroz ile sulandırılarak
-                toplam 50 mL'ye tamamlanır (Konsantrasyon: <strong>4 mcg/mL</strong>).
-              </li>
-              <li>
-                <strong>Sıvı Kısıtlı Hastalar:</strong> Santral venöz kateterden 200 mcg / 25 mL tamamlanarak{' '}
-                <strong>8 mcg/mL</strong> konsantrasyonda da infüze edilebilir.
-              </li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-rose-500/5 space-y-2">
-            <span className="font-bold text-rose-700 dark:text-rose-300 block flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4" />
-              <span>Hayati Uygulama Kuralları</span>
-            </span>
-            <ul className="space-y-1.5 list-disc list-inside text-slate-700 dark:text-slate-300">
-              <li>
-                <strong>KESİNLİKLE konsantre (sulandırılmamış) ampul IV puşe yapılmaz!</strong> Ani fatal bradikardi,
-                AV tam blok ve kardiyak arreste neden olur.
-              </li>
-              <li>
-                Daima kalibre edilmiş <strong>elektronik infüzyon pompası</strong> veya şırınga pompası ile kontrollü
-                verilmelidir.
-              </li>
-              <li>
-                Hazırlanan seyreltilmiş solüsyon oda sıcaklığında (20–25°C) <strong>24 saat stabildir</strong>.
-              </li>
-              <li>
-                Geçimlilik: %0.9 NaCl, %5 Dekstroz, Ringer Laktat ve Mannitol çözeltileriyle tam geçimlidir.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 12. İLAÇ GÜVENLİĞİ VE YÜKSEK RİSKLİ İLAÇ (HIGH-ALERT) DURUMLARI     */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <ShieldCheck className="w-5 h-5 text-indigo-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            İlaç Güvenliği ve Yüksek Riskli İlaç (ISMP High-Alert) Uyarıları
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs sm:text-sm">
-          <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-500/5 space-y-1">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">ISMP High-Alert İlaç</span>
-            <p className="text-slate-600 dark:text-slate-400 text-xs">
-              Hatalı doz hesabı veya infüzyon pompası programlama hataları derin kardiyovasküler kollapsa neden olabilir.
-              Hemşire çift kontrolü (independent double-check) önerilir.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-500/5 space-y-1">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Ses / Yazılış Benzerliği</span>
-            <p className="text-slate-600 dark:text-slate-400 text-xs">
-              <strong>Precedex</strong> ile <strong>Prevacid</strong> (Lansoprazol) ve <strong>Peridex</strong>{' '}
-              (Klorheksidin gargarası) karışıklıklarına karşı eczane ve servis dolaplarında Tall-Man yazı biçimi
-              (dexmedetomiDINE) kullanılmalıdır.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-500/5 space-y-1">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">Hemodinamik &amp; Bolus Güvenliği</span>
-            <p className="text-slate-600 dark:text-slate-400 text-xs">
-              Hızlı IV bolus bifazik geçici hipertansiyon ardından derin bradikardi/asistoli tetikleyebilir.
-              Şiddetli bradikardide Atropin hazır bulundurulmalı, yükleme en az 10–20 dakikada verilmelidir.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <SpecialClinicalCautionsBlock
         isDark={isDark}
         items={[
@@ -1541,31 +1541,126 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
               'Uzun süreli YBÜ infüzyonlarında enfeksiyon dışı, antibiyotiğe yanıtsız yüksek ateş (≥ 38,5–40 °C) gelişebilir ve sıklıkla sepsis sanılır. Hipotalamik α₂ termoregülasyon etkisine bağlıdır; infüzyon kesildiğinde ateş 6–12 saat içinde hızla geriler.',
           },
           {
-            title: 'Yükleme Dozu ve Bifazik Hemodinamik Yanıt',
+            title: 'Hipovolemi & Yükleme Bolusu Bifazik Yanıtı',
             detail:
-              'Hızlı IV bolus (> 10 dk’dan kısa) periferik α₂B uyarısıyla geçici şiddetli hipertansiyon, ardından derin bradikardi/AV blok/asistoli tetikleyebilir. Hemodinamik olarak kırılgan veya yaşlı hastalarda yükleme dozu atlanmalıdır.',
+              'Damar içi volümü tükenmiş hastalarda santral vazomotor tonus baskılandığında derin refrakter hipotansiyon gelişir (önce volüm resüsitasyonu!). Hızlı IV bolus (< 10 dk) periferik α₂B uyarısıyla geçici şiddetli hipertansiyon, ardından derin bradikardi/AV blok/asistoli tetikler; YBÜ ve kırılgan hastalarda yükleme atlanmalıdır.',
+          },
+          {
+            title: 'Eşzamanlı Bradikardizan İlaçlar & Otonomik Nöropati',
+            detail:
+              'Beta-blokerler (metoprolol, esmolol), non-dihidropiridin KKB’ler (diltiazem, verapamil), digoksin, amiodaron veya remifentanil alan hastalarda ve diyabetik otonom nöropatide sinerjik ağır bradikardi ve asistoli riski katlanır.',
+          },
+          {
+            title: 'Solunum Avantajı vs Orofaringeal Obstrüksiyon',
+            detail:
+              'Medüller solunum güdüsünü ve CO₂ yanıtını korur; ancak derin sedasyonda (RASS ≤ -3) veya obstrüktif uyku apnesi (OSA) olanlarda orofaringeal kas gevşemesiyle parsiyel üst havayolu obstrüksiyonu gelişebileceği akılda tutulmalıdır.',
+          },
+          {
+            title: 'Poliüri / Hipernatremi (AVP Baskılanması) & Kademeli Kesme',
+            detail:
+              'Uzamış/yüksek doz infüzyonlarda santral + nefrojenik DI benzeri masif poliüri gelişirse ilaç kesilmelidir (12–24 saatte düzelir). > 48–72 saat alan hastalarda ani kesilme rebound hipertansiyon/taşikardi yapar; 24–48 saatte kademeli azaltılmalı veya oral klonidin köprüsü kurulmalıdır.',
           },
         ]}
       />
 
-      <HighAlertSafetyBlock
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        tallManName="dexmedeTOMIDINE (4 mcg/mL Standart Seyreltme)"
-        confusionRiskWith="Deksametazon · Dobutamin · Klonidin"
-        antidoteOrRescue="Spesifik Klinik Antidot YOK (Atipamezol Veteriner) — Destekleyici Tedavi: İnfüzyonu derhal durdurun. Semptomatik bradikardide Atropin 0,5–1 mg IV (veya glikopirolat), hipotansiyonda dengeli kristaloid + vazopresör (noradrenalin/efedrin) uygulayın."
-        criticalAlerts={[
-          '200 mcg/2 mL flakon ASLA sulandırılmadan puşe edilmez; standart 4 mcg/mL (200 mcg / 50 mL SF) pompa protokolü kullanılır.',
-          '2. veya 3. derece AV blok (pacemaker yoksa) ve ciddi bradikardide infüzyon başlatılmamalıdır.',
-          '≤ 65 yaş kritik YBÜ hastalarında EMA 2022 uyarısı doğrultusunda endikasyon ve alternatif sedatifler yeniden değerlendirilmelidir.',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Ultra-Selektif α₂-Adrenoseptör (α₂A / α₂B / α₂C) Alt Tipleri & LC → VLPO Uyku Yolağı',
+          summary:
+            'Deksmedetomidin, α₂:α₁ seçiciliği 1620:1 olan (klonidinin ~8 katı) imidazol türevi tam α₂-adrenoseptör agonistidir. Tüm α₂ alt tipleri inhibitör Gi/Go proteini ile kenetlidir; adenilat siklazı inhibe eder, intraselüler cAMP’yi düşürür, voltaj-kapılı Ca²⁺ kanallarını kapatır ve GIRK K⁺ kanallarını açarak nöronal hiperpolarizasyon oluşturur.',
+          points: [
+            'α₂A Alt Tipi (Locus Coeruleus & Spinal Arka Boynuz): Sedasyon, anksiyoliz, sempatoliz (hipotansiyon/bradikardi), supraspinal ve spinal analjezi (P maddesi ve glutamat salınım inhibisyonu) ile titreme (shivering) eşiğinin düşürülmesinden sorumludur.',
+            'α₂B Alt Tipi (Periferik Damar Düz Kası & Renal Toplayıcı Tübül): Damar düz kasındaki postsinaptik α₂B aktivasyonu doğrudan vazokonstriksiyon yaparak hızlı bolus sonrası geçici hipertansiyonu oluşturur; böbrekte V₂/cAMP direnciyle serbest su diürezini (DI benzeri poliüri) tetikler.',
+            'α₂C Alt Tipi (SSS Modülasyonu): Startle (irkilme) refleksi, kognitif işleme ve spinal analjezik modülasyonda rol oynar.',
+            'Locus Coeruleus (LC) → VLPO NREM Uyku Devresi: LC noradrenerjik nöronlarının inhibisyonu, ventrolateral preoptik çekirdek (VLPO) üzerindeki tonik inhibisyonu kaldırır; VLPO’dan salınan GABA/galanin tuberomammiller çekirdeği baskılayarak fizyolojik NREM Evre 2–3 benzeri uyku (EEG uyku iğcikleri) başlatır.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Kooperatif NREM Benzeri Sedasyon & EEG: Propofol/midazolamdan farklı olarak kortikal GABA-A’yı doğrudan baskılamaz; EEG’de doğal NREM uykusuna benzeyen yavaş delta dalgaları ve 12–16 Hz uyku iğcikleri (sleep spindles) oluşturur. Hasta sesle kolayca uyandırılıp nörolojik muayeneye koopere olabilir.',
+            'Deliryum Profili & Serebral Hemodinami: Doğal uyku mimarisini koruduğu ve antikolinerjik/GABAerjik yük getirmediği için YBÜ deliryum insidansını belirgin azaltır (SEDCOM / PADIS). CBF’yi vazokonstriksiyonla hafif azaltır, CMRO₂’yi minimal etkiler, ICP’yi artırmaz.',
+            'Analjezik & Anti-Shivering Etki: Spinal arka boynuz α₂A aktivasyonuyla opioid ihtiyacını %30–50 azaltır; hipotalamik termoregülasyon eşiğini düşürerek postoperatif titremeyi etkin biçimde durdurur.',
+          ],
+          cvs: [
+            'Klasik Bifazik Kan Basıncı Yanıtı: Hızlı yükleme bolusu sonrası yüksek pik plazma düzeyi önce periferik vasküler α₂B reseptörlerini uyararak geçici hipertansiyon ve refleks bradikardi yapar; ardından santral medüller/LC α₂A sempatolizi baskın çıkarak SVR düşüşü, hipotansiyon ve kalıcı sinüs bradikardisi oluşturur.',
+            'İletim Sistemi & Asistoli Riski: SA nod otomatizmasını ve AV nod iletimini yavaşlatır; yüksek vagal tonuslu genç erişkinlerde, pacemaker’sız 2.–3. derece AV blokta veya remifentanil/β-bloker birlikteliğinde sinüs arresti/asistoli gelişebilir.',
+          ],
+          respiratory: [
+            'Minimal Solunum Depresyonu: Medüller solunum merkezinin CO₂ duyarlılığını ve dakika ventilasyonunu klinik dozlarda korur; apne riski propofol/opioid/midazolama göre son derece düşüktür.',
+            'Üst Havayolu Tonusu: Doğal NREM uykusundaki gibi derin sedasyonda (RASS ≤ -3) veya OSA’lı hastalarda faringeal kas gevşemesiyle horlama ve parsiyel üst havayolu obstrüksiyonu görülebilir (çene itme/CPAP ile kolayca açılır).',
+          ],
+          other: [
+            'Hipofizer AVP salınımını ve renal AQP2 kanallarını baskılayarak poliüri/hipernatremi (DI benzeri tablo) yapabilir',
+            'Hipotalamik termoregülasyon bozukluğu ile antibiyotiğe yanıtsız santral ilaç ateşi (hipertermi)',
+            'Adrenal steroidogenezi klinik olarak anlamlı baskılamaz (etomidattan farklı)',
+            'Endojen katekolamin salınımını azaltarak cerrahi stres yanıtını köreltir',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Deksmedetomidin, inhalasyon anestezikleri ve opioidlerle güçlü koruyucu (sparing) sinerji gösterirken, tek başına genel anestezi/derin koma oluşturamayan belirgin bir sedasyon tavan etkisine sahiptir.',
+          points: [
+            'MAC & Opioid Azaltımı: İnhalasyon ajanlarının MAC değerini %30–50, intraoperatif/postoperatif opioid ve propofol gereksinimini %30–50 oranında azaltır.',
+            'Sedasyon Tavan Etkisi (Ceiling Effect): Doz 1.4 mcg/kg/saat üzerine çıkarılsa bile güvenilir bilinç kaybı ve amnezi sağlamaz; aksine ağır bradikardi, hipertansiyon (α₂B) ve hipotansiyon artar. Derin sedasyon (RASS -4/-5, NMB altında) için tek başına KULLANILMAZ.',
+            'Spesifik İnsan Antidotu Yoktur: Veteriner hekimlikte kullanılan atipamezol insanlarda ruhsatlı değildir; aşırı doz/bradikardi yönetimi infüzyonu kesme, atropin/glikopirolat ve sıvı/vazopresör desteğine dayanır.',
+          ],
+        }}
+        clinicalPearls={[
+          'SPICE III ≤ 65 Yaş Mortalite Paradoksu: SPICE III çalışmasında genel mortalite farksızken ≤ 65 yaş kritik hastalarda 90 günlük mortalite artış sinyali saptanmıştır (EMA 2022 uyarısı); > 65 yaş ve postoperatif hastalarda ise fayda sinyali öne çıkmıştır.',
+          'Açıklanamayan YBÜ Ateşinde "Deksmedetomidin İlaç Ateşi": Kültürleri negatif, prokalsitonini düşük ve antibiyotiğe yanıtsız yüksek ateşli YBÜ hastasında deksmedetomidin akla gelmelidir; kesilince ateş 6–12 saatte normale döner.',
+          'Tolerans, Taşifilaksi & Klonidin Köprüsü: > 48–72 saatlik infüzyonlarda α₂ reseptör down-regülasyonu gelişir; ani kesilme rebound hipertansiyon, taşikardi ve ajitasyon yapar. 24–48 saatte kademeli azaltma veya enteral klonidin (0.1–0.3 mg/gün) ile geçiş gerekir.',
+          'NMB (Nöromüsküler Bloker) Altında Tek Başına Kullanmayın: Amnezi ve bilinç kaybı garantisi vermediğinden paralize hastada farkındalık (awareness) riski taşır; propofol/midazolam ile kombine edilmelidir.',
         ]}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 14. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
+      {/* 14. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA      */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Deksmedetomidin"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Amfoterisin B · Diazepam (Aynı IV Hat / Y-Site) & Pacemaker’sız 2.–3. Derece AV Blok',
+            mechanism: 'Fizikokimyasal Presipitasyon / İleri İletim Sistemi Bloku',
+            clinicalEffect: 'Y-site çökelme ve kateter tıkanması; ileri AV blokta fatal bradikardi/asistoli.',
+            management: 'Amfoterisin B ve diazepam ile ayrı lümen kullanın; pacemaker’sız ileri AV blokta kesinlikle uygulamayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Beta-Blokerler (Metoprolol, Esmolol) · Non-DHP KKB (Diltiazem, Verapamil) · Digoksin · Amiodaron',
+            mechanism: 'Aditif / Sinerjik SA–AV Nod Depresyonu & Sempatoliz',
+            clinicalEffect: 'Ciddi sinüs bradikardisi (<40–50/dk), yüksek dereceli AV blok, sinüs arresti ve asistoli riski.',
+            management: 'Yükleme bolusundan kaçının; düşük idame hızıyla (0.2 mcg/kg/saat) başlayın, sürekli EKG ve yatak başı atropin hazır bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'Opioidler (Remifentanil, Fentanil) · Propofol · Midazolam · İnhalasyon Anestezikleri',
+            mechanism: 'Farmakodinamik Sinerji (Sedasyon, Vagotoni & Vazodilatasyon)',
+            clinicalEffect: 'Derin sedasyon, hipotansiyon ve vagotonik bradikardi; MAC ve opioid gereksiniminde %30–50 düşüş.',
+            management: 'Eşzamanlı anestezik ve opioid dozlarını %30–50 titre ederek azaltın; derin sedasyonda üst havayolu açıklığını izleyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Antihipertansifler (ACEi/ARB, Klonidin, Vazodilatörler) & Nöroaksiyel (Spinal/Epidural) Blok',
+            mechanism: 'Aditif Santral + Periferik Sempatik Blokaj',
+            clinicalEffect: 'Dirençli hipotansiyon ve ortostatik kollaps; klonidin ile birlikte kullanımda ağır bradikardi.',
+            management: 'Öncelikle övolemiyi sağlayın; vazopresör (efedrin/fenilefrin/norepinefrin) hazır bulundurun.',
+          },
+          {
+            severity: 'C',
+            agent: 'Antidepresanlar / Antipsikotikler & CYP2A6 / UGT Modülatörleri',
+            mechanism: 'Aditif SSS Sedasyonu / Hepatik Metabolizma Değişikliği',
+            clinicalEffect: 'Artmış somnolans, ortostatik hipotansiyon veya hepatik klerens değişkenliği.',
+            management: 'RASS hedefi (-1 / -2) eşliğinde kademeli titrasyon yapın.',
+          },
+        ]}
         references={[
           {
             authors: 'Riker RR, Shehabi Y, Bokesch PM, et al. (SEDCOM)',

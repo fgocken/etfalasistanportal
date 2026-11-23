@@ -2,26 +2,22 @@ import React, { useState, useId } from 'react';
 import {
   Wind,
   Activity,
-  AlertTriangle,
-  ShieldAlert,
-  Info,
   Clock,
   Stethoscope,
-  Flame,
-  Zap,
   Gauge,
   Brain,
   HeartPulse,
-  Droplet,
   ChevronDown,
   ChevronUp,
   Leaf,
-  Thermometer,
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
   MonographCopyButton,
@@ -29,6 +25,7 @@ import {
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -75,7 +72,7 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
   const [dialPercent, setDialPercent] = useState<number>(5.0);
   const [caseHours, setCaseHours] = useState<number>(2.0);
 
-  const [pkOpen, setPkOpen] = useState<boolean>(true);
+  const [pkOpen, setPkOpen] = useState<boolean>(false);
 
   const ageInputId = useId();
   const n2oSelectId = useId();
@@ -129,6 +126,44 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP & MH Güvenliği' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-dozlar', label: 'Endikasyon & Dozaj' },
+          { id: 'sec-hesaplayici', label: 'MAC & Karbon Ayak İzi' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'TEC-6 & CO Absorban' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON · v4.0) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="desFLURANE"
+        confusionRiskWith="sevoFLURANE · isoFLURANE"
+        criticalAlerts={[
+          'Sadece Mavi kodlu Desfluran şişesi ve elektrikle ısıtmalı/basınçlı TEC-6 / D-Vapor dolum portuna bağlanır; standart vaporizatöre ASLA doldurulmaz (22.8 °C kaynama noktası nedeniyle oda sıcaklığında kaynayıp ölümcül aşırı doz ve basınç hasarı yapar!).',
+          'İnhalasyon (maske) indüksiyonu KESİNLİKLE KONTRENDİKEDİR: %30–50 oranında laringospazm, bronkospazm ve desatürasyon tetikler.',
+          'CO zehirlenmesi şüphesinde standart puls oksimetre SpO₂’yi %98–100 yalancı normal gösterir; kurumuş soda lime/Baralyme temasında mutlaka CO-oksimetreli AKG alın ve absorbanı derhal değiştirin.',
+          'Malign Hipertermi (MH) şüphesinde vaporizatörü derhal kapatıp cihazdan çıkarın, aktif kömür filtresi (Vapor-Clean) takarak %100 O₂ 10–15 L/dk yıkayın, TIVA’ya geçin ve Dantrolen 2.5 mg/kg IV başlatın.',
+        ]}
+        antidoteOrRescue="Aşırı dozda vaporizatörü kapatıp %100 O₂ yüksek akımla hızlı yıkama yapın (0.42–0.45 kan/gaz katsayısı nedeniyle dakikalar içinde elimine olur). Sempatik taşikardi/hipertansiyon krizinde Esmolol veya Fentanil/Remifentanil ile küntleştirin. Malign Hipertermi krizinde spesifik antidot IV Dantrolen sodyumdur (2.5 mg/kg IV bolus)."
+      />
+
       {/* 1. KİMLİK & KLİNİK ÖZET HEADER */}
       <section
         id="sec-ozet"
@@ -232,24 +267,6 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      <MonographQuickNav
-        isDark={isDark}
-        items={[
-          { id: 'sec-etki', label: 'Etki Mekanizması' },
-          { id: 'sec-hesaplayici', label: 'MAC & Karbon Ayak İzi' },
-          { id: 'sec-pkpd', label: 'Fizikokimya & Sempatik Yanıt' },
-          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-          { id: 'sec-dozlar', label: 'Endikasyonlar & Klinik Kullanım' },
-          { id: 'sec-uyumluluk', label: 'TEC-6 Vaporizatör & CO Toksisitesi' },
-          { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
-          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
-          { id: 'sec-guvenlik', label: 'ISMP & MH Güvenliği' },
-          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
-        ]}
-      />
-
       {/* ETKİ MEKANİZMASI */}
       <MechanismOfActionBlock
         isDark={isDark}
@@ -273,6 +290,173 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
           },
         ]}
       />
+
+      {/* 3. FİZİKOKİMYA, PK/PD VE SİSTEMİK ETKİLER (AKORDİYON) */}
+      <section
+        id="sec-pkpd"
+        className={`rounded-2xl border overflow-hidden ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setPkOpen(!pkOpen)}
+          className="w-full p-5 flex items-center justify-between text-left cursor-pointer hover:bg-slate-500/5"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                Farmakokinetik, Fizikokimya &amp; Sempatik Hiperaktivite Fizyolojisi
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                En hızlı FA/FI oranı, sıfıra yakın metabolizma (%0.02), sempatik taşikardi ve bronş irritasyonu
+              </p>
+            </div>
+          </div>
+          {pkOpen ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+        </button>
+
+        {pkOpen && (
+          <div className="p-5 pt-0 border-t border-slate-200 dark:border-slate-800 space-y-4">
+            <div className="overflow-x-auto pt-4">
+              <table className="w-full text-xs text-left">
+                <thead className="border-b border-slate-200 dark:border-slate-700 text-slate-500 uppercase">
+                  <tr>
+                    <th className="py-2 pr-4">Parametre</th>
+                    <th className="py-2 pr-4">Değer (Miller / Barash)</th>
+                    <th className="py-2">Klinik Yorum</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-mono tabular-nums">
+                  <tr>
+                    <td className="py-2 pr-4 font-sans font-semibold">Kan / Gaz Partisyon Katsayısı</td>
+                    <td className="py-2 pr-4 font-bold text-emerald-600 dark:text-emerald-400">0.42 – 0.45</td>
+                    <td className="py-2 font-sans">Tüm halojenliler içinde en düşük → saniyeler/dakikalar içinde denge &amp; en hızlı uyanma</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-4 font-sans font-semibold">Yağ / Gaz · Beyin / Kan</td>
+                    <td className="py-2 pr-4 font-bold">18.7 – 27 · 1.3</td>
+                    <td className="py-2 font-sans">Morbid obezitede ve 6–8 saatlik vakalarda yağda birikim minimal</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-4 font-sans font-semibold">Kaynama Noktası · Buhar Basıncı</td>
+                    <td className="py-2 pr-4 font-bold text-amber-600 dark:text-amber-400">22.8°C · 669 mmHg</td>
+                    <td className="py-2 font-sans">Oda sıcaklığında kaynar! Isıtmalı &amp; basınçlı TEC-6/D-Vapor şarttır</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-4 font-sans font-semibold">Metabolizma &amp; Compound A</td>
+                    <td className="py-2 pr-4 font-bold">%0.02 · Compound A Yok</td>
+                    <td className="py-2 font-sans">Trifloroasetik asit (TFA) ve F⁻ oluşumu pratik olarak sıfırdır</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-rose-50/60 border-rose-200'}`}>
+                <span className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-1">
+                  <Wind className="w-4 h-4" />
+                  <span>Solunum &amp; Hava Yolu</span>
+                </span>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <strong>Keskin (pungent) kokulu ve şiddetli hava yolu irritanıdır!</strong> &gt; 1 MAC (%6) ve ani artışlar öksürük, nefes tutma, <strong>laringospazm</strong> ve <strong>bronkospazmı</strong> tetikler. İntraoperatif bronkospazm gelişirse Desfluran derhal kapatılıp Sevofluran veya Propofole geçilmelidir.
+                </p>
+              </div>
+              <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-amber-50/60 border-amber-200'}`}>
+                <span className="font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5 mb-1">
+                  <HeartPulse className="w-4 h-4" />
+                  <span>Kardiyovasküler &amp; Sempatik Pik</span>
+                </span>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  SVR'yi doza bağımlı düşürür (MAP↓). Ancak konsantrasyon <strong>&gt; 1 MAC (%6) üzerine hızla çıkarılırsa</strong> trakeal/pulmoner reseptör uyarısıyla geçici <strong>sempatik hiperaktivite (KTA↑↑, OAB↑↑, plazma adrenalin↑)</strong> oluşur. Önlemek için %1–2 kademeli artırın veya opioid/esmolol ekleyin.
+                </p>
+              </div>
+              <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-indigo-50/60 border-indigo-200'}`}>
+                <span className="font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5 mb-1">
+                  <Brain className="w-4 h-4" />
+                  <span>Serebral &amp; Kas Gevşetici Potansiyalizasyon</span>
+                </span>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  CMRO₂ düşürür ancak İzofluran/Sevoflurana göre beyin damarlarında biraz daha fazla vazodilatasyon yapar (KİB artışı riski yüksek olgularda &lt; 0.8–1.0 MAC veya TIVA tercih edilir). Non-depolarizan NMB'lerin etkisini belirgin potansiyalize eder.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* KONTRENDİKASYONLAR (ENDİKASYONLARDAN ÖNCE) */}
+      <ContraindicationsGridBlock
+        isDark={isDark}
+        absoluteItems={[
+          'Malign Hipertermi (MH) bilinen veya şüphelenilen genetik yatkınlık (RYR1/CACNA1S mutasyonu, aile öyküsü).',
+          'İnhalasyon (maske) indüksiyonu (pediatri ve erişkinlerde yüksek laringospazm/bronkospazm/apne insidansı nedeniyle kontrendikedir).',
+          'Önceki halojenli anesteziklere bağlı immün hepatit veya ciddi aşırı duyarlılık öyküsü.',
+        ]}
+        relativeItems={[
+          'Astım, KOAH alevlenmesi, aktif bronkospazm veya üst solunum yolu enfeksiyonu olan reaktif hava yolu (bronkospazmı tetikleyebilir!).',
+          'Ciddi koroner arter hastalığı, kontrolsüz hipertansiyon, kritik aort stenozu veya intrakraniyal anevrizma (hızlı artışta oluşan sempatik taşikardi/hipertansiyon krizi nedeniyle).',
+          'Ağır KİBAS / intrakraniyal kitle (serebral vazodilatasyon ile KİB artırabilir).',
+        ]}
+        clinicalNote="İntraoperatif bronkospazm veya yüksek Ppeak gelişen bir hastada Desfluran konsantrasyonunu artırarak anesteziyi derinleştirmeye çalışmak bronkospazmı daha da şiddetlendirir — derhal Propofol veya Sevoflurana geçin."
+      />
+
+      {/* 4. ENDİKASYONLAR & KLİNİK DOZAJ */}
+      <section
+        id="sec-dozlar"
+        className={`p-5 sm:p-6 rounded-2xl border space-y-4 ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <Stethoscope className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            Klinik Endikasyonlar, Doz Titrasyonu ve LMA / ETT Ayrımı
+          </h3>
+        </div>
+
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 font-bold">
+              <tr>
+                <th className="p-3">Klinik Senaryo</th>
+                <th className="p-3">Hedeflenen EtDes / Kadran</th>
+                <th className="p-3">Titrasyon Hızı &amp; FGF</th>
+                <th className="p-3">Klinik Strateji</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
+              <tr>
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">Morbid Obezite (Bariatrik Cerrahi)</td>
+                <td className="p-3 font-mono font-bold text-sky-600 dark:text-sky-400">0.7 – 1.0 MAC (%4.0 – %6.0)</td>
+                <td className="p-3 font-mono">0.5 – 1.0 L/dk · Kademeli artış</td>
+                <td className="p-3">Yağ/gaz katsayısı 18.7 olduğu için ekstübasyon ve hava yolu reflekslerinin dönüşü Propofol/İzoflurana göre belirgin hızlıdır.</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">Uzun Süreli Cerrahi İdamesi (ETT ile)</td>
+                <td className="p-3 font-mono font-bold text-teal-600 dark:text-teal-400">%3.5 – %5.5 (+ Opioid)</td>
+                <td className="p-3 font-mono">0.5 – 0.8 L/dk (Minimal Akım)</td>
+                <td className="p-3">Yalnızca IV indüksiyon ve entübasyon tamamlandıktan sonra başlanmalıdır; doku birikimi minimaldir.</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">LMA / Supraglottik Hava Yolu ile Kullanım</td>
+                <td className="p-3 font-mono font-bold text-amber-600 dark:text-amber-400">&lt; %5.0 – %6.0 (Opioid ile)</td>
+                <td className="p-3 font-mono">Yavaş %1'lik basamaklarla artır</td>
+                <td className="p-3">Spontan solunumda &gt;%6 irritasyonla öksürük/laringospazm riskini artırır; LMA'da Sevofluran genelde daha sorunsuzdur.</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold text-slate-900 dark:text-white">Maske / İnhalasyon İndüksiyonu</td>
+                <td className="p-3 font-mono font-bold text-rose-600 dark:text-rose-400">KONTRENDİKE</td>
+                <td className="p-3 font-mono">—</td>
+                <td className="p-3">Özellikle çocuklarda %50'ye varan laringospazm, öksürük ve desatürasyon riski nedeniyle asla kullanılmaz!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       {/* 2. İNTERAKTİF MAC & KARBON AYAK İZİ HESAPLAYICISI */}
       <section
@@ -559,214 +743,55 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
-      {/* 3. FİZİKOKİMYA, PK/PD VE SİSTEMİK ETKİLER (AKORDİYON) */}
-      <section
-        id="sec-pkpd"
-        className={`rounded-2xl border overflow-hidden ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <button
-          type="button"
-          onClick={() => setPkOpen(!pkOpen)}
-          className="w-full p-5 flex items-center justify-between text-left cursor-pointer hover:bg-slate-500/5"
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                Farmakokinetik, Fizikokimya &amp; Sempatik Hiperaktivite Fizyolojisi
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                En hızlı FA/FI oranı, sıfıra yakın metabolizma (%0.02), sempatik taşikardi ve bronş irritasyonu
-              </p>
-            </div>
-          </div>
-          {pkOpen ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
-        </button>
-
-        {pkOpen && (
-          <div className="p-5 pt-0 border-t border-slate-200 dark:border-slate-800 space-y-4">
-            <div className="overflow-x-auto pt-4">
-              <table className="w-full text-xs text-left">
-                <thead className="border-b border-slate-200 dark:border-slate-700 text-slate-500 uppercase">
-                  <tr>
-                    <th className="py-2 pr-4">Parametre</th>
-                    <th className="py-2 pr-4">Değer (Miller / Barash)</th>
-                    <th className="py-2">Klinik Yorum</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-mono tabular-nums">
-                  <tr>
-                    <td className="py-2 pr-4 font-sans font-semibold">Kan / Gaz Partisyon Katsayısı</td>
-                    <td className="py-2 pr-4 font-bold text-emerald-600 dark:text-emerald-400">0.42 – 0.45</td>
-                    <td className="py-2 font-sans">Tüm halojenliler içinde en düşük → saniyeler/dakikalar içinde denge &amp; en hızlı uyanma</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 pr-4 font-sans font-semibold">Yağ / Gaz · Beyin / Kan</td>
-                    <td className="py-2 pr-4 font-bold">18.7 – 27 · 1.3</td>
-                    <td className="py-2 font-sans">Morbid obezitede ve 6–8 saatlik vakalarda yağda birikim minimal</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 pr-4 font-sans font-semibold">Kaynama Noktası · Buhar Basıncı</td>
-                    <td className="py-2 pr-4 font-bold text-amber-600 dark:text-amber-400">22.8°C · 669 mmHg</td>
-                    <td className="py-2 font-sans">Oda sıcaklığında kaynar! Isıtmalı &amp; basınçlı TEC-6/D-Vapor şarttır</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 pr-4 font-sans font-semibold">Metabolizma &amp; Compound A</td>
-                    <td className="py-2 pr-4 font-bold">%0.02 · Compound A Yok</td>
-                    <td className="py-2 font-sans">Trifloroasetik asit (TFA) ve F⁻ oluşumu pratik olarak sıfırdır</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-rose-50/60 border-rose-200'}`}>
-                <span className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-1">
-                  <Wind className="w-4 h-4" />
-                  <span>Solunum &amp; Hava Yolu</span>
-                </span>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                  <strong>Keskin (pungent) kokulu ve şiddetli hava yolu irritanıdır!</strong> &gt; 1 MAC (%6) ve ani artışlar öksürük, nefes tutma, <strong>laringospazm</strong> ve <strong>bronkospazmı</strong> tetikler. İntraoperatif bronkospazm gelişirse Desfluran derhal kapatılıp Sevofluran veya Propofole geçilmelidir.
-                </p>
-              </div>
-              <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-amber-50/60 border-amber-200'}`}>
-                <span className="font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5 mb-1">
-                  <HeartPulse className="w-4 h-4" />
-                  <span>Kardiyovasküler &amp; Sempatik Pik</span>
-                </span>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                  SVR'yi doza bağımlı düşürür (MAP↓). Ancak konsantrasyon <strong>&gt; 1 MAC (%6) üzerine hızla çıkarılırsa</strong> trakeal/pulmoner reseptör uyarısıyla geçici <strong>sempatik hiperaktivite (KTA↑↑, OAB↑↑, plazma adrenalin↑)</strong> oluşur. Önlemek için %1–2 kademeli artırın veya opioid/esmolol ekleyin.
-                </p>
-              </div>
-              <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-indigo-50/60 border-indigo-200'}`}>
-                <span className="font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5 mb-1">
-                  <Brain className="w-4 h-4" />
-                  <span>Serebral &amp; Kas Gevşetici Potansiyalizasyon</span>
-                </span>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                  CMRO₂ düşürür ancak İzofluran/Sevoflurana göre beyin damarlarında biraz daha fazla vazodilatasyon yapar (KİB artışı riski yüksek olgularda &lt; 0.8–1.0 MAC veya TIVA tercih edilir). Non-depolarizan NMB'lerin etkisini belirgin potansiyalize eder.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* KONTRENDİKASYONLAR (ENDİKASYONLARDAN ÖNCE) */}
-      <ContraindicationsGridBlock
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
         isDark={isDark}
-        absoluteItems={[
-          'Malign Hipertermi (MH) bilinen veya şüphelenilen genetik yatkınlık (RYR1/CACNA1S mutasyonu, aile öyküsü).',
-          'İnhalasyon (maske) indüksiyonu (pediatri ve erişkinlerde yüksek laringospazm/bronkospazm/apne insidansı nedeniyle kontrendikedir).',
-          'Önceki halojenli anesteziklere bağlı immün hepatit veya ciddi aşırı duyarlılık öyküsü.',
+        preparations={[
+          {
+            name: 'Suprane 240 mL Şişe (Desfluran %100)',
+            presentation: '240 mL koyu amber cam / alüminyum kaplı şişe + dahili Mavi renk kodlu kilitli dolum valfi (Saf-T-Fil) — yalnızca ısıtmalı/basınçlı TEC-6 veya D-Vapor vaporizatörüne bağlanır',
+            concentration: '%100 Sıvı (1 mL = 209.7 mL buhar @ 20 °C)',
+            saltOrBaseNote: 'Kaynama noktası 22.8 °C, buhar basıncı 20 °C’de 669 mmHg! Oda sıcaklığında kaynadığı için 39 °C’ye ısıtılan ve ~1500 mmHg (2 atm) basınç altında regüle edilen özel elektronik vaporizatör ZORUNLUDUR.',
+            alertLevel: 'high',
+          },
         ]}
-        relativeItems={[
-          'Astım, KOAH alevlenmesi, aktif bronkospazm veya üst solunum yolu enfeksiyonu olan reaktif hava yolu (bronkospazmı tetikleyebilir!).',
-          'Ciddi koroner arter hastalığı, kontrolsüz hipertansiyon, kritik aort stenozu veya intrakraniyal anevrizma (hızlı artışta oluşan sempatik taşikardi/hipertansiyon krizi nedeniyle).',
-          'Ağır KİBAS / intrakraniyal kitle (serebral vazodilatasyon ile KİB artırabilir).',
+        standardDilutions={[
+          'Vaporizatör Tipi: Isıtmalı & basınçlı elektronik TEC-6 / Dräger D-Vapor (39 °C, ~2 atm, %1–%18 kadran aralığı; elektrik bağlantısı zorunludur!).',
+          'İdame (Minimal / Düşük Akım Zorunlu): 0.5–0.8 L/dk FGF, EtDes %3.5–%5.5 (opioid eşliğinde 0.7–1.0 MAC). GWP₁₀₀ = 2540 nedeniyle yüksek akım (> 1 L/dk) kullanılmamalıdır.',
+          'Titrasyon Kuralı: Konsantrasyon ≥ %6 (1 MAC) üzerine çıkarılacaksa sempatik deşarjı önlemek için %1–2’lik yavaş basamaklarla artırın veya opioid/esmolol ekleyin.',
         ]}
-        clinicalNote="İntraoperatif bronkospazm veya yüksek Ppeak gelişen bir hastada Desfluran konsantrasyonunu artırarak anesteziyi derinleştirmeye çalışmak bronkospazmı daha da şiddetlendirir — derhal Propofol veya Sevoflurana geçin."
+        concentrationTrapWarning="Standart değişken-bypass vaporizatöre (Sevofluran/İzofluran) ASLA doldurulmaz! Elektrik kesintisinde TEC-6 / D-Vapor 10–15 saniye içinde gaz akışını keser (farkındalık riski!)."
       />
 
-      {/* 4. ENDİKASYONLAR & KLİNİK DOZAJ */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className="w-5 h-5 text-sky-600 dark:text-sky-400" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-            Klinik Endikasyonlar, Doz Titrasyonu ve LMA / ETT Ayrımı
-          </h3>
-        </div>
-
-        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 font-bold">
-              <tr>
-                <th className="p-3">Klinik Senaryo</th>
-                <th className="p-3">Hedeflenen EtDes / Kadran</th>
-                <th className="p-3">Titrasyon Hızı &amp; FGF</th>
-                <th className="p-3">Klinik Strateji</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
-              <tr>
-                <td className="p-3 font-semibold text-slate-900 dark:text-white">Morbid Obezite (Bariatrik Cerrahi)</td>
-                <td className="p-3 font-mono font-bold text-sky-600 dark:text-sky-400">0.7 – 1.0 MAC (%4.0 – %6.0)</td>
-                <td className="p-3 font-mono">0.5 – 1.0 L/dk · Kademeli artış</td>
-                <td className="p-3">Yağ/gaz katsayısı 18.7 olduğu için ekstübasyon ve hava yolu reflekslerinin dönüşü Propofol/İzoflurana göre belirgin hızlıdır.</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-semibold text-slate-900 dark:text-white">Uzun Süreli Cerrahi İdamesi (ETT ile)</td>
-                <td className="p-3 font-mono font-bold text-teal-600 dark:text-teal-400">%3.5 – %5.5 (+ Opioid)</td>
-                <td className="p-3 font-mono">0.5 – 0.8 L/dk (Minimal Akım)</td>
-                <td className="p-3">Yalnızca IV indüksiyon ve entübasyon tamamlandıktan sonra başlanmalıdır; doku birikimi minimaldir.</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-semibold text-slate-900 dark:text-white">LMA / Supraglottik Hava Yolu ile Kullanım</td>
-                <td className="p-3 font-mono font-bold text-amber-600 dark:text-amber-400">&lt; %5.0 – %6.0 (Opioid ile)</td>
-                <td className="p-3 font-mono">Yavaş %1'lik basamaklarla artır</td>
-                <td className="p-3">Spontan solunumda &gt;%6 irritasyonla öksürük/laringospazm riskini artırır; LMA'da Sevofluran genelde daha sorunsuzdur.</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-semibold text-slate-900 dark:text-white">Maske / İnhalasyon İndüksiyonu</td>
-                <td className="p-3 font-mono font-bold text-rose-600 dark:text-rose-400">KONTRENDİKE</td>
-                <td className="p-3 font-mono">—</td>
-                <td className="p-3">Özellikle çocuklarda %50'ye varan laringospazm, öksürük ve desatürasyon riski nedeniyle asla kullanılmaz!</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* 5. TEC-6 VAPORİZATÖR & KARBONMONOKSİT (CO) RİSKİ */}
-      <section
-        id="sec-uyumluluk"
-        className={`p-5 sm:p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5">
-          <Thermometer className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-            TEC-6 / D-Vapor Teknolojisi, Kurumuş Absorban &amp; Karbonmonoksit (CO) Tehlikesi
-          </h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-sky-50/50 border-sky-200'}`}>
-            <span className="font-bold text-sky-700 dark:text-sky-300 block mb-1">
-              1. Isıtmalı &amp; Basınçlı Vaporizatör Zorunluluğu
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Desfluran 22.8 °C'de kaynar; buhar basıncı 20 °C'de 669 mmHg'dir (1 atm'ye çok yakın). Bu nedenle hazneyi <strong>39 °C'ye ısıtıp ~1500 mmHg (2 atm) basınç altında</strong> regüle ederek elektronik olarak enjekte eden TEC-6 / D-Vapor kullanır. <strong>Elektrik kesilirse 10–15 sn içinde kapanır!</strong>
-            </p>
-          </div>
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-rose-50/50 border-rose-200'}`}>
-            <span className="font-bold text-rose-700 dark:text-rose-300 block mb-1">
-              2. Kurumuş Absorban = Masif Karbonmonoksit (CO) Üretimi!
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Desfluran, CHF₂ grubunun tamamen kurumuş kuvvetli baz içeren soda lime/Baralyme ile reaksiyonu sonucu <strong>tüm anestezikler içinde en yüksek miktarda CO</strong> üretir (Desfluran &gt; Enfluran &gt; İzofluran &gt;&gt; Sevofluran). İlk vaka, hafta sonu unutulmuş açık O₂ akımı sonrası yüksek COHb gelişebilir!
-            </p>
-          </div>
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-amber-50/50 border-amber-200'}`}>
-            <span className="font-bold text-amber-700 dark:text-amber-300 block mb-1">
-              3. Yüksek Rakım (İrtifa) Etkisi
-            </span>
-            <p className="text-slate-600 dark:text-slate-300">
-              Standart variable-bypass vaporizatörler (Sevofluran) yüksek rakımda kısmi basıncı korurken, TEC-6 kadranı <strong>yüzde (%) hacim fraksiyonu</strong> verir. Yüksek rakımda (düşük barometrik basınçta) aynı parsiyel basıncı (MAC) korumak için kadran % ayarı yukarı çekilmelidir.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* UYGULAMA YOLU, VAPORİZATÖR, CO₂ ABSORBANI & DEVRE UYUMLULUĞU (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        sectionTitle="Uygulama Yolu, Vaporizatör, CO₂ Absorbanı & Devre Uyumluluğu"
+        accessRequirement="peripheral-ok"
+        accessSummary="Yalnızca endotrakeal tüp (ETT) veya dikkatle titre edilmiş LMA üzerinden, ısıtmalı/basınçlı TEC-6 / D-Vapor (39 °C, ~2 atm) aracılığıyla İNHALASYON yoluyla uygulanır (maske indüksiyonu ve IV uygulama KESİNLİKLE KONTRENDİKEDİR). Yüksek rakımda (düşük barometrik basınçta) TEC-6 hacim yüzdesi (%) verdiği için aynı parsiyel basıncı (MAC) korumak adına kadran % değeri yukarı ayarlanmalıdır."
+        phRange="Nötr Uçucu Sıvı (Kaynama: 22.8 °C · Buhar Basıncı: 669 mmHg)"
+        osmolalityNote="1 mL sıvı = 1.465 g ≈ 209.7 mL buhar (20 °C). GWP₁₀₀ = 2540 (sera gazı yükünü sınırlamak için 0.5–0.8 L/dk minimal akım şarttır)."
+        compatibleDiluents={[
+          'Taşıyıcı Gazlar: %100 O₂, O₂ / Medikal Hava veya O₂ / N₂O karışımları',
+          'Modern KOH/NaOH-Free CO₂ Absorbanları (Amsorb Plus, Drägersorb Free): Kurumuş olsa dahi Karbonmonoksit (CO) oluşumu pratik olarak SIFIR — Desfluranla en güvenli absorban seçeneği!',
+          'Compound A Oluşturmaz: Sevoflurandan farklı olarak Desfluran düşük akımda Compound A üretmez.',
+        ]}
+        stabilityNote="Oda sıcaklığında (15–30 °C) dik konumda saklanır. CHF₂ grubunun tamamen kurumuş kuvvetli baz içeren Baralyme veya klasik soda lime ile reaksiyonu TÜM VOLATİLLER İÇİNDE EN YÜKSEK MİKTARDA KARBONMONOKSİT (CO) üretir (Desfluran > Enfluran > İzofluran >> Sevofluran)! Özellikle hafta sonu O₂ akışı açık unutulan cihazlarda Pazartesi sabahı ilk vakada masif COHb gelişebilir."
+        ySiteCompatible={[
+          'O₂ / Medikal Hava',
+          'N₂O (Aditif MAC)',
+          'Amsorb Plus / Drägersorb Free',
+          'IV Propofol / Opioid / NMB (Ayrı IV Hat)',
+          'ETT (Tercih) · LMA (< %6 Dikkatle)',
+        ]}
+        ySiteIncompatible={[
+          'Kurumuş Baralyme / Klasik Soda Lime (MASİF CO ÜRETİMİ!)',
+          'Standart Variable-Bypass Vaporizatör',
+          'Maske / İnhalasyon İndüksiyonu',
+          'Herhangi Bir IV / İntravasküler Enjeksiyon',
+        ]}
+        extravasationProtocol="Malign Hipertermi (MH) Devre & Vaporizatör Protokolü (MHAUS): MH şüphesinde Desfluranı DERHAL kapatın, TEC-6 / D-Vapor’ı cihazdan çıkarın (veya sıfırlayıp kapatın), inspiratuvar ve ekspiratuvar kollara aktif kömür filtresi (Vapor-Clean) takarak %100 O₂ 10–15 L/dk ile yüksek akım yıkama başlatın, TIVA’ya geçin ve 2.5 mg/kg IV Dantrolen uygulayın. CO zehirlenmesi şüphesinde standart SpO₂ yalancı normal (%98–100) görünür; CO-oksimetreli AKG alın ve absorbanı derhal değiştirin."
+      />
 
       {/* 7. BÖBREK & KARACİĞER YETMEZLİĞİ */}
       <OrganImpairmentGridBlock
@@ -781,6 +806,24 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
           'TFA hapten oluşumu diğer tüm halojenlilerden en düşüktür; volatil ilişkili hepatit riski teorik düzeydedir.',
           'Siroz ve karaciğer transplantasyonunda hızlı nörolojik derlenme sağlayarak postoperatif ensefalopati ayrımını kolaylaştırır.',
         ]}
+      />
+
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="Her Dekatta MAC ~%6 ↓ (>40 Yaş)"
+        geriatricPoints={[
+          'Mapleson (1996) denklemine göre 40 yaşından sonra her 10 yılda Desfluran MAC değeri ~%6 düşer: 40 yaşta %6.0 olan 1.0 MAC, 70 yaşta ~%5.0’e, 80 yaşta ~%4.7’ye iner.',
+          'Koroner arter hastalığı ve hipertansiyonu olan yaşlı hastalarda > 1 MAC hızlı konsantrasyon artışının tetiklediği sempatik taşikardi/hipertansiyon krizi miyokardiyal iskemiye yol açabilir; daima %1–2 kademeli artırılmalıdır.',
+          'Yaşlılarda düşük kan/gaz çözünürlüğü sayesinde hızlı ve öngörülebilir uyanma sağlar; ancak erken postoperatif ağrı ve hipertansiyon fırtınasını önlemek için uzun etkili analjezi vaka bitmeden verilmelidir.',
+        ]}
+        obesityWeightScalarBadge="En Düşük Kan/Gaz (0.42) & Yağ/Gaz (18.7)"
+        obesityPoints={[
+          'Tüm halojenli volatiller içinde en düşük kan/gaz (0.42–0.45) ve en düşük yağ/gaz (18.7–27) partisyon katsayısına sahiptir.',
+          'Morbid obez (BMI ≥ 40 kg/m²) ve uzun süreli (>3–4 saat) bariatrik cerrahi vakalarında yağ dokusunda minimal birikim yaparak Sevofluran/İzofluran/Propofole göre daha hızlı ekstübasyon ve hava yolu reflekslerinin erken dönüşünü sağlar.',
+          'Dozlama kilograma göre değil yaş-düzeltmeli alveolar konsantrasyon (EtDes) ve BIS 40–60 eşliğinde yapılır; çevresel etkiyi azaltmak için ≤ 0.5–0.8 L/dk minimal akım uygulanmalıdır.',
+        ]}
+        clinicalNote="Obstrüktif uyku apnesi (OSA) ve morbid obezitede hava yolu reflekslerinin hızlı dönüşü kritik avantajdır; ancak astım/KOAH eşlik ediyorsa hava yolu irritasyonu nedeniyle Sevofluran veya TIVA daha güvenlidir."
       />
 
       {/* 8. GEBELİK & LAKTASYON */}
@@ -898,23 +941,99 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 9. ISMP GÜVENLİK & MH KURTARMA */}
-      <HighAlertSafetyBlock
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        tallManName="desFLURANE"
-        confusionRiskWith="sevoFLURANE / isoFLURANE"
-        criticalAlerts={[
-          'Sadece Mavi kodlu Desfluran şişesi ve elektrikle ısıtmalı TEC-6 / D-Vapor dolum portuna bağlanır; standart vaporizatöre ASLA doldurulmaz (oda sıcaklığında kaynayıp ölümcül aşırı doz ve patlama/basınç hasarı yapar!).',
-          'CO zehirlenmesi şüphesinde standart puls oksimetre SpO₂\'yi %98–100 yalancı normal gösterir; mutlaka CO-oksimetreli AKG alın ve absorbanı derhal değiştirin.',
-          'Malign Hipertermi şüphesinde vaporizatörü derhal kapat/çıkar, %100 O₂ 10–15 L/dk yıka, aktif kömür filtresi tak ve Dantrolen 2.5 mg/kg IV başlat.',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'GABA-A, Glisin, TREK-1 K₂P Kanalları, NMDA İnhibisyonu, TRPA1 & RyR1 MH Tetiklenmesi',
+          summary:
+            'Desfluran tam florlu metil etil eter yapısıyla (CHF₂–O–CHF–CF₃) santral sinir sisteminde inhibitör reseptörleri güçlendirip eksitatör sinaptik iletimi baskılar (Miller’s / Stoelting’s / Barash). Ek olarak hava yolundaki nosiseptif TRPA1 iyon kanallarını doğrudan aktive etmesi klinik profilini Sevoflurandan keskin biçimde ayırır.',
+          points: [
+            'GABA-A & Glisin Potansiyalizasyonu: Kortikal/talamik GABA-A reseptörlerinde Cl⁻ akımını uzatarak hipnoz ve amnezi; spinal Glisin reseptörleriyle motor nöron inhibisyonu (immobilite / MAC) oluşturur.',
+            'TREK-1 / TASK İki-Porlu Potasyum (K₂P) Kanalları & NMDA İnhibisyonu: K⁺ sızıntı akımını artırarak membranı hiperpolarize eder; NMDA glutamat ve nöronal nAChR kanallarını baskılar.',
+            'TRPA1 İrritan Reseptör Aktivasyonu: Hava yolu C-liflerindeki TRPA1 kanallarını uyararak refleks öksürük, laringospazm, bronkospazm ve hızlı > 1 MAC artışta santral sempatik deşarjı (Ebert 1993) tetikler.',
+            'RyR1 Malign Hipertermi Tetiklenmesi (MHAUS): Yatkın kas liflerinde sarkoplazmik retikulum RyR1 kanalından kontrolsüz Ca²⁺ salınımına yol açarak fulminan hipermetabolik krizi başlatır.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'CBF / CMRO₂ Ayrışması & KİB: CMRO₂’yi doza bağımlı azaltır; ancak > 0.8–1.0 MAC’ta direkt serebral vazodilatasyonla serebral kan akımını (CBF) ve KİB’i Sevoflurana göre bir miktar daha belirgin artırabilir.',
+            'EEG & Burst Suppression: Sevofluran gibi epileptiform spike-wave aktivitesi belirgin değildir; ~1.5–2.0 MAC düzeyinde doz bağımlı EEG baskılanması ve burst suppression oluşturur.',
+            'Hızlı FA/FI & Uyanma Kinetiği: 0.42–0.45 kan/gaz katsayısı sayesinde alveolar konsantrasyon değişiklikleri beyne saniyeler–dakikalar içinde yansır.',
+          ],
+          cvs: [
+            'SVR Düşüşü vs Sempatik Deşarj (Taşikardi/HT): Sabit konsantrasyonda doza bağımlı SVR ve MAP düşüşü yapar; ancak > 1 MAC (%6) üzerine hızlı artışta trakeopulmoner reseptör uyarısıyla plazma adrenalin/noradrenalini ~2–3 kat yükseltip geçici şiddetli taşikardi ve hipertansiyon krizi oluşturur.',
+            'Miyokardiyal Önkoşullama: K-ATP kanalları üzerinden iskemik önkoşullama sağlar; ancak sempatik taşikardi KAH hastalarında miyokard O₂ tüketimini artırarak bu faydayı gölgeleyebilir.',
+          ],
+          respiratory: [
+            'Keskin Koku & Hava Yolu İrritasyonu: > %6 konsantrasyonda öksürük, nefes tutma, hipersalivasyon, laringospazm ve bronkospazm tetikler — inhalasyon indüksiyonunda ve aktif bronkospazmda KULLANILMAZ.',
+            'Ventilasyon & HPV: Tidal volümü azaltır, PaCO₂’yi yükseltir ve > 1 MAC’ta hipoksik pulmoner vazokonstriksiyonu (HPV) baskılar.',
+          ],
+          other: [
+            'Metabolizma yalnızca %0.02 (TFA, F⁻ ve Compound A pratik olarak sıfır — hepatorenal açıdan en inert halojenli)',
+            'Uterin düz kası > 1.0 MAC’ta gevşetir (postpartum atoni riski)',
+            'Çevresel etki: GWP₁₀₀ = 2540 (atmosferik ömür ~14 yıl — sürdürülebilir anestezi kılavuzları minimal akım veya alternatif ajan önerir)',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Desfluran tek başına tam genel anestezi sağlar; ancak sempatik deşarj eşiği (%6) altında kalabilmek için opioidler ve/veya N₂O ile kombine edilmesi klinik pratikte esastır.',
+          points: [
+            'Opioid / Esmolol / Klonidin Sinerjisi: Fentanil/Remifentanil hem Desfluran MAC’ını %25–50 düşürerek EtDes’i <%6 güvenli bölgede tutar hem de sempatik taşikardi/hipertansiyon yanıtını etkin biçimde köreltir.',
+            'N₂O Aditif MAC Katkısı: %60 N₂O (~0.58 MAC) eklendiğinde 1.0 MAC için gereken EtDes %6.0’dan ~%2.8’e iner.',
+            'Nöromüsküler Bloker (NMB) Potansiyalizasyonu: Non-depolarizan NMB’lerin (roküronyum, veküronyum, sisatrakuryum) etkisini %30–50 oranında güçlendirir ve süresini uzatır.',
+          ],
+        }}
+        clinicalPearls={[
+          'Sempatik Krizi Önlemenin 3 Kuralı: (1) Kadranı asla tek hamlede %6’nın üstüne fırlatma, %1–2 basamaklarla çık; (2) Cerrahi uyaran öncesi opioid/esmolol/propofol ile küntleştir; (3) KAH veya aort stenozunda alternatif ajan düşün.',
+          'Pazartesi Sabahı COHb Tuzağı (Fang Anesth Analg 1995): Hafta sonu O₂ akışı açık unutulan kurumuş Baralyme/soda lime ile Desfluran masif CO üretir; standart SpO₂ %99 normal görünür! KOH/NaOH-free absorban (Amsorb/Drägersorb Free) kullanın.',
+          'Bronkospazm Gelişirse Desfluranı Artırma, KAPAT: Hava yolu direnci artan hastada Desfluranı derinleştirmek TRPA1 irritasyonunu artırıp bronkospazmı ağırlaştırır; derhal Sevofluran veya IV Propofole geçin.',
+          'Yüksek İrtifa & Elektrik Kesintisi: TEC-6 elektrik kesilirse 10–15 sn’de kapanır; yüksek rakımda ise hacim yüzdesi (%) verdiği için aynı parsiyel basıncı (MAC) korumak adına kadran yukarı ayarlanmalıdır.',
         ]}
-        antidoteOrRescue="Aşırı dozda vaporizatörü kapatıp %100 O₂ yüksek akımla hızlı yıkama yapın (düşük kan/gaz katsayısı nedeniyle dakikalar içinde elimine olur). Sempatik taşikardi/hipertansiyon krizinde Esmolol veya Fentanil/Remifentanil ile küntleştirin."
       />
 
-      {/* 10. KAYNAKÇA & ETKİLEŞİMLER */}
+      {/* 10. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Desfluran"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Süksinilkolin (MH Yatkın Hastalarda) & Kurumuş Kuvvetli Baz CO₂ Absorbanı',
+            mechanism: 'RyR1 Sinerjik Malign Hipertermi Tetiklenmesi / CHF₂ Bazik Yıkımı ile Masif CO Üretimi',
+            clinicalEffect: 'Fulminan Malign Hipertermi krizi veya yüksek COHb ile doku hipoksisi (yalancı normal SpO₂).',
+            management: 'MH yatkın hastada volatil + süksinilkolin kesinlikle yasaktır. Kuru soda lime/Baralyme derhal değiştirilir (KOH/NaOH-free absorban tercih edilir).',
+          },
+          {
+            severity: 'D',
+            agent: 'Non-Depolarizan Nöromüsküler Blokerler (Roküronyum, Veküronyum, Sisatrakuryum)',
+            mechanism: 'Postsinaptik nAChR İnhibisyonu & Spinal Motor Nöron Baskılanması',
+            clinicalEffect: 'NMB bloğu %30–50 potansiyalize olur ve rezidüel kürarizasyon riski artar.',
+            management: 'NMB idame dozlarını azaltın; ekstübasyon öncesi kantitatif TOF ≥ 0.90 doğrulayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Opioidler (Remifentanil, Fentanil) · Propofol · Deksmedetomidin · N₂O',
+            mechanism: 'Güçlü Santral Farmakodinamik Sinerji (MAC-Sparing)',
+            clinicalEffect: 'EtDes gereksinimi <%6’ya inerek sempatik pik önlenir; aşırı kombinasyonda hipotansiyon/solunum depresyonu.',
+            management: 'EtDes’i yaş ve opioid düzeyine göre titre edin; BIS 40–60 hedefleyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Sempatomimetikler (Efedrin, Adrenalin, Kokain) & MAOİ / Trisiklik Antidepresanlar',
+            mechanism: 'Desfluran Hızlı Artış Kaynaklı Sempatik Deşarj ile Aditif Katekolamin Fırtınası',
+            clinicalEffect: 'Şiddetli taşikardi, hipertansif kriz ve miyokardiyal iskemi.',
+            management: 'Desfluranı %1–2 yavaş basamaklarla artırın; taşikardi/HT gelişirse Esmolol veya opioid ile kontrol edin.',
+          },
+          {
+            severity: 'C',
+            agent: 'Beta-Blokerler & Kalsiyum Kanal Blokerleri (Verapamil, Diltiazem)',
+            mechanism: 'Aditif Vazodilatasyon ve Negatif İnotropi (Beta-blokerler sempatik taşikardiyi köreltir)',
+            clinicalEffect: 'Sabit konsantrasyonda hipotansiyon belirginleşebilir; ancak esmolol/beta-blokerler >1 MAC sempatik pikini koruyucu olarak baskılar.',
+            management: 'MAP ≥ 65 mmHg için volüm ve vazopressör titrasyonu yapın.',
+          },
+        ]}
         references={[
           {
             authors: 'Ebert TJ, Muzi M',

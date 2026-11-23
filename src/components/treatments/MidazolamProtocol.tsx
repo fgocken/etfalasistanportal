@@ -32,8 +32,15 @@ import {
   Wine
 } from 'lucide-react';
 import {
+  CompatibilityAndLineBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographCopyButton,
+  MonographQuickNav,
+  SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -326,8 +333,47 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-6">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozlar', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON · v4.0) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="midazoLAM (TR: 5 mg/1 mL vs 5 mg/5 mL · 5 KAT FARK!)"
+        confusionRiskWith="Dormicum 5 mg/1 mL (5 mg/mL) ↔ 5 mg/5 mL (1 mg/mL) · 15 mg/3 mL · 50 mg/10 mL"
+        antidoteOrRescue="Flumazenil (Anexate 0,5 mg/5 mL) — Dikkatli Titrasyon: Başlangıç 0,2 mg IV (15–30 sn’de); yanıt yoksa 60 sn arayla 0,1–0,2 mg tekrar (maks 1 mg). Kronik benzodiazepin bağımlısı, epilepsi veya trisiklik antidepresan (TCA) zehirlenmesinde KESİNLİKLE KONTRENDİKEDİR (status epileptikus!). Flumazenil yarı ömrü (~40–80 dk) kısa olduğu için yeniden sedasyon açısından ≥ 2 saat gözlem şarttır."
+        criticalAlerts={[
+          '5 Kat Konsantrasyon Tuzağı (1 mg/mL vs 5 mg/mL): Türkiye ampullerinde 1 mg/mL (5 mg/5 mL) ve 5 mg/mL (5 mg/1 mL, 15 mg/3 mL, 50 mg/10 mL) bulunur; yanlış ampul seçimi 5 kat aşırı doz yaratır! Daima etiket okuyun ve IV titrasyon için 1 mg/mL’ye sulandırın.',
+          'Yeşil Reçete & Resüsitasyon Hazırlığı: Kontrole tabi ilaçtır (kilitli dolap ve kayıt zorunlu). Uygulanan her alanda O₂, balon-valf-maske (Ambu), aspiratör, sürekli kapnografi/SpO₂ ve Flumazenil hazır bulundurulmalıdır.',
+          'Böbrek Yetmezliğinde 1-OH-Midazolam Kümülasyonu: Aktif metabolit (1-OH-midazolam glukuronid) böbreklerden atılır; eGFR < 30 mL/dk veya >48 saat YBÜ infüzyonunda günlerce süren uzamış koma yapar.',
+          'Opioid Sinerjisi & SCCM PADIS 2018: Opioidlerle kombine edildiğinde apne riski 4 kat artar (her iki doz %50 azaltılmalıdır). Erişkin YBÜ’de deliryum riskini artırdığı için 1. tercih değildir (propofol/deksmedetomidin önceliklidir).',
+        ]}
+      />
+
       {/* 1. ÜST BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI (EN YUKARIDA) */}
       <div
+        id="sec-ozet"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900/90 border-slate-800 text-slate-100 shadow-xl'
@@ -400,6 +446,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 2. FARMAKOKİNETİK PROFİLİ (AKORDİYON: TIKLAYINCA AÇILIR) */}
       <div
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -484,6 +531,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 3. KONTRENDİKASYONLARI */}
       <div
+        id="sec-kontrendikasyon"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -538,6 +586,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 4. ENDİKASYONLARI VE OFF-LABEL KULLANIMLARI (GENİŞLETİLMİŞ 10 KLİNİK ALAN) */}
       <div
+        id="sec-endikasyon"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -652,6 +701,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 5. UYGULAMA YOLLARI VE ERİŞKİN / PEDİATRİK DOZ REJİMLERİ */}
       <div
+        id="sec-dozlar"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -835,6 +885,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 6. İNTERAKTİF DOZ HESAPLAYICISI VE İNFÜZYON POMPASI (DOZ REJİMLERİNDEN HEMEN SONRA) */}
       <div
+        id="sec-hesaplayici"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900 border-purple-500/40 text-slate-100 shadow-xl'
@@ -860,6 +911,19 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
               </p>
             </div>
           </div>
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() =>
+              [
+                `MİDAZOLAM İNFÜZYON ÖZETİ`,
+                `Hesaplama Ağırlığı: ${weightKg} kg`,
+                `Çözelti Konsantrasyonu: ${concentrationMgMl.toFixed(1)} mg/mL`,
+                `Hedef Doz: ${calculatedDoseMgHr.toFixed(1)} mg/saat (${calculatedDoseMgKgHr.toFixed(3)} mg/kg/saat)`,
+                `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat (~${dropsPerMin.toFixed(0)} gtt/dk)`,
+                `24 Saatlik Toplam Doz: ${dailyTotalDoseMg.toFixed(1)} mg/gün`,
+              ].join('\n')
+            }
+          />
         </div>
 
         {/* Hesaplayıcı Araç Sekmeleri */}
@@ -1617,8 +1681,91 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </div>
 
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Midazolam 5 mg / 5 mL Ampul (Dormicum / Sedamid / Zolamid / Midazolam Demo)',
+            presentation: 'IV bolus titrasyon, premedikasyon ve prosedürel sedasyon (MAC) için en güvenli seyreltik cam ampul',
+            concentration: '1 mg/mL',
+            saltOrBaseNote: '5 mg midazolam baza eşdeğer midazolam HCl içerir; 1 mL = 1 mg olduğundan yatak başı doz hatası riski düşüktür.',
+            alertLevel: 'standard',
+          },
+          {
+            name: 'Midazolam 5 mg / 1 mL Ampul (Yüksek Konsantrasyon · 5 KAT FARK!)',
+            presentation: 'İntramüsküler (IM), intranazal (MAD) veya bukkal uygulama için 1 mL cam ampul',
+            concentration: '5 mg/mL',
+            saltOrBaseNote: '5 mg/5 mL ampulle AYNI toplam mg’ı (5 mg) içerir ancak hacmi 5 kat küçüktür! Doğrudan IV puşe edildiğinde 5 kat aşırı doz tuzağı yaratır.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Midazolam 15 mg / 3 mL Ampul (Konsantre Form)',
+            presentation: 'IM/IN/Bukkal acil nöbet kurtarma ve şırınga pompası infüzyon hazırlama için 3 mL cam ampul',
+            concentration: '5 mg/mL',
+            saltOrBaseNote: 'IV bolus için mutlaka 15 mL’ye (1 mg/mL) sulandırılmalı ve açıkça etiketlenmelidir.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Midazolam 50 mg / 10 mL Ampul / Flakon (YBÜ İnfüzyon Formu)',
+            presentation: 'Yoğun bakım sürekli perfüzör infüzyonları ve refrakter status epileptikus için 10 mL konsantre form',
+            concentration: '5 mg/mL',
+            saltOrBaseNote: 'Asla sulandırılmadan doğrudan IV bolus yapılmaz; standart 50 mL enjektöre SF/D5W ile tamamlanarak 1 mg/mL hazırlanır.',
+            alertLevel: 'high',
+          },
+        ]}
+        standardDilutions={[
+          'Standart YBÜ İnfüzyon (1 mg/mL): 50 mg (10 mL, 5 mg/mL ampul) + 40 mL %0.9 NaCl veya %5 Dekstroz → toplam 50 mL (1 mg/mL = en güvenli pompa konsantrasyonu).',
+          'Sıvı Kısıtlamalı / Yüksek Doz YBÜ (2 mg/mL): 100 mg (20 mL, 5 mg/mL) + 30 mL SF/D5W → toplam 50 mL (2 mg/mL).',
+          'Saf Konsantre İnfüzyon (5 mg/mL): Yalnızca aşırı sıvı kısıtlaması veya refrakter status epileptikus yüksek doz perfüzöründe, santral lümenden ve çift kontrolle.',
+          'IM / İntranazal (MAD) / Bukkal Acil Nöbet: 5 mg/mL konsantre form sulandırılmadan kullanılır (burun deliği başına maks 0.5–1 mL).',
+        ]}
+        concentrationTrapWarning="Türkiye klinik pratiğindeki en tehlikeli ilaç hatalarından biri 5 mg/5 mL (1 mg/mL) yerine 5 mg/1 mL, 15 mg/3 mL veya 50 mg/10 mL (5 mg/mL) ampulün çekilerek 5 KAT AŞIRI DOZ uygulanmasıdır! Her şırınga mutlaka mg/mL konsantrasyonu yazılarak etiketlenmelidir."
+      />
+
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Periferik veya santral IV hattan güvenle uygulanabilir (suda çözünür imidazol halkası sayesinde propilen glikol içermez; diazepam/lorazepamın aksine düşük flebit riski). Yüksek konsantrasyonlu (2–5 mg/mL) uzun süreli YBÜ infüzyonlarında santral venöz lümen tercih edilir. Ayrıca IM, İntranazal (MAD), Bukkal ve Oral yollarla da etkilidir."
+        phRange="3.0 – 3.6 (Asidik · Suda Çözünür Açık İmidazol Halkası)"
+        osmolalityNote="1 mg/mL dilüsyon ~290–310 mOsm/kg (izotonik); 5 mg/mL saf form ~385 mOsm/kg. Fizyolojik kan pH’ında (7.4) halka kapanır ve molekül yüksek lipofilik hale geçer."
+        compatibleDiluents={[
+          '%0.9 Sodyum Klorür (İzotonik SF) — 24 saat (25 °C) / 48 saat (2–8 °C) stabil',
+          '%5 Dekstroz (D5W) — 24 saat (25 °C) stabil',
+          '%10 Dekstroz ve Ringer Laktat (RL) — uyumlu',
+        ]}
+        stabilityNote="Hazırlanan 0.5–2 mg/mL infüzyon çözeltileri oda sıcaklığında (25 °C) 24 saat, buzdolabında (2–8 °C) 48 saat kimyasal olarak stabildir. Işıktan korunması önerilir."
+        ySiteCompatible={[
+          'Fentanil',
+          'Remifentanil',
+          'Morfin',
+          'Deksmedetomidin',
+          'Ketamin',
+          'Propofol (kısa Y-site)',
+          'Norepinefrin',
+          'Epinefrin',
+          'Dopamin',
+          'Roküronyum',
+          'Cisatrakuryum',
+        ]}
+        ySiteIncompatible={[
+          'Sodyum Bikarbonat (beyaz çökelti!)',
+          'Furosemid (presipitasyon!)',
+          'Deksametazon Sodyum Fosfat',
+          'Tiyopental / Metoheksital',
+          'Albümin',
+          'Ampisilin / Amoksisilin-Klavulanat',
+          'Seftazidim / Sefepim',
+          'Pantoprazol / Omeprazol',
+          'Hidrokortizon',
+        ]}
+        extravasationProtocol="Non-vezikandır; ekstravazasyon nadir lokal irritasyon veya hafif ödem yapabilir. İnfüzyonu durdurun, kateterden aspire edin, ekstremiteyi eleve edin ve soğuk/ılık kompres uygulayın. Asidik pH nedeniyle alkali ilaçlarla aynı lümenden verilmesi ani beyaz çökelmeye ve kateter tıkanmasına yol açar."
+      />
+
       {/* 7. BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU */}
       <div
+        id="sec-organ"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -1712,8 +1859,27 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="%50 Doz Azaltımı · Deliryum Riski!"
+        geriatricPoints={[
+          'Yaşlı (>65 yaş) ve kırılgan (frail) hastalarda hepatik CYP3A4 klerensi azalır, vücut yağ oranı artar (yarı ömür 2–3 kat uzar) ve santral GABA-A duyarlılığı belirgin yükselir; başlangıç IV bolusu 0.5–1.0 mg (asla >1.5 mg tek seferde değil) ile sınırlandırılmalıdır.',
+          'AGS Beers Kriterleri & SCCM PADIS 2018: Yaşlı hastalarda postoperatif/YBÜ deliryumu, düşme, paradoksal ajitasyon ve uzamış kognitif disfonksiyon riski çok yüksektir; mümkünse premedikasyon ve rutin YBÜ sedasyonundan kaçınılmalıdır.',
+          'Titrasyon aralıkları gençlerdeki 2 dakika yerine en az 3–5 dakikaya uzatılmalı; opioid ile eşzamanlı kullanımda doz %50–70 düşürülmelidir.',
+        ]}
+        obesityWeightScalarBadge="Tek Bolus: TBW · İnfüzyon: IBW / AdjBW"
+        obesityPoints={[
+          'SOBA ve Miller’s Anesthesia kılavuzları: Midazolam yüksek lipofilik olduğundan obezlerde (BMI ≥ 30–40 kg/m²) dağılım hacmi (Vd) dramatik artar; tek seferlik başlangıç bolusu TBW (veya AdjBW) ile hesaplanabilir.',
+          'Sürekli infüzyon veya tekrarlayan dozlar KESİNLİKLE IBW (veya LBW) üzerinden titre edilmelidir; TBW ile idame infüzyonu yağ dokusunda masif depo birikimine ve infüzyon kesildikten sonra günlerce süren uyanma gecikmesine yol açar.',
+          'Obez/OSA hastalarında üst havayolu kollapsı ve hiperkapnik solunum depresyonu riski yüksek olduğundan sürekli kapnografi zorunludur.',
+        ]}
+        clinicalNote="Yukarıdaki etkileşimli hesaplayıcı içindeki Obezite Doz Ölçekleyici ile hastanın IBW/AdjBW değeri tek tıkla hesaplamaya aktarılabilir."
+      />
+
       {/* 9. GEBELİK VE LAKTASYON KILAVUZU */}
       <div
+        id="sec-gebelik"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -1760,6 +1926,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
 
       {/* 10. O İLACA ÖZEL ÖNEMLİ OLUMSUZ ETKİLER */}
       <div
+        id="sec-olumsuz"
         className={`p-5 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
@@ -1826,149 +1993,126 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </div>
 
-      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL DURUMLAR */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4 text-purple-600 dark:text-purple-400">
-          <Info className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Klinisyenin İlaca ve Belirli Klinik Durumlara Göre Dikkat Etmesi Gerekenler</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
-              <Skull className="w-4 h-4 text-amber-500" />
-              <span>Sempatomimetik Krizde Beta Bloker Yasağı</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Kokain, amfetamin veya bonzai intoksikasyonuna bağlı hipertansiyon ve taşikardide <strong>asla tek başına beta bloker (örn. propranolol, metoprolol, esmolol) verilmemelidir</strong>. Beta blokaj periferik damarlardaki vazodilatatör beta-2 reseptörleri bloke ederek alfa-1 aracılı şiddetli vazokonstriksiyonu maskesiz bırakır (unopposed alpha stimulation) ve ölümcül miyokard enfarktüsü veya serebral kanamaya yol açabilir. <strong>İlk tercih agresif Midazolam titrasyonudur.</strong>
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5">
-              <Wine className="w-4 h-4 text-indigo-500" />
-              <span>Alkol Yoksunluğunda Wernicke Profilaksisi</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Ağır alkol yoksunluğu ve deliryum tremens tedavisinde midazolam agresif şekilde titre edilirken, geri dönüşümsüz beyin hasarını (Wernicke-Korsakoff Sendromu) önlemek amacıyla <strong>herhangi bir dekstrozlu/glukozlu sıvı verilmeden önce mutlaka 100–500 mg parenteral Tiamin (B1 Vitamini)</strong> uygulanmalıdır.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
-              <RefreshCw className="w-4 h-4 text-purple-500" />
-              <span>Flumazenilin Kısa Yarı Ömrü & Re-sedasyon Tehdidi</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Flumazenilin etki süresi 40–80 dakikadır. Midazolam ise vücuttan çok daha geç atılır. Flumazenil ile uyandırılan hasta 1 saat sonra midazolamın tekrar reseptörlere bağlanmasıyla <strong>aniden derin komaya ve apneye dönebilir</strong>. Hasta en az 2 saat boyunca taburcu edilmemeli ve izlenmelidir.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
-            <h4 className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5">
-              <ShieldAlert className="w-4 h-4 text-rose-500" />
-              <span>Opioid + Midazolam Eşzamanlı Kullanımı (Black Box Warning)</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Opioidlerle benzodiazepinlerin birlikte kullanımında solunum arresti riski 4 katına çıkar. İki ilaç birlikte verileceği zaman her ikisinin de başlangıç dozu <strong>%50 oranında düşürülmeli</strong> ve sürekli kapnografi/pulse oksimetre izlenmelidir.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 12. IV UYGULAMA VE SULANDIRMA / HAZIRLAMA ŞEKİLLERİ */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4 text-purple-600 dark:text-purple-400">
-          <Layers className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">IV Uygulama, Sulandırma ve Hazırlama Kuralları</h2>
-        </div>
-
-        <div className="space-y-3 text-xs">
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
-              Ticari Formülasyonlar (Ampul Çeşitleri)
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>5 mg / 5 mL (1 mg/mL):</strong> IV titrasyon ve premedikasyon için en güvenli formdur.<br />
-              • <strong>15 mg / 3 mL (5 mg/mL):</strong> Konsantre form. İnfüzyon hazırlama ve IM/İntranazal uygulamalarda hacim kısıtlaması için kullanılır.<br />
-              • <strong>50 mg / 10 mL (5 mg/mL):</strong> YBÜ perfüzör infüzyonları için yüksek doz flakon.
-            </p>
-          </div>
-
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <span className="font-bold text-slate-900 dark:text-slate-100 block mb-1">
-              Geçimli Çözeltiler ve İnfüzyon Hazırlama
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              • <strong>Geçimli Sıvılar:</strong> %0.9 NaCl (SF), %5 Dekstroz (D5W), %10 Dekstroz ve Ringer Laktat ile tam uyumludur.<br />
-              • <strong>Standart İnfüzyon Çözeltisi:</strong> 50 mg (10 mL 5 mg/mL ampul) çekilerek 50 mL'lik enjektöre SF ile tamamlanır → <strong>1.0 mg/mL</strong> derişim elde edilir.<br />
-              • Hazırlanan infüzyon çözeltisi oda sıcaklığında 24 saat, buzdolabında (2–8°C) 48 saat kimyasal stabilitesini korur.
-            </p>
-          </div>
-
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30' : 'bg-rose-50 border-rose-200'}`}>
-            <span className="font-bold text-rose-700 dark:text-rose-300 block mb-1">
-              Fizikokimyasal Geçimsizlik (Alkalen Çözeltilerle Asla Karıştırmayın!)
-            </span>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              Midazolam asidik pH'ta stabildir. <strong>Sodyum bikarbonat, tiyopental, metoheksital, deksametazon sodyum fosfat ve furosemid</strong> gibi alkali sıvılarla karıştırıldığında derhal beyaz çökelti (presipitasyon) oluşur ve kateter tıkanır! Aynı lümenden verilmemelidir.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 13. İLAÇ GÜVENLİĞİ VE HIGH-ALERT UYARILARI */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4 text-rose-600 dark:text-rose-400">
-          <ShieldAlert className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">İlaç Güvenliği İlişkili Durumlar (ISMP High-Alert &amp; Kontrole Tabi Reçete)</h2>
-        </div>
-
-        <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900'} space-y-2.5 text-xs`}>
-          <div className="flex items-center gap-2 font-bold text-sm text-rose-800 dark:text-rose-300">
-            <AlertOctagon className="w-4 h-4 text-rose-500 shrink-0" />
-            <span>ISMP High-Alert &amp; Konsantrasyon Karışıklığı Uyarısı</span>
-          </div>
-          <p className="leading-relaxed text-slate-700 dark:text-slate-300">
-            1. <strong>Konsantrasyon Karışıklığı (1 mg/mL vs 5 mg/mL):</strong> En sık yapılan medikal hata 1 mg/mL ampul yerine 5 mg/mL ampulün çekilmesidir (hastaya 5 kat aşırı doz verilir!). Şırıngalar mutlaka renkli ve miligram cinsinden etiketlenmelidir.
-          </p>
-          <p className="leading-relaxed text-slate-700 dark:text-slate-300">
-            2. <strong>Yeşil Reçete / Kontrole Tabi Madde:</strong> Bağımlılık ve kötüye kullanım potansiyeli nedeniyle ulusal ve uluslararası mevzuata göre kilitli dolaplarda saklanmalı ve her kullanım kayıt altına alınmalıdır.
-          </p>
-          <p className="leading-relaxed text-slate-700 dark:text-slate-300">
-            3. <strong>Oksijen &amp; Resüsitasyon Hazırlığı:</strong> Midazolam uygulanan her odada balon-valf-maske (Ambu), aspiratör, yüksek akımlı oksijen ve <strong>Flumazenil ampul</strong> kullanıma hazır bulunmalıdır.
-          </p>
-        </div>
-      </div>
-
-      {/* 14. KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ SORGULAMA */}
-      <HighAlertSafetyBlock
+      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0) */}
+      <SpecialClinicalCautionsBlock
         isDark={isDark}
-        tallManName="midazoLAM (TR: 5 mg/1 mL vs 5 mg/5 mL · 5 KAT FARK!)"
-        confusionRiskWith="Dormicum 5 mg/1 mL (5 mg/mL) ↔ 5 mg/5 mL (1 mg/mL) · 15 mg/3 mL · 50 mg/10 mL"
-        antidoteOrRescue="Flumazenil (Anexate 0,5 mg/5 mL) — Dikkatli Titrasyon: Başlangıç 0,2 mg IV (15 sn’de); yanıt yoksa 60 sn arayla 0,1–0,2 mg tekrar (maks 1 mg). Kronik benzodiazepin bağımlısı, epilepsi veya trisiklik antidepresan (TCA) zehirlenmesinde KESİNLİKLE KONTRENDİKEDİR (status epileptikus!). Flumazenil yarı ömrü (~50 dk) kısa olduğu için yeniden sedasyon açısından ≥ 2 saat gözlem şarttır."
-        criticalAlerts={[
-          'Türkiye ampullerinde 1 mg/mL (5 mg/5 mL) ve 5 mg/mL (5 mg/1 mL, 15 mg/3 mL, 50 mg/10 mL) olmak üzere 5 kat konsantrasyon farkı vardır; daima etiket okuyun ve 1 mg/mL’ye sulandırarak uygulayın.',
-          'Böbrek yetmezliğinde aktif metabolit (1-OH-midazolam glukuronid) birikerek günlerce süren koma yapar.',
-          'SCCM PADIS 2018: Erişkin YBÜ’de benzodiazepinler deliryum riskini artırdığı için 1. tercih değildir (propofol/deksmedetomidin tercih edilir).',
+        items={[
+          {
+            title: 'Sempatomimetik Krizde (Kokain / Amfetamin / Bonzai) Beta-Bloker Yasağı',
+            detail:
+              'Sempatomimetik kaynaklı hipertansiyon ve taşikardide asla tek başına beta-bloker (propranolol/metoprolol/esmolol) verilmez (karşılanmamış α₁-vazokonstriksiyon → MI/inme). İlk basamak tedavi agresif IV Midazolam titrasyonudur.',
+          },
+          {
+            title: 'Alkol Yoksunluğu & Deliryum Tremens’te Wernicke Profilaksisi',
+            detail:
+              'Ağır alkol yoksunluğu ve deliryum tremens’te CIWA-Ar eşliğinde midazolam titre edilirken, herhangi bir dekstrozlu sıvıdan ÖNCE mutlaka 100–500 mg parenteral Tiamin (B1 vitamini) uygulanmalıdır.',
+          },
+          {
+            title: 'Flumazenil Kısa Yarı Ömrü & Re-Sedasyon Tehdidi',
+            detail:
+              'Flumazenilin yarı ömrü (~40–80 dk) midazolamdan çok daha kısadır. Antidot ile uyandırılan hasta 45–60 dakika sonra tekrar derin komaya ve apneye girebilir; en az 2 saat yakın monitörizasyon zorunludur. Kronik BZD kullanıcısında veya TCA zehirlenmesinde flumazenil kontrendikedir (status epileptikus!).',
+          },
+          {
+            title: 'Opioid + Midazolam Eşzamanlı Kullanımı (FDA Black Box Warning)',
+            detail:
+              'Opioidlerle kombine kullanımda solunum arresti riski ~4 kat artar. Birlikte uygulanacaksa her iki ilacın başlangıç dozu %50 azaltılmalı, sürekli kapnografi ve SpO₂ monitörizasyonu sağlanmalıdır.',
+          },
         ]}
       />
 
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
+        isDark={isDark}
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'GABA-A Benzodiazepin (α/γ) Bölgesi, Reseptör Alt Tip Seçiciliği & pH-Bağımlı Halka Dinamiği',
+          summary:
+            'Midazolam suda çözünür bir imidazobenzodiazepindir. Asidik ampul pH’ında (<4) açık olan imidazol halkası fizyolojik kan pH’ında (7.4) hızla kapanır; molekül ileri derecede lipofilik hale gelerek 1.5–3 dakikada kan-beyin bariyerini geçer.',
+          points: [
+            'Pozitif Allosterik Modülasyon (Frekans Artışı): GABA-A reseptöründe α ve γ₂ alt birimleri arasındaki BZD bağlanma cebine tutunur; endojen GABA’nın afinitesini artırarak Cl⁻ kanalının AÇILMA SIKLIĞINI (frekansını) artırır (propofol/barbitüratlar ise açık kalma süresini uzatır).',
+            'Tavan Etkisi (Ceiling Effect): Endojen GABA varlığına bağımlıdır; yüksek dozlarda dahi doğrudan Cl⁻ kanalını açamaz. Bu nedenle tek başına yüksek dozlarda bile propofol gibi EEG izoelektrik sessizliği yaratmaz.',
+            'α Alt Birim Farmakodinamik Ayrımı: α₁ alt birimi sedasyon, anterograd amnezi ve antikonvülzan etkiden; α₂ ve α₃ alt birimleri anksiyoliz ve santral kas gevşemesinden sorumludur.',
+            'İntrinsik Analjezi Yoktur: Nosiseptif iletimi kesmez; ağrılı işlemlerde opioid veya lokal anestezi gerektirir.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Sedasyon, Anterograd Amnezi & Antikonvülzan Etki: Güçlü anterograd amnezi sağlar (retrograd amnezi yapmaz). Limbik sistem ve kortikal yayılımı baskılayarak status epileptikusta 1. basamak antikonvülzandır.',
+            'Serebral Hemodinami & EEG: CMRO₂ ve CBF’yi propofole göre daha ılımlı (~%20–30) azaltır, CO₂ reaktivitesini korur ve ICP’yi yükseltmez (hiperkapni önlendiği sürece). EEG’de β aktivitesini artırır; BIS değerini propofol kadar öngörülebilir düşürmez.',
+            'Deliryum & Paradoksal Eksitasyon: Kortikal inhibitör ağlarda dengesizlik ve kolinerjik/GABAerjik disfonksiyonla YBÜ deliryum riskini belirgin artırır (SCCM PADIS). Çocuk/yaşlıda %1–2 paradoksal ajitasyon görülebilir.',
+          ],
+          cvs: [
+            'Hafif–Orta Vazodilatasyon (SVR ↓): Propofole kıyasla miyokard kontraktilitesini daha iyi korur; ancak özellikle hipovolemik, yaşlı veya opioid ile kombine edilen hastalarda SVR düşüşü ve venöz göllenmeye bağlı belirgin hipotansiyon gelişebilir.',
+            'Barorefleks Etkisi: Baroreseptör refleksini kısmen baskılar; kalp hızında hafif refleks artış veya nötr seyir izlenir.',
+          ],
+          respiratory: [
+            'CO₂ Yanıt Eğrisinin Baskılanması: Doza bağımlı olarak medüller solunum merkezinin CO₂ duyarlılığını azaltır ve apneik eşiği yükseltir (hızlı IV bolus veya KOAH/OSA’da ani apne).',
+            'Üst Havayolu Tonusu Kaybı: Faringeal dilatatör kas tonusunu (özellikle genioglossus) azaltarak obstrüktif uyku apneli ve obez hastalarda hızla üst havayolu tıkanmasına yol açar.',
+          ],
+          other: [
+            'Spinal internöronlarda glisin/GABA potansiyalizasyonu ile santral kas gevşemesi (Miyastenia Gravis’te tehlikeli)',
+            'Adrenal steroidogenezi baskılamaz ve Malign Hipertermi tetiklemez',
+            'Aktif 1-OH-midazolam glukuronid böbrek yetmezliğinde birikerek uzamış koma yapar',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Midazolam tek başına bir tavan etkisine sahip olsa da opioidler, propofol ve alkol ile ölümcül düzeyde farmakodinamik sinerji gösterir.',
+          points: [
+            'Opioid–Midazolam Sinerjisi: Fentanil/remifentanil/morfin ile kombine edildiğinde solunum depresyonu ve hipoksemik apne riski aditif değil SİNERJİKTİR (~4 kat artış); indüksiyon/sedasyon dozları karşılıklı %50 azaltılmalıdır.',
+            'Propofol & İnhalasyon Ajanlarıyla Ko-indüksiyon: 1–2 mg midazolam propofol indüksiyon dozunu ~%20–30 ve inhalasyon MAC değerini ~%15–25 düşürür.',
+            'Kompetitif Antagonist — Flumazenil: GABA-A BZD cebinde yüksek afiniteli kompetitif antagonisttir; sedasyon ve solunum depresyonunu 1–2 dk içinde geri çevirir ancak kısa yarı ömrü (~40–80 dk) nedeniyle re-sedasyon riski taşır.',
+          ],
+        }}
+        clinicalPearls={[
+          'Böbrek Yetmezliğinde 1-OH-Midazolam Glukuronid Tuzağı: Ana ilaç hepatik CYP3A4 ile 1-OH-midazolama (~%50 aktif) çevrilir, ardından glukuronidlenerek böbrekten atılır. eGFR < 30 mL/dk hastalarda bu aktif glukuronid birikerek infüzyon kapatıldıktan sonra günlerce süren koma yapar.',
+          'CSHT (Bağlama Duyarlı Yarı Ömür) Uzaması: 2 saatlik infüzyonda ~30 dk olan CSHT, lipofilik yağ kompartmanı doldukça >48 saatlik YBÜ infüzyonlarında saatler–günler düzeyine çıkar.',
+          'CYP3A4 İlaç Etkileşim Patlaması: Klaritromisin, vorikonazol, flukonazol, diltiazem, verapamil ve ritonavir/pakslovid gibi güçlü CYP3A4 inhibitörleri midazolam düzeyini 5–15 kat artırarak derin ve uzamış komaya neden olur.',
+          'Paradoksal Reaksiyon Yönetimi: Özellikle çocuk ve yaşlıda midazolam sonrası gelişen ajitasyonda ek midazolam vermek tabloyu ağırlaştırır; düşük doz flumazenil (0.1–0.2 mg) veya alternatif ajan (deksmedetomidin/haloperidol) düşünülmelidir.',
+        ]}
+      />
+
+      {/* 14. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Midazolam"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Güçlü CYP3A4 İnhibitörleri (Ritonavir/Nirmatrelvir [Paxlovid], Ketokonazol, İtrakonazol, Vorikonazol, Klaritromisin)',
+            mechanism: 'Potent Hepatik & İntestinal CYP3A4 İnhibisyonu',
+            clinicalEffect: 'Midazolam plazma AUC değerinde 5–15 kat artış; aşırı derin ve günlerce süren uzamış sedasyon/solunum arresti.',
+            management: 'Oral midazolam kesinlikle KONTRENDİKEDİR; IV kullanımda mümkünse alternatif sedatife (propofol/deksmedetomidin) geçin veya dozu %50–75 azaltıp yakın izleyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Opioid Analjezikler (Fentanil, Remifentanil, Morfin, Tramadol)',
+            mechanism: 'Sinerjik Medüller Solunum Depresyonu & Sedasyon (FDA Black Box)',
+            clinicalEffect: 'Hipoventilasyon, derin apne, hipoksemi ve hipotansiyon riskinde ~4 kat artış.',
+            management: 'Her iki ajanın başlangıç dozunu %50 azaltın; sürekli kapnografi/SpO₂ ve yatak başı nalokson + flumazenil hazır bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'Propofol · İnhalasyon Anestezikleri · Alkol · Diğer SSS Depresanları',
+            mechanism: 'Aditif / Sinerjik GABA-A Potansiyalizasyonu',
+            clinicalEffect: 'Derin hipnoz, üst havayolu obstrüksiyonu ve hipotansiyon.',
+            management: 'Ko-indüksiyon/sedasyonda dozları kademeli titre edin; yaşlılarda en düşük etkin dozu kullanın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Orta Düzey CYP3A4 İnhibitörleri (Flukonazol, Diltiazem, Verapamil, Eritromisin, Amiodaron)',
+            mechanism: 'Hepatik CYP3A4 Klerens Azalması',
+            clinicalEffect: 'Midazolam yarı ömründe 2–4 kat uzama ve uyanmada gecikme.',
+            management: 'İdame infüzyon ve tekrarlayan bolus dozlarını %30–50 azaltarak RASS eşliğinde titre edin.',
+          },
+          {
+            severity: 'C',
+            agent: 'CYP3A4 İndükleyicileri (Rifampisin, Karbamazepin, Fenitoin, St. John’s Wort)',
+            mechanism: 'CYP3A4 Enzim İndüksiyonu (Hızlanmış Klerens)',
+            clinicalEffect: 'Midazolam plazma düzeyinde %50–90 azalma ve yetersiz sedasyon/nöbet kontrolü.',
+            management: 'Klinik yanıtı yakından izleyin; gerekirse dozu titre ederek artırın veya alternatif ajan seçin.',
+          },
+        ]}
         references={[
           {
             authors: 'Silbergleit R, Durkalski V, Lowenstein D, et al. (RAMPART)',

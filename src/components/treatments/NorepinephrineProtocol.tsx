@@ -29,13 +29,18 @@ import {
   BookOpen
 } from 'lucide-react';
 import {
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
+  SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -67,7 +72,6 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
   // Akordiyon State'leri
   const [pkOpen, setPkOpen] = useState<boolean>(false);
   const [pushDoseOpen, setPushDoseOpen] = useState<boolean>(true);
-  const [extravasationOpen, setExtravasationOpen] = useState<boolean>(true);
 
   // Push-Dose Simülasyonu
   const [pushDosePrep, setPushDosePrep] = useState<'10mcg' | '16mcg'>('10mcg');
@@ -135,6 +139,48 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
   return (
     <div className="space-y-8 font-sans">
       {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0)                                   */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozaj', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON)     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="NORepinephrine"
+        confusionRiskWith="EPINEPHrine · EPHEDRINE"
+        criticalAlerts={[
+          'ISMP Tall-Man Etiketleme & Çift Kontrol: NORepinephrine (Noradrenalin) ile EPINEPHrine (Adrenalin) enjektörleri asla aynı sepette tutulmamalı; pompa programlamasında (80 / 160 / 320 mcg/mL) bağımsız çift kontrol yapılmalıdır.',
+          '2:1 Baz/Bitartrat Tuzağı (ESICM 2023/2024): TR 4 mL ampul 8 mg noradrenalin bitartrat (= 4 mg noradrenalin BAZ) içerir. Tüm uluslararası doz eşikleri (SSC 2021 vazopresin eşiği 0.25–0.50 mcg/kg/dk) 4 mg BAZ üzerinden hesaplanır.',
+          'Torba/Enjektör Değişiminde Çift Pompa (Smart Switchover): Yarı ömrü 1–2 dk olduğundan 2–3 dakikalık kesinti ani derin hipotansiyona ve arreste yol açabilir; yedek enjektör daima önceden hazırlanmalıdır.',
+          'Alkali İnaktivasyon & Ekstravazasyon: Sodyum Bikarbonat (%8.4 NaHCO₃) ile aynı lümenden asla verilmez; periferik sızıntı doku nekrozu yapar (12 saat içinde Fentolamin SC infiltrasyon).',
+        ]}
+        antidoteOrRescue="Ekstravazasyonda infüzyonu derhal durdurun, kanülden aspire edin ve 12 saat içinde 5–10 mg Fentolamin (10–15 mL SF) SC çember şeklinde infiltre edin (Fentolamin yoksa Terbutalin 1 mg/10 mL SF lokal infiltrasyon veya topikal %2 Nitrogliserin + ılık kompres; BUZ/SOĞUK ASLA UYGULANMAZ!). Sistemik doz aşımında infüzyonu kapatmak 2–5 dk içinde etkiyi sonlandırır."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 1. BAŞLIK, FARMAKOLOJİK KATEGORİ & ETKİ MEKANİZMASI                  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
@@ -150,7 +196,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
                 Vazoaktif / Vazopressör Ajan
               </span>
               <span aria-hidden="true">·</span>
-              <span>Levophed · Sterinor · Noradrenalin</span>
+              <span>Steradin · Cardenor · Levophed · Noradrenalin</span>
               <span aria-hidden="true">·</span>
               <span className="font-mono">ATC: C01CA03</span>
             </div>
@@ -241,25 +287,6 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
-
-      <MonographQuickNav
-        isDark={isDark}
-        items={[
-          { id: 'sec-etki', label: 'Etki Mekanizması' },
-          { id: 'sec-pkpd', label: 'Farmakokinetik' },
-          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
-          { id: 'sec-dozaj', label: 'Dozaj Kademeleri' },
-          { id: 'sec-hesaplayici', label: 'İnfüzyon Pompası' },
-          { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
-          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
-          { id: 'sec-uyumluluk', label: 'Çözelti & Ekstravazasyon' },
-          { id: 'sec-guvenlik', label: 'ISMP High-Alert' },
-          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
-        ]}
-      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 2. FARMAKOKİNETİK ÖZELLİKLER (PK/PD AKORDİYON)                      */}
@@ -1191,6 +1218,80 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                      */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Noradrenalin / Steradin / Cardenor 4 mg/4 mL Ampul (TR Standart)',
+            presentation: '4 mL berrak steril IV konsantre çözelti içeren cam ampul (ışıktan korunmuş kutuda)',
+            concentration: '1 mg/mL BAZ (= 2 mg/mL Bitartrat)',
+            saltOrBaseNote:
+              'ESICM 2023/2024 & 2:1 Tuz/Baz Oranı: Her 4 mL ampul 8 mg noradrenalin bitartrat içerir; bu tam olarak 4 mg noradrenalin BAZ eşdeğeridir. Türkiye klinik pratiği ve uluslararası kılavuzlar (SSC 2021 vazopresin eşiği 0.25–0.50 mcg/kg/dk) hesaplamayı 4 mg BAZ üzerinden yapar.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Hazır Seyreltilmiş / Yüksek Konsantrasyonlu YBÜ Enjektörleri (Hazırlama)',
+            presentation: '50 mL enjektör pompası veya 250–500 mL torba infüzyonu (asla sulandırmadan verilmez)',
+            concentration: '80 · 160 · 320 mcg/mL (Enjektör) · 16 mcg/mL (Torba)',
+            saltOrBaseNote:
+              'Tek ampul (4 mg baz) + 46 mL D5W/SF = 80 mcg/mL; sıvı kısıtlı ARDS/KY hastalarında 8 mg/50 mL (160 mcg/mL) veya 16 mg/50 mL (320 mcg/mL) konsantre enjektör hazırlanır.',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          'Standart YBÜ Enjektörü (80 mcg/mL): 1 ampul (4 mg baz / 4 mL) + 46 mL %5 Dekstroz (D5W) veya %0.9 NaCl = 50 mL.',
+          'Çift Konsantrasyon / Sıvı Kısıtlı (160 mcg/mL): 2 ampul (8 mg baz / 8 mL) + 42 mL D5W veya SF = 50 mL (yalnızca SVK!).',
+          '4× Konsantrasyon / Aşırı Sıvı Kısıtlı (320 mcg/mL): 4 ampul (16 mg baz / 16 mL) + 34 mL D5W veya SF = 50 mL (yalnızca SVK!).',
+          'Standart Torba / Geçici Periferik İnfüzyon (16 mcg/mL): 1 ampul (4 mg baz) + 246 mL D5W/SF (= 250 mL) veya 2 ampul (8 mg baz) + 492 mL (= 500 mL).',
+          'Push-Dose Köprü (10 mcg/mL): 80 mcg/mL enjektörden 1 mL + 7 mL SF (veya 1 mL ampul [1 mg] / 100 mL SF) → 1–2 mL = 10–20 mcg IV.',
+        ]}
+        concentrationTrapWarning="Etikette '8 mg bitartrat' yazan 4 mL ampulün aktif baz eşdeğeri 4 mg'dır! Bitartrat üzerinden hesaplanan Avrupa protokolleri ile baz üzerinden hesaplanan protokoller arasında tam 2 kat doz farkı vardır. Enjektör etiketine daima 'NORepinephrine — XX mcg/mL (BAZ)' yazılmalıdır."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0)  */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="central-preferred"
+        accessSummary="Uzun süreli ve yüksek konsantrasyonlu (≥80–320 mcg/mL) infüzyonlarda ayrı lümenden Santral Venöz Kateter (SVK) esastır. Ancak septik şokta SVK beklenirken tedavi GECİKTİRİLMEZ: antekübital fossa veya proksimal önkol geniş venlerinden (≥20G/18G; el sırtı/bilek/ayak KESİNLİKLE YASAK!) düşük konsantrasyon (16–80 mcg/mL) en fazla 24–48 saat geçici başlanabilir; infüzyon yeri her 1–2 saatte palpe ve inspekte edilmelidir."
+        phRange="3.0 – 4.5 (Asidik · Oksidasyona Duyarlı)"
+        osmolalityNote="Vezikan/vazokonstriktör ajan: Periferik doku sızıntısında pH'tan çok lokal α₁-aracılı kapiller vazospazm nedeniyle iskemik cilt nekrozu gelişir."
+        compatibleDiluents={[
+          '%5 Dekstroz (D5W) — Altın standart (dekstroz katekolamin oksidasyonunu önler)',
+          '%5 Dekstroz + %0.9 NaCl (D5NS) — 24 saat stabil',
+          '%0.9 Sodyum Klorür (SF) — Acil/pratikte güvenli, ≤24 saat içinde yenilenmelidir',
+        ]}
+        stabilityNote="Işıktan korunmalıdır (opak hat/enjektör kılıfı önerilir). Çözelti pembe, sarı veya kahverengiye dönerse ya da partikül içeriyorsa OKSİTLENMİŞTİR — derhal imha edilmelidir. İnfüzyon torbası/enjektörü en geç 24 saatte bir yenilenir."
+        ySiteCompatible={[
+          'Dobutamin',
+          'Vazopressin',
+          'Epinefrin',
+          'Milrinon',
+          'Fentanil',
+          'Remifentanil',
+          'Midazolam',
+          'Propofol',
+          'Deksmedetomidin',
+          'Heparin',
+          'Potasyum Klorür',
+          'Magnezyum Sülfat',
+        ]}
+        ySiteIncompatible={[
+          'Sodyum Bikarbonat (%8.4 NaHCO₃ — saniyeler içinde alkali inaktivasyon!)',
+          'Furosemid',
+          'Aminofilin',
+          'Tiyopental',
+          'İnsülin (aynı hatta değişken stabilite/doz salınımı)',
+          'Pantoprazol / Alkali çözeltiler',
+          'Kan Ürünleri (aynı lümenden verme)',
+        ]}
+        extravasationProtocol="Ekstravazasyon geliştiğinde 12 SAAT İÇİNDE müdahale edin: (1) İnfüzyonu derhal durdurun, kanülü çekmeden enjektörle dokudaki/hattaki ilacı aspire edin. (2) Antidot: 5–10 mg Fentolamin'i 10–15 mL SF içinde seyreltip 25–27G ince iğneyle soluk/soğuk iskemik alan çevresine çember şeklinde çoklu SC enjekte edin (hiperemi sağlanana dek). (3) Fentolamin yoksa: Terbutalin 1 mg / 10 mL SF lokal SC infiltrasyon veya topikal %2 Nitrogliserin pomad uygulayın. (4) Ekstremiteyi eleve edin ve kuru ILIK kompres uygulayın — SOĞUK / BUZ ASLA KULLANMAYIN!"
+      />
+
       <OrganImpairmentGridBlock
         isDark={isDark}
         renalSummary="Organ-bağımsız klirens: Böbrek yetmezliğinde veya CRRT'de başlangıç dozu azaltılmaz."
@@ -1204,6 +1305,26 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           'Karaciğer yetmezliğinde splenik ve portal vazokonstriksiyon nedeniyle mezenterik perfüzyon ve laktat trendi yakından izlenmelidir.',
           'Sirotik vazodilatasyon ve hepatorenal sendrom (HRS) tip-1 tedavisinde terlipresine güçlü alternatif vazopressördür.',
         ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0)       */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="Düşük Başlangıç · Yavaş Titrasyon"
+        geriatricPoints={[
+          '>65 yaş ve kırılgan (frailty) hastalarda baroreseptör refleks duyarlılığı ve β₁-adrenerjik rezerv azalmış, arteriyel sertlik artmıştır; ani yüksek dozlar sol ventrikül afterloadunu keskin artırarak kardiyak debiyi düşürebilir.',
+          'Kronik hipertansiyonu olan yaşlı septik şok hastalarında organ perfüzyonu (özellikle renal/serebral otoregülasyon) yakından izlenmeli, ancak rutin olarak MAP > 75–85 mmHg zorlamak aritmi ve iskemi riskini artırır (SEPSISPAM / 65 Trial).',
+          'Periferik arter hastalığı ve diyabetik mikrovaskülopatisi sık olduğundan ekstremite uçları, kapiller dolum ve splanknik perfüzyon (laktat) daha sık kontrol edilmelidir.',
+        ]}
+        obesityWeightScalarBadge="AdjBW (Tercih) veya IBW"
+        obesityPoints={[
+          'Noradrenalin hidrofilik bir katekolamin olup dağılım hacmi (Vd ~0.1–0.2 L/kg) primer olarak intravasküler kompartmanla sınırlıdır; adipoz dokuya dağılmaz (SOBA / Miller’s / ESICM).',
+          'BMI ≥ 30–40 kg/m² morbid obez hastalarda toplam vücut ağırlığı (TBW) yerine Düzeltilmiş Vücut Ağırlığı (AdjBW) veya İdeal Vücut Ağırlığı (IBW) kullanılması (ya da ağırlıksız mcg/dk skalasına geçilmesi) gereksiz aşırı vazopresör doz maruziyetini önler.',
+          'Klinik titrasyon daima invaziv arteriyel basınç hedefine (MAP ≥ 65 mmHg) göre yapılır; yukarıdaki hesaplayıcıdaki Obezite Doz Ölçekleyici ile AdjBW/IBW tek tıkla uygulanabilir.',
+        ]}
+        clinicalNote="Morbid obezitede ağırlık bazlı mcg/kg/dk eşikleri (ör. SSC 0.25 mcg/kg/dk vazopresin eşiği) TBW ile hesaplanırsa yapay olarak düşük görünür; AdjBW/IBW veya mutlak mcg/dk (ör. >15–20 mcg/dk) ile birlikte değerlendirilmelidir."
       />
 
       <PregnancyLactationBlock
@@ -1283,389 +1404,141 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 10. İLAÇ ETKİLEŞİMLERİ & KONTRENDİKASYONLAR                         */}
+      {/* KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0)       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Kritik İlaç Etkileşimleri &amp; Önlemler
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs leading-relaxed">
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-amber-950/20 border-amber-900/50' : 'bg-amber-50/70 border-amber-200'}`}>
-            <span className="font-bold text-amber-800 dark:text-amber-300 block mb-1">
-              MAO İnhibitörleri &amp; Trisiklikler (TCA)
-            </span>
-            Katekolamin yıkımını ve geri alımını bloke ederler. Noradrenalin etkisi <strong>2–10 kat potansiyalize</strong> olur.
-            Şiddetli hipertansif kriz riski vardır; doz %80–90 oranında düşürülerek çok dikkatli titre edilmelidir.
-          </div>
-
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-amber-950/20 border-amber-900/50' : 'bg-amber-50/70 border-amber-200'}`}>
-            <span className="font-bold text-amber-800 dark:text-amber-300 block mb-1">
-              Beta-Bloker Kullanan Hastalar
-            </span>
-            Beta-1 ve beta-2 reseptörleri bloke olduğunda noradrenalinin alfa-1 etkisi <em>karşılanmamış (unopposed)</em> kalır.
-            Aşırı SVR artışı, şiddetli hipertansiyon ve derin bradikardi gelişebilir.
-          </div>
-
-          <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-amber-950/20 border-amber-900/50' : 'bg-amber-50/70 border-amber-200'}`}>
-            <span className="font-bold text-amber-800 dark:text-amber-300 block mb-1">
-              Halojenli Uçucu Anestezikler (Sevofluran / İzofluran)
-            </span>
-            Uçucu anestezikler miyokardı katekolaminlerin aritmojenik etkilerine duyarlı hale getirir.
-            Yüksek doz katekolamin uygulamalarında ventriküler taşiaritmi riski artar; EKG ritmi yakından izlenmelidir.
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 11. ÖZEL HASTA POPÜLASYONLARI & GEBELİK                              */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <Stethoscope className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Özel Hasta Popülasyonları &amp; Obstetrik Anestezi
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="font-bold text-slate-900 dark:text-white mb-1.5 text-xs">
-              Gebelik &amp; Sezaryen Spinal Hipotansiyonu (SOAP 2023)
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Güncel obstetrik anestezi kılavuzlarında (SOAP) spinal anestezi sonrası hipotansiyonda <strong>düşük doz Noradrenalin</strong>{' '}
-              (ör. 5–10 mcg bolus veya 0.02–0.05 mcg/kg/dk infüzyon) Fenilefrin ve Efedrin'e güçlü alternatif olarak kabul edilmektedir.
-              Efedrine kıyasla daha az fetal asidoz riski yaratır ve maternal kalp hızını korur.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="font-bold text-slate-900 dark:text-white mb-1.5 text-xs">
-              Sağ Kalp Yetmezliği &amp; Pulmoner Hipertansiyon
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Sağ ventrikül (RV) iskemi döngüsünü kırmak için Ortalama Arteryel Basınç yükseltilerek <strong>sağ koroner perfüzyon</strong> korunmalıdır.
-              Noradrenalinin SVR artırıcı etkisi PVR (pulmoner direnç) artırıcı etkisinden fazladır; PVR/SVR oranını lehte tutar.
-            </p>
-          </div>
-
-          <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-            <h4 className="font-bold text-slate-900 dark:text-white mb-1.5 text-xs">
-              Obezite &amp; Doz Hesaplama Kriteri
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-              Morbid obez hastalarda gerçek ağırlık üzerinden hesaplama aşırı doza yol açabilir. Doz başlangıcında{' '}
-              <strong>İdeal Vücut Ağırlığı (IBW)</strong> veya <strong>Düzeltilmiş Ağırlık (AdjBW)</strong> baz alınmalı,
-              titrasyon daima invaziv arteryel tansiyon hedefine (MAP ≥ 65 mmHg) göre yapılmalıdır.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 12. İNFÜZYONDAN ÇIKIŞ / WEANING PROTOKOLÜ                           */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-3">
-          <RefreshCw className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            İnfüzyondan Çıkış / Weaning Algoritması
-          </h2>
-        </div>
-
-        <div className={`p-4 rounded-xl border leading-relaxed text-xs sm:text-sm ${
-          isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-        }`}>
-          <ol className="space-y-2 list-decimal list-inside">
-            <li>
-              <strong>Övolemi Doğrulaması:</strong> Weaning öncesi hastanın intravasküler volümünün yeterli olduğu doğrulanmalıdır
-              (dinamik parametreler: Vena Kava kolapsibilitesi, SVV/PPV &lt; %13 veya pasif bacak kaldırma testi negatif).
-            </li>
-            <li>
-              <strong>Kademeli Azaltım:</strong> Noradrenalin aniden kesilmez. Her 15–30 dakikada bir infüzyon hızı %10–25 oranında basamaklı
-              olarak azaltılır (MAP ≥ 65 mmHg korunarak).
-            </li>
-            <li>
-              <strong>Kombine Vazopressör Varlığında Sıralama:</strong> Vazopressin ile birlikte veriliyorsa, kılavuzlar genellikle
-              önce Noradrenalinin düşük/güvenli seviyeye (≤ 0.05 mcg/kg/dk) inilmesini, ardından Vazopressinin kademeli kesilmesini önerir.
-            </li>
-            <li>
-              <strong>Rebound Hipotansiyon Takibi:</strong> İnfüzyon tamamen sonlandırıldıktan sonra ilk 2–4 saat boyunca hemodinami
-              ve idrar çıkışı yakından izlenmelidir.
-            </li>
-          </ol>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 13. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR          */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-ozel-durumlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-          {/* İnci 1 */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1.5">
-              1. Boş Tanka Musluk Sıkılmaz (Hipovolemi Tuzağı):
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Ciddi hipovolemisi olan bir hastada yeterli sıvı resüsitasyonu yapılmadan yüksek doz noradrenalin başlanması
-              splanknik yatakta, böbreklerde ve parmak uçlarında felaket düzeyde iskemiye yol açar. Ancak septik şokta sıvı yüklemesi
-              tamamlanana kadar tansiyonun 40 mmHg'de kalması beklenmez; sıvı infüzyonu akarken vazopressör eşzamanlı başlanır!
-            </p>
-          </div>
-
-          {/* İnci 2 */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1.5">
-              2. Manşon (NIBP) Yanılsaması &amp; İnvaziv Arter Kateteri:
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Yüksek doz noradrenalin alan şoktaki hastada periferik şiddetli vazokonstriksiyon nedeniyle koldan manşonla
-              ölçülen non-invaziv tansiyon arteryel basıncı olduğundan 20–30 mmHg daha düşük gösterebilir. Noradrenalin infüzyonuna
-              başlanan her yoğun bakım ve yüksek riskli cerrahi hastasında <strong>İnvaziv Arteryel Kateter (A-Line)</strong> altın standarttır.
-            </p>
-          </div>
-
-          {/* İnci 3 */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1.5">
-              3. Torba / Enjektör Değişiminde Ani Hipotansiyon:
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Noradrenalinin yarı ömrü 1–2 dakikadır. Biten bir enjektörün veya serumun değiştirilmesi 3–4 dakika gecikirse
-              hasta dakikalar içinde derin şoka ve kardiyak arreste girebilir. Çift pompa (smart switchover) veya yedek enjektörün
-              önceden hazır tutulması hayati önem taşır.
-            </p>
-          </div>
-
-          {/* İnci 4 */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1.5">
-              4. Laktat Artışı Adrenalin Gibi Yalancı Değildir:
-            </span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Adrenalin uygulamasında beta-2 reseptör stimülasyonu ile karaciğer ve kasta aerobik glikoliz artar ve tip-B laktat yükselir.
-              Ancak noradrenalinde beta-2 etkisi yoktur; noradrenalin altındaki bir hastada laktat yükseliyorsa bu aşırı vazokonstriksiyona
-              bağlı doku hipoperfüzyonunu veya kötüleşen şoku gösterir!
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 7. ÇÖZELTİ HAZIRLAMA & UYUMLULUK REHBERİ                             */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-uyumluluk"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <Droplet className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Çözelti Hazırlama, Seyreltme &amp; Kimyasal Uyumluluk
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-          {/* 1. Taşıyıcı Sıvı Tercihi */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Taşıyıcı Sıvı: %5 Dextroz (D5W) Altın Standart</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Katekolaminler oksidasyona karşı oldukça hassastır. Dekstroz molekülü norepinefrinin oksidatif yıkımını engeller
-              ve stabiliteyi artırır. Bu nedenle <strong>%5 Dextroz (D5W)</strong> veya <strong>D5W + %0.9 SF</strong> tercih edilir.
-              Saf Serum Fizyolojik (%0.9 NaCl) acil durumlarda kullanılabilir ancak 24 saatten uzun saklanmamalıdır.
-            </p>
-          </div>
-
-          {/* 2. Işık Koruması & Oksidasyon Uyarısı */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-              <ShieldAlert className="w-4 h-4 text-amber-500" />
-              <span>Işık Koruması &amp; Renk Değişimi</span>
-            </h4>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
-              Ampuller ışıktan korunarak oda sıcaklığında saklanmalıdır. İnfüzyon hattında opak koruyucu kılıf önerilir.
-              Solüsyon pembe, sarı veya kahverengiye dönerse veya partikül içeriyorsa <strong>OKSİT OLMUŞTUR</strong>;
-              biyolojik etkinliğini kaybetmiştir, <strong>KESİNLİKLE KULLANILMAMALIDIR!</strong>
-            </p>
-          </div>
-
-          {/* 3. Kritik Geçimsizlik: Bikarbonat */}
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-rose-950/20 border-rose-900/50' : 'bg-rose-50/70 border-rose-200'
-          }`}>
-            <h4 className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 mb-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              <span>Kritik Geçimsizlik: Alkali Solüsyonlar</span>
-            </h4>
-            <p className="text-rose-900 dark:text-rose-200 leading-relaxed text-xs">
-              <strong>Sodyum Bikarbonat (%8.4 NaHCO₃)</strong> ve alkali çözeltilerle ASLA aynı damar yolundan verilmemelidir!
-              Alkali pH katekolaminleri saniyeler içinde kimyasal olarak inaktive eder. Ayrıca furosemid, aminofilin ve
-              tiyopental ile aynı lümenden geçimsizdir.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 8. PERİFERİK DAMAR YOLU GÜVENLİK KURALLARI & EKSTRAVAZASYON YÖNETİMİ */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`rounded-2xl border transition-all overflow-hidden ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <button
-          type="button"
-          onClick={() => setExtravasationOpen(!extravasationOpen)}
-          aria-expanded={extravasationOpen}
-          className={`w-full p-5 sm:p-6 flex items-center justify-between text-left transition-colors cursor-pointer ${
-            isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <span>Periferik Damar Yolu Güvenliği &amp; Ekstravazasyon (Fentolamin) Yönetimi</span>
-                <span className="text-xs font-normal px-2 py-0.5 rounded font-mono bg-rose-500/15 text-rose-700 dark:text-rose-300">
-                  Antidot: Fentolamin 5–10 mg
-                </span>
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Yoğun bakımcı ve anestezistin en titiz güvenlik alanı: Erken periferik başlama ve lokal doku nekrozu acil kurtarma protokolü.
-              </p>
-            </div>
-          </div>
-          {extravasationOpen ? (
-            <ChevronUp className="w-5 h-5 text-slate-400" />
-          ) : (
-            <ChevronDown className="w-5 h-5 text-slate-400" />
-          )}
-        </button>
-
-        {extravasationOpen && (
-          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800 space-y-4">
-            {/* Periferik Kullanım Şartları */}
-            <div className={`p-4 rounded-xl border leading-relaxed text-xs sm:text-sm ${
-              isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-            }`}>
-              <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span>"Santral Hat Beklenirken Tedavi Geciktirilmez" — Periferik Güvenlik İlkeleri:</span>
-              </h4>
-              <ul className="space-y-1.5 list-disc list-inside">
-                <li>
-                  <strong>Damar Yeri:</strong> Yalnızca <strong>antekübital fossa veya önkol geniş venleri</strong> (≥ 20G veya 18G kanül).
-                  El sırtı (dorsum manus), el bileği veya ayak/bacak venleri KESİNLİKLE KULLANILMAMALIDIR!
-                </li>
-                <li>
-                  <strong>Süre Sınırı:</strong> Periferik infüzyon bir geçiş stratejisidir. Maksimum <strong>24–48 saat</strong> içinde
-                  santral venöz kateterizasyon (SVK) sağlanmalıdır.
-                </li>
-                <li>
-                  <strong>Monitörizasyon:</strong> İnfüzyon bölgesi her 1–2 saatte bir ödem, solukluk, soğukluk ve geri kan akımı açısından
-                  fiziki olarak palpe ve inspekte edilmelidir.
-                </li>
-              </ul>
-            </div>
-
-            {/* Fentolamin Ekstravazasyon Protokolü */}
-            <div className={`p-4 rounded-xl border ${
-              isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-200' : 'bg-rose-50/80 border-rose-200 text-rose-950'
-            }`}>
-              <div className="flex items-center gap-2 mb-2 font-bold text-sm text-rose-700 dark:text-rose-300">
-                <AlertOctagon className="w-5 h-5 text-rose-600" />
-                <span>EKSTRAVAZASYON GELİŞTİĞİNDE ACİL KURTARMA PROTOKOLÜ (12 SAAT İÇİNDE UYGULANMALI):</span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs mt-3">
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">1. İnfüzyonu Durdur</span>
-                  İnfüzyon derhal kesilir. Kateter hemen çekilmez; enjektör takılarak ekstravaze olmuş noradrenalin aspire edilir.
-                </div>
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">2. Fentolamin Hazırla</span>
-                  <strong>Fentolamin (Regitine / Alfa-bloker) 5 – 10 mg</strong>, 10–15 mL Serum Fizyolojik içinde seyreltilir.
-                </div>
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">3. Subkutan İnfiltrasyon</span>
-                  İnce iğne (25–27G) ile iskemi/solukluk alanına çember şeklinde çoklu noktadan subkutan enjekte edilir (doku hiperemisi hedeflenir).
-                </div>
-                <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200'}`}>
-                  <span className="font-bold block text-rose-600 dark:text-rose-400 mb-1">4. Alternatif &amp; Bakım</span>
-                  Fentolamin yoksa <strong>Topikal %2 Nitrogliserin pomad</strong> sürülür. Kol eleve edilir, ılık kompres konur (SOĞUK/BUZ ASLA UYGULANMAZ!).
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
-
-      <HighAlertSafetyBlock
+      <SpecialClinicalCautionsBlock
         isDark={isDark}
-        tallManName="NORepinephrine"
-        confusionRiskWith="EPINEPHrine"
-        criticalAlerts={[
-          'ISMP Tall-Man etiketleme zorunludur: NORepinephrine (Noradrenalin) ile EPINEPHrine (Adrenalin) enjektörleri aynı sepette tutulmamalıdır.',
-          'Torba/enjektör değişiminde çift pompa (smart switchover) kullanılmalıdır; 2–3 dakikalık kesinti ani derin hipotansiyona yol açar.',
-          'Standart enjektör konsantrasyonları (80 / 160 / 320 mcg/mL) yüksek risklidir; pompa programlamasında bağımsız çift kontrol yapılmalıdır.',
+        items={[
+          {
+            title: 'Boş Tanka Musluk Sıkılmaz (Hipovolemi Tuzağı vs Erken Başlama)',
+            detail:
+              'Ciddi hipovolemi düzeltilmeden yüksek doz noradrenalin splanknik, renal ve dijital iskemiyi derinleştirir. Ancak septik şokta sıvı yüklemesinin bitmesi beklenmez; kristaloid akarken eşzamanlı erken başlanır.',
+          },
+          {
+            title: 'Manşon (NIBP) Yanılsaması & İnvaziv Arter Kateteri (A-Line)',
+            detail:
+              'Yüksek doz noradrenalin alan şok hastasında şiddetli periferik vazokonstriksiyon nedeniyle koldan manşon ölçümü gerçek arter basıncını 20–30 mmHg düşük gösterebilir; invaziv A-Line altın standarttır.',
+          },
+          {
+            title: 'Torba / Enjektör Değişiminde Smart Switchover Zorunluluğu',
+            detail:
+              'Yarı ömrü 1–2 dakikadır; biten enjektörün 3–4 dakika geç değiştirilmesi ani kardiyovasküler kollapsa yol açar. Çift pompa (smart switchover) veya yedek hazır enjektör kullanılmalıdır.',
+          },
+          {
+            title: 'Laktat Artışı Adrenalin Gibi Yalancı (Tip-B) Değildir',
+            detail:
+              'Adrenalinden farklı olarak noradrenalinde β₂-aracılı aerobik glikoliz artışı minimaldir. Noradrenalin altında laktat yükseliyorsa bu aşırı vazokonstriksiyona bağlı gerçek doku hipoperfüzyonunu veya kötüleşen şoku gösterir.',
+          },
+          {
+            title: 'Sağ Kalp Yetmezliği & Pulmoner Hipertansiyonda RV Perfüzyonu',
+            detail:
+              'Sağ ventrikül iskemi döngüsünü kırmak için MAP yükseltilerek sağ koroner perfüzyon korunmalıdır; noradrenalinin SVR artışı PVR artışından fazladır (PVR/SVR oranını lehte tutar).',
+          },
+          {
+            title: 'Kademeli Weaning & Vazopressin Kesilme Sıralaması',
+            detail:
+              'Övolemi doğrulandıktan sonra (SVV/PPV <%13) her 15–30 dk’da %10–25 azaltılır; asla aniden kesilmez. Vazopressin ile kombineyken önce noradrenalin güvenli düşük düzeye (≤0.05 mcg/kg/dk) indirilir, ardından vazopressin kesilir; kesim sonrası 2–4 saat rebound hipotansiyon izlenir.',
+          },
         ]}
-        antidoteOrRescue="Ekstravazasyonda infüzyonu kapatın, kanülden aspire edin ve 12 saat içinde 5–10 mg Fentolamin (10–15 mL SF) SC infiltre edin (veya topikal %2 Nitrogliserin + ılık kompres; buz ASLA koymayın)."
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 14. GÜNCEL KILAVUZ REFERANSLARI & DOĞRULAMA                         */}
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <DeepPharmacodynamicsBlock
+        isDark={isDark}
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Adrenoseptör Seçiciliği (α₁ >> β₁ > β₂) & Hücre İçi Sinyal İletimi',
+          summary:
+            'Noradrenalin sempatik postgangliyonik sinir uçlarının primer nörotransmitteridir. Vasküler düz kastaki α₁-adrenoseptörlere en yüksek afiniteyle bağlanır, kardiyak β₁-reseptörlerini ılımlı uyarır ve vasküler/bronşiyal β₂-reseptörlere etkisi ihmal edilebilir düzeydedir (Miller’s / Stoelting’s / Barash).',
+          points: [
+            'α₁-Reseptör (Gq/11 → Fosfolipaz C → IP₃ / DAG → Ca²⁺↑): Arteriyoler rezistans damarları ve splanknik/kutanöz kapasitans venlerinde güçlü kasılma sağlayarak hem SVR’yi hem venöz dönüşü artırır.',
+            'α₂-Reseptör (Gi → cAMP↓): Postsinaptik vasküler α₂b vazokonstriksiyona katkı verir; presinaptik α₂a ise negatif geri bildirimle endojen NE salınımını düzenler.',
+            'β₁-Reseptör (Gs → Adenilat Siklaz → cAMP↑ → PKA → L-tipi Ca²⁺ akımı & Fosfolamban fosforilasyonu): Miyokard kontraktilitesini (inotropi) ve lusitropiyi destekler; ancak in vivo baroreseptör refleksi kronotropik artışı çoğunlukla dengeler.',
+            'Minimal β₂ Aktivitesi: Adrenalinin aksine iskelet kası vazodilatasyonu, bronkodilatasyon, β₂-aracılı hipokalemi veya Tip-B laktik asidoz oluşturmaz.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Polar katekolamin yapısı nedeniyle kan-beyin bariyerini (KBB) anlamlı düzeyde geçmez; doğrudan sedasyon, hipnoz veya EEG/BIS değişikliği oluşturmaz.',
+            'Serebral Hemodinami: Serebral otoregülasyon sınırları (MAP ~60–150 mmHg) korunduğu sürece doğrudan serebral vazokonstriksiyon yapmaz; şokta MAP’ı yükselterek serebral perfüzyon basıncını (CPP = MAP − ICP) restore eder.',
+          ],
+          cvs: [
+            'Stressed Venöz Hacim & Preload Rekrütmanı: Venöz kapasitans yataklarını (özellikle splanknik venleri) daraltarak "unstressed" kan hacmini "stressed" hacme çevirir; ortalama sistemik dolum basıncını (Pmsf) ve venöz dönüşü artırarak sıvı yükü olmadan kardiyak debiye destek olur (Hamzaoui / ESICM).',
+            'Baroreseptör Refleks Bradikardi: Güçlü α₁-aracılı MAP yükselmesi karotis sinüs ve arkus aorta baroreseptörlerini uyararak vagal tonusu artırır; bu refleks β₁ kronotropisini maskeleyerek kalp hızını sabit tutar veya hafif düşürür.',
+            'Koroner Perfüzyon & Ventriküler Coupling: Aort diyastolik basıncını yükselterek sol ve sağ koroner arter perfüzyonunu artırır; ancak yüksek dozlarda aşırı afterload (Ea↑) ventrikülo-arteriyel eşleşmeyi bozarak zayıf sol ventrikülde stroke volümü düşürebilir.',
+          ],
+          respiratory: [
+            'Pulmoner damar yatağında hafif α₁ vazokonstriksiyon (PVR↑) yapabilir; ancak sistemik SVR artışı PVR artışından belirgin yüksek olduğundan sağ ventrikül koroner perfüzyon gradientini korur.',
+            'β₂ etkisi minimal olduğundan akut bronkospazm veya anafilaktik hava yolu obstrüksiyonunda bronkodilatasyon sağlamaz (bu durumda 1. tercih Adrenalindir).',
+          ],
+          other: [
+            'Renal: Hipovolemide GFR’yi düşürürken, vazoplejik/septik şokta efferent arteriyolü afferentten daha fazla daraltarak glomerüler filtrasyon basıncını ve idrar çıkışını artırır.',
+            'Splanknik & Mikrosirkülasyon: Yüksek dozlarda (>0.5 mcg/kg/dk) mezenterik/mukozal kan akımı ve periferik kapiller perfüzyon bozulabilir.',
+            'Metabolik: Adrenaline kıyasla laktat, glukoz ve potasyum üzerine bozucu etkisi çok daha sınırlıdır.',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Noradrenalinin mutlak bir farmakolojik tavan dozu tanımlanmasa da, artan dozlarda adrenerjik reseptör duyarsızlaşması ve mikrosirkülatuar toksisite nedeniyle çoklu mekanizmalı (katekolamin-koruyucu) vazopresör stratejisi esastır (SSC 2021 / ESICM).',
+          points: [
+            'Şiddetli Asidozda (pH < 7.15) Katekolamin Direnci & Reseptör Downregülasyonu: Asidemi ve uzamış yüksek doz katekolamin maruziyeti β/α reseptör fosforilasyonu (GRK/β-arrestin) ve internalizasyonuna yol açarak pressör yanıtı köreltir; eşzamanlı asit-baz/ventilasyon optimizasyonu şarttır.',
+            'Vazopressin (V1a) & Hidrokortizon Sinerjisi: Noradrenalin >0.25–0.50 mcg/kg/dk düzeyine çıktığında eklenen Vazopressin (0.03 U/dk) katekolaminden bağımsız V1a reseptörleriyle etki eder ve asidozdan daha az etkilenir; IV Hidrokortizon (200 mg/gün) ise adrenerjik reseptör ekspresyonunu yeniden artırarak (upregülasyon) şoktan çıkışı hızlandırır.',
+            'Non-Selektif β-Bloker Etkileşimi: β₁/β₂ blokajı altında noradrenalinin α₁ vazokonstriksiyonu karşılanmamış (unopposed) kalarak şiddetli hipertansiyon ve derin refleks bradikardi/kalp yetmezliği oluşturabilir.',
+          ],
+        }}
+        clinicalPearls={[
+          'Septik şokta erken noradrenalin (sıvı resüsitasyonuyla eşzamanlı) yalnızca SVR’yi değil, venöz kapasitansı azaltarak preload’u da artırır ve pozitif sıvı dengesi/akciğer ödemi riskini azaltır.',
+          '2:1 Baz/Bitartrat Hatasını Önleyin: Yurtdışı literatürde bazı Avrupa merkezleri dozu bitartrat (2×), ABD ve SSC 2021 kılavuzu ise baz (1×) cinsinden verir — Türkiye’de 1 ampul = 4 mg baz (8 mg bitartrat) standardı esas alınmalıdır.',
+          'İskemi & Laktat Yorumu: Noradrenalin altında yükselen laktat "masum Tip-B" değildir; aşırı vazokonstriksiyon, düzeltilmemiş hipovolemi, düşük kardiyak debi veya mezenterik iskemiyi dışlayın.',
+          'Vazoplejik şokta (KPB çıkışı, ACEI/ARB) yüksek doz noradrenaline rağmen direnç sürüyorsa Vazopressin, Hidrokortizon ve seçilmiş olgularda Metilen Mavisi / Hidroksokobalamin değerlendirilmelidir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 14. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA      */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Noradrenalin (Norepinefrin)"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Sodyum Bikarbonat (%8.4 NaHCO₃) & Alkali IV Çözeltiler (Aynı Lümen)',
+            mechanism: 'Fizikokimyasal Alkali Oksidasyon / İnaktivasyon',
+            clinicalEffect: 'Yüksek pH noradrenalini saniyeler içinde oksitleyerek inaktive eder; ani vazopresör kaybı ve derin şok gelişir.',
+            management: 'Asla aynı Y-port veya lümenden vermeyin; ayrı damar yolu kullanın veya uygulama öncesi/sonrası hattı SF ile yıkayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'MAO İnhibitörleri (Linezolid · Metilen Mavisi · Fenelzin) & TCA',
+            mechanism: 'MAO İnhibisyonu & Nöronal Uptake-1 (NET) Blokajı',
+            clinicalEffect: 'Noradrenalinin pressör etkisi 2–10 kat potansiyalize olur; şiddetli hipertansif kriz, intraserebral kanama ve aritmi riski.',
+            management: 'Başlangıç dozunu %80–90 azaltın (ör. 0.01 mcg/kg/dk), invaziv arter monitörizasyonu altında ultra-yavaş titre edin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Non-Selektif Beta-Blokerler (Propranolol · Karvedilol · Timolol)',
+            mechanism: 'Karşılanmamış (Unopposed) α₁-Vazokonstriksiyon',
+            clinicalEffect: 'Aşırı SVR yükselmesi, şiddetli hipertansiyon, derin refleks bradikardi ve kalp yetmezliği dekompansasyonu.',
+            management: 'Düşük dozla başlayıp kan basıncı ve kalp hızını yakın izleyin; kardiyak debi düşerse inodilatör/glukagon değerlendirin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Halojenli Uçucu Anestezikler (Halotan >> İzofluran > Sevofluran/Desfluran)',
+            mechanism: 'Miyokardiyal Katekolamin Duyarlılaşması',
+            clinicalEffect: 'Özellikle hipoksi ve hiperkapni eşlik ettiğinde ventriküler ektopi, VT ve VF riski artar.',
+            management: 'Sürekli EKG monitörizasyonu yapın; oksijenasyon, normokapni ve elektrolitleri (K⁺, Mg²⁺) optimize edin.',
+          },
+          {
+            severity: 'C',
+            agent: 'Ergot Alkaloidleri (Metilergonovin) & Oksitosin (Obstetrik)',
+            mechanism: 'Aditif Periferik & Serebral Vazokonstriksiyon',
+            clinicalEffect: 'Postpartum dönemde şiddetli hipertansiyon ve serebral vazospazm/inme riski.',
+            management: 'Obstetride ergot alkaloidi uygulanacaksa noradrenalin dozunu en düşük düzeyde tutun ve kan basıncını dakika dakika izleyin.',
+          },
+        ]}
         references={[
           {
             authors: 'Evans L, Rhodes A, Alhazzani W, et al.',

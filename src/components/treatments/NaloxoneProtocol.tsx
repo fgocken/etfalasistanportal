@@ -5,15 +5,17 @@ import {
   ChevronDown,
   ChevronUp,
   Clock,
-  FlaskConical,
   ShieldAlert,
   Syringe,
   Wind,
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
   MonographCopyButton,
@@ -21,6 +23,7 @@ import {
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -32,7 +35,7 @@ type PatientGroup = 'adult' | 'pediatric';
 
 export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState<CalcTab>('pacu_oird');
-  const [pkOpen, setPkOpen] = useState<boolean>(true);
+  const [pkOpen, setPkOpen] = useState<boolean>(false);
 
   // 1. PACU / Postoperatif Solunum Depresyonu (OIRD) State
   const [pacuGroup, setPacuGroup] = useState<PatientGroup>('adult');
@@ -159,6 +162,44 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
+          { id: 'sec-dozlar', label: 'Endikasyonlar & Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik & Yenidoğan' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="NALOXONE (0,4 mg/1 mL → PACU’da 40 mcg/mL SULANDIR!)"
+        confusionRiskWith="NALTREKSON · NALBUFİN · LANOXIN (DİGOKSİN)"
+        criticalAlerts={[
+          'PACU’da 0,4 mg (400 mcg) tam ampulü doğrudan puşe ETMEYİN — 10 mL’ye sulandırıp (40 mcg/mL) 1 mL’lik (40 mcg) dilimlerle titre edin; aksi halde akut ağrı krizi, MINS ve flash pulmoner ödem gelişebilir.',
+          'Nalokson’un etki süresi (30–60 dk) çoğu opioidden KISADIR — son doz sonrası en az 2 saat renarkotizasyon açısından monitörlü gözlem şarttır.',
+          'Ameliyathanede nalokson enjektörüne ISO standart beyaz/mavi-çizgili (antagonist) etiket yapıştırın ve konsantrasyonu (40 mcg/mL) açıkça yazın.',
+          'Opioid ilişkili kardiyak arrestte (nabız yok) nalokson için yüksek kaliteli CPR, ventilasyon ve Adrenalin’i ASLA geciktirmeyin (AHA 2023).',
+        ]}
+        antidoteOrRescue="Naloksonun kendisinin aşırı dozuna bağlı akut flash pulmoner ödem gelişirse derhal yüksek akım O₂ / NIV (CPAP/BiPAP) veya endotrakeal entübasyon + PEEP uygulanır (diüretik rutin ilk basamak değildir, non-kardiyojeniktir). Akut hipertansif kriz ve taşiaritmide kısa etkili IV Esmolol veya Nikardipin/Nitrogliserin titre edilir; nalokson etkisi 30–60 dk içinde kendiliğinden sonlanır."
+      />
+
       {/* 1. KİMLİK & KLİNİK ÖZET HEADER */}
       <section
         id="sec-ozet"
@@ -168,7 +209,7 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
             : 'bg-white border-rose-200 shadow-lg shadow-rose-500/5 text-slate-900'
         }`}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="p-3.5 rounded-2xl bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center justify-center shrink-0">
               <Wind className="w-8 h-8" />
@@ -219,26 +260,6 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
               <div className="text-[10px] text-slate-500">Uzun etkili opioidde</div>
             </div>
           </div>
-        </div>
-
-        <div className="mt-4">
-          <MonographQuickNav
-            isDark={isDark}
-            items={[
-              { id: 'sec-etki', label: 'Etki Mekanizması' },
-              { id: 'sec-pkpd', label: 'PK / PD' },
-              { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-              { id: 'sec-dozlar', label: 'Endikasyonlar & Dozaj' },
-              { id: 'sec-hesaplayici', label: 'Titrasyon & İnfüzyon Hesaplayıcı' },
-              { id: 'sec-uyumluluk', label: 'TR Ampul & Sulandırma' },
-              { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-              { id: 'sec-gebelik', label: 'Gebelik & Yenidoğan' },
-              { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-              { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
-              { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
-              { id: 'sec-kaynaklar', label: 'Kaynakça' },
-            ]}
-          />
         </div>
       </section>
 
@@ -925,48 +946,65 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
-      {/* 7. HAZIRLAMA, TR AMPUL FORMLARI & UYUMLULUK */}
-      <section
-        id="sec-uyumluluk"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
-      >
-        <div className="flex items-center gap-2.5">
-          <FlaskConical className={`h-5 w-5 ${isDark ? 'text-amber-400' : 'text-amber-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Türkiye Ampul Formu, Sulandırma &amp; Y-Site Uyumluluk
-          </h3>
-        </div>
+      {/* 7. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Nalokson HCl 0,4 mg / 1 mL Ampul (Türkiye Ruhsatlı Standart Form)',
+            presentation: '1 mL berrak enjeksiyonluk çözelti içeren cam ampul (IV / IM / SC / IO kullanım; atomizer ile IN)',
+            concentration: '0,4 mg/mL (400 mcg/mL)',
+            saltOrBaseNote: '1 tam ampul = 400 mcg nalokson HCl içerir. Postoperatif PACU hastasında tek seferde 1 tam ampul puşe edilmesi şiddetli ağrı krizi ve flash pulmoner ödem nedenidir.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'İntranazal (IN) Sprey / Atomizer Hazırlığı (Off-Label MAD)',
+            presentation: 'Türkiye’de hazır 4 mg IN sprey her merkezde bulunmayabilir; acil damar yolu yoksa 0,4 mg/mL ampulden Mukozal Atomizasyon Cihazı (MAD) ile her burun deliğine ≤ 1 mL uygulanır.',
+            concentration: '0,4 mg/mL (ampul) · 4 mg/0,1 mL (hazır sprey)',
+            saltOrBaseNote: 'Damar yolu yoksa IM (deltoid/vastus lateralis) veya IN uygulama hayat kurtarıcıdır; ilk etki 2–5 dk’da başlar.',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          'PACU Erişkin Standart Titrasyon (40 mcg/mL): 1 ampul (0,4 mg / 1 mL) + 9 mL %0,9 NaCl = 10 mL enjektör → 1 mL = 40 mcg (0,5 mL = 20 mcg mikro-bolus).',
+          'Pediatrik PACU Çift Sulandırma (4 mcg/mL): 40 mcg/mL enjektörden 1 mL çekilir + 9 mL %0,9 NaCl eklenir = 10 mL → 1 mL = 4 mcg (1–2 mcg/kg hassas titrasyon için).',
+          'Boyer 2/3 Sürekli IV İnfüzyon (40 mcg/mL): 5 ampul (2 mg / 5 mL) + 45 mL %0,9 NaCl veya %5 Dekstroz = 50 mL perfüzör enjektörü.',
+          'Nöroaksiyel Kaşıntı / PONV Düşük Doz İnfüzyon (4 mcg/mL): 1 ampul (0,4 mg = 400 mcg) + 99 mL %0,9 NaCl = 100 mL torba → 0,25–2,0 mcg/kg/saat hızında.',
+        ]}
+        concentrationTrapWarning="Postoperatif PACU’da ASLA 0,4 mg/1 mL tam ampulü doğrudan IV puşe etmeyin! Daima 10 mL’ye sulandırıp (40 mcg/mL) 1 mL’lik (40 mcg) dilimler halinde (KAH/kronik opioidde 0,5 mL = 20 mcg) titre edin."
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-rose-950/25 border-rose-500/40' : 'bg-rose-50/80 border-rose-200'}`}>
-            <div className="font-bold text-rose-700 dark:text-rose-300">TR Standart Ampul: 0,4 mg / 1 mL</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              1 ampul = <strong>400 mcg</strong>! Postoperatif PACU hastasında <strong>ASLA 1 ampulü doğrudan puşe etmeyin</strong> —
-              daima 9 mL %0,9 NaCl ekleyip <strong>10 mL (40 mcg/mL)</strong> yapın ve 1 mL’lik (40 mcg) dilimler halinde titre edin.
-            </p>
-          </div>
+      {/* 8. DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Periferik veya santral IV hattan doğrudan uygulanabilir. Damar yolu bulunmayan acil opioid intoksikasyonunda IM, SC, IO veya atomizerle intranazal (IN) yollar derhal kullanılabilir (ETT yolu emilim değişkenliği nedeniyle son çaredir)."
+        phRange="3.0 – 6.5 (Asidik)"
+        osmolalityNote="İzotonik seyreltmede (SF/D5W) doku vezikanı değildir; ancak asidik pH nedeniyle alkali çözeltilerle ve bisülfit/metabisülfit içeren preparatlarla kimyasal olarak geçimsizdir."
+        compatibleDiluents={[
+          '%0,9 Sodyum Klorür (İzotonik SF) — 24 saat stabil',
+          '%5 Dekstroz (D5W) — 24 saat stabil',
+          'Enjeksiyonluk Steril Su (dilüsyon için)',
+        ]}
+        stabilityNote="SF veya D5W içinde hazırlanan 4–40 mcg/mL infüzyon çözeltileri oda sıcaklığında (20–25 °C) 24 saat stabildir; ışıktan korunması önerilir ve 24 saat sonunda kalan çözelti atılmalıdır."
+        ySiteCompatible={[
+          'Heparin',
+          'Ondansetron',
+          'Linezolid',
+          'Propofol (hat yıkaması sonrası)',
+          'Ringer Laktat',
+        ]}
+        ySiteIncompatible={[
+          'Sodyum Bikarbonat (alkali çökelme)',
+          'Fenitoin (alkali presipitasyon)',
+          'Bisülfit / Metabisülfit içeren çözeltiler',
+          'Amfoterisin B',
+          'Diazepam',
+        ]}
+        extravasationProtocol="Doku vezikanı değildir; periferik ekstravazasyonda infüzyonu durdurup kateteri çıkarın, ekstremiteyi eleve edin ve soğuk/ılık lokal takip yapın. Asıl klinik risk ekstravazasyona bağlı ilaç kaybı ve gecikmiş renarkotizasyondur — acil durumda derhal IM/IN veya ikinci IV hattan devam edin."
+      />
 
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-            <div className="font-bold text-emerald-700 dark:text-emerald-300">İnfüzyon &amp; Alternatif Yollar</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              <strong>Sürekli İnfüzyon:</strong> 2 mg (5 ampul) + 45 mL SF = 50 mL (40 mcg/mL) — 24 saat stabildir.<br />
-              <strong>Damar Yolu Yoksa:</strong> IM, SC, IO veya atomizerle intranazal (IN) güvenle uygulanır; ETT yolu son çaredir.
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-1.5 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-            <div className="font-bold text-sky-700 dark:text-sky-300">Y-Site Uyumluluk &amp; Geçimsizlik</div>
-            <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              <strong>Uyumlu:</strong> %0,9 NaCl, %5 Dekstroz, Heparin, Ondansetron, Propofol hattı (flush sonrası).<br />
-              <strong>Geçimsiz:</strong> Bisülfit/metabisülfit içeren çözeltiler ve <strong>alkali solüsyonlar (Sodyum Bikarbonat, Fenitoin)</strong> — çökme ve inaktivasyon riski!
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. BÖBREK VE KARACİĞER YETMEZLİĞİ */}
+      {/* 9. BÖBREK VE KARACİĞER YETMEZLİĞİ */}
       <OrganImpairmentGridBlock
         isDark={isDark}
         renalSummary="Acil ve perioperatif dozda renal ayarlama gerekmez; ancak böbrek yetmezliğinde sorumlu opioid (özellikle Morfin-6-glukuronid!) çok uzun süre biriktiği için RENARKOTİZASYON riski katlanır!"
@@ -980,7 +1018,25 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 9. GEBELİK, OBSTETRİK VE YENİDOĞAN */}
+      {/* 10. GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="20–40 mcg Mikro-Titrasyon"
+        geriatricPoints={[
+          '>65 yaş, kırılgan (frailty) ve gizli/bilinen koroner arter hastalığı olan yaşlı hastalarda ani tam opioid geri dönüşü şiddetli hipertansif kriz, taşikardi, perioperatif miyokard hasarı (MINS) ve akut flash pulmoner ödemi tetikler.',
+          'PACU’da 20–40 mcg (0,5–1 mL sulandırılmış 40 mcg/mL çözelti) çok küçük alikuotlarla 2–3 dakikada bir yalnızca yeterli spontan ventilasyon (SS ≥ 10–12/dk) sağlanana dek titre edin.',
+          'Yaşlılarda opioid klirensi de yavaşladığı için nalokson sonrası renarkotizasyon penceresi uzundur; en az 2–4 saat yakın SpO₂/kapnografi izlemi gerekir.',
+        ]}
+        obesityWeightScalarBadge="Sabit Titre Alikuot (0,04 mg · Kilo Bazlı Yüksek Bolus YOK)"
+        obesityPoints={[
+          'Erişkin obez hastalarda (BMI ≥ 30–40 kg/m²) nalokson toplam vücut ağırlığına (TBW) göre yüksek tek bolus olarak hesaplanmaz; sabit 0,04 mg (40 mcg) titre alikuotlarla (zehirlenmede 0,4 → 2 mg merdiveni) klinik solunum yanıtına göre uygulanır.',
+          'Obstrüktif uyku apnesi (OSA) ve obezite hipoventilasyon sendromu (OHS) bulunan hastalarda lipofilik opioidler (fentanil) yağ dokusundan yavaş salındığı için naloksonun 30–60 dk’lık etkisi geçince ağır renarkotizasyon ve üst hava yolu obstrüksiyonu gelişir.',
+          'Obez PACU hastasında naloksonla birlikte baş elevasyonu (30°), CPAP/NIV desteği ve uzatılmış kapnografi izlemi zorunludur.',
+        ]}
+        clinicalNote="Kilo bazlı dozlama (1–2 mcg/kg PACU veya 0,1 mg/kg tam zehirlenme) yalnızca pediatrik popülasyon için geçerlidir; erişkinlerde (yaşlı/obez dahil) klinik yanıta göre mikro-titrasyon esastır."
+      />
+
+      {/* 11. GEBELİK, OBSTETRİK VE YENİDOĞAN */}
       <PregnancyLactationBlock
         isDark={isDark}
         pregnancySummary="Maternal solunum depresyonunda gecikmeden verilir (hayatı tehdit eden maternal hipoksi fetüs için en büyük risktir); kronik opioid kullanan gebede düşük doz titrasyonu şarttır."
@@ -994,7 +1050,7 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 10. ÖNEMLİ OLUMSUZ ETKİLER */}
+      {/* 12. ÖNEMLİ OLUMSUZ ETKİLER */}
       <AdverseEffectsBlock
         isDark={isDark}
         items={[
@@ -1029,7 +1085,7 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
+      {/* 13. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR */}
       <SpecialClinicalCautionsBlock
         isDark={isDark}
         items={[
@@ -1066,26 +1122,100 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 12. ISMP HIGH-ALERT & GÜVENLİK */}
-      <HighAlertSafetyBlock
+      {/* 14. DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        tallManName="NALOXONE (0,4 mg/1 mL → PACU’da 40 mcg/mL SULANDIR!)"
-        confusionRiskWith="NALTREKSON · NALBUFİN · NAXOLONE / LANOXIN (DİGOKSİN)"
-        criticalAlerts={[
-          'PACU’da 0,4 mg (400 mcg) tam ampulü doğrudan puşe ETMEYİN — 10 mL’ye sulandırıp (40 mcg/mL) 1 mL’lik (40 mcg) dilimlerle titre edin; aksi halde akut ağrı krizi, MINS ve flash pulmoner ödem gelişebilir.',
-          'Nalokson’un etki süresi (30–60 dk) çoğu opioidden KISADIR — son doz sonrası en az 2 saat renarkotizasyon açısından monitörlü gözlem şarttır.',
-          'Ameliyathanede nalokson enjektörüne ISO standart beyaz/mavi-çizgili (antagonist) etiket yapıştırın ve konsantrasyonu (40 mcg/mL) açıkça yazın.',
-          'Opioid ilişkili kardiyak arrestte (nabız yok) nalokson için yüksek kaliteli CPR, ventilasyon ve Adrenalin’i ASLA geciktirmeyin (AHA 2023).',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Saf Kompetitif μ > κ > δ Opioid Reseptör Antagonizması & Kısa Etki Kinetiği',
+          summary:
+            'Nalokson, oksimorfonun N-allil türevidir ve intrinsik agonist aktivitesi SIFIR olan saf kompetitif opioid reseptör antagonistidir (afinite sırası: μ >> κ > δ). Opioid varlığı yoksa fizyolojik dozlarda belirgin bir farmakolojik etki oluşturmaz.',
+          points: [
+            'Reseptör Yer Değiştirmesi (Competitive Displacement): Lipofilik yapısıyla KBB’yi 1–2 dk’da geçerek pre-Bötzinger solunum merkezi ve spinal arka boynuzdaki μ-opioid reseptörlerinden agonisti uzaklaştırır; Gi/Go kaynaklı cAMP baskılanmasını ve K⁺ hiperpolarizasyonunu anında sonlandırır.',
+            'Kısa Etki Süresi → Renarkotizasyon Mekaniği: Hızlı santral redistribüsyon ve yüksek hepatik glukuronidasyon (UGT2B7) nedeniyle klinik etki süresi 30–60 dk’dır; morfin, metadon, uzun salımlı oral opioidler ve uzamış fentanil infüzyonundan çok daha kısa olduğu için opioid reseptöre tekrar bağlanır.',
+            'Reseptör Ayrılma Hızı (k_off) Farkı: Buprenorfin gibi reseptöre çok sıkı bağlanan parsiyel agonistlerde veya ultra-potent fentanil analoglarında standart tek bolus reseptörü tam boşaltamaz; yüksek doz + sürekli infüzyon gerekir (Dahan 2010).',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Opioid Kaynaklı Sedasyon & Miyozisin Hızlı Geri Dönüşü: Locus coeruleus ve ARAS üzerindeki μ-inhibitör freni kaldırarak 1–2 dakikada uyanıklık ve pupiller dilatasyon sağlar; ancak benzodiyazepin, propofol veya alkol sedasyonuna etkisi YOKTUR.',
+            'Akut Ağrı & Ajitasyon Rebound’u: Postoperatif hastada μ₁ supraspinal analjezinin aniden silinmesi şiddetli nosiseptif deşarja, deliryuma ve kronik opioid kullanıcısında akut yoksunluk/nöbet eşiği düşüşüne yol açar.',
+            'Serebral Kan Akımı (CBF/ICP): Hiperkapnik vazodilatasyonu düzeltse de ani hipertansif fırtına ve şiddetli ağrı intrakraniyal anevrizma veya yeni kraniyotomi hastasında kafa içi kanama riski yaratır.',
+          ],
+          cvs: [
+            'Akut Katekolamin Fırtınası: Ani opioid antagonizması (özellikle yüksek tek bolusta) plazma epinefrin/norepinefrin düzeylerini katlayarak şiddetli hipertansiyon, sinüs taşikardisi, ventriküler ektopi/VF ve miyokard iskemisi (MINS) tetikler.',
+            'Non-Kardiyojenik (Flash) Pulmoner Ödem: Masif sempatik deşarjın yarattığı pulmoner venokonstriksiyon + kapiller hidrostatik basınç artışı ve kapalı glottise karşı derin inspiratuvar çaba (negatif basınçlı ödem) ani pembe köpüklü balgam ve ağır hipoksemiye yol açar.',
+          ],
+          respiratory: [
+            'Pre-Bötzinger Kompleksi & CO₂ Yanıtı: Medüller solunum merkezindeki μ₂ baskısını kaldırarak dakika ventilasyonunu, solunum sayısını ve hiperkapnik/hipoksik kemoreseptör duyarlılığını 1–2 dk’da geri getirir.',
+            'Laringospazm & Aspirasyon Riski: Hızlı tam geri dönüşte akut yoksunluğa bağlı kusma ve hiperreaktif hava yolu refleksleri gelişebilir; hava yolu aspirasyondan korunmalıdır.',
+          ],
+          other: [
+            'Nöroaksiyel kaşıntı/PONV’yi santral μ-modülasyonuyla ≤ 2 mcg/kg/saat dozda analjeziyi koruyarak giderir',
+            'Oral < %2 biyoyararlanımı sayesinde enterik μ-reseptörlerini selektif bloke eder (OIC)',
+            'Doğrudan NMB veya GABAerjik ajanları antagonize etmez',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Naloksonun klinik sanatını belirleyen şey "kompetitif doz-yanıt dengesi"dir: düşük dozlar solunum depresyonu ve kaşıntıyı seçici biçimde düzeltirken, yüksek dozlar analjeziyi tamamen silip sempatik fırtına yaratır.',
+          points: [
+            'Analjezi Koruma Penceresi (Dahan 2010): PACU’da 20–40 mcg IV mikro-titrasyon (veya kaşıntıda 0,25–2,0 mcg/kg/saat) μ₂ kaynaklı solunum depresyonu/kaşıntıyı hafifletirken postoperatif analjeziyi büyük ölçüde korur.',
+            'Renarkotizasyon Penceresi & Boyer 2/3 İnfüzyon Kuralı: İlk uyanma dozunun 2/3’ünün saatlik sürekli infüzyon olarak başlanması (+ 15. dk’da ilk bolusun 1/2’si köprü bolusu) uzun etkili opioidlerde plazma antagonizmasını sabit tutar.',
+            'Parsiyel Agonist Direnci: Buprenorfin yüksek μ-afinitesi nedeniyle tipik 0,4 mg bolusa direnç gösterebilir; bu durumda 2–4+ mg kademeli doz ve sürekli infüzyon gerekir.',
+          ],
+        }}
+        clinicalPearls={[
+          'Önce Oksijen ve BVM Ventilasyon: Hipoksemi/hiperkapni varlığında naloksonun katekolamin fırtınası ve ventriküler aritmi riski katlanır; ilaç hazırlanırken hastayı mutlaka %100 O₂ ile ventile edin.',
+          'PACU’da 0,4 mg Tam Ampul Tuzağı: Postoperatif hastada 0,4 mg doğrudan puşe etmek neredeyse her zaman şiddetli ağrı şoku, hipertansiyon ve cerrahi sütür/kanama stresine yol açar; daima 40 mcg/mL sulandırıp 1 mL titre edin.',
+          'Yanıtsız Hastada 10 mg Kuralı: Kümülatif 10 mg naloksona rağmen solunum/bilinç açılmıyorsa (ultra-potent sentetik opioidler hariç) altta yatan neden opioid dışı bir patolojidir (rezidüel NMB, benzodiyazepin, ksilazin, hipoglisemi, inme).',
+          'Taburculuk / Servis Transferi Hatası: Naloksonla uyanan hasta asla 30–60 dakika içinde monitörsüz servise gönderilmez; son dozdan sonra en az 2 saat renarkotizasyon takibi şarttır.',
         ]}
-        antidoteOrRescue="Naloksonun kendisinin aşırı dozuna bağlı akut flash pulmoner ödem gelişirse derhal yüksek akım O₂ / NIV (CPAP/BiPAP) veya endotrakeal entübasyon + PEEP uygulanır (diüretik rutin ilk basamak değildir, non-kardiyojeniktir). Akut hipertansif kriz ve taşiaritmide kısa etkili IV Esmolol veya Nikardipin/Nitrogliserin titre edilir; nalokson etkisi 30–60 dk içinde kendiliğinden sonlanır."
       />
 
-      {/* 13. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMLERİ */}
+      {/* 15. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA (v4.0) */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Nalokson Hidroklorür"
         drugsComUrl="https://www.drugs.com/drug-interactions/naloxone.html"
         medscapeUrl="https://reference.medscape.com/drug/narcan-naloxone-343741"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Sodyum Bikarbonat · Fenitoin · Bisülfit/Metabisülfit Çözeltileri (Aynı IV Hat)',
+            mechanism: 'Fizikokimyasal pH Uyumsuzluğu & Kimyasal İnaktivasyon',
+            clinicalEffect: 'Asidik nalokson çözeltisi alkali ilaçlarla çökelir; bisülfit/metabisülfit ile kimyasal degradasyona uğrayarak antidot etkinliğini yitirir.',
+            management: 'Aynı IV hattan/Y-site’dan asla vermeyin; ayrı lümen kullanın veya hattı SF ile yıkayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Kronik Opioid Agonistleri (Metadon · Morfin · Oksikodon · Fentanil TTS)',
+            mechanism: 'Ani Kompetitif μ-Opioid Reseptör Boşaltımı',
+            clinicalEffect: 'Yüksek tek bolus (≥ 0,4 mg) akut şiddetli yoksunluk sendromu, kusma/aspirasyon, ajitasyon ve katekolamin fırtınası (HT, MINS, flash pulmoner ödem) tetikler.',
+            management: '20–40 mcg IV mikro-titrasyon ile yalnızca yeterli spontan solunumu (SS ≥ 10–12/dk) hedefleyin; uzun etkili opioidde Boyer 2/3 infüzyonu planlayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Sempatomimetikler (Kokain · Amfetamin · Yüksek Doz Katekolaminler)',
+            mechanism: 'Karşılanmamış Sempatik Hiperaktivite (Opioid Freninin Ani Kalkması)',
+            clinicalEffect: 'Polimadde zehirlenmesinde opioid sedasyonu kalkınca şiddetli hipertansif kriz, taşiaritmi, miyokard iskemisi ve nöbet gelişebilir.',
+            management: 'Düşük doz titre nalokson (0,04 mg) kullanın; ajitasyon/HT için benzodiyazepin ve kısa etkili vazodilatör/esmolol hazır bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'Buprenorfin (Yüksek Afinite Parsiyel μ-Agonisti)',
+            mechanism: 'Yavaş Reseptör Ayrılma Kinetiği (Yüksek μ-Afinite Direnci)',
+            clinicalEffect: 'Standart 0,4 mg tek bolus solunum depresyonunu tam döndüremeyebilir ve hızlı renarkotizasyon gelişir.',
+            management: 'Daha yüksek kademeli bolus (2–4+ mg) ve saatlerce süren sürekli nalokson IV infüzyonu uygulayın.',
+          },
+          {
+            severity: 'C',
+            agent: 'Klonidin (Santral α₂-Agonisti)',
+            mechanism: 'Kısmi Endojen Opioid / Santral Sempatolitik Etkileşim',
+            clinicalEffect: 'Klonidin intoksikasyonunda naloksonun solunum/sedasyon geri dönüş etkisi değişken ve öngörülemezdir; paradoks hipertansiyon gelişebilir.',
+            management: 'Klonidin toksisitesinde temel tedavi destekleyici havayolu/hemodinami yönetimidir; nalokson denenirse hemodinamiyi yakından izleyin.',
+          },
+        ]}
         references={[
           {
             authors: 'Boyer EW.',

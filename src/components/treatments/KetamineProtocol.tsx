@@ -34,10 +34,16 @@ import {
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographCopyButton,
   MonographQuickNav,
+  OrganImpairmentGridBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -240,10 +246,50 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet & Etki' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozaj', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-emergence', label: 'Emergence' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON · v4.0) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        tallManName="KETAMINE (50 mg/mL Konsantre Flakon — 10 mg/mL SULANDIR!)"
+        confusionRiskWith="Ketalar 50 mg/mL (500 mg/10 mL) ↔ 10 mg/mL Sulandırılmış Enjektör · Esketamin (2× Potent)"
+        antidoteOrRescue="Spesifik Antidot YOK — Hava Yolu & Psikomimetik Yönetim: Aşırı dozda destekleyici ventilasyon ve hemodinamik izlem esastır. Şiddetli uyanma ajitasyonu/halüsinasyonda Midazolam 1–2 mg IV (veya propofol küçük bolus); laringospazmda çene itme, CPAP, gerekirse propofol/süksinilkolin uygulanır."
+        criticalAlerts={[
+          '50 mg/mL Konsantre Flakon Tuzağı: Türkiye’deki 500 mg/10 mL (50 mg/mL) Ketalar flakon direkt subanestezik puşe için 5 kat aşırı konsantredir; 10 mg/mL’ye (2 mL = 100 mg + 8 mL SF) sulandırıp etiketleyin.',
+          'Subanestezik vs İndüksiyon Doz Karışıklığı: Analjezi dozu (0,15–0,3 mg/kg bolus · 0,1–0,2 mg/kg/saat) ile disosiyatif/RSI indüksiyon dozu (1–2 mg/kg IV) kesinlikle karıştırılmamalıdır.',
+          'Katekolamin Tükenmiş Ağır Şok Paradoksu: Endojen katekolamin deposu tükenmiş kronik septik/kardiyojenik şokta ketaminin direkt miyokardiyal depresan etkisi baskın çıkabilir; dozu %50 azaltın (0,5–1,2 mg/kg) ve vazopresör hazır bulundurun.',
+          'Barbitürat / Diazepam Çökelmesi: Tiyopental veya diazepam ile aynı lümenden verilmesi ani presipitasyon yapar; ayrı hat kullanın.',
+        ]}
+      />
+
       {/* =========================================================================
           BÖLÜM 1: ÜST BAŞLIK VE HIZLI İLAÇ KİMLİK ÖZETİ
           ========================================================================= */}
       <div
+        id="sec-ozet"
         className={`p-6 rounded-2xl border transition-all ${
           isDark
             ? 'bg-slate-900/90 border-indigo-500/30 shadow-xl shadow-indigo-950/20 text-slate-100'
@@ -271,7 +317,7 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
                 Ketamin (KETALAR, KETANEST, SPRAVATO)
               </h1>
               <p className="text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-                NMDA reseptör antagonisti, fenilpiperazin türevi disosiyatif anestezi ve analjezik ajan.
+                Non-kompetitif NMDA reseptör antagonisti, fensiklidin (arilsikloheksilamin) türevi disosiyatif anestezi ve analjezik ajan.
                 Talamokortikal ve limbik sistem disosiasyonu yaratarak hasta uyanık görünürken derin analjezi ve amnezi sağlar;
                 faringeal-laringeal refleksleri ve spontan solunumu korur, sempatik deşarj ile bronkodilatasyon ve hemodinamik stabilite sağlar.
               </p>
@@ -342,25 +388,6 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </div>
-
-      <MonographQuickNav
-        isDark={isDark}
-        items={[
-          { id: 'sec-etki', label: 'Etki Mekanizması' },
-          { id: 'sec-farmakokinetik', label: 'Farmakokinetik' },
-          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
-          { id: 'sec-dozaj', label: 'Dozaj Tablosu' },
-          { id: 'sec-hesaplayici', label: 'Ketamin & Ketofol' },
-          { id: 'sec-populasyon', label: 'Özel Popülasyonlar' },
-          { id: 'sec-gebelik', label: 'Gebelik & Laktasyon' },
-          { id: 'sec-emergence', label: 'Emergence Deliryumu' },
-          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-          { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
-          { id: 'sec-hazirlama', label: 'Ketofol Hazırlama' },
-          { id: 'sec-kaynaklar', label: 'Kaynakça & Etkileşim' },
-        ]}
-      />
 
       {/* =========================================================================
           BÖLÜM 2: FARMAKODİNAMİK VE ETKİ MEKANİZMASI
@@ -437,9 +464,10 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* =========================================================================
-          BÖLÜM 3: FARMAKOKİNETİK PROFİLİ
+          BÖLÜM 3: FARMAKOKİNETİK PROFİLİ (TEK KAYNAK AKORDİYON · v4.0)
           ========================================================================= */}
       <section
+        id="sec-pkpd"
         className={`rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -447,6 +475,7 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
         <button
           type="button"
           onClick={() => setPkOpen(!pkOpen)}
+          aria-expanded={pkOpen}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
           }`}
@@ -458,14 +487,14 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100">
-                  Farmakokinetik Profili
+                  Farmakokinetik &amp; Norketamin Metabolizma Profili (PK / PD)
                 </span>
                 <span className="text-[11px] px-2 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                  {pkOpen ? 'Gizle' : 'Genişletmek için tıklayın'}
+                  {pkOpen ? 'Gizle' : 'Tıkla & Göster'}
                 </span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Onset, peak, redistribüsyon, Vd, hepatik CYP2B6/3A4 metabolizması ve aktif norketamin eliminasyonu
+                Onset, peak, t½α hızlı redistribüsyon, Vd, hepatik CYP2B6/3A4 metabolizması ve aktif Norketamin eliminasyonu
               </p>
             </div>
           </div>
@@ -483,16 +512,16 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
                 </span>
                 <span className="text-sm font-bold text-slate-900 dark:text-slate-100">30 – 60 Saniye (IV)</span>
                 <p className="text-[11px] text-slate-500 mt-1">
-                  IM: 3–5 dk; İntranazal: 5–10 dk; Oral: 15–30 dk.
+                  IM: 3–5 dk; İntranazal: 5–10 dk; Oral: 15–30 dk (oral biyoyararlanım ~%16–20).
                 </p>
               </div>
 
               <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
                 <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
-                  Pik Etki (Peak)
+                  Pik Etki &amp; Redistribüsyon (t½α)
                 </span>
                 <span className="text-sm font-bold text-slate-900 dark:text-slate-100">1 – 2 Dakika (IV)</span>
-                <p className="text-[11px] text-slate-500 mt-1">IM: 5–15 dk; Oral: 30–45 dk.</p>
+                <p className="text-[11px] text-slate-500 mt-1">Hızlı yeniden dağılım t½α ~10–15 dk (IM pik: 5–15 dk).</p>
               </div>
 
               <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
@@ -528,10 +557,10 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
                   Eliminasyon Yarı Ömrü (t½β)
                 </span>
                 <span className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
-                  2 – 3 Saat
+                  2.0 – 3.0 Saat
                 </span>
                 <p className="text-[11px] text-slate-500 mt-1">
-                  Karaciğerde yüksek hepatik klerens (12–17 mL/kg/dk).
+                  Yüksek hepatik klerens (12–17 mL/kg/dk; hepatik kan akımına bağımlı).
                 </p>
               </div>
             </div>
@@ -544,95 +573,10 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
                 • <strong>CYP2B6 ve CYP3A4 N-Demetilasyonu:</strong> Ketamin karaciğerde mikrozomal enzimlerle aktif metaboliti olan <strong>Norketamin</strong>e dönüştürülür.
               </p>
               <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-                • <strong>Norketamin Potensi:</strong> Norketamin, ana ketamin molekülünün yaklaşık 1/3 ila 1/5'i kadar analjezik aktiviteye sahiptir. YBÜ'de uzamış infüzyonlarda veya oral kullanımda norketamin birikir ve analjezik etkinin uzamasına katkıda bulunur.
+                • <strong>Norketamin Potensi &amp; Uzun Yarı Ömrü (~12 saat):</strong> Norketamin, ana ketamin molekülünün yaklaşık 1/3 ila 1/5&apos;i kadar analjezik aktiviteye sahiptir ve yarı ömrü belirgin uzundur (~12 saat). YBÜ&apos;de uzamış infüzyonlarda veya oral kullanımda norketamin birikerek analjezik ve sedatif etkinin uzamasına katkıda bulunur.
               </p>
               <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-                • <strong>Ekskresyon:</strong> Hidroksilasyon ve glukuronid konjugasyonu sonrasında metabolitlerin %90'ı böbrekler yoluyla idrarla atılır; &lt;%4 değişmemiş ana ilaç olarak atılır.
-              </p>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* =========================================================================
-          BÖLÜM 12: FARMAKOKİNETİK VE DİNAMİK SİMÜLATÖR
-          ========================================================================= */}
-      <section
-        id="sec-farmakokinetik"
-        className={`p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
-              <Activity className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                Farmakokinetik &amp; Norketamin Metabolizma Profili
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Yüksek lipid çözünürlüğü, t½α 1–2 dk hızlı yeniden dağılım ve aktif metabolit Norketamin
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setPkOpen(!pkOpen)}
-            className="flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
-          >
-            <span>{pkOpen ? 'Simülatörü Gizle' : 'Simülatörü Genişlet'}</span>
-            {pkOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
-        </div>
-
-        {pkOpen && (
-          <div className="space-y-4 pt-2 text-xs">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Dağılım Hacmi (Vd)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  2.5 – 3.5 L/kg
-                </span>
-                <span className="text-[10px] text-slate-500">Mükemmel santral penetrasyon</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Yeniden Dağılım (t½α)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  1 – 2 Dakika
-                </span>
-                <span className="text-[10px] text-slate-500">Uyanma yeniden dağılımla olur</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Eliminasyon (t½β)</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  2.0 – 3.0 Saat
-                </span>
-                <span className="text-[10px] text-slate-500">Hepatik klerens: 12-17 mL/kg/dk</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-bold block">Protein Bağlanması</span>
-                <span className="text-sm font-black font-mono text-slate-900 dark:text-white mt-0.5 block">
-                  %12 – %15
-                </span>
-                <span className="text-[10px] text-slate-500">Çok düşük (serbest fraksiyon yüksek)</span>
-              </div>
-            </div>
-
-            {/* Norketamin Metabolizma Şeması */}
-            <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 space-y-2">
-              <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
-                Aktif Metabolit: Norketamin (Dönüşüm Yolağı):
-              </span>
-              <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                Ketamin karaciğerde sitokrom P450 (özellikle CYP3A4 ve CYP2B6) enzimleri aracılığıyla N-demetilasyona uğrayarak <strong>Norketamin</strong>'e dönüşür.
-                Norketamin, ana molekülün yaklaşık <strong>1/3 ila 1/5'i oranında analjezik ve anestezik etkinliğe</strong> sahiptir.
-                Yarılanma ömrü daha uzundur (yaklaşık 12 saat). Sürekli infüzyon veya tekrarlayan dozlarda birikerek kümülatif analjezik etkiye katkıda bulunur.
+                • <strong>Ekskresyon:</strong> Hidroksilasyon ve glukuronid konjugasyonu sonrasında metabolitlerin %90&apos;ı böbrekler yoluyla idrarla atılır; &lt;%4 değişmemiş ana ilaç olarak atılır.
               </p>
             </div>
           </div>
@@ -1033,6 +977,19 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
               </p>
             </div>
           </div>
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() =>
+              [
+                `KETAMİN DOZ & İNFÜZYON ÖZETİ`,
+                `Hesaplama Ağırlığı: ${weightKg} kg (${patientProfile})`,
+                `RSI İndüksiyon (${rsiTargetMgKg} mg/kg): ${rsiTotalMg} mg IV (${rsiTotalMl_50mgml} mL Ketalar 50 mg/mL)`,
+                `Sub-dissosiyatif Ağrı Bolusu (${subdissociativeBolusMgKg} mg/kg): ${subdissociativeTotalMg} mg IV`,
+                `Analjezik İnfüzyon (${infusionRateMgKgHr} mg/kg/saat): ${infusionHourlyMg} mg/saat → ${infusionPumpRateMlHr} mL/saat (${infusionConcMgMl} mg/mL)`,
+                `Ketofol (${ketofolRatio.replace('_to_', ':')}): ${ketofolPrepDescription}`,
+              ].join('\n')
+            }
+          />
         </div>
 
         {/* Araç Seçim Sekmeleri */}
@@ -1606,78 +1563,101 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
-      {/* =========================================================================
-          BÖLÜM 11: ÖZEL POPÜLASYONLAR VE DOZ AYARLARI
-          ========================================================================= */}
-      <section
-        id="sec-populasyon"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Özel Popülasyonlar &amp; Doz Modifikasyonları (Böbrek / Karaciğer Dahil)
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Pediatri, geriatri, karaciğer yetmezliği, gebelik ve böbrek fonksiyonları
-            </p>
-          </div>
-        </div>
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Ketamin 500 mg / 10 mL Flakon (Ketalar %5 — Türkiye Standart Formu)',
+            presentation: 'IV/IM enjeksiyon ve infüzyon için berrak, renksiz çoklu doz cam flakon (10 mL)',
+            concentration: '50 mg/mL (KONSANTRE!)',
+            saltOrBaseNote: '50 mg ketamin baza eşdeğer 57.67 mg ketamin HCl + benzethonium klorür koruyucu içerir. Subanestezik analjezi için doğrudan puşe EDİLMEMELİ; mutlaka 10 mg/mL’ye sulandırılmalıdır.',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Esketamin (Ketanest S — S(+)-Ketamin) & Spravato 28 mg İntranazal',
+            presentation: 'S(+) enantiomer IV form (bazı merkezlerde) ve tedaviye dirençli depresyonda 28 mg intranazal sprey cihazı (Spravato)',
+            concentration: 'Rasemik Ketaminden 2× Potent',
+            saltOrBaseNote: 'Esketamin (S-izomer) rasemik ketaminden ~2 kat daha güçlüdür; yanlışlıkla rasemik ketamin dozunda uygulanırsa 2 kat aşırı doz oluşur.',
+            alertLevel: 'high',
+          },
+        ]}
+        standardDilutions={[
+          'IV Bolus / Subanestezik Analjezi Standardı (10 mg/mL): 2 mL Ketalar (100 mg) + 8 mL %0.9 NaCl → toplam 10 mL (1 mL = 10 mg; yatak başı doz hatasını önler).',
+          'YBÜ / Akut Ağrı Sürekli İnfüzyonu (1 mg/mL veya 2 mg/mL): 500 mg (10 mL) + 490 mL SF/D5W → 1 mg/mL; sıvı kısıtlı hastada 200 mg (4 mL) + 96 mL SF → 2 mg/mL.',
+          'Ketofol 1:1 (20 mL Enjektör): 2 mL Ketalar (100 mg) + 10 mL Propofol %1 (100 mg) + 8 mL SF → her 1 mL = 5 mg Ketamin + 5 mg Propofol.',
+          'Acil IM Sedasyon / Excited Delirium: 50 mg/mL saf flakon sulandırılmadan derin IM (vastus lateralis) enjekte edilir (küçük hacim avantajı; maks 500 mg).',
+        ]}
+        concentrationTrapWarning="Türkiye’deki tek yaygın IV/IM form olan Ketalar 500 mg/10 mL (50 mg/mL) flakon son derece konsantredir! 0.1–0.3 mg/kg sub-dissosiyatif analjezide sulandırılmadan çekilirse 5 kat aşırı doz ve ani disosiasyon/apne riski doğar. Daima 10 mg/mL’ye sulandırıp etiketleyin."
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Pediatrik Hastalar</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Çocuklarda uyanma deliryumu insidansı çok düşüktür (%3).
-              Metabolizma yetişkinlere göre daha hızlıdır; IM sedasyon için <strong>3.0 – 5.0 mg/kg</strong>, IV sedasyon için 1.0 – 2.0 mg/kg gerekir. Sekresyon artışına bağlı hava yolu obstrüksiyonu riski daha yüksektir.
-            </p>
-          </div>
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Periferik veya santral IV hattan güvenle uygulanır; ayrıca damar yolu olmayan acillerde derin IM, intranazal (MAD) ve oral yollarla etkilidir. Hızlı IV bolus (< 30 sn) geçici apne ve belirgin taşikardi/hipertansiyon yaptığından en az 60 saniyede yavaş verilmelidir."
+        phRange="3.5 – 5.5 (Asidik)"
+        osmolalityNote="50 mg/mL konsantre form ~300 mOsm/kg (izotonik), 1–10 mg/mL SF/D5W dilüsyonları izotoniktir. Oda sıcaklığında (15–25 °C) ışıktan korunarak saklanır, dondurulmaz."
+        compatibleDiluents={[
+          '%0.9 Sodyum Klorür (İzotonik SF) — 24 saat stabil',
+          '%5 Dekstroz (D5W) — 24 saat stabil',
+          'Propofol %1 (Ketofol enjektör karışımı) — en az 3–4 saat fizikokimyasal olarak stabil',
+        ]}
+        stabilityNote="Hazırlanan 1–2 mg/mL SF/D5W infüzyonları oda sıcaklığında 24 saat stabildir. Ketofol karışımında lipid partikül çapı ≥ 3–4 saat korunur, aynı gün içinde aseptik tüketilmelidir."
+        ySiteCompatible={[
+          'Propofol (Ketofol)',
+          'Midazolam',
+          'Fentanil',
+          'Remifentanil',
+          'Morfin',
+          'Deksmedetomidin',
+          'Lidokain',
+          'Norepinefrin',
+          'Epinefrin',
+          'Roküronyum',
+        ]}
+        ySiteIncompatible={[
+          'Tiyopental / Barbitüratlar (anında çökelme!)',
+          'Diazepam (presipitasyon!)',
+          'Sodyum Bikarbonat',
+          'Furosemid',
+          'Fenitoin',
+        ]}
+        extravasationProtocol="İzotonik ve non-vezikandır; ekstravazasyonda doku nekrozu beklenmez. İnfüzyonu durdurun, kateterden aspire edin ve lokal soğuk/ılık kompres uygulayın. Tiyopental veya diazepam ile aynı lümenden verilmesi derhal beyaz çökelme ve kateter tıkanması yapar."
+      />
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Geriatri (Yaşlı Hastalar)</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Yaşlılarda deliryum, disfori ve postoperatif konfüzyon riski belirgin şekilde yüksektir.
-              Kardiyovasküler semptomlar (taşikardi, hipertansiyon) daha belirgindir. Başlangıç dozları <strong>%30 – 50 oranında azaltılmalıdır</strong>.
-            </p>
-          </div>
+      {/* BÖBREK & KARACİĞER YETMEZLİĞİNDE DOZ YÖNETİMİ (v4.0) */}
+      <OrganImpairmentGridBlock
+        isDark={isDark}
+        renalSummary="Tek dozda ayar gerekmez; uzamış YBÜ infüzyonunda aktif Norketamin metabolit birikimi izlenmelidir."
+        renalDetails={[
+          'Ketaminin <%4’ü böbreklerden değişmeden atılır; KBY, hemodiyaliz (HD), periton diyalizi ve CRRT’de tek bolus RSI/prosedürel sedasyon dozu değişmez.',
+          'Aktif metabolit Norketamin ve glukuronid konjugatlarının %90’ı idrarla atılır; eGFR < 30 mL/dk hastalarda uzun süreli (>24–48 saat) YBÜ infüzyonunda sedasyon ve psikomimetik etki uzayabilir — infüzyon hızını %25–30 azaltın.',
+        ]}
+        hepaticSummary="Child-Pugh B/C sirozda hepatik CYP2B6/3A4 klerensi belirgin düşer; tekrarlayan bolus ve infüzyon dozları azaltılmalıdır."
+        hepaticDetails={[
+          'Child-Pugh A: Tek doz indüksiyonda ayar gerekmez; infüzyonda standart klinik titrasyon.',
+          'Child-Pugh B / C: Hepatik kan akımına bağımlı yüksek ekstraksiyonlu ilaçtır; sirozda yarı ömür uzar ve uyanma gecikir — idame infüzyonu %25–50 azaltın, tekrarlayan bolus aralıklarını uzatın.',
+        ]}
+      />
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Karaciğer Yetmezliği</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Ketamin karaciğerde CYP3A4 ve CYP2B6 enzimleri ile <strong>Norketamin</strong> aktif metabolitine dönüştürülür.
-              Siroz ve ağır hepatik yetmezlikte klerens düşer, etki süresi uzar; tekrarlayan bolus ve infüzyon dozları azaltılmalıdır.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Böbrek Yetmezliği</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Ketamin metabolitleri (Norketamin glukuronidleri) böbrek yoluyla atılır.
-              Diyaliz hastalarında veya KBY'de tek dozluk uygulamada doz ayarlaması gerekmez; ancak uzun süreli YBÜ infüzyonunda metabolit birikimine bağlı sedasyon uzayabilir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Gebelik &amp; Laktasyon</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              FDA Kategori B / C. Plasentayı hızla geçer. Yüksek dozlarda fetal solunum depresyonuna ve uterus tonusunda artışa yol açabilir.
-              Acil sezaryen indüksiyonunda hemodinamik şok veya şiddetli astım varlığında tercih edilebilir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
-            <span className="font-bold text-slate-900 dark:text-white block">Obez Hastalar</span>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Ketamin yüksek derecede lipofiliktir. Doz aşımı ve uzamış uyanmadan kaçınmak için indüksiyon ve infüzyon hesaplamaları <strong>İdeal Vücut Ağırlığı (İVA)</strong> üzerinden yapılmalıdır.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="%30–50 Başlangıç Doz Azaltımı"
+        geriatricPoints={[
+          'Yaşlı (>65 yaş) ve kırılgan hastalarda uyanma deliryumu, disfori, postoperatif konfüzyon ve sempatik kardiyovasküler yük (taşikardi, hipertansiyon, miyokard O₂ tüketimi artışı) belirgin daha yüksektir.',
+          'Hem RSI/prosedürel sedasyon hem de sub-dissosiyatif analjezi başlangıç dozları %30–50 azaltılmalı (örn. analjezi için 0.1–0.15 mg/kg 15 dk infüzyon) ve koroner rezervi sınırlı yaşlılarda yakın EKG/tansiyon izlenmelidir.',
+          'Uyanma deliryumu profilaksisi için düşük doz benzodiazepin (0.5–1 mg midazolam) veya Ketofol kombinasyonu değerlendirilebilir.',
+        ]}
+        obesityWeightScalarBadge="LBW (Tercih) veya IBW"
+        obesityPoints={[
+          'SOBA ve Miller’s Anesthesia kılavuzları: Ketamin yüksek lipofilik olduğundan morbid obez hastalarda (BMI ≥ 30–40 kg/m²) TBW ile dozlama aşırı psikomimetik yan etkilere, hipertansiyona ve uzamış derlenmeye yol açar.',
+          'İndüksiyon bolusu için Yağsız Vücut Kütlesi (LBW) veya İdeal Vücut Ağırlığı (IBW), subanestezik analjezi infüzyonu için IBW/LBW kullanılmalıdır.',
+          'Spontan solunum dürtüsünü koruduğu için OSA’lı obezlerde opioid-sparing analjezi avantajı sunar; ancak artmış faringeal sekresyon ve laringospazma karşı aspiratör hazır olmalıdır.',
+        ]}
+        clinicalNote="Yukarıdaki etkileşimli hesaplayıcı içindeki Obezite Doz Ölçekleyici ile hastanın LBW/IBW değeri tek tıkla hesaplamaya aktarılabilir."
+      />
 
       {/* =========================================================================
           BÖLÜM 10: GEBELİK VE LAKTASYON KILAVUZU
@@ -1788,61 +1768,6 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
         </div>
       </section>
 
-      {/* =========================================================================
-          BÖLÜM 7: HAZIRLAMA, SEYRELTME VE KETOFOL KILAVUZU
-          ========================================================================= */}
-      <section
-        id="sec-hazirlama"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
-            <Droplet className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              IV Uygulama, Hazırlama, Seyreltici Uyumluluğu &amp; Ketofol Karışımı
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Ticari ampul formları, infüzyon çözeltisi stabilitesi ve Ketofol fizikokimyasal özellikleri
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Ticari Formlar &amp; Saklama</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• <strong>Ketalar %5 Flakon:</strong> 50 mg/mL, 10 mL flakon = 500 mg Ketamin HCl.</li>
-              <li>• <strong>Ketanest / Esketamin:</strong> S(+) enantiomeri (2 kat daha potent).</li>
-              <li>• <strong>Spravato:</strong> 28 mg İntranazal Esketamin cihazı (Depresyon).</li>
-              <li>• Oda sıcaklığında (15–25°C), ışıktan korunarak saklanır. Dondurulmamalıdır.</li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 space-y-2">
-            <span className="font-bold text-indigo-700 dark:text-indigo-300 block">
-              Ketofol Fizikokimyasal Stabilitesi
-            </span>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              Propofol (lipid emülsiyonu) ile Ketamin HCl aynı enjektörde karıştırıldığında emülsiyon stabilitesi <strong>en az 3–4 saat</strong> korunur.
-              Lipid partikül çapı bozulmaz, faz ayrışması veya presipitasyon meydana gelmez. Karışım hazırlandıktan sonra aseptik koşullarda aynı gün içinde tüketilmelidir.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-            <span className="font-bold text-slate-900 dark:text-white block">Seyreltici &amp; Geçimsizlik</span>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300">
-              <li>• %0.9 NaCl ve %5 Dekstroz ile tam geçimlidir.</li>
-              <li>• <strong>Barbitüratlar ile KESİNLİKLE GEÇİMSİZDİR:</strong> Tiyopental ile aynı damar yolundan verilirse anında presipitasyon (çökelme) oluşur; lümen tıkanır!</li>
-              <li>• Diazepam ile de presipite olabilir; ayrı lümenden verilmelidir.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS) */}
       <AdverseEffectsBlock
         isDark={isDark}
@@ -1929,24 +1854,101 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* =========================================================================
-          BÖLÜM 13: KANITA DAYALI KAYNAKÇA VE KILAVUZLAR
-          ========================================================================= */}
-      <HighAlertSafetyBlock
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        tallManName="KETAMINE (50 mg/mL Konsantre Flakon — 10 mg/mL SULANDIR!)"
-        confusionRiskWith="Ketalar 50 mg/mL (500 mg/10 mL) ↔ 10 mg/mL Sulandırılmış Enjektör"
-        antidoteOrRescue="Spesifik Antidot YOK — Hava Yolu & Psikomimetik Yönetim: Aşırı dozda destekleyici ventilasyon ve hemodinamik izlem esastır. Şiddetli uyanma ajitasyonu/halüsinasyonda Midazolam 1–2 mg IV (veya propofol küçük bolus); laringospazmda çene itme, CPAP, gerekirse propofol/süksinilkolin uygulanır."
-        criticalAlerts={[
-          'Türkiye’deki 500 mg/10 mL (50 mg/mL) flakon direkt subanestezik puşe için aşırı konsantredir; 10 mg/mL’ye (2 mL = 100 mg + 8 mL SF) sulandırıp etiketleyin.',
-          'Endojen katekolamin deposu tükenmiş ağır şokta ketaminin direkt miyokardiyal depresan etkisi baskın çıkabilir; dozu %50 azaltın ve vazopresör hazır bulundurun.',
-          'Subanestezik analjezi (0,15–0,3 mg/kg bolus · 0,1–0,2 mg/kg/saat) ile indüksiyon (1–2 mg/kg IV) dozları karıştırılmamalıdır.',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Non-Kompetitif NMDA Kanal Bloku, HCN1 Kanalları & Multimodal (μ/κ/σ/Monoaminerjik) Sinyal İletimi',
+          summary:
+            'Ketamin, fensiklidin (arilsikloheksilamin) türevi kiral bir moleküldür (rasemik karışım: S(+)-ketamin [esketamin] NMDA reseptörüne R(−)-ketamine göre 3–4 kat daha yüksek afinite gösterir). Propofol ve benzodiazepinlerden farklı olarak GABA-A üzerinden değil, eksitatör glutamaterjik NMDA reseptör blokajı ve HCN1 kanal inhibisyonu ile benzersiz disosiyatif anestezi oluşturur.',
+          points: [
+            'Non-Kompetitif Açık-Kanal NMDA Antagonizmi: Glutamat bağlanmasıyla açılan NMDA reseptör kanalının içindeki fensiklidin (PCP) bölgesine bağlanarak Ca²⁺/Na⁺ akışını bloke eder; spinal arka boynuzda “wind-up” fenomenini, santral sensitizasyonu ve opioid kaynaklı hiperaljeziyi (OIH) kırar.',
+            'HCN1 (Hiperpolarizasyonla Aktive Katyon) Kanal İnhibisyonu: Kortikal piramidal nöronlardaki HCN1 kanallarının blokajı ketaminin hipnotik ve talamokortikal disosiyatif etkisine temel katkı sağlar.',
+            'Opioid (μ / κ / δ) & Sigma (σ) Reseptör Etkileşimi: μ ve κ opioid reseptörleriyle zayıf agonistik/modülatör etkileşim analjeziye, σ reseptörleri ve kolinerjik/dopaminerjik modülasyon ise psikomimetik etkilere ve antidepresan AMPA/BDNF/mTOR sinyal kaskadına katkıda bulunur.',
+            'Nöronal Katekolamin Geri Alım (NET) İnhibisyonu: Santral sempatik çıkışı artırır ve periferik nöronal noradrenalin geri alımını inhibe ederek indirekt sempatomimetik yanıt oluşturur.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Disosiyatif Anestezi & EEG/BIS Tuzağı: Talamokortikal ve limbik sistemler arasında fonksiyonel kopukluk yaratır; gözler açık, nistagmuslu ve kataleptik görünüm altında derin somatik analjezi ve amnezi sağlar. EEG’de yüksek frekanslı γ (30–80 Hz) ve θ salınımlarını artırdığı için BIS skorunu YAPAY OLARAK YÜKSEK gösterir (BIS güvenilmezdir!).',
+            'Serebral Hemodinami & ICP Miti: Normokapni korunduğunda (mekanik ventilasyon) kafa içi basıncını (ICP) kritik yükseltmez; MAP’ı koruyarak serebral perfüzyon basıncını (CPP) sürdürür (travmatik beyin hasarı + şokta güvenli).',
+            'Emergence Deliryumu & Psikomimetik Etki: Erişkinlerin %10–20’sinde uyanmada canlı rüya, disfori ve halüsinasyon yapar (çocuklarda %3–5); 1–2 mg IV midazolam veya propofol (Ketofol) ile > %70 önlenir.',
+          ],
+          cvs: [
+            'İndirekt Sempatomimetik Stimülasyon: Sağlam sempatik rezerve sahip hastalarda kalp hızı, MAP, pulmoner arter basıncı, kardiyak debi ve miyokard O₂ tüketimini (MVO₂) artırır — hemorajik şok ve travma RSI’sinde hemodinamik avantaj sağlar.',
+            'Direkt Miyokard Depresyonu Paradoksu: Ketamin izole miyokardda aslında direkt negatif inotroptur! Endojen katekolamin depoları tükenmiş kronik septik/kardiyojenik şok veya ağır travma hastalarında sempatik kompansasyon oluşamaz ve paradoksal ağır hipotansiyon/kardiyak kollaps gelişebilir.',
+          ],
+          respiratory: [
+            'Spontan Solunum & Güçlü Bronkodilatasyon: Medüller CO₂ yanıtını ve fonksiyonel rezidüel kapasiteyi (FRC) klinik dozlarda korur. Katekolamin salınımı ve direkt bronş düz kası Ca²⁺ inhibisyonuyla güçlü bronkodilatasyon sağlar (status asthmaticus’ta altın standart).',
+            'Hipersalivasyon, Laringospazm & Geçici Apne: Faringeal/laringeal refleksler kısmen korunsa da tam aspirasyon güvenliği vermez; artmış tükürük sekresyonu çocuklarda laringospazma (%0.3–1), hızlı IV bolus (<30 sn) ise 1–2 dk geçici apneye yol açabilir.',
+          ],
+          other: [
+            'Malign Hipertermi tetiklemez; adrenal steroidogenezi baskılamaz',
+            'Kas tonusunu artırabilir (tonik-klonik olmayan miyoklonus, blefarospazm)',
+            'Uzamış yüksek doz / kronik kullanımda ülseratif sistit (ketamin üropatisi) ve safra yolu dilatasyonu (kolanjiopati)',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Ketamin, opioidlerle güçlü analjezik sinerji ve propofolle ideal hemodinamik/solunumsal karşılıklı denge (Ketofol) kurar.',
+          points: [
+            'Opioid-Sparing & OIH Tersine Çevirme: Sub-dissosiyatif infüzyon (0.1–0.3 mg/kg/saat) postoperatif ve YBÜ opioid tüketimini %30–50 azaltır, remifentanil/kronik opioid kaynaklı hiperaljeziyi (OIH) NMDA blokajı ile önler.',
+            'Ketofol (Ketamin + Propofol) Karşılıklı Dengeleme: Ketamin propofolün hipotansiyon ve apne riskini nötralize ederken, propofol ketaminin emergence deliryumu, bulantı ve taşikardisini baskılar.',
+            'Spesifik Antidot Yoktur: NMDA blokajını geri çeviren bir antagonist bulunmaz; aşırı dozda havayolu/ventilasyon desteği, emergence ajitasyonunda ise GABAerjik ajan (midazolam 1–2 mg IV veya küçük propofol bolusu) kullanılır.',
+          ],
+        }}
+        clinicalPearls={[
+          'BIS / Entropi Monitörü Yanılgısı: Ketamin tek başına veya TIVA’ya eklendiğinde kortikal gama dalgalarını artırarak BIS değerini 60–80’lere çıkarabilir; hastanın yüzeyel anesteziye geçtiği sanılarak gereksiz yüksek doz propofol/sevofluran verilmemelidir.',
+          'Katekolamin Tükenmiş Şok Kuralı: Günlerdir yüksek doz norepinefrin alan septik şok veya kardiyojenik şok hastasında RSI için ketamin 2 mg/kg yerine 0.75–1.2 mg/kg’a düşürülmeli ve vazopresör infüzyonu açık tutulmalıdır.',
+          'S-Ketamin (Esketamin) 2× Potens Farkı: S(+)-ketamin rasemik ketaminden ~2 kat güçlüdür ve daha hızlı derlenme sağlar; flakon etiketinde rasemik vs S-ketamin ayrımı mutlaka doğrulanmalıdır.',
+          'Sub-Dissosiyatif Ağrı Bolusunu 15 Dakikada Verin: 0.15–0.3 mg/kg akut ağrı bolusu hızlı puşe edilirse hastada rahatsız edici disfori/baş dönmesi yapar; 100 mL SF içinde 10–15 dakikada infüze edildiğinde analjezi korunurken yan etki dramatik düşer.',
         ]}
       />
 
+      {/* =========================================================================
+          BÖLÜM 13: ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA
+          ========================================================================= */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Ketamin"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Tiyopental / Barbitüratlar · Diazepam (Aynı IV Hat / Enjektör)',
+            mechanism: 'Fizikokimyasal Asit–Baz Presipitasyonu',
+            clinicalEffect: 'Anında beyaz çökelme, partikül embolisi riski ve IV kateter tıkanması.',
+            management: 'Asla aynı enjektörde veya aynı Y-site lümende karıştırmayın; ayrı hat kullanın veya hattı SF ile yıkayın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Sempatomimetikler (Epinefrin, Norepinefrin, Kokain, Amfetamin) · MAOİ · Tiroid Hormonları',
+            mechanism: 'Sinerjik Katekolamin Geri Alım İnhibisyonu & Adrenerjik Aktivasyon',
+            clinicalEffect: 'Şiddetli hipertansif kriz, malign taşiaritmi ve miyokard iskemisi riski.',
+            management: 'Kontrolsüz hipertansiyon, hipertiroidi veya MAOİ kullananlarda alternatif ajan seçin; zorunluysa düşük doz + yakın EKG/kan basıncı takibi.',
+          },
+          {
+            severity: 'D',
+            agent: 'Teofilin / Aminofilin (Status Asthmaticus Kombinasyonu)',
+            mechanism: 'Aditif Kortikal Eksitasyon & Nöbet Eşiği Düşüşü',
+            clinicalEffect: 'Ekstansör rijidite ve jeneralize nöbet (konvülsiyon) eşiğinde belirgin düşüş.',
+            management: 'Teofilin alan astım hastasında ketamin kullanılacaksa yakın nörolojik izlem ve yatak başı benzodiazepin hazır bulundurun.',
+          },
+          {
+            severity: 'D',
+            agent: 'Opioidler · Benzodiazepinler (Midazolam) · Propofol · İnhalasyon Anestezikleri',
+            mechanism: 'Farmakodinamik Etkileşim (Analjezi Sinerjisi vs Solunum Depresyonu)',
+            clinicalEffect: 'Opioid/anestezik gereksiniminde %30–50 azalma; yüksek doz kombinasyonda solunum depresyonu ve uzamış derlenme (volatil ajanlarla sempatik yanıt körelir → hipotansiyon açığa çıkabilir).',
+            management: 'Ketofol ve multimodal analjezide dozları titre ederek azaltın; sürekli kapnografi ve SpO₂ izleyin.',
+          },
+          {
+            severity: 'C',
+            agent: 'Güçlü CYP2B6 / CYP3A4 İnhibitörleri (Klaritromisin, Flukonazol, Ritonavir) & İndükleyiciler (Rifampisin)',
+            mechanism: 'Hepatik N-Demetilasyon (Norketamin Oluşumu) Modülasyonu',
+            clinicalEffect: 'İnhibitörler ketamin/norketamin düzeyini ve sedasyon süresini artırabilir; rifampisin oral/IV etkinliği azaltır.',
+            management: 'Uzamış infüzyonlarda klinik yanıta göre doz aralığını veya hızını titre edin.',
+          },
+        ]}
         references={[
           {
             authors: 'Green SM, Roback MG, Kennedy RM, Krauss B',

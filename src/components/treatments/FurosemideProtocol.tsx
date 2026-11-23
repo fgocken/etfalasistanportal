@@ -7,19 +7,19 @@ import {
   ChevronUp,
   Clock,
   Droplet,
-  Ear,
   Gauge,
   HeartPulse,
-  Pill,
   ShieldAlert,
   Stethoscope,
-  Syringe,
   Zap,
 } from 'lucide-react';
 import {
   AdverseEffectsBlock,
+  CompatibilityAndLineBlock,
   ContraindicationsGridBlock,
+  DeepPharmacodynamicsBlock,
   DrugReferencesAndInteractionsBlock,
+  GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
   MonographCopyButton,
@@ -27,6 +27,7 @@ import {
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
+  TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
 
 interface Props {
@@ -39,7 +40,7 @@ type InfusionPrep = 'pure_10' | 'conc_4' | 'conc_2';
 
 export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState<CalcTab>('bolus');
-  const [pkOpen, setPkOpen] = useState<boolean>(true);
+  const [pkOpen, setPkOpen] = useState<boolean>(false);
 
   // 1. Bolus / ESC-DOSE State
   const [bolusScenario, setBolusScenario] = useState<BolusScenario>('adhf_edema');
@@ -225,6 +226,45 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0) */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-etki', label: 'Etki Mekanizması' },
+          { id: 'sec-pkpd', label: 'PK / PD' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-dozlar', label: 'Endikasyon & Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Bolus / İnfüzyon / FST' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON · v4.0) */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        defaultOpen={false}
+        sectionTitle="İlaç Güvenliği, Tall-Man Lettering & Doz Aşımı Yönetimi"
+        tallManName="furoSEMIDE"
+        confusionRiskWith="torSEMIDE · buMETAnide"
+        criticalAlerts={[
+          'Yüksek doz IV uygulamalarda (> 40–80 mg) infüzyon hızı mutlaka ≤ 4 mg/dk (pediatride ≤ 0,5 mg/kg/dk) sınırında tutulmalıdır — aksi halde koklear NKCC1 hasarına bağlı ototoksisite gelişir.',
+          'Alkali pH (~8,0–9,3) nedeniyle noradrenalin, adrenalin, dopamin, dobutamin, midazolam ve amiodaron ile aynı lümenden ASLA verilmez (saniyeler içinde çökelme ve katekolamin inaktivasyonu!).',
+          'Sürekli infüzyon enjektörü ve seti ışıktan korunmalı; sararmış veya çökeltili çözeltiler imha edilmelidir.',
+          'Digoksin kullanan veya K⁺ < 3,5 mEq/L olan hastalarda K⁺/Mg²⁺ replasmanı yapılmadan yüksek doz furosemid uygulanmamalıdır.',
+        ]}
+        antidoteOrRescue="Spesifik antidot yoktur. Doz aşımında ağır hipovolemi, hipotansiyon, hemokonsantrasyon, hipokalemi, hipomagnezemi, hipokloremik metabolik alkaloz ve tinnitus/işitme kaybı görülür. Furosemid kesilir; izotonik/dengeli kristaloidlerle intravasküler volüm, IV KCl ve MgSO₄ ile elektrolitler yerine konur. Furosemid yüksek protein bağlanması nedeniyle hemodiyalizle anlamlı düzeyde uzaklaştırılamaz."
+      />
+
       {/* 1. KİMLİK & KLİNİK ÖZET HEADER */}
       <section
         id="sec-ozet"
@@ -234,7 +274,7 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
             : 'bg-white border-cyan-200 shadow-lg shadow-cyan-500/5 text-slate-900'
         }`}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="p-3.5 rounded-2xl bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 flex items-center justify-center shrink-0">
               <Droplet className="w-8 h-8" />
@@ -248,7 +288,7 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
                   ATC: C03CA01
                 </span>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                  LASİX · DESAL 20 mg / 2 mL AMPUL · 40 mg TB
+                  LASİX · DESAL 20 mg / 2 mL · 250 mg / 25 mL · 40 mg TB
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
@@ -298,26 +338,6 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
               <div className="text-[10px] text-slate-500 dark:text-slate-400">Yüksek dozda yavaş IV</div>
             </div>
           </div>
-        </div>
-
-        <div className="pt-4">
-          <MonographQuickNav
-            isDark={isDark}
-            items={[
-              { id: 'sec-etki', label: 'Etki Mekanizması' },
-              { id: 'sec-pkpd', label: 'PK/PD Profili' },
-              { id: 'sec-kontrendikasyon', label: 'Kontrendikasyonlar' },
-              { id: 'sec-dozlar', label: 'Endikasyon & Dozaj' },
-              { id: 'sec-hesaplayici', label: 'Bolus / İnfüzyon / FST' },
-              { id: 'sec-uyumluluk', label: 'Hazırlama & Uyumluluk' },
-              { id: 'sec-organ', label: 'Böbrek / Karaciğer' },
-              { id: 'sec-gebelik', label: 'Gebelik / Laktasyon' },
-              { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
-              { id: 'sec-ozel-durumlar', label: 'Özel Klinik Durumlar' },
-              { id: 'sec-guvenlik', label: 'ISMP & Antidot' },
-              { id: 'sec-kaynaklar', label: 'Kaynakça' },
-            ]}
-          />
         </div>
       </section>
 
@@ -1122,49 +1142,77 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
         )}
       </section>
 
-      {/* 7. HAZIRLAMA, DİLÜSYON, STABİLİTE VE UYUMLULUK */}
-      <section
-        id="sec-uyumluluk"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Syringe className={`h-5 w-5 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Türkiye Formülasyonları, Hazırlama, Işık Stabilitesi ve Y-Site Uyumsuzluğu
-          </h3>
-        </div>
+      {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
+      <TurkeyFormulationBlock
+        isDark={isDark}
+        preparations={[
+          {
+            name: 'Lasix / Desal / Furomid 20 mg / 2 mL Ampul',
+            presentation: '2 mL amber renkli cam ampul — acil servis, ameliyathane ve servislerde rutin standart IV/IM form',
+            concentration: '10 mg/mL (20 mg / 2 mL)',
+            saltOrBaseNote: 'Alkali (pH ~8,0–9,3) çözeltidir; ışıktan korunmalıdır. Sararmış veya çökeltili ampuller kesinlikle kullanılmaz.',
+            alertLevel: 'standard',
+          },
+          {
+            name: 'Lasix / Furosemid 250 mg / 25 mL Ampul (YBÜ Yüksek Doz)',
+            presentation: '25 mL yüksek hacimli amber ampul — yoğun bakım sürekli IV infüzyon ve yüksek doz böbrek yetmezliği protokolleri için',
+            concentration: '10 mg/mL (250 mg / 25 mL)',
+            saltOrBaseNote: '50 mL enjektöre 2 ampul (500 mg / 50 mL = saf 10 mg/mL) çekilerek sıvı kısıtlı YBÜ hastalarında enjektör pompası ile verilir. Yüksek dozda hız ≤ 4 mg/dk sınırı zorunludur!',
+            alertLevel: 'high',
+          },
+          {
+            name: 'Lasix / Desal / Furomid 40 mg Tablet',
+            presentation: 'Çentikli oral tablet (kronik kalp yetmezliği, hipertansiyon ve sirotik asit idamesi)',
+            concentration: '40 mg / tablet',
+            saltOrBaseNote: 'Oral biyoyararlanım oldukça değişkendir (~%50; aralık %10–90). Pratik klinik dönüşüm: 20 mg IV ≈ 40 mg PO.',
+            alertLevel: 'standard',
+          },
+        ]}
+        standardDilutions={[
+          'Saf İnfüzyon (Sıvı Kısıtlı YBÜ — 10 mg/mL): 2 × 250 mg/25 mL ampul (veya 25 × 20 mg ampul) → 50 mL enjektörde sulandırılmadan (500 mg / 50 mL).',
+          'Orta Konsantrasyon (4 mg/mL): 200 mg (10 × 20 mg ampul = 20 mL) + 30 mL %0,9 NaCl → 50 mL enjektör.',
+          'Seyreltik / Pediatrik (2 mg/mL): 100 mg (5 × 20 mg ampul = 10 mL) + 40 mL %0,9 NaCl → 50 mL enjektör.',
+          'Bolus Uygulama Hızı: 20–40 mg 1–2 dk’da yavaş IV; > 40–80 mg dozlarda ototoksisite koruması için ≤ 4 mg/dk (pediatride ≤ 0,5 mg/kg/dk).',
+        ]}
+        concentrationTrapWarning="20 mg/2 mL ampul ile 250 mg/25 mL yüksek doz ampul arasındaki 12,5 kat toplam doz farkı nedeniyle özellikle pediatri ve servislerde etiket çift kontrolü zorunludur. Asidik %5 Dekstroz (pH < 5,5) içinde çökelme riski olduğundan seyreltmede daima %0,9 NaCl tercih edilir."
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
-          <div className={`rounded-xl border p-4 space-y-2 ${isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
-            <p className={`font-bold text-sm ${isDark ? 'text-cyan-300' : 'text-cyan-800'}`}>
-              Türkiye Formları &amp; Sulandırma
-            </p>
-            <p>
-              Standart ampul <strong>20 mg / 2 mL (10 mg/mL)</strong> (Lasix, Desal, Furomid); yüksek doz <strong>250 mg / 25 mL</strong> flakon ve <strong>40 mg tablet</strong> mevcuttur. <strong>%0,9 NaCl (SF)</strong> veya Ringer Laktat ile uyumludur. Asidik pH’lı (%5 Dekstroz pH &lt; 5,5) çözeltilerde çökelme riski arttığından <strong>%0,9 NaCl tercih edilir</strong>; sıvı kısıtlı hastada saf (10 mg/mL) infüzyon idealdir.
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-2 ${isDark ? 'bg-slate-950/60 border-amber-900/40 text-slate-300' : 'bg-amber-50/50 border-amber-200 text-slate-700'}`}>
-            <p className={`font-bold text-sm ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
-              Işıktan Koruma &amp; Hız Sınırı
-            </p>
-            <p>
-              Furosemid ışığa duyarlıdır; sürekli infüzyon enjektörü ve hattı <strong>ışıktan korunmalı</strong>, sararmış veya bulanık çözelti kesinlikle kullanılmamalıdır. 20–40 mg bolus 1–2 dk’da verilebilir; <strong>&gt; 40–80 mg yüksek dozlarda hız ≤ 4 mg/dk</strong> (pediatride ≤ 0,5 mg/kg/dk) olmalıdır.
-            </p>
-          </div>
-
-          <div className={`rounded-xl border p-4 space-y-2 ${isDark ? 'bg-slate-950/60 border-rose-900/40 text-slate-300' : 'bg-rose-50/50 border-rose-200 text-slate-700'}`}>
-            <p className={`font-bold text-sm ${isDark ? 'text-rose-300' : 'text-rose-800'}`}>
-              Kritik Y-Site Uyumsuzluğu (pH ~9,0)
-            </p>
-            <p>
-              Alkali pH’sı (~8,0–9,3) nedeniyle <strong>noradrenalin, adrenalin, dopamin, dobutamin, midazolam, amiodaron, gentamisin, vankomisin, siprofloksasin, morfin ve diltiazem</strong> ile aynı lümenden verilmez — saniyeler içinde beyaz çökelti veya katekolamin inaktivasyonu oluşur!
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* DAMAR YOLU, pH/OZMOLALİTE, Y-SITE UYUMLULUK & EKSTRAVAZASYON (v4.0) */}
+      <CompatibilityAndLineBlock
+        isDark={isDark}
+        accessRequirement="peripheral-ok"
+        accessSummary="Periferik veya santral IV hattan güvenle uygulanabilir; ancak yüksek alkali pH (~8,0–9,3) nedeniyle sürekli infüzyonlarda ve yoğun bakım hastalarında vazopressör/sedatiflerden TAMAMEN AYRI BİR LÜMEN kullanılmalıdır. Aynı lümenden verilmesi saniyeler içinde beyaz çökelti veya katekolamin inaktivasyonuna yol açar."
+        phRange="8,0 – 9,3 (Kuvvetli Alkali)"
+        osmolalityNote="~280–300 mOsm/kg (izotonik; ancak pH < 5,5 asidik çözeltilerle temas ettiğinde serbest furosemid asidi hızla çöker)."
+        compatibleDiluents={[
+          '%0,9 Sodyum Klorür (İzotonik SF — ilk tercih)',
+          'Ringer Laktat (pH ~6,5 — uyumlu)',
+          'Sulandırılmadan saf 10 mg/mL (sıvı kısıtlı YBÜ enjektör pompası)',
+          'DİKKAT: %5 Dekstroz (D5W, pH 4,0–5,5) asidik pH nedeniyle çökelme riski taşır — kaçınılmalıdır!',
+        ]}
+        stabilityNote="Işığa duyarlıdır (fotodegradasyon ile sarı renk değişimi)! Sürekli infüzyon enjektörü ve hattı mutlaka ışıktan korunmalı (opak/amber set veya folyo), oda sıcaklığında 24 saatte bir yenilenmelidir. Sararmış veya bulanık çözelti kesinlikle kullanılmaz."
+        ySiteCompatible={[
+          'Potasyum Klorür (KCl)',
+          'Heparin',
+          'İnsülin (Regüler)',
+          'Nitrogliserin',
+          'Sodyum Bikarbonat',
+          'Albümin %20',
+          'Piperasilin-Tazobaktam',
+          'Sefazolin',
+        ]}
+        ySiteIncompatible={[
+          'Noradrenalin (Çökelme / İnaktivasyon!)',
+          'Adrenalin (Epinefrin)',
+          'Dopamin / Dobutamin',
+          'Midazolam',
+          'Amiodaron',
+          'Gentamisin / Vankomisin',
+          'Siprofloksasin',
+          'Morfin / Diltiazem / Esmolol',
+        ]}
+        extravasationProtocol="Klasik doku vezikanı değildir ancak alkali pH (~9,0) nedeniyle ekstravazasyonda lokal irritasyon ve flebit yapabilir: infüzyonu durdurun, ekstremiteyi eleve edin ve soğuk/ılık kompres uygulayın. Yüksek doz IV uygulamada asıl hayati kural ≤ 4 mg/dk hız sınırıdır."
+      />
 
       {/* 8. BÖBREK & KARACİĞER YETMEZLİĞİ */}
       <OrganImpairmentGridBlock
@@ -1180,6 +1228,24 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
           'Siroz + Asit: Standart başlangıç 40 mg/gün PO furosemid + 100 mg/gün spironolakton (maks 160 mg furosemid / 400 mg spironolakton). Aşırı diürez hepatorenal sendromu (HRS) tetikler; günde maks 0,5 kg (ödem yoksa) veya 1 kg (ödem varsa) kilo kaybı hedeflenir.',
           'Hepatik Ensefalopati / Pre-koma: Furosemidin yaptığı hipokalemi ve metabolik alkaloz renal amonyogenezi ve NH₃’ün beyne geçişini artırır → ensefalopati geliştiğinde derhal kesilmelidir.',
         ]}
+      />
+
+      {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        geriatricReductionBadge="Düşük Başlangıç · Dehidratasyon & Ototoksisite Riski"
+        geriatricPoints={[
+          'Yaşlılarda azalmış GFR, kırılgan baroreseptör yanıtı ve düşük intravasküler rezerv nedeniyle hızlı dehidratasyon, ortostatik hipotansiyon, düşme/senkop ve prerenal ABH riski belirgin yüksektir.',
+          'Loop naif geriatrik hastalarda düşük dozla (20 mg IV veya 20–40 mg PO) başlanmalı; eGFR < 30 mL/dk eşlik ediyorsa t½ uzaması nedeniyle yüksek dozlarda ototoksisite koruması (≤ 4 mg/dk) titizlikle uygulanmalıdır.',
+          'Hipokalemi, hipomagnezemi ve hiponatremi yaşlılarda deliryum, kas güçsüzlüğü ve malign aritmiyi hızla tetikler; erken dönemde elektrolit ve kreatinin kontrolü şarttır.',
+        ]}
+        obesityWeightScalarBadge="Sabit Erişkin Dozu (mg/kg Değil · Klinik Yanıt)"
+        obesityPoints={[
+          'Erişkinlerde bolus ve infüzyon dozları TBW üzerinden mg/kg olarak değil, sabit eşik/tavan dozları (20–200 mg IV) ve 2. saat idrar Na⁺ (>50–70 mEq/L) / saatlik idrar çıkışına göre titre edilir.',
+          'Furosemid Stres Testi (FST) sırasında morbid obez hastalarda gerçek ağırlıkla (TBW) hesaplanan aşırı yüksek tek dozlar (>160–200 mg) ototoksisite riskini artırabileceğinden ≤ 4 mg/dk yavaş infüzyon ve klinik tavan gözetilmelidir.',
+          'Obezitede fizik muayene ile volüm değerlendirmesi yanıltıcı olabilir; akciğer/IVC POCUS ve biyobelirteçlerle gerçek konjesyon doğrulanmalıdır.',
+        ]}
+        clinicalNote="Yaşlı ve kırılgan hastalarda diüretik tedavisine başlandıktan 24–72 saat içinde serum K⁺, Mg²⁺, Na⁺, kreatinin ve ortostatik kan basıncı kontrol edilmelidir."
       />
 
       {/* 9. GEBELİK & LAKTASYON */}
@@ -1293,25 +1359,98 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
         ]}
       />
 
-      {/* 12. ISMP GÜVENLİK, TALL-MAN LETTERING & DOZ AŞIMI */}
-      <HighAlertSafetyBlock
+      {/* DERİN FARMAKODİNAMİK & SİSTEMİK FİZYOLOJİ ANALİZİ (AKORDİYON · v4.0) */}
+      <DeepPharmacodynamicsBlock
         isDark={isDark}
-        sectionTitle="İlaç Güvenliği, Tall-Man Lettering & Doz Aşımı Yönetimi"
-        tallManName="furoSEMIDE"
-        confusionRiskWith="torSEMIDE / buMETAnide"
-        criticalAlerts={[
-          'Yüksek doz IV uygulamalarda (> 40–80 mg) infüzyon hızı mutlaka ≤ 4 mg/dk (pediatride ≤ 0,5 mg/kg/dk) sınırında tutulmalıdır — aksi halde ototoksisite gelişir.',
-          'Alkali pH (~9,0) nedeniyle noradrenalin, adrenalin, dopamin, dobutamin, midazolam ve amiodaron ile aynı lümenden ASLA verilmez.',
-          'Sürekli infüzyon enjektörü ve seti ışıktan korunmalı; sararmış veya çökeltili çözeltiler imha edilmelidir.',
-          'Digoksin kullanan veya K⁺ < 3,5 mEq/L olan hastalarda K⁺/Mg²⁺ replasmanı yapılmadan yüksek doz furosemid uygulanmamalıdır.',
+        defaultOpen={false}
+        receptorMechanism={{
+          title: 'Henle Çıkan Kalın Kol (TAL) NKCC2 İnhibisyonu, OAT1/3 Sekresyonu & Koklear NKCC1',
+          summary:
+            'Furosemid plazma albüminine >%95 bağlandığı için glomerülden neredeyse hiç filtre edilmez; etki yerine ulaşması proksimal tübüldeki organik anyon taşıyıcılarının (OAT1/OAT3) aktif sekresyonuna bağlıdır. Tübüler lümende Henle kulpunun çıkan kalın kolundaki (TAL) NKCC2 (SLC12A1) kotransporterının klor bağlanma bölgesini kompetitif olarak bloke eder.',
+          points: [
+            'NKCC2 Blokajı & Lümen-Pozitif Potansiyel Kaybı: Filtre edilen Na⁺’un %20–25’inin geri emilimini durdurur; ROMK aracılı lümen-pozitif elektriksel gradyan çöktüğü için paraselüler Ca²⁺ ve Mg²⁺ emilimi de engellenir.',
+            'Makula Densa & RAAS Aktivasyonu: Makula densadaki NKCC2’nin inhibisyonu tübüloglomerüler geri bildirimi (TGF) bozar ve renin-anjiyotensin-aldosteron sistemini (RAAS) uyarır.',
+            'Renal Prostaglandin (PGE₂/PGI₂) Sentezi: COX-2 aracılı vazodilatatör prostaglandin salınımını artırarak IV uygulamadan 5–15 dakika sonra — henüz diürez başlamadan — venöz kapasitansı genişletip preload’ı düşürür.',
+            'Koklear Stria Vascularis NKCC1 İnhibisyonu: Yüksek plazma piklerinde (>50 mcg/mL veya >4 mg/dk hızlı IV) iç kulaktaki NKCC1 taşıyıcısını bloke ederek endolenf K⁺ dengesini bozar ve ototoksisite yapar.',
+          ],
+        }}
+        organEffects={{
+          cns: [
+            'Direkt SSS depresyonu yoktur; ancak nöroşirürjide koroid pleksus Na⁺/Cl⁻ taşınımını hafif azaltarak ve sistemik dehidratasyonla mannitole adjuvan KİB düşüşü sağlayabilir.',
+            'İç kulak (VIII. kranial sinir / koklea): Hızlı yüksek doz IV uygulamada geri dönüşlü veya kalıcı sensörinöral işitme kaybı, tinnitus ve vertigo.',
+          ],
+          cvs: [
+            'Erken Venodilatasyon (5–15 dk): Prostaglandin aracılı sistemik venöz göllenme ile sol ventrikül diyastol sonu basıncını (LVEDP) ve pulmoner kapiller kama basıncını (PAOP) hızla indirir — akut pulmoner ödemdeki ani rahatlamanın temelidir.',
+            'Volüm Deplesyonu & Aritmi: Aşırı diürez preload çöküşü ve hipotansiyon yapar; indüklediği hipokalemi ve hipomagnezemi QTc uzaması ve Torsades de Pointes’i tetikler.',
+          ],
+          respiratory: [
+            'Pulmoner Konjesyonun Çözülmesi: Hidrostatik akciğer ödemi (ADHF / TACO) vakalarında ekstravasküler akciğer suyunu ve şantı azaltarak oksijenasyonu hızla iyileştirir.',
+            'Kontraksiyon Metabolik Alkalozu: Oluşturduğu hipokloremik alkaloz medüller solunum dürtüsünü baskılayıp kompansatuvar hipoventilasyon (PaCO₂↑) yaratarak YBÜ mekanik ventilasyon weaning’ini geciktirebilir.',
+          ],
+          other: [
+            'Renal/Metabolik: Hipokloremik-hipokalemik kontraksiyon metabolik alkalozu, hiperürisemi (OAT yarışması), hipomagnezemi ve kalsiürez',
+            'KDIGO ABH Kuralı: Oligürik ABH’yi non-oligürik forma çevirmek renal iyileşmeyi veya mortaliteyi İYİLEŞTİRMEZ (Ho–Sheridan BMJ 2006)',
+          ],
+        }}
+        synergyAndCeiling={{
+          summary:
+            'Furosemid dik bir “eşik (threshold) – tavan (ceiling)” doz-yanıt eğrisine sahiptir; eşik aşılmadan diürez başlamaz, tavan aşıldıktan sonra tek dozu büyütmek natriürezi artırmaz ancak ototoksisiteyi katlar.',
+          points: [
+            'Diüretik Frenleme (Braking) & Direnç Mekanizması: Kronik loop kullanımında distal tübül epitel hipertrofisi ve proksimal Na⁺ geri emilimi artışı gelişir; tek başına furosemid dozunu tırmandırmak yerine ardışık (sequential) nefron blokajı uygulanır.',
+            'ADVOR Sinerjisi (Proksimal Blokaj — Asetazolamid): Proksimal tübülde Na⁺/HCO₃⁻ emilimini kırarak Henle’ye ulaşan sodyum yükünü artırır ve 3 günde tam dekonjesyon oranını anlamlı yükseltir (NEJM 2022).',
+            'CLOROTIC Sinerjisi (Distal Blokaj — Tiyazid/Metolazon): Distal kıvrımlı tübülde (NCC) kompansatuvar Na⁺ geri emilimini bloke ederek güçlü sinerjik natriürez sağlar (ancak K⁺/Mg²⁺ kaybı dramatik artar!).',
+            'NSAİİ Antagonizması: İndometazin/ibuprofen/ketorolak renal PGE₂ sentezini bloke ederek hem venodilatasyonu hem de diüretik yanıtı belirgin köreltir.',
+          ],
+        }}
+        clinicalPearls={[
+          'Sülfonamid Çapraz Reaksiyon Miti (Strom NEJM 2003 · AAAAI): Furosemid non-antibiyotik (arilamin halkası olmayan) bir sülfonamiddir; TMP-SMX gibi antibiyotik sülfonamid alerjisi olanlarda gerçek çapraz reaksiyon kanıtlanmamıştır (ağır SJS/TEN/DRESS veya doğrudan furosemid anafilaksisi hariç).',
+          'Yükleme Bolusu Olmadan Sürekli İnfüzyon Hatası: Bolus yapılmadan doğrudan 5–10 mg/saat infüzyon başlanırsa tübüler eşiğe saatlerce ulaşılamaz; daima önce 20–40 mg IV yükleme bolusu verin.',
+          'Furosemid Stres Testi (FST) ile RRT Zamanlaması: Övolemik Evre 1–2 ABH hastasında 1,0–1,5 mg/kg IV sonrası 2 saatte < 200 mL idrar çıkışı, Evre 3 ABH ve diyaliz ihtiyacını %87 duyarlılıkla öngörür.',
+          'Alkali pH (~9,0) Y-Site Çökelme Kuralı: Noradrenalin, adrenalin, dopamin, dobutamin, midazolam veya amiodaron hattından puşe edilen furosemid anında çökelir ve vazopressör kaybına yol açar.',
         ]}
-        antidoteOrRescue="Spesifik antidot yoktur. Doz aşımında ağır hipovolemi, hipotansiyon, hemokonsantrasyon, hipokalemi, hipomagnezemi, hipokloremik metabolik alkaloz ve tinnitus/işitme kaybı görülür. Furosemid kesilir; izotonik/dengeli kristaloidlerle intravasküler volüm, IV KCl ve MgSO₄ ile elektrolitler yerine konur. Furosemid yüksek protein bağlanması nedeniyle hemodiyalizle anlamlı düzeyde uzaklaştırılamaz."
       />
 
-      {/* 13. KANITA DAYALI KAYNAKÇA & ETKİLEŞİM ARAÇLARI */}
+      {/* 13. ŞİDDET DERECELİ İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Furosemid"
+        structuredInteractions={[
+          {
+            severity: 'X',
+            agent: 'Asidik IV İlaçlarla Aynı Lümen (Noradrenalin, Adrenalin, Dopamin, Dobutamin, Midazolam, Amiodaron)',
+            mechanism: 'Fizikokimyasal pH Uyumsuzluğu (Furosemid pH ~9,0 → Asidik Çözeltide Çökelme)',
+            clinicalEffect: 'Hat içinde anında beyaz çökelti, kateter tıkanması ve vazopressör inaktivasyonuna bağlı şok.',
+            management: 'Kesinlikle aynı lümenden vermeyin; ayrı IV hat veya farklı santral kateter lümeni kullanın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Aminoglikozidler (Gentamisin, Amikasin) · Vankomisin · Sisplatin',
+            mechanism: 'Koklear NKCC1 + Nefrotoksik Sinerji',
+            clinicalEffect: 'Geçici veya kalıcı işitme kaybı (ototoksisite) ve akut tübüler nekroz (ABH) riskinde dramatik artış.',
+            management: 'Mümkünse eş zamanlı yüksek dozdan kaçının; hızı ≤ 4 mg/dk tutun, ilaç düzeyleri ve böbrek fonksiyonlarını izleyin.',
+          },
+          {
+            severity: 'D',
+            agent: 'Digoksin & QT Uzatan Antiaritmikler (Amiodaron, Sotalol)',
+            mechanism: 'Diüretik İndüklü Hipokalemi & Hipomagnezemi',
+            clinicalEffect: 'Na⁺/K⁺-ATPaz duyarlılaşması ile fatal digoksin toksisitesi ve Torsades de Pointes ventriküler aritmileri.',
+            management: 'Serum K⁺ ≥ 4,0 mEq/L ve Mg²⁺ ≥ 2,0 mg/dL hedeflenerek agresif elektrolit replasmanı yapın.',
+          },
+          {
+            severity: 'D',
+            agent: 'Lityum',
+            mechanism: 'Volüm/Na⁺ Deplesyonuna Bağlı Proksimal Tübüler Lityum Geri Emilimi Artışı',
+            clinicalEffect: 'Serum lityum düzeyinde yükselme ve nörotoksisite/nefrotoksisite.',
+            management: 'Kombinasyonda serum lityum düzeyini sık izleyin ve lityum dozunu azaltın.',
+          },
+          {
+            severity: 'C',
+            agent: 'NSAİİ’ler (İbuprofen, Diklofenak, Ketorolak) · ACEİ / ARB',
+            mechanism: 'Renal Prostaglandin (PGE₂) İnhibisyonu & Efferent Arteriyol Dilatasyonu (“Triple Whammy”)',
+            clinicalEffect: 'Diüretik ve venodilatatör yanıtın körelmesi, GFR’de ani düşüş ve prerenal ABH.',
+            management: 'ADHF ve YBÜ’de NSAİİ’den kaçının; ACEİ/ARB ile birlikte kreatinin ve K⁺ takibi yapın.',
+          },
+        ]}
         references={[
           {
             authors: 'Felker GM, Lee KL, Bull DA, Redfield MM, Stevenson LW, Goldsmith SR, et al. (DOSE Trial)',
