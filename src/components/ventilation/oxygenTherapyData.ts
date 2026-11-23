@@ -385,8 +385,23 @@ export const OXYGEN_REFERENCES: OxygenReference[] = [
     detail: 'JAMA. 2009;302(14):1543–1550.',
   },
   {
-    authors: 'Gropper MA, Eriksson LI, Fleisher LA, et al. / Lumb AB.',
-    title: "Miller's Anesthesia (9th/10th ed.) & Nunn's Applied Respiratory Physiology (9th ed.).",
-    detail: 'Elsevier. (Oxygen Therapy, Preoxygenation, Apneic Oxygenation, Hypoxia & Hyperoxia).',
+    authors: 'Gropper MA, Eriksson LI, Fleisher LA, et al. / Lumb AB / Dorsch JA, Dorsch SE.',
+    title: "Miller's Anesthesia (9th/10th ed.), Nunn's Applied Respiratory Physiology (9th ed.) & Understanding Anesthesia Equipment.",
+    detail: 'Elsevier / Wolters Kluwer. (Oxygen Therapy, Boyle’s Law & Medical Gas Cylinders, Preoxygenation, Hypoxia & Hyperoxia).',
+  },
+  {
+    authors: 'Jacobs SS, Krishnan JA, Lederer DJ, et al. (ATS Clinical Practice Guideline).',
+    title: 'Home Oxygen Therapy for Adults with Chronic Lung Disease: An Official American Thoracic Society Clinical Practice Guideline.',
+    detail: 'Am J Respir Crit Care Med. 2020;202(10):e121–e141.',
+  },
+  {
+    authors: 'Hardinge M, Annandale J, Bourne S, et al. (British Thoracic Society) & GOLD Report.',
+    title: 'BTS Guidelines for Home Oxygen Use in Adults & Global Strategy for Prevention, Diagnosis and Management of COPD.',
+    detail: 'Thorax. 2015;70(Suppl 1):i1–i43 & GOLD 2024/2025.',
+  },
+  {
+    authors: 'NOTT Group (1980), MRC Working Party (1981) & LOTT Research Group (2016).',
+    title: 'Continuous vs. nocturnal oxygen therapy, domiciliary LTOT in hypoxic cor pulmonale, and LTOT in moderate desaturation.',
+    detail: 'Ann Intern Med. 1980;93:391–398 · Lancet. 1981;1:681–686 · N Engl J Med. 2016;375:1617–1627.',
   },
 ];

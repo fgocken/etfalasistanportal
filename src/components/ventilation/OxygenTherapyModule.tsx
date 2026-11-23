@@ -1,10 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import {
   AlertTriangle,
+  Baby,
   BookOpen,
+  Calculator,
+  Droplets,
   Filter,
   Flame,
   HeartPulse,
+  Home,
   ShieldAlert,
   Wind,
 } from 'lucide-react';
@@ -24,13 +28,51 @@ interface OxygenTherapyModuleProps {
   isDark: boolean;
 }
 
-type OxygenSectionFilter = 'all' | 'targets' | 'devices' | 'perioperative' | 'safety';
+type OxygenSectionFilter = 'all' | 'targets' | 'devices' | 'perioperative' | 'safety' | 'ltot';
 type DeviceFilterId = 'all' | 'Düşük Akım (Değişken)' | 'Yüksek Akım (Sabit)' | 'Resüsitasyon / Devre';
+
+const TURKEY_PORTABLE_CYLINDERS = [
+  { volumeL: 2, label: '2 L', desc: 'Kompakt acil / ev / ambulans', maxBar: 150 },
+  { volumeL: 3, label: '3 L', desc: 'Hafif transport / ambulans', maxBar: 150 },
+  { volumeL: 5, label: '5 L', desc: 'Standart hastane içi sedye / transport', maxBar: 150 },
+  { volumeL: 10, label: '10 L', desc: 'Büyük transport / ambulans ana tüpü', maxBar: 200 },
+] as const;
 
 export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark }) => {
   const [sectionFilter, setSectionFilter] = useState<OxygenSectionFilter>('all');
   const [selectedProfileId, setSelectedProfileId] = useState<string>(OXYGEN_TARGET_PROFILES[0].id);
   const [deviceFilter, setDeviceFilter] = useState<DeviceFilterId>('all');
+
+  // Boyle's Law Portable Cylinder Duration Calculator (Turkey metric bar standard)
+  const [cylinderWaterVol, setCylinderWaterVol] = useState<string>('5');
+  const [cylinderPressureBar, setCylinderPressureBar] = useState<string>('150');
+  const [cylinderReserveBar, setCylinderReserveBar] = useState<number>(10);
+  const [cylinderFlowLpm, setCylinderFlowLpm] = useState<string>('6');
+
+  const cylinderCalc = useMemo(() => {
+    const vol = Math.max(0, parseFloat(cylinderWaterVol.replace(',', '.')) || 0);
+    const bar = Math.max(0, parseFloat(cylinderPressureBar.replace(',', '.')) || 0);
+    const flow = Math.max(0, parseFloat(cylinderFlowLpm.replace(',', '.')) || 0);
+    const effectiveBar = Math.max(0, bar - cylinderReserveBar);
+    const totalLiters = Math.round(bar * vol);
+    const usableLiters = Math.round(effectiveBar * vol);
+    const minutes = flow > 0 ? Math.floor(usableLiters / flow) : 0;
+    const hours = Math.floor(minutes / 60);
+    const remMinutes = minutes % 60;
+    return {
+      vol,
+      bar,
+      flow,
+      effectiveBar,
+      totalLiters,
+      usableLiters,
+      minutes,
+      hours,
+      remMinutes,
+      isLowPressure: bar > 0 && bar <= 20,
+      isShortDuration: flow > 0 && minutes > 0 && minutes < 15,
+    };
+  }, [cylinderWaterVol, cylinderPressureBar, cylinderReserveBar, cylinderFlowLpm]);
 
   const selectedProfile =
     OXYGEN_TARGET_PROFILES.find((p) => p.id === selectedProfileId) || OXYGEN_TARGET_PROFILES[0];
@@ -57,10 +99,11 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
     icon: React.ComponentType<{ className?: string }>;
   }[] = [
     { id: 'all', label: 'Tümü (Kesintisiz Okuma)', icon: Filter },
-    { id: 'targets', label: '1. Hedefler & Fizyoloji', icon: HeartPulse },
-    { id: 'devices', label: '2. Verme Sistemleri & Ventüri', icon: Wind },
+    { id: 'targets', label: '1. Hedefler, Sistemler & Fizyoloji', icon: HeartPulse },
+    { id: 'devices', label: '2. Akım & Ventüri Fiziği', icon: Wind },
     { id: 'perioperative', label: '3. Perioperatif & Özel', icon: Flame },
-    { id: 'safety', label: '4. Güvenlik & Kaynaklar', icon: ShieldAlert },
+    { id: 'safety', label: '4. Güvenlik & Boyle Tüp Hesabı', icon: ShieldAlert },
+    { id: 'ltot', label: '5. Uzun Süreli O₂ (USOT)', icon: Home },
   ];
 
   // SVG Palette
@@ -176,7 +219,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
         <div className="space-y-6">
           <div className="flex items-baseline justify-between gap-2 px-1">
             <h2 className={`text-lg sm:text-xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              1. Hedef <MedicalText text="SpO_{2}" />, Oksijen Taşınım Formülleri ve Fizyoloji
+              1. Hedef <MedicalText text="SpO_{2}" />, Verme Sistemleri ve Fizyoloji
             </h2>
             <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
               BTS 2017 · Nunn&apos;s · West&apos;s
@@ -290,13 +333,142 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 </div>
               </div>
             </div>
+
+            {/* Practical Bedside Pearls: Humidification & Pediatric Comfort */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+              <div
+                className={`rounded-xl border p-3.5 flex items-start gap-2.5 ${
+                  isDark
+                    ? 'bg-sky-950/25 border-sky-800/60 text-sky-100'
+                    : 'bg-sky-50/70 border-sky-200 text-sky-950'
+                }`}
+              >
+                <Droplets className="w-4 h-4 shrink-0 mt-0.5 text-sky-500" />
+                <div className="leading-relaxed">
+                  <span className="font-bold block text-sky-700 dark:text-sky-300 mb-0.5">
+                    Uzun Süreli Uygulamada Nemlendirme
+                  </span>
+                  Oksijen verilmesinin uzun süreceği öngörüldüğünde, kuruyan salgıların daha küçük hava yollarını
+                  tıkamasını önlemek için mümkün olduğunca nemlendirilmelidir.
+                </div>
+              </div>
+
+              <div
+                className={`rounded-xl border p-3.5 flex items-start gap-2.5 ${
+                  isDark
+                    ? 'bg-amber-950/25 border-amber-800/60 text-amber-100'
+                    : 'bg-amber-50/70 border-amber-200 text-amber-950'
+                }`}
+              >
+                <Baby className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                <div className="leading-relaxed">
+                  <span className="font-bold block text-amber-700 dark:text-amber-300 mb-0.5">
+                    Pediatrik Uygulama (Ajitasyondan Kaçınma)
+                  </span>
+                  Solunum güçlüğü çeken küçük çocuklar oksijen uygulamasında huzursuzlanarak klinik olarak kötüleşebilir;
+                  çocuk rahat pozisyonda tutulmalı, gerekirse ebeveyn veya bakıcı oksijen kaynağını yüzüne yakın
+                  tutarak (blow-by) destek vermelidir.
+                </div>
+              </div>
+            </div>
           </section>
 
-          {/* 1B. CaO2, DO2, VO2, O2ER Formulas & Core Physiology */}
+          {/* 1.2. Delivery Systems Comparison Table (Moved directly under 1.1) */}
+          <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  1.2. Oksijen Verme Sistemleri Karşılaştırma Tablosu
+                </h3>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Akım aralığı, sağlanan <MedicalText text="FiO_{2}" />, nemlendirme gereksinimi ve kritik güvenlik kuralları
+                </p>
+              </div>
+
+              <div className={`inline-flex items-center gap-1 p-1 rounded-lg border ${subtlePanel}`}>
+                {(['all', 'Düşük Akım (Değişken)', 'Yüksek Akım (Sabit)', 'Resüsitasyon / Devre'] as DeviceFilterId[]).map(
+                  (filter) => (
+                    <button
+                      key={filter}
+                      type="button"
+                      onClick={() => setDeviceFilter(filter)}
+                      className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                        deviceFilter === filter
+                          ? isDark
+                            ? 'bg-slate-800 text-white'
+                            : 'bg-white text-slate-900 shadow-2xs'
+                          : isDark
+                            ? 'text-slate-400 hover:text-slate-200'
+                            : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {filter === 'all' ? 'Tümü' : filter.split(' (')[0]}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+
+            <div className={`overflow-x-auto rounded-xl border ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
+              <table className="w-full text-xs sm:text-sm border-collapse">
+                <thead
+                  className={
+                    isDark
+                      ? 'bg-slate-950 text-slate-200 border-b border-slate-800'
+                      : 'bg-slate-100 text-slate-900 border-b border-slate-200'
+                  }
+                >
+                  <tr>
+                    <th className="text-left p-3 font-semibold whitespace-nowrap">Cihaz</th>
+                    <th className="text-left p-3 font-semibold whitespace-nowrap">
+                      <MedicalText text="O_{2}" /> Akımı
+                    </th>
+                    <th className="text-left p-3 font-semibold whitespace-nowrap">
+                      Sağlanan <MedicalText text="FiO_{2}" />
+                    </th>
+                    <th className="text-left p-3 font-semibold whitespace-nowrap">Nemlendirme</th>
+                    <th className="text-left p-3 font-semibold">Mekanizma ve Klinik İnciler</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                  {filteredDevices.map((row) => (
+                    <tr
+                      key={row.device}
+                      className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}
+                    >
+                      <td className="p-3 align-top min-w-[180px]">
+                        <div className="font-bold">{row.device}</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{row.category}</div>
+                      </td>
+                      <td className="p-3 align-top font-mono text-xs tabular-nums whitespace-nowrap">
+                        <MedicalText text={row.flowRange} />
+                      </td>
+                      <td className="p-3 align-top font-mono text-xs font-semibold tabular-nums text-sky-600 dark:text-sky-400 whitespace-nowrap">
+                        <MedicalText text={row.fio2Range} />
+                      </td>
+                      <td className="p-3 align-top text-xs min-w-[160px]">
+                        <MedicalText text={row.humidification} />
+                      </td>
+                      <td className="p-3 align-top text-xs leading-relaxed space-y-1 min-w-[260px]">
+                        <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>
+                          <MedicalText text={row.mechanismNote} />
+                        </p>
+                        <p className="font-semibold text-amber-700 dark:text-amber-300">
+                          <MedicalText text={row.clinicalPearls} />
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* 1.3. CaO2, DO2, VO2, O2ER Formulas & Core Physiology */}
           <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
             <div>
               <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                1.2. Arteriyel Oksijen İçeriği (<MedicalText text="C_{a}O_{2}" />), Sistemik Sunum (
+                1.3. Arteriyel Oksijen İçeriği (<MedicalText text="C_{a}O_{2}" />), Sistemik Sunum (
                 <MedicalText text="DO_{2}" />), Tüketim (<MedicalText text="VO_{2}" />) ve Temel Formüller
               </h3>
               <p className={`text-xs sm:text-sm mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -331,12 +503,12 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
             </div>
           </section>
 
-          {/* 1C. COPD Hypercapnia 3 Mechanisms + Hyperoxia Harms */}
+          {/* 1.4 & 1.5. COPD Hypercapnia 3 Mechanisms + Hyperoxia Harms */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
               <div>
                 <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  1.3. KOAH&apos;ta Oksijen Kaynaklı Hiperkapninin 3 Mekanizması
+                  1.4. KOAH&apos;ta Oksijen Kaynaklı Hiperkapninin 3 Mekanizması
                 </h3>
                 <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                   Board sınavlarının klasik sorusu: Hipoksik dürtü baskılanması tek başına ana neden değildir.
@@ -366,7 +538,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
             <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
               <div>
                 <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  1.4. Hiperokseminin Sistemik Zararları ve Kanıta Dayalı Sınırlar
+                  1.5. Hiperokseminin Sistemik Zararları ve Kanıta Dayalı Sınırlar
                 </h3>
                 <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                   Fazla oksijen masum değildir — normoksemi dışı hedefler organ hasarıyla ilişkilidir.
@@ -415,7 +587,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
         <div className="space-y-6">
           <div className="flex items-baseline justify-between gap-2 px-1">
             <h2 className={`text-lg sm:text-xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              2. Oksijen Verme Sistemleri ve Ventüri (HAFOE) Fiziği
+              2. Akım Fiziği ve Ventüri (HAFOE) Sistemleri
             </h2>
             <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
               Bernoulli · PIFR · ISO Renk Kodları
@@ -537,102 +709,11 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
             </div>
           </section>
 
-          {/* Delivery Systems Comparison Table with Optional Category Filter */}
-          <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  2.2. Oksijen Verme Sistemleri Karşılaştırma Tablosu
-                </h3>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Akım aralığı, sağlanan <MedicalText text="FiO_{2}" />, nemlendirme gereksinimi ve kritik güvenlik kuralları
-                </p>
-              </div>
-
-              <div className={`inline-flex items-center gap-1 p-1 rounded-lg border ${subtlePanel}`}>
-                {(['all', 'Düşük Akım (Değişken)', 'Yüksek Akım (Sabit)', 'Resüsitasyon / Devre'] as DeviceFilterId[]).map(
-                  (filter) => (
-                    <button
-                      key={filter}
-                      type="button"
-                      onClick={() => setDeviceFilter(filter)}
-                      className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                        deviceFilter === filter
-                          ? isDark
-                            ? 'bg-slate-800 text-white'
-                            : 'bg-white text-slate-900 shadow-2xs'
-                          : isDark
-                            ? 'text-slate-400 hover:text-slate-200'
-                            : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      {filter === 'all' ? 'Tümü' : filter.split(' (')[0]}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
-
-            <div className={`overflow-x-auto rounded-xl border ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
-              <table className="w-full text-xs sm:text-sm border-collapse">
-                <thead
-                  className={
-                    isDark
-                      ? 'bg-slate-950 text-slate-200 border-b border-slate-800'
-                      : 'bg-slate-100 text-slate-900 border-b border-slate-200'
-                  }
-                >
-                  <tr>
-                    <th className="text-left p-3 font-semibold whitespace-nowrap">Cihaz</th>
-                    <th className="text-left p-3 font-semibold whitespace-nowrap">
-                      <MedicalText text="O_{2}" /> Akımı
-                    </th>
-                    <th className="text-left p-3 font-semibold whitespace-nowrap">
-                      Sağlanan <MedicalText text="FiO_{2}" />
-                    </th>
-                    <th className="text-left p-3 font-semibold whitespace-nowrap">Nemlendirme</th>
-                    <th className="text-left p-3 font-semibold">Mekanizma ve Klinik İnciler</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                  {filteredDevices.map((row) => (
-                    <tr
-                      key={row.device}
-                      className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}
-                    >
-                      <td className="p-3 align-top min-w-[180px]">
-                        <div className="font-bold">{row.device}</div>
-                        <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{row.category}</div>
-                      </td>
-                      <td className="p-3 align-top font-mono text-xs tabular-nums whitespace-nowrap">
-                        <MedicalText text={row.flowRange} />
-                      </td>
-                      <td className="p-3 align-top font-mono text-xs font-semibold tabular-nums text-sky-600 dark:text-sky-400 whitespace-nowrap">
-                        <MedicalText text={row.fio2Range} />
-                      </td>
-                      <td className="p-3 align-top text-xs min-w-[160px]">
-                        <MedicalText text={row.humidification} />
-                      </td>
-                      <td className="p-3 align-top text-xs leading-relaxed space-y-1 min-w-[260px]">
-                        <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>
-                          <MedicalText text={row.mechanismNote} />
-                        </p>
-                        <p className="font-semibold text-amber-700 dark:text-amber-300">
-                          <MedicalText text={row.clinicalPearls} />
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
           {/* Venturi Color Codes Table */}
           <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
             <div>
               <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                2.3. Ventüri (HAFOE) Maskesi Renk Kodları, Sürüklenme Oranı ve Toplam Akım Tablosu
+                2.2. Ventüri (HAFOE) Maskesi Renk Kodları, Sürüklenme Oranı ve Toplam Akım Tablosu
               </h3>
               <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 ISO standartlı adaptör değerleri (üreticiye göre akım etiketini daima teyit edin).
@@ -805,15 +886,15 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
         </div>
       )}
 
-      {/* BÖLÜM 4: GÜVENLİK, BOARD SINAVI & KAYNAKLAR */}
+      {/* BÖLÜM 4: GÜVENLİK, BOARD SINAVI & BOYLE YASASI TÜP HESABI */}
       {showSection('safety') && (
         <div className="space-y-6">
           <div className="flex items-baseline justify-between gap-2 px-1">
             <h2 className={`text-lg sm:text-xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              4. Klinik Güvenlik, Board Sınavı Tuzakları ve Kaynaklar
+              4. Klinik Güvenlik, Board Sınavı Tuzakları ve Boyle Yasası (Tüp Süresi)
             </h2>
             <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-              Never Events · EDAIC · ABA · TARD
+              Never Events · Boyle Yasası · TS EN 1089-3
             </span>
           </div>
 
@@ -847,30 +928,507 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
             </section>
           </div>
 
-          <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
-            <div className="flex items-center gap-2 text-sm font-bold">
-              <BookOpen className="w-4 h-4 text-sky-500" />
-              <span>Kılavuzlar ve Temel Referans Kaynakları</span>
+          {/* 4.3. Boyle's Law & Portable Oxygen Cylinder Duration Calculator (Turkey Metric/Bar Standard) */}
+          <section className={`rounded-xl border p-5 sm:p-6 space-y-5 ${surfaceCard}`}>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <div className="space-y-1">
+                <h3 className={`text-base sm:text-lg font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  <Calculator className="w-4 h-4 text-sky-500 shrink-0" />
+                  <span>4.3. Boyle Yasası ve Türkiye&apos;deki Portatif Oksijen Tüpleri Kalan Süre Hesaplayıcısı</span>
+                </h3>
+                <p className={`text-xs sm:text-sm leading-relaxed max-w-4xl ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  <strong>Boyle–Mariotte Yasası</strong>&apos;na göre sabit sıcaklıkta ideal bir gazın basıncı ile hacmi ters
+                  orantılıdır (<MedicalText text="P_{1} \times V_{1} = P_{2} \times V_{2}" />). Oksijenin kritik sıcaklığı{' '}
+                  <strong className="font-mono">−118,6 °C</strong> olduğundan oda sıcaklığında tüp içinde sıvılaşmaz,{' '}
+                  <strong>sıkıştırılmış gaz</strong> fazında bulunur. Bu nedenle manometre basıncı tüpte kalan gaz hacmiyle{' '}
+                  <strong>doğrusal (lineer)</strong> olarak azalır (Dorsch &amp; Dorsch; Miller&apos;s Anesthesia).
+                </p>
+              </div>
+              <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                TS EN 1089-3 · Beyaz Tüp · 150–200 bar
+              </span>
             </div>
-            <ol className="space-y-2.5 text-xs sm:text-sm">
-              {OXYGEN_REFERENCES.map((ref, idx) => (
-                <li
-                  key={ref.title}
-                  className={`flex items-start gap-3 rounded-lg border p-3 ${subtlePanel}`}
-                >
-                  <span className="font-mono text-xs font-bold text-sky-500 mt-0.5 tabular-nums">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <div className="leading-relaxed">
-                    <span className="font-semibold">{ref.authors}</span>{' '}
-                    <span className="italic">{ref.title}</span>{' '}
-                    <span className="text-slate-500 dark:text-slate-400">{ref.detail}</span>
+
+            {/* Formula Strip */}
+            <div className={`rounded-xl border p-3.5 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs ${subtlePanel}`}>
+              <div className="space-y-1">
+                <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Metrik (Bar) Kalan Süre Formülü
+                </div>
+                <div className="font-mono font-bold text-sky-600 dark:text-sky-400">
+                  Kalan Süre (dk) = [(P<sub>bar</sub> − P<sub>rezerv</sub>) × V<sub>su (L)</sub>] / Akım (L/dk)
+                </div>
+              </div>
+              <div className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                Türkiye&apos;de portatif medikal <MedicalText text="O_{2}" /> tüpleri metrik su hacmiyle (<strong>2, 3, 5, 10 L</strong>)
+                ve <strong>bar</strong> cinsinden manometreyle (tam dolum <strong>150</strong> veya <strong>200 bar</strong>) ölçülür.
+                Regülatör güvenliği için genellikle <strong>10–20 bar</strong> rezerv bırakılır.
+              </div>
+            </div>
+
+            {/* Interactive Calculator */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+              {/* Inputs */}
+              <div className={`lg:col-span-7 rounded-xl border p-4 space-y-4 ${subtlePanel}`}>
+                {/* Cylinder Presets */}
+                <div className="space-y-1.5">
+                  <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                    1. Portatif Tüp Su Hacmi (Türkiye Standartları)
                   </div>
-                </li>
-              ))}
-            </ol>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {TURKEY_PORTABLE_CYLINDERS.map((cyl) => {
+                      const active = Number(cylinderWaterVol) === cyl.volumeL;
+                      return (
+                        <button
+                          key={cyl.volumeL}
+                          type="button"
+                          onClick={() => {
+                            setCylinderWaterVol(String(cyl.volumeL));
+                            setCylinderPressureBar(String(cyl.maxBar));
+                          }}
+                          className={`text-left rounded-lg border p-2.5 transition-colors cursor-pointer ${
+                            active
+                              ? isDark
+                                ? 'bg-sky-950/60 border-sky-500 text-white'
+                                : 'bg-sky-50 border-sky-600 text-slate-900'
+                              : isDark
+                                ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                                : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                          }`}
+                        >
+                          <div className="text-sm font-mono font-extrabold text-sky-600 dark:text-sky-400">
+                            {cyl.label}
+                          </div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
+                            {cyl.desc}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Numeric Controls */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="o2-cyl-vol"
+                      className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                    >
+                      Su Hacmi — V<sub>su</sub> (Litre)
+                    </label>
+                    <input
+                      id="o2-cyl-vol"
+                      type="number"
+                      min="0.5"
+                      max="50"
+                      step="0.5"
+                      value={cylinderWaterVol}
+                      onChange={(e) => setCylinderWaterVol(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-white'
+                          : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="o2-cyl-bar"
+                      className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                    >
+                      Manometre Basıncı (bar)
+                    </label>
+                    <input
+                      id="o2-cyl-bar"
+                      type="number"
+                      min="0"
+                      max="250"
+                      step="5"
+                      value={cylinderPressureBar}
+                      onChange={(e) => setCylinderPressureBar(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-white'
+                          : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <div className="flex gap-1 pt-0.5">
+                      {[50, 100, 150, 200].map((b) => (
+                        <button
+                          key={b}
+                          type="button"
+                          onClick={() => setCylinderPressureBar(String(b))}
+                          className={`flex-1 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-pointer ${
+                            Number(cylinderPressureBar) === b
+                              ? 'bg-sky-600 border-sky-600 text-white'
+                              : isDark
+                                ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                                : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          {b}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="o2-cyl-flow"
+                      className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                    >
+                      Oksijen Akımı (L/dk)
+                    </label>
+                    <input
+                      id="o2-cyl-flow"
+                      type="number"
+                      min="0.5"
+                      max="60"
+                      step="0.5"
+                      value={cylinderFlowLpm}
+                      onChange={(e) => setCylinderFlowLpm(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-white'
+                          : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <div className="flex gap-1 pt-0.5">
+                      {[2, 4, 6, 10, 15].map((f) => (
+                        <button
+                          key={f}
+                          type="button"
+                          onClick={() => setCylinderFlowLpm(String(f))}
+                          className={`flex-1 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-pointer ${
+                            Number(cylinderFlowLpm) === f
+                              ? 'bg-sky-600 border-sky-600 text-white'
+                              : isDark
+                                ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                                : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          {f}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Safety Reserve Selector */}
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    Güvenlik Rezerv Basıncı (P<sub>rezerv</sub>):
+                  </span>
+                  <div className="inline-flex gap-1.5">
+                    {[0, 10, 20].map((res) => (
+                      <button
+                        key={res}
+                        type="button"
+                        onClick={() => setCylinderReserveBar(res)}
+                        className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold border cursor-pointer ${
+                          cylinderReserveBar === res
+                            ? 'bg-sky-600 border-sky-600 text-white'
+                            : isDark
+                              ? 'bg-slate-900 border-slate-800 text-slate-300'
+                              : 'bg-white border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        {res} bar{res === 10 ? ' (Önerilen)' : ''}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Result Panel */}
+              <div
+                className={`lg:col-span-5 rounded-xl border p-4 space-y-3.5 ${
+                  cylinderCalc.isLowPressure || cylinderCalc.isShortDuration
+                    ? isDark
+                      ? 'bg-rose-950/25 border-rose-500/40'
+                      : 'bg-rose-50/70 border-rose-200'
+                    : isDark
+                      ? 'bg-sky-950/25 border-sky-500/30'
+                      : 'bg-sky-50/70 border-sky-200'
+                }`}
+              >
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Tahmini Güvenli Kalan Süre
+                </div>
+
+                <div className="flex items-baseline gap-2">
+                  <span
+                    className={`text-3xl font-mono font-black tabular-nums ${
+                      cylinderCalc.isLowPressure || cylinderCalc.isShortDuration
+                        ? 'text-rose-600 dark:text-rose-400'
+                        : 'text-sky-700 dark:text-sky-300'
+                    }`}
+                  >
+                    {cylinderCalc.hours > 0
+                      ? `${cylinderCalc.hours} sa ${cylinderCalc.remMinutes} dk`
+                      : `${cylinderCalc.minutes} dk`}
+                  </span>
+                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                    (toplam {cylinderCalc.minutes} dk)
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5 text-xs">
+                  <div className={`rounded-lg border p-2.5 ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200'}`}>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Kullanılabilir O₂</div>
+                    <div className="font-mono font-bold text-sm tabular-nums mt-0.5">
+                      {cylinderCalc.usableLiters} L
+                    </div>
+                  </div>
+                  <div className={`rounded-lg border p-2.5 ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200'}`}>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Toplam Gaz (0 bar)</div>
+                    <div className="font-mono font-bold text-sm tabular-nums mt-0.5">
+                      {cylinderCalc.totalLiters} L
+                    </div>
+                  </div>
+                </div>
+
+                {(cylinderCalc.isLowPressure || cylinderCalc.isShortDuration) && (
+                  <div className="rounded-lg border border-rose-500/40 bg-rose-500/10 p-2.5 text-xs text-rose-700 dark:text-rose-200 flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-500" />
+                    <span>
+                      <strong>Kritik Uyarı:</strong> Basınç ≤ 20 bar veya kalan süre &lt; 15 dk! Hasta transportuna
+                      başlamadan önce yedek dolu tüp hazırlayın.
+                    </span>
+                  </div>
+                )}
+
+                <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  <strong>Transport İncisi:</strong> Pnömatik transport ventilatörleri hasta dakika ventilasyonuna ek
+                  olarak iç çalışma gazı (<em>driving gas</em>) tüketebilir; gerçek akımı hesaplarken cihaz tüketimini
+                  ekleyin ve daima %25–30 güvenlik payı bırakın.
+                </p>
+              </div>
+            </div>
           </section>
         </div>
+      )}
+
+      {/* BÖLÜM 5: UZUN SÜRELİ OKSİJEN TEDAVİSİ (USOT / LTOT) */}
+      {showSection('ltot') && (
+        <div className="space-y-6">
+          <div className="flex items-baseline justify-between gap-2 px-1">
+            <h2 className={`text-lg sm:text-xl font-extrabold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              5. Uzun Süreli Oksijen Tedavisi (USOT / LTOT)
+            </h2>
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+              ATS 2020 · BTS 2015 · GOLD · NOTT / MRC / LOTT
+            </span>
+          </div>
+
+          {/* 5.1. Definition, Introduction & Landmark Evidence */}
+          <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
+            <div>
+              <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                5.1. Tanım, Klinik Amaç ve Kanıta Dayalı Temel
+              </h3>
+              <p className={`text-xs sm:text-sm mt-1.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <strong>Uzun Süreli Oksijen Tedavisi (USOT / LTOT)</strong>, kronik ağır istirahat hipoksemisi olan
+                hastalarda arteriyel oksijenasyonu güvenli sınıra (<MedicalText text="P_{a}O_{2} \ge 60" /> mmHg /{' '}
+                <MedicalText text="SpO_{2} \ge \%90" />) yükseltmek, hipoksik pulmoner vazokonstriksiyonu ve sağ kalp
+                yetmezliği (kor pulmonale) gelişimini yavaşlatmak ve <strong>sağkalımı uzatmak</strong> amacıyla evde
+                günde <strong>en az 15 saat</strong> (ideal olarak <strong>15–18+ saat/gün</strong>, uykuyu kapsayacak
+                şekilde) uygulanan medikal oksijen tedavisidir.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
+                <div className="font-bold text-emerald-600 dark:text-emerald-400">MRC Çalışması (Lancet, 1981)</div>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Ağır hipoksemik KOAH&apos;ta günde <strong>≥ 15 saat</strong> ev oksijeni alan grupta 5 yıllık
+                  mortalitenin anlamlı biçimde azaldığını gösteren ilk dönüm noktası RKÇ.
+                </p>
+              </div>
+              <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
+                <div className="font-bold text-sky-600 dark:text-sky-400">NOTT Çalışması (Ann Intern Med, 1980)</div>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Sürekli (~18–24 saat/gün) oksijen tedavisinin yalnızca gece (12 saat) oksijen tedavisine kıyasla
+                  mortaliteyi anlamlı düzeyde daha fazla düşürdüğünü kanıtladı.
+                </p>
+              </div>
+              <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
+                <div className="font-bold text-amber-600 dark:text-amber-400">LOTT Çalışması (NEJM, 2016)</div>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Yalnızca <strong>orta düzey</strong> istirahat desatürasyonu (<MedicalText text="SpO_{2}" /> %89–93)
+                  veya izole egzersiz desatürasyonu olan stabil KOAH hastalarında USOT&apos;un sağkalım ya da hastaneye
+                  yatışa fayda sağlamadığını gösterdi.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* 5.2. Indications & ABG Rules */}
+          <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
+            <div>
+              <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                5.2. USOT Endikasyonları ve Arteriyel Kan Gazı (AKG) Kuralları
+              </h3>
+              <p className={`text-xs sm:text-sm mt-1 leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                ATS 2020, BTS 2015 ve GOLD 2024/2025 rehberlerine göre kalıcı USOT reçeteleme kriterleri:
+              </p>
+            </div>
+
+            {/* Prerequisite Banner */}
+            <div
+              className={`rounded-xl border p-3.5 text-xs sm:text-sm leading-relaxed ${
+                isDark
+                  ? 'bg-sky-950/30 border-sky-800/70 text-sky-100'
+                  : 'bg-sky-50 border-sky-200 text-sky-950'
+              }`}
+            >
+              <strong className="text-sky-700 dark:text-sky-300">Zorunlu Ön Koşul (Stabilite &amp; Çift AKG Kuralı): </strong>
+              Kalıcı USOT kararı akut alevlenme sırasında alınan tek AKG ile verilmez. Hasta optimal medikal tedavi
+              altında, akut alevlenmeden en az <strong>3–4 hafta</strong> (BTS: ≥ 5 hafta) sonra klinik olarak stabilken,
+              oda havasında istirahatte <strong>en az 3 hafta arayla alınmış 2 ayrı AKG</strong> ile kronik hipoksemi
+              doğrulanmalıdır. Taburculukta geçici başlanan olgular <strong>60–90 gün</strong> içinde yeniden
+              değerlendirilmelidir (GOLD / ATS 2020).
+            </div>
+
+            {/* ABG Criteria Table */}
+            <div className={`overflow-x-auto rounded-xl border ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
+              <table className="w-full text-xs sm:text-sm border-collapse">
+                <thead
+                  className={
+                    isDark
+                      ? 'bg-slate-950 text-slate-200 border-b border-slate-800'
+                      : 'bg-slate-100 text-slate-900 border-b border-slate-200'
+                  }
+                >
+                  <tr>
+                    <th className="text-left p-3 font-semibold whitespace-nowrap">Endikasyon Grubu</th>
+                    <th className="text-left p-3 font-semibold whitespace-nowrap">
+                      Oda Havası AKG / <MedicalText text="SpO_{2}" /> Kriteri
+                    </th>
+                    <th className="text-left p-3 font-semibold">Ek Şart / Klinik Açıklama</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                  <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
+                    <td className="p-3 align-top font-bold text-emerald-600 dark:text-emerald-400">
+                      1. Mutlak (Kesin) Endikasyon
+                    </td>
+                    <td className="p-3 align-top font-mono font-bold tabular-nums whitespace-nowrap">
+                      <MedicalText text="P_{a}O_{2} \le 55" /> mmHg (<MedicalText text="\le 7,3" /> kPa)
+                      <br />
+                      <span className="text-xs font-normal text-slate-500">veya</span>{' '}
+                      <MedicalText text="SpO_{2} \le \%88" />
+                    </td>
+                    <td className="p-3 align-top text-xs leading-relaxed">
+                      Hiperkapni olsun veya olmasın <strong>güçlü USOT endikasyonudur</strong> (KOAH ve kronik ağır
+                      hipoksemili interstisyel akciğer hastalıkları — ATS 2020 güçlü öneri).
+                    </td>
+                  </tr>
+                  <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
+                    <td className="p-3 align-top font-bold text-amber-600 dark:text-amber-400">
+                      2. Koşullu (Komplikasyonlu) Endikasyon
+                    </td>
+                    <td className="p-3 align-top font-mono font-bold tabular-nums whitespace-nowrap">
+                      <MedicalText text="P_{a}O_{2}\ 56\text{–}59" /> mmHg (7,4–7,9 kPa)
+                      <br />
+                      <span className="text-xs font-normal text-slate-500">veya</span>{' '}
+                      <MedicalText text="SpO_{2} = \%89" />
+                    </td>
+                    <td className="p-3 align-top text-xs leading-relaxed">
+                      Aşağıdakilerden <strong>en az biri</strong> eşlik ediyorsa USOT endikedir:
+                      <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                        <li>Pulmoner hipertansiyon</li>
+                        <li>Sağ kalp yetmezliği / kor pulmonale (periferik ödem, P pulmonale)</li>
+                        <li>Sekonder polisitemi (<strong>Hematokrit &gt; %55</strong>)</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
+                    <td className="p-3 align-top font-bold text-sky-600 dark:text-sky-400">
+                      3. KOAH Dışı Kronik Hipoksemi
+                    </td>
+                    <td className="p-3 align-top font-mono font-semibold tabular-nums whitespace-nowrap">
+                      Aynı AKG eşikleri
+                    </td>
+                    <td className="p-3 align-top text-xs leading-relaxed">
+                      İnterstisyel akciğer hastalığı (İAH), kistik fibrozis, pulmoner arteriyel hipertansiyon ve ağır
+                      göğüs duvarı deformitesi (kifoskolyoz) olgularında ağır istirahat hipoksemisi varsa endikedir.
+                    </td>
+                  </tr>
+                  <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
+                    <td className="p-3 align-top font-bold text-rose-600 dark:text-rose-400">
+                      4. Rutin Önerilmeyen Durum
+                    </td>
+                    <td className="p-3 align-top font-mono font-semibold tabular-nums whitespace-nowrap">
+                      <MedicalText text="SpO_{2}\ \%89\text{–}93" /> (komplikasyonsuz)
+                    </td>
+                    <td className="p-3 align-top text-xs leading-relaxed">
+                      LOTT çalışması ve ATS 2020 rehberi doğrultusunda, orta düzeyde istirahat hipoksemisi olan
+                      komplikasyonsuz stabil KOAH hastalarında <strong>rutin USOT önerilmez</strong>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Prescription, Titration & Safety Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs leading-relaxed">
+              <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
+                <div className="font-bold text-sky-600 dark:text-sky-400">Süre ve Hedef Titrasyon</div>
+                <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
+                  Günde <strong>≥ 15 saat</strong> (tercihen 18+ saat) uygulanır. Akım hızı istirahatte{' '}
+                  <MedicalText text="P_{a}O_{2} > 60" /> mmHg veya <MedicalText text="SpO_{2} \ge \%90" /> (hiperkapnik
+                  KOAH&apos;ta aşırı <MedicalText text="P_{a}CO_{2}" /> artışından kaçınarak genelde %90–92) olacak
+                  şekilde titre edilir; uyku ve egzersizde genelde +1 L/dk artış değerlendirilir.
+                </p>
+              </div>
+              <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
+                <div className="font-bold text-emerald-600 dark:text-emerald-400">Evde Cihaz Seçimi</div>
+                <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
+                  Sabit ev kullanımı için standart kaynak <strong>elektrikli oksijen konsantratörüdür</strong> (genelde
+                  nazal kanül ile). Ev dışı hareketli hastalarda portatif konsantratör veya sıvı/gaz yedek tüp eklenir.
+                </p>
+              </div>
+              <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
+                <div className="font-bold text-rose-600 dark:text-rose-400">Yangın ve Sigara Güvenliği</div>
+                <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
+                  Oksijen yanıcı değildir ancak yanmayı şiddetle hızlandırır. Aktif sigara kullanımı ve açık alev/ocak
+                  yakınında oksijen kullanımı ciddi yüz yanığı ve ölümcül ev yangını riski taşır; hasta/yakınlarına
+                  güvenlik eğitimi ve sigara bırakma desteği zorunludur (ATS 2020 / BTS 2015).
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* KAYNAKLAR (Her zaman en altta — Tümü veya Safety/LTOT görünümünde) */}
+      {(sectionFilter === 'all' || sectionFilter === 'safety' || sectionFilter === 'ltot') && (
+        <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
+          <div className="flex items-center gap-2 text-sm font-bold">
+            <BookOpen className="w-4 h-4 text-sky-500" />
+            <span>Kılavuzlar ve Temel Referans Kaynakları</span>
+          </div>
+          <ol className="space-y-2.5 text-xs sm:text-sm">
+            {OXYGEN_REFERENCES.map((ref, idx) => (
+              <li
+                key={ref.title}
+                className={`flex items-start gap-3 rounded-lg border p-3 ${subtlePanel}`}
+              >
+                <span className="font-mono text-xs font-bold text-sky-500 mt-0.5 tabular-nums">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="leading-relaxed">
+                  <span className="font-semibold">{ref.authors}</span>{' '}
+                  <span className="italic">{ref.title}</span>{' '}
+                  <span className="text-slate-500 dark:text-slate-400">{ref.detail}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
       )}
     </div>
   );
