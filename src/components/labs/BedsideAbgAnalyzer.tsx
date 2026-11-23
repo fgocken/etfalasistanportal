@@ -161,6 +161,97 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
     setInputs((prev) => ({ ...prev, ureaMode: nextMode, bun: converted }));
   };
 
+  // Estimated FiO2 Selector (Device + Flow -> auto-fills inputs.fio2)
+  type AbgO2DeviceId = 'room_air' | 'nasal_cannula' | 'simple_mask' | 'nrbm' | 'venturi' | 'hfnc_mv';
+  const [o2Device, setO2Device] = useState<AbgO2DeviceId>('room_air');
+  const [o2FlowInput, setO2FlowInput] = useState<string>('4');
+  const [o2VenturiPct, setO2VenturiPct] = useState<number>(28);
+
+  const computeEstimatedFio2 = (device: AbgO2DeviceId, flowVal: number, venturiPct: number) => {
+    let pct = 21;
+    let warning: string | null = null;
+
+    if (device === 'room_air') {
+      pct = 21;
+    } else if (device === 'nasal_cannula') {
+      if (flowVal <= 0) {
+        pct = 21;
+      } else {
+        pct = Math.round(20 + Math.min(flowVal, 6) * 4);
+        if (flowVal > 6) {
+          warning = 'Nazal kanülde > 6 L/dk akım FiO₂’yi anlamlı artırmaz (6 L/dk baz alınmıştır).';
+        }
+      }
+    } else if (device === 'simple_mask') {
+      if (flowVal < 5) {
+        pct = 35;
+        warning = 'Basit maskede < 5 L/dk akımda CO₂ geri solunumu (rebreathing) riski doğar! En az 5 L/dk açın.';
+      } else {
+        pct = Math.round(35 + (Math.min(flowVal, 10) - 5) * 4);
+        if (flowVal > 10) {
+          warning = 'Basit maskede > 10 L/dk ek FiO₂ artışı sağlamaz; NRBM veya HFNC düşünün.';
+        }
+      }
+    } else if (device === 'nrbm') {
+      if (flowVal < 10) {
+        pct = 60;
+        warning = 'NRBM’de < 10 L/dk akımda rezervuar torbası çöker ve CO₂ birikir! 10–15 L/dk açın.';
+      } else {
+        pct = Math.round(60 + (Math.min(flowVal, 15) - 10) * 5);
+      }
+    } else if (device === 'venturi') {
+      pct = venturiPct;
+    } else {
+      const current = parseNum(inputs.fio2);
+      pct = current !== null ? Math.round((current > 1 ? current : current * 100)) : 40;
+      pct = Math.min(100, Math.max(21, pct));
+    }
+
+    return {
+      pct,
+      decimalStr: (pct / 100).toFixed(2),
+      warning,
+    };
+  };
+
+  const o2FlowNum = Math.max(0, parseFloat(o2FlowInput.replace(',', '.')) || 0);
+  const o2Estimate = computeEstimatedFio2(o2Device, o2FlowNum, o2VenturiPct);
+
+  const handleSelectO2Device = (nextDevice: AbgO2DeviceId) => {
+    setO2Device(nextDevice);
+    let nextFlowStr = o2FlowInput;
+    if (nextDevice === 'nasal_cannula') nextFlowStr = '4';
+    else if (nextDevice === 'simple_mask') nextFlowStr = '6';
+    else if (nextDevice === 'nrbm') nextFlowStr = '15';
+
+    if (nextFlowStr !== o2FlowInput) {
+      setO2FlowInput(nextFlowStr);
+    }
+
+    if (nextDevice === 'hfnc_mv') {
+      const cur = parseNum(inputs.fio2);
+      if (cur === null || cur <= 0.21) {
+        updateField('fio2', '0.40');
+      }
+      return;
+    }
+
+    const est = computeEstimatedFio2(nextDevice, parseFloat(nextFlowStr) || 0, o2VenturiPct);
+    updateField('fio2', est.decimalStr);
+  };
+
+  const handleO2FlowChange = (raw: string) => {
+    setO2FlowInput(raw);
+    const num = Math.max(0, parseFloat(raw.replace(',', '.')) || 0);
+    const est = computeEstimatedFio2(o2Device, num, o2VenturiPct);
+    updateField('fio2', est.decimalStr);
+  };
+
+  const handleSelectVenturiPct = (pct: number) => {
+    setO2VenturiPct(pct);
+    updateField('fio2', (pct / 100).toFixed(2));
+  };
+
   const copyTextToClipboard = async (text: string): Promise<boolean> => {
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -768,32 +859,154 @@ export const BedsideAbgAnalyzer: React.FC<BedsideAbgAnalyzerProps> = ({ isDark }
               </div>
             </div>
 
-            {/* Quick FiO2 Buttons */}
-            <div className="flex flex-wrap gap-1">
-              {[
-                { label: '%21 Oda', val: '0.21' },
-                { label: '%32 Nazal', val: '0.32' },
-                { label: '%40 Maske', val: '0.40' },
-                { label: '%60', val: '0.60' },
-                { label: '%100', val: '1.00' }
-              ].map((btn) => (
-                <button
-                  key={btn.val}
-                  type="button"
-                  onClick={() => updateField('fio2', btn.val)}
-                  className={`px-2 py-1 text-[11px] font-mono rounded border transition-colors cursor-pointer ${
-                    inputs.fio2 === btn.val
-                      ? isDark
-                        ? 'bg-teal-600/25 border-teal-500 text-teal-300'
-                        : 'bg-teal-50 border-teal-500 text-teal-800'
-                      : isDark
-                        ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
-                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {btn.label}
-                </button>
-              ))}
+            {/* Interactive Estimated FiO2 Selector (Device + Flow) */}
+            <div
+              className={`rounded-lg border p-2.5 space-y-2 ${
+                isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50/80 border-slate-200'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                  Tahmini FiO₂ (Cihaz &amp; Akım)
+                </span>
+                <span className="text-[11px] font-mono font-bold text-teal-600 dark:text-teal-400">
+                  {o2Device === 'room_air' || o2Device === 'venturi' || o2Device === 'hfnc_mv'
+                    ? `FiO₂: %${Math.round((parseNum(inputs.fio2) ?? 0.21) * ((parseNum(inputs.fio2) ?? 0.21) > 1 ? 1 : 100))}`
+                    : `Tahmini: %${o2Estimate.pct}`}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-3 gap-1">
+                {(
+                  [
+                    { id: 'room_air', label: 'Oda (%21)' },
+                    { id: 'nasal_cannula', label: 'Nazal Kanül' },
+                    { id: 'simple_mask', label: 'Basit Maske' },
+                    { id: 'nrbm', label: 'NRBM' },
+                    { id: 'venturi', label: 'Ventüri' },
+                    { id: 'hfnc_mv', label: 'HFNC / MV' },
+                  ] as const
+                ).map((dev) => {
+                  const active = o2Device === dev.id;
+                  return (
+                    <button
+                      key={dev.id}
+                      type="button"
+                      onClick={() => handleSelectO2Device(dev.id)}
+                      className={`px-1.5 py-1 text-[11px] font-semibold rounded border transition-colors cursor-pointer truncate ${
+                        active
+                          ? isDark
+                            ? 'bg-teal-600/25 border-teal-500 text-teal-300'
+                            : 'bg-teal-50 border-teal-500 text-teal-800'
+                          : isDark
+                            ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                            : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {dev.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {(o2Device === 'nasal_cannula' || o2Device === 'simple_mask' || o2Device === 'nrbm') && (
+                <div className="space-y-1.5 pt-0.5">
+                  <div className="flex items-center gap-2">
+                    <label
+                      htmlFor="abg-o2-flow"
+                      className="text-[11px] font-medium text-slate-500 dark:text-slate-400 shrink-0"
+                    >
+                      Akım (L/dk):
+                    </label>
+                    <input
+                      id="abg-o2-flow"
+                      type="number"
+                      min="0"
+                      max="20"
+                      step="0.5"
+                      inputMode="decimal"
+                      value={o2FlowInput}
+                      onChange={(e) => handleO2FlowChange(e.target.value)}
+                      className={`w-20 px-2 py-1 text-xs font-mono font-bold rounded border focus:outline-none focus:ring-1 focus:ring-teal-500 ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-slate-100'
+                          : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <div className="flex flex-wrap gap-1">
+                      {(o2Device === 'nasal_cannula'
+                        ? [1, 2, 4, 6]
+                        : o2Device === 'simple_mask'
+                          ? [5, 6, 8, 10]
+                          : [10, 12, 15]
+                      ).map((v) => (
+                        <button
+                          key={v}
+                          type="button"
+                          onClick={() => handleO2FlowChange(String(v))}
+                          className={`px-1.5 py-0.5 text-[10px] font-mono font-semibold rounded border cursor-pointer ${
+                            Number(o2FlowInput) === v
+                              ? 'bg-teal-600 border-teal-600 text-white'
+                              : isDark
+                                ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                                : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          {v}L
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {o2Estimate.warning && (
+                    <div className="text-[11px] leading-snug text-rose-600 dark:text-rose-300 flex items-start gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-rose-500" />
+                      <span>{o2Estimate.warning}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {o2Device === 'venturi' && (
+                <div className="flex flex-wrap gap-1 pt-0.5">
+                  {[24, 28, 31, 35, 40, 60].map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => handleSelectVenturiPct(v)}
+                      className={`flex-1 py-1 text-[11px] font-mono font-semibold rounded border cursor-pointer ${
+                        o2VenturiPct === v
+                          ? 'bg-teal-600 border-teal-600 text-white'
+                          : isDark
+                            ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      %{v}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {o2Device === 'hfnc_mv' && (
+                <div className="flex flex-wrap gap-1 pt-0.5">
+                  {['0.30', '0.40', '0.50', '0.60', '0.80', '1.00'].map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => updateField('fio2', v)}
+                      className={`flex-1 py-1 text-[11px] font-mono font-semibold rounded border cursor-pointer ${
+                        inputs.fio2 === v
+                          ? 'bg-teal-600 border-teal-600 text-white'
+                          : isDark
+                            ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      %{Math.round(parseFloat(v) * 100)}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
