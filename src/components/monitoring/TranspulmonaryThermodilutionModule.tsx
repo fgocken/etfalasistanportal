@@ -14,6 +14,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { MedicalText } from '../basics/respiratory/MedicalText';
+import { TptdInteractiveDecisionTree } from './TptdInteractiveDecisionTree';
 
 interface TranspulmonaryThermodilutionModuleProps {
   isDark: boolean;
@@ -2219,6 +2220,9 @@ export const TranspulmonaryThermodilutionModule: React.FC<TranspulmonaryThermodi
               </div>
             ))}
           </div>
+
+          {/* Interactive 4-Column Visual Decision Tree */}
+          <TptdInteractiveDecisionTree isDark={isDark} />
 
           {/* Decision Tree Branch A (Low CI) & Branch B (Normal/High CI) */}
           {(
