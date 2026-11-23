@@ -112,7 +112,54 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
   return (
     <div className="space-y-8 font-sans">
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 1. ÜST BAŞLIK KARTI (MonographCopyButton + Klinik Özet Rozetleri)    */}
+      {/* HIZLI BÖLÜM NAVİGASYON BARI (v4.0)                                   */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <MonographQuickNav
+        isDark={isDark}
+        items={[
+          { id: 'sec-guvenlik', label: 'ISMP Güvenlik' },
+          { id: 'sec-ozet', label: 'Özet' },
+          { id: 'sec-pkpd', label: 'Farmakokinetik' },
+          { id: 'sec-kontrendikasyon', label: 'Kontrendikasyon' },
+          { id: 'sec-endikasyon', label: 'Endikasyonlar' },
+          { id: 'sec-dozaj', label: 'Dozaj' },
+          { id: 'sec-hesaplayici', label: 'Hesaplayıcı' },
+          { id: 'sec-tr-preparat', label: 'TR Preparat' },
+          { id: 'sec-uyumluluk', label: 'Damar Yolu & Y-Site' },
+          { id: 'sec-organ', label: 'Böbrek & KC' },
+          { id: 'sec-geriatri-obezite', label: 'Geriatri & Obezite' },
+          { id: 'sec-gebelik', label: 'Gebelik' },
+          { id: 'sec-olumsuz', label: 'Olumsuz Etkiler' },
+          { id: 'sec-ozel-durumlar', label: 'Özel Durumlar' },
+          { id: 'sec-derin-pd', label: 'Derin Farmakodinami' },
+          { id: 'sec-kaynaklar', label: 'Etkileşim & Kaynakça' },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (EN ÜSTTE KAPALI AKORDİYON)     */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        sectionId="sec-guvenlik"
+        defaultOpen={false}
+        tallManName="DOPamin"
+        confusionRiskWith={[
+          'DOBUTamin (Dobutamin — LASA: en sık ölümcül karışan inotrop!)',
+          'Noradrenalin (Norepinefrin)',
+          'Adrenalin (Epinefrin)',
+        ].join(' · ')}
+        criticalAlerts={[
+          'LASA (DOPamin vs DOBUTamin) & Kesinlikle Direkt IV Push/Bolus VERİLMEZ: DOPamin (200 mg/5 mL) ile DOBUTamin (250 mg/20 mL) ampulleri ve infüzyon torbaları en sık karışan yüksek riskli ilaç çiftidir! Ampul konsantre (40 mg/mL) olduğundan ASLA sulandırılmadan veya IV bolus/push olarak uygulanmaz; daima sulandırılarak akıllı infüzyon pompasıyla verilir.',
+          'SOAP-II & Surviving Sepsis 2021 Uyarıları: Dopamin septik şokta ve kardiyojenik şokta ilk tercih vazopresör DEĞİLDİR! SOAP-II (NEJM 2010) çalışmasında Noradrenaline kıyasla 2 kat fazla aritmi (%24,1 vs %12,4; p<0,001) ve kardiyojenik şok alt grubunda anlamlı artmış 28 günlük mortalite (p=0,03) göstermiştir.',
+          '"Böbrek Koruyucu / Renal Doz Dopamin" (1–3 mcg/kg/dk) Efsanesi: ANZICS RCT (Bellomo et al., Lancet 2000) ve KDIGO AKI kılavuzlarıyla düşük doz dopaminin akut böbrek hasarını (ABH) önlemediği, RRT ihtiyacını veya mortaliteyi azaltmadığı kanıtlanmıştır — diürez veya böbrek koruma amacıyla KULLANILMAZ (Sınıf III - Önerilmez).',
+          'MAO İnhibitörü Etkileşimi (1/10 Doz Kuralı): Dopamin MAO enzimi ile metabolize olduğundan, son 14–21 gün içinde MAO inhibitörü (Moklobemid, Selegilin, Linezolid, IV Metilen Mavisi) alan hastalarda etkisi 6–10 kat şiddetlenir; zorunluysa başlangıç dozu normalin 1/10’una (%10’una; ör. 0,5 mcg/kg/dk) düşürülmelidir!',
+        ]}
+        antidoteOrRescue="Ekstravazasyon Antidotu: Fentolamin (5–10 mg / 10–15 mL SF lokal infiltrasyon) veya Terbutalin / Topikal %2 Nitrogliserin (12 saat içinde; soğuk/buz ASLA uygulanmaz!). Taşiaritmi / İskemi: İnfüzyonu azalt/durdur (yarı ömür t½ ~2 dk olduğundan etkisi 5–10 dk içinde sonlanır), dirençli taşiaritmide kısa etkili β-bloker (Esmolol) uygulanır."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 1. BAŞLIK & FARMAKOLOJİK KATEGORİ (#sec-ozet)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-ozet"
@@ -167,51 +214,434 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 2. HIZLI BÖLÜM NAVİGASYON BARI (v4.0)                               */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <MonographQuickNav
-        isDark={isDark}
-        items={[
-          { id: 'safety', label: 'ISMP & Güvenlik' },
-          { id: 'calculator', label: 'Doz & İnfüzyon Hesaplayıcı' },
-          { id: 'contraindications', label: 'Kontrendikasyonlar' },
-          { id: 'indications', label: 'Endikasyonlar & SOAP-II' },
-          { id: 'formulation', label: 'TR Preparat & Sulandırma' },
-          { id: 'compatibility', label: 'Damar Yolu & Ekstravazasyon' },
-          { id: 'populations', label: 'Özel Popülasyonlar' },
-          { id: 'pharmacokinetics', label: 'Farmakokinetik' },
-          { id: 'pharmacodynamics', label: 'Derin Farmakodinami' },
-          { id: 'references', label: 'Etkileşim & Kaynaklar' },
-        ]}
-      />
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 3. ISMP HIGH-ALERT & TALL-MAN GÜVENLİĞİ (defaultOpen={false})       */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <HighAlertSafetyBlock
-        isDark={isDark}
-        sectionId="safety"
-        defaultOpen={false}
-        tallManName="DOPamin"
-        confusionRiskWith={[
-          'DOBUTamin (Dobutamin — LASA: en sık ölümcül karışan inotrop!)',
-          'Noradrenalin (Norepinefrin)',
-          'Adrenalin (Epinefrin)',
-        ].join(' · ')}
-        criticalAlerts={[
-          'LASA (DOPamin vs DOBUTamin) & Kesinlikle Direkt IV Push/Bolus VERİLMEZ: DOPamin (200 mg/5 mL) ile DOBUTamin (250 mg/20 mL) ampulleri ve infüzyon torbaları en sık karışan yüksek riskli ilaç çiftidir! Ampul konsantre (40 mg/mL) olduğundan ASLA sulandırılmadan veya IV bolus/push olarak uygulanmaz; daima sulandırılarak akıllı infüzyon pompasıyla verilir.',
-          'SOAP-II & Surviving Sepsis 2021 Uyarıları: Dopamin septik şokta ve kardiyojenik şokta ilk tercih vazopresör DEĞİLDİR! SOAP-II (NEJM 2010) çalışmasında Noradrenaline kıyasla 2 kat fazla aritmi (%24,1 vs %12,4; p<0,001) ve kardiyojenik şok alt grubunda anlamlı artmış 28 günlük mortalite (p=0,03) göstermiştir.',
-          '"Böbrek Koruyucu / Renal Doz Dopamin" (1–3 mcg/kg/dk) Efsanesi: ANZICS RCT (Bellomo et al., Lancet 2000) ve KDIGO AKI kılavuzlarıyla düşük doz dopaminin akut böbrek hasarını (ABH) önlemediği, RRT ihtiyacını veya mortaliteyi azaltmadığı kanıtlanmıştır — diürez veya böbrek koruma amacıyla KULLANILMAZ (Sınıf III - Önerilmez).',
-          'MAO İnhibitörü Etkileşimi (1/10 Doz Kuralı): Dopamin MAO enzimi ile metabolize olduğundan, son 14–21 gün içinde MAO inhibitörü (Moklobemid, Selegilin, Linezolid, IV Metilen Mavisi) alan hastalarda etkisi 6–10 kat şiddetlenir; zorunluysa başlangıç dozu normalin 1/10’una (%10’una; ör. 0,5 mcg/kg/dk) düşürülmelidir!',
-        ]}
-        antidoteOrRescue="Ekstravazasyon Antidotu: Fentolamin (5–10 mg / 10–15 mL SF lokal infiltrasyon) veya Terbutalin / Topikal %2 Nitrogliserin (12 saat içinde; soğuk/buz ASLA uygulanmaz!). Taşiaritmi / İskemi: İnfüzyonu azalt/durdur (yarı ömür t½ ~2 dk olduğundan etkisi 5–10 dk içinde sonlanır), dirençli taşiaritmide kısa etkili β-bloker (Esmolol) uygulanır."
-      />
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 4. İNTERAKTİF DOZ & İNFÜZYON HESAPLAYICISI (id="calculator")        */}
+      {/* 2. FARMAKOKİNETİK ÖZELLİKLER AKORDİYONU (#sec-pkpd, pkOpen=false)    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
-        id="calculator"
+        id="sec-pkpd"
+        className={`rounded-2xl border transition-all overflow-hidden ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setPkOpen(!pkOpen)}
+          aria-expanded={pkOpen}
+          className={`w-full p-5 sm:p-6 flex items-center justify-between text-left transition-colors cursor-pointer ${
+            isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <span>Farmakokinetik (ADME) Özellikleri</span>
+                <span className="text-xs font-normal px-2 py-0.5 rounded font-mono bg-amber-500/15 text-amber-700 dark:text-amber-300">
+                  t½: ~2 dk · %25 → Noradrenaline Dönüşüm
+                </span>
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Hızlı başlangıç (2–5 dk), plazma/doku MAO ve COMT metabolizması, KBB geçişi ve nöroendokrin dağılım.
+              </p>
+            </div>
+          </div>
+          {pkOpen ? (
+            <ChevronUp className="w-5 h-5 text-slate-400" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-slate-400" />
+          )}
+        </button>
+
+        {pkOpen && (
+          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mt-4">
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  Etki Başlangıcı (Onset)
+                </span>
+                <span className="text-base font-bold font-mono text-amber-600 dark:text-amber-400 mt-1 block">
+                  2 – 5 Dakika
+                </span>
+                <span className="text-[10px] text-slate-400">IV infüzyon başlangıcı sonrası</span>
+              </div>
+
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  Pik Etki (Peak)
+                </span>
+                <span className="text-base font-bold font-mono text-teal-600 dark:text-teal-400 mt-1 block">
+                  5 – 10 Dakika
+                </span>
+                <span className="text-[10px] text-slate-400">Kararlı durum (Steady-state)</span>
+              </div>
+
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  Eliminasyon Yarı Ömrü (t½)
+                </span>
+                <span className="text-base font-bold font-mono text-indigo-600 dark:text-indigo-400 mt-1 block">
+                  ~2 Dakika
+                </span>
+                <span className="text-[10px] text-slate-400">Etki süresi: &lt; 10 dakika</span>
+              </div>
+
+              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  Etki Süresi (Duration)
+                </span>
+                <span className="text-base font-bold font-mono text-rose-600 dark:text-rose-400 mt-1 block">
+                  &lt; 10 Dakika
+                </span>
+                <span className="text-[10px] text-slate-400">MAO-İ varlığında ~1 saate uzar!</span>
+              </div>
+            </div>
+
+            <div
+              className={`p-4 rounded-xl border text-xs sm:text-sm leading-relaxed space-y-2.5 ${
+                isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+              }`}
+            >
+              <div>
+                <strong className="text-slate-900 dark:text-white">
+                  • Metabolizma (MAO &amp; COMT + %25 Endojen Noradrenaline Dönüşüm):
+                </strong>{' '}
+                Verilen dopaminin yaklaşık <strong>%75&apos;i</strong> karaciğer, böbrek ve plazmada{' '}
+                <strong>Monoamin Oksidaz (MAO)</strong> ve <strong>Katekol-O-Metiltransferaz (COMT)</strong> enzimleri ile
+                hızla inaktif homovanilik asit (HVA) ve vanililmandelik asit (VMA) metabolitlerine yıkılır (%80&apos;i 24
+                saatte idrarla atılır). Kalan <strong>yaklaşık %25&apos;i ise sempatik adrenerjik sinir uçlarına alınarak
+                dopamin β-hidroksilaz ile endojen noradrenaline dönüştürülür!</strong>
+              </div>
+              <div>
+                <strong className="text-slate-900 dark:text-white">
+                  • Dağılım &amp; Kan-Beyin Bariyeri (KBB):
+                </strong>{' '}
+                Polar yapısı nedeniyle sağlam <strong>kan-beyin bariyerini (KBB) GEÇMEZ</strong>. Ancak KBB dışında kalan
+                sirkumventriküler organları — özellikle <strong>hipotalamus/ön hipofiz median eminens</strong> ve{' '}
+                <strong>area postrema (kemoreseptör tetik bölgesi - CTZ)</strong> — doğrudan etkileyerek D₂ reseptörleri
+                üzerinden prolaktin/TSH baskılanması ve bulantı/kusma oluşturabilir.
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 3. KONTRENDİKASYONLAR — ENDİKASYONLARDAN ÖNCE (#sec-kontrendikasyon) */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <ContraindicationsGridBlock
+        isDark={isDark}
+        sectionId="sec-kontrendikasyon"
+        absoluteTitle="Mutlak Kontrendikasyonlar"
+        absoluteItems={[
+          'Feokromositoma: Presinaptik katekolamin salınımı ve doğrudan reseptör uyarımıyla ölümcül hipertansif kriz ve malign aritmi tetikler.',
+          'Düzeltilmemiş taşiaritmiler (hızlı ventrikül yanıtlı Atriyal Fibrilasyon, Ventriküler Taşikardi) veya Ventriküler Fibrilasyon (VF).',
+          'Dopamin hidroklorüre veya ampuldeki sodyum metabisülfit yardımcı maddesine bilinen aşırı duyarlılık.',
+        ]}
+        relativeTitle="Göreceli Kontrendikasyonlar & Kaçınılması Gereken Durumlar"
+        relativeItems={[
+          'Hipovolemi düzeltilmeden kullanım: Dopamin kan hacmi replasmanının yerini tutmaz; önce sıvı resüsitasyonu yapılmalıdır (aksi halde ağır renal/splanknik ve periferik organ iskemisi gelişir).',
+          'Kardiyojenik şok: SOAP-II çalışmasında Noradrenaline kıyasla anlamlı olarak artmış 28 günlük mortalite (p=0,03) ve taşiaritmi nedeniyle rutin vazopresör olarak kaçınılmalıdır.',
+          'Septik şokta rutin 1. basamak kullanım: SSC 2021 kılavuzuna göre yalnızca bradikardik ve taşiaritmi riski çok düşük seçilmiş hastalar dışında kullanılmaz (1. tercih Noradrenalin).',
+          'MAO inhibitörü kullanımı (son 14–21 gün): Dopamin metabolizması bloke olduğundan standart dozlar hipertansif kriz yapar; zorunluysa doz normalin 1/10’una (%10) düşürülmelidir.',
+          'Halojenli volatil anestezikler (Halotan, İzofluran, Sevofluran): Miyokardı ekzojen katekolaminlere duyarlılaştırarak ciddi ventriküler aritmi riski doğurur.',
+          'Oklüziv periferik vasküler hastalık (Raynaud fenomeni, ileri ateroskleroz, tromboanjiitis obliterans, diyabetik mikroanjiyopati, soğuk ısırması): Parmak ucu iskemisi ve nekroz riski.',
+        ]}
+        clinicalNote="Şokta dopamin başlamadan önce mutlaka hipovolemi düzeltilmeli, hipoksi/hiperkapni/asidoz (pH < 7,15 katekolamin yanıtını düşürür ve aritmiyi artırır) eşzamanlı tedavi edilmelidir."
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 4. ENDİKASYONLAR & KLİNİK KANIT (#sec-endikasyon)                    */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        id="sec-endikasyon"
+        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <BookOpen className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+            Endikasyonlar &amp; Klinik Kanıt (ACC/AHA/HRS · SSC 2021 · SOAP-II · ANZICS)
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+          {/* 1. Semptomatik Bradikardi */}
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <HeartPulse className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>1. Semptomatik Bradikardi (Atropine Yanıtsız 2. Basamak)</span>
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-500/20 text-amber-700 dark:text-amber-300 shrink-0">
+                AHA/ACLS · Sınıf IIb
+              </span>
+            </div>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Atropine (1 mg IV, maks 3 mg) yanıtsız semptomatik bradikardi veya sinoatriyal/AV iletim gecikmesinde geçici
+              transkutanöz/transvenöz pacemaker hazırlığına köprü veya alternatif olarak{' '}
+              <strong className="font-mono text-slate-900 dark:text-white">5–20 mcg/kg/dk</strong> IV infüzyon (özellikle
+              hipotansiyonun eşlik ettiği bradikardide; başlangıç <strong>5 mcg/kg/dk</strong>, kalp hızı ve MAP yanıtına
+              göre titre edilir).
+            </p>
+          </div>
+
+          {/* 2. Seçilmiş Şok / Hipotansiyon */}
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Flame className="w-4 h-4 text-rose-500 shrink-0" />
+                <span>2. Seçilmiş Şok / Hipotansiyon (Bradikardi Eşlik Eden)</span>
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 shrink-0">
+                SSC 2021 · Seçilmiş Hasta
+              </span>
+            </div>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Surviving Sepsis Campaign (SSC 2021) kılavuzuna göre septik şokta yalnızca{' '}
+              <strong>relatif veya mutlak bradikardisi olan ve taşiaritmi riski çok düşük</strong> seçilmiş hastalarda
+              Noradrenaline alternatif vazopresör olarak{' '}
+              <strong className="font-mono text-slate-900 dark:text-white">5–15 mcg/kg/dk</strong> dozunda kullanılabilir.
+              Genel septik şok popülasyonunda Noradrenalin 1. tercihtir.
+            </p>
+          </div>
+
+          {/* 3. Post-Resüsitasyon (ROSC) / Düşük Kardiyak Debi */}
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-teal-500 shrink-0" />
+                <span>3. Post-Resüsitasyon (ROSC) &amp; Kronotropik Destek</span>
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-teal-500/20 text-teal-700 dark:text-teal-300 shrink-0">
+                3–10 mcg/kg/dk
+              </span>
+            </div>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Post-kardiyak arrest (ROSC) veya açık kalp cerrahisi sonrası miyokardiyal depresyon ve bradikardinin ön
+              planda olduğu seçilmiş olgularda geçiş tedavisi olarak kullanılır. Saf inotropi gerektiğinde Dobutamin, saf
+              vazopresör gerektiğinde Noradrenalin tercih edilir.
+            </p>
+          </div>
+        </div>
+
+        {/* Klinik Kanıt Kutusu: SOAP-II & ANZICS Renal Dopamin */}
+        <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-100' : 'bg-rose-50/70 border-rose-200 text-rose-950'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <span className="font-bold text-xs sm:text-sm text-rose-700 dark:text-rose-300 flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>SOAP-II Çalışması (De Backer et al., NEJM 2010, n=1679)</span>
+              </span>
+              <span className="font-mono text-[10.5px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-800 dark:text-rose-200">
+                PMID: 20200382
+              </span>
+            </div>
+            <p className="text-xs leading-relaxed">
+              Şok tedavisinde ilk basamak Dopamin (maks 20 mcg/kg/dk) ile Noradrenalin (maks 0,19 mcg/kg/dk)
+              karşılaştırılmıştır: 28 günlük genel mortalite benzer (%52,5 vs %48,5; p=0,10) bulunmuş; ancak dopamin
+              grubunda <strong>aritmi oranı 2 kat yüksek (%24,1 vs %12,4; p&lt;0,001 — özellikle AF)</strong> ve{' '}
+              <strong>kardiyojenik şok alt grubunda 28 günlük mortalite anlamlı olarak daha yüksek (p=0,03)</strong>{' '}
+              saptanmıştır.
+            </p>
+          </div>
+
+          <div
+            className={`p-4 rounded-xl border ${
+              isDark ? 'bg-amber-950/20 border-amber-900/50 text-amber-100' : 'bg-amber-50/70 border-amber-200 text-amber-950'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <span className="font-bold text-xs sm:text-sm text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+                <Info className="w-4 h-4 shrink-0" />
+                <span>ANZICS Renal-Dose Dopamine Trial (Bellomo et al., Lancet 2000, n=328)</span>
+              </span>
+              <span className="font-mono text-[10.5px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-200">
+                PMID: 11191541
+              </span>
+            </div>
+            <p className="text-xs leading-relaxed">
+              SIRS ve erken renal disfonksiyonu olan 328 YBÜ hastasında sürekli{' '}
+              <strong>2 mcg/kg/dk düşük doz (&quot;renal doz&quot;) dopamin</strong> ile plasebo karşılaştırılmıştır: Pik
+              serum kreatinin düzeyi (245 vs 249 µmol/L; p=0,93), renal replasman tedavisi (RRT) ihtiyacı (%21 vs %25;
+              p=0,55), YBÜ kalış süresi veya sağkalım üzerine <strong>hiçbir klinik faydası olmadığı</strong> kanıtlanmıştır
+              (SSC 2021 &amp; KDIGO: Sınıf III / Önerilmez).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 5. DOZAJ KADEMELERİ & RESEPTÖR TİTRASYON ALGORİTMASI (#sec-dozaj)    */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        id="sec-dozaj"
+        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2 mb-4">
+          <div className="flex items-center gap-2">
+            <Layers className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+              Dozaj Kademeleri &amp; Doz-Bağımlı Reseptör Titrasyon Algoritması
+            </h2>
+          </div>
+          <span className="text-xs font-mono text-slate-500">D₁/D₂ → β₁ → α₁ Spektrumu</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Kademe 1: D1/D2 */}
+          <div
+            className={`p-4 rounded-xl border flex flex-col justify-between ${
+              activePhase === 'dopaminergic'
+                ? 'border-teal-500 bg-teal-500/10'
+                : isDark
+                ? 'bg-slate-800/40 border-slate-700'
+                : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wide text-teal-600 dark:text-teal-400">
+                  D₁/D₂ Dopaminerjik
+                </span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-700 dark:text-teal-300">
+                  Sınıf III (Önerilmez)
+                </span>
+              </div>
+              <div className="text-lg font-bold font-mono text-slate-900 dark:text-white mt-1">
+                1 – 3 <span className="text-xs font-sans font-normal text-slate-500">mcg/kg/dk</span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Tarihsel &quot;renal doz&quot;; proksimal tübüler natriürez yapar ancak GFR veya RRT ihtiyacını iyileştirmez
+                (ANZICS 2000).
+              </p>
+            </div>
+            <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700/60 text-[10px] text-teal-600 dark:text-teal-400 font-medium">
+              ⚠ ABH koruma amacıyla kullanılmaz
+            </div>
+          </div>
+
+          {/* Kademe 2: Beta-1 */}
+          <div
+            className={`p-4 rounded-xl border flex flex-col justify-between ${
+              activePhase === 'beta1'
+                ? 'border-amber-500 bg-amber-500/10'
+                : isDark
+                ? 'bg-slate-800/40 border-slate-700'
+                : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">
+                  β₁ İnotrop / Kronotrop
+                </span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300">
+                  Bradikardi &amp; CO↑
+                </span>
+              </div>
+              <div className="text-lg font-bold font-mono text-slate-900 dark:text-white mt-1">
+                3 – 10 <span className="text-xs font-sans font-normal text-slate-500">mcg/kg/dk</span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Atropine yanıtsız semptomatik bradikardi ve düşük kardiyak debide standart başlangıç (5 mcg/kg/dk) ve
+                titrasyon penceresi.
+              </p>
+            </div>
+            <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700/60 text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+              ✓ Direkt β₁ + %50 endojen NE salınımı
+            </div>
+          </div>
+
+          {/* Kademe 3: Alfa-1 */}
+          <div
+            className={`p-4 rounded-xl border flex flex-col justify-between ${
+              activePhase === 'alpha1'
+                ? 'border-rose-500 bg-rose-500/15 ring-2 ring-rose-500/40'
+                : isDark
+                ? 'bg-slate-800/40 border-slate-700'
+                : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wide text-rose-600 dark:text-rose-400">
+                  α₁ Baskın Vazopresör
+                </span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-700 dark:text-rose-300">
+                  SVR↑ · MAP↑
+                </span>
+              </div>
+              <div className="text-lg font-bold font-mono text-rose-700 dark:text-rose-300 mt-1">
+                10 – 20 <span className="text-xs font-sans font-normal text-slate-500">mcg/kg/dk</span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Sistemik ve venöz vazokonstriksiyon baskınlaşır; D₁ renal gevşeme kaybolur, PCWP ve taşiaritmi (%24,1)
+                riski hızla artar.
+              </p>
+            </div>
+            <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700/60 text-[10px] text-rose-700 dark:text-rose-300 font-bold">
+              ⚠ Yakın EKG &amp; İskemi Takibi Şart
+            </div>
+          </div>
+
+          {/* Kademe 4: >20 Tavan */}
+          <div
+            className={`p-4 rounded-xl border flex flex-col justify-between ${
+              activePhase === 'exceeded'
+                ? 'border-rose-600 bg-rose-600/20 ring-2 ring-rose-600/50'
+                : isDark
+                ? 'bg-slate-800/40 border-slate-700'
+                : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wide text-rose-600 dark:text-rose-400">
+                  Tavan Eşiği Aşımı (!)
+                </span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-700 dark:text-rose-300">
+                  Noradrenaline Geç
+                </span>
+              </div>
+              <div className="text-lg font-bold font-mono text-rose-600 dark:text-rose-400 mt-1">
+                &gt; 20 <span className="text-xs font-sans font-normal text-slate-500">mcg/kg/dk</span>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Ek inotropik kazanç olmaksızın aşırı vazokonstriksiyon, splanknik/periferik iskemi ve malign aritmi üretir.
+              </p>
+            </div>
+            <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700/60 text-[10px] text-rose-600 dark:text-rose-400 font-bold">
+              ⛔ Artırma — Noradrenaline Geç!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 6. İNTERAKTİF DOZ & İNFÜZYON HESAPLAYICISI (#sec-hesaplayici)        */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <section
+        id="sec-hesaplayici"
         className={`p-5 sm:p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
@@ -656,173 +1086,11 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 5. KONTRENDİKASYONLAR — ENDİKASYONLARDAN ÖNCE (id="contraindications") */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <ContraindicationsGridBlock
-        isDark={isDark}
-        sectionId="contraindications"
-        absoluteTitle="Mutlak Kontrendikasyonlar"
-        absoluteItems={[
-          'Feokromositoma: Presinaptik katekolamin salınımı ve doğrudan reseptör uyarımıyla ölümcül hipertansif kriz ve malign aritmi tetikler.',
-          'Düzeltilmemiş taşiaritmiler (hızlı ventrikül yanıtlı Atriyal Fibrilasyon, Ventriküler Taşikardi) veya Ventriküler Fibrilasyon (VF).',
-          'Dopamin hidroklorüre veya ampuldeki sodyum metabisülfit yardımcı maddesine bilinen aşırı duyarlılık.',
-        ]}
-        relativeTitle="Göreceli Kontrendikasyonlar & Kaçınılması Gereken Durumlar"
-        relativeItems={[
-          'Hipovolemi düzeltilmeden kullanım: Dopamin kan hacmi replasmanının yerini tutmaz; önce sıvı resüsitasyonu yapılmalıdır (aksi halde ağır renal/splanknik ve periferik organ iskemisi gelişir).',
-          'Kardiyojenik şok: SOAP-II çalışmasında Noradrenaline kıyasla anlamlı olarak artmış 28 günlük mortalite (p=0,03) ve taşiaritmi nedeniyle rutin vazopresör olarak kaçınılmalıdır.',
-          'Septik şokta rutin 1. basamak kullanım: SSC 2021 kılavuzuna göre yalnızca bradikardik ve taşiaritmi riski çok düşük seçilmiş hastalar dışında kullanılmaz (1. tercih Noradrenalin).',
-          'MAO inhibitörü kullanımı (son 14–21 gün): Dopamin metabolizması bloke olduğundan standart dozlar hipertansif kriz yapar; zorunluysa doz normalin 1/10’una (%10) düşürülmelidir.',
-          'Halojenli volatil anestezikler (Halotan, İzofluran, Sevofluran): Miyokardı ekzojen katekolaminlere duyarlılaştırarak ciddi ventriküler aritmi riski doğurur.',
-          'Oklüziv periferik vasküler hastalık (Raynaud fenomeni, ileri ateroskleroz, tromboanjiitis obliterans, diyabetik mikroanjiyopati, soğuk ısırması): Parmak ucu iskemisi ve nekroz riski.',
-        ]}
-        clinicalNote="Şokta dopamin başlamadan önce mutlaka hipovolemi düzeltilmeli, hipoksi/hiperkapni/asidoz (pH < 7,15 katekolamin yanıtını düşürür ve aritmiyi artırır) eşzamanlı tedavi edilmelidir."
-      />
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 6. ENDİKASYONLAR & KLİNİK KANIT (SOAP-II & ANZICS) (id="indications") */}
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="indications"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar &amp; Klinik Kanıt (ACC/AHA/HRS · SSC 2021 · SOAP-II · ANZICS)
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-          {/* 1. Semptomatik Bradikardi */}
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-2">
-              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <HeartPulse className="w-4 h-4 text-amber-500 shrink-0" />
-                <span>1. Semptomatik Bradikardi (Atropine Yanıtsız 2. Basamak)</span>
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-500/20 text-amber-700 dark:text-amber-300 shrink-0">
-                AHA/ACLS · Sınıf IIb
-              </span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Atropine (1 mg IV, maks 3 mg) yanıtsız semptomatik bradikardi veya sinoatriyal/AV iletim gecikmesinde geçici
-              transkutanöz/transvenöz pacemaker hazırlığına köprü veya alternatif olarak{' '}
-              <strong className="font-mono text-slate-900 dark:text-white">5–20 mcg/kg/dk</strong> IV infüzyon (özellikle
-              hipotansiyonun eşlik ettiği bradikardide; başlangıç <strong>5 mcg/kg/dk</strong>, kalp hızı ve MAP yanıtına
-              göre titre edilir).
-            </p>
-          </div>
-
-          {/* 2. Seçilmiş Şok / Hipotansiyon */}
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-2">
-              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Flame className="w-4 h-4 text-rose-500 shrink-0" />
-                <span>2. Seçilmiş Şok / Hipotansiyon (Bradikardi Eşlik Eden)</span>
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 shrink-0">
-                SSC 2021 · Seçilmiş Hasta
-              </span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Surviving Sepsis Campaign (SSC 2021) kılavuzuna göre septik şokta yalnızca{' '}
-              <strong>relatif veya mutlak bradikardisi olan ve taşiaritmi riski çok düşük</strong> seçilmiş hastalarda
-              Noradrenaline alternatif vazopresör olarak{' '}
-              <strong className="font-mono text-slate-900 dark:text-white">5–15 mcg/kg/dk</strong> dozunda kullanılabilir.
-              Genel septik şok popülasyonunda Noradrenalin 1. tercihtir.
-            </p>
-          </div>
-
-          {/* 3. Post-Resüsitasyon (ROSC) / Düşük Kardiyak Debi */}
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-2">
-              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-teal-500 shrink-0" />
-                <span>3. Post-Resüsitasyon (ROSC) &amp; Kronotropik Destek</span>
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-teal-500/20 text-teal-700 dark:text-teal-300 shrink-0">
-                3–10 mcg/kg/dk
-              </span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Post-kardiyak arrest (ROSC) veya açık kalp cerrahisi sonrası miyokardiyal depresyon ve bradikardinin ön
-              planda olduğu seçilmiş olgularda geçiş tedavisi olarak kullanılır. Saf inotropi gerektiğinde Dobutamin, saf
-              vazopresör gerektiğinde Noradrenalin tercih edilir.
-            </p>
-          </div>
-        </div>
-
-        {/* Klinik Kanıt Kutusu: SOAP-II & ANZICS Renal Dopamin */}
-        <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-rose-950/20 border-rose-900/50 text-rose-100' : 'bg-rose-50/70 border-rose-200 text-rose-950'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-1.5">
-              <span className="font-bold text-xs sm:text-sm text-rose-700 dark:text-rose-300 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>SOAP-II Çalışması (De Backer et al., NEJM 2010, n=1679)</span>
-              </span>
-              <span className="font-mono text-[10.5px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-800 dark:text-rose-200">
-                PMID: 20200382
-              </span>
-            </div>
-            <p className="text-xs leading-relaxed">
-              Şok tedavisinde ilk basamak Dopamin (maks 20 mcg/kg/dk) ile Noradrenalin (maks 0,19 mcg/kg/dk)
-              karşılaştırılmıştır: 28 günlük genel mortalite benzer (%52,5 vs %48,5; p=0,10) bulunmuş; ancak dopamin
-              grubunda <strong>aritmi oranı 2 kat yüksek (%24,1 vs %12,4; p&lt;0,001 — özellikle AF)</strong> ve{' '}
-              <strong>kardiyojenik şok alt grubunda 28 günlük mortalite anlamlı olarak daha yüksek (p=0,03)</strong>{' '}
-              saptanmıştır.
-            </p>
-          </div>
-
-          <div
-            className={`p-4 rounded-xl border ${
-              isDark ? 'bg-amber-950/20 border-amber-900/50 text-amber-100' : 'bg-amber-50/70 border-amber-200 text-amber-950'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 mb-1.5">
-              <span className="font-bold text-xs sm:text-sm text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
-                <Info className="w-4 h-4 shrink-0" />
-                <span>ANZICS Renal-Dose Dopamine Trial (Bellomo et al., Lancet 2000, n=328)</span>
-              </span>
-              <span className="font-mono text-[10.5px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-200">
-                PMID: 11191541
-              </span>
-            </div>
-            <p className="text-xs leading-relaxed">
-              SIRS ve erken renal disfonksiyonu olan 328 YBÜ hastasında sürekli{' '}
-              <strong>2 mcg/kg/dk düşük doz (&quot;renal doz&quot;) dopamin</strong> ile plasebo karşılaştırılmıştır: Pik
-              serum kreatinin düzeyi (245 vs 249 µmol/L; p=0,93), renal replasman tedavisi (RRT) ihtiyacı (%21 vs %25;
-              p=0,55), YBÜ kalış süresi veya sağkalım üzerine <strong>hiçbir klinik faydası olmadığı</strong> kanıtlanmıştır
-              (SSC 2021 &amp; KDIGO: Sınıf III / Önerilmez).
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 7. TÜRKİYE PREPARAT & SULANDIRMA REHBERİ (id="formulation")          */}
+      {/* 7. TÜRKİYE PREPARAT & SULANDIRMA REHBERİ (#sec-tr-preparat)          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <TurkeyFormulationBlock
         isDark={isDark}
-        sectionId="formulation"
+        sectionId="sec-tr-preparat"
         preparations={[
           {
             name: 'Dopmin® / Dopadren® / Dopasel® / Dobetal® / Dopamine DBL-Fresenius® 200 mg / 5 mL Ampul',
@@ -851,11 +1119,11 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 8. DAMAR YOLU, Y-SITE UYUMLULUK & EKSTRAVAZASYON (id="compatibility") */}
+      {/* 8. DAMAR YOLU, Y-SITE UYUMLULUK & EKSTRAVAZASYON (#sec-uyumluluk)    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <CompatibilityAndLineBlock
         isDark={isDark}
-        sectionId="compatibility"
+        sectionId="sec-uyumluluk"
         accessRequirement="central-preferred"
         accessSummary="Tercihen Santral Venöz Kateter (SVK) üzerinden infüze edilir. Acil durumda SVK açılana kadar geniş proksimal periferik venden (antekübital fossa; el sırtı veya ayak bileği venlerinden kaçınılmalı!) yalnızca düşük konsantrasyonda (≤ 800–1600 mcg/mL) kısa süreli verilebilir ve giriş yeri saatlik kontrol edilmelidir. Yüksek konsantrasyonlu enjektör (4000 mcg/mL) mutlak SVK gerektirir."
         phRange="2,5 – 5,0 (Asidik Çözelti)"
@@ -890,234 +1158,136 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 9. ÖZEL POPÜLASYONLAR (id="populations")                             */}
+      {/* 9. BÖBREK & KARACİĞER YETMEZLİĞİ (#sec-organ)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <div id="populations" className="space-y-8">
-        <GeriatricAndObesityBlock
-          isDark={isDark}
-          geriatricReductionBadge="Düşük Başlangıç · Aritmi & İskemi İzlemi"
-          geriatricPoints={[
-            'Geriatrik hastalarda (>65 yaş) miyokardiyal β₁-reseptör yanıtı ve baroreseptör refleks kapasitesi azalmış; buna karşın altta yatan koroner arter hastalığı, atriyal fibrilasyon (AF) ve oklüziv periferik arter hastalığı sıklığı yüksektir.',
-            'Düşük dozla (2–5 mcg/kg/dk) başlanmalı ve yavaş titre edilmelidir; yaşlı septik veya kardiyojenik şok hastalarında dopamin ile yeni başlangıçlı hızlı AF ve miyokardiyal iskemi riski gençlere göre belirgin daha fazladır.',
-            'Periferik ekstremite perfüzyonu (kapiller dolum, parmak ucu sıcaklığı ve rengi) sık aralıklarla kontrol edilmelidir.',
-          ]}
-          obesityWeightScalarBadge="IBW (Başlangıç) → Yanıta Göre Titre Et"
-          obesityPoints={[
-            'Obezitede (BMI ≥ 30 kg/m²) yağ dokusunun vaskülaritesi düşük olduğundan ve dopamin hidrofilik yapısıyla intravasküler kompartmanda (Vd ~0,5 L/kg) dağıldığından, gerçek vücut ağırlığı (TBW) üzerinden doz hesaplanması aşırı yüksek başlangıç dozlarına, taşiaritmiye ve erken α₁ vazokonstriksiyona yol açar.',
-            'Başlangıç dozu İdeal Vücut Ağırlığı (IBW) (veya alternatif olarak Düzeltilmiş Vücut Ağırlığı - AdjBW) üzerinden hesaplanmalı; yarı ömrü (~2 dk) çok kısa olduğundan ardından hedef hemodinamik yanıta (MAP ve kalp hızı) göre dakika dakika titre edilmelidir.',
-            'Hesaplayıcı bölümündeki Obezite Doz Ölçekleyici ile boy/cinsiyete göre IBW tek tıkla uygulanabilir.',
-          ]}
-          clinicalNote="Hem geriatrik hem morbid obez hastalarda yüksek doz dopamin (>10 mcg/kg/dk) gereksinimi doğduğunda dozu artırmak yerine erken dönemde Noradrenaline geçilmesi taşiaritmi yükünü azaltır."
-        />
-
-        <OrganImpairmentGridBlock
-          isDark={isDark}
-          renalSummary="Plazma/doku MAO ve COMT ile hızla yıkılır; böbrek yetmezliğinde rutin başlangıç doz azaltımı gerekmez, klinik yanıta göre titre edilir."
-          renalDetails={[
-            'Dopaminin aktif molekülü plazma, böbrek ve karaciğerdeki MAO/COMT enzimleriyle dakikalar içinde inaktif HVA ve VMA metabolitlerine dönüştürülür; metabolitler idrarla atılır.',
-            'Ağır böbrek yetmezliğinde veya diyaliz/CRRT altında doğrudan hemodinamik hedefe göre titre edilir.',
-            'ANZICS ve KDIGO Uyarısı: Düşük doz (1–3 mcg/kg/dk) dopaminin oligürik ABH hastalarında böbrek fonksiyonunu koruduğu veya diyaliz ihtiyacını azalttığı görüşü tamamen çürütülmüştür.',
-          ]}
-          hepaticSummary="Karaciğer yetmezliğinde doku ve plazma MAO/COMT klirensi devam eder; başlangıç dozu klinik yanıta göre titre edilir."
-          hepaticDetails={[
-            'İleri evre sirozda (Child-Pugh C) splanknik dolaşım dinamikleri değiştiğinden yüksek doz (>10 mcg/kg/dk) dopamin portal basıncı ve mezenterik vazokonstriksiyonu etkileyebilir.',
-            'Hepatorenal sendromda (HRS) dopamin etkisizdir; Terlipressin veya Noradrenalin + Albümin tercih edilmelidir.',
-          ]}
-        />
-
-        <PregnancyLactationBlock
-          isDark={isDark}
-          pregnancySummary="FDA Gebelik Kategorisi C · Yalnızca maternal hayati endikasyonda; yüksek dozda uterin arter vazokonstriksiyonu yapabilir."
-          pregnancyDetails={[
-            'Maternal şok veya dirençli semptomatik bradikardide anne hemodinamisini sağlamak fetal sağkalım için önceliklidir.',
-            'Ancak yüksek dozlarda (>10 mcg/kg/dk) α₁-aracılı uterin damar vazokonstriksiyonu uteroplasental kan akımını azaltabilir; obstetrik spinal hipotansiyonda ve septik şokta ilk tercih Noradrenalin veya Fenilefrindir.',
-          ]}
-          lactationSummary="Yarı ömrü ~2 dakika ve oral biyoyararlanımı %0 olduğundan emzirme açısından sistemik bebek maruziyeti beklenmez."
-          lactationDetails={[
-            'Dopamin GI kanaldan emilmez ve hızla inaktive olur; ancak intravenöz dopamin infüzyonu ön hipofiz D₂ reseptörlerini uyararak maternal serum Prolaktin düzeyini baskılar ve süt üretimini geçici olarak azaltabilir.',
-          ]}
-        />
-
-        <AdverseEffectsBlock
-          isDark={isDark}
-          items={[
-            {
-              title: 'Taşiaritmiler (Sinüs Taşikardisi, AF, VT)',
-              incidenceOrSeverity: '%24,1 (SOAP-II)',
-              detail:
-                'Noradrenaline göre 2 kat fazla aritmi (%24,1 vs %12,4); pozitif kronotropi, artmış AV iletim ve ektopik odak aktivasyonu.',
-              tone: 'rose',
-            },
-            {
-              title: 'Miyokard Oksijen Tüketimi (MVO₂) Artışı & İskemi',
-              incidenceOrSeverity: 'Doz-Bağımlı',
-              detail:
-                'Taşikardi ve artmış kontraktilite koroner arter hastalığı veya kardiyojenik şokta subendokardiyal iskemiyi derinleştirir.',
-              tone: 'amber',
-            },
-            {
-              title: 'Ekstravazasyon Nekrozu & Periferik Gangren',
-              incidenceOrSeverity: 'Vezikan (α₁)',
-              detail:
-                'Periferik sızıntıda lokal doku nekrozu (antidot: Fentolamin); yüksek doz uzun süreli infüzyonda parmak ucu iskemisi.',
-              tone: 'rose',
-            },
-            {
-              title: 'Hipofizer Süpresyon & Bulantı/Kusma',
-              incidenceOrSeverity: 'D₂ Aracılı',
-              detail:
-                'KBB dışındaki ön hipofiz ve area postrema (CTZ) D₂ uyarımıyla Prolaktin/TSH/GH baskılanması ve uyanık hastada bulantı.',
-              tone: 'indigo',
-            },
-          ]}
-        />
-
-        <SpecialClinicalCautionsBlock
-          isDark={isDark}
-          items={[
-            {
-              title: 'Sodyum Metabisülfit Alerjisi & Bronkospazm Riski',
-              detail:
-                'Türkiye’deki dopamin ampulleri antioksidan olarak sodyum metabisülfit içerir. Sülfit duyarlılığı olan (özellikle steroid bağımlı veya ağır astımlı) hastalarda akut bronkospazm ve anafilaktoid reaksiyon tetikleyebilir.',
-            },
-            {
-              title: 'Hipofizer & İmmün Baskılanma (Prolaktin, TSH ve GH Süpresyonu)',
-              detail:
-                'Ön hipofiz kan-beyin bariyeri dışında yer aldığından, dopamin infüzyonu D₂ reseptörleri üzerinden Prolaktin, TSH ve Büyüme Hormonu (GH) sekresyonunu güçlü şekilde baskılar. Bu durum kritik hastalık ötiroid hasta sendromunu maskeler/derinleştirir ve prolaktin düşüşüyle T-lenfosit immün yanıtını zayıflatabilir.',
-            },
-            {
-              title: 'Kesilme Protokolü (Weaning — Ani Kesilmez!)',
-              detail:
-                'Dopamin infüzyonu asla aniden kapatılmamalıdır! Yarı ömrü ~2 dk olduğundan ve uzamış infüzyonda endojen noradrenalin depoları boşalmış olabileceğinden, ani kesilmesi ağır rebound hipotansiyona yol açar. Övolemi doğrulandıktan sonra doz her 15–30 dakikada bir kademeli olarak (ör. 1–2 mcg/kg/dk adımlarla) azaltılarak kesilir.',
-            },
-            {
-              title: 'Uzamış İnfüzyonda Taşiflaksi (Endojen Noradrenalin Depo Tükenmesi)',
-              detail:
-                'Dopaminin kardiyak inotropik etkisinin yaklaşık %50’si sempatik sinir uçlarından endojen noradrenalin salınımına bağlıdır. Kronik kalp yetmezliği veya >24–48 saat süren ağır şokta miyokardiyal noradrenalin depoları tükendiğinde dopamin yanıtı körelir (taşiflaksi); doğrudan etkili agonistlere (Noradrenalin / Dobutamin / Adrenalin) geçilmelidir.',
-            },
-          ]}
-        />
-      </div>
+      <OrganImpairmentGridBlock
+        isDark={isDark}
+        sectionId="sec-organ"
+        renalSummary="Plazma/doku MAO ve COMT ile hızla yıkılır; böbrek yetmezliğinde rutin başlangıç doz azaltımı gerekmez, klinik yanıta göre titre edilir."
+        renalDetails={[
+          'Dopaminin aktif molekülü plazma, böbrek ve karaciğerdeki MAO/COMT enzimleriyle dakikalar içinde inaktif HVA ve VMA metabolitlerine dönüştürülür; metabolitler idrarla atılır.',
+          'Ağır böbrek yetmezliğinde veya diyaliz/CRRT altında doğrudan hemodinamik hedefe göre titre edilir.',
+          'ANZICS ve KDIGO Uyarısı: Düşük doz (1–3 mcg/kg/dk) dopaminin oligürik ABH hastalarında böbrek fonksiyonunu koruduğu veya diyaliz ihtiyacını azalttığı görüşü tamamen çürütülmüştür.',
+        ]}
+        hepaticSummary="Karaciğer yetmezliğinde doku ve plazma MAO/COMT klirensi devam eder; başlangıç dozu klinik yanıta göre titre edilir."
+        hepaticDetails={[
+          'İleri evre sirozda (Child-Pugh C) splanknik dolaşım dinamikleri değiştiğinden yüksek doz (>10 mcg/kg/dk) dopamin portal basıncı ve mezenterik vazokonstriksiyonu etkileyebilir.',
+          'Hepatorenal sendromda (HRS) dopamin etkisizdir; Terlipressin veya Noradrenalin + Albümin tercih edilmelidir.',
+        ]}
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 10. FARMAKOKİNETİK AKORDİYON (id="pharmacokinetics", pkOpen=false)   */}
+      {/* 10. GERİATRİ & OBEZİTE (#sec-geriatri-obezite)                       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="pharmacokinetics"
-        className={`rounded-2xl border transition-all overflow-hidden ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <button
-          type="button"
-          onClick={() => setPkOpen(!pkOpen)}
-          aria-expanded={pkOpen}
-          className={`w-full p-5 sm:p-6 flex items-center justify-between text-left transition-colors cursor-pointer ${
-            isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <span>Farmakokinetik (ADME) Özellikleri</span>
-                <span className="text-xs font-normal px-2 py-0.5 rounded font-mono bg-amber-500/15 text-amber-700 dark:text-amber-300">
-                  t½: ~2 dk · %25 → Noradrenaline Dönüşüm
-                </span>
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Hızlı başlangıç (2–5 dk), plazma/doku MAO ve COMT metabolizması, KBB geçişi ve nöroendokrin dağılım.
-              </p>
-            </div>
-          </div>
-          {pkOpen ? (
-            <ChevronUp className="w-5 h-5 text-slate-400" />
-          ) : (
-            <ChevronDown className="w-5 h-5 text-slate-400" />
-          )}
-        </button>
-
-        {pkOpen && (
-          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800 space-y-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mt-4">
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  Etki Başlangıcı (Onset)
-                </span>
-                <span className="text-base font-bold font-mono text-amber-600 dark:text-amber-400 mt-1 block">
-                  2 – 5 Dakika
-                </span>
-                <span className="text-[10px] text-slate-400">IV infüzyon başlangıcı sonrası</span>
-              </div>
-
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  Pik Etki (Peak)
-                </span>
-                <span className="text-base font-bold font-mono text-teal-600 dark:text-teal-400 mt-1 block">
-                  5 – 10 Dakika
-                </span>
-                <span className="text-[10px] text-slate-400">Kararlı durum (Steady-state)</span>
-              </div>
-
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  Eliminasyon Yarı Ömrü (t½)
-                </span>
-                <span className="text-base font-bold font-mono text-indigo-600 dark:text-indigo-400 mt-1 block">
-                  ~2 Dakika
-                </span>
-                <span className="text-[10px] text-slate-400">Etki süresi: &lt; 10 dakika</span>
-              </div>
-
-              <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
-                <span className="block text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  Etki Süresi (Duration)
-                </span>
-                <span className="text-base font-bold font-mono text-rose-600 dark:text-rose-400 mt-1 block">
-                  &lt; 10 Dakika
-                </span>
-                <span className="text-[10px] text-slate-400">MAO-İ varlığında ~1 saate uzar!</span>
-              </div>
-            </div>
-
-            <div
-              className={`p-4 rounded-xl border text-xs sm:text-sm leading-relaxed space-y-2.5 ${
-                isDark ? 'bg-slate-800/40 border-slate-700 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-              }`}
-            >
-              <div>
-                <strong className="text-slate-900 dark:text-white">
-                  • Metabolizma (MAO &amp; COMT + %25 Endojen Noradrenaline Dönüşüm):
-                </strong>{' '}
-                Verilen dopaminin yaklaşık <strong>%75&apos;i</strong> karaciğer, böbrek ve plazmada{' '}
-                <strong>Monoamin Oksidaz (MAO)</strong> ve <strong>Katekol-O-Metiltransferaz (COMT)</strong> enzimleri ile
-                hızla inaktif homovanilik asit (HVA) ve vanililmandelik asit (VMA) metabolitlerine yıkılır (%80&apos;i 24
-                saatte idrarla atılır). Kalan <strong>yaklaşık %25&apos;i ise sempatik adrenerjik sinir uçlarına alınarak
-                dopamin β-hidroksilaz ile endojen noradrenaline dönüştürülür!</strong>
-              </div>
-              <div>
-                <strong className="text-slate-900 dark:text-white">
-                  • Dağılım &amp; Kan-Beyin Bariyeri (KBB):
-                </strong>{' '}
-                Polar yapısı nedeniyle sağlam <strong>kan-beyin bariyerini (KBB) GEÇMEZ</strong>. Ancak KBB dışında kalan
-                sirkumventriküler organları — özellikle <strong>hipotalamus/ön hipofiz median eminens</strong> ve{' '}
-                <strong>area postrema (kemoreseptör tetik bölgesi - CTZ)</strong> — doğrudan etkileyerek D₂ reseptörleri
-                üzerinden prolaktin/TSH baskılanması ve bulantı/kusma oluşturabilir.
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
+      <GeriatricAndObesityBlock
+        isDark={isDark}
+        sectionId="sec-geriatri-obezite"
+        geriatricReductionBadge="Düşük Başlangıç · Aritmi & İskemi İzlemi"
+        geriatricPoints={[
+          'Geriatrik hastalarda (>65 yaş) miyokardiyal β₁-reseptör yanıtı ve baroreseptör refleks kapasitesi azalmış; buna karşın altta yatan koroner arter hastalığı, atriyal fibrilasyon (AF) ve oklüziv periferik arter hastalığı sıklığı yüksektir.',
+          'Düşük dozla (2–5 mcg/kg/dk) başlanmalı ve yavaş titre edilmelidir; yaşlı septik veya kardiyojenik şok hastalarında dopamin ile yeni başlangıçlı hızlı AF ve miyokardiyal iskemi riski gençlere göre belirgin daha fazladır.',
+          'Periferik ekstremite perfüzyonu (kapiller dolum, parmak ucu sıcaklığı ve rengi) sık aralıklarla kontrol edilmelidir.',
+        ]}
+        obesityWeightScalarBadge="IBW (Başlangıç) → Yanıta Göre Titre Et"
+        obesityPoints={[
+          'Obezitede (BMI ≥ 30 kg/m²) yağ dokusunun vaskülaritesi düşük olduğundan ve dopamin hidrofilik yapısıyla intravasküler kompartmanda (Vd ~0,5 L/kg) dağıldığından, gerçek vücut ağırlığı (TBW) üzerinden doz hesaplanması aşırı yüksek başlangıç dozlarına, taşiaritmiye ve erken α₁ vazokonstriksiyona yol açar.',
+          'Başlangıç dozu İdeal Vücut Ağırlığı (IBW) (veya alternatif olarak Düzeltilmiş Vücut Ağırlığı - AdjBW) üzerinden hesaplanmalı; yarı ömrü (~2 dk) çok kısa olduğundan ardından hedef hemodinamik yanıta (MAP ve kalp hızı) göre dakika dakika titre edilmelidir.',
+          'Hesaplayıcı bölümündeki Obezite Doz Ölçekleyici ile boy/cinsiyete göre IBW tek tıkla uygulanabilir.',
+        ]}
+        clinicalNote="Hem geriatrik hem morbid obez hastalarda yüksek doz dopamin (>10 mcg/kg/dk) gereksinimi doğduğunda dozu artırmak yerine erken dönemde Noradrenaline geçilmesi taşiaritmi yükünü azaltır."
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 11. DERİN FARMAKODİNAMİK ANALİZ (id="pharmacodynamics", 4 Kademe)    */}
+      {/* 11. GEBELİK & LAKTASYON (#sec-gebelik)                               */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <PregnancyLactationBlock
+        isDark={isDark}
+        sectionId="sec-gebelik"
+        pregnancySummary="FDA Gebelik Kategorisi C · Yalnızca maternal hayati endikasyonda; yüksek dozda uterin arter vazokonstriksiyonu yapabilir."
+        pregnancyDetails={[
+          'Maternal şok veya dirençli semptomatik bradikardide anne hemodinamisini sağlamak fetal sağkalım için önceliklidir.',
+          'Ancak yüksek dozlarda (>10 mcg/kg/dk) α₁-aracılı uterin damar vazokonstriksiyonu uteroplasental kan akımını azaltabilir; obstetrik spinal hipotansiyonda ve septik şokta ilk tercih Noradrenalin veya Fenilefrindir.',
+        ]}
+        lactationSummary="Yarı ömrü ~2 dakika ve oral biyoyararlanımı %0 olduğundan emzirme açısından sistemik bebek maruziyeti beklenmez."
+        lactationDetails={[
+          'Dopamin GI kanaldan emilmez ve hızla inaktive olur; ancak intravenöz dopamin infüzyonu ön hipofiz D₂ reseptörlerini uyararak maternal serum Prolaktin düzeyini baskılar ve süt üretimini geçici olarak azaltabilir.',
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 12. OLUMSUZ ETKİLER (#sec-olumsuz)                                   */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <AdverseEffectsBlock
+        isDark={isDark}
+        sectionId="sec-olumsuz"
+        items={[
+          {
+            title: 'Taşiaritmiler (Sinüs Taşikardisi, AF, VT)',
+            incidenceOrSeverity: '%24,1 (SOAP-II)',
+            detail:
+              'Noradrenaline göre 2 kat fazla aritmi (%24,1 vs %12,4); pozitif kronotropi, artmış AV iletim ve ektopik odak aktivasyonu.',
+            tone: 'rose',
+          },
+          {
+            title: 'Miyokard Oksijen Tüketimi (MVO₂) Artışı & İskemi',
+            incidenceOrSeverity: 'Doz-Bağımlı',
+            detail:
+              'Taşikardi ve artmış kontraktilite koroner arter hastalığı veya kardiyojenik şokta subendokardiyal iskemiyi derinleştirir.',
+            tone: 'amber',
+          },
+          {
+            title: 'Ekstravazasyon Nekrozu & Periferik Gangren',
+            incidenceOrSeverity: 'Vezikan (α₁)',
+            detail:
+              'Periferik sızıntıda lokal doku nekrozu (antidot: Fentolamin); yüksek doz uzun süreli infüzyonda parmak ucu iskemisi.',
+            tone: 'rose',
+          },
+          {
+            title: 'Hipofizer Süpresyon & Bulantı/Kusma',
+            incidenceOrSeverity: 'D₂ Aracılı',
+            detail:
+              'KBB dışındaki ön hipofiz ve area postrema (CTZ) D₂ uyarımıyla Prolaktin/TSH/GH baskılanması ve uyanık hastada bulantı.',
+            tone: 'indigo',
+          },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 13. ÖZEL KLİNİK DURUMLAR & UYARILAR (#sec-ozel-durumlar)             */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      <SpecialClinicalCautionsBlock
+        isDark={isDark}
+        sectionId="sec-ozel-durumlar"
+        items={[
+          {
+            title: 'Sodyum Metabisülfit Alerjisi & Bronkospazm Riski',
+            detail:
+              'Türkiye’deki dopamin ampulleri antioksidan olarak sodyum metabisülfit içerir. Sülfit duyarlılığı olan (özellikle steroid bağımlı veya ağır astımlı) hastalarda akut bronkospazm ve anafilaktoid reaksiyon tetikleyebilir.',
+          },
+          {
+            title: 'Hipofizer & İmmün Baskılanma (Prolaktin, TSH ve GH Süpresyonu)',
+            detail:
+              'Ön hipofiz kan-beyin bariyeri dışında yer aldığından, dopamin infüzyonu D₂ reseptörleri üzerinden Prolaktin, TSH ve Büyüme Hormonu (GH) sekresyonunu güçlü şekilde baskılar. Bu durum kritik hastalık ötiroid hasta sendromunu maskeler/derinleştirir ve prolaktin düşüşüyle T-lenfosit immün yanıtını zayıflatabilir.',
+          },
+          {
+            title: 'Kesilme Protokolü (Weaning — Ani Kesilmez!)',
+            detail:
+              'Dopamin infüzyonu asla aniden kapatılmamalıdır! Yarı ömrü ~2 dk olduğundan ve uzamış infüzyonda endojen noradrenalin depoları boşalmış olabileceğinden, ani kesilmesi ağır rebound hipotansiyona yol açar. Övolemi doğrulandıktan sonra doz her 15–30 dakikada bir kademeli olarak (ör. 1–2 mcg/kg/dk adımlarla) azaltılarak kesilir.',
+          },
+          {
+            title: 'Uzamış İnfüzyonda Taşiflaksi (Endojen Noradrenalin Depo Tükenmesi)',
+            detail:
+              'Dopaminin kardiyak inotropik etkisinin yaklaşık %50’si sempatik sinir uçlarından endojen noradrenalin salınımına bağlıdır. Kronik kalp yetmezliği veya >24–48 saat süren ağır şokta miyokardiyal noradrenalin depoları tükendiğinde dopamin yanıtı körelir (taşiflaksi); doğrudan etkili agonistlere (Noradrenalin / Dobutamin / Adrenalin) geçilmelidir.',
+          },
+        ]}
+      />
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 14. DERİN FARMAKODİNAMİK ANALİZ (#sec-derin-pd, 4 Kademe)            */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DeepPharmacodynamicsBlock
         isDark={isDark}
-        sectionId="pharmacodynamics"
+        sectionId="sec-derin-pd"
         defaultOpen={false}
         receptorMechanism={{
           title: 'Hücre Zarı & Moleküler Hedef (GPCR Alt Tipleri: D₁/D₂ > β₁ > α₁ & Presinaptik NET Taşıyıcısı)',
@@ -1202,11 +1372,11 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 12. İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA (id="references")    */}
+      {/* 15. İLAÇ ETKİLEŞİMLERİ & KANITA DAYALI KAYNAKÇA (#sec-kaynaklar)     */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
-        sectionId="references"
+        sectionId="sec-kaynaklar"
         drugName="Dopamin Hidroklorür"
         structuredInteractions={[
           {
