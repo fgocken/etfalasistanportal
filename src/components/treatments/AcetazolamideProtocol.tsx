@@ -1056,6 +1056,11 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
             detail:
               'Asetazolamid lityum klirensini artırarak düzeyini düşürür; yüksek doz metotreksat klirensini değiştirebilir; topiramat veya zonisamid (diğer CA inhibitörleri) ile birlikte kullanıldığında ağır metabolik asidoz ve böbrek taşı riski katlanır.',
           },
+          {
+            title: 'Sülfonamid Çapraz Reaksiyon Miti (Strom NEJM 2003 · AAAAI)',
+            detail:
+              'Asetazolamid non-antibiyotik bir sülfonamiddir; TMP-SMX gibi antibiyotik sülfonamid alerjisi asetazolamid için gerçek çapraz kontrendikasyon oluşturmaz (ağır SJS/TEN/DRESS veya doğrudan asetazolamid anafilaksisi hariç).',
+          },
         ]}
       />
 

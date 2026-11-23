@@ -35,9 +35,11 @@ import {
 import {
   AdverseEffectsBlock,
   DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
   MonographQuickNav,
   SpecialClinicalCautionsBlock,
 } from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -218,13 +220,14 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
   const vtPumpMlHr_2mgml = vtMgHr / 2.0; // 2 mg/mL solüsyonda mL/saat
   const vtPumpMlHr_pure20mgml = vtMgHr / 20.0; // Saf %2 enjektörde mL/saat
 
-  // C. Perioperatif Sistemik IV İnfüzyon Hesapları
-  // Yükleme: 1.0 - 1.5 mg/kg IV bolus (10-15 dakikada)
-  const ivLoadTotalMg = Math.round(weightKg * ivLoadingMgKg * 10) / 10;
+  // C. Perioperatif Sistemik IV İnfüzyon Hesapları (Foo et al. Anaesthesia 2021 Uluslararası Konsensüsü)
+  // Yükleme: maks 1.5 mg/kg IBW (≥ 10 dk'da, maks 120 mg)
+  const ivLoadTotalMg = Math.min(120, Math.round(weightKg * ivLoadingMgKg * 10) / 10);
   const ivLoadMl_2pct = Math.round((ivLoadTotalMg / 20) * 10) / 10;
 
-  // İdame: 1.0 - 2.0 mg/kg/saat (ideal kiloya göre önerilir)
-  const ivMaintTotalMgHr = Math.round(weightKg * ivMaintMgKgHr * 10) / 10;
+  // İdame: maks 1.5 mg/kg/saat IBW · MUTLAK TAVAN ≤ 120 mg/saat (≤ 24 saat)
+  const ivMaintRawMgHr = Math.round(weightKg * ivMaintMgKgHr * 10) / 10;
+  const ivMaintTotalMgHr = Math.min(120, ivMaintRawMgHr);
   let ivBagConcMgMl = 2.0; // 1000 mg / 500 mL
   if (ivBagPrep === '500ml_2000mg') ivBagConcMgMl = 4.0;
   if (ivBagPrep === 'pure_2_percent') ivBagConcMgMl = 20.0;
@@ -232,18 +235,21 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
   const ivPumpRateMlHr = Math.round((ivMaintTotalMgHr / ivBagConcMgMl) * 10) / 10;
   const iv24HourCumulativeMg = Math.round(ivLoadTotalMg + ivMaintTotalMgHr * 24);
 
-  // D. ASRA LAST & %20 İntralipid Acil Kurtarma Hesapları
-  // Bolus: 1.5 mL/kg IV (1 dakikada puşe)
-  // İnfüzyon: 0.25 mL/kg/dk (15 mL/kg/saat)
-  // Kardiyovasküler instabilite devam ederse: Bolus 1-2 kez tekrarlanabilir, infüzyon 0.5 mL/kg/dk (30 mL/kg/saat)
-  // Maksimum Güvenli Toplam Doz: 12 mL/kg (ilk 30-60 dakikada)
-  const intralipidBolusMl = Math.round(weightKg * 1.5);
-  const intralipidInfusionRateMlHr = Math.round(
-    weightKg * (lastInfusionSpeed === 'standard' ? 15.0 : 30.0)
-  );
-  const intralipidInfusionRateMlMin = Math.round(
-    weightKg * (lastInfusionSpeed === 'standard' ? 0.25 : 0.5) * 10
-  ) / 10;
+  // D. ASRA LAST 2020 & %20 İntralipid Acil Kurtarma Hesapları
+  // ≥ 70 kg erişkin: SABİT 100 mL bolus (2–3 dk'da) + 200–250 mL / 15–20 dk infüzyon (~750–1000 mL/saat)
+  // < 70 kg hasta: 1.5 mL/kg bolus + 0.25 mL/kg/dk (15 mL/kg/saat) infüzyon
+  // Maksimum Güvenli Toplam Doz: ~12 mL/kg (ilk 30–60 dakikada)
+  const intralipidBolusMl = weightKg >= 70 ? 100 : Math.round(weightKg * 1.5);
+  const intralipidInfusionRateMlHr =
+    weightKg >= 70
+      ? lastInfusionSpeed === 'standard'
+        ? 800
+        : 1200
+      : Math.round(weightKg * (lastInfusionSpeed === 'standard' ? 15.0 : 30.0));
+  const intralipidInfusionRateMlMin =
+    weightKg >= 70
+      ? Number((intralipidInfusionRateMlHr / 60).toFixed(1))
+      : Math.round(weightKg * (lastInfusionSpeed === 'standard' ? 0.25 : 0.5) * 10) / 10;
   const intralipidMaxCeilingMl = Math.round(weightKg * 12.0);
 
   // Kümülatif verilen İntralipid tahmini
@@ -1140,8 +1146,19 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
               <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">kg</span>
             </div>
             <span className="text-[10px] text-slate-400 mt-1 block">
-              Doz hesaplamaları bu ağırlık üzerinden dinamik türetilir.
+              Foo 2021 Konsensüsü: IV analjezi ve blok üst sınırlarında İdeal Vücut Ağırlığı (IBW) + maks 120 mg/saat tavan uygulanır.
             </span>
+          </div>
+
+          <div className="sm:col-span-2 lg:col-span-3">
+            <ObesityDosingScaler
+              isDark={isDark}
+              drugName="Lidokain (IV / Blok)"
+              recommendedScalar="IBW"
+              rationale="Foo et al. (Anaesthesia 2021) ve ASRA 2020 rehberleri, obez hastalarda lokal anestezik toksisitesini (LAST) önlemek için İdeal Vücut Ağırlığı (IBW) kullanılmasını ve IV analjezi idamesinde 120 mg/saat tavanının aşılmamasını zorunlu kılar."
+              currentWeightKg={weightKg}
+              onApplyWeight={(w) => setWeightKg(Math.max(3, Math.min(200, w)))}
+            />
           </div>
 
           <div>
@@ -2156,6 +2173,18 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             detail:
               'Obstetrik epidural/bloklarda fetal asfiksi varsa bazik lidokain plasentadan geçip asidik fetal kanda iyonize olarak hapsolur ve neonatal kardiyodepresyon/hipotoni yaratabilir.',
           },
+        ]}
+      />
+
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="LIDOCAINE (Aritmal %2 vs %10 AMPUL KARIŞTIRMA!)"
+        confusionRiskWith="Aritmal %10 (500 mg/5 mL) ↔ Aritmal %2 (100 mg/5 mL) · Bupivakain"
+        antidoteOrRescue="ASRA LAST 2020 — %20 Lipid Emülsiyonu (Intralipid): ≥ 70 kg erişkinde SABİT 100 mL bolus (2–3 dk) + 200–250 mL / 15–20 dk infüzyon (< 70 kg: 1,5 mL/kg bolus + 0,25 mL/kg/dk). Propofol İntralipid yerine GEÇMEZ; vazopresin ve kalsiyum kanal blokerlerinden kaçının, epinefrin boluslarını ≤ 1 mcg/kg küçültün."
+        criticalAlerts={[
+          'Aritmal %10 (500 mg/5 mL) ampul ASLA doğrudan IV puşe edilmez; yalnızca seyreltilmiş infüzyon hazırlığı içindir.',
+          'Foo 2021 Konsensüsü: Perioperatif IV lidokain infüzyonu IBW ile ≤ 1,5 mg/kg/saat ve mutlak ≤ 120 mg/saat (≤ 24 saat) sınırında tutulur.',
+          'Rejyonel blok / lokal infiltrasyon ile IV lidokain infüzyonu eşzamanlı uygulanmaz (bloktan sonra ≥ 4 saat bekleme penceresi).',
         ]}
       />
 

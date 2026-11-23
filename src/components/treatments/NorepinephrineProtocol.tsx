@@ -37,6 +37,7 @@ import {
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
 } from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -714,6 +715,35 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
                   ))}
                 </div>
               </div>
+            </div>
+
+            <ObesityDosingScaler
+              isDark={isDark}
+              drugName="Noradrenalin"
+              recommendedScalar="AdjBW"
+              secondaryScalar={{ type: 'IBW', context: 'Morbid Obez' }}
+              rationale="Morbid obez hastalarda gerçek kilo (TBW) yerine IBW veya AdjBW kullanılması gereksiz yüksek vazopresör doz maruziyetini önler (SOBA / ESICM)."
+              currentWeightKg={weightKg}
+              onApplyWeight={(w) => setWeightKg(Math.min(150, Math.max(5, w)))}
+            />
+
+            {/* Türkiye Preparatı: 8 mg Bitartrat = 4 mg Baz Açıklaması */}
+            <div
+              className={`rounded-xl border p-3 text-xs leading-relaxed ${
+                isDark
+                  ? 'bg-amber-950/25 border-amber-500/40 text-amber-200'
+                  : 'bg-amber-50 border-amber-200 text-amber-950'
+              }`}
+            >
+              <strong className="block text-amber-700 dark:text-amber-300 mb-0.5">
+                Türkiye Preparatı Notu — 8 mg Bitartrat = 4 mg Baz (2:1 Oranı · ESICM 2023/2024)
+              </strong>
+              Türkiye&apos;deki standart 4 mL ampuller (<em>Steradin / Noradrenalin</em>) etiket olarak{' '}
+              <strong>8 mg noradrenalin bitartrat</strong> içerir; bu miktar tam olarak{' '}
+              <strong>4 mg noradrenalin baz</strong> eşdeğeridir. Klinik pratikte herkes ve uluslararası kılavuzlar
+              (ESICM 2023/2024 konsensüsü &amp; SSC 2021 vazopresin eşiği 0,25–0,50 mcg/kg/dk) hesaplamayı{' '}
+              <strong>4 mg baz</strong> üzerinden yapar — aşağıdaki hesaplayıcı <strong>4 mg baz</strong> cinsindendir
+              (bitartrat cinsinden ifade edilen protokoller bu değerin 2 katıdır).
             </div>
 
             {/* 2. Çözelti Hazırlama / Seyreltme Şeması */}

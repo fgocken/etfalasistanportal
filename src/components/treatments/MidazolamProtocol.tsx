@@ -31,7 +31,11 @@ import {
   Skull,
   Wine
 } from 'lucide-react';
-import { DrugReferencesAndInteractionsBlock } from './shared/DrugMonographBlocks';
+import {
+  DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
+} from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -969,6 +973,18 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
                 />
                 <span className="font-mono text-slate-500">kg</span>
               </div>
+            </div>
+
+            <div className="sm:col-span-2 lg:col-span-3">
+              <ObesityDosingScaler
+                isDark={isDark}
+                drugName="Midazolam"
+                recommendedScalar="IBW"
+                secondaryScalar={{ type: 'TBW', context: 'Tek Bolus' }}
+                rationale="SOBA / Miller's Anesthesia: Midazolam yüksek lipofiliktir; tek seferlik başlangıç bolusu dağılım hacmi (Vd) nedeniyle TBW'ye yakın verilebilirken, tekrarlayan dozlar ve YBÜ infüzyonları uzamış sedasyon/deliryumu önlemek için mutlaka IBW üzerinden hesaplanmalıdır."
+                currentWeightKg={weightKg}
+                onApplyWeight={(w) => setWeightKg(Math.max(3, Math.min(250, w)))}
+              />
             </div>
 
             <div>
@@ -1938,6 +1954,18 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
       </div>
 
       {/* 14. KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ SORGULAMA */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="midazoLAM (TR: 5 mg/1 mL vs 5 mg/5 mL · 5 KAT FARK!)"
+        confusionRiskWith="Dormicum 5 mg/1 mL (5 mg/mL) ↔ 5 mg/5 mL (1 mg/mL) · 15 mg/3 mL · 50 mg/10 mL"
+        antidoteOrRescue="Flumazenil (Anexate 0,5 mg/5 mL) — Dikkatli Titrasyon: Başlangıç 0,2 mg IV (15 sn’de); yanıt yoksa 60 sn arayla 0,1–0,2 mg tekrar (maks 1 mg). Kronik benzodiazepin bağımlısı, epilepsi veya trisiklik antidepresan (TCA) zehirlenmesinde KESİNLİKLE KONTRENDİKEDİR (status epileptikus!). Flumazenil yarı ömrü (~50 dk) kısa olduğu için yeniden sedasyon açısından ≥ 2 saat gözlem şarttır."
+        criticalAlerts={[
+          'Türkiye ampullerinde 1 mg/mL (5 mg/5 mL) ve 5 mg/mL (5 mg/1 mL, 15 mg/3 mL, 50 mg/10 mL) olmak üzere 5 kat konsantrasyon farkı vardır; daima etiket okuyun ve 1 mg/mL’ye sulandırarak uygulayın.',
+          'Böbrek yetmezliğinde aktif metabolit (1-OH-midazolam glukuronid) birikerek günlerce süren koma yapar.',
+          'SCCM PADIS 2018: Erişkin YBÜ’de benzodiazepinler deliryum riskini artırdığı için 1. tercih değildir (propofol/deksmedetomidin tercih edilir).',
+        ]}
+      />
+
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Midazolam"

@@ -1285,6 +1285,11 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
             detail:
               'Preoperatif sabah furosemid alan veya kronik yüksek doz kullanan hastalarda indüksiyonda derin hipotansiyon ve hipokalemiye bağlı aritmi riski yüksektir; preop K⁺/Mg²⁺ kontrolü şarttır.',
           },
+          {
+            title: 'Sülfonamid Alerjisi Çapraz Reaksiyon Miti (Strom NEJM 2003 · AAAAI)',
+            detail:
+              'Furosemid non-antibiyotik (arilamin halkası içermeyen) bir sülfonamiddir; antibiyotik sülfonamidlere (TMP-SMX) alerjisi olan hastalarda gerçek immünolojik çapraz reaksiyon gösterilmemiştir. Yalnızca geçmişte ağır SCAR (SJS/TEN/DRESS) öyküsü varsa veya doğrudan furosemide anafilaksi geliştiyse kaçınılır.',
+          },
         ]}
       />
 

@@ -25,7 +25,11 @@ import {
   Layers,
   FileText
 } from 'lucide-react';
-import { DrugReferencesAndInteractionsBlock } from './shared/DrugMonographBlocks';
+import {
+  DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
+} from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -969,6 +973,16 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
                   </button>
                 ))}
               </div>
+              <div className="mt-2.5">
+                <ObesityDosingScaler
+                  isDark={isDark}
+                  drugName="Fentanil"
+                  recommendedScalar="LBW"
+                  rationale="SOBA / Miller's Anesthesia: Fentanil yüksek lipofilik yapısıyla obezitede yağ dokusunda birikerek uzamış solunum depresyonu yapar; başlangıç ve idame dozları Yağsız Vücut Ağırlığına (LBW) göre titre edilmelidir."
+                  currentWeightKg={weightKg}
+                  onApplyWeight={(w) => setWeightKg(Math.max(3, Math.min(250, w)))}
+                />
+              </div>
             </div>
 
             {/* Çözelti / Konsantrasyon Seçimi */}
@@ -1882,6 +1896,18 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 14: KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="FENTANYL (50 mcg/mL · Ultra-Potent Opioid)"
+        confusionRiskWith="REMİFENTANİL · SUFENTANİL · ALFENTANİL · MORFİN"
+        antidoteOrRescue="Nalokson HCl (PACU Mikro-Titrasyon: 20–40 mcg IV): Solunum depresyonunda önce hava yolu/BVM ventilasyon; PACU’da 20–40 mcg IV q2–3 dk titre edin (tam ampul puşe edilmez!). Göğüs duvarı rijiditesi BVM ventilasyonunu engelliyorsa kısa etkili NMB (süksinilkolin/roküronyum) veya Nalokson uygulayın."
+        criticalAlerts={[
+          'Hızlı yüksek doz bolus (> 3–5 mcg/kg) akut göğüs duvarı / vokal kord rijiditesine ("tahta göğüs") yol açabilir.',
+          'Uzun süreli infüzyonlarda CSHT hızla uzar (4 saatte ~250 dk); ekstübasyon öncesi erken azaltım gerekir.',
+          'MAOI, linezolid, metilen mavisi ve SSRI/SNRI kullanan hastalarda Serotonin Sendromu açısından dikkatli olunmalıdır.',
+        ]}
+      />
+
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Fentanil"

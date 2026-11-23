@@ -23,8 +23,11 @@ import {
 } from 'lucide-react';
 import {
   DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
   PregnancyLactationBlock,
+  SpecialClinicalCautionsBlock,
 } from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -646,6 +649,18 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
                     kg
                   </span>
                 </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <ObesityDosingScaler
+                  isDark={isDark}
+                  drugName="Deksmedetomidin"
+                  recommendedScalar="AdjBW"
+                  secondaryScalar={{ type: 'LBW', context: 'Morbid Obez' }}
+                  rationale="SOBA / Miller's Anesthesia: Morbid obez hastalarda TBW ile dozlama aşırı plazma düzeyi, derin bradikardi ve uzamış sedasyona yol açar; AdjBW veya LBW tercih edilir."
+                  currentWeightKg={weightKg}
+                  onApplyWeight={(w) => setWeightKg(Math.max(2, Math.min(250, w)))}
+                />
               </div>
 
               <div>
@@ -1511,6 +1526,39 @@ export const DexmedetomidineProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
+
+      <SpecialClinicalCautionsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'SPICE III ≤ 65 Yaş Mortalite Sinyali (EMA 2022 Güvenlik Uyarısı)',
+            detail:
+              'SPICE III RKÇ’sinin (NEJM 2019; Intensive Care Med 2021 alt grup analizi) ardından EMA (2022), ≤ 65 yaş kritik yoğun bakım hastalarında deksmedetomidinin standart sedatiflere kıyasla artmış 90 günlük mortalite riski taşıyabileceğine dair resmi uyarı yayımlamıştır. Genç/non-operatif kritik hastalarda alternatif sedasyonla fayda-risk dengesi gözetilmelidir.',
+          },
+          {
+            title: 'Deksmedetomidin Kaynaklı Santral Hipertermi (İlaç Ateşi)',
+            detail:
+              'Uzun süreli YBÜ infüzyonlarında enfeksiyon dışı, antibiyotiğe yanıtsız yüksek ateş (≥ 38,5–40 °C) gelişebilir ve sıklıkla sepsis sanılır. Hipotalamik α₂ termoregülasyon etkisine bağlıdır; infüzyon kesildiğinde ateş 6–12 saat içinde hızla geriler.',
+          },
+          {
+            title: 'Yükleme Dozu ve Bifazik Hemodinamik Yanıt',
+            detail:
+              'Hızlı IV bolus (> 10 dk’dan kısa) periferik α₂B uyarısıyla geçici şiddetli hipertansiyon, ardından derin bradikardi/AV blok/asistoli tetikleyebilir. Hemodinamik olarak kırılgan veya yaşlı hastalarda yükleme dozu atlanmalıdır.',
+          },
+        ]}
+      />
+
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="dexmedeTOMIDINE (4 mcg/mL Standart Seyreltme)"
+        confusionRiskWith="Deksametazon · Dobutamin · Klonidin"
+        antidoteOrRescue="Spesifik Klinik Antidot YOK (Atipamezol Veteriner) — Destekleyici Tedavi: İnfüzyonu derhal durdurun. Semptomatik bradikardide Atropin 0,5–1 mg IV (veya glikopirolat), hipotansiyonda dengeli kristaloid + vazopresör (noradrenalin/efedrin) uygulayın."
+        criticalAlerts={[
+          '200 mcg/2 mL flakon ASLA sulandırılmadan puşe edilmez; standart 4 mcg/mL (200 mcg / 50 mL SF) pompa protokolü kullanılır.',
+          '2. veya 3. derece AV blok (pacemaker yoksa) ve ciddi bradikardide infüzyon başlatılmamalıdır.',
+          '≤ 65 yaş kritik YBÜ hastalarında EMA 2022 uyarısı doğrultusunda endikasyon ve alternatif sedatifler yeniden değerlendirilmelidir.',
+        ]}
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 14. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}

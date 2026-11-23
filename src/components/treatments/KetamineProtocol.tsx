@@ -35,9 +35,11 @@ import {
 import {
   AdverseEffectsBlock,
   DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
   MonographQuickNav,
   SpecialClinicalCautionsBlock,
 } from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -1112,6 +1114,18 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
             </span>
           </div>
 
+          <div className="sm:col-span-2 lg:col-span-3">
+            <ObesityDosingScaler
+              isDark={isDark}
+              drugName="Ketamin"
+              recommendedScalar="LBW"
+              secondaryScalar={{ type: 'IBW', context: 'Subanestezik Analjezi' }}
+              rationale="SOBA / Miller's Anesthesia: Obez hastalarda ketamin indüksiyonu ve subanestezik analjezi infüzyonu aşırı psikomimetik yan etki ve uzamış derlenmeyi önlemek için LBW/IBW üzerinden hesaplanmalıdır."
+              currentWeightKg={weightKg}
+              onApplyWeight={(w) => setWeightKg(Math.max(3, Math.min(200, w)))}
+            />
+          </div>
+
           <div>
             <label htmlFor={profileSelectId} className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
               Klinik Profil &amp; Hemodinamik Durum
@@ -1918,6 +1932,18 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* =========================================================================
           BÖLÜM 13: KANITA DAYALI KAYNAKÇA VE KILAVUZLAR
           ========================================================================= */}
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="KETAMINE (50 mg/mL Konsantre Flakon — 10 mg/mL SULANDIR!)"
+        confusionRiskWith="Ketalar 50 mg/mL (500 mg/10 mL) ↔ 10 mg/mL Sulandırılmış Enjektör"
+        antidoteOrRescue="Spesifik Antidot YOK — Hava Yolu & Psikomimetik Yönetim: Aşırı dozda destekleyici ventilasyon ve hemodinamik izlem esastır. Şiddetli uyanma ajitasyonu/halüsinasyonda Midazolam 1–2 mg IV (veya propofol küçük bolus); laringospazmda çene itme, CPAP, gerekirse propofol/süksinilkolin uygulanır."
+        criticalAlerts={[
+          'Türkiye’deki 500 mg/10 mL (50 mg/mL) flakon direkt subanestezik puşe için aşırı konsantredir; 10 mg/mL’ye (2 mL = 100 mg + 8 mL SF) sulandırıp etiketleyin.',
+          'Endojen katekolamin deposu tükenmiş ağır şokta ketaminin direkt miyokardiyal depresan etkisi baskın çıkabilir; dozu %50 azaltın ve vazopresör hazır bulundurun.',
+          'Subanestezik analjezi (0,15–0,3 mg/kg bolus · 0,1–0,2 mg/kg/saat) ile indüksiyon (1–2 mg/kg IV) dozları karıştırılmamalıdır.',
+        ]}
+      />
+
       <DrugReferencesAndInteractionsBlock
         isDark={isDark}
         drugName="Ketamin"

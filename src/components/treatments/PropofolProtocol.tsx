@@ -26,7 +26,11 @@ import {
   FileText,
   AlertOctagon
 } from 'lucide-react';
-import { DrugReferencesAndInteractionsBlock } from './shared/DrugMonographBlocks';
+import {
+  DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
+} from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -430,10 +434,13 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
           <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30' : 'bg-rose-50 border-rose-200'}`}>
             <h4 className="text-xs sm:text-sm font-bold text-rose-800 dark:text-rose-300 flex items-center gap-2 mb-1.5">
               <AlertOctagon className="w-4 h-4 text-rose-500 shrink-0" />
-              <span>Soya ve Yumurta Lesitini Anafilaksi Öyküsü</span>
+              <span>Propofole Bilinen Anafilaksi (Yumurta/Soya Miti Düzeltmesi)</span>
             </h4>
             <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-              Propofol veya taşıyıcı lipid emülsiyonundaki bileşenlere (soya fasulyesi yağı, arıtılmış yumurta fosfatidi/lesitini, gliserol) bilinen anafilaktik aşırı duyarlılığı olan hastalarda kesinlikle kontrendikedir. (Klinik Not: Saf yumurta akı alerjisi [ovalbumin] genellikle lesitin ile çapraz reaksiyon vermez, ancak anafilaksi öyküsü varsa dikkatli olunmalıdır).
+              Yalnızca <strong>propofolün kendisine</strong> veya emülsiyon bileşenlerine karşı doğrulanmış anafilaksi
+              öyküsü mutlak kontrendikasyondur. <strong>AAAAI, AAGBI ve Miller&apos;s Anesthesia</strong> kılavuzlarına göre
+              gıda tipi <strong>yumurta veya soya alerjisi propofol için kontrendikasyon DEĞİLDİR</strong> (emülsiyon
+              rafine soya yağı ve arıtılmış yumurta fosfatidi içerir; alerjen protein içermez).
             </p>
           </div>
 
@@ -912,6 +919,18 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
                 />
                 <span className="font-mono text-slate-500">kg</span>
               </div>
+            </div>
+
+            <div className="sm:col-span-2 lg:col-span-4">
+              <ObesityDosingScaler
+                isDark={isDark}
+                drugName="Propofol"
+                recommendedScalar="LBW"
+                secondaryScalar={{ type: 'AdjBW', context: 'TIVA İdame' }}
+                rationale="SOBA / Miller's Anesthesia: Obez hastalarda propofol indüksiyon bolusu Yağsız Vücut Ağırlığına (LBW) göre verilir (TBW ile bolus derin hipotansiyon yapar); TIVA idame infüzyonu ise AdjBW/TBW üzerinden titre edilir."
+                currentWeightKg={weightKg}
+                onApplyWeight={(w) => setWeightKg(Math.max(10, Math.min(250, w)))}
+              />
             </div>
 
             <div>
@@ -1674,6 +1693,18 @@ export const PropofolProtocol: React.FC<Props> = ({ isDark }) => {
           </p>
         </div>
       </div>
+
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="PROPOFOL (%1 [10 mg/mL] vs %2 [20 mg/mL] DİKKAT!)"
+        confusionRiskWith="Propofol %2 (20 mg/mL) ↔ Propofol %1 (10 mg/mL) · İntralipid %20"
+        antidoteOrRescue="Spesifik Antidot YOK — PRIS Acil Yönetim & Destek: Propofolün farmakolojik antidotu yoktur; kısa etki süresine güvenilerek solunum/hemodinami desteklenir. PRIS şüphesinde (açıklanamayan laktik asidoz, rabdomiyoliz, Brugada benzeri EKG, hiperkalemi) infüzyonu DERHAL kesin, alternatif sedasyona geçin, agresif hemodinamik destek ve gerekirse CRRT/ECMO planlayın."
+        criticalAlerts={[
+          'Aseptik 6/12 Saat Kuralı: Enjektöre çekilen propofol ≤ 6 saatte, orijinal flakon infüzyonu ≤ 12 saatte değiştirilir (bakteriyel kontaminasyon ve sepsis riski).',
+          'PRIS Tavanı: Erişkin YBÜ sedasyonunda > 4 mg/kg/saat ve > 48 saat infüzyondan kaçının; 16 yaş altında uzun süreli YBÜ sedasyonu KESİNLİKLE kontrendikedir.',
+          'Propofol %1 ile %2 flakonları karıştırılmamalı; %2 yalnızca TIVA/YBÜ pompası için etiketlenmelidir.',
+        ]}
+      />
 
       {/* 14. KANITA DAYALI KAYNAKÇA VE İLAÇ ETKİLEŞİMİ SORGULAMA */}
       <DrugReferencesAndInteractionsBlock

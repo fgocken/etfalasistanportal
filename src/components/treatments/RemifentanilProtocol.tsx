@@ -24,9 +24,12 @@ import {
 } from 'lucide-react';
 import {
   DrugReferencesAndInteractionsBlock,
+  HighAlertSafetyBlock,
   MonographCopyButton,
   PregnancyLactationBlock,
+  SpecialClinicalCautionsBlock,
 } from './shared/DrugMonographBlocks';
+import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
   isDark: boolean;
@@ -678,6 +681,17 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
                   <span className="absolute right-3.5 top-2.5 text-xs text-slate-400 pointer-events-none font-medium">
                     kg
                   </span>
+                </div>
+                <div className="mt-2">
+                  <ObesityDosingScaler
+                    isDark={isDark}
+                    drugName="Remifentanil"
+                    recommendedScalar="LBW"
+                    secondaryScalar={{ type: 'IBW', context: 'İdeal Kilo' }}
+                    rationale="Minto PK/PD modeli & SOBA: Obez hastalarda remifentanil KESİNLİKLE gerçek kiloya (TBW) göre verilmez; TBW ile dozlama derin hipotansiyon, bradikardi ve rijidite yapar. LBW veya IBW kullanılmalıdır."
+                    currentWeightKg={weightKg}
+                    onApplyWeight={(w) => setWeightKg(Math.max(2, Math.min(250, w)))}
+                  />
                 </div>
                 <div className="flex flex-wrap gap-1.5 mt-2">
                   <button
@@ -1456,6 +1470,39 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
           </div>
         </div>
       </section>
+
+      <SpecialClinicalCautionsBlock
+        isDark={isDark}
+        items={[
+          {
+            title: 'Bağlama Duyarlı Yarı Ömür (CSHT ~3–4 dk — İnfüzyon Süresinden Bağımsız)',
+            detail:
+              'Non-spesifik plazma ve doku esterazlarıyla hızla yıkıldığı için remifentanilin bağlama duyarlı yarı ömrü (CSHT) 1 saatlik veya 10 saatlik infüzyon sonunda değişmez (~3–4 dakika). Organ yetmezliğinden (böbrek/karaciğer) etkilenmez; ancak analjezi de dakikalar içinde biter.',
+          },
+          {
+            title: 'Akut Opioid Kaynaklı Hiperaljezi (OIH) & Köprü Analjezi Zorunluluğu',
+            detail:
+              'Özellikle > 0,2–0,3 mcg/kg/dk yüksek doz ve uzun infüzyon sonrası NMDA reseptör aktivasyonu ile postoperatif hiperaljezi gelişebilir. İnfüzyon kapatılmadan 20–30 dk önce mutlaka köprü analjezik (morfin/fentanil/parasetamol/NSAİİ veya düşük doz ketamin) uygulanmalıdır.',
+          },
+          {
+            title: 'İntratekal / Epidural Uygulama KESİNLİKLE KONTRENDİKEDİR (Glisin Taşıyıcı)',
+            detail:
+              'Ticari remifentanil flakonları taşıyıcı olarak nörotoksik glisin içerir; spinal veya epidural yoldan asla uygulanmaz.',
+          },
+        ]}
+      />
+
+      <HighAlertSafetyBlock
+        isDark={isDark}
+        tallManName="remiFENTANIL (Ultra-Potent Opioid · Ayrı Hat + Çek-Valf!)"
+        confusionRiskWith="FENTANİL · SUFENTANİL · ALFENTANİL"
+        antidoteOrRescue="Nalokson HCl + Acil Pozitif Basınçlı Ventilasyon: İnfüzyonu derhal durdurun ve hattaki ölü boşluğu (dead-space) yıkamayın! Apne/göğüs duvarı rijiditesinde %100 O₂ ile BVM ventilasyonu; rijidite ventilasyonu engelliyorsa kısa etkili NMB (süksinilkolin/roküronyum) veya Nalokson 40–80 mcg IV titre edin."
+        criticalAlerts={[
+          'Ölü Boşluk (Dead-Space) Kazası: Remifentanil hattı asla hızlı sıvı bolusu verilen ana hattan puşe edilmez; hasta uyandıktan sonra hatta kalan kalıntı tek seferde giderek ani apne/rijidite yapabilir.',
+          'Obez hastalarda (VKİ ≥ 30) daima LBW veya IBW ile dozlanır; TBW ile dozlama ağır bradikardi ve hipotansiyon riskidir.',
+          'İnfüzyon bitiminde hat tamamen çıkarılmalı veya izole şekilde temizlenmelidir.',
+        ]}
+      />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 14. KANITA DAYALI KAYNAKÇA & İLAÇ ETKİLEŞİMİ DIŞ BAĞLANTILARI       */}
