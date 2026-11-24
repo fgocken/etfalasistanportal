@@ -48,6 +48,7 @@ import { DobutamineProtocol } from './DobutamineProtocol';
 import { SugammadexProtocol } from './SugammadexProtocol';
 import { HydrocortisoneProtocol } from './HydrocortisoneProtocol';
 import { DexamethasoneProtocol } from './DexamethasoneProtocol';
+import { MethylprednisoloneProtocol } from './MethylprednisoloneProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1321,6 +1322,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'methylprednisolone',
+    category: 'medications',
+    categories: ['medications'],
+    categoryLabel: 'Orta Etkili Steroid (5× · 0,5 MK) · ARDS & Pulse',
+    badge: 'Bronkospazm 40–125 mg · ARDS · Pulse',
+    title: 'Metilprednizolon Sodyum Süksinat (METHYLPREDNISOLONE · Prednol-L)',
+    shortDesc: 'Orta etkili (12–36 sa) yüksek akciğer penetrasyonlu glukokortikoid; akut astım/KOAH bronkospazmı (40–125 mg IV), post-ekstübasyon stridor (François Lancet 2007), erken ağır ARDS (Meduri 1 mg/kg/gün infüzyon), pulse tedavi (250–1000 mg) ve MRC CRASH TBH kontrendikasyonu.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Liyofilize Ampul / Flakon',
+        value: '20 · 40 · 250 mg',
+        subtext: 'Prednol-L® · Precort-Liyo® · Solu-Medrol®',
+        tooltip: 'Prednol-L® 20/40/250 mg liyofilize ampul ve Solu-Medrol® 40–1000 mg flakon; ≥250 mg pulse dozlar ASLA hızlı puşe edilmez (≥30–60 dk infüzyon + EKG)',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'Bronkospazm & Post-Ekstübasyon',
+        value: '40–125 mg · 20 mg q4h×4',
+        subtext: 'Astım/KOAH · François Lancet 2007',
+        tooltip: 'Akut astım/KOAH’da 40–125 mg IV; post-ekstübasyon stridor profilaksisinde ekstübasyondan 12 sa önce başlayarak 20 mg IV q4h × 4 doz (toplam 80 mg)',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Erken Ağır ARDS (Meduri)',
+        value: '1 mg/kg → 1 mg/kg/gün',
+        subtext: 'Sürekli IV infüzyon × 14 gün · SCCM 2024',
+        tooltip: 'Meduri (Chest 2007) & SCCM 2024: 1 mg/kg IV yükleme ardından 1 mg/kg/gün sürekli infüzyon × 14 gün ve kademeli azaltma (ani kesme rebound ARDS yapar)',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Pulse Aritmi & CRASH TBH',
+        value: '≥30–60 dk İnfüzyon · TBH ✗',
+        subtext: '4 mg MP = 20 mg HC = 0,75 mg Deksa',
+        tooltip: 'Hızlı pulse (>250–1000 mg) kardiyak arrest/bradikardi yapabilir; travmatik beyin hasarında (MRC CRASH Lancet 2004) mortaliteyi artırdığı için KESİNLİKLE KONTRENDİKEDİR',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -1419,7 +1471,14 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     dekort: 'dexamethasone',
     onadron: 'dexamethasone',
     deksamet: 'dexamethasone',
-    gadexon: 'dexamethasone'
+    gadexon: 'dexamethasone',
+    metilprednizolon: 'methylprednisolone',
+    prednol: 'methylprednisolone',
+    'prednol-l': 'methylprednisolone',
+    precort: 'methylprednisolone',
+    'precort-liyo': 'methylprednisolone',
+    cortipol: 'methylprednisolone',
+    'solu-medrol': 'methylprednisolone'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -2085,6 +2144,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 26: DEKSAMETAZON SODYUM FOSFAT MONOGRAFİSİ & PONV / HAVAYOLU / BEYİN ÖDEMİ / ARDS HESAPLAYICISI */}
       {(activeProtocolId === 'dexamethasone' || activeProtocolId === 'deksametazon' || activeProtocolId === 'dekort' || activeProtocolId === 'onadron' || activeProtocolId === 'deksamet' || activeProtocolId === 'gadexon') && (
         <DexamethasoneProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 27: METİLPREDNİZOLON SODYUM SÜKSİNAT MONOGRAFİSİ & BRONKOSPAZM / STRİDOR / ARDS / PULSE HESAPLAYICISI */}
+      {(activeProtocolId === 'methylprednisolone' || activeProtocolId === 'metilprednizolon' || activeProtocolId === 'prednol' || activeProtocolId === 'prednol-l' || activeProtocolId === 'precort' || activeProtocolId === 'precort-liyo' || activeProtocolId === 'cortipol' || activeProtocolId === 'solu-medrol') && (
+        <MethylprednisoloneProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
