@@ -14,7 +14,8 @@ import {
   Footprints,
   Coffee,
   Baby,
-  Moon
+  Moon,
+  Calculator
 } from 'lucide-react';
 import { MaceCalculator } from './MaceCalculator';
 import { AsaClassification } from '../asa/AsaClassification';
@@ -22,6 +23,7 @@ import { DasiCalculator } from './DasiCalculator';
 import { StopBangCalculator } from './StopBangCalculator';
 import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
 import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
+import { WeightFluidCalculator } from '../calculator/WeightFluidCalculator';
 import { PortalLink } from '../common/PortalLink';
 import { useHashSubRoute } from '../../hooks/useHashSubRoute';
 
@@ -31,8 +33,8 @@ interface PreoperativeEvaluationProps {
   onOpenGastricUsg?: () => void;
 }
 
-export type PreopToolId = 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting';
-const VALID_PREOP_TOOL_IDS: readonly PreopToolId[] = ['stop-bang', 'mace', 'dasi', 'asa', 'adult-fasting', 'pediatric-fasting'];
+export type PreopToolId = 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting' | 'weight-fluid';
+const VALID_PREOP_TOOL_IDS: readonly PreopToolId[] = ['stop-bang', 'mace', 'dasi', 'asa', 'adult-fasting', 'pediatric-fasting', 'weight-fluid'];
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -176,6 +178,27 @@ const PREOP_CARDS: PreopCardItem[] = [
       { label: 'Anne Sütü', value: '3 Saat', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
       { label: 'Bebek Maması', value: '4 Saat', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
       { label: 'Katı / İnek Sütü', value: '6 Saat', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' }
+    ]
+  },
+  {
+    id: 'weight-fluid',
+    title: 'Kilo, MV Volüm & İdame Sıvı Hesaplayıcısı',
+    badge: 'IBW · PBW · AdjBW · 4-2-1',
+    category: 'Antropometri · Ventilasyon & Sıvı',
+    shortDesc: 'İdeal Kilo (IBW Devine), Öngörülen Kilo (PBW ARDSnet), VKİ/BMI, Düzeltilmiş Kilo (AdjBW), Koruyucu Tidal Volüm (6–8 & 4–6 mL/kg) ve Holliday-Segar 4-2-1 İdame Sıvı hızı.',
+    icon: Calculator,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-600',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    highlightsHeader: 'Hesaplanan Parametreler:',
+    highlights: [
+      { label: 'IBW / PBW', value: 'Devine · ARDSnet', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Obezite', value: 'VKİ & AdjBW', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Tidal Volüm', value: '6–8 / 4–6 mL/kg', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'İdame Sıvı', value: '4-2-1 Kuralı', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' }
     ]
   }
 ];
@@ -381,6 +404,10 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
           isDark={isDark}
           onOpenAdult={() => handleSelectTool('adult-fasting')}
         />
+      )}
+
+      {activeToolId === 'weight-fluid' && (
+        <WeightFluidCalculator isDark={isDark} />
       )}
 
     </div>
