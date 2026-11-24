@@ -47,6 +47,7 @@ import { DopamineProtocol } from './DopamineProtocol';
 import { DobutamineProtocol } from './DobutamineProtocol';
 import { SugammadexProtocol } from './SugammadexProtocol';
 import { HydrocortisoneProtocol } from './HydrocortisoneProtocol';
+import { DexamethasoneProtocol } from './DexamethasoneProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1269,6 +1270,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'dexamethasone',
+    category: 'medications',
+    categories: ['medications'],
+    categoryLabel: 'Saf Glukokortikoid (25–30× · 0 MK) · PONV & Anti-Ödem',
+    badge: 'PONV 4–8 mg · ARDS 20 mg · 36–72 sa',
+    title: 'Deksametazon Sodyum Fosfat (DEXAMETHASONE · Dekort)',
+    shortDesc: 'Uzun etkili (36–72 sa) saf glukokortikoid (0 mineralokortikoid); PONV profilaksisi (Gan 2020 4–8 mg), PNB analjezik adjuvanı, post-ekstübasyon stridor/krup, beyin tümörü vazojenik ödemi (TBH’de kontrendike!), COVID-19 (RECOVERY) & ARDS (DEXA-ARDS) protokolü.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul (Kullanıma Hazır)',
+        value: '8 mg / 2 mL (4 mg/mL)',
+        subtext: 'Dekort® · Onadron® · Deksamet® · Gadexon®',
+        tooltip: '1 ampul = 8 mg/2 mL (4 mg/mL) berrak çözelti; uyanık hastada hızlı IV puşe şiddetli perineal yanma yapar — en az 1–3 dk’da veya 50–100 mL SF içinde yavaş verin',
+        colorClass: 'text-purple-700 dark:text-purple-300',
+        bgClass: 'bg-purple-500/10',
+        borderClass: 'border-purple-500/30'
+      },
+      {
+        label: 'PONV & PNB Adjuvanı',
+        value: '4–8 mg IV (İndüksiyonda)',
+        subtext: 'Gan 2020 · IV 4–8 mg PNB uzatma',
+        tooltip: 'PONV için indüksiyonda 4–8 mg IV (0,15 mg/kg pediatrik, maks 8 mg); PNB süresini 4–8 saat uzatmak için IV yol perinöral kadar etkilidir ve nörotoksisite riski taşımaz',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'COVID-19 & Orta-Ağır ARDS',
+        value: '6 mg/gün · 20→10 mg/gün',
+        subtext: 'RECOVERY NEJM 2021 · DEXA-ARDS 2020',
+        tooltip: 'Hipoksemik COVID-19’da 6 mg/gün × 10 gün (RECOVERY); orta-ağır ARDS’de 20 mg/gün × 5 gün → 10 mg/gün × 5 gün (DEXA-ARDS)',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: '0 Mineralokortikoid & TBH Uyarısı',
+        value: 'Tümör Ödemi ✓ · TBH ✗',
+        subtext: 'CRASH: TBH’de mortalite ↑ · 0,75 mg = 20 mg HC',
+        tooltip: 'Sıfır mineralokortikoid etkisi ile beyin tümörü vazojenik ödeminde idealdir; ancak travmatik beyin hasarında (TBH) CRASH çalışması nedeniyle KESİNLİKLE KONTRENDİKEDİR',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -1362,7 +1414,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     hidrokortizon: 'hydrocortisone',
     'hydrocort-liyo': 'hydrocortisone',
     hidrozon: 'hydrocortisone',
-    'solu-cortef': 'hydrocortisone'
+    'solu-cortef': 'hydrocortisone',
+    deksametazon: 'dexamethasone',
+    dekort: 'dexamethasone',
+    onadron: 'dexamethasone',
+    deksamet: 'dexamethasone',
+    gadexon: 'dexamethasone'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -2023,6 +2080,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 25: HİDROKORTİZON SODYUM SÜKSİNAT MONOGRAFİSİ & SEPTİK ŞOK / ADRENAL KRİZ / STEROİD EŞDEĞERLİK HESAPLAYICISI */}
       {(activeProtocolId === 'hydrocortisone' || activeProtocolId === 'hidrokortizon' || activeProtocolId === 'hydrocort-liyo' || activeProtocolId === 'hidrozon' || activeProtocolId === 'solu-cortef') && (
         <HydrocortisoneProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 26: DEKSAMETAZON SODYUM FOSFAT MONOGRAFİSİ & PONV / HAVAYOLU / BEYİN ÖDEMİ / ARDS HESAPLAYICISI */}
+      {(activeProtocolId === 'dexamethasone' || activeProtocolId === 'deksametazon' || activeProtocolId === 'dekort' || activeProtocolId === 'onadron' || activeProtocolId === 'deksamet' || activeProtocolId === 'gadexon') && (
+        <DexamethasoneProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
