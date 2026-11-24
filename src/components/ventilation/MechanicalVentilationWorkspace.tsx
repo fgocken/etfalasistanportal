@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, ChevronRight, Gauge, Wind } from 'lucide-react';
 import { ShareLinkButton } from '../common/ShareLinkButton';
+import { PortalLink } from '../common/PortalLink';
 import { OxygenTherapyModule } from './OxygenTherapyModule';
 import { MedicalText } from '../basics/respiratory/MedicalText';
-import { parseHashRoute, updateHashRoute } from '../../utils/deepLink';
+import { buildHashHref, parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 
 export type VentilationCardId = 'oxygen-therapy';
 
@@ -65,7 +66,12 @@ export const MechanicalVentilationWorkspace: React.FC<MechanicalVentilationWorks
     if (isValidVentilationCardId(initialCardId)) {
       setSelectedCardId(initialCardId);
     } else if (initialCardId === null) {
-      setSelectedCardId(null);
+      const route = parseHashRoute();
+      if (route.type === 'arac' && route.id === 'mechanical-ventilation' && isValidVentilationCardId(route.subId)) {
+        setSelectedCardId(route.subId);
+      } else {
+        setSelectedCardId(null);
+      }
     }
   }, [initialCardId]);
 
@@ -167,10 +173,10 @@ export const MechanicalVentilationWorkspace: React.FC<MechanicalVentilationWorks
       {/* Card Board Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {VENTILATION_CARDS.map((card) => (
-          <button
+          <PortalLink
             key={card.id}
-            type="button"
-            onClick={() => handleSelectCard(card.id)}
+            href={buildHashHref('arac', 'mechanical-ventilation', card.id)}
+            onNavigate={() => handleSelectCard(card.id)}
             className={`group text-left rounded-2xl border p-5 sm:p-6 transition-all duration-200 flex flex-col justify-between gap-5 cursor-pointer ${
               isDark
                 ? 'bg-slate-900/80 border-slate-800 hover:border-sky-500/50 hover:bg-slate-900'
@@ -245,7 +251,7 @@ export const MechanicalVentilationWorkspace: React.FC<MechanicalVentilationWorks
               <span className="truncate">{card.publisher}</span>
               <span className="font-semibold whitespace-nowrap text-sky-500">Modülü Oku →</span>
             </div>
-          </button>
+          </PortalLink>
         ))}
       </div>
 

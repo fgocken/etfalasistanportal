@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ShieldCheck, Compass, Crosshair, Activity, Droplet, AlertTriangle, Syringe } from 'lucide-react';
 import { IvAccessInfographic } from '../infographics/IvAccessInfographic';
 import { UsgCvcModule } from './UsgCvcModule';
 import { LandmarkCvcModule } from './LandmarkCvcModule';
 import { ArterialCannulationModule } from './ArterialCannulationModule';
+import { PortalLink } from '../common/PortalLink';
+import { useHashSubRoute } from '../../hooks/useHashSubRoute';
 
 interface VascularAccessWorkspaceProps {
   isDark: boolean;
@@ -72,23 +74,19 @@ const SUB_MODULES: SubModuleTab[] = [
   },
 ];
 
-const isValidVascularSubModule = (id?: string | null): id is VascularSubModuleId =>
-  Boolean(id && SUB_MODULES.some((m) => m.id === id));
+const VALID_VASCULAR_SUB_MODULES: readonly VascularSubModuleId[] = SUB_MODULES.map((m) => m.id);
 
 export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = ({
   isDark,
   initialSubModule,
 }) => {
-  const [activeSubModule, setActiveSubModule] = useState<VascularSubModuleId>(
-    isValidVascularSubModule(initialSubModule) ? initialSubModule : 'peripheral-iv'
+  const { activeSubId, selectSub, getSubHref } = useHashSubRoute<VascularSubModuleId>(
+    'vascular-access',
+    (initialSubModule as VascularSubModuleId | null) || undefined,
+    VALID_VASCULAR_SUB_MODULES
   );
 
-  useEffect(() => {
-    if (isValidVascularSubModule(initialSubModule)) {
-      setActiveSubModule(initialSubModule);
-    }
-  }, [initialSubModule]);
-
+  const activeSubModule: VascularSubModuleId = activeSubId ?? 'peripheral-iv';
   const currentTab = SUB_MODULES.find((m) => m.id === activeSubModule) || SUB_MODULES[0];
 
   return (
@@ -144,10 +142,10 @@ export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = (
             const Icon = mod.icon;
             const isSelected = activeSubModule === mod.id;
             return (
-              <button
+              <PortalLink
                 key={mod.id}
-                type="button"
-                onClick={() => setActiveSubModule(mod.id)}
+                href={getSubHref(mod.id)}
+                onNavigate={() => selectSub(mod.id)}
                 className={`p-3 rounded-xl border text-left transition-colors cursor-pointer flex items-start gap-2.5 ${
                   isSelected
                     ? isDark
@@ -186,7 +184,7 @@ export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = (
                     {mod.subtitle}
                   </div>
                 </div>
-              </button>
+              </PortalLink>
             );
           })}
         </div>
@@ -221,13 +219,13 @@ export const VascularAccessWorkspace: React.FC<VascularAccessWorkspaceProps> = (
             <strong>03 · Landmark Metodu ile SVK</strong> ve <strong>04 · İnvaziv Arteriyel Kanülasyon</strong>{' '}
             modüllerini kullanabilirsiniz.
           </p>
-          <button
-            type="button"
-            onClick={() => setActiveSubModule('peripheral-iv')}
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-700 text-white transition-colors cursor-pointer"
+          <PortalLink
+            href={getSubHref('peripheral-iv')}
+            onNavigate={() => selectSub('peripheral-iv')}
+            className="inline-flex items-center px-4 py-2 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-700 transition-colors cursor-pointer"
           >
-            Periferik IV Erişim Modülüne Dön
-          </button>
+            <span className="text-white">Periferik IV Erişim Modülüne Dön</span>
+          </PortalLink>
         </section>
       )}
     </div>

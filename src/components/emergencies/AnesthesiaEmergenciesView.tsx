@@ -22,7 +22,8 @@ import { ANESTHESIA_EMERGENCIES_DATA } from '../../data/emergenciesData';
 import { EMERGENCY_TROUBLESHOOTING_ITEMS } from '../../data/emergenciesTroubleshootingData';
 import { EmergencyProtocolDetailView } from './EmergencyProtocolDetailView';
 import { EmergencyTroubleshootingDetailView } from './EmergencyTroubleshootingDetailView';
-import { updateHashRoute } from '../../utils/deepLink';
+import { PortalLink } from '../common/PortalLink';
+import { buildHashHref, parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 
 interface AnesthesiaEmergenciesViewProps {
   isDark: boolean;
@@ -245,20 +246,52 @@ const TROUBLESHOOTING_PREVIEWS: TroubleshootingPreview[] = [
   }
 ];
 
+const isValidEmergencyId = (id: string | null | undefined): id is string =>
+  Boolean(
+    id &&
+      (ANESTHESIA_EMERGENCIES_DATA[id] ||
+        EMERGENCY_TROUBLESHOOTING_ITEMS.some((item) => item.id === id))
+  );
+
 export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps> = ({ 
   isDark,
   initialEmergencyId 
 }) => {
-  const [selectedEmergencyId, setSelectedEmergencyId] = useState<string | null>(initialEmergencyId || null);
+  const [selectedEmergencyId, setSelectedEmergencyId] = useState<string | null>(() => {
+    if (isValidEmergencyId(initialEmergencyId)) return initialEmergencyId;
+    const route = parseHashRoute();
+    if (route.type === 'arac' && route.id === 'emergencies' && isValidEmergencyId(route.subId)) {
+      return route.subId;
+    }
+    return null;
+  });
   const [feedbackNotice, setFeedbackNotice] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<EmergencyDomainFilter>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
-    if (initialEmergencyId !== undefined) {
+    if (isValidEmergencyId(initialEmergencyId)) {
       setSelectedEmergencyId(initialEmergencyId);
+    } else if (initialEmergencyId === null) {
+      const route = parseHashRoute();
+      if (route.type === 'arac' && route.id === 'emergencies' && isValidEmergencyId(route.subId)) {
+        setSelectedEmergencyId(route.subId);
+      } else {
+        setSelectedEmergencyId(null);
+      }
     }
   }, [initialEmergencyId]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const route = parseHashRoute();
+      if (route.type === 'arac' && route.id === 'emergencies') {
+        setSelectedEmergencyId(isValidEmergencyId(route.subId) ? route.subId : null);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const filterTabs = useMemo(() => {
     const countByCat = (cat: EmergencyClinicalCategory) =>
@@ -540,10 +573,14 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
               const categoryTitle = CATEGORY_LABELS[item.category];
 
               return (
-                <div
+                <PortalLink
                   key={item.id}
-                  onClick={() => handleSelectEmergency(item.id)}
-                  className={`p-4 rounded-xl border relative overflow-hidden transition-all group cursor-pointer ${
+                  href={isReady ? buildHashHref('arac', 'emergencies', item.id) : undefined}
+                  disabled={!isReady}
+                  onNavigate={() => handleSelectEmergency(item.id)}
+                  className={`block p-4 rounded-xl border relative overflow-hidden transition-all group ${
+                    isReady ? 'cursor-pointer' : 'cursor-not-allowed'
+                  } ${
                     isReady
                       ? isDark 
                         ? 'bg-gradient-to-b from-red-950/30 to-slate-800/80 border-red-500/50 hover:border-red-400 shadow-sm hover:shadow-red-950/40' 
@@ -604,7 +641,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
                       </span>
                     )}
                   </div>
-                </div>
+                </PortalLink>
               );
             })}
           </div>
@@ -650,10 +687,11 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
             {filteredTroubleshooting.map((item) => {
               const Icon = item.icon;
               return (
-                <div
+                <PortalLink
                   key={item.id}
-                  onClick={() => handleSelectEmergency(item.id)}
-                  className={`p-4 rounded-xl border relative overflow-hidden transition-all group cursor-pointer ${
+                  href={buildHashHref('arac', 'emergencies', item.id)}
+                  onNavigate={() => handleSelectEmergency(item.id)}
+                  className={`block p-4 rounded-xl border relative overflow-hidden transition-all group cursor-pointer ${
                     isDark
                       ? 'bg-gradient-to-b from-teal-950/20 to-slate-800/70 border-teal-500/35 hover:border-teal-400 shadow-sm'
                       : 'bg-gradient-to-b from-teal-50/60 to-white border-teal-200 hover:border-teal-400 hover:shadow-md'
@@ -693,7 +731,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
-                </div>
+                </PortalLink>
               );
             })}
           </div>

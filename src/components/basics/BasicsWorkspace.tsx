@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, BookOpenCheck, ChevronRight, HeartPulse, Wind } from 'lucide-react';
 import { ShareLinkButton } from '../common/ShareLinkButton';
+import { PortalLink } from '../common/PortalLink';
 import { RespiratoryPhysiologyWorkspace } from './RespiratoryPhysiologyWorkspace';
 import { CardiovascularPhysiologyWorkspace } from './CardiovascularPhysiologyWorkspace';
 import { MedicalText } from './respiratory/MedicalText';
-import { parseHashRoute, updateHashRoute } from '../../utils/deepLink';
+import { buildHashHref, parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 
 interface BasicsWorkspaceProps {
   isDark: boolean;
@@ -87,7 +88,12 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
     if (isValidBasicsCardId(initialCardId)) {
       setSelectedCardId(initialCardId);
     } else if (initialCardId === null) {
-      setSelectedCardId(null);
+      const route = parseHashRoute();
+      if (route.type === 'arac' && route.id === 'basics' && isValidBasicsCardId(route.subId)) {
+        setSelectedCardId(route.subId);
+      } else {
+        setSelectedCardId(null);
+      }
     }
   }, [initialCardId]);
 
@@ -194,10 +200,10 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
           const IconComponent = card.icon;
           const isRose = card.accent === 'rose';
           return (
-            <button
+            <PortalLink
               key={card.id}
-              type="button"
-              onClick={() => handleSelectCard(card.id)}
+              href={buildHashHref('arac', 'basics', card.id)}
+              onNavigate={() => handleSelectCard(card.id)}
               className={`group text-left rounded-2xl border p-5 sm:p-6 transition-all duration-200 flex flex-col justify-between gap-5 cursor-pointer ${
                 isDark
                   ? isRose
@@ -301,7 +307,7 @@ export const BasicsWorkspace: React.FC<BasicsWorkspaceProps> = ({
                   Özeti Oku →
                 </span>
               </div>
-            </button>
+            </PortalLink>
           );
         })}
       </div>

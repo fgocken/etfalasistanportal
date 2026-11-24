@@ -189,6 +189,15 @@ export function parseHashRoute(): ParsedHashRoute {
 }
 
 /**
+ * SPA içi <a href="..."> bağlantıları için standart hash URL üretir.
+ * Örn: buildHashHref('arac', 'preop', 'stop-bang') => '#arac=preop&sub=stop-bang'
+ */
+export function buildHashHref(type: HashRouteType, id: string, subId?: string | null): string {
+  const base = `#${type}=${id}`;
+  return subId ? `${base}&sub=${subId}` : base;
+}
+
+/**
  * Belirli bir bölüm için tam paylaşılabilir URL oluşturur.
  */
 export function buildShareUrl(type: HashRouteType, id: string): string {

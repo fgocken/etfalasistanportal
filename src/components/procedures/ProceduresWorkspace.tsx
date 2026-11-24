@@ -33,6 +33,8 @@ import {
   getProcedureById 
 } from '../../data/procedures';
 import { ProcedureDetailView } from './ProcedureDetailView';
+import { PortalLink } from '../common/PortalLink';
+import { useHashSubRoute } from '../../hooks/useHashSubRoute';
 
 interface ProceduresWorkspaceProps {
   isDark: boolean;
@@ -225,48 +227,48 @@ const SPECIALTY_CONFIG: Record<SurgicalSpecialty, {
   }
 };
 
+const isSpecialtySubId = (id: string | null): id is SurgicalSpecialty | 'all' =>
+  Boolean(id && (id === 'all' || SURGICAL_SPECIALTIES.some((s) => s.id === id)));
+
 export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
   isDark,
   initialProcedureId
 }) => {
-  // initialProcedureId varsa doğrudan o prosedürün branşını açacak şekilde başlangıç ayarı yapılır
-  const initialProcedure = useMemo(() => {
-    if (!initialProcedureId) return null;
-    return getProcedureById(initialProcedureId) || null;
-  }, [initialProcedureId]);
+  const { activeSubId, selectSub, clearSub, getSubHref } = useHashSubRoute<string>(
+    'procedures',
+    initialProcedureId || undefined
+  );
+
+  const activeProcedure = useMemo(() => {
+    if (!activeSubId) return null;
+    return getProcedureById(activeSubId) || null;
+  }, [activeSubId]);
 
   // selectedSpecialty: null ise ana "Branş Kartları" görünümü gösterilir.
   // Bir branşa basılırsa o branşın ID'si atanır. 'all' ise düz tüm liste modudur.
-  const [selectedSpecialty, setSelectedSpecialty] = useState<SurgicalSpecialty | 'all' | null>(
-    initialProcedure ? initialProcedure.specialty : null
-  );
+  const [selectedSpecialty, setSelectedSpecialty] = useState<SurgicalSpecialty | 'all' | null>(() => {
+    if (activeProcedure) return activeProcedure.specialty;
+    if (isSpecialtySubId(activeSubId)) return activeSubId;
+    return null;
+  });
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedProcedureId, setSelectedProcedureId] = useState<string | null>(initialProcedureId || null);
 
   useEffect(() => {
-    if (initialProcedureId === undefined) return;
-    if (initialProcedureId) {
-      const proc = getProcedureById(initialProcedureId);
-      if (proc) {
-        setSelectedSpecialty(proc.specialty);
-        setSelectedProcedureId(proc.id);
-        setSearchQuery('');
-        return;
-      }
+    if (activeProcedure) {
+      setSelectedSpecialty((prev) => (prev === 'all' ? 'all' : activeProcedure.specialty));
+      setSearchQuery('');
+    } else if (isSpecialtySubId(activeSubId)) {
+      setSelectedSpecialty(activeSubId);
+    } else if (activeSubId === null) {
+      setSelectedSpecialty(null);
     }
-    setSelectedProcedureId(null);
-  }, [initialProcedureId]);
+  }, [activeSubId, activeProcedure]);
 
   // Arama sonuçları
   const filteredProcedures = useMemo(() => {
     const scope = selectedSpecialty === null ? 'all' : selectedSpecialty;
     return searchProcedures(searchQuery, scope);
   }, [searchQuery, selectedSpecialty]);
-
-  const activeProcedure = useMemo(() => {
-    if (!selectedProcedureId) return null;
-    return getProcedureById(selectedProcedureId) || null;
-  }, [selectedProcedureId]);
 
   // Seçili branşın meta bilgisi
   const activeSpecialtyMeta = useMemo(() => {
@@ -296,7 +298,7 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
       <ProcedureDetailView 
         procedure={activeProcedure}
         isDark={isDark}
-        onBack={() => setSelectedProcedureId(null)}
+        onBack={() => (selectedSpecialty ? selectSub(selectedSpecialty) : clearSub())}
       />
     );
   }
@@ -395,7 +397,7 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
 
           {filteredProcedures.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              {filteredProcedures.map((proc) => renderProcedureCard(proc, isDark, setSelectedProcedureId))}
+              {filteredProcedures.map((proc) => renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub))}
             </div>
           ) : (
             renderEmptyState(isDark, searchQuery)
@@ -415,9 +417,9 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
               </span>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setSelectedSpecialty('all')}
+            <PortalLink
+              href={getSubHref('all')}
+              onNavigate={() => selectSub('all')}
               className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer flex items-center gap-1.5 self-start sm:self-auto ${
                 isDark 
                   ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-teal-300 hover:border-teal-500/40' 
@@ -426,7 +428,7 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
             >
               <span>Tüm Prosedürleri Listele ({REGISTERED_PROCEDURES.length})</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </PortalLink>
           </div>
 
           {/* Branş Kartları Grid */}
@@ -442,9 +444,10 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
               const IconComponent = config.icon;
 
               return (
-                <div
+                <PortalLink
                   key={spec.id}
-                  onClick={() => setSelectedSpecialty(spec.id)}
+                  href={getSubHref(spec.id)}
+                  onNavigate={() => selectSub(spec.id)}
                   className={`p-5 rounded-2xl border transition-all cursor-pointer group flex flex-col justify-between gap-4 ${
                     isDark
                       ? `bg-slate-900/80 border-slate-800 ${config.borderHover} hover:bg-slate-900 shadow-sm hover:shadow-md`
@@ -490,7 +493,7 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
                       <ChevronRight className="w-4 h-4" />
                     </div>
                   </div>
-                </div>
+                </PortalLink>
               );
             })}
           </div>
@@ -501,9 +504,9 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
           {/* Breadcrumb ve Geri Dön Butonu */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setSelectedSpecialty(null)}
+              <PortalLink
+                href={getSubHref(null)}
+                onNavigate={clearSub}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
                   isDark
                     ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-teal-300'
@@ -512,7 +515,7 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Tüm Cerrahi Branşlar</span>
-              </button>
+              </PortalLink>
 
               <span className="text-slate-400 text-xs">/</span>
 
@@ -537,32 +540,34 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
 
             {/* Hızlı Branş Değiştirici Butonları */}
             <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 scrollbar-thin">
-              <button
-                type="button"
-                onClick={() => setSelectedSpecialty('all')}
+              <PortalLink
+                href={getSubHref('all')}
+                onNavigate={() => selectSub('all')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-bold whitespace-nowrap transition-all cursor-pointer ${
                   selectedSpecialty === 'all'
                     ? isDark ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40' : 'bg-teal-700 text-white'
                     : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Tümü
-              </button>
+                <span className={selectedSpecialty === 'all' && !isDark ? 'text-white' : undefined}>Tümü</span>
+              </PortalLink>
               {SURGICAL_SPECIALTIES.filter(s => (procedureCountsBySpecialty[s.id] || 0) > 0).map((spec) => {
                 const isCurrent = selectedSpecialty === spec.id;
                 return (
-                  <button
+                  <PortalLink
                     key={spec.id}
-                    type="button"
-                    onClick={() => setSelectedSpecialty(spec.id)}
+                    href={getSubHref(spec.id)}
+                    onNavigate={() => selectSub(spec.id)}
                     className={`px-2.5 py-1 rounded-md text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
                       isCurrent
                         ? isDark ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40' : 'bg-teal-700 text-white'
                         : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {spec.shortName} ({procedureCountsBySpecialty[spec.id]})
-                  </button>
+                    <span className={isCurrent && !isDark ? 'text-white' : undefined}>
+                      {spec.shortName} ({procedureCountsBySpecialty[spec.id]})
+                    </span>
+                  </PortalLink>
                 );
               })}
             </div>
@@ -596,7 +601,7 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
           {/* Prosedür Kartları Grid */}
           {filteredProcedures.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              {filteredProcedures.map((proc) => renderProcedureCard(proc, isDark, setSelectedProcedureId))}
+              {filteredProcedures.map((proc) => renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub))}
             </div>
           ) : (
             renderEmptyState(isDark, searchQuery)
@@ -689,6 +694,7 @@ function getShortGoldStandard(proc: ProcedureDefinition): string {
 function renderProcedureCard(
   proc: ProcedureDefinition,
   isDark: boolean,
+  href: string,
   onSelect: (id: string) => void
 ) {
   const bleeding = getShortBleeding(proc);
@@ -696,9 +702,10 @@ function renderProcedureCard(
   const goldStandardText = getShortGoldStandard(proc);
 
   return (
-    <div
+    <PortalLink
       key={proc.id}
-      onClick={() => onSelect(proc.id)}
+      href={href}
+      onNavigate={() => onSelect(proc.id)}
       className={`p-4 rounded-xl border transition-all cursor-pointer group flex flex-col justify-between gap-3 ${
         isDark 
           ? 'bg-slate-900/80 border-slate-800 hover:border-teal-500/50 hover:bg-slate-900 shadow-2xs hover:shadow-sm' 
@@ -797,7 +804,7 @@ function renderProcedureCard(
           <ChevronRight className="w-3.5 h-3.5" />
         </div>
       </div>
-    </div>
+    </PortalLink>
   );
 }
 

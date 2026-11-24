@@ -881,9 +881,27 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
   const [dragOverToolId, setDragOverToolId] = useState<ToolTabId | null>(null);
   const [isRosterModalOpen, setIsRosterModalOpen] = useState<boolean>(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
-  const [selectedEmergencyProtocolId, setSelectedEmergencyProtocolId] = useState<string | null>(null);
-  const [selectedPreopToolId, setSelectedPreopToolId] = useState<PreopToolId | null>(null);
-  const [selectedAirwayCardId, setSelectedAirwayCardId] = useState<AirwayCardId | null>(null);
+  const [selectedEmergencyProtocolId, setSelectedEmergencyProtocolId] = useState<string | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'emergencies' && route.subId) {
+      return route.subId;
+    }
+    return null;
+  });
+  const [selectedPreopToolId, setSelectedPreopToolId] = useState<PreopToolId | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'preop' && route.subId) {
+      return route.subId as PreopToolId;
+    }
+    return null;
+  });
+  const [selectedAirwayCardId, setSelectedAirwayCardId] = useState<AirwayCardId | null>(() => {
+    const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
+    if (route?.type === 'arac' && route.id === 'airway' && route.subId) {
+      return route.subId as AirwayCardId;
+    }
+    return null;
+  });
   const [selectedTreatmentProtocolId, setSelectedTreatmentProtocolId] = useState<string | null>(null);
   const [selectedNerveBlockId, setSelectedNerveBlockId] = useState<string | null>(null);
   const [activeNerveBlockSubId, setActiveNerveBlockSubId] = useState<string | null>(null);
@@ -1041,11 +1059,13 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       case 'preop': {
         setSelectedPreopToolId((subId as PreopToolId) || null);
         handleSelectTab('preop', { preservePreopTool: true });
+        updateHashRoute('arac', subId ? `preop&sub=${subId}` : 'preop');
         break;
       }
       case 'airway': {
         setSelectedAirwayCardId((subId as AirwayCardId) || null);
         handleSelectTab('airway', { preserveAirwayCard: true });
+        updateHashRoute('arac', subId ? `airway&sub=${subId}` : 'airway');
         break;
       }
       case 'intraop': {

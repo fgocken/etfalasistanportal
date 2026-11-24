@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { 
   Activity, 
   ChevronRight, 
@@ -14,50 +14,29 @@ import {
   Info
 } from 'lucide-react';
 import { IcuAdmissionCriteriaView, IcuCriteriaTabType } from './IcuAdmissionCriteriaView';
+import { PortalLink } from '../common/PortalLink';
+import { useHashSubRoute } from '../../hooks/useHashSubRoute';
 
 interface IcuWorkspaceProps {
   isDark: boolean;
   initialSubId?: string | null;
 }
 
-type IcuSubView = 'hub' | 'admission_criteria' | 'scoring';
+const VALID_ICU_TABS: readonly IcuCriteriaTabType[] = ['priority', 'diagnosis', 'objective', 'levels', 'scoring'];
 
-const VALID_ICU_TABS: IcuCriteriaTabType[] = ['priority', 'diagnosis', 'objective', 'levels', 'scoring'];
-const isValidIcuTab = (id?: string | null): id is IcuCriteriaTabType =>
-  Boolean(id && VALID_ICU_TABS.includes(id as IcuCriteriaTabType));
-
-export const IcuWorkspace: React.FC<IcuWorkspaceProps> = ({ isDark, initialSubId = null }) => {
-  const [currentView, setCurrentView] = useState<IcuSubView>(() => {
-    if (isValidIcuTab(initialSubId)) {
-      return initialSubId === 'scoring' ? 'scoring' : 'admission_criteria';
-    }
-    return 'hub';
-  });
-  const [targetTab, setTargetTab] = useState<IcuCriteriaTabType>(
-    isValidIcuTab(initialSubId) ? initialSubId : 'priority'
+export const IcuWorkspace: React.FC<IcuWorkspaceProps> = ({ isDark, initialSubId }) => {
+  const { activeSubId, selectSub, clearSub, getSubHref } = useHashSubRoute<IcuCriteriaTabType>(
+    'icu',
+    (initialSubId as IcuCriteriaTabType | null) || undefined,
+    VALID_ICU_TABS
   );
 
-  useEffect(() => {
-    if (initialSubId === undefined) return;
-    if (isValidIcuTab(initialSubId)) {
-      setTargetTab(initialSubId);
-      setCurrentView(initialSubId === 'scoring' ? 'scoring' : 'admission_criteria');
-    } else if (initialSubId === null) {
-      setCurrentView('hub');
-    }
-  }, [initialSubId]);
-
-  const openApp = (view: 'admission_criteria' | 'scoring', tab: IcuCriteriaTabType = 'priority') => {
-    setTargetTab(tab);
-    setCurrentView(view);
-  };
-
-  if (currentView !== 'hub') {
+  if (activeSubId) {
     return (
       <IcuAdmissionCriteriaView
         isDark={isDark}
-        initialTab={targetTab}
-        onBack={() => setCurrentView('hub')}
+        initialTab={activeSubId}
+        onBack={clearSub}
       />
     );
   }
@@ -109,8 +88,9 @@ export const IcuWorkspace: React.FC<IcuWorkspaceProps> = ({ isDark, initialSubId
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Card 1: Yoğun Bakım Endikasyonu (Kabul Kriterleri) */}
-          <div 
-            onClick={() => openApp('admission_criteria', 'priority')}
+          <PortalLink
+            href={getSubHref('priority')}
+            onNavigate={() => selectSub('priority')}
             className={`group rounded-2xl border p-5 sm:p-6 flex flex-col justify-between transition-all duration-200 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 ${
               isDark 
                 ? 'bg-slate-800/40 hover:bg-slate-800/70 border-slate-800 hover:border-rose-500/50' 
@@ -167,11 +147,12 @@ export const IcuWorkspace: React.FC<IcuWorkspaceProps> = ({ isDark, initialSubId
                 4 Model Rehberi
               </span>
             </div>
-          </div>
+          </PortalLink>
 
           {/* Card 2: Fizyolojik Skorlama Sistemleri (SOFA & NEWS2) */}
-          <div 
-            onClick={() => openApp('scoring', 'scoring')}
+          <PortalLink
+            href={getSubHref('scoring')}
+            onNavigate={() => selectSub('scoring')}
             className={`group rounded-2xl border p-5 sm:p-6 flex flex-col justify-between transition-all duration-200 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 ${
               isDark 
                 ? 'bg-slate-800/40 hover:bg-slate-800/70 border-slate-800 hover:border-teal-500/50' 
@@ -224,7 +205,7 @@ export const IcuWorkspace: React.FC<IcuWorkspaceProps> = ({ isDark, initialSubId
                 İnteraktif Hesaplama
               </span>
             </div>
-          </div>
+          </PortalLink>
         </div>
 
         {/* Info banner at bottom */}

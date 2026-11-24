@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Activity,
   ArrowLeft,
@@ -16,6 +16,8 @@ import { RSIvsElectiveInfographic } from '../infographics/RSIvsElectiveInfograph
 import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
 import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
 import { AirwayEquipmentSizer } from './AirwayEquipmentSizer';
+import { PortalLink } from '../common/PortalLink';
+import { useHashSubRoute } from '../../hooks/useHashSubRoute';
 
 interface AirwayManagementViewProps {
   isDark: boolean;
@@ -206,14 +208,15 @@ const AIRWAY_CARDS: AirwayCardItem[] = [
   }
 ];
 
-export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDark, initialCardId = null }) => {
-  const [activeCardId, setActiveCardId] = useState<AirwayCardId | null>(initialCardId);
+const VALID_AIRWAY_CARD_IDS: readonly AirwayCardId[] = AIRWAY_CARDS.map((c) => c.id);
 
-  useEffect(() => {
-    if (initialCardId !== undefined) {
-      setActiveCardId(initialCardId);
-    }
-  }, [initialCardId]);
+export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDark, initialCardId }) => {
+  const {
+    activeSubId: activeCardId,
+    selectSub: selectCard,
+    clearSub: clearCard,
+    getSubHref
+  } = useHashSubRoute<AirwayCardId>('airway', initialCardId || undefined, VALID_AIRWAY_CARD_IDS);
 
   const selectedCard = AIRWAY_CARDS.find((c) => c.id === activeCardId);
 
@@ -226,9 +229,9 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {activeCardId ? (
-              <button
-                type="button"
-                onClick={() => setActiveCardId(null)}
+              <PortalLink
+                href={getSubHref(null)}
+                onNavigate={clearCard}
                 className={`p-2 rounded-xl border transition-colors cursor-pointer flex items-center justify-center ${
                   isDark
                     ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
@@ -237,7 +240,7 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
                 title="Tüm Havayolu Araçlarına Dön"
               >
                 <ArrowLeft className="w-5 h-5 text-cyan-500" />
-              </button>
+              </PortalLink>
             ) : (
               <div className={`p-2.5 rounded-xl ${
                 isDark ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/20' : 'bg-cyan-50 text-cyan-700 border border-cyan-200'
@@ -264,9 +267,9 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
           </div>
 
           {activeCardId && (
-            <button
-              type="button"
-              onClick={() => setActiveCardId(null)}
+            <PortalLink
+              href={getSubHref(null)}
+              onNavigate={clearCard}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
                 isDark
                   ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
@@ -275,7 +278,7 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
             >
               <ArrowLeft className="w-3.5 h-3.5 text-cyan-500" />
               <span>Tüm Havayolu Araçlarına Dön</span>
-            </button>
+            </PortalLink>
           )}
         </div>
       </div>
@@ -292,9 +295,10 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
             {AIRWAY_CARDS.map((card) => {
               const Icon = card.icon;
               return (
-                <div
+                <PortalLink
                   key={card.id}
-                  onClick={() => setActiveCardId(card.id)}
+                  href={getSubHref(card.id)}
+                  onNavigate={() => selectCard(card.id)}
                   className={`group relative rounded-2xl border p-5 sm:p-6 transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                     isDark
                       ? `bg-slate-900 border-slate-800 ${card.borderHoverDark} hover:bg-slate-800/60 shadow-xs`
@@ -358,7 +362,7 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
                       <ChevronRight className="w-4 h-4" />
                     </div>
                   </div>
-                </div>
+                </PortalLink>
               );
             })}
           </div>
@@ -372,28 +376,28 @@ export const AirwayManagementView: React.FC<AirwayManagementViewProps> = ({ isDa
       {activeCardId === 'adult-fasting' && (
         <AdultFastingInfographic
           isDark={isDark}
-          onOpenPediatric={() => setActiveCardId('pediatric-fasting')}
-          onOpenGastricUsg={() => setActiveCardId('gastric-usg')}
+          onOpenPediatric={() => selectCard('pediatric-fasting')}
+          onOpenGastricUsg={() => selectCard('gastric-usg')}
         />
       )}
       {activeCardId === 'pediatric-fasting' && (
         <PediatricFastingInfographic
           isDark={isDark}
-          onOpenAdult={() => setActiveCardId('adult-fasting')}
+          onOpenAdult={() => selectCard('adult-fasting')}
         />
       )}
       {activeCardId === 'adult-equipment-sizer' && (
         <AirwayEquipmentSizer
           isDark={isDark}
           scope="adult"
-          onOpenPediatric={() => setActiveCardId('pediatric-equipment-sizer')}
+          onOpenPediatric={() => selectCard('pediatric-equipment-sizer')}
         />
       )}
       {activeCardId === 'pediatric-equipment-sizer' && (
         <AirwayEquipmentSizer
           isDark={isDark}
           scope="pediatric"
-          onOpenAdult={() => setActiveCardId('adult-equipment-sizer')}
+          onOpenAdult={() => selectCard('adult-equipment-sizer')}
         />
       )}
     </div>

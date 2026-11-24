@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { 
   ClipboardCheck, 
   Heart, 
@@ -22,6 +22,8 @@ import { DasiCalculator } from './DasiCalculator';
 import { StopBangCalculator } from './StopBangCalculator';
 import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
 import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
+import { PortalLink } from '../common/PortalLink';
+import { useHashSubRoute } from '../../hooks/useHashSubRoute';
 
 interface PreoperativeEvaluationProps {
   isDark: boolean;
@@ -30,6 +32,7 @@ interface PreoperativeEvaluationProps {
 }
 
 export type PreopToolId = 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting';
+const VALID_PREOP_TOOL_IDS: readonly PreopToolId[] = ['stop-bang', 'mace', 'dasi', 'asa', 'adult-fasting', 'pediatric-fasting'];
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -178,13 +181,12 @@ const PREOP_CARDS: PreopCardItem[] = [
 ];
 
 export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ isDark, initialTool = null, onOpenGastricUsg }) => {
-  const [activeToolId, setActiveToolId] = useState<PreopToolId | null>(initialTool);
-
-  useEffect(() => {
-    if (initialTool !== undefined) {
-      setActiveToolId(initialTool);
-    }
-  }, [initialTool]);
+  const {
+    activeSubId: activeToolId,
+    selectSub: handleSelectTool,
+    clearSub: handleClearTool,
+    getSubHref
+  } = useHashSubRoute<PreopToolId>('preop', initialTool, VALID_PREOP_TOOL_IDS);
 
   const selectedTool = PREOP_CARDS.find(card => card.id === activeToolId);
 
@@ -197,9 +199,9 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {activeToolId ? (
-              <button
-                type="button"
-                onClick={() => setActiveToolId(null)}
+              <PortalLink
+                href={getSubHref(null)}
+                onNavigate={handleClearTool}
                 className={`p-2 rounded-xl border transition-colors cursor-pointer flex items-center justify-center ${
                   isDark 
                     ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700' 
@@ -208,7 +210,7 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
                 title="Tüm Preoperatif Araçlara Dön"
               >
                 <ArrowLeft className="w-5 h-5 text-blue-500" />
-              </button>
+              </PortalLink>
             ) : (
               <div className={`p-2.5 rounded-xl ${
                 isDark ? 'bg-blue-500/15 text-blue-400 border border-blue-500/20' : 'bg-blue-50 text-blue-700 border border-blue-200'
@@ -238,9 +240,9 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
           </div>
 
           {activeToolId && (
-            <button
-              type="button"
-              onClick={() => setActiveToolId(null)}
+            <PortalLink
+              href={getSubHref(null)}
+              onNavigate={handleClearTool}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer self-start sm:self-auto ${
                 isDark 
                   ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700' 
@@ -249,7 +251,7 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
             >
               <ArrowLeft className="w-3.5 h-3.5 text-blue-500" />
               <span>Tüm Preoperatif Araçlara Dön</span>
-            </button>
+            </PortalLink>
           )}
         </div>
       </div>
@@ -266,9 +268,10 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
             {PREOP_CARDS.map((card) => {
               const Icon = card.icon;
               return (
-                <div
+                <PortalLink
                   key={card.id}
-                  onClick={() => setActiveToolId(card.id)}
+                  href={getSubHref(card.id)}
+                  onNavigate={() => handleSelectTool(card.id)}
                   className={`group relative rounded-2xl border p-5 sm:p-6 transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                     isDark
                       ? `bg-slate-900 border-slate-800 ${card.borderHoverDark} hover:bg-slate-850 hover:shadow-xl hover:shadow-black/30`
@@ -339,7 +342,7 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
                       <ChevronRight className="w-4 h-4" />
                     </div>
                   </div>
-                </div>
+                </PortalLink>
               );
             })}
           </div>
@@ -368,7 +371,7 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
       {activeToolId === 'adult-fasting' && (
         <AdultFastingInfographic
           isDark={isDark}
-          onOpenPediatric={() => setActiveToolId('pediatric-fasting')}
+          onOpenPediatric={() => handleSelectTool('pediatric-fasting')}
           onOpenGastricUsg={onOpenGastricUsg}
         />
       )}
@@ -376,7 +379,7 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
       {activeToolId === 'pediatric-fasting' && (
         <PediatricFastingInfographic
           isDark={isDark}
-          onOpenAdult={() => setActiveToolId('adult-fasting')}
+          onOpenAdult={() => handleSelectTool('adult-fasting')}
         />
       )}
 

@@ -7,7 +7,8 @@ import {
   PlusCircle,
 } from 'lucide-react';
 import { ShareLinkButton } from '../common/ShareLinkButton';
-import { updateHashRoute } from '../../utils/deepLink';
+import { PortalLink } from '../common/PortalLink';
+import { buildHashHref, parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 import { AsaBasicMonitoringInfographic } from '../infographics/AsaBasicMonitoringInfographic';
 import { PulseOximetryModule } from './PulseOximetryModule';
 import { CapnographyModule } from './CapnographyModule';
@@ -1326,18 +1327,46 @@ const isValidMonitoringModuleId = (id?: string | null): id is MonitoringModuleId
 
 export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({
   isDark,
-  initialModuleId = null,
+  initialModuleId,
   onActiveModuleChange,
 }) => {
-  const [activeModuleId, setActiveModuleIdState] = useState<MonitoringModuleId | null>(
-    isValidMonitoringModuleId(initialModuleId) ? initialModuleId : null
-  );
+  const [activeModuleId, setActiveModuleIdState] = useState<MonitoringModuleId | null>(() => {
+    if (isValidMonitoringModuleId(initialModuleId)) return initialModuleId;
+    const route = parseHashRoute();
+    if (route.type === 'arac' && route.id === 'monitoring' && isValidMonitoringModuleId(route.subId)) {
+      return route.subId;
+    }
+    return null;
+  });
   const [tierFilter, setTierFilter] = useState<'all' | 'basic' | 'advanced'>('all');
 
   useEffect(() => {
-    if (initialModuleId === undefined) return;
-    setActiveModuleIdState(isValidMonitoringModuleId(initialModuleId) ? initialModuleId : null);
+    if (isValidMonitoringModuleId(initialModuleId)) {
+      setActiveModuleIdState(initialModuleId);
+    } else if (initialModuleId === null) {
+      const route = parseHashRoute();
+      if (route.type === 'arac' && route.id === 'monitoring' && isValidMonitoringModuleId(route.subId)) {
+        setActiveModuleIdState(route.subId);
+      } else {
+        setActiveModuleIdState(null);
+      }
+    }
   }, [initialModuleId]);
+
+  useEffect(() => {
+    const handleHash = () => {
+      const route = parseHashRoute();
+      if (route.type === 'arac' && route.id === 'monitoring') {
+        const nextId: MonitoringModuleId | null = isValidMonitoringModuleId(route.subId)
+          ? route.subId
+          : null;
+        setActiveModuleIdState(nextId);
+        onActiveModuleChange?.(nextId);
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, [onActiveModuleChange]);
 
   const setActiveModuleId = (nextId: MonitoringModuleId | null) => {
     setActiveModuleIdState(nextId);
@@ -1667,10 +1696,10 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({
                                     : 'text-emerald-600 dark:text-emerald-400';
 
           return (
-            <button
+            <PortalLink
               key={card.id}
-              type="button"
-              onClick={() => setActiveModuleId(card.id)}
+              href={buildHashHref('arac', 'monitoring', card.id)}
+              onNavigate={() => setActiveModuleId(card.id)}
               className={`group relative p-5 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between cursor-pointer select-none focus:outline-none focus-visible:ring-2 ${accentCardClass}`}
             >
               <div>
@@ -1741,7 +1770,7 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({
                   <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>
-            </button>
+            </PortalLink>
           );
         };
 
