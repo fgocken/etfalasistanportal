@@ -2621,6 +2621,36 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-sugammadex-protocol',
+    title: 'Sugammadeks Sodyum (SUGAMMADEX · Bridion) TOF / PTC / CICO (16 mg/kg) NMB Reversal & Antidot Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'NMB Antagonisti (SRBA) · Antidot',
+    description: 'Modifiye γ-siklodekstrin selektif gevşetici bağlayıcı ajan; Roküronyum/Veküronyum bloğunda 2 · 4 · 16 mg/kg (TBW) flakon hesaplayıcı, ASA/ESAIC 2023 TOF ≥ 0,9 kılavuzu, Re-NMB bekleme süreleri ve 7 günlük kontraseptif uyarısı.',
+    keywords: [
+      'sugammadeks',
+      'sugammadex',
+      'bridion',
+      'brimadeks',
+      'sugaver',
+      'nmb antagonisti',
+      'roküronyum antidotu',
+      'esmeron antidotu',
+      'veküronyum antidotu',
+      'antidot',
+      'srba',
+      'tof',
+      'ptc',
+      'cico',
+      '16 mg/kg',
+      'rekürarizasyon',
+      '200 mg/2 ml',
+      '500 mg/5 ml'
+    ],
+    tabId: 'treatments',
+    subId: 'sugammadex',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',

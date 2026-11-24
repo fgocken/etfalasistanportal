@@ -45,6 +45,7 @@ import { NaloxoneProtocol } from './NaloxoneProtocol';
 import { FlumazenilProtocol } from './FlumazenilProtocol';
 import { DopamineProtocol } from './DopamineProtocol';
 import { DobutamineProtocol } from './DobutamineProtocol';
+import { SugammadexProtocol } from './SugammadexProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1165,6 +1166,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'sugammadex',
+    category: 'medications',
+    categories: ['medications', 'sedation', 'antidotes'],
+    categoryLabel: 'NMB Antagonisti (SRBA) · Antidot',
+    badge: '2 · 4 · 16 mg/kg IV · TOF ≥ 0,9',
+    title: 'Sugammadeks Sodyum (SUGAMMADEX · Bridion)',
+    shortDesc: 'Modifiye γ-siklodekstrin yapılı selektif gevşetici bağlayıcı ajan (SRBA); Roküronyum/Veküronyum bloğunda 1:1 moleküler enkapsülasyon, orta/derin/CICO (16 mg/kg) flakon hesaplayıcı, Re-NMB bekleme süreleri ve 7 günlük kontraseptif uyarısı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Flakon (Bridion / Brimadeks)',
+        value: '200 mg/2 mL & 500 mg/5 mL',
+        subtext: '100 mg/mL · 10 sn hızlı IV bolus',
+        tooltip: 'İki flakon da 100 mg/mL konsantrasyondadır; sulandırmadan tek hızlı IV bolus uygulanır (CICO 16 mg/kg için 500 mg flakon hazır olmalı)',
+        colorClass: 'text-purple-700 dark:text-purple-300',
+        bgClass: 'bg-purple-500/10',
+        borderClass: 'border-purple-500/30'
+      },
+      {
+        label: 'TOF / PTC Doz Basamakları',
+        value: '2 · 4 · 16 mg/kg (TBW)',
+        subtext: 'T2: 2 · PTC 1–2: 4 · CICO: 16 mg/kg',
+        tooltip: 'ASA/ESAIC 2023 (1A): Gerçek vücut ağırlığı (TBW) üzerinden dozlanır; IBW ile dozlama obezlerde rekürarizasyon riski doğurur',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'Sadece Aminosteroid NMB!',
+        value: 'Roküronyum > Veküronyum',
+        subtext: 'Atraküryum / Süksinilkolinde ETKİSİZ',
+        tooltip: 'Benzilizokinolin (Sisatraküryum, Atraküryum, Mivaküryum) ve Süksinilkolin bloğunu KESİNLİKLE çevirmez; Atropin eklenmesi gerekmez',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Kritik Güvenlik Uyarıları',
+        value: 'Bradikardi · 7 Gün Bariyer',
+        subtext: 'CrCl < 30 mL/dk · Anafilaksi takibi',
+        tooltip: 'Progesteron bağladığı için 7 gün ek bariyer kontrasepsiyon şarttır; uygulama sırasında ani bradikardi/asistoli için sürekli EKG ve Atropin hazır olmalı',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -1251,7 +1303,10 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     dopadren: 'dopamine',
     dobutamin: 'dobutamine',
     dobutasel: 'dobutamine',
-    dobuthaver: 'dobutamine'
+    dobuthaver: 'dobutamine',
+    sugammadeks: 'sugammadex',
+    bridion: 'sugammadex',
+    brimadeks: 'sugammadex'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1902,6 +1957,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 23: DOBUTAMİN HİDROKLORÜR MONOGRAFİSİ & İNODİLATÖR (β1 >> β2) İNFÜZYON HESAPLAYICISI */}
       {(activeProtocolId === 'dobutamine' || activeProtocolId === 'dobutamin' || activeProtocolId === 'dobutasel' || activeProtocolId === 'dobuthaver') && (
         <DobutamineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 24: SUGAMMADEKS SODYUM MONOGRAFİSİ & TOF / PTC / CICO FLAKON HESAPLAYICISI */}
+      {(activeProtocolId === 'sugammadex' || activeProtocolId === 'sugammadeks' || activeProtocolId === 'bridion' || activeProtocolId === 'brimadeks') && (
+        <SugammadexProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
