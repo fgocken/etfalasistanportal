@@ -46,6 +46,7 @@ import { FlumazenilProtocol } from './FlumazenilProtocol';
 import { DopamineProtocol } from './DopamineProtocol';
 import { DobutamineProtocol } from './DobutamineProtocol';
 import { SugammadexProtocol } from './SugammadexProtocol';
+import { HydrocortisoneProtocol } from './HydrocortisoneProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1217,6 +1218,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'hydrocortisone',
+    category: 'medications',
+    categories: ['medications', 'vasoactive'],
+    categoryLabel: 'Kortikosteroid (1:1) · Septik Şok & Adrenal Kriz',
+    badge: 'Septik Şok 200 mg/gün · Adrenal Kriz 100 mg',
+    title: 'Hidrokortizon Sodyum Süksinat (HYDROCORTISONE · Hydrocort-Liyo)',
+    shortDesc: 'Endojen kortizol (1:1 glukokortikoid/mineralokortikoid); refrakter septik şok (SSC 2021 / ADRENAL / APROCCHSS 200 mg/gün IV), akut adrenal kriz (100 mg bolus), perioperatif stres dozu (Woodcock 2020) ve steroid eşdeğerlik dönüştürücüsü.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Flakon / Ampul',
+        value: '100 mg + 2 mL (50 mg/mL)',
+        subtext: 'Hydrocort-Liyo® · Hidrozon® · Solu-Cortef®',
+        tooltip: '100 mg liyofilize toz + 2 mL enjeksiyonluk su = 50 mg/mL; 100 mg IV bolus en az 1–3 dk’da verilir (hızlı puşede perineal yanma!)',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Refrakter Septik Şok (SSC 2021)',
+        value: '200 mg / gün IV',
+        subtext: '50 mg q6h veya 8,3 mg/saat infüzyon',
+        tooltip: 'ADRENAL & APROCCHSS NEJM 2018: Noradrenalin ≥ 0,25 mcg/kg/dk gereksinimi sürdüğünde şoktan çıkış süresini ve vazopresör ihtiyacını azaltır',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'Adrenal Kriz & Perioperatif Stres',
+        value: '100 mg IV + 200 mg/24 sa',
+        subtext: 'Woodcock 2020 · Majör cerrahi protokolü',
+        tooltip: 'Primer/sekonder adrenal yetmezlik veya HPA aksı baskılı hastada indüksiyonda 100 mg IV bolus + 200 mg/24 saat sürekli infüzyon',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Eşdeğerlik & Metabolik İzlem',
+        value: '20 mg = 4 mg MP = 0,75 mg Deksa',
+        subtext: 'Hiperglisemi · Na⁺↑ · K⁺↓ takibi',
+        tooltip: 'Eşit (1:1) mineralokortikoid aktivitesi sayesinde şokta idealdir; ancak hiperglisemi, hipernatremi ve hipokalemi yakından izlenmelidir',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -1306,7 +1358,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     dobuthaver: 'dobutamine',
     sugammadeks: 'sugammadex',
     bridion: 'sugammadex',
-    brimadeks: 'sugammadex'
+    brimadeks: 'sugammadex',
+    hidrokortizon: 'hydrocortisone',
+    'hydrocort-liyo': 'hydrocortisone',
+    hidrozon: 'hydrocortisone',
+    'solu-cortef': 'hydrocortisone'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -1962,6 +2018,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 24: SUGAMMADEKS SODYUM MONOGRAFİSİ & TOF / PTC / CICO FLAKON HESAPLAYICISI */}
       {(activeProtocolId === 'sugammadex' || activeProtocolId === 'sugammadeks' || activeProtocolId === 'bridion' || activeProtocolId === 'brimadeks') && (
         <SugammadexProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 25: HİDROKORTİZON SODYUM SÜKSİNAT MONOGRAFİSİ & SEPTİK ŞOK / ADRENAL KRİZ / STEROİD EŞDEĞERLİK HESAPLAYICISI */}
+      {(activeProtocolId === 'hydrocortisone' || activeProtocolId === 'hidrokortizon' || activeProtocolId === 'hydrocort-liyo' || activeProtocolId === 'hidrozon' || activeProtocolId === 'solu-cortef') && (
+        <HydrocortisoneProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}

@@ -2651,6 +2651,34 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'treatment-hydrocortisone-protocol',
+    title: 'Hidrokortizon Sodyum Süksinat (HYDROCORTISONE · Hydrocort-Liyo) Septik Şok, Adrenal Kriz & Stres Dozu Protokolü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Kortikosteroid (1:1) · Septik Şok & Adrenal Kriz',
+    description: 'Endojen kortizol; refrakter septik şok (SSC 2021 / ADRENAL / APROCCHSS 200 mg/gün IV), akut adrenal kriz (100 mg bolus + 200 mg/24 sa), perioperatif stres dozu (Woodcock 2020), TR 100 mg flakon sulandırma ve steroid eşdeğerlik dönüştürücüsü.',
+    keywords: [
+      'hidrokortizon',
+      'hydrocortisone',
+      'hydrocort-liyo',
+      'hidrozon',
+      'solu-cortef',
+      'kortizol',
+      'kortikosteroid',
+      'steroid',
+      'septik şok steroid',
+      'adrenal kriz',
+      'addison krizi',
+      'stres dozu steroid',
+      'adrenal trial',
+      'aprocchss',
+      '200 mg/gün',
+      '100 mg'
+    ],
+    tabId: 'treatments',
+    subId: 'hydrocortisone',
+    popular: true
+  },
+  {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',
     category: 'Kılavuzlar & Protokoller',
