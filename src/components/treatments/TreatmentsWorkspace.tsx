@@ -49,6 +49,7 @@ import { SugammadexProtocol } from './SugammadexProtocol';
 import { HydrocortisoneProtocol } from './HydrocortisoneProtocol';
 import { DexamethasoneProtocol } from './DexamethasoneProtocol';
 import { MethylprednisoloneProtocol } from './MethylprednisoloneProtocol';
+import { ThiopentalProtocol } from './ThiopentalProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1373,6 +1374,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'thiopental',
+    category: 'general_anesthetics',
+    categories: ['general_anesthetics', 'medications', 'sedation'],
+    categoryLabel: 'IV Barbitürat · İndüksiyon, İKB & SRSE',
+    badge: '%2,5 (25 mg/mL) · pH 10,5 · Barbitürat Koması',
+    title: 'Tiyopental Sodyum (THIOPENTAL · Pental Sodyum)',
+    shortDesc: 'Ultra-kısa başlangıçlı (15–30 sn) IV tiyobarbitürat; genel anestezi/RSI indüksiyonu (3–5 mg/kg), refrakter İKB barbitürat koması (BTF 2017), süper-refrakter status epileptikus (SRSE), porfiri kontrendikasyonu ve intra-arteriyel enjeksiyon acil kurtarma protokolü.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Flakon & %2,5 Sulandırma',
+        value: '0,5 g / 1 g → 25 mg/mL',
+        subtext: 'Pental Sodyum® · Tyosod® · pH ~10,5',
+        tooltip: '0,5 g + 20 mL veya 1 g + 40 mL SF/enj. su = %2,5 (25 mg/mL); kuvvetli alkali çözeltidir — NMB/asidik ilaçlarla Y-site çökelti yapar (araya SF flush şart!)',
+        colorClass: 'text-purple-700 dark:text-purple-300',
+        bgClass: 'bg-purple-500/10',
+        borderClass: 'border-purple-500/30'
+      },
+      {
+        label: 'İndüksiyon & Obstetrik RSI',
+        value: '3–5 mg/kg IV (15–30 sn)',
+        subtext: 'Geriatrik/Şok: 1,5–2,5 · Ped: 5–6 mg/kg',
+        tooltip: '1 kol-beyin dolaşım süresinde (15–30 sn) bilinç kaybı; uyanma metabolizmayla değil redistribüsyonla (5–10 dk) gerçekleşir',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Refrakter İKB & SRSE İnfüzyon',
+        value: '3–5 mg/kg → 1–5 mg/kg/sa',
+        subtext: 'BTF 2017 Level IIB · EEG Burst-Supresyon',
+        tooltip: 'Maksimum tedaviye dirençli İKB ve SRSE’de EEG burst-supresyona titre edilir; uzun infüzyonda sıfır-derece kinetik ve hipokalemi → rebound hiperkalemi riski!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Porfiri & İntra-Arteriyel Felaket',
+        value: 'AIP Yasak · Kateteri Çekme!',
+        subtext: 'ALA sentaz indüksiyonu · Kristalleşme nekrozu',
+        tooltip: 'Akut intermitan porfiride kesin kontrendikedir; kazara intra-arteriyel enjeksiyonda kateteri çekmeden SF + Lidokain/Papaverin + Heparin + Stellat blok uygulanır',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
   }
 ];
 
@@ -1478,7 +1530,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     precort: 'methylprednisolone',
     'precort-liyo': 'methylprednisolone',
     cortipol: 'methylprednisolone',
-    'solu-medrol': 'methylprednisolone'
+    'solu-medrol': 'methylprednisolone',
+    tiyopental: 'thiopental',
+    'tiyopental-sodyum': 'thiopental',
+    pental: 'thiopental',
+    'pental-sodyum': 'thiopental',
+    tyosod: 'thiopental'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -2149,6 +2206,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 27: METİLPREDNİZOLON SODYUM SÜKSİNAT MONOGRAFİSİ & BRONKOSPAZM / STRİDOR / ARDS / PULSE HESAPLAYICISI */}
       {(activeProtocolId === 'methylprednisolone' || activeProtocolId === 'metilprednizolon' || activeProtocolId === 'prednol' || activeProtocolId === 'prednol-l' || activeProtocolId === 'precort' || activeProtocolId === 'precort-liyo' || activeProtocolId === 'cortipol' || activeProtocolId === 'solu-medrol') && (
         <MethylprednisoloneProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 28: TİYOPENTAL SODYUM MONOGRAFİSİ & İNDÜKSİYON / BARBİTÜRAT KOMASI / SRSE / IA ACİL HESAPLAYICISI */}
+      {(activeProtocolId === 'thiopental' || activeProtocolId === 'tiyopental' || activeProtocolId === 'tiyopental-sodyum' || activeProtocolId === 'pental' || activeProtocolId === 'pental-sodyum' || activeProtocolId === 'tyosod') && (
+        <ThiopentalProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
