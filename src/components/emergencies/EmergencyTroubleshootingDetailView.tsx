@@ -14,10 +14,146 @@ import {
   XCircle,
   Activity,
   Wind,
-  Wrench
+  Wrench,
+  Play,
+  Pause
 } from 'lucide-react';
 import { EmergencyTroubleshootingItem } from '../../data/emergenciesTroubleshootingData';
 import { ShareLinkButton } from '../common/ShareLinkButton';
+
+type WaveformTone = 'normal' | 'warning' | 'danger' | 'info';
+
+interface BaseWaveformPattern {
+  id: string;
+  label: string;
+  subtitle: string;
+  meaning: string;
+  action: string;
+  svgPath: string;
+  tone: WaveformTone;
+}
+
+const getWaveformStrokeColor = (tone: WaveformTone): string => {
+  switch (tone) {
+    case 'normal':
+      return '#10b981';
+    case 'warning':
+      return '#f59e0b';
+    case 'danger':
+      return '#f43f5e';
+    default:
+      return '#06b6d4';
+  }
+};
+
+const getToneBadgeClass = (tone: WaveformTone): string => {
+  switch (tone) {
+    case 'normal':
+      return 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-300';
+    case 'warning':
+      return 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300';
+    case 'danger':
+      return 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-300';
+    default:
+      return 'bg-cyan-500/10 border-cyan-500/30 text-cyan-700 dark:text-cyan-300';
+  }
+};
+
+interface WaveformPatternGridProps<T extends BaseWaveformPattern> {
+  title: string;
+  subtitle: string;
+  icon: React.ReactNode;
+  patterns: T[];
+  isDark: boolean;
+  viewBox: string;
+  svgHeightClass: string;
+  renderSvgGuides: (pattern: T) => React.ReactNode;
+  renderExtraMeta?: (pattern: T) => React.ReactNode;
+}
+
+function WaveformPatternGrid<T extends BaseWaveformPattern>({
+  title,
+  subtitle,
+  icon,
+  patterns,
+  isDark,
+  viewBox,
+  svgHeightClass,
+  renderSvgGuides,
+  renderExtraMeta
+}: WaveformPatternGridProps<T>) {
+  return (
+    <div
+      className={`p-5 rounded-2xl border space-y-3 ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+      }`}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200/70 dark:border-slate-800">
+        <div className="flex items-center gap-2">
+          {icon}
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+            {title}
+          </h2>
+        </div>
+        <span className="text-[11px] text-slate-400">{subtitle}</span>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {patterns.map((pat) => {
+          const strokeColor = getWaveformStrokeColor(pat.tone);
+          return (
+            <div
+              key={pat.id}
+              className={`p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
+                isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50/80 border-slate-200'
+              }`}
+            >
+              <div className="space-y-2">
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">{pat.label}</div>
+                  <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{pat.subtitle}</div>
+                </div>
+
+                <div className="rounded-lg border border-slate-800 bg-slate-950 p-2">
+                  <svg
+                    role="img"
+                    viewBox={viewBox}
+                    className={`w-full ${svgHeightClass} overflow-visible`}
+                    aria-label={pat.label}
+                  >
+                    {renderSvgGuides(pat)}
+                    <path
+                      d={pat.svgPath}
+                      fill="none"
+                      stroke={strokeColor}
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+
+                {renderExtraMeta?.(pat)}
+
+                <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">{pat.meaning}</p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-200/70 dark:border-slate-800 text-[11px] font-semibold text-teal-700 dark:text-teal-300">
+                → {pat.action}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const formatClock = (totalSeconds: number): string => {
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+};
 
 interface EmergencyTroubleshootingDetailViewProps {
   item: EmergencyTroubleshootingItem;
@@ -32,17 +168,45 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
 }) => {
   const [diffFilter, setDiffFilter] = useState<'all' | 'Acil' | 'Çok Yaygın' | 'Yaygın'>('all');
   const [checkedGoldenSteps, setCheckedGoldenSteps] = useState<number[]>([]);
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
 
   useEffect(() => {
     setCheckedGoldenSteps([]);
     setDiffFilter('all');
+    setElapsedSeconds(0);
+    setIsTimerRunning(false);
   }, [item.id]);
+
+  useEffect(() => {
+    if (!isTimerRunning) return;
+    const intervalId = window.setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => window.clearInterval(intervalId);
+  }, [isTimerRunning]);
 
   const toggleGoldenStep = (idx: number) => {
     setCheckedGoldenSteps((prev) =>
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
     );
   };
+
+  const resetTimer = () => {
+    setIsTimerRunning(false);
+    setElapsedSeconds(0);
+  };
+
+  const hasWaveforms = Boolean(
+    item.capnogramPatterns?.length || item.pressurePatterns?.length || item.spo2Patterns?.length
+  );
+  const diffSectionNumber = hasWaveforms ? 3 : 2;
+  const algoSectionNumber = hasWaveforms ? 4 : 3;
+
+  const remainingGoldenSeconds = Math.max(0, 60 - elapsedSeconds);
+  const isOverSixty = elapsedSeconds > 60;
+  const allGoldenDone =
+    item.goldenSixtySeconds.length > 0 && checkedGoldenSteps.length === item.goldenSixtySeconds.length;
 
   return (
     <div className="space-y-5 animate-in fade-in duration-300">
@@ -59,6 +223,7 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
             <button
               type="button"
               onClick={onBack}
+              aria-label="Anestezi Acillerine Dön"
               className={`p-2 rounded-xl border transition-colors cursor-pointer shrink-0 mt-0.5 ${
                 isDark
                   ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
@@ -105,6 +270,100 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Yapışkan Altın 60 Saniye Sayaç & Kontrol Listesi Çubuğu */}
+      <div
+        className={`sticky top-14 z-20 px-3.5 py-2.5 rounded-xl border backdrop-blur-md flex flex-wrap items-center justify-between gap-2.5 shadow-sm ${
+          isOverSixty
+            ? isDark
+              ? 'bg-rose-950/90 border-rose-500/45 text-rose-100'
+              : 'bg-rose-50/95 border-rose-300 text-rose-950'
+            : isDark
+              ? 'bg-slate-900/90 border-teal-500/35 text-slate-100'
+              : 'bg-white/95 border-teal-200 text-slate-900'
+        }`}
+      >
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex items-center gap-1.5">
+            <Clock
+              className={`w-4 h-4 shrink-0 ${
+                isOverSixty ? 'text-rose-500 animate-pulse' : 'text-teal-500'
+              }`}
+            />
+            <span className="text-[11px] font-bold uppercase tracking-wider">
+              {isOverSixty ? '60 sn Aşıldı' : 'Altın 60 sn'}
+            </span>
+          </div>
+
+          <span
+            className={`font-mono tabular-nums text-xs font-bold px-2 py-0.5 rounded-md border ${
+              isOverSixty
+                ? isDark
+                  ? 'bg-rose-900/60 border-rose-500/40 text-rose-200'
+                  : 'bg-rose-100 border-rose-300 text-rose-800'
+                : isTimerRunning
+                  ? isDark
+                    ? 'bg-teal-950 border-teal-500/40 text-teal-300'
+                    : 'bg-teal-50 border-teal-300 text-teal-800'
+                  : isDark
+                    ? 'bg-slate-950 border-slate-700 text-slate-200'
+                    : 'bg-slate-100 border-slate-200 text-slate-800'
+            }`}
+          >
+            {isOverSixty
+              ? `Geçen ${formatClock(elapsedSeconds)}`
+              : `Kalan ${formatClock(remainingGoldenSeconds)} · Geçen ${formatClock(elapsedSeconds)}`}
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setIsTimerRunning((prev) => !prev)}
+              aria-label={isTimerRunning ? 'Sayacı Duraklat' : 'Altın 60 Saniye Sayacını Başlat'}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer ${
+                isTimerRunning
+                  ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                  : 'bg-teal-600 hover:bg-teal-700 text-white'
+              }`}
+            >
+              {isTimerRunning ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+              <span>{isTimerRunning ? 'Duraklat' : elapsedSeconds > 0 ? 'Devam Et' : 'Başlat'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={resetTimer}
+              disabled={elapsedSeconds === 0 && !isTimerRunning}
+              aria-label="Sayacı Sıfırla"
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                isDark
+                  ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
+                  : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>Sıfırla</span>
+            </button>
+          </div>
+        </div>
+
+        <span
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-mono tabular-nums text-[11px] font-bold ${
+            allGoldenDone
+              ? isDark
+                ? 'bg-emerald-950/60 border-emerald-500/45 text-emerald-300'
+                : 'bg-emerald-50 border-emerald-300 text-emerald-800'
+              : isDark
+                ? 'bg-slate-950/70 border-slate-700 text-teal-300'
+                : 'bg-teal-50/80 border-teal-200 text-teal-800'
+          }`}
+        >
+          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+          <span>
+            {checkedGoldenSteps.length} / {item.goldenSixtySeconds.length} adım tamamlandı
+          </span>
+        </span>
       </div>
 
       {/* A. Alarm & Fizyolojik Denklem Özeti */}
@@ -195,6 +454,7 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
               <button
                 key={idx}
                 type="button"
+                aria-pressed={isDone}
                 onClick={() => toggleGoldenStep(idx)}
                 className={`w-full p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
                   isDone
@@ -228,263 +488,116 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
 
       {/* C1. Kapnogram Dalga Formu Tanı Rehberi */}
       {item.capnogramPatterns && item.capnogramPatterns.length > 0 && (
-        <div
-          className={`p-5 rounded-2xl border space-y-3 ${
-            isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-          }`}
-        >
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200/70 dark:border-slate-800">
-            <div className="flex items-center gap-2">
-              <Activity className="w-4 h-4 text-cyan-500" />
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                2. Kapnogram Dalga Formu &amp; Taban Çizgisi Ayrımı
-              </h2>
-            </div>
-            <span className="text-[11px] text-slate-400">Monitör Eğrisi Hızlı Tanı</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {item.capnogramPatterns.map((pat) => {
-              const strokeColor =
-                pat.tone === 'normal'
-                  ? '#10b981'
-                  : pat.tone === 'warning'
-                    ? '#f59e0b'
-                    : pat.tone === 'danger'
-                      ? '#f43f5e'
-                      : '#06b6d4';
-              return (
-                <div
-                  key={pat.id}
-                  className={`p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
-                    isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50/80 border-slate-200'
-                  }`}
-                >
-                  <div className="space-y-2">
-                    <div>
-                      <div className="text-xs font-bold text-slate-900 dark:text-white">{pat.label}</div>
-                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{pat.subtitle}</div>
-                    </div>
-
-                    <div className="rounded-lg border border-slate-800 bg-slate-950 p-2">
-                      <svg viewBox="0 0 160 60" className="w-full h-14 overflow-visible" aria-label={pat.label}>
-                        <line x1="2" y1="50" x2="158" y2="50" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
-                        <text x="3" y="57" fill="#64748b" fontSize="6" fontFamily="monospace">
-                          0 mmHg
-                        </text>
-                        {pat.baselineY < 50 && (
-                          <text x="116" y="47" fill="#fb7185" fontSize="6" fontFamily="monospace">
-                            FiCO₂ &gt; 0
-                          </text>
-                        )}
-                        <path
-                          d={pat.svgPath}
-                          fill="none"
-                          stroke={strokeColor}
-                          strokeWidth="2.4"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-
-                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">{pat.meaning}</p>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-200/70 dark:border-slate-800 text-[11px] font-semibold text-teal-700 dark:text-teal-300">
-                    → {pat.action}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <WaveformPatternGrid
+          title="2. Kapnogram Dalga Formu & Taban Çizgisi Ayrımı"
+          subtitle="Monitör Eğrisi Hızlı Tanı"
+          icon={<Activity className="w-4 h-4 text-cyan-500" />}
+          patterns={item.capnogramPatterns}
+          isDark={isDark}
+          viewBox="0 0 160 60"
+          svgHeightClass="h-14"
+          renderSvgGuides={(pat) => (
+            <>
+              <line x1="2" y1="50" x2="158" y2="50" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
+              <text x="3" y="57" fill="#64748b" fontSize="6" fontFamily="monospace">
+                0 mmHg
+              </text>
+              {pat.baselineY < 50 && (
+                <text x="116" y="47" fill="#fb7185" fontSize="6" fontFamily="monospace">
+                  FiCO₂ &gt; 0
+                </text>
+              )}
+            </>
+          )}
+        />
       )}
 
       {/* C2. Basınç-Zaman Dalga Formu & İnspiratuvar Tutma (Ppeak vs Pplat) */}
       {item.pressurePatterns && item.pressurePatterns.length > 0 && (
-        <div
-          className={`p-5 rounded-2xl border space-y-3 ${
-            isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-          }`}
-        >
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200/70 dark:border-slate-800">
-            <div className="flex items-center gap-2">
-              <Wind className="w-4 h-4 text-cyan-500" />
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                2. Basınç-Zaman Eğrisi &amp; İnspiratuvar Tutma (Ppeak vs Pplat Ayrımı)
-              </h2>
-            </div>
-            <span className="text-[11px] text-slate-400">Rezistans vs Kompliyans Hızlı Tanı</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {item.pressurePatterns.map((pat) => {
-              const strokeColor =
-                pat.tone === 'normal'
-                  ? '#10b981'
-                  : pat.tone === 'warning'
-                    ? '#f59e0b'
-                    : pat.tone === 'danger'
-                      ? '#f43f5e'
-                      : '#06b6d4';
-              return (
+        <WaveformPatternGrid
+          title="2. Basınç-Zaman Eğrisi & İnspiratuvar Tutma (Ppeak vs Pplat Ayrımı)"
+          subtitle="Rezistans vs Kompliyans Hızlı Tanı"
+          icon={<Wind className="w-4 h-4 text-cyan-500" />}
+          patterns={item.pressurePatterns}
+          isDark={isDark}
+          viewBox="0 0 160 62"
+          svgHeightClass="h-16"
+          renderSvgGuides={() => (
+            <>
+              <line x1="2" y1="20" x2="158" y2="20" stroke="#7f1d1d" strokeWidth="1" strokeDasharray="3 3" />
+              <text x="3" y="17" fill="#fca5a5" fontSize="6" fontFamily="monospace">
+                30 cmH₂O (Pplat sınırı)
+              </text>
+              <line x1="2" y1="50" x2="158" y2="50" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
+              <text x="3" y="57" fill="#64748b" fontSize="6" fontFamily="monospace">
+                0 cmH₂O
+              </text>
+            </>
+          )}
+          renderExtraMeta={(pat) => (
+            <>
+              <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono tabular-nums">
                 <div
-                  key={pat.id}
-                  className={`p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
-                    isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50/80 border-slate-200'
+                  className={`px-2 py-1 rounded border ${
+                    isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-200 text-slate-800'
                   }`}
                 >
-                  <div className="space-y-2">
-                    <div>
-                      <div className="text-xs font-bold text-slate-900 dark:text-white">{pat.label}</div>
-                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{pat.subtitle}</div>
-                    </div>
-
-                    <div className="rounded-lg border border-slate-800 bg-slate-950 p-2">
-                      <svg viewBox="0 0 160 62" className="w-full h-16 overflow-visible" aria-label={pat.label}>
-                        <line x1="2" y1="20" x2="158" y2="20" stroke="#7f1d1d" strokeWidth="1" strokeDasharray="3 3" />
-                        <text x="3" y="17" fill="#fca5a5" fontSize="6" fontFamily="monospace">
-                          30 cmH₂O (Pplat sınırı)
-                        </text>
-                        <line x1="2" y1="50" x2="158" y2="50" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
-                        <text x="3" y="57" fill="#64748b" fontSize="6" fontFamily="monospace">
-                          0 cmH₂O
-                        </text>
-                        <path
-                          d={pat.svgPath}
-                          fill="none"
-                          stroke={strokeColor}
-                          strokeWidth="2.4"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono tabular-nums">
-                      <div className={`px-2 py-1 rounded border ${isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-200 text-slate-800'}`}>
-                        <span className="text-slate-400">Ppeak: </span>
-                        <strong>{pat.ppeakLabel}</strong>
-                      </div>
-                      <div className={`px-2 py-1 rounded border ${isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-200 text-slate-800'}`}>
-                        <span className="text-slate-400">Pplat: </span>
-                        <strong>{pat.pplatLabel}</strong>
-                      </div>
-                    </div>
-                    <div
-                      className={`px-2 py-1 rounded border text-[10px] font-mono font-bold tabular-nums text-center ${
-                        pat.tone === 'normal'
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-300'
-                          : pat.tone === 'warning'
-                            ? 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300'
-                            : pat.tone === 'danger'
-                              ? 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-300'
-                              : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-700 dark:text-cyan-300'
-                      }`}
-                    >
-                      {pat.gradientLabel}
-                    </div>
-
-                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">{pat.meaning}</p>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-200/70 dark:border-slate-800 text-[11px] font-semibold text-teal-700 dark:text-teal-300">
-                    → {pat.action}
-                  </div>
+                  <span className="text-slate-400">Ppeak: </span>
+                  <strong>{pat.ppeakLabel}</strong>
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                <div
+                  className={`px-2 py-1 rounded border ${
+                    isDark ? 'bg-slate-900 border-slate-800 text-slate-200' : 'bg-white border-slate-200 text-slate-800'
+                  }`}
+                >
+                  <span className="text-slate-400">Pplat: </span>
+                  <strong>{pat.pplatLabel}</strong>
+                </div>
+              </div>
+              <div
+                className={`px-2 py-1 rounded border text-[10px] font-mono font-bold tabular-nums text-center ${getToneBadgeClass(
+                  pat.tone
+                )}`}
+              >
+                {pat.gradientLabel}
+              </div>
+            </>
+          )}
+        />
       )}
 
       {/* C3. SpO₂ Pletismografi (Pleth) Dalga Formu & Artefakt / Dishemoglobinemi Ayrımı */}
       {item.spo2Patterns && item.spo2Patterns.length > 0 && (
-        <div
-          className={`p-5 rounded-2xl border space-y-3 ${
-            isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-          }`}
-        >
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200/70 dark:border-slate-800">
-            <div className="flex items-center gap-2">
-              <Activity className="w-4 h-4 text-cyan-500" />
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                2. Pletismografi (Pleth) Dalgası &amp; SpO₂ Artefakt / Dishemoglobinemi Ayrımı
-              </h2>
+        <WaveformPatternGrid
+          title="2. Pletismografi (Pleth) Dalgası & SpO₂ Artefakt / Dishemoglobinemi Ayrımı"
+          subtitle="Gerçek Hipoksemi vs Artefakt Hızlı Tanı"
+          icon={<Activity className="w-4 h-4 text-cyan-500" />}
+          patterns={item.spo2Patterns}
+          isDark={isDark}
+          viewBox="0 0 160 62"
+          svgHeightClass="h-16"
+          renderSvgGuides={() => (
+            <>
+              <line x1="2" y1="16" x2="158" y2="16" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
+              <text x="3" y="12" fill="#64748b" fontSize="6" fontFamily="monospace">
+                Normal PI
+              </text>
+              <line x1="2" y1="48" x2="158" y2="48" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
+              <text x="3" y="56" fill="#64748b" fontSize="6" fontFamily="monospace">
+                Bazal (0)
+              </text>
+            </>
+          )}
+          renderExtraMeta={(pat) => (
+            <div
+              className={`px-2 py-1 rounded border text-[10px] font-mono font-bold tabular-nums text-center ${getToneBadgeClass(
+                pat.tone
+              )}`}
+            >
+              {pat.spo2Badge}
             </div>
-            <span className="text-[11px] text-slate-400">Gerçek Hipoksemi vs Artefakt Hızlı Tanı</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {item.spo2Patterns.map((pat) => {
-              const strokeColor =
-                pat.tone === 'normal'
-                  ? '#10b981'
-                  : pat.tone === 'warning'
-                    ? '#f59e0b'
-                    : pat.tone === 'danger'
-                      ? '#f43f5e'
-                      : '#06b6d4';
-              return (
-                <div
-                  key={pat.id}
-                  className={`p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
-                    isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50/80 border-slate-200'
-                  }`}
-                >
-                  <div className="space-y-2">
-                    <div>
-                      <div className="text-xs font-bold text-slate-900 dark:text-white">{pat.label}</div>
-                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{pat.subtitle}</div>
-                    </div>
-
-                    <div className="rounded-lg border border-slate-800 bg-slate-950 p-2">
-                      <svg viewBox="0 0 160 62" className="w-full h-16 overflow-visible" aria-label={pat.label}>
-                        <line x1="2" y1="16" x2="158" y2="16" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
-                        <text x="3" y="12" fill="#64748b" fontSize="6" fontFamily="monospace">
-                          Normal PI
-                        </text>
-                        <line x1="2" y1="48" x2="158" y2="48" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
-                        <text x="3" y="56" fill="#64748b" fontSize="6" fontFamily="monospace">
-                          Bazal (0)
-                        </text>
-                        <path
-                          d={pat.svgPath}
-                          fill="none"
-                          stroke={strokeColor}
-                          strokeWidth="2.4"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-
-                    <div
-                      className={`px-2 py-1 rounded border text-[10px] font-mono font-bold tabular-nums text-center ${
-                        pat.tone === 'normal'
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-300'
-                          : pat.tone === 'warning'
-                            ? 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300'
-                            : pat.tone === 'danger'
-                              ? 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-300'
-                              : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-700 dark:text-cyan-300'
-                      }`}
-                    >
-                      {pat.spo2Badge}
-                    </div>
-
-                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">{pat.meaning}</p>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-200/70 dark:border-slate-800 text-[11px] font-semibold text-teal-700 dark:text-teal-300">
-                    → {pat.action}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+          )}
+        />
       )}
 
       {/* D. Sistematik Ayırıcı Tanı Matriksi */}
@@ -498,7 +611,7 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
             <AlertOctagon className="w-4 h-4 text-amber-500" />
             <div>
               <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                3. Sistematik Ayırıcı Tanı ({item.differentialDiagnosis.length} Etiyoloji)
+                {diffSectionNumber}. Sistematik Ayırıcı Tanı ({item.differentialDiagnosis.length} Etiyoloji)
               </h2>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Fizyolojik mekanizmaya ve sıklığa göre klinik ipuçları, doğrulama testi ve acil müdahale.
@@ -511,6 +624,7 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
               <button
                 key={f}
                 type="button"
+                aria-pressed={diffFilter === f}
                 onClick={() => setDiffFilter(f)}
                 className={`px-2.5 py-1 rounded-lg border text-[11px] font-semibold cursor-pointer ${
                   diffFilter === f
@@ -606,7 +720,7 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
         <div className="flex items-center gap-2 pb-2.5 border-b border-slate-200/70 dark:border-slate-800">
           <ClipboardCheck className="w-4 h-4 text-teal-500" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-            4. Adım Adım Algoritmik Sorun Giderme Akışı
+            {algoSectionNumber}. Adım Adım Algoritmik Sorun Giderme Akışı
           </h2>
         </div>
 

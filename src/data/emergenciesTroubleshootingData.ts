@@ -207,12 +207,12 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         immediateAction: 'Geçici ekspiratuvar CO₂ çıkışını kolaylaştırmak için ventilasyonu geçici artır; ek müdahale gerekmez.'
       },
       {
-        condition: 'Ateş, Sepsis, Tiroid Fırtınası veya Feokromositoma / Hafif Anestezi',
-        mechanism: 'Üretim / Emilim (↑V̇CO₂)',
+        condition: 'Ateş, Sepsis, Tiroid Fırtınası, Feokromositoma, NMS / Serotonin Sendromu veya Hafif Anestezi',
+        mechanism: 'Üretim / Emilim (↑V̇CO₂) · MH Taklitçileri',
         frequency: 'Yaygın',
-        clues: 'FiCO₂ = 0 ve normal kapnogram şekli eşliğinde taşikardi, ısı artışı (özellikle aktif ısıtma blanketlerinin aşırı ısıtması veya bakteriyemi) ya da ağrıya bağlı sempatik deşarj ve titreme.',
-        confirmatoryTest: 'Özofageal/mesane sıcaklık ölçümü, BIS/MAC kontrolü, kan kültürü/tiroid/laktat tetkiki.',
-        immediateAction: 'Isıtıcıyı kapat/soğutma başlat, analjezi ve anestezi derinliğini optimize et, dakika ventilasyonunu artır; tiroid fırtınasında β-bloker/antitiroid planla.'
+        clues: 'FiCO₂ = 0 ve normal kapnogram şekli eşliğinde taşikardi, ısı artışı (aktif ısıtma blanketlerinin aşırı ısıtması, bakteriyemi) ya da ağrıya bağlı sempatik deşarj. Nöroleptik Malign Sendrom (NMS: antipsikotik/metoklopramid → kurşun boru rijiditesi) ve Serotonin Sendromu (SSRI/SNRI/MAOI/fentanil/tramadol/metilen mavisi → klonus, hiperrefleksi) Malign Hipertermiyi (MH) taklit edebilir.',
+        confirmatoryTest: 'Özofageal/mesane sıcaklık ölçümü, BIS/MAC kontrolü, ilaç öyküsü ve nörolojik muayene (klonus/rijidite), CK/kan kültürü/tiroid/laktat tetkiki.',
+        immediateAction: 'Isıtıcıyı kapat/soğutma başlat, analjezi ve anestezi derinliğini optimize et, dakika ventilasyonunu artır; tiroid fırtınasında β-bloker/antitiroid, Serotonin Sendromunda siproheptadin/benzodiazepin, NMS’de bromokriptin/dantrolen planla.'
       },
       {
         condition: 'Bölgesel/Laparoskopik Ekipman Hatası — Yanlış Kalibrasyon veya İstenmeyen CO₂ Verilmesi',
@@ -427,7 +427,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         frequency: 'Acil',
         clues: 'SVK girişimi, laparoskopi, toraks travması veya yüksek PEEP sonrası Ppeak’te ani sıçrama + tek taraflı solunum ses kaybı + trakea deviasyonu + derin hipotansiyon + EtCO₂ çöküşü.',
         confirmatoryTest: 'Akciğer USG’de plevral kayma (lung sliding) kaybı ve barkod bulgusu; tamponadda TTE’de perikardiyal efüzyon ve sağ atriyal kollaps.',
-        immediateAction: 'Tansiyon pnömotoraksta derhal 2. interkostal aralık midklaviküler veya 4–5. İKA ön/orta aksiller hattan iğne dekompresyonu (14G) → tüp torakostomi.'
+        immediateAction: 'Tansiyon pnömotoraksta derhal erişkinde 4–5. İKA ön/orta aksiller hattan (AAL/MAL; pediatrikte 2. İKA MCL) iğne dekompresyonu (14G) → tüp torakostomi.'
       },
       {
         condition: 'Alveoler Hiperventilasyon (↑V̇A)',
@@ -487,7 +487,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         stepNumber: 5,
         phase: 'Fizyolojik Düzeltme · Hiperventilasyon & Hipotermi',
         action: 'Hemodinami ve devre stabilse V̇E ve vücut ısısını optimize et',
-        detail: 'İstenmeyen hiperkapni dışı serebral vazokonstriksiyonu önlemek için aşırı RR/VT’yi azalt (normokapni 35–42 mmHg hedefle; beyin cerrahisi özel endikasyonları hariç) ve hastayı aktif ısıt.',
+        detail: 'İstenmeyen hipokapniye bağlı serebral vazokonstriksiyonu önlemek için aşırı RR/VT’yi azalt (normokapni 35–42 mmHg hedefle; beyin cerrahisi özel endikasyonları hariç) ve hastayı aktif ısıt.',
         checkTip: 'Serebral otoregülasyon: PaCO₂ < 28–30 mmHg serebral iskemiyi tetikleyebilir.'
       },
       {
@@ -978,7 +978,8 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         'İki saniyelik altın manevra: Hastayı ventilatörden ayırıp %100 O₂ ile Ambu/balona geçmek, cihaz/devre/HME tıkanıklığını hasta/ETT kaynaklı sorunlardan anında ayırır.',
         'ΔP = Ppeak − Pplat farkı akciğer barotravma riskini ayırt eder: Saf bronkospazm veya ETT kinkinde Ppeak 45 cmH₂O olsa bile alveole yansıyan Pplat düşük kalabilir; buna karşın Pplat > 30 cmH₂O gerçek alveoler aşırı gerilimi gösterir.',
         'HME/bakteri filtreleri sekresyon, kan veya bronkodilatör nebülizasyonu sonrası hızla şişerek tamamen tıkanabilir; ETT değişimi kararı vermeden önce mutlaka HME’yi devreden çıkar.',
-        'Laparoskopi ve Trendelenburg pozisyonunda diyaframın yukarı itilmesi karinayı da sefalik kaydırır; indüksiyonda normal yerde olan ETT intraoperatif dönemde sağ ana bronşa ilerleyebilir.'
+        'Laparoskopi ve Trendelenburg pozisyonunda diyaframın yukarı itilmesi karinayı da sefalik kaydırır; indüksiyonda normal yerde olan ETT intraoperatif dönemde sağ ana bronşa ilerleyebilir.',
+        'Hızlı kriz taraması (DOPES & COVER ABCD): Entübe hastada ani Ppeak yükselmesinde sırayla Dislodgement (tüp kayması/endobronşiyal), Obstruction (kink/mukus/ısırma), Pneumothorax, Equipment (devre/HME/ventilatör arızası), Stacking (oto-PEEP/hava hapsi) tara; genel taramada COVER ABCD’yi (Circulation, Oxygen, Ventilation, Endotracheal tube, Review) uygula.'
       ],
       pitfalls: [
         'Altta yatan nedeni (pnömotoraks, ETT kink, bronkospazm) araştırmadan sadece ventilatörün yüksek basınç alarm sınırını yukarı çekmek.',
@@ -1038,7 +1039,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
     summary:
       'İntraoperatif hipoksemi; düşük FiO₂ veya gaz besleme hatası, alveoler hipoventilasyon, V/Q uyumsuzluğu, sağdan sola şant (atelektazi, endobronşiyal entübasyon, tek akciğer ventilasyonu [OLV], hepatopulmoner sendrom [HPS] veya intrakardiyak şant), difüzyon kısıtlanması ve düşük kardiyak debiye bağlı azalmış mikst venöz oksijen satürasyonundan (↓SvO₂) kaynaklanır. Öncelikle pletismografi dalgası ile gerçek hipoksemi vs artefakt ayrılmalı, eş zamanlı %100 O₂ verilerek makine-devre-hasta üçgeni sistematik taranmalıdır.',
     goldenSixtySeconds: [
-      'Derhal FiO₂ %100’e çıkar, taze gaz akımını (FGF) artır; oksijen analizöründe gerçek FiO₂’nin yükseldiğini ve santral O₂ basıncını / yedek silindiri doğrula (vaporizatör/N₂O kapalı).',
+      'Derhal FiO₂ %100’e çıkar, taze gaz akımını (FGF) artır; oksijen analizöründe gerçek FiO₂’nin yükseldiğini ve santral O₂ basıncını / yedek silindiri doğrula (N₂O kapalı; şok/arrest veya refrakter OLV’de volatil kapatılırsa intraoperatif farkındalığı önlemek için TIVA/IV hipnotik ile devam et).',
       'SpO₂ probunu ve pletismografi (pleth) dalga formunu kontrol et: dalga silik/gürültülü ise aynı kolda NİBP manşonu, soğuk/vazokonstriksiyon, koter paraziti veya IV boya (metilen/patent mavisi) artefaktını ele — şüphede AKG/CO-oksimetri al.',
       'Devre bağlantısı, VTe, Ppeak ve EtCO₂’yi kontrol et; ventilatörü manuel/Ambu balonuna (%100 O₂) geçirerek cihaz-devre arızasını dışla ve akciğer kompliyansını elle hisset.',
       'Bilateral akciğer oskültasyonu yap, ETT derinliğini kontrol et ve aspirasyon kateteri geçir; Tek Akciğer Ventilasyonunda (OLV) derhal Fiberoptik Bronkoskop (FOB) ile DLT/bronşiyal bloker pozisyonunu doğrula.',
@@ -1185,7 +1186,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         frequency: 'Yaygın',
         clues: 'Zayıf/bozuk pleth dalgası (soğuk, şok, NİBP, koter), Metilen/Patent mavisi enjeksiyonu sonrası ani 5–15 dk’lık yalancı SpO₂ düşüşü veya prilokain/nitrat sonrası çikolata rengi kan + %85 sabit SpO₂.',
         confirmatoryTest: 'Çok dalga boylu CO-oksimetreli AKG (gerçek PaO₂, SaO₂, MetHb % ve COHb % ölçümü).',
-        immediateAction: 'CO-oksimetri ile gerçek PaO₂’yi doğrula; MetHb > %20–30 semptomatikse IV Metilen Mavisi 1–2 mg/kg (5 dk’da infüzyon; G6PD eksikliğinde kontrendike — Askorbik asit kullan).'
+        immediateAction: 'CO-oksimetri ile gerçek PaO₂’yi doğrula; MetHb > %20–30 semptomatikse IV Metilen Mavisi 1–2 mg/kg (5 dk’da infüzyon; G6PD eksikliğinde kontrendike — Askorbik asit kullan; SSRI/SNRI/MAOI kullananlarda güçlü MAO-A inhibisyonu ile Serotonin Sendromu riski!).'
       }
     ],
     algorithmicSteps: [
@@ -1243,7 +1244,8 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         'Oksihemoglobin dissosiyasyon eğrisinin dik bölümü nedeniyle SpO₂ %90 (PaO₂ ≈ 60 mmHg) altına indikten sonraki düşüşler çok hızlıdır — %94 eşiğinde önlem alın.',
         'Tek Akciğer Ventilasyonunda (OLV) desatürasyonda ilk enstrümental hamle Fiberoptik Bronkoskop (FOB) ile DLT/bronşiyal bloker yerini doğrulamaktır (Rozé et al., 2011).',
         'Non-dependent (ameliyat edilen) akciğere verilen %100 O₂ ile 5–10 cmH₂O CPAP, OLV hipoksemisini düzeltmede en etkili kurtarma yöntemlerinden biridir.',
-        'Hepatopulmoner Sendromda (HPS) baziller İPVD’ler yerçekimine duyarlıdır (ortodeoksi): supin pozisyon oksijenasyonu düzeltir, aşırı PEEP ise şantı paradoksal olarak artırabilir (La Via et al., 2025).'
+        'Hepatopulmoner Sendromda (HPS) baziller İPVD’ler yerçekimine duyarlıdır (ortodeoksi): supin pozisyon oksijenasyonu düzeltir, aşırı PEEP ise şantı paradoksal olarak artırabilir (La Via et al., 2025).',
+        'Hızlı kriz taraması (COVER ABCD & DOPES): Circulation/Color, Oxygen/O₂ analizörü, Ventilation/Vaporizatör, Endotracheal tube/Eliminate machine, Review monitors/equipment; entübe hastada ek olarak DOPES (Dislodgement, Obstruction, Pneumothorax, Equipment, Stacking) ile saniyeler içinde sistematik tara.'
       ],
       pitfalls: [
         'Methemoglobinemi (%85 plato) veya Karbonmonoksit zehirlenmesinde (yalancı normal SpO₂) standart 2 dalga boylu puls oksimetreye güvenip CO-oksimetreli AKG almamak.',
@@ -1326,7 +1328,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         confirmatoryTest:
           'Kantitatif akseleromiyografi/elektromiyografi ile TOFR < 0.90 (asla sadece 5 sn baş kaldırma gibi klinik testlere güvenmeyin).',
         immediateAction:
-          'Steroidal ajanlarda (Roküronyum/Veküronyum) Sugammadeks 2–4 mg/kg IV; diğerlerinde TOFR ≥ 0.4 ise Neostigmin 0.04–0.07 mg/kg + Atropin/Glikopirolat. Bu arada sedasyon/analjezi sağla.'
+          'Steroidal ajanlarda (Roküronyum/Veküronyum) Sugammadeks 2–4 mg/kg IV; diğerlerinde TOFR ≥ 0.4 ise paradoksal depolarizan güçsüzlükten kaçınmak için ASA/ESAIC 2023 düşük doz Neostigmin 0,015–0,03 mg/kg (maks 5 mg) + Atropin/Glikopirolat. Bu arada sedasyon/analjezi sağla.'
       },
       {
         condition: 'Opioid Fazlalığı / Göreceli Doz Aşımı',
@@ -1399,7 +1401,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
         mechanism: 'Metabolik / İyonik Ensefalopati',
         frequency: 'Acil',
         clues:
-          'TURP/histeroskopi sonrası glisin/hipotonik irrigasyona bağlı akut hiponatremi (< 120 mmol/L → beyin ödemi, konfüzyon, nöbet); preeklampsi/eklampside MgSO₄ yüklemesine bağlı hipermagnezemi (> 4–6 mEq/L → derin refleks kaybı, NMB potansiyalizasyonu, SSS depresyonu).',
+          'TURP/histeroskopi sonrası glisin/hipotonik irrigasyona bağlı akut hiponatremi (< 120 mmol/L → beyin ödemi, konfüzyon, nöbet); preeklampsi/eklampside MgSO₄ yüklemesine bağlı hipermagnezemi (> 7–10 mEq/L [> 3,5–5 mmol/L] → derin refleks kaybı, NMB potansiyalizasyonu; > 10–15 mEq/L → solunum/SSS depresyonu; 4–7 mEq/L preeklampside terapötiktir).',
         confirmatoryTest:
           'Acil AKG/serum elektrolitleri (Na⁺, Mg²⁺, iCa²⁺, serum osmolalitesi).',
         immediateAction:

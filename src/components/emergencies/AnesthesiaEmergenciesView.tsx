@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
   AlertOctagon, 
   Flame, 
@@ -327,6 +327,16 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
     ];
   }, []);
 
+  const feedbackTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (feedbackTimerRef.current !== null) {
+        window.clearTimeout(feedbackTimerRef.current);
+      }
+    };
+  }, []);
+
   const filteredEmergencies = useMemo(() => {
     if (activeFilter === 'troubleshooting') return [];
     const q = searchQuery.trim().toLocaleLowerCase('tr-TR');
@@ -335,7 +345,11 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
         return false;
       }
       if (!q) return true;
-      const haystack = `${item.title} ${item.shortDesc} ${CATEGORY_LABELS[item.category]}`.toLocaleLowerCase('tr-TR');
+      const protocol = ANESTHESIA_EMERGENCIES_DATA[item.id];
+      const extraText = protocol
+        ? `${protocol.keyCallout} ${protocol.introduction.triggers?.join(' ') || ''}`
+        : '';
+      const haystack = `${item.title} ${item.shortDesc} ${CATEGORY_LABELS[item.category]} ${extraText}`.toLocaleLowerCase('tr-TR');
       return haystack.includes(q);
     });
   }, [activeFilter, searchQuery]);
@@ -347,7 +361,11 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
         return false;
       }
       if (!q) return true;
-      const haystack = `${item.title} ${item.shortDesc} ${item.tag} ${CATEGORY_LABELS[item.category]}`.toLocaleLowerCase('tr-TR');
+      const fullItem = EMERGENCY_TROUBLESHOOTING_ITEMS.find((t) => t.id === item.id);
+      const extraText = fullItem
+        ? `${fullItem.subtitle} ${fullItem.goldenSixtySeconds.join(' ')} ${fullItem.differentialDiagnosis.map((d) => d.condition).join(' ')} ${fullItem.tags.join(' ')}`
+        : '';
+      const haystack = `${item.title} ${item.shortDesc} ${item.tag} ${CATEGORY_LABELS[item.category]} ${extraText}`.toLocaleLowerCase('tr-TR');
       return haystack.includes(q);
     });
   }, [activeFilter, searchQuery]);
@@ -361,6 +379,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
   if (selectedEmergencyId && ANESTHESIA_EMERGENCIES_DATA[selectedEmergencyId]) {
     return (
       <EmergencyProtocolDetailView
+        key={selectedEmergencyId}
         protocol={ANESTHESIA_EMERGENCIES_DATA[selectedEmergencyId]}
         isDark={isDark}
         onBack={handleBackToList}
@@ -376,6 +395,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
   if (selectedTroubleshootingItem) {
     return (
       <EmergencyTroubleshootingDetailView
+        key={selectedTroubleshootingItem.id}
         item={selectedTroubleshootingItem}
         isDark={isDark}
         onBack={handleBackToList}
@@ -394,7 +414,10 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
     } else {
       const item = EMERGENCY_PREVIEWS.find(p => p.id === id);
       setFeedbackNotice(`"${item?.title || id}" acil senaryosu, hazırladığımız şablona göre sıradaki adımda eklenecektir.`);
-      setTimeout(() => setFeedbackNotice(null), 5000);
+      if (feedbackTimerRef.current !== null) {
+        window.clearTimeout(feedbackTimerRef.current);
+      }
+      feedbackTimerRef.current = window.setTimeout(() => setFeedbackNotice(null), 5000);
     }
   };
 
@@ -486,6 +509,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
             />
             <input
               type="search"
+              aria-label="Anestezi acilleri, belirti veya ilaç ara"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Acil, belirti veya ilaç ara..."

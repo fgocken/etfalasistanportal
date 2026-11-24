@@ -588,6 +588,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     codeColor: 'red',
     severityBadge: 'KOD KIRMIZI · ZAMANA DUYARLI HAYATİ ACİL',
     keyCallout: 'Tetikleyici kesilip %100 O2 ile hiperventile edilmeli, Dantrolen (2.5 mg/kg) gecikmeksizin başlanmalıdır. Ca-kanal blokerleri KESİNLİKLE KONTRENDİKEDİR!',
+    quickCalculatorType: 'dantrolene',
 
     // 2) Tanımlama ve Giriş
     introduction: {
@@ -624,9 +625,10 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         { category: 'Süreç 1: Kas Rijiditesi', points: '10 - 15 Puan', description: 'Genelleşmiş kas rijiditesi (15 puan) veya süksinilkolin sonrası çene kilitlenmesi (10 puan).' },
         { category: 'Süreç 2: Kas Yıkımı', points: '10 - 15 Puan', description: 'CK > 20.000 IU/L (15 puan), CK > 10.000 IU/L (10 puan), serum miyoglobin > 170 mcg/L veya idrarda miyoglobinüri (5 puan).' },
         { category: 'Süreç 3: Solunumsal Asidoz', points: '10 - 15 Puan', description: 'Uygun ventilasyona rağmen EtCO2 > 55 mmHg (15 puan) veya PaCO2 > 60 mmHg (15 puan).' },
-        { category: 'Süreç 4: Sıcaklık Artışı', points: '10 - 15 Puan', description: 'Açıklanamayan hızlı sıcaklık artışı > 38.8°C (10 puan) veya ameliyathanede > 41°C (15 puan).' },
-        { category: 'Süreç 5: Kardiyak Bulgular', points: '3 Puan', description: 'Açıklanamayan sinüs taşikardisi veya ventriküler aritmi / bigemine atımlar.' },
-        { category: 'Süreç 6: Diğer / Aile Öyküsü', points: '5 - 10 Puan', description: '1. derece akrabada doğrulanmış MH öyküsü (10 puan) veya arteriyel pH < 7.25 / baz açığı < -8 (10 puan).' }
+        { category: 'Süreç 4: Sıcaklık Artışı', points: '10 - 15 Puan', description: 'Anestezist değerlendirmesinde uygunsuz hızlı sıcaklık artışı (15 puan) veya perioperatif açıklanamayan > 38,8°C sıcaklık (10 puan).' },
+        { category: 'Süreç 5: Kardiyak Bulgular', points: '3 Puan', description: 'Açıklanamayan sinüs taşikardisi veya ventriküler taşikardi / ventriküler fibrilasyon (3 puan).' },
+        { category: 'Süreç 6: Aile Öyküsü', points: '5 - 15 Puan', description: '1. derece akrabada doğrulanmış MH öyküsü (15 puan) veya 1. derece dışı akrabada MH öyküsü (5 puan).' },
+        { category: 'Diğer Göstergeler (Ayrı Süreç — Asidoz & Dantrolen Yanıtı)', points: '5 - 10 Puan', description: 'Arteriyel pH < 7,25 veya baz açığı (BE) < -8 mEq/L (10 puan — aile öyküsünden ayrı süreçtir); IV Dantrolen ile belirtilerin hızla düzelmesi (5 puan).' }
       ],
       larachInterpretation: 'Larach Klinik Derecelendirme Skalası (Clinical Grading Scale - CGS): Toplam puan > 50 ise "Neredeyse Kesin MH" (Rank 6); 35-49 arası "Çok Olası MH" (Rank 5); 20-34 arası "Olası MH"; < 10 ise "Pek Olası Değil" olarak sınıflanır.',
       differentialDiagnosis: [
@@ -653,7 +655,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 2,
           title: '%100 OKSİJEN İLE AŞIRI HİPERVENTİLASYON (3-4 KAT DAKİKA VENTİLASYONU)',
-          action: 'Taze gaz akışını (FGF) maksimuma getirin (≥ 10-15 L/dk %100 O2). Dakika ventilasyonunu normalin 2-3 katına çıkarın (TV artırın, solunum frekansını yükseltin). Mümkünse ekspiratuar hatta aktif karbon filtre takın. Anestezi devresini ve absorbanı (soda lime) hemen değiştirmek için vakit kaybetmeyin, yüksek akım flush uygulayın.',
+          action: 'Taze gaz akışını (FGF) maksimuma getirin (≥ 10-15 L/dk %100 O2). Dakika ventilasyonunu normalin 2-3 katına çıkarın (TV artırın, solunum frekansını yükseltin). İnspiratuar ve ekspiratuar HER İKİ hatta aktif karbon filtre (Vapor-Clean) takın (en kritik olan inspiratuar hattır). Anestezi devresini ve absorbanı (soda lime) hemen değiştirmek için vakit kaybetmeyin, yüksek akım flush uygulayın.',
           criticalNote: 'Amaç: Masif hücresel CO2 üretimini temizlemek ve aşırı doku hipoksisini önlemektir.',
           priority: 'CRITICAL'
         },
@@ -701,19 +703,19 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           {
             name: 'Dantrium / Revonto (Klasik Formülasyon)',
             vialContent: '20 mg Dantrolen liyofilize toz + 3000 mg (3 g) Mannitol',
-            reconstitution: 'Her bir flakon 60 mL Steril Enjeksiyonluk Su (AQUA) ile çözünmelidir. SF VEYA DEKSTROZ KULLANILMAZ!',
-            diluent: 'Steril Distile Su (Aqua ad iniectabilia) - Isıtılmış (38°C) su çözünmeyi hızlandırır.',
+            reconstitution: 'Her bir flakon 60 mL Koruyucusuz Steril Enjeksiyonluk Su (AQUA) ile çözünmelidir. SF, DEKSTROZ VEYA BAKTERİYOSTATİK SU KULLANILMAZ!',
+            diluent: 'Koruyucusuz Steril Distile Su (Preservative-free Aqua ad iniectabilia; bakteriyostatik su kullanılmaz) - Isıtılmış (38°C) su çözünmeyi hızlandırır.',
             timeToPrepare: '70 kg hasta (200 mg başlangıç) için 10 flakon ve 600 mL su gerekir; çözünmesi 15-20 dakika sürebilir (en az 3-4 kişi aynı anda çalkalamalıdır).'
           },
           {
             name: 'Ryanodex (Yeni Nesil Nano-Süspansiyon Formülasyonu)',
             vialContent: '250 mg Dantrolen sodyum + 125 mg Mannitol',
-            reconstitution: 'Tek bir flakon SADECE 5 mL Steril Enjeksiyonluk Su ile 10-15 saniyede tamamen çözünür.',
-            diluent: 'Steril Distile Su (5 mL)',
+            reconstitution: 'Tek bir flakon SADECE 5 mL Koruyucusuz Steril Enjeksiyonluk Su (bakteriyostatik su kullanılmaz) ile 10-15 saniyede tamamen çözünür.',
+            diluent: 'Koruyucusuz Steril Distile Su (5 mL)',
             timeToPrepare: '70 kg hasta için TEK 1 FLAKON yeterlidir ve 1 dakikadan kısa sürede IV puşe edilebilir. Kriz anında zaman kazandırır.'
           }
         ],
-        preparationWarning: 'Dantrolen flakonlarını ASLA %0.9 NaCl (SF), Dengeli Sıvılar veya %5 Dekstroz ile sulandırmayın; çökelti oluşturur ve çözünmez! SADECE STERİL SAF ENJEKSİYONLUK SU (AQUA) kullanılmalıdır.'
+        preparationWarning: 'Dantrolen flakonlarını ASLA %0.9 NaCl (SF), Dengeli Sıvılar, %5 Dekstroz veya bakteriyostatik su ile sulandırmayın; çökelti oluşturur ve çözünmez! SADECE KORUYUCUSUZ STERİL SAF ENJEKSİYONLUK SU (preservative-free sterile water / AQUA) kullanılmalıdır.'
       },
       coolingProtocol: {
         targetTemp: 'Ölçülen çekirdek (özofagus / nazofaringeal) sıcaklık 38.5°C\'nin altına indiğinde aktif soğutmayı kesin.',
@@ -781,7 +783,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Anestezi Devresinde Isınma: Soda lime kabının (karbondioksit absorbanı) aşırı CO2 reaksiyonu nedeniyle el yakacak derecede ısınması'
       ],
       lateSigns: [
-        'Hızla Yükselen Yüksek Ateş (Hipertermi): Çekirdek ısının dakikada 1-2°C tırmanarak 41 - 43°C seviyelerine ulaşması',
+        'Hızla Yükselen Yüksek Ateş (Hipertermi): Çekirdek ısının 5–15 dakikada 1–2°C tırmanarak 41 - 43°C seviyelerine ulaşması',
         'Miyoglobinüri: İdrar torbasında kola, koyu çay veya bordo renkli idrar',
         'Yaygın Damar İçi Pıhtılaşma (DIC): Cerrahi alandan kontrolsüz sızıntı kanama, peteşi, trombositopeni, INR uzaması',
         'Kardiyak Disritmiler & Arrest: Şiddetli hiperkalemi ve asidoza bağlı Ventriküler Fibrilasyon, Asistoli veya PEA',
@@ -903,11 +905,18 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         relevance: 'Avrupa Malign Hipertermi Grubu güncel tanı, genetik test ve kas biyopsisi konsensus kılavuzu.'
       },
       {
+        authors: 'Larach MG, Localio AR, Allen GC, Denborough MA, Ellis FR, Gronert GA, et al.',
+        title: 'A clinical grading scale to predict malignant hyperthermia susceptibility.',
+        journal: 'Anesthesiology. 1994;80(4):771–779.',
+        year: '1994',
+        relevance: 'Orijinal Larach Klinik Derecelendirme Skalası (CGS) skorlama sistemi ve tanısal puanlama kriterleri.'
+      },
+      {
         authors: 'Larach MG, Gronert GA, Allen GC, Brandom BW, Lehman EB.',
         title: 'Clinical presentation, treatment, and complications of malignant hyperthermia in North America from 1987 to 2006.',
         journal: 'Anesthesia & Analgesia. 2010;110(2):498-507.',
         year: '2010',
-        relevance: 'Klinik Derecelendirme Skalası (Larach Skoru) ve Kuzey Amerika kriz komplikasyon analizi.'
+        relevance: 'Kuzey Amerika MH kriz prezentasyonu, tedavi yanıtı ve komplikasyon analizi.'
       },
       {
         authors: 'Glitzenstein S, et al. (MHAUS Medical Advisory Board)',
@@ -1105,9 +1114,9 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         refractoryRescuePlan: [
           'Hemen kardiyak arrest arabasını ve defibrilatörü odaya getirtin.',
           'Hastayı ventilatörden ayırıp apneik toraks dekompresyonu yapın (oto-PEEP boşaltımı).',
-          'Adrenalin 100 mcg IV bolus yapın; yanıt yoksa arrest dozu (1 mg IV) hazırlayın.',
+          'Nabızlı hastada Adrenalin 10–50 mcg (en fazla 100 mcg) IV titre bolus veya 0,05–0,2 mcg/kg/dk infüzyon uygulayın; 1 mg IV yalnızca kardiyak arrest gelişirse kullanılır.',
           'Parenteral Aminofilin yükleme dozu (5 mg/kg IV 20-30 dakikada) düşünün (aritmi takibi şartıyla).',
-          'Tansiyon pnömotoraks şüphesinde bilateral 2. interkostal aralık midklaviküler hattan iğne dekompresyonu yapın.',
+          'Tansiyon pnömotoraks şüphesinde erişkinde 4.–5. interkostal aralık ön/orta aksiller hattan (AAL/MAL; pediatrikte 2. İKA MCL) iğne dekompresyonu yapın.',
           'Tüm farmakoterapiye yanıtsız uç vakalarda VV-ECMO (Ekstrakorporeal Membran Oksijenasyonu) konsültasyonu isteyin.'
         ]
       }
@@ -1261,10 +1270,10 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 10) Kullanılan Kaynaklar & İleri Okuma
     references: [
       {
-        authors: 'British Thoracic Society (BTS) & Scottish Intercollegiate Guidelines Network (SIGN).',
-        title: 'British guideline on the management of asthma: Perioperative and acute crisis recommendations.',
-        journal: 'Thorax. 2022;77(Suppl 1):1-140.',
-        year: '2022',
+        authors: 'British Thoracic Society (BTS), NICE & Scottish Intercollegiate Guidelines Network (SIGN).',
+        title: 'BTS/SIGN British Guideline on the Management of Asthma (Thorax 2019) & BTS/NICE/SIGN Joint Asthma Guideline (2024).',
+        journal: 'Thorax. 2019;74(Suppl 1) & NICE NG245 (2024).',
+        year: '2019 / 2024',
         relevance: 'Akut bronkospazm basamaklı farmakoterapisi, MDI uygulama ilkeleri ve perioperatif risk optimizasyonu.'
       },
       {
@@ -1402,8 +1411,8 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 6,
           title: 'Sub-Paralitik / Kırıcı Doz Süksinilkolin Verin',
-          action: 'İlk 30-45 saniyede çözülmezse veya SpO2 düşüşü sürüyorsa, vokal kordları gevşetmek için düşük doz Süksinilkolin (0.1 - 0.5 mg/kg IV) verin. Pediatrik hastada bradikardiyi önlemek için derhal Atropin (0.01 - 0.02 mg/kg IV) ekleyin.',
-          criticalNote: '0.2-0.5 mg/kg sub-paralitik doz apne yapmadan vokal kordları anında açar; spontan solunum korunur.',
+          action: 'İlk 30-45 saniyede çözülmezse veya SpO2 düşüşü sürüyorsa, vokal kordları gevşetmek için düşük doz Süksinilkolin (0.1 - 0.5 mg/kg IV) verin. Pediatrik hastada bradikardiyi önlemek için derhal Atropin (0.01 - 0.02 mg/kg IV) ekleyin. Süksinilkolin MUTLAK KONTRENDİKE ise (hiperkalemi, yanık >24–48 sa, denervasyon/spinal travma, Duchenne/Becker MD, MH öyküsü) Rokuronyum 1,0–1,2 mg/kg IV kullanın.',
+          criticalNote: '0.2-0.5 mg/kg sub-paralitik doz apne yapmadan vokal kordları anında açar; spontan solunum korunur. Mutlak kontrendikasyonlarda (hiperkalemi, yanık >24–48 sa, denervasyon/spinal travma, Duchenne/Becker MD, MH) ASLA süksinilkolin vermeyin.',
           priority: 'CRITICAL'
         },
         {
@@ -1459,9 +1468,9 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           {
             step: 'Alternatif Non-Depolarizan Ajan',
             drug: 'Rokuronyum IV',
-            dosage: '0.3 - 0.6 mg/kg IV',
+            dosage: '1,0–1,2 mg/kg IV (hızlı ~60 sn etki başlangıcı)',
             route: 'İntravenöz',
-            clinicalPearls: 'Süksinilkolin kontrendike ise (MH öyküsü, hiperkalemi) verilir; Sugammadeks ile anında geri çevrilir.'
+            clinicalPearls: 'Süksinilkolin kontrendike ise (hiperkalemi, yanık >24–48 sa, denervasyon/spinal travma, Duchenne/Becker MD, MH) hızlı (~60 sn) etki için 1,0–1,2 mg/kg verilir; gerektiğinde Sugammadeks 16 mg/kg IV ile hızla geri çevrilebilir.'
           }
         ],
         nppeManagement: [
@@ -1702,7 +1711,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       gradingScaleSource: 'DAS 2015 Difficult Airway & CICO Guidelines',
       larachScale: [
         { category: 'Plan A: Yüz Maskesi & Trakeal Entübasyon Başarısız', points: 'Maks 3 Girişim', description: 'Direkt veya video laringoskopi ile entübasyon denenir; 3 girişimde başarısız olunursa gecikmeden Plan B\'ye geçilir.' },
-        { category: 'Plan B: İkinci Kuşak SGA / LMA Kurtarma Başarısız', points: 'Maks 2 Girişim', description: '2. kuşak LMA (i-gel/ProSeal) yerleştirilir; oksijenizasyon sağlanamazsa hemen Plan C\'ye geçilir.' },
+        { category: 'Plan B: İkinci Kuşak SGA / LMA Kurtarma Başarısız', points: 'Maks 3 Girişim', description: '2. kuşak LMA (i-gel/ProSeal) yerleştirilir; maksimum 3 girişimde oksijenizasyon sağlanamazsa hemen Plan C\'ye geçilir.' },
         { category: 'Plan C: Yüz Maskesi ile Son Oksijenizasyon Başarısız', points: 'İki Kişilik Maske', description: 'NMB tam gevşeme, 2 kişilik 4 el tekniği, Guedel airway. Ventilasyon sağlanamazsa CICO İLAN EDİLİR!' },
         { category: 'Plan D: Acil Cerrahi Boyun Girişimi (eFONA / CICO)', points: 'Neşter-Buji-Tüp', description: 'ZAMAN KAYBETMEDEN krikotiroid membran neşterle açılır, buji sokulur ve 6.0 mm ETT yerleştirilir.' }
       ],
@@ -1774,7 +1783,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           title: 'DAS Altın Standart: Neşter-Buji-Tüp (Scalpel-Bougie-Tube) Krikotiroidotomi',
           laryngealHandshake: 'Dominant olmayan elin baş ve orta parmakları ile tiroid kıkırdak bilateral kavranır, aşağı doğru inilerek krikoid kıkırdak ve aralarındaki krikotiroid membran çukurluğu net olarak palpe edilir.',
           techniqueSteps: [
-            '1. Stabilizasyon & Yatay Kesi: Krikotiroid membran parmakla tespit edilir. No:10 veya 20 bistüri ile membran üzerine transvers (yatay) 1-2 cm derin insizyon yapılır.',
+            '1. Stabilizasyon & Yatay Kesi: Krikotiroid membran parmakla tespit edilir. No. 10 bistüri ile membran üzerine transvers (yatay) 1-2 cm derin insizyon yapılır.',
             '2. Bistüriyi 90° Çevir: Bistüri lümenden çıkarılmadan kesici yüzü kaudale (ayaklara doğru) bakacak şekilde 90 derece dikey konuma çevrilir ve lümen kenara doğru aralanır.',
             '3. Buji İlerlemesi: Coudé uçlu trakeal buji (15 Fr) bistürinin yanından trakea içine 10-15 cm kadar nazikçe kaydırılır (trakeal kıkırdak halkalarının "tık-tık" klik hissi doğrulanır).',
             '4. Tüpün Gönderilmesi: Buji trakeada sabit tutulur, bistüri çıkarılır. Buji üzerinden ID 6.0 mm kaflı endotrakeal tüp rotasyonel hareketle trakeaya kaydırılır.',
@@ -1886,7 +1895,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       },
       cartTitle: 'Acil Krikotiroidotomi & CICO Kiti Asgari Donanım Listesi:',
       cartChecklist: [
-        'No: 10 ve No: 20 Steril Cerrahi Neşter (Bistüri)',
+        'No. 10 Steril Cerrahi Neşter (Bistüri — DAS 2015 standardı)',
         '15 Fr Coudé Uçlu Havayolu Bujisi (Eschmann Tracheal Introducer)',
         'ID 6.0 mm Kaflı Endotrakeal Tüp (ve 10 mL kaf enjektörü)',
         'İkinci Kuşak Supraglottik Havayolu Araçları (i-gel / ProSeal No: 3, 4, 5)',
@@ -1960,251 +1969,6 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     ],
 
     // 10) Kullanılan Kaynaklar & İleri Okuma
-    references: [
-      {
-        authors: 'Frerk C, Mitchell VS, McNarry AF, et al. (Difficult Airway Society)',
-        title: 'Difficult Airway Society 2015 guidelines for management of unanticipated difficult intubation in adults.',
-        journal: 'British Journal of Anaesthesia. 2015;115(6):827-848.',
-        year: '2015',
-        relevance: 'CICO algoritması, Scalpel-Bougie-Tube altın standart tekniği ve Plan A-B-C-D basamakları.'
-      },
-      {
-        authors: 'Cook TM, Woodall N, Frerk C. (Royal College of Anaesthetists)',
-        title: 'Major complications of airway management in the UK: results of the Fourth National Audit Project (NAP4).',
-        journal: 'British Journal of Anaesthesia. 2011;106(5):617-642.',
-        year: '2011',
-        relevance: 'Perioperatif havayolu ölümlerinin kök neden analizi, kanül başarısızlıkları ve cerrahi karar gecikmeleri.'
-      },
-      {
-        authors: 'Apfelbaum JL, Hagberg CA, Connis RT, et al. (ASA Task Force)',
-        title: '2022 American Society of Anesthesiologists Practice Guidelines for Management of the Difficult Airway.',
-        journal: 'Anesthesiology. 2022;136(1):31-81.',
-        year: '2022',
-        relevance: 'Zor havayolu karar ağaçları, video-laringoskopi yeri ve cerrahi havayolu zamanlaması.'
-      },
-      {
-        authors: 'Chrimes N, Higgs A.',
-        title: 'Emergency Front-of-Neck Access (eFONA): Evolution of the scalpel-bougie-tube technique.',
-        journal: 'BJA Education. 2017;17(11):376-385.',
-        year: '2017',
-        relevance: 'Boyun önü acil havayolu erişimi adımları, buji hissi ve anatomik kılavuzluk.'
-      }
-    ]
-  },
-
-  'cico': {
-    // Alias to airway-crisis
-    id: 'airway-crisis',
-    title: 'Ventile Edilemiyor - Entübe Edilemiyor (CICO)',
-    subTitle: 'Acil Cerrahi Havayolu, Neşter-Buji-Tüp Krikotiroidotomi & DAS 2015 Algoritması',
-    codeColor: 'red',
-    severityBadge: 'KOD KIRMIZI · EN ÜST DÜZEY HAVAYOLU KRİZİ (CICO)',
-    keyCallout: 'CICO İLAN EDİN VE YARDIM ÇAĞIRIN! İki kişilik maske ve 2. kuşak LMA ile son kurtarma deneyin. NMB tam değilse Rokuronyum veya Sugammadeks 16 mg/kg verin. SpO2 düşüşü sürüyorsa VAKİT KAYBETMEDEN NEŞTER-BUJİ-TÜP KRİKOTİROİDOTOMİYE GEÇİN!',
-    quickCalculatorType: 'cico',
-    introduction: {
-      definition: 'Ventile Edilemiyor - Entübe Edilemiyor (Cannot Intubate, Cannot Oxygenate - CICO); endotrakeal entübasyonun başarısız olduğu, supraglottik havayolu aracı (SGA/LMA) ile oksijenizasyon sağlanamadığı ve yüz maskesi balon ventilasyonunun imkansız hale geldiği, hastanın dakikalar içinde asfiksi ve anoksik kardiyak arreste sürüklendiği en ölümcül anestezi krizidir.',
-      epidemiology: 'Elektif genel anestezide insidansı yaklaşık 1:50.000 iken, acil cerrahi, majör travma, maksillofasiyal cerrahi ve baş-boyun kitlelerinde 1:200 ila 1:1.000 oranına kadar fırlar. NAP4 verilerine göre perioperatif hava yolu ölümlerinin en büyük nedeni cerrahi havayoluna (eFONA) geçişte yaşanan kararsızlık ve gecikmedir.',
-      triggers: [
-        'Tekrarlayan ve İnatçı Laringoskopi Girişimleri: 3\'ten fazla entübasyon denemesi mukozal kanama, masif vokal kord ödemi ve anatomik distorsiyona yol açar.',
-        'Tanınmamış Zor Havayolu / Anatomik Deformiteler: Mikrognati, retrognati, servikal rijidite, laringeal kitle ve radyoterapi boyun fiksasyonu.',
-        'Yetersiz Kas Gevşemesi veya Yüzeyel Anestezi Altında Spazm: Hasta gevşememişken yapılan girişimler spazm ile hava yolunu kilitler.',
-        'Fasiyal / Maksiller Travma ve Masif Kanama: Aspiratörün yetersiz kalması ve anatomik sınırların kaybolması.',
-        'Yüksek Mallampati + Şiddetli OSA + Morbid Obezite Kombinasyonu.'
-      ],
-      safeAgents: [
-        'Neşter-Buji-Tüp Tekniği (Scalpel-Bougie-Tube): DAS altın standardıdır; başarı > %95, süre < 40 sn.',
-        'Sugammadeks 16 mg/kg IV: Rokuronyum derin bloğunu 3 dakikada sıfırlar.',
-        'İkinci Kuşak SGA (ProSeal / i-gel): Son oksijenizasyon kurtarmasında en güvenilir araçtır.',
-        'İki Kişilik Dört El Yüz Maskesi Tekniği (VE Manevrası) + Orofarengeal Airway.',
-        'Video-Laringoskop (Hiperangüle pala): Uzman tarafından 1 kez denenebilir.'
-      ],
-      mortalityStats: 'CICO tablosunda hipoksik kardiyak arrest ve anoksik beyin hasarı süresi 3-4 dakikadır. 5 dakikalık gecikme mortaliteyi %70\'in üzerine çıkarır.',
-      clinicalUrgency: 'Saniyelerin kritik olduğu anestezi acilidir; "bir kez daha deneyeyim" tuzağına düşülmeden krikotiroidotomiye başlanmalıdır.'
-    },
-    diagnosis: {
-      overview: 'CICO tanısı anlık bir karardır: ETT başarısız, SGA başarısız, 2 kişilik maske ile torba sıkıldığında göğüs kalkmıyor, EtCO2 = 0 mmHg ve SpO2 hızla düşüyorsa tablo KESİN CICO\'dur.',
-      clinicalCriteria: [
-        'Başarısız Trakeal Entübasyon (Maksimum 3 denemeden sonra tüp yerleştirilememesi)',
-        'Başarısız Supraglottik Havayolu / LMA (SGA ile akciğerlere ventilasyon verilememesi)',
-        'Başarısız Yüz Maskesi Oksijenizasyonu (APL sıkılıp iki elle zorlanmasına rağmen hava geçişi olmaması)',
-        'SpO2 Seviyesinde Yıldırım Hızında Çöküş (< %80 - %70 - %50)',
-        'Kapnografide Sıfır Çizgisi (EtCO2 = 0 mmHg, soluk dalgası yok)',
-        'Giderek Derinleşen Hipoksik Sinüs Bradikardisi, Siyanoz ve Kardiyak Arrest Eşiği'
-      ],
-      gradingScaleTitle: 'DAS 2015 4-Aşamalı Kriz Skalası',
-      gradingScaleSource: 'DAS 2015 Difficult Airway & CICO Guidelines',
-      larachScale: [
-        { category: 'Plan A: Yüz Maskesi & Trakeal Entübasyon Başarısız', points: 'Maks 3 Girişim', description: 'Direkt veya video laringoskopi ile entübasyon denenir; 3 girişimde başarısız olunursa hemen Plan B\'ye geçilir.' },
-        { category: 'Plan B: İkinci Kuşak SGA / LMA Kurtarma Başarısız', points: 'Maks 2 Girişim', description: '2. kuşak LMA (i-gel/ProSeal) yerleştirilir; oksijenizasyon sağlanamazsa Plan C\'ye geçilir.' },
-        { category: 'Plan C: Yüz Maskesi ile Son Oksijenizasyon Başarısız', points: 'İki Kişilik Maske', description: 'NMB tam gevşeme, 2 kişilik 4 el tekniği, Guedel airway. Ventilasyon sağlanamazsa CICO İLAN EDİLİR!' },
-        { category: 'Plan D: Acil Cerrahi Boyun Girişimi (eFONA / CICO)', points: 'Neşter-Buji-Tüp', description: 'ZAMAN KAYBETMEDEN krikotiroid membran neşterle açılır, buji sokulur ve 6.0 mm ETT yerleştirilir.' }
-      ],
-      larachInterpretation: 'Plan A, B ve C aşamalarında oksijenizasyon sağlanamadığı anda Plan D (Cerrahi Krikotiroidotomi) hayatta kalmak için zorunlu eylemdir.',
-      differentialDiagnosis: [
-        { condition: 'Şiddetli Akut Laringospazm', differentiatingFactors: 'Üst solunum yolu spazmıdır; sub-paralitik süksinilkolin veya propofol ile kırılır.' },
-        { condition: 'Refrakter Bronkospazm ("Sessiz Akciğer")', differentiatingFactors: 'Patoloji alt solunum yollarındadır; ETT trakeadadır ancak solunum sesi yoktur ve Ppeak fırlamıştır.' },
-        { condition: 'Trakeal Yabancı Cisim / Masif Mukus Tıkacı', differentiatingFactors: 'Kordların altında mekanik kütle vardır; krikotiroidotomi hayat kurtarır.' },
-        { condition: 'Tansiyon Pnömotoraks', differentiatingFactors: 'Tek taraflı solunum yokluğu, perküsyon hipersonoritesi ve derin hipotansiyon.' },
-        { condition: 'Anestezi Devresi veya Ventilatör Tıkanıklığı', differentiatingFactors: 'Devre ayrılıp ambu-balon bağlandığında hasta havalanıyorsa devre/cihaz arızasıdır.' }
-      ]
-    },
-    crisisManagement: {
-      coreAlgorithm: [
-        { stepNumber: 1, title: 'CICO İLAN EDİN & TÜM EKİBİ ALARMA GEÇİRİN', action: 'Ameliyathanede yüksek sesle CICO ilan edin. İkinci uzman anestezist, KBB cerrahı ve arrest arabasını çağırın.', criticalNote: 'Tüm cerrahi işlemleri durdurun.', priority: 'CRITICAL' },
-        { stepNumber: 2, title: 'TAM NÖROMÜSKÜLER BLOK VEYA SUGAMMADEKS 16 MG/KG UYGULAYIN', action: 'Relaksasyon eksikse ek Rokuronyum (1.0-1.2 mg/kg IV) verin veya spontan uyanma hedefleniyorsa Sugammadeks 16 mg/kg IV bolus yapın.', criticalNote: 'Cerrahi boyun hazırlığı ASLA durdurulmamalıdır!', priority: 'CRITICAL' },
-        { stepNumber: 3, title: 'İKİ KİŞİLİK YÜZ MASKESİ VE SGA İLE SON OKSİJENİZASYON DENEYİN', action: 'Birinci hekim iki elle çift-C ve E tekniği ile maskeyi oturtsun, ikinci hekim torbayı sıksın. 2. kuşak LMA ile son kez deneyin.', criticalNote: 'En fazla 30-45 saniye ayrılmalıdır.', priority: 'CRITICAL' },
-        { stepNumber: 4, title: 'HASTAYA DOĞRU POZİSYON VERİN & LARENKSİ PALPE EDİN (Laryngeal Handshake)', action: 'Omuzların altına rulo koyarak boynu ekstansiyona getirin. Dominant olmayan elle tiroid ve krikoid kıkırdakları kavrayıp zarı tespit edin.', criticalNote: 'Boyun ekstansiyonu krikotiroid membranı öne doğru iter.', priority: 'CRITICAL' },
-        { stepNumber: 5, title: 'NEŞTER-BUJİ-TÜP TEKNİĞİ İLE KRİKOTİROİDOTOMİ UYGULAYIN', action: 'No:10 neşter ile krikotiroid membran üzerine yatay kesi yapın. Neşteri çıkarmadan 90° çevirin. 15 Fr bujiyi 10-15 cm ilerletin. Buji üzerinden ID 6.0 mm kaflı ETT kaydırın.', criticalNote: 'DAS altın standardıdır; başarı oranı %95\'tir.', priority: 'CRITICAL' },
-        { stepNumber: 6, title: 'TÜP KAFINI ŞİŞİRİN VE VENTİLASYONU KAPNOGRAFİ İLE DOĞRULAYIN', action: 'Bujiyi çekin, kafı şişirin. Devreyi bağlayıp %100 oksijenle solutun. Kapnografide ardışık en az 3 EtCO2 dalgası görün.', criticalNote: 'Kapnografi dalgası görmeden asla cerrahi alana dönmeyin.', priority: 'CRITICAL' },
-        { stepNumber: 7, title: 'TÜPÜ TESPİT EDİN & DERHAL YOĞUN BAKIM / KBB ENTEGRASYONU SAĞLAYIN', action: 'Tüpü boyun bağı ile sabitleyin. 24-48 saat içinde elektif cerrahi trakeostomiye dönüştürülmesi için KBB ekibiyle planlama yapın.', criticalNote: 'Krikotiroidotomi tüpleri hareketle çıkabilir; çift sabitleme şarttır.', priority: 'HIGH' }
-      ],
-      cicoProtocols: {
-        scalpelBougieTubeTechnique: {
-          title: 'DAS Altın Standart: Neşter-Buji-Tüp (Scalpel-Bougie-Tube) Krikotiroidotomi',
-          laryngealHandshake: 'Dominant olmayan elin baş ve orta parmakları ile tiroid kıkırdak bilateral kavranır, aşağı inilerek krikoid kıkırdak ve aralarındaki krikotiroid membran çukurluğu net olarak palpe edilir.',
-          techniqueSteps: [
-            '1. Stabilizasyon & Yatay Kesi: Krikotiroid membran parmakla tespit edilir. No:10 neşter ile membran üzerine transvers (yatay) 1-2 cm derin insizyon yapılır.',
-            '2. Bistüriyi 90° Çevir: Bistüri lümenden çıkarılmadan kesici yüzü kaudale bakacak şekilde 90 derece dikey konuma çevrilir ve lümen aralanır.',
-            '3. Buji İlerlemesi: Coudé uçlu trakeal buji (15 Fr) bistürinin yanından trakea içine 10-15 cm kaydırılır (trakeal kıkırdak halkalarının "tık-tık" klik hissi doğrulanır).',
-            '4. Tüpün Gönderilmesi: Buji sabit tutulur, bistüri çıkarılır. Buji üzerinden ID 6.0 mm kaflı tüp rotasyonel hareketle trakeaya kaydırılır.',
-            '5. Kaf Şişirme & Doğrulama: Kaf şişirilir, buji çekilir. Devre bağlanır; kapnografide en az 3 ardışık EtCO2 dalgası doğrulanır.'
-          ],
-          obesePatientModification: 'Obez, kısa boyunlu veya ödemli hastada anatomik yapılar palpe edilemiyorsa vakit kaybetmeden tiroid çentiğinden sternuma kadar 8-10 cm dikey orta hat insizyonu yapılır, parmaklarla yağ dokusu iki yana sıyrılarak krikoid kıkırdak hissedilir ve membran yatay kesilir.'
-        },
-        needleVsScalpelComparison: [
-          { feature: 'Başarı Oranı (İlk Girişimde)', scalpelBougieTube: '%95 - %100 (Yüksek kanıt düzeyi)', cannulaCricothyrotomy: '%40 - %60 (Yüksek başarısızlık ve kanül bükülmesi)' },
-          { feature: 'Ventilasyon Yöntemi', scalpelBougieTube: 'Standart anestezi devresi ve mekanik ventilatör (EtCO2 takipli)', cannulaCricothyrotomy: 'Yüksek basınçlı Jet Ventilatör (Manujet) gerektirir' },
-          { feature: 'Barotravma ve Pnömotoraks Riski', scalpelBougieTube: 'Çok düşük (Düşük basınçlı geniş lümen)', cannulaCricothyrotomy: 'Çok yüksek (Üst solunum yolu kapalıysa akciğer patlar)' },
-          { feature: 'Girişim Tamamlanma Süresi', scalpelBougieTube: '< 40 saniye (Basit, mekanik ve öngörülebilir)', cannulaCricothyrotomy: '60 - 120 saniye (Kılavuz tel ve dilatatör gecikmeleri)' },
-          { feature: 'Sekresyon Aspirasyonu & Koruma', scalpelBougieTube: 'Kaflı tüp olduğu için aspirasyon korunur, içi aspire edilebilir', cannulaCricothyrotomy: 'Kaf yoktur; kan ve sekresyon akciğere akar, aspire edilemez' }
-        ],
-        sugammadexProtocol: {
-          dose: '16 mg/kg IV Hızlı Bolus (Tek Seferde)',
-          indication: 'Rokuronyum (1.0-1.2 mg/kg) indüksiyonunda CICO geliştiğinde nöromüsküler bloğun acil farmakolojik eliminasyonu.',
-          pearls: '3 dakika içinde iletimi %90 TOF oranına ulaştırır. DİKKAT: Doku ödemi, hematom veya obstrüksiyon varsa hasta uyansa dahi soluyamaz; krikotiroidotomi hazırlığı asla durdurulmamalıdır!'
-        }
-      }
-    },
-    pathophysiology: {
-      molecularBasis: 'CICO durumunda hipoksi dakikalar içinde hücresel düzeyde enerji krizine yol açar. FRC hızla tükenir; PaO2 < 30 mmHg seviyesine çakılır. Hücre içi mitokondriyal oksidatif fosforilasyon durur, anaerobik glikolizle masif laktat ve H+ birikir. Miyokardiyal hipoksi saniyeler içinde sinüs bradikardisine ve asistoliye dönüşür.',
-      cascadeSteps: [
-        { phase: '1. FRC Tükenmesi & Difüzyon Krizi', mechanism: 'Ventilasyon durduğu anda alveoler oksijen kütüphanesi hızla tükenir.' },
-        { phase: '2. Kritik Alveoler Hipoksemi', mechanism: 'PaO2 < 30 mmHg seviyesine iner; hemoglobin saturasyonu dik eğriye girerek %90\'dan saniyeler içinde %40\'a düşer.' },
-        { phase: '3. Hipoksik Pulmoner Vazokonstriksiyon (HPV)', mechanism: 'Tüm akciğerde yaygın vazokonstriksiyon gelişir; sağ ventrikül art yükü fırlar.' },
-        { phase: '4. Miyokardiyal İskemi & Vagal Bradikardi', mechanism: 'Koroner perfüzyon hipoksik kanla beslenir; sinoatriyal ve AV düğüm iletimi yavaşlar, sinüs bradikardisi gelişir.' },
-        { phase: '5. Asistoli / PEA & Anoksik Serebral Hasar', mechanism: 'Hücresel ATP sıfırlanır, sodyum-potasyum pompası iflas eder; 3-4. dakikada geri dönüşümsüz nöronal ölüm meydana gelir.' }
-      ],
-      summaryText: 'Özetle CICO; solunum yolunun mekanik olarak sıfırlanmasıyla organizmanın oksijen deposunun 120-180 saniyede tamamen tükenmesi ve dakikalar içinde kardiyak arrest ile anoksik serebral nöron ölümüne yol açan en yıkıcı klinik krizdir.'
-    },
-    presentation: {
-      earlySigns: [
-        'Endotrakeal Tüpün Vokal Kordlardan Geçirilememesi',
-        'Supraglottik Havayolu (LMA) Takılmasına Rağmen Ventilasyon Direnci',
-        'Yüz Maskesi Balon Ventilasyonunda Sıfır Göğüs Hareketi',
-        'SpO2 Seviyesinin %90\'ın Altına Düşüş Başlangıcı ve Kapnografide Dalga Çıkmaması'
-      ],
-      progressingSigns: [
-        'Hızla Koyu Mor / Gri Siyanoza Dönüşüm',
-        'SpO2\'nin %70 - %50 - %30 Seviyelerine Şelale Hızıyla İnmesi',
-        'Kompansatuar Taşikardinin Aniden Derin Hipoksik Bradikardiye Dönüşmesi (< 40 bpm)',
-        'Göz Bebeklerinde Dilatasyon ve Işık Refleksinin Zayıflaması'
-      ],
-      lateSigns: [
-        'Nabızsız Elektriksel Aktivite (PEA) veya Asistolik Kardiyak Arrest',
-        'Geri Dönüşümsüz Hipoksik İskemik Ensefalopati (3-4 dakikalık anoksi sonrası)',
-        'Masif Serebral Ödem ve Beyin Ölümü'
-      ],
-      specialAlertTitle: 'Ölümcül Klinik Tuzak: "Bir Kez Daha Laringoskopi Deneyeyim" Yanılgısı',
-      specialAlertContent: 'NAP4 denetim raporlarında perioperatif hava yolu ölümlerinin %80\'inde klinisyenlerin cerrahi havayoluna geçmek yerine 4., 5., 6. kez endotrakeal entübasyon denediği belgelenmiştir. Başarısız 3 girişimden sonra laringoskop derhal masaya bırakılmalı, Neşter-Buji-Tüp krikotiroidotomiye başlanmalıdır!'
-    },
-    preventionAndPreparedness: {
-      preopRiskAssessment: [
-        'LEMON Skoru ile Zor Entübasyon Taraması (Look, Evaluate 3-3-2, Mallampati, Obstruction, Neck mobility).',
-        'MOANS Skoru ile Zor Maske Ventilasyonu Taraması (Mask seal, Obesity, Age>55, No teeth, Stiff lungs).',
-        'SHORT Skoru ile Zor Krikotiroidotomi Tespiti (Surgery, Hematoma, Obesity, Radiation, Tumor).',
-        'Uyanık Fiberoptik Entübasyon (AFOI) Kararı: Zor havayolu öngörülen olguda anestezi öncesi fiberoptik planlanmalıdır.',
-        'Yüksek Akımlı Nazal Oksijenizasyon (THRIVE): Apneik desatürasyon süresini 10-15 dakikaya kadar uzatır.'
-      ],
-      anesthesiaMachinePreparation: {
-        title: 'Zor Havayolu ve CICO Krizine Karşı Standart Cihaz & Ekipman Hazırlığı',
-        steps: [
-          'Preoksijenizasyon: En az 3-5 dakika boyunca yüze tam oturan maske ile %100 FiO2 uygulayın.',
-          'CICO Kurtarma Kiti Masada: Steril No:10 neşter, 15 Fr coudé buji ve ID 6.0 mm kaflı ETT ameliyathanede hazır tutulmalıdır.',
-          'Videolaringoskopun Hazır Bulundurulması: İlk entübasyon girişiminden itibaren videolaringoskop odada açık olmalıdır.',
-          'İkinci Kuşak LMA Hazırlığı: Gastrik kanallı 2. kuşak supraglottik araç (i-gel / ProSeal) indüksiyon öncesi hazır olmalıdır.',
-          'Sugammadeks Rezervi: Rokuronyum kullanılan her ameliyathanede 16 mg/kg acil geri çevirme dozu anında ulaşılabilir olmalıdır.'
-        ]
-      },
-      cartTitle: 'Acil Krikotiroidotomi & CICO Kiti Asgari Donanım Listesi:',
-      cartChecklist: [
-        'No: 10 ve No: 20 Steril Cerrahi Neşter (Bistüri)',
-        '15 Fr Coudé Uçlu Havayolu Bujisi (Eschmann Tracheal Introducer)',
-        'ID 6.0 mm Kaflı Endotrakeal Tüp (ve 10 mL kaf enjektörü)',
-        'İkinci Kuşak Supraglottik Havayolu Araçları (i-gel / ProSeal No: 3, 4, 5)',
-        'Guedel Orofarengeal ve Nazofarengeal Airway Seti (Her boy)',
-        'Sugammadeks (Bridion 200 mg ve 500 mg flakonlar)',
-        'Videolaringoskop ve Hiperangüle / Macintosh Uyumlu Palalar',
-        'Krikotiroidotomi Tüp Tespit Bağı ve Boyun Gaz Kompresleri'
-      ]
-    },
-    postopManagement: {
-      icuMonitoringDuration: 'Krikotiroidotomi ile kurtarılan tüm hastalar entübe ve sedatize olarak EN AZ 48 - 72 SAAT Yoğun Bakım Ünitesinde (YBÜ) takip edilmelidir.',
-      recurrenceRiskBadge: 'KOMPLİKASYON & YENİDEN TIKANMA RİSKİ',
-      recurrenceRate: 'Krikotiroidotomi tüpleri kısa ve hareketli olduğundan bükülme, kaf herniasyonu veya kıkırdak zedelenmesi ile sekonder obstrüksiyon riski yüksektir. 24-48 saat içinde elektif cerrahi trakeostomiye dönüştürülmelidir.',
-      maintenanceTherapy: 'İnvaziv mekanik ventilasyon, akciğer koruyucu strateji, profilaktik antibiyoterapi, yakın trakeal aspirasyon ve KBB koordinasyonu.',
-      monitoringParameters: [
-        'Sürekli Dalga Formlu Kapnografi (EtCO2) ve SpO2 Takibi',
-        'İnvaziv Arter Basıncı ve Hemodinamik Kararlılık',
-        'Boyun Muayenesi (Subkutan amfizem, hematom ve kanama kontrolü)',
-        'Seri Arteryel Kan Gazı (PaO2, Laktat ve asidoz düzelmesi)',
-        'Nörolojik Değerlendirme (Hipoksik iskemik ensefalopati takibi)'
-      ],
-      expectedComplications: [
-        'Ciddi Cerrahi Kanama ve Boyun Hematomu',
-        'Tüpün Pretrakeal Yalancı Pasaja (False Lumen) Girmesi ve Masif Cilt Altı Amfizem',
-        'Arka Trakeal Duvar ve Özofagus Yaralanması / Perforasyonu',
-        'Krikoid Kıkırdak Hasarı ve Geç Dönem Subglottik Stenoz',
-        'Anoksik Beyin Hasarı ve Hipoksik Miyokard Enfarktüsü'
-      ],
-      definitiveDiagnosticTesting: [
-        { testName: 'Yatak Başı Akciğer Grafisi (PA)', description: 'Tüp derinliğinin (karina mesafesi), bilateral akciğer ekspansiyonunun ve pnömotoraks / pnömomediastinum yokluğunun teyidi.' },
-        { testName: 'Fiberoptik Bronkoskopi (FOB)', description: 'Tüpün trakea lümeninde olduğunun, karinaya olan mesafesinin ve posterior duvar hasarı olmadığının doğrudan gözle doğrulanması.' },
-        { testName: 'KBB & Baş-Boyun Cerrahisi Konsültasyonu', description: 'Krikotiroidotominin 24-48 saat içinde kalıcı elektif trakeostomiye dönüştürülmesi planı.' }
-      ],
-      prognosisSummary: 'İlk 2-3 dakika içinde Neşter-Buji-Tüp tekniği ile oksijenizasyon sağlanan olgularda kalıcı beyin hasarı kalmaksızın tam nörolojik iyileşme oranı %85-90\'dır. Cerrahi havayoluna geçişte tereddüt edilen ve süresi 5 dakikayı aşan olgularda anoksik ensefalopati ve mortalite dramatik şekilde tırmanır.'
-    },
-    highYieldPearls: [
-      {
-        title: '"Neşter-Buji-Tüp" İğne Krikotiroidotomiye Üstündür',
-        takeaway: 'DAS 2015 kılavuzları kanül/iğne krikotiroidotomiyi terk etmiş ve Neşter-Buji-Tüp tekniğini tek altın standart ilan etmiştir. İğne krikotiroidotomi %50 başarısızlık, kanül bükülmesi ve masif barotravma riski taşır.',
-        category: 'Ezber Bozan'
-      },
-      {
-        title: '3 Girişim Kuralı (The Rule of 3)',
-        takeaway: 'Laringoskopi ile entübasyonda en fazla 3 denemeye izin verilir (sonuncusu uzman tarafından video-laringoskop ile). 3\'ten fazla denemek CICO riskini 7 kat artırır; inat etmek hastayı öldürür!',
-        category: 'Tuzak'
-      },
-      {
-        title: 'Sugammadeks 16 mg/kg Mucizesi ve Tuzağı',
-        takeaway: 'Rokuronyum felcini 3 dakikada sıfırlar. Ancak mekanik obstrüksiyon, yumuşak doku hematomu veya ağır ödem varsa hasta uyansa dahi hava yolu açılmaz. Sugammadeks verilirken krikotiroidotomi hazırlığı ASLA durdurulmamalıdır!',
-        category: 'Kritik Doz'
-      },
-      {
-        title: 'Obez Hastada 8-10 cm Dikey Kesi Kuralı',
-        takeaway: 'Boynu kalın ve kıkırdakları palpe edilemeyen hastada körlemesine yatay kesi yapılmaz! Tiroid çentiğinden sternuma kadar 8-10 cm derin dikey kesi yapılıp parmakla yağ dokusu iki yana sıyrılarak krikoid kıkırdak palpe edilmelidir.',
-        category: 'Tuzak'
-      },
-      {
-        title: 'Laryngeal Handshake Palpasyon Tekniği',
-        takeaway: 'Krikotiroid membranı bulmak için dominant olmayan elin baş ve orta parmakları ile tiroid laminası kavranır, aşağı doğru inilerek krikoid kıkırdak ve arasındaki zar çukurluğu netleşir.',
-        category: 'Sınav / Klinik Notu'
-      },
-      {
-        title: 'Tüp Çapı Kuralı: ID 6.0 mm Kaflı Tüp',
-        takeaway: 'Krikotiroidotomi için 7.5 veya 8.0 mm tüp denenmemelidir; krikoid halkaya sığmaz ve kıkırdağı kırar. Standart erişkin krikotiroidotomi tüpü daima ID 6.0 mm kaflı tüptür.',
-        category: 'Kritik Doz'
-      }
-    ],
     references: [
       {
         authors: 'Frerk C, Mitchell VS, McNarry AF, et al. (Difficult Airway Society)',
@@ -2338,7 +2102,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 6,
           title: 'Akut Mukozal / Laringeal Ödem İse: Farmakolojik Dekompresyon',
-          action: 'Deksametazon 0.2 mg/kg IV (maks 8-16 mg) uygulayın. L-Adrenalin (1 mg/mL) ampulünden 2-5 mL SF ile nebülizatör aracılığıyla inhale ettirin. Anjiyoödem şüphesinde İntramüsküler Adrenalin (0.5 mg) uygulayın.',
+          action: 'Deksametazon 0.2 mg/kg IV (maks 8-16 mg) uygulayın. Nebülize L-Adrenalin: 3–5 mg (3–5 mL 1:1.000 [1 mg/mL] L-Adrenalin; pediatrik 0,5 mL/kg, maks 5 mL) nebülizatör aracılığıyla inhale ettirin. Anjiyoödem şüphesinde İntramüsküler Adrenalin (0.5 mg) uygulayın.',
           criticalNote: 'ACE inhibitörüne bağlı bradikinin aracılı anjiyoödemde antihistaminik ve steroid etkisiz kalabilir; erken entübasyon kararı gecikmemelidir.',
           priority: 'HIGH'
         },
@@ -2545,10 +2309,10 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 10) Kullanılan Kaynaklar & İleri Okuma
     references: [
       {
-        authors: 'Harding J, Sebag-Montefiore D, et al. (Difficult Airway Society & BAETS)',
-        title: 'Multidisciplinary consensus guideline for the management of haematoma after thyroid surgery.',
-        journal: 'Anaesthesia. 2021;76(7):912-921.',
-        year: '2021',
+        authors: 'Iliff HA, El-Boghdadly K, Ahmad I, et al.',
+        title: 'Management of haematoma after thyroid surgery: systematic review and multidisciplinary consensus guidelines from the Difficult Airway Society, the British Association of Endocrine and Thyroid Surgeons and the British Association of Otorhinolaryngology, Head and Neck Surgery.',
+        journal: 'Anaesthesia. 2022;77(1):82–95.',
+        year: '2022',
         relevance: 'Postoperatif boyun hematomunda yatak başı dikiş açma algoritması (SCOOP protokolü).'
       },
       {
@@ -2590,7 +2354,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       epidemiology: 'Genel anestezide pulmoner aspirasyon sıklığı elektif cerrahilerde yaklaşık 1:3.000 - 1:4.000, acil cerrahilerde ve obstetrik vakalarda ise 1:600 - 1:900 oranında bildirilmektedir. Perioperatif anesteziye bağlı mortalitenin yaklaşık %10-15\'inden tek başına aspirasyon sorumludur. Aspirasyonların %50\'den fazlası indüksiyon ve laringoskopi sırasında, %20-30\'u ise ekstübasyon ve uyanma evresinde gerçekleşir.',
       triggers: [
         'Yetersiz Preoperatif Açlık Süresi: Acil cerrahi, travma veya açlık kurallarına uymayan tok karınlı hastalar',
-        'Gecikmiş Mide Boşalması (Gastroparezi): Diyabetes mellitus, akut travma/ağrı, opioid kullanımı, ileus, akut karın, gebelik (> 16. hafta), morbid obezite',
+        'Gecikmiş Mide Boşalması (Gastroparezi): Diyabetes mellitus, GLP-1 reseptör agonistleri (semaglutid, liraglutid, tirzepatid — ASA 2023/2024), akut travma/ağrı, opioid kullanımı, ileus, akut karın, gebelik (> 16. hafta), morbid obezite',
         'Bozulmuş Alt Özofagus Sfinkter (LES) Tonusu: Ağır gastroözofageal reflü (GÖRH), hiatal herni, skleroderma, mide çıkım darlığı',
         'Zor Maske Ventilasyonu & Gastrik İnsuflasyon: Yüksek tepe basıncıyla (> 20 cmH2O) ventilasyon sonucu havanın mideye dolup kardiyayı açması',
         'Yüzeyel Anestezi Altında Laringoskopi ve Ekstübasyon: Yutma ve öksürük refleksleri tam dönmeden veya ıkınma sırasında ekstübasyon yapılması',
@@ -2599,7 +2363,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       safeAgents: [
         'Hızlı Seri İndüksiyon (RSI / RSII): Preoksijenizasyon, hızlı hipnotik + Rokuronyum (1.0-1.2 mg/kg) veya Süksinilkolin (1.5 mg/kg), maske yapmadan hızlı kaflı entübasyon.',
         'Gastrik Ultrasonografi (GUS): Antral alan ölçümü ve Perlas sınıflaması ile aspirasyon riskinin kantitatif belirlenmesi.',
-        'Preoperatif Gastrik Asit & Volüm Profilaksisi: H2 reseptör antagonisti / PPI + Berrak berrak antiasit (Sodyum sitrat 0.3 M) + Metoklopramid (10 mg IV).',
+        'Preoperatif Gastrik Asit & Volüm Profilaksisi: H2 reseptör antagonisti / PPI + Berrak antiasit (Sodyum sitrat 0.3 M) + Metoklopramid (10 mg IV).',
         'Uyanık Fiberoptik Entübasyon (AFOI): Yüksek aspirasyon riski ve eşlik eden zor havayolunda altın standarttır.',
         'Tam Uyanık Ekstübasyon: Koruyucu farengeal/laringeal refleksler tam dönmüş, hasta komutlara uyar durumda ve baş-boyun elevasyonundayken ekstübasyon.',
         'Güçlü Rijit Aspiratör (Yankauer): İndüksiyon öncesi çalışır durumda yastığın hemen altında hazır bulunmalıdır.'
@@ -3035,14 +2799,14 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 6,
           title: 'ACİL TROMBOLİTİK TEDAVİ (MASİF PE & ŞOK PROTOKOLÜ)',
-          action: 'Persistan şok (SKB < 90 mmHg veya MAP < 65 mmHg) veya kardiyak arrest durumunda derhal sistemik tromboliz uygulayın: Alteplase (rt-PA) 100 mg IV 2 saatlik infüzyon VEYA arrest/peri-arrest durumunda acil 50 mg IV 15 dakikalık bolus (gerekirse 30 dk sonra 2. 50 mg). Alternatif: Kilo ayarlı Tenecteplase tek bolus.',
+          action: 'Persistan şok (SKB < 90 mmHg veya MAP < 65 mmHg) veya kardiyak arrest durumunda derhal sistemik tromboliz uygulayın: Tam kardiyak arrestte Alteplase (rt-PA) 50 mg IV 1–2 dk hızlı bolus (ROSC yoksa 15–30 dk sonra 2. 50 mg); peri-arrest/şokta 0,6 mg/kg (maks 50 mg) 15 dakikada IV veya standart 100 mg IV 2 saatlik infüzyon. Alternatif: Kilo ayarlı Tenecteplase tek bolus.',
           criticalNote: 'Perioperatif cerrahi kanama riski çok yüksekse alternatif: Acil Cerrahi Pulmoner Embolektomi veya Girişimsel Kateter Trombektomi / VA-ECMO.',
           priority: 'CRITICAL'
         },
         {
           stepNumber: 7,
-          title: 'ANTİKOAGÜLASYON: ANFRAKSİYONE HEPARİN (UFH)',
-          action: 'Klinik şüphe anında ve trombolizle eşzamanlı/hemen sonrasında IV UFH 80 IU/kg bolus ardından 18 IU/kg/saat infüzyon başlatın. Hedef aPTT: normalin 1.5 - 2.5 katı (60-80 saniye).',
+          title: 'ANTİKOAGÜLASYON: ANFRAKSİYONE HEPARİN (UFH — ESC 2019)',
+          action: 'Tromboliz uygulanmayacak yüksek şüpheli olgularda IV UFH 80 IU/kg bolus + 18 IU/kg/saat infüzyon başlanır. ANCAK ESC 2019 kılavuzuna göre sistemik tromboliz (Alteplase/Tenecteplase) sırasında UFH infüzyonu DURDURULUR ve eşzamanlı 80 IU/kg UFH bolusu YAPILMAZ; tromboliz bittikten sonra aPTT < 2× normal olduğunda UFH (bolussuz) yeniden başlatılır (hedef aPTT: 1,5–2,5× normal).',
           criticalNote: 'Cerrahi kanama veya acil operasyon riski olan olgularda yarı ömrü kısa olduğu ve Protamin Sülfat ile hızla nötralize edilebildiği için UFH altın standarttır.',
           priority: 'HIGH'
         },
@@ -3112,7 +2876,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
             {
               agent: 'Alteplase (rt-PA) Standart İnfüzyon',
               standardDose: '100 mg IV infüzyon 2 saatte (veya kilo <65 kg ise 0.6 mg/kg, maks 50 mg 15 dakikada)',
-              cardiacArrestDose: '50 mg IV 15 dakikada bolus infüzyon; 30 dakika sonra ROSC sağlanamazsa 2. 50 mg bolus verilebilir',
+              cardiacArrestDose: 'Tam kardiyak arrestte: 50 mg IV 1–2 dk hızlı bolus (15–30 dk sonra ROSC yoksa 2. 50 mg bolus düşünülebilir) · Peri-arrest/şok: 0,6 mg/kg (maks 50 mg) 15 dakikada IV infüzyon',
               contraindications: 'Aktif iç kanama, son 3 ayda hemorajik inme / kafa travması, son 3 haftada majör cerrahi (göreceli - arrest durumunda hayat kurtarıcı olarak uygulanır).'
             },
             {
@@ -3490,16 +3254,16 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         },
         {
           stepNumber: 5,
-          title: 'BİLATERAL İNTERNAL JÜGÜLER VEN KOMPRESYONU (1-2. DK)',
-          action: 'Boyun venlerine bilateral hafif manuel kompresyon uygulayın. Serebral ve servikal venöz basıncı anlık yükselterek havanın girdiği açık kranial/servikal veni bulup kapatmak için venöz geri akım sağlayın.',
-          criticalNote: 'Bilateral boyun veni basısı kranial venöz basıncı artırarak venöz lümenden kanın dışarı akmasını sağlar; cerrah hava emen veni lokalize edip bipolar koter veya kemik mumu ile kapatabilir.',
+          title: 'BİLATERAL İNTERNAL JÜGÜLER VEN KOMPRESYONU (1-2. DK — DİKKATLİ/KISA SÜRELİ)',
+          action: 'Boyun venlerine bilateral hafif ve kısa süreli manuel kompresyon uygulayın. Serebral ve servikal venöz basıncı anlık yükselterek havanın girdiği açık kranial/servikal veni bulup kapatmak için venöz geri akım sağlayın.',
+          criticalNote: 'DİKKAT: Bilateral IJV kompresyonu KİBAS artışı, serebral perfüzyon basıncında (CPP) düşüş, karotis sinüs uyarımıyla refleks bradikardi/hipotansiyon ve karotis plak rüptürü/embolizasyonu riski taşır; yalnızca kısa süreli ve dikkatle uygulanmalıdır.',
           priority: 'HIGH'
         },
         {
           stepNumber: 6,
-          title: 'AGRESİF İNTRAVENÖZ SIVI YÜKLEMESİ & CVP DÜZEYİ (2-3. DK)',
-          action: 'Isıtılmış dengeli kristaloid (İzolen/Ringer Laktat) 1000-1500 mL hızlı infüzyonla CVP düzeyini 10-12 mmHg seviyesine çıkarın. Sağ atriyal ve sistemik venöz basıncı hidrostatik olarak yükselterek venöz lümen ile atmosfer arasındaki negatif gradyenti sıfırlayın.',
-          criticalNote: 'Hipovolemi VAE riskini ve şiddetini katlar. Venöz basıncın pozitif olması damarın hava emmesini fiziksel olarak engeller. Ancak aşırı yüklemede RV dilatasyonuna dikkat edilmelidir.',
+          title: 'KONTROLLÜ İNTRAVENÖZ SIVI YÜKLEMESİ & CVP DÜZEYİ (2-3. DK)',
+          action: 'Isıtılmış dengeli kristaloid (İzolen/Ringer Laktat) ile kontrollü sıvı yüklemesi yaparak sağ atriyal ve sistemik venöz basıncı hidrostatik olarak yükseltin ve venöz lümen ile atmosfer arasındaki negatif gradyenti azaltın (hipovolemik erken evrelerde 500–1000 mL boluslarla CVP 10–12 mmHg hedeflenebilir).',
+          criticalNote: 'Hipovolemi VAE riskini katlar; ANCAK Evre IV–V (masif emboli, şok ve akut sağ ventrikül yetmezliği) tablosunda aşırı hızlı sıvı yüklemesinden KESİNLİKLE KAÇININ (sıvı kısıtlaması + erken Noradrenalin), aksi halde RV dilatasyonu ve septal şift kardiyak debiyi çökertir.',
           priority: 'HIGH'
         },
         {
@@ -3905,29 +3669,29 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 3,
           title: 'NÖBET AKTİVİTESİNİ BASKILA: BENZODİAZEPİN TERCİHİ (İLK 30 SN)',
-          action: 'Nöbet gelişirse ilk tercih olarak Midazolam 1 - 2 mg IV bolus titre edin. Alternatif: Lorazepam veya Diazepam. Nöbet devam ederse Süksinilkolin 0.5-1 mg/kg IV veya Rokuronyum uygulanarak motor aktivite ve kas asidozu durdurulmalı, hasta entübe edilmelidir.',
+          action: 'Nöbet gelişirse ilk tercih olarak Midazolam 1 - 2 mg IV bolus titre edin. Alternatif: Lorazepam veya Diazepam. Nöbet devam ederse Süksinilkolin 0.5-1 mg/kg IV veya Rokuronyum uygulanarak motor konvülziyonlar ve kas kaynaklı asidoz durdurulmalı, hasta entübe edilmelidir (DİKKAT: NMB motor kasılmaları ve laktik asidozu durdurur ancak beyindeki EEG nöbet aktivitesini durdurmaz; benzodiazepin/antikonvülzan desteği sürdürülmelidir).',
           criticalNote: 'Propofol kardiyotoksik ve miyokardiyal depresandır; ağır hipotansiyon ve kardiyak yetmezliği tetikleyebileceği için LAST nöbetinde ilk tercih DEĞİLDİR (yalnızca düşük doz 20-30 mg çok dikkatle kullanılabilir).',
           priority: 'CRITICAL'
         },
         {
           stepNumber: 4,
-          title: '%20 LİPİD EMÜLSİYONU (İNTRALİPİD) ACİL BOLUSU BAŞLA (1. DK)',
-          action: '%20 İntralipid solüsyonundan 1.5 mL/kg IV bolus (70 kg hasta için ~100 mL) 2-3 dakika içinde puşe olarak uygulayın. Vasküler instabilite veya nörolojik çöküş görülen tüm olgularda gecikmeden başlanmalıdır.',
+          title: '%20 LİPİD EMÜLSİYONU (İNTRALİPİD) ACİL BOLUSU BAŞLA (1. DK — ASRA 2020)',
+          action: 'ASRA 2020 basitleştirilmiş şeması: ≥ 70 kg erişkinde sabit 100 mL %20 İntralipid IV bolus (2–3 dk); < 70 kg hastada 1,5 mL/kg IV bolus (2–3 dk) uygulayın. Vasküler instabilite veya nörolojik çöküş görülen tüm olgularda gecikmeden başlanmalıdır.',
           criticalNote: 'Lipid kurtarma kardiyak arrest beklenmeden, ilk hemodinamik instabilite veya nöbet anında başlanmalıdır! "Lipid Sink" etkisiyle kanda serbest LA fraksiyonunu bağlar ve miyokardı temizler.',
           priority: 'CRITICAL'
         },
         {
           stepNumber: 5,
           title: '%20 LİPİD EMÜLSİYONU SÜREKLİ İNFÜZYONUNU BAŞLAT (2. DK)',
-          action: 'Bolusun hemen ardından %20 Lipid infüzyonunu 0.25 mL/kg/dk hızında (70 kg hasta için ~17.5 mL/dk veya yaklaşık 1000 mL/saat) başlatın. İnfüzyon hemodinamik stabilite sağlanana kadar en az 10-15 dakika sürdürülmelidir.',
+          action: 'Bolusun hemen ardından: ≥ 70 kg erişkinde 200–250 mL %20 Lipid 15–20 dakikada IV infüzyon; < 70 kg hastada 0,25 mL/kg/dk sürekli infüzyon başlatın. Hemodinamik stabilite sağlandıktan sonra en az 10–15 dakika sürdürülmelidir.',
           criticalNote: 'İnfüzyon pompayla veya manuel serbest akışla verilebilir; hastanın kan basıncı ve kardiyak ritmi normale dönene kadar kesilmemelidir.',
           priority: 'HIGH'
         },
         {
           stepNumber: 6,
           title: 'PERSİSTAN KARDİYOVASKÜLER ÇÖKMEDE TEKRAR BOLUSU VE HIZ ARTIRIMI (3-5. DK)',
-          action: 'Eğer kan basıncı toparlanmazsa veya aritmiler sürerse: 1.5 mL/kg bolusu 5-10 dakika arayla 1 veya 2 kez tekrarlayın (toplam maks 3 bolus). Sürekli infüzyon hızını iki katına çıkararak 0.5 mL/kg/dk (70 kg için ~35 mL/dk) yapın.',
-          criticalNote: 'Maksimum Kümülatif Lipid Doz Sınırı: İlk 30-60 dakika içinde toplam 10 - 12 mL/kg (70 kg için ~700-840 mL) aşılmamalıdır.',
+          action: 'Eğer kan basıncı toparlanmazsa veya aritmiler sürerse: Bolusu (≥ 70 kg: 100 mL; < 70 kg: 1,5 mL/kg) 5–10 dakika arayla 1 veya 2 kez tekrarlayın ve infüzyon hızını iki katına çıkarın (< 70 kg için 0,5 mL/kg/dk).',
+          criticalNote: 'Maksimum Kümülatif Lipid Doz Sınırı (ASRA 2020): Toplam 12 mL/kg ideal vücut ağırlığı (IBW) — erişkinde yaklaşık 1000 mL aşılmamalıdır.',
           priority: 'HIGH'
         },
         {
@@ -3963,11 +3727,11 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       // LAST'a özel detaylı klinik protokoller
       lastProtocols: {
         lipidRescueProtocol: {
-          title: '%20 Lipid Emülsiyonu (Lipid Kurtarma) Uygulama Rehberi',
-          bolusDose: '1.5 mL/kg IV Bolus (2-3 dakikada verilir; 70 kg erişkin için yaklaşık 100-105 mL)',
-          infusionDose: '0.25 mL/kg/dk Sürekli İnfüzyon (70 kg hasta için yaklaşık 17.5 mL/dk veya 1050 mL/saat)',
-          repeatBolusRule: 'Kardiyovasküler instabilite veya aritmi devam ederse 5-10 dk arayla 1-2 kez daha 1.5 mL/kg bolus tekrarlanabilir ve infüzyon 0.5 mL/kg/dkya çıkarılabilir.',
-          maxCumulativeDose: 'İlk 30-60 dakikada toplam 10 - 12 mL/kg (70 kg hasta için maksimum ~700 - 840 mL)',
+          title: '%20 Lipid Emülsiyonu (Lipid Kurtarma) Uygulama Rehberi (ASRA 2020)',
+          bolusDose: '≥ 70 kg erişkin (ASRA 2020 basitleştirilmiş sabit doz): 100 mL IV Bolus (2–3 dk) · < 70 kg hasta: 1,5 mL/kg IV Bolus (2–3 dk)',
+          infusionDose: '≥ 70 kg erişkin: 200–250 mL IV İnfüzyon 15–20 dakikada · < 70 kg hasta: 0,25 mL/kg/dk Sürekli İnfüzyon (IBW)',
+          repeatBolusRule: 'Kardiyovasküler instabilite veya aritmi devam ederse 5–10 dk arayla 1–2 kez daha bolus tekrarlanabilir (≥ 70 kg: 100 mL; < 70 kg: 1,5 mL/kg) ve infüzyon hızı iki katına çıkarılabilir.',
+          maxCumulativeDose: 'Maksimum kümülatif doz: 12 mL/kg ideal vücut ağırlığı (IBW) — erişkinde ilk 30 dk\'da yaklaşık 1000 mL aşılmamalıdır',
           lipidSinkMechanism: 'Lipid Sink (Lipid Çökeltisi) Hipotezi: Lipid damlacıkları kanda lipofilik lokal anesteziği (özellikle Bupivakaini) tutarak doku ve miyositlerden uzaklaştırır. Metabolik Hipotez: LA ile bloke olan karnitin açiltransferazı baypas ederek miyosit mitokondrisine doğrudan yağ asidi yakıtı sağlar ve miyokardiyal ATP üretimini restore eder.'
         },
         aclsModifications: {
@@ -4120,7 +3884,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           'Tüm periferik sinir blokları ve yüksek doz infiltrasyonlar kesinlikle tam monitörizasyon altında (EKG, NIBP, SpO2) ve damar yolu açıkken uygulanmalıdır.',
           'Blok odasında ve ameliyathanede acil %20 Lipid Emülsiyonu (en az iki adet 500 mL torba), infüzyon seti ve aspiratör hazır bulundurulmalıdır.',
           'Acil havayolu ekipmanı (balon-maske, videolaringoskop, ETT) ve nöbet kontrolü için Midazolam çekili tutulmalıdır.',
-          'Modifiye ACLS için düşük doz Adrenalin (1 mg ampul 100 mL veya 10 mLye sulandırılarak 10 mcg/mL konsantrasyon) hazırlanabilir durumda olmalıdır.'
+          'Modifiye ACLS için düşük doz Adrenalin (1 mg ampul 100 mL SF\'ye sulandırılarak [10 mcg/mL] konsantrasyon) hazırlanabilir durumda olmalıdır.'
         ]
       },
       cleanAnesthesiaProtocol: [
@@ -4354,8 +4118,8 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 6,
           title: 'REFRAKTER VAZOPPLEJİDE İKİNCİ BASAMAK VAZOPRESSÖRLERİ EKLEYİN',
-          action: 'Yüksek doz adrenaline rağmen hipotansiyon sürüyorsa (özellikle kronik ACEİ/ARB veya beta-bloker kullanan hastalarda): Erken Noradrenalin infüzyonu (0.05 - 0.5 mcg/kg/dk), Vazopressin (0.5 - 2 Ünite IV bolus veya 0.01 - 0.04 Ü/dk sürekli infüzyon) veya refrakter vazoplejide Metilen Mavisi (1.5 - 2 mg/kg IV 20-60 dakikada) uygulayın.',
-          criticalNote: 'Beta-bloker kullanan hastalarda Glukagon (1 - 5 mg IV yavaş puşe, ardından 2-5 mg/saat infüzyon) adrenalin direncini kırmak için endikedir.',
+          action: 'Yüksek doz adrenaline rağmen hipotansiyon sürüyorsa (özellikle kronik ACEİ/ARB veya beta-bloker kullanan hastalarda): Erken Noradrenalin infüzyonu (0.05 - 0.5 mcg/kg/dk), Vazopressin (0.5 - 2 Ünite IV bolus veya 0.01 - 0.04 Ü/dk sürekli infüzyon) veya refrakter vazoplejide Metilen Mavisi (1.5 - 2 mg/kg IV 20-60 dakikada; KONTRENDİKASYONLAR: G6PD eksikliği [hemoliz], SSRI/SNRI/MAOI [Serotonin Sendromu] ve yanlış düşük SpO₂) uygulayın.',
+          criticalNote: 'Beta-bloker kullanan hastalarda Glukagon (1–2 mg IV 5 dk\'da yavaş puşe [maks 5 mg], ardından 5–15 mcg/dk [0,3–0,9 mg/saat, maks 1–2 mg/saat] infüzyon) adrenalin direncini kırmak için endikedir.',
           priority: 'HIGH'
         },
         {
@@ -4367,10 +4131,10 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         },
         {
           stepNumber: 8,
-          title: 'ROKURONYUM ŞÜPHESİNDE ACİL SUGAMMADEKS KURTARMA DOZU',
-          action: 'Eğer anafilaksi indüksiyonda veya idame sırasında Rokuronyum (veya Vekuronyum) verilmesini takiben geliştiyse, derhal 16 mg/kg Sugammadeks IV verin. Sugammadeks molekülü dolaşımdaki rokuronyumu şelasyon gibi sararak IgE bağlanan antijenik epitopları bloke eder ve krizin çözülmesine katkı sağlar (NAP6 kılavuz önerisi).',
-          criticalNote: 'Sugammadeksin kendisinin de nadiren alerji yapabileceği unutulmamalı; ancak rokuronyum anafilaksisinde hayat kurtarıcı bir kurtarma ajanı olarak değerlendirilmelidir.',
-          priority: 'HIGH'
+          title: 'ROKURONYUM ŞÜPHESİNDE SUGAMMADEKS (YALNIZCA REFRAKTER OLGULARDA)',
+          action: 'NAP6 (2018) ve Garvey BJA (2019) konsensusuna göre Sugammadeks rokuronyum anafilaksisinde RUTİN veya İLK BASAMAK tedavi olarak ÖNERİLMEZ ve asla Adrenalin veya sıvı resüsitasyonunu geciktirmemelidir. Yalnızca standart resüsitasyona (Adrenalin + agresif kristaloid) yanıtsız refrakter olgularda 16 mg/kg Sugammadeks IV kurtarma dozu düşünülebilir.',
+          criticalNote: 'Sugammadeksin kendisinin de anafilaksi tetikleyebileceği unutulmamalı; primer hayat kurtarıcı tedavi daima Adrenalin ve sıvı resüsitasyonudur.',
+          priority: 'MEDIUM'
         },
         {
           stepNumber: 9,
@@ -4381,8 +4145,8 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         },
         {
           stepNumber: 10,
-          title: 'TANI PROTOKOLÜ: SERİ SERUM TRİPTAZ ÖRNEKLERİ ALIN VE KAYDEDİN',
-          action: 'Tanının kesinleştirilmesi ve adli/tıbbi süreç için mutlaka iki ayrı kan örneği alınmalıdır: 1. Tüp: Olayın başlangıcından sonraki 30 - 120. dakikalar arasında (Pik Mast Hücre Degranülasyon Triptazı). 2. Tüp: Postoperatif 24. saatte veya taburculuk öncesi (Bazal Serum Triptazı). Tüm verilen ilaçlar saat/dakika kaydedilerek hasta 4-6 hafta sonra alerji-immünoloji polikliniğine yönlendirilmelidir.',
+          title: 'TANI PROTOKOLÜ: NAP6 3-ÖRNEK SERUM TRİPTAZ PROTOKOLÜ',
+          action: 'Tanının kesinleştirilmesi ve adli/tıbbi süreç için NAP6 standardına göre 3 ayrı serum triptaz örneği alınmalıdır: 1. Tüp: Olay fark edildiği EN ERKEN anda (resüsitasyonu geciktirmeden); 2. Tüp: 1–2. saatte (maksimum 4 saat içinde — Pik Mast Hücre Degranülasyon Triptazı); 3. Tüp: ≥ 24 saat sonra (Bazal Serum Triptazı). Tüm verilen ilaçlar saat/dakika kaydedilerek hasta 4-6 hafta sonra alerji-immünoloji polikliniğine yönlendirilmelidir.',
           criticalNote: 'Pozitif Anafilaksi Doğrulama Kriteri: Pik Triptaz ≥ (1.2 x Bazal Triptaz) + 2 mcg/L formülü ile kesinleştirilir.',
           priority: 'MEDIUM'
         }
@@ -4451,12 +4215,12 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
             {
               agent: 'Metilen Mavisi',
               dosage: '1.5 - 2.0 mg/kg IV (100 mL %5 Dekstroz içinde 20-60 dakikada)',
-              indication: 'Tüm katekolaminlere dirençli refrakter vazoplejik şok',
+              indication: 'Tüm katekolaminlere dirençli refrakter vazoplejik şok (KONTRENDİKASYONLAR: G6PD eksikliği [hemoliz], SSRI/SNRI/MAOI [Serotonin Sendromu]; yanlış düşük SpO₂ okutur)',
               mechanism: 'İndüklenebilir nitrik oksit sentaz (iNOS) ve çözünür guanilat siklazı (sGC) inhibe ederek NO kaynaklı masif vazodilatasyonu kırar.'
             },
             {
               agent: 'Glukagon',
-              dosage: '1 - 5 mg IV yavaş bolus (5 dakikada), ardından 2 - 5 mg/saat sürekli infüzyon',
+              dosage: '1–2 mg IV (5 dk\'da yavaş puşe, maks 5 mg), ardından 5–15 mcg/dk (0,3–0,9 mg/saat, maks 1–2 mg/saat) infüzyon',
               indication: 'Kronik Beta-Bloker tedavisi alan ve adrenaline yanıt vermeyen hipotansif/bradikardik hastalar',
               mechanism: 'Beta-adrenerjik reseptörleri baypas ederek doğrudan miyokardiyal adenilat siklazı aktive eder; inotropik ve kronotropik etki sağlar.'
             }
@@ -4496,9 +4260,9 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         ],
 
         tryptaseAndInvestigationProtocol: {
-          title: 'Serum Triptaz Tanı Protokolü & İmmünolojik Araştırma (NAP6 Standartları)',
-          firstSampleTiming: '1. Kan Örneği (Pik Triptaz): Reaksiyonun başlangıcından itibaren 30 - 120. dakikalar arasında (en geç 4. saat içinde) alınmalıdır. Bu örnek mast hücresi degranülasyonunun tepe seviyesini gösterir.',
-          secondSampleTiming: '2. Kan Örneği (Bazal Triptaz): Reaksiyondan en az 24 saat sonra (veya taburculuk öncesi poliklinik kontrolünde) alınmalıdır. Bu örnek hastanın kendi fizyolojik bazal mast hücresi yükünü belirler.',
+          title: 'Serum Triptaz Tanı Protokolü & İmmünolojik Araştırma (NAP6 3-Örnek Standartları)',
+          firstSampleTiming: '1. Örnek: Olay fark edildiği EN ERKEN anda (resüsitasyonu geciktirmeden) · 2. Örnek: 1–2. saatte (maks 4 saat içinde — Pik Mast Hücre Degranülasyon Triptazı).',
+          secondSampleTiming: '3. Örnek (Bazal Triptaz): Reaksiyondan ≥ 24 saat sonra (veya taburculuk/alerji polikliniği kontrolünde) alınmalıdır. Hastanın fizyolojik bazal mast hücresi yükünü belirler.',
           diagnosticFormula: 'Pozitif Anafilaksi Doğrulama Formülü: Pik Serum Triptazı ≥ (1.2 x Bazal Serum Triptazı) + 2 mcg/L (Örn: Bazal 5 mcg/L olan hastada pik triptazın ≥ 8 mcg/L olması reaksiyonu kanıtlar).',
           culpritAgentsBreakdown: [
             {
@@ -4532,7 +4296,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               riskNotes: 'Lateks temasından 30-60 dakika sonra mukozal emilimle reaksiyon başlar. Çoklu cerrahi ve spina bifidalı hastalar yüksek risklidir.'
             }
           ],
-          sugammadexRescueInRocuronium: 'Rokuronyuma bağlı anafilakside yüksek doz Sugammadeks (16 mg/kg) verilmesi, dolaşımdaki serbest rokuronyumu hızla enkapsüle ederek IgE antikorlarının bağlanmasını ve mast hücre uyarısını sonlandırabilir.',
+          sugammadexRescueInRocuronium: 'NAP6 (2018) ve Garvey BJA (2019) konsensusuna göre Sugammadeks rokuronyum anafilaksisinde RUTİN veya İLK BASAMAK tedavi olarak ÖNERİLMEZ ve asla Adrenalin/sıvı resüsitasyonunu geciktirmemelidir. Yalnızca standart resüsitasyona yanıtsız refrakter olgularda 16 mg/kg IV kurtarma dozu düşünülebilir.',
           allergyClinicReferral: 'Olay sonrası epikrizde anestezi indüksiyonunda ve cerrahide kullanılan tüm ilaçlar, solüsyonlar, antiseptikler, lateks ve cerrahi boyalar tam saatleriyle listelenmelidir. Hasta reaksiyondan 4 - 6 hafta sonra Deri Prik Testi, İntradermal Test ve Spesifik IgE incelemesi için Alerji-İmmünoloji Kliniğine sevk edilmelidir.'
         }
       }
@@ -4676,9 +4440,9 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         category: 'Tuzak'
       },
       {
-        title: 'Rokuronyum Anafilaksisinde Sugammadeks 16 mg/kg',
-        takeaway: 'Rokuronyuma bağlı kollapsta yüksek doz Sugammadeks (16 mg/kg) dolaşımdaki antijeni sarıp epitopları maskeleyerek krizden çıkış sağlayabilir.',
-        category: 'Ezber Bozan'
+        title: 'Rokuronyum Anafilaksisinde Sugammadeks: Rutin İlk Basamak Değildir',
+        takeaway: 'NAP6 (2018) ve Garvey BJA (2019) konsensusuna göre Sugammadeks rokuronyum anafilaksisinde RUTİN veya İLK BASAMAK tedavi olarak ÖNERİLMEZ; asla Adrenalin ve sıvı resüsitasyonunu geciktirmemelidir. Yalnızca standart resüsitasyona yanıtsız refrakter olgularda 16 mg/kg kurtarma dozu düşünülebilir.',
+        category: 'Tuzak'
       },
       {
         title: 'Kounis Sendromunu Unutmayın',
@@ -4690,7 +4454,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     // 10) Kanıta Dayalı Kaynaklar
     references: [
       {
-        authors: 'Kempker RR, Hunter JM, Cook TM, et al. (NAP6 Steering Group)',
+        authors: 'Harper NJN, Cook TM, Garcez T, et al. (NAP6 Steering Group)',
         title: 'Anaesthesia, surgery, and life-threatening allergic reactions: report and findings of the Royal College of Anaesthetists 6th National Audit Project (NAP6).',
         journal: 'British Journal of Anaesthesia. 2018;121(1):159-171.',
         year: '2018',
@@ -5012,13 +4776,13 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
             category: '5T (Mekanik / Toksik)',
             cause: 'Tromboz - Pulmoner Emboli (PE) veya Koroner (MI)',
             intraopClues: 'Ani EtCO2 çöküşü + POCUSda RV dilatasyonu (PE) veya ST elevasyonu (Kounis/MI)',
-            immediateReversal: 'Masif PE: Alteplase 50 mg IV bolus + 15 dk daha KPR veya VA-ECMO. MI: PCI / Acil anjiyo aktivasyonu.'
+            immediateReversal: 'Masif PE: Alteplase 50 mg IV 1–2 dk hızlı bolus + en az 60–90 dk KPR (ERC 2021) veya VA-ECMO. MI: PCI / Acil anjiyo aktivasyonu.'
           },
           {
             category: 'Anesteziye Özgü',
             cause: 'Yüksek Spinal / Total Nöroaksiyel Blok & Aşırı Vagal Refleks',
             intraopClues: 'Spinal/epidural sonrası ani bradikardi→asistoli, üst ekstremite güçsüzlüğü, laparoskopi insüflasyonu',
-            immediateReversal: 'Adrenalin/Efedrin + Atropin (vagalde) + Hızlı IV sıvı + Entübasyon/ventilasyon; pnömoperitonu boşalt!'
+            immediateReversal: 'Adrenalin/Efedrin + Semptomatik bradikardide Atropin 1 mg IV (AHA 2020/2025; 3–5 dk arayla, maks 3 mg) + Hızlı IV sıvı + Entübasyon/ventilasyon; pnömoperitonu boşalt!'
           },
           {
             category: 'Anesteziye Özgü',
@@ -5826,7 +5590,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         },
         {
           stepNumber: 6,
-          title: 'KESİN TEDAVİ: TÜP TORAKOSTOMİ & SUALTI KAPALI DRENAJ (EMİYET ÜÇGENİ)',
+          title: 'KESİN TEDAVİ: TÜP TORAKOSTOMİ & SUALTI KAPALI DRENAJ (EMNİYET ÜÇGENİ)',
           action: 'İğne/parmak dekompresyon geçicidir (kateter kıvrılabilir veya tıkanabilir). İdeal olarak parmak torakostomi yapılan alandan veya BTS Emniyet Üçgeni içinden (4–5. İKA, ön aksiller–orta aksiller hat arası; meme başı hizasının üstü) trokarsız künt diseksiyonla (veya basit izole olguda 10–14 Fr Seldinger; travma/dev kaçak/hemotoraksta 24–28 Fr) göğüs tüpünü posterior-apikal yöne yerleştirin ve sualtı kapalı drenaj şişesine bağlayın.',
           criticalNote: 'Tüp ucunun su seviyesinin 2–3 cm altında olduğunu, drenaj şişesinin hasta seviyesinden 50–100 cm aşağıda dik durduğunu ve inspiryum-ekspiryumda salınım (tidalling) olduğunu doğrulayın.',
           priority: 'HIGH'
@@ -6287,7 +6051,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         postFireAssessment: {
           title: 'Yangın Sonrası Değerlendirme, Bronkoskopi & Toksik İnhalasyon Yönetimi',
           bronchoscopyProtocol: 'Tüm hava yolu yangınlarında (ve şüpheli yüz/duman inhalasyonunda) en kısa sürede Rijit veya Fiberoptik Bronkoskopi yapılmalıdır. Mukozal ödem, ülserasyon, karbon birikimi (is) ve kırılmış tüp/tampon parçaları taranır.',
-          toxicInhalationCheck: 'Yanmış PVC tüplerden Hidrojen Klorür (HCl), Karbonmonoksit (CO) ve Siyanür (HCN) açığa çıkar. Seri arteriyel kan gazında CO-oksimetri ile COHb düzeyi ve yüksek laktat/anyon açığı (siyanür şüphesi!) ölçülmelidir. COHb yüksekse %100 O₂ uygulanır.',
+          toxicInhalationCheck: 'Yanmış PVC tüplerden Hidrojen Klorür (HCl), Karbonmonoksit (CO) ve Siyanür (HCN) açığa çıkar. Seri arteriyel kan gazında CO-oksimetri ile COHb düzeyi ve yüksek laktat/anyon açığı (siyanür şüphesi!) ölçülmelidir. COHb yüksekse %100 O₂ uygulanır; siyanür (HCN) toksisitesi şüphesinde (açıklanamayan yüksek laktat > 8–10 mmol/L, derin metabolik asidoz veya hemodinamik kollaps) spesifik antidot Hidroksokobalamin (Cyanokit) 5 g IV (15 dk infüzyon; pediatrik 70 mg/kg) uygulanır.',
           edemaAndSteroids: 'Termal hava yolu ödemi ilk 6–24 saatte zirve yapar ve ekstübasyon sonrası ani tıkanma yaratabilir. Hastalar erken ekstübe edilmez; YBÜ’de baş 30–45° elevasyonda, nemlendirilmiş oksijen, gerekirse nebülize adrenalin ve ödem yönetimi (Deksametazon 0.1–0.2 mg/kg IV, maksimum 8–10 mg) eşliğinde seri bronkoskopik takiple izlenir.'
         }
       }
@@ -6466,4 +6230,8 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     ]
   }
 };
+
+// Alias 'cico' -> 'airway-crisis' (zero duplication, full backward compatibility)
+ANESTHESIA_EMERGENCIES_DATA['cico'] = ANESTHESIA_EMERGENCIES_DATA['airway-crisis'];
+
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   ShieldAlert,
   Flame,
@@ -26,6 +26,10 @@ import {
   Droplets
 } from 'lucide-react';
 import { EmergencyProtocol } from '../../data/emergenciesData';
+import { ShareLinkButton } from '../common/ShareLinkButton';
+import { computeEmergencyDoses } from './calculators/emergencyDoseCalculations';
+import { StickyCrisisHeaderBar } from './calculators/StickyCrisisHeaderBar';
+import { ProtocolDoseCalculatorPanel } from './calculators/ProtocolDoseCalculatorPanel';
 
 interface EmergencyProtocolDetailViewProps {
   protocol: EmergencyProtocol;
@@ -33,154 +37,57 @@ interface EmergencyProtocolDetailViewProps {
   onBack: () => void;
 }
 
+const CRISIS_MODE_SECTIONS: Record<string, boolean> = {
+  sec2: false, // 2) Giriş (ders kitabı — Kriz Modunda kapalı)
+  sec3: true,  // 3) Tanı
+  sec4: true,  // 4) Akut Kriz Yönetimi (ÖNCELİKLİ)
+  sec5: false, // 5) Patofizyoloji
+  sec6: false, // 6) Klinik Özellikler & Prezentasyon
+  sec7: false, // 7) Koruyucu Tedbirler & Hazırlık
+  sec8: false, // 8) Postoperatif Takip & Prognoz
+  sec9: false, // 9) High-Yield Bilgiler
+  sec10: false // 10) Kaynaklar
+};
+
+const ALL_OPEN_SECTIONS: Record<string, boolean> = {
+  sec2: true,
+  sec3: true,
+  sec4: true,
+  sec5: true,
+  sec6: true,
+  sec7: true,
+  sec8: true,
+  sec9: true,
+  sec10: true
+};
+
+const ALL_CLOSED_SECTIONS: Record<string, boolean> = {
+  sec2: false,
+  sec3: false,
+  sec4: false,
+  sec5: false,
+  sec6: false,
+  sec7: false,
+  sec8: false,
+  sec9: false,
+  sec10: false
+};
+
 export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewProps> = ({
   protocol,
   isDark,
   onBack
 }) => {
-  // Quick Weight Calculator (e.g. 70 kg default)
+  // Quick Weight Calculator (e.g. 70 kg default) — centralized, validated & P0-fixed
   const [patientWeight, setPatientWeight] = useState<string>('70');
-  const weightNum = parseFloat(patientWeight) || 0;
+  const doses = useMemo(() => computeEmergencyDoses(patientWeight), [patientWeight]);
 
-  // MH Dantrolene calculations
-  const initialDoseMg = Math.round(weightNum * 2.5);
-  const dantriumVials = Math.ceil(initialDoseMg / 20);
-  const ryanodexVials = Math.ceil(initialDoseMg / 250);
+  // Crisis-First Mode (default true: Acute Crisis Management & Diagnosis open, textbook sections collapsed)
+  const [crisisMode, setCrisisMode] = useState<boolean>(true);
+  const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>({ ...CRISIS_MODE_SECTIONS });
 
-  // Bronchospasm calculations
-  const mgSulfateGrams = weightNum > 0 ? Math.min(2.5, +(weightNum * 0.045).toFixed(1)) : 2.0;
-  const ketamineMg = Math.round(weightNum * 0.75);
-  const methylpredMg = Math.round(weightNum * 1.5);
-  const adrenalinBolus = weightNum < 40 ? Math.max(5, Math.round(weightNum * 0.5)) : 20;
-
-  // Laryngospasm calculations
-  const propofolLaryngoMg = Math.round(weightNum * 0.75);
-  const succinylcholineIvBreakMg = +(weightNum * 0.25).toFixed(1);
-  const succinylcholineImMg = Math.round(weightNum * 3.5);
-  const atropineLaryngoMg = +(Math.min(0.5, Math.max(0.1, weightNum * 0.015))).toFixed(2);
-  const rocuroniumLaryngoMg = Math.round(weightNum * 0.45);
-
-  // CICO calculations
-  const sugammadexMg = Math.round(weightNum * 16);
-  const sugammadexVials200 = Math.ceil(sugammadexMg / 200);
-  const sugammadexVials500 = Math.ceil(sugammadexMg / 500);
-  const atropineCicoMg = +(Math.min(1.0, Math.max(0.2, weightNum * 0.02))).toFixed(2);
-
-  // Airway Obstruction calculations
-  const dexamethasoneMg = +(Math.min(16, Math.max(4, weightNum * 0.2))).toFixed(1);
-  const nebulizedAdrenalinMg = weightNum < 20 ? 2 : 5;
-  const magillSize = weightNum < 15 ? 'İnfant' : weightNum < 35 ? 'Pediatrik' : 'Erişkin (25 cm)';
-  const yankauerType = weightNum < 20 ? 'Ch 10-12 Esnek' : 'Ch 14-18 Rijit Yankauer';
-
-  // Aspiration calculations
-  const ettSizeReco = weightNum < 55 ? 'ID 7.0 mm (Kaflı)' : weightNum < 80 ? 'ID 7.5 mm (Kaflı)' : 'ID 8.0 mm (Kaflı)';
-  const suctionCatheterSize = weightNum < 55 ? 'Ch 12' : 'Ch 14';
-  const ngsSize = weightNum < 55 ? 'Ch 14-16' : 'Ch 16-18';
-  const salbutamolPuffs = '8-10 puf MDI';
-  const peepReco = '6-10 cmH2O';
-
-  // Pulmonary Embolism (PE / PTE) calculations
-  const alteplaseArrestBolusMg = 50;
-  const alteplaseInfusionMg = weightNum < 65 ? +(weightNum * 0.6).toFixed(1) : 100;
-  const tenecteplaseMg = weightNum < 60 ? 30 : weightNum < 70 ? 35 : weightNum < 80 ? 40 : weightNum < 90 ? 45 : 50;
-  const tenecteplaseUnits = tenecteplaseMg * 200;
-  const ufhBolusUnits = Math.min(10000, Math.round(weightNum * 80));
-  const ufhInfusionUnits = Math.min(2000, Math.round(weightNum * 18));
-  const lmwhDoseMg = Math.round(weightNum * 1.0);
-  const noradMinMcg = +(weightNum * 0.05).toFixed(1);
-  const noradMaxMcg = +(weightNum * 1.0).toFixed(1);
-
-  // Venous Air Embolism (VAE / PAE) calculations
-  const vaeLethalVolMin = Math.round(weightNum * 3);
-  const vaeLethalVolMax = Math.round(weightNum * 5);
-  const vaeRvotAirLockBolus = Math.round(weightNum * 1.5);
-  const cvcRightIjvDepthMin = weightNum < 55 ? 12 : 13;
-  const cvcRightIjvDepthMax = weightNum < 55 ? 14 : 15;
-  const vaeNoradMin = +(weightNum * 0.05).toFixed(1);
-  const vaeNoradMax = +(weightNum * 0.3).toFixed(1);
-
-  // LAST (Lokal Anestezik Sistemik Toksisitesi) calculations
-  const lastLipidBolusMl = Math.round(weightNum * 1.5);
-  const lastLipidInfusionMlMin = +(weightNum * 0.25).toFixed(1);
-  const lastLipidInfusionMlHour = Math.round(weightNum * 0.25 * 60);
-  const lastLipidHighInfusionMlMin = +(weightNum * 0.5).toFixed(1);
-  const lastLipidHighInfusionMlHour = Math.round(weightNum * 0.5 * 60);
-  const lastLipidMaxDoseMl = Math.round(weightNum * 12);
-  const lastAdrenalinMaxMcg = Math.min(50, Math.round(weightNum * 1.0));
-  const lastBupiMaxPlainMg = Math.min(175, Math.round(weightNum * 2.0));
-  const lastLidoPlainMg = Math.min(300, Math.round(weightNum * 4.5));
-  const lastLidoEpiMg = Math.min(500, Math.round(weightNum * 7.0));
-
-  // Anaphylaxis (Şiddetli Anafilaktik Şok) calculations
-  const anaphylaxisAdrenalinGrade3BolusMcg = Math.min(200, Math.max(50, Math.round(weightNum * 1.5)));
-  const anaphylaxisAdrenalinInfusionMinMcg = +(weightNum * 0.05).toFixed(1);
-  const anaphylaxisAdrenalinInfusionMaxMcg = +(weightNum * 0.5).toFixed(1);
-  const anaphylaxisAdrenalinImDoseMg = weightNum < 25 ? 0.15 : weightNum < 40 ? 0.3 : 0.5;
-  const anaphylaxisFluidBolusMinMl = Math.round(weightNum * 20);
-  const anaphylaxisFluidBolusMaxMl = Math.round(weightNum * 30);
-  const anaphylaxisNoradMin = +(weightNum * 0.05).toFixed(1);
-  const anaphylaxisNoradMax = +(weightNum * 0.5).toFixed(1);
-  const anaphylaxisSugammadexMg = Math.round(weightNum * 16);
-  const anaphylaxisSugammadexVials200 = Math.ceil(anaphylaxisSugammadexMg / 200);
-  const anaphylaxisMethylprednisoloneMg = Math.round(weightNum * 1.5);
-
-  // Perioperative Cardiac Arrest & ACLS calculations (handles both adult & pediatric weights)
-  const isPediatricWeight = weightNum > 0 && weightNum < 40;
-  const aclsEpiDoseText = isPediatricWeight
-    ? `${+(weightNum * 0.01).toFixed(2)} mg (10 mcg/kg)`
-    : '1 mg IV/IO (3-5 dk)';
-  const aclsAmiodarone1Text = isPediatricWeight
-    ? `${Math.min(300, Math.round(weightNum * 5))} mg (5 mg/kg)`
-    : '300 mg (2. doz 150 mg)';
-  const aclsLidocaineMin = Math.round(weightNum * 1.0);
-  const aclsLidocaineMax = Math.round(weightNum * 1.5);
-  const aclsDefibText = isPediatricWeight
-    ? `${Math.round(weightNum * 2)} → ${Math.round(weightNum * 4)} J (2-4 J/kg)`
-    : '200 J Bifazik (360 J Mono)';
-  const aclsFluidBolusMl = Math.round(weightNum * 20);
-
-  // Masif Transfüzyon Protokolü (MTP) calculations
-  const mtpEstimatedBloodVolMl = Math.round(weightNum * 70);
-  const mtpFiftyPercentLossMl = Math.round(mtpEstimatedBloodVolMl * 0.5);
-  const mtpFibrinogenMinG = +(weightNum * 0.03).toFixed(1);
-  const mtpFibrinogenMaxG = +(weightNum * 0.05).toFixed(1);
-  const mtpTdpMinMl = Math.round(weightNum * 15);
-  const mtpTdpMaxMl = Math.round(weightNum * 20);
-  const mtpPccMinIu = Math.round(weightNum * 15);
-  const mtpPccMaxIu = Math.round(weightNum * 25);
-  const mtpRf7aMcg = Math.round(weightNum * 90);
-
-  // Tansiyon Pnömotoraks Dekompresyon & Toraks Tüpü hesaplamaları
-  const isPedsPneumo = weightNum > 0 && weightNum < 40;
-  const pneumoNeedleSite = isPedsPneumo
-    ? '2. İKA Midklaviküler Hat (MCL)'
-    : '4–5. İKA Ön/Orta Aksiller Hat (ATLS 10)';
-  const pneumoCatheterSpec = weightNum > 0 && weightNum < 15
-    ? '18G × 3–3.8 cm'
-    : isPedsPneumo
-      ? '16G × 3.8–5 cm'
-      : '14G × ≥5 cm (5–8 cm)';
-  const pneumoSimpleTubeFr = weightNum > 0 && weightNum < 10
-    ? '8–10 Fr'
-    : weightNum > 0 && weightNum < 25
-      ? '10–14 Fr'
-      : '10–14 Fr (Seldinger)';
-  const pneumoTraumaTubeFr = weightNum > 0 && weightNum < 15
-    ? '10–14 Fr'
-    : isPedsPneumo
-      ? '14–20 Fr'
-      : '24–28 Fr (Trokar YASAK)';
-  const pneumoFluidBolusMl = Math.round(weightNum * 20);
-
-  // Airway Fire (Hava Yolu Yangını) re-entübasyon & ödem yönetimi hesaplamaları
-  const airwayFireReintubEtt = weightNum > 0 && weightNum < 15
-    ? 'Pediatrik (0.5 mm küçük kaflı)'
-    : weightNum > 0 && weightNum < 40
-      ? 'ID 5.0–6.0 mm (0.5 mm küçük)'
-      : weightNum < 65
-        ? 'ID 6.5 mm (0.5 mm küçük)'
-        : 'ID 7.0–7.5 mm (0.5 mm küçük)';
-  const airwayFireDexaMg = +(Math.min(10, Math.max(4, weightNum * 0.15))).toFixed(1);
+  // Interactive Timestamped Core Algorithm Checklist (stepNumber -> HH:MM:SS)
+  const [checkedCoreSteps, setCheckedCoreSteps] = useState<Record<number, string>>({});
 
   // Optional ECG lightbox modal state
   const [selectedEcgItem, setSelectedEcgItem] = useState<{
@@ -193,49 +100,61 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
     sourceLicense: string;
   } | null>(null);
 
-  // Accordion Sections Open State (sec2 to sec10; default open for immediate clinical speed)
-  const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>({
-    sec2: true,  // 2) Giriş
-    sec3: true,  // 3) Tanı
-    sec4: true,  // 4) Akut Kriz Yönetimi
-    sec5: true,  // 5) Patofizyoloji
-    sec6: true,  // 6) Klinik Özellikler & Prezentasyon
-    sec7: true,  // 7) Koruyucu Tedbirler & Hazırlık
-    sec8: true,  // 8) Postoperatif Takip & Prognoz
-    sec9: true,  // 9) High-Yield Bilgiler
-    sec10: true  // 10) Kullanılan Kaynaklar & İleri Okuma
-  });
+  const scrollTimerRef = useRef<number | null>(null);
+
+  // Clean up pending scroll timer on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current !== null) {
+        window.clearTimeout(scrollTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Close ECG Lightbox modal on Escape key
+  useEffect(() => {
+    if (!selectedEcgItem) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedEcgItem(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedEcgItem]);
+
+  const toggleCoreStep = (stepNumber: number) => {
+    setCheckedCoreSteps((prev) => {
+      if (prev[stepNumber]) {
+        const next = { ...prev };
+        delete next[stepNumber];
+        return next;
+      }
+      const now = new Date();
+      const stamp = now.toTimeString().slice(0, 8);
+      return { ...prev, [stepNumber]: stamp };
+    });
+  };
+
+  const toggleCrisisMode = () => {
+    setCrisisMode((prev) => {
+      const next = !prev;
+      setSectionOpen(next ? { ...CRISIS_MODE_SECTIONS } : { ...ALL_OPEN_SECTIONS });
+      return next;
+    });
+  };
 
   const toggleSection = (key: string) => {
     setSectionOpen(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const expandAll = () => {
-    setSectionOpen({
-      sec2: true,
-      sec3: true,
-      sec4: true,
-      sec5: true,
-      sec6: true,
-      sec7: true,
-      sec8: true,
-      sec9: true,
-      sec10: true
-    });
+    setCrisisMode(false);
+    setSectionOpen({ ...ALL_OPEN_SECTIONS });
   };
 
   const collapseAll = () => {
-    setSectionOpen({
-      sec2: false,
-      sec3: false,
-      sec4: false,
-      sec5: false,
-      sec6: false,
-      sec7: false,
-      sec8: false,
-      sec9: false,
-      sec10: false
-    });
+    setSectionOpen({ ...ALL_CLOSED_SECTIONS });
   };
 
   const isAllExpanded = Object.values(sectionOpen).every(Boolean);
@@ -243,7 +162,10 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
   // Scroll to section with automatic expand if collapsed
   const scrollToSection = (id: string) => {
     setSectionOpen(prev => ({ ...prev, [id]: true }));
-    setTimeout(() => {
+    if (scrollTimerRef.current !== null) {
+      window.clearTimeout(scrollTimerRef.current);
+    }
+    scrollTimerRef.current = window.setTimeout(() => {
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -274,10 +196,18 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
               <span>Acil Senaryo Listesine Dön</span>
             </button>
 
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider px-3 py-1 rounded-full font-bold bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/40 animate-pulse">
-              <span className="w-2 h-2 rounded-full bg-red-500" />
-              {protocol.severityBadge}
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <ShareLinkButton
+                type="arac"
+                id={`emergencies&sub=${protocol.id}`}
+                isDark={isDark}
+                title="Bu Kriz Protokolünün Bağlantısını Kopyala"
+              />
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider px-3 py-1 rounded-full font-bold bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/40 animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-red-500" />
+                {protocol.severityBadge}
+              </span>
+            </div>
           </div>
 
           <div>
@@ -302,853 +232,14 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
             </div>
           </div>
 
-          {/* Quick Interactive Drug Dose Calculator based on protocol */}
-          {protocol.id === 'bronchospasm' ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">
-                  <Wind className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Acil Bronkodilatör & Hava Yolu İlaç Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">
-                      KİLOYA GÖRE
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek MDI, Magnezyum, Adrenalin ve Ketamin dozlarını hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Salbutamol MDI adaptörle ETT içine 8-10 puf">
-                    Ventolin: <strong>8-10 puf MDI</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Magnezyum Sülfat 40-50 mg/kg (maks 2.5 g)">
-                    MgSO4: <strong>{mgSulfateGrams} g IV</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Adrenalin IV Titrasyon Bolus (10-50 mcg, ağırda 50-100 mcg)">
-                    Adrenalin: <strong>{adrenalinBolus} mcg IV</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Ketamin 0.75 mg/kg IV bronkodilatör bolus">
-                    Ketamin: <strong>{ketamineMg} mg</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Metilprednizolon 1.5 mg/kg IV">
-                    Prednol: <strong>{methylpredMg} mg</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : protocol.id === 'laryngospasm' ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
-                  <Activity className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Acil Laringospazm İlaç & Kırıcı Doz Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
-                      KİLOYA GÖRE
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek sub-paralitik kırıcı doz ve atropin miktarlarını anında hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Sıkı maske ile CPAP">
-                    CPAP: <strong>10-20 cmH2O</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Propofol 0.75 mg/kg IV refleks kırıcı">
-                    Propofol: <strong>{propofolLaryngoMg} mg IV</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Sub-paralitik kırıcı Süksinilkolin 0.25 mg/kg IV">
-                    Süksinilkolin IV: <strong>{succinylcholineIvBreakMg} mg</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Damar yolu yoksa IM Süksinilkolin 3.5 mg/kg">
-                    Süksinilkolin IM: <strong>{succinylcholineImMg} mg</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Atropin 0.015 mg/kg IV (pediatrik bradikardi önleyici)">
-                    Atropin IV: <strong>{atropineLaryngoMg} mg</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'airway-crisis' || protocol.id === 'cico' || protocol.quickCalculatorType === 'cico') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
-                  <AlertOctagon className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Acil CICO & Krikotiroidotomi / Sugammadeks Doz Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
-                      16 mg/kg & eFONA
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Kilo girerek acil Sugammadeks kurtarma dozu ve krikotiroidotomi tüp/buji/neşter donanımını anında hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Sugammadeks 16 mg/kg acil IV bolus">
-                    Sugammadeks: <strong>{sugammadexMg} mg IV</strong>
-                  </div>
-                  <div className="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="200 mg / 2 mL flakon ihtiyacı">
-                    200mg Flk: <strong className="text-amber-400">~{sugammadexVials200}</strong>
-                  </div>
-                  <div className="px-2 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="500 mg / 5 mL flakon ihtiyacı">
-                    500mg Flk: <strong className="text-emerald-400">~{sugammadexVials500}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Altın standart eFONA boyutu">
-                    Tüp: <strong>ETT ID 6.0 mm</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="15 Fr Coudé uçlu buji">
-                    Buji: <strong>15 Fr Coudé</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Derin hipokside bradikardi için 0.02 mg/kg">
-                    Atropin: <strong>{atropineCicoMg} mg IV</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'airway-obstruction' || protocol.quickCalculatorType === 'airway-obstruction') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
-                  <ShieldAlert className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Akut Hava Yolu Obstrüksiyonu İlaç & Ekipman Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
-                      ÖDEM & EKSTRAKSİYON
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek Deksametazon, inhale Adrenalin, Magill ve aspiratör boyutlarını anında hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Larenks ödemi için Deksametazon 0.2 mg/kg IV (maks 16 mg)">
-                    Deksametazon: <strong>{dexamethasoneMg} mg IV</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Subglottik ödem için İnhale L-Adrenalin (SF ile nebül)">
-                    Nebül Adrenalin: <strong>{nebulizedAdrenalinMg} mg</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Yabancı cisim için uygun Magill forsepsi boyutu">
-                    Magill: <strong>{magillSize}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Pıhtı ve sekresyon için aspiratör tipi">
-                    Aspiratör: <strong>{yankauerType}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-700 dark:text-teal-300 font-bold" title="Helyum-Oksijen karışımı gaz oranı">
-                    Heliox: <strong>80:20</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'aspiration' || protocol.quickCalculatorType === 'aspiration') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">
-                  <AlertTriangle className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Pulmoner Aspirasyon & Mendelson Acil Ekipman ve Ventilasyon Parametreleri</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">
-                      RSI & PEEP
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosuna göre uygun kaflı ETT, aspirasyon kateteri, NGS ve solunum parametreleri:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Kaflı tüp boyutu">
-                    ETT: <strong>{ettSizeReco}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Trakeal aspirasyon kateteri boyutu">
-                    Aspiratör: <strong>{suctionCatheterSize}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Nazogastrik / Orogastrik sonda boyutu">
-                    NGS: <strong>{ngsSize}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-700 dark:text-teal-300 font-bold" title="Atelektazi ve şant önleyici PEEP">
-                    PEEP: <strong>{peepReco}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Bronkospazm kurtarma dozu">
-                    Salbutamol: <strong>{salbutamolPuffs}</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'pe' || protocol.quickCalculatorType === 'pe') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 shrink-0">
-                  <Activity className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Acil Masif PE Doz & Sıvı / Trombolitik Doz Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
-                      ESC 2019 · TROMBOLİZ & RV
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek acil arrest/infüzyon trombolitik, heparin bolus/infüzyon ve Noradrenalin dozlarını anında hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Kardiyak arrest veya peri-arrest çökmüş hastada acil IV bolus">
-                    Alteplase Arrest: <strong>{alteplaseArrestBolusMg} mg IV (15 dk)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Standart masif PE 2 saatlik IV infüzyon">
-                    Alteplase İnfüzyon: <strong>{alteplaseInfusionMg} mg</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Tenecteplase tek IV bolus puşe dozu">
-                    Tenecteplase: <strong>{tenecteplaseMg} mg ({tenecteplaseUnits} IU)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="UFH 80 IU/kg IV bolus + 18 IU/kg/st infüzyon">
-                    Heparin (UFH): <strong>{ufhBolusUnits} IU + {ufhInfusionUnits} IU/st</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Stabil olgularda Enoksaparin 1 mg/kg SC (12 saatte bir)">
-                    Enoksaparin: <strong>{lmwhDoseMg} mg SC</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Noradrenalin 0.05-1.0 mcg/kg/dk (Sağ koroner perfüzyon hedef MAP ≥ 65)">
-                    Noradrenalin: <strong>{noradMinMcg}-{noradMaxMcg} mcg/dk</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="Aşırı sıvı RV septal shift yaparak sol ventrikülü çökertebilir">
-                    Sıvı: <strong className="text-red-400">Maks 250-500 mL!</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'vae' || protocol.quickCalculatorType === 'vae') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-500 border border-cyan-500/20 shrink-0">
-                  <Wind className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>İntraoperatif Hava Embolisi Hacim Eşiği & CVC Derinlik Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-bold">
-                      3-5 mL/kg FATAL EŞİK · CVC SVC-RA
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek ölümcül hava hacim eşiği, kavoatriyal CVC aspirasyon derinliği ve Noradrenalin dozunu anında hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="Hızlı 3-5 mL/kg hava bolusu akut kardiyovasküler çökme ve asistoli ile ölümcüldür">
-                    Fatal Eşik: <strong className="text-red-400">{vaeLethalVolMin}-{vaeLethalVolMax} mL hava</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-700 dark:text-cyan-300 font-bold" title="Sağ ventrikül çıkış yolunu (RVOT) anında kilitleyen kritik hava bolusu">
-                    RVOT Air-Lock: <strong>~{vaeRvotAirLockBolus} mL</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Sağ internal jügüler venden kavoatriyal bileşkeye (SVC-RA junction) yaklaşık derinlik">
-                    CVC Derinlik (Sağ IJV): <strong>{cvcRightIjvDepthMin}-{cvcRightIjvDepthMax} cm</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Noradrenalin 0.05-0.3 mcg/kg/dk IV perfüzyon dozu">
-                    Noradrenalin: <strong>{vaeNoradMin}-{vaeNoradMax} mcg/dk</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="PFO varlığında veya şüphesinde PEEP kesinlikle sıfırlanmalıdır">
-                    PEEP: <strong className="text-rose-400">0 cmH2O (PFO Yasağı!)</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'last' || protocol.quickCalculatorType === 'last') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-500 border border-purple-500/20 shrink-0">
-                  <Activity className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>ASRA 2020 LAST %20 Lipid Emülsiyon Kurtarma Doz Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-bold">
-                      1.5 mL/kg BOLUS · 0.25 mL/kg/dk
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek acil %20 İntralipid bolus hacmi, infüzyon hızları, modifiye düşük doz adrenalin ve güvenli LA limitlerini anında hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="%20 Lipid 1.5 mL/kg IV bolus (2-3 dakikada verilir)">
-                    Lipid Bolus: <strong>{lastLipidBolusMl} mL IV (2-3 dk)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="%20 Lipid 0.25 mL/kg/dk standart infüzyon hızı">
-                    İnfüzyon: <strong>{lastLipidInfusionMlMin} mL/dk ({lastLipidInfusionMlHour} mL/st)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="%20 Lipid 0.5 mL/kg/dk persistan instabilite yüksek infüzyon hızı">
-                    Yüksek İnfüzyon: <strong>{lastLipidHighInfusionMlMin} mL/dk ({lastLipidHighInfusionMlHour} mL/st)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="İlk 30-60 dakikada maksimum kümülatif lipid dozu (12 mL/kg)">
-                    Maks Lipid: <strong>{lastLipidMaxDoseMl} mL</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="Standart 1 mg adrenalin KESİNLİKLE YASAKTIR! ≤1 mcg/kg boluslar titre edilmelidir">
-                    Adrenalin: <strong className="text-red-400">≤ {lastAdrenalinMaxMcg} mcg (1 mg YASAK!)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Bupivakain maksimum güvenli tek doz (2 mg/kg, maks 175 mg)">
-                    Bupivakain Maks: <strong>{lastBupiMaxPlainMg} mg</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Lidokain düz 4.5 mg/kg, adrenalinli 7.0 mg/kg">
-                    Lidokain Maks: <strong>{lastLidoPlainMg} mg ({lastLidoEpiMg} mg +Epi)</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'anaphylaxis' || protocol.quickCalculatorType === 'anaphylaxis') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
-                  <Syringe className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>İntraoperatif Anafilaktik Şok Adrenalin & Volüm Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
-                      ERKEN ADRENALİN · 20-30 mL/kg SIVI
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek acil Adrenalin IV/IM dozları, masif kristaloid sıvı hacmi, Noradrenalin ve Sugammadeks kurtarma dozlarını hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Grade III ağır şokta IV Adrenalin titre puşe (1:10.000 veya 1:100.000)">
-                    Adrenalin Şok: <strong>{anaphylaxisAdrenalinGrade3BolusMcg} mcg IV (titre)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Adrenalin 0.05-0.5 mcg/kg/dk sürekli IV infüzyon">
-                    Adrenalin İnfüzyon: <strong>{anaphylaxisAdrenalinInfusionMinMcg}-{anaphylaxisAdrenalinInfusionMaxMcg} mcg/dk</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Damaryolu yoksa uyluk dış yan (Vastus lateralis) IM Adrenalin">
-                    Adrenalin IM: <strong>{anaphylaxisAdrenalinImDoseMg} mg IM</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="20-30 mL/kg hızlı dengeli kristaloid (basınçlı torbayla ilk 15-30 dk)">
-                    Kristaloid Sıvı: <strong>{anaphylaxisFluidBolusMinMl}-{anaphylaxisFluidBolusMaxMl} mL</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="Jelatin ve nişasta bazlı kolloidler anafilaktoid degranülasyon yapar">
-                    Kolloid: <strong className="text-red-400">KESİNLİKLE YASAK!</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Adrenaline dirençli vazoplejide Noradrenalin 0.05-0.5 mcg/kg/dk">
-                    Noradrenalin: <strong>{anaphylaxisNoradMin}-{anaphylaxisNoradMax} mcg/dk</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Rokuronyum anafilaksisinde 16 mg/kg şelasyon kurtarma dozu">
-                    Sugammadeks: <strong>{anaphylaxisSugammadexMg} mg (~{anaphylaxisSugammadexVials200} flk)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Bifazik reaksiyonu önlemek için Metilprednizolon 1-2 mg/kg IV">
-                    Prednol: <strong>{anaphylaxisMethylprednisoloneMg} mg IV</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'acls' || protocol.quickCalculatorType === 'acls') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 shrink-0">
-                  <HeartCrack className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Perioperatif ACLS Doz &amp; Defibrilasyon Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
-                      {isPediatricWeight ? 'PEDİATRİK (<40 kg) MODU' : 'ERİŞKİN AHA/ERC MODU'}
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Kilo girerek Adrenalin, Amiodaron, Lidokain, Bifazik Defibrilasyon enerjisi ve 20 mL/kg hipovolemi bolusunu görüntüleyin:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Şoklanamaz ritimde İLK ANDA, şoklanabilirde 2. şok sonrası (LAST hariç!)">
-                    Adrenalin: <strong>{aclsEpiDoseText}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="VF/pVT 1. şok enerjisi">
-                    Defibrilasyon: <strong>{aclsDefibText}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="3. şok sonrası refrakter VF/pVTde">
-                    Amiodaron: <strong>{aclsAmiodarone1Text}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Amiodaron yoksa 1-1.5 mg/kg IV">
-                    Lidokain: <strong>{aclsLidocaineMin}-{aclsLidocaineMax} mg IV</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Hipovolemik/hemorajik PEAda hızlı 20 mL/kg kristaloid">
-                    Sıvı (20 mL/kg): <strong>{aclsFluidBolusMl} mL</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Entübe hastada asenkron sabit solutma hızı">
-                    Ventilasyon: <strong className="text-cyan-400">10/dk (Hiperventile Etme!)</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'mh' || protocol.quickCalculatorType === 'dantrolene') ? (
-            <div className={`p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20">
-                  <Syringe className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white">
-                    Acil Dantrolen Başlangıç Dozu Hesaplayıcısı (2.5 mg/kg)
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hastanın kilosunu girerek anlık doz ve flakon adedini hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <label className="text-xs font-semibold text-slate-500">Hasta Kilosu:</label>
-                  <div className="relative w-20">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2.5 py-1 text-xs font-mono font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-2 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 font-mono text-xs">
-                  <div className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-300 font-bold">
-                    {initialDoseMg} mg IV
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Klasik 20 mg flakon">
-                    Dantrium: <strong className="text-amber-400">{dantriumVials}</strong> flk
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Yeni 250 mg flakon">
-                    Ryanodex: <strong className="text-emerald-400">{ryanodexVials}</strong> flk
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'mtp' || protocol.quickCalculatorType === 'mtp') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 shrink-0">
-                  <Droplets className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Masif Transfüzyon (MTP) &amp; Hemostaz Doz Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">
-                      1:1:1 + ROTEM/TXA
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Kilo girerek tahmini kan hacmini, Fibrinojen (30-50 mg/kg), TDP (15-20 mL/kg), PCC ve TXA/Kalsiyum dozlarını hesaplayın:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono tabular-nums font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono tabular-nums text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 font-bold" title="Toplam kan hacmi ~70 mL/kg (Masif kanama eşiği %50 = 35 mL/kg)">
-                    Kan Hacmi: <strong>{mtpEstimatedBloodVolMl} mL</strong> (%50: {mtpFiftyPercentLossMl} mL)
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="FIBTEM A5 < 10 mm veya Fib < 1.5-2.0 g/L için 30-50 mg/kg">
-                    Fibrinojen: <strong>{mtpFibrinogenMinG}-{mtpFibrinogenMaxG} g IV</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="EXTEM CT > 80 sn / INR > 1.5 için 15-20 mL/kg TDP">
-                    TDP (15-20 mL/kg): <strong>{mtpTdpMinMl}-{mtpTdpMaxMl} mL</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="4-Faktör PCC 15-25 IU/kg (VKA/DOAK veya uzamış CT)">
-                    4F-PCC: <strong>{mtpPccMinIu}-{mtpPccMaxIu} IU</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="≤3 saat içinde 1 g IV bolus + 1 g 8 sa infüzyon">
-                    TXA: <strong>1 g + 1 g / 8 sa</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Her 4 ünite kan ürünü sonrası iCa2+ kontrolü ile">
-                    CaCl₂ %10: <strong>10 mL / 4 Ü</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Yalnızca dirençli kurtarma (pH ≥7.20, Isı ≥35°C) için 90 mcg/kg">
-                    Salvaj rFVIIa: <strong className="text-amber-300">{mtpRf7aMcg} mcg</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'tension-pneumothorax' || protocol.quickCalculatorType === 'tension-pneumothorax') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 shrink-0">
-                  <Wind className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Acil Plevral Dekompresyon &amp; Toraks Tüpü Seçim Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
-                      {isPedsPneumo ? 'PEDİATRİK (<40 kg) MODU' : 'ERİŞKİN ATLS 10 / BTS MODU'}
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Kilo girerek iğne dekompresyon bölgesi/kateter boyu, tüp Fr çapı, aspirasyon basıncı ve obstrüktif şok sıvı bolusunu görün:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono tabular-nums font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono tabular-nums text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 font-bold" title="Alt kostanın ÜST kenarından dik giriş; standart 3.2 cm venflon erişkinde yetersiz kalır">
-                    İğne Yeri: <strong>{pneumoNeedleSite}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="Erişkinde ≥5 cm dekompresyon kateteri veya entübede doğrudan Parmak Torakostomi">
-                    Kateter: <strong>{pneumoCatheterSpec}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Basit / iyatrojenik pnömotoraksta BTS 2010/2023 küçük çap">
-                    Tüp (Basit): <strong>{pneumoSimpleTubeFr}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Travma / dev kaçak / hemopnömotoraks tüp çapı">
-                    Tüp (Travma/Kaçak): <strong>{pneumoTraumaTubeFr}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Gerektiğinde düşük basınçlı sualtı aspirasyonu">
-                    Suction: <strong>−10 ila −20 cmH₂O</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-bold" title="Obstrüktif şokta dekompresyon ile birlikte sıvı desteği">
-                    Sıvı (20 mL/kg): <strong>{pneumoFluidBolusMl} mL</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="N2O pnömotoraksı hızla büyütür; PEEP venöz dönüşü daha da bozar">
-                    Anestezi: <strong className="text-red-400">N₂O KAPAT · PEEP=0</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (protocol.id === 'airway-fire' || protocol.quickCalculatorType === 'airway-fire') ? (
-            <div className={`p-4 rounded-xl border flex flex-col xl:flex-row xl:items-center justify-between gap-4 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 shrink-0">
-                  <Flame className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span>Hava Yolu Yangını Refleks Eylem &amp; Re-Entübasyon Hesaplayıcısı</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-600 dark:text-red-400 font-bold">
-                      ASA OR FIRE ADVISORY
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Kilo girerek yangın sonrası ödem riskine uygun re-entübasyon ETT boyunu, Deksametazon dozunu ve güvenli FiO₂/kuruma sınırlarını görün:
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-1.5">
-                  <label className="text-xs font-semibold text-slate-500">Kilo:</label>
-                  <div className="relative w-18">
-                    <input
-                      type="number"
-                      min="1"
-                      max="250"
-                      value={patientWeight}
-                      onChange={(e) => setPatientWeight(e.target.value)}
-                      className={`w-full px-2 py-1 text-xs font-mono tabular-nums font-bold rounded-lg border text-center ${
-                        isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
-                      }`}
-                    />
-                    <span className="absolute right-1.5 top-1 text-[10px] text-slate-400 font-mono">kg</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 font-mono tabular-nums text-[11px]">
-                  <div className="px-2.5 py-1.5 rounded-lg bg-red-950/40 border border-red-500/40 text-red-300 font-bold" title="ASA ilk 4 adım aynı anda">
-                    Refleks: <strong className="text-red-400">ETT ÇEK · GAZ KES · SF DÖK</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold" title="T4 üzeri ve lazer cerrahisinde güvenli O2 limiti; N2O = %0">
-                    Güvenli FiO₂: <strong>≤ %30 (N₂O = %0)</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold" title="Termal ödem nedeniyle normalden 0.5-1.0 mm küçük çaplı ETT seçilir">
-                    Re-entübasyon ETT: <strong>{airwayFireReintubEtt}</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold" title="Ödem yönetimi için Deksametazon ~0.15 mg/kg IV (maks 10 mg)">
-                    Deksametazon: <strong>{airwayFireDexaMg} mg IV</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold" title="Alkol bazlı antiseptikler için minimum tam kuruma süresi">
-                    Alkol Kuruma: <strong>≥ 3 Dakika</strong>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 text-[11px]" title="Lazer cerrahisinde hava yerine boyalı salinle kaf şişirilir">
-                    Lazer Kafı: <strong className="text-cyan-300">Metilen Mavili SF</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
+          {/* Quick Interactive Drug Dose Calculator (Modular P0-fixed Registry) */}
+          <ProtocolDoseCalculatorPanel
+            protocolId={protocol.id}
+            patientWeight={patientWeight}
+            onWeightChange={setPatientWeight}
+            doses={doses}
+            isDark={isDark}
+          />
         </div>
 
         {/* Quick Navigation Anchor Bar & Global Expand/Collapse Toggle */}
@@ -1254,12 +345,24 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
         </div>
       </div>
 
+      {/* Sticky Crisis Header Bar (Weight + Top Doses + Live Stopwatch/Countdown + Crisis/Reference Toggle) */}
+      <StickyCrisisHeaderBar
+        protocolId={protocol.id}
+        patientWeight={patientWeight}
+        onWeightChange={setPatientWeight}
+        doses={doses}
+        crisisMode={crisisMode}
+        onToggleCrisisMode={toggleCrisisMode}
+        isDark={isDark}
+      />
+
       {/* 2) Giriş (Accordion Section) */}
       <section id="sec2" className={`rounded-2xl border transition-all scroll-mt-20 overflow-hidden ${
         isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec2)}
           onClick={() => toggleSection('sec2')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -1365,6 +468,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec3)}
           onClick={() => toggleSection('sec3')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -1576,6 +680,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec4)}
           onClick={() => toggleSection('sec4')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-red-950/30' : 'hover:bg-red-50/50'
@@ -1612,50 +717,93 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
 
         {sectionOpen.sec4 && (
           <div className="p-5 sm:p-6 pt-0 space-y-6 border-t border-red-500/20">
-            {/* 7 Core Emergency Action Steps */}
+            {/* Core Emergency Action Steps — Interactive Timestamped Checklist */}
             <div className="space-y-3 pt-2">
-              {protocol.crisisManagement.coreAlgorithm.map((step) => (
-                <div
-                  key={step.stepNumber}
-                  className={`p-4 rounded-xl border flex flex-col gap-2 transition-all ${
-                    step.priority === 'CRITICAL'
-                      ? isDark ? 'bg-red-950/30 border-red-500/50 text-white' : 'bg-red-50/80 border-red-300 text-slate-900'
-                      : isDark ? 'bg-slate-800/50 border-slate-700 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-900'
-                  }`}
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-mono font-black ${
-                        step.priority === 'CRITICAL' ? 'bg-red-500 text-white' : 'bg-slate-700 text-slate-200'
-                      }`}>
-                        {step.stepNumber}
-                      </span>
-                      <h3 className="text-xs sm:text-sm font-black tracking-tight">
-                        {step.title}
-                      </h3>
-                    </div>
-
-                    <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded font-bold ${
-                      step.priority === 'CRITICAL'
-                        ? 'bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30'
-                        : 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30'
-                    }`}>
-                      {step.priority === 'CRITICAL' ? 'HAYATİ ÖNCELİK' : 'YÜKSEK ÖNCELİK'}
-                    </span>
-                  </div>
-
-                  <p className="text-xs leading-relaxed text-slate-700 dark:text-slate-300 pl-8">
-                    {step.action}
-                  </p>
-
-                  {step.criticalNote && (
-                    <div className="pl-8 pt-1 text-[11px] font-semibold text-red-600 dark:text-red-400 flex items-center gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                      <span>{step.criticalNote}</span>
-                    </div>
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span className={`font-semibold ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Uygulanan adımları işaretlemek için üzerine tıklayın (otomatik saat damgası eklenir):
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                    {Object.keys(checkedCoreSteps).length} / {protocol.crisisManagement.coreAlgorithm.length} Tamamlandı
+                  </span>
+                  {Object.keys(checkedCoreSteps).length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setCheckedCoreSteps({})}
+                      className={`px-2 py-0.5 rounded-lg border text-[11px] font-semibold cursor-pointer ${
+                        isDark ? 'border-slate-700 text-slate-400 hover:text-white' : 'border-slate-300 text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      Sıfırla
+                    </button>
                   )}
                 </div>
-              ))}
+              </div>
+
+              {protocol.crisisManagement.coreAlgorithm.map((step) => {
+                const completedAt = checkedCoreSteps[step.stepNumber];
+                const isDone = Boolean(completedAt);
+                return (
+                  <button
+                    key={step.stepNumber}
+                    type="button"
+                    aria-pressed={isDone}
+                    onClick={() => toggleCoreStep(step.stepNumber)}
+                    className={`w-full text-left p-4 rounded-xl border flex flex-col gap-2 transition-all cursor-pointer ${
+                      isDone
+                        ? isDark
+                          ? 'bg-emerald-950/30 border-emerald-500/50 text-emerald-100 opacity-85'
+                          : 'bg-emerald-50/90 border-emerald-300 text-slate-800 opacity-90'
+                        : step.priority === 'CRITICAL'
+                          ? isDark ? 'bg-red-950/30 border-red-500/50 text-white hover:border-red-400' : 'bg-red-50/80 border-red-300 text-slate-900 hover:border-red-400'
+                          : isDark ? 'bg-slate-800/50 border-slate-700 text-slate-200 hover:border-slate-500' : 'bg-slate-50 border-slate-200 text-slate-900 hover:border-slate-400'
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-mono font-black shrink-0 ${
+                          isDone
+                            ? 'bg-emerald-500 text-white'
+                            : step.priority === 'CRITICAL' ? 'bg-red-500 text-white' : 'bg-slate-700 text-slate-200'
+                        }`}>
+                          {isDone ? '✓' : step.stepNumber}
+                        </span>
+                        <h3 className={`text-xs sm:text-sm font-black tracking-tight ${isDone ? 'line-through opacity-75' : ''}`}>
+                          {step.title}
+                        </h3>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        {isDone && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                            <Clock className="w-3 h-3" />
+                            {completedAt}
+                          </span>
+                        )}
+                        <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded font-bold ${
+                          step.priority === 'CRITICAL'
+                            ? 'bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30'
+                            : 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                        }`}>
+                          {step.priority === 'CRITICAL' ? 'HAYATİ ÖNCELİK' : 'YÜKSEK ÖNCELİK'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs leading-relaxed text-slate-700 dark:text-slate-300 pl-8">
+                      {step.action}
+                    </p>
+
+                    {step.criticalNote && (
+                      <div className="pl-8 pt-1 text-[11px] font-semibold text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{step.criticalNote}</span>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Detailed Dantrolene Protocol & Formulation Comparison (Only for MH) */}
@@ -4299,6 +3447,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec5)}
           onClick={() => toggleSection('sec5')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -4457,6 +3606,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec6)}
           onClick={() => toggleSection('sec6')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -4583,6 +3733,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec7)}
           onClick={() => toggleSection('sec7')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -4705,6 +3856,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec8)}
           onClick={() => toggleSection('sec8')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -4846,6 +3998,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec9)}
           onClick={() => toggleSection('sec9')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -4922,6 +4075,7 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       }`}>
         <button
           type="button"
+          aria-expanded={Boolean(sectionOpen.sec10)}
           onClick={() => toggleSection('sec10')}
           className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors cursor-pointer select-none ${
             isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
@@ -4986,6 +4140,9 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
       {/* EKG Büyütme Modalı (Lightbox) */}
       {selectedEcgItem && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${selectedEcgItem.rhythmName} Büyütülmüş EKG`}
           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-xs p-4"
           onClick={() => setSelectedEcgItem(null)}
         >
@@ -5009,13 +4166,14 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
               <button
                 type="button"
                 onClick={() => setSelectedEcgItem(null)}
+                aria-label="EKG penceresini kapat"
                 className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
                   isDark
                     ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                     : 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'
                 }`}
               >
-                Kapat
+                Kapat (Esc)
               </button>
             </div>
 
