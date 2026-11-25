@@ -1461,6 +1461,17 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'preop-cancellation-matrix',
+    title: 'Preoperatif Ameliyat Erteleme & İptal Kriterleri Karar Matrisi',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Preop · 30 Kriter',
+    description: 'Preoperatif değerlendirme aracı: 6 sistem, 30 klinik kriter, 4 aciliyet kademesi (Elektif/Zamana Duyarlı/İvedi/Acil), çoklu bulgu vaka sentezi ve kopyalanabilir preop notu.',
+    keywords: ['preop erteleme', 'ameliyat iptali', 'erteleme karar matrisi', 'stent erteleme', 'tansiyon iptal', 'açlık ihlali', 'sglt2 kesme', 'glp-1 erteleme', 'akut mi', 'inme erteleme', 'diyaliz', 'preop'],
+    tabId: 'preop',
+    subId: 'cancellation-matrix',
+    popular: true
+  },
+  {
     id: 'guideline-mallampati',
     title: 'Mallampati Sınıflaması ve Zor Havayolu Kriterleri',
     category: 'Kılavuzlar & Protokoller',
@@ -1922,6 +1933,17 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     keywords: ['acil cerrahi', 'ivedi cerrahi', 'zamana duyarlı cerrahi', 'elektif cerrahi', 'aha acc 2024', 'cerrahi aciliyet', 'mace', 'zamanlama', 'aort anevrizması', 'apandisit', 'kolesistit', 'kanser cerrahisi', 'katarakt', 'protez'],
     tabId: 'infographics',
     subId: 'surgical-urgency-2024',
+    popular: true
+  },
+  {
+    id: 'info-surgical-cancellation-matrix',
+    title: 'Ameliyat Erteleme ve İptal Kriterleri Karar Matrisi (30 Kriter · 4 Aciliyet)',
+    category: 'Klinik İnfografikler',
+    badge: 'AHA/ACC · ESC · ESAIC',
+    description: 'Preoperatif 6 organ sistemi ve 30 klinik kriter için kesin erteleme, optimizasyon ve iptal nedeni olmayan eşikler; 4 kademeli aciliyet eylem planı ve çoklu bulgu vaka notu üretici.',
+    keywords: ['ameliyat erteleme', 'ameliyat iptal', 'vaka iptal', 'erteleme kriterleri', 'karar matrisi', 'des stent', 'sglt2', 'glp-1', 'hba1c', 'evre 3 hipertansiyon', 'üsye', 'covid', 'dka', 'inme', 'hiperkalemi', 'gebelik', 'child-pugh', 'preop erteleme', 'sakız', 'iptal nedeni değil'],
+    tabId: 'infographics',
+    subId: 'surgical-cancellation-matrix',
     popular: true
   },
   {

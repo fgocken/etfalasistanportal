@@ -216,8 +216,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   preop: {
     id: 'preop',
     title: 'Preoperatif Değerlendirme',
-    desc: 'STOP-BANG (OSAS & OHS) hesaplayıcı ve rehberi, MACE kardiyak risk analizi (RCRI & Gupta), Duke Activity Status Index (DASI / METs), açlık kılavuzları ve güncel 2025/2026 ASA sınıflaması.',
-    clinicalKey: 'Elektif cerrahi öncesi OSAS/OHS solunum riski (STOP-BANG), fonksiyonel kapasite (DASI) ve kardiyak morbidite öngörüsü sağlar.',
+    desc: 'Ameliyat Erteleme & İptal Kriterleri Karar Matrisi (30 kriter / 4 aciliyet), STOP-BANG (OSAS & OHS), MACE (RCRI & Gupta), DASI (METs), açlık kılavuzları ve güncel 2025/2026 ASA sınıflaması.',
+    clinicalKey: 'Elektif ve acil cerrahi öncesi sistem bazlı erteleme eşikleri, OSAS/OHS solunum riski, DASI fonksiyonel kapasite ve kardiyak MACE öngörüsü sağlar.',
     icon: ClipboardCheck,
     iconBgDark: 'bg-blue-500/15',
     iconBgLight: 'bg-blue-50',

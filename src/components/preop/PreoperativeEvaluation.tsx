@@ -15,7 +15,8 @@ import {
   Coffee,
   Baby,
   Moon,
-  Calculator
+  Calculator,
+  CalendarX2
 } from 'lucide-react';
 import { MaceCalculator } from './MaceCalculator';
 import { AsaClassification } from '../asa/AsaClassification';
@@ -23,6 +24,7 @@ import { DasiCalculator } from './DasiCalculator';
 import { StopBangCalculator } from './StopBangCalculator';
 import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
 import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
+import { SurgicalCancellationMatrixInfographic } from '../infographics/SurgicalCancellationMatrixInfographic';
 import { WeightFluidCalculator } from '../calculator/WeightFluidCalculator';
 import { PortalLink } from '../common/PortalLink';
 import { useHashSubRoute } from '../../hooks/useHashSubRoute';
@@ -33,8 +35,8 @@ interface PreoperativeEvaluationProps {
   onOpenGastricUsg?: () => void;
 }
 
-export type PreopToolId = 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting' | 'weight-fluid';
-const VALID_PREOP_TOOL_IDS: readonly PreopToolId[] = ['stop-bang', 'mace', 'dasi', 'asa', 'adult-fasting', 'pediatric-fasting', 'weight-fluid'];
+export type PreopToolId = 'cancellation-matrix' | 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting' | 'weight-fluid';
+const VALID_PREOP_TOOL_IDS: readonly PreopToolId[] = ['cancellation-matrix', 'stop-bang', 'mace', 'dasi', 'asa', 'adult-fasting', 'pediatric-fasting', 'weight-fluid'];
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -54,6 +56,27 @@ interface PreopCardItem {
 }
 
 const PREOP_CARDS: PreopCardItem[] = [
+  {
+    id: 'cancellation-matrix',
+    title: 'Ameliyat Erteleme & İptal Kriterleri Karar Matrisi',
+    badge: '30 Kriter · 4 Aciliyet',
+    category: 'Karar Destek & Erteleme Eşikleri',
+    shortDesc: '6 organ sistemi ve 30 klinik kriter için kılavuz eşikleri, fizyopatolojik gerekçeler, salon incileri, 4 kademeli AHA/ACC 2024 aciliyet eylem planı ve çoklu bulgu vaka özeti.',
+    icon: CalendarX2,
+    iconBgDark: 'bg-rose-500/15',
+    iconBgLight: 'bg-rose-50',
+    iconColorDark: 'text-rose-400',
+    iconColorLight: 'text-rose-600',
+    borderHoverDark: 'hover:border-rose-500/40',
+    borderHoverLight: 'hover:border-rose-400',
+    highlightsHeader: 'Karar Kademeleri & Modüller:',
+    highlights: [
+      { label: 'Kesin Erteleme', value: '19 Kriter', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Optimizasyon', value: '7 Kriter', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'İptal Değil', value: '4 Kriter', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Çoklu Vaka', value: 'Not Kopyala', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' }
+    ]
+  },
   {
     id: 'stop-bang',
     title: 'STOP-BANG · OSAS & OHS Değerlendirmesi',
@@ -373,6 +396,10 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
       )}
 
       {/* GÖRÜNÜM 2: AÇIK ARAÇ DETAYLARI (Tıklanınca Açılan Tam Görünüm) */}
+      {activeToolId === 'cancellation-matrix' && (
+        <SurgicalCancellationMatrixInfographic isDark={isDark} />
+      )}
+
       {activeToolId === 'stop-bang' && (
         <StopBangCalculator isDark={isDark} />
       )}

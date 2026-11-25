@@ -30,6 +30,7 @@ import { TivaCshtInfographic } from './TivaCshtInfographic';
 import { SpontaneousVsPpvInfographic } from './SpontaneousVsPpvInfographic';
 import { AsaBasicMonitoringInfographic } from './AsaBasicMonitoringInfographic';
 import { DiureticsNephronInfographic } from './DiureticsNephronInfographic';
+import { SurgicalCancellationMatrixInfographic } from './SurgicalCancellationMatrixInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { PortalLink } from '../common/PortalLink';
 import { buildHashHref, updateHashRoute } from '../../utils/deepLink';
@@ -236,6 +237,23 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Elektif', rate: 'Planlı', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
     ],
     accentColor: 'teal'
+  },
+  {
+    id: 'surgical-cancellation-matrix',
+    title: 'Ameliyat Erteleme ve İptal Kriterleri Karar Matrisi',
+    source: 'AHA/ACC 2024 · ESC 2022 · ESAIC 2022/2025 · ASA 2023/2024',
+    sourceBadge: '30 Kriter · 4 Aciliyet',
+    category: 'Preop Karar & Erteleme',
+    shortDesc: '6 organ sistemi ve 30 klinik kriter için kesin erteleme, optimizasyon ve iptal nedeni olmayan eşikler; 4 kademeli aciliyet eylem planı ve çoklu bulgu vaka özeti.',
+    pillsHeader: 'Karar Dağılımı & Modül:',
+    publisher: 'AHA/ACC · ESC · ESAIC · ASA',
+    riskPills: [
+      { label: 'Erteleme', rate: '19 Kriter', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Optimizasyon', rate: '7 Kriter', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'İptal Değil', rate: '4 Kriter', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Aciliyet', rate: '4 Kademe', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+    ],
+    accentColor: 'rose'
   },
   {
     id: 'surgical-risk',
@@ -665,6 +683,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {/* VIEW: Nephron & Diuretics Interactive Animation + Clinical Decision Matrix */}
       {activeInfographicId === 'diuretics-nephron' && (
         <DiureticsNephronInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: Surgical Postponement & Cancellation Criteria Decision Matrix */}
+      {activeInfographicId === 'surgical-cancellation-matrix' && (
+        <SurgicalCancellationMatrixInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}
