@@ -733,14 +733,12 @@ export const TptdInteractiveDecisionTree: React.FC<TptdInteractiveDecisionTreePr
     const pPvpi = parseFloat(numPvpi.replace(',', '.'));
     const pSvri = parseFloat(numSvri.replace(',', '.'));
 
-    let nextEvlwi: EvlwiState = evlwi;
     if (!Number.isNaN(pCi)) setCi(pCi < 3.0 ? 'low' : 'high');
     if (!Number.isNaN(pGedvi)) {
       setGedvi(pGedvi < 680 ? 'low' : pGedvi <= 800 ? 'normal' : 'high');
     }
     if (!Number.isNaN(pEvlwi)) {
-      nextEvlwi = pEvlwi < 10 ? 'low' : 'high';
-      setEvlwi(nextEvlwi);
+      setEvlwi(pEvlwi < 10 ? 'low' : 'high');
     }
     if (!Number.isNaN(pPvpi)) {
       setWetMech(pPvpi < 3.0 ? 'pvpi_hydro' : 'pvpi_perm');

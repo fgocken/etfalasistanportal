@@ -30,7 +30,8 @@ import { TivaCshtInfographic } from './TivaCshtInfographic';
 import { SpontaneousVsPpvInfographic } from './SpontaneousVsPpvInfographic';
 import { AsaBasicMonitoringInfographic } from './AsaBasicMonitoringInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
-import { updateHashRoute } from '../../utils/deepLink';
+import { PortalLink } from '../common/PortalLink';
+import { buildHashHref, updateHashRoute } from '../../utils/deepLink';
 
 interface InfographicsViewProps {
   isDark: boolean;
@@ -435,9 +436,10 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {INFOGRAPHIC_COLLECTION.map((card) => (
-              <div
+              <PortalLink
                 key={card.id}
-                onClick={() => handleSelectInfographic(card.id)}
+                href={buildHashHref('infografik', card.id)}
+                onNavigate={() => handleSelectInfographic(card.id)}
                 className={`group relative p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between cursor-pointer select-none ${
                   isDark 
                     ? 'bg-slate-900/90 border-slate-800 hover:border-violet-500/50 hover:bg-slate-800/60 shadow-xs' 
@@ -535,7 +537,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
                     <ChevronRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
-              </div>
+              </PortalLink>
             ))}
 
             {/* Future Slot Placeholder Card */}

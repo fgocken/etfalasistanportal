@@ -66,7 +66,7 @@ import { QuestionBankWorkspace } from './question-bank/QuestionBankWorkspace';
 import { BasicsWorkspace } from './basics/BasicsWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
-import { ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
+import { HashRouteType, ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
 
 export type ToolTabId = 'calculator' | 'abg' | 'mechanical-ventilation' | 'monitoring' | 'basics' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'podcast' | 'question-bank' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
 
@@ -844,6 +844,17 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
     return null;
   });
+  const [currentHashRoute, setCurrentHashRoute] = useState<ParsedHashRoute>(() => parseHashRoute());
+
+  useEffect(() => {
+    const syncRoute = () => setCurrentHashRoute(parseHashRoute());
+    window.addEventListener('hashchange', syncRoute);
+    window.addEventListener('popstate', syncRoute);
+    return () => {
+      window.removeEventListener('hashchange', syncRoute);
+      window.removeEventListener('popstate', syncRoute);
+    };
+  }, []);
 
   // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
   useEffect(() => {
@@ -1587,32 +1598,76 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
               <span>← Tüm Bölümlere Dön</span>
             </a>
 
-            {activeTab !== 'infographics' && (
-              <ShareLinkButton
-                type={activeTab === 'nerve-blocks' && activeNerveBlockSubId ? 'blok' : 'arac'}
-                id={
-                  activeTab === 'nerve-blocks' && activeNerveBlockSubId
-                    ? activeNerveBlockSubId
-                    : activeTab === 'basics' && selectedBasicsCardId
-                    ? `basics&sub=${selectedBasicsCardId}`
-                    : activeTab === 'mechanical-ventilation' && selectedVentilationCardId
-                    ? `mechanical-ventilation&sub=${selectedVentilationCardId}`
-                    : activeTab
+            {activeTab !== 'infographics' && (() => {
+              let shareType: HashRouteType = 'arac';
+              let shareId: string = activeTab;
+              let shareTitle = `${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`;
+
+              if (activeTab === 'treatments' && currentHashRoute.type === 'tedavi' && currentHashRoute.id) {
+                shareType = 'tedavi';
+                shareId = currentHashRoute.id;
+                shareTitle = 'Seçili Tedavi Protokolü Bağlantısını Kopyala';
+              } else if (activeTab === 'nerve-blocks') {
+                const blokId =
+                  activeNerveBlockSubId ||
+                  (currentHashRoute.type === 'blok' ? currentHashRoute.id : null);
+                if (blokId) {
+                  shareType = 'blok';
+                  shareId = blokId;
+                  shareTitle =
+                    blokId === 'spinal-anestezi'
+                      ? 'Spinal Anestezi Klinik Talimatı Bağlantısını Kopyala'
+                      : 'Seçili Sinir Bloğu / Protokol Bağlantısını Kopyala';
                 }
-                isDark={isDark}
-                title={
-                  activeTab === 'nerve-blocks' && activeNerveBlockSubId === 'spinal-anestezi'
-                    ? 'Spinal Anestezi Klinik Talimatı Bağlantısını Kopyala'
-                    : activeTab === 'basics' && selectedBasicsCardId === 'respiratory-physiology'
-                    ? 'Solunum Fizyolojisi Bağlantısını Kopyala'
-                    : activeTab === 'basics' && selectedBasicsCardId === 'cardiovascular-physiology'
-                    ? 'Kardiyovasküler Fizyoloji Bağlantısını Kopyala'
-                    : activeTab === 'mechanical-ventilation' && selectedVentilationCardId === 'oxygen-therapy'
-                    ? 'Klinik ve Perioperatif Oksijen Tedavisi Bağlantısını Kopyala'
-                    : `${ALL_CLINICAL_TOOLS[activeTab]?.title || 'Bu Bölümün'} Bağlantısını Kopyala`
+              } else {
+                const stateSubId =
+                  activeTab === 'basics'
+                    ? selectedBasicsCardId
+                    : activeTab === 'mechanical-ventilation'
+                    ? selectedVentilationCardId
+                    : activeTab === 'monitoring'
+                    ? selectedMonitoringModuleId
+                    : activeTab === 'preop'
+                    ? selectedPreopToolId
+                    : activeTab === 'airway'
+                    ? selectedAirwayCardId
+                    : activeTab === 'emergencies'
+                    ? selectedEmergencyProtocolId
+                    : activeTab === 'procedures'
+                    ? selectedProcedureId
+                    : activeTab === 'vascular-access'
+                    ? selectedVascularSubId
+                    : activeTab === 'icu'
+                    ? selectedIcuSubId
+                    : null;
+
+                const resolvedSubId =
+                  currentHashRoute.type === 'arac' && currentHashRoute.id === activeTab
+                    ? currentHashRoute.subId || null
+                    : stateSubId;
+
+                if (resolvedSubId) {
+                  shareType = 'arac';
+                  shareId = `${activeTab}&sub=${resolvedSubId}`;
+                  if (activeTab === 'basics' && resolvedSubId === 'respiratory-physiology') {
+                    shareTitle = 'Solunum Fizyolojisi Bağlantısını Kopyala';
+                  } else if (activeTab === 'basics' && resolvedSubId === 'cardiovascular-physiology') {
+                    shareTitle = 'Kardiyovasküler Fizyoloji Bağlantısını Kopyala';
+                  } else if (activeTab === 'mechanical-ventilation' && resolvedSubId === 'oxygen-therapy') {
+                    shareTitle = 'Klinik ve Perioperatif Oksijen Tedavisi Bağlantısını Kopyala';
+                  }
                 }
-              />
-            )}
+              }
+
+              return (
+                <ShareLinkButton
+                  type={shareType}
+                  id={shareId}
+                  isDark={isDark}
+                  title={shareTitle}
+                />
+              );
+            })()}
           </div>
         )}
 
@@ -1674,6 +1729,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
             onOpenGastricUsg={() => {
               setSelectedAirwayCardId('gastric-usg');
               handleSelectTab('airway', { preserveAirwayCard: true });
+              updateHashRoute('arac', 'airway&sub=gastric-usg');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
