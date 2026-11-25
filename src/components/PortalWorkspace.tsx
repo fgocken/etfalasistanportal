@@ -216,8 +216,8 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   preop: {
     id: 'preop',
     title: 'Preoperatif Değerlendirme',
-    desc: 'Ameliyat Erteleme & İptal Kriterleri Karar Matrisi (30 kriter / 4 aciliyet), STOP-BANG (OSAS & OHS), MACE (RCRI & Gupta), DASI (METs), açlık kılavuzları ve güncel 2025/2026 ASA sınıflaması.',
-    clinicalKey: 'Elektif ve acil cerrahi öncesi sistem bazlı erteleme eşikleri, OSAS/OHS solunum riski, DASI fonksiyonel kapasite ve kardiyak MACE öngörüsü sağlar.',
+    desc: 'Ameliyat Erteleme & İptal Matrisi, Perioperatif Antitrombotik & Rejyonel Anestezi Matrisi (ASRA 2025 / ESAIC 2022), STOP-BANG (OSAS & OHS), MACE, DASI (METs), açlık kılavuzları ve güncel ASA sınıflaması.',
+    clinicalKey: 'Elektif ve acil cerrahi öncesi sistem bazlı erteleme eşikleri, antikoagülan/blok kesme süreleri, OSAS/OHS solunum riski ve MACE öngörüsü sağlar.',
     icon: ClipboardCheck,
     iconBgDark: 'bg-blue-500/15',
     iconBgLight: 'bg-blue-50',

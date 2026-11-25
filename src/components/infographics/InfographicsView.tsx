@@ -31,6 +31,7 @@ import { SpontaneousVsPpvInfographic } from './SpontaneousVsPpvInfographic';
 import { AsaBasicMonitoringInfographic } from './AsaBasicMonitoringInfographic';
 import { DiureticsNephronInfographic } from './DiureticsNephronInfographic';
 import { SurgicalCancellationMatrixInfographic } from './SurgicalCancellationMatrixInfographic';
+import { PerioperativeAntithromboticMatrixInfographic } from './PerioperativeAntithromboticMatrixInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { PortalLink } from '../common/PortalLink';
 import { buildHashHref, updateHashRoute } from '../../utils/deepLink';
@@ -254,6 +255,23 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Aciliyet', rate: '4 Kademe', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
     ],
     accentColor: 'rose'
+  },
+  {
+    id: 'antithrombotic-matrix',
+    title: 'Perioperatif Antitrombotik & Rejyonel Anestezi Matrisi',
+    source: 'ASRA 5th Ed. (2025) · ESAIC/ESRA 2022 · PAUSE / ACCP 2022',
+    sourceBadge: 'ASRA 2025 · 18 Ajan',
+    category: 'Antitrombotik & Rejyonel',
+    shortDesc: 'Nöraksiyel, derin ve yüzeyel sinir blokları için 3-sütunlu matris (Pre-Hold · Indwelling Catheter · Post-Restart), CrCl uyarlaması ve yüksek/düşük riskli cerrahi kesme-köprüleme süreleri.',
+    pillsHeader: 'Klinik Matris Modülleri:',
+    publisher: 'ASRA / ESAIC / ESRA / ACCP',
+    riskPills: [
+      { label: 'Nöraksiyel', rate: 'Pre · Kat · Post', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Sinir Blok', rate: 'Derin vs Yüzeyel', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Cerrahi', rate: 'PAUSE · BRIDGE', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Renal', rate: 'CrCl ≥50 / <50', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+    ],
+    accentColor: 'teal'
   },
   {
     id: 'surgical-risk',
@@ -688,6 +706,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {/* VIEW: Surgical Postponement & Cancellation Criteria Decision Matrix */}
       {activeInfographicId === 'surgical-cancellation-matrix' && (
         <SurgicalCancellationMatrixInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: Perioperative Antithrombotic & Regional Anesthesia Management Matrix */}
+      {activeInfographicId === 'antithrombotic-matrix' && (
+        <PerioperativeAntithromboticMatrixInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}

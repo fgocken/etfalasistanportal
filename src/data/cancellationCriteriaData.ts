@@ -229,8 +229,9 @@ export const CANCELLATION_CRITERIA: CancellationCriterion[] = [
       acil: 'Erteleme yok; Varfarin’de 4F-PCC + IV K vit, Dabigatran’da İdarusizumab, Xa inh.’de Andeksanet/4F-PCC ve hemostaz protokolü.'
     },
     relatedLinks: [
+      { href: '#infografik=antithrombotic-matrix', label: 'Antitrombotik & Rejyonel Matris' },
       { href: '#arac=nerve-blocks', label: 'Nöraksiyel Blok Güvenliği' },
-      { href: '#arac=vascular-access', label: 'Koagülasyon Tabloları' },
+      { href: '#arac=vascular-access', label: 'SVK Koagülasyon (2025)' },
       { href: '#arac=emergencies&sub=mtp', label: 'Masif Transfüzyon (MTP)' }
     ],
     keywords: ['doac', 'noac', 'apiksaban', 'rivaroksaban', 'dabigatran', 'varfarin', 'coumadin', 'klopidogrel', 'plavix', 'tikagrelor', 'prasugrel', 'aspirin', 'spinal']

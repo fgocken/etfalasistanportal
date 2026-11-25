@@ -16,7 +16,8 @@ import {
   Baby,
   Moon,
   Calculator,
-  CalendarX2
+  CalendarX2,
+  Droplets
 } from 'lucide-react';
 import { MaceCalculator } from './MaceCalculator';
 import { AsaClassification } from '../asa/AsaClassification';
@@ -25,6 +26,7 @@ import { StopBangCalculator } from './StopBangCalculator';
 import { AdultFastingInfographic } from '../infographics/AdultFastingInfographic';
 import { PediatricFastingInfographic } from '../infographics/PediatricFastingInfographic';
 import { SurgicalCancellationMatrixInfographic } from '../infographics/SurgicalCancellationMatrixInfographic';
+import { PerioperativeAntithromboticMatrixInfographic } from '../infographics/PerioperativeAntithromboticMatrixInfographic';
 import { WeightFluidCalculator } from '../calculator/WeightFluidCalculator';
 import { PortalLink } from '../common/PortalLink';
 import { useHashSubRoute } from '../../hooks/useHashSubRoute';
@@ -35,8 +37,8 @@ interface PreoperativeEvaluationProps {
   onOpenGastricUsg?: () => void;
 }
 
-export type PreopToolId = 'cancellation-matrix' | 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting' | 'weight-fluid';
-const VALID_PREOP_TOOL_IDS: readonly PreopToolId[] = ['cancellation-matrix', 'stop-bang', 'mace', 'dasi', 'asa', 'adult-fasting', 'pediatric-fasting', 'weight-fluid'];
+export type PreopToolId = 'cancellation-matrix' | 'antithrombotic-matrix' | 'stop-bang' | 'mace' | 'dasi' | 'asa' | 'adult-fasting' | 'pediatric-fasting' | 'weight-fluid';
+const VALID_PREOP_TOOL_IDS: readonly PreopToolId[] = ['cancellation-matrix', 'antithrombotic-matrix', 'stop-bang', 'mace', 'dasi', 'asa', 'adult-fasting', 'pediatric-fasting', 'weight-fluid'];
 
 interface PreopCardItem {
   id: PreopToolId;
@@ -75,6 +77,27 @@ const PREOP_CARDS: PreopCardItem[] = [
       { label: 'Optimizasyon', value: '7 Kriter', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
       { label: 'İptal Değil', value: '4 Kriter', colorClass: 'text-emerald-700 dark:text-emerald-300', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
       { label: 'Çoklu Vaka', value: 'Not Kopyala', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' }
+    ]
+  },
+  {
+    id: 'antithrombotic-matrix',
+    title: 'Perioperatif Antitrombotik & Rejyonel Anestezi Matrisi',
+    badge: 'ASRA 2025 · ESAIC 2022',
+    category: 'Antikoagülan, Antiagregan & Blok Güvenliği',
+    shortDesc: '18 ajan için Nöraksiyel, Derin ve Yüzeyel Sinir Blokları 3-sütunlu matrisi (Pre-Hold · Indwelling Catheter · Post-Restart), CrCl uyarlaması ve PAUSE/ACCP cerrahi kesme süreleri.',
+    icon: Droplets,
+    iconBgDark: 'bg-teal-500/15',
+    iconBgLight: 'bg-teal-50',
+    iconColorDark: 'text-teal-400',
+    iconColorLight: 'text-teal-600',
+    borderHoverDark: 'hover:border-teal-500/40',
+    borderHoverLight: 'hover:border-teal-400',
+    highlightsHeader: 'Kapsanan Alanlar:',
+    highlights: [
+      { label: 'Rejyonel 3-Sütun', value: 'Pre · Kateter · Post', colorClass: 'text-teal-700 dark:text-teal-300', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Blok Ayrımı', value: 'Nöro · Derin · Yüzeyel', colorClass: 'text-sky-700 dark:text-sky-300', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Cerrahi Risk', value: 'PAUSE · BRIDGE', colorClass: 'text-amber-700 dark:text-amber-300', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+      { label: 'Renal Profil', value: 'CrCl Uyarlamalı', colorClass: 'text-rose-700 dark:text-rose-300', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' }
     ]
   },
   {
@@ -398,6 +421,10 @@ export const PreoperativeEvaluation: React.FC<PreoperativeEvaluationProps> = ({ 
       {/* GÖRÜNÜM 2: AÇIK ARAÇ DETAYLARI (Tıklanınca Açılan Tam Görünüm) */}
       {activeToolId === 'cancellation-matrix' && (
         <SurgicalCancellationMatrixInfographic isDark={isDark} />
+      )}
+
+      {activeToolId === 'antithrombotic-matrix' && (
+        <PerioperativeAntithromboticMatrixInfographic isDark={isDark} />
       )}
 
       {activeToolId === 'stop-bang' && (

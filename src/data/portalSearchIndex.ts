@@ -1494,12 +1494,13 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
   },
   {
     id: 'guideline-anticoagulants',
-    title: 'Antikoagülan ve Antitrombositer Kesilme Süreleri',
+    title: 'Perioperatif Antitrombotik, Nöraksiyel & Sinir Blokları Yönetim Matrisi (ASRA 2025 / ESAIC 2022)',
     category: 'Kılavuzlar & Protokoller',
-    badge: 'Antikoagülan',
-    description: 'Aspirin, Klopidogrel (Plavix), Ticagrelor, Varfarin (Coumadin), DOAK (Xarelto, Eliquis, Pradaxa), DMAH (Clexane).',
-    keywords: ['antikoagülan', 'aspirin', 'klopidogrel', 'plavix', 'ticagrelor', 'brilinta', 'prasugrel', 'varfarin', 'coumadin', 'doak', 'noak', 'xarelto', 'rivaroksaban', 'eliquis', 'apiksaban', 'pradaxa', 'dabigatran', 'clexane', 'enoksaparin', 'dmah', 'kan sulandırıcı'],
+    badge: 'ASRA 2025 · PAUSE',
+    description: '18 ajan (DOAC, Varfarin, DMAH, UFH, Fondaparinuks, P2Y12, Kangrelor, Trombolitik) için Nöraksiyel, Derin ve Yüzeyel blok 3-sütunlu matrisi (Pre-Hold · Kateter · Post-Restart), CrCl uyarlaması ve cerrahi kesme süreleri.',
+    keywords: ['antikoagülan', 'antitrombotik', 'asra 2025', 'esaic 2022', 'nöraksiyel', 'epidural kateter', 'sinir bloğu', 'derin blok', 'yüzeyel blok', 'aspirin', 'klopidogrel', 'plavix', 'tikagrelor', 'ticagrelor', 'brilinta', 'prasugrel', 'kangrelor', 'varfarin', 'coumadin', 'doac', 'doak', 'noak', 'xarelto', 'rivaroksaban', 'eliquis', 'apiksaban', 'pradaxa', 'dabigatran', 'fondaparinuks', 'clexane', 'enoksaparin', 'dmah', 'ufh', 'kan sulandırıcı', 'pause', 'bridge'],
     tabId: 'preop',
+    subId: 'antithrombotic-matrix',
     popular: true
   },
   {
@@ -1944,6 +1945,17 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     keywords: ['ameliyat erteleme', 'ameliyat iptal', 'vaka iptal', 'erteleme kriterleri', 'karar matrisi', 'des stent', 'sglt2', 'glp-1', 'hba1c', 'evre 3 hipertansiyon', 'üsye', 'covid', 'dka', 'inme', 'hiperkalemi', 'gebelik', 'child-pugh', 'preop erteleme', 'sakız', 'iptal nedeni değil'],
     tabId: 'infographics',
     subId: 'surgical-cancellation-matrix',
+    popular: true
+  },
+  {
+    id: 'info-antithrombotic-matrix',
+    title: 'Perioperatif Antitrombotik & Rejyonel Anestezi Yönetim Matrisi (ASRA 2025 / ESAIC 2022)',
+    category: 'Klinik İnfografikler',
+    badge: 'ASRA 2025 · 18 Ajan',
+    description: 'Nöraksiyel, derin ve yüzeyel sinir blokları için Pre-Placement/Removal Hold, Indwelling Catheter Management, Post-Placement/Removal Restart matrisi; CrCl uyarlaması ve PAUSE/ACCP cerrahi kesme süreleri.',
+    keywords: ['antitrombotik matris', 'asra 2025', 'esaic 2022', 'nöraksiyel antikoagülan', 'indwelling catheter', 'epidural kateter çekme', 'derin sinir bloğu', 'yüzeyel blok', 'doac kesme', 'apiksaban', 'rivaroksaban', 'dabigatran', 'varfarin', 'dmah', 'enoksaparin', 'ufh', 'fondaparinuks', 'klopidogrel', 'tikagrelor', 'prasugrel', 'kangrelor', 'trombolitik'],
+    tabId: 'infographics',
+    subId: 'antithrombotic-matrix',
     popular: true
   },
   {
