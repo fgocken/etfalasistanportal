@@ -32,10 +32,10 @@ type OxygenSectionFilter = 'all' | 'targets' | 'devices' | 'perioperative' | 'sa
 type DeviceFilterId = 'all' | 'Düşük Akım (Değişken)' | 'Yüksek Akım (Sabit)' | 'Resüsitasyon / Devre';
 
 const TURKEY_PORTABLE_CYLINDERS = [
-  { volumeL: 2, label: '2 L', desc: 'Kompakt acil / ev / ambulans', maxBar: 150 },
-  { volumeL: 3, label: '3 L', desc: 'Hafif transport / ambulans', maxBar: 150 },
-  { volumeL: 5, label: '5 L', desc: 'Standart hastane içi sedye / transport', maxBar: 150 },
-  { volumeL: 10, label: '10 L', desc: 'Büyük transport / ambulans ana tüpü', maxBar: 200 },
+  { volumeL: 2, label: '2 L', desc: 'Kompakt acil / ev (150–200 bar)', maxBar: 150 },
+  { volumeL: 3, label: '3 L', desc: 'Hafif transport (150–200 bar)', maxBar: 150 },
+  { volumeL: 5, label: '5 L', desc: 'Standart sedye (150–200 bar)', maxBar: 150 },
+  { volumeL: 10, label: '10 L', desc: 'Büyük transport / ambulans', maxBar: 200 },
 ] as const;
 
 export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark }) => {
@@ -46,33 +46,85 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
   // Boyle's Law Portable Cylinder Duration Calculator (Turkey metric bar standard)
   const [cylinderWaterVol, setCylinderWaterVol] = useState<string>('5');
   const [cylinderPressureBar, setCylinderPressureBar] = useState<string>('150');
-  const [cylinderReserveBar, setCylinderReserveBar] = useState<number>(10);
+  const [cylinderReserveBar, setCylinderReserveBar] = useState<number>(20);
   const [cylinderFlowLpm, setCylinderFlowLpm] = useState<string>('6');
+  const [extraVentFlowLpm, setExtraVentFlowLpm] = useState<string>('0');
 
   const cylinderCalc = useMemo(() => {
     const vol = Math.max(0, parseFloat(cylinderWaterVol.replace(',', '.')) || 0);
     const bar = Math.max(0, parseFloat(cylinderPressureBar.replace(',', '.')) || 0);
-    const flow = Math.max(0, parseFloat(cylinderFlowLpm.replace(',', '.')) || 0);
+    const patientFlow = Math.max(0, parseFloat(cylinderFlowLpm.replace(',', '.')) || 0);
+    const extraFlow = Math.max(0, parseFloat(extraVentFlowLpm.replace(',', '.')) || 0);
+    const totalFlow = patientFlow + extraFlow;
     const effectiveBar = Math.max(0, bar - cylinderReserveBar);
     const totalLiters = Math.round(bar * vol);
     const usableLiters = Math.round(effectiveBar * vol);
-    const minutes = flow > 0 ? Math.floor(usableLiters / flow) : 0;
+    const minutes = totalFlow > 0 ? Math.floor(usableLiters / totalFlow) : 0;
     const hours = Math.floor(minutes / 60);
     const remMinutes = minutes % 60;
+    const isEmptyOrReserveOnly = bar <= cylinderReserveBar;
+    const isLowPressure = bar <= Math.max(20, cylinderReserveBar);
+    const isShortDuration = totalFlow > 0 && minutes < 15;
     return {
       vol,
       bar,
-      flow,
+      flow: totalFlow,
+      patientFlow,
+      extraFlow,
       effectiveBar,
       totalLiters,
       usableLiters,
       minutes,
       hours,
       remMinutes,
-      isLowPressure: bar > 0 && bar <= 20,
-      isShortDuration: flow > 0 && minutes > 0 && minutes < 15,
+      isEmptyOrReserveOnly,
+      isLowPressure,
+      isShortDuration,
     };
-  }, [cylinderWaterVol, cylinderPressureBar, cylinderReserveBar, cylinderFlowLpm]);
+  }, [cylinderWaterVol, cylinderPressureBar, cylinderReserveBar, cylinderFlowLpm, extraVentFlowLpm]);
+
+  // Interactive CaO2 / DO2 / VO2 / O2ER Calculator State
+  const [do2HbInput, setDo2HbInput] = useState<string>('15');
+  const [do2Sao2Input, setDo2Sao2Input] = useState<string>('98');
+  const [do2Pao2Input, setDo2Pao2Input] = useState<string>('95');
+  const [do2CoInput, setDo2CoInput] = useState<string>('5.0');
+  const [do2Svo2Input, setDo2Svo2Input] = useState<string>('73');
+
+  const do2Calc = useMemo(() => {
+    const hb = Math.min(25, Math.max(1, parseFloat(do2HbInput.replace(',', '.')) || 0));
+    const sao2Pct = Math.min(100, Math.max(40, parseFloat(do2Sao2Input.replace(',', '.')) || 0));
+    const pao2 = Math.min(700, Math.max(20, parseFloat(do2Pao2Input.replace(',', '.')) || 0));
+    const co = Math.min(15, Math.max(1, parseFloat(do2CoInput.replace(',', '.')) || 0));
+    const svo2Pct = Math.min(sao2Pct, Math.max(20, parseFloat(do2Svo2Input.replace(',', '.')) || 0));
+    const pvo2Approx = 40;
+
+    const boundO2 = 1.34 * hb * (sao2Pct / 100);
+    const dissolvedO2 = 0.0031 * pao2;
+    const cao2 = boundO2 + dissolvedO2;
+    const cvo2 = 1.34 * hb * (svo2Pct / 100) + 0.0031 * pvo2Approx;
+    const do2 = co * cao2 * 10;
+    const vo2 = Math.max(0, co * (cao2 - cvo2) * 10);
+    const o2er = do2 > 0 ? (vo2 / do2) * 100 : 0;
+    const dissolvedShare = cao2 > 0 ? (dissolvedO2 / cao2) * 100 : 0;
+
+    return {
+      hb,
+      sao2Pct,
+      pao2,
+      co,
+      svo2Pct,
+      boundO2,
+      dissolvedO2,
+      dissolvedShare,
+      cao2,
+      do2,
+      vo2,
+      o2er,
+      isCriticalDo2: do2 < 350,
+      isLowDo2: do2 >= 350 && do2 < 600,
+      isHighExtraction: o2er > 40,
+    };
+  }, [do2HbInput, do2Sao2Input, do2Pao2Input, do2CoInput, do2Svo2Input]);
 
   // Estimated FiO2 & PaO2/FiO2 (P/F) Calculator State
   type Fio2DeviceId = 'nasal_cannula' | 'simple_mask' | 'nrbm' | 'venturi' | 'hfnc_direct';
@@ -91,14 +143,15 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
     let rangeNote = '';
     let warning: string | null = null;
     let isFixedFio2 = false;
+    let venturiSpec: (typeof VENTURI_ADAPTER_SPECS)[number] | null = null;
 
     if (fio2Device === 'nasal_cannula') {
       if (flow <= 0) {
         estFio2Pct = 21;
-        rangeNote = 'Oda havası (%21)';
+        rangeNote = 'Oda havası (%21) — Oksijen akımı kapalı.';
       } else {
         const clampedFlow = Math.min(flow, 6);
-        estFio2Pct = Math.round(20 + clampedFlow * 4);
+        estFio2Pct = Math.max(21, Math.round(20 + clampedFlow * 4));
         rangeNote = 'Yaklaşık formül: %20 + (4 × Akım L/dk) · Taşipnede gerçek FiO₂ düşer.';
         if (flow > 6) {
           warning =
@@ -106,9 +159,14 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
         }
       }
     } else if (fio2Device === 'simple_mask') {
-      if (flow < 5) {
-        estFio2Pct = 35;
-        rangeNote = '5–10 L/dk aralığında ~%35–%55';
+      if (flow <= 0) {
+        estFio2Pct = 21;
+        rangeNote = 'Oksijen akımı kapalı (%21); maske hasta yüzündeyse ölü boşluk ve CO₂ geri solunumu oluşur!';
+        warning =
+          'KRİTİK GÜVENLİK UYARISI: Oksijen akımı 0 L/dk iken basit yüz maskesi hasta yüzünde bırakılamaz! Minimum 5 L/dk açın veya maskeyi çıkarın.';
+      } else if (flow < 5) {
+        estFio2Pct = Math.max(24, Math.round(21 + flow * 3));
+        rangeNote = '5–10 L/dk aralığında ~%35–%55 (5 L/dk altı güvensizdir).';
         warning =
           'GÜVENLİK UYARISI: Basit yüz maskesinde < 5 L/dk akımda ekspiratuvar CO₂ maskeden yıkanamaz ve CO₂ geri solunumu (rebreathing) oluşur! Minimum 5 L/dk açın.';
       } else {
@@ -120,9 +178,14 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
         }
       }
     } else if (fio2Device === 'nrbm') {
-      if (flow < 10) {
-        estFio2Pct = 60;
-        rangeNote = '10–15 L/dk aralığında ~%60–%85 (ideal sızdırmazlıkta ~%90)';
+      if (flow <= 0) {
+        estFio2Pct = 21;
+        rangeNote = 'Oksijen akımı kapalı (%21); rezervuar torbası sönük maske asla hastaya takılmaz!';
+        warning =
+          'KRİTİK GÜVENLİK UYARISI: NRBM akımı 0 L/dk! Maskeyi hastadan çıkarın veya torbayı tam şişirecek şekilde 10–15 L/dk açın.';
+      } else if (flow < 10) {
+        estFio2Pct = Math.max(28, Math.round(21 + flow * 4));
+        rangeNote = '10–15 L/dk aralığında ~%60–%85 (10 L/dk altı güvensizdir).';
         warning =
           'GÜVENLİK UYARISI: Rezervuarlı geri solumasız maskede < 10 L/dk akımda torba çöker ve CO₂ birikimi riski doğar! Torba tam şiş kalacak şekilde 10–15 L/dk açın.';
       } else {
@@ -133,7 +196,8 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
     } else if (fio2Device === 'venturi') {
       estFio2Pct = venturiPresetFio2;
       isFixedFio2 = true;
-      rangeNote = 'Sabit performanslı (HAFOE): Adaptörün belirttiği minimum O₂ akımı sağlandığında kesin FiO₂ verir.';
+      venturiSpec = VENTURI_ADAPTER_SPECS.find((s) => s.fio2 === venturiPresetFio2) || null;
+      rangeNote = 'Sabit performanslı (HAFOE): Minimum O₂ akımı sağlandığında kesin FiO₂ verir (SS > 30/dk ise akımı %50 artırın).';
     } else {
       estFio2Pct = Math.round(directPct);
       isFixedFio2 = true;
@@ -142,10 +206,19 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
 
     const fio2Decimal = estFio2Pct / 100;
     const hasPao2 = !Number.isNaN(pao2) && pao2 > 0;
-    const pfRatio = hasPao2 ? Math.round(pao2 / fio2Decimal) : null;
+    // Normobaric ceiling: PAO2 ≈ FiO2 × (760 - 47) - PaCO2/0.8 (assuming minimal PaCO2 ~15 mmHg hyperventilation floor)
+    const maxPlausiblePao2 = Math.round(713 * fio2Decimal - 15);
+    const isImpossiblePao2 = hasPao2 && pao2 > maxPlausiblePao2;
+    const pfRatio = hasPao2 && !isImpossiblePao2 ? Math.round(pao2 / fio2Decimal) : null;
 
     let pfCategory: { label: string; tone: 'emerald' | 'sky' | 'amber' | 'rose'; detail: string } | null = null;
-    if (pfRatio !== null) {
+    if (isImpossiblePao2) {
+      pfCategory = {
+        label: 'Fizyolojik Olarak İmkânsız PaO₂ / FiO₂ Uyumsuzluğu!',
+        tone: 'rose',
+        detail: `Normobarik ortamda %${estFio2Pct} FiO₂ ile PaO₂ en fazla ~${maxPlausiblePao2} mmHg olabilir. Girilen AKG PaO₂ (${pao2} mmHg) veya seçili cihaz FiO₂ değerini kontrol edin.`,
+      };
+    } else if (pfRatio !== null) {
       if (pfRatio > 400) {
         pfCategory = {
           label: 'Normal Oksijenasyon (> 400)',
@@ -162,19 +235,19 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
         pfCategory = {
           label: 'Hafif Hipoksemi · Hafif ARDS Aralığı (201–300)',
           tone: 'amber',
-          detail: 'Berlin ARDS tanısı için PEEP/CPAP ≥ 5 cmH₂O (veya Global ARDS 2024: HFNC ≥ 30 L/dk) ve radyolojik kriterler gerekir.',
+          detail: 'Berlin ARDS için PEEP/CPAP ≥ 5 cmH₂O gerekir. Global ARDS 2024: HFNC ≥ 30 L/dk veya AKG yokken SpO₂ ≤ %97 koşuluyla S/F ≤ 315 (orta ≤ 235, ağır ≤ 148).',
         };
       } else if (pfRatio > 100) {
         pfCategory = {
           label: 'Orta Hipoksemi · Orta ARDS Aralığı (101–200)',
           tone: 'rose',
-          detail: 'Ciddi oksijenasyon bozukluğu; HFNC/NIV veya invaziv akciğer koruyucu ventilasyon açısından yakın izlem gerekir.',
+          detail: 'Ciddi oksijenasyon bozukluğu; HFNC/NIV veya invaziv akciğer koruyucu ventilasyon (VT 4–8 mL/kg PBW, Pplat ≤ 30 cmH₂O) açısından yakın izlem gerekir.',
         };
       } else {
         pfCategory = {
           label: 'Ağır Hipoksemi · Ağır ARDS Aralığı (≤ 100)',
           tone: 'rose',
-          detail: 'Kritik refrakter hipoksemi; akciğer koruyucu MV, PEEP titrasyonu, pron pozisyon ve ECMO kriterleri değerlendirilir.',
+          detail: 'Kritik refrakter hipoksemi; akciğer koruyucu MV, PEEP titrasyonu, pron pozisyon (< 150) ve ECMO (< 80) kriterleri değerlendirilir.',
         };
       }
     }
@@ -185,6 +258,8 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
       rangeNote,
       warning,
       isFixedFio2,
+      venturiSpec,
+      isImpossiblePao2,
       pfRatio,
       pfCategory,
     };
@@ -462,10 +537,11 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 <Droplets className="w-4 h-4 shrink-0 mt-0.5 text-sky-500" />
                 <div className="leading-relaxed">
                   <span className="font-bold block text-sky-700 dark:text-sky-300 mb-0.5">
-                    Uzun Süreli Uygulamada Nemlendirme
+                    Nemlendirme (BTS 2017 Bölüm 10.2)
                   </span>
-                  Oksijen verilmesinin uzun süreceği öngörüldüğünde, kuruyan salgıların daha küçük hava yollarını
-                  tıkamasını önlemek için mümkün olduğunca nemlendirilmelidir.
+                  <strong>Soğuk kabarcıklı nemlendiricilerin</strong> orta akımlarda klinik fayda kanıtı yoktur ve
+                  bakteriyel kontaminasyon riski taşır. Gerçek endikasyon <strong>aktif ısıtmalı nemlendirme</strong>dir
+                  (HFNC, trakeostomi/üst havayolu bypass, uzun süreli yüksek akım veya koyu sekresyonlar).
                 </div>
               </div>
 
@@ -554,7 +630,9 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                     >
                       <td className="p-3 align-top min-w-[180px]">
                         <div className="font-bold">{row.device}</div>
-                        <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{row.category}</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          {row.subLabel || row.category}
+                        </div>
                       </td>
                       <td className="p-3 align-top font-mono text-xs tabular-nums whitespace-nowrap">
                         <MedicalText text={row.flowRange} />
@@ -811,7 +889,11 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                         {fio2Calc.isFixedFio2 ? 'P/F Oranı' : 'Tahmini P/F Oranı'}
                       </div>
-                      {fio2Calc.pfRatio !== null ? (
+                      {fio2Calc.isImpossiblePao2 ? (
+                        <div className="text-sm font-mono font-black text-rose-600 dark:text-rose-400 mt-1.5">
+                          Geçersiz Giriş!
+                        </div>
+                      ) : fio2Calc.pfRatio !== null ? (
                         <div className="flex items-baseline gap-1 mt-0.5">
                           <span
                             className={`text-2xl font-mono font-black tabular-nums ${
@@ -835,6 +917,28 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       )}
                     </div>
                   </div>
+
+                  {fio2Calc.venturiSpec && (
+                    <div
+                      className={`rounded-lg border px-3 py-2 text-xs flex flex-wrap items-center justify-between gap-2 ${
+                        isDark ? 'bg-slate-950/70 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+                      }`}
+                    >
+                      <span className="inline-flex items-center gap-1.5 font-bold">
+                        <span
+                          className="w-3 h-3 rounded-xs border border-slate-400/50 inline-block shrink-0"
+                          style={{ backgroundColor: fio2Calc.venturiSpec.swatchHex }}
+                        />
+                        {fio2Calc.venturiSpec.colorName} Adaptör (%{fio2Calc.venturiSpec.fio2})
+                      </span>
+                      <span className="font-mono text-[11px] text-sky-600 dark:text-sky-400 font-semibold">
+                        Min {fio2Calc.venturiSpec.minO2Flow} L/dk (Toplam {fio2Calc.venturiSpec.totalFlowAtMin} L/dk)
+                        {fio2Calc.venturiSpec.tachypneaO2Flow > fio2Calc.venturiSpec.minO2Flow
+                          ? ` · SS > 30: ${fio2Calc.venturiSpec.tachypneaO2Flow} L/dk`
+                          : ' · Ağır dispnede HFNC/NIV'}
+                      </span>
+                    </div>
+                  )}
 
                   {fio2Calc.pfCategory && (
                     <div
@@ -915,6 +1019,206 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 </div>
               ))}
             </div>
+
+            {/* Interactive CaO2 / DO2 / VO2 / O2ER Mini-Calculator */}
+            <div className={`rounded-xl border p-4 sm:p-5 space-y-4 ${subtlePanel}`}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h4 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    <Calculator className="w-4 h-4 text-sky-500 shrink-0" />
+                    <span>
+                      İnteraktif <MedicalText text="C_{a}O_{2}" /> · <MedicalText text="DO_{2}" /> ·{' '}
+                      <MedicalText text="VO_{2}" /> · <MedicalText text="O_{2}ER" /> Hesaplayıcısı
+                    </span>
+                  </h4>
+                  <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                    Hemoglobin, kalp debisi ve <MedicalText text="P_{a}O_{2}" /> değişiminin doku oksijen sunumuna gerçek etkisini görün.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: 'Normal (Hb 15)', hb: '15', sao2: '98', pao2: '95', co: '5.0', svo2: '73' },
+                    { label: 'Ağır Anemi + %100 O₂', hb: '5', sao2: '100', pao2: '500', co: '6.0', svo2: '55' },
+                    { label: 'Düşük Debi / Şok', hb: '11', sao2: '96', pao2: '90', co: '2.4', svo2: '48' },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => {
+                        setDo2HbInput(preset.hb);
+                        setDo2Sao2Input(preset.sao2);
+                        setDo2Pao2Input(preset.pao2);
+                        setDo2CoInput(preset.co);
+                        setDo2Svo2Input(preset.svo2);
+                      }}
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-semibold border cursor-pointer transition-colors ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-slate-200 hover:border-sky-500'
+                          : 'bg-white border-slate-300 text-slate-700 hover:border-sky-500'
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                {[
+                  { id: 'do2-hb', label: 'Hb (g/dL)', val: do2HbInput, set: setDo2HbInput, min: '1', max: '25', step: '0.5' },
+                  { id: 'do2-sao2', label: 'SaO₂ (%)', val: do2Sao2Input, set: setDo2Sao2Input, min: '40', max: '100', step: '1' },
+                  { id: 'do2-pao2', label: 'PaO₂ (mmHg)', val: do2Pao2Input, set: setDo2Pao2Input, min: '20', max: '700', step: '5' },
+                  { id: 'do2-co', label: 'CO (L/dk)', val: do2CoInput, set: setDo2CoInput, min: '1', max: '15', step: '0.2' },
+                  { id: 'do2-svo2', label: 'SvO₂ (%)', val: do2Svo2Input, set: setDo2Svo2Input, min: '20', max: '95', step: '1' },
+                ].map((field) => (
+                  <div key={field.id} className="space-y-1">
+                    <label htmlFor={field.id} className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                      {field.label}
+                    </label>
+                    <input
+                      id={field.id}
+                      type="number"
+                      min={field.min}
+                      max={field.max}
+                      step={field.step}
+                      value={field.val}
+                      onChange={(e) => field.set(e.target.value)}
+                      className={`w-full px-2.5 py-1.5 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                        isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+                <div className={`rounded-lg border p-3 ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+                  <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    Arteriyel İçerik (C<sub>a</sub>O<sub>2</sub>)
+                  </div>
+                  <div className="text-xl font-mono font-black tabular-nums text-sky-600 dark:text-sky-400 mt-0.5">
+                    {do2Calc.cao2.toFixed(1).replace('.', ',')}{' '}
+                    <span className="text-[11px] font-normal text-slate-500">mL/dL</span>
+                  </div>
+                  <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">
+                    Hb: {do2Calc.boundO2.toFixed(1).replace('.', ',')} · Çözünen: {do2Calc.dissolvedO2.toFixed(2).replace('.', ',')} (%{do2Calc.dissolvedShare.toFixed(1).replace('.', ',')})
+                  </div>
+                </div>
+
+                <div
+                  className={`rounded-lg border p-3 ${
+                    do2Calc.isCriticalDo2
+                      ? isDark
+                        ? 'bg-rose-950/40 border-rose-500/50'
+                        : 'bg-rose-50 border-rose-300'
+                      : do2Calc.isLowDo2
+                        ? isDark
+                          ? 'bg-amber-950/30 border-amber-500/40'
+                          : 'bg-amber-50 border-amber-300'
+                        : isDark
+                          ? 'bg-slate-900 border-slate-800'
+                          : 'bg-white border-slate-200'
+                  }`}
+                >
+                  <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    Sistemik Sunum (DO<sub>2</sub>)
+                  </div>
+                  <div
+                    className={`text-xl font-mono font-black tabular-nums mt-0.5 ${
+                      do2Calc.isCriticalDo2
+                        ? 'text-rose-600 dark:text-rose-400'
+                        : do2Calc.isLowDo2
+                          ? 'text-amber-600 dark:text-amber-400'
+                          : 'text-emerald-600 dark:text-emerald-400'
+                    }`}
+                  >
+                    {Math.round(do2Calc.do2)} <span className="text-[11px] font-normal text-slate-500">mL/dk</span>
+                  </div>
+                  <div className="text-[10px] font-semibold mt-0.5 text-slate-500 dark:text-slate-400">
+                    {do2Calc.isCriticalDo2
+                      ? 'KRİTİK (< 350): Laktik asidoz riski!'
+                      : do2Calc.isLowDo2
+                        ? 'Düşük sunum (< 600): Rezerv sınırlı'
+                        : 'Normal aralık (~900–1100 mL/dk)'}
+                  </div>
+                </div>
+
+                <div className={`rounded-lg border p-3 ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+                  <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    Tüketim (VO<sub>2</sub>)
+                  </div>
+                  <div className="text-xl font-mono font-black tabular-nums text-teal-600 dark:text-teal-400 mt-0.5">
+                    {Math.round(do2Calc.vo2)} <span className="text-[11px] font-normal text-slate-500">mL/dk</span>
+                  </div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Bazal normal: ~250 mL/dk</div>
+                </div>
+
+                <div className={`rounded-lg border p-3 ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+                  <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    Ekstraksiyon (O<sub>2</sub>ER)
+                  </div>
+                  <div
+                    className={`text-xl font-mono font-black tabular-nums mt-0.5 ${
+                      do2Calc.isHighExtraction
+                        ? 'text-amber-600 dark:text-amber-400'
+                        : 'text-emerald-600 dark:text-emerald-400'
+                    }`}
+                  >
+                    %{do2Calc.o2er.toFixed(1).replace('.', ',')}
+                  </div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    {do2Calc.isHighExtraction ? 'Artmış ekstraksiyon (stres/şok)' : 'Normal: ~%22 – %30'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ODC (P50) & Pulse Oximetry Clinical Limitations */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs leading-relaxed">
+              <div className={`rounded-xl border p-4 space-y-2 ${subtlePanel}`}>
+                <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Oksihemoglobin Disosiyasyon Eğrisi (ODC) &amp; <MedicalText text="P_{50}" /> = 26,6 mmHg
+                </div>
+                <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
+                  <MedicalText text="P_{50}" />, hemoglobinin %50 satüre olduğu <MedicalText text="P_{a}O_{2}" /> değeridir
+                  (<strong>Bohr etkisi</strong>). Eğrinin kayma yönü oksijenin dokuya bırakımını belirler:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  <div className={`rounded-lg border p-2.5 ${isDark ? 'bg-emerald-950/25 border-emerald-800/50' : 'bg-emerald-50 border-emerald-200'}`}>
+                    <div className="font-bold text-emerald-700 dark:text-emerald-300">Sağa Kayma (P<sub>50</sub> ↑ → Dokuya O<sub>2</sub> ↑)</div>
+                    <p className="mt-1 opacity-90">
+                      ↑CO<sub>2</sub>, ↑H<sup>+</sup> (asidoz), ↑Sıcaklık, ↑2,3-DPG (kronik hipoksi/anemi) — Hb afinitesi düşer, dokuya boşaltım kolaylaşır.
+                    </p>
+                  </div>
+                  <div className={`rounded-lg border p-2.5 ${isDark ? 'bg-amber-950/25 border-amber-800/50' : 'bg-amber-50 border-amber-200'}`}>
+                    <div className="font-bold text-amber-700 dark:text-amber-300">Sola Kayma (P<sub>50</sub> ↓ → Dokuya O<sub>2</sub> ↓)</div>
+                    <p className="mt-1 opacity-90">
+                      ↓CO<sub>2</sub>, alkaloz, hipotermi, ↓2,3-DPG (beklemiş banka kanı), <strong>COHb, MetHb, HbF</strong> — SpO<sub>2</sub> iyi görünse bile doku hipoksisi gelişebilir.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`rounded-xl border p-4 space-y-2 ${subtlePanel}`}>
+                <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Pulse Oksimetri (<MedicalText text="SpO_{2}" />) Klinik Sınırlılıkları
+                </div>
+                <ul className={`space-y-1.5 list-disc pl-4 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  <li>
+                    <strong>COHb vs MetHb:</strong> COHb yalancı <strong>%98–100</strong> okur; MetHb ise oksijene dirençli <strong>~%85</strong> platosuna sabitlenir (kesin tanı: <strong>KO-oksimetri</strong>).
+                  </li>
+                  <li>
+                    <strong>Koyu cilt pigmentasyonu (FDA gizli hipoksemi uyarısı):</strong> Gerçek <MedicalText text="S_{a}O_{2}" /> &lt; %88 iken <MedicalText text="SpO_{2}" /> %92–96 ölçülebilir; klinik uyumsuzlukta AKG alın.
+                  </li>
+                  <li>
+                    <strong>Düşük perfüzyon / vazokonstriksiyon / IV boyalar:</strong> Şok, hipotermi, yüksek doz vazopresör veya metilen mavisi sinyali bozar/yalancı düşürür.
+                  </li>
+                  <li>
+                    <strong>Ventilasyonu göstermez:</strong> Yüksek <MedicalText text="FiO_{2}" /> altında ağır hiperkapni/apne <MedicalText text="SpO_{2}" /> %99 iken dakikalarca gizli kalabilir.
+                  </li>
+                </ul>
+              </div>
+            </div>
           </section>
 
           {/* 1.4 & 1.5. COPD Hypercapnia 3 Mechanisms + Hyperoxia Harms */}
@@ -955,7 +1259,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                   1.5. Hiperokseminin Sistemik Zararları ve Kanıta Dayalı Sınırlar
                 </h3>
                 <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                  Fazla oksijen masum değildir — normoksemi dışı hedefler organ hasarıyla ilişkilidir.
+                  Fazla oksijen masum değildir — ancak hiperkapnisiz ARDS&apos;de aşırı düşük hedef de zararlıdır.
                 </p>
               </div>
 
@@ -976,18 +1280,21 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                   </div>
                   <p className={`mt-1 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                     Belirgin hiperoksi (<MedicalText text="P_{a}O_{2}" /> &gt; 200–300 mmHg) direkt arteriyoler
-                    vazokonstriksiyon yaparak koroner ve serebral kan akımını azaltabilir (DETO2X-AMI çalışması
-                    normoksemik MI hastasında rutin <MedicalText text="O_{2}" /> faydasını dışlamıştır).
+                    vazokonstriksiyon yaparak koroner ve serebral kan akımını azaltabilir (DETO2X-AMI &amp; AVOID MI&apos;da,
+                    SO2S inmede normoksemik rutin <MedicalText text="O_{2}" /> faydasını dışlamıştır).
                   </p>
                 </div>
                 <div className={`rounded-lg border p-3.5 ${subtlePanel}`}>
                   <div className="font-bold text-sky-600 dark:text-sky-400">
-                    3. Oksidatif Stres &amp; YBÜ Kanıtları (ICU-ROX / HOT-ICU)
+                    3. Oksidatif Stres &amp; YBÜ Kanıtları (ICU-ROX · HOT-ICU · LOCO2)
                   </div>
                   <p className={`mt-1 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    Reaktif oksijen türleri (ROS) alveoler tip I hücre hasarı ve sürfaktan disfonksiyonu oluşturur.
-                    ICU-ROX ve HOT-ICU RKÇ’lerinde liberal hiperoksik hedefler konservatif normoksemik stratejilere
-                    üstün bulunmamıştır.
+                    ROS artışı alveoler tip I hücre hasarı ve sürfaktan disfonksiyonu yapar. <strong>ICU-ROX</strong> ve{' '}
+                    <strong>HOT-ICU</strong> liberal vs konservatif hedefler arasında mortalite farkı göstermemiştir;
+                    buna karşılık <strong>LOCO2 (NEJM 2020)</strong> ARDS&apos;de aşırı konservatif (
+                    <MedicalText text="P_{a}O_{2}" /> 55–70 mmHg / <MedicalText text="SpO_{2}" /> %88–92) hedefin{' '}
+                    <strong>mezenterik iskemi (5 vs 0 olgu)</strong> ve 90 günlük mortalite riskini artırması nedeniyle
+                    erken durdurulmuştur → hiperkapni riski yoksa güvenli denge <strong>%92–96 / %94–98</strong>&apos;dir.
                   </p>
                 </div>
               </div>
@@ -1125,13 +1432,16 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
 
           {/* Venturi Color Codes Table */}
           <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
-            <div>
-              <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                2.2. Ventüri (HAFOE) Maskesi Renk Kodları, Sürüklenme Oranı ve Toplam Akım Tablosu
-              </h3>
-              <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                ISO standartlı adaptör değerleri (üreticiye göre akım etiketini daima teyit edin).
-              </p>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <div>
+                <h3 className={`text-base sm:text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  2.2. Ventüri (HAFOE) Maskesi Renk Kodları, Sürüklenme Oranı ve Toplam Akım Tablosu
+                </h3>
+                <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  ISO standartlı adaptör değerleri · <strong>BTS 2017 Altın Kuralı:</strong> Solunum hızı &gt; 30/dk ise{' '}
+                  <MedicalText text="O_{2}" /> akımını %50 artırın (<MedicalText text="FiO_{2}" /> sabit kalır, toplam gaz akımı artarak PIFR&apos;yi karşılar).
+                </p>
+              </div>
             </div>
 
             <div className={`overflow-x-auto rounded-xl border ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
@@ -1150,6 +1460,9 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                     </th>
                     <th className="text-left p-3 font-semibold whitespace-nowrap">
                       Min <MedicalText text="O_{2}" /> Akımı
+                    </th>
+                    <th className="text-left p-3 font-semibold whitespace-nowrap">
+                      SS &gt; 30/dk (+%50)
                     </th>
                     <th className="text-left p-3 font-semibold whitespace-nowrap">
                       Hava : <MedicalText text="O_{2}" /> Oranı
@@ -1174,6 +1487,9 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                         %{spec.fio2}
                       </td>
                       <td className="p-3 align-middle font-mono tabular-nums">{spec.minO2Flow} L/dk</td>
+                      <td className="p-3 align-middle font-mono font-semibold tabular-nums text-amber-600 dark:text-amber-400">
+                        {spec.tachypneaO2Flow > spec.minO2Flow ? `${spec.tachypneaO2Flow} L/dk` : 'HFNC / NIV'}
+                      </td>
                       <td className="p-3 align-middle font-mono tabular-nums">{spec.airToO2Ratio}</td>
                       <td className="p-3 align-middle font-mono font-bold tabular-nums">{spec.totalFlowAtMin} L/dk</td>
                       <td className="p-3 align-middle text-xs leading-relaxed">
@@ -1196,7 +1512,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
               3. Perioperatif Oksijenasyon ve Özel Klinik Durumlar
             </h2>
             <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-              Preoksijenasyon · NODESAT · PROXI · PACU
+              PREOXI · NODESAT · iPROVE-O2 · PACU
             </span>
           </div>
 
@@ -1273,24 +1589,22 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                     <td className="p-3 font-bold">8 Derin Vital Kapasite Nefesi</td>
                     <td className="p-3 font-mono tabular-nums whitespace-nowrap">60 saniye içinde 8 derin nefes</td>
                     <td className="p-3 font-mono tabular-nums whitespace-nowrap">
-                      ≥ 10 L/dk · <MedicalText text="FeO_{2}" /> &gt; %85
+                      ZORUNLU ≥ 10 L/dk · <MedicalText text="FeO_{2}" /> &gt; %85
                     </td>
                     <td className="p-3 text-xs">
-                      Acil / RSI olgularında 3 dk tidal solunuma eşdeğer <MedicalText text="P_{a}O_{2}" /> sağlar. 4 derin
-                      nefes (30 sn) daha kısa etkilidir ve hızlı desatüre olur.
+                      Acil / RSI olgularında 3 dk tidal solunuma eşdeğer <MedicalText text="P_{a}O_{2}" /> sağlar (dakika ventilasyonu &gt; 15 L/dk olduğundan düşük FGF geri soluma yapar!). 4 derin nefes (30 sn) daha hızlı desatüre olur.
                     </td>
                   </tr>
                   <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
                     <td className="p-3 font-bold">
-                      Ramped + CPAP / PEEP (5–10 <MedicalText text="cmH_{2}O" />)
+                      NIV / BiPAP · Ramped + PEEP (PREOXI 2024)
                     </td>
-                    <td className="p-3 font-mono tabular-nums whitespace-nowrap">20–25° baş yukarı + NIV/PEEP</td>
+                    <td className="p-3 font-mono tabular-nums whitespace-nowrap">20–25° baş yukarı + IPAP/EPAP 5–10 <MedicalText text="cmH_{2}O" /></td>
                     <td className="p-3 font-mono tabular-nums whitespace-nowrap">
                       <MedicalText text="FiO_{2}" /> 1,00 · <MedicalText text="FeO_{2}" /> &gt; %90
                     </td>
                     <td className="p-3 text-xs">
-                      Morbid obez, gebe ve YBÜ hastalarında en uzun güvenli apne süresi; %100{' '}
-                      <MedicalText text="O_{2}" />’nin tetiklediği absorpsiyon atelektazisini önler.
+                      <strong>PREOXI (NEJM 2024, n=1.301):</strong> Acil entübasyonda kritik hastalarda hipoksemiyi maskeye göre yarıya indirdi (<strong>%9,1 vs %18,5</strong>; aspirasyon artışı yok). Obez, gebe ve ARDS hastalarında absorpsiyon atelektazisini önler.
                     </td>
                   </tr>
                 </tbody>
@@ -1352,14 +1666,17 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 </h3>
                 <p className={`text-xs sm:text-sm leading-relaxed max-w-4xl ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                   <strong>Boyle–Mariotte Yasası</strong>&apos;na göre sabit sıcaklıkta ideal bir gazın basıncı ile hacmi ters
-                  orantılıdır (<MedicalText text="P_{1} \times V_{1} = P_{2} \times V_{2}" />). Oksijenin kritik sıcaklığı{' '}
+                  orantılıdır (<MedicalText text="P_{1} × V_{1} = P_{2} × V_{2}" />). Oksijenin kritik sıcaklığı{' '}
                   <strong className="font-mono">−118,6 °C</strong> olduğundan oda sıcaklığında tüp içinde sıvılaşmaz,{' '}
-                  <strong>sıkıştırılmış gaz</strong> fazında bulunur. Bu nedenle manometre basıncı tüpte kalan gaz hacmiyle{' '}
-                  <strong>doğrusal (lineer)</strong> olarak azalır (Dorsch &amp; Dorsch; Miller&apos;s Anesthesia).
+                  <strong>sıkıştırılmış gaz</strong> fazında bulunur ve manometre basıncı kalan gaz hacmiyle{' '}
+                  <strong>doğrusal</strong> azalır. <em>Kontrast (Board Tuzağı):</em>{' '}
+                  <MedicalText text="N_{2}O" />&apos;nun kritik sıcaklığı <strong>+36,5 °C</strong> olduğundan tüp içinde{' '}
+                  <strong>sıvı+gaz</strong> fazındadır; basınç (~44–51 bar) sıvı bitene kadar sabit kalır ve kalan miktar
+                  yalnızca <strong>tartılarak</strong> belirlenir.
                 </p>
               </div>
               <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-                TS EN 1089-3 · Beyaz Tüp · 150–200 bar
+                TS EN 1089-3: Omuz Beyaz (ABD/NFPA: Yeşil) · 150–200 bar
               </span>
             </div>
 
@@ -1370,13 +1687,13 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                   Metrik (Bar) Kalan Süre Formülü
                 </div>
                 <div className="font-mono font-bold text-sky-600 dark:text-sky-400">
-                  Kalan Süre (dk) = [(P<sub>bar</sub> − P<sub>rezerv</sub>) × V<sub>su (L)</sub>] / Akım (L/dk)
+                  Kalan Süre (dk) = [(P<sub>bar</sub> − P<sub>rezerv</sub>) × V<sub>su (L)</sub>] / Toplam Akım (L/dk)
                 </div>
               </div>
               <div className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                 Türkiye&apos;de portatif medikal <MedicalText text="O_{2}" /> tüpleri metrik su hacmiyle (<strong>2, 3, 5, 10 L</strong>)
-                ve <strong>bar</strong> cinsinden manometreyle (tam dolum <strong>150</strong> veya <strong>200 bar</strong>) ölçülür.
-                Regülatör güvenliği için genellikle <strong>10–20 bar</strong> rezerv bırakılır.
+                ve <strong>bar</strong> cinsinden manometreyle (tam dolum <strong>150</strong> veya yeni tüplerde <strong>200 bar</strong> —
+                daima manometreden teyit edin) ölçülür. Güvenli transport için <strong>20 bar</strong> emniyet rezervi önerilir.
               </div>
             </div>
 
@@ -1423,13 +1740,13 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 </div>
 
                 {/* Numeric Controls */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   <div className="space-y-1">
                     <label
                       htmlFor="o2-cyl-vol"
                       className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
                     >
-                      Su Hacmi — V<sub>su</sub> (Litre)
+                      Su Hacmi — V<sub>su</sub> (L)
                     </label>
                     <input
                       id="o2-cyl-vol"
@@ -1452,7 +1769,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       htmlFor="o2-cyl-bar"
                       className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
                     >
-                      Manometre Basıncı (bar)
+                      Manometre (bar)
                     </label>
                     <input
                       id="o2-cyl-bar"
@@ -1493,7 +1810,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       htmlFor="o2-cyl-flow"
                       className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
                     >
-                      Oksijen Akımı (L/dk)
+                      Hasta Akımı (L/dk)
                     </label>
                     <input
                       id="o2-cyl-flow"
@@ -1528,6 +1845,47 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       ))}
                     </div>
                   </div>
+
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="o2-cyl-extra"
+                      className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400"
+                    >
+                      Cihaz Ek Gazı (L/dk)
+                    </label>
+                    <input
+                      id="o2-cyl-extra"
+                      type="number"
+                      min="0"
+                      max="15"
+                      step="0.5"
+                      value={extraVentFlowLpm}
+                      onChange={(e) => setExtraVentFlowLpm(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm font-mono font-bold focus:outline-none focus:border-sky-500 ${
+                        isDark
+                          ? 'bg-slate-900 border-slate-700 text-white'
+                          : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                    />
+                    <div className="flex gap-1 pt-0.5">
+                      {[0, 1, 2, 3].map((ef) => (
+                        <button
+                          key={ef}
+                          type="button"
+                          onClick={() => setExtraVentFlowLpm(String(ef))}
+                          className={`flex-1 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-pointer ${
+                            Number(extraVentFlowLpm) === ef
+                              ? 'bg-sky-600 border-sky-600 text-white'
+                              : isDark
+                                ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                                : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          +{ef}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Safety Reserve Selector */}
@@ -1549,7 +1907,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                               : 'bg-white border-slate-200 text-slate-700'
                         }`}
                       >
-                        {res} bar{res === 10 ? ' (Önerilen)' : ''}
+                        {res} bar{res === 20 ? ' (Önerilen)' : ''}
                       </button>
                     ))}
                   </div>
@@ -1559,7 +1917,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
               {/* Result Panel */}
               <div
                 className={`lg:col-span-5 rounded-xl border p-4 space-y-3.5 ${
-                  cylinderCalc.isLowPressure || cylinderCalc.isShortDuration
+                  cylinderCalc.isEmptyOrReserveOnly || cylinderCalc.isLowPressure || cylinderCalc.isShortDuration
                     ? isDark
                       ? 'bg-rose-950/25 border-rose-500/40'
                       : 'bg-rose-50/70 border-rose-200'
@@ -1569,13 +1927,13 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 }`}
               >
                 <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Tahmini Güvenli Kalan Süre
+                  Tahmini Güvenli Kalan Süre {cylinderCalc.extraFlow > 0 ? `(Toplam ${cylinderCalc.flow} L/dk)` : ''}
                 </div>
 
                 <div className="flex items-baseline gap-2">
                   <span
                     className={`text-3xl font-mono font-black tabular-nums ${
-                      cylinderCalc.isLowPressure || cylinderCalc.isShortDuration
+                      cylinderCalc.isEmptyOrReserveOnly || cylinderCalc.isLowPressure || cylinderCalc.isShortDuration
                         ? 'text-rose-600 dark:text-rose-400'
                         : 'text-sky-700 dark:text-sky-300'
                     }`}
@@ -1604,20 +1962,25 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                   </div>
                 </div>
 
-                {(cylinderCalc.isLowPressure || cylinderCalc.isShortDuration) && (
+                {(cylinderCalc.isEmptyOrReserveOnly || cylinderCalc.isLowPressure || cylinderCalc.isShortDuration) && (
                   <div className="rounded-lg border border-rose-500/40 bg-rose-500/10 p-2.5 text-xs text-rose-700 dark:text-rose-200 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-500" />
                     <span>
-                      <strong>Kritik Uyarı:</strong> Basınç ≤ 20 bar veya kalan süre &lt; 15 dk! Hasta transportuna
-                      başlamadan önce yedek dolu tüp hazırlayın.
+                      <strong>Kritik Uyarı:</strong>{' '}
+                      {cylinderCalc.bar <= 0
+                        ? 'Tüp TAMAMEN BOŞ (0 bar)! Derhal dolu tüp ile değiştirin.'
+                        : cylinderCalc.isEmptyOrReserveOnly
+                          ? `Tüp yalnızca emniyet rezervinde (≤ ${cylinderReserveBar} bar · kullanılabilir gaz 0 L)! Transfer başlatılamaz.`
+                          : 'Basınç ≤ 20 bar veya kalan süre < 15 dk! Hasta transportuna başlamadan önce yedek dolu tüp hazırlayın.'}
                     </span>
                   </div>
                 )}
 
                 <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                   <strong>Transport İncisi:</strong> Pnömatik transport ventilatörleri hasta dakika ventilasyonuna ek
-                  olarak iç çalışma gazı (<em>driving gas</em>) tüketebilir; gerçek akımı hesaplarken cihaz tüketimini
-                  ekleyin ve daima %25–30 güvenlik payı bırakın.
+                  olarak iç çalışma gazı (<em>driving gas</em>, genelde 1–3 L/dk) tüketebilir; yukarıdaki{' '}
+                  <strong>Cihaz Ek Gazı</strong> alanını kullanarak toplam akımı hesaplayın ve daima %25–30 emniyet payı
+                  bırakın.
                 </p>
               </div>
             </div>
@@ -1645,8 +2008,8 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
               </h3>
               <p className={`text-xs sm:text-sm mt-1.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                 <strong>Uzun Süreli Oksijen Tedavisi (USOT / LTOT)</strong>, kronik ağır istirahat hipoksemisi olan
-                hastalarda arteriyel oksijenasyonu güvenli sınıra (<MedicalText text="P_{a}O_{2} \ge 60" /> mmHg /{' '}
-                <MedicalText text="SpO_{2} \ge \%90" />) yükseltmek, hipoksik pulmoner vazokonstriksiyonu ve sağ kalp
+                hastalarda arteriyel oksijenasyonu güvenli sınıra (<MedicalText text="P_{a}O_{2}" /> ≥ 60 mmHg /{' '}
+                <MedicalText text="SpO_{2}" /> ≥ %90) yükseltmek, hipoksik pulmoner vazokonstriksiyonu ve sağ kalp
                 yetmezliği (kor pulmonale) gelişimini yavaşlatmak ve <strong>sağkalımı uzatmak</strong> amacıyla evde
                 günde <strong>en az 15 saat</strong> (ideal olarak <strong>15–18+ saat/gün</strong>, uykuyu kapsayacak
                 şekilde) uygulanan medikal oksijen tedavisidir.
@@ -1673,7 +2036,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                   Yalnızca <strong>orta düzey</strong> istirahat desatürasyonu (<MedicalText text="SpO_{2}" /> %89–93)
                   veya izole egzersiz desatürasyonu olan stabil KOAH hastalarında USOT&apos;un sağkalım ya da hastaneye
-                  yatışa fayda sağlamadığını gösterdi.
+                  yatışa fayda sağlamadığını gösterdi (KOAH popülasyonu; İAH hariç).
                 </p>
               </div>
             </div>
@@ -1730,14 +2093,14 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       1. Mutlak (Kesin) Endikasyon
                     </td>
                     <td className="p-3 align-top font-mono font-bold tabular-nums whitespace-nowrap">
-                      <MedicalText text="P_{a}O_{2} \le 55" /> mmHg (<MedicalText text="\le 7,3" /> kPa)
+                      <MedicalText text="P_{a}O_{2}" /> ≤ 55 mmHg (≤ 7,3 kPa)
                       <br />
                       <span className="text-xs font-normal text-slate-500">veya</span>{' '}
-                      <MedicalText text="SpO_{2} \le \%88" />
+                      <MedicalText text="SpO_{2}" /> ≤ %88
                     </td>
                     <td className="p-3 align-top text-xs leading-relaxed">
-                      Hiperkapni olsun veya olmasın <strong>güçlü USOT endikasyonudur</strong> (KOAH ve kronik ağır
-                      hipoksemili interstisyel akciğer hastalıkları — ATS 2020 güçlü öneri).
+                      Hiperkapni olsun veya olmasın <strong>güçlü USOT endikasyonudur</strong> (KOAH: orta kanıt, İAH:
+                      çok düşük kanıtla güçlü öneri — ATS 2020).
                     </td>
                   </tr>
                   <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
@@ -1745,10 +2108,10 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       2. Koşullu (Komplikasyonlu) Endikasyon
                     </td>
                     <td className="p-3 align-top font-mono font-bold tabular-nums whitespace-nowrap">
-                      <MedicalText text="P_{a}O_{2}\ 56\text{–}59" /> mmHg (7,4–7,9 kPa)
+                      <MedicalText text="P_{a}O_{2}" /> 56–59 mmHg (7,4–7,9 kPa)
                       <br />
                       <span className="text-xs font-normal text-slate-500">veya</span>{' '}
-                      <MedicalText text="SpO_{2} = \%89" />
+                      <MedicalText text="SpO_{2}" /> = %89
                     </td>
                     <td className="p-3 align-top text-xs leading-relaxed">
                       Aşağıdakilerden <strong>en az biri</strong> eşlik ediyorsa USOT endikedir:
@@ -1761,14 +2124,15 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                   </tr>
                   <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
                     <td className="p-3 align-top font-bold text-sky-600 dark:text-sky-400">
-                      3. KOAH Dışı Kronik Hipoksemi
+                      3. KOAH Dışı &amp; Ambulatör Oksijen
                     </td>
                     <td className="p-3 align-top font-mono font-semibold tabular-nums whitespace-nowrap">
-                      Aynı AKG eşikleri
+                      Aynı AKG eşikleri · Efor Desat.
                     </td>
                     <td className="p-3 align-top text-xs leading-relaxed">
-                      İnterstisyel akciğer hastalığı (İAH), kistik fibrozis, pulmoner arteriyel hipertansiyon ve ağır
-                      göğüs duvarı deformitesi (kifoskolyoz) olgularında ağır istirahat hipoksemisi varsa endikedir.
+                      İnterstisyel akciğer hastalığı (İAH), kistik fibrozis, PAH ve ağır kifoskolyozda ağır istirahat
+                      hipoksemisi varsa USOT endikedir. <strong>ATS 2020:</strong> Şiddetli efor desatürasyonu olan KOAH
+                      ve İAH hastalarında yaşam kalitesi/mobilite için <strong>ambulatör oksijen</strong> koşullu önerilir.
                     </td>
                   </tr>
                   <tr className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
@@ -1776,7 +2140,7 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                       4. Rutin Önerilmeyen Durum
                     </td>
                     <td className="p-3 align-top font-mono font-semibold tabular-nums whitespace-nowrap">
-                      <MedicalText text="SpO_{2}\ \%89\text{–}93" /> (komplikasyonsuz)
+                      <MedicalText text="SpO_{2}" /> %89–93 (komplikasyonsuz)
                     </td>
                     <td className="p-3 align-top text-xs leading-relaxed">
                       LOTT çalışması ve ATS 2020 rehberi doğrultusunda, orta düzeyde istirahat hipoksemisi olan
@@ -1790,12 +2154,13 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
             {/* Prescription, Titration & Safety Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs leading-relaxed">
               <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
-                <div className="font-bold text-sky-600 dark:text-sky-400">Süre ve Hedef Titrasyon</div>
+                <div className="font-bold text-sky-600 dark:text-sky-400">Süre, Titrasyon &amp; Uçak Yolculuğu</div>
                 <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
-                  Günde <strong>≥ 15 saat</strong> (tercihen 18+ saat) uygulanır. Akım hızı istirahatte{' '}
-                  <MedicalText text="P_{a}O_{2} > 60" /> mmHg veya <MedicalText text="SpO_{2} \ge \%90" /> (hiperkapnik
-                  KOAH&apos;ta aşırı <MedicalText text="P_{a}CO_{2}" /> artışından kaçınarak genelde %90–92) olacak
-                  şekilde titre edilir; uyku ve egzersizde genelde +1 L/dk artış değerlendirilir.
+                  Günde <strong>≥ 15 saat</strong> (tercihen 18+ saat) uygulanır. Akım istirahatte{' '}
+                  <MedicalText text="P_{a}O_{2}" /> &gt; 60 mmHg / <MedicalText text="SpO_{2}" /> ≥ %90 (hiperkapnik
+                  KOAH&apos;ta %90–92) olacak şekilde titre edilir; uyku/egzersizde +1 L/dk,{' '}
+                  <strong>uçak kabininde</strong> (~2.400 m; efektif <MedicalText text="FiO_{2}" /> ≈ %15) genelde{' '}
+                  <strong>+1–2 L/dk</strong> artış gerekir (BTS Air Travel).
                 </p>
               </div>
               <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
@@ -1806,44 +2171,79 @@ export const OxygenTherapyModule: React.FC<OxygenTherapyModuleProps> = ({ isDark
                 </p>
               </div>
               <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
-                <div className="font-bold text-rose-600 dark:text-rose-400">Yangın ve Sigara Güvenliği</div>
+                <div className="font-bold text-rose-600 dark:text-rose-400">Yangın, Sigara &amp; Termal Valf</div>
                 <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
-                  Oksijen yanıcı değildir ancak yanmayı şiddetle hızlandırır. Aktif sigara kullanımı ve açık alev/ocak
-                  yakınında oksijen kullanımı ciddi yüz yanığı ve ölümcül ev yangını riski taşır; hasta/yakınlarına
-                  güvenlik eğitimi ve sigara bırakma desteği zorunludur (ATS 2020 / BTS 2015).
+                  Oksijen yanmayı şiddetle hızlandırır. Aktif sigara/açık alev ölümcül yüz yanığı ve ev yangınına yol
+                  açar; yapılandırılmış güvenlik eğitimi, sigara bırakma desteği ve oksijen hortumuna{' '}
+                  <strong>hat içi yangın kesici valf (thermal firebreak)</strong> takılması önerilir (ATS 2020 / BTS 2015).
                 </p>
+              </div>
+            </div>
+
+            {/* 5.3. Perioperative Management of LTOT Patients */}
+            <div
+              className={`rounded-xl border p-4 space-y-2 text-xs leading-relaxed ${
+                isDark
+                  ? 'bg-amber-950/20 border-amber-800/60 text-amber-100'
+                  : 'bg-amber-50/80 border-amber-200 text-amber-950'
+              }`}
+            >
+              <div className="text-sm font-bold text-amber-700 dark:text-amber-300">
+                5.3. USOT Kullanan Hastanın Perioperatif Yönetimi (Anestezi Köprüsü)
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1">
+                <div>
+                  <span className="font-bold block">1. Preop Bazal Kayıt</span>
+                  Hastanın ev akım hızı (L/dk), bazal <MedicalText text="SpO_{2}" /> ve bazal AKG (
+                  <MedicalText text="P_{a}CO_{2}" /> / HCO<sub>3</sub><sup>−</sup>) değeri mutlaka belgelenir.
+                </div>
+                <div>
+                  <span className="font-bold block">2. İntraop &amp; Postop Hedef</span>
+                  Yüksek hiperoksiden kaçınılarak bazal/hedef <strong>%88–92</strong> korunur; rejyonal anestezi mümkünse
+                  tercih edilir.
+                </div>
+                <div>
+                  <span className="font-bold block">3. Opioid &amp; NMB Hassasiyeti</span>
+                  Opioid solunum depresyonu ve rezidüel kürarizasyon (kantitatif TOF ≥ 0,90 şart!) hızla hiperkapnik
+                  komaya ilerler; multimodal analjezi esastır.
+                </div>
+                <div>
+                  <span className="font-bold block">4. Erken NIV / Ev Cihazı</span>
+                  Ekstübasyon sonrası profilaktik/erken <strong>NIV veya HFNC</strong> eşiği düşük tutulur; hasta taburcu
+                  olmadan ev konsantratörü/reçetesi teyit edilir.
+                </div>
               </div>
             </div>
           </section>
         </div>
       )}
 
-      {/* KAYNAKLAR (Her zaman en altta — Tümü veya Safety/LTOT görünümünde) */}
-      {(sectionFilter === 'all' || sectionFilter === 'safety' || sectionFilter === 'ltot') && (
-        <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
-          <div className="flex items-center gap-2 text-sm font-bold">
-            <BookOpen className="w-4 h-4 text-sky-500" />
-            <span>Kılavuzlar ve Temel Referans Kaynakları</span>
-          </div>
-          <ol className="space-y-2.5 text-xs sm:text-sm">
-            {OXYGEN_REFERENCES.map((ref, idx) => (
-              <li
-                key={ref.title}
-                className={`flex items-start gap-3 rounded-lg border p-3 ${subtlePanel}`}
-              >
-                <span className="font-mono text-xs font-bold text-sky-500 mt-0.5 tabular-nums">
-                  {String(idx + 1).padStart(2, '0')}
-                </span>
-                <div className="leading-relaxed">
-                  <span className="font-semibold">{ref.authors}</span>{' '}
-                  <span className="italic">{ref.title}</span>{' '}
-                  <span className="text-slate-500 dark:text-slate-400">{ref.detail}</span>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
+      {/* KAYNAKLAR (Tüm bölüm filtrelerinde erişilebilir) */}
+      <section className={`rounded-xl border p-5 sm:p-6 space-y-4 ${surfaceCard}`}>
+        <div className="flex items-center gap-2 text-sm font-bold">
+          <BookOpen className="w-4 h-4 text-sky-500" />
+          <span>Kılavuzlar ve Temel Referans Kaynakları</span>
+        </div>
+        <ol className="space-y-2.5 text-xs sm:text-sm">
+          {OXYGEN_REFERENCES.map((ref, idx) => (
+            <li
+              key={ref.title}
+              className={`flex items-start gap-3 rounded-lg border p-3 ${subtlePanel}`}
+            >
+              <span className="font-mono text-xs font-bold text-sky-500 mt-0.5 tabular-nums">
+                {String(idx + 1).padStart(2, '0')}
+              </span>
+              <div className="leading-relaxed">
+                <span className="font-semibold">{ref.authors}</span>{' '}
+                <span className="italic">
+                  <MedicalText text={ref.title} />
+                </span>{' '}
+                <span className="text-slate-500 dark:text-slate-400">{ref.detail}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
     </div>
   );
 };

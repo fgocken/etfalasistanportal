@@ -17,7 +17,20 @@ interface MedicalTextProps {
 const TOKEN_REGEX =
   /\\dot\{([A-Za-z]+)\}|\\bar\{([A-Za-z]+)\}|_\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}|\^\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
 
-function renderTokens(input: string, keyPrefix = 't'): React.ReactNode[] {
+function normalizeMedicalLatex(input: string): string {
+  return input
+    .replace(/\\text\{([^{}]*)\}/g, '$1')
+    .replace(/\\times\b/g, '×')
+    .replace(/\\geq?\b/g, '≥')
+    .replace(/\\leq?\b/g, '≤')
+    .replace(/\\approx\b/g, '≈')
+    .replace(/\\pm\b/g, '±')
+    .replace(/\\%/g, '%')
+    .replace(/\\ /g, ' ');
+}
+
+function renderTokens(rawInput: string, keyPrefix = 't'): React.ReactNode[] {
+  const input = normalizeMedicalLatex(rawInput);
   const nodes: React.ReactNode[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
