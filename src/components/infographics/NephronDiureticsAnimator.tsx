@@ -2083,14 +2083,28 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
 interface CellularMechanismPanelProps {
   isDark: boolean;
   selectedDiuretic: DiureticId;
+  onPrevDiuretic: () => void;
+  onNextDiuretic: () => void;
   isDrugActive: boolean;
+  onToggleDrugActive: (active: boolean) => void;
+  isPlaying: boolean;
+  onTogglePlay: () => void;
+  speed: SpeedMultiplier;
+  onChangeSpeed: (speed: SpeedMultiplier) => void;
   time: number;
 }
 
 const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
   isDark,
   selectedDiuretic,
+  onPrevDiuretic,
+  onNextDiuretic,
   isDrugActive,
+  onToggleDrugActive,
+  isPlaying,
+  onTogglePlay,
+  speed,
+  onChangeSpeed,
   time,
 }) => {
   const drug = DIURETICS[selectedDiuretic];
@@ -3380,6 +3394,151 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
         )}
       </div>
 
+      {/* HÜCRESEL ANİMASYONA BİTİŞİK MİNİ-KONTROL ŞERİDİ (Yukarı Kaydırmadan Anlık Kontrol) */}
+      <div
+        className={`border-b px-2.5 py-1.5 flex flex-wrap items-center justify-between gap-1.5 text-[10.5px] ${
+          isDark
+            ? 'border-slate-800 bg-slate-900/95'
+            : 'border-slate-200/90 bg-slate-50/70'
+        }`}
+        role="toolbar"
+        aria-label="Hücresel animasyon hızlı kontrolleri"
+      >
+        {/* 1. Mini Diüretik Grubu Değişimi (< Sınıf >) */}
+        <div
+          className={`inline-flex items-center gap-0.5 p-0.5 rounded-lg border ${
+            isDark
+              ? 'bg-slate-950/80 border-slate-800'
+              : 'bg-white border-slate-200 shadow-2xs'
+          }`}
+        >
+          <button
+            type="button"
+            onClick={onPrevDiuretic}
+            aria-label="Önceki diüretik grubu"
+            title="Önceki diüretik grubu (←)"
+            className={`p-1 rounded-md transition-colors cursor-pointer ${
+              isDark
+                ? 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+          </button>
+          <span
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-extrabold text-white text-[10px] leading-none max-w-[138px] truncate"
+            style={{ backgroundColor: theme.hex }}
+            title={`${drug.name} (${DIURETIC_ORDER.indexOf(selectedDiuretic) + 1}/${DIURETIC_ORDER.length})`}
+          >
+            <span className="truncate">{drug.shortName}</span>
+            <span className="opacity-80 font-mono shrink-0">
+              {DIURETIC_ORDER.indexOf(selectedDiuretic) + 1}/{DIURETIC_ORDER.length}
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={onNextDiuretic}
+            aria-label="Sonraki diüretik grubu"
+            title="Sonraki diüretik grubu (→)"
+            className={`p-1 rounded-md transition-colors cursor-pointer ${
+              isDark
+                ? 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* 2. Mini Fizyolojik / Diüretik Etkin Anahtarı */}
+        <div
+          className={`inline-flex items-center p-0.5 rounded-lg border font-bold ${
+            isDark
+              ? 'bg-slate-950/80 border-slate-800'
+              : 'bg-white border-slate-200 shadow-2xs'
+          }`}
+          role="group"
+          aria-label="Fizyolojik veya diüretik etkin görünüm"
+        >
+          <button
+            type="button"
+            onClick={() => onToggleDrugActive(false)}
+            aria-pressed={!isDrugActive}
+            className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+              !isDrugActive
+                ? 'bg-emerald-600 text-white shadow-2xs'
+                : isDark
+                  ? 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Fizyolojik
+          </button>
+          <button
+            type="button"
+            onClick={() => onToggleDrugActive(true)}
+            aria-pressed={isDrugActive}
+            className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+              isDrugActive
+                ? 'bg-rose-600 text-white shadow-2xs'
+                : isDark
+                  ? 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Diüretik
+          </button>
+        </div>
+
+        {/* 3. Mini Oynat/Duraklat + Hız Kontrolü (0.5x / 1x / 2x) */}
+        <div
+          className={`inline-flex items-center gap-0.5 p-0.5 rounded-lg border font-mono font-bold ${
+            isDark
+              ? 'bg-slate-950/80 border-slate-800'
+              : 'bg-white border-slate-200 shadow-2xs'
+          }`}
+          role="group"
+          aria-label="Oynatma ve hız kontrolü"
+        >
+          <button
+            type="button"
+            onClick={onTogglePlay}
+            aria-label={isPlaying ? 'Animasyonu duraklat' : 'Animasyonu oynat'}
+            title={isPlaying ? 'Duraklat' : 'Oynat'}
+            className={`p-1 rounded-md transition-colors cursor-pointer ${
+              isPlaying
+                ? isDark
+                  ? 'bg-sky-500/20 text-sky-300 hover:bg-sky-500/30'
+                  : 'bg-sky-100 text-sky-700 hover:bg-sky-200'
+                : isDark
+                  ? 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+          </button>
+          {([0.5, 1, 2] as const).map((spd) => (
+            <button
+              key={spd}
+              type="button"
+              onClick={() => onChangeSpeed(spd)}
+              aria-pressed={speed === spd}
+              className={`px-1.5 py-0.5 rounded-md text-[10px] transition-all cursor-pointer ${
+                speed === spd
+                  ? isDark
+                    ? 'bg-teal-500/25 text-teal-200'
+                    : 'bg-teal-600 text-white'
+                  : isDark
+                    ? 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              {spd}×
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* HÜCRESEL SVG */}
       <div
         className={`p-2 sm:p-3 flex-1 flex flex-col justify-between ${
@@ -4415,14 +4574,31 @@ IonsAbbreviationsTable.displayName = 'IonsAbbreviationsTable';
 interface NephronAnimationStageProps {
   isDark: boolean;
   selectedDiuretic: DiureticId;
+  onPrevDiuretic: () => void;
+  onNextDiuretic: () => void;
   isDrugActive: boolean;
+  onToggleDrugActive: (active: boolean) => void;
   isPlaying: boolean;
+  onTogglePlay: () => void;
   speed: SpeedMultiplier;
+  onChangeSpeed: (speed: SpeedMultiplier) => void;
   onSelectSegment: (segment: NephronSegmentId) => void;
 }
 
 const NephronAnimationStage: React.FC<NephronAnimationStageProps> = React.memo(
-  ({ isDark, selectedDiuretic, isDrugActive, isPlaying, speed, onSelectSegment }) => {
+  ({
+    isDark,
+    selectedDiuretic,
+    onPrevDiuretic,
+    onNextDiuretic,
+    isDrugActive,
+    onToggleDrugActive,
+    isPlaying,
+    onTogglePlay,
+    speed,
+    onChangeSpeed,
+    onSelectSegment,
+  }) => {
     const [animTime, setAnimTime] = useState<number>(0);
     const [isInView, setIsInView] = useState<boolean>(true);
     const [isTabVisible, setIsTabVisible] = useState<boolean>(
@@ -4505,7 +4681,14 @@ const NephronAnimationStage: React.FC<NephronAnimationStageProps> = React.memo(
           <CellularMechanismPanel
             isDark={isDark}
             selectedDiuretic={selectedDiuretic}
+            onPrevDiuretic={onPrevDiuretic}
+            onNextDiuretic={onNextDiuretic}
             isDrugActive={isDrugActive}
+            onToggleDrugActive={onToggleDrugActive}
+            isPlaying={isPlaying}
+            onTogglePlay={onTogglePlay}
+            speed={speed}
+            onChangeSpeed={onChangeSpeed}
             time={animTime}
           />
         </div>
@@ -4628,9 +4811,14 @@ export const NephronDiureticsAnimator: React.FC<NephronDiureticsAnimatorProps> =
       <NephronAnimationStage
         isDark={isDark}
         selectedDiuretic={selectedDiuretic}
+        onPrevDiuretic={handlePrevDiuretic}
+        onNextDiuretic={handleNextDiuretic}
         isDrugActive={isDrugActive}
+        onToggleDrugActive={setIsDrugActive}
         isPlaying={isPlaying}
+        onTogglePlay={handleTogglePlay}
         speed={speed}
+        onChangeSpeed={setSpeed}
         onSelectSegment={handleSelectSegment}
       />
 
