@@ -4,6 +4,8 @@ import {
   Pause,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Droplets,
   Activity,
   ShieldAlert,
@@ -11,11 +13,11 @@ import {
   Zap,
   Pill,
   AlertTriangle,
-  Gauge,
   BookOpen,
   Lock,
   Filter,
   Sparkles,
+  Table2,
 } from 'lucide-react';
 
 // ============================================================================
@@ -78,20 +80,25 @@ export interface DiureticProfile {
   id: DiureticId;
   name: string;
   shortName: string;
+  pillLabel: string;
   prototypes: string[];
   targetSegments: NephronSegmentId[];
   primarySegment: NephronSegmentId;
   segmentLabel: string;
+  shortSegmentLabel: string;
   molecularTarget: string;
+  shortTarget: string;
   accentColor: string;
   diuresisScore: number; // 0 - 100 (normal fizyoloji = 22)
   diuresisLabel: string;
   feNaPercent: string;
+  shortFeNa: string;
   summary: string;
   normalMechanism: string;
   blockedMechanism: string;
   electrolytes: ElectrolyteChange[];
   acidBaseEffect: string;
+  shortAcidBase: string;
   clinicalUses: string[];
   sideEffects: string[];
 }
@@ -107,6 +114,71 @@ interface SampledPoint extends Point2D {
   t: number; // 0..1 normalize ilerleme
   segment: NephronSegmentId;
 }
+
+// ============================================================================
+// KANONİK RENK / TEMA HARİTASI (Tek Doğruluk Kaynağı — Animator & Matrix Ortak)
+// ============================================================================
+
+export const DIURETIC_THEME: Record<
+  DiureticId,
+  {
+    hex: string;
+    darkHex: string;
+    pillBg: string;
+    softBg: string;
+    border: string;
+    text: string;
+  }
+> = {
+  cai: {
+    hex: '#0891b2',
+    darkHex: '#22d3ee',
+    pillBg: 'bg-cyan-600 text-white',
+    softBg: 'bg-cyan-50 dark:bg-cyan-950/40',
+    border: 'border-cyan-200 dark:border-cyan-500/35',
+    text: 'text-cyan-700 dark:text-cyan-300',
+  },
+  osmotic: {
+    hex: '#0f766e',
+    darkHex: '#2dd4bf',
+    pillBg: 'bg-teal-700 text-white',
+    softBg: 'bg-teal-50 dark:bg-teal-950/40',
+    border: 'border-teal-200 dark:border-teal-500/35',
+    text: 'text-teal-800 dark:text-teal-300',
+  },
+  loop: {
+    hex: '#e11d48',
+    darkHex: '#fb7185',
+    pillBg: 'bg-rose-600 text-white',
+    softBg: 'bg-rose-50 dark:bg-rose-950/40',
+    border: 'border-rose-200 dark:border-rose-500/35',
+    text: 'text-rose-700 dark:text-rose-300',
+  },
+  thiazide: {
+    hex: '#15803d',
+    darkHex: '#4ade80',
+    pillBg: 'bg-green-700 text-white',
+    softBg: 'bg-emerald-50 dark:bg-emerald-950/40',
+    border: 'border-emerald-200 dark:border-emerald-500/35',
+    text: 'text-emerald-800 dark:text-emerald-300',
+  },
+  ksparing: {
+    hex: '#7c3aed',
+    darkHex: '#a78bfa',
+    pillBg: 'bg-violet-600 text-white',
+    softBg: 'bg-violet-50 dark:bg-violet-950/40',
+    border: 'border-violet-200 dark:border-violet-500/35',
+    text: 'text-violet-700 dark:text-violet-300',
+  },
+  vaptan: {
+    hex: '#2563eb',
+    darkHex: '#60a5fa',
+    pillBg: 'bg-blue-600 text-white',
+    softBg: 'bg-blue-50 dark:bg-blue-950/40',
+    border: 'border-blue-200 dark:border-blue-500/35',
+    text: 'text-blue-700 dark:text-blue-300',
+  },
+};
 
 // ============================================================================
 // İYON GÖRSEL STİLLERİ VE RENK KODLARI
@@ -140,36 +212,31 @@ export const DIURETIC_ORDER: DiureticId[] = [
 // 6 DİÜRETİK SINIFI TIBBİ VERİ SETİ (Tüm metinlerde uzun ad + kısaltma birlikte)
 // ============================================================================
 
-const DARK_ACCENT_COLORS: Record<DiureticId, string> = {
-  cai: '#22d3ee',
-  osmotic: '#2dd4bf',
-  loop: '#fb7185',
-  thiazide: '#4ade80',
-  ksparing: '#a78bfa',
-  vaptan: '#60a5fa',
-};
-
 export const DIURETICS: Record<DiureticId, DiureticProfile> = {
   cai: {
     id: 'cai',
     name: 'Karbonik Anhidraz İnhibitörleri (KAI)',
     shortName: 'Karbonik Anhidraz İnh. (KAI)',
+    pillLabel: 'KAI',
     prototypes: ['Asetazolamid', 'Dorzolamid', 'Brinzolamid'],
     targetSegments: ['pct'],
     primarySegment: 'pct',
     segmentLabel: 'Proksimal Kıvrımlı Tübül (PCT)',
+    shortSegmentLabel: 'PCT',
     molecularTarget:
       'Apikal Karbonik Anhidraz Tip 4 (CA-IV) ve Sitozolik Karbonik Anhidraz Tip 2 (CA-II) Enzimleri',
-    accentColor: '#0891b2',
+    shortTarget: 'CA-IV / CA-II (PCT)',
+    accentColor: DIURETIC_THEME.cai.hex,
     diuresisScore: 46,
-    diuresisLabel: 'Hafif - Orta Şiddette Alkali Diürez',
+    diuresisLabel: 'Hafif - Orta Şiddette Alkali Diürez (2–4 Günde Kendini Sınırlar)',
     feNaPercent: '%3 - %5',
+    shortFeNa: '%3–5',
     summary:
       'Proksimal Kıvrımlı Tübül (PCT) bölgesinde Karbonik Anhidraz Tip 4 (CA-IV) ve Tip 2 (CA-II) enzimlerini inhibe ederek Bikarbonat (HCO₃⁻) geri emilimini durdurur ve Sodyum-Hidrojen Değiştiricisi Tip 3 (NHE3) üzerinden Sodyum (Na⁺) geri emilimini dolaylı olarak azaltır.',
     normalMechanism:
       'Lümen yüzeyindeki Karbonik Anhidraz Tip 4 (CA-IV) enzimi, Bikarbonat (HCO₃⁻) ve Hidrojen (H⁺) iyonlarını Karbondioksit (CO₂) ve Su (H₂O) moleküllerine dönüştürerek hücre içine geçişini sağlar. Hücre içindeki Karbonik Anhidraz Tip 2 (CA-II) yeniden Hidrojen (H⁺) üretir; bu iyon Sodyum-Hidrojen Değiştiricisi Tip 3 (NHE3) ile lümene verilirken Sodyum (Na⁺) hücreye alınır ve Bikarbonat (HCO₃⁻) Elektrojenik Sodyum-Bikarbonat Kotransporteri Tip 1 (NBCe1) aracılığıyla kana geçer.',
     blockedMechanism:
-      'Asetazolamid, hem apikal Karbonik Anhidraz Tip 4 (CA-IV) hem de sitozolik Karbonik Anhidraz Tip 2 (CA-II) enzimlerini bloke eder. Bikarbonat (HCO₃⁻) lümenden geri emilemez; hücre içi Hidrojen (H⁺) üretimi azaldığından Sodyum-Hidrojen Değiştiricisi Tip 3 (NHE3) yavaşlar. Sonuç olarak Sodyum (Na⁺), Bikarbonat (HCO₃⁻), Potasyum (K⁺) ve Su (H₂O) idrarla atılır.',
+      'Asetazolamid, hem apikal Karbonik Anhidraz Tip 4 (CA-IV) hem de sitozolik Karbonik Anhidraz Tip 2 (CA-II) enzimlerini bloke eder. Bikarbonat (HCO₃⁻) lümenden geri emilemez; hücre içi Hidrojen (H⁺) üretimi azaldığından Sodyum-Hidrojen Değiştiricisi Tip 3 (NHE3) yavaşlar. Sodyum (Na⁺), Bikarbonat (HCO₃⁻), Potasyum (K⁺) ve Su (H₂O) idrarla atılır; ancak metabolik asidoz geliştikçe filtre edilen HCO₃⁻ yükü düştüğünden diüretik etki 2–4 gün içinde kendini sınırlar (self-limiting).',
     electrolytes: [
       { symbol: 'Na⁺', fullName: 'Sodyum', direction: 'up', label: '↑ Artar' },
       { symbol: 'K⁺', fullName: 'Potasyum', direction: 'up', label: '↑ Artar', note: 'Distal akış artışıyla' },
@@ -180,39 +247,44 @@ export const DIURETICS: Record<DiureticId, DiureticProfile> = {
       { symbol: 'H₂O', fullName: 'Su', direction: 'up', label: '↑ Artar' },
     ],
     acidBaseEffect: 'Hiperkloremik Metabolik Asidoz (Alkali İdrar pH Artışı)',
+    shortAcidBase: 'Met. Asidoz',
     clinicalUses: [
+      'ADVOR çalışması: Akut dekompanse kalp yetmezliğinde (ADKY) IV kıvrım diüretiğine kısa süreli eklenerek ardışık nefron blokajı ve hızlı dekonjesyon sağlar',
       'Açık açılı glokom tedavisi (göz içi aköz hümör sıvısında Bikarbonat (HCO₃⁻) sentezini azaltır)',
       'Yüksek irtifa (akut dağ) hastalığı profilaksisi ve tedavisi (hafif metabolik asidoz solunumu uyarır)',
-      'İdrar alkalinizasyonu (sistin ve ürik asit böbrek taşlarının çözünürlüğünü artırır)',
-      'İdiyopatik intrakraniyal hipertansiyon ve metabolik alkalozun düzeltilmesi',
+      'İdrar alkalinizasyonu (sistin ve ürik asit taşları), idiyopatik intrakraniyal hipertansiyon ve metabolik alkalozun düzeltilmesi',
     ],
     sideEffects: [
-      'Hiperkloremik metabolik asidoz (Bikarbonat (HCO₃⁻) kaybına bağlı) ve hipokalemi (Potasyum (K⁺) düşüklüğü)',
+      'Hiperkloremik metabolik asidoz (Bikarbonat (HCO₃⁻) kaybına bağlı), hipokalemi ve 2–4 gün içinde diüretik etkinin kendini sınırlaması (self-limiting)',
       'Alkali idrar nedeniyle Kalsiyum (Ca²⁺) fosfat böbrek taşı oluşumu riski',
       'Siroz hastalarında Amonyak (NH₃) atılımını azaltarak hepatik ensefalopatiyi tetikleyebilir',
-      'Parestezi (uyuşma/karıncalanma), halsizlik ve sülfonamid aşırı duyarlılığı',
+      'Parestezi (uyuşma/karıncalanma) ve halsizlik. Non-antibiyotik sülfonamid diüretikler ile antibiyotik sülfonamidler (TMP-SMX) arasında anlamlı çapraz reaktivite yoktur; yalnızca ağır SCAR (SJS/TEN/DRESS) öyküsünde kaçınılır.',
     ],
   },
   osmotic: {
     id: 'osmotic',
     name: 'Ozmotik Diüretikler',
     shortName: 'Ozmotik Diüretikler',
+    pillLabel: 'Ozmotik',
     prototypes: ['Mannitol', 'Üre', 'Gliserin'],
     targetSegments: ['pct', 'thin_descending'],
     primarySegment: 'thin_descending',
     segmentLabel: 'Proksimal Kıvrımlı Tübül (PCT) ve Henle İnen İnce Kolu',
+    shortSegmentLabel: 'PCT + İnen Henle',
     molecularTarget:
-      'Lümen İçi Ozmotik Gradyan Artışı — Akuaporin-1 (AQP1) Suya Geçirgen Segmentler',
-    accentColor: '#0d9488',
+      'Lümen İçi Ozmotik Gradyan Artışı (AQP1 Geçirgen Segmentler) + Medüller Vasa Recta Washout',
+    shortTarget: 'Ozmotik Gradyan (AQP1)',
+    accentColor: DIURETIC_THEME.osmotic.hex,
     diuresisScore: 74,
     diuresisLabel: 'Yüksek Şiddette Ozmotik Su Diürezi',
     feNaPercent: '%5 - %10 (Başlıca Serbest Su)',
+    shortFeNa: '%5–10',
     summary:
-      'Glomerülden serbestçe süzülen ancak tübüllerden geri emilemeyen Mannitol, Proksimal Kıvrımlı Tübül (PCT) ve Henle İnen İnce Kolu lümeninde yüksek ozmotik basınç oluşturarak Su (H₂O) moleküllerini lümende tutar ve Akuaporin-1 (AQP1) kanallarından geri emilimi engeller.',
+      'Glomerülden serbestçe süzülen ancak tübüllerden geri emilemeyen Mannitol, Proksimal Kıvrımlı Tübül (PCT) ve Henle İnen İnce Kolu lümeninde yüksek ozmotik basınç oluşturarak Su (H₂O) geri emilimine karşı koyar ve medüller ozmotik gradyanı yıkar (washout).',
     normalMechanism:
       'Proksimal Kıvrımlı Tübül (PCT) ve Henle İnen İnce Kolu, Akuaporin-1 (AQP1) su kanalları ve paraselüler aralıklar sayesinde Su (H₂O) moleküllerine yüksek geçirgenlik gösterir. Hiperozmolar medulla gradyanı Su (H₂O) moleküllerini hızla interstisyum ve kana geri çeker.',
     blockedMechanism:
-      'Geri emilemeyen Mannitol molekülleri tübül lümeni içinde ozmotik basıncı belirgin biçimde yükseltir. Bu ozmotik çekim gücü Su (H₂O) moleküllerini lümende alıkoyarak Akuaporin-1 (AQP1) üzerinden kana geçişi engeller; yoğun Su (H₂O) ve ikincil Sodyum (Na⁺) atılımı gerçekleşir.',
+      'Geri emilemeyen Mannitol molekülleri tübül lümeni içinde ozmotik basıncı yükselterek Akuaporin-1 (AQP1) kanallarını doğrudan kapatmadan ozmotik su geri emilimini engeller. Eş zamanlı olarak medüller vasa recta kan akımını artırarak hiperozmolar medüller gradyanı yıkar (washout) ve Henle Çıkan Kalın Kolu (TAL) NaCl geri emilimini de azaltır; yoğun Su (H₂O) ve ikincil Sodyum (Na⁺) atılımı gerçekleşir.',
     electrolytes: [
       { symbol: 'Na⁺', fullName: 'Sodyum', direction: 'up', label: '↑ Artar', note: 'Hızlı akış ve seyrelme ile' },
       { symbol: 'K⁺', fullName: 'Potasyum', direction: 'up', label: '↑ Artar' },
@@ -223,37 +295,41 @@ export const DIURETICS: Record<DiureticId, DiureticProfile> = {
       { symbol: 'H₂O', fullName: 'Su', direction: 'up-strong', label: '↑↑ Çok Artar' },
     ],
     acidBaseEffect: 'Doğrudan Primer Asit-Baz Etkisi Yoktur (Hacim Kontraksiyonu Oluşabilir)',
+    shortAcidBase: 'Nötr',
     clinicalUses: [
       'Beyin ödemi ve Kafa İçi Basınç Artışı Sendromu (KİBAS) durumlarında acil basınç düşürme',
       'Akut açı kapanması glokomunda göz içi basıncının hızlı azaltılması',
-      'Rabdomiyoliz ve nefrotoksik ilaç zehirlenmelerinde yüksek hızlı idrar akışı (zorlu diürez) sağlama',
+      'Rabdomiyoliz: Seçilmiş nadir olgular (güncel KDIGO/travma kılavuzları rabdomiyolizde rutin mannitol önermez; temel tedavi izotonik sıvı resüsitasyonudur)',
     ],
     sideEffects: [
-      'Başlangıçta damar içi hacim artışı nedeniyle akut akciğer ödemi riski (Kalp yetmezliğinde kontrendikedir!)',
-      'Yoğun Su (H₂O) kaybına bağlı dehidratasyon ve hipernatremi (Sodyum (Na⁺) yükselmesi)',
-      'İlk uygulama fazında hücre dışına su çekilmesine bağlı geçici dilüsyonel hiponatremi, baş ağrısı ve bulantı',
+      'Başlangıçta damar içi hacim artışı nedeniyle akut akciğer ödemi riski (Kalp yetmezliği ve anüride kontrendikedir!)',
+      'Akut intraoperatif geçici hiperkalemi (hücre dışına hızlı su geçişiyle oluşan "solvent drag" mekanizmasıyla K⁺ sürüklenmesi) ve erken fazda dilüsyonel hiponatremi',
+      'Yoğun Su (H₂O) kaybına bağlı dehidratasyon ve hipernatremi; %20 Mannitol solüsyonları soğukta kristalize olabileceğinden daima inline filtre ile infüze edilmelidir',
     ],
   },
   loop: {
     id: 'loop',
     name: 'Kıvrım (Lup) Diüretikleri',
     shortName: 'Kıvrım (Lup) Diüretikleri',
+    pillLabel: 'Loop',
     prototypes: ['Furosemid', 'Bumetanid', 'Torsemid', 'Etakrinik Asit'],
     targetSegments: ['tal'],
     primarySegment: 'tal',
     segmentLabel: 'Henle Kulpu Çıkan Kalın Kolu (TAL)',
-    molecularTarget:
-      'Apikal Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2)',
-    accentColor: '#e11d48',
+    shortSegmentLabel: 'Henle TAL',
+    molecularTarget: 'Apikal Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2)',
+    shortTarget: 'NKCC2 (TAL)',
+    accentColor: DIURETIC_THEME.loop.hex,
     diuresisScore: 96,
     diuresisLabel: 'Çok Yüksek Şiddette Diürez (En Güçlü Sınıf)',
     feNaPercent: '%20 - %25',
+    shortFeNa: '%20–25',
     summary:
-      'Henle Kulpu Çıkan Kalın Kolu (TAL) apikal membranındaki Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2) proteinini bloke ederek en güçlü natriürez ve diürezi sağlar; paraselüler Kalsiyum (Ca²⁺) ve Magnezyum (Mg²⁺) geri emilimini de durdurur.',
+      'Henle Kulpu Çıkan Kalın Kolu (TAL) apikal membranındaki Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2) proteinini bloke ederek en güçlü natriürez ve diürezi sağlar; Claudin-16/19 üzerinden paraselüler Kalsiyum (Ca²⁺) ve Magnezyum (Mg²⁺) geri emilimini de durdurur.',
     normalMechanism:
-      'Apikal Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2), Sodyum (Na⁺), Potasyum (K⁺) ve Klorür (Cl⁻) iyonlarını hücreye taşır. Potasyum (K⁺) iyonlarının Renal Dış Medüller Potasyum Kanalı (ROMK) üzerinden lümene geri dönmesi +8 mV lümen-pozitif potansiyel oluşturur; bu elektriksel itici güç Kalsiyum (Ca²⁺) ve Magnezyum (Mg²⁺) iyonlarını paraselüler yoldan kana iter.',
+      'Apikal Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2), Sodyum (Na⁺), Potasyum (K⁺) ve Klorür (Cl⁻) iyonlarını hücreye taşır. Potasyum (K⁺) iyonlarının Renal Dış Medüller Potasyum Kanalı (ROMK) üzerinden lümene geri dönmesi +8 mV lümen-pozitif potansiyel oluşturur; bu elektriksel itici güç Kalsiyum (Ca²⁺) ve Magnezyum (Mg²⁺) iyonlarını Claudin-16 / 19 sıkı bağlantı porlarından paraselüler yoldan kana iter.',
     blockedMechanism:
-      'Furosemid, Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2) taşıyıcısını doğrudan bloke eder. Sodyum (Na⁺), Potasyum (K⁺) ve Klorür (Cl⁻) lümende kalır. Renal Dış Medüller Potasyum Kanalı (ROMK) kaynaklı +8 mV lümen-pozitif potansiyel kaybolduğundan paraselüler Kalsiyum (Ca²⁺) ve Magnezyum (Mg²⁺) geri emilimi de durur; tüm bu iyonlar Su (H₂O) ile birlikte idrarla atılır.',
+      'Furosemid, Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2) taşıyıcısını doğrudan bloke eder. Sodyum (Na⁺), Potasyum (K⁺) ve Klorür (Cl⁻) lümende kalır. Renal Dış Medüller Potasyum Kanalı (ROMK) kaynaklı +8 mV lümen-pozitif potansiyel kaybolduğundan Claudin-16 / 19 aracılı paraselüler Kalsiyum (Ca²⁺) ve Magnezyum (Mg²⁺) geri emilimi de durur; tüm bu iyonlar Su (H₂O) ile birlikte idrarla atılır.',
     electrolytes: [
       { symbol: 'Na⁺', fullName: 'Sodyum', direction: 'up-strong', label: '↑↑ Çok Artar' },
       { symbol: 'K⁺', fullName: 'Potasyum', direction: 'up-strong', label: '↑↑ Çok Artar' },
@@ -264,6 +340,7 @@ export const DIURETICS: Record<DiureticId, DiureticProfile> = {
       { symbol: 'H₂O', fullName: 'Su', direction: 'up-strong', label: '↑↑ Çok Artar' },
     ],
     acidBaseEffect: 'Hipokloremik Metabolik Alkaloz (Hacim Kontraksiyonu ve Hidrojen (H⁺) Kaybı)',
+    shortAcidBase: 'Met. Alkaloz',
     clinicalUses: [
       'Akut akciğer ödemi ve akut dekompanse kalp yetmezliğinde hızlı sıvı yükü azaltma',
       'Nefrotik sendrom, karaciğer sirozu asiti ve kronik böbrek yetmezliği ödemlerinin tedavisi',
@@ -274,48 +351,52 @@ export const DIURETICS: Record<DiureticId, DiureticProfile> = {
       'Hipokalemi (Potasyum (K⁺) düşüklüğü), hipokalsemi (Kalsiyum (Ca²⁺) düşüklüğü), hipomagnezemi (Magnezyum (Mg²⁺) düşüklüğü) ve metabolik alkaloz',
       'Ototoksisite (işitme kaybı; özellikle yüksek doz intravenöz uygulama veya aminoglikozid antibiyotiklerle birlikte)',
       'Hiperürisemi (gut atağı tetiklenebilir), hipovolemi ve ortostatik hipotansiyon',
-      'Sülfonamid alerjisi (Etakrinik asit sülfonamid içermez, alternatif olarak kullanılabilir)',
+      'Non-antibiyotik sülfonamid diüretikler ile antibiyotik sülfonamidler (TMP-SMX) arasında anlamlı çapraz reaktivite yoktur; yalnızca ağır SCAR (SJS/TEN/DRESS) öyküsünde kaçınılır (Etakrinik asit sülfonamid içermez).',
     ],
   },
   thiazide: {
     id: 'thiazide',
     name: 'Tiyazid Diüretikleri',
     shortName: 'Tiyazid Diüretikleri',
-    prototypes: ['Hidroklorotiyazid', 'Klortalidon', 'İndapamid'],
+    pillLabel: 'Tiyazid',
+    prototypes: ['Hidroklorotiyazid', 'Klortalidon', 'İndapamid', 'Metolazon'],
     targetSegments: ['dct'],
     primarySegment: 'dct',
     segmentLabel: 'Erken Distal Kıvrımlı Tübül (DCT)',
-    molecularTarget:
-      'Apikal Sodyum-Klorür Kotransporteri (NCC)',
-    accentColor: '#16a34a',
+    shortSegmentLabel: 'Erken DCT',
+    molecularTarget: 'Apikal Sodyum-Klorür Kotransporteri (NCC)',
+    shortTarget: 'NCC (Erken DCT)',
+    accentColor: DIURETIC_THEME.thiazide.hex,
     diuresisScore: 62,
     diuresisLabel: 'Orta Şiddette Diürez (Kalsiyum Koruyucu)',
     feNaPercent: '%5 - %10',
+    shortFeNa: '%5–10',
     summary:
       'Erken Distal Kıvrımlı Tübül (DCT) apikal membranındaki Sodyum-Klorür Kotransporteri (NCC) proteinini inhibe ederek Sodyum (Na⁺) ve Klorür (Cl⁻) atılımını artırırken, Kalsiyum (Ca²⁺) geri emilimini belirgin şekilde ARTIRIR.',
     normalMechanism:
-      'Apikal Sodyum-Klorür Kotransporteri (NCC), Sodyum (Na⁺) ve Klorür (Cl⁻) iyonlarını hücre içine taşır. Bazolateral Sodyum-Potasyum Adenozin Trifosfataz Pompası (Na⁺/K⁺-ATPaz) hücre içi Sodyum (Na⁺) düzeyini düşük tutar. Kalsiyum (Ca²⁺) ise apikal Geçici Reseptör Potansiyeli Vanilloid 5 Kalsiyum Kanalı (TRPV5) üzerinden girip bazolateral Sodyum-Kalsiyum Değiştiricisi Tip 1 (NCX1) ile kana geçer.',
+      'Suya geçirgen olmayan Erken Distal Kıvrımlı Tübül (DCT) apikal membranındaki Sodyum-Klorür Kotransporteri (NCC), Sodyum (Na⁺) ve Klorür (Cl⁻) iyonlarını hücre içine taşır. Bazolateral Sodyum-Potasyum Adenozin Trifosfataz Pompası (Na⁺/K⁺-ATPaz) hücre içi Sodyum (Na⁺) düzeyini düşük tutar. Kalsiyum (Ca²⁺) apikal Geçici Reseptör Potansiyeli Vanilloid 5 Kalsiyum Kanalı (TRPV5) üzerinden girip bazolateral Sodyum-Kalsiyum Değiştiricisi Tip 1 (NCX1) ile kana geçer.',
     blockedMechanism:
-      'Hidroklorotiyazid, Sodyum-Klorür Kotransporteri (NCC) taşıyıcısını bloke eder; Sodyum (Na⁺), Klorür (Cl⁻) ve Su (H₂O) idrarla atılır. Hücre içi Sodyum (Na⁺) derişimi daha da düştüğü için bazolateral Sodyum-Kalsiyum Değiştiricisi Tip 1 (NCX1) hızlanır; bu durum apikal Geçici Reseptör Potansiyeli Vanilloid 5 Kalsiyum Kanalı (TRPV5) üzerinden Kalsiyum (Ca²⁺) geri emilimini ARTIRIR (hipokalsiüri).',
+      'Hidroklorotiyazid/Klortalidon/Metolazon, NCC taşıyıcısını bloke ederek Na⁺ ve Cl⁻ atılımını artırır (erken DCT suya geçirgen değildir; su distalde ozmotik olarak atılır). Hipokalsiürinin BASKIN kronik mekanizması, hafif hacim kontraksiyonu sonucu proksimal tübülde pasif paraselüler Ca²⁺ geri emiliminin artmasıdır; ek olarak distalde hücre içi [Na⁺] düştüğünden bazolateral NCX1 hızlanır ve apikal TRPV5 üzerinden Ca²⁺ emilimi artar. Apikal TRPM6 magnezyum kanalının baskılanması ise hipomagnezemiye (Mg²⁺ kaybı) yol açar.',
     electrolytes: [
       { symbol: 'Na⁺', fullName: 'Sodyum', direction: 'up', label: '↑ Artar' },
       { symbol: 'K⁺', fullName: 'Potasyum', direction: 'up', label: '↑ Artar', note: 'Distal Sodyum (Na⁺) yüküyle' },
       { symbol: 'Cl⁻', fullName: 'Klorür', direction: 'up', label: '↑ Artar' },
-      { symbol: 'Ca²⁺', fullName: 'Kalsiyum', direction: 'down', label: '↓ İdrarda Azalır', note: 'Kanda tutulur!' },
-      { symbol: 'Mg²⁺', fullName: 'Magnezyum', direction: 'up', label: '↑ Hafif Artar' },
+      { symbol: 'Ca²⁺', fullName: 'Kalsiyum', direction: 'down', label: '↓ İdrarda Azalır', note: 'PCT + NCX1/TRPV5 ile tutulur!' },
+      { symbol: 'Mg²⁺', fullName: 'Magnezyum', direction: 'up', label: '↑ Hafif Artar', note: 'TRPM6 ↓ kaybı' },
       { symbol: 'HCO₃⁻', fullName: 'Bikarbonat', direction: 'neutral', label: '↔ Değişmez' },
       { symbol: 'H₂O', fullName: 'Su', direction: 'up', label: '↑ Artar' },
     ],
     acidBaseEffect: 'Hafif - Orta Dereceli Hipokloremik Metabolik Alkaloz',
+    shortAcidBase: 'Hafif Alkaloz',
     clinicalUses: [
-      'Esansiyel hipertansiyon tedavisinde birinci basamak ilaç seçimi',
-      'Hafif ve orta dereceli kronik kalp yetmezliğine bağlı ödem kontrolü',
+      'Esansiyel hipertansiyon tedavisinde birinci basamak ilaç seçimi (Klortalidon ve İndapamid uzun etkilidir)',
+      'Hafif-orta kronik ödem ve dirençli kalp yetmezliğinde kıvrım diüretiklerine eklenerek ardışık nefron blokajı (Metolazon / HCTZ)',
       'İdiyopatik hiperkalsiüri ve tekrarlayan Kalsiyum (Ca²⁺) oksalat böbrek taşlarının önlenmesi',
       'Osteoporozda kemik Kalsiyum (Ca²⁺) korunması ve nefrojenik diabetes insipidus (paradoksal etki)',
     ],
     sideEffects: [
-      'Hipokalemi (Potasyum (K⁺) düşüklüğü), hiponatremi (Sodyum (Na⁺) düşüklüğü — özellikle yaşlılarda) ve metabolik alkaloz',
-      'Hiperkalsemi (Kalsiyum (Ca²⁺) geri emiliminin artmasına bağlı)',
+      'Hipokalemi, hiponatremi (özellikle yaşlılarda dilüsyon kapasitesinin bozulmasıyla) ve hipomagnezemi (TRPM6 kanalı downregülasyonuyla Mg²⁺ kaybı)',
+      'Hiperkalsemi (proksimal pasif geri emilim + distal NCX1/TRPV5 aktivasyonu) ve hipokloremik metabolik alkaloz',
       'Hiperglisemi (insülin salınımında azalma), hiperlipidemi ve hiperürisemi (gut riski)',
     ],
   },
@@ -323,64 +404,73 @@ export const DIURETICS: Record<DiureticId, DiureticProfile> = {
     id: 'ksparing',
     name: 'Potasyum Tutucu Diüretikler',
     shortName: 'Potasyum Tutucular',
-    prototypes: ['Spironolakton', 'Eplerenon', 'Amilorid', 'Triamteren'],
+    pillLabel: 'K⁺-Tutucu',
+    prototypes: ['Spironolakton', 'Eplerenon', 'Finerenon (nsMRA)', 'Amilorid', 'Triamteren'],
     targetSegments: ['collecting_duct'],
     primarySegment: 'collecting_duct',
     segmentLabel: 'Geç Distal Tübül / Kortikal Toplayıcı Kanal (Esas Hücre)',
+    shortSegmentLabel: 'Kortikal TK',
     molecularTarget:
       'Epitelyal Sodyum Kanalı (ENaC) ve Mineralokortikoid (Aldosteron) Reseptörü (MR)',
-    accentColor: '#7c3aed',
+    shortTarget: 'ENaC / MR (Toplayıcı Kanal)',
+    accentColor: DIURETIC_THEME.ksparing.hex,
     diuresisScore: 34,
     diuresisLabel: 'Hafif Diürez (Potasyum Koruyucu)',
     feNaPercent: '%2 - %3',
+    shortFeNa: '%2–3',
     summary:
-      'Amilorid ve Triamteren doğrudan Epitelyal Sodyum Kanalı (ENaC) blokajı yaparken, Spironolakton ve Eplerenon Mineralokortikoid (Aldosteron) Reseptörü (MR) antagonizması ile etki gösterir. Sodyum (Na⁺) atılımını artırırken Potasyum (K⁺) ve Hidrojen (H⁺) kaybını engeller.',
+      'Amilorid ve Triamteren doğrudan Epitelyal Sodyum Kanalı (ENaC) blokajı yaparken, Spironolakton, Eplerenon ve non-steroidal Finerenon Mineralokortikoid Reseptörü (MR) antagonizması ile etki gösterir. Sodyum (Na⁺) atılımını hafif artırırken Potasyum (K⁺) ve Hidrojen (H⁺) kaybını engeller.',
     normalMechanism:
       'Aldosteron hormonu hücre içi Mineralokortikoid (Aldosteron) Reseptörü (MR) ile birleşerek Epitelyal Sodyum Kanalı (ENaC), Renal Dış Medüller Potasyum Kanalı (ROMK) ve Sodyum-Potasyum Adenozin Trifosfataz Pompası (Na⁺/K⁺-ATPaz) sentezini artırır. Epitelyal Sodyum Kanalı (ENaC) ile Sodyum (Na⁺) emilimi lümende negatif potansiyel (-35 mV) oluşturur ve Potasyum (K⁺) Renal Dış Medüller Potasyum Kanalı (ROMK) üzerinden idrara sekrete edilir.',
     blockedMechanism:
-      'Amilorid apikal Epitelyal Sodyum Kanalı (ENaC) kanalını doğrudan kapatır; Spironolakton ise Mineralokortikoid (Aldosteron) Reseptörü (MR) bölgesini bloke ederek Epitelyal Sodyum Kanalı (ENaC) ve Sodyum-Potasyum Adenozin Trifosfataz Pompası (Na⁺/K⁺-ATPaz) üretimini azaltır. Sodyum (Na⁺) idrarla atılır; lümen-negatif elektrik yükü kaybolduğu için Potasyum (K⁺) ve Hidrojen (H⁺) sekresyonu durur.',
+      'Amilorid apikal Epitelyal Sodyum Kanalı (ENaC) kanalını doğrudan kapatır; Spironolakton/Eplerenon/Finerenon ise Mineralokortikoid Reseptörü (MR) bölgesini bloke ederek ENaC ve Na⁺/K⁺-ATPaz sentezini azaltır. Lümen-negatif elektrik yükü kaybolduğu için ROMK doğrudan bloke edilmeden dolaylı olarak Potasyum (K⁺) sekresyonu durur; komşu alfa-interkale hücrelerde H⁺-ATPaz üzerinden H⁺ ve NH₄⁺ atılımı azalır (Tip 4 RTA tablosu).',
     electrolytes: [
       { symbol: 'Na⁺', fullName: 'Sodyum', direction: 'up', label: '↑ Hafif Artar' },
       { symbol: 'K⁺', fullName: 'Potasyum', direction: 'down-strong', label: '↓↓ İdrarda Azalır', note: 'Kanda tutulur!' },
       { symbol: 'Cl⁻', fullName: 'Klorür', direction: 'up', label: '↑ Hafif Artar' },
       { symbol: 'Ca²⁺', fullName: 'Kalsiyum', direction: 'neutral', label: '↔ Minimal' },
       { symbol: 'Mg²⁺', fullName: 'Magnezyum', direction: 'down', label: '↓ Hafif Tutulur' },
-      { symbol: 'HCO₃⁻', fullName: 'Bikarbonat', direction: 'up', label: '↑ Hafif Artar' },
+      { symbol: 'HCO₃⁻', fullName: 'Bikarbonat', direction: 'neutral', label: '↔ / ↑ Minimal', note: 'Esas mekanizma: H⁺/NH₄⁺ ↓ (Tip 4 RTA)' },
       { symbol: 'H₂O', fullName: 'Su', direction: 'up', label: '↑ Hafif Artar' },
     ],
-    acidBaseEffect: 'Hiperkalemik Metabolik Asidoz (İnterkale Hücrelerde Hidrojen (H⁺) Sekresyonu Azalır)',
+    acidBaseEffect: 'Hiperkalemik Metabolik Asidoz — Tip 4 RTA (Alfa-İnterkale H⁺-ATPaz / NH₄⁺ Sekresyonu Azalır)',
+    shortAcidBase: 'Tip 4 RTA (Asidoz)',
     clinicalUses: [
       'Primer hiperaldosteronizm (Conn sendromu) ve siroz asitine bağlı sekonder hiperaldosteronizm',
       'Düşük ejeksiyon fraksiyonlu kalp yetmezliğinde (Spironolakton / Eplerenon mortaliteyi azaltır)',
-      'Kıvrım (Lup) ve Tiyazid diüretiklerine bağlı hipokaleminin (Potasyum (K⁺) düşüklüğü) önlenmesi',
-      'Amilorid: Lityum tedavisine bağlı nefrojenik diabetes insipidus tedavisi',
+      'Finerenon (non-steroidal MRA): Tip 2 diyabetik kronik böbrek hastalığında albüminüriyi ve kardiyorenal olayları azaltır',
+      'Kıvrım/Tiyazid kaynaklı hipokalemi önlenmesi; Amilorid ile lityum ilişkili nefrojenik diabetes insipidus tedavisi',
     ],
     sideEffects: [
-      'Hiperkalemi (Potasyum (K⁺) yükselmesi — Anjiyotensin Dönüştürücü Enzim İnhibitörleri (ACEi) veya Potasyum (K⁺) takviyeleri ile ölümcül aritmi riski!)',
-      'Hiperkloremik metabolik asidoz (Hidrojen (H⁺) sekresyonunun azalmasına bağlı)',
-      'Spironolakton kullanımında antiandrojenik etkilere bağlı jinekomasti ve adet düzensizliği (Eplerenon daha seçicidir)',
+      'Hiperkalemi (Potasyum (K⁺) yükselmesi — ACEi/ARB veya Potasyum (K⁺) takviyeleri ile ölümcül aritmi riski!)',
+      'Hiperkalemik hiperkloremik metabolik asidoz (Tip 4 RTA — H⁺-ATPaz ve NH₄⁺ sekresyonunun azalmasına bağlı)',
+      'Spironolakton kullanımında antiandrojenik etkilere bağlı jinekomasti ve adet düzensizliği (Eplerenon ve Finerenon seçicidir)',
     ],
   },
   vaptan: {
     id: 'vaptan',
     name: 'Antidiüretik Hormon (ADH) Antagonistleri (Vaptanlar)',
     shortName: 'ADH Antagonistleri (Vaptan)',
-    prototypes: ['Tolvaptan', 'Konivaptan'],
+    pillLabel: 'Vaptan',
+    prototypes: ['Tolvaptan (PO · V2)', 'Konivaptan (IV · V1a/V2)'],
     targetSegments: ['collecting_duct'],
     primarySegment: 'collecting_duct',
     segmentLabel: 'Medüller Toplayıcı Kanal',
+    shortSegmentLabel: 'Medüller TK',
     molecularTarget:
-      'Bazolateral Vazopresin Tip 2 Reseptörü (V2) — Akuaporin-2 (AQP2) Yerleşiminin İnhibisyonu',
-    accentColor: '#2563eb',
+      'Bazolateral Gₛ-Kenetli Vazopresin Tip 2 Reseptörü (V2) — Akuaporin-2 (AQP2) Yerleşiminin İnhibisyonu',
+    shortTarget: 'V2 Reseptör (AQP2)',
+    accentColor: DIURETIC_THEME.vaptan.hex,
     diuresisScore: 78,
     diuresisLabel: 'Yüksek Serbest Su Diürezi (Akuarez)',
     feNaPercent: 'Elektrolitten Bağımsız (Saf Su)',
+    shortFeNa: 'Saf Su',
     summary:
-      'Toplayıcı kanal hücrelerinin bazolateral membranındaki Vazopresin Tip 2 Reseptörü (V2) bölgesini bloke ederek Akuaporin-2 (AQP2) su kanallarının apikal membrana yerleşmesini engeller; Sodyum (Na⁺) veya Potasyum (K⁺) kaybı olmaksızın serbest Su (H₂O) atılımı (akuarez) sağlar.',
+      'Tolvaptan (selektif V2 antagonisti, PO) ve Konivaptan (dual V1a/V2 antagonisti, IV), toplayıcı kanal bazolateral membranındaki Gₛ-protein kenetli V2 reseptörünü bloke ederek Akuaporin-2 (AQP2) yerleşimini önler ve elektrolit kaybı olmadan serbest Su (H₂O) atılımı (akuarez) sağlar.',
     normalMechanism:
-      'Kandan gelen Antidiüretik Hormon (ADH), bazolateral Vazopresin Tip 2 Reseptörü (V2) ile birleşir. Bu bağlanma Siklik Adenozin Monofosfat (cAMP) ve Protein Kinaz A (PKA) sinyal yolunu uyararak hücre içi veziküllerdeki Akuaporin-2 (AQP2) kanallarının apikal membrana yerleşmesini sağlar. Böylece Su (H₂O) hızla hücreye girer ve Akuaporin-3 ve Akuaporin-4 (AQP3/4) üzerinden kana geri emilir.',
+      'Kandan gelen Antidiüretik Hormon (ADH), bazolateral Gₛ-protein kenetli Vazopresin Tip 2 Reseptörü (V2) ile birleşir. Bu bağlanma Siklik Adenozin Monofosfat (cAMP) ve Protein Kinaz A (PKA) sinyal yolunu uyararak hücre içi veziküllerdeki Akuaporin-2 (AQP2) kanallarının apikal membrana yerleşmesini sağlar. Böylece Su (H₂O) hızla hücreye girer ve bazolateral Akuaporin-3 / Akuaporin-4 (AQP3/4) üzerinden kana geri emilir.',
     blockedMechanism:
-      'Tolvaptan ve Konivaptan, bazolateral Vazopresin Tip 2 Reseptörü (V2) bölgesini bloke eder. Siklik Adenozin Monofosfat (cAMP) sinyali kesildiği için Akuaporin-2 (AQP2) kanalları veziküllerde kalır ve apikal membrana yerleşemez. Sodyum (Na⁺) ve Potasyum (K⁺) taşınması etkilenmeden yalnızca serbest Su (H₂O) idrarla atılır.',
+      'Tolvaptan (selektif V2, PO) veya Konivaptan (dual V1a/V2, IV), bazolateral V2 reseptörünü bloke ederek Gₛ → cAMP → PKA sinyalini keser. Akuaporin-2 (AQP2) kanalları sitozolik veziküllerde hapis kalır ve apikal membrana yerleşemez. Sodyum (Na⁺) ve Potasyum (K⁺) taşınması etkilenmeden yalnızca serbest Su (H₂O) idrarla atılır (saf akuarez).',
     electrolytes: [
       { symbol: 'Na⁺', fullName: 'Sodyum', direction: 'neutral', label: '↔ Etkilenmez', note: 'Serum Sodyum (Na⁺) yükselir' },
       { symbol: 'K⁺', fullName: 'Potasyum', direction: 'neutral', label: '↔ Etkilenmez' },
@@ -391,21 +481,22 @@ export const DIURETICS: Record<DiureticId, DiureticProfile> = {
       { symbol: 'H₂O', fullName: 'Su', direction: 'up-strong', label: '↑↑ Saf Su Artar' },
     ],
     acidBaseEffect: 'Asit-Baz Dengesi Üzerinde Doğrudan Etkisi Yoktur',
+    shortAcidBase: 'Nötr',
     clinicalUses: [
-      'Uygunsuz Antidiüretik Hormon Sendromu (SIADH) kaynaklı övolemik hiponatremi (Sodyum (Na⁺) düşüklüğü) tedavisi',
-      'Kalp yetmezliğine eşlik eden hipervolemik hiponatremi yönetimi',
+      'Uygunsuz Antidiüretik Hormon Sendromu (SIADH) kaynaklı övolemik hiponatremi tedavisi (hastane gözetiminde başlatılır)',
+      'Kalp yetmezliğine eşlik eden hipervolemik hiponatremi yönetimi (Tolvaptan PO / Konivaptan IV)',
       'Otozomal Dominant Polikistik Böbrek Hastalığı (ODPBH / ADPKD) olgularında kist büyümesini yavaşlatma (Tolvaptan)',
     ],
     sideEffects: [
-      'Serum Sodyum (Na⁺) düzeyinin aşırı hızlı yükselmesi durumunda Ozmotik Demiyelinizasyon Sendromu riski!',
-      'Şiddetli susama hissi, ağız kuruluğu, poliüri ve hipernatremi (Sodyum (Na⁺) yüksekliği)',
-      'Uzun süreli Tolvaptan kullanımında hepatotoksisite riski (düzenli karaciğer enzim takibi gerekir)',
+      'FDA Kara Kutu Uyarısı: Hiponatremide maksimum 30 gün kullanılır; siroz ve altta yatan karaciğer hastalığında KESİN KONTRENDİKEDİR (ağır hepatotoksisite)!',
+      'Serum Sodyum (Na⁺) düzeyinin aşırı hızlı yükselmesi durumunda Ozmotik Demiyelinizasyon Sendromu (ODS) riski!',
+      'Şiddetli susama hissi, ağız kuruluğu, poliüri, hipernatremi ve Konivaptan ile CYP3A4 ilaç etkileşimleri / infüzyon yeri reaksiyonu',
     ],
   },
 };
 
 // ============================================================================
-// İYONLAR, TAŞIYICILAR VE KISALTMALAR REFERANS SÖZLÜĞÜ (Animasyon Altı Tablo)
+// İYONLAR, TAŞIYICILAR VE KISALTMALAR REFERANS SÖZLÜĞÜ (28 Öğe)
 // ============================================================================
 
 const GLOSSARY_ITEMS: GlossaryItem[] = [
@@ -420,7 +511,7 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     relevantGroups: ['cai', 'osmotic', 'loop', 'thiazide', 'ksparing', 'vaptan'],
     groupSpecificEffect: {
       cai: 'Sodyum-Hidrojen Değiştiricisi Tip 3 (NHE3) yavaşladığı için idrarda Sodyum (Na⁺) atılımı artar.',
-      osmotic: 'Su (H₂O) tutulumu ve hızlı lüminal akış nedeniyle Sodyum (Na⁺) geri emilimi azalır.',
+      osmotic: 'Su (H₂O) tutulumu, medüller washout ve hızlı lüminal akış nedeniyle Sodyum (Na⁺) geri emilimi azalır.',
       loop: 'Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2) blokajıyla en yüksek düzeyde idrar Sodyum (Na⁺) atılımı oluşur.',
       thiazide: 'Sodyum-Klorür Kotransporteri (NCC) blokajıyla orta şiddette Sodyum (Na⁺) atılımı artar.',
       ksparing: 'Epitelyal Sodyum Kanalı (ENaC) inhibisyonu ile hafif düzeyde Sodyum (Na⁺) atılımı artar.',
@@ -437,10 +528,10 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     relevantGroups: ['cai', 'osmotic', 'loop', 'thiazide', 'ksparing'],
     groupSpecificEffect: {
       cai: 'Distal tübüle artan Sodyum (Na⁺) ve su akışı nedeniyle Potasyum (K⁺) kaybı (hipokalemi riski) artar.',
-      osmotic: 'Yüksek tübüler akış hızı nedeniyle idrarla Potasyum (K⁺) atılımı artar.',
+      osmotic: 'Yüksek tübüler akış hızı nedeniyle idrarla K⁺ atılımı artar; ancak akut infüzyonda solvent drag ile geçici hiperkalemi görülebilir.',
       loop: 'Hem Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2) blokajı hem distal yük artışı belirgin hipokalemi yapar.',
       thiazide: 'Distal Sodyum (Na⁺) yükünün artması toplayıcı kanalda Potasyum (K⁺) kaybını artırır.',
-      ksparing: 'Lümen-negatif yük kaybolduğu için Potasyum (K⁺) sekresyonu durur; kanda tutulur (hiperkalemi riski).',
+      ksparing: 'Lümen-negatif yük kaybolduğu için Potasyum (K⁺) sekresyonu dolaylı olarak durur; kanda tutulur (hiperkalemi riski).',
     },
   },
   {
@@ -467,8 +558,8 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Kemik mineralizasyonu ve nöromüsküler iletim için gereklidir; Henle ve distal tübülde farklı yönlerde etkilenir.',
     relevantGroups: ['loop', 'thiazide'],
     groupSpecificEffect: {
-      loop: 'Lümen-pozitif potansiyel (+8 mV) kaybolduğu için paraselüler Kalsiyum (Ca²⁺) geri emilimi durur (hiperkalsiüri).',
-      thiazide: 'Hücre içi Sodyum (Na⁺) düşüşü Sodyum-Kalsiyum Değiştiricisi Tip 1 (NCX1) aktivitesini artırır → Kalsiyum (Ca²⁺) kanda tutulur!',
+      loop: 'Lümen-pozitif potansiyel (+8 mV) kaybolduğu için Claudin-16/19 üzerinden paraselüler Kalsiyum (Ca²⁺) geri emilimi durur (hiperkalsiüri).',
+      thiazide: 'Hacim kontraksiyonu ile proksimal pasif paraselüler Ca²⁺ geri emilimi (baskın kronik mekanizma) ve distal NCX1/TRPV5 geri emilimi artar → Ca²⁺ kanda tutulur!',
     },
   },
   {
@@ -480,8 +571,8 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Enzimatik reaksiyonlar ve kardiyak elektrofizyoloji için zorunludur; çoğunlukla Henle çıkan kalın kolundan paraselüler emilir.',
     relevantGroups: ['loop', 'thiazide', 'ksparing'],
     groupSpecificEffect: {
-      loop: 'Paraselüler itici güç kaybolduğundan belirgin Magnezyum (Mg²⁺) kaybı (hipomagnezemi) oluşur.',
-      thiazide: 'Kronik kullanımda hafif Magnezyum (Mg²⁺) kaybına yol açabilir.',
+      loop: 'Claudin-16/19 paraselüler itici gücü kaybolduğundan belirgin Magnezyum (Mg²⁺) kaybı (hipomagnezemi) oluşur.',
+      thiazide: 'Distal tübülde apikal TRPM6 magnezyum kanalının baskılanmasına bağlı kronik Mg²⁺ kaybına yol açabilir.',
       ksparing: 'Potasyum (K⁺) ile birlikte Magnezyum (Mg²⁺) tutulmasına da katkı sağlar.',
     },
   },
@@ -492,9 +583,10 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     category: 'İyon',
     ionKey: 'HCO3-',
     generalRole: 'Kanın temel asit-baz tampon sistemidir; filtre edilen Bikarbonat (HCO₃⁻) iyonlarının %85’i proksimal tübülden geri emilir.',
-    relevantGroups: ['cai'],
+    relevantGroups: ['cai', 'ksparing'],
     groupSpecificEffect: {
       cai: 'Karbonik Anhidraz Tip 4 (CA-IV) ve Tip 2 (CA-II) blokajıyla geri emilemez; idrarı alkalileştirir ve metabolik asidoz yapar.',
+      ksparing: 'Doğrudan bikarbonatüri minimaldir; asidozun esas mekanizması H⁺-ATPaz / NH₄⁺ atılımının azalmasıdır (Tip 4 RTA).',
     },
   },
   {
@@ -507,7 +599,7 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     relevantGroups: ['cai', 'ksparing'],
     groupSpecificEffect: {
       cai: 'Hücre içi Hidrojen (H⁺) üretimi azaldığı için Sodyum-Hidrojen Değiştiricisi Tip 3 (NHE3) çalışması yavaşlar.',
-      ksparing: 'Lümen-negatif yük azaldığından toplayıcı kanalda Hidrojen (H⁺) sekresyonu düşer (asidoz eğilimi).',
+      ksparing: 'Lümen-negatif yük azaldığından alfa-interkale hücrelerde H⁺-ATPaz ile H⁺ ve NH₄⁺ sekresyonu düşer (Tip 4 RTA).',
     },
   },
   {
@@ -520,9 +612,9 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     relevantGroups: ['cai', 'osmotic', 'loop', 'thiazide', 'ksparing', 'vaptan'],
     groupSpecificEffect: {
       cai: 'Bikarbonat (HCO₃⁻) ve Sodyum (Na⁺) ile birlikte ozmotik olarak idrarla atılır.',
-      osmotic: 'Mannitol tarafından lümende tutulur; Akuaporin-1 (AQP1) üzerinden geri emilemeden hızla atılır.',
+      osmotic: 'Mannitol tarafından lümende tutulur; ozmotik gradyan bozulduğundan AQP1 üzerinden geri emilemeden hızla atılır.',
       loop: 'Medüller ozmotik gradyan bozulduğundan çok yoğun Su (H₂O) diürezi gerçekleşir.',
-      thiazide: 'Sodyum (Na⁺) ve Klorür (Cl⁻) atılımına paralel olarak orta düzeyde Su (H₂O) atılır.',
+      thiazide: 'Erken DCT suya geçirgen değildir; Na⁺/Cl⁻ yükü distalde ozmotik olarak orta düzeyde Su (H₂O) atılımı sağlar.',
       ksparing: 'Hafif Sodyum (Na⁺) atılımına eşlik eden hafif Su (H₂O) diürezi görülür.',
       vaptan: 'Akuaporin-2 (AQP2) yerleşemediği için elektrolit kaybı olmadan saf serbest Su (H₂O) atılır (akuarez).',
     },
@@ -569,7 +661,7 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Proksimal Kıvrımlı Tübül (PCT) ve Henle İnen İnce Kolu boyunca sürekli açık olan, Antidiüretik Hormon (ADH) bağımsız su kanalıdır.',
     relevantGroups: ['osmotic'],
     groupSpecificEffect: {
-      osmotic: 'Mannitol lümen içi ozmotik basıncı yükselttiğinden Akuaporin-1 (AQP1) üzerinden Su (H₂O) geri emilimine karşı koyar.',
+      osmotic: 'Mannitol kanal porunu farmakolojik olarak kapatmaz; lümen içi ozmotik basıncı artırarak AQP1 üzerinden su emilimine karşı koyar.',
     },
   },
   {
@@ -581,7 +673,7 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Glomerülden serbestçe süzülen ancak tübüllerden geri emilmeyen inert şeker alkolüdür.',
     relevantGroups: ['osmotic'],
     groupSpecificEffect: {
-      osmotic: 'Lümende kalarak yüksek ozmotik çekim gücü yaratır ve Su (H₂O) moleküllerini idrara sürükler.',
+      osmotic: 'Lümende yüksek ozmotik çekim gücü yaratır ve medüller vasa recta washout ile Su (H₂O) moleküllerini idrara sürükler.',
     },
   },
   {
@@ -604,7 +696,18 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     relevantGroups: ['loop', 'ksparing'],
     groupSpecificEffect: {
       loop: 'Sodyum-Potasyum-2 Klorür Kotransporteri (NKCC2) durunca geri dönüş azalır ve +8 mV pozitif potansiyel kaybolur.',
-      ksparing: 'Lümen-negatif yük kaybolduğu için Renal Dış Medüller Potasyum Kanalı (ROMK) üzerinden Potasyum (K⁺) sekresyonu durur.',
+      ksparing: 'Doğrudan bloke edilmez; ENaC blokajıyla lümen-negatif yük kaybolduğundan ROMK üzerinden K⁺ sekresyonu dolaylı olarak durur.',
+    },
+  },
+  {
+    id: 'claudin16_19',
+    symbol: 'Claudin-16 / 19',
+    fullName: 'Claudin-16 ve Claudin-19 Paraselüler Katyon Porları',
+    category: 'Kanal',
+    generalRole: 'Henle Çıkan Kalın Kolu (TAL) sıkı bağlantılarında (tight junction) yer alan ve +8 mV lümen-pozitif potansiyelle Ca²⁺ ve Mg²⁺ iyonlarının paraselüler geri emilimini sağlayan protein kompleksidir.',
+    relevantGroups: ['loop'],
+    groupSpecificEffect: {
+      loop: 'NKCC2 blokajı +8 mV itici gücünü ortadan kaldırdığı için Claudin-16 / 19 üzerinden Ca²⁺ ve Mg²⁺ geri emilimi durur (hiperkalsiüri ve hipomagnezemi).',
     },
   },
   {
@@ -623,7 +726,7 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Erken Distal Kıvrımlı Tübül (DCT) apikal membranında Sodyum (Na⁺) ve Klorür (Cl⁻) iyonlarını elektroneutral olarak hücreye taşır.',
     relevantGroups: ['thiazide'],
     groupSpecificEffect: {
-      thiazide: 'Hidroklorotiyazid, Klortalidon ve İndapamid tarafından doğrudan bloke edilen hedeftir.',
+      thiazide: 'Hidroklorotiyazid, Klortalidon, İndapamid ve Metolazon tarafından doğrudan bloke edilen hedeftir.',
     },
   },
   {
@@ -645,7 +748,7 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Distal tübül bazolateral membranında 3 Sodyum (Na⁺) iyonunu hücreye alırken 1 Kalsiyum (Ca²⁺) iyonunu kana pompalar.',
     relevantGroups: ['thiazide'],
     groupSpecificEffect: {
-      thiazide: 'Hücre içi Sodyum (Na⁺) düştüğünde Sodyum-Kalsiyum Değiştiricisi Tip 1 (NCX1) hızlanarak Kalsiyum (Ca²⁺) geri emilimini artırır.',
+      thiazide: 'Hücre içi Sodyum (Na⁺) düştüğünde Sodyum-Kalsiyum Değiştiricisi Tip 1 (NCX1) hızlanarak distal Kalsiyum (Ca²⁺) geri emilimini destekler.',
     },
   },
   {
@@ -656,7 +759,7 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Kortikal toplayıcı kanal esas hücrelerinin apikal membranında Sodyum (Na⁺) geri emilimini sağlayan ve lümende negatif potansiyel oluşturan kanaldır.',
     relevantGroups: ['ksparing'],
     groupSpecificEffect: {
-      ksparing: 'Amilorid ve Triamteren tarafından doğrudan bloke edilir; Spironolakton ise sentezini azaltır.',
+      ksparing: 'Amilorid ve Triamteren tarafından doğrudan bloke edilir; Spironolakton/Eplerenon/Finerenon ise sentezini azaltır.',
     },
   },
   {
@@ -667,18 +770,30 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Aldosteron bağlandığında çekirdeğe giderek Epitelyal Sodyum Kanalı (ENaC) ve Sodyum-Potasyum Adenozin Trifosfataz Pompası (Na⁺/K⁺-ATPaz) sentezini artıran hücre içi reseptördür.',
     relevantGroups: ['ksparing'],
     groupSpecificEffect: {
-      ksparing: 'Spironolakton ve Eplerenon tarafından yarışmalı olarak antagonize edilir.',
+      ksparing: 'Spironolakton, Eplerenon (steroidal) ve Finerenon (non-steroidal) tarafından yarışmalı olarak antagonize edilir.',
+    },
+  },
+  {
+    id: 'h_atpase',
+    symbol: 'H⁺-ATPaz',
+    fullName: 'Apikal Proton Pompası (Alfa-İnterkale Hücre)',
+    category: 'Taşıyıcı',
+    generalRole: 'Kortikal ve medüller toplayıcı kanal alfa-interkale hücrelerinin apikal membranında idrarı asidifiye etmek için Hidrojen (H⁺) iyonlarını aktif olarak lümene pompalar.',
+    relevantGroups: ['ksparing', 'loop'],
+    groupSpecificEffect: {
+      ksparing: 'Aldosteron uyarısı ve lümen-negatif potansiyel kaybolduğunda H⁺-ATPaz aktivitesi düşer; H⁺/NH₄⁺ atılımı azalarak Tip 4 RTA gelişir.',
+      loop: 'Hacim kontraksiyonu ve yüksek aldosteron H⁺-ATPaz pompasını uyararak metabolik alkalozu derinleştirir.',
     },
   },
   {
     id: 'v2',
     symbol: 'V2',
-    fullName: 'Vazopresin Tip 2 Reseptörü',
+    fullName: 'Vazopresin Tip 2 Reseptörü (Gₛ-Kenetli)',
     category: 'Reseptör',
-    generalRole: 'Toplayıcı kanal bazolateral membranında yer alan ve Antidiüretik Hormon (ADH) bağlanınca Siklik Adenozin Monofosfat (cAMP) üreten G-protein kenetli reseptördür.',
+    generalRole: 'Toplayıcı kanal bazolateral membranında yer alan ve Antidiüretik Hormon (ADH) bağlanınca Gₛ-protein kenetli yolakla adenilat siklazı uyararak Siklik Adenozin Monofosfat (cAMP) üreten reseptördür.',
     relevantGroups: ['vaptan'],
     groupSpecificEffect: {
-      vaptan: 'Tolvaptan ve Konivaptan tarafından bloke edilerek Akuaporin-2 (AQP2) kanallarının membrana yerleşmesi önlenir.',
+      vaptan: 'Tolvaptan (selektif V2, PO) ve Konivaptan (dual V1a/V2, IV) tarafından bloke edilerek Akuaporin-2 (AQP2) kanallarının membrana yerleşmesi önlenir.',
     },
   },
   {
@@ -700,7 +815,18 @@ const GLOSSARY_ITEMS: GlossaryItem[] = [
     generalRole: 'Toplayıcı kanal hücrelerinde Antidiüretik Hormon (ADH) uyarısıyla veziküllerden apikal membrana yerleşen su kanalıdır.',
     relevantGroups: ['vaptan'],
     groupSpecificEffect: {
-      vaptan: 'Siklik Adenozin Monofosfat (cAMP) sinyali kesildiği için apikal membrana yerleşemez ve Su (H₂O) idrarla atılır.',
+      vaptan: 'Gₛ → cAMP → PKA sinyali kesildiği için apikal membrana yerleşemez ve serbest Su (H₂O) idrarla atılır.',
+    },
+  },
+  {
+    id: 'aqp3_4',
+    symbol: 'AQP3 / AQP4',
+    fullName: 'Akuaporin-3 ve Akuaporin-4 Bazolateral Su Kanalları',
+    category: 'Kanal',
+    generalRole: 'Toplayıcı kanal esas hücrelerinin bazolateral membranında konstitütif (sürekli) olarak bulunan ve AQP2 ile hücreye giren Su (H₂O) moleküllerini interstisyum/kana aktaran su kanallarıdır.',
+    relevantGroups: ['vaptan'],
+    groupSpecificEffect: {
+      vaptan: 'Bazolateral AQP3 / AQP4 açık kalsa da apikal AQP2 yerleşemediği için su hücreye giremez ve serbest akuarez gerçekleşir.',
     },
   },
   {
@@ -910,15 +1036,13 @@ function getPointOnNephron(t: number): SampledPoint {
 
 
 // ============================================================================
-// ORTAK KOMPAKT ANİMASYON ÜST ÇUBUĞU (Grup Seçici < > + Simülasyon Kontrolleri)
+// BİRLEŞİK ÜST KONTROL ÇUBUĞU (6 Sınıf Hapı + < > + Tek Simülasyon Kontrolü)
 // ============================================================================
 
-interface AnimationPanelToolbarProps {
+interface UnifiedDiureticControlBarProps {
   isDark: boolean;
-  title: string;
-  subtitle: string;
-  icon: React.ReactNode;
   selectedDiuretic: DiureticId;
+  onSelectDiuretic: (id: DiureticId) => void;
   onPrevDiuretic: () => void;
   onNextDiuretic: () => void;
   isDrugActive: boolean;
@@ -927,231 +1051,249 @@ interface AnimationPanelToolbarProps {
   onTogglePlay: () => void;
   speed: SpeedMultiplier;
   onChangeSpeed: (s: SpeedMultiplier) => void;
-  extraRightSlot?: React.ReactNode;
 }
 
-const AnimationPanelToolbar: React.FC<AnimationPanelToolbarProps> = ({
-  isDark,
-  title,
-  subtitle,
-  icon,
-  selectedDiuretic,
-  onPrevDiuretic,
-  onNextDiuretic,
-  isDrugActive,
-  onToggleDrugActive,
-  isPlaying,
-  onTogglePlay,
-  speed,
-  onChangeSpeed,
-  extraRightSlot,
-}) => {
-  const drug = DIURETICS[selectedDiuretic];
-  const currentIndex = DIURETIC_ORDER.indexOf(selectedDiuretic);
+const UnifiedDiureticControlBar: React.FC<UnifiedDiureticControlBarProps> = React.memo(
+  ({
+    isDark,
+    selectedDiuretic,
+    onSelectDiuretic,
+    onPrevDiuretic,
+    onNextDiuretic,
+    isDrugActive,
+    onToggleDrugActive,
+    isPlaying,
+    onTogglePlay,
+    speed,
+    onChangeSpeed,
+  }) => {
+    const drug = DIURETICS[selectedDiuretic];
+    const activeTheme = DIURETIC_THEME[selectedDiuretic];
 
-  return (
-    <div
-      className={`border-b px-3 py-2.5 space-y-2 ${
-        isDark
-          ? 'border-slate-800 bg-slate-950/60'
-          : 'border-slate-200 bg-slate-50/90'
-      }`}
-    >
-      {/* ÜST SATIR: Panel Başlığı + Kompakt Simge Tabanlı Kontroller */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
-            style={{ backgroundColor: drug.accentColor }}
-          >
-            {icon}
-          </div>
-          <div className="min-w-0">
-            <h2
-              className={`text-xs sm:text-sm font-extrabold truncate ${
-                isDark ? 'text-slate-100' : 'text-slate-800'
-              }`}
-            >
-              {title}
-            </h2>
-            <p
-              className={`text-[11px] truncate ${
-                isDark ? 'text-slate-400' : 'text-slate-500'
-              }`}
-            >
-              {subtitle}
-            </p>
-          </div>
-        </div>
-
-        {/* Kompakt Simge Kontrolleri: Normal/Diüretik + Oynat/Duraklat + Hız */}
-        <div className="flex flex-wrap items-center gap-1.5">
-          {/* Normal Fizyoloji vs Diüretik Etkisi Kompakt Anahtar */}
-          <div
-            className={`inline-flex items-center rounded-lg p-0.5 border shadow-2xs ${
-              isDark
-                ? 'bg-slate-900 border-slate-700'
-                : 'bg-white border-slate-200'
-            }`}
-            role="group"
-            aria-label="Fizyoloji veya diüretik modu"
-          >
-            <button
-              type="button"
-              onClick={() => onToggleDrugActive(false)}
-              title="Normal Fizyoloji (İlaçsız)"
-              className={`px-2 py-1 rounded-md text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                !isDrugActive
-                  ? 'bg-emerald-600 text-white shadow-2xs'
-                  : isDark
-                    ? 'text-slate-300 hover:bg-slate-800'
-                    : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-              <span className="hidden sm:inline">Normal</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => onToggleDrugActive(true)}
-              title="Diüretik Etkisi Aktif"
-              className={`px-2 py-1 rounded-md text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                isDrugActive
-                  ? 'bg-rose-600 text-white shadow-2xs'
-                  : isDark
-                    ? 'text-slate-300 hover:bg-slate-800'
-                    : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
-              <span className="hidden sm:inline">Diüretik</span>
-            </button>
-          </div>
-
-          {/* Oynat / Duraklat Simge Butonu */}
-          <button
-            type="button"
-            onClick={onTogglePlay}
-            title={isPlaying ? 'Animasyonu Duraklat' : 'Animasyonu Oynat'}
-            aria-label={isPlaying ? 'Duraklat' : 'Oynat'}
-            className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-colors cursor-pointer shadow-2xs ${
-              isPlaying
-                ? isDark
-                  ? 'bg-slate-900 border-slate-700 text-amber-400 hover:bg-amber-950/40'
-                  : 'bg-white border-slate-200 text-amber-600 hover:bg-amber-50'
-                : 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700'
-            }`}
-          >
-            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-          </button>
-
-          {/* Hız Seçici: 0.5x / 1x / 2x */}
-          <div
-            className={`inline-flex items-center rounded-lg p-0.5 border shadow-2xs ${
-              isDark
-                ? 'bg-slate-900 border-slate-700'
-                : 'bg-white border-slate-200'
-            }`}
-            role="group"
-            aria-label="Animasyon hızı"
-          >
-            {([0.5, 1, 2] as SpeedMultiplier[]).map((sp) => (
-              <button
-                key={sp}
-                type="button"
-                onClick={() => onChangeSpeed(sp)}
-                title={`Animasyon Hızı: ${sp}x`}
-                className={`px-1.5 py-1 rounded-md text-[10px] font-extrabold transition-all cursor-pointer ${
-                  speed === sp
-                    ? isDark
-                      ? 'bg-slate-100 text-slate-900'
-                      : 'bg-slate-800 text-white'
-                    : isDark
-                      ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800'
-                      : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
-                }`}
-              >
-                {sp}x
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ALT SATIR: Sol (<) / Sağ (>) Oklarla Senkronize Diüretik Grubu Değiştirici */}
+    return (
       <div
-        className={`flex items-center justify-between gap-2 rounded-xl border px-2 py-1.5 shadow-2xs ${
+        className={`rounded-2xl border shadow-xs p-3 sm:p-3.5 space-y-2.5 ${
           isDark
-            ? 'bg-slate-900/90 border-slate-700/90'
-            : 'bg-white border-slate-200/90'
+            ? 'bg-slate-900/95 border-slate-800'
+            : 'bg-white border-slate-200'
         }`}
       >
-        <button
-          type="button"
-          onClick={onPrevDiuretic}
-          title="Önceki Diüretik Grubu (Sol Ok Tuşu)"
-          aria-label="Önceki diüretik grubu"
-          className={`w-8 h-8 rounded-lg border active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 ${
-            isDark
-              ? 'border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200'
-              : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700'
-          }`}
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-
-        <div className="flex-1 min-w-0 text-center px-1">
-          <div className="flex items-center justify-center gap-1.5">
-            <span
-              className="w-2.5 h-2.5 rounded-full shrink-0"
-              style={{ backgroundColor: drug.accentColor }}
-            />
-            <span
-              className={`text-xs sm:text-sm font-extrabold truncate ${
-                isDark ? 'text-white' : 'text-slate-900'
-              }`}
-            >
-              {drug.shortName}
-            </span>
-            <span
-              className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md text-white shrink-0"
-              style={{ backgroundColor: drug.accentColor }}
-            >
-              {currentIndex + 1} / {DIURETIC_ORDER.length}
-            </span>
-          </div>
-          <div
-            className={`text-[10.5px] font-semibold truncate mt-0.5 ${
-              isDark ? 'text-slate-400' : 'text-slate-500'
+        {/* SATIR 1: 6 Doğrudan Tıklanabilir Renkli Diüretik Hapı + < / > Geçiş Okları */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onPrevDiuretic}
+            title="Önceki Diüretik Sınıfı (Sol Ok Tuşu)"
+            aria-label="Önceki diüretik sınıfı"
+            className={`w-8 h-8 rounded-xl border active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+              isDark
+                ? 'border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200'
+                : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700'
             }`}
           >
-            {drug.prototypes[0]} • {drug.segmentLabel}
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div
+            className="flex-1 flex flex-wrap items-center justify-center gap-1.5"
+            role="tablist"
+            aria-label="Diüretik sınıfları"
+          >
+            {DIURETIC_ORDER.map((id) => {
+              const item = DIURETICS[id];
+              const theme = DIURETIC_THEME[id];
+              const isSelected = id === selectedDiuretic;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  onClick={() => onSelectDiuretic(id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                    isSelected
+                      ? 'text-white shadow-sm scale-[1.02]'
+                      : isDark
+                        ? 'bg-slate-950/70 border-slate-700/80 text-slate-300 hover:bg-slate-800 hover:text-white'
+                        : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
+                  style={
+                    isSelected
+                      ? {
+                          backgroundColor: theme.hex,
+                          borderColor: isDark ? theme.darkHex : theme.hex,
+                        }
+                      : undefined
+                  }
+                >
+                  <span
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{
+                      backgroundColor: isSelected
+                        ? '#ffffff'
+                        : isDark
+                          ? theme.darkHex
+                          : theme.hex,
+                    }}
+                  />
+                  <span>{item.pillLabel}</span>
+                </button>
+              );
+            })}
           </div>
+
+          <button
+            type="button"
+            onClick={onNextDiuretic}
+            title="Sonraki Diüretik Sınıfı (Sağ Ok Tuşu)"
+            aria-label="Sonraki diüretik sınıfı"
+            className={`w-8 h-8 rounded-xl border active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+              isDark
+                ? 'border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200'
+                : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700'
+            }`}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
 
-        <button
-          type="button"
-          onClick={onNextDiuretic}
-          title="Sonraki Diüretik Grubu (Sağ Ok Tuşu)"
-          aria-label="Sonraki diüretik grubu"
-          className={`w-8 h-8 rounded-lg border active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 ${
-            isDark
-              ? 'border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200'
-              : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700'
+        {/* SATIR 2: Normal/Diüretik Anahtarı + Oynat/Duraklat + Hız + Aktif Moleküler Hedef Hapı */}
+        <div
+          className={`pt-2.5 border-t flex flex-wrap items-center justify-between gap-2 ${
+            isDark ? 'border-slate-800' : 'border-slate-100'
           }`}
         >
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Normal Fizyoloji | Diüretik Aktif */}
+            <div
+              className={`inline-flex items-center rounded-xl p-0.5 border shadow-2xs ${
+                isDark
+                  ? 'bg-slate-950 border-slate-700'
+                  : 'bg-slate-50 border-slate-200'
+              }`}
+              role="group"
+              aria-label="Fizyoloji veya diüretik modu"
+            >
+              <button
+                type="button"
+                onClick={() => onToggleDrugActive(false)}
+                aria-pressed={!isDrugActive}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  !isDrugActive
+                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    : isDark
+                      ? 'text-slate-300 hover:bg-slate-800'
+                      : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                <span>Normal Fizyoloji</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onToggleDrugActive(true)}
+                aria-pressed={isDrugActive}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  isDrugActive
+                    ? 'bg-rose-600 text-white shadow-2xs'
+                    : isDark
+                      ? 'text-slate-300 hover:bg-slate-800'
+                      : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
+                <span>Diüretik Aktif</span>
+              </button>
+            </div>
 
-      {/* Opsiyonel Ek Alt Seçici (Örn. Spironolakton / Amilorid) */}
-      {extraRightSlot && <div className="flex justify-end">{extraRightSlot}</div>}
-    </div>
-  );
-};
+            {/* Oynat / Duraklat */}
+            <button
+              type="button"
+              onClick={onTogglePlay}
+              title={isPlaying ? 'Animasyonu Duraklat' : 'Animasyonu Oynat'}
+              aria-label={isPlaying ? 'Animasyonu duraklat' : 'Animasyonu oynat'}
+              className={`h-8 px-2.5 rounded-xl border flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer shadow-2xs ${
+                isPlaying
+                  ? isDark
+                    ? 'bg-slate-950 border-slate-700 text-amber-400 hover:bg-amber-950/40'
+                    : 'bg-white border-slate-200 text-amber-700 hover:bg-amber-50'
+                  : 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700'
+              }`}
+            >
+              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              <span className="hidden sm:inline">{isPlaying ? 'Duraklat' : 'Oynat'}</span>
+            </button>
+
+            {/* Hız Seçici: 0.5x | 1x | 2x */}
+            <div
+              className={`inline-flex items-center rounded-xl p-0.5 border shadow-2xs ${
+                isDark
+                  ? 'bg-slate-950 border-slate-700'
+                  : 'bg-slate-50 border-slate-200'
+              }`}
+              role="group"
+              aria-label="Animasyon hızı"
+            >
+              {([0.5, 1, 2] as SpeedMultiplier[]).map((sp) => (
+                <button
+                  key={sp}
+                  type="button"
+                  onClick={() => onChangeSpeed(sp)}
+                  aria-pressed={speed === sp}
+                  title={`Animasyon Hızı: ${sp}x`}
+                  className={`px-2 py-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer ${
+                    speed === sp
+                      ? isDark
+                        ? 'bg-slate-100 text-slate-900'
+                        : 'bg-slate-800 text-white'
+                      : isDark
+                        ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800'
+                        : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
+                  }`}
+                >
+                  {sp}x
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Aktif Moleküler Hedef Hapı */}
+          <div
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold max-w-full ${
+              isDark
+                ? 'bg-slate-950/80 border-slate-700/80 text-slate-200'
+                : 'bg-slate-50 border-slate-200 text-slate-800'
+            }`}
+          >
+            <span
+              className="w-2.5 h-2.5 rounded-full shrink-0"
+              style={{ backgroundColor: isDark ? activeTheme.darkHex : activeTheme.hex }}
+            />
+            <span
+              className="font-extrabold shrink-0"
+              style={{ color: isDark ? activeTheme.darkHex : activeTheme.hex }}
+            >
+              Hedef:
+            </span>
+            <span className="truncate">{drug.shortTarget}</span>
+            <span
+              className={`hidden md:inline text-[11px] font-semibold px-1.5 py-0.5 rounded-md ${
+                isDark ? 'bg-slate-800 text-slate-300' : 'bg-white border border-slate-200 text-slate-600'
+              }`}
+            >
+              {drug.prototypes[0]}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+
+UnifiedDiureticControlBar.displayName = 'UnifiedDiureticControlBar';
 
 // ============================================================================
-// YARDIMCI SVG BİLEŞENLERİ: İYON KÜRESİ & KIRMIZI BLOKAJ ROZETİ
+// YARDIMCI SVG BİLEŞENLERİ: İYON KÜRESİ & KOMPAKT BLOKAJ ROZETİ
 // ============================================================================
 
 const IonBadgeSvg: React.FC<{
@@ -1198,26 +1340,29 @@ const BlockadeBadgeSvg: React.FC<{
   time: number;
   size?: number;
   label?: string;
-}> = ({ x, y, time, size = 14, label }) => {
-  const pulse = 1 + 0.14 * Math.sin(time * 6);
+  labelOffsetX?: number;
+  labelOffsetY?: number;
+}> = ({ x, y, time, size = 12, label, labelOffsetX = 0, labelOffsetY = 0 }) => {
+  const pulse = 1 + 0.12 * Math.sin(time * 5.5);
+  const pillWidth = label ? Math.max(56, label.length * 5.6 + 12) : 0;
   return (
     <g transform={`translate(${x}, ${y})`}>
-      <circle r={size * 1.45 * pulse} fill="#ef4444" opacity={0.22} />
-      <circle r={size} fill="#dc2626" stroke="#ffffff" strokeWidth={2.2} />
+      <circle r={size * 1.4 * pulse} fill="#ef4444" opacity={0.22} />
+      <circle r={size} fill="#dc2626" stroke="#ffffff" strokeWidth={2} />
       <path
-        d={`M ${-size * 0.42} ${-size * 0.42} L ${size * 0.42} ${size * 0.42} M ${size * 0.42} ${-size * 0.42} L ${-size * 0.42} ${size * 0.42}`}
+        d={`M ${-size * 0.4} ${-size * 0.4} L ${size * 0.4} ${size * 0.4} M ${size * 0.4} ${-size * 0.4} L ${-size * 0.4} ${size * 0.4}`}
         stroke="#ffffff"
-        strokeWidth={2.7}
+        strokeWidth={2.5}
         strokeLinecap="round"
       />
       {label && (
-        <g transform={`translate(0, ${-size - 11})`}>
+        <g transform={`translate(${labelOffsetX}, ${-size - 10 + labelOffsetY})`}>
           <rect
-            x={-label.length * 3.35 - 7}
-            y={-9}
-            width={label.length * 6.7 + 14}
-            height={17}
-            rx={8.5}
+            x={-pillWidth / 2}
+            y={-8}
+            width={pillWidth}
+            height={16}
+            rx={8}
             fill="#991b1b"
             stroke="#fecaca"
             strokeWidth={1}
@@ -1226,7 +1371,7 @@ const BlockadeBadgeSvg: React.FC<{
             textAnchor="middle"
             dominantBaseline="central"
             fill="#ffffff"
-            fontSize={8.8}
+            fontSize={8.1}
             fontWeight="700"
           >
             {label}
@@ -1238,20 +1383,76 @@ const BlockadeBadgeSvg: React.FC<{
 };
 
 // ============================================================================
+// PANEL 1 SABİT VERİLERİ (Modül Seviyesinde — 60 FPS Sıfır Yeniden Tahsis)
+// ============================================================================
+
+const MACRO_LUMEN_PARTICLES: { id: number; ion: IonType; offset: number; jitter: number }[] = (
+  [
+    'Na+', 'H2O', 'Cl-', 'HCO3-', 'Na+', 'H2O', 'K+', 'Ca2+',
+    'Na+', 'H2O', 'Cl-', 'H2O', 'Na+', 'HCO3-', 'Cl-', 'H2O',
+    'K+', 'Ca2+', 'Na+', 'H2O', 'Cl-', 'H2O', 'Na+', 'H2O',
+  ] as IonType[]
+).map((ion, idx, arr) => ({
+  id: idx,
+  ion,
+  offset: idx / arr.length,
+  jitter: ((idx % 3) - 1) * 3.8,
+}));
+
+const MACRO_TRANSPORT_SITES: {
+  seg: NephronSegmentId;
+  t: number;
+  side: 1 | -1;
+  ions: IonType[];
+  isSecretion?: boolean;
+  enhancedWhen?: DiureticId;
+}[] = [
+  { seg: 'pct', t: 0.12, side: 1, ions: ['Na+', 'HCO3-'] },
+  { seg: 'pct', t: 0.21, side: -1, ions: ['H2O', 'Na+'] },
+  { seg: 'thin_descending', t: 0.36, side: -1, ions: ['H2O'] },
+  { seg: 'tal', t: 0.56, side: 1, ions: ['Na+', 'Cl-'] },
+  { seg: 'tal', t: 0.62, side: -1, ions: ['Ca2+', 'K+'] },
+  { seg: 'dct', t: 0.72, side: -1, ions: ['Na+', 'Cl-'] },
+  { seg: 'dct', t: 0.78, side: 1, ions: ['Ca2+'], enhancedWhen: 'thiazide' },
+  { seg: 'collecting_duct', t: 0.87, side: -1, ions: ['Na+'] },
+  { seg: 'collecting_duct', t: 0.89, side: 1, ions: ['K+'], isSecretion: true },
+  { seg: 'collecting_duct', t: 0.94, side: -1, ions: ['H2O'] },
+];
+
+const MACRO_BLOCKADE_COORDS: Record<DiureticId, { x: number; y: number; label: string }[]> = {
+  cai: [{ x: 205, y: 122, label: 'CA-IV / CA-II İnhibe' }],
+  osmotic: [
+    { x: 235, y: 136, label: 'Ozmotik Etki' },
+    { x: 276, y: 345, label: 'H₂O Tutulur' },
+  ],
+  loop: [{ x: 342, y: 292, label: 'NKCC2 İnhibe' }],
+  thiazide: [{ x: 428, y: 118, label: 'NCC İnhibe' }],
+  ksparing: [{ x: 522, y: 215, label: 'ENaC / MR İnhibe' }],
+  vaptan: [{ x: 522, y: 365, label: 'V2 / AQP2 İnhibe' }],
+};
+
+const MACRO_SEGMENT_LABELS: {
+  seg: NephronSegmentId;
+  x: number;
+  y: number;
+  title: string;
+  subtitle: string;
+}[] = [
+  { seg: 'pct', x: 210, y: 54, title: 'Proksimal Tübül (PCT)', subtitle: 'KAI • Ozmotik' },
+  { seg: 'thin_descending', x: 168, y: 355, title: 'Henle İnen İnce Kol', subtitle: 'Ozmotik (AQP1)' },
+  { seg: 'tal', x: 425, y: 315, title: 'Henle Çıkan Kalın Kol', subtitle: 'Kıvrım (Lup) • NKCC2' },
+  { seg: 'dct', x: 432, y: 54, title: 'Distal Tübül (DCT)', subtitle: 'Tiyazid • NCC' },
+  { seg: 'collecting_duct', x: 594, y: 245, title: 'Toplayıcı Kanal', subtitle: 'K⁺ Tutucu • ADH Ant.' },
+];
+
+// ============================================================================
 // PANEL 1: MAKRO BÖBREK NEFRONU ANİMASYONU
 // ============================================================================
 
 interface MacroNephronPanelProps {
   isDark: boolean;
   selectedDiuretic: DiureticId;
-  onPrevDiuretic: () => void;
-  onNextDiuretic: () => void;
   isDrugActive: boolean;
-  onToggleDrugActive: (active: boolean) => void;
-  isPlaying: boolean;
-  onTogglePlay: () => void;
-  speed: SpeedMultiplier;
-  onChangeSpeed: (s: SpeedMultiplier) => void;
   time: number;
   onSelectSegment: (segment: NephronSegmentId) => void;
 }
@@ -1259,71 +1460,19 @@ interface MacroNephronPanelProps {
 const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
   isDark,
   selectedDiuretic,
-  onPrevDiuretic,
-  onNextDiuretic,
   isDrugActive,
-  onToggleDrugActive,
-  isPlaying,
-  onTogglePlay,
-  speed,
-  onChangeSpeed,
   time,
   onSelectSegment,
 }) => {
   const drug = DIURETICS[selectedDiuretic];
-  const darkSafeAccent = DARK_ACCENT_COLORS[selectedDiuretic];
+  const theme = DIURETIC_THEME[selectedDiuretic];
+  const darkSafeAccent = theme.darkHex;
   const [hoveredSeg, setHoveredSeg] = useState<NephronSegmentId | null>(null);
 
   const isSegTargeted = (seg: NephronSegmentId) => drug.targetSegments.includes(seg);
 
   const effectiveDiuresis = isDrugActive ? drug.diuresisScore : 22;
   const flowBoost = isDrugActive ? 1 + (drug.diuresisScore - 22) / 90 : 1;
-
-  const lumenParticles = useMemo(() => {
-    const baseIons: IonType[] = [
-      'Na+', 'H2O', 'Cl-', 'HCO3-', 'Na+', 'H2O', 'K+', 'Ca2+',
-      'Na+', 'H2O', 'Cl-', 'H2O', 'Na+', 'HCO3-', 'Cl-', 'H2O',
-      'K+', 'Ca2+', 'Na+', 'H2O', 'Cl-', 'H2O', 'Na+', 'H2O',
-    ];
-    return baseIons.map((ion, idx) => ({
-      id: idx,
-      ion,
-      offset: idx / baseIons.length,
-      jitter: ((idx % 3) - 1) * 3.8,
-    }));
-  }, []);
-
-  const transportSites: {
-    seg: NephronSegmentId;
-    t: number;
-    side: 1 | -1;
-    ions: IonType[];
-    isSecretion?: boolean;
-    enhancedWhen?: DiureticId;
-  }[] = [
-    { seg: 'pct', t: 0.12, side: 1, ions: ['Na+', 'HCO3-'] },
-    { seg: 'pct', t: 0.21, side: -1, ions: ['H2O', 'Na+'] },
-    { seg: 'thin_descending', t: 0.36, side: -1, ions: ['H2O'] },
-    { seg: 'tal', t: 0.56, side: 1, ions: ['Na+', 'Cl-'] },
-    { seg: 'tal', t: 0.62, side: -1, ions: ['Ca2+', 'K+'] },
-    { seg: 'dct', t: 0.72, side: -1, ions: ['Na+', 'Cl-'] },
-    { seg: 'dct', t: 0.78, side: 1, ions: ['Ca2+'], enhancedWhen: 'thiazide' },
-    { seg: 'collecting_duct', t: 0.87, side: -1, ions: ['Na+'] },
-    { seg: 'collecting_duct', t: 0.89, side: 1, ions: ['K+'], isSecretion: true },
-    { seg: 'collecting_duct', t: 0.94, side: -1, ions: ['H2O'] },
-  ];
-
-  const blockadeCoords: Record<DiureticId, { x: number; y: number; label: string }[]> = {
-    cai: [{ x: 205, y: 122, label: 'CA-IV / CA-II İnhibe' }],
-    osmotic: [
-      { x: 235, y: 136, label: 'Ozmotik Etki' },
-      { x: 276, y: 345, label: 'H₂O Tutulur' },
-    ],
-    loop: [{ x: 342, y: 292, label: 'NKCC2 İnhibe' }],
-    thiazide: [{ x: 428, y: 118, label: 'NCC İnhibe' }],
-    ksparing: [{ x: 522, y: 215, label: 'ENaC / MR İnhibe' }],
-    vaptan: [{ x: 522, y: 365, label: 'V2 / AQP2 İnhibe' }],
-  };
 
   const shouldParticleReachEnd = (ion: IonType, idx: number): boolean => {
     if (!isDrugActive) return idx % 5 === 0;
@@ -1344,44 +1493,45 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
     return idx % 3 === 0;
   };
 
-  const segmentLabels: {
-    seg: NephronSegmentId;
-    x: number;
-    y: number;
-    title: string;
-    subtitle: string;
-  }[] = [
-    { seg: 'pct', x: 210, y: 54, title: 'Proksimal Tübül (PCT)', subtitle: 'KAI • Ozmotik' },
-    { seg: 'thin_descending', x: 168, y: 355, title: 'Henle İnen İnce Kol', subtitle: 'Ozmotik (AQP1)' },
-    { seg: 'tal', x: 425, y: 315, title: 'Henle Çıkan Kalın Kol', subtitle: 'Kıvrım (Lup) • NKCC2' },
-    { seg: 'dct', x: 432, y: 54, title: 'Distal Tübül (DCT)', subtitle: 'Tiyazid • NCC' },
-    { seg: 'collecting_duct', x: 594, y: 245, title: 'Toplayıcı Kanal', subtitle: 'K⁺ Tutucu • ADH Ant.' },
-  ];
-
   return (
     <div
-      className={`rounded-2xl border shadow-sm overflow-hidden flex flex-col ${
+      className={`rounded-2xl border shadow-sm overflow-hidden flex flex-col flex-1 ${
         isDark
           ? 'bg-slate-900 border-slate-800'
           : 'bg-white border-slate-200'
       }`}
     >
-      {/* ÜST KONTROL VE GRUP SEÇİM ÇUBUĞU */}
-      <AnimationPanelToolbar
-        isDark={isDark}
-        title="Makro Böbrek Nefronu Animasyonu"
-        subtitle="Segmentlere tıklayarak veya ok tuşlarıyla diüretik seçebilirsiniz"
-        icon={<Activity className="w-4 h-4" />}
-        selectedDiuretic={selectedDiuretic}
-        onPrevDiuretic={onPrevDiuretic}
-        onNextDiuretic={onNextDiuretic}
-        isDrugActive={isDrugActive}
-        onToggleDrugActive={onToggleDrugActive}
-        isPlaying={isPlaying}
-        onTogglePlay={onTogglePlay}
-        speed={speed}
-        onChangeSpeed={onChangeSpeed}
-      />
+      {/* TEK SATIRLI KOMPAKT KART BAŞLIĞI */}
+      <div
+        className={`border-b px-3.5 py-2.5 flex items-center justify-between gap-2 ${
+          isDark
+            ? 'border-slate-800 bg-slate-950/60'
+            : 'border-slate-200 bg-slate-50/90'
+        }`}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <div
+            className="w-6 h-6 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs"
+            style={{ backgroundColor: theme.hex }}
+          >
+            <Activity className="w-3.5 h-3.5" />
+          </div>
+          <h3
+            className={`text-xs sm:text-sm font-extrabold truncate ${
+              isDark ? 'text-slate-100' : 'text-slate-800'
+            }`}
+          >
+            Makro Nefron Akışı
+          </h3>
+        </div>
+        <span
+          className={`text-[10.5px] font-semibold truncate ${
+            isDark ? 'text-slate-400' : 'text-slate-500'
+          }`}
+        >
+          Segmentlere tıklayarak sınıf seçin
+        </span>
+      </div>
 
       {/* SVG ALANI */}
       <div
@@ -1414,10 +1564,6 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
               <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.85" />
               <stop offset="100%" stopColor="#0284c7" stopOpacity="0.2" />
             </linearGradient>
-            <filter id="nephron-segmentGlow" x="-25%" y="-25%" width="150%" height="150%">
-              <feGaussianBlur stdDeviation="4.5" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
           </defs>
 
           {/* Koyu Mod Taban Tuvali */}
@@ -1489,11 +1635,11 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
               Efferent
             </text>
 
-            {/* Bowman Kapsülü */}
+            {/* Bowman Kapsülü (Koyu modda koyu amber zemin + parlak amber çerçeve) */}
             <path
               d="M 66 76 C 102 64, 134 86, 136 118 C 134 150, 102 172, 66 160 C 52 154, 48 144, 54 138 C 66 144, 98 152, 114 136 C 122 126, 122 110, 114 100 C 98 84, 66 92, 54 98 C 48 92, 52 82, 66 76 Z"
-              fill={isDark ? '#d97706' : '#fbbf24'}
-              stroke={isDark ? '#fbbf24' : '#b45309'}
+              fill={isDark ? '#291a0d' : '#fbbf24'}
+              stroke={isDark ? '#f59e0b' : '#b45309'}
               strokeWidth="2.5"
             />
 
@@ -1545,7 +1691,7 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
             <path d="M 524 196 L 556 180" stroke={isDark ? '#292524' : '#fde68a'} strokeWidth="9.5" strokeLinecap="round" />
           </g>
 
-          {/* NEFRON SEGMENTLERİ */}
+          {/* NEFRON SEGMENTLERİ (Hafif yarı saydam vurgu — feGaussianBlur olmadan 60 FPS akıcılık) */}
           {NEPHRON_SEGMENTS_DEF.map((seg) => {
             const d = NEPHRON_LUT.segmentPaths[seg.id];
             const targeted = isSegTargeted(seg.id);
@@ -1554,7 +1700,7 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
               targeted && isDrugActive
                 ? isDark
                   ? darkSafeAccent
-                  : drug.accentColor
+                  : theme.hex
                 : isDark
                   ? '#d97706'
                   : '#b45309';
@@ -1568,16 +1714,26 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
                 onMouseLeave={() => setHoveredSeg(null)}
               >
                 {(targeted || isHovered) && (
-                  <path
-                    d={d}
-                    fill="none"
-                    stroke={targeted ? (isDark ? darkSafeAccent : drug.accentColor) : '#94a3b8'}
-                    strokeWidth={seg.width + (targeted && isDrugActive ? 14 : 9)}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    opacity={targeted && isDrugActive ? 0.34 + 0.14 * Math.sin(time * 4) : 0.22}
-                    filter="url(#nephron-segmentGlow)"
-                  />
+                  <>
+                    <path
+                      d={d}
+                      fill="none"
+                      stroke={targeted ? (isDark ? darkSafeAccent : theme.hex) : '#94a3b8'}
+                      strokeWidth={seg.width + (targeted && isDrugActive ? 18 : 11)}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      opacity={targeted && isDrugActive ? 0.14 : 0.12}
+                    />
+                    <path
+                      d={d}
+                      fill="none"
+                      stroke={targeted ? (isDark ? darkSafeAccent : theme.hex) : '#94a3b8'}
+                      strokeWidth={seg.width + (targeted && isDrugActive ? 11 : 7)}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      opacity={targeted && isDrugActive ? 0.26 : 0.18}
+                    />
+                  </>
                 )}
                 <path
                   d={d}
@@ -1650,7 +1806,7 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
           </g>
 
           {/* LÜMEN İÇİ AKAN İYON PARTİKÜLLERİ */}
-          {lumenParticles.map((p) => {
+          {MACRO_LUMEN_PARTICLES.map((p) => {
             const rawT = (time * 0.11 * flowBoost + p.offset) % 1;
             const reachesEnd = shouldParticleReachEnd(p.ion, p.id);
             if (!reachesEnd && rawT > 0.68) return null;
@@ -1684,7 +1840,7 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
           )}
 
           {/* SEGMENTLERDE GERİ EMİLİM / SEKRESYON VE BLOKAJ ANİMASYONLARI */}
-          {transportSites.map((site, sIdx) => {
+          {MACRO_TRANSPORT_SITES.map((site, sIdx) => {
             const pt = getPointOnNephron(site.t);
             const dir = site.side;
             const isBlockedByDrug =
@@ -1734,7 +1890,7 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
                     isBlockedByDrug
                       ? '#ef4444'
                       : isEnhanced
-                        ? '#16a34a'
+                        ? '#15803d'
                         : site.isSecretion
                           ? isDark
                             ? '#a78bfa'
@@ -1768,12 +1924,12 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
 
           {/* KIRMIZI BLOKAJ İŞARETLERİ */}
           {isDrugActive &&
-            blockadeCoords[selectedDiuretic].map((b, idx) => (
-              <BlockadeBadgeSvg key={`blk-${idx}`} x={b.x} y={b.y} time={time} size={13} label={b.label} />
+            MACRO_BLOCKADE_COORDS[selectedDiuretic].map((b, idx) => (
+              <BlockadeBadgeSvg key={`blk-${idx}`} x={b.x} y={b.y} time={time} size={12} label={b.label} />
             ))}
 
           {/* TIKLANABİLİR SEGMENT ETİKETLERİ */}
-          {segmentLabels.map((lbl) => {
+          {MACRO_SEGMENT_LABELS.map((lbl) => {
             const active = isSegTargeted(lbl.seg);
             return (
               <g
@@ -1801,7 +1957,7 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
                     active
                       ? isDark
                         ? darkSafeAccent
-                        : drug.accentColor
+                        : theme.hex
                       : isDark
                         ? '#475569'
                         : '#cbd5e1'
@@ -1817,7 +1973,7 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
                     active
                       ? isDark
                         ? darkSafeAccent
-                        : drug.accentColor
+                        : theme.hex
                       : isDark
                         ? '#f1f5f9'
                         : '#1e293b'
@@ -1927,31 +2083,18 @@ const MacroNephronPanel: React.FC<MacroNephronPanelProps> = ({
 interface CellularMechanismPanelProps {
   isDark: boolean;
   selectedDiuretic: DiureticId;
-  onPrevDiuretic: () => void;
-  onNextDiuretic: () => void;
   isDrugActive: boolean;
-  onToggleDrugActive: (active: boolean) => void;
-  isPlaying: boolean;
-  onTogglePlay: () => void;
-  speed: SpeedMultiplier;
-  onChangeSpeed: (s: SpeedMultiplier) => void;
   time: number;
 }
 
 const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
   isDark,
   selectedDiuretic,
-  onPrevDiuretic,
-  onNextDiuretic,
   isDrugActive,
-  onToggleDrugActive,
-  isPlaying,
-  onTogglePlay,
-  speed,
-  onChangeSpeed,
   time,
 }) => {
   const drug = DIURETICS[selectedDiuretic];
+  const theme = DIURETIC_THEME[selectedDiuretic];
   const [kSparingMode, setKSparingMode] = useState<'both' | 'spironolactone' | 'amiloride'>('both');
 
   const lerpPt = (x1: number, y1: number, x2: number, y2: number, p: number) => ({
@@ -2002,15 +2145,16 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
   // Bazolateral Sodyum-Potasyum-ATPaz Pompası
   const renderBasolateralATPase = (yCenter: number, dimmed = false) => {
     const sp = dimmed ? 0.25 : 0.6;
+    const purpleStroke = isDark ? '#a78bfa' : '#7c3aed';
     return (
-      <g opacity={dimmed ? 0.5 : 1}>
+      <g opacity={dimmed ? (isDark ? 0.75 : 0.5) : 1}>
         <rect
           x="375"
           y={yCenter - 26}
           width="40"
           height="52"
           rx="14"
-          fill="#475569"
+          fill={isDark && dimmed ? '#334155' : '#475569'}
           stroke={isDark ? '#94a3b8' : '#1e293b'}
           strokeWidth="2"
         />
@@ -2035,7 +2179,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
           y1={yCenter + 13}
           x2="340"
           y2={yCenter + 13}
-          stroke="#8b5cf6"
+          stroke={purpleStroke}
           strokeWidth="2.2"
           markerEnd="url(#cell-arrowPurple)"
         />
@@ -2045,6 +2189,8 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
   };
 
   const renderCellSpecificDiagram = () => {
+    const purpleStroke = isDark ? '#a78bfa' : '#7c3aed';
+
     switch (selectedDiuretic) {
       case 'cai': {
         return (
@@ -2221,8 +2367,8 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               </>
             ) : (
               <>
-                <BlockadeBadgeSvg x={115} y={252} time={time} size={13} label="Asetazolamid (İnhibe)" />
-                <BlockadeBadgeSvg x={265} y={252} time={time} size={13} />
+                <BlockadeBadgeSvg x={115} y={252} time={time} size={12} label="Asetazolamid" labelOffsetX={10} />
+                <BlockadeBadgeSvg x={265} y={252} time={time} size={12} />
 
                 <line x1="75" y1="166" x2="122" y2="166" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
                 <text x="195" y="160" fontSize="8.3" fontWeight="700" fill={isDark ? '#fca5a5' : '#dc2626'}>
@@ -2258,11 +2404,29 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
 
             {[170, 290].map((yPos, i) => (
               <g key={`aqp1-${i}`}>
-                <rect x="130" y={yPos - 18} width="30" height="36" rx="10" fill="#0ea5e9" stroke="#0369a1" strokeWidth="2" />
+                <rect
+                  x="130"
+                  y={yPos - 18}
+                  width="30"
+                  height="36"
+                  rx="10"
+                  fill="#0ea5e9"
+                  stroke={isDark ? '#7dd3fc' : '#0369a1'}
+                  strokeWidth="2"
+                />
                 <text x="145" y={yPos + 3} textAnchor="middle" fill="#fff" fontSize="8.5" fontWeight="800">
                   AQP1
                 </text>
-                <rect x="380" y={yPos - 18} width="30" height="36" rx="10" fill="#0ea5e9" stroke="#0369a1" strokeWidth="2" />
+                <rect
+                  x="380"
+                  y={yPos - 18}
+                  width="30"
+                  height="36"
+                  rx="10"
+                  fill="#0ea5e9"
+                  stroke={isDark ? '#7dd3fc' : '#0369a1'}
+                  strokeWidth="2"
+                />
                 <text x="395" y={yPos + 3} textAnchor="middle" fill="#fff" fontSize="8.5" fontWeight="800">
                   AQP1
                 </text>
@@ -2306,7 +2470,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
                   height="252"
                   rx="14"
                   fill={isDark ? '#134e4a' : '#ccfbf1'}
-                  stroke={isDark ? '#2dd4bf' : '#0d9488'}
+                  stroke={isDark ? '#2dd4bf' : '#0f766e'}
                   strokeWidth="2"
                   strokeDasharray="6 4"
                   opacity={isDark ? '0.55' : '0.7'}
@@ -2318,10 +2482,18 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
                   (Geri Emilmeyen Mannitol)
                 </text>
 
-                <line x1="95" y1="170" x2="180" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
-                <line x1="95" y1="290" x2="180" y2="290" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
-                <BlockadeBadgeSvg x={145} y={170} time={time} size={12} label="Su Çıkışı Engellendi" />
-                <BlockadeBadgeSvg x={145} y={290} time={time} size={12} />
+                {/* AQP1 kanal poru doğrudan bloke edilmez; lümen tarafında ozmotik direnç gösterilir */}
+                <line x1="92" y1="170" x2="128" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+                <line x1="92" y1="290" x2="128" y2="290" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+                <BlockadeBadgeSvg
+                  x={108}
+                  y={170}
+                  time={time}
+                  size={10}
+                  label="Ozmotik Gradyan (AQP1 Su Emilimi ↓)"
+                  labelOffsetX={98}
+                  labelOffsetY={-4}
+                />
 
                 {[0.0, 0.33, 0.66].map((off, idx) => {
                   const p = (time * 0.55 + off) % 1;
@@ -2338,19 +2510,22 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
 
                 <g transform="translate(270, 232)">
                   <rect
-                    x="-80"
-                    y="-22"
-                    width="160"
-                    height="44"
+                    x="-92"
+                    y="-26"
+                    width="184"
+                    height="52"
                     rx="10"
                     fill={isDark ? '#042f2e' : '#f0fdfa'}
-                    stroke={isDark ? '#2dd4bf' : '#14b8a6'}
+                    stroke={isDark ? '#2dd4bf' : '#0f766e'}
                     strokeWidth="1.5"
                   />
-                  <text textAnchor="middle" y="-6" fontSize="9" fontWeight="800" fill={isDark ? '#5eead4' : '#0f766e'}>
-                    Ozmotik Gradyan Engellenir
+                  <text textAnchor="middle" y="-9" fontSize="8.8" fontWeight="800" fill={isDark ? '#5eead4' : '#0f766e'}>
+                    AQP1 Açık, Ozmotik Gradyan ↓
                   </text>
-                  <text textAnchor="middle" y="8" fontSize="8" fontWeight="600" fill={isDark ? '#99f6e4' : '#115e59'}>
+                  <text textAnchor="middle" y="4" fontSize="7.8" fontWeight="600" fill={isDark ? '#99f6e4' : '#115e59'}>
+                    Medüller vasa recta washout + TAL etkisi
+                  </text>
+                  <text textAnchor="middle" y="16" fontSize="7.6" fontWeight="700" fill={isDark ? '#5eead4' : '#0f766e'}>
                     H₂O kana geçemez, idrarla atılır
                   </text>
                 </g>
@@ -2407,7 +2582,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
                     : '#9d174d'
               }
             >
-              Paraselüler Yol (Ca²⁺, Mg²⁺)
+              Paraselüler Yol — Claudin-16/19 (Ca²⁺, Mg²⁺)
             </text>
 
             {/* Lümen Pozitif Voltaj Rozeti */}
@@ -2509,7 +2684,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               Cl⁻
             </text>
 
-            <text x="270" y="394" textAnchor="middle" fontSize="8.3" fontWeight="700" fill={isDark ? '#94a3b8' : '#64748b'}>
+            <text x="270" y="362" textAnchor="middle" fontSize="8.1" fontWeight="700" fill={isDark ? '#94a3b8' : '#64748b'}>
               Çıkan Kalın Kol (TAL) suya geçirgen değildir (Dilüsyon segmenti)
             </text>
 
@@ -2520,13 +2695,13 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
                 {renderFlowIon('Mg2+', 80, 62, 455, 62, 0.6, 0.65, 'loop-mg-norm')}
 
                 <line x1="65" y1="184" x2="260" y2="184" stroke="#f59e0b" strokeWidth="2.4" markerEnd="url(#cell-arrowAmber)" />
-                <line x1="65" y1="204" x2="250" y2="204" stroke="#8b5cf6" strokeWidth="2.4" markerEnd="url(#cell-arrowPurple)" />
+                <line x1="65" y1="204" x2="250" y2="204" stroke={purpleStroke} strokeWidth="2.4" markerEnd="url(#cell-arrowPurple)" />
                 <line x1="65" y1="224" x2="260" y2="224" stroke="#10b981" strokeWidth="2.4" markerEnd="url(#cell-arrowGreen)" />
                 {renderFlowIon('Na+', 68, 184, 255, 184, 0.0, 0.7, 'loop-na-in')}
                 {renderFlowIon('K+', 68, 204, 245, 204, 0.33, 0.7, 'loop-k-in')}
                 {renderFlowIon('Cl-', 68, 224, 255, 224, 0.66, 0.7, 'loop-cl-in')}
 
-                <line x1="235" y1="305" x2="78" y2="305" stroke="#7c3aed" strokeWidth="2.4" markerEnd="url(#cell-arrowPurple)" />
+                <line x1="235" y1="305" x2="78" y2="305" stroke={purpleStroke} strokeWidth="2.4" markerEnd="url(#cell-arrowPurple)" />
                 {renderFlowIon('K+', 230, 305, 82, 305, 0.2, 0.7, 'loop-k-romk')}
 
                 <line x1="315" y1="305" x2="462" y2="305" stroke="#10b981" strokeWidth="2.4" markerEnd="url(#cell-arrowGreen)" />
@@ -2534,8 +2709,8 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               </>
             ) : (
               <>
-                <BlockadeBadgeSvg x={145} y={202} time={time} size={15} label="Furosemid (NKCC2 İnhibe)" />
-                <BlockadeBadgeSvg x={270} y={62} time={time} size={11} />
+                <BlockadeBadgeSvg x={145} y={202} time={time} size={13} label="Furosemid (NKCC2)" labelOffsetX={16} />
+                <BlockadeBadgeSvg x={270} y={62} time={time} size={10} />
 
                 {renderBlockedDeflectIon('Na+', 126, 182, 0.0, 'loop-blk-na')}
                 {renderBlockedDeflectIon('Cl-', 126, 218, 0.22, 'loop-blk-cl')}
@@ -2580,7 +2755,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               width="42"
               height="62"
               rx="14"
-              fill={isDrugActive ? '#dc2626' : '#16a34a'}
+              fill={isDrugActive ? '#dc2626' : '#15803d'}
               stroke={isDark ? '#86efac' : '#14532d'}
               strokeWidth="2.2"
             />
@@ -2643,6 +2818,10 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               3Na⁺ / Ca²⁺
             </text>
 
+            <text x="270" y="362" textAnchor="middle" fontSize="7.9" fontWeight="700" fill={isDark ? '#94a3b8' : '#64748b'}>
+              Erken DCT suya geçirgen değildir • Kronik Ca²⁺: PCT + NCX1/TRPV5
+            </text>
+
             {!isDrugActive ? (
               <>
                 <line x1="65" y1="148" x2="255" y2="148" stroke="#f59e0b" strokeWidth="2.4" markerEnd="url(#cell-arrowAmber)" />
@@ -2658,32 +2837,32 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               </>
             ) : (
               <>
-                <BlockadeBadgeSvg x={145} y={161} time={time} size={14} label="Hidroklorotiyazid (NCC İnhibe)" />
+                <BlockadeBadgeSvg x={145} y={161} time={time} size={13} label="HCTZ / Metolazon (NCC)" labelOffsetX={22} />
 
+                {/* Erken DCT suya geçirgen değildir — yalnızca Na⁺ ve Cl⁻ engellenir */}
                 {renderBlockedDeflectIon('Na+', 126, 148, 0.0, 'thz-blk-na')}
-                {renderBlockedDeflectIon('Cl-', 126, 174, 0.35, 'thz-blk-cl')}
-                {renderBlockedDeflectIon('H2O', 112, 196, 0.7, 'thz-blk-h2o')}
+                {renderBlockedDeflectIon('Cl-', 126, 174, 0.42, 'thz-blk-cl')}
 
                 <g transform="translate(268, 212)">
                   <rect
-                    x="-78"
+                    x="-82"
                     y="-22"
-                    width="156"
+                    width="164"
                     height="44"
                     rx="10"
                     fill={isDark ? '#052e16' : '#ecfdf5'}
-                    stroke={isDark ? '#4ade80' : '#16a34a'}
+                    stroke={isDark ? '#4ade80' : '#15803d'}
                     strokeWidth="1.8"
                   />
-                  <text textAnchor="middle" y="-5" fontSize="9.5" fontWeight="800" fill={isDark ? '#86efac' : '#166534'}>
-                    ↓ Hücre İçi [Na⁺] Düşer
+                  <text textAnchor="middle" y="-5" fontSize="9.2" fontWeight="800" fill={isDark ? '#86efac' : '#166534'}>
+                    ↓ Hücre İçi [Na⁺] + PCT Emilimi ↑
                   </text>
-                  <text textAnchor="middle" y="10" fontSize="8" fontWeight="700" fill={isDark ? '#bbf7d0' : '#15803d'}>
-                    NCX1 Hızlanır → ↑↑ Ca²⁺ Kana Geçer!
+                  <text textAnchor="middle" y="10" fontSize="7.8" fontWeight="700" fill={isDark ? '#bbf7d0' : '#15803d'}>
+                    NCX1/TRPV5 Hızlanır → ↑↑ Ca²⁺ Tutulur!
                   </text>
                 </g>
 
-                <line x1="65" y1="302" x2="468" y2="302" stroke="#16a34a" strokeWidth="4" markerEnd="url(#cell-arrowGreen)" />
+                <line x1="65" y1="302" x2="468" y2="302" stroke="#15803d" strokeWidth="4" markerEnd="url(#cell-arrowGreen)" />
                 <line x1="458" y1="326" x2="338" y2="326" stroke="#f59e0b" strokeWidth="2.2" markerEnd="url(#cell-arrowAmber)" />
                 {renderFlowIon('Ca2+', 68, 302, 464, 302, 0.0, 1.05, 'thz-ca-fast1')}
                 {renderFlowIon('Ca2+', 68, 302, 464, 302, 0.33, 1.05, 'thz-ca-fast2')}
@@ -2775,22 +2954,22 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               Na⁺
             </text>
 
-            {/* ROMK */}
+            {/* ROMK — doğrudan bloke edilmez, lümen-negatif yük kaybıyla dolaylı baskılanır */}
             <rect
               x="126"
-              y="288"
+              y="282"
               width="38"
-              height="50"
+              height="48"
               rx="12"
               fill={isDrugActive ? '#64748b' : '#7c3aed'}
               stroke={isDark ? '#c4b5fd' : '#4c1d95'}
               strokeWidth="2.2"
             />
-            <text x="145" y="310" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="800">
+            <text x="145" y="303" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="800">
               ROMK
             </text>
-            <text x="145" y="323" textAnchor="middle" fill="#ede9fe" fontSize="7.2" fontWeight="700">
-              K⁺ Çıkışı
+            <text x="145" y="316" textAnchor="middle" fill="#ede9fe" fontSize="7.2" fontWeight="700">
+              {isDrugActive ? 'Dolaylı ↓' : 'K⁺ Çıkışı'}
             </text>
 
             {/* MR */}
@@ -2843,7 +3022,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               y1="212"
               x2="168"
               y2="180"
-              stroke={blockMR ? '#ef4444' : isDark ? '#a78bfa' : '#7c3aed'}
+              stroke={blockMR ? '#ef4444' : purpleStroke}
               strokeWidth="1.8"
               strokeDasharray="4 3"
             />
@@ -2851,16 +3030,16 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               x1="210"
               y1="238"
               x2="168"
-              y2="298"
-              stroke={blockMR ? '#ef4444' : isDark ? '#a78bfa' : '#7c3aed'}
+              y2="294"
+              stroke={blockMR ? '#ef4444' : purpleStroke}
               strokeWidth="1.8"
               strokeDasharray="4 3"
             />
 
             {renderBasolateralATPase(224, isDrugActive)}
 
-            <text x="270" y="394" textAnchor="middle" fontSize="8.2" fontWeight="700" fill={isDark ? '#94a3b8' : '#64748b'}>
-              Komşu interkale hücrelerde Hidrojen (H⁺) sekresyonu da azalır
+            <text x="270" y="370" textAnchor="middle" fontSize="7.9" fontWeight="700" fill={isDark ? '#94a3b8' : '#64748b'}>
+              Komşu alfa-interkale hücrelerde H⁺-ATPaz / NH₄⁺ sekresyonu azalır
             </text>
 
             {!isDrugActive ? (
@@ -2869,32 +3048,40 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
                 {renderFlowIon('Na+', 68, 174, 216, 174, 0.0, 0.7, 'ksp-na-in')}
                 {renderFlowIon('Na+', 68, 174, 216, 174, 0.5, 0.7, 'ksp-na-in2')}
 
-                <line x1="255" y1="313" x2="66" y2="313" stroke="#7c3aed" strokeWidth="2.8" markerEnd="url(#cell-arrowPurple)" />
-                {renderFlowIon('K+', 252, 313, 68, 313, 0.2, 0.7, 'ksp-k-sec1')}
-                {renderFlowIon('K+', 252, 313, 68, 313, 0.7, 0.7, 'ksp-k-sec2')}
+                <line x1="255" y1="306" x2="66" y2="306" stroke={purpleStroke} strokeWidth="2.8" markerEnd="url(#cell-arrowPurple)" />
+                {renderFlowIon('K+', 252, 306, 68, 306, 0.2, 0.7, 'ksp-k-sec1')}
+                {renderFlowIon('K+', 252, 306, 68, 306, 0.7, 0.7, 'ksp-k-sec2')}
               </>
             ) : (
               <>
                 {blockENaC && (
-                  <BlockadeBadgeSvg x={145} y={174} time={time} size={13} label="Amilorid (ENaC İnhibe)" />
+                  <BlockadeBadgeSvg x={145} y={174} time={time} size={12} label="Amilorid (ENaC)" labelOffsetX={14} />
                 )}
                 {blockMR && (
-                  <BlockadeBadgeSvg x={268} y={224} time={time} size={13} label="Spironolakton (MR İnhibe)" />
+                  <BlockadeBadgeSvg x={268} y={224} time={time} size={12} label="MRA (MR İnhibe)" />
                 )}
 
                 {renderBlockedDeflectIon('Na+', 126, 174, 0.0, 'ksp-blk-na1')}
                 {renderBlockedDeflectIon('Na+', 126, 174, 0.5, 'ksp-blk-na2')}
                 {renderBlockedDeflectIon('H2O', 110, 200, 0.25, 'ksp-blk-h2o')}
 
-                <line x1="230" y1="313" x2="165" y2="313" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
-                <BlockadeBadgeSvg x={145} y={313} time={time} size={11} />
-                <IonBadgeSvg ion="K+" x={275 + Math.sin(time * 3) * 6} y={313} scale={0.95} />
-                <IonBadgeSvg ion="K+" x={465} y={313 + Math.cos(time * 2.5) * 6} scale={0.95} />
+                {/* ROMK üzerinde kırmızı X yoktur — yalnızca dolaylı elektriksel baskılanma gösterilir */}
+                <line
+                  x1="236"
+                  y1="306"
+                  x2="168"
+                  y2="306"
+                  stroke={isDark ? '#94a3b8' : '#64748b'}
+                  strokeWidth="2"
+                  strokeDasharray="3 3"
+                />
+                <IonBadgeSvg ion="K+" x={274 + Math.sin(time * 3) * 5} y={306} scale={0.92} />
+                <IonBadgeSvg ion="K+" x={465} y={306 + Math.cos(time * 2.5) * 5} scale={0.92} />
 
-                <g transform="translate(310, 348)">
-                  <rect x="-76" y="-12" width="152" height="24" rx="8" fill="#6d28d9" />
-                  <text textAnchor="middle" dominantBaseline="central" fill="#fff" fontSize="8.6" fontWeight="800">
-                    K⁺ Sekresyonu Durdu → K⁺ Tutulur!
+                <g transform="translate(298, 344)">
+                  <rect x="-82" y="-11" width="164" height="22" rx="8" fill="#6d28d9" />
+                  <text textAnchor="middle" dominantBaseline="central" fill="#fff" fontSize="8.3" fontWeight="800">
+                    Lümen ~0 mV → K⁺ Tutulur!
                   </text>
                 </g>
               </>
@@ -2918,7 +3105,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               strokeWidth="2.2"
             />
             <text x="395" y="151" textAnchor="middle" fill="#fff" fontSize="9.5" fontWeight="800">
-              V2
+              V2 (Gₛ)
             </text>
             <text x="395" y="164" textAnchor="middle" fill="#dbeafe" fontSize="7.2" fontWeight="700">
               Reseptör
@@ -2926,8 +3113,8 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
 
             {/* ADH Hormonu */}
             <g transform={`translate(${isDrugActive ? 476 : 440 + Math.sin(time * 4) * 5}, 154)`}>
-              <rect x="-24" y="-12" width="48" height="24" rx="12" fill="#1d4ed8" stroke="#93c5fd" strokeWidth="1.5" />
-              <text textAnchor="middle" dominantBaseline="central" fill="#fff" fontSize="9" fontWeight="800">
+              <rect x="-22" y="-11" width="44" height="22" rx="11" fill="#1d4ed8" stroke="#93c5fd" strokeWidth="1.5" />
+              <text textAnchor="middle" dominantBaseline="central" fill="#fff" fontSize="8.8" fontWeight="800">
                 ADH
               </text>
             </g>
@@ -2975,7 +3162,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
                       : '#1d4ed8'
                 }
               >
-                cAMP → PKA
+                Gₛ → cAMP → PKA
               </text>
               <text textAnchor="middle" y="10" fontSize="7.5" fontWeight="700" fill={isDark ? '#94a3b8' : '#64748b'}>
                 {isDrugActive ? 'Sinyal Kesildi!' : 'AQP2 Füzyon Sinyali'}
@@ -3059,17 +3246,18 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               H₂O
             </text>
 
+            {/* Hücre çekirdeğinden (cy=392) tamamen ayrı konumlandırılmış bilgi kutusu */}
             <rect
               x="172"
-              y="362"
+              y="334"
               width="196"
-              height="28"
+              height="26"
               rx="8"
               fill={isDark ? '#0f172a' : '#f8fafc'}
               stroke={isDark ? '#475569' : '#cbd5e1'}
               strokeWidth="1.2"
             />
-            <text x="270" y="379" textAnchor="middle" fontSize="8.3" fontWeight="700" fill={isDark ? '#e2e8f0' : '#334155'}>
+            <text x="270" y="350" textAnchor="middle" fontSize="8.3" fontWeight="700" fill={isDark ? '#e2e8f0' : '#334155'}>
               Na⁺ ve K⁺ etkilenmez (Saf Akuarez)
             </text>
 
@@ -3085,8 +3273,15 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               </>
             ) : (
               <>
-                <BlockadeBadgeSvg x={395} y={154} time={time} size={14} label="Tolvaptan (V2 İnhibe)" />
-                <BlockadeBadgeSvg x={145} y={215} time={time} size={10} />
+                <BlockadeBadgeSvg
+                  x={395}
+                  y={154}
+                  time={time}
+                  size={12}
+                  label="Vaptan (V2 İnhibe)"
+                  labelOffsetX={-12}
+                  labelOffsetY={-4}
+                />
 
                 {renderBlockedDeflectIon('H2O', 124, 215, 0.0, 'vap-blk-1')}
                 {renderBlockedDeflectIon('H2O', 124, 260, 0.33, 'vap-blk-2')}
@@ -3109,66 +3304,81 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
     }
   };
 
-  // Potasyum tutucu aktifken Spironolakton / Amilorid alt seçicisi
-  const kSparingSubSelector =
-    selectedDiuretic === 'ksparing' && isDrugActive ? (
-      <div
-        className={`inline-flex flex-wrap items-center p-0.5 rounded-lg border text-[10.5px] font-bold ${
-          isDark
-            ? 'bg-violet-950/60 border-violet-700/60'
-            : 'bg-violet-100/80 border-violet-200'
-        }`}
-      >
-        {(
-          [
-            { id: 'both', label: 'Spironolakton + Amilorid' },
-            { id: 'spironolactone', label: 'Spironolakton (MR)' },
-            { id: 'amiloride', label: 'Amilorid (ENaC)' },
-          ] as const
-        ).map((opt) => (
-          <button
-            key={opt.id}
-            type="button"
-            onClick={() => setKSparingMode(opt.id)}
-            className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
-              kSparingMode === opt.id
-                ? 'bg-violet-700 text-white shadow-2xs'
-                : isDark
-                  ? 'text-violet-200 hover:bg-violet-900/60'
-                  : 'text-violet-800 hover:bg-violet-200/60'
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-    ) : null;
-
   return (
     <div
-      className={`rounded-2xl border shadow-sm overflow-hidden flex flex-col ${
+      className={`rounded-2xl border shadow-sm overflow-hidden flex flex-col flex-1 ${
         isDark
           ? 'bg-slate-900 border-slate-800'
           : 'bg-white border-slate-200'
       }`}
     >
-      {/* ÜST KONTROL VE GRUP SEÇİM ÇUBUĞU (Panel 1 ile tam senkronize) */}
-      <AnimationPanelToolbar
-        isDark={isDark}
-        title="Hücresel Etki Mekanizması ve İyon Yönleri"
-        subtitle={drug.segmentLabel}
-        icon={<Zap className="w-4 h-4" />}
-        selectedDiuretic={selectedDiuretic}
-        onPrevDiuretic={onPrevDiuretic}
-        onNextDiuretic={onNextDiuretic}
-        isDrugActive={isDrugActive}
-        onToggleDrugActive={onToggleDrugActive}
-        isPlaying={isPlaying}
-        onTogglePlay={onTogglePlay}
-        speed={speed}
-        onChangeSpeed={onChangeSpeed}
-        extraRightSlot={kSparingSubSelector}
-      />
+      {/* TEK SATIRLI KOMPAKT KART BAŞLIĞI + K⁺-TUTUCU ALT SEÇİCİSİ */}
+      <div
+        className={`border-b px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 ${
+          isDark
+            ? 'border-slate-800 bg-slate-950/60'
+            : 'border-slate-200 bg-slate-50/90'
+        }`}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <div
+            className="w-6 h-6 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs"
+            style={{ backgroundColor: theme.hex }}
+          >
+            <Zap className="w-3.5 h-3.5" />
+          </div>
+          <h3
+            className={`text-xs sm:text-sm font-extrabold truncate ${
+              isDark ? 'text-slate-100' : 'text-slate-800'
+            }`}
+          >
+            Hücresel İyon Taşınması
+          </h3>
+        </div>
+
+        {selectedDiuretic === 'ksparing' && isDrugActive ? (
+          <div
+            className={`inline-flex items-center p-0.5 rounded-lg border text-[10px] font-bold ${
+              isDark
+                ? 'bg-violet-950/60 border-violet-700/60'
+                : 'bg-violet-100/80 border-violet-200'
+            }`}
+            role="group"
+            aria-label="Potasyum tutucu mekanizma seçimi"
+          >
+            {(
+              [
+                { id: 'both', label: 'MRA + ENaC' },
+                { id: 'spironolactone', label: 'Spironolakton (MR)' },
+                { id: 'amiloride', label: 'Amilorid (ENaC)' },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setKSparingMode(opt.id)}
+                className={`px-1.5 py-0.5 rounded-md transition-all cursor-pointer ${
+                  kSparingMode === opt.id
+                    ? 'bg-violet-700 text-white shadow-2xs'
+                    : isDark
+                      ? 'text-violet-200 hover:bg-violet-900/60'
+                      : 'text-violet-800 hover:bg-violet-200/60'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <span
+            className={`text-[10.5px] font-semibold truncate ${
+              isDark ? 'text-slate-400' : 'text-slate-500'
+            }`}
+          >
+            {drug.shortSegmentLabel}
+          </span>
+        )}
+      </div>
 
       {/* HÜCRESEL SVG */}
       <div
@@ -3190,7 +3400,7 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
               <path d="M0,0 L7,3.5 L0,7 Z" fill="#10b981" />
             </marker>
             <marker id="cell-arrowPurple" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
-              <path d="M0,0 L7,3.5 L0,7 Z" fill="#7c3aed" />
+              <path d="M0,0 L7,3.5 L0,7 Z" fill={isDark ? '#a78bfa' : '#7c3aed'} />
             </marker>
             <marker id="cell-arrowBlue" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
               <path d="M0,0 L7,3.5 L0,7 Z" fill="#0ea5e9" />
@@ -3275,16 +3485,16 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
           <circle cx="152" cy="78" r="4.5" fill={isDark ? '#94a3b8' : '#475569'} />
           <circle cx="388" cy="78" r="4.5" fill={isDark ? '#94a3b8' : '#475569'} />
 
-          {/* Hücre Çekirdeği */}
+          {/* Hücre Çekirdeği — alt bilgi kutularıyla çakışmayacak şekilde cy=392, ry=13 */}
           <ellipse
             cx="270"
-            cy="366"
-            rx="44"
-            ry="18"
+            cy="392"
+            rx="38"
+            ry="13"
             fill={isDark ? '#334155' : '#fef3c7'}
             stroke={isDark ? '#475569' : '#fde68a'}
-            strokeWidth="1.5"
-            opacity="0.55"
+            strokeWidth="1.4"
+            opacity={isDark ? 0.42 : 0.5}
           />
 
           {/* ÜST BÖLGE BAŞLIKLARI */}
@@ -3351,55 +3561,76 @@ const CellularMechanismPanel: React.FC<CellularMechanismPanelProps> = ({
 };
 
 // ============================================================================
-// ANİMASYON ALTI 1. BÖLÜM: İYONLAR, TAŞIYICILAR VE KISALTMALAR TABLOSU
+// ANİMASYON ALTI 1. BÖLÜM: 6×9 İNTERAKTİF ELEKTROLİT & ASİT-BAZ ISI HARİTASI
 // ============================================================================
 
-const IonsAbbreviationsTable: React.FC<{
+const HEATMAP_ELECTROLYTE_SYMBOLS = ['Na⁺', 'K⁺', 'Cl⁻', 'Ca²⁺', 'Mg²⁺', 'HCO₃⁻', 'H₂O'] as const;
+
+const ElectrolyteHeatmapMatrix: React.FC<{
   selectedDiuretic: DiureticId;
+  onSelectDiuretic: (id: DiureticId) => void;
   isDark: boolean;
-}> = React.memo(({ selectedDiuretic, isDark }) => {
-  const [filterMode, setFilterMode] = useState<'active' | 'all'>('all');
-  const drug = DIURETICS[selectedDiuretic];
-  const darkSafeAccent = DARK_ACCENT_COLORS[selectedDiuretic];
-
-  const sortedItems = useMemo(() => {
-    const relevant = GLOSSARY_ITEMS.filter((item) =>
-      item.relevantGroups.includes(selectedDiuretic)
-    );
-    if (filterMode === 'active') return relevant;
-    const others = GLOSSARY_ITEMS.filter(
-      (item) => !item.relevantGroups.includes(selectedDiuretic)
-    );
-    return [...relevant, ...others];
-  }, [selectedDiuretic, filterMode]);
-
-  const getCategoryBadgeClass = (cat: GlossaryCategory) => {
-    switch (cat) {
-      case 'İyon':
-        return isDark
-          ? 'bg-sky-950/60 text-sky-300 border-sky-700/60'
-          : 'bg-sky-50 text-sky-800 border-sky-200';
-      case 'Taşıyıcı':
-        return isDark
-          ? 'bg-amber-950/60 text-amber-300 border-amber-700/60'
-          : 'bg-amber-50 text-amber-800 border-amber-200';
-      case 'Kanal':
-        return isDark
-          ? 'bg-indigo-950/60 text-indigo-300 border-indigo-700/60'
-          : 'bg-indigo-50 text-indigo-800 border-indigo-200';
-      case 'Reseptör':
-        return isDark
-          ? 'bg-violet-950/60 text-violet-300 border-violet-700/60'
-          : 'bg-violet-50 text-violet-800 border-violet-200';
-      case 'Enzim':
-        return isDark
-          ? 'bg-cyan-950/60 text-cyan-300 border-cyan-700/60'
-          : 'bg-cyan-50 text-cyan-800 border-cyan-200';
-      default:
-        return isDark
-          ? 'bg-teal-950/60 text-teal-300 border-teal-700/60'
-          : 'bg-teal-50 text-teal-800 border-teal-200';
+}> = React.memo(({ selectedDiuretic, onSelectDiuretic, isDark }) => {
+  const getCellMeta = (el: ElectrolyteChange) => {
+    switch (el.direction) {
+      case 'up-strong':
+        return {
+          arrow: '↑↑',
+          cls: isDark
+            ? 'bg-rose-950/70 text-rose-300 border-rose-700/70'
+            : 'bg-rose-100 text-rose-800 border-rose-300',
+        };
+      case 'up':
+        return {
+          arrow: '↑',
+          cls: isDark
+            ? 'bg-amber-950/65 text-amber-300 border-amber-700/70'
+            : 'bg-amber-100 text-amber-800 border-amber-300',
+        };
+      case 'down-strong':
+        return {
+          arrow: '↓↓',
+          cls: isDark
+            ? 'bg-emerald-950/70 text-emerald-300 border-emerald-700/70'
+            : 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        };
+      case 'down':
+        return {
+          arrow: '↓',
+          cls: isDark
+            ? 'bg-emerald-950/60 text-emerald-300 border-emerald-700/60'
+            : 'bg-emerald-50 text-emerald-800 border-emerald-300',
+        };
+      default: {
+        const arrow = el.label.includes('↑')
+          ? '↔/↑'
+          : el.label.includes('↓')
+            ? '↔/↓'
+            : '↔';
+        return {
+          arrow,
+          cls: isDark
+            ? 'bg-slate-800/80 text-slate-400 border-slate-700'
+            : 'bg-slate-100 text-slate-600 border-slate-200',
+        };
+      }
     }
+  };
+
+  const getAcidBaseBadgeClass = (shortAcidBase: string) => {
+    if (shortAcidBase.includes('Asidoz')) {
+      return isDark
+        ? 'bg-orange-950/60 text-orange-300 border-orange-700/60'
+        : 'bg-orange-50 text-orange-800 border-orange-200';
+    }
+    if (shortAcidBase.includes('Alkaloz')) {
+      return isDark
+        ? 'bg-sky-950/60 text-sky-300 border-sky-700/60'
+        : 'bg-sky-50 text-sky-800 border-sky-200';
+    }
+    return isDark
+      ? 'bg-slate-800/80 text-slate-300 border-slate-700'
+      : 'bg-slate-100 text-slate-600 border-slate-200';
   };
 
   return (
@@ -3410,256 +3641,215 @@ const IonsAbbreviationsTable: React.FC<{
           : 'bg-white border-slate-200'
       }`}
     >
-      {/* Başlık ve Filtre Çubuğu */}
       <div
-        className={`px-4 sm:px-5 py-3.5 border-b flex flex-col md:flex-row md:items-center justify-between gap-3 ${
+        className={`px-4 py-3 border-b flex flex-wrap items-center justify-between gap-2 ${
           isDark
             ? 'border-slate-800 bg-slate-950/50'
             : 'border-slate-100 bg-slate-50/70'
         }`}
       >
-        <div className="flex items-start sm:items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <div
-            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+            className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
               isDark
-                ? 'bg-indigo-950/70 text-indigo-300'
-                : 'bg-indigo-100 text-indigo-700'
+                ? 'bg-sky-950/80 text-sky-300'
+                : 'bg-sky-100 text-sky-700'
             }`}
           >
-            <BookOpen className="w-4 h-4" />
+            <Table2 className="w-4 h-4" />
           </div>
           <div>
             <h3
-              className={`text-sm sm:text-base font-extrabold ${
+              className={`text-xs sm:text-sm font-extrabold ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}
             >
-              İyonlar, Taşıyıcılar ve Kısaltmalar Referans Tablosu
+              6×9 İdrar Elektrolit, Su ve Asit-Baz Karşılaştırma Isı Haritası
             </h3>
-            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              Animasyonlarda kullanılan tüm iyon simgelerinin ve moleküler kısaltmaların uzun Türkçe karşılıkları
+            <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              Herhangi bir satıra tıklayarak canlı nefron ve hücresel animasyonu anında değiştirin
             </p>
           </div>
         </div>
 
-        {/* Aktif Grup vs Tüm Kısaltmalar Filtresi + Yön Efsanesi */}
-        <div className="flex flex-wrap items-center gap-3">
-          <div
-            className={`inline-flex items-center rounded-xl p-1 border text-xs font-bold ${
+        {/* Kompakt Renk Efsanesi */}
+        <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-bold">
+          <span
+            className={`px-1.5 py-0.5 rounded border ${
               isDark
-                ? 'bg-slate-800 border-slate-700'
-                : 'bg-slate-200/70 border-slate-200'
+                ? 'bg-rose-950/70 text-rose-300 border-rose-700/70'
+                : 'bg-rose-100 text-rose-800 border-rose-300'
             }`}
           >
-            <Filter className={`w-3.5 h-3.5 mx-1.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
-            <button
-              type="button"
-              onClick={() => setFilterMode('active')}
-              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                filterMode === 'active'
-                  ? isDark
-                    ? 'bg-slate-950 text-white shadow-2xs'
-                    : 'bg-white text-slate-900 shadow-2xs'
-                  : isDark
-                    ? 'text-slate-400 hover:text-white'
-                    : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Aktif Grup ({GLOSSARY_ITEMS.filter((i) => i.relevantGroups.includes(selectedDiuretic)).length})
-            </button>
-            <button
-              type="button"
-              onClick={() => setFilterMode('all')}
-              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                filterMode === 'all'
-                  ? isDark
-                    ? 'bg-slate-950 text-white shadow-2xs'
-                    : 'bg-white text-slate-900 shadow-2xs'
-                  : isDark
-                    ? 'text-slate-400 hover:text-white'
-                    : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Tüm Kısaltmalar ({GLOSSARY_ITEMS.length})
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Ok Yönleri Mini Efsane Şeridi */}
-      <div
-        className={`px-4 sm:px-5 py-2 border-b flex flex-wrap items-center gap-4 text-[11px] font-semibold ${
-          isDark
-            ? 'bg-slate-950/30 border-slate-800 text-slate-300'
-            : 'bg-slate-50/40 border-slate-100 text-slate-600'
-        }`}
-      >
-        <div className="flex items-center gap-1.5">
-          <span className="w-5 h-0.5 bg-sky-500 inline-block" />
-          <span>Geri Emilim (Tübül Lümeni → Kan)</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-5 h-0.5 border-b-2 border-dashed border-violet-500 inline-block" />
-          <span>Sekresyon (Kan → Tübül Lümeni)</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-4 h-4 rounded-full bg-red-600 text-white text-[9px] font-black flex items-center justify-center">
-            ✕
+            ↑↑ Güçlü Atılım
           </span>
-          <span className={isDark ? 'text-rose-400' : 'text-rose-700'}>
-            İnhibe Edilen / Bloke Taşınma
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5">
           <span
-            className="w-2.5 h-2.5 rounded-full inline-block"
-            style={{ backgroundColor: drug.accentColor }}
-          />
-          <span className={isDark ? 'text-slate-200' : 'text-slate-800'}>
-            Aktif Grup ({drug.shortName}) İlgili Öğeleri Vurgulanır
+            className={`px-1.5 py-0.5 rounded border ${
+              isDark
+                ? 'bg-amber-950/65 text-amber-300 border-amber-700/70'
+                : 'bg-amber-100 text-amber-800 border-amber-300'
+            }`}
+          >
+            ↑ Artar
+          </span>
+          <span
+            className={`px-1.5 py-0.5 rounded border ${
+              isDark
+                ? 'bg-slate-800 text-slate-300 border-slate-700'
+                : 'bg-slate-100 text-slate-600 border-slate-200'
+            }`}
+          >
+            ↔ Nötr
+          </span>
+          <span
+            className={`px-1.5 py-0.5 rounded border ${
+              isDark
+                ? 'bg-emerald-950/70 text-emerald-300 border-emerald-700/70'
+                : 'bg-emerald-100 text-emerald-800 border-emerald-300'
+            }`}
+          >
+            ↓/↓↓ Korunur
           </span>
         </div>
       </div>
 
-      {/* Responsive Tablo */}
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr
-              className={`border-b text-[11px] font-extrabold uppercase tracking-wider ${
+              className={`border-b text-[10.5px] font-extrabold uppercase tracking-wider ${
                 isDark
                   ? 'bg-slate-950/60 border-slate-800 text-slate-400'
                   : 'bg-slate-50 border-slate-200 text-slate-500'
               }`}
             >
-              <th className="py-2.5 px-4 w-36">Simge / Kısaltma</th>
-              <th className="py-2.5 px-4 min-w-[210px]">Uzun Hali (Tam Türkçe Adı)</th>
-              <th className="py-2.5 px-4 w-32">Kategori</th>
-              <th className="py-2.5 px-4 min-w-[260px]">Fizyolojik Görev ve Aktif Gruptaki Etkisi</th>
+              <th className="py-2.5 px-3.5 min-w-[155px]">Diüretik Sınıfı</th>
+              <th className="py-2.5 px-2.5 min-w-[100px]">Segment</th>
+              <th className="py-2.5 px-2 text-center min-w-[68px]">FENa</th>
+              {HEATMAP_ELECTROLYTE_SYMBOLS.map((sym) => (
+                <th key={sym} className="py-2.5 px-1.5 text-center min-w-[48px]">
+                  {sym}
+                </th>
+              ))}
+              <th className="py-2.5 px-3 text-right min-w-[116px]">Asit-Baz</th>
             </tr>
           </thead>
-          <tbody
-            className={`divide-y text-xs ${
-              isDark ? 'divide-slate-800' : 'divide-slate-100'
-            }`}
-          >
-            {sortedItems.map((item) => {
-              const isRelevant = item.relevantGroups.includes(selectedDiuretic);
-              const ionStyle = item.ionKey ? ION_STYLES[item.ionKey] : null;
-              const activeEffect = item.groupSpecificEffect?.[selectedDiuretic];
+          <tbody className={`divide-y text-xs ${isDark ? 'divide-slate-800/80' : 'divide-slate-100'}`}>
+            {DIURETIC_ORDER.map((id) => {
+              const row = DIURETICS[id];
+              const theme = DIURETIC_THEME[id];
+              const isSelected = id === selectedDiuretic;
 
               return (
                 <tr
-                  key={item.id}
-                  className={`transition-colors ${
-                    isRelevant
+                  key={id}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isSelected}
+                  onClick={() => onSelectDiuretic(id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onSelectDiuretic(id);
+                    }
+                  }}
+                  className={`cursor-pointer transition-colors outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
+                    isSelected
                       ? isDark
-                        ? 'bg-sky-950/25 hover:bg-sky-950/40'
-                        : 'bg-sky-50/35 hover:bg-sky-50/60'
+                        ? 'bg-slate-800/85'
+                        : 'bg-sky-50/70'
                       : isDark
-                        ? 'bg-slate-900 hover:bg-slate-800/50 opacity-75'
-                        : 'bg-white hover:bg-slate-50/70 opacity-80'
+                        ? 'bg-slate-900 hover:bg-slate-800/45'
+                        : 'bg-white hover:bg-slate-50/80'
                   }`}
+                  style={{
+                    boxShadow: isSelected
+                      ? `inset 4px 0 0 0 ${isDark ? theme.darkHex : theme.hex}`
+                      : undefined,
+                  }}
                 >
-                  {/* Simge / Kısaltma */}
-                  <td className="py-2.5 px-4 align-top">
+                  <td className="py-2.5 px-3.5">
                     <div className="flex items-center gap-2">
-                      {ionStyle ? (
-                        <span
-                          className="w-7 h-7 rounded-full text-[10px] font-extrabold text-white flex items-center justify-center shrink-0 shadow-2xs"
-                          style={{ backgroundColor: ionStyle.color }}
-                        >
-                          {ionStyle.label}
-                        </span>
-                      ) : (
-                        <span
-                          className="px-2 py-1 rounded-lg text-[11px] font-extrabold border shrink-0"
-                          style={
-                            isDark
-                              ? {
-                                  borderColor: isRelevant ? darkSafeAccent : '#475569',
-                                  color: isRelevant ? darkSafeAccent : '#cbd5e1',
-                                  backgroundColor: isRelevant ? '#0f172a' : '#1e293b',
-                                }
-                              : {
-                                  borderColor: isRelevant ? drug.accentColor : '#cbd5e1',
-                                  color: isRelevant ? drug.accentColor : '#334155',
-                                  backgroundColor: isRelevant ? '#ffffff' : '#f8fafc',
-                                }
-                          }
-                        >
-                          {item.symbol}
-                        </span>
-                      )}
-                      {ionStyle && (
-                        <span
-                          className={`font-extrabold ${
-                            isDark ? 'text-slate-100' : 'text-slate-900'
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: isDark ? theme.darkHex : theme.hex }}
+                      />
+                      <div className="min-w-0">
+                        <div
+                          className={`font-extrabold text-xs leading-tight ${
+                            isSelected
+                              ? isDark
+                                ? 'text-white'
+                                : 'text-slate-950'
+                              : isDark
+                                ? 'text-slate-200'
+                                : 'text-slate-800'
                           }`}
                         >
-                          {item.symbol}
-                        </span>
-                      )}
+                          {row.pillLabel}
+                          {isSelected && (
+                            <span
+                              className="ml-1.5 text-[9.5px] font-extrabold px-1.5 py-0.5 rounded-full text-white align-middle"
+                              style={{ backgroundColor: theme.hex }}
+                            >
+                              Aktif
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          className={`text-[10.5px] truncate ${
+                            isDark ? 'text-slate-400' : 'text-slate-500'
+                          }`}
+                        >
+                          {row.prototypes[0]}
+                        </div>
+                      </div>
                     </div>
                   </td>
 
-                  {/* Uzun Hali */}
-                  <td className="py-2.5 px-4 align-top">
-                    <div
-                      className={`font-bold flex flex-wrap items-center gap-1.5 ${
-                        isDark ? 'text-slate-100' : 'text-slate-900'
+                  <td
+                    className={`py-2.5 px-2.5 text-[11px] font-semibold ${
+                      isDark ? 'text-slate-300' : 'text-slate-600'
+                    }`}
+                  >
+                    {row.shortSegmentLabel}
+                  </td>
+
+                  <td className="py-2.5 px-2 text-center">
+                    <span
+                      className={`inline-block text-[11px] font-extrabold px-1.5 py-0.5 rounded-md ${
+                        isDark ? 'bg-slate-800 text-sky-300' : 'bg-slate-100 text-sky-800'
                       }`}
                     >
-                      <span>{item.fullName}</span>
-                      {isRelevant && (
-                        <span
-                          className="inline-flex items-center gap-0.5 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full text-white"
-                          style={{ backgroundColor: drug.accentColor }}
-                        >
-                          <Sparkles className="w-2.5 h-2.5" />
-                          Aktif Grup
-                        </span>
-                      )}
-                    </div>
-                  </td>
-
-                  {/* Kategori */}
-                  <td className="py-2.5 px-4 align-top">
-                    <span
-                      className={`inline-block px-2 py-0.5 rounded-md border text-[10.5px] font-bold ${getCategoryBadgeClass(
-                        item.category
-                      )}`}
-                    >
-                      {item.category}
+                      {row.shortFeNa}
                     </span>
                   </td>
 
-                  {/* Görev ve Aktif Etki */}
-                  <td className="py-2.5 px-4 align-top space-y-1">
-                    <p
-                      className={`leading-relaxed ${
-                        isDark ? 'text-slate-300' : 'text-slate-600'
-                      }`}
-                    >
-                      {item.generalRole}
-                    </p>
-                    {activeEffect && (
-                      <p
-                        className={`font-semibold border rounded-lg px-2.5 py-1.5 leading-snug ${
-                          isDark
-                            ? 'text-slate-100 bg-slate-950/70 border-slate-700/80'
-                            : 'text-slate-900 bg-white/90 border-slate-200/80'
-                        }`}
-                      >
+                  {HEATMAP_ELECTROLYTE_SYMBOLS.map((sym) => {
+                    const el = row.electrolytes.find((e) => e.symbol === sym);
+                    if (!el) return <td key={sym} className="py-2.5 px-1.5 text-center">—</td>;
+                    const meta = getCellMeta(el);
+                    return (
+                      <td key={sym} className="py-2.5 px-1.5 text-center">
                         <span
-                          style={{ color: isDark ? darkSafeAccent : drug.accentColor }}
-                          className="font-extrabold"
+                          title={`${el.fullName} (${el.symbol}): ${el.label}${el.note ? ` — ${el.note}` : ''}`}
+                          className={`inline-flex items-center justify-center min-w-[34px] px-1.5 py-0.5 rounded-md border text-[11px] font-extrabold ${meta.cls}`}
                         >
-                          {drug.shortName}:{' '}
+                          {meta.arrow}
                         </span>
-                        {activeEffect}
-                      </p>
-                    )}
+                      </td>
+                    );
+                  })}
+
+                  <td className="py-2.5 px-3 text-right">
+                    <span
+                      title={row.acidBaseEffect}
+                      className={`inline-block px-2 py-0.5 rounded-md border text-[10.5px] font-bold whitespace-nowrap ${getAcidBaseBadgeClass(
+                        row.shortAcidBase
+                      )}`}
+                    >
+                      {row.shortAcidBase}
+                    </span>
                   </td>
                 </tr>
               );
@@ -3671,37 +3861,17 @@ const IonsAbbreviationsTable: React.FC<{
   );
 });
 
-IonsAbbreviationsTable.displayName = 'IonsAbbreviationsTable';
+ElectrolyteHeatmapMatrix.displayName = 'ElectrolyteHeatmapMatrix';
 
 // ============================================================================
-// ANİMASYON ALTI 2. BÖLÜM: İDRAR ELEKTROLİT DEĞİŞİMLERİ VE KLİNİK ÖZET KARTI
+// ANİMASYON ALTI 2. BÖLÜM: KOMPAKT KLİNİK ÖZET KARTI
 // ============================================================================
 
 const ClinicalSummaryPanel: React.FC<{
   drug: DiureticProfile;
   isDark: boolean;
 }> = React.memo(({ drug, isDark }) => {
-  const getBadgeStyle = (dir: EffectDirection) => {
-    switch (dir) {
-      case 'up-strong':
-        return isDark
-          ? 'bg-rose-950/50 text-rose-200 border-rose-700/70'
-          : 'bg-rose-100 text-rose-900 border-rose-300';
-      case 'up':
-        return isDark
-          ? 'bg-amber-950/50 text-amber-200 border-amber-700/70'
-          : 'bg-amber-100 text-amber-900 border-amber-300';
-      case 'down-strong':
-      case 'down':
-        return isDark
-          ? 'bg-emerald-950/50 text-emerald-200 border-emerald-700/70'
-          : 'bg-emerald-100 text-emerald-900 border-emerald-300';
-      default:
-        return isDark
-          ? 'bg-slate-800/80 text-slate-300 border-slate-700'
-          : 'bg-slate-100 text-slate-700 border-slate-200';
-    }
-  };
+  const theme = DIURETIC_THEME[drug.id];
 
   return (
     <section
@@ -3723,7 +3893,7 @@ const ClinicalSummaryPanel: React.FC<{
           <div className="flex flex-wrap items-center gap-2">
             <span
               className="w-3 h-3 rounded-full shrink-0"
-              style={{ backgroundColor: drug.accentColor }}
+              style={{ backgroundColor: isDark ? theme.darkHex : theme.hex }}
             />
             <h3
               className={`text-base font-extrabold ${
@@ -3758,7 +3928,7 @@ const ClinicalSummaryPanel: React.FC<{
             <span
               key={med}
               className="text-xs font-bold px-2.5 py-1 rounded-lg text-white shadow-2xs"
-              style={{ backgroundColor: drug.accentColor }}
+              style={{ backgroundColor: theme.hex }}
             >
               {med}
             </span>
@@ -3766,37 +3936,7 @@ const ClinicalSummaryPanel: React.FC<{
         </div>
       </div>
 
-      {/* İDRAR ELEKTROLİT DEĞİŞİMLERİ ŞERİDİ (7 Elektrolit + Uzun Ad + Kısaltma) */}
-      <div className="px-5 pt-4 pb-2">
-        <div
-          className={`text-xs font-extrabold uppercase tracking-wide mb-2.5 flex items-center gap-1.5 ${
-            isDark ? 'text-slate-200' : 'text-slate-700'
-          }`}
-        >
-          <Gauge className={`w-4 h-4 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
-          İdrar Elektrolit ve Su Atılımı Değişimleri
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-          {drug.electrolytes.map((el) => (
-            <div
-              key={el.symbol}
-              className={`px-2.5 py-2 rounded-xl border text-xs flex flex-col justify-between ${getBadgeStyle(
-                el.direction
-              )}`}
-            >
-              <div className="font-extrabold text-[11.5px] leading-tight">
-                {el.fullName} ({el.symbol})
-              </div>
-              <div className="font-extrabold text-xs mt-1">{el.label}</div>
-              {el.note && (
-                <div className="text-[10px] opacity-85 mt-0.5 leading-tight">{el.note}</div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 3 SÜTUNLU KLİNİK DETAYLAR */}
+      {/* 3 SÜTUNLU KLİNİK DETAYLAR (Moleküler Hedef & Asit-Baz | Klinik Endikasyonlar | Önemli Yan Etkiler) */}
       <div className="p-5 grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* 1. Hedef Molekül ve Asit-Baz Etkisi */}
         <div
@@ -3921,6 +4061,462 @@ const ClinicalSummaryPanel: React.FC<{
 ClinicalSummaryPanel.displayName = 'ClinicalSummaryPanel';
 
 // ============================================================================
+// ANİMASYON ALTI 3. BÖLÜM: AÇILIR/KAPANIR İYONLAR & KISALTMALAR SÖZLÜĞÜ (28 Öğe)
+// ============================================================================
+
+const IonsAbbreviationsTable: React.FC<{
+  selectedDiuretic: DiureticId;
+  isDark: boolean;
+}> = React.memo(({ selectedDiuretic, isDark }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [filterMode, setFilterMode] = useState<'active' | 'all'>('active');
+  const drug = DIURETICS[selectedDiuretic];
+  const theme = DIURETIC_THEME[selectedDiuretic];
+  const darkSafeAccent = theme.darkHex;
+
+  const activeCount = useMemo(
+    () => GLOSSARY_ITEMS.filter((i) => i.relevantGroups.includes(selectedDiuretic)).length,
+    [selectedDiuretic]
+  );
+
+  const sortedItems = useMemo(() => {
+    const relevant = GLOSSARY_ITEMS.filter((item) =>
+      item.relevantGroups.includes(selectedDiuretic)
+    );
+    if (filterMode === 'active') return relevant;
+    const others = GLOSSARY_ITEMS.filter(
+      (item) => !item.relevantGroups.includes(selectedDiuretic)
+    );
+    return [...relevant, ...others];
+  }, [selectedDiuretic, filterMode]);
+
+  const getCategoryBadgeClass = (cat: GlossaryCategory) => {
+    switch (cat) {
+      case 'İyon':
+        return isDark
+          ? 'bg-sky-950/60 text-sky-300 border-sky-700/60'
+          : 'bg-sky-50 text-sky-800 border-sky-200';
+      case 'Taşıyıcı':
+        return isDark
+          ? 'bg-amber-950/60 text-amber-300 border-amber-700/60'
+          : 'bg-amber-50 text-amber-800 border-amber-200';
+      case 'Kanal':
+        return isDark
+          ? 'bg-indigo-950/60 text-indigo-300 border-indigo-700/60'
+          : 'bg-indigo-50 text-indigo-800 border-indigo-200';
+      case 'Reseptör':
+        return isDark
+          ? 'bg-violet-950/60 text-violet-300 border-violet-700/60'
+          : 'bg-violet-50 text-violet-800 border-violet-200';
+      case 'Enzim':
+        return isDark
+          ? 'bg-cyan-950/60 text-cyan-300 border-cyan-700/60'
+          : 'bg-cyan-50 text-cyan-800 border-cyan-200';
+      default:
+        return isDark
+          ? 'bg-teal-950/60 text-teal-300 border-teal-700/60'
+          : 'bg-teal-50 text-teal-800 border-teal-200';
+    }
+  };
+
+  return (
+    <section
+      className={`rounded-2xl border shadow-sm overflow-hidden ${
+        isDark
+          ? 'bg-slate-900 border-slate-800'
+          : 'bg-white border-slate-200'
+      }`}
+    >
+      {/* Açılır/Kapanır Çekmece Başlık Düğmesi */}
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`w-full px-4 sm:px-5 py-3.5 flex items-center justify-between gap-3 text-left transition-colors cursor-pointer ${
+          isOpen ? 'border-b' : ''
+        } ${
+          isDark
+            ? 'border-slate-800 bg-slate-950/50 hover:bg-slate-800/60'
+            : 'border-slate-100 bg-slate-50/70 hover:bg-slate-100/70'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div
+            className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+              isDark
+                ? 'bg-indigo-950/70 text-indigo-300'
+                : 'bg-indigo-100 text-indigo-700'
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <h3
+              className={`text-xs sm:text-sm font-extrabold truncate ${
+                isDark ? 'text-white' : 'text-slate-900'
+              }`}
+            >
+              İyonlar, Taşıyıcılar ve Kısaltmalar Sözlüğü ({GLOSSARY_ITEMS.length} Öğe — Aç/Kapat)
+            </h3>
+            <p className={`text-[11px] truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              {drug.pillLabel} için {activeCount} aktif moleküler öğe · Tüm sembollerin Türkçe karşılıkları
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <span
+            className="hidden sm:inline-flex items-center gap-1 text-[10.5px] font-extrabold px-2 py-0.5 rounded-full text-white"
+            style={{ backgroundColor: theme.hex }}
+          >
+            <Sparkles className="w-2.5 h-2.5" />
+            {drug.pillLabel}: {activeCount}
+          </span>
+          <span
+            className={`w-7 h-7 rounded-lg border flex items-center justify-center ${
+              isDark
+                ? 'border-slate-700 bg-slate-800 text-slate-300'
+                : 'border-slate-200 bg-white text-slate-600'
+            }`}
+          >
+            {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </span>
+        </div>
+      </button>
+
+      {isOpen && (
+        <>
+          {/* Filtre + Ok Yönleri Mini Efsane Şeridi */}
+          <div
+            className={`px-4 sm:px-5 py-2.5 border-b flex flex-wrap items-center justify-between gap-3 ${
+              isDark
+                ? 'bg-slate-950/30 border-slate-800 text-slate-300'
+                : 'bg-slate-50/40 border-slate-100 text-slate-600'
+            }`}
+          >
+            <div className="flex flex-wrap items-center gap-4 text-[11px] font-semibold">
+              <div className="flex items-center gap-1.5">
+                <span className="w-5 h-0.5 bg-sky-500 inline-block" />
+                <span>Geri Emilim (Lümen → Kan)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-5 h-0.5 border-b-2 border-dashed border-violet-500 inline-block" />
+                <span>Sekresyon (Kan → Lümen)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-4 h-4 rounded-full bg-red-600 text-white text-[9px] font-black flex items-center justify-center">
+                  ✕
+                </span>
+                <span className={isDark ? 'text-rose-400' : 'text-rose-700'}>
+                  İnhibe / Bloke Taşınma
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={`inline-flex items-center rounded-xl p-1 border text-xs font-bold ${
+                isDark
+                  ? 'bg-slate-800 border-slate-700'
+                  : 'bg-slate-200/70 border-slate-200'
+              }`}
+            >
+              <Filter className={`w-3.5 h-3.5 mx-1.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
+              <button
+                type="button"
+                onClick={() => setFilterMode('active')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  filterMode === 'active'
+                    ? isDark
+                      ? 'bg-slate-950 text-white shadow-2xs'
+                      : 'bg-white text-slate-900 shadow-2xs'
+                    : isDark
+                      ? 'text-slate-400 hover:text-white'
+                      : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Aktif Grup ({activeCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterMode('all')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  filterMode === 'all'
+                    ? isDark
+                      ? 'bg-slate-950 text-white shadow-2xs'
+                      : 'bg-white text-slate-900 shadow-2xs'
+                    : isDark
+                      ? 'text-slate-400 hover:text-white'
+                      : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Tümü ({GLOSSARY_ITEMS.length})
+              </button>
+            </div>
+          </div>
+
+          {/* Responsive Tablo */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr
+                  className={`border-b text-[11px] font-extrabold uppercase tracking-wider ${
+                    isDark
+                      ? 'bg-slate-950/60 border-slate-800 text-slate-400'
+                      : 'bg-slate-50 border-slate-200 text-slate-500'
+                  }`}
+                >
+                  <th className="py-2.5 px-4 w-36">Simge / Kısaltma</th>
+                  <th className="py-2.5 px-4 min-w-[210px]">Uzun Hali (Tam Türkçe Adı)</th>
+                  <th className="py-2.5 px-4 w-32">Kategori</th>
+                  <th className="py-2.5 px-4 min-w-[260px]">Fizyolojik Görev ve Aktif Gruptaki Etkisi</th>
+                </tr>
+              </thead>
+              <tbody
+                className={`divide-y text-xs ${
+                  isDark ? 'divide-slate-800' : 'divide-slate-100'
+                }`}
+              >
+                {sortedItems.map((item) => {
+                  const isRelevant = item.relevantGroups.includes(selectedDiuretic);
+                  const ionStyle = item.ionKey ? ION_STYLES[item.ionKey] : null;
+                  const activeEffect = item.groupSpecificEffect?.[selectedDiuretic];
+
+                  return (
+                    <tr
+                      key={item.id}
+                      className={`transition-colors ${
+                        isRelevant
+                          ? isDark
+                            ? 'bg-sky-950/25 hover:bg-sky-950/40'
+                            : 'bg-sky-50/35 hover:bg-sky-50/60'
+                          : isDark
+                            ? 'bg-slate-900 hover:bg-slate-800/50 opacity-75'
+                            : 'bg-white hover:bg-slate-50/70 opacity-80'
+                      }`}
+                    >
+                      {/* Simge / Kısaltma */}
+                      <td className="py-2.5 px-4 align-top">
+                        <div className="flex items-center gap-2">
+                          {ionStyle ? (
+                            <span
+                              className="w-7 h-7 rounded-full text-[10px] font-extrabold text-white flex items-center justify-center shrink-0 shadow-2xs"
+                              style={{ backgroundColor: ionStyle.color }}
+                            >
+                              {ionStyle.label}
+                            </span>
+                          ) : (
+                            <span
+                              className="px-2 py-1 rounded-lg text-[11px] font-extrabold border shrink-0"
+                              style={
+                                isDark
+                                  ? {
+                                      borderColor: isRelevant ? darkSafeAccent : '#475569',
+                                      color: isRelevant ? darkSafeAccent : '#cbd5e1',
+                                      backgroundColor: isRelevant ? '#0f172a' : '#1e293b',
+                                    }
+                                  : {
+                                      borderColor: isRelevant ? theme.hex : '#cbd5e1',
+                                      color: isRelevant ? theme.hex : '#334155',
+                                      backgroundColor: isRelevant ? '#ffffff' : '#f8fafc',
+                                    }
+                              }
+                            >
+                              {item.symbol}
+                            </span>
+                          )}
+                          {ionStyle && (
+                            <span
+                              className={`font-extrabold ${
+                                isDark ? 'text-slate-100' : 'text-slate-900'
+                              }`}
+                            >
+                              {item.symbol}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Uzun Hali */}
+                      <td className="py-2.5 px-4 align-top">
+                        <div
+                          className={`font-bold flex flex-wrap items-center gap-1.5 ${
+                            isDark ? 'text-slate-100' : 'text-slate-900'
+                          }`}
+                        >
+                          <span>{item.fullName}</span>
+                          {isRelevant && (
+                            <span
+                              className="inline-flex items-center gap-0.5 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full text-white"
+                              style={{ backgroundColor: theme.hex }}
+                            >
+                              <Sparkles className="w-2.5 h-2.5" />
+                              Aktif Grup
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Kategori */}
+                      <td className="py-2.5 px-4 align-top">
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded-md border text-[10.5px] font-bold ${getCategoryBadgeClass(
+                            item.category
+                          )}`}
+                        >
+                          {item.category}
+                        </span>
+                      </td>
+
+                      {/* Görev ve Aktif Etki */}
+                      <td className="py-2.5 px-4 align-top space-y-1">
+                        <p
+                          className={`leading-relaxed ${
+                            isDark ? 'text-slate-300' : 'text-slate-600'
+                          }`}
+                        >
+                          {item.generalRole}
+                        </p>
+                        {activeEffect && (
+                          <p
+                            className={`font-semibold border rounded-lg px-2.5 py-1.5 leading-snug ${
+                              isDark
+                                ? 'text-slate-100 bg-slate-950/70 border-slate-700/80'
+                                : 'text-slate-900 bg-white/90 border-slate-200/80'
+                            }`}
+                          >
+                            <span
+                              style={{ color: isDark ? darkSafeAccent : theme.hex }}
+                              className="font-extrabold"
+                            >
+                              {drug.shortName}:{' '}
+                            </span>
+                            {activeEffect}
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </section>
+  );
+});
+
+IonsAbbreviationsTable.displayName = 'IonsAbbreviationsTable';
+
+// ============================================================================
+// İZOLE 60 FPS ANİMASYON SAHNESİ (Diğer bileşenlerde 0 FPS yeniden render!)
+// ============================================================================
+
+interface NephronAnimationStageProps {
+  isDark: boolean;
+  selectedDiuretic: DiureticId;
+  isDrugActive: boolean;
+  isPlaying: boolean;
+  speed: SpeedMultiplier;
+  onSelectSegment: (segment: NephronSegmentId) => void;
+}
+
+const NephronAnimationStage: React.FC<NephronAnimationStageProps> = React.memo(
+  ({ isDark, selectedDiuretic, isDrugActive, isPlaying, speed, onSelectSegment }) => {
+    const [animTime, setAnimTime] = useState<number>(0);
+    const [isInView, setIsInView] = useState<boolean>(true);
+    const [isTabVisible, setIsTabVisible] = useState<boolean>(
+      typeof document === 'undefined' ? true : document.visibilityState === 'visible'
+    );
+
+    const stageRef = useRef<HTMLDivElement | null>(null);
+    const lastFrameRef = useRef<number | null>(null);
+    const speedRef = useRef<SpeedMultiplier>(speed);
+
+    useEffect(() => {
+      speedRef.current = speed;
+    }, [speed]);
+
+    // Görünürlük alanı takibi (ekrandan çıkınca rAF otomatik duraklar)
+    useEffect(() => {
+      const node = stageRef.current;
+      if (!node || typeof IntersectionObserver === 'undefined') return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (entry) setIsInView(entry.isIntersecting);
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(node);
+      return () => observer.disconnect();
+    }, []);
+
+    // Sekme arka plana alınınca rAF otomatik duraklar
+    useEffect(() => {
+      if (typeof document === 'undefined') return;
+      const onVisChange = () => {
+        setIsTabVisible(document.visibilityState === 'visible');
+      };
+      document.addEventListener('visibilitychange', onVisChange);
+      return () => document.removeEventListener('visibilitychange', onVisChange);
+    }, []);
+
+    // 60 FPS Senkronize Animasyon Döngüsü (yalnızca görünür + oynatılırken çalışır)
+    useEffect(() => {
+      if (!isPlaying || !isInView || !isTabVisible) {
+        lastFrameRef.current = null;
+        return;
+      }
+
+      let frameId: number;
+      const tick = (now: number) => {
+        try {
+          if (lastFrameRef.current !== null) {
+            const dt = Math.min((now - lastFrameRef.current) / 1000, 0.08);
+            setAnimTime((prev) => prev + dt * speedRef.current);
+          }
+          lastFrameRef.current = now;
+          frameId = requestAnimationFrame(tick);
+        } catch {
+          // Beklenmedik kare hatasında güvenli çıkış
+        }
+      };
+
+      frameId = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(frameId);
+    }, [isPlaying, isInView, isTabVisible]);
+
+    return (
+      <div
+        ref={stageRef}
+        className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch"
+      >
+        <div className="xl:col-span-7 flex flex-col">
+          <MacroNephronPanel
+            isDark={isDark}
+            selectedDiuretic={selectedDiuretic}
+            isDrugActive={isDrugActive}
+            time={animTime}
+            onSelectSegment={onSelectSegment}
+          />
+        </div>
+        <div className="xl:col-span-5 flex flex-col">
+          <CellularMechanismPanel
+            isDark={isDark}
+            selectedDiuretic={selectedDiuretic}
+            isDrugActive={isDrugActive}
+            time={animTime}
+          />
+        </div>
+      </div>
+    );
+  }
+);
+
+NephronAnimationStage.displayName = 'NephronAnimationStage';
+
+// ============================================================================
 // ANA İNTERAKTİF ANİMASYON BİLEŞENİ (NephronDiureticsAnimator)
 // ============================================================================
 
@@ -3938,14 +4534,6 @@ export const NephronDiureticsAnimator: React.FC<NephronDiureticsAnimatorProps> =
   const [isDrugActive, setIsDrugActive] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [speed, setSpeed] = useState<SpeedMultiplier>(1);
-  const [animTime, setAnimTime] = useState<number>(0);
-
-  const lastFrameRef = useRef<number | null>(null);
-  const speedRef = useRef<SpeedMultiplier>(speed);
-
-  useEffect(() => {
-    speedRef.current = speed;
-  }, [speed]);
 
   // Önceki / Sonraki Diüretik Grubu Geçiş Fonksiyonları (Senkronize)
   const handlePrevDiuretic = useCallback(() => {
@@ -3991,31 +4579,6 @@ export const NephronDiureticsAnimator: React.FC<NephronDiureticsAnimatorProps> =
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [handlePrevDiuretic, handleNextDiuretic]);
 
-  // 60 FPS Senkronize Animasyon Döngüsü (requestAnimationFrame)
-  useEffect(() => {
-    if (!isPlaying) {
-      lastFrameRef.current = null;
-      return;
-    }
-
-    let frameId: number;
-    const tick = (now: number) => {
-      try {
-        if (lastFrameRef.current !== null) {
-          const dt = Math.min((now - lastFrameRef.current) / 1000, 0.08);
-          setAnimTime((prev) => prev + dt * speedRef.current);
-        }
-        lastFrameRef.current = now;
-        frameId = requestAnimationFrame(tick);
-      } catch {
-        // Beklenmedik kare hatasında güvenli çıkış
-      }
-    };
-
-    frameId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frameId);
-  }, [isPlaying]);
-
   // Nefron segmentine tıklandığında ilgili diüretiği seçme
   const handleSelectSegment = useCallback(
     (segment: NephronSegmentId) => {
@@ -4046,46 +4609,43 @@ export const NephronDiureticsAnimator: React.FC<NephronDiureticsAnimatorProps> =
 
   return (
     <div className="space-y-4">
-      {/* İKİ SENKRONİZE ANİMASYON PANELİ (Kontroller ve < > Diüretik Seçici Doğrudan Her İki Panelin Başında) */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
-        <div className="xl:col-span-7 flex flex-col">
-          <MacroNephronPanel
-            isDark={isDark}
-            selectedDiuretic={selectedDiuretic}
-            onPrevDiuretic={handlePrevDiuretic}
-            onNextDiuretic={handleNextDiuretic}
-            isDrugActive={isDrugActive}
-            onToggleDrugActive={setIsDrugActive}
-            isPlaying={isPlaying}
-            onTogglePlay={handleTogglePlay}
-            speed={speed}
-            onChangeSpeed={setSpeed}
-            time={animTime}
-            onSelectSegment={handleSelectSegment}
-          />
-        </div>
-        <div className="xl:col-span-5 flex flex-col">
-          <CellularMechanismPanel
-            isDark={isDark}
-            selectedDiuretic={selectedDiuretic}
-            onPrevDiuretic={handlePrevDiuretic}
-            onNextDiuretic={handleNextDiuretic}
-            isDrugActive={isDrugActive}
-            onToggleDrugActive={setIsDrugActive}
-            isPlaying={isPlaying}
-            onTogglePlay={handleTogglePlay}
-            speed={speed}
-            onChangeSpeed={setSpeed}
-            time={animTime}
-          />
-        </div>
-      </div>
+      {/* TEK BİRLEŞİK ÜST KONTROL ÇUBUĞU (6 Renkli Sınıf Hapı + Simülasyon Kontrolleri) */}
+      <UnifiedDiureticControlBar
+        isDark={isDark}
+        selectedDiuretic={selectedDiuretic}
+        onSelectDiuretic={onSelectDiuretic}
+        onPrevDiuretic={handlePrevDiuretic}
+        onNextDiuretic={handleNextDiuretic}
+        isDrugActive={isDrugActive}
+        onToggleDrugActive={setIsDrugActive}
+        isPlaying={isPlaying}
+        onTogglePlay={handleTogglePlay}
+        speed={speed}
+        onChangeSpeed={setSpeed}
+      />
 
-      {/* ANİMASYONLARIN ALTINDA 1: İYONLAR, TAŞIYICILAR VE KISALTMALAR TABLOSU (Uzun Halleriyle) */}
-      <IonsAbbreviationsTable selectedDiuretic={selectedDiuretic} isDark={isDark} />
+      {/* İZOLE 60 FPS ANİMASYON SAHNESİ (Makro Nefron + Hücresel Mekanizma) */}
+      <NephronAnimationStage
+        isDark={isDark}
+        selectedDiuretic={selectedDiuretic}
+        isDrugActive={isDrugActive}
+        isPlaying={isPlaying}
+        speed={speed}
+        onSelectSegment={handleSelectSegment}
+      />
 
-      {/* ANİMASYONLARIN ALTINDA 2: İDRAR ELEKTROLİT DEĞİŞİMLERİ VE KLİNİK ÖZET */}
+      {/* ANİMASYONLARIN ALTINDA 1: 6×9 İNTERAKTİF ELEKTROLİT & ASİT-BAZ ISI HARİTASI */}
+      <ElectrolyteHeatmapMatrix
+        selectedDiuretic={selectedDiuretic}
+        onSelectDiuretic={onSelectDiuretic}
+        isDark={isDark}
+      />
+
+      {/* ANİMASYONLARIN ALTINDA 2: KOMPAKT KLİNİK ÖZET (Hedef, Endikasyonlar, Yan Etkiler) */}
       <ClinicalSummaryPanel drug={currentDrug} isDark={isDark} />
+
+      {/* ANİMASYONLARIN ALTINDA 3: AÇILIR/KAPANIR SÖZLÜK ÇEKMECESİ (Varsayılan Kapalı) */}
+      <IonsAbbreviationsTable selectedDiuretic={selectedDiuretic} isDark={isDark} />
     </div>
   );
 };
