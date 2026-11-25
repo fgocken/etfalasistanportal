@@ -39,9 +39,9 @@ const AIRWAY_DEFINITIONS: DifficultAirwayDefinition[] = [
     id: 'facemask',
     title: 'Zor Yüz Maskesi Ventilasyonu',
     criteria:
-      'Deneyimli anestezist tarafından yardımsız %100 O₂ ile SpO₂ > %90 korunamaması, gaz kaçağı, göğüs hareketi olmaması veya iki kişi / airway (Guedel/NP) gerektirmesi (Han Grade 3–4).',
-    clinicalThreshold: 'Han Grade 3: İki operatör/airway ile · Grade 4: Ventile edilemiyor',
-    source: 'ASA 2022'
+      'Deneyimli anestezist tarafından yardımsız %100 O₂ ile SpO₂ > %90 korunamaması, aşırı gaz kaçağı, yetersiz göğüs hareketi veya zor/yetersiz/stabil olmayan ya da 2 operatör gerektiren ventilasyon (Han Grade 3–4).',
+    clinicalThreshold: 'Han Grade 2: Tek operatör + oral/nazal airway · Grade 3: Zor/yetersiz veya 2 operatör · Grade 4: Ventile edilemiyor',
+    source: 'ASA 2022 / Han'
   },
   {
     id: 'laryngoscopy',
@@ -63,7 +63,7 @@ const AIRWAY_DEFINITIONS: DifficultAirwayDefinition[] = [
     id: 'intubation',
     title: 'Zor Trakeal Entübasyon',
     criteria:
-      'Trakeal tüpün yerleştirilmesi için birden fazla girişim, >10 dakika süre veya ek ileri hava yolu tekniklerinin (buji, VL, fiberoptik) zorunlu hale gelmesi.',
+      'Trakeal tüpün yerleştirilmesi için birden fazla girişim veya ek ileri hava yolu tekniklerinin (buji, videolaringoskop, fiberoptik) zorunlu hale gelmesi (ASA 2013 & 2022’de eski >10 dk kriteri kaldırılmıştır).',
     clinicalThreshold: 'DAS 2025 limiti: En fazla 3 + 1 girişim (sonra başarısız ilan edilir)',
     source: 'DAS 2025 / ASA 2022'
   },
@@ -79,61 +79,94 @@ const AIRWAY_DEFINITIONS: DifficultAirwayDefinition[] = [
 
 interface LemonRiskFactor {
   id: string;
+  letter: 'L' | 'E' | 'M' | 'O' | 'N';
   label: string;
   cutoff: string;
   points: number;
   detail: string;
 }
 
+// Orijinal LEMON Skoru (0–10 puan, her kriter 1 puan; 3-3-2 kuralı dahil; Reed et al., EMJ 2005)
 const LEMON_FACTORS: LemonRiskFactor[] = [
   {
+    id: 'look_trauma',
+    letter: 'L',
+    label: 'Look — Yüz / Boyun Travması veya Deformite',
+    cutoff: 'Maksillofasiyal travma, yanık, retrognati',
+    points: 1,
+    detail: 'Dış bakıda yüz-çene deformitesi, kırık, kanama veya belirgin mikrognati/retrognati.'
+  },
+  {
+    id: 'look_incisors',
+    letter: 'L',
+    label: 'Look — Büyük Üst Kesici Dişler',
+    cutoff: 'Belirgin/uzun üst kesiciler (overbite)',
+    points: 1,
+    detail: 'Laringoskop bıçağının görüş eksenini daraltarak glottis hizalanmasını güçleştirir.'
+  },
+  {
+    id: 'look_beard',
+    letter: 'L',
+    label: 'Look — Sakal veya Yoğun Yüz Kılı',
+    cutoff: 'Maske sızdırmazlığını bozan sakal/bıyık',
+    points: 1,
+    detail: 'Hem yüz maskesi sızdırmazlığını zorlaştırır hem de gizli retrognatiyi maskeleyebilir.'
+  },
+  {
+    id: 'look_tongue',
+    letter: 'L',
+    label: 'Look — Büyük Dil (Makroglossi)',
+    cutoff: 'Oral kaviteyi dolduran iri dil',
+    points: 1,
+    detail: 'Laringoskopi sırasında dilin sola ekartasyonunu ve hipofarenks görüşünü kısıtlar.'
+  },
+  {
+    id: 'eval_mouth',
+    letter: 'E',
+    label: 'Evaluate (3-3-2) — Ağız Açıklığı',
+    cutoff: '< 3 parmak (< ~3–4 cm interinsizör)',
+    points: 1,
+    detail: '3-3-2 kuralının ilk "3"ü: Hastanın kendi 3 parmağı üst ve alt kesiciler arasına sığmalıdır.'
+  },
+  {
+    id: 'eval_hyomental',
+    letter: 'E',
+    label: 'Evaluate (3-3-2) — Hyomental Mesafe',
+    cutoff: '< 3 parmak (mentum – hyoid arası)',
+    points: 1,
+    detail: '3-3-2 kuralının ikinci "3"ü: Mandibular alanın (dilin itileceği boşluğun) yeterliliğini gösterir.'
+  },
+  {
+    id: 'eval_thyrohyoid',
+    letter: 'E',
+    label: 'Evaluate (3-3-2) — Tirohyoid Mesafe',
+    cutoff: '< 2 parmak (ağız tabanı – tiroid çentik)',
+    points: 1,
+    detail: '3-3-2 kuralının "2"si: Kısa mesafe yüksek/anterior yerleşimli larinks göstergesidir.'
+  },
+  {
     id: 'mallampati',
-    label: 'Modifiye Mallampati Sınıf III – IV',
-    cutoff: 'Yumuşak damak/uvula tabanı görünmüyor',
-    points: 2,
-    detail: 'Oturur pozisyonda, baş nötral, dil maksimum dışarıda ve fonasyon ("Aaa") yapılmadan değerlendirilir.'
+    letter: 'M',
+    label: 'Mallampati — Modifiye Sınıf III veya IV',
+    cutoff: 'Sınıf III: yumuşak damak + uvula tabanı görülür · Sınıf IV: yumuşak damak görünmez',
+    points: 1,
+    detail: 'Oturur pozisyonda, baş nötral, dil maksimum dışarıda ve fonasyon ("Aaa") yapılmadan bakılır.'
   },
   {
-    id: 'tmd',
-    label: 'Kısa Tiromental Mesafe (Patil Testi)',
-    cutoff: '< 6.0 cm (< 3 parmak)',
-    points: 2,
-    detail: 'Baş tam ekstansiyondayken tiroid çentik ile çene ucu (mentum) arası mesafe; küçük mandibula ve anterior larinks göstergesi.'
-  },
-  {
-    id: 'mouth',
-    label: 'Kısıtlı Ağız Açıklığı (İnterinsizör Mesafe)',
-    cutoff: '< 3.0 cm (< 2 parmak)',
-    points: 2,
-    detail: 'Laringoskop bıçağının girişi ve SAD yerleştirilmesi için kritik mekanik sınır.'
-  },
-  {
-    id: 'ulbt',
-    label: 'Üst Dudak Isırma Testi (ULBT) Sınıf III',
-    cutoff: 'Alt kesiciler üst dudağı hiç ısıramıyor',
-    points: 2,
-    detail: 'Temporomandibular eklem protrüzyonunu ölçer; tek başına yüksek özgüllük ve pozitif prediktif değere sahiptir.'
+    id: 'obstruction',
+    letter: 'O',
+    label: 'Obstruction / Obesity — Obstrüksiyon veya Obezite',
+    cutoff: 'Stridor, tümör, apse, hematom, RT veya BMI > 30',
+    points: 1,
+    detail: 'Üst havayolu darlığı, epiglotit, baş-boyun radyoterapisi veya morbid obezite/kalın boyun.'
   },
   {
     id: 'neck',
-    label: 'Boyun Ekstansiyon Kısıtlılığı / Kalın Boyun',
-    cutoff: 'Hareket < 35° veya Çevre > 43 cm',
+    letter: 'N',
+    label: 'Neck Mobility — Boyun Hareket Kısıtlılığı',
+    cutoff: 'Ekstansiyon < 35° / servikal fiksasyon',
     points: 1,
-    detail: 'Servikal fiksasyon, ankilozan spondilit, travma boyunluğu veya obezitede oral-faringeal-laringeal aksların hizalanması bozulur.'
-  },
-  {
-    id: 'smd',
-    label: 'Kısa Sternomental Mesafe (Savva)',
-    cutoff: '< 12.5 cm',
-    points: 1,
-    detail: 'Baş tam ekstansiyonda iken sternum üst çentiği ile çene ucu arasındaki toplam uzaklık.'
-  },
-  {
-    id: 'look',
-    label: 'Dış Görünüm Anomalisi / Obstrüksiyon / OSAS',
-    cutoff: 'Retrognati, stridor, tümör, radyoterapi, sakal',
-    points: 2,
-    detail: 'Hem maske sızdırmazlığını hem de glottik görünümü bozan anatomik engeller; uyanık entübasyon endikasyonu doğurabilir.'
+    detail: 'Servikal boyunluk, ankilozan spondilit veya artritte oral-faringeal-laringeal akslar hizalanamaz.'
   }
 ];
 
@@ -167,12 +200,12 @@ const MALLAMPATI_CLASSES = [
   },
   {
     cls: 'Sınıf III',
-    structures: 'Yalnızca yumuşak damak ve uvulanın tabanı görünür.',
+    structures: 'Yumuşak damak ve uvulanın tabanı görülür; uvula gövdesi ve tonsil plikaları gizlidir.',
     risk: 'Orta–Yüksek Risk'
   },
   {
     cls: 'Sınıf IV',
-    structures: 'Yumuşak damak dahi görünmez; sadece sert damak seçilebilir.',
+    structures: 'Yumuşak damak görünmez; yalnızca sert damak görülür.',
     risk: 'Yüksek Risk'
   }
 ];
@@ -192,27 +225,41 @@ interface DasPlanDetail {
   nextPlan?: DasPlanId;
 }
 
+const getPlanTransitionLabel = (nextPlan: DasPlanId): string => {
+  switch (nextPlan) {
+    case 'planB':
+      return 'PLAN B’ye Geç';
+    case 'planC':
+      return 'PLAN C’ye Geç';
+    case 'planD':
+      return 'PLAN D’ye Geç';
+    default:
+      return 'PLAN A’ya Dön';
+  }
+};
+
 const DAS_2025_PLANS: DasPlanDetail[] = [
   {
     id: 'planA',
     code: 'PLAN A',
     title: 'Trakeal Entübasyon (İlk Girişimde Başarıyı Maksimize Et)',
-    subtitle: 'DAS 2025 Birincil Strateji: Optimize Edilmiş Videolaringoskopi & Sürekli Oksijenasyon',
+    subtitle: 'DAS 2025 Evrensel İlk Seçenek: Videolaringoskopi (VL) & Sürekli Oksijenasyon',
     attemptLimit: 'Maksimum 3 + 1 Girişim',
     maxAttemptsNum: 4,
     goal: 'Yeterli oksijenasyon eşliğinde en yüksek ilk geçiş entübasyon başarısını sağlamak ve havayolu travmasından kaçınmak.',
     keyActions: [
       'Pozisyonu optimize et: Nötralde "sniffing" pozisyonu; obez/yüksek risklide "ramped" (kulak-sternum hizası).',
       'Tam preoksijenasyon (EtO₂ > %90) ve girişim boyunca sürekli apneik oksijenasyon (nazal kanül 15 L/dk veya HFNO).',
-      'Videolaringoskopi (VL) DAS 2025 tarafından ilk seçenek/erken standart olarak öne çıkarılır (uygun pala: Macintosh veya hiperangüle + uygun stile).',
+      'Videolaringoskopi (VL) DAS 2025’te tüm yetişkin entübasyonlar için evrensel ilk seçenek standart olarak önerilir (uygun Macintosh veya hiperangüle pala + uygun stile/buji).',
       'Tam nöromüsküler blokajdan emin ol; eksternal laringeal manipülasyon (BURP / OELM) ve buji/stile kullan.',
       'Her başarısız girişim arasında tekniği anlamlı şekilde değiştir (operatör, pala tipi/boyutu, pozisyon).'
     ],
     criticalRules: [
       'En fazla 3 standart/optimize girişim yapılır; yalnızca farklı bir teknik veya daha kıdemli bir operatörle +1 son girişime izin verilir.',
+      '"No trace = wrong place": Sürekli dalga formu kapnografi (EtCO₂) trasesi yoksa aksi kanıtlanana dek özofageal entübasyon kabul et ve tüpü hemen çıkar!',
       'Körlemesine tekrarlayan denemeler laringeal ödem ve kanama yaratarak Plan B ve Plan C’yi sabote eder!'
     ],
-    ifSuccess: 'Dalga formu kapnografi (EtCO₂) ve klinik doğrulama ile tüpü tespit et.',
+    ifSuccess: 'Sürekli dalga formu kapnografi ("No trace = wrong place") ve klinik doğrulama ile tüpü tespit et.',
     ifFailure: 'Yüksek sesle "Plan A başarısız — Plan B’ye geçiyorum" ilanı yap ve yardım çağır.',
     nextPlan: 'planB'
   },
@@ -290,8 +337,8 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
 
   // Interactive DAS 2025 Plan A-D Simulator State
   const [activePlanId, setActivePlanId] = useState<DasPlanId>('planA');
-  const [planAAttempts, setPlanAAttempts] = useState<number>(1);
-  const [planBAttempts, setPlanBAttempts] = useState<number>(1);
+  const [planAAttempts, setPlanAAttempts] = useState<number>(0);
+  const [planBAttempts, setPlanBAttempts] = useState<number>(0);
   const [simOutcome, setSimOutcome] = useState<'in-progress' | 'success' | 'cico-done'>('in-progress');
   const [mallampatiImgError, setMallampatiImgError] = useState<boolean>(false);
 
@@ -308,12 +355,23 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
 
   const activePlan = DAS_2025_PLANS.find(p => p.id === activePlanId) || DAS_2025_PLANS[0];
 
+  const handleSelectPlan = (planId: DasPlanId) => {
+    setActivePlanId(planId);
+    setSimOutcome('in-progress');
+    if (planId === 'planA') {
+      setPlanAAttempts(0);
+    } else if (planId === 'planB') {
+      setPlanBAttempts(0);
+    }
+  };
+
   const handleNextAttempt = () => {
     if (activePlanId === 'planA') {
       if (planAAttempts < 4) {
         setPlanAAttempts(prev => prev + 1);
       } else {
         setActivePlanId('planB');
+        setPlanBAttempts(0);
         setSimOutcome('in-progress');
       }
     } else if (activePlanId === 'planB') {
@@ -329,6 +387,9 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
   const handleEscalatePlan = () => {
     if (activePlan.nextPlan) {
       setActivePlanId(activePlan.nextPlan);
+      if (activePlan.nextPlan === 'planB') {
+        setPlanBAttempts(0);
+      }
       setSimOutcome('in-progress');
     } else {
       setSimOutcome('cico-done');
@@ -337,8 +398,8 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
 
   const resetDasSimulator = () => {
     setActivePlanId('planA');
-    setPlanAAttempts(1);
-    setPlanBAttempts(1);
+    setPlanAAttempts(0);
+    setPlanBAttempts(0);
     setSimOutcome('in-progress');
   };
 
@@ -495,7 +556,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                     : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
               }`}
             >
-              LEMON &amp; Mallampati Sayacı
+              LEMON (0–10) &amp; Mallampati
             </button>
             <button
               type="button"
@@ -526,9 +587,18 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
           </div>
         </div>
 
-        {/* Tab A: LEMON + Mallampati */}
+        {/* Tab A: LEMON (0–10) + Mallampati */}
         {assessmentTab === 'lemon' && (
           <div className="space-y-4">
+            <div className={`px-3.5 py-2.5 rounded-xl border text-[11px] flex flex-wrap items-center justify-between gap-2 ${
+              isDark ? 'bg-cyan-950/20 border-cyan-500/30 text-cyan-200' : 'bg-cyan-50/70 border-cyan-200 text-cyan-900'
+            }`}>
+              <span>
+                <strong>Orijinal LEMON Skorlaması (0–10 Puan · Her Kriter 1 Puan):</strong> <strong>L</strong>ook (4 kriter) + <strong>E</strong>valuate 3-3-2 (3 kriter) + <strong>M</strong>allampati (1) + <strong>O</strong>bstruction/Obesity (1) + <strong>N</strong>eck (1).
+              </span>
+              <span className="font-mono font-bold shrink-0">Yüksek Risk Eşiği: ≥ 3–4 / 10</span>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
               {LEMON_FACTORS.map(factor => {
                 const checked = selectedLemonIds.includes(factor.id);
@@ -548,7 +618,16 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <span className="text-xs font-bold leading-snug">{factor.label}</span>
+                      <div className="flex items-start gap-2">
+                        <span className={`text-[10px] font-mono font-black w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5 ${
+                          checked
+                            ? 'bg-amber-500 text-white'
+                            : isDark ? 'bg-cyan-950/70 text-cyan-300 border border-cyan-500/30' : 'bg-cyan-100 text-cyan-800'
+                        }`}>
+                          {factor.letter}
+                        </span>
+                        <span className="text-xs font-bold leading-snug">{factor.label}</span>
+                      </div>
                       <span className={`text-[10px] font-mono tabular-nums px-1.5 py-0.5 rounded font-bold shrink-0 ${
                         checked
                           ? 'bg-amber-500 text-white'
@@ -570,27 +649,33 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
 
             {/* LEMON Live Summary */}
             <div className={`p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-3 ${
-              lemonScore >= 4
+              lemonScore >= 3
                 ? isDark ? 'bg-rose-950/25 border-rose-500/40' : 'bg-rose-50 border-rose-300'
-                : lemonScore >= 2
+                : lemonScore >= 1
                   ? isDark ? 'bg-amber-950/25 border-amber-500/40' : 'bg-amber-50 border-amber-300'
                   : isDark ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-emerald-50 border-emerald-200'
             }`}>
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-bold text-slate-900 dark:text-white">
-                    Seçili Anatomik Risk Yükü:
+                    LEMON Skoru:
                   </span>
-                  <span className="font-mono tabular-nums text-sm font-black text-rose-600 dark:text-rose-300">
-                    {lemonScore} Puan ({selectedLemonIds.length} bulgu)
+                  <span className={`font-mono tabular-nums text-sm font-black ${
+                    lemonScore >= 3
+                      ? 'text-rose-600 dark:text-rose-300'
+                      : lemonScore >= 1
+                        ? 'text-amber-600 dark:text-amber-300'
+                        : 'text-emerald-600 dark:text-emerald-300'
+                  }`}>
+                    {lemonScore} / 10 Puan ({selectedLemonIds.length} kriter)
                   </span>
                 </div>
                 <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                  {lemonScore >= 4
-                    ? 'YÜKSEK BEKLENEN ZOR HAVAYOLU RİSKİ: Uyanık Fiberoptik/VL Entübasyon (ATI) veya çift planlı Videolaringoskop + 2. jen SAD + eFONA kiti hazır tutulmalıdır; kıdemli yardım sağlanmalıdır.'
-                    : lemonScore >= 2
-                      ? 'ORTA RİSK: İndüksiyon öncesi Videolaringoskop, buji ve 2. jenerasyon SAD odada hazır bulundurulmalı, tam preoksijenasyon ve ramped pozisyon uygulanmalıdır.'
-                      : 'DÜŞÜK ANATOMİK RİSK: Standart indüksiyon uygundur; her vakada beklenmedik zor havayolu için DAS 2025 Plan A–D ekipmanı erişilebilir olmalıdır.'}
+                  {lemonScore >= 3
+                    ? 'YÜKSEK ZOR LARİNGOSKOPİ / HAVAYOLU RİSKİ (LEMON ≥ 3–4): Uyanık Fiberoptik/VL Entübasyon (ATI) veya çift planlı Videolaringoskop + buji + 2. jen SAD + eFONA kiti hazır tutulmalı ve kıdemli yardım sağlanmalıdır.'
+                    : lemonScore >= 1
+                      ? 'DÜŞÜK–ORTA RİSK (1–2 Puan): İndüksiyon öncesi Videolaringoskop (DAS 2025 evrensel ilk seçenek), buji ve 2. jenerasyon SAD hazır bulundurulmalı; tam preoksijenasyon ve ramped/sniffing pozisyon uygulanmalıdır.'
+                      : 'DÜŞÜK ANATOMİK RİSK (0 Puan): Standart indüksiyon uygundur; her vakada beklenmedik zor havayolu için DAS 2025 Plan A–D ekipmanı erişilebilir olmalıdır.'}
                 </p>
               </div>
               {selectedLemonIds.length > 0 && (
@@ -605,6 +690,26 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                   <span>Sıfırla</span>
                 </button>
               )}
+            </div>
+
+            {/* Supplementary Clinical Pearls: ULBT, TMD/SMD, OSAS & Validated EGRI (0-12) */}
+            <div className={`p-3.5 rounded-xl border text-[11px] space-y-1.5 ${
+              isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+            }`}>
+              <div className="font-bold text-slate-900 dark:text-white">
+                Tamamlayıcı Yatak Başı Testler &amp; EGRI (LEMON’dan Bağımsız Değerlendirilir)
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 leading-snug">
+                <div>
+                  <strong>ULBT (Üst Dudak Isırma Testi) Sınıf III:</strong> Alt kesiciler üst dudağı ısıramıyorsa TMJ protrüzyonu kısıtlıdır; tek başına yüksek özgüllüğe sahiptir.
+                </div>
+                <div>
+                  <strong>TMD / SMD &amp; OSAS:</strong> Tiromental mesafe (Patil) <strong>&lt; 6.0 cm</strong>, sternomental mesafe (Savva) <strong>&lt; 12.5 cm</strong>, boyun çevresi <strong>&gt; 43 cm</strong> ve <strong>OSAS</strong> zor entübasyon/maske riskini artırır.
+                </div>
+                <div>
+                  <strong>El-Ganzouri Risk İndeksi (EGRI, 0–12 Puan):</strong> Ağız açıklığı, TMD, Mallampati, boyun hareketi, çene protrüzyonu, kilo ve öyküden oluşur; <strong>EGRI ≥ 4</strong> yüksek risk eşiğidir (LEMON 0–10 skoru ile karıştırılmamalıdır).
+                </div>
+              </div>
             </div>
 
             {/* Mallampati Anatomical Diagram + Reference Strip */}
@@ -776,7 +881,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                   <strong>3. Sağ Kalp Yetmezliği:</strong> Hiperkapni, hipoksi ve aşırı PEEP RV yetmezliğini arrestle sonuçlandırır.
                 </div>
                 <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-rose-200'}`}>
-                  <strong>4. Ağır Asidoz / Dolu Mide:</strong> Apne süresini kısa tut (ROK/RSI) veya uyanık entübasyon değerlendir.
+                  <strong>4. Ağır Metabolik Asidoz / Dolu Mide:</strong> Kısa apne bile katastropik asidemi ve arreste yol açabilir. <strong>Uyanık entübasyon</strong> veya indüksiyon sırasında <strong>nazik BMV</strong> tercih edin; entübasyon sonrası <strong>entübasyon öncesi dakika ventilasyonunu anında eşleyin</strong>.
                 </div>
               </div>
             </div>
@@ -831,7 +936,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
             isDark ? 'bg-purple-950/20 border-purple-500/30 text-purple-200' : 'bg-purple-50 border-purple-200 text-purple-900'
           }`}>
             <ShieldAlert className="w-4 h-4 text-purple-500 shrink-0" />
-            <span><strong>Zorunlu Kapnografi:</strong> Her adımda dalga formu EtCO₂ ile doğrula.</span>
+            <span><strong>&ldquo;No trace = wrong place&rdquo;:</strong> Kapnografi trasesi yoksa özofageal entübasyon kabul et!</span>
           </div>
         </div>
 
@@ -844,10 +949,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
               <button
                 key={plan.id}
                 type="button"
-                onClick={() => {
-                  setActivePlanId(plan.id);
-                  setSimOutcome('in-progress');
-                }}
+                onClick={() => handleSelectPlan(plan.id)}
                 className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer relative ${
                   isActive
                     ? plan.id === 'planD'
@@ -918,11 +1020,11 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                 >
                   {activePlan.id === 'planA'
                     ? planAAttempts < 4
-                      ? `Deneme #${planAAttempts} Başarısız (+Teknik Değiştir)`
-                      : '3+1 Limiti Doldu → Plan B'
+                      ? `Deneme #${planAAttempts + 1} Başarısız (+Teknik Değiştir)`
+                      : '3+1 Limiti Doldu → Plan B’ye Geç'
                     : planBAttempts < 3
-                      ? `SAD Deneme #${planBAttempts} Başarısız`
-                      : '3 Deneme Doldu → Plan C'}
+                      ? `SAD Deneme #${planBAttempts + 1} Başarısız`
+                      : '3 Deneme Doldu → Plan C’ye Geç'}
                 </button>
               )}
 
@@ -941,7 +1043,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                   onClick={handleEscalatePlan}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold cursor-pointer"
                 >
-                  <span>{activePlan.nextPlan.replace('plan', 'Plan ').toUpperCase()}'e Geç</span>
+                  <span>{getPlanTransitionLabel(activePlan.nextPlan)}</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               ) : (
@@ -1028,7 +1130,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                 DAS 2025 Plan A – D Özet Akış Şeması (Tek Bakışta Kriz Kaskadı)
               </h5>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Tüm adımlarda kesintisiz oksijenasyon + insan faktörleri + dalga formu EtCO₂ zorunludur. İncelemek için ilgili plana tıklayabilirsiniz.
+                Tüm adımlarda kesintisiz oksijenasyon + insan faktörleri + dalga formu EtCO₂ (&ldquo;No trace = wrong place&rdquo;) zorunludur. İncelemek için ilgili plana tıklayabilirsiniz.
               </p>
             </div>
             <span className="text-[10px] font-mono text-slate-400 shrink-0">Ahmad et al., BJA 2026</span>
@@ -1038,7 +1140,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
           <div className={`px-3 py-2 rounded-lg border text-center text-[11px] font-semibold ${
             isDark ? 'bg-cyan-950/30 border-cyan-500/30 text-cyan-200' : 'bg-cyan-50 border-cyan-200 text-cyan-900'
           }`}>
-            KESİNTİSİZ ÇEKİRDEK İLKE: Preoksijenasyon + Apneik O₂ / HFNO · Sesli İlan &amp; Yardım Çağır · Dalga Formu Kapnografi
+            KESİNTİSİZ ÇEKİRDEK İLKE: Evrensel İlk Seçenek VL · Preoksijenasyon + Apneik O₂ / HFNO · Sesli İlan &amp; Yardım · Kapnografi (&ldquo;No trace = wrong place&rdquo;)
           </div>
 
           {/* 4-Stage Visual Flow Diagram */}
@@ -1046,10 +1148,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
             {/* PLAN A NODE */}
             <button
               type="button"
-              onClick={() => {
-                setActivePlanId('planA');
-                setSimOutcome('in-progress');
-              }}
+              onClick={() => handleSelectPlan('planA')}
               className={`lg:col-span-2 p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
                 activePlanId === 'planA'
                   ? 'ring-2 ring-cyan-500 border-cyan-500 bg-cyan-500/10'
@@ -1063,7 +1162,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
                 </div>
                 <div className="text-xs font-bold text-slate-900 dark:text-white">Trakeal Entübasyon</div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                  Erken Videolaringoskopi, pozisyon, NMB, buji/stile.
+                  Evrensel ilk seçenek VL, pozisyon, NMB, buji/stile.
                 </p>
               </div>
               <div className="pt-2 border-t border-slate-200/70 dark:border-slate-800 space-y-1 text-[10px]">
@@ -1080,10 +1179,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
             {/* PLAN B NODE */}
             <button
               type="button"
-              onClick={() => {
-                setActivePlanId('planB');
-                setSimOutcome('in-progress');
-              }}
+              onClick={() => handleSelectPlan('planB')}
               className={`lg:col-span-2 p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
                 activePlanId === 'planB'
                   ? 'ring-2 ring-sky-500 border-sky-500 bg-sky-500/10'
@@ -1114,10 +1210,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
             {/* PLAN C NODE */}
             <button
               type="button"
-              onClick={() => {
-                setActivePlanId('planC');
-                setSimOutcome('in-progress');
-              }}
+              onClick={() => handleSelectPlan('planC')}
               className={`lg:col-span-2 p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
                 activePlanId === 'planC'
                   ? 'ring-2 ring-amber-500 border-amber-500 bg-amber-500/10'
@@ -1148,10 +1241,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
             {/* PLAN D NODE */}
             <button
               type="button"
-              onClick={() => {
-                setActivePlanId('planD');
-                setSimOutcome('in-progress');
-              }}
+              onClick={() => handleSelectPlan('planD')}
               className={`lg:col-span-2 p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
                 activePlanId === 'planD'
                   ? 'ring-2 ring-rose-500 border-rose-500 bg-rose-500/15'
@@ -1188,6 +1278,7 @@ export const DifficultAirwayDASInfographic: React.FC<DifficultAirwayDASInfograph
         <p>2. Apfelbaum JL, Hagberg CA, Connis RT, et al. <em>2022 American Society of Anesthesiologists Practice Guidelines for Management of the Difficult Airway.</em> Anesthesiology. 2022;136(1):31-81. PMID: 34762729.</p>
         <p>3. Frerk C, Mitchell VS, McNarry AF, et al. <em>DAS 2015 guidelines for management of unanticipated difficult intubation in adults.</em> BJA. 2015;115(6):827-848. PMID: 26556848.</p>
         <p>4. De Jong A, Molinari N, Terzi N, et al. <em>Early identification of patients at risk for difficult intubation in the intensive care unit: development and validation of the MACOCHA score.</em> Am J Respir Crit Care Med. 2013;187(8):832-839.</p>
+        <p>5. Reed MJ, Dunn MJ, McKeown DW. <em>Can an airway assessment score predict difficulty at intubation in the emergency department?</em> Emerg Med J. 2005;22(2):99-102. PMID: 15662057. (Orijinal LEMON 0–10 validasyonu).</p>
       </div>
     </div>
   );

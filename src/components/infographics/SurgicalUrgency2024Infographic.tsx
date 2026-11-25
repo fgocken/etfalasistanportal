@@ -93,8 +93,8 @@ const URGENCY_TIERS: UrgencyTier[] = [
     clinicalActions: [
       'Hızlı odaklanmış kardiyak inceleme (POCUS / kardiyak ve akciğer ultrasonu, 12-derivasyon EKG, elektrolitler, kan gazı).',
       'Hızlı volüm ve asit-baz optimizasyonu, kritik elektrolit (potasyum, magnezyum, kalsiyum) bozukluklarının hızla düzeltilmesi.',
-      'Kardiyak ilaçların hızlı düzenlenmesi (beta-bloker kesilmemeli, hemodinamiye göre vazopresör ve inotrop hazırlığı).',
-      'Antikoagülan ve antitrombositer ajanların acil geri çevrilmesi (antidot/reversal) için protokol başlatılması.'
+      'Kronik beta-blokerlere devam edilmeli (Class 1); ancak cerrahi günü yeni beta-bloker başlanmamalıdır (Class 3 — Zarar).',
+      'Antikoagülan geri çevirme (antidot/reversal) endikasyona göre planlanır; hayatı tehdit eden veya kapalı boşluk (intrakraniyal/intraspinal) kanaması dışında rutin antiplatelet geri çevirmeden (trombosit transfüzyonu vb.) kaçınılır.'
     ],
     examples: [
       'Akut peritonit, barsak perforasyonu veya strangüle herni',
@@ -108,8 +108,8 @@ const URGENCY_TIERS: UrgencyTier[] = [
     id: 'time-sensitive',
     title: 'Zamana Duyarlı Cerrahi',
     badgeLabel: 'Zamana Duyarlı',
-    timeWindow: '1 ila 3 Aya Kadar (≤ 3 Ay)',
-    threatLevel: 'Hemen ölüm tehlikesi yoktur ancak 1-3 aydan fazla gecikme prognozu ve sağkalımı bozar.',
+    timeWindow: '> 24 Saat – ≤ 3 Ay',
+    threatLevel: 'Hemen ölüm tehlikesi yoktur ancak > 24 saat – ≤ 3 ay penceresinden fazla gecikme prognozu ve sağkalımı bozar.',
     colorScheme: {
       accent: 'text-sky-600 dark:text-sky-400',
       badgeBg: 'bg-sky-500/15',
@@ -121,12 +121,12 @@ const URGENCY_TIERS: UrgencyTier[] = [
       gradient: 'from-sky-500 to-blue-600'
     },
     maceOpportunity: 'Tam kapsamlı kardiyovasküler değerlendirme, optimizasyon ve risk modellemesi için yeterli süre tanır',
-    preopEvaluation: 'Sonuçları olumsuz etkilemeksizin preoperatif kardiyak tetkik, medikal optimizasyon ve multidisipliner tedavi planlaması için cerrahi 3 aya kadar ertelenebilir.',
+    preopEvaluation: 'Sonuçları olumsuz etkilemeksizin preoperatif kardiyak tetkik, medikal optimizasyon ve multidisipliner tedavi planlaması için cerrahi > 24 saat – ≤ 3 ay penceresinde planlanabilir.',
     clinicalActions: [
       'RCRI (Lee İndeksi) veya NSQIP MACE risk hesaplaması yapılması.',
-      'Fonksiyonel kapasite (<4 MET) ve semptomlara göre Transtorasik Ekokardiyografi (TTE) veya Farmakolojik Stres Testi planlaması.',
+      'Sübjektif "< 4 MET" tahmini yerine yapılandırılmış DASI (Duke Activity Status Index ≤ 34) + riskli olgularda preop BNP/NT-proBNP veya hs-cTn kullanımı tercih edilir.',
       'Yakın dönemde koroner stent geçmişi varsa ikili antiplatelet (DAPT) zamanlamasının cerrahi ekip ve kardiyoloji ile ortak yönetimi.',
-      'Kalp yetersizliği, kontrolsüz hipertansiyon ve diyabetin perioperatif hedef değerlere getirilmesi.'
+      'SGLT2 inhibitörlerinin cerrahiden 3–4 gün önce kesilmesi (Class 1) ve kalp yetersizliği/diyabetin hedef değerlere getirilmesi.'
     ],
     examples: [
       'Akciğer rezeksiyonları ve torasik onkolojik cerrahiler (lobektomi vb.)',
@@ -140,8 +140,8 @@ const URGENCY_TIERS: UrgencyTier[] = [
     id: 'elective',
     title: 'Elektif Cerrahi',
     badgeLabel: 'Elektif',
-    timeWindow: '> 3 Ay / Tamamen Planlı',
-    threatLevel: 'Yaşam ya da uzuv tehdidi yoktur; cerrahi uygun bir zamana güvenle ertelenebilir.',
+    timeWindow: '> 3 Ay (1 Yıla Kadar)',
+    threatLevel: 'Yaşam ya da uzuv tehdidi yoktur; cerrahi 1 yıla kadar uygun bir zamana güvenle ertelenebilir.',
     colorScheme: {
       accent: 'text-emerald-600 dark:text-emerald-400',
       badgeBg: 'bg-emerald-500/15',
@@ -153,12 +153,12 @@ const URGENCY_TIERS: UrgencyTier[] = [
       gradient: 'from-emerald-500 to-teal-600'
     },
     maceOpportunity: 'Maksimum preoperatif optimizasyon; kardiyak risk faktörleri kontrol altına alınmadan operasyona girilmez',
-    preopEvaluation: 'Eksiksiz bir preoperatif klinik değerlendirme ve uygun medikal yönetim tamamlanana kadar cerrahi işlem güvenle ertelenebilir.',
+    preopEvaluation: 'Eksiksiz bir preoperatif klinik değerlendirme ve uygun medikal yönetim tamamlanana kadar cerrahi işlem 1 yıla kadar güvenle ertelenebilir.',
     clinicalActions: [
-      'Gereğinde koroner revaskülarizasyon (stent veya baypas) veya kapak girişimi tamamlandıktan sonra cerrahinin planlanması.',
-      'Kronik kardiyovasküler medikal tedavinin (ACE inhibitörü/ARB, Statin, SGLT2 inhibitörü, Beta-bloker) kılavuzlara göre optimize edilmesi.',
-      'Ameliyat öncesi fiziksel egzersiz (prehabilitasyon) ve sigara/alkol bırakma programları.',
-      'Tüm sistemik yandaş hastalıkların en ideal fizyolojik seviyeye ulaştırılması.'
+      'Rutin profilaktik koroner revaskülarizasyon yapılmaz (Class 3 — Yararsız); revaskülarizasyon/kapak girişimi yalnızca cerrahiden bağımsız standart kardiyak endikasyon varsa uygulanır.',
+      'SGLT2 inhibitörleri euDKA riskini önlemek için cerrahiden 3–4 gün önce kesilir (Class 1); kronik beta-bloker devam ettirilir, cerrahi günü yeni beta-bloker başlanmaz (Class 3 — Zarar).',
+      'Yapılandırılmış fonksiyonel değerlendirme (DASI ≤ 34) + seçilmiş hastalarda BNP/hs-cTn ile risk stratifikasyonu.',
+      'Ameliyat öncesi fiziksel egzersiz (prehabilitasyon), sigara/alkol bırakma ve tüm yandaş hastalıkların ideal fizyolojik seviyeye ulaştırılması.'
     ],
     examples: [
       'Total kalça ve diz protezi cerrahileri (artroplasti)',
@@ -509,26 +509,33 @@ export const SurgicalUrgency2024Infographic: React.FC<SurgicalUrgency2024Infogra
         )}
       </div>
 
-      {/* 5. Key Clinical Takeaways & Recommendation Box */}
-      <div className={`p-4 sm:p-5 rounded-2xl border text-xs leading-relaxed space-y-2 ${
+      {/* 5. Key Clinical Takeaways & 2024 AHA/ACC Core Perioperative Rules */}
+      <div className={`p-4 sm:p-5 rounded-2xl border text-xs leading-relaxed space-y-3.5 ${
         isDark ? 'bg-slate-800/30 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
       }`}>
         <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
           <ShieldAlert className="w-4 h-4 text-teal-500" />
-          <span>2024 AHA/ACC Kılavuzu Temel Perioperatif Kardiyovasküler Çıkarımları:</span>
+          <span>2024 AHA/ACC Kılavuzu Temel Perioperatif Kardiyovasküler Kuralları:</span>
         </div>
+
         <ul className="list-disc pl-5 space-y-1.5 text-[11px] text-slate-600 dark:text-slate-400">
           <li>
-            <strong>Acil cerrahilerde</strong> ileri kardiyak tetkik (örneğin preoperatif stres testi veya invaziv koroner anjiyografi) için cerrahi kesinlikle geciktirilmemelidir; hemodinamik izlem ameliyathanede sağlanır.
+            <strong>Acil (&lt; 2 sa) &amp; İvedi (2–24 sa) cerrahiler:</strong> Acil olgularda ileri kardiyak tetkik için cerrahi kesinlikle geciktirilmez. İvedi olgularda 2–24 saatlik pencerede sıvı, elektrolit, kanama ve kritik ilaç optimizasyonu ile MACE riski azaltılır; <strong>hayatı tehdit eden veya kapalı boşluk (intrakraniyal, intraspinal, intraoküler) kanaması dışında rutin antiplatelet geri çevirmeden kaçınılır</strong>.
           </li>
           <li>
-            <strong>İvedi cerrahilerde</strong> amaç ameliyatı geciktirmek değil; mevcut 2–24 saatlik pencerede hastanın sıvı, elektrolit, kanama kontrolü ve kritik kardiyak ilaçlarını optimize ederek <em>MACE (Kardiyovasküler Ölüm, Miyokard Enfarktüsü, İnme)</em> riskini en aza indirmektir.
+            <strong>Zamana duyarlı (&gt; 24 sa – ≤ 3 ay) &amp; Elektif (&gt; 3 ay, 1 yıla kadar ertelenebilir) cerrahiler:</strong> Onkolojik rezeksiyonlarda 3 aylık güvenli pencere aşılmadan optimizasyon tamamlanır; elektif cerrahiler tam kardiyak stabilizasyon sağlanana kadar 1 yıla kadar ertelenebilir.
           </li>
           <li>
-            <strong>Zamana duyarlı onkolojik cerrahilerde</strong> kardiyak tetkik ve stent/antiplatelet yönetimi, onkolojik rezeksiyonun azami 1–3 aylık güvenli penceresi aşılmayacak şekilde koordine edilmelidir.
+            <strong>Yapılandırılmış Fonksiyonel Değerlendirme &amp; Biyobelirteçler:</strong> Sübjektif <em>&lt; 4 MET</em> tahmini yerine yapılandırılmış <strong>DASI (Duke Activity Status Index ≤ 34)</strong> ve yüksek riskli hastalarda <strong>BNP/NT-proBNP veya hs-cTn</strong> tercih edilir.
           </li>
           <li>
-            <strong>Elektif cerrahilerde</strong> hasta kardiyak ve sistemik açıdan tam olarak optimize edilmeden elektif operasyona alınmamalıdır.
+            <strong>SGLT2 İnhibitörleri (Class 1):</strong> Öglisemik diyabetik ketoasidoz (euDKA) riskini önlemek için elektif cerrahiden <strong>3–4 gün önce kesilmelidir</strong> (ertugliflozin 4 gün, diğerleri 3 gün).
+          </li>
+          <li>
+            <strong>Beta-Blokerler (Class 3 — Zarar):</strong> Kronik kullanılan beta-blokerlere devam edilir (Class 1), ancak <strong>cerrahi gününde yeni beta-bloker başlanması</strong> inme ve mortaliteyi artırdığı için <strong>Class 3 (Zarar)</strong> olarak kesinlikle önerilmez.
+          </li>
+          <li>
+            <strong>Koroner Revaskülarizasyon (Class 3 — Yararsız):</strong> Yalnızca perioperatif riski azaltmak amacıyla stabil koroner arter hastalığında <strong>rutin profilaktik koroner revaskülarizasyon yapılmaz (Class 3)</strong>.
           </li>
         </ul>
       </div>
@@ -540,7 +547,7 @@ export const SurgicalUrgency2024Infographic: React.FC<SurgicalUrgency2024Infogra
         <div className="flex items-center gap-2">
           <BookOpen className="w-3.5 h-3.5 text-teal-500 shrink-0" />
           <span>
-            <strong>Resmi Kaynak:</strong> <em>2024 AHA/ACC/ACS/ASNC/HRS/SCA/SCCT/SCMR/SVM Guideline for Perioperative Cardiovascular Management for Noncardiac Surgery.</em> Circulation. 2024;150:e354–e443.
+            <strong>Resmi Kaynak:</strong> Thompson A, Fleischmann KE, Smilowitz NR, et al. <em>2024 AHA/ACC/ACS/ASNC/HRS/SCA/SCCT/SCMR/SVM Guideline for Perioperative Cardiovascular Management for Noncardiac Surgery.</em> Circulation. 2024;150(19):e351–e442.
           </span>
         </div>
         <a

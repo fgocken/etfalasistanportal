@@ -685,15 +685,15 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
                 <span className="text-xs text-slate-500 dark:text-slate-400">Non-Kardiyak Cerrahi</span>
               </div>
               <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Cerrahilere Göre Cerrahi Risk Sınıflaması
+                Cerrahilere Göre Cerrahi Risk Sınıflaması (ESC 2022 Tablo 3)
               </h4>
               <p className={`text-xs mt-0.5 max-w-2xl leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                Cerrahiye bağlı risk; 30 günlük <strong>MACE (Major Adverse Cardiovascular Events: Kardiyovasküler Ölüm, Miyokard Enfarktüsü ve İnme)</strong> riskini ifade eder.
+                Bu tablo, <strong>hastanın komorbiditelerinden bağımsız olarak yalnızca cerrahi prosedürün intrinsik riskini</strong> (30 günlük <strong>MACE</strong>: Kardiyovasküler Ölüm, Miyokard Enfarktüsü ve İnme) ifade eder.
               </p>
             </div>
 
             <a
-              href="https://academic.oup.com/view-large/570640891"
+              href="https://doi.org/10.1093/eurheartj/ehac270"
               target="_blank"
               rel="noopener noreferrer"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all shrink-0 cursor-pointer ${
@@ -703,20 +703,20 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
               }`}
             >
               <BookOpen className="w-3.5 h-3.5 text-violet-500" />
-              <span>Orijinal Tablo (OUP)</span>
+              <span>Resmi Kılavuz (DOI)</span>
               <ExternalLink className="w-3 h-3 text-slate-400" />
             </a>
           </div>
 
-          {/* MACE Risk Definition Pill Bar */}
+          {/* MACE & Intrinsic Risk Definition Pill Bar */}
           <div className={`p-3 rounded-xl border flex items-center gap-2.5 text-xs ${
             isDark ? 'bg-violet-950/20 border-violet-800/40 text-violet-200' : 'bg-violet-50/80 border-violet-200 text-violet-900'
           }`}>
             <span className="font-bold px-2 py-0.5 rounded bg-violet-500/20 text-violet-700 dark:text-violet-300 text-[11px] font-mono shrink-0">
-              MACE Tanımı
+              İntrinsik Risk &amp; MACE
             </span>
             <span className="text-[11px] leading-tight">
-              <strong>MACE:</strong> Major Adverse Cardiovascular Events — 30 gün içinde gelişen kardiyovasküler mortalite, non-fatal miyokard enfarktüsü veya inme.
+              <strong>ESC 2022 Tablo 3</strong> yalnızca cerrahi prosedürün <em>intrinsik</em> 30 günlük MACE (KV ölüm, non-fatal MI, inme) riskini gösterir; toplam perioperatif risk hastaya özgü komorbiditelerle birlikte değerlendirilir.
             </span>
           </div>
 
@@ -747,7 +747,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
                 <div className={`p-2.5 rounded-lg mb-3 text-[11px] leading-relaxed border ${
                   isDark ? 'bg-emerald-950/40 border-emerald-800/40 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-900 font-medium'
                 }`}>
-                  ✓ Aktif kardiyak semptom yoksa rutin EKO / ileri tetkik gerekmez.
+                  ✓ Stabil, düşük riskli cerrahide <strong>rutin EKG, hs-cTn veya BNP/NT-proBNP önerilmez (Class III)</strong>; aktif kardiyak semptom yoksa ileri tetkik gerekmez.
                 </div>
 
                 {/* Procedure List */}
@@ -853,7 +853,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
                 <div className={`p-2.5 rounded-lg mb-3 text-[11px] leading-relaxed border ${
                   isDark ? 'bg-amber-950/40 border-amber-800/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900 font-medium'
                 }`}>
-                  ⚠️ ≥65 yaş veya KV risk faktörlerinde EKG, hs-cTn ve BNP önerilir.
+                  ⚠️ ≥65 yaş, KV risk faktörü veya bilinen KVH varsa: <strong>12-derivasyon EKG (Class I)</strong>, <strong>hs-cTn preop + postop 24. ve 48. saat (PMI taraması · Class I)</strong> ve <strong>BNP/NT-proBNP (Class IIa)</strong>.
                 </div>
 
                 {/* Procedure List */}
@@ -875,8 +875,15 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
                   <div className={`p-2 rounded-lg border ${
                     isDark ? 'bg-slate-800/40 border-slate-700/60 text-slate-200' : 'bg-white border-slate-100 text-slate-800 shadow-xs'
                   }`}>
-                    <div className="font-bold">• Karotis Endarterektomisi (CEA)</div>
-                    <div className="text-[10px] text-slate-400 italic">Asemptomatik veya semptomatik açık CEA</div>
+                    <div className="font-bold">• Karotis Asemptomatik (CEA veya CAS)</div>
+                    <div className="text-[10px] text-slate-400 italic">Asymptomatic carotid endarterectomy or stenting</div>
+                  </div>
+
+                  <div className={`p-2 rounded-lg border ${
+                    isDark ? 'bg-slate-800/40 border-slate-700/60 text-slate-200' : 'bg-white border-slate-100 text-slate-800 shadow-xs'
+                  }`}>
+                    <div className="font-bold">• Karotis Semptomatik (Açık CEA)</div>
+                    <div className="text-[10px] text-slate-400 italic">Symptomatic carotid endarterectomy (Semptomatik CAS → Yüksek Risk)</div>
                   </div>
 
                   <div className={`p-2 rounded-lg border ${
@@ -959,7 +966,7 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
                 <div className={`p-2.5 rounded-lg mb-3 text-[11px] leading-relaxed border ${
                   isDark ? 'bg-rose-950/40 border-rose-900/40 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900 font-medium'
                 }`}>
-                  🚨 Multidisipliner kardiyak değerlendirme ve invaziv hemodinami.
+                  🚨 Multidisipliner değerlendirme: <strong>12-derivasyon EKG (Class I)</strong>, <strong>hs-cTn preop + postop 24–48. sa (PMI · Class I)</strong>, <strong>BNP/NT-proBNP (Class IIa)</strong>. İnvaziv hemodinami hasta/cerrahiye göre seçilir; <strong>rutin PAC önerilmez (Class III)</strong>.
                 </div>
 
                 {/* Procedure List */}
@@ -1057,17 +1064,17 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
             <div className="flex items-start gap-2.5">
               <Info className="w-4 h-4 text-violet-500 shrink-0 mt-0.5" />
               <div className="leading-relaxed text-[11px]">
-                <strong>Resmi Kaynak:</strong> <em>2022 ESC Guidelines on cardiovascular assessment and management of patients undergoing non-cardiac surgery.</em> European Heart Journal (academic.oup.com).
+                <strong>Resmi Kaynak:</strong> Halvorsen S, Mehilli J, Cassese S, et al. <em>2022 ESC Guidelines on cardiovascular assessment and management of patients undergoing non-cardiac surgery.</em> Eur Heart J. 2022;43(39):3826–3924.
               </div>
             </div>
 
             <a
-              href="https://academic.oup.com/view-large/570640891"
+              href="https://doi.org/10.1093/eurheartj/ehac270"
               target="_blank"
               rel="noopener noreferrer"
               className="text-violet-600 dark:text-violet-400 hover:underline font-semibold shrink-0 inline-flex items-center gap-1 text-[11px]"
             >
-              <span>academic.oup.com/view-large/570640891</span>
+              <span>doi.org/10.1093/eurheartj/ehac270</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           </div>

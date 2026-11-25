@@ -44,73 +44,74 @@ interface PediatricFastingRule {
 const PEDIATRIC_RULES: PediatricFastingRule[] = [
   {
     id: 'solids',
-    name: 'İnek Sütü & Katı Gıdalar (Hafif veya Ağır Öğünler)',
+    name: 'Tam / Diğer Katı Öğünler (Normal & Ağır Yemekler)',
     hours: 6,
-    shortBadge: 'Tam Açlık',
-    badgeLabel: '6 Saat',
+    shortBadge: 'GRADE 1C',
+    badgeLabel: '6 Saat (GRADE 1C)',
     badgeColor: 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30',
     hourColorClass: 'text-rose-600 dark:text-rose-400',
-    targetGroup: 'Ek gıda alan bebekler ve büyük çocuklar',
+    targetGroup: 'Tam katı öğün tüketen çocuklar',
     examples: [
-      'İnek sütü, keçi sütü, yoğurt, sütlü tatlılar',
-      'Kahvaltı (ekmek, peynir, yumurta, zeytin)',
-      'Bebek bisküvisi, püre, çorba, makarna, etli yemekler'
+      'Etli, yağlı, kızartılmış veya büyük porsiyonlu ana yemekler',
+      'Makarna, pilav, pizza, hamburger ve tam öğünler',
+      'Hafif kahvaltı kapsamına girmeyen diğer tüm katı gıdalar'
     ],
-    recommendation: 'İnek sütü ve her türlü katı gıda için anestezi öncesi en az 6 saat tam açlık şarttır.',
-    physiologicalRationale: 'İnek sütü mide asidinde yoğun kazein pıhtısı oluşturarak katı gıda gibi davranır. Yağlı/katı gıdalar çocuklarda 4-6 saatte ancak boşalabilir.',
-    aspirationSafety: '6 saatten erken indüksiyonda regürjitasyon ve pulmoner aspirasyon riski yüksektir.'
+    recommendation: 'ESAIC 2022 (GRADE 1C): Tam ve diğer katı öğünler için elektif anestezi öncesi en az 6 saat açlık gerekir. (Not: ASA 2017/2023 kılavuzu ağır/yağlı yemek için 8 saat, hafif öğün ve inek sütü için 6 saat uygular.)',
+    physiologicalRationale: 'Yüksek yağ ve protein içeren tam katı öğünlerin çocuklarda güvenli rezidüel seviyelere boşalması 6 saati bulur.',
+    aspirationSafety: 'ESAIC 2022 GRADE 1C · ASA 2017/2023 ağır öğün: 8 saat'
   },
   {
     id: 'formula',
-    name: 'Bebek Maması (Formül Süt / Bebek Formülü)',
+    name: 'Mama, İnek Sütü & Hafif Kahvaltı / Yarı Katılar',
     hours: 4,
-    shortBadge: 'Formül Süt',
-    badgeLabel: '4 Saat',
+    shortBadge: 'GRADE 2C',
+    badgeLabel: '4 Saat (GRADE 2C)',
     badgeColor: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30',
     hourColorClass: 'text-amber-600 dark:text-amber-400',
-    targetGroup: 'Mama ile beslenen bebekler ve 1 yaş altı süt çocukları',
+    targetGroup: 'Mama alan bebekler, inek sütü veya hafif kahvaltı alan çocuklar',
     examples: [
-      'Standart toz/sıvı bebek mamaları (Formül 1, 2 vb.)',
-      'Özel hidrolize veya hipoalerjenik bebek mamaları'
+      'Bebek mamaları (standart veya hidrolize formül sütler)',
+      'İnek sütü ve diğer hayvansal sütler (ESAIC 2022: 4 saat)',
+      'Hafif kahvaltı / yarı katılar (az yağlı tost/ekmek, yoğurt, püre, bebek bisküvisi)'
     ],
-    recommendation: 'Elektif anestezi öncesi formül süt alımına en az 4 saat önce son verilmelidir.',
-    physiologicalRationale: 'Formül mama anne sütüne göre daha yüksek kazein ve bitkisel yağ fraksiyonu içerir; gastrik boşalma süresi ortalama 3.5 - 4 saattir.',
-    aspirationSafety: '4 saat sonrasında mide boşalması güvenli eşik değerlere ulaşır.'
+    recommendation: 'ESAIC 2022 (GRADE 2C): Formül mama, inek sütü ve hafif kahvaltı / yarı katı gıdalar için 4 saatlik açlık yeterlidir. (Karşılaştırma: ASA 2017/2023 kılavuzunda formül, inek sütü ve hafif öğün 6 saat kabul edilir.)',
+    physiologicalRationale: 'Pediatrik gastrik USG ve boşalma çalışmaları; formül mama, inek sütü ve hafif/yarı-katı gıdaların sağlıklı çocuklarda ortalama 3.5–4 saat içinde güvenli bazal düzeye indiğini göstermiştir.',
+    aspirationSafety: 'ESAIC 2022 GRADE 2C · ASA 2017/2023 (8-6-4-2): 6 saat'
   },
   {
     id: 'breast-milk',
     name: 'Anne Sütü (Breast Milk)',
     hours: 3,
-    shortBadge: 'Avrupa Kılavuzu',
-    badgeLabel: '3 Saat (Avrupa Kılavuzu)',
+    shortBadge: 'GRADE 1C',
+    badgeLabel: '3 Saat (GRADE 1C)',
     badgeColor: 'bg-teal-500/15 text-teal-700 dark:text-teal-300 border-teal-500/30',
     hourColorClass: 'text-teal-600 dark:text-teal-400',
     targetGroup: 'Emzirilen bebekler ve küçük çocuklar',
     examples: [
       'Doğrudan anne memesiyle emzirme',
-      'Biberonla verilen sağılmış taze anne sütü'
+      'Biberonla verilen sağılmış taze anne sütü (katkısız)'
     ],
-    recommendation: 'ESAIC 2022 Kılavuzu: Anne sütü ile beslenen bebeklerde elektif anestezi öncesi 3 saatlik açlık yeterlidir (Klasik Amerikan yaklaşımı 4 saattir).',
+    recommendation: 'ESAIC 2022 (GRADE 1C): Anne sütü ile beslenen bebeklerde elektif anestezi öncesi 3 saatlik açlık yeterlidir (ASA 2017/2023 kılavuzunda 4 saattir).',
     physiologicalRationale: 'Anne sütündeki protein ve yağ profili bebek fizyolojisine kusursuz uyumludur; kazein oranı düşüktür ve inek sütü veya formül mamaya göre mideden çok daha hızlı boşalır.',
-    aspirationSafety: '3 saatlik açlık bebek midesinde rezidüel volümü güvenli sınırlara indirir.'
+    aspirationSafety: 'ESAIC 2022 GRADE 1C · ASA 2017/2023: 4 saat'
   },
   {
     id: 'clear-fluids',
-    name: 'Berrak Sıvılar (Su, Elma Suyu, Şekerli Berrak Sıvılar)',
+    name: 'Berrak Sıvılar (Su, Elma Suyu · Pratik ≤ 3 mL/kg)',
     hours: 1,
-    shortBadge: 'Yeni Standart',
-    badgeLabel: '1 Saat (Yeni Standart)',
+    shortBadge: 'GRADE 1B',
+    badgeLabel: '1 Saat (GRADE 1B)',
     badgeColor: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
     hourColorClass: 'text-emerald-600 dark:text-emerald-400',
     targetGroup: 'Tüm yaş grupları (bebekler ve çocuklar)',
     examples: [
-      'Su, berrak posasız elma suyu',
+      'Su, posasız berrak elma suyu (pratik bolus sınırı: ≤ 3 mL/kg)',
       'Şekerli berrak sıvılar / berrak meyve aromalı içecekler',
-      'Sütsüz açık çay, berrak elektrolit solüsyonları (pediatrik)'
+      'Sütsüz açık çay, pediatrik berrak oral elektrolit solüsyonları'
     ],
-    recommendation: 'ESAIC 2022 & ESPA / APA: Elektif cerrahi indüksiyonuna 1 saat kalana kadar çocuklara berrak sıvı verilmeli ve özellikle susayan çocuklar teşvik edilmelidir.',
-    physiologicalRationale: 'Çocuklarda berrak sıvıların %95’i 30-45 dakika içinde mideden duodenuma geçer. 1 saatlik süre aspirasyon riskini artırmaksızın dehidratasyon ve ajitasyonu dramatik şekilde azaltır.',
-    aspirationSafety: 'Aspirasyon riski klasik 2 saat kuralı ile eşdeğerdir (GRADE 1C kanıt düzeyi).'
+    recommendation: 'ESAIC 2022 (GRADE 1B) & ESPA / APA: Elektif anestezi indüksiyonuna 1 saat kalana kadar çocuklara berrak sıvı (pratikte ≤ 3 mL/kg) verilmesi aktif olarak teşvik edilir.',
+    physiologicalRationale: 'Çocuklarda berrak sıvıların %95’i 30–45 dakika içinde mideden duodenuma geçer. 1 saatlik süre aspirasyon riskini artırmaksızın dehidratasyon, ketozis ve ajitasyonu dramatik şekilde azaltır.',
+    aspirationSafety: 'Aspirasyon riski 2 saat kuralı ile eşdeğerdir (ESAIC 2022 GRADE 1B)'
   }
 ];
 
@@ -384,55 +385,118 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
         </div>
       </div>
 
-      {/* 4. Comparison Table: Klasik (6-4-4-2) vs Modern (6-4-3-1) */}
+      {/* 4. Comparison Table: ASA (8-6-4-2) vs ESAIC 2022 (6-4-3-1) */}
       <div className={`p-5 rounded-2xl border space-y-3 ${
         isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50/80 border-slate-200'
       }`}>
         <h4 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
           <ArrowRight className="w-4 h-4 text-amber-500" />
-          <span>Kılavuz Evrimi: Klasik (6-4-4-2) Yaklaşım vs Modern (6-4-3-1) Kılavuzu</span>
+          <span>Kılavuz Karşılaştırması: ASA 2017/2023 (8-6-4-2) vs ESAIC 2022 (6-4-3-1)</span>
         </h4>
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className={`border-b ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
-                <th className="py-2 px-3 font-semibold">Gıda Türü</th>
-                <th className="py-2 px-3 font-semibold text-slate-500">Klasik Kural (Eski)</th>
-                <th className="py-2 px-3 font-semibold text-amber-600 dark:text-amber-400">ESAIC 2022 / ESPA (Güncel)</th>
-                <th className="py-2 px-3 font-semibold">Klinik Değişim Nedeni</th>
+                <th className="py-2 px-3 font-semibold">Gıda / Sıvı Türü</th>
+                <th className="py-2 px-3 font-semibold text-slate-500">ASA 2017/2023 (8-6-4-2)</th>
+                <th className="py-2 px-3 font-semibold text-amber-600 dark:text-amber-400">ESAIC 2022 (6-4-3-1)</th>
+                <th className="py-2 px-3 font-semibold">Kanıt Düzeyi &amp; Klinik Not</th>
               </tr>
             </thead>
             <tbody className={`divide-y ${isDark ? 'divide-slate-800/60 text-slate-300' : 'divide-slate-200 text-slate-700'}`}>
               <tr>
-                <td className="py-2.5 px-3 font-bold text-slate-700 dark:text-slate-200">Berrak Sıvılar (Su, Elma Suyu)</td>
+                <td className="py-2.5 px-3 font-bold text-slate-700 dark:text-slate-200">Berrak Sıvılar (Pratik ≤ 3 mL/kg)</td>
                 <td className="py-2.5 px-3 font-mono text-slate-400">2 Saat</td>
-                <td className="py-2.5 px-3 font-mono font-black text-emerald-600 dark:text-emerald-400">1 Saat</td>
-                <td className="py-2.5 px-3 text-[11px]">30-45 dk'da gastrik boşalma kanıtlandı; dehidratasyonu ve susuzluğu önler.</td>
+                <td className="py-2.5 px-3 font-mono font-black text-emerald-600 dark:text-emerald-400">1 Saat (GRADE 1B)</td>
+                <td className="py-2.5 px-3 text-[11px]">30–45 dk’da boşalma kanıtlı; dehidratasyon, ketozis ve ajitasyonu azaltır.</td>
               </tr>
               <tr>
                 <td className="py-2.5 px-3 font-bold text-slate-700 dark:text-slate-200">Anne Sütü (Breast Milk)</td>
                 <td className="py-2.5 px-3 font-mono text-slate-400">4 Saat</td>
-                <td className="py-2.5 px-3 font-mono font-black text-teal-600 dark:text-teal-400">3 Saat</td>
-                <td className="py-2.5 px-3 text-[11px]">Anne sütünün düşük kazein ve yüksek sindirilebilirliği USG ile doğrulandı.</td>
+                <td className="py-2.5 px-3 font-mono font-black text-teal-600 dark:text-teal-400">3 Saat (GRADE 1C)</td>
+                <td className="py-2.5 px-3 text-[11px]">Düşük kazein ve hızlı gastrik boşalma USG ile doğrulanmıştır.</td>
               </tr>
               <tr>
                 <td className="py-2.5 px-3 font-bold text-slate-700 dark:text-slate-200">Bebek Maması (Formül Süt)</td>
-                <td className="py-2.5 px-3 font-mono text-slate-400">4 Saat / 6 Saat</td>
-                <td className="py-2.5 px-3 font-mono font-black text-amber-600 dark:text-amber-400">4 Saat</td>
-                <td className="py-2.5 px-3 text-[11px]">Bebek mamalarının ortalama 3.5-4 saatte güvenli seviyeye boşaldığı gösterildi.</td>
+                <td className="py-2.5 px-3 font-mono text-slate-400">6 Saat</td>
+                <td className="py-2.5 px-3 font-mono font-black text-amber-600 dark:text-amber-400">4 Saat (GRADE 2C)</td>
+                <td className="py-2.5 px-3 text-[11px]">ESAIC 2022’de formül sütler 4 saat; ASA’da 6 saat kabul edilir.</td>
               </tr>
               <tr>
-                <td className="py-2.5 px-3 font-bold text-slate-700 dark:text-slate-200">Katı Gıdalar & İnek Sütü</td>
+                <td className="py-2.5 px-3 font-bold text-slate-700 dark:text-slate-200">İnek Sütü &amp; Hafif Kahvaltı / Yarı Katılar</td>
                 <td className="py-2.5 px-3 font-mono text-slate-400">6 Saat</td>
-                <td className="py-2.5 px-3 font-mono font-black text-rose-600 dark:text-rose-400">6 Saat</td>
-                <td className="py-2.5 px-3 text-[11px]">Değişmedi. İnek sütü ve katılar yüksek kazein/yağ nedeniyle 6 saat kalmalıdır.</td>
+                <td className="py-2.5 px-3 font-mono font-black text-amber-600 dark:text-amber-400">4 Saat (GRADE 2C)</td>
+                <td className="py-2.5 px-3 text-[11px]">ESAIC 2022 inek sütü ve hafif kahvaltı/yarı katıları 4 saatte sınıflar (6 sa kuralı ASA’ya aittir).</td>
+              </tr>
+              <tr>
+                <td className="py-2.5 px-3 font-bold text-slate-700 dark:text-slate-200">Tam / Ağır / Yağlı Katı Öğünler</td>
+                <td className="py-2.5 px-3 font-mono text-slate-400">8 Saat (Ağır/Yağlı)</td>
+                <td className="py-2.5 px-3 font-mono font-black text-rose-600 dark:text-rose-400">6 Saat (GRADE 1C)</td>
+                <td className="py-2.5 px-3 text-[11px]">ESAIC 2022’de diğer tüm katı/tam öğünler 6 saat; ASA’da ağır/etli/yağlı öğün 8 saattir.</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* 5. Literature References */}
+      {/* 5. Neonate/Premature Guidance & High-Risk Pediatric Exceptions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div className={`p-4 rounded-2xl border space-y-2 ${
+          isDark ? 'bg-sky-950/20 border-sky-500/35' : 'bg-sky-50/70 border-sky-200'
+        }`}>
+          <div className="flex items-center gap-2 font-bold text-sky-700 dark:text-sky-300">
+            <Baby className="w-4 h-4 text-sky-500 shrink-0" />
+            <span>Yenidoğan &amp; Prematüreler (&lt; 28 Gün): Hipoglisemi Koruması</span>
+          </div>
+          <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+            Yenidoğan ve prematürelerde hepatik glikojen depoları minimaldir; uzamış açlıkta semptomatik/nörotoksik <strong>hipoglisemi</strong> hızla gelişebilir. Vaka sabah ilk sıraya alınmalı, açlık süresi <strong>kesinlikle minimize edilmeli</strong>; açlık uzayacaksa <strong>%1–2.5 dekstroz içeren izotonik dengeli IV idame sıvısı</strong> başlanmalı ve seri kan şekeri izlenmelidir.
+          </p>
+        </div>
+
+        <div className={`p-4 rounded-2xl border space-y-2 ${
+          isDark ? 'bg-rose-950/20 border-rose-500/35' : 'bg-rose-50/70 border-rose-200'
+        }`}>
+          <div className="flex items-center gap-2 font-bold text-rose-700 dark:text-rose-300">
+            <ShieldAlert className="w-4 h-4 text-rose-500 shrink-0" />
+            <span>Yüksek Riskli Pediatrik İstisnalar (6-4-3-1 Kuralı Yetersizdir!)</span>
+          </div>
+          <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+            <strong>Akut travma, GİS obstrüksiyonu / pilor stenozu / ileus, şiddetli GÖRH, aktif opioid kullanımı veya Gİ dismotilite</strong> varlığında standart 6-4-3-1 süreleri boş mideyi garanti etmez! Bu olgularda açlık <strong>bireyselleştirilir</strong>; şüphede başucu <strong>pediatrik gastrik POCUS (Spencer 2015)</strong> uygulanır ve gerekirse modifiye/klasik RSI tercih edilir.
+          </p>
+        </div>
+      </div>
+
+      {/* 6. ESAIC 2022 Additional Practical Pearls */}
+      <div className={`p-4 rounded-2xl border space-y-3 ${
+        isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+      }`}>
+        <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-slate-800 dark:text-slate-200">
+          <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+          <span>ESAIC 2022 Ek Klinik Pratik İncileri</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-slate-600 dark:text-slate-300">
+          <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+            <div className="font-bold text-emerald-700 dark:text-emerald-300 mb-1">1. Pratik Berrak Sıvı Sınırı (≤ 3 mL/kg)</div>
+            <p className="leading-relaxed">
+              İndüksiyondan 1 saat öncesine kadar susayan çocuklara pratikte <strong>≤ 3 mL/kg</strong> berrak sıvı verilmesi güvenli kabul edilir ve susuzluğu önler (GRADE 1B).
+            </p>
+          </div>
+          <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+            <div className="font-bold text-sky-700 dark:text-sky-300 mb-1">2. Pediatrik Sakız Çiğneme</div>
+            <p className="leading-relaxed">
+              Yutulmamış sakız çiğnemek elektif pediatrik cerrahi için <strong>iptal veya erteleme nedeni değildir</strong>; indüksiyon öncesi ağızdan çıkarılması yeterlidir (GRADE 1C).
+            </p>
+          </div>
+          <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+            <div className="font-bold text-amber-700 dark:text-amber-300 mb-1">3. Erken Postoperatif Oral Alım</div>
+            <p className="leading-relaxed">
+              Çocukların derlenme döneminde kendileri istediklerinde <strong>erken oral sıvı/beslenmeye</strong> başlamaları teşvik edilir; zorunlu su içme testi taburculuk şartı değildir (GRADE 1C).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 7. Literature References */}
       <div className={`p-4 rounded-xl border text-xs space-y-2 ${
         isDark ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
       }`}>
@@ -441,7 +505,10 @@ export const PediatricFastingInfographic: React.FC<PediatricFastingInfographicPr
           <span>Pediatrik Literatür ve Kılavuz Künyesi</span>
         </div>
         <p className="leading-relaxed">
-          Frykholm P, Disma N, Andersson H, et al. <em>Pre-operative fasting in children: A guideline from the European Society of Anaesthesiology and Intensive Care.</em> European Journal of Anaesthesiology. 2022 Jan;39(1):4-25. <strong>PMID: 34857683</strong>. DOI: 10.1097/EJA.0000000000001599.
+          1. <strong>ESAIC 2022:</strong> Frykholm P, Disma N, Andersson H, et al. <em>Pre-operative fasting in children: A guideline from the European Society of Anaesthesiology and Intensive Care.</em> European Journal of Anaesthesiology. 2022 Jan;39(1):4-25. <strong>PMID: 34857683</strong>. DOI: 10.1097/EJA.0000000000001599.
+        </p>
+        <p className="leading-relaxed">
+          2. <strong>ASA 2023 Modular Update:</strong> Joshi GP, Abdelmalak BB, Weigel WA, et al. <em>2023 American Society of Anesthesiologists Practice Guidelines for Preoperative Fasting (Pediatric Fasting Duration).</em> Anesthesiology. 2023;138(2):132-151. PMID: 36629465.
         </p>
       </div>
     </div>

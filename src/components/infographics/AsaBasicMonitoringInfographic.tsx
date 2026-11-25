@@ -53,10 +53,10 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
     shortLabel: 'Genel Anestezi',
     title: 'Genel Anestezi (ETT / SGA + Mekanik Ventilasyon)',
     subtitle: 'Tüm Standart I ve Standart II monitörleri ile sesli güvenlik alarmları eksiksiz zorunludur.',
-    monitorSummary: 'EKG + SpO₂ + FiO₂ Analizörü + Kapnografi (EtCO₂) + Disconnect Alarmı + NIBP (≤5 dk) + Ek Dolaşım + Sıcaklık',
+    monitorSummary: 'Kesintisiz EKG + Devamlı SpO₂ & FiO₂ Analizörü + Kantitatif EtCO₂ + Disconnect Alarmı + NIBP (≤5 dk) + Ek Dolaşım + Sıcaklık',
     etco2Active: true,
     etco2Label: '36 mmHg · RR 12',
-    etco2Sub: 'Zorunlu: ETT/SGA teyidi + devamlı kapnografi',
+    etco2Sub: 'Zorunlu: ETT/SGA teyidi + devamlı kantitatif EtCO₂',
     fio2Required: true,
     disconnectAlarmRequired: true,
     adjunctCircRequired: true,
@@ -66,10 +66,10 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
         title: 'Oksijenasyon',
         requirementLabel: 'Zorunlu (FiO₂ + SpO₂)',
         requirementLevel: 'mandatory',
-        summary: 'Solunum sisteminde düşük O₂ limit alarmlı oksijen analizörü VE kantitatif pulse oksimetri zorunludur.',
+        summary: 'Solunum sisteminde düşük O₂ limit alarmlı oksijen analizörü VE devamlı (continually) kantitatif pulse oksimetri zorunludur.',
         keyPoints: [
           'İnspire gaz O₂ konsantrasyonu düşük limit alarmlı O₂ analizörü ile ölçülmelidir.',
-          'Pulse oksimetri (SpO₂) değişken tonlu (variable-pitch) nabız sesi ve düşük eşik sesli alarmı ile kullanılmalıdır.',
+          'Pulse oksimetri (SpO₂) değişken tonlu (variable-pitch) nabız sesi ve düşük eşik sesli alarmı ile devamlı (continually) değerlendirilmelidir.',
           'Hastanın rengini gözlemlemek için yeterli ortam aydınlatması ve görsel erişim sağlanmalıdır.'
         ],
         alarmNote: 'Düşük FiO₂ alarmı ve değişken tonlu SpO₂ sesli uyarısı aktif olmalıdır.'
@@ -77,12 +77,12 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
       ventilation: {
         pillar: 'ventilation',
         title: 'Ventilasyon',
-        requirementLabel: 'Zorunlu (EtCO₂ + Disconnect)',
+        requirementLabel: 'Zorunlu (Kantitatif EtCO₂ + Disconnect)',
         requirementLevel: 'mandatory',
-        summary: 'Klinik gözlem, devamlı kapnografi (EtCO₂) ve mekanik ventilatörde devre ayrılma alarmı zorunludur.',
+        summary: 'Klinik gözlem, devamlı (continually) kantitatif kapnografi (EtCO₂) ve mekanik ventilatörde devre ayrılma alarmı zorunludur.',
         keyPoints: [
-          'ETT veya supraglottik havayolu (SGA/LMA) yerleştirildiğinde klinik bulgular VE ekshale CO₂ tespiti ile doğrulanmalıdır.',
-          'Anestezi süresince devamlı EtCO₂ analizi (kapnografi) ve göğüs hareketi / balon / oskültasyon takibi yapılmalıdır.',
+          'ETT veya supraglottik havayolu (SGA/LMA) yerleştirildiğinde klinik bulgular VE kantitatif ekshale CO₂ (EtCO₂) analizi ile doğrulanmalıdır.',
+          'Anestezi süresince devamlı (continually) kantitatif EtCO₂ izlemi ve göğüs hareketi / balon / oskültasyon takibi yapılmalıdır.',
           'Mekanik ventilatörde sesli devre ayrılma (disconnect) alarmı zorunludur; ekspiryum volümünün kantitatif izlemi güçlü şekilde önerilir.'
         ],
         alarmNote: 'Ventilatör devre ayrılma (disconnect) ve apne/EtCO₂ alarmları açık kalmalıdır.'
@@ -90,12 +90,12 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
       circulation: {
         pillar: 'circulation',
         title: 'Dolaşım',
-        requirementLabel: 'Zorunlu (EKG + ≤5 dk NIBP + Ek)',
+        requirementLabel: 'Zorunlu (Kesintisiz EKG + ≤5 dk NIBP + Ek)',
         requirementLevel: 'mandatory',
-        summary: 'Sürekli EKG, en az 5 dakikada bir NIBP/KH ölçümü ve en az bir ek dolaşım doğrulama yöntemi zorunludur.',
+        summary: 'Kesintisiz (continuously) EKG, en az 5 dakikada bir NIBP/KH (continually) ve en az bir ek dolaşım doğrulama yöntemi zorunludur.',
         keyPoints: [
-          'EKG indüksiyon başlangıcından anestezi alanından ayrılma hazırlığına kadar sürekli (continuously) izlenmelidir.',
-          'Arteriyel kan basıncı ve kalp hızı en az her 5 dakikada bir ölçülüp kaydedilmelidir.',
+          'EKG indüksiyon başlangıcından anestezi alanından ayrılma hazırlığına kadar kesintisiz (continuously) görüntülenmelidir.',
+          'Arteriyel kan basıncı ve kalp hızı en az her 5 dakikada bir (continually) ölçülüp kaydedilmelidir.',
           'Genel anestezide ek olarak en az biri zorunludur: nabız palpasyonu, kalp sesi oskültasyonu, intra-arteriyel trase, USG nabız veya pulse pletismografi/oksimetri.'
         ],
         alarmNote: 'EKG ritim/bradikardi-taşikardi ve NIBP limit alarmları vaka öncesi kontrol edilmelidir.'
@@ -105,25 +105,25 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
         title: 'Vücut Sıcaklığı',
         requirementLabel: 'Koşullu Zorunlu',
         requirementLevel: 'conditional',
-        summary: 'Sıcaklıkta klinik olarak anlamlı değişiklik amaçlandığında, beklendiğinde veya şüphelendiğinde zorunludur.',
+        summary: 'Sıcaklıkta klinik olarak anlamlı değişiklik amaçlandığında, beklendiğinde veya şüphelendiğinde devamlı (continually) izlenmelidir.',
         keyPoints: [
           '30 dakikayı aşan genel anesteziler, geniş kavite cerrahisi, pediatrik/geriatrik hastalar ve aktif ısıtma/soğutma durumlarında mutlaka izlenir.',
-          'Malign hipertermi (MH) veya perioperatif hipotermi riskinde çekirdek (özofageal, nazofaringeal, timpanik, mesane) ölçüm tercih edilir.',
+          'Hızlı termal değişimlerde en hızlı çekirdek (kor) ısı bölgeleri pulmoner arter, distal özofagus, nazofarenks ve temaslı timpanik membrandır; mesane ve rektal problar hızlı değişimlere gecikmeli (lag) yanıt verir.',
           'Ölçüm aracı anestezi ortamında derhal erişilebilir durumda bulundurulmalıdır.'
         ],
-        alarmNote: 'Beklenmedik ısı artışı + EtCO₂ yükselmesi kombinasyonu Malign Hipertermi açısından acil uyarıdır.'
+        alarmNote: 'KRİTİK MH UYARISI: Hipertermi, Malign Hiperterminin GEÇ bulgusudur — asla ateş yükselmesini bekleme! Erken bulgular: açıklanamayan EtCO₂ artışı, taşikardi ve masseter/jeneralize rijidite.'
       }
     }
   },
   sedation: {
     id: 'sedation',
-    shortLabel: 'Orta / Derin Sedasyon (MAC)',
-    title: 'Orta veya Derin Sedasyon & Monitörize Anestezi Bakımı (MAC)',
-    subtitle: '2011 revizyonundan bu yana orta ve derin sedasyonda ekshale CO₂ (kapnografi) izlemi ASA temel standardıdır.',
-    monitorSummary: 'EKG + SpO₂ + Nazal/Maske Kapnografi (EtCO₂) + NIBP (≤5 dk) + Klinik Gözlem + Gerekirse Sıcaklık',
+    shortLabel: 'Orta / Derin Sedasyon · MAC',
+    title: 'Orta / Derin Sedasyon & Monitörize Anestezi Bakımı (MAC)',
+    subtitle: 'MAC bir sedasyon derinliği değil, anestezi hizmet/sunum tipidir (sedasyonsuz, minimal, orta veya derin olabilir). ASA, ekshale CO₂ izlemini özellikle ORTA ve DERİN sedasyonda zorunlu kılar (minimal sedasyonda değil).',
+    monitorSummary: 'Kesintisiz EKG + Devamlı SpO₂ + Ekshale CO₂ Tespiti (Orta/Derin Sedasyonda) + NIBP (≤5 dk) + Klinik Gözlem + Gerekirse Sıcaklık',
     etco2Active: true,
     etco2Label: '38 mmHg · RR 14',
-    etco2Sub: 'Zorunlu: Orta/Derin sedasyonda nazal kanül/maske EtCO₂',
+    etco2Sub: 'Zorunlu: Yalnızca orta ve derin sedasyonda ekshale CO₂ tespiti',
     fio2Required: false,
     disconnectAlarmRequired: false,
     adjunctCircRequired: false,
@@ -133,35 +133,35 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
         title: 'Oksijenasyon',
         requirementLabel: 'Zorunlu (SpO₂ + Sesli Ton)',
         requirementLevel: 'mandatory',
-        summary: 'Kantitatif pulse oksimetri (değişken nabız tonu + düşük alarm) ve oksijen kaynağının teyidi zorunludur.',
+        summary: 'Devamlı (continually) kantitatif pulse oksimetri (değişken nabız tonu + düşük alarm) ve oksijen kaynağının teyidi zorunludur.',
         keyPoints: [
-          'Tüm MAC ve sedasyon vakalarında SpO₂ sürekli izlenmeli, değişken pitch nabız tonu ve düşük eşik alarmı duyulabilir olmalıdır.',
+          'Tüm MAC ve sedasyon vakalarında SpO₂ devamlı (continually) izlenmeli, değişken pitch nabız tonu ve düşük eşik alarmı duyulabilir olmalıdır.',
           'Genel anestezi devresi kullanılmıyorsa inspire O₂ analizörü gerekmez; ancak destek O₂ akışı ve hastanın rengi gözlemlenmelidir.',
-          'Ek O₂ verilmesi desatürasyonu geciktirebilir; hipoventilasyonu maskelememesi için kapnografi ile birlikte değerlendirilmelidir.'
+          'Ek O₂ verilmesi desatürasyonu geciktirebilir; hipoventilasyonu maskelememesi için orta/derin sedasyonda ekshale CO₂ izlemi ile birlikte değerlendirilmelidir.'
         ],
-        alarmNote: 'Ek oksijen altında SpO₂ geç düşer; solunum depresyonunun erken uyarısı kapnografidir.'
+        alarmNote: 'Ek oksijen altında SpO₂ geç düşer; solunum depresyonunun erken uyarısı ekshale CO₂ izlemidir.'
       },
       ventilation: {
         pillar: 'ventilation',
         title: 'Ventilasyon',
-        requirementLabel: 'Zorunlu (EtCO₂ + Gözlem)',
+        requirementLabel: 'Zorunlu (Orta/Derin: Ekshale CO₂)',
         requirementLevel: 'mandatory',
-        summary: 'Orta veya derin sedasyonda klinik gözleme ek olarak devamlı ekshale CO₂ (kapnografi) izlemi zorunludur.',
+        summary: 'Orta ve derin sedasyonda klinik gözleme ek olarak devamlı (continually) ekshale CO₂ tespiti zorunludur; minimal sedasyonda (anksiyolizde) zorunlu değildir.',
         keyPoints: [
-          'ASA kuralı: Hasta, işlem veya ekipman doğası engellemedikçe orta/derin sedasyonda nazal örnekleme kanülü veya maske ile devamlı EtCO₂ izlenmelidir.',
-          'Göğüs duvarı hareketi ve solunum paterni kalitatif olarak devamlı gözlemlenmelidir.',
-          'Derin sedasyon kolayca genel anesteziye kayabileceğinden havayolu ve pozitif basınçlı ventilasyon donanımı hazır olmalıdır.'
+          'MAC bir sedasyon derinliği değil, anestezi hizmet tipidir; ancak MAC altında orta veya derin sedasyon uygulandığında (hasta/işlem/ekipman engellemedikçe) nazal kanül veya maske ile devamlı ekshale CO₂ tespiti zorunludur.',
+          'ETT/SGA’daki kantitatif EtCO₂ analizinden farklı olarak orta/derin sedasyonda ASA temel şartı ekshale CO₂ varlığının devamlı tespitidir (kapnografi tercih edilir).',
+          'Göğüs duvarı hareketi ve solunum paterni devamlı gözlemlenmeli; derin sedasyon hızla genel anesteziye kayabileceğinden havayolu ve pozitif basınçlı ventilasyon donanımı hazır olmalıdır.'
         ],
         alarmNote: 'Kapnogramın düzleşmesi (apne) SpO₂ düşüşünden 30–60 saniye önce hipoventilasyonu yakalar.'
       },
       circulation: {
         pillar: 'circulation',
         title: 'Dolaşım',
-        requirementLabel: 'Zorunlu (EKG + ≤5 dk NIBP)',
+        requirementLabel: 'Zorunlu (Kesintisiz EKG + ≤5 dk NIBP)',
         requirementLevel: 'mandatory',
-        summary: 'Sürekli EKG ve en az 5 dakikada bir arteriyel kan basıncı ile kalp hızı değerlendirmesi zorunludur.',
+        summary: 'Kesintisiz (continuously) EKG ve en az 5 dakikada bir (continually) arteriyel kan basıncı ile kalp hızı değerlendirmesi zorunludur.',
         keyPoints: [
-          'İşlem başlangıcından derlenme/çıkış hazırlığına kadar sürekli EKG izlemi sürdürülmelidir.',
+          'İşlem başlangıcından derlenme/çıkış hazırlığına kadar kesintisiz (continuously) EKG izlemi sürdürülmelidir.',
           'NIBP ve kalp hızı en az her 5 dakikada bir ölçülüp anestezi kaydına işlenmelidir.',
           'Propofol/opioid/deksmedetomidin kombinasyonlarında hipotansiyon ve bradikardi yakından takip edilmelidir.'
         ],
@@ -172,7 +172,7 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
         title: 'Vücut Sıcaklığı',
         requirementLabel: 'Koşullu Zorunlu',
         requirementLevel: 'conditional',
-        summary: 'Klinik olarak anlamlı sıcaklık değişimi amaçlandığında, beklendiğinde veya şüphelendiğinde izlenmelidir.',
+        summary: 'Klinik olarak anlamlı sıcaklık değişimi amaçlandığında, beklendiğinde veya şüphelendiğinde devamlı (continually) izlenmelidir.',
         keyPoints: [
           'Kısa, normotermik tanısal sedasyonlarda rutin sürekli prob gerekmeyebilir.',
           'Uzun süreli girişimler, geniş cilt maruziyeti, pediatrik/geriatrik olgular veya titreme/ateş şüphesinde mutlaka ölçülmelidir.'
@@ -184,12 +184,12 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
   regional: {
     id: 'regional',
     shortLabel: 'Rejyonel (Sedasyonsuz)',
-    title: 'Rejyonel / Lokal Anestezi (Sedasyon Eklenmeden)',
-    subtitle: 'Nitelikli personel, sürekli EKG, SpO₂ ve ≤5 dk NIBP zorunludur; sedasyon eklendiği an EtCO₂ zorunlu hâle gelir.',
-    monitorSummary: 'EKG + SpO₂ + NIBP (≤5 dk) + Devamlı Klinik Solunum Gözlemi + Gerekirse Sıcaklık',
+    title: 'Rejyonel / Lokal Anestezi (Orta/Derin Sedasyon Yok)',
+    subtitle: 'Nitelikli personel ve kesintisiz EKG ile devamlı SpO₂ ve ≤5 dk NIBP zorunludur; orta veya derin sedasyon eklendiği an ekshale CO₂ izlemi zorunlu hâle gelir.',
+    monitorSummary: 'Kesintisiz EKG + Devamlı SpO₂ + NIBP (≤5 dk) + Devamlı Klinik Solunum Gözlemi + Gerekirse Sıcaklık',
     etco2Active: false,
-    etco2Label: 'Klinik Gözlem (Sedasyon Yok)',
-    etco2Sub: 'Sedasyon eklenirse EtCO₂ anında ZORUNLU olur',
+    etco2Label: 'Klinik Gözlem (Orta/Derin Sedasyon Yok)',
+    etco2Sub: 'Orta/derin sedasyon eklenirse ekshale CO₂ anında ZORUNLU olur',
     fio2Required: false,
     disconnectAlarmRequired: false,
     adjunctCircRequired: false,
@@ -199,9 +199,9 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
         title: 'Oksijenasyon',
         requirementLabel: 'Zorunlu (SpO₂ + Sesli Ton)',
         requirementLevel: 'mandatory',
-        summary: 'Sedasyonsuz tüm rejyonel/nöraksiyel bloklarda kantitatif pulse oksimetri ve sesli alarm zorunludur.',
+        summary: 'Sedasyonsuz tüm rejyonel/nöraksiyel bloklarda devamlı (continually) kantitatif pulse oksimetri ve sesli alarm zorunludur.',
         keyPoints: [
-          'SpO₂ sürekli izlenmeli; değişken tonlu nabız sesi ve düşük eşik sesli alarmı aktif tutulmalıdır.',
+          'SpO₂ devamlı (continually) izlenmeli; değişken tonlu nabız sesi ve düşük eşik sesli alarmı aktif tutulmalıdır.',
           'Yüksek spinal/epidural blok veya lokal anestezik sistemik toksisitesi (LAST) durumunda derhal O₂ desteği hazır bulunmalıdır.',
           'Hastanın rengi ve bilinç/sözel yanıtı düzenli gözlemlenmelidir.'
         ],
@@ -210,25 +210,25 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
       ventilation: {
         pillar: 'ventilation',
         title: 'Ventilasyon',
-        requirementLabel: 'Klinik Gözlem (Sedasyonda EtCO₂)',
+        requirementLabel: 'Klinik Gözlem (Orta/Derin Sedasyonda CO₂)',
         requirementLevel: 'clinical',
-        summary: 'Sedasyon uygulanmıyorsa kalitatif klinik bulguların devamlı gözlemi zorunludur; orta/derin sedasyona geçilirse EtCO₂ zorunludur.',
+        summary: 'Orta veya derin sedasyon uygulanmıyorsa kalitatif klinik bulguların devamlı (continually) gözlemi zorunludur; orta/derin sedasyona geçilirse ekshale CO₂ zorunludur.',
         keyPoints: [
           'Göğüs duvarı hareketi, solunum sayısı/derinliği ve hasta ile sözel iletişim devamlı değerlendirilir.',
-          'İntraoperatif dönemde orta veya derin sedasyon eklenirse ekshale CO₂ (kapnografi) derhal devreye alınmalıdır.',
+          'İntraoperatif dönemde orta veya derin sedasyon eklenirse ekshale CO₂ tespiti derhal devreye alınmalıdır (minimal anksiyolizde zorunlu değildir).',
           'Yüksek torakal blokta interkostal/frenik etkilenmeye bağlı dispne ve hipoventilasyon açısından uyanık olunmalıdır.'
         ],
-        alarmNote: 'Sedasyon verildiği an protokol otomatik olarak MAC / Orta-Derin Sedasyon standardına yükselir.'
+        alarmNote: 'Orta veya derin sedasyon verildiği an protokol otomatik olarak ekshale CO₂ zorunluluğuna yükselir.'
       },
       circulation: {
         pillar: 'circulation',
         title: 'Dolaşım',
-        requirementLabel: 'Zorunlu (EKG + ≤5 dk NIBP)',
+        requirementLabel: 'Zorunlu (Kesintisiz EKG + ≤5 dk NIBP)',
         requirementLevel: 'mandatory',
-        summary: 'Sürekli EKG ve en az 5 dakikada bir NIBP/kalp hızı ölçümü zorunludur (spinal başlangıcında 1–3 dk sık ölçüm önerilir).',
+        summary: 'Kesintisiz (continuously) EKG ve en az 5 dakikada bir NIBP/kalp hızı ölçümü zorunludur (spinal başlangıcında 1–3 dk sık ölçüm önerilir).',
         keyPoints: [
-          'EKG tüm rejyonel anestezi boyunca sürekli izlenir (özellikle sempatik blokta bradikardi / Bezold-Jarisch ve LAST aritmileri için).',
-          'ASA alt sınırı en az her 5 dakikada bir NIBP ve kalp hızıdır; nöraksiyel blok sonrası ilk 15–20 dakikada 1–3 dk aralıkla ölçüm klinik güvenlik sağlar.'
+          'EKG tüm rejyonel anestezi boyunca kesintisiz (continuously) görüntülenir (özellikle sempatik blokta bradikardi / Bezold-Jarisch ve LAST aritmileri için).',
+          'ASA alt sınırı en az her 5 dakikada bir (continually) NIBP ve kalp hızıdır; nöraksiyel blok sonrası ilk 15–20 dakikada 1–3 dk aralıkla ölçüm klinik güvenlik sağlar.'
         ],
         alarmNote: 'Spinal/epidural sempatik blokta ani hipotansiyon ve bradikardi hızla tanınmalıdır.'
       },
@@ -237,7 +237,7 @@ const ANESTHESIA_MODES: Record<AnesthesiaModeId, AnesthesiaModeSpec> = {
         title: 'Vücut Sıcaklığı',
         requirementLabel: 'Koşullu Zorunlu',
         requirementLevel: 'conditional',
-        summary: 'Klinik olarak anlamlı sıcaklık değişimi beklendiğinde/şüphelendiğinde izlenmelidir (nöraksiyel blok vazodilatasyonla ısı kaybını artırır).',
+        summary: 'Klinik olarak anlamlı sıcaklık değişimi beklendiğinde/şüphelendiğinde devamlı izlenmelidir (nöraksiyel blok vazodilatasyonla ısı kaybını artırır).',
         keyPoints: [
           'Nöraksiyel bloklarda alt ekstremite vazodilatasyonu ve santral termoregülasyon eşiğinin düşmesi nedeniyle fark edilmeyen hipotermi gelişebilir.',
           'Uzun süreli nöraksiyel vakalarda ve yaşlı/obstetrik/pediatrik hastalarda aktif sıcaklık izlemi ve ısıtma önerilir.'
@@ -267,8 +267,8 @@ const STANDARD_II_PILLARS: {
     index: '01',
     title: 'Oksijenasyon',
     enTitle: 'Oxygenation',
-    objective: 'İnspire edilen gazda ve kanda yeterli oksijen konsantrasyonunu güvence altına almak.',
-    timingLabel: 'Sürekli (SpO₂ & FiO₂)',
+    objective: 'İnspire edilen gazda ve kanda yeterli oksijen konsantrasyonunu devamlı (continually) güvence altına almak.',
+    timingLabel: 'Devamlı (Continually)',
     icon: Wind,
     accentText: 'text-sky-600 dark:text-sky-400',
     accentBgDark: 'bg-sky-500/15 border-sky-500/25',
@@ -295,7 +295,7 @@ const STANDARD_II_PILLARS: {
     title: 'Ventilasyon',
     enTitle: 'Ventilation',
     objective: 'Tüm anesteziler süresince solunumun yeterliliğini devamlı (continually) doğrulamak.',
-    timingLabel: 'Devamlı + Sürekli EtCO₂',
+    timingLabel: 'Devamlı (Continually) + CO₂',
     icon: Activity,
     accentText: 'text-amber-600 dark:text-amber-400',
     accentBgDark: 'bg-amber-500/15 border-amber-500/25',
@@ -303,38 +303,38 @@ const STANDARD_II_PILLARS: {
     methods: [
       {
         label: 'Klinik Bulgular (Tüm Anesteziler)',
-        detail: 'Göğüs duvarı hareketi, rezervuar balon izlemi ve solunum seslerinin oskültasyonu devamlı değerlendirilir.'
+        detail: 'Göğüs duvarı hareketi, rezervuar balon izlemi ve solunum seslerinin oskültasyonu devamlı (continually) değerlendirilir.'
       },
       {
-        label: 'Kapnografi / EtCO₂ (Genel + Orta/Derin Sedasyon)',
-        detail: 'ETT veya SGA yerleşimi klinik + ekshale CO₂ ile doğrulanır ve vaka boyunca devamlı EtCO₂ izlenir. Orta/derin sedasyonda da ekshale CO₂ zorunludur.'
+        label: 'Kantitatif EtCO₂ (ETT/SGA) vs Ekshale CO₂ Tespiti (Orta/Derin Sedasyon)',
+        detail: 'ETT veya SGA yerleştirildiğinde klinik bulgulara ek olarak devamlı kantitatif EtCO₂ analizi (kapnografi) zorunludur. Orta ve derin sedasyonda (minimal sedasyonda değil) devamlı ekshale CO₂ tespiti zorunludur.'
       },
       {
         label: 'Ayrılma Alarmı & Ekspiryum Volümü',
         detail: 'Mekanik ventilatörde sesli devre ayrılma (disconnect) alarmı zorunludur; ekspiryum gaz hacminin kantitatif izlemi güçlü şekilde önerilir.'
       }
     ],
-    pearl: 'Özofageal entübasyonda 1–2 küçük dalga sonrası EtCO₂ hızla sıfırlanır; kalıcı kare dalga kapnografi doğru trakeal/havayolu yerleşiminin altın standardıdır.'
+    pearl: 'Özofageal entübasyonda 1–2 küçük dalga sonrası EtCO₂ hızla sıfırlanır; kalıcı kare dalga kantitatif kapnografi doğru trakeal/havayolu yerleşiminin altın standardıdır.'
   },
   {
     id: 'circulation',
     index: '03',
     title: 'Dolaşım',
     enTitle: 'Circulation',
-    objective: 'Tüm anesteziler boyunca dolaşım fonksiyonunun yeterliliğini kesintisiz doğrulamak.',
-    timingLabel: 'Sürekli EKG · ≤5 dk NIBP',
+    objective: 'Tüm anesteziler boyunca dolaşım fonksiyonunun yeterliliğini doğrulamak (EKG kesintisiz; NIBP/KH düzenli aralıklarla).',
+    timingLabel: 'Kesintisiz EKG · ≤5 dk NIBP',
     icon: HeartPulse,
     accentText: 'text-emerald-600 dark:text-emerald-400',
     accentBgDark: 'bg-emerald-500/15 border-emerald-500/25',
     accentBgLight: 'bg-emerald-50 border-emerald-200',
     methods: [
       {
-        label: 'Sürekli EKG',
-        detail: 'Anestezi başlangıcından anestezi alanından ayrılma hazırlığına kadar kesintisiz (continuously) EKG izlemi zorunludur.'
+        label: 'Kesintisiz EKG (Continuously)',
+        detail: 'ASA Standart II’de özellikle EKG trasesinin anestezi başlangıcından anestezi alanından ayrılma hazırlığına kadar kesintisiz (continuously) görüntülenmesi zorunludur.'
       },
       {
-        label: 'Arteriyel Basınç & Kalp Hızı',
-        detail: 'Her hastada arteriyel kan basıncı ve kalp hızı en az her 5 dakikada bir ölçülüp değerlendirilmelidir.'
+        label: 'Arteriyel Basınç & Kalp Hızı (Continually)',
+        detail: 'Her hastada arteriyel kan basıncı ve kalp hızı en az her 5 dakikada bir (continually) ölçülüp değerlendirilmelidir.'
       },
       {
         label: 'Ek Dolaşım Değerlendirmesi (Genel Anestezi)',
@@ -348,8 +348,8 @@ const STANDARD_II_PILLARS: {
     index: '04',
     title: 'Vücut Sıcaklığı',
     enTitle: 'Body Temperature',
-    objective: 'Uygun vücut sıcaklığının korunmasına yardımcı olmak, hipotermi ve hipertermiyi erken saptamak.',
-    timingLabel: 'Koşullu Zorunlu',
+    objective: 'Uygun vücut sıcaklığının korunmasına yardımcı olmak, hipotermiyi önlemek ve sıcaklık değişimlerini devamlı (continually) saptamak.',
+    timingLabel: 'Devamlı (Koşullu Zorunlu)',
     icon: Thermometer,
     accentText: 'text-rose-600 dark:text-rose-400',
     accentBgDark: 'bg-rose-500/15 border-rose-500/25',
@@ -357,18 +357,18 @@ const STANDARD_II_PILLARS: {
     methods: [
       {
         label: 'Zorunluluk Koşulu',
-        detail: 'Vücut sıcaklığında klinik olarak anlamlı değişiklik amaçlandığında, beklendiğinde veya şüphelendiğinde sıcaklık mutlaka izlenmelidir.'
+        detail: 'Vücut sıcaklığında klinik olarak anlamlı değişiklik amaçlandığında, beklendiğinde veya şüphelendiğinde sıcaklık devamlı (continually) izlenmelidir.'
       },
       {
-        label: 'Çekirdek Ölçüm Bölgeleri',
-        detail: 'Distal özofagus, nazofarenks, timpanik membran, pulmoner arter veya mesane/rektum probları çekirdek sıcaklığı güvenilir yansıtır.'
+        label: 'Çekirdek Ölçüm Bölgeleri & Gecikme (Lag) Uyarısı',
+        detail: 'Hızlı termal değişimlerde en hızlı kor ısı bölgeleri pulmoner arter, distal özofagus, nazofarenks ve temaslı timpanik membrandır. Mesane ve rektal problar hızlı ısı değişimlerine gecikmeli (lag) yanıt verir.'
       },
       {
-        label: 'Klinik Hedef & Kriz',
-        detail: 'İstenmeyen perioperatif hipotermi (< 36.0 °C) koagülopati ve enfeksiyonu artırır; açıklanamayan hızlı artışta Malign Hipertermi akla gelmelidir.'
+        label: 'Malign Hipertermi (MH) — Hipertermi GEÇ Bulgudur!',
+        detail: 'İstenmeyen hipotermi (< 36.0 °C) koagülopati ve enfeksiyonu artırır. Malign Hipertermide ise ateş yükselmesi GEÇ bir bulgudur — asla hipertermiyi bekleme! Erken uyarı bulguları: açıklanamayan EtCO₂ artışı, taşikardi ve masseter/jeneralize rijiditedir.'
       }
     ],
-    pearl: 'Genel anestezi indüksiyonunun ilk 1 saatinde vazodilatasyona bağlı santral-periferik redistribüsyonla çekirdek sıcaklık 0.5–1.5 °C düşebilir.'
+    pearl: 'Genel anestezi indüksiyonunun ilk 1 saatinde vazodilatasyona bağlı santral-periferik redistribüsyonla çekirdek sıcaklık 0.5–1.5 °C düşebilir; MH şüphesinde ise EtCO₂ yükselişi ateşten çok önce ortaya çıkar.'
   }
 ];
 
@@ -380,9 +380,9 @@ const MATRIX_ROWS: {
 }[] = [
   {
     param: 'Standart I: Nitelikli Anestezi Personeli',
-    general: 'Zorunlu (Sürekli)',
-    sedation: 'Zorunlu (Sürekli)',
-    regional: 'Zorunlu (Sürekli)'
+    general: 'Zorunlu (Kesintisiz)',
+    sedation: 'Zorunlu (Kesintisiz)',
+    regional: 'Zorunlu (Kesintisiz)'
   },
   {
     param: 'İnspire O₂ Analizörü (Düşük O₂ Alarmlı)',
@@ -392,9 +392,9 @@ const MATRIX_ROWS: {
   },
   {
     param: 'Pulse Oksimetri (SpO₂ + Değişken Ton + Alarm)',
-    general: 'Zorunlu (Sürekli)',
-    sedation: 'Zorunlu (Sürekli)',
-    regional: 'Zorunlu (Sürekli)'
+    general: 'Zorunlu (Devamlı)',
+    sedation: 'Zorunlu (Devamlı)',
+    regional: 'Zorunlu (Devamlı)'
   },
   {
     param: 'Kalitatif Ventilasyon Gözlemi (Göğüs / Balon / Ses)',
@@ -404,9 +404,9 @@ const MATRIX_ROWS: {
   },
   {
     param: 'Ekshale CO₂ / Kapnografi (EtCO₂)',
-    general: 'Zorunlu (Teyit + Devamlı)',
-    sedation: 'Zorunlu (Orta/Derin)',
-    regional: 'Sedasyon Eklenirse Zorunlu'
+    general: 'Zorunlu (Kantitatif ETT/SGA)',
+    sedation: 'Zorunlu (Orta/Derin; Minimalde değil)',
+    regional: 'Orta/Derin Sedasyonda Zorunlu'
   },
   {
     param: 'Ventilatör Devre Ayrılma (Disconnect) Sesli Alarmı',
@@ -416,15 +416,15 @@ const MATRIX_ROWS: {
   },
   {
     param: 'Elektrokardiyografi (EKG)',
-    general: 'Zorunlu (Sürekli)',
-    sedation: 'Zorunlu (Sürekli)',
-    regional: 'Zorunlu (Sürekli)'
+    general: 'Zorunlu (Kesintisiz)',
+    sedation: 'Zorunlu (Kesintisiz)',
+    regional: 'Zorunlu (Kesintisiz)'
   },
   {
     param: 'Arteriyel Kan Basıncı (NIBP) & Kalp Hızı',
-    general: 'Zorunlu (≤ 5 dk)',
-    sedation: 'Zorunlu (≤ 5 dk)',
-    regional: 'Zorunlu (≤ 5 dk)'
+    general: 'Zorunlu (≤ 5 dk · Devamlı)',
+    sedation: 'Zorunlu (≤ 5 dk · Devamlı)',
+    regional: 'Zorunlu (≤ 5 dk · Devamlı)'
   },
   {
     param: 'Ek Dolaşım Doğrulaması (Palpasyon / Pletismografi vb.)',
@@ -482,7 +482,7 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
                 ASA Temel Monitörizasyon Standartları
               </span>
               <span aria-hidden="true">·</span>
-              <span>Onay: 1986 · Son Güncelleme / Teyit: 13 Aralık 2020</span>
+              <span>Onay: 1986 · Son Revizyon: 2015 · Teyit (Reaffirmation): 13 Aralık 2020 · ASA NMB 2023</span>
               <span aria-hidden="true">·</span>
               <span>Miller’s &amp; Morgan &amp; Mikhail</span>
             </div>
@@ -497,7 +497,7 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
             <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
               Tüm <strong>genel anestezi</strong>, <strong>rejyonel anestezi</strong> ve{' '}
               <strong>monitörize anestezi bakımı (MAC)</strong> uygulamaları için geçerli minimum zorunlu hasta güvenliği standartlarıdır.
-              Klinik gereksinime göre her zaman aşılabilir; ancak acil durumlarda yaşam kurtarıcı girişimler öncelikli olmak üzere temel güvenlik alt sınırını oluşturur.
+              Not: <strong>MAC bir sedasyon derinliği değil, anestezi hizmet/sunum tipidir</strong> (sedasyonsuz, minimal, orta veya derin sedasyon içerebilir); ASA ekshale CO₂ zorunluluğunu özellikle <strong>orta ve derin sedasyonda</strong> şart koşar.
             </p>
           </div>
 
@@ -513,12 +513,12 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
           </div>
         </div>
 
-        {/* Sınav & Klinik Terminoloji Ayrımı: Continuous vs Continual */}
+        {/* Sınav & Klinik Terminoloji Ayrımı: Continuously vs Continually */}
         <div className={`pt-4 border-t grid grid-cols-1 md:grid-cols-2 gap-4 ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
           <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
             <div className="flex items-center justify-between gap-2">
               <span className={`text-xs font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
-                Sürekli — Continuous
+                Kesintisiz — Continuously
               </span>
               <span className={`text-[11px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 Kesintisiz Akış
@@ -526,14 +526,14 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
             </div>
             <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
               <strong>“Herhangi bir kesinti olmaksızın uzun süreli devam eden”</strong> anlamına gelir.
-              Örnek: <em>Standart I (personelin salonda bulunması)</em>, <em>EKG trasesi</em> ve <em>SpO₂ izlemi</em>.
+              ASA metninde özellikle <em>Standart I (nitelikli personelin odada varlığı)</em> ve Standart II içinde <em>EKG trasesinin görüntülenmesi</em> için kullanılır.
             </p>
           </div>
 
           <div className={`rounded-xl border p-3.5 space-y-1 ${subtlePanel}`}>
             <div className="flex items-center justify-between gap-2">
               <span className={`text-xs font-bold ${isDark ? 'text-sky-400' : 'text-sky-700'}`}>
-                Devamlı Yinelenen — Continual
+                Devamlı / Düzenli Yinelenen — Continually
               </span>
               <span className={`text-[11px] font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 Düzenli Sık Aralık
@@ -541,7 +541,7 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
             </div>
             <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
               <strong>“Düzenli, sık ve istikrarlı bir ardışıklıkla tekrarlanan”</strong> anlamına gelir.
-              Örnek: <em>Standart II genel değerlendirmesi</em> ve <em>en az her 5 dakikada bir NIBP &amp; nabız ölçümü</em>.
+              ASA Standart II’de <em>Oksijenasyon (SpO₂/FiO₂)</em>, <em>Ventilasyon (EtCO₂/klinik gözlem)</em>, <em>Dolaşım (≤5 dk NIBP &amp; KH)</em> ve <em>Vücut Sıcaklığı</em> değerlendirmeleri için kullanılan resmi ifadedir.
             </p>
           </div>
         </div>
@@ -667,8 +667,8 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between text-[11px] font-mono mb-1">
-                      <span className="text-emerald-400 font-bold">II · EKG (Sürekli — Continuous)</span>
-                      <span className="text-slate-400">NIBP ≤ 5 dk · {modeSpec.adjunctCircRequired ? '+ Ek Dolaşım Zorunlu' : 'Standart II'}</span>
+                      <span className="text-emerald-400 font-bold">II · EKG (Kesintisiz — Continuously)</span>
+                      <span className="text-slate-400">NIBP ≤ 5 dk (Continually) · {modeSpec.adjunctCircRequired ? '+ Ek Dolaşım Zorunlu' : 'Standart II'}</span>
                     </div>
                     <svg viewBox="0 0 360 44" className="w-full h-10" aria-label="EKG Lead II dalga formu">
                       <path
@@ -701,7 +701,7 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between text-[11px] font-mono mb-1">
-                      <span className="text-sky-400 font-bold">SpO₂ · Pletismografi (Zorunlu)</span>
+                      <span className="text-sky-400 font-bold">SpO₂ · Pletismografi (Devamlı — Continually)</span>
                       <span className={modeSpec.fio2Required ? 'text-sky-300' : 'text-slate-400'}>
                         {modeSpec.fio2Required ? 'FiO₂ %45 · Düşük O₂ Alarmı AKTİF' : 'O₂ Kaynağı Teyitli'}
                       </span>
@@ -737,7 +737,11 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between text-[11px] font-mono mb-1">
                       <span className={modeSpec.etco2Active ? 'text-amber-400 font-bold' : 'text-slate-400 font-bold'}>
-                        EtCO₂ · Kapnografi ({modeSpec.etco2Active ? 'Zorunlu' : 'Sedasyon Eklenirse Zorunlu'})
+                        {selectedMode === 'general'
+                          ? 'EtCO₂ · Kantitatif Kapnografi (Zorunlu)'
+                          : selectedMode === 'sedation'
+                            ? 'Ekshale CO₂ Tespiti (Orta/Derin Sedasyonda Zorunlu)'
+                            : 'Ekshale CO₂ (Orta/Derin Sedasyonda Zorunlu)'}
                       </span>
                       <span className="text-slate-400">
                         {modeSpec.disconnectAlarmRequired ? 'Disconnect Alarmı: AKTİF' : modeSpec.etco2Sub}
@@ -756,7 +760,7 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
                       </svg>
                     ) : (
                       <div className="h-9 flex items-center text-xs font-mono text-slate-400 border border-dashed border-slate-800 rounded-lg px-3">
-                        Sedasyonsuz rejyonel blokta kalitatif solunum gözlemi zorunludur; sedasyon verilirse EtCO₂ açılır.
+                        Sedasyonsuz (veya minimal sedasyonlu) rejyonel blokta kalitatif gözlem zorunludur; orta/derin sedasyon eklenirse ekshale CO₂ zorunlu olur.
                       </div>
                     )}
                   </div>
@@ -985,7 +989,7 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
               <tr className={isDark ? 'bg-slate-950/70 text-slate-300 border-b border-slate-800' : 'bg-slate-50 text-slate-700 border-b border-slate-200'}>
                 <th className="py-3 px-4 font-semibold">Monitörizasyon Parametresi</th>
                 <th className="py-3 px-4 font-semibold">Genel Anestezi</th>
-                <th className="py-3 px-4 font-semibold">Orta / Derin Sedasyon (MAC)</th>
+                <th className="py-3 px-4 font-semibold">Orta / Derin Sedasyon · MAC</th>
                 <th className="py-3 px-4 font-semibold">Rejyonel (Sedasyonsuz)</th>
               </tr>
             </thead>
@@ -1015,10 +1019,10 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
       <div className={`rounded-2xl border p-5 space-y-4 ${surfaceCard}`}>
         <div className="space-y-1">
           <div className={`text-[11px] font-mono ${isDark ? 'text-teal-400' : 'text-teal-700'}`}>
-            ASA Temel Standartlarına Ek Güncel Kılavuz Önerileri
+            ASA Temel Standartlarına Ek Güncel Kılavuzlar &amp; Zorunlu Standartlar
           </div>
           <h3 className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Modern Ameliyathane Güvenliğinde Tamamlayıcı Monitörler
+            Modern Ameliyathane Güvenliğinde Tamamlayıcı &amp; Minimum Standartlar
           </h3>
         </div>
 
@@ -1028,18 +1032,20 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
               Kantitatif Nöromüsküler İzlem (ASA 2023)
             </div>
             <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
-              ASA Temel Standartları metninde yer almasa da <strong>ASA 2023 Nöromüsküler Blokaj Kılavuzu</strong>, NMB uygulanan tüm hastalarda
-              adduktor pollisis kasında <strong>kantitatif TOF oranı ≥ 0.90</strong> doğrulanmasını güçlü biçimde önerir.
+              <strong>ASA 2023 NMB Kılavuzu</strong>, NMB uygulanan tüm hastalarda kalitatif değerlendirme veya klinik testler yerine{' '}
+              <strong>kantitatif monitörizasyonu</strong> güçlü şekilde önerir. Göz kasları (<em>orbicularis oculi / corrugator supercilii</em>) yerine{' '}
+              <strong>adduktor pollisis</strong> tercih edilir; ekstubasyon öncesi <strong>TOF oranı ≥ 0.90</strong> doğrulanmalıdır.
             </p>
           </div>
 
           <div className={`rounded-xl border p-4 space-y-1.5 ${subtlePanel}`}>
             <div className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              İnhalasyon Ajan &amp; İşlenmiş EEG (AAGBI 2021)
+              AAGBI 2021 — Minimum Zorunlu Standartlar
             </div>
             <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>
-              Volatil ajanlarda ekspiratuar ajan analizi (MAC), TIVA + kas gevşetici kullanımında ise farkındalığı (awareness) önlemek için
-              işlenmiş EEG (BIS / PSI) monitörizasyonu önerilir.
+              Association of Anaesthetists (<strong>AAGBI 2021</strong>) kılavuzunda volatil anesteziklerde <strong>ekspiratuar ajan analizi</strong>,
+              NMB kullanıldığında <strong>kantitatif NMB monitörizasyonu</strong> ve TIVA + NMB uygulamasında <strong>işlenmiş EEG (pEEG: BIS/PSI)</strong>{' '}
+              yalnızca önerilen değil, <strong>minimum zorunlu standartlar</strong> olarak tanımlanır.
             </p>
           </div>
 
@@ -1063,7 +1069,7 @@ export const AsaBasicMonitoringInfographic: React.FC<AsaBasicMonitoringInfograph
         </div>
         <ul className={`space-y-1.5 leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
           <li>
-            1. American Society of Anesthesiologists (ASA). <em>Standards for Basic Anesthetic Monitoring</em>. Approved Oct 21, 1986; last amended Oct 28, 2015; last affirmed Dec 13, 2020.
+            1. American Society of Anesthesiologists (ASA). <em>Standards for Basic Anesthetic Monitoring</em>. Approved Oct 21, 1986; moderate/deep sedation capnography amendment effective Jul 1, 2011; last amended Oct 28, 2015; last reaffirmed Dec 13, 2020.
           </li>
           <li>
             2. Thilen SR, Weigel WA, Todd MM, et al. <em>2023 American Society of Anesthesiologists Practice Guidelines for Monitoring and Antagonism of Neuromuscular Blockade</em>. Anesthesiology. 2023;138(1):13–41.

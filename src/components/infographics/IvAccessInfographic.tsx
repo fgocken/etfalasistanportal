@@ -38,7 +38,7 @@ interface AccessRowSpec {
   scenarioTags: ('resuscitation' | 'blood' | 'routine' | 'pediatric')[];
 }
 
-// Periferik IV kanüller (ISO 10555-5) + Standart Üç Lümenli 7 Fr 20 cm SVK (Teleflex/Arrow)
+// Periferik IV kanüller (ISO 10555-5:2023) + Standart Üç Lümenli 7 Fr 20 cm SVK (Teleflex/Arrow)
 // Tümü görünümünde Poiseuille akım hızına göre büyükten küçüğe iç içe (karşılaştırmalı) sıralıdır.
 const ACCESS_ROWS: AccessRowSpec[] = [
   {
@@ -81,6 +81,27 @@ const ACCESS_ROWS: AccessRowSpec[] = [
     siteRationale: 'Mümkünse eklem kıvrımı dışındaki düz proksimal ön kol veni seçilir; böylece kol bükülse dahi akım kesintiye uğramaz.',
     clinicalNotes:
       'Kanama riski yüksek ameliyatlarda (plasenta previa, majör vasküler, çoklu travma) anestezi öncesi/sonrası güvenli geniş damar yolu standardıdır.',
+    scenarioTags: ['resuscitation', 'blood']
+  },
+  {
+    id: 'piv-17g',
+    kind: 'peripheral',
+    gauge: '17G',
+    subLabel: 'Periferik IV',
+    colorName: 'Beyaz',
+    colorHex: '#f1f5f9',
+    badgeClass: 'bg-slate-100 text-slate-800 dark:bg-slate-100/15 dark:text-slate-100 border-slate-400/50',
+    outerDiameterMm: '1.5 mm',
+    lengthLabel: '45 mm',
+    flowRateMlMinLabel: '125 – 142 mL/dk',
+    flowRateNumericMid: 135,
+    oneLiterTimeApprox: '~7 – 8 dk',
+    bloodTransfusion: 'Hızlı Transfüzyon · Çok Uygun',
+    primaryUse: 'Majör cerrahi, hızlı kan/sıvı transfüzyonu, 16G’nin zor sığdığı ancak 18G’den daha yüksek debi gereken olgular',
+    preferredSites: 'Proksimal ön kol sefalik/bazilik veni veya geniş antekübital fossa venleri',
+    siteRationale: 'ISO 10555-5:2023 ara kalibresi olup 16G ile 18G arasında yüksek akımlı, damar duvarına daha uyumlu bir seçenektir.',
+    clinicalNotes:
+      '18G Yeşil kanülden ~%35–40 daha yüksek akım hızı sunar; majör cerrahi ve hızlı eritrosit transfüzyonunda güçlü bir ara kalibredir.',
     scenarioTags: ['resuscitation', 'blood']
   },
   {
@@ -143,7 +164,7 @@ const ACCESS_ROWS: AccessRowSpec[] = [
     preferredSites: 'Santral Venler: Sağ İnternal Juguler Ven (İJV) · Subklavyen/Aksiller Ven · Acilde Femoral Ven',
     siteRationale: 'Ucu alt SVC / kavoatriyal bileşkeye (CAJ) oturur. Buradan vazopresör infüzyonu verilmez (bolus anında hemodinamik sıçrama yapar).',
     clinicalNotes:
-      'Poiseuille 1/L yasasının kanıtı: Periferik 16G Gri ile aynı iç çapa (16G) sahip olsa da 200 mm uzunluğu nedeniyle hızı 195 mL/dk’dan ~52 mL/dk’ya düşer.',
+      'Poiseuille 1/L yasasının kanıtı: Periferik 16G Gri ile eşdeğer lümen kalibresine (16G) sahip olsa da 200 mm uzunluğu ve çok lümenli iç geometrisi nedeniyle hızı ~195 mL/dk’dan ~52 mL/dk’ya düşer.',
     scenarioTags: []
   },
   {
@@ -248,7 +269,7 @@ const ACCESS_ROWS: AccessRowSpec[] = [
     preferredSites: 'Yenidoğan el/ayak sırtı kapiller-venöz ağı ve yüzeyel temporal/frontal skalp venleri',
     siteRationale: 'Prematüre ven çapına uygun en ince kalibredir; büyük venlere göre mekanik oklüzyon/tıkanma riskine karşı düşük hızda sürekli akım tercih edilir.',
     clinicalNotes:
-      'ISO 10555-5 ek neonatal renk standardıdır. Tıkanmayı önlemek için düzenli nazik %0.9 NaCl flush gerektirir.',
+      'ISO 10555-5:2023 ek neonatal renk standardıdır. Tıkanmayı önlemek için düzenli nazik %0.9 NaCl flush gerektirir.',
     scenarioTags: ['pediatric']
   }
 ];
@@ -267,7 +288,7 @@ const DIVA_TECHNIQUES = [
   {
     step: '03',
     title: 'USG Eşliğinde Derin Periferik Ven (DIVA Altın Standardı)',
-    detail: 'Yüksek frekanslı lineer prob (10–15 MHz) ile bazilik, brakiyal veya derin sefalik ven hedeflenir. Ven > 0.5–1.0 cm derindeyse standart 32 mm yerine UZUN (45–64 mm) 18G–20G kanül kullanılmalıdır; aksi halde kanülün damar içi payı < 1/3 kalıp saatler içinde çıkar.'
+    detail: 'Yüksek frekanslı lineer prob (10–15 MHz) ile bazilik, brakiyal veya derin sefalik ven hedeflenir. Ven > 0.5–1.0 cm derindeyse standart 32 mm yerine UZUN (45–64 mm) 18G–20G kanül kullanılmalıdır; INS 2024’e göre erken yerinden çıkma ve ekstravazasyonu önlemek için kanül uzunluğunun ≥ %50’sinin (≥ 1/2 veya ≥ 2.75 cm) damar içi yerleşimde kalması şarttır.'
   },
   {
     step: '04',
@@ -277,7 +298,7 @@ const DIVA_TECHNIQUES = [
   {
     step: '05',
     title: 'Eksternal Juguler Ven (EJV) & Midline Kateter',
-    detail: 'Acilde 15° Trendelenburg ile EJV üzerinden hızlı 16G–18G periferik yol açılabilir. 1–4 haftalık orta süreli erişimde USG ile üst kola yerleştirilen Midline kateter (8–20 cm, ucu aksiller vende kalır; vezikan değildir) tercih edilebilir.'
+    detail: 'Acilde 15° Trendelenburg ile EJV üzerinden hızlı 16G–18G periferik yol açılabilir. 1–4 haftalık orta süreli erişimde USG ile üst kola yerleştirilen Midline kateter (8–20 cm, ucu aksiller vende kalır; vezikan infüzyonlar için uygun değildir) tercih edilebilir.'
   },
   {
     step: '06',
@@ -297,20 +318,20 @@ const SCENARIO_GUIDES: {
   {
     id: 'all',
     label: 'Tümü (14G – 26G + 7Fr SVK)',
-    recommended: 'ISO 10555-5 Tam Ölçek + Standart 7 Fr (20 cm) 3 Lümenli SVK (Hız Sıralı)',
-    rationale: 'Periferik IV kanüller ile standart 7 Fr 20 cm 3 lümenli SVK lümenleri akım hızına göre aynı tabloda iç içe sıralanmıştır: kısa bir 20G Pembe kanülün SVK 16G distal lümenden daha hızlı olduğu doğrudan görülür.'
+    recommended: 'ISO 10555-5:2023 Tam Ölçek + Standart 7 Fr (20 cm) 3 Lümenli SVK (Hız Sıralı)',
+    rationale: 'Periferik IV kanüller (17G Beyaz dahil) ile standart 7 Fr 20 cm 3 lümenli SVK lümenleri akım hızına göre aynı tabloda iç içe sıralanmıştır: kısa bir 20G Pembe kanülün SVK 16G distal lümenden daha hızlı olduğu doğrudan görülür.'
   },
   {
     id: 'resuscitation',
     label: 'Acil Resüsitasyon / Şok',
-    recommended: '14G Turuncu · 16G Gri · (18G Yeşil)',
-    rationale: 'Travma, hemorajik şok ve masif kanama riski olan majör cerrahilerde iki adet geniş proksimal periferik yol (14G–16G) tek bir standart SVK lümeninden ~3.5–5 kat daha hızlı sıvı verir.'
+    recommended: '14G Turuncu · 16G Gri · 17G Beyaz · (18G Yeşil)',
+    rationale: 'Travma, hemorajik şok ve masif kanama riski olan majör cerrahilerde iki adet geniş proksimal periferik yol (14G–16G veya 17G) tek bir standart SVK lümeninden ~2.5–5 kat daha hızlı sıvı verir.'
   },
   {
     id: 'blood',
     label: 'Kan & Kan Ürünü Transfüzyonu',
-    recommended: '18G Yeşil (İdeal) · 16G / 14G · (20G Yavaş)',
-    rationale: 'Eritrosit süspansiyonunun hemoliz riskini artırmadan güvenle geçmesi için erişkinde standart 18G (acil masif transfüzyonda 14G–16G) tercih edilir; elektifte 20G kullanılabilir.'
+    recommended: '18G Yeşil (İdeal) · 17G / 16G / 14G · (20G Yavaş)',
+    rationale: 'Eritrosit süspansiyonunun hemoliz riskini artırmadan güvenle geçmesi için erişkinde standart 18G (acil masif transfüzyonda 14G–17G) tercih edilir; elektifte 20G kullanılabilir.'
   },
   {
     id: 'routine',
@@ -330,15 +351,15 @@ const IV_REFERENCES = [
   {
     id: 'iso-10555',
     type: 'Uluslararası Standart',
-    citation: 'ISO 10555-5:2013/Amd 1:2017. Intravascular catheters — Sterile and single-use catheters — Part 5: Over-needle peripheral catheters.',
-    note: 'Periferik IV kanül göbek/kapak renk kodlaması (14G Turuncu – 26G Mor), dış çap toleransları ve standart akım test koşulları.',
-    url: 'https://www.iso.org/standard/57882.html'
+    citation: 'ISO 10555-5:2023. Intravascular catheters — Sterile and single-use catheters — Part 5: Over-needle peripheral catheters.',
+    note: 'Periferik IV kanül göbek/kapak renk kodlaması (14G Turuncu, 16G Gri, 17G Beyaz, 18G Yeşil – 26G Mor), dış çap (OD) toleransları ve standart akım test koşulları.',
+    url: 'https://www.iso.org/search.html?q=ISO%2010555-5'
   },
   {
     id: 'ins-2024',
     type: 'Klinik Uygulama Standardı',
     citation: 'Nickel B, Gorski L, Kleidon T, et al. Infusion Therapy Standards of Practice, 9th Edition. J Infus Nurs. 2024;47(1S Suppl 1):S1–S285.',
-    note: 'Kalibre ve anatomik bölge eşleştirme kuralları, 2-deneme DIVA kuralı, USG eşliğinde uzun kanül kullanımı, flebit/ekstravazasyon önleme ve ven koruma ilkeleri.',
+    note: 'Kalibre ve anatomik bölge eşleştirme kuralları, 2-deneme DIVA kuralı, USG eşliğinde uzun kanül (≥ %50 / ≥ 2.75 cm damar içi yerleşim), SLNB vs ALND ayrımı, pH kriterinin kaldırılması ve kısa süreli seyreltik periferik vazopresör ilkeleri.',
     url: 'https://pubmed.ncbi.nlm.nih.gov/38211609/'
   },
   {
@@ -376,6 +397,23 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
   const peripheralDetailCards = visibleRows.filter((r) => r.kind === 'peripheral');
   const maxFlow = 270;
 
+  const getFlowMetrics = (row: AccessRowSpec) => {
+    const isCvc = row.kind === 'cvc';
+    const pressurizedLow = Math.round(row.flowRateNumericMid * 1.85);
+    const pressurizedHigh = Math.round(row.flowRateNumericMid * (isCvc ? 2.25 : 2.35));
+    const pressurizedTimeMin = Math.max(
+      1.5,
+      Math.round((1000 / ((pressurizedLow + pressurizedHigh) / 2)) * 10) / 10
+    );
+
+    return {
+      flowLabel: pressureBagActive
+        ? `~${pressurizedLow} – ${pressurizedHigh} mL/dk`
+        : row.flowRateMlMinLabel,
+      oneLiterLabel: pressureBagActive ? `~${pressurizedTimeMin} dk` : row.oneLiterTimeApprox
+    };
+  };
+
   return (
     <div className="space-y-6">
       {/* 1. Üst Özet Başlık + Büyük Poiseuille Yasası + Senaryo Filtreleri + Basınç Modu Seçici */}
@@ -389,7 +427,7 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md font-bold bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30">
-              ISO 10555-5 · INS 2024
+              ISO 10555-5:2023 · INS 2024
             </span>
             <span className="text-xs text-slate-400">·</span>
             <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -400,7 +438,7 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
             IV Erişim: Standart Kanül Renkleri, Tercih Edilen Bölgeler, İnfüzyon Hızları &amp; 7 Fr SVK Kıyaslaması
           </h4>
           <p className={`text-xs sm:text-sm max-w-4xl leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-            Gauge (G) numarası <strong>küçüldükçe</strong> kanül çapı büyür ve akım hızı katlanarak artar. Klinik hedef: <em>&quot;Tedaviyi güvenle karşılayan en kısa ve en ince yeterli kalibre&quot;</em> ile damar duvarını korumak; masif resüsitasyonda ise uzun santral kateterler yerine kısa ve geniş periferik yolları tercih etmektir.
+            Gauge (G) standardı kanülün <strong>dış çapını (Outer Diameter — OD)</strong> tanımlar (iç çap duvar kalınlığına göre değişir); numara <strong>küçüldükçe</strong> dış çap büyür ve akım hızı katlanarak artar. Klinik hedef: <em>&quot;Tedaviyi güvenle karşılayan en kısa ve en ince yeterli kalibre&quot;</em> ile damar duvarını korumak; masif resüsitasyonda ise uzun santral kateterler yerine kısa ve geniş periferik yolları tercih etmektir.
           </p>
         </div>
 
@@ -441,10 +479,10 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div className={`p-3 rounded-xl border ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-cyan-200'}`}>
               <div className="font-bold text-amber-600 dark:text-amber-400 mb-1">
-                1. Çap Etkisi (r⁴) — Dominant Faktör
+                1. Çap Etkisi (r⁴) — Teorik vs Gerçek Akım
               </div>
               <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                İç yarıçap sadece <strong>2 kat</strong> büyüdüğünde akım hızı <strong>16 kat (2⁴)</strong> artar. Örnek: 14G (2.1 mm) bir kanül, 20G (1.1 mm) kanüle göre yaklaşık <strong>4.5 kat</strong> daha hızlıdır.
+                Laminar akımda iç yarıçap <strong>2 kat</strong> büyüdüğünde teorik debi <strong>13–16 kat (r⁴)</strong> artar. Gerçek pratikte 14G (OD 2.1 mm, ~270 mL/dk) ile 20G (OD 1.1 mm, ~60 mL/dk) farkının <strong>~4.5 kat</strong> kalmasının nedeni; 14G’nin daha uzun olması (<strong>45–50 mm vs 32 mm</strong>), dış/iç çap duvar kalınlığı farkı, yüksek hızda <strong>türbülan akıma</strong> geçiş ve IV set/üç yollu musluk direncidir.
               </p>
             </div>
 
@@ -453,7 +491,7 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
                 2. Uzunluk Etkisi (1 / L) — SVK Neden Yavaş?
               </div>
               <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                Kateter boyu <strong>2 kat</strong> uzarsa akım <strong>yarıya (%50)</strong> düşer. Aynı <strong>16G</strong> çapta olsa bile 45 mm periferik kanül (~195 mL/dk), 200 mm 7 Fr SVK distal lümeninden (~52 mL/dk) <strong>~3.8× hızlıdır</strong>.
+                Kateter boyu <strong>2 kat</strong> uzarsa akım <strong>yarıya (%50)</strong> düşer. Eşdeğer <strong>16G</strong> lümen kalibresinde olsa bile 45 mm periferik kanül (~195 mL/dk), 200 mm 7 Fr SVK distal lümeninden (~52 mL/dk) <strong>~3.8× hızlıdır</strong>.
               </p>
             </div>
 
@@ -513,12 +551,12 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
               <Gauge className={`w-5 h-5 shrink-0 mt-0.5 ${pressureBagActive ? 'text-amber-500' : 'text-cyan-500'}`} />
               <div>
                 <div className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  İnfüzyon Basınç Modu Seçimi (Tablodaki Hızları Anlık Günceller)
+                  İnfüzyon Basınç Modu Seçimi (Tablo ve Detay Kartlarındaki Hızları Anlık Günceller)
                 </div>
                 <p className={`text-[11px] ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                   {pressureBagActive
-                    ? 'Basınçlı Torba (300 mmHg) AKTİF: Tablodaki tüm akım hızları ve 1 L süreleri 300 mmHg manşon basıncı altındaki tahmini değerleri (~2× hızlanma) gösterir.'
-                    : 'Standart Yerçekimi AKTİF: Tablodaki akım hızları 100 cm (1 metre) serum askısı yüksekliğindeki standart yerçekimi değerleridir.'}
+                    ? 'Basınçlı Torba (300 mmHg) AKTİF: Tablo ve alt detay kartlarındaki tüm akım hızları ile 1 L süreleri 300 mmHg manşon basıncı altındaki tahmini değerleri (~2× hızlanma) gösterir.'
+                    : 'Standart Yerçekimi AKTİF: Tablo ve alt detay kartlarındaki akım hızları 100 cm (1 metre) serum askısı yüksekliğindeki standart yerçekimi değerleridir.'}
                 </p>
               </div>
             </div>
@@ -600,7 +638,7 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
             <thead>
               <tr className={isDark ? 'bg-slate-950/90 text-slate-300' : 'bg-slate-100 text-slate-700'}>
                 <th className="p-3 font-semibold border-b border-slate-200 dark:border-slate-800">Gauge · Tip &amp; Renk</th>
-                <th className="p-3 font-semibold border-b border-slate-200 dark:border-slate-800">Çap / Uzunluk</th>
+                <th className="p-3 font-semibold border-b border-slate-200 dark:border-slate-800">Dış Çap (OD) / Uzunluk</th>
                 <th className="p-3 font-semibold border-b border-slate-200 dark:border-slate-800">
                   {pressureBagActive ? 'Basınçlı Akım (300 mmHg)' : 'İnfüzyon Hızı (Yerçekimi)'}
                 </th>
@@ -613,8 +651,8 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
               {visibleRows.map((row) => {
                 const isCvc = row.kind === 'cvc';
                 const barWidthPct = Math.max(5, Math.round((row.flowRateNumericMid / maxFlow) * 100));
-                const pressurizedLow = Math.round(row.flowRateNumericMid * 1.85);
-                const pressurizedHigh = Math.round(row.flowRateNumericMid * (isCvc ? 2.25 : 2.35));
+                const { flowLabel, oneLiterLabel } = getFlowMetrics(row);
+                const isWhiteSwatch = row.id === 'piv-17g';
                 return (
                   <tr
                     key={row.id}
@@ -631,7 +669,11 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
                     <td className="p-3 align-top">
                       <div className="flex items-center gap-2.5">
                         <span
-                          className="w-4 h-9 rounded-sm border border-black/15 shrink-0"
+                          className={`w-4 h-9 rounded-sm shrink-0 ${
+                            isWhiteSwatch
+                              ? 'border border-slate-400 dark:border-slate-500'
+                              : 'border border-black/15'
+                          }`}
                           style={{ backgroundColor: row.colorHex }}
                           aria-hidden="true"
                         />
@@ -670,23 +712,22 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
                               : 'text-cyan-600 dark:text-cyan-400'
                         }`}
                       >
-                        {pressureBagActive ? `~${pressurizedLow} – ${pressurizedHigh} mL/dk` : row.flowRateMlMinLabel}
+                        {flowLabel}
                       </div>
                       <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 mt-1.5 overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all duration-300"
-                          style={{ width: `${barWidthPct}%`, backgroundColor: row.colorHex }}
+                          style={{
+                            width: `${barWidthPct}%`,
+                            backgroundColor: isWhiteSwatch ? '#94a3b8' : row.colorHex
+                          }}
                         />
                       </div>
                     </td>
                     <td className="p-3 align-top font-mono tabular-nums whitespace-nowrap">
                       <div className="inline-flex items-center gap-1 font-semibold">
                         <Timer className="w-3.5 h-3.5 text-slate-400" />
-                        <span>
-                          {pressureBagActive
-                            ? `~${Math.max(1.5, Math.round((1000 / ((pressurizedLow + pressurizedHigh) / 2)) * 10) / 10)} dk`
-                            : row.oneLiterTimeApprox}
-                        </span>
+                        <span>{oneLiterLabel}</span>
                       </div>
                     </td>
                     <td className="p-3 align-top max-w-[260px] leading-relaxed">
@@ -712,44 +753,60 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
         </div>
       </div>
 
-      {/* 3. Detaylı Kanül Kartları Grid (Bölge & Klinik İnciler) */}
+      {/* 3. Detaylı Kanül Kartları Grid (Bölge & Klinik İnciler — Basınç Modu ile Senkron) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-        {peripheralDetailCards.map((c) => (
-          <div
-            key={c.id}
-            className={`p-4 rounded-xl border flex flex-col justify-between space-y-2.5 ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
-            }`}
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-2">
+        {peripheralDetailCards.map((c) => {
+          const { flowLabel, oneLiterLabel } = getFlowMetrics(c);
+          const isWhiteSwatch = c.id === 'piv-17g';
+          return (
+            <div
+              key={c.id}
+              className={`p-4 rounded-xl border flex flex-col justify-between space-y-2.5 ${
+                isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+              }`}
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`w-3.5 h-3.5 rounded-full shrink-0 ${
+                        isWhiteSwatch
+                          ? 'border border-slate-400 dark:border-slate-500'
+                          : 'border border-black/15'
+                      }`}
+                      style={{ backgroundColor: c.colorHex }}
+                    />
+                    <span className={`font-mono font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {c.gauge} · {c.colorName}
+                    </span>
+                  </div>
                   <span
-                    className="w-3.5 h-3.5 rounded-full border border-black/15 shrink-0"
-                    style={{ backgroundColor: c.colorHex }}
-                  />
-                  <span className={`font-mono font-bold text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    {c.gauge} · {c.colorName}
+                    className={`text-[11px] font-mono tabular-nums font-semibold ${
+                      pressureBagActive
+                        ? 'text-amber-600 dark:text-amber-400'
+                        : 'text-cyan-600 dark:text-cyan-400'
+                    }`}
+                  >
+                    {flowLabel}
                   </span>
                 </div>
-                <span className="text-[11px] font-mono tabular-nums font-semibold text-cyan-600 dark:text-cyan-400">
-                  {c.flowRateMlMinLabel}
+                <div className="flex items-start gap-1.5 text-[11px] font-semibold text-cyan-700 dark:text-cyan-300">
+                  <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                  <span>{c.preferredSites}</span>
+                </div>
+                <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  {c.clinicalNotes}
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                <span>OD {c.outerDiameterMm} · {c.lengthLabel}</span>
+                <span className={pressureBagActive ? 'text-amber-600 dark:text-amber-400 font-semibold' : ''}>
+                  1 L{pressureBagActive ? ' (300 mmHg)' : ''}: {oneLiterLabel}
                 </span>
               </div>
-              <div className="flex items-start gap-1.5 text-[11px] font-semibold text-cyan-700 dark:text-cyan-300">
-                <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                <span>{c.preferredSites}</span>
-              </div>
-              <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                {c.clinicalNotes}
-              </p>
             </div>
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center justify-between">
-              <span>Ø {c.outerDiameterMm} · {c.lengthLabel}</span>
-              <span>1 L: {c.oneLiterTimeApprox}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* 4. Klinik İnciler: Periferik vs Santral Akım & Damar Koruma Kuralları */}
@@ -773,6 +830,9 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
             <li>
               • <strong>Kan Viskozitesi:</strong> Soğuk eritrosit süspansiyonunun viskozitesi yüksektir; hızlı transfüzyonda izotonik (%0.9 NaCl) ile birlikte ve ısıtıcı/basınçlı sistemle (≤ 300 mmHg) 14G–18G üzerinden verilmelidir.
             </li>
+            <li>
+              • <strong>Kan Transfüzyonu Sıvı Uyumluluğu:</strong> Eritrosit süspansiyonu ile aynı hattan <strong>yalnızca %0.9 NaCl</strong> (veya kalsiyumsuz uyumlu izotonik dengeli solüsyonlar, örn. Plasma-Lyte A) uygulanır. <strong>Ringer Laktat (RL)</strong> içeriğindeki kalsiyum, kan torbasındaki sitrat antikoagülanını bağlayarak <strong>pıhtılaşmaya</strong> yol açar; <strong>%5 Dekstroz (D5W)</strong> veya hipotonik solüsyonlar ise eritrositlerde ozmotik şişme ve <strong>hemoliz</strong> oluşturur.
+            </li>
           </ul>
         </div>
 
@@ -787,13 +847,13 @@ export const IvAccessInfographic: React.FC<IvAccessInfographicProps> = ({ isDark
           </div>
           <ul className={`space-y-1.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
             <li>
-              • <strong>Kontrendike Ekstremiteler:</strong> Aktif/planlanan AV fistül (KBH Evre 3b–5), ipsilateral aksiller lenf nodu diseksiyonu/mastektomi, lenfödem, tromboz veya enfeksiyon bulunan kola kanül takılmaz.
+              • <strong>Kontrendike Ekstremiteler:</strong> Aktif/planlanan AV fistül (KBH Evre 3b–5), ipsilateral <strong>aksiller lenf nodu diseksiyonu (ALND)</strong>, <strong>lenfödem</strong>, tromboz veya enfeksiyon bulunan kola kanül takılmaz. <em>INS 2024 Güncellemesi:</em> Komplikasyonsuz <strong>sentinel lenf nodu biyopsisi (SLNB)</strong> tek başına ipsilateral IV erişim için artık mutlak kontrendikasyon değildir.
             </li>
             <li>
               • <strong>Bölge Seçimi:</strong> Elektifte bükülme/kink ve flebit riski nedeniyle eklem kıvrım yerlerinden (antekübital fossa, el bileği volar yüzü) kaçınılır; düz <strong>ön kol sefalik/bazilik veya el sırtı</strong> venleri tercih edilir.
             </li>
             <li>
-              • <strong>Vezikan/Hiperozmolar İlaçlar:</strong> Vankomisin, KCl (&gt; 40 mEq/L), %3 NaCl, yüksek doz vazopresör veya pH &lt; 5 / &gt; 9 / &gt; 900 mOsm/L solüsyonlar uzun süreli periferik yoldan ekstravazasyon riski taşır; yakın izlem veya santral erişim gerektirir.
+              • <strong>Vezikan / Hiperozmolar İlaçlar &amp; Vazopresörler (INS 2024):</strong> INS 2024 tek başına <code>pH &lt; 5 / &gt; 9</code> değerini otomatik SVK endikasyonu olmaktan çıkarmıştır; karar artık <strong>ozmolarite &gt; 900 mOsm/L</strong>, vezikan özellik (vankomisin, KCl &gt; 40 mEq/L, %3 NaCl, kemoterapötikler) ve <strong>infüzyon süresine</strong> göre verilir. Kısa süreli seyreltik periferik vazopresör infüzyonu, proksimal ≥ 18–20G USG-doğrulanmış sağlam PIV’den yakın saha izlemiyle uygulanabilir; uzun süreli/yüksek doz infüzyonda SVK gereklidir.
             </li>
           </ul>
         </div>

@@ -39,7 +39,7 @@ const CLINICAL_SCENARIOS: ScenarioSpec[] = [
     mechanism:
       'İntravasküler hacim azaldığında MSFP düşüktür. PBV + PEEP ile sağ atriyum basıncı (PRA) yükselince venöz dönüş gradienti (MSFP − PRA) hızla sıfıra yaklaşır ve atım hacmi (SV) çöker.',
     action:
-      'İndüksiyonda agresif PEEP ve yüksek tepe basıncından kaçının; eşzamanlı kristaloid/kan resüsitasyonu ve gerekirse vazopresör (Noradrenalin / Efedrin) uygulayın. PPV > %13 sıvı yanıtlılığını gösterir.',
+      'İndüksiyonda agresif PEEP ve yüksek tepe basıncından kaçının; eşzamanlı kristaloid/kan resüsitasyonu ve gerekirse vazopresör (Noradrenalin / Efedrin) uygulayın. Geçerlilik koşulları sağlandığında PPV > %12–13 preload yanıtlılığını (sıvı yanıtlılığı) gösterir (tek başına hipovolemi tanısı değildir).',
     tone: 'rose'
   },
   {
@@ -61,7 +61,7 @@ const CLINICAL_SCENARIOS: ScenarioSpec[] = [
     mechanism:
       'Yüksek Vt ve yüksek PEEP alveoler kapillerleri sıkıştırarak Pulmoner Vasküler Direnci (PVR) fırlatır. RV afterload artar, RV dilate olur ve interventriküler septumu sola iterek LV dolumunu bozar.',
     action:
-      'Düşük tidal hacim (6 mL/kg IBW), düşük plato basıncı (< 27–30 cmH₂O) ve minimal/ılımlı PEEP (≤ 5–8 cmH₂O) kullanın; hipoksi ve hiperkapni (HPV ile PVR’yi daha da artıran faktörler) önlenmelidir.',
+      'Düşük tidal hacim (6 mL/kg PBW), düşük plato basıncı (< 27–30 cmH₂O) ve minimal/ılımlı PEEP (≤ 5–8 cmH₂O) kullanın; hipoksi, hiperkapni ve asidemi (HPV ve pulmoner vazokonstriksiyon üzerinden PVR’yi daha da artıran faktörler) titizlikle önlenmelidir.',
     tone: 'amber'
   },
   {
@@ -99,19 +99,19 @@ const COMPARISON_ROWS = [
     ppv: 'Paralizide karın organları posterior diyaframı iter → hava anterior/apikal (non-dependent) bölgeye kaçar, posterior atelektazi & şant artar'
   },
   {
-    param: 'Fizyolojik Ölü Boşluk (VD/VT)',
-    spontaneous: 'Düşük / Normal (~0.30); West Zon 3 baskın',
-    ppv: 'Artar (~0.40+); yüksek Paw apikal kapillerleri ezer → West Zon 1 (alveoler ölü boşluk) genişler'
+    param: 'Fizyolojik Ölü Boşluk (VD/VT) & West Zonları',
+    spontaneous: 'Düşük / Normal (~0.30); West Zon 3 (Pa > Pv > PA) ve Zon 2 (Pa > PA > Pv) baskın',
+    ppv: 'Artar (~0.40+); yüksek PA apikal kapillerleri ezer → West Zon 1 (PA > Pa > Pv, alveoler ölü boşluk) genişler'
   },
   {
     param: 'Sağ Atriyum Basıncı (PRA) & Venöz Dönüş',
-    spontaneous: 'PRA ↓ → Venöz dönüş gradienti (MSFP − PRA) ARTAR (IVC inspirasyonda daralır)',
-    ppv: 'PRA ↑ → Venöz dönüş gradienti (MSFP − PRA) AZALIR (IVC inspirasyonda genişler)'
+    spontaneous: 'İnspirasyonda PRA ↓ → Venöz dönüş (MSFP − PRA) ARTAR (IVC daralır; ancak PRA < 0 mmHg altında Starling rezistörü / vasküler şelale platosu oluşur); ekspirasyonda bazale döner',
+    ppv: 'İnspirasyonda PRA ↑ → Venöz dönüş AZALIR (IVC genişler); ekspirasyonda PEEP aşırı değilse IVC kısmen dekomprese olur ve VR toparlanır'
   },
   {
     param: 'Pulmoner Vasküler Direnç (PVR) & RV Afterload',
     spontaneous: 'Normal FRC’de PVR minimum; RV afterload düşük',
-    ppv: 'Yüksek Vt/PEEP alveoler kapillerleri sıkıştırır → PVR ↑ ve RV afterload ↑ (atelektaziyi açan optimal PEEP hariç)'
+    ppv: 'Yüksek Vt/PEEP alveoler kapillerleri sıkıştırır → PVR ↑ ve RV afterload ↑ (atelektaziyi açan optimal PEEP hariç; hipoksi, hiperkapni ve asidemi PVR’yi daha da artırır)'
   },
   {
     param: 'LV Transmural Afterload (PLV − Ppl)',
@@ -119,9 +119,9 @@ const COMPARISON_ROWS = [
     ppv: 'Pozitif Ppl dış destek sağlar → LV transmural afterload AZALIR (akut LV yetmezliğinde faydalı)'
   },
   {
-    param: 'Dinamik Sıvı Yanıtlılığı (PPV / SVV)',
-    spontaneous: 'Geçersizdir (değişken Vt ve efor nedeniyle güvenilir ölçüm vermez)',
-    ppv: 'Geçerlidir (Tam kontrollü PBV, Vt ≥ 8 mL/kg ve sinüs ritminde PPV/SVV > %12–13 → sıvı yanıtlı)'
+    param: 'Dinamik Preload Yanıtlılığı (PPV / SVV)',
+    spontaneous: 'Geçersizdir (değişken Vt ve spontan efor nedeniyle güvenilir ölçüm vermez)',
+    ppv: 'Geçerlilik şartları: Tam kontrollü PBV (efor yok), Vt ≥ 8 mL/kg, sinüs ritmi, HR/RR > 3.6, kapalı toraks, normal IAP ve RV yetmezliği olmaması → PPV/SVV > %12–13 preload (sıvı) yanıtlılığını gösterir (mutlak hipovolemi demek değildir)'
   },
   {
     param: 'Başlıca Komplikasyonlar',
@@ -474,70 +474,149 @@ export const SpontaneousVsPpvInfographic: React.FC<SpontaneousVsPpvInfographicPr
               })()}
 
               {/* Kalp & Sağ Atriyum (Merkez Mediyastinum) */}
-              <g>
-                <ellipse
-                  cx="280"
-                  cy="176"
-                  rx={ventMode === 'ppv' && breathPhase === 'inspiration' ? 28 : 34}
-                  ry={ventMode === 'ppv' && breathPhase === 'inspiration' ? 35 : 40}
-                  fill="#9f1239"
-                  fillOpacity="0.65"
-                  stroke="#fb7185"
-                  strokeWidth="2"
-                />
-                <text x="280" y="172" textAnchor="middle" fill="#ffe4e6" fontSize="10.5" fontWeight="bold" fontFamily="monospace">
-                  Kalp (RA/RV/LV)
-                </text>
-                <text x="280" y="187" textAnchor="middle" fill="#fecdd3" fontSize="9.5" fontFamily="monospace">
-                  {ventMode === 'ppv' && breathPhase === 'inspiration' ? 'Dıştan Bası ↑ (PRA↑)' : 'Transmural Dolum'}
-                </text>
-              </g>
+              {(() => {
+                const isInsp = breathPhase === 'inspiration';
+                const isHighPeep = ventMode === 'ppv' && peepLevel === 'high';
+                const heartCompressed = ventMode === 'ppv' && (isInsp || isHighPeep);
 
-              {/* İnferior Vena Kava (IVC) ve Venöz Dönüş Akışı (Alttan RA'ya) */}
-              <g>
-                {/* IVC damar lümeni: Spontan insp'te daralır ama akış hızlanır; PBV'de genişler ama akış yavaşlar */}
-                <rect
-                  x={ventMode === 'ppv' ? 256 : 262}
-                  y="214"
-                  width={ventMode === 'ppv' ? 28 : 16}
-                  height="86"
-                  rx="4"
-                  fill="#1d4ed8"
-                  fillOpacity="0.4"
-                  stroke="#60a5fa"
-                  strokeWidth="1.6"
-                />
-                {/* Venöz dönüş oku */}
-                <line
-                  x1="270"
-                  y1="294"
-                  x2="270"
-                  y2="225"
-                  stroke={ventMode === 'spontaneous' ? '#34d399' : '#f59e0b'}
-                  strokeWidth={ventMode === 'spontaneous' && breathPhase === 'inspiration' ? '4.5' : '2.2'}
-                />
-                <polygon
-                  points="264,232 276,232 270,220"
-                  fill={ventMode === 'spontaneous' ? '#34d399' : '#f59e0b'}
-                />
-                <text x="20" y="294" fill="#93c5fd" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  IVC &amp; Venöz Dönüş: {metrics.venousReturn}
-                </text>
-              </g>
+                // IVC çapı ve venöz dönüş akımı — breathPhase & peepLevel ile tam senkron
+                const ivcWidth =
+                  ventMode === 'spontaneous'
+                    ? isInsp
+                      ? 14 // Spontan inspirasyonda kollabe / daralır
+                      : 22 // Spontan ekspirasyonda bazal genişlik
+                    : isInsp
+                      ? isHighPeep
+                        ? 32 // PBV + Yüksek PEEP inspirasyonda belirgin distansiyon
+                        : 28 // PBV inspirasyonda genişler
+                      : isHighPeep
+                        ? 28 // Yüksek PEEP ekspirasyonda da geniş kalır
+                        : 22; // Normal PEEP ekspirasyonda kısmi dekompresyon
+                const ivcX = 270 - ivcWidth / 2;
 
-              {/* Guyton Denklemi Kutusu (Sağ üst/alt köşe) */}
-              <g transform="translate(362, 232)">
-                <rect x="0" y="0" width="186" height="66" rx="8" fill="#0f172a" stroke="#334155" strokeWidth="1.2" />
-                <text x="10" y="18" fill="#38bdf8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                  Guyton Venöz Dönüş Yasası:
-                </text>
-                <text x="10" y="34" fill="#e2e8f0" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  VR = (MSFP − PRA) / RVR
-                </text>
-                <text x="10" y="52" fill={ventMode === 'spontaneous' ? '#6ee7b7' : '#fda4af'} fontSize="9.5" fontFamily="monospace">
-                  {ventMode === 'spontaneous' ? 'PRA ↓ → VR ↑ (Emme Pompası)' : 'PRA ↑ → VR ↓ (Sıkışma)'}
-                </text>
-              </g>
+                const vrStrokeColor =
+                  ventMode === 'spontaneous'
+                    ? isInsp
+                      ? '#34d399'
+                      : '#60a5fa'
+                    : isInsp
+                      ? isHighPeep
+                        ? '#f43f5e'
+                        : '#f59e0b'
+                      : isHighPeep
+                        ? '#f59e0b'
+                        : '#38bdf8';
+
+                const vrStrokeWidth =
+                  ventMode === 'spontaneous'
+                    ? isInsp
+                      ? 4.5
+                      : 2.8
+                    : isInsp
+                      ? isHighPeep
+                        ? 1.5
+                        : 2.0
+                      : isHighPeep
+                        ? 2.0
+                        : 3.0;
+
+                const guytonText =
+                  ventMode === 'spontaneous'
+                    ? isInsp
+                      ? 'PRA ↓ → VR ↑ (Emme Pompası)'
+                      : 'PRA Bazal → Normal VR Akımı'
+                    : isInsp
+                      ? isHighPeep
+                        ? 'PRA ↑↑ → VR ↓↓ (Ağır Sıkışma)'
+                        : 'PRA ↑ → VR ↓ (Sıkışma)'
+                      : isHighPeep
+                        ? 'Yüksek PEEP → VR Baskılı'
+                        : 'PRA ↓ → VR Kısmen Toparlanır';
+
+                const guytonColor =
+                  ventMode === 'spontaneous'
+                    ? isInsp
+                      ? '#6ee7b7'
+                      : '#93c5fd'
+                    : isInsp
+                      ? '#fda4af'
+                      : isHighPeep
+                        ? '#fcd34d'
+                        : '#7dd3fc';
+
+                return (
+                  <>
+                    <g>
+                      <ellipse
+                        cx="280"
+                        cy="176"
+                        rx={heartCompressed ? 28 : 34}
+                        ry={heartCompressed ? 35 : 40}
+                        fill="#9f1239"
+                        fillOpacity="0.65"
+                        stroke="#fb7185"
+                        strokeWidth="2"
+                      />
+                      <text x="280" y="172" textAnchor="middle" fill="#ffe4e6" fontSize="10.5" fontWeight="bold" fontFamily="monospace">
+                        Kalp (RA/RV/LV)
+                      </text>
+                      <text x="280" y="187" textAnchor="middle" fill="#fecdd3" fontSize="9.5" fontFamily="monospace">
+                        {ventMode === 'ppv'
+                          ? isInsp
+                            ? 'Dıştan Bası ↑ (PRA↑)'
+                            : isHighPeep
+                              ? 'Sürekli PEEP Basısı'
+                              : 'Bası ↓ (Dekompresyon)'
+                          : isInsp
+                            ? 'Transmural Dolum ↑'
+                            : 'Bazal Dolum'}
+                      </text>
+                    </g>
+
+                    {/* İnferior Vena Kava (IVC) ve Venöz Dönüş Akışı (Alttan RA'ya) */}
+                    <g>
+                      <rect
+                        x={ivcX}
+                        y="214"
+                        width={ivcWidth}
+                        height="86"
+                        rx="4"
+                        fill="#1d4ed8"
+                        fillOpacity="0.4"
+                        stroke="#60a5fa"
+                        strokeWidth="1.6"
+                      />
+                      {/* Venöz dönüş oku */}
+                      <line
+                        x1="270"
+                        y1="294"
+                        x2="270"
+                        y2="225"
+                        stroke={vrStrokeColor}
+                        strokeWidth={vrStrokeWidth}
+                      />
+                      <polygon points="264,232 276,232 270,220" fill={vrStrokeColor} />
+                      <text x="16" y="294" fill="#93c5fd" fontSize="9.5" fontFamily="monospace" fontWeight="bold">
+                        IVC ({ventMode === 'spontaneous' ? (isInsp ? 'Daralır' : 'Bazal') : isInsp ? 'Genişler' : isHighPeep ? 'Geniş Kalır' : 'Kısmi Dekomp.'}) · VR: {metrics.venousReturn}
+                      </text>
+                    </g>
+
+                    {/* Guyton Denklemi Kutusu (Sağ alt köşe) */}
+                    <g transform="translate(356, 232)">
+                      <rect x="0" y="0" width="194" height="66" rx="8" fill="#0f172a" stroke="#334155" strokeWidth="1.2" />
+                      <text x="10" y="18" fill="#38bdf8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                        Guyton Venöz Dönüş Yasası:
+                      </text>
+                      <text x="10" y="34" fill="#e2e8f0" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                        VR = (MSFP − PRA) / RVR
+                      </text>
+                      <text x="10" y="52" fill={guytonColor} fontSize="9.2" fontFamily="monospace">
+                        {guytonText}
+                      </text>
+                    </g>
+                  </>
+                );
+              })()}
             </svg>
           </div>
 
@@ -571,7 +650,15 @@ export const SpontaneousVsPpvInfographic: React.FC<SpontaneousVsPpvInfographicPr
               <div className={`text-[11px] ${mutedText}`}>IVC Dinamiği (USG / Ekokardiyografi)</div>
               <div className="font-bold text-sm mt-1">{metrics.ivcStatus}</div>
               <div className={`text-[11px] mt-0.5 ${mutedText}`}>
-                {ventMode === 'spontaneous' ? 'Spontan inspirasyonda kollaps normaldir.' : 'PBV’de inspiratuar genişleme olur.'}
+                {ventMode === 'spontaneous'
+                  ? breathPhase === 'inspiration'
+                    ? 'Spontan inspirasyonda kollaps normaldir.'
+                    : 'Ekspirasyonda bazal çapa döner.'
+                  : breathPhase === 'inspiration'
+                    ? 'PBV inspirasyonunda distansiyon (genişleme) olur.'
+                    : peepLevel === 'high'
+                      ? 'Yüksek PEEP ekspirasyonda da geniş tutar.'
+                      : 'Ekspirasyonda kısmen dekomprese olur.'}
               </div>
             </div>
 
@@ -599,7 +686,7 @@ export const SpontaneousVsPpvInfographic: React.FC<SpontaneousVsPpvInfographicPr
               2. Kardiyopulmoner Hemodinamik Etkiler (Önyük, Ardyük, Ventriküler Etkileşim &amp; Nabız Basıncı)
             </h5>
             <p className={`text-xs ${mutedText}`}>
-              Pozitif basınçlı ventilasyonun sağ kalp, sol kalp ve sıvı yanıtlılığı (PPV/SVV) üzerindeki temel mekanizmaları:
+              Pozitif basınçlı ventilasyonun sağ kalp, sol kalp ve dinamik preload yanıtlılığı (PPV/SVV) üzerindeki temel mekanizmaları:
             </p>
           </div>
         </div>
@@ -610,12 +697,12 @@ export const SpontaneousVsPpvInfographic: React.FC<SpontaneousVsPpvInfographicPr
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm flex items-center gap-1.5 text-rose-500">
                 <ArrowDown className="w-4 h-4" />
-                1. RV Preload &amp; Venöz Dönüş Azalması
+                1. RV Preload, Venöz Dönüş &amp; Vasküler Şelale
               </span>
               <span className="font-mono text-[11px] text-slate-400">Guyton Modeli</span>
             </div>
             <p className="leading-relaxed">
-              Venöz dönüş hızı ortalama sistemik dolum basıncı ile sağ atriyum basıncı farkına bağlıdır (<strong>VR = [MSFP − PRA] / RVR</strong>). PBV ve PEEP intratorasik basıncı artırarak <strong>PRA (CVP)’yi yükseltir</strong>; gradient daralır, RV önyükü ve kardiyak debi düşer. <em>(Spontan inspirasyonda ise PRA düşer ve venöz dönüş artar.)</em>
+              Venöz dönüş hızı ortalama sistemik dolum basıncı ile sağ atriyum basıncı farkına bağlıdır (<strong>VR = [MSFP − PRA] / RVR</strong>). PBV ve PEEP intratorasik basıncı artırarak <strong>PRA (CVP)’yi yükseltir</strong>; gradient daralır, RV önyükü ve kardiyak debi düşer. <em>Spontan inspirasyonda PRA düşer ve VR artar; ancak <strong>PRA &lt; 0 mmHg</strong> altına indiğinde büyük torasik venler (IVC/SVC) kollabe olarak <strong>Starling rezistörü / vasküler şelale (vascular waterfall)</strong> oluşturur ve venöz dönüş plato yapar (daha derin negatif basınç VR’yi daha fazla artırmaz).</em>
             </p>
           </div>
 
@@ -623,12 +710,12 @@ export const SpontaneousVsPpvInfographic: React.FC<SpontaneousVsPpvInfographicPr
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm flex items-center gap-1.5 text-amber-500">
                 <ArrowUp className="w-4 h-4" />
-                2. PVR Artışı, RV Afterload &amp; Septal Kayma
+                2. PVR Artışı, West Zonları &amp; Septal Kayma
               </span>
-              <span className="font-mono text-[11px] text-slate-400">West Zonları</span>
+              <span className="font-mono text-[11px] text-slate-400">West Zon 1–3</span>
             </div>
             <p className="leading-relaxed">
-              Yüksek tidal hacim ve yüksek PEEP alveoler basıncı (PA) artırarak intraalveoler kapillerleri sıkıştırır (<strong>West Zon 1–2 artışı</strong>). Bu durum <strong>Pulmoner Vasküler Direnci (PVR)</strong> ve <strong>RV ardyükünü</strong> artırır. RV aşırı gerilirse interventriküler septum sola kayarak (<em>ventriküler bağımlılık</em>) LV dolumunu kısıtlar.
+              Yüksek Vt ve PEEP alveoler basıncı (P<sub>A</sub>) artırarak intraalveoler kapillerleri sıkıştırır ve ölü boşluğu genişletir: <span className="font-mono font-semibold">Zon 1: P<sub>A</sub> &gt; P<sub>a</sub> &gt; P<sub>v</sub></span> · <span className="font-mono font-semibold">Zon 2: P<sub>a</sub> &gt; P<sub>A</sub> &gt; P<sub>v</sub></span> · <span className="font-mono font-semibold">Zon 3: P<sub>a</sub> &gt; P<sub>v</sub> &gt; P<sub>A</sub></span>. Zon 1–2 artışı <strong>PVR</strong> ve <strong>RV ardyükünü</strong> yükseltir (eşlik eden <strong>hipoksi, hiperkapni ve asidemi</strong> PVR’yi daha da artırır); RV dilate olunca septum sola kayarak LV dolumunu kısıtlar.
             </p>
           </div>
 
@@ -641,7 +728,7 @@ export const SpontaneousVsPpvInfographic: React.FC<SpontaneousVsPpvInfographicPr
               <span className="font-mono text-[11px] text-slate-400">Ptm = PLV − Ppl</span>
             </div>
             <p className="leading-relaxed">
-              Sol ventrikülün yenmek zorunda olduğu gerçek duvar gerilimi <strong>transmural basınçtır (PLV − Ppl)</strong>. PBV ile plevral basınç (Ppl) pozitife çıktığında LV ejeksiyonuna dışarıdan destek sağlanır ve <strong>LV ardyükü azalır</strong>. Bu nedenle akut LV yetmezliği / pulmoner ödemde pozitif basınç (CPAP/PBV) kardiyak debiyi artırır.
+              Sol ventrikülün yenmek zorunda olduğu gerçek duvar gerilimi <strong>transmural basınçtır (P<sub>tm</sub> = P<sub>LV</sub> − P<sub>pl</sub>)</strong>. PBV ile plevral basınç (P<sub>pl</sub>) pozitife çıktığında LV ejeksiyonuna dışarıdan destek sağlanır ve <strong>LV ardyükü azalır</strong>. Bu nedenle akut LV yetmezliği / pulmoner ödemde pozitif basınç (CPAP/PBV) kardiyak debiyi artırır.
             </p>
           </div>
 
@@ -649,12 +736,12 @@ export const SpontaneousVsPpvInfographic: React.FC<SpontaneousVsPpvInfographicPr
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm flex items-center gap-1.5 text-sky-500">
                 <Wind className="w-4 h-4" />
-                4. Dinamik Nabız Basıncı Değişimi (PPV / SVV)
+                4. Dinamik Preload Yanıtlılığı (PPV / SVV)
               </span>
               <span className="font-mono text-[11px] text-slate-400">dUp + dDown</span>
             </div>
             <p className="leading-relaxed">
-              PBV inspirasyonu başında akciğer kapillerlerindeki kan LV’ye sıkıldığı için kısa bir atım artışı (<strong>dUp</strong>), ardından 2–3 atım sonra RV’den gelen azalmış önyük nedeniyle atım düşüşü (<strong>dDown</strong>) oluşur. Tam kontrollü PBV’de (Vt ≥ 8 mL/kg, sinüs ritmi) <strong>PPV / SVV &gt; %12–13</strong> hipovolemiyi ve sıvı yanıtlılığını gösterir.
+              PBV inspirasyonu başında (1) pulmoner kapiller kanın LV’ye itilmesi <strong>ve (2) inspiratuvar LV transmural basıncının (P<sub>tm</sub> = P<sub>LV</sub> − P<sub>pl</sub>) düşmesiyle LV ardyükünün azalması</strong> kısa bir atım artışı (<strong>dUp</strong>) yaratır; 2–3 atım sonra RV’den gelen azalmış önyük atımı düşürür (<strong>dDown</strong>). <strong>PPV / SVV &gt; %12–13</strong> doğrudan hipovolemiyi değil, <strong>preload yanıtlılığını (sıvı yanıtlılığını)</strong> gösterir. <em>Geçerlilik önkoşulları:</em> Tam kontrollü PBV (spontan efor yok), sinüs ritmi, <strong>V<sub>T</sub> ≥ 8 mL/kg</strong>, <strong>HR/RR &gt; 3.6</strong>, <strong>kapalı toraks</strong>, <strong>normal intraabdominal basınç (IAP)</strong> ve <strong>RV yetmezliği olmaması</strong>.
             </p>
           </div>
         </div>

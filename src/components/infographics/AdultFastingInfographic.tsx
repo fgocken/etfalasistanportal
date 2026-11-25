@@ -78,20 +78,20 @@ const ADULT_FASTING_ITEMS: FastingItem[] = [
   },
   {
     id: 'formula-milk',
-    name: 'Hayvansal Süt ve Sütlü İçecekler',
+    name: 'Hayvansal Sütler & Opak Bitkisel Sütler',
     category: 'Sıvı',
     recommendedHours: 6,
     badgeLabel: '6 Saat',
     badgeColor: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30',
     examples: [
       'İnek sütü, keçi sütü, tam yağlı/yarım yağlı süt',
-      'Sütlü kahve (Latte, Cappuccino vb.)',
+      'Sütlü kahve (Latte, Cappuccino, süt/krema eklenmiş çay)',
       'Yoğurtlu içecekler ve ayran',
-      'Soya/Badem sütü (yoğun proteinli/yağlı formlar)'
+      'Tüm opak bitkisel sütler (badem, yulaf, soya, hindistan cevizi sütü — protein/yağ oranından bağımsız)'
     ],
-    clinicalRule: 'Süt sıvı görünümünde olsa bile kazein pıhtısı nedeniyle midede katı gıda gibi davranır; en az 6 saat açlık gerektirir.',
+    clinicalRule: 'Hayvansal sütler ve tüm opak bitkisel sütler (badem, yulaf, soya vb.) berrak sıvı DEĞİLDİR; en az 6 saat açlık gerektirir.',
     aspirationRisk: 'Orta',
-    keyNotes: 'Mide asidiyle karşılaşan süt proteini (kazein) jel kıvamında pıhtılaşır ve berrak sıvılara göre boşalması çok daha uzun sürer.'
+    keyNotes: 'Mide asidiyle karşılaşan hayvansal süt proteini (kazein) pıhtılaşır; opak bitkisel sütler ise partikül, yağ ve kompleks içerikleri nedeniyle berrak sıvı sınıfına girmez ve 6 saat açlık gerektirir.'
   },
   {
     id: 'heavy-meal',
@@ -111,19 +111,19 @@ const ADULT_FASTING_ITEMS: FastingItem[] = [
   },
   {
     id: 'gum',
-    name: 'Sakız Çiğneme ve Sert Şeker Emme (ASA 2023)',
+    name: 'Yutulmamış Sakız Çiğneme (ASA 2023)',
     category: 'Özel Durum',
     recommendedHours: 0,
-    badgeLabel: 'Ameliyat İptal Edilmez!',
+    badgeLabel: '0 Saat · İptal Edilmez!',
     badgeColor: 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/30',
     examples: [
-      'Şekersiz veya şekerli sakız çiğneme',
-      'Ağızda sert şeker veya nane şekeri emme',
-      'Tütün çiğneme / nikotin sakızı'
+      'Şekersiz veya şekerli sakız çiğneme (YUTULMADAN)',
+      'Nikotin sakızı (yalnızca yutulmamış sakız formu)',
+      '⚠️ Sert şeker / nane şekeri ve tütün çiğneme bu muafiyette DEĞİLDİR!'
     ],
-    clinicalRule: 'ASA 2023 Kılavuz Güncellemesi: Sakız çiğneyen hastalarda elektif cerrahi KESİNLİKLE ERTELENMEZ veya İPTAL EDİLMEZ.',
+    clinicalRule: 'ASA 2023 (Joshi, PMID 36629465): Sağlıklı erişkinlerde YALNIZCA yutulmamış sakız çiğnemek elektif cerrahiyi erteleme veya iptal gerekçesi değildir.',
     aspirationRisk: 'Düşük',
-    keyNotes: 'Sakız mide sekresyon hacmini hafif artırsa da gastrik pH veya regürjitasyon riskini klinik olarak anlamlı düzeyde değiştirmez. Tek şart: İndüksiyon öncesi sakızın ağızdan çıkarılıp atılmasıdır (fiziksel havayolu tıkanıklığını önlemek için).'
+    keyNotes: 'Yutulmamış sakız gastrik hacim/pH’ı klinik olarak anlamlı değiştirmez; indüksiyon öncesi ağızdan çıkarılması yeterlidir. DİKKAT: Sert şeker (hard candy) ağızda eriyip yutulduğundan berrak karbonhidrat/katı gibi değerlendirilir; tütün çiğneme ise partiküllü bitkisel materyal içerdiğinden ASLA 0 saat muafiyetinde sayılmaz!'
   },
   {
     id: 'glp1',
@@ -137,9 +137,9 @@ const ADULT_FASTING_ITEMS: FastingItem[] = [
       'Tirzepatid (Mounjaro, Zepbound)',
       'Liraglutid (Victoza, Saxenda), Dulaglutid (Trulicity)'
     ],
-    clinicalRule: 'Multisociety 2024 (ASA/AGA/ASMBS/SAGES/ISPCOP): Çoğu hasta tedaviye devam edebilir; rutin kesim yerine 4 yüksek risk kriteri değerlendirilir ve riskli olgularda 24 saat sıvı diyet / ortak karar uygulanır.',
+    clinicalRule: 'Multisociety 2024 (ASA/AGA/ASMBS/SAGES/ISPCOP): Çoğu hasta tedaviye devam edebilir; 4 yüksek risk kriteri varsa 24 saat sıvı diyet / ortak karar uygulanır. Ortak kararla kesilecekse: günlük doz operasyon günü atlanır, haftalık doz operasyondan 1 hafta önce kesilir.',
     aspirationRisk: 'Gecikmiş Boşalma',
-    keyNotes: 'Yüksek risk kriterleri: (1) Doz artırma/eskalasyon fazı, (2) yüksek doz, (3) haftalık dozlama, (4) aktif GI semptomları (bulantı, kusma, karın ağrısı, şişkinlik, kabızlık) veya gastroparezi. Riskli hastada işlemden 24 saat önce sıvı diyet önerilir. İşlem günü GI semptomu veya şüphe varsa başucu Gastrik USG (POCUS) yapılmalı, yapılamıyorsa dolu mide (RSI veya erteleme) kabul edilmelidir.'
+    keyNotes: 'Yüksek risk kriterleri: (1) Doz artırma/eskalasyon fazı, (2) yüksek doz, (3) haftalık dozlama, (4) aktif Gİ semptomları (bulantı, kusma, karın ağrısı, şişkinlik, kabızlık) veya gastroparezi. Riskli hastada işlemden 24 saat önce sıvı diyet önerilir; ortak kararla kesme seçilirse günlük preparat operasyon günü, haftalık preparat 1 hafta önce kesilir. İşlem günü şüphede Gastrik USG (POCUS) veya dolu mide yönetimi (RSI/erteleme) uygulanır.'
   }
 ];
 
@@ -354,29 +354,33 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
                 ASA 2023 GÜNCELLEMESİ
               </span>
               <span className="text-xs font-mono font-bold text-sky-600 dark:text-sky-400">
-                Vaka Ertelenmez!
+                Yalnızca Sakız!
               </span>
             </div>
             <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Sakız Çiğneyen Hasta
+              Yutulmamış Sakız Çiğneyen Hasta
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              Önceki yıllarda sakız çiğnendiği için vakalar saatlerce ertelenmekteydi. 2023 ASA kılavuzu bu pratiği sonlandırdı.
+              ASA 2023 (Joshi, PMID 36629465) sağlıklı erişkinlerde <strong>yalnızca yutulmamış sakız</strong> için vaka ertelemesini kaldırdı.
             </p>
 
             <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
               <div className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
-                <span>Sakız çiğnemek elektif cerrahinin ertelenmesi veya iptali için <strong>gerekçe değildir</strong>.</span>
+                <span>Yutulmamış şekerli/şekersiz sakız elektif cerrahinin ertelenmesi veya iptali için <strong>gerekçe değildir</strong>; indüksiyondan önce ağızdan çıkarılır.</span>
               </div>
               <div className="flex items-start gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
-                <span>Tek güvenlik kuralı: İndüksiyondan hemen önce sakız ağızdan çıkarılmalıdır.</span>
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+                <span><strong>Sert şeker (hard candy)</strong> eriyip yutulduğundan berrak karbonhidrat/katı gibi değerlendirilir; 0 saat muafiyetinde <strong>DEĞİLDİR</strong>.</span>
+              </div>
+              <div className="flex items-start gap-1.5">
+                <ShieldAlert className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+                <span><strong>Tütün çiğneme</strong> partiküllü bitkisel materyal içerdiğinden <strong>ASLA 0 saat muafiyetinde sayılmaz</strong>!</span>
               </div>
             </div>
           </div>
           <div className="mt-3 pt-2 border-t border-sky-500/20 text-[11px] text-sky-700 dark:text-sky-300 font-semibold">
-            ✓ Şekerli veya şekersiz sakız ayrımı yapılmaz
+            ✓ Muafiyet yalnızca sağlıklı erişkinde yutulmamış sakız içindir
           </div>
         </div>
 
@@ -405,20 +409,20 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
             <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
               <div className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
-                <span><strong>Çoğu Hastada Devam:</strong> Stabil idame dozunda ve GI semptomu yoksa ilaca devam edilebilir (rutin 1 hafta kesim artık zorunlu değil).</span>
+                <span><strong>Çoğu Hastada Devam:</strong> Stabil idame dozunda ve Gİ semptomu yoksa ilaca devam edilebilir.</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
-                <span><strong>4 Yüksek Risk Kriteri:</strong> Doz eskalasyon fazı, yüksek doz, haftalık rejim ve aktif GI semptomları (bulantı/kusma/şişkinlik) veya gastroparezi.</span>
+                <span><strong>4 Yüksek Risk Kriteri:</strong> Doz eskalasyon fazı, yüksek doz, haftalık rejim ve aktif Gİ semptomları (bulantı/kusma/şişkinlik) veya gastroparezi.</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5" />
-                <span><strong>24 sa Sıvı Diyet &amp; POCUS:</strong> Riskli hastada işlemden <strong>24 saat önce sıvı diyet</strong> uygulanır; şüphede <strong>Gastrik USG</strong> veya RSI/erteleme seçilir.</span>
+                <span><strong>24 sa Sıvı Diyet &amp; Ortak Kararla Kesim:</strong> Riskli hastada <strong>24 saat sıvı diyet</strong> uygulanır; ortak kararla ilacın kesilmesine karar verilirse <strong>günlük doz operasyon günü atlanır</strong>, <strong>haftalık doz operasyondan 1 hafta önce kesilir</strong>.</span>
               </div>
             </div>
           </div>
           <div className="mt-3 pt-2 border-t border-purple-500/20 text-[11px] text-purple-700 dark:text-purple-300 font-semibold">
-            ⚠️ 8 saatlik standart açlık dolu mideyi ekarte ettirmez — Risk varsa 24 sa sıvı diyet + POCUS!
+            ⚠️ 8 saatlik standart açlık dolu mideyi ekarte ettirmez — Şüphede Gastrik POCUS veya RSI/erteleme!
           </div>
         </div>
 
@@ -434,28 +438,32 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
                 BAŞUCU DEĞERLENDİRME
               </span>
               <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                Perlas Skoru
+                Perlas 0–2 (Berrak Sıvı)
               </span>
             </div>
             <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
               Gastrik POCUS (Mide Ultrasonu)
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              Açlık süresinden emin olunamayan veya gecikmiş boşalma şüphesi olan hastalarda mide içeriğini nesnel doğrular.
+              Perlas Grade 0–2 skalası <strong>yalnızca berrak sıvı</strong> için geçerlidir; <strong>katı/partiküllü içerik</strong> ayrı yüksek risk kategorisidir.
             </p>
 
             <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
               <div className="flex items-start gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>Grade 0:</strong> Sırtüstü ve sağ lateralde antrum boş (güvenli indüksiyon).</span>
+                <span><strong>Grade 0:</strong> Sırtüstü ve sağ lateralde (RLD) antrum boş (çok düşük risk).</span>
               </div>
               <div className="flex items-start gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>Grade 1:</strong> Yalnızca sağ lateralde berrak sıvı (&lt;1.5 mL/kg, düşük risk).</span>
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+                <span><strong>Grade 1:</strong> Yalnızca RLD’de berrak sıvı — koşulsuz &lt;1.5 mL/kg değildir (~%25’inde &gt;1.5 mL/kg olabilir; <strong>RLD CSA ölçümü gerekir</strong>).</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <ShieldAlert className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
-                <span><strong>Grade 2:</strong> Hem sırtüstü hem lateralde sıvı/katı (Dolu mide! RSI veya erteleme).</span>
+                <span><strong>Grade 2:</strong> Hem supin hem RLD’de berrak sıvı (genellikle &gt;1.5 mL/kg — yüksek risk).</span>
+              </div>
+              <div className="flex items-start gap-1.5">
+                <ShieldAlert className="w-3.5 h-3.5 text-rose-600 shrink-0 mt-0.5" />
+                <span><strong>Katı İçerik (Ayrı Kategori):</strong> Volüm ölçülmeden doğrudan dolu mide (erteleme veya RSI).</span>
               </div>
             </div>
           </div>
@@ -476,17 +484,17 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
       </div>
 
       {/* 4. High Risk "Full Stomach" Checklist */}
-      <div className={`p-5 rounded-2xl border ${
+      <div className={`p-5 rounded-2xl border space-y-4 ${
         isDark ? 'bg-amber-950/15 border-amber-500/30' : 'bg-amber-50/70 border-amber-200'
       }`}>
-        <div className="flex items-center gap-2 mb-2 text-amber-800 dark:text-amber-300 font-bold text-xs sm:text-sm">
+        <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-bold text-xs sm:text-sm">
           <Zap className="w-4 h-4 text-amber-500 shrink-0" />
-          <span>Açlık Süresine Bakılmaksızın "Dolu Mide" Kabul Edilen ve Hızlı Seri İndüksiyon (RSI) Gerektiren Durumlar</span>
+          <span>Açlık Süresine Bakılmaksızın &ldquo;Dolu Mide&rdquo; Kabul Edilen ve Hızlı Seri İndüksiyon (RSI) Gerektiren Durumlar</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           <div className="space-y-1">
-            <span className="font-bold text-slate-700 dark:text-slate-200">1. Acil Cerrahi & Travma</span>
+            <span className="font-bold text-slate-700 dark:text-slate-200">1. Acil Cerrahi &amp; Travma</span>
             <p className="text-slate-500 dark:text-slate-400 text-[11px]">
               Ağrı, stres ve şok mide boşalmasını tamamen durdurur. Travma anında midede ne varsa kalır.
             </p>
@@ -494,7 +502,7 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
           <div className="space-y-1">
             <span className="font-bold text-slate-700 dark:text-slate-200">2. İleri Gebelik (&gt; 20 Hafta)</span>
             <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-              Progesteron etkisiyle alt özofagus sfinkter tonusu azalır ve büyüyen uterus mide içi basıncı artırır.
+              Progesteron etkisiyle alt özofagus sfinkter tonusu azalır ve büyüyen uterus mide içi basıncı artırır (mide boşalması özellikle aktif travay/opioid varlığında gecikir).
             </p>
           </div>
           <div className="space-y-1">
@@ -504,11 +512,21 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
             </p>
           </div>
           <div className="space-y-1">
-            <span className="font-bold text-slate-700 dark:text-slate-200">4. Akut Batın & GIS Obstrüksiyonu</span>
+            <span className="font-bold text-slate-700 dark:text-slate-200">4. Akut Batın &amp; GİS Obstrüksiyonu</span>
             <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-              İleus, barsak obstrüksiyonu ve peritonitte nazogastrik sonda ile dekompresyon ve krikoid bası/RSI esastır.
+              İleus, barsak obstrüksiyonu ve peritonitte nazogastrik sonda ile dekompresyon ve modifiye/klasik RSI tercih edilir; krikoid bası rutin zorunlu değildir, bireyselleştirilir (IRIS 2019).
             </p>
           </div>
+        </div>
+
+        {/* ASA 2017 Pharmacologic Prophylaxis Rule */}
+        <div className={`p-3.5 rounded-xl border text-xs flex flex-col sm:flex-row sm:items-center gap-2.5 ${
+          isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-amber-200 text-slate-700'
+        }`}>
+          <Pill className="w-4 h-4 text-emerald-500 shrink-0" />
+          <p className="text-[11px] leading-relaxed">
+            <strong>Farmakolojik Aspirasyon Profilaksisi (ASA 2017 Kuralı):</strong> Aspirasyon riski olmayan sağlıklı elektif hastalarda <strong>rutin PPI, H₂ reseptör blokörü veya metoklopramid ÖNERİLMEZ</strong>. Yüksek aspirasyon riskli seçilmiş hastalarda (ör. acil sezaryen / dolu mide) hızlı etki için <strong>0.3 M partikülsüz sodyum sitrat (30 mL)</strong> tercih edilir; partiküllü antiasitlerden kaçınılır.
+          </p>
         </div>
       </div>
 
@@ -521,10 +539,13 @@ export const AdultFastingInfographic: React.FC<AdultFastingInfographicProps> = (
           <span>Literatür ve Kılavuz Referansları</span>
         </div>
         <p className="leading-relaxed">
-          1. <strong>ASA 2023 Update:</strong> Joshi GP, et al. <em>Practice Guidelines for Preoperative Fasting: Carbohydrate-Containing Clear Liquids with or without Protein, Chewing Gum, and Pediatric Fasting Duration—A Modular Update of the American Society of Anesthesiologists Practice Guidelines.</em> Anesthesiology. 2023 Feb;138(2):132-151. PMID: 36629465.
+          1. <strong>ASA 2023 Update:</strong> Joshi GP, Abdelmalak BB, Weigel WA, et al. <em>Practice Guidelines for Preoperative Fasting: Carbohydrate-Containing Clear Liquids with or without Protein, Chewing Gum, and Pediatric Fasting Duration—A Modular Update of the American Society of Anesthesiologists Practice Guidelines.</em> Anesthesiology. 2023 Feb;138(2):132-151. PMID: 36629465.
         </p>
         <p className="leading-relaxed">
-          2. <strong>GLP-1 RA Multisociety Guidance (2024):</strong> Kindel TL, Wang AY, Wadhwa A, Schulman AR, Sharaiha RZ, Kroh M, Ghanem OM, Levy S, Joshi GP, LaMasters TL (ASA, AGA, ASMBS, SAGES, ISPCOP). <em>Multisociety Clinical Practice Guidance for the Safe Use of Glucagon-like Peptide-1 Receptor Agonists in the Perioperative Period / Preprocedure Care of Patients on Glucagon-like Peptide-1 Receptor Agonists.</em> Anesthesiology. 2024 Dec;141(6):1208-1209. doi:10.1097/ALN.0000000000005231. PMID: 39471342. (2023 ASA geçici uzlaşısının yerini alan güncel ortak rehber).
+          2. <strong>GLP-1 RA Multisociety Guidance (2024):</strong> Kindel TL, Wang AY, Wadhwa A, et al. (ASA, AGA, ASMBS, SAGES, ISPCOP). <em>Multisociety Clinical Practice Guidance for the Safe Use of GLP-1 Receptor Agonists in the Perioperative Period.</em> 2024; Anesthesiology 2024 Dec;141(6):1208-1209. doi:10.1097/ALN.0000000000005231. PMID: 39471342.
+        </p>
+        <p className="leading-relaxed">
+          3. <strong>ASA 2017 Fasting &amp; Pharmacologic Prophylaxis:</strong> Practice Guidelines for Preoperative Fasting and the Use of Pharmacologic Agents to Reduce the Risk of Pulmonary Aspiration. <em>Anesthesiology.</em> 2017 Mar;126(3):376-393. PMID: 28045707.
         </p>
       </div>
     </div>

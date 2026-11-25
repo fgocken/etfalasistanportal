@@ -56,8 +56,8 @@ const SURGICAL_OPTIONS: SurgicalOption[] = [
   {
     id: 'high',
     label: 'Yüksek İnvaziv',
-    rangeText: '8 – 10 mL/kg/saat',
-    factor: 9.0,
+    rangeText: '6 – 8 mL/kg/saat',
+    factor: 7.0,
     examples: 'Majör laparotomi, barsak rezeksiyonları, radikal sistektomi, torakotomi'
   }
 ];
@@ -89,15 +89,16 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
     ibw = baseIbw + 2.3 * (heightInches - 60);
     if (ibw < 10) ibw = 10;
 
-    // AdjBW = IBW + 0.4 * (Actual - IBW)
-    adjBw = ibw + 0.4 * (weightNum - ibw);
+    // AdjBW yalnızca gerçek vücut ağırlığı IBW'den büyükse hesaplanır; aksi halde gerçek ağırlık korunur
+    adjBw = weightNum > ibw ? ibw + 0.4 * (weightNum - ibw) : weightNum;
     const heightM = heightNum / 100;
     bmi = weightNum / (heightM * heightM);
   }
 
   // Determine calculation weight
-  // If user explicitly marks obese, use AdjBW (if height provided, else fallback to weightNum)
-  const calcWeight = isObese && adjBw > 0 ? adjBw : weightNum;
+  // If user explicitly marks obese AND actual weight exceeds IBW, use AdjBW; otherwise keep actual weight
+  const isAdjBwApplied = isObese && heightNum > 0 && weightNum > ibw;
+  const calcWeight = isAdjBwApplied ? adjBw : weightNum;
 
   // 1) Hourly Maintenance (4-2-1 Rule)
   let hourlyMaintenance = 0;
@@ -126,8 +127,8 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
   const surgicalLossRate = effectiveSurgicalFactor * calcWeight;
 
   // 4) Hourly Fluid Schedule
-  // 1. saat: 1/2 Açlık defisiti + Saatlik idame
-  const hour1Fluid = (0.5 * fastingDeficit) + hourlyMaintenance;
+  // 1. saat: 1/2 Açlık defisiti + Saatlik idame + Cerrahi kayıp
+  const hour1Fluid = (0.5 * fastingDeficit) + hourlyMaintenance + surgicalLossRate;
 
   // 2. saat: 1/4 Açlık defisiti + Saatlik idame + Cerrahi kayıp
   const hour2Fluid = (0.25 * fastingDeficit) + hourlyMaintenance + surgicalLossRate;
@@ -167,7 +168,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
   };
 
   const handleCopyPlan = () => {
-    const textToCopy = `• 1. Saat: ${Math.round(hour1Fluid)} mL/saat (½ Defisit + İdame)
+    const textToCopy = `• 1. Saat: ${Math.round(hour1Fluid)} mL/saat (½ Defisit + İdame + Cerrahi Kayıp)
 • 2. Saat: ${Math.round(hour2Fluid)} mL/saat (¼ Defisit + İdame + Cerrahi Kayıp)
 • 3. Saat: ${Math.round(hour3Fluid)} mL/saat (¼ Defisit + İdame + Cerrahi Kayıp)
 • 4. Saat ve sonrası: ${Math.round(hour4PlusRate)} mL/saat (İdame + Cerrahi Kayıp)`;
@@ -293,15 +294,17 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                   <div>
                     <div className="text-xs font-bold flex items-center gap-2">
                       <span>Hasta Obez (VKİ &ge; 30 veya Aşırı Kilolu)</span>
-                      {isObese && (
+                      {isAdjBwApplied && (
                         <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
                           AdjBW Aktif
                         </span>
                       )}
                     </div>
                     <p className="text-[11px] opacity-80 mt-0.5">
-                      {isObese 
-                        ? 'Hesaplamalar Düzeltilmiş Ağırlık (AdjBW) üzerinden yapılacaktır.' 
+                      {isObese
+                        ? isAdjBwApplied
+                          ? 'Hesaplamalar Düzeltilmiş Ağırlık (AdjBW) üzerinden yapılacaktır.'
+                          : 'Gerçek kilo ≤ İdeal Kilo (IBW) olduğu için gerçek vücut ağırlığı korunur.'
                         : 'Standart hesaplama: Gerçek vücut ağırlığı kullanılır.'}
                     </p>
                   </div>
@@ -380,12 +383,16 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                   <div className={`p-2.5 rounded-lg border text-center ${
                     isDark ? 'bg-slate-900/80 border-slate-700' : 'bg-white border-slate-200 shadow-2xs'
                   }`}>
-                    <div className="text-[10px] uppercase font-mono text-slate-400">Hesaplanan AdjBW</div>
+                    <div className="text-[10px] uppercase font-mono text-slate-400">
+                      {isAdjBwApplied ? 'Hesaplanan AdjBW' : 'Korunan Gerçek Kilo'}
+                    </div>
                     <div className="text-base font-extrabold text-amber-500 dark:text-amber-400 font-mono">
-                      {adjBw.toFixed(1)} <span className="text-xs font-normal">kg</span>
+                      {calcWeight.toFixed(1)} <span className="text-xs font-normal">kg</span>
                     </div>
                     {bmi > 0 && (
-                      <div className="text-[10px] text-slate-500 font-mono">VKİ: {bmi.toFixed(1)} kg/m²</div>
+                      <div className="text-[10px] text-slate-500 font-mono">
+                        VKİ: {bmi.toFixed(1)} · IBW: {ibw.toFixed(1)} kg
+                      </div>
                     )}
                   </div>
                 </div>
@@ -624,9 +631,9 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
             </div>
             <ul className="list-disc list-inside space-y-1 text-[11px]">
               <li><strong>Saatlik İdame (4-2-1 Kuralı):</strong> 0-10 kg için 4 mL/kg/saat; 11-20 kg için +2 mL/kg/saat; &gt;20 kg için +1 mL/kg/saat.</li>
-              <li><strong>Obez Hastalarda Ağırlık:</strong> Obezite durumunda aşırı hidrasyonu engellemek için <code className="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-800">AdjBW = IBW + 0.4 × (Gerçek Kilo - IBW)</code> kullanılır.</li>
+              <li><strong>Obez Hastalarda Ağırlık:</strong> Obezite durumunda aşırı hidrasyonu engellemek için yalnızca <code>Gerçek Kilo &gt; IBW</code> koşulunda <code className="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-800">AdjBW = IBW + 0.4 × (Gerçek Kilo - IBW)</code> kullanılır (aksi halde gerçek ağırlık korunur).</li>
               <li><strong>Açlık Sıvı Defisiti:</strong> Aç geçirilen saat × Saatlik idame sıvısı.</li>
-              <li><strong>1. Saat:</strong> 1/2 Açlık Defisiti + Saatlik İdame.</li>
+              <li><strong>1. Saat:</strong> 1/2 Açlık Defisiti + Saatlik İdame + Cerrahi Sıvı Kaybı.</li>
               <li><strong>2. Saat:</strong> 1/4 Açlık Defisiti + Saatlik İdame + Cerrahi Sıvı Kaybı.</li>
               <li><strong>3. Saat:</strong> 1/4 Açlık Defisiti + Saatlik İdame + Cerrahi Sıvı Kaybı.</li>
               <li><strong>4. Saat ve Sonrası:</strong> Saatlik İdame + Cerrahi Sıvı Kaybı.</li>
@@ -652,7 +659,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                 {calcWeight.toFixed(1)} <span className="text-xs font-normal">kg</span>
               </div>
               <div className="text-[10px] font-medium text-slate-500 mt-0.5">
-                {isObese ? 'AdjBW (Düzeltilmiş)' : 'Gerçek Vücut Ağırlığı'}
+                {isAdjBwApplied ? 'AdjBW (Düzeltilmiş)' : 'Gerçek Vücut Ağırlığı'}
               </div>
             </div>
 
@@ -764,6 +771,9 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                     <span className="text-xs font-extrabold uppercase tracking-wide text-teal-600 dark:text-teal-400">
                       1. SAAT
                     </span>
+                    <span className="text-[10px] font-mono text-teal-600/80 dark:text-teal-400/80">
+                      ½ Defisit + Cerrahi
+                    </span>
                   </div>
 
                   <div>
@@ -781,6 +791,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                     <div className="font-mono text-[10px] text-slate-500 space-y-0.5">
                       <div>½ Açlık Defisiti: {Math.round(0.5 * fastingDeficit)} mL</div>
                       <div>+ Saatlik İdame: {Math.round(hourlyMaintenance)} mL</div>
+                      <div>+ Cerrahi Kayıp: {Math.round(surgicalLossRate)} mL</div>
                     </div>
                   </div>
                 </div>
@@ -803,7 +814,7 @@ export const IntraopFluidCalculator: React.FC<IntraopFluidCalculatorProps> = ({ 
                       2. SAAT
                     </span>
                     <span className="text-[10px] font-mono text-slate-500">
-                      + Cerrahi Kayıp
+                      ¼ Defisit + Cerrahi
                     </span>
                   </div>
 

@@ -74,19 +74,23 @@ const RESPIRATORY_FAILURE_TYPES: RespFailureProfile[] = [
     definition:
       'Oksijenasyonun bozulduğu, klinikte en sık karşılaşılan solunum yetmezliği formudur. Yeterli alveoler ventilasyona rağmen arteriyel kan yeterince oksijenlenemez.',
     mechanismSummary:
-      'Ventilasyon/Perfüzyon (V/Q) eşitsizliği (en sık), intrapulmoner sağdan-sola şant, alveoler hipoventilasyon veya difüzyon bariyeri kalınlaşması.',
+      'Ventilasyon/Perfüzyon (V/Q) eşitsizliği (en sık), intrapulmoner sağdan-sola şant, difüzyon bariyeri kalınlaşması veya düşük PiO₂ (yüksek irtifa / hipoksik gaz karışımı — normal A–a). Not: Saf alveoler hipoventilasyon Tip 2 solunum yetmezliğidir.',
     diagnosticCriteria: [
       { label: 'Kan Gazı (PaO₂)', value: '< 60 mmHg', detail: 'Oda havasında (FiO₂ 0.21) veya SpO₂ < %90' },
       { label: 'Arteriyel PaCO₂', value: 'Normal / ↓', detail: 'Hipoksiye sekonder hiperventilasyon nedeniyle genellikle normal veya düşük' },
-      { label: 'PaO₂ / FiO₂ Oranı', value: '< 300 mmHg', detail: 'ARDS: Hafif 200–300, Orta 100–200, Ağır ≤ 100' },
-      { label: 'A–a O₂ Gradiyenti', value: 'ARTMIŞ', detail: 'V/Q eşitsizliği, şant ve difüzyon bozukluğunda yükselir (> Yaş/4 + 4)' }
+      {
+        label: 'PaO₂/FiO₂ & ARDS',
+        value: '≤ 300 mmHg',
+        detail: 'Berlin (PEEP ≥ 5 cmH₂O): Hafif 200–300, Orta 100–200, Ağır ≤ 100 · Global Yeni ARDS (Matthay 2024): HFNO ≥ 30 L/dk, SpO₂/FiO₂ ≤ 315 & Akciğer USG (LUS)'
+      },
+      { label: 'A–a O₂ Gradiyenti', value: 'ARTMIŞ', detail: 'V/Q eşitsizliği, şant ve difüzyon bozukluğunda yükselir (oda havasında > Yaş/4 + 4; düşük PiO₂’de normal)' }
     ],
     clinicalExamples: [
-      'ARDS (Akut Solunum Sıkıntısı Sendromu)',
+      'ARDS (Berlin PEEP ≥ 5 cmH₂O & 2024 Global Tanım: HFNO ≥ 30 L/dk, SpO₂/FiO₂ ≤ 315, LUS)',
       'Pnömoni (bakteriyel, viral, aspirasyon)',
       'Kardiyojenik pulmoner ödem',
       'Pulmoner emboli',
-      'Masif atelektazi veya pnömotoraks'
+      'Masif atelektazi, pnömotoraks veya yüksek irtifa / düşük PiO₂'
     ],
     criticalHistory: [
       'Akut başlayan şiddetli dispne.',
@@ -109,12 +113,12 @@ const RESPIRATORY_FAILURE_TYPES: RespFailureProfile[] = [
       }
     ],
     firstIntervention: [
-      'Hedeflenen satürasyona (SpO₂ > %92–94) ulaşmak için oksijen desteği (rezervuarlı maske, Yüksek Akışlı Nazal Kanül — HFNC) başlanır.',
+      'Hedeflenen satürasyona (SpO₂ > %92–94) ulaşmak için oksijen desteği (rezervuarlı maske, Yüksek Akışlı Nazal Kanül — HFNO ≥ 30 L/dk) başlanır; HFNO yanıtı ROX indeksi [(SpO₂/FiO₂) / RR ≥ 4.88 = düşük entübasyon riski] ile seri takip edilir.',
       'Kardiyojenik ödem tablosunda alveolleri açık tutmak ve venöz dönüşü (preload) azaltmak için CPAP (NIMV) hayat kurtarıcıdır.',
-      'Altta yatan nedene yönelik farmakoterapi (diüretik, antibiyotik, antikoagülan) geciktirilmeden uygulanır; şant baskın ARDS’de PEEP titrasyonu ve gerektiğinde prone pozisyon gerekir.'
+      'Altta yatan nedene yönelik tedaviye ek olarak invaziv ventilasyon gereken ARDS’de akciğer koruyucu hedefler uygulanır: VT 4–8 mL/kg PBW, Pplat ≤ 30 cmH₂O, sürüş basıncı ΔP (Pplat − PEEP) < 15 cmH₂O, uygun PEEP (≥ 5 cmH₂O) ve ağır ARDS’de prone pozisyon.'
     ],
     clinicalPearl:
-      'Tip 1 yetmezlikte FiO₂ %100’e çıkarıldığı halde PaO₂ yükselmiyorsa (refrakter hipoksemi) hakim mekanizma V/Q uyumsuzluğu değil intrapulmoner ŞANTtır; çözüm yalnız FiO₂ artışı değil PEEP ve alveoler açılmadır.'
+      'Tip 1 yetmezlikte FiO₂ %100’e çıkarıldığı halde PaO₂ yükselmiyorsa (refrakter hipoksemi) hakim mekanizma V/Q uyumsuzluğu değil intrapulmoner ŞANTtır; çözüm yalnız FiO₂ artışı değil PEEP ve alveoler açılmadır. HFNO’da 2–12. saatlerde ROX < 3.85 ise entübasyon geciktirilmemelidir.'
   },
   {
     id: 'type2',
@@ -167,7 +171,7 @@ const RESPIRATORY_FAILURE_TYPES: RespFailureProfile[] = [
       }
     ],
     firstIntervention: [
-      'Hipoksik solunum dürtüsünü (hypoxic drive) baskılamamak ve Haldane etkisinden kaçınmak için kontrollü oksijenasyon (KOAH’ta hedef SpO₂ %88–92) sağlanır.',
+      'KOAH’ta kontrollü oksijenasyon (hedef SpO₂ %88–92) sağlanır: kontrolsüz hiperoksinin hiperkapniyi ağırlaştırmasında PRİMER mekanizma (~%50–70) hipoksik pulmoner vazokonstriksiyonun (HPV) kalkmasına bağlı V/Q bozulması ve fizyolojik ölü boşluk artışıdır; ek olarak Haldane etkisi (~%25–30) ve hipoksik solunum dürtüsünün baskılanması (~%10–20) rol oynar.',
       'CO₂ atılımını artırmak (ventilasyonu desteklemek) için kontrendikasyon yoksa ilk seçenek BPAP / BiPAP (NIMV) uygulamasıdır.',
       'Opiyat/sedatif toksisitesi varsa spesifik antidotlar (Nalokson; benzodiyazepinde kronik bağımlılık/nöbet riski yoksa dikkatli Flumazenil) uygulanır; KOAH’ta bronkodilatör ve sistemik steroid başlanır.'
     ],
@@ -310,7 +314,7 @@ const ALVEOLAR_STATES: AlveolarState[] = [
     o2BadgeClass: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 border-emerald-500/30',
     title: 'Dengeli Ventilasyon ve Perfüzyon (Normal Gaz Değişimi)',
     physiology:
-      'Alveoler ventilasyon (V̇A ≈ 4 L/dk) ve pulmoner kapiller kan akımı (Q̇ ≈ 5 L/dk) dengelidir. Mikst venöz kan (PvO₂ 40 mmHg, SpO₂ %75) alveolokapiller membrandan tam oksijenlenerek ayrılır (PaO₂ ≈ 95–100 mmHg, SaO₂ %98).',
+      'Alveoler ventilasyon (V̇A ≈ 4 L/dk) ve pulmoner kapiller kan akımı (Q̇ ≈ 5 L/dk) dengelidir. Mikst venöz kan (PvO₂ 40 mmHg, SvO₂ / S̄vO₂ %75) alveolokapiller membrandan tam oksijenlenerek ayrılır (PaO₂ ≈ 95–100 mmHg, SaO₂ %98).',
     examples: 'Sağlıklı akciğer parankimi',
     management: 'Fizyolojik referans durumu',
     typeLink: 'Referans'
@@ -326,7 +330,7 @@ const ALVEOLAR_STATES: AlveolarState[] = [
     physiology:
       'Bronkospazm, sekresyon veya hafif interstisyel ödem nedeniyle alveole giren hava azalmış ancak tamamen kesilmemiştir. Alveol kısmen düşük PAO₂’ye sahiptir; yüksek FiO₂ verildiğinde kalan açık yoldan alveol içi O₂ basıncı yükselir ve PaO₂ belirgin düzelir.',
     examples: 'KOAH, Astım atağı, erken dönem bronkopnömoni, hafif pulmoner ödem',
-    management: 'Ek O₂ desteği (rezervuarlı maske / HFNC) + bronkodilatör / diüretik',
+    management: 'Ek O₂ desteği (rezervuarlı maske / HFNO) + bronkodilatör / diüretik',
     typeLink: 'Tip 1 & Tip 2'
   },
   {
@@ -338,7 +342,7 @@ const ALVEOLAR_STATES: AlveolarState[] = [
     o2BadgeClass: 'text-rose-700 dark:text-rose-300 bg-rose-500/15 border-rose-500/30',
     title: 'İntrapulmoner Sağdan-Sola Şant (Kollabe / Sıvı Dolu Alveol)',
     physiology:
-      'Alveol sıvı/püy ile tamamen dolu (ARDS, lober pnömoni) veya tamamen kollabedir (masif atelektazi). Hiç taze gaz girmediği için FiO₂ %100 yapılsa bile şantlanan kan O₂ alamaz ve iyi ventile olan ünitelerdeki hemoglobin zaten %100 satüre olduğu için hipoksemi düzelmez.',
+      'Alveol sıvı/püy ile tamamen dolu (ARDS, lober pnömoni) veya tamamen kollabedir (masif atelektazi); alveol içinde gaz fazı yoktur. Hiç taze gaz girmediği için FiO₂ %100 yapılsa bile şantlanan kan mikst venöz düzeyde (PvO₂ ≈ 40 mmHg, SvO₂ / S̄vO₂ ≈ %75) kalır ve iyi ventile olan ünitelerdeki hemoglobin zaten %100 satüre olduğu için hipoksemi düzelmez.',
     examples: 'ARDS, yaygın atelektazi (Tip 3), masif pulmoner ödem, konsolide lober pnömoni',
     management: 'Alveolü açmak gerekir: CPAP / PEEP titrasyonu, rekruitment manevrası, prone pozisyon',
     typeLink: 'Tip 1 & Tip 3'
@@ -391,7 +395,7 @@ const AlveolarShuntDiagram: React.FC<AlveolarShuntDiagramProps> = ({
     : selectedState === 'vq-mismatch'
       ? 'SaO₂ ~%86 → O₂ ile >%95'
       : selectedState === 'shunt'
-        ? 'SaO₂ ~%75 (O₂’ye dirençli)'
+        ? 'SvO₂ ~%75 (PvO₂ 40 · O₂’ye dirençli)'
         : 'Akım Kesik (CO₂ ↑)';
 
   return (
@@ -536,7 +540,7 @@ const AlveolarShuntDiagram: React.FC<AlveolarShuntDiagramProps> = ({
             {/* Alveolus Sac */}
             <circle
               cx="210"
-              cy="118"
+              cy={isCollapsed ? 114 : 118}
               r={isCollapsed ? 42 : 62}
               fill={
                 isCollapsed
@@ -558,7 +562,7 @@ const AlveolarShuntDiagram: React.FC<AlveolarShuntDiagramProps> = ({
             {/* Fluid / Consolidation fill inside collapsed alveolus */}
             {isCollapsed && (
               <path
-                d="M 171 124 Q 210 114 249 124 A 41 41 0 0 1 171 124 Z"
+                d="M 171 120 Q 210 110 249 120 A 41 41 0 0 1 171 120 Z"
                 fill="#ef4444"
                 opacity="0.45"
               />
@@ -567,25 +571,25 @@ const AlveolarShuntDiagram: React.FC<AlveolarShuntDiagramProps> = ({
             {/* Alveolar Labels */}
             <text
               x="210"
-              y={isCollapsed ? 112 : 106}
+              y={isCollapsed ? 108 : 106}
               textAnchor="middle"
-              fontSize="12"
+              fontSize={isCollapsed ? '10' : '12'}
               fontWeight="800"
               fill={isDark ? '#f8fafc' : '#0f172a'}
             >
-              {isCollapsed ? 'Atelektazi / Ödem' : 'ALVEOL'}
+              {isCollapsed ? 'Kollabe / Sıvı Dolu' : 'ALVEOL'}
             </text>
             <text
               x="210"
-              y={isCollapsed ? 128 : 124}
+              y={isCollapsed ? 124 : 124}
               textAnchor="middle"
-              fontSize="10"
+              fontSize={isCollapsed ? '9.5' : '10'}
               fontWeight="700"
               fontFamily="monospace"
-              fill={isCollapsed ? '#fca5a5' : isDark ? '#7dd3fc' : '#0369a1'}
+              fill={isCollapsed ? (isDark ? '#fca5a5' : '#b91c1c') : isDark ? '#7dd3fc' : '#0369a1'}
             >
               {isCollapsed
-                ? 'PAO₂ ≈ 0 (Şant)'
+                ? '(Gaz Fazı Yok)'
                 : isNarrowAirway
                   ? 'PAO₂ ↓ (Düşük V/Q)'
                   : isNoPerfusion
@@ -624,9 +628,14 @@ const AlveolarShuntDiagram: React.FC<AlveolarShuntDiagramProps> = ({
             )}
 
             {isCollapsed && (
-              <text x="210" y="182" textAnchor="middle" fontSize="10" fontWeight="800" fill="#ef4444">
-                ✕ Gaz Değişimi Yok (Sağ→Sol Şant)
-              </text>
+              <>
+                <text x="210" y="170" textAnchor="middle" fontSize="9.5" fontWeight="800" fill="#ef4444">
+                  Alveol Kollabe / Sıvı Dolu (Gaz Fazı Yok)
+                </text>
+                <text x="210" y="182" textAnchor="middle" fontSize="9.5" fontWeight="800" fontFamily="monospace" fill="#ef4444">
+                  → Şantlanan Kan: PvO₂ ≈ 40 mmHg
+                </text>
+              </>
             )}
 
             {isNoPerfusion && (
@@ -664,7 +673,7 @@ const AlveolarShuntDiagram: React.FC<AlveolarShuntDiagramProps> = ({
 
             {/* Capillary Inflow / Outflow Labels */}
             <text x="28" y="194" fontSize="10" fontWeight="700" fill="#3b82f6">
-              Venöz (SpO₂ %75)
+              Venöz (SvO₂ / S̄vO₂ %75)
             </text>
             <text x="392" y="194" textAnchor="end" fontSize="10" fontWeight="800" fill={capillaryEndColor}>
               {sao2Output}
@@ -906,21 +915,43 @@ const AlveolarGasAndAaSimulator: React.FC<{
     const expectedAaUpper = age / 4 + 4;
     const pfRatio = pao2 / fio2;
 
-    // On FiO2 > 21%, normal A-a widens physiologically (~5-7 mmHg per +10% FiO2)
-    const adjustedUpperForFio2 =
-      fio2Pct <= 21 ? expectedAaUpper : expectedAaUpper + (fio2Pct - 21) * 0.65;
+    // P0: Physiologically impossible values (PaO2 > PAO2 or PAO2 <= 0)
+    const isPhysiologicallyImpossible = pao2Alveolar <= 0 || aaGradient < 0;
 
-    const isAaElevated = aaGradient > adjustedUpperForFio2;
+    // P1: (Age/4 + 4) only applies to room air (FiO2 21%).
+    // At elevated FiO2, expected normal A-a widens physiologically (up to ~100-120 mmHg at FiO2 100%).
+    const adjustedUpperForFio2 =
+      fio2Pct <= 21
+        ? expectedAaUpper
+        : Math.max(expectedAaUpper + (fio2 - 0.21) * 120, Math.min(125, expectedAaUpper + (fio2 - 0.21) * 135));
+
+    const isHealthyHighFio2 =
+      !isPhysiologicallyImpossible &&
+      fio2Pct >= 40 &&
+      pfRatio >= 400 &&
+      aaGradient <= Math.max(adjustedUpperForFio2, 125);
+
+    const isAaElevated =
+      !isPhysiologicallyImpossible && !isHealthyHighFio2 && aaGradient > adjustedUpperForFio2;
     const isHypercapnic = paco2 > 45;
     const isLowPio2 = pb < 680 || fio2Pct < 21;
-    const isHypoxemic = (fio2Pct <= 21 && pao2 < 60) || pfRatio < 300;
+    const isHypoxemic = !isPhysiologicallyImpossible && ((fio2Pct <= 21 && pao2 < 60) || pfRatio < 300);
 
     let diffCategory = 'Normal Gaz Değişimi';
     let diffDetail =
-      'Alveol–arteriyel oksijen farkı (A–a) ve PaCO₂ yaşa/FiO₂’ye göre beklenen fizyolojik sınırlar içindedir.';
+      fio2Pct > 21
+        ? `Yüksek FiO₂ (%${fio2Pct}) altında hesaplanan A–a gradiyenti (${aaGradient.toFixed(1)} mmHg) ve P/F oranı (${pfRatio.toFixed(0)} mmHg) beklenen fizyolojik sınırlar içindedir.`
+        : 'Alveol–arteriyel oksijen farkı (A–a) ve PaCO₂ yaşa/FiO₂’ye göre beklenen fizyolojik sınırlar içindedir.';
     let diffClass = 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 border-emerald-500/30';
 
-    if (!isAaElevated && isHypercapnic) {
+    if (isPhysiologicallyImpossible) {
+      diffCategory = 'Fizyolojik Olarak İmkânsız Değer — FiO₂ / ABG Ölçüm Hatası Kontrol Edilmeli';
+      diffDetail =
+        pao2Alveolar <= 0
+          ? `Hesaplanan alveoler PAO₂ (${pao2Alveolar.toFixed(1)} mmHg ≤ 0) fizyolojik olarak mümkün değildir. Girilen FiO₂, barometrik basınç (PB) ve PaCO₂ değerlerini doğrulayın.`
+          : `Arteriyel PaO₂ (${pao2} mmHg) hesaplanan alveoler PAO₂ (${pao2Alveolar.toFixed(1)} mmHg) değerinden yüksek olamaz (A–a = ${aaGradient.toFixed(1)} mmHg). Hastanın kayıtlı olandan daha yüksek FiO₂ alıyor olması, hava kabarcığı kontaminasyonu veya kan gazı analizörü ölçüm hatası kontrol edilmelidir.`;
+      diffClass = 'text-rose-700 dark:text-rose-300 bg-rose-500/15 border-rose-500/40';
+    } else if (!isAaElevated && isHypercapnic) {
       diffCategory = 'Normal A–a Gradiyenti + Hiperkapni → Saf Alveoler Hipoventilasyon (Tip 2)';
       diffDetail =
         'Akciğer parankimi sağlamdır! Hipoksemi tümüyle yüksek PaCO₂’nin alveolde O₂’nin yerini almasından (PAO₂ ↓) kaynaklanır. Nedenler: Opioid/sedatif depresyonu, rezidüel NMB, nöromusküler hastalık veya santral dürtü kaybı.';
@@ -966,6 +997,7 @@ const AlveolarGasAndAaSimulator: React.FC<{
       expectedAaUpper,
       adjustedUpperForFio2,
       pfRatio,
+      isPhysiologicallyImpossible,
       isAaElevated,
       diffCategory,
       diffDetail,
@@ -1072,7 +1104,7 @@ const AlveolarGasAndAaSimulator: React.FC<{
             id="sim-pao2"
             type="range"
             min="25"
-            max="550"
+            max="600"
             step="1"
             value={pao2Input}
             onChange={(e) => setPao2Input(e.target.value)}
@@ -1081,14 +1113,14 @@ const AlveolarGasAndAaSimulator: React.FC<{
           <div className="flex justify-between text-[10px] font-mono text-slate-400">
             <span>25</span>
             <span>60 (Eşik)</span>
-            <span>550</span>
+            <span>600</span>
           </div>
         </div>
 
         {/* Age */}
         <div className={`p-3 rounded-xl border space-y-1 ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
           <label htmlFor="sim-age" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Hasta Yaşı (yıl) — Beklenen Üst Sınır: {(sim.age / 4 + 4).toFixed(0)} mmHg
+            Hasta Yaşı (yıl) — Oda Havası Üst Sınırı: {(sim.age / 4 + 4).toFixed(0)} mmHg
           </label>
           <input
             id="sim-age"
@@ -1171,7 +1203,11 @@ const AlveolarGasAndAaSimulator: React.FC<{
 
         <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">2. Alveoler PAO₂</div>
-          <div className="text-lg font-mono tabular-nums font-black text-indigo-600 dark:text-indigo-400 mt-0.5">
+          <div
+            className={`text-lg font-mono tabular-nums font-black mt-0.5 ${
+              sim.pao2Alveolar <= 0 ? 'text-rose-600 dark:text-rose-400' : 'text-indigo-600 dark:text-indigo-400'
+            }`}
+          >
             {sim.pao2Alveolar.toFixed(1)} mmHg
           </div>
           <div className="text-[10px] font-mono text-slate-500 mt-1">
@@ -1179,29 +1215,49 @@ const AlveolarGasAndAaSimulator: React.FC<{
           </div>
         </div>
 
-        <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+        <div
+          className={`p-3.5 rounded-xl border ${
+            sim.isPhysiologicallyImpossible
+              ? 'bg-rose-500/10 border-rose-500/40'
+              : isDark
+                ? 'bg-slate-950/70 border-slate-800'
+                : 'bg-slate-50 border-slate-200'
+          }`}
+        >
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">3. A–a Gradiyenti</div>
           <div
             className={`text-lg font-mono tabular-nums font-black mt-0.5 ${
-              sim.isAaElevated ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
+              sim.isPhysiologicallyImpossible || sim.isAaElevated
+                ? 'text-rose-600 dark:text-rose-400'
+                : 'text-emerald-600 dark:text-emerald-400'
             }`}
           >
             {sim.aaGradient.toFixed(1)} mmHg
           </div>
           <div className="text-[10px] font-mono text-slate-500 mt-1">
-            {sim.fio2Pct <= 21
-              ? `Oda sınırı ≤ ${sim.expectedAaUpper.toFixed(0)} mmHg`
-              : `FiO₂ düzeltilmiş sınır ≤ ${sim.adjustedUpperForFio2.toFixed(0)}`}
+            {sim.isPhysiologicallyImpossible
+              ? 'İmkânsız değer (Ölçüm/FiO₂ hatası!)'
+              : sim.fio2Pct <= 21
+                ? `Oda sınırı ≤ ${sim.expectedAaUpper.toFixed(0)} mmHg`
+                : `Yüksek FiO₂ beklenen ≤ ${sim.adjustedUpperForFio2.toFixed(0)} mmHg`}
           </div>
         </div>
 
         <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">4. PaO₂ / FiO₂ (P/F)</div>
-          <div className="text-lg font-mono tabular-nums font-black text-amber-600 dark:text-amber-400 mt-0.5">
+          <div
+            className={`text-lg font-mono tabular-nums font-black mt-0.5 ${
+              sim.isPhysiologicallyImpossible
+                ? 'text-rose-600 dark:text-rose-400'
+                : sim.pfRatio >= 400
+                  ? 'text-emerald-600 dark:text-emerald-400'
+                  : 'text-amber-600 dark:text-amber-400'
+            }`}
+          >
             {sim.pfRatio.toFixed(0)} mmHg
           </div>
           <div className="text-[10px] font-mono text-slate-500 mt-1">
-            {sim.pao2} / {(sim.fio2Pct / 100).toFixed(2)}
+            {sim.pao2} / {(sim.fio2Pct / 100).toFixed(2)} {sim.pfRatio >= 400 && !sim.isPhysiologicallyImpossible ? '(Normal ≥400)' : ''}
           </div>
         </div>
       </div>
@@ -1216,29 +1272,36 @@ const AlveolarGasAndAaSimulator: React.FC<{
             Toplam PiO₂ = {sim.pio2.toFixed(0)} mmHg (%100)
           </span>
         </div>
-        <div className="w-full h-5 rounded-lg overflow-hidden flex bg-slate-200 dark:bg-slate-800">
-          <div
-            style={{ width: `${sim.pao2ArtPct}%` }}
-            className="bg-emerald-500 transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1"
-            title={`Arteriyel PaO₂: ${sim.pao2} mmHg`}
-          >
-            PaO₂ {sim.pao2}
+        {sim.isPhysiologicallyImpossible ? (
+          <div className="w-full h-6 rounded-lg bg-rose-500/20 border border-rose-500/40 flex items-center justify-center gap-2 text-[11px] font-bold text-rose-600 dark:text-rose-300 px-2">
+            <AlertOctagon className="w-3.5 h-3.5 shrink-0" />
+            <span>Fizyolojik Olarak İmkânsız Değer — PaO₂ &gt; PAO₂ veya PAO₂ ≤ 0 (FiO₂ / ABG Kontrol Edilmeli)</span>
           </div>
-          <div
-            style={{ width: `${sim.aaBarPct}%` }}
-            className={`${sim.isAaElevated ? 'bg-rose-500' : 'bg-sky-400'} transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1`}
-            title={`A–a Gradiyenti: ${sim.aaGradient.toFixed(1)} mmHg`}
-          >
-            A–a {sim.aaGradient.toFixed(0)}
+        ) : (
+          <div className="w-full h-5 rounded-lg overflow-hidden flex bg-slate-200 dark:bg-slate-800">
+            <div
+              style={{ width: `${sim.pao2ArtPct}%` }}
+              className="bg-emerald-500 transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1"
+              title={`Arteriyel PaO₂: ${sim.pao2} mmHg`}
+            >
+              PaO₂ {sim.pao2}
+            </div>
+            <div
+              style={{ width: `${sim.aaBarPct}%` }}
+              className={`${sim.isAaElevated ? 'bg-rose-500' : 'bg-sky-400'} transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1`}
+              title={`A–a Gradiyenti: ${sim.aaGradient.toFixed(1)} mmHg`}
+            >
+              A–a {sim.aaGradient.toFixed(0)}
+            </div>
+            <div
+              style={{ width: `${Math.max(0, 100 - sim.pao2AlvPct)}%` }}
+              className="bg-violet-500/75 transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1"
+              title={`PaCO₂ / RQ düşüşü: ${(sim.paco2 / sim.rq).toFixed(1)} mmHg`}
+            >
+              CO₂/RQ
+            </div>
           </div>
-          <div
-            style={{ width: `${Math.max(0, 100 - sim.pao2AlvPct)}%` }}
-            className="bg-violet-500/75 transition-all duration-300 flex items-center justify-center text-[10px] font-mono font-bold text-white truncate px-1"
-            title={`PaCO₂ / RQ düşüşü: ${(sim.paco2 / sim.rq).toFixed(1)} mmHg`}
-          >
-            CO₂/RQ
-          </div>
-        </div>
+        )}
         <div className="flex flex-wrap gap-4 text-[10px] text-slate-500 dark:text-slate-400">
           <span className="inline-flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-xs bg-emerald-500" /> Yeşil: Arteriyel PaO₂
@@ -1254,11 +1317,14 @@ const AlveolarGasAndAaSimulator: React.FC<{
 
       {/* Differential Diagnosis Interpretation */}
       <div className={`p-4 rounded-xl border space-y-1.5 ${sim.diffClass}`}>
-        <div className="text-xs sm:text-sm font-extrabold">{sim.diffCategory}</div>
+        <div className="flex items-center gap-2 text-xs sm:text-sm font-extrabold">
+          {sim.isPhysiologicallyImpossible && <AlertOctagon className="w-4 h-4 shrink-0" />}
+          <span>{sim.diffCategory}</span>
+        </div>
         <p className="text-xs leading-relaxed opacity-95">{sim.diffDetail}</p>
-        {sim.fio2Pct > 21 && (
+        {sim.fio2Pct > 21 && !sim.isPhysiologicallyImpossible && (
           <p className="text-[11px] opacity-85 pt-0.5">
-            Not: Klasik yaş formülü <code>(Yaş/4) + 4</code> oda havası (<code>FiO₂ %21</code>) içindir; yüksek <code>FiO₂</code> altında normal A–a sınırı fizyolojik olarak genişler (%100 O₂’de ~50–100 mmHg).
+            Not: Klasik yaş formülü <code>(Yaş/4) + 4</code> yalnızca oda havası (<code>FiO₂ %21</code>) içindir; yüksek <code>FiO₂</code> altında normal A–a üst sınırı fizyolojik olarak genişler (%100 O₂’de ~100–120 mmHg’ye kadar çıkabilir) ve <code>P/F</code> oranı ile birlikte yorumlanmalıdır.
           </p>
         )}
       </div>
@@ -1746,6 +1812,50 @@ export const RespiratoryFailureInfographic: React.FC<RespiratoryFailureInfograph
                 <strong>Klinik İpucu:</strong> {activeProfile.clinicalPearl}
               </span>
             </div>
+
+            {/* Type 1 Extended Protocol Strip: Global New ARDS 2024, ROX Index & Lung-Protective Targets */}
+            {activeProfile.id === 'type1' && (
+              <div
+                className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-sky-950/20 border-sky-500/30' : 'bg-sky-50/70 border-sky-200'
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="text-xs font-extrabold uppercase tracking-wider text-sky-700 dark:text-sky-300">
+                    Güncel ARDS Tanımı (Berlin &amp; Global 2024) · HFNO ROX İndeksi · Akciğer Koruyucu Hedefler
+                  </div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30">
+                    Matthay et al., AJRCCM 2024
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-white border-sky-100'}`}>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">
+                      Global Yeni ARDS Tanımı (2024)
+                    </div>
+                    <p className={`mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      Berlin kriterlerindeki <strong>PEEP ≥ 5 cmH₂O</strong> şartına ek olarak, entübe olmayan hastalarda <strong>HFNO ≥ 30 L/dk</strong>, arter kan gazı yokluğunda <strong>SpO₂/FiO₂ ≤ 315</strong> (SpO₂ ≤ %97 iken) ve görüntülemede <strong>Akciğer USG (LUS)</strong> kabul edilmiştir.
+                    </p>
+                  </div>
+                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-white border-sky-100'}`}>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      HFNO Takibinde ROX İndeksi
+                    </div>
+                    <p className={`mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      <code>ROX = (SpO₂ / FiO₂) / Solunum Hızı</code>. 2, 6 ve 12. saatlerde <strong>ROX ≥ 4.88</strong> düşük entübasyon riski gösterir; <strong>&lt; 2.85 (2. sa) / &lt; 3.47 (6. sa) / &lt; 3.85 (12. sa)</strong> HFNO başarısızlığı lehinedir.
+                    </p>
+                  </div>
+                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-slate-950/70 border-slate-800' : 'bg-white border-sky-100'}`}>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                      Akciğer Koruyucu Ventilasyon
+                    </div>
+                    <p className={`mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      <strong>V<sub>T</sub>: 4–8 mL/kg PBW</strong> (tahmini ideal ağırlık), <strong>P<sub>plat</sub> ≤ 30 cmH₂O</strong>, <strong>Sürüş Basıncı (ΔP = P<sub>plat</sub> − PEEP) &lt; 15 cmH₂O</strong> ve uygun PEEP / prone pozisyon.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Universal Clinical Red Flag Callout */}
@@ -1793,11 +1903,11 @@ export const RespiratoryFailureInfographic: React.FC<RespiratoryFailureInfograph
                     {
                       id: 'type1' as RespFailureTypeId,
                       label: 'Tip 1 · Hipoksemik',
-                      defect: 'V/Q eşitsizliği, Şant, Difüzyon',
+                      defect: 'V/Q eşitsizliği, Şant, Difüzyon, Düşük PiO₂',
                       pao2: '< 60 mmHg',
                       paco2: 'Normal / ↓',
                       exam: 'Santral siyanoz, ajitasyon, raller',
-                      tx: 'SpO₂ >%92–94 O₂ (HFNC); Ödemde CPAP'
+                      tx: 'SpO₂ >%92–94 (HFNO ≥30 L/dk, ROX ≥4.88); ARDS: 4–8 mL/kg PBW, ΔP <15'
                     },
                     {
                       id: 'type2' as RespFailureTypeId,
@@ -1806,7 +1916,7 @@ export const RespiratoryFailureInfographic: React.FC<RespiratoryFailureInfograph
                       pao2: 'Genelde < 60',
                       paco2: '> 45–50 mmHg',
                       exam: 'Asteriksis, sıcak/terli cilt, bradipne/paradoksal',
-                      tx: 'KOAH %88–92 O₂, BiPAP, Nalokson'
+                      tx: 'KOAH %88–92 O₂ (HPV korunumu), BiPAP, Nalokson'
                     },
                     {
                       id: 'type3' as RespFailureTypeId,
@@ -1893,12 +2003,13 @@ export const RespiratoryFailureInfographic: React.FC<RespiratoryFailureInfograph
           <BookOpen className="w-4 h-4 text-sky-500" />
           <span>Kaynaklar (Textbook &amp; Solunum Yetmezliği Kılavuzları)</span>
         </div>
-        <p>1. Roussos C, Koutsoukou A. <em>Respiratory failure.</em> Eur Respir J Suppl. 2003;47:3s–14s. PMID: 14621112.</p>
-        <p>2. Hedenstierna G, Edmark L. <em>Mechanisms of atelectasis in the perioperative period.</em> Best Pract Res Clin Anaesthesiol. 2010;24(2):157–169. PMID: 20608554.</p>
-        <p>3. Aubier M, Trippenbach T, Roussos C. <em>Respiratory muscle fatigue during cardiogenic shock.</em> J Appl Physiol. 1981;51(2):499–508. PMID: 7263456.</p>
-        <p>4. Rochwerg B, Brochard L, Elliott MW, et al. <em>Official ERS/ATS clinical practice guidelines: noninvasive ventilation for acute respiratory failure.</em> Eur Respir J. 2017;50(2):1602426. PMID: 28860265.</p>
-        <p>5. Gropper MA, et al. <em>Miller&apos;s Anesthesia</em> (10th Ed.). Respiratory Physiology, Postoperative Pulmonary Complications &amp; ICU Ventilation.</p>
-        <p>6. Butterworth JF, Mackey DC, Wasnick JD. <em>Morgan &amp; Mikhail&apos;s Clinical Anesthesiology</em> (7th Ed.). Respiratory Physiology &amp; Critical Care.</p>
+        <p>1. Matthay MA, Arabi Y, Arroliga AC, et al. <em>A New Global Definition of Acute Respiratory Distress Syndrome.</em> Am J Respir Crit Care Med. 2024;209(1):37–47. (HFNO ≥30 L/dk, SpO₂/FiO₂ ≤315, LUS).</p>
+        <p>2. Roca O, Caralt B, Messika J, et al. <em>An Index Combining Respiratory Rate and Oxygenation to Predict Outcome of Nasal High-Flow Therapy (ROX Index).</em> Am J Respir Crit Care Med. 2019;199(11):1368–1376.</p>
+        <p>3. ARDS Definition Task Force (Berlin 2012, JAMA) &amp; Fan E, et al. <em>ATS/ESICM/SCCM Clinical Practice Guideline: Mechanical Ventilation in Adult Patients with ARDS</em> (VT 4–8 mL/kg PBW, Pplat ≤30, ΔP &lt;15 cmH₂O).</p>
+        <p>4. Roussos C, Koutsoukou A. <em>Respiratory failure.</em> Eur Respir J Suppl. 2003;47:3s–14s. PMID: 14621112.</p>
+        <p>5. Hedenstierna G, Edmark L. <em>Mechanisms of atelectasis in the perioperative period.</em> Best Pract Res Clin Anaesthesiol. 2010;24(2):157–169. PMID: 20608554.</p>
+        <p>6. Abdo WF, Heunks LM. <em>Oxygen-induced hypercapnia in COPD: myths and facts</em> (Crit Care. 2012) &amp; Rochwerg B, et al. <em>ERS/ATS NIV Guidelines</em> (Eur Respir J. 2017).</p>
+        <p>7. Aubier M, Trippenbach T, Roussos C. <em>Respiratory muscle fatigue during cardiogenic shock.</em> J Appl Physiol. 1981;51(2):499–508. &amp; Gropper MA, et al. <em>Miller&apos;s Anesthesia</em> (10th Ed.).</p>
       </div>
     </div>
   );

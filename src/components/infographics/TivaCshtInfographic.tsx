@@ -8,6 +8,7 @@ import {
   Info,
   Layers,
   RotateCcw,
+  ShieldCheck,
   Sliders,
   TrendingUp
 } from 'lucide-react';
@@ -51,7 +52,7 @@ const DRUG_PK_PROFILES: DrugPkProfile[] = [
     terminalHalfLife: '10–20 dk',
     clearance: '~40–60 mL/kg/dk (Çok Yüksek)',
     metabolism: 'Non-spesifik plazma & doku esterazları',
-    tciModel: 'Minto (LBM bazlı)',
+    tciModel: 'Minto (standart BMI) · Kim–Obara–Egan / Eleveld (obezite)',
     csht50Points: [2.5, 3.0, 3.2, 3.5, 3.7, 3.8, 4.0, 4.0],
     decrement80Points: [5, 6, 7, 8, 8.5, 9, 9.5, 10],
     clinicalSummary:
@@ -67,12 +68,12 @@ const DRUG_PK_PROFILES: DrugPkProfile[] = [
     colorHex: '#06b6d4',
     terminalHalfLife: '4–24+ saat',
     clearance: '~25–35 mL/kg/dk (Hepatik + Ekstrahepatik)',
-    metabolism: 'Hepatik glukuronidasyon/CYP2B6 + renal/akciğer klirensi',
-    tciModel: 'Schnider / Marsh / Eleveld',
+    metabolism: 'Hepatik glukuronidasyon/CYP2B6 + ekstrahepatik renal (~%30) & GİS (akciğer = ilk geçiş tutulumu/uptake)',
+    tciModel: 'Eleveld (tüm BMI) · Marsh (ABW) · Schnider (obez olmayan)',
     csht50Points: [3, 7, 11, 16, 20, 25, 33, 40],
     decrement80Points: [7, 15, 24, 38, 52, 65, 88, 110],
     clinicalSummary:
-      'Uzun terminal yarı ömrüne (4–24 sa) rağmen yüksek metabolik klirensi ve büyük V3 kompartmanı sayesinde CSHT 8 saatte bile ~40 dk civarında kalır.',
+      'Uzun terminal yarı ömrüne (t₁/₂γ 4–24+ sa) rağmen yüksek hepatik + renal/GİS klirensi ve büyük V3 kompartmanı sayesinde CSHT 8 saatte bile ~40 dk civarında kalır.',
     awakeningRule: 'Dikkat: Uzun vakalarda uyanma için %50 değil %70–80 azalma (Decrement Time ~65–110 dk) gerekir; vaka sonu doz azaltılmazsa uyanma uzar.',
     statusTag: 'TIVA Altın Standardı',
     tone: 'cyan'
@@ -89,7 +90,7 @@ const DRUG_PK_PROFILES: DrugPkProfile[] = [
     csht50Points: [5, 11, 17, 24, 28, 32, 42, 54],
     decrement80Points: [12, 24, 38, 58, 76, 95, 130, 165],
     clinicalSummary:
-      'Klasik farmakokinetik paradoksu (Hughes 1992): Terminal yarı ömrü Alfentanilden uzun olmasına rağmen, ilk 6–8 saatlik infüzyonlarda CSHT değeri Alfentanilden KISADIR.',
+      'Klasik farmakokinetik paradoksu (Hughes 1992): Terminal yarı ömrü (t₁/₂γ) Alfentanilden uzun olmasına rağmen, ilk 6–8 saatlik infüzyonlarda CSHT değeri Alfentanilden KISADIR.',
     awakeningRule: '4 saate kadar orta-uzun vakalarda Fentanile kıyasla çok daha öngörülebilir uyanma sunar; 8+ saat sonrasında CSHT yükselmeye başlar.',
     statusTag: 'Fentanilden Üstün Profil',
     tone: 'sky'
@@ -108,7 +109,7 @@ const DRUG_PK_PROFILES: DrugPkProfile[] = [
     decrement80Points: [22, 55, 85, 115, 128, 135, 145, 152],
     clinicalSummary:
       'Düşük dağılım hacmi nedeniyle tek bolusta hızlı biter; ancak sürekli infüzyonda kompartmanları çabuk doyduğu için ~90 dk sonra ~58–60 dk platoya oturur.',
-    awakeningRule: 'Kısa terminal yarı ömrüne aldanılmamalıdır: 1–4 saatlik infüzyonda Propofol ve Sufentanilden daha uzun CSHT sergiler.',
+    awakeningRule: 'Kısa terminal yarı ömrüne (t₁/₂γ) aldanılmamalıdır: 1–4 saatlik infüzyonda Propofol ve Sufentanilden daha uzun CSHT sergiler.',
     statusTag: '60 dk Plato Eğrisi',
     tone: 'amber'
   },
@@ -159,9 +160,9 @@ const DRUG_PK_PROFILES: DrugPkProfile[] = [
     csht50Points: [8, 15, 24, 54, 112, 178, 255, 295],
     decrement80Points: [18, 35, 58, 130, 245, 340, 440, 500],
     clinicalSummary:
-      'Kısa vakalarda (≤ 60 dk) düşük CSHT (~24 dk) ile hızlı derlenir; ancak 2–3 saatten sonra yağ/kas depoları doyar ve CSHT 4–5 saate eksponansiyel sıçrar!',
+      'Klasik sigmoidal (S-şeklinde) CSHT eğrisi gösterir: ≤ 60 dk infüzyonlarda hızlı redistribüsyonla kısa (~24 dk) kalır, 2–4 saat arasında dik yükselişle 3–5 saate fırlar ve çok uzun infüzyonlarda terminal yarı ömre doğru platoya yaklaşır.',
     awakeningRule: 'Klasik TIVA tuzağı: Uzun ameliyatlarda sürekli fentanil infüzyonu/yüksek kümülatif bolus sonrası Nalokson (~45 dk) bittiğinde re-narkotizasyon gelişebilir.',
-    statusTag: 'Eksponansiyel CSHT Sıçraması',
+    statusTag: 'Sigmoidal CSHT Sıçraması',
     tone: 'rose'
   }
 ];
@@ -202,8 +203,8 @@ const PATIENT_MODIFIERS: Record<
     label: 'Morbid Obezite (BMI > 35)',
     multiplierPropofol: 1.4,
     multiplierOpioid: 1.45,
-    title: 'Genişlemiş Yağ Kompartmanı (V3) & Yavaş Geri-Akım',
-    note: 'Lipofilik ajanlar (Propofol, Fentanil, Midazolam) total vücut ağırlığına (TBW) göre verilirse V3 deposunda dev birikim oluşur. Remifentanil LBW, Propofol indüksiyonu LBW/ABW ve idamesi BIS/ABW ile yönetilmelidir.'
+    title: 'Genişlemiş Yağ Kompartmanı (V3) & James LBM Tuzağı',
+    note: 'Morbid obezitede Schnider (Propofol) ve Minto (Remifentanil) KULLANILMAMALIDIR (James LBM formülü BMI >42 E / >35–37 K üzerinde paradoksal düşer → Schnider Propofol DOZ AŞIMI, Minto yetersiz doz!). Eleveld (Al-Sallami FFM), Marsh (ABW) veya Kim–Obara–Egan modelleri tercih edilmelidir.'
   },
   'low-co': {
     label: 'Hipotermi / Düşük Kalp Debisi',
@@ -255,7 +256,7 @@ const COMPARTMENT_STAGES: {
     v3Level: 82,
     flowLabel: 'V3 + V2 → V1 Geri Akım (Eliminasyona Bağımlı Offset)',
     explanation:
-      'Derin doku (V3) doyduğunda infüzyon kapatılsa dahi V2 ve V3’ten kana sürekli ilaç geri sızar. Fentanil ve Tiyopentalde CSHT eksponansiyel uzar; sadece Remifentanil (esteraz) ve Propofol (yüksek klirens) kısa kalır.'
+      'Derin doku (V3) doyduğunda infüzyon kapatılsa dahi V2 ve V3’ten kana sürekli ilaç geri sızar. Fentanilde klasik sigmoidal (S-şeklinde) dik yükselişle CSHT saatlere fırlar; sadece Remifentanil (esteraz) ve Propofol (yüksek klirens) kısa kalır.'
   }
 ];
 
@@ -282,6 +283,25 @@ function formatDurationLabel(minutes: number): string {
   return `${h} sa ${m} dk`;
 }
 
+function computeAdjustedMetric(
+  drug: DrugPkProfile,
+  baseMinutes: number,
+  metricMode: CurveMetricMode,
+  patientModifier: PatientModifierId
+): number {
+  const rawPoints = metricMode === 'csht50' ? drug.csht50Points : drug.decrement80Points;
+  const raw = interpolateValue(rawPoints, baseMinutes);
+  if (drug.id === 'remifentanil') {
+    return patientModifier === 'low-co' ? Number((raw * 1.15).toFixed(1)) : Number(raw.toFixed(1));
+  }
+  const mod = PATIENT_MODIFIERS[patientModifier];
+  const mult =
+    drug.id === 'propofol' || drug.id === 'thiopental' || drug.id === 'midazolam'
+      ? mod.multiplierPropofol
+      : mod.multiplierOpioid;
+  return Math.round(raw * mult);
+}
+
 export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark }) => {
   const [durationMinutes, setDurationMinutes] = useState<number>(240);
   const [metricMode, setMetricMode] = useState<CurveMetricMode>('csht50');
@@ -291,8 +311,32 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
   const [compartmentStage, setCompartmentStage] = useState<CompartmentStageId>('saturated');
 
   const modifier = PATIENT_MODIFIERS[patientModifier];
-  const yMax = metricMode === 'csht50' ? 320 : 520;
-  const yTicks = metricMode === 'csht50' ? [0, 60, 120, 180, 240, 300] : [0, 100, 200, 300, 400, 500];
+
+  const getAdjustedValue = (drug: DrugPkProfile, baseMinutes: number): number =>
+    computeAdjustedMetric(drug, baseMinutes, metricMode, patientModifier);
+
+  // Dynamic Y-axis bounds based on currently visible drugs + active patient modifier (prevents clipping/plateaus)
+  const { yMax, yTicks } = useMemo(() => {
+    const visibleDrugs = DRUG_PK_PROFILES.filter((d) => !hiddenDrugIds.includes(d.id));
+    let rawMax = 10;
+    for (const drug of visibleDrugs) {
+      for (const t of TIME_KNOTS_MIN) {
+        const val = computeAdjustedMetric(drug, t, metricMode, patientModifier);
+        if (val > rawMax) rawMax = val;
+      }
+    }
+    const padded = rawMax * 1.08;
+    const stepCandidates = [2, 5, 10, 20, 25, 50, 60, 100, 150, 200];
+    const step =
+      stepCandidates.find((s) => Math.ceil(padded / s) <= 6) ??
+      Math.ceil(padded / 5 / 50) * 50;
+    const computedMax = Math.max(step, Math.ceil(padded / step) * step);
+    const ticks: number[] = [];
+    for (let v = 0; v <= computedMax; v += step) {
+      ticks.push(v);
+    }
+    return { yMax: computedMax, yTicks: ticks };
+  }, [hiddenDrugIds, metricMode, patientModifier]);
 
   // SVG Coordinate System
   const padLeft = 54;
@@ -311,26 +355,19 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
     setHiddenDrugIds((prev) => {
       if (prev.includes(id)) return prev.filter((item) => item !== id);
       if (prev.length >= DRUG_PK_PROFILES.length - 1) return prev;
-      return [...prev, id];
+      const nextHidden = [...prev, id];
+      if (selectedDrugId === id) {
+        const nextVisible = DRUG_PK_PROFILES.find((d) => !nextHidden.includes(d.id));
+        if (nextVisible) setSelectedDrugId(nextVisible.id);
+      }
+      return nextHidden;
     });
-  };
-
-  const getAdjustedValue = (drug: DrugPkProfile, baseMinutes: number): number => {
-    const rawPoints = metricMode === 'csht50' ? drug.csht50Points : drug.decrement80Points;
-    const raw = interpolateValue(rawPoints, baseMinutes);
-    if (drug.id === 'remifentanil') {
-      return patientModifier === 'low-co' ? Number((raw * 1.15).toFixed(1)) : Number(raw.toFixed(1));
-    }
-    const mult = drug.id === 'propofol' || drug.id === 'thiopental' || drug.id === 'midazolam'
-      ? modifier.multiplierPropofol
-      : modifier.multiplierOpioid;
-    return Math.round(raw * mult);
   };
 
   const rankedSnapshot = useMemo(() => {
     return DRUG_PK_PROFILES.filter((d) => !hiddenDrugIds.includes(d.id))
       .map((drug) => {
-        const cshtVal = getAdjustedValue(drug, durationMinutes);
+        const cshtVal = computeAdjustedMetric(drug, durationMinutes, metricMode, patientModifier);
         const rawCsht50 = interpolateValue(drug.csht50Points, durationMinutes);
         const rawDec80 = interpolateValue(drug.decrement80Points, durationMinutes);
         const mult =
@@ -350,9 +387,12 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
         };
       })
       .sort((a, b) => a.activeMetricValue - b.activeMetricValue);
-  }, [durationMinutes, metricMode, patientModifier, hiddenDrugIds]);
+  }, [durationMinutes, metricMode, patientModifier, hiddenDrugIds, modifier.multiplierPropofol, modifier.multiplierOpioid]);
 
-  const focusedDrug = DRUG_PK_PROFILES.find((d) => d.id === selectedDrugId) || DRUG_PK_PROFILES[0];
+  const focusedDrug =
+    DRUG_PK_PROFILES.find((d) => d.id === selectedDrugId && !hiddenDrugIds.includes(d.id)) ||
+    rankedSnapshot[0]?.drug ||
+    DRUG_PK_PROFILES[0];
   const focusedSnapshot = rankedSnapshot.find((r) => r.drug.id === focusedDrug.id);
   const currentCompartment = COMPARTMENT_STAGES.find((s) => s.id === compartmentStage) || COMPARTMENT_STAGES[2];
 
@@ -383,13 +423,13 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
               <span aria-hidden="true">·</span>
               <span>Hughes, Glass &amp; Jacobs (1992)</span>
               <span aria-hidden="true">·</span>
-              <span>Miller’s Anesthesia &amp; Morgan-Mikhail</span>
+              <span>SIVA/AAGBI TIVA (Nimmo 2019) &amp; Miller’s</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white text-balance">
               Bağlama Duyarlı Yarı Ömür (Context-Sensitive Half-Time · CSHT)
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-              Sürekli TIVA infüzyonu kesildikten sonra plazma ilaç konsantrasyonunun <strong>%50</strong> azalması için gereken süredir. Buradaki <strong>"bağlam"</strong> toplam infüzyon süresidir; uyanma hızı terminal yarı ömürden (t₁/₂β) çok, infüzyon süresine bağlı kompartman doygunluğuna ve <strong>%80 azalma süresine (Decrement Time)</strong> bağlıdır.
+              <strong>Sabit santral/plazma konsantrasyonunu sürdüren</strong> bir infüzyonun kesilmesinden sonra plazma ilaç konsantrasyonunun <strong>%50</strong> azalması için gereken süredir. Buradaki <strong>"bağlam"</strong> toplam infüzyon süresidir; uyanma hızı 3-kompartmanlı terminal eliminasyon yarı ömründen (<strong>t₁/₂γ</strong>; <em>t₁/₂β</em> yavaş dağılım fazıdır) çok, infüzyon süresine bağlı kompartman doygunluğuna ve <strong>%80 azalma süresine (Decrement Time)</strong> bağlıdır.
             </p>
           </div>
 
@@ -771,7 +811,7 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
                 })}
               </div>
               <div
-                className={`p-2.5 rounded-lg border text-[11px] leading-snug ${
+                className={`p-2.5 rounded-lg border text-[11px] leading-snug space-y-1 ${
                   patientModifier === 'standard'
                     ? isDark
                       ? 'bg-slate-950/60 border-slate-800 text-slate-400'
@@ -781,8 +821,11 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
                       : 'bg-amber-50 border-amber-200 text-amber-950'
                 }`}
               >
-                <div className="font-bold mb-0.5">{modifier.title}</div>
+                <div className="font-bold">{modifier.title}</div>
                 <div>{modifier.note}</div>
+                <div className="text-[10px] opacity-80 pt-1 border-t border-current/15">
+                  <strong>Eğitsel Simülasyon Notu:</strong> Hasta profillerindeki 1.35×–1.5× çarpanlar fizyolojik yönü göstermek için kullanılan yaklaşık eğitsel tahminlerdir; gerçek bireysel farmakokinetik değişkenlik gösterir ve klinik dozlama BIS/pEEG ile titre edilmelidir.
+                </div>
               </div>
             </div>
 
@@ -965,7 +1008,7 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
                 isDark ? 'bg-amber-950/20 border-amber-500/30 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-950'
               }`}
             >
-              <strong>Neden Terminal Yarı Ömür (t₁/₂β) Yanıltıcıdır?</strong> Propofolün terminal t₁/₂β süresi 4–24+ saattir ancak derin yağ dokusundan kana dönüş hızı karaciğer+ekstrahepatik klirens hızına göre çok yavaştır; bu sayede 8 saat sonunda bile plazma düzeyi ~40 dk içinde %50 düşer. Buna karşılık Alfentanil’in t₁/₂β’sı sadece 1.5 saattir ancak düşük klirensi nedeniyle 1 saatte CSHT ~40 dk’ya çıkar.
+              <strong>Neden Terminal Eliminasyon Yarı Ömrü (t₁/₂γ) Yanıltıcıdır?</strong> (3-kompartmanlı modelde terminal yarı ömür <strong>t₁/₂γ</strong>’dır; <em>t₁/₂β</em> yavaş dağılım fazıdır.) Propofolün terminal t₁/₂γ süresi 4–24+ saattir ancak derin yağ dokusundan kana dönüş hızı hepatik + ekstrahepatik (renal ~%30 &amp; GİS) klirens hızına göre çok yavaştır; bu sayede 8 saat sonunda bile plazma düzeyi ~40 dk içinde %50 düşer. Buna karşılık Alfentanil’in t₁/₂γ’sı sadece 1.5–2 saattir ancak düşük klirensi nedeniyle 1 saatte CSHT ~40 dk’ya çıkar.
             </div>
           </div>
         </div>
@@ -999,7 +1042,7 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
                 }`}
               >
                 <th className="py-2.5 pr-3 font-bold">Ajan</th>
-                <th className="py-2.5 px-2 font-bold">Terminal t₁/₂β</th>
+                <th className="py-2.5 px-2 font-bold">Terminal t₁/₂γ</th>
                 <th className="py-2.5 px-2 font-bold text-right">1 Saat CSHT</th>
                 <th className="py-2.5 px-2 font-bold text-right">2 Saat CSHT</th>
                 <th className="py-2.5 px-2 font-bold text-right">4 Saat CSHT</th>
@@ -1081,6 +1124,107 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
         </div>
       </div>
 
+      {/* BÖLÜM 3B: TCI Model Karşılaştırması + SIVA/AAGBI 2018 TIVA Güvenliği + Deksmedetomidin Notu */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
+        {/* TCI Model Karşılaştırması */}
+        <div
+          className={`xl:col-span-7 p-5 rounded-2xl border space-y-3 ${
+            isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/70 dark:border-slate-800">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Activity className="w-4 h-4 text-cyan-500 shrink-0" />
+              <span>TCI Model Karşılaştırması &amp; Morbid Obezite Güvenliği</span>
+            </h3>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/15 text-rose-600 dark:text-rose-300 font-bold">
+              James LBM Uyarısı
+            </span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-[11px]">
+              <thead>
+                <tr className={`border-b ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-500'}`}>
+                  <th className="py-2 pr-2 font-bold">Model / Ajan</th>
+                  <th className="py-2 px-2 font-bold">Giriş Değişkenleri</th>
+                  <th className="py-2 pl-2 font-bold">Morbid Obezite Uygunluğu</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200/60 dark:divide-slate-800/80 text-slate-700 dark:text-slate-300">
+                <tr>
+                  <td className="py-2 pr-2 font-bold text-slate-900 dark:text-white">Eleveld (Propofol / Remi)</td>
+                  <td className="py-2 px-2">Yaş, kilo, boy, cinsiyet (<strong>Al-Sallami FFM</strong>)</td>
+                  <td className="py-2 pl-2 text-emerald-700 dark:text-emerald-400 font-semibold">
+                    ✓ En uygun / Tercih edilir (pediatrik–geriatrik–obez valide)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-2 font-bold text-slate-900 dark:text-white">Marsh (Propofol)</td>
+                  <td className="py-2 px-2">Yalnızca ağırlık (yaş/boy/cinsiyet yok)</td>
+                  <td className="py-2 pl-2 text-amber-700 dark:text-amber-300">
+                    TBW girilirse aşırı yükler; <strong>ABW (Adjusted BW)</strong> ile kullanılabilir
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-2 font-bold text-slate-900 dark:text-white">Schnider (Propofol)</td>
+                  <td className="py-2 px-2">Yaş, kilo, boy, cinsiyet (<strong>James LBM</strong>)</td>
+                  <td className="py-2 pl-2 text-rose-600 dark:text-rose-400 font-semibold">
+                    ✗ Morbid obezitede KULLANMA! BMI &gt;42 E / &gt;35–37 K üzerinde James LBM paradoksal düşer → CL1 negatif LBM katsayısı <strong>ciddi Propofol DOZ AŞIMI</strong>na yol açar
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-2 font-bold text-slate-900 dark:text-white">Minto (Remifentanil)</td>
+                  <td className="py-2 px-2">Yaş, kilo, boy, cinsiyet (<strong>James LBM</strong>)</td>
+                  <td className="py-2 pl-2 text-rose-600 dark:text-rose-400 font-semibold">
+                    ✗ Morbid obezitede KULLANMA! Paradoksal düşük LBM → yetersiz doz (underdosing). Yerine <strong>Kim–Obara–Egan</strong> veya <strong>Eleveld</strong> kullanın
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Sağ Sütun: SIVA/AAGBI 2018 TIVA Güvenlik Kılavuzu + Deksmedetomidin CSHT */}
+        <div className="xl:col-span-5 flex flex-col gap-4">
+          <div
+            className={`p-4 rounded-2xl border space-y-2 ${
+              isDark ? 'bg-cyan-950/20 border-cyan-500/30' : 'bg-cyan-50/60 border-cyan-200'
+            }`}
+          >
+            <div className="flex items-center gap-2 text-xs font-bold text-cyan-700 dark:text-cyan-300">
+              <ShieldCheck className="w-4 h-4 shrink-0" />
+              <span>SIVA / AAGBI 2018 TIVA Güvenlik Kılavuzu (Nimmo et al., 2019)</span>
+            </div>
+            <ul className="space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+              <li>
+                • <strong>NMB varsa zorunlu pEEG (BIS/Entropy):</strong> Kas gevşetici altında intraoperatif farkındalık (AAGA) riskini azaltmak için işlenmiş EEG monitörizasyonu şarttır.
+              </li>
+              <li>
+                • <strong>Özel IV Hat + Valfler:</strong> Mümkünse TIVA için ayrı/özel IV kanül kullanın; ortak hat gerekiyorsa mutlaka <strong>anti-reflü (tek yönlü)</strong> ve <strong>anti-sifon</strong> valf takın, ölü boşluğu minimize edin.
+              </li>
+              <li>
+                • <strong>Görünür Kanül Kontrolü:</strong> IV kanül ve bağlantı noktası vaka boyunca <strong>görünür</strong> olmalı veya düzenli aralıklarla ekstravazasyon/diskonneksiyon açısından kontrol edilmelidir.
+              </li>
+            </ul>
+          </div>
+
+          <div
+            className={`p-4 rounded-2xl border space-y-1.5 ${
+              isDark ? 'bg-amber-950/20 border-amber-500/30' : 'bg-amber-50/70 border-amber-200'
+            }`}
+          >
+            <div className="flex items-center gap-2 text-xs font-bold text-amber-800 dark:text-amber-300">
+              <Info className="w-4 h-4 shrink-0" />
+              <span>Deksmedetomidin — Uzun İnfüzyon CSHT Uyarısı</span>
+            </div>
+            <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+              Deksmedetomidin kısa (10 dk) infüzyonlarda ~4 dk gibi kısa CSHT sergilese de <strong>uzun infüzyonlarda CSHT belirgin şekilde uzar</strong> (8 saatlik infüzyon sonrası ~250 dk’ya ulaşabilir). TIVA adjuvanı olarak kullanıldığında cerrahi bitiminden erken kesilmezse PACU’da uzamış sedasyon ve bradikardi/hipotansiyon görülebilir.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* BÖLÜM 4: TIVA Pratik Kuralları & Klinik Tuzaklar */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div
@@ -1108,7 +1252,7 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
             <li className="flex items-start gap-2">
               <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">3.</span>
               <span>
-                <strong>Model &amp; Ağırlık Seçimi:</strong> Obez hastalarda Marsh (TBW) yerine Schnider/Eleveld ve Minto (LBM) kullanmak aşırı kompartman yüklemesini ve postoperatif gecikmiş uyanmayı önler.
+                <strong>Morbid Obezitede Model Seçimi:</strong> <strong>Schnider ve Minto</strong> (James LBM paradoksu nedeniyle) morbid obezitede <em>kullanılmamalıdır</em>! Propofolde <strong>Eleveld (Al-Sallami FFM)</strong> veya <strong>Marsh (ABW)</strong>, Remifentanilde <strong>Kim–Obara–Egan</strong> veya <strong>Eleveld</strong> modelleri tercih edilmelidir.
               </span>
             </li>
           </ul>
@@ -1121,7 +1265,7 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
         >
           <div className="flex items-center gap-2 text-xs font-bold text-rose-700 dark:text-rose-300">
             <AlertTriangle className="w-4 h-4 shrink-0" />
-            <span>Klinik Tuzaklar (Gecikmiş Uyanma Nedenleri)</span>
+            <span>Klinik Tuzaklar (Gecikmiş Uyanma &amp; Doz Hatası Nedenleri)</span>
           </div>
           <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
             <li className="flex items-start gap-2">
@@ -1139,7 +1283,7 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
             <li className="flex items-start gap-2">
               <span className="font-mono font-bold text-rose-600 dark:text-rose-400">!</span>
               <span>
-                <strong>IV Hat Ölü Boşluğu &amp; Geri Akım:</strong> Çoklu infüzyon setinde reflü veya musluk ölü boşluğunda biriken Propofol/Remifentanilin vaka sonunda hızlı SF ile yıkanması ani bolus doz aşımına/apneye yol açabilir.
+                <strong>IV Hat Ölü Boşluğu &amp; Geri Akım:</strong> Anti-reflü valfsiz çoklu infüzyon setinde reflü veya musluk ölü boşluğunda biriken Propofol/Remifentanilin vaka sonunda hızlı SF ile yıkanması ani bolus doz aşımına/apneye yol açabilir.
               </span>
             </li>
           </ul>
@@ -1154,26 +1298,26 @@ export const TivaCshtInfographic: React.FC<TivaCshtInfographicProps> = ({ isDark
       >
         <div className="flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
           <BookOpen className="w-4 h-4 text-cyan-500" />
-          <span>Kaynaklar (Textbook &amp; Temel Farmakokinetik Literatür)</span>
+          <span>Kaynaklar (Textbook &amp; Temel Farmakokinetik / TIVA Kılavuzları)</span>
         </div>
         <ol className="list-decimal list-inside space-y-1 leading-relaxed">
           <li>
             Hughes MA, Glass PS, Jacobs JR. Context-sensitive half-time in multicompartment pharmacokinetic models for intravenous anesthetic drugs. <em>Anesthesiology</em>. 1992;76(3):334–341. (PMID: 1539843).
           </li>
           <li>
-            Egan TD, Lemmens HJ, Fiset P, et al. The pharmacokinetics of the new short-acting opioid remifentanil (GI87084B) in healthy adult male volunteers. <em>Anesthesiology</em>. 1993;79(5):881–892. (PMID: 7902032).
+            Nimmo AF, Absalom AR, Bagshaw O, et al. Guidelines for the safe practice of total intravenous anaesthesia (TIVA): Joint Guidelines from the Association of Anaesthetists and the Society for Intravenous Anaesthesia (SIVA). <em>Anaesthesia</em>. 2019;74(2):211–224.
           </li>
           <li>
-            Bailey JM. Context-sensitive half-times and other decrement times of intravenous drugs. <em>Curr Opin Anaesthesiol</em>. 1997;10(4):259–264. / Bailey JM. Technique for quantifying the duration of intravenous anesthetic effect. <em>Anesthesiology</em>. 1995;83(5):1095–1103.
+            Eleveld DJ, Colin P, Absalom AR, Struys MMRF. Pharmacokinetic-pharmacodynamic model for propofol for broad application in anaesthesia and sedation. <em>Br J Anaesth</em>. 2018;120(5):942–959.
           </li>
           <li>
-            Gropper MA, Eriksson LI, Fleisher LA, et al. (Eds.). <em>Miller’s Anesthesia</em>. 10th ed. Elsevier; 2024. (Intravenous Anesthetics, Opioids &amp; Multicompartment Pharmacokinetics).
+            Kim TK, Obara S, Egan TD, et al. Disposition of remifentanil in obesity: a new pharmacokinetic model incorporating the influence of body mass. <em>Anesthesiology</em>. 2017;126(6):1019–1032.
           </li>
           <li>
-            Butterworth JF, Mackey DC, Wasnick JD. <em>Morgan &amp; Mikhail’s Clinical Anesthesiology</em>. 7th ed. McGraw-Hill; 2022. (Chapters 9–10: Intravenous Anesthetics &amp; Opioid Analgesics).
+            Bailey JM. Context-sensitive half-times and other decrement times of intravenous drugs. <em>Curr Opin Anaesthesiol</em>. 1997;10(4):259–264. / Gropper MA et al. <em>Miller’s Anesthesia</em>, 10th ed. Elsevier; 2024.
           </li>
           <li>
-            Al-Rifai Z, Mulvey D. Principles of total intravenous anaesthesia: basic pharmacokinetics and model descriptions. <em>BJA Educ</em>. 2016;16(3):92–97.
+            Al-Rifai Z, Mulvey D. Principles of total intravenous anaesthesia: basic pharmacokinetics and model descriptions. <em>BJA Educ</em>. 2016;16(3):92–97. / Butterworth JF et al. <em>Morgan &amp; Mikhail’s Clinical Anesthesiology</em>, 7th ed. 2022.
           </li>
         </ol>
       </div>

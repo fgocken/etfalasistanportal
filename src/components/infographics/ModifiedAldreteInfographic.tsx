@@ -213,7 +213,7 @@ export const ModifiedAldreteInfographic: React.FC<ModifiedAldreteInfographicProp
   if (hasZeroScore) {
     statusBadge = {
       title: 'Transfer Engeli: 0 Puan Alan Kritik Parametre Mevcut!',
-      subtitle: 'Toplam puan ≥ 9 olsa dahi, herhangi bir parametreden 0 alan hasta servise GÖNDERİLEMEZ.',
+      subtitle: 'Toplam puan 8 olsa dahi (5×2 = 10 puanlık skalada 0 varsa maksimum 8 alınabilir), herhangi bir parametreden 0 alan hasta servise GÖNDERİLEMEZ.',
       colorClass: 'text-rose-700 dark:text-rose-300',
       bgClass: 'bg-rose-500/10 dark:bg-rose-500/15',
       borderClass: 'border-rose-500/30',
@@ -513,7 +513,7 @@ export const ModifiedAldreteInfographic: React.FC<ModifiedAldreteInfographicProp
               </li>
               <li className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                <span>En az 30-45 dakika stabil PACU takibi tamamlanmış olmalıdır.</span>
+                <span><strong>ASA 2013 PACU:</strong> Taburculuk zorunlu sabit bir bekleme süresine değil, fizyolojik kriterlerin tutarlı sağlanmasına dayanır.</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
@@ -586,7 +586,7 @@ export const ModifiedAldreteInfographic: React.FC<ModifiedAldreteInfographicProp
               </span>
             </div>
             <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Aktif Müdahale & Resüsitasyon
+              Aktif Müdahale &amp; Resüsitasyon
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
               Solunum yetmezliği, apne, derin hipotansiyon/şok, refrakter hipoksi veya uyandırılamayan koma durumu.
@@ -671,11 +671,11 @@ export const ModifiedAldreteInfographic: React.FC<ModifiedAldreteInfographicProp
             <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
               <div className="flex items-start gap-1.5">
                 <ArrowRight className="w-3.5 h-3.5 text-teal-500 shrink-0 mt-0.5" />
-                <span><strong>Ölçüm Aracı:</strong> PADSS (Post-Anesthesia Discharge Scoring System).</span>
+                <span><strong>Ölçüm Aracı:</strong> Modified PADSS (Post-Anesthetic Discharge Scoring System).</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <ArrowRight className="w-3.5 h-3.5 text-teal-500 shrink-0 mt-0.5" />
-                <span><strong>Gerekli Ek Kriterler:</strong> Bulantı/kusmanın (PONV) olmaması, oral sıvı alabilme, kabul edilebilir ağrı (VAS ≤ 3), cerrahi kanama olmaması, refakatçi mevcudiyeti.</span>
+                <span><strong>Gerekli Ek Kriterler:</strong> Minimal/kontrol altında PONV, dengeli ambulasyon, kabul edilebilir ağrı (VAS ≤ 3), cerrahi kanama olmaması ve sorumlu refakatçi (Modified PADSS &amp; ASA 2013’te <em>zorunlu oral sıvı alımı şartı kaldırılmıştır</em>).</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <ArrowRight className="w-3.5 h-3.5 text-teal-500 shrink-0 mt-0.5" />
@@ -710,27 +710,54 @@ export const ModifiedAldreteInfographic: React.FC<ModifiedAldreteInfographicProp
             <div className="space-y-1">
               <span className="font-bold text-slate-700 dark:text-slate-200">1. Rezidüel Blok (NMB)</span>
               <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-                Hasta 4 ekstremiteyi hareket ettirse bile TOF oranı &ge; 0.9 olmadan kürardan tam çıkmış sayılmaz.
+                Hasta 4 ekstremiteyi hareket ettirse bile kantitatif TOF oranı &ge; 0.90 olmadan kürardan tam çıkmış sayılmaz.
               </p>
             </div>
             <div className="space-y-1">
-              <span className="font-bold text-slate-700 dark:text-slate-200">2. Normotermi</span>
+              <span className="font-bold text-slate-700 dark:text-slate-200">2. Normotermi (≥ 36.0°C)</span>
               <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-                Aksiller/timpanik vücut sıcaklığı &gt; 36.0°C olmalıdır. Hipotermi ilaç atılımını ve pıhtılaşmayı bozar.
+                Kor vücut sıcaklığı <strong>&ge; 36.0°C</strong> olmalıdır. Aksiller ölçüm kor sıcaklığını olduğundan düşük gösterebilir (underestimate); timpanik/temporal kor ölçüm tercih edilir.
               </p>
             </div>
             <div className="space-y-1">
-              <span className="font-bold text-slate-700 dark:text-slate-200">3. Analjezi & PONV</span>
+              <span className="font-bold text-slate-700 dark:text-slate-200">3. Analjezi &amp; PONV</span>
               <p className="text-slate-500 dark:text-slate-400 text-[11px]">
                 Ağrı skoru VAS &le; 4 olmalı; dirençli bulantı veya aktif kusma kontrol altına alınmış olmalıdır.
               </p>
             </div>
             <div className="space-y-1">
-              <span className="font-bold text-slate-700 dark:text-slate-200">4. Stabilite Süresi</span>
+              <span className="font-bold text-slate-700 dark:text-slate-200">4. Fizyolojik Kriterler (ASA 2013)</span>
               <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-                Skor 9-10'a ulaştıktan sonra en az 15-30 dakika süreyle vital bulgular stabilitesini korumalıdır.
+                ASA 2013 PACU kılavuzuna göre taburculuk sabit bekleme süresine değil fizyolojik kriterlerin sağlanmasına dayanır (son IV opioid/sedatif sonrası pik etki süresi izlenmelidir).
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Aldrete Blind Spots & Baseline-Adjusted Scoring */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
+          <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+            isDark ? 'bg-rose-950/15 border-rose-500/30' : 'bg-rose-50/70 border-rose-200'
+          }`}>
+            <div className="font-bold text-rose-700 dark:text-rose-300 flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <span>Modifiye Aldrete’nin Kör Noktaları (Kısıtlılıklar)</span>
+            </div>
+            <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Modifiye Aldrete Skoru <strong>ağrı şiddetini, PONV (bulantı-kusma), cerrahi kanama/drenaj, vücut sıcaklığını (hipotermi) ve kantitatif rezidüel nöromüsküler bloku (NMB)</strong> değerlendirmez. Skor 10/10 olsa bile bu 5 alan PACU’da ayrıca kontrol edilmelidir.
+            </p>
+          </div>
+
+          <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+            isDark ? 'bg-sky-950/15 border-sky-500/30' : 'bg-sky-50/70 border-sky-200'
+          }`}>
+            <div className="font-bold text-sky-700 dark:text-sky-300 flex items-center gap-1.5">
+              <Info className="w-4 h-4 shrink-0" />
+              <span>Preoperatif Bazale Göre Puanlama (Baseline-Adjusted)</span>
+            </div>
+            <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Kronik nörolojik defisiti (ör. hemipleji/parapleji), kronik hipoksemili KOAH’ı veya demansı olan hastalarda derlenme puanlaması ideal sağlıklı bireye göre değil, <strong>hastanın preoperatif bazal fonksiyonuna dönüşü</strong> esas alınarak yapılır.
+            </p>
           </div>
         </div>
       </div>
@@ -749,8 +776,13 @@ export const ModifiedAldreteInfographic: React.FC<ModifiedAldreteInfographicProp
         <p className="leading-relaxed">
           <strong>1995 (Modifiye Aldrete):</strong> Cilt rengi subjektif olduğu ve farklı ten renklerinde yanıltıcı olabildiği için, puls oksimetre yaygınlaşmasıyla birlikte <em>SpO2 (Oksijen Satürasyonu)</em> parametresine dönüştürüldü. Günümüzde dünya genelinde PACU Faz 1 derlenme standardıdır.
         </p>
-        <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800">
-          Referans: <em>Aldrete JA. The post-anesthesia recovery score revisited. Journal of Clinical Anesthesia. 1995 Feb;7(1):89-91. doi: 10.1016/0952-8180(94)00001-k.</em>
+        <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1">
+          <div>
+            1. <em>Aldrete JA. The post-anesthesia recovery score revisited. Journal of Clinical Anesthesia. 1995 Feb;7(1):89-91. doi: 10.1016/0952-8180(94)00001-k.</em>
+          </div>
+          <div>
+            2. <em>Apfelbaum JL, Silverstein JH, Chung FF, et al. Practice guidelines for postanesthetic care: an updated report by the ASA Task Force on Postanesthetic Care. Anesthesiology. 2013;118(2):291-307.</em>
+          </div>
         </div>
       </div>
     </div>

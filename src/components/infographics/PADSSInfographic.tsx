@@ -120,7 +120,7 @@ const PADSS_CRITERIA: PADSSCriterion[] = [
       {
         points: 0,
         label: 'Şiddetli & Dirençli (Tekrarlayan Kusma)',
-        description: 'Çoklu antiemetiğe rağmen devam eden bulantı-öğürme, aktif kusma, oral sıvı alamama.',
+        description: 'Çoklu antiemetiğe rağmen devam eden şiddetli bulantı-öğürme veya tekrarlayan aktif kusma.',
         badge: 'Refrakter PONV'
       }
     ]
@@ -198,7 +198,7 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
 
   // Status computation
   let statusBadge = {
-    title: 'Eve Güvenli Taburculuk Onaylandı (PADSS ≥ 9)',
+    title: 'Eve Güvenli Taburculuk Onaylandı (Modified PADSS ≥ 9)',
     subtitle: 'Hasta günübirlik cerrahi Faz 2 derlenmesini başarıyla tamamlamıştır. Eve taburcu edilebilir.',
     colorClass: 'text-teal-700 dark:text-teal-300',
     bgClass: 'bg-teal-500/10 dark:bg-teal-500/15',
@@ -210,7 +210,7 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
   if (hasZeroScore) {
     statusBadge = {
       title: 'Taburculuk Engeli: 0 Puan Alan Kriter Mevcut!',
-      subtitle: 'Toplam puan ≥ 9 olsa dahi herhangi bir kriterden 0 alan hasta EVE GÖNDERİLEMEZ.',
+      subtitle: 'Toplam puan 8 olsa dahi (5×2 = 10 puanlık skalada 0 varsa maksimum 8 alınabilir) herhangi bir kriterden 0 alan hasta EVE GÖNDERİLEMEZ.',
       colorClass: 'text-rose-700 dark:text-rose-300',
       bgClass: 'bg-rose-500/10 dark:bg-rose-500/15',
       borderClass: 'border-rose-500/30',
@@ -227,7 +227,7 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
       bgClass: 'bg-amber-500/10 dark:bg-amber-500/15',
       borderClass: 'border-amber-500/30',
       icon: AlertTriangle,
-      recommendation: 'Oral hidrasyon, ek analjezik/antiemetik uygulanması ve 30-60 dakika sonra mobilizasyon ile skorlama tekrarlanmalıdır.'
+      recommendation: 'Gerekirse IV hidrasyon, ek analjezik/antiemetik uygulanması (zorla su içirilmeden) ve 30-60 dakika sonra mobilizasyon ile skorlama tekrarlanmalıdır.'
     };
   } else {
     statusBadge = {
@@ -269,21 +269,21 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
           </span>
           <span className="text-xs text-slate-400">·</span>
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Frances Chung (1995) & SAMBA Kılavuzları
+            Modified PADSS (Chung 1995; Marshall &amp; Chung 1999) · SAMBA &amp; ASA 2013
           </span>
         </div>
 
         <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          PADSS (Post-Anesthetic Discharge Scoring System)
+          Modified PADSS (Post-Anesthetic Discharge Scoring System)
         </h3>
 
         <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-          Günübirlik ve ayaktan cerrahi operasyon geçiren hastaların <strong>hastaneden doğrudan eve güvenle taburcu edilebilmesini</strong> (Home-Readiness) değerlendiren 5 parametreli altın standart Faz 2 derlenme skoru.
+          Günübirlik ve ayaktan cerrahi operasyon geçiren hastaların <strong>hastaneden doğrudan eve güvenle taburcu edilebilmesini</strong> (Home-Readiness) değerlendiren 5 parametreli altın standart Faz 2 derlenme skoru. Güncel <strong>Modified PADSS, SAMBA ve ASA 2013</strong> kılavuzlarına göre zorunlu su içme testi kaldırılmış, miksiyon şartı ise yalnızca yüksek riskli hastalarla sınırlandırılmıştır.
         </p>
 
         <div className="pt-1 flex flex-wrap items-center gap-2">
           <a
-            href="https://pubmed.ncbi.nlm.nih.gov/8534468/"
+            href="https://pubmed.ncbi.nlm.nih.gov/10071996/"
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all cursor-pointer ${
@@ -293,7 +293,7 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
             }`}
           >
             <BookOpen className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
-            <span>Kaynak: PubMed (Chung 1995: PMID 8534468)</span>
+            <span>Modified PADSS (Marshall &amp; Chung 1999 · PMID 10071996)</span>
             <ExternalLink className="w-3 h-3 text-slate-400" />
           </a>
 
@@ -528,28 +528,28 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
             <div>
               <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold mb-1">
                 <Droplets className="w-4 h-4 shrink-0" />
-                <span>2. Spontan İdrar Çıkışı (Miksiyon)</span>
+                <span>2. Seçici Miksiyon &amp; Mesane POCUS (Yalnızca Yüksek Risk)</span>
               </div>
               <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">
-                Spinal/epidural blok, kasık fıtığı, pelvik veya rektal cerrahilerde taburculuk öncesi spontan idrar çıkışı görülmelidir (üriner retansiyon riski).
+                Her hastada koşulsuz idrar yapma şartı <strong>yoktur</strong>. Spontan miksiyon yalnızca <strong>üriner retansiyon açısından yüksek riskli</strong> hastalarda (nöroaksiyel blok, pelvik/ürolojik/anorektal/herni cerrahisi, retansiyon öyküsü) aranır. Henüz idrar yapmamış yüksek riskli hastada <strong>mesane POCUS (USG)</strong> ile rezidüel hacim ölçülür (&lt; 300–400 mL ve semptomsuzsa acil başvuru talimatıyla taburculuk; ≥ 500–600 mL ise kateterizasyon).
               </p>
             </div>
-            <span className="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-300 mt-2">✓ Spinal & Pelviste Zorunlu</span>
+            <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-300 mt-2">✓ Yalnızca Yüksek Risklide · Mesane POCUS</span>
           </div>
 
           <div className={`p-3.5 rounded-xl border flex flex-col justify-between ${
-            isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
+            isDark ? 'bg-amber-950/15 border-amber-500/30' : 'bg-amber-50/70 border-amber-200'
           }`}>
             <div>
-              <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold mb-1">
+              <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300 font-bold mb-1">
                 <Coffee className="w-4 h-4 shrink-0" />
-                <span>3. Oral Sıvı Toleransı</span>
+                <span>3. Zorunlu Su İçme Testi Kaldırıldı!</span>
               </div>
-              <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">
-                Hastanın bulantı veya kusma hissetmeksizin bir miktar su içebildiği doğrulanmalıdır. Aşırı sıvı içmeye zorlanmamalı, tolerans yeterlidir.
+              <p className="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                <strong>Modified PADSS (1999), SAMBA ve ASA 2013</strong> kılavuzlarında taburculuk öncesi zorunlu oral sıvı alımı (su içme testi) <strong>kaldırılmıştır</strong>. Hastayı zorla sıvı içmeye zorlamak <strong>PONV (bulantı-kusma) sıklığını artırır</strong> ve taburculuğu gereksiz yere geciktirir; oral alım yalnızca hastanın kendi isteğiyle desteklenir.
               </p>
             </div>
-            <span className="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-300 mt-2">✓ Hidrasyon Güvenliği</span>
+            <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-300 mt-2">✗ Zorunlu Oral Sıvı Şartı YOK</span>
           </div>
 
           <div className={`p-3.5 rounded-xl border flex flex-col justify-between ${
@@ -558,13 +558,13 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
             <div>
               <div className="flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold mb-1">
                 <FileText className="w-4 h-4 shrink-0" />
-                <span>4. 24 Saatlik Yasal & Güvenlik Kısıtlamaları</span>
+                <span>4. 24 Saatlik Yasal &amp; Güvenlik Kısıtlamaları</span>
               </div>
               <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">
                 İlk 24 saat: Araç veya motorlu taşıt kullanmama, karmaşık makine çalıştırmama, hukuki belge imzalamama ve alkol almama yazılı olarak teslim edilmelidir.
               </p>
             </div>
-            <span className="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-300 mt-2">✓ Yazılı Onam & İkaz</span>
+            <span className="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-300 mt-2">✓ Yazılı Onam &amp; İkaz</span>
           </div>
 
           <div className={`p-3.5 rounded-xl border flex flex-col justify-between ${
@@ -576,7 +576,7 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
                 <span>5. 24 Saat Acil İletişim Hattı</span>
               </div>
               <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">
-                Gece boyunca evde gelişebilecek beklenmeyen kanama, nefes darlığı veya kontrolsüz ağrıda doğrudan ulaşılabilecek klinik/nöbetçi hekim dahili numarası verilmelidir.
+                Gece boyunca evde gelişebilecek beklenmeyen kanama, nefes darlığı, 6–8 saatte idrar yapamama veya kontrolsüz ağrıda doğrudan ulaşılabilecek klinik/nöbetçi hekim dahili numarası verilmelidir.
               </p>
             </div>
             <span className="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-300 mt-2">✓ 7/24 Klinik İletişim</span>
@@ -599,13 +599,13 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
         </div>
       </div>
 
-      {/* 4. Comparison Table: Modifiye Aldrete vs PADSS */}
+      {/* 4. Comparison Table: Modifiye Aldrete vs Modified PADSS */}
       <div className={`p-5 rounded-2xl border space-y-3 ${
         isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50/80 border-slate-200'
       }`}>
         <h4 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
           <ArrowRight className="w-4 h-4 text-teal-500" />
-          <span>Derlenme Fazları Karşılaştırma Matrisi (Faz 1 Aldrete vs Faz 2 PADSS)</span>
+          <span>Derlenme Fazları Karşılaştırma Matrisi (Faz 1 Aldrete vs Faz 2 Modified PADSS)</span>
         </h4>
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
@@ -613,7 +613,7 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
               <tr className={`border-b ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
                 <th className="py-2 px-3 font-semibold">Özellik</th>
                 <th className="py-2 px-3 font-semibold text-emerald-600 dark:text-emerald-400">Modifiye Aldrete Skoru</th>
-                <th className="py-2 px-3 font-semibold text-teal-600 dark:text-teal-400">PADSS Skoru</th>
+                <th className="py-2 px-3 font-semibold text-teal-600 dark:text-teal-400">Modified PADSS Skoru</th>
               </tr>
             </thead>
             <tbody className={`divide-y ${isDark ? 'divide-slate-800/60 text-slate-300' : 'divide-slate-200 text-slate-700'}`}>
@@ -639,27 +639,38 @@ export const PADSSInfographic: React.FC<PADSSInfographicProps> = ({ isDark, onBa
               </tr>
               <tr>
                 <td className="py-2.5 px-3 font-medium text-slate-400">Ek Güvenlik Gereksinimleri</td>
-                <td className="py-2.5 px-3">TOF &ge; 0.9, Normotermi &gt; 36°C</td>
-                <td className="py-2.5 px-3">Refakatçi, Oral sıvı toleransı, Spontan miksiyon</td>
+                <td className="py-2.5 px-3">TOF &ge; 0.90, Normotermi &ge; 36.0°C, ağrı/PONV/kanama kontrolü</td>
+                <td className="py-2.5 px-3">Refakatçi (mutlak), yüksek risklilerde miksiyon / mesane POCUS (zorunlu su içme testi YOK)</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* 5. Historical & Academic Reference Footnote */}
-      <div className={`p-4 rounded-xl border text-xs space-y-2 ${
+      {/* 5. Historical & Academic Reference Footnote: Orijinal PADSS vs Modified PADSS */}
+      <div className={`p-4 rounded-xl border text-xs space-y-2.5 ${
         isDark ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
       }`}>
         <div className="flex items-center gap-2 font-bold text-slate-700 dark:text-slate-300">
           <BookOpen className="w-4 h-4 text-teal-500" />
-          <span>Literatür ve Kanıt Temeli</span>
+          <span>Orijinal PADSS (1995) vs Modified PADSS (1999) — Evrim ve Kanıt Temeli</span>
         </div>
         <p className="leading-relaxed">
-          Dr. Frances Chung ve meslektaşları tarafından 1995 yılında geliştirilen <strong>PADSS (Post-Anesthetic Discharge Scoring System)</strong>, ambulatuvar cerrahide eve taburculuk için sübjektif değerlendirmelerin yerine objektif ve standardize kriterler getirmiştir. Society for Ambulatory Anesthesia (SAMBA) ve uluslararası günübirlik cerrahi kılavuzları tarafından Faz 2 derlenme standardı olarak tavsiye edilmektedir.
+          <strong>Orijinal PADSS (Chung et al., 1995):</strong> Dr. Frances Chung tarafından geliştirilen ilk 5 parametreli sistemde <em>“Intake &amp; Output”</em> (oral sıvı alımı ve spontan idrar çıkışı) zorunlu bir kriter olarak yer alıyor, ağrı ve bulantı/kusma ise tek başlık altında puanlanıyordu.
         </p>
-        <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800">
-          Referans: <em>Chung F, Chan VW, Ong D. A post-anesthetic discharge scoring system for home readiness after ambulatory surgery. Journal of Clinical Anesthesia. 1995 Sep;7(6):500-506. PMID: 8534468. doi: 10.1016/0952-8180(95)00130-a.</em>
+        <p className="leading-relaxed">
+          <strong>Modified PADSS (Marshall &amp; Chung, 1999):</strong> Prospektif çalışmalar zorunlu su içme testinin PONV’u artırdığını ve düşük riskli hastalarda koşulsuz miksiyon beklemenin taburculuğu gereksiz uzattığını gösterdi. Bunun üzerine <strong>Intake/Output kriteri tamamen çıkarıldı</strong>; <strong>Ağrı</strong> ve <strong>PONV</strong> ayrı ayrı puanlanarak bugünkü 5 parametreli Modified PADSS oluşturuldu. Bu yaklaşım <strong>SAMBA</strong> ve <strong>ASA 2013 Postanestezik Bakım Kılavuzu</strong> tarafından da benimsenmiştir.
+        </p>
+        <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1">
+          <div>
+            1. <em>Chung F, Chan VW, Ong D. A post-anesthetic discharge scoring system for home readiness after ambulatory surgery. J Clin Anesth. 1995;7(6):500-506. PMID: 8534468.</em>
+          </div>
+          <div>
+            2. <em>Marshall SI, Chung F. Discharge criteria and complications after ambulatory surgery. Anesth Analg. 1999;88(3):508-517. PMID: 10071996.</em>
+          </div>
+          <div>
+            3. <em>Apfelbaum JL, Silverstein JH, Chung FF, et al. Practice guidelines for postanesthetic care: an updated report by the ASA Task Force on Postanesthetic Care. Anesthesiology. 2013;118(2):291-307.</em>
+          </div>
         </div>
       </div>
     </div>

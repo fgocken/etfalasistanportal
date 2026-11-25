@@ -153,7 +153,7 @@ const STRATEGIES: StrategyDetail[] = [
         phase: '4. Gerçek Kanamanın Birebir Replasmanı',
         action: 'Aspiratör + Spanç ölçümüne göre 1:1 (Kolloid/Kan) veya 1:1.5 Kristaloid',
         detail:
-          'Prophylactic sıvı bolusu yapılmaz. Yalnızca objektif olarak ölçülen kan kaybı yerine konur. İdrar çıkışı < 0.5 mL/kg/sa olması tek başına (laktat normalse ve taşikardi yoksa) sıvı verme endikasyonu sayılmaz.'
+          'Profilaktik sıvı bolusu yapılmaz. Yalnızca objektif olarak ölçülen kan kaybı yerine konur. İdrar çıkışı < 0.5 mL/kg/sa olması tek başına (laktat normalse ve taşikardi yoksa) sıvı verme endikasyonu sayılmaz.'
       },
       {
         phase: '5. Güvenlik Sınırı & Eskalasyon Kriteri',
@@ -173,7 +173,7 @@ const STRATEGIES: StrategyDetail[] = [
       'Böbrek yetmezliği, sepsis, açık pankreatik/hepatik cerrahi veya yüksek kanama riski olan vakalarda tek başına uygulanması tehlikelidir.'
     ],
     evidenceNote:
-      '2018 RELIEF çalışması sonrası ERAS ve POQI kılavuzları katı "restriktif" tanımını terk ederek "ılımlı sıfır-denge (tipik 1–2 L pozitif dengeyi aşmayan)" veya yüksek riskli vakalarda GDFT kullanımına evrilmiştir.'
+      '2018 RELIEF çalışması sonrası ERAS ve POQI kılavuzları katı "restriktif" rejimi terk ederek düşük–orta riskli majör cerrahilerde "ılımlı liberal (moderately liberal; +1–2 L pozitif denge)" stratejisine, yüksek riskli vakalarda ise bireyselleştirilmiş GDFT kullanımına evrilmiştir.'
   },
   {
     id: 'gdft',
@@ -191,7 +191,7 @@ const STRATEGIES: StrategyDetail[] = [
     activeBtnClass:
       'bg-emerald-600 text-white border-emerald-600 shadow-xs',
     physiologyPrinciple:
-      'Frank–Starling mekanizması: Bir hasta ancak ventrikül eğrisinin dik (önyük-bağımlı) kısmındaysa verilen sıvı atım hacmini (SV) ve dokuya oksijen sunumunu (DO2) artırır. Eğrinin düz (plato) kısmında verilen her ekstra mL sıvı sadece doku ödemine yol açar.',
+      'Frank–Starling mekanizması: Bir hasta ancak ventrikül eğrisinin dik (önyük-bağımlı) kısmındaysa verilen sıvı atım hacmini (SV) ve dokuya oksijen sunumunu (DO₂) artırır. Eğrinin düz (plato) kısmında verilen her ekstra mL sıvı sadece doku ödemine yol açar.',
     intraopSteps: [
       {
         phase: '1. Minimal Bazal İdame + İnvaziv/Dinamik Kurulum',
@@ -201,9 +201,9 @@ const STRATEGIES: StrategyDetail[] = [
       },
       {
         phase: '2. Dinamik İndeks Geçerlilik Kontrolü',
-        action: 'PPV/SVV yorumlaması için 5 şart doğrulanır',
+        action: 'PPV/SVV yorumlaması için 6 temel ön koşul doğrulanır',
         detail:
-          'Sinüs ritmi (AF olmamalı), tam kontrollü mekanik ventilasyon (VT ≥ 8 mL/kg ideal ağırlık; düşük TV ise mini-bolus testi), kapalı toraks ve normal karın içi basınç (laparoskopide PPV/SVV eşiği ~%15–17’ye yükselir).'
+          '(1) Sinüs ritmi (AF/sık ektopi olmamalı), (2) Tam kontrollü mekanik ventilasyon ve VT ≥ 8 mL/kg ideal ağırlık (spontan solunum olmamalı; düşük VT’de Tidal Volüm Testi veya mini-bolus kullanılır), (3) Kalp hızı / solunum sayısı oranı (KH/SS, HR/RR) > 3.6, (4) Sağ ventrikül (RV) yetmezliği olmaması (RV yetmezliği yanlış pozitif PPV’nin başlıca nedenidir!), (5) Kapalı toraks ve (6) Normal karın içi basınç (laparoskopide PPV/SVV eşiği ~%15–17’ye yükselir).'
       },
       {
         phase: '3. Sıvı Yükleme (Fluid Challenge) Kararı',
@@ -218,10 +218,10 @@ const STRATEGIES: StrategyDetail[] = [
           'Bolus sonrası SV ≥ %10 artmışsa hasta hâlâ volüm yanıtlıdır; PPV/SVV < %12 olana veya SV artışı < %10 platoya ulaşana kadar algoritma tekrarlanır. ΔSV < %10 ise hasta maksimum doluluktadır, sıvı verilmez.'
       },
       {
-        phase: '5. Vazopresör & İnotrop Entegrasyonu',
-        action: 'Volüm yanıtsız + MAP < 65 → Vazopresör · CI < 2.2–2.5 → İnotrop',
+        phase: '5. Vazopresör & Seçili İnotrop Entegrasyonu',
+        action: 'Övolemik MAP < 65 → Vazopresör · Rutin İnotrop ÖNERİLMEZ',
         detail:
-          'Önyük optimize edilmiş (ΔSV < %10) ancak MAP < 65 mmHg devam ediyorsa Noradrenalin/Fenilefrin başlanır. Kardiyak indeks düşük (< 2.2–2.5 L/dk/m²) ve laktat yükseliyorsa düşük doz Dobutamin ile DO2I (> 500–600 mL/dk/m²) hedeflenir.'
+          'Önyük optimize edilmiş (ΔSV < %10) ancak MAP < 65 mmHg devam ediyorsa Noradrenalin/Fenilefrin başlanır. Eski "supranormal DO₂I (> 500–600 mL/dk/m²)" hedefiyle rutin dobutamin infüzyonu artık önerilmemektedir (OPTIMISE II: 30 günlük enfeksiyonu azaltmadan 24 saatlik kardiyak aritmileri anlamlı artırmıştır). İnotrop yalnızca belgelenmiş düşük kardiyak debi (CI < 2.2 L/dk/m²) ve doku hipoperfüzyonu (artan laktat, düşük ScvO₂) varlığında seçili olgularda eklenir.'
       }
     ],
     indications: [
@@ -230,12 +230,12 @@ const STRATEGIES: StrategyDetail[] = [
       'Tahmini kan kaybı > 500–1000 mL veya süresi > 2–3 saat olan tüm majör intraabdominal/ortopedik ameliyatlar'
     ],
     risksAndPitfalls: [
-      'Aritmi (Atriyal fibrilasyon), spontan solunum, açık toraks veya yüksek PEEP altında PPV ve SVV değerleri güvenilmezdir (yanlış pozitif/negatif).',
+      'Aritmi (Atriyal fibrilasyon), spontan solunum, sağ ventrikül (RV) yetmezliği, KH/SS ≤ 3.6, açık toraks veya yüksek PEEP altında PPV ve SVV değerleri güvenilmezdir (yanlış pozitif/negatif).',
       'Pnömoperiton (laparoskopi/robotik cerrahi) ve Trendelenburg pozisyonunda intraabdominal basınç artışı PPV/SVV bazalını yukarı çeker.',
-      'OPTIMISE II (BMJ 2024): Düşük riskli, kısa süreli ERAS hastalarında rutin ileri kardiyak debi monitörü + inotrop kullanımı ek klinik fayda göstermemiştir; invaziv maliyet/risk dengesi gözetilmelidir.'
+      'OPTIMISE II (BMJ 2024 · n=2.498 yüksek riskli majör GİS cerrahisi): Rutin kalp debisi (CO) rehberli sıvı + sabit düşük doz inotrop (dobutamin/dopeksamin) protokolü 30 günlük enfeksiyonu azaltmamış (%23.2 vs %22.7; aOR 1.03, P=0.81), buna karşın 24 saatlik akut kardiyak olayları/başlıca taşiaritmileri anlamlı artırmıştır (%3.0 vs %1.7; aOR 1.82, P=0.03; aritmilerde ~2.5 kat artış). Rutin inotrop eklenmesi önerilmez.'
     ],
     evidenceNote:
-      'POQI (Perioperative Quality Initiative), ERAS Society ve FEDORA (BJA 2018) verileri yüksek riskli hastada ve majör cerrahide GDFT’nin postoperatif komplikasyonları, ileusu, ABH’yi ve hastane yatış süresini azalttığını doğrulamaktadır.'
+      'POQI (Perioperative Quality Initiative 2024), ERAS Society ve FEDORA (BJA 2018) verileri yüksek riskli hastada bireyselleştirilmiş GDFT’yi desteklerken, OPTIMISE II (BMJ 2024) rutin düşük doz inotrop (dobutamin) eklenmesinin yüksek riskli GİS cerrahisinde enfeksiyonu azaltmadığını ve aritmi riskini artırdığını göstermiştir.'
   }
 ];
 
@@ -252,7 +252,7 @@ const COMPARISON_TABLE: ComparisonRow[] = [
     parameter: '1. Temel Felsefe & Amaç',
     liberal: 'Tüm açlık, idame ve doku travması kayıplarını formüle göre eksiksiz yerine koymak',
     restrictive: 'İyatrojenik ödemi önlemek için bazal kayıp + kanama dışında sıvı vermemek (0 kg denge)',
-    gdft: 'Kişiye özel dinamik monitörizasyonla Frank–Starling eğrisi tepesinde doku DO2 optimizasyonu',
+    gdft: 'Kişiye özel dinamik monitörizasyonla Frank–Starling eğrisi tepesinde doku DO₂ optimizasyonu',
     clinicalNote: 'U-şekilli risk eğrisinin dip noktası (normovolemi) her hastada farklıdır.'
   },
   {
@@ -288,7 +288,7 @@ const COMPARISON_TABLE: ComparisonRow[] = [
     liberal: 'Dengeli kristaloid (RL, Plazma-Lyte, İsolyte-S); %0.9 NaCl hiperkloremik asidoz riski taşır',
     restrictive: 'Yalnızca dengeli izotonik kristaloid; büyük kanamada kan ürünü/albümin',
     gdft: 'Bazalde dengeli kristaloid; boluslarda dengeli kristaloid (hipoalbüminemide %5 albümin seçeneği)',
-    clinicalNote: 'Nişasta solüsyonları (HES) nefrotoksisite nedeniyle perioperatif rutinden çıkarılmıştır.'
+    clinicalNote: 'HES (hidroksietil nişasta): Sepsis, YBÜ ve böbrek yetmezliğinde KONTRENDİKEDİR (6S, CHEST; FDA Black Box uyarısı ve EMA ruhsat askıya alma).'
   },
   {
     parameter: '7. Anestezi Kaynaklı Hipotansiyon Tedavisi',
@@ -322,7 +322,7 @@ const COMPARISON_TABLE: ComparisonRow[] = [
     parameter: '11. Başlıca Risk Profili',
     liberal: 'Glikokaliks hasarı, bağırsak ödemi, uzamış ileus, anastomoz kaçağı, pulmoner ödem',
     restrictive: 'Renal hipoperfüzyon, Akut Böbrek Hasarı (ABH %8.6 vs %5.0), cerrahi alan enfeksiyonu',
-    gdft: 'Monitör bağımlı yanlış yorumlama (AF, düşük TV, pnömoperiton), arteriyel/maliyet yükü',
+    gdft: 'Monitör bağımlı yanlış yorumlama (AF, RV yetmezliği, düşük TV, pnömoperiton), rutin inotropta aritmi riski',
     clinicalNote: 'Aşırı uçlar (aşırı kuru veya aşırı ıslak) mortalite ve morbiditeyi artırır.'
   },
   {
@@ -330,7 +330,7 @@ const COMPARISON_TABLE: ComparisonRow[] = [
     liberal: 'Acil dehidrate hastalar, belirgin preop kayıp, kısa minör cerrahiler',
     restrictive: 'ERAS düşük/orta riskli elektif kolorektal cerrahi, akciğer rezeksiyonları',
     gdft: 'Majör yüksek riskli cerrahi, ASA III–IV hastalar, yüksek kanama/sıvı şifti beklentisi',
-    clinicalNote: 'ERAS & POQI: Düşük riskte ılımlı sıfır-denge, yüksek riskte GDFT önerilir.'
+    clinicalNote: 'RELIEF sonrası ERAS & POQI: Düşük–orta riskte ılımlı liberal (+1–2 L pozitif denge), yüksek riskte GDFT önerilir.'
   }
 ];
 
@@ -347,13 +347,13 @@ const SPECIAL_SCENARIOS = [
   },
   {
     title: 'Atriyal Fibrilasyon / Spontan Solunum',
-    badge: 'PPV/SVV Kontrendike',
-    text: 'PPV ve SVV atım-atım ventrikül doluş değişkenliğini kullandığından aritmide veya spontan solunum eforunda geçersizdir. Bu durumda Pasif Bacak Kaldırma (PLR) testi, End-Ekspiratuar Oklüzyon Testi (15 sn) veya POCUS ile LVOT VTI / VCI değişkenliği kullanılır.'
+    badge: 'PPV/SVV Geçersiz',
+    text: 'PPV ve SVV atım-atım ventrikül doluş değişkenliğini kullandığından aritmide veya spontan solunum eforunda geçersizdir. Bu durumda Pasif Bacak Kaldırma (PLR) testi veya POCUS ile LVOT VTI (mini-fluid challenge) kullanılır. Dikkat: 15 sn Ekspiryum Sonu Oklüzyon Testi (EEOT) spontan solunumda GEÇERSİZDİR; AF’de güvenilir olabilmesi için hastanın tam kontrollü mekanik ventilasyon altında olması ve 15 sn boyunca hiç solunum eforu göstermemesi şarttır.'
   },
   {
     title: 'Sıvı Seçimi: Dengeli Kristaloid vs %0.9 NaCl vs Kolloid',
-    badge: 'SALT-ED / SMART / Kılavuz',
-    text: 'Yüksek miktarda %0.9 NaCl (Cl⁻ 154 mEq/L) hiperkloremik metabolik asidoz, afferent renal arteriyol vazokonstriksiyonu ve ABH riskini artırır. İlk tercih dengeli kristaloidlerdir (Ringer Laktat, Plazma-Lyte). Sentetik nişastalar (HES) ABH ve koagülopati riski nedeniyle rutin kullanılmaz; hipoalbüminemik majör cerrahide %4–5 Albümin düşünülebilir.'
+    badge: 'SALT-ED / SMART / 6S / CHEST',
+    text: 'Yüksek miktarda %0.9 NaCl (Cl⁻ 154 mEq/L) hiperkloremik metabolik asidoz, afferent renal arteriyol vazokonstriksiyonu ve ABH riskini artırır. İlk tercih dengeli kristaloidlerdir (Ringer Laktat, Plazma-Lyte). Hidroksietil nişastalar (HES) sepsis, YBÜ ve böbrek yetmezliğinde ABH, renal replasman ve mortalite artışı nedeniyle KONTRENDİKEDİR (6S ve CHEST çalışmaları; FDA Black Box uyarısı ve EMA pazarlama izni askıya alma kararı). Hipoalbüminemik majör cerrahide %4–5 Albümin düşünülebilir.'
   }
 ];
 
@@ -385,26 +385,35 @@ const REFERENCES = [
     type: 'Kılavuz',
     citation:
       'Gustafsson UO, Scott MJ, Hubner M, et al. Guidelines for Perioperative Care in Elective Colorectal Surgery: Enhanced Recovery After Surgery (ERAS®) Society Recommendations: 2018. World J Surg. 2019;43(3):659-695.',
-    note: 'ERAS sıfır-denge ("near-zero fluid balance"), preop berrak sıvı/karbonhidrat ve yüksek riskte GDFT önerileri.',
+    note: 'ERAS preop berrak sıvı/karbonhidrat yükleme, aşırı sıvıdan kaçınma ve yüksek riskte GDFT önerileri.',
     url: 'https://pubmed.ncbi.nlm.nih.gov/30426190/'
   },
   {
     id: 5,
-    type: 'Konsensus',
+    type: 'Klinik Derleme',
     citation:
-      'Miller TE, Myles PS; Perioperative Quality Initiative (POQI) Workgroup. Perioperative Fluid Therapy for Major Surgery. Anesthesiology / Br J Anaesth (POQI Consensus). 2019;130(5):825-832.',
-    note: 'Düşük riskli vakalarda ılımlı liberal/övolemik yaklaşım, yüksek riskli majör cerrahide GDFT algoritması.',
-    url: 'https://pubmed.ncbi.nlm.nih.gov/30985319/'
+      'Miller TE, Myles PS. Perioperative Fluid Therapy for Major Surgery. Anesthesiology. 2019;130(5):825-832.',
+    note: 'RELIEF sonrası majör cerrahide düşük–orta riskli olgularda "ılımlı liberal (+1–2 L pozitif denge)" stratejisi, yüksek riskli olgularda GDFT çerçevesi.',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/30789364/'
   },
   {
     id: 6,
-    type: 'Trial (2024)',
+    type: 'Konsensus (2024)',
     citation:
-      'Pearse RM, et al. (OPTIMISE II Investigators). Effect of cardiac output-guided haemodynamic therapy on postoperative infection and mortality (OPTIMISE II). BMJ. 2024;385:e078671.',
-    note: 'Modern ERAS çağında düşük-orta riskli majör GIS cerrahisinde rutin kalp debisi-güdümlü inotrop+sıvı algoritmasının sınırlarını ortaya koyan büyük RKÇ.'
+      'Ostermann M, Auzinger G, Grocott M, et al.; PeriOperative Quality Initiative (POQI) Investigators. Perioperative fluid management: evidence-based consensus recommendations from the international multidisciplinary PeriOperative Quality Initiative. Br J Anaesth. 2024;133(6):1263-1275.',
+    note: 'Uluslararası multidisipliner POQI uzlaşısı: bireyselleştirilmiş perioperatif sıvı yönetimi, sıvı toleransı ve organ spesifik öneriler.',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/39341776/'
   },
   {
     id: 7,
+    type: 'Landmark Trial (2024)',
+    citation:
+      'OPTIMISE II Trial Group (Edwards MR, Forbes G, MacDonald N, ..., Pearse RM). Cardiac output-guided haemodynamic therapy for patients undergoing major gastrointestinal surgery: OPTIMISE II randomised clinical trial. BMJ. 2024;387:e080439.',
+    note: '2.498 yüksek riskli (≥ 65 yaş, ASA ≥ II) majör GİS cerrahisi hastasında rutin CO-rehberli sıvı + düşük doz inotrop (dobutamin/dopeksamin) tedavisinin 30 günlük enfeksiyonu azaltmadığını (%23.2 vs %22.7; aOR 1.03, P=0.81) ve 24 saatlik akut kardiyak olayları/başlıca taşiaritmileri anlamlı artırdığını (%3.0 vs %1.7; aOR 1.82, P=0.03; aritmilerde ~2.5 kat artış) gösteren büyük çok merkezli RKÇ.',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/39626899/'
+  },
+  {
+    id: 8,
     type: 'Trial',
     citation:
       'Calvo-Vecino JM, Ripollés-Melchor J, Mythen MG, et al. Effect of goal-directed haemodynamic therapy on postoperative complications in low–moderate risk surgical patients: a multicentre randomised controlled trial (FEDORA). Br J Anaesth. 2018;120(4):734-744.',
@@ -412,11 +421,11 @@ const REFERENCES = [
     url: 'https://pubmed.ncbi.nlm.nih.gov/29576114/'
   },
   {
-    id: 8,
+    id: 9,
     type: 'Kılavuz',
     citation:
-      'NICE Clinical Guideline [CG174] / NG24: Intravenous fluid therapy in adults in hospital & ESAIC Perioperative Fasting / Haemodynamic Guidelines.',
-    note: 'Klinik değerlendirme, 5R yaklaşımı (Resuscitation, Routine maintenance, Replacement, Redistribution, Reassessment).'
+      'NICE Clinical Guideline [CG174]: Intravenous fluid therapy in adults in hospital (pediatrik: NICE Guideline [NG29]) & ESAIC Perioperative Fasting / Haemodynamic Guidelines.',
+    note: 'Erişkin (CG174) ve pediatrik (NG29) IV sıvı yönetimi; klinik değerlendirme ve 5R yaklaşımı (Resuscitation, Routine maintenance, Replacement, Redistribution, Reassessment).'
   }
 ];
 
@@ -845,7 +854,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
                 1–2 mL/kg/sa İdame + Tarama
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                Bazal SV, PPV ve SVV ölçülür. Sinüs ritmi ve VT ≥ 8 mL/kg doğrulanır.
+                Bazal SV, PPV ve SVV ölçülür. Sinüs ritmi, VT ≥ 8 mL/kg, KH/SS &gt; 3.6 ve RV yetmezliği olmadığı doğrulanır.
               </p>
             </div>
 
@@ -884,7 +893,7 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
                 Övolemik Hipotansiyon → NA
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                SV platoda ve MAP &lt; 65 mmHg ise Noradrenalin; CI &lt; 2.2 ise Dobutamin eklenir.
+                SV platoda ve MAP &lt; 65 mmHg ise Noradrenalin başlanır. Rutin inotrop verilmez (OPTIMISE II aritmi riski); yalnızca belgelenmiş düşük CI + hipoperfüzyonda seçili inotrop düşünülür.
               </p>
             </div>
           </div>
@@ -924,9 +933,9 @@ export const FluidManagementStrategiesInfographic: React.FC<FluidManagementStrat
         <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
           <strong>POQI &amp; ERAS Klinik Uzlaşısı:</strong> Sağlıklı bireylerde düşük–orta riskli elektif cerrahilerde aşırı
-          restriksiyondan kaçınılarak <strong>ılımlı övolemik denge (tipik 1–2 L pozitif dengeyi geçmeyen)</strong> hedeflenmelidir.
-          Majör yüksek riskli cerrahide (Whipple, hepatektomi, kolorektal kanser, ASA III–IV) ise <strong>Hedefe Yönelik Sıvı
-          Yönetimi (GDFT)</strong> standart bakım olarak benimsenmelidir.
+          restriksiyondan kaçınılarak <strong>ılımlı liberal / moderately liberal yaklaşım (tipik +1–2 L pozitif denge)</strong> hedeflenmelidir.
+          Majör yüksek riskli cerrahide (Whipple, hepatektomi, kolorektal kanser, ASA III–IV) ise <strong>bireyselleştirilmiş Hedefe Yönelik Sıvı
+          Yönetimi (GDFT; rutin inotrop eklenmeden)</strong> tercih edilmelidir.
         </div>
       </div>
 
