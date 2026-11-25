@@ -3,11 +3,10 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Kraniyotomi: Kranyal Sinir Mikrovasküler Dekompresyonu (MVD - Jannetta Prosedürü)
  * (Microvascular Decompression of Cranial Nerves: Trigeminal, Facial, Glossopharyngeal)
- * 
- * Jaffe (5th ed., Section II: Neurosurgery - Cranial Nerve Decompression, pp. 427-433),
- * American Association of Neurological Surgeons (AANS/CNS),
- * Society for Neuroscience in Anesthesiology and Critical Care (SNACC)
- * ve ERAS Society Nöroşirürji Kılavuzları referans alınarak yapılandırılmıştır.
+ *
+ * Jaffe (6th ed., 2020), PROSPECT Craniotomy Guidelines (Mestdagh et al., EJA 2023),
+ * 4th Consensus Guidelines for PONV (Gan et al., Anesth Analg 2020),
+ * AANS/CNS ve SNACC kılavuzları referans alınarak yapılandırılmıştır.
  */
 export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
   id: 'craniotomy-microvascular-decompression',
@@ -46,7 +45,7 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
       'Bipolar hassas mikronöroşirürjikal koagülasyon (perforatör damarlar yakılmamalıdır)',
       'Kemik diploik kanamalarında steril kemik mumu (Bone Wax) basılması',
       'Dural sinüs kenarı sızıntılarında Gelfoam, Surgicel veya FloSeal ile nazik kompresyon',
-      'Sinüs laserasyonunda cerrahi dural tamir, başın hafif indirilmesi ve venöz hava embolisini önlemek için alana serum fizyolojik doldurulması',
+      'Sinüs laserasyonunda cerrahi dural tamir, baş elevasyonunun azaltılması ve venöz hava embolisini önlemek için alana steril %0.9 NaCl doldurulması',
       'Teflon Keçe (Teflon Felt): Sinir ile damar arasına yerleştirilen implantın damar duvarını zedelemeyecek yumuşaklıkta olması'
     ]
   },
@@ -54,20 +53,20 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
-      'TIVA ŞARTTIR: İntraoperatif Nöromonitörizasyon (BAEP / ABR ve Fasiyal / Alt Kranyal Sinir Spontan-Tetiklenmiş EMG) kullanıldığından indüksiyon sonrasında KAS GEVŞETİCİ KESİNLİKLE KULLANILMAZ!'
+      'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI]): Arka çukur/vestibüler cerrahideki çok yüksek (%70-80) PONV riskini düşürmek, ideal serebellar gevşeme ve pürüzsüz uyanma sağlamak için ilk tercihtir',
+      'KAS GEVŞETİCİSİZ İDAME ŞARTTIR: Fasiyal / alt kranyal sinir EMG ve Lateral Spread Response (LSR) yanıtlarını ortadan kaldıran temel faktör NÖROMUSKÜLER BLOKERLERDİR (NMB); entübasyon sonrası kas gevşetici KESİNLİKLE tekrarlanmaz! (N₂O KESİNLİKLE KONTRENDİKEDİR)'
     ],
     alternative: [
-      'TIVA + Çok Düşük Doz Sevofluran (< 0.3 - 0.4 MAC): Yalnızca BAEP dalgalarını baskılamayacak ve EMG amplitüdünü bozmayacak mikro düzeyde'
+      'Düşük Doz Sevofluran (< 0.5 - 0.8 MAC) + Remifentanil İnfüzyonu (Kas Gevşeticisiz): BAEP ve kranyal sinir EMG/LSR volatil anesteziklere SON DERECE DİRENÇLİDİR (volatiller başlıca kortikal SSEP ve TcMEP\'i baskılar); ancak PONV riski ve serebral vazodilatasyon nedeniyle saf TIVA üstündür'
     ],
-    clinicalRationale: 'Arka çukur cerrahisinde kranyal sinir EMG\'si (LSR takibi) ve BAEP kayıtlarının güvenilirliği için entübasyon sonrası kas gevşetici kullanılmadan Propofol + Remifentanil TIVA idamesi altın standarttır. Lateral/park-bench pozisyonda boyun fleksiyonuna bağlı tüp katlanmasını önlemek için spiral telli (gerekirse glossofaringeal olgularda NIM elektrotlu) ETT ile kontrollü ventilasyon uygulanır.',
-    notes: 'MVD CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ: (1) KAS GEVŞETİCİSİZ TIVA İDAMESİ; (2) BAEP / İŞİTME MONİTÖRİZASYONU; (3) TRİGEMİNO-KARDİYAK VE VAGAL REFLEKS YÖNETİMİ; (4) PÜRÜZSÜZ UYANMA VE ARKA ÇUKUR KANAMASI ÖNLEMİ.',
+    clinicalRationale: 'MVD cerrahisinde kranyal sinir EMG ve LSR kayıtları nöromusküler blokerler (NMB) tarafından bloke edildiğinden entübasyon sonrası kas gevşeticisiz idame zorunludur. BAEP ve EMG/LSR volatil anesteziklere oldukça dirençli olmakla birlikte, arka çukur cerrahisindeki %70-80\'lik PONV riskini en aza indirmek, serebellar gevşemeyi optimize etmek ve (kullanılırsa) kortikal SSEP/TcMEP\'i korumak için Propofol + Remifentanil TIVA altın standarttır; VAE ve pnömosefali riski nedeniyle N₂O kesinlikle kontrendikedir.',
+    notes: 'MVD CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ: (1) NMB\'siz TIVA idamesi (EMG/LSR\'yi ortadan kaldıran NMB\'dir; BAEP ve EMG volatillere dirençlidir); (2) BAEP / işitme monitörizasyonu ve retraktör uyarısı; (3) Trigemino-kardiyak / vagal refleks yönetimi (CN IX/X üzerine direkt Lidokain damlatılmaz); (4) N₂O yasağı ve tam VAE acil tedavi algoritması; (5) Pürüzsüz uyanma, agresif çoklu PONV profilaksisi ve taze arka çukurda Deksketoprofen/Tramadol yasağı.',
     rulesTitle: 'MVD CERRAHİSİNDE TEMEL ANESTEZİ İLKELERİ',
     indispensableRules: [
       {
         number: 1,
-        title: 'KAS GEVŞETİCİSİZ TIVA İDAMESİ (SERBEST EMG VE LSR TAKİBİ)',
-        content: 'Hemifasiyal spazm (CN VII) ve trigeminal nevralji (CN V) cerrahisinde Lateral Spread Response (LSR) kaybolmasını ve sinir irritasyonunu yakalamak için serbest/tetiklenmiş EMG kullanılır. Entübasyondan sonra kas gevşetici KESİNLİKLE yapılmamalı, Propofol + Remifentanil TIVA sürdürülmelidir.'
+        title: 'KAS GEVŞETİCİSİZ TIVA İDAMESİ VE DOĞRU NÖROFİZYOLOJİ (EMG / LSR / BAEP)',
+        content: 'BAEP ve kranyal sinir EMG/LSR yanıtları volatil anesteziklere SON DERECE DİRENÇLİDİR; EMG ve LSR\'yi ortadan kaldıran asıl ajan NÖROMUSKÜLER BLOKERLERDİR (NMB). Volatil ajanlar esas olarak kortikal SSEP ve TcMEP\'i baskılar. Entübasyon sonrası kas gevşetici KESİNLİKLE yapılmamalı, kantitatif TOF oranı ≥ 0.90 doğrulanmalı ve yüksek PONV riski nedeniyle Propofol + Remifentanil TIVA tercih edilmelidir.'
       },
       {
         number: 2,
@@ -77,12 +76,17 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
       {
         number: 3,
         title: 'TRİGEMİNO-KARDİYAK VE GLOSOFARİNGEAL-VAGAL REFLEKS (ANİ ASİSTOLİ)',
-        content: 'CN V, IX veya X köklerinin cerrahi manipülasyonu saniyeler içinde şiddetli vagal bradikardi, derin hipotansiyon veya ani ASİSTOLİYE (Trigemino-kardiyak refleks) yol açabilir! İlk müdahale cerrahın manevrayı DERHAL durdurmasıdır; yanıt vermezse IV Atropin (0.5-1 mg) uygulanır.'
+        content: 'CN V, IX veya X köklerinin manipülasyonu saniyeler içinde şiddetli bradikardi, hipotansiyon veya ani ASİSTOLİYE yol açabilir. İlk ve en etkili müdahale cerrahın manevrayı DERHAL durdurmasıdır; yanıt vermezse IV Atropin (0.5-1 mg) uygulanır. CN IX/X üzerine doğrudan %1 Lidokain damlatılması vokal kord paralizisi ve aspirasyon riski doğurduğundan UYGULANMAZ!'
       },
       {
         number: 4,
-        title: 'PÜRÜZSÜZ UYANMA VE ARKA ÇUKUR HEMATOMASINDAN KORUNMA',
-        content: 'Dar ve rijit arka çukur kompartmanında uyanma sırasındaki öksürük veya hipertansiyon beyin sapı basısı yapan ölümcül hematoma neden olur (Remifentanil/Lidokain ile yumuşak ekstübasyon). Postoperatif dönemde PONV profilaksisi ve alt kranyal sinir muayenesi sağlanır.'
+        title: 'N₂O KESİN YASAĞI VE VENÖZ HAVA EMBOLİSİ (VAE) ACİL ALGORİTMASI',
+        content: 'Dural sinüs (Sigmoideus/Transversus) ve emissary ven komşuluğu nedeniyle N₂O KESİNLİKLE KONTRENDİKEDİR. Ani EtCO2 düşüşü veya Doppler "mill-wheel" sesinde: Cerrahı uyar, sahayı SF ile doldur + kemik mumu bas, %100 O₂ ver, baş elevasyonunu düşür (mümkünse sol lateral/Durant), CVC varsa hava aspire et, vazopressör başla.'
+      },
+      {
+        number: 5,
+        title: 'PÜRÜZSÜZ UYANMA, ÇOKLU PONV PROFİLAKSİSİ VE ARKA ÇUKUR HEMATOMU ÖNLEMİ',
+        content: 'Dar arka çukur kompartmanında uyanmada öksürük, kusma veya hipertansiyon ölümcül beyin sapı basısı yapan hematoma yol açar. 2020 PONV Kılavuzuna uygun TIVA + Deksametazon + Ondansetron + Aprepitant uygulanır; taze arka çukur hematom riski nedeniyle rutin IV Deksketoprofen ve yüksek PONV riski nedeniyle Tramadol KESİNLİKLE KULLANILMAZ.'
       }
     ]
   },
@@ -104,7 +108,7 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
     laboratoryAndTests: [
       'Kan Grubu, Antikor Tarama ve 2 Ünite ES Cross-Match teyidi.',
       'Serum Elektrolitleri: Özellikle Sodyum (Na+) seviyesi (Karbamazepin ve Okskarbazepin kullanan olgularda ilaca bağlı hiponatremi sık görülür; intraoperatif beyin ödemi riskini artırır!).',
-      'Tam Kan Sayımı (Karbamazepine bağlı agranülositoz/trombositopeni kontrolü) ve Karaciğer Enzimleri.',
+      'Tam Kan Sayımı (Karbamazepine bağlı agranülositoz/trombositopeni kontrolü), Kan Glukozu ve Karaciğer Enzimleri.',
       'Koagülasyon Paneli (PT/INR, aPTT, Fibrinojen).',
       'Preoperatif Odyometri Raporu ve Ameliyathane Nöronavigasyon İstasyonuna Yüklenmiş MRG.'
     ]
@@ -113,17 +117,18 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'İnvaziv Arter Basınç Monitörizasyonu (A-Line) — Kalp ve Foramen Monro / Dış Kulak Yolu Seviyesinde Sıfırlanmış: Anestezi indüksiyonu ÖNCESİ lokal anesteziyle takılmalıdır. CN V ve CN IX/X manipülasyonundaki ani kardiyak arrest ve tansiyon çöküşlerini saniyelik yakalamak için zorunludur.',
+      'İnvaziv Arter Basınç Monitörizasyonu (A-Line) — Dış Kulak Yolu (Tragus / Willis Poligonu) Seviyesinde Sıfırlanmış: Anestezi indüksiyonu ÖNCESİ lokal anesteziyle takılmalıdır. Doğru CPP izlemi ve CN V / CN IX-X manipülasyonundaki ani bradikardi/tansiyon çöküşlerini saniyelik yakalamak için zorunludur.',
       'Beyin Sapı İşitsel Uyarılmış Potansiyelleri (BAEP / ABR): İşitme sinirinin (CN VIII) korunmasında altın standart. Dalga I (akustik sinir), Dalga III (koklear nükleus/superior oliver kompleks) ve Dalga V (inferior kollikulus) izlenir. Dalga V latansında > 1.0 ms gecikme veya Dalga V amplitüdünde > %50 düşüş geri dönüşümsüz işitme kaybı alarmıdır!',
       'Fasiyal Sinir Serbest ve Uyarılmış EMG (Free-run EMG ve Triggered EMG): M. orbicularis oculi ve M. orbicularis oris kaslarına yerleştirilen iğne elektrotlarla CN VII gerilimi ve irritasyonu izlenir.',
       'Lateral Spread Response (LSR) Monitörizasyonu (Hemifasiyal Spazm İçin): Fasiyal sinirin temporal dalı uyarıldığında mandibular daldan anormal kas yanıtı alınmasıdır; Teflon keçe yerleştirilip mikrovasküler dekompresyon sağlandığı anda LSR yanıtının kaybolması cerrahi başarının kanıtıdır.',
-      'Alt Kranyal Sinir EMG Monitörizasyonu (Glossofaringeal Nevralji İçin): CN IX, X, XI, XII kas yanıtları (vokal kord EMG elektrotlu endotrakeal tüp, yumuşak damak ve trapez kası elektrotları).',
-      'Venöz Hava Embolisi (VAE) Takibi: Prekordiyal Doppler Ultrason ve Sürekli End-Tidal CO2 (EtCO2 ani düşüşü hava embolisi şüphesidir).',
-      'Nöromusküler İleti İzlemi (TOF - Train-of-Four): İdame evresinde kas gevşetici blokajının tamamen kalktığını (TOF = 4/4 ve post-tetanik fasilitasyon) doğrulamak için zorunludur.'
+      'Alt Kranyal Sinir EMG Monitörizasyonu (Glossofaringeal Nevralji İçin): CN IX, X, XI, XII kas yanıtları (zırhlı/telli vokal kord EMG elektrotlu endotrakeal tüp, yumuşak damak ve trapez kası elektrotları).',
+      'Venöz Hava Embolisi (VAE) Takibi: Prekordiyal Doppler Ultrason ve Sürekli End-Tidal CO2 (EtCO2 ani düşüşü ve açıklanamayan hipotansiyon hava embolisi alarmıdır).',
+      'Kantitatif Nöromusküler İleti İzlemi (TOF - Train-of-Four): İdame evresinde EMG/LSR kayıtlarına başlanmadan önce nöromusküler bloğun tamamen çözüldüğünü doğrulamak için kantitatif TOF oranı (TOFR) ≥ 0.90 teyit edilmelidir.',
+      'Sürekli Isı Takibi (Normotermi 36.0 - 37.0°C) ve Seri Kan Gazı / Kan Glukozu Takibi (hedef 140 - 180 mg/dL).'
     ],
     vascularAccess: [
       'En az iki adet geniş lümenli periferik intravenöz hat (14G veya 16G)',
-      'Santral Venöz Kateter (CVC): Otonomik instabilite veya vazoaktif infüzyon gereksinimi olan yaşlı/riskli olgularda',
+      'Santral Venöz Kateter (CVC): Yüksek VAE riski, otonomik instabilite veya vazoaktif infüzyon gereksinimi olan olgularda (sağ atriyum-SVC bileşkesinden hava aspirasyonu olanağı)',
       'Kan/Sıvı Isıtıcı Düzenekleri'
     ],
     patientPosition: 'Park-Bench Pozisyonu veya Modifiye Lateral Dekübitus (Mayfield 3-Noktalı Çivili Başlık ile İmmobilize Edilmiş)',
@@ -135,32 +140,41 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
       'Gözler, kulaklar ve peroneal sinir bası noktaları jel pedlerle tam korunmalıdır.'
     ],
     anesthesiaManagement: [
-      'İndüksiyon: Propofol (1.5 - 2.5 mg/kg) + Fentanil (2 - 3 mcg/kg) veya Remifentanil (0.15 - 0.25 mcg/kg/dk) + Kısa/Orta Etkili Kas Gevşetici (Rokuronyum 0.6 mg/kg). Entübasyon sonrası kas gevşetici KESİNLİKLE tekrarlanmaz!',
-      'İdame: TIVA Protokolü (Propofol 80 - 130 mcg/kg/dk + Remifentanil 0.1 - 0.25 mcg/kg/dk TCI infüzyonu). BIS hedefi: 40 - 50. Uçucu anestezikler (Sevofluran vb.) BAEP ve EMG dalgalarını baskıladığı için tercih edilmez.',
-      'Cerebellar Gevşeme Stratejisi ("Slack Posterior Fossa"):',
-      '  - Retrosigmoid koridorda serebelluma minimal ekarte basısı uygulamak için insizyonla birlikte %20 Mannitol (0.5 g/kg IV yavaş) uygulanır.',
-      '  - Hafif kontrollü hiperventilasyon (PaCO2 32 - 35 mmHg).',
-      '  - Cerrah dura açılışında sisterna magna veya serebellomedüller sisterni açarak BOS drene eder; BOS drene olduğu anda serebellum kendiliğinden çöker ve ekartöre ihtiyaç kalmaz.',
+      'İndüksiyon: Propofol (1.5 - 2.5 mg/kg) + Fentanil (2 - 3 mcg/kg) veya Remifentanil (0.15 - 0.25 mcg/kg/dk) + Kısa/Orta Etkili Kas Gevşetici (Rokuronyum 0.6 mg/kg). Entübasyon sonrası kas gevşetici KESİNLİKLE tekrarlanmaz; EMG/LSR başlamadan önce kantitatif TOFR ≥ 0.90 doğrulanır (gerekirse düşük doz Sugammadeks).',
+      'İdame: TIVA Protokolü (Propofol 80 - 130 mcg/kg/dk + Remifentanil 0.1 - 0.25 mcg/kg/dk TCI infüzyonu; BIS 40 - 50). Not: BAEP ve kranyal sinir EMG/LSR volatil anesteziklere dirençlidir (EMG/LSR\'yi ortadan kaldıran NMB\'dir; volatiller esas olarak kortikal SSEP/TcMEP\'i baskılar); ancak MVD\'de TIVA yüksek PONV riskini düşürmek ve serebellar gevşemeyi optimize etmek için ilk tercihtir.',
+      'Azot Protoksit (N₂O) KESİNLİKLE KONTRENDİKEDİR: Venöz hava embolisi (VAE) hacmini hızla katlar, pnömosefaliye ve PONV artışına yol açar.',
+      'Sıvı ve Glukoz Yönetimi: İzotonik dengeli kristalloid (Plasmalyte/Isolyte-S) veya %0.9 NaCl kullanılır; hipotonik ve dekstrozlu sıvılar (%5 Dekstroz, Ringer Laktat) beyin ödemini artırdığından KESİNLİKLE verilmez. Kan glukozu hedefi 140 - 180 mg/dL tutulur.',
+      'Serebellar Gevşeme Stratejisi ("Slack Posterior Fossa"):',
+      '  - Retrosigmoid koridorda serebelluma minimal ekarte basısı uygulamak için insizyonla birlikte %20 Mannitol (0.5 g/kg IV yavaş; Osm < 320 mOsm/L) uygulanabilir.',
+      '  - Normokapni / hafif hipokapni (PaCO2 33 - 36 mmHg).',
+      '  - Cerrah dura açılışında sisterna magna veya serebellomedüller sisterni açarak BOS drene eder; BOS drene olduğu anda serebellum kendiliğinden çöker.',
       'Otonomik Krizlerin Yönetimi (Kritik Refleksler):',
-      '  - Trigemino-Kardiyak Refleks (TCR): Cerrahi mikroskop altında CN V manipüle edilirken ani bradikardi, asistoli veya hipotansiyon gelişirse: ANINDA CERRAHA MANİPÜLASYONU DURDURMASI SÖYLENİR! Cerrah ekartörü çektiğinde kalp hızı düzelmezse IV Atropin (0.5 - 1.0 mg) veya Glikopirolat uygulanır.',
-      '  - Glossofaringeal-Vagal Refleks: CN IX/X manipülasyonunda şiddetli bradikardi veya aritmiye karşı lokal anestezik (sinir üzerine %1 Lidokain damlatılması) ve Atropin hazır bulundurulur.'
+      '  - Trigemino-Kardiyak Refleks (TCR) ve Glossofaringeal-Vagal Refleks: CN V veya CN IX/X manipülasyonu sırasında ani bradikardi, asistoli veya derin hipotansiyon gelişirse ANINDA CERRAHA MANİPÜLASYONU DURDURMASI SÖYLENİR! Yanıt vermezse IV Atropin (0.5 - 1.0 mg) veya Glikopirolat uygulanır.',
+      '  - CN IX/X üzerine doğrudan %1 Lidokain damlatılması postoperatif vokal kord paralizisi, öğürme kaybı ve aspirasyon riski yarattığından UYGULANMAZ!',
+      'Venöz Hava Embolisi (VAE) Acil Müdahale Algoritması:',
+      '  1. Cerrahı derhal uyar: Cerrahi sahayı bol steril %0.9 NaCl (SF) ile doldur (flood), kemik kenarlarına kemik mumu (bone wax) ve ıslak gaz tampon uygula.',
+      '  2. Solunum gazı: %100 O₂ ventilasyona geç (N₂O zaten kapalı/kontrendikedir).',
+      '  3. Pozisyon: Cerrahi elverdiğince baş elevasyonunu düşür; hemodinamik kollapsta mümkünse sol lateral dekübitus / baş aşağı (Durant) pozisyona yaklaştır.',
+      '  4. CVC Aspirasyonu: SVC-sağ atriyum hizasında santral venöz kateter mevcutsa hava aspirasyonu uygula.',
+      '  5. Hemodinamik Destek: Hızlı izotonik sıvı bolusu + vazopressör (Noradrenalin / Fenilefrin / Efedrin; arrestte Adrenalin ve KPR).',
+      '  6. Juguler Kompresyon: Yalnızca cerrahın doğrudan talebi/kontrolü altında, kısa süreli ve nazikçe uygulanır (serebral venöz basıncı artırarak hava girişini kesmek için).'
     ],
     airwayManagement: [
       'Standart Oral Endotrakeal Entübasyon; başın lateral ve fleksiyonda pozisyonlandırılması sırasında tüpün katlanmasını önlemek için Spiral (Zırhlı / Wire-reinforced) ETT.',
-      'Glossofaringeal Nevralji olgularında: Nöromonitörizasyon amacıyla vokal kord EMG kayıt elektrotlu özel endotrakeal tüp (NIM ETT) kullanılabilir.',
+      'Glossofaringeal Nevralji olgularında: Vokal kord EMG monitörizasyonu için zırhlı/telli (armored/reinforced) EMG endotrakeal tüp tercih edilmelidir (standart plastik NIM tüpleri boyun fleksiyonunda katlanabilir).',
       'Kaf basıncı sürekli 20 - 25 cmH2O aralığında tutulmalıdır.'
     ],
     criticalSurgicalStages: [
       '1. Mayfield Çivili Başlık Takılması ve Park-Bench Pozisyonlama: Sempatik pik, juguler ven açıklığı ve aksiller rulo kontrolü.',
-      '2. Retrosigmoid Kraniektomi ve Dural Sinüs Kenarı: Sinüs Transversus ve Sigmoideus bileşkesinde kanama ve venöz hava embolisi riski; cerrah sinüs sınırını kemik mumu ile yalıtır.',
-      '3. Sisternal Drenaj ve Serebellar Gevşeme: BOS drenajı ile serebellumun düşmesi; beyin sapı işitsel uyarılmış potansiyellerinin (BAEP) bazal teyidi.',
+      '2. Retrosigmoid Kraniektomi ve Dural Sinüs Kenarı: Sinüs Transversus ve Sigmoideus bileşkesinde kanama ve venöz hava embolisi (VAE) riski; cerrah sinüs sınırını kemik mumu ile yalıtır.',
+      '3. Sisternal Drenaj ve Serebellar Gevşeme: BOS drenajı ile serebellumun düşmesi; BAEP bazal teyidi ve kantitatif TOFR ≥ 0.90 doğrulaması.',
       '4. CN VIII İşitme Sinirinin Korunması: Akustik sinir aşırı gerilirse BAEP Dalga V uzar; retraktör açısı ve cerrahi çekme kuvveti anestezi ekibi uyarısıyla ayarlanır.',
       '5. Suçlu Damarın Diseksiyonu ve Teflon Keçe Yerleştirilmesi: Damar sinir REZ bölgesinden nazikçe ayrılır, araya Teflon keçe yerleştirilir; Hemifasiyal spazmda Lateral Spread Response (LSR) anında kaybolur.',
       '6. Su Sızdırmaz (Water-tight) Dural Tamir ve Valsalva Manevrası: BOS fistülü ve psödomeningosel gelişimini önlemek için cerrah tamir yaparken anestezi uzmanı 25-30 cmH2O hava yolu basıncı uygular.'
     ],
     emergenceNotes: [
       'HİPERTANSİYONSUZ VE ÖKSÜRMESİZ UYANMA (SMOOTH EMERGENCE): Arka çukur rijit ve hacmi çok kısıtlı bir alandır. Uyanma esnasında ıkınma ve hipertansif pikler cerrahi lojda arka çukur hematomuna, beyin sapı kompresyonuna, akut solunum durmasına ve ölüme yol açar!',
-      'Uyanma Sırasında Sempatik Blokaj: Ekstübasyon öncesi IV Lidokain (1.5 mg/kg), Esmolol (0.5 mg/kg) veya Deksmedetomidin infüzyonu uygulanarak öksürük ve hipertansiyon tamamen engellenir. Sistolik kan basıncı < 130-140 mmHg tutulmalıdır.',
+      'Uyanma Sırasında Sempatik Blokaj: Ekstübasyon öncesi düşük doz Remifentanil idamesi, IV Lidokain (1.5 mg/kg), Esmolol (0.5 mg/kg) veya Deksmedetomidin ile öksürük ve hipertansiyon tamamen engellenir. Sistolik kan basıncı < 130-140 mmHg tutulmalıdır.',
       'Alt Kranyal Sinir ve Yutma Fonksiyonlarının Değerlendirilmesi: Özellikle CN IX ve CN X cerrahisi geçirmiş hastalarda vokal kord paralizisi, öğürme refleksi kaybı ve aspirasyon riski mevcuttur. Ekstübasyon öncesi vokal kordlar ve spontan yutma refleksi mutlaka kontrol edilmelidir.',
       'Nörolojik Muayene: Ekstübe edilen hastada fasiyal simetri, göz kırpma, işitme kabiliyeti ve ekstremite motor güçleri ameliyathanede anında değerlendirilir.'
     ]
@@ -170,18 +184,19 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
   postoperative: {
     painManagement: [
       'Retrosigmoid İnsizyon ve Suboksipital Kas Ağrısı Yönetimi:',
-      '  - Cerrahi Başlangıcında veya Kapanışta Cilt/Kas İçi Lokal İnfiltrasyon (%0.25 Bupivakain veya %0.5 Ropivakain): Suboksipital boyun kaslarının spazmını ve ameliyat sonrası ense ağrısını belirgin azaltır.',
-      '  - IV Parasetamol (1000 mg 6 saatte bir düzenli infüzyon).',
-      '  - IV Deksketoprofen (50 mg 12 saatte bir): Cerrahi hemostaz teyit edildikten sonra.',
-      '  - Kurtarma Opiyatı: Düşük doz Tramadol (50 mg IV yavaş) veya Fentanil (25-50 mcg IV); aşırı sedasyon nörolojik takibi engellememelidir.'
+      '  - Cerrahi Başlangıcında veya Kapanışta Cilt/Kas İçi Lokal İnfiltrasyon (%0.25 Bupivakain veya %0.5 Ropivakain): Suboksipital boyun kaslarının spazmını ve ameliyat sonrası ense ağrısını belirgin azaltır (PROSPECT 2023 A-düzeyi öneri).',
+      '  - Düzenli IV Parasetamol (1000 mg 6 saatte bir infüzyon).',
+      '  - Kurtarma Opiyatı: Dikkatle titre edilen düşük doz IV Fentanil (25-50 mcg); aşırı sedasyon nörolojik takibi engellememelidir.',
+      '  - KAÇINILACAK AJANLAR: Taze arka çukur cerrahisinde ölümcül beyin sapı hematomu riski nedeniyle rutin IV Deksketoprofen (non-selektif NSAİİ) KULLANILMAZ; ayrıca %70-80\'e ulaşan arka çukur PONV riskini şiddetle artırması ve nöbet eşiğini düşürmesi nedeniyle Tramadol KESİNLİKLE KULLANILMAZ!'
     ],
     prospectRecommendations: [
-      'Retrosigmoid kraniyotomi sonrası postoperatif ense ve baş ağrısı insidansı yüksektir; cerrahi sahaya preoperatif lokal anestezik infiltrasyonu ve multimodal non-opioid analjezi A-düzeyinde önerilmektedir.'
+      'PROSPECT Kraniyotomi (2023) kılavuzuna göre retrosigmoid yaklaşımlarda preoperatif/kapanış skalp-suboksipital lokal anestezik infiltrasyonu (veya skalp bloğu) ile düzenli IV Parasetamol multimodal analjezinin temel taşıdır; kanama riski yüksek arka çukur cerrahisinde non-selektif NSAİİ\'lardan ve yüksek emetojenik Tramadolden kaçınılır.'
     ],
     erasRecommendations: [
-      'ERAS Nöroşirürji ve Kafa Tabanı Kılavuzları:',
-      '  - Postoperatif Bulantı ve Kusmanın (PONV) Agresif Profilaksisi: Arka çukur ve vestibüler cerrahilerde PONV insidansı %70-80\'e ulaşabilir; öğürme KİBAS ve dural BOS kaçağını tetikler. Çift/Üçlü antiemetik (Deksametazon 4-8 mg intraoperatif + Ondansetron 4 mg kapanışta + gerekirse Metoklopramid) uygulanmalıdır.',
+      '4. Konsensus PONV (2020) ve Arka Çukur Postoperatif Bakım Protokolleri:',
+      '  - Agresif Çoklu PONV Profilaksisi: Arka çukur ve vestibüler manipülasyonda PONV insidansı %70-80\'e ulaşır; öğürme ve kusma KİBAS, arka çukur kanaması ve BOS kaçağını tetikler. 2020 Konsensus Kılavuzuna uygun olarak TIVA (Propofol) + Deksametazon (4-8 mg indüksiyonda) + 5-HT3 antagonisti (Ondansetron 4 mg kapanışta) + NK1 reseptör antagonisti (Aprepitant 40 mg PO preoperatif) uygulanır (zayıf etkili Metoklopramid yerine).',
       '  - BOS Fistülü Önlemi: Hastanın başı 30° elevasyonda tutulmalı, postoperatif ıkınma, öksürme ve burun sümkürmesi engellenmelidir.',
+      '  - Glisemik Kontrol ve Sıvı: Kan glukozu 140 - 180 mg/dL aralığında tutulur; izotonik sıvılar tercih edilir.',
       '  - Oral Beslenme Öncesi Gag/Yutma Testi: Alt kranyal sinir (CN IX/X) cerrahisi geçiren olgularda su verilmeden önce yutma ve öğürme refleksi hekim tarafından bizzat doğrulanmalıdır.',
       '  - Erken Mobilizasyon: Hemodinamik ve nörolojik stabilitesi tam olan hastaların postoperatif 1. günde yatak dışına çıkarılması.'
     ]
@@ -189,13 +204,13 @@ export const craniotomyMicrovascularDecompression: ProcedureDefinition = {
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2014). Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section II: Neurosurgery - Cranial Nerve Decompression (pp. 427-433). Philadelphia: Lippincott Williams & Wilkins.',
-    erasReference: 'Hagan, K. B., et al. (2020). Enhanced Recovery After Surgery (ERAS) in Neurosurgical Oncology and Skull Base Surgery: Consensus Guidelines. Journal of Neurosurgery, 134(3), 781-791.',
-    prospectReference: 'PROSPECT Guidelines for Postoperative Pain Management in Craniotomy and Suboccipital Approaches. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
+    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2020). Anesthesiologist\'s Manual of Surgical Procedures (6th ed.). Section II: Neurosurgery — Cranial Nerve Decompression. Philadelphia: Wolters Kluwer.',
+    erasReference: 'Gan, T. J., Belani, K. G., Bergese, S., et al. (2020). Fourth Consensus Guidelines for the Management of Postoperative Nausea and Vomiting. Anesthesia & Analgesia, 131(2), 411-448.',
+    prospectReference: 'Mestdagh, F., Lavand\'homme, P., Pirard, G., Joshi, G. P., Sauter, A. R., & Van de Velde, M. (2023). Pain management after elective craniotomy: A systematic review with procedure-specific postoperative pain management (PROSPECT) recommendations. European Journal of Anaesthesiology, 40(10), 747-757.',
     otherReferences: [
       'Jannetta, P. J. (1980). Neurovascular compression in cranial nerve disorders. Neurosurgery, 7(3), 295-300.',
-      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Clinical Practice Guideline for Anesthetic Care of Patients Undergoing Microvascular Decompression.',
-      'Barker, F. G., et al. (1996). The long-term outcome of microvascular decompression for trigeminal neuralgia. The New England Journal of Medicine, 334(17), 1077-1084.'
+      'Barker, F. G., Jannetta, P. J., Bissonette, D. J., Larkins, M. V., & Jho, H. D. (1996). The long-term outcome of microvascular decompression for trigeminal neuralgia. New England Journal of Medicine, 334(17), 1077-1084.',
+      'Sloan, T. B., & Jäntti, V. (2008). Anesthetic effects on evoked potentials. In: Nuwer, M. R. (Ed.), Intraoperative Monitoring of Neural Function (Handbook of Clinical Neurophysiology, Vol. 8, pp. 94-126). Elsevier.'
     ]
   }
 };

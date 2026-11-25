@@ -3,11 +3,11 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Spastisite Cerrahisi: Selektif Dorsal Rizotomi (SDR), DREZ Lezyonlama ve Periferik Nörotomi
  * (Surgery for Spasticity: Selective Dorsal Rhizotomy, DREZotomy, and Peripheral Neurotomy)
- * 
- * Jaffe (5th ed., Section II: Neurosurgery - Stereotactic Procedures & Functional Neurosurgery: 
- * Surgery for Spasticity, pp. 498-502), American Academy for Cerebral Palsy and Developmental Medicine (AACPDM),
- * Society for Neuroscience in Anesthesiology and Critical Care (SNACC),
- * European Paediatric Neurology Society (EPNS) ve ERAS Society Nöroşirürji Kılavuzları referans alınarak yapılandırılmıştır.
+ *
+ * Jaffe (6th ed., 2020, Section II: Neurosurgery - Functional Neurosurgery: Surgery for Spasticity),
+ * American Academy for Cerebral Palsy and Developmental Medicine (AACPDM),
+ * Society for Neuroscience in Anesthesiology and Critical Care (SNACC)
+ * ve güncel pediatrik nöroanestezi literatürü referans alınarak yapılandırılmıştır.
  */
 export const surgeryForSpasticity: ProcedureDefinition = {
   id: 'surgery-for-spasticity',
@@ -18,173 +18,195 @@ export const surgeryForSpasticity: ProcedureDefinition = {
   categoryTag: 'Fonksiyonel & Pediatrik Nöroşirürji',
 
   // 1) Prosedür Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Medikal ve fizik tedavi yöntemlerine dirençli şiddetli spastisite olgularında anormal hiperaktif kas tonusunu ve refleks arkını kalıcı olarak hafifletmek amacıyla uygulanan cerrahi nöromodülasyon ve ablasyon prosedürleridir. En yaygın uygulanan yöntem Selektif Dorsal Rizotomi (SDR / Selective Dorsal Rhizotomy)\'dir: Lomber laminotomi/laminoplasti (L1-L2 seviyesinde konus medullaris veya L2-S1 seviyelerinde) sonrası kauda ekuina ve lumbosakral sinir kökleri (L2-S2) cerrahi sahaya taşınır. Ventral motor kökler dorsal duyu köklerinden mikronöroşirürjikal olarak ayrılır; ardından dorsal kökçükler (rootlets) tek tek elektrofizyolojik stimülasyonla (İONM / EMG) uyarılır. Anormal, yaygın veya klonik deşarj gösteren kökçükler selektif olarak kesilerek (genellikle her seviyedeki kökçüklerin %30-50\'si) kas iğciği kökenli kontrolsüz afferent refleks arkı kırılır. Diğer yöntemler arasında fokal kontraktür ve ağrılı spastisitede DREZ Lezyonlama (Dorsal Root Entry Zone) ve Seçici Periferik Parsiyel Nörotomiler (obturator, tibial, muskulokutanöz nörotomi) yer alır.',
+  description: 'Medikal ve fizik tedaviye dirençli şiddetli spastisitede hiperaktif kas tonusunu ve anormal spinal refleks arkını kalıcı olarak azaltan nöromodülasyon/ablasyon girişimleridir. En sık uygulanan prosedür Selektif Dorsal Rizotomi (SDR)\'dir: Lomber tek seviye konus laminoplastisi (L1 - L2) veya çok seviyeli laminotomi (L2 - S1) ve geniş dural açılış sonrası kauda ekuina sinir kökleri (L2 - S2) ventral (motor) ve dorsal (duyu) olarak ayrılır; dorsal kökçükler (rootlets) tek tek elektrofizyolojik EMG stimülasyonuyla test edilerek anormal/yaygın/klonik refleks yanıtı verenler (%30 - %50 oranında) selektif olarak kesilir. Diğer yöntemler arasında ağrılı fokal spastisitede DREZ Lezyonlama ve izole kas kontraktürlerinde seçici periferik parsiyel nörotomiler yer alır.',
   indications: [
-    'Serebral Palsi (Spastik Dipleji ve Seçilmiş Spastik Kuadripleji): Ambulasyon potansiyeli olan (GMFCS Seviye II ve III) veya bakım konforunu artırmak hedeflenen (GMFCS IV-V), oral antispastiklere ve botulinum toksinine dirençli 3-18 yaş arası pediatrik ve genç erişkin hastalar (SDR en temel endikasyonudur)',
-    'Spinal Kord Yaralanması veya Multipl Skleroz (MS) Sekeli Şiddetli Spastisite: Alt ekstremitelerde makaslama yürüyüşü, fleksör veya ekstansör spazmlar',
-    'Ağrılı ve Spastik Üst/Alt Ekstremite Deformiteleri: Brakiyal pleksus avülsiyonu veya spinal travma zemininde gelişen kontrolsüz tonus artışı (DREZ Lezyonlama endikasyonu)',
-    'İzole Kas Grubu Spastisitesi: Kalça adduktor spazmı (makaslama), ekinovarus ayak deformitesi veya dirsek fleksiyon kontraktürlerinde seçici parsiyel periferik nörotomi',
-    'Ortopedik Cerrahi Öncesi veya Eşzamanlı Tonus Dengeleme: Tendon uzatma ve kemik osteotomileri öncesinde spastisitenin kalıcı olarak giderilmesi'
+    'Serebral Palsi (Spastik Dipleji ve Seçilmiş Spastik Kuadripleji): Ambulasyon potansiyeli olan (GMFCS II - III) veya bakım konforu hedeflenen (GMFCS IV - V), oral antispastiklere ve botulinum toksinine dirençli 3 - 18 yaş arası pediatrik ve genç erişkin hastalar (SDR temel endikasyonu)',
+    'Spinal Kord Yaralanması (SCI) veya Multipl Skleroz (MS) Sekeli Şiddetli Spastisite: Makaslama yürüyüşü, kontrolsüz fleksör/ekstansör spazmlar (DİKKAT: > 24 - 48 saat denervasyonda Süksinilkolin ölümcül hiperkalemi yapar — MUTLAK KONTRENDİKE!)',
+    'Ağrılı Spastik Ekstremite Deformiteleri ve Brakiyal Pleksus Avülsiyonu: DREZ (Dorsal Root Entry Zone) lezyonlama endikasyonu',
+    'İzole Kas Grubu Spastisitesi: Kalça adduktor makaslaması, ekinovarus ayak veya dirsek fleksiyon kontraktürlerinde parsiyel periferik nörotomi',
+    'Mevcut İntratekal Baklofen (ITB) Pompasından SDR\'ye Geçiş veya Ortopedik Cerrahi Öncesi Tonus Dengeleme (ITB yoksunluk krizine karşı yüksek alarm!)'
   ],
-  averageDuration: '3.0 - 5.5 saat (Prone pozisyonlama, silikon rulo desteği ve floroskopik seviye belirleme: 45-60 dk; L1-L2 tek seviye laminoplasti veya çok seviyeli laminotomi: 45-60 dk; Dural açılış, mikronöroşirürjikal kök diseksiyonu ve çok kanallı İONM elektrofizyolojik kökçük stimülasyonu / selektif transeksiyon: 90-150 dk; Su geçirmez dural tamir, Valsalva testi ve tabakalı laminoplasti kapanışı: 45-60 dk)',
+  averageDuration: '3.0 - 5.5 saat (Prone pozisyonlama, kontraktür destekleri ve floroskopik seviye doğrulama: 45-60 dk; Tek seviye L1-L2 laminoplasti veya çok seviyeli laminotomi: 45-60 dk; Geniş dural açılış, mikronöroşirürjikal kök diseksiyonu ve çok kanallı EMG kökçük stimülasyonu/transeksiyonu: 90-150 dk; Su geçirmez dural tamir [gerekirse doğrudan görüş altında koruyucusuz intratekal morfin], Valsalva testi ve laminoplasti kapanışı: 45-60 dk)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '100 - 300 mL (Küçük pediatrik olgularda 80-150 mL [ancak vücut ağırlığına oranla dolaşan kan hacminin %10-20\'sini bulabilir]; erişkin SDR veya DREZ olgularında 150-350 mL)',
+    estimatedBloodLoss: '100 - 300 mL (Küçük pediatrik olgularda 80 - 150 mL dahi düşük dolaşan kan hacmi nedeniyle toplam kan hacminin %10 - %20\'sine ulaşabilir; çok seviyeli laminotomide ve erişkin SDR/DREZ\'de 150 - 350 mL)',
     riskLevel: 'moderate',
-    riskLevelLabel: 'Orta Düzey Risk (Pediatrik Olgularda Dolaşan Kan Hacmi Düşüktür; Mililitrik Kan Kaybı Hızla Hipovolemi Yaratabilir)',
-    crossMatchRequirement: '1-2 Ünite Eritrosit Süspansiyonu (ES) Cross-Match hazır bulundurulmalıdır; küçük çocuklarda (< 20 kg) taze kan ve gereğinde Taze Donmuş Plazma (TDP) planlanmalıdır',
-    transfusionProbability: '%15 - %35 (Pediatrik düşük kilolu olgularda %30-45)',
+    riskLevelLabel: 'Orta Düzey Risk (Pediatrik Düşük Kan Hacmi — Preoperatif İzin Verilebilir Kan Kaybı [ABL] Hesabı Zorunludur)',
+    crossMatchRequirement: '1 - 2 Ünite Eritrosit Süspansiyonu (ES) Cross-Match hazır bulundurulmalıdır; < 20 kg çocuklarda taze/ışınlanmış kan ve gerektiğinde TDP planlanmalıdır',
+    transfusionProbability: '%15 - %35 (Düşük kilolu ve çok seviyeli laminotomi uygulanan pediatrik olgularda %30 - %45)',
     criticalBleedingSources: [
-      'Epidural Venöz Pleksus (Batson pleksusu — lamina açılırken ve dural marjinler serbestleştirilirken yırtılma riski)',
-      'Spinal Kök Besleyici Radiküler Arterler (A. radicularis magna - Adamkiewicz arteri ve radikülomedüller vasküler dallar kök diseksiyonunda titizlikle korunmalıdır)',
+      'Epidural Venöz Pleksus (Batson pleksusu — prone pozisyonda batın basısı varsa masif kanar)',
+      'Spinal Radiküler Besleyici Arterler (A. radicularis magna [Adamkiewicz] ve radikülomedüller dallar)',
       'Subaraknoid Kauda Ekuina Mikrovasküler Yatağı',
-      'Laminoplasti Kemik Kenarları ve Paravertebral Kas Yatağı'
+      'Çok Seviyeli Laminotomi Kemik Kenarları ve Paravertebral Kas Yatağı'
     ],
     hemostasisStrategies: [
-      'Mikronöroşirürjikal bipolar koagülasyon (dorsal kökçükler üzerinde düşük akımlı mikro-bipolar forseps kullanılır)',
-      'Lomber epidural sahada hemostatik matriks ajanları (FloSeal, Surgicel, pamuk basısı)',
-      'Kemik kanamalarında steril kemik mumu uygulaması',
-      'Prone pozisyonda batın basısının tamamen kaldırılarak inferior vena cava ve epidural venöz basıncın düşürülmesi'
+      'Pediatrik Çok Seviyeli Laminotomide Kan Koruma: Preoperatif İzin Verilebilir Kan Kaybı (ABL = EBV × [Hct_başlangıç - Hct_hedef] / Hct_başlangıç) hesaplanır ve kanamayı azaltmak için Traneksamik Asit (TXA — 10 - 15 mg/kg yükleme + 1 - 5 mg/kg/saat infüzyon) düşünülür',
+      'Mikronöroşirürjikal düşük akımlı bipolar koagülasyon, kemik mumu ve epidural hemostatik matriks (FloSeal, Surgicel)',
+      'Prone pozisyonda batının tamamen serbest asılı tutulması (Vena Cava Inferior ve Batson pleksus basıncını düşürür)'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — İntraoperatif nörofizyolojik kök stimülasyonu (EMG) için MUTLAK ALTIN STANDARTTIR',
-      'Düşük Doz İnhalasyon Anestezisi (< 0.5 MAC Sevofluran/İzofluran) + Opioid İnfüzyonu: Kökçük uyarımı fazında MAC düzeyi < 0.3 seviyesine çekilerek TIVA ağırlıklı idameye dönülür'
+      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil — Kas Gevşeticisiz İdame): SDR EMG ve H-refleks kökçük stimülasyonu için MUTLAK ALTIN STANDARTTIR! (Midazolam ve > 0.5 MAC volatil anestezikler SDR EMG ve H-refleks yanıtlarını belirgin baskılar!)',
+      'Entübasyon ve Modifiye RSI Stratejisi (GÖRH / Aspirasyon Riski): SÜKSİNİLKOLİN MUTLAK KONTRENDİKEDİR! Kas gevşeticisiz yüksek doz Propofol + Remifentanil VEYA düşük doz Rokuronyum (0.3 - 0.45 mg/kg) + EMG kökçük testi öncesinde Sugammadeks ile tam antagonizasyon (TOF %100)'
     ],
     alternative: [
-      'İzole Periferik Nörotomiler İçin: Genel Anestezi veya Seçilmiş Erişkinlerde Periferik Sinir Blokları + Sedasyon (ancak motor stimülasyon gerektiğinde kas gevşetici verilmez)'
+      'İzole Periferik Nörotomiler İçin: Kas gevşeticisiz genel anestezi veya seçilmiş erişkinlerde sinir stimülasyonunu bozmayan yaklaşımlar'
     ],
-    clinicalRationale: 'Selektif dorsal rizotomide L2-S2 kökçüklerinin ve S2-S4 sfinkter liflerinin elektriksel stimülasyonla oluşan kas/anal sfinkter EMG refleks yanıtlarını bozmamak için entübasyon sonrası kas gevşeticisiz Propofol + Remifentanil TIVA altın standarttır. Pediatrik hastada prone pozisyonda baş hareketlerine bağlı tüp bükülmesini veya endobronşiyal kaymayı önlemek için spiral telli oral ETT tercih edilir.',
-    notes: 'SPASTİSİTE CERRAHİSİNDE (SDR) ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) SIFIR NÖROMUSKÜLER BLOKAJ (KAS GEVŞETİCİ YASAKTIR!) — SDR\'nin başarısı, L2-S2 dorsal kökçüklerine tek tek 0.1-1.0 mA elektrik akımı verildiğinde alt ekstremite kaslarında (adduktor, kuadriseps, tibialis anterior, gastroknemius) ve anal sfinkterde ortaya çıkan EMG refleks yanıtlarının kaydedilmesine bağlıdır. Entübasyonda ultra-kısa etkili gevşetici kullanılsa dahi cerrahi diseksiyon başlamadan önce TOF oranı 4/4 (%100) olmalı ve operasyon boyunca KESİNLİKLE kas gevşetici eklenmemelidir! (2) PRONE POZİSYONDA KONTRAKTÜRLER VE BASI YARASI KORUMASI — Serebral palsili çocuklarda kalça/diz fleksiyon kontraktürleri, ekinovarus deformitesi ve skolyoz sıktır. Hastayı düz prone yatırmak eklemleri zorlar ve sinir basılarına yol açar. Kontraktürlü eklemler altına özel silikon yastıklar yerleştirilmeli, göğüs ve pelvis ruloları ile karın boşlukta asılı tutulmalı, gözler/burun sıfır basıda korunmalıdır. (3) PEDİATRİK HİPOTERMİ VE AÇIK BOS MARUZİYETİ — Saatler süren laminektomi ve geniş dural açılışta açık subaraknoid mesafeden sürekli soğuk irrigasyon yapılması hipotermiyi hızla tetikler. Vücut sıcaklığı < 35.5°C olduğunda EMG refleks eşikleri bozulur, pıhtılaşma çöker. Aktif hava ısıtıcı battaniye (Bair Hugger), sıvı ısıtıcıları ve oda sıcaklığının 24°C üzerinde tutulması zorunludur. (4) İNTRAOPERATİF SFİNKTER KORUMASI (S2-S4 KÖKLERİ) — S1 ve özellikle S2-S4 dorsal kökçükleri uyarılırken anal sfinkter EMG aktivitesi izlenir. Sfinkter liflerinin yanlışlıkla kesilmesi kalıcı üriner inkontinans ve fekal inkontinans ile sonuçlanır; anestezi uzmanı sfinkter EMG yanıtlarını cerrah ve nörofizyolog ile teyit etmelidir. (5) POSTOPERATİF ŞİDDETLİ SPAZM VE AĞRI YÖNETİMİ — Dorsal duyusal deafferentasyon ve laminoplasti ameliyat sonrasında şiddetli nosiseptif ağrıya ve paradoksal kas spazmlarına yol açar. Epidural kateter, kaudal blok veya multimodal analjezi (IV Parasetamol, düzenli Diazepam/Baklofen ve titre opioidler) uyanma odasından itibaren kesintisiz uygulanmalıdır.'
+    clinicalRationale: 'SDR\'nin tüm klinik başarısı, L2 - S2 dorsal kökçüklerinin ve S2 - S4 pudendal/anal sfinkter liflerinin EMG ve H-refleks yanıtlarının bozulmadan ölçülmesine bağlıdır; bu nedenle Midazolamdan, > 0.5 MAC volatil gazlardan ve idame kas gevşeticilerden kaçınılarak Propofol + Remifentanil TIVA uygulanır. Üst/alt motor nöron denervasyonunda (SCI, MS, spastik kuadripleji) Süksinilkolin ölümcül hiperkalemik arreste yol açtığından kesinlikle kullanılmaz.',
+    notes: 'SPASTİSİTE CERRAHİSİNDE (SDR) 6 HAYATİ ANESTEZİ KURALI: (1) SÜKSİNİLKOLİN MUTLAK KONTRENDİKE (HİPERKALEMİK ARREST — NMB-FREE VEYA DÜŞÜK DOZ ROKURONYUM + SUGAMMADEKS!); (2) İNTRATEKAL BAKLOFEN (ITB) YOKSUNLUK KRİZİ VE DOZ AŞIMI PROTOKOLÜ; (3) SDR GENİŞ DURAL AÇILIŞTA EPİDURAL/KAUDAL TOTAL SPİNAL TEHLİKESİ — DOĞRUDAN GÖRÜŞ ALTINDA İNTRATEKAL MORFİN ALTERNATİFİ; (4) REKTAL ISI PROBU YASAK (S2-S4 ANAL SFİNKTER EMG ÇAKIŞMASI — ÖZOFAGEAL + MESANE PROBU KULLAN!); (5) MİDAZOLAM / > 0.5 MAC VOLATİL EMG BASKILAMASI, KETOJENİK DİYET VE LATEKS-FREE ÖNLEM; (6) PRONE KONTRAKTÜR KORUMASI, PEDİATRİK HİPOTERMİ, ABL/TXA VE KÜMÜLATİF LAST/ERKEN KETOROLAK YASAĞI.',
+    rulesTitle: 'SPASTİSİTE CERRAHİSİNDE (SDR) ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'SÜKSİNİLKOLİN MUTLAK KONTRENDİKEDİR (ÖLÜMCÜL HİPERKALEMİK KARDİYAK ARREST!)',
+        content: 'Spinal kord yaralanması (SCI), Multipl Skleroz (MS), spastik kuadripleji ve > 24 - 48 saatlik üst/alt motor nöron denervasyonunda nikotinik ACh reseptör up-regülasyonu nedeniyle SÜKSİNİLKOLİN masif potasyum salınımı ve ölümcül hiperkalemik arreste yol açar! GÖRH/aspirasyon riskli CP çocuklarında Süksinilkolinsiz modifiye RSI uygulanır: Kas gevşeticisiz Propofol + Remifentanil VEYA düşük doz Rokuronyum (0.3 - 0.45 mg/kg) + EMG testi öncesinde Sugammadeks ile tam antagonizasyon (TOF %100).'
+      },
+      {
+        number: 2,
+        title: 'İNTRATEKAL BAKLOFEN (ITB) YOKSUNLUK KRİZİ VE DOZ AŞIMI ACİL PROTOKOLÜ',
+        content: 'Mevcut ITB pompası (veya yüksek doz oral baklofen) kesintisinde gelişen ITB Yoksunluk Krizi (yüksek ateş, şiddetli rijidite, rabdomiyoliz, otonomik fırtına, nöbet, DİK) MH ve NMS\'den farklıdır ve hızla ölümcüldür! Tedavi: Acil intratekal baklofen akışının restorasyonu + yüksek doz IV Benzodiazepinler (Diazepam/Lorazepam/Midazolam) + enteral Baklofen + Siproheptadin + agresif soğutma/YBÜ desteği. ITB Doz Aşımında ise (koma, solunum arresti, hipotansiyon): Acil entübasyon, mekanik ventilasyon, pompa durdurma ve 30 - 40 mL BOS aspirasyonu uygulanır.'
+      },
+      {
+        number: 3,
+        title: 'SDR GENİŞ DURAL AÇILIŞTA EPİDURAL / KAUDAL GÜVENLİK UYARISI VE İNTRATEKAL MORFİN',
+        content: 'SDR\'de geniş dural açılış ve dural dikiş hattı olduğundan epidural kateter veya kaudal blok lokal anesteziğin subaraknoid aralığa sızmasına yol açarak TOTAL SPİNAL ANESTEZİ, solunum arresti, BOS kaçağı/psödomeningosel ve postoperatif nörolojik muayenenin maskelenmesi riskini doğurur! Standart güvenli alternatif: Dural kapanış hemen öncesinde cerrah tarafından doğrudan görüş altında koruyucusuz İNTRATEKAL MORFİN (2 - 5 mcg/kg) uygulanması (+ 24 saat sürekli SpO2/solunum takibi).'
+      },
+      {
+        number: 4,
+        title: 'REKTAL ISI PROBU KULLANILMAZ (S2 - S4 ANAL SFİNKTER EMG ÇAKIŞMASI!) + TIVA ŞARTI',
+        content: 'S2 - S4 pudendal/sfinkter koruması için yerleştirilen eksternal anal sfinkter EMG elektrotlarıyla çakışıp artefakt yaratacağından REKTAL ISI PROBU YASAKTIR — sıcaklık izlemi ÖZOFAGEAL + MESANE (Foley) problarıyla yapılır! Kökçük EMG ve H-refleks yanıtlarını korumak için Midazolamdan, > 0.5 MAC volatillerden ve idame kas gevşeticilerden kaçınılır (Propofol + Remifentanil TIVA).'
+      },
+      {
+        number: 5,
+        title: 'LATEKS-FREE HAZIRLIK, CP EPİLEPSİ / KETOJENİK DİYET VE PEDİATRİK ABL / TXA',
+        content: 'Çoklu cerrahi/kateterizasyon öykülü CP ve nörojenik mesane hastalarında yüksek lateks alerjisi riski nedeniyle ameliyathane LATEKS-FREE hazırlanır. Eşlik eden epilepsi ve ketojenik diyet mutlaka sorgulanır (ketojenik diyette dekstroz ve Ringer Laktat YASAK → %0.9 NaCl + glukoz/keton/HCO3- takibi). Düşük kilolu çocuklarda preop ABL hesaplanır ve çok seviyeli laminotomide TXA düşünülür.'
+      },
+      {
+        number: 6,
+        title: 'PRONE KONTRAKTÜR KORUMASI, HİPOTERMİ ÖNLEMİ, KÜMÜLATİF LAST VE ERKEN KETOROLAK YASAĞI',
+        content: 'Kontraktürlü kalça/dizler zorla düzleştirilmeden silikon pedlerle desteklenir, batın serbest asılır ve açık BOS irrigasyonu 37.5°C\'de tutularak normotermi (> 36.0°C) korunur. Ekstübasyonda IV Lidokain ile yara yeri Ropivakain/Bupivakain birlikte kullanılacaksa KÜMÜLATİF LAST maksimum dozu aşılmamalıdır. Geniş intradural cerrahi sonrası erken dönemde rutin Ketorolak/NSAİİ verilmez (intraspinal hematom riski!).'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Pediatrik Nöroloji / Gelişimsel Pediyatri Konsültasyonu: Serebral palsi tipi (spastik dipleji vs kuadripleji), GMFCS (Kaba Motor Fonksiyon Sınıflama Sistemi) seviyesi, eşlik eden epilepsi nöbetleri ve kognitif durum değerlendirilir.',
-      'Fizik Tedavi ve Rehabilitasyon (FTR) Konsültasyonu: Kas tonusunun dağılımı (Modifiye Ashworth Skalası), alt ekstremite eklem hareket açıklıkları (ROM), sabit kontraktürler ve cerrahi sonrası hedeflenen fonksiyonel motor kapasite.',
-      'Ortopedi Konsültasyonu: Kalça eklemi çıkık/sublüksasyon riski (Reimers migrasyon indeksi — SDR öncesi kalça stabilitesi kontrol edilmelidir), skolyoz derecesi ve planlanan ortopedik prosedürler.',
-      'Çocuk Cerrahisi / Üroloji Konsültasyonu: Bazal mesane ve bağırsak fonksiyonları (inkontinans, nörojenik mesane öyküsü); postoperatif sfinkter fonksiyonunun karşılaştırılması için esastır.',
-      'Göğüs Hastalıkları Konsültasyonu: Şiddetli spastik kuadriplejide kronik mikrogizli aspirasyonlar, restriktif akciğer hastalığı, kifoskolyoz ve zayıf öksürük refleksi nedeniyle pulmoner rezerv tespiti.'
+      'Pediatrik Nöroloji / Gelişimsel Pediyatri Konsültasyonu: Serebral palsi alt tipi, GMFCS seviyesi, eşlik eden EPILEPSİ ve KETOJENİK DİYET durumu, oral/intratekal Baklofen rejimi (ITB pompası varsa kapatma/geçiş protokolü).',
+      'Fizik Tedavi (FTR), Ortopedi ve Çocuk Ürolojisi Konsültasyonu: Modifiye Ashworth skoru, sabit eklem kontraktürleri, kalça sublüksasyonu/skolyoz derecesi ve bazal mesane/bağırsak sfinkter fonksiyonu.',
+      'Göğüs Hastalıkları / Pediatrik Pulmonoloji: Spastik kuadriplejide kronik mikroaspirasyon, GÖRH, kifoskolyoza bağlı restriktif akciğer hastalığı ve zayıf öksürük rezervi.'
     ],
     historyAndPhysical: [
-      'Ayrıntılı Motor ve Duyusal Taban Muayenesi: Kalça fleksörleri, adduktorlar, kuadriseps, hamstringler, tibialis anterior ve gastroknemius kas kuvvetleri ve bazal spastisite skorları ayrıntılı kaydedilir.',
-      'Hava Yolu ve Servikal Anatomi: Spastik serebral palsili çocuklarda mikronati, psödobulber palsi, tükürük yutma güçlüğü (drooling), gastroözofageal reflü (GÖRH) ve zor laringoskopi olasılığı değerlendirilir.',
-      'Kullanılan Antispastik ve Antiepileptik İlaçlar: Oral Baklofen, Tizanidin, Diazepam, Dantrolen ve antiepileptik ilaçlar; ameliyat sabahı ilaç dozlarının devamı.',
-      'Vücut Ağırlığı ve Beslenme Durumu: Kronik malnütrisyon, düşük subkutan yağ dokusu ve bası yarası yatkınlığı.'
+      'LATEKS ALERJİSİ TARAMASI: Çoklu operasyon ve kateterizasyon öyküsü olan CP/spina bifida/nörojenik mesane hastalarında yüksek risk — ameliyathane tam lateks-free hazırlanmalıdır.',
+      'GÖRH, Disfaji ve Aspirasyon Riski: Psödobulber palsi, sialore (drooling), mikronati ve zor hava yolu değerlendirmesi (Süksinilkolinsiz modifiye RSI planı).',
+      'Antispastik ve Antiepileptik İlaçlar: Mevcut ITB pompası (dolum tarihi, günlük doz, kateter durumu — ani kesilmesi ölümcül yoksunluk krizine yol açar!), oral Baklofen, Tizanidin, Diazepam ve AED\'ler ameliyat sabahı kesintisiz sürdürülür.',
+      'Ayrıntılı Motor/Duyu Taban Muayenesi, Kontraktür Haritası ve Beslenme/Subkutan Doku Durumu (bası yarası ve hipotermi yatkınlığı).'
     ],
     laboratoryAndTests: [
-      'Tam Kan Sayımı (Hb, Hct, Trombosit sayısı; pediatrik hematokrit sınırları ve bazal anemi durumu).',
-      'Koagülasyon Paneli (PT, aPTT, INR, Fibrinojen).',
-      'Serum Elektrolitleri, BUN, Kreatinin ve Kan Şekeri takibi.',
-      'Kan Grubu, Antikor Tarama ve 1-2 Ünite Eritrosit Süspansiyonu Cross-Match hazırlığı.',
-      'Lumbosakral ve Tüm Omurga MRG: Konus medullarisin seviyesi (L1-L2 hizasında mı, gergin omurilik [tethered cord] var mı?), spinal kanal çapı ve kemik anatomi doğrulanır.',
-      'Kalça Grafileri (Pelvis AP grafisi — kalça subluksasyonu varlığı).'
+      'Tam Kan Sayımı (Hb, Hct, Trombosit) ve preoperatif İzin Verilebilir Kan Kaybı (ABL) hesabı.',
+      'Koagülasyon Paneli (PT, aPTT, INR, Fibrinojen — Valproat kullanan CP/epilepsi olgularında trombosit fonksiyon/PFA-100 kontrolü).',
+      'Serum Elektrolitleri (K+ — özellikle SCI/MS/denervasyonda bazal potasyum!), BUN, Kreatinin ve Kan Şekeri (ketojenik diyette glukoz + keton + HCO3-).',
+      'Kan Grubu, Antikor Tarama ve 1 - 2 Ünite Eritrosit Süspansiyonu Cross-Match hazırlığı.',
+      'Tüm Omurga MRG (konus medullaris seviyesi, gergin omurilik [tethered cord] dışlanması) ve Pelvis AP grafisi.'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG, SpO2, EtCO2 ve Sıcaklık.',
-      'Sürekli Çift Sıcaklık Probu (Özofagus ve Rektal/Mesane): Uzun prone pozisyonda açık BOS temasında derin hipotermiyi (> 36.0°C hedef) önlemek için kesintisiz takip.',
-      'İnvaziv Arter Basıncı İzlemi (A-Line): Pediatrik olgularda sürekli hemodinamik stabilite, kan gazı, baz açığı ve hemoglobin takibi için zorunludur.',
-      'Santral Venöz Erişim (CVC): Düşük kilolu (< 15 kg) çocuklarda, santral sıvı/inotrop yönetimi ve santral venöz basınç takibi.',
-      'ÇOK KANALLI İNTRAOPERATİF ELEKTROMİYOGRAFİ (İONM / EMG):',
-      '  - Bilateral Adduktor longus (L2-L3)',
-      '  - Bilateral Quadriceps femoris (L3-L4)',
-      '  - Bilateral Tibialis anterior (L4-L5)',
-      '  - Bilateral Gastrocnemius / Soleus (L5-S1)',
-      '  - Bilateral Hamstring kasları (L5-S2)',
-      '  - Eksternal Anal Sfinkter EMG (S2-S4 pudendal kök koruması)',
-      'Nöromusküler İleti Monitörizasyonu (TOF): Kök uyarım fazında TOF oranı %100 (4/4 seğirme) olmalıdır; kas gevşeticinin sıfırlandığı kanıtlanmalıdır.',
-      'Sıcaklık Sensörlü Mesane Sondası (İdrar çıkışı > 1.0 mL/kg/saat hedefi).'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG, SpO2, EtCO2 ve sürekli çift sıcaklık izlemi.',
+      'SÜREKLİ ÇİFT SICAKLIK PROBU — ÖZOFAGEAL + MESANE (FOLEY): REKTAL ISI PROBU KESİNLİKLE KULLANILMAZ (S2 - S4 eksternal anal sfinkter EMG elektrotlarıyla çakışır ve artefakt oluşturur!). Hedef çekirdek sıcaklığı > 36.0°C.',
+      'İnvaziv Arter Basıncı İzlemi (A-Line): Pediatrik hastalarda anlık hemodinami, seri hemoglobin/Hct, kan gazı, elektrolit (ve ketojenik diyette glukoz/keton/HCO3-) takibi için.',
+      'Santral Venöz Erişim (CVC): Düşük kilolu (< 15 kg) veya zor periferik venli çocuklarda.',
+      'ÇOK KANALLI İNTRAOPERATİF EMG (İONM): Bilateral Adduktor longus (L2-L3), Quadriceps (L3-L4), Tibialis anterior (L4-L5), Gastrocnemius/Soleus (L5-S1), Hamstring (L5-S2) ve Eksternal Anal Sfinkter EMG (S2-S4 pudendal kök koruması).',
+      'Nöromusküler İleti Monitörizasyonu (TOF): Kökçük stimülasyonunda TOF oranı %100 (4/4) olarak kanıtlanmalıdır.',
+      'Isı Sensörlü Foley Mesane Sondası (idrar çıkışı > 1.0 mL/kg/saat hedefi).'
     ],
     vascularAccess: [
-      'En az 2 adet geniş güvenli periferik intravenöz yol (üst ekstremitelerde)',
-      'İnvaziv radiyal arter kanülü (ultrason eşliğinde)',
-      'Küçük çocuklarda santral venöz kateter (sağ internal juguler ven)'
+      'En az 2 adet güvenli periferik intravenöz yol (üst ekstremitelerde; lateks-free malzemelerle)',
+      'Ultrason eşliğinde invaziv radiyal arter kanülasyonu',
+      'Küçük çocuklarda (< 15 kg) gereğinde santral venöz kateter'
     ],
-    patientPosition: 'Prone (Yüzüstü) Pozisyon, Kontraktürlü Eklem Destekleri ve Karın Serbest Asılı',
+    patientPosition: 'Prone (Yüzüstü) Pozisyon, Kontraktürlü Eklem Silikon Destekleri ve Karın Tam Serbest Asılı',
     patientPositionDetails: [
-      'GÖĞÜS VE PELVİS SİLİKON RULOLARI: Abdomen tamamen serbest bırakılır; intraabdominal basınç artışı Vena Cava Inferior\'a bası yaparak Batson epidural pleksus kanamasını tetiklememelidir.',
-      'Kontraktürlü Eklem Adaptasyonu: Fleksiyon kontraktürü olan kalça ve dizlerin altına anatomik açıyı koruyan yumuşak jel destekler konur; eklemler zorla düzleştirilmez.',
-      'Yüz, Gözler ve Kafa Koruması: Baş ProneView koruyucu kask veya at nalı jel desteğe alınır; göz kürelerine, buruna ve dudaklara sıfır bası teyit edilir.',
-      'Kollar vücut yanında nötral pozisyonda desteklenir; dirseklerde ulnar sinir silikon pedlerle korunur.',
-      'Ayaklar: Ekinovarus deformitesi olan ayak bilekleri desteklenir, ayak parmaklarının masaya basması önlenir.'
+      'Göğüs ve Pelvis Silikon Ruloları: Abdomen tamamen serbest bırakılarak Vena Cava Inferior ve Batson epidural venöz pleksus basıncı düşürülür.',
+      'Kontraktürlü Eklem Adaptasyonu: Fleksiyon kontraktürlü kalça, diz ve ekinovarus ayak bilekleri anatomik açıda yumuşak jel desteklerle korunur; eklemler ASLA zorla düzleştirilmez.',
+      'Yüz, Gözler ve Kafa Koruması: ProneView kask veya jel at nalı destek ile göz kürelerine sıfır bası teyit edilir.',
+      'Üst ekstremiteler ve ulnar sinirler silikon pedlerle korunur.'
     ],
     anesthesiaManagement: [
-      'İndüksiyon: Propofol (2.5-3.5 mg/kg) + Fentanil (2-3 mcg/kg) veya Remifentanil (0.1-0.2 mcg/kg/dk). Entübasyonda yalnızca gerekirse kısa etkili Rokuronyum (0.3 mg/kg) veya Süksinilkolin uygulanabilir; cerrahi başlamadan önce gevşeticinin etkisi tamamen kalkmış olmalıdır.',
-      'İdame: TIVA Protokolü (Propofol 100-160 mcg/kg/dk + Remifentanil 0.1-0.3 mcg/kg/dk). Düşük konsantrasyonda Desfluran/Sevofluran (< 0.5 MAC) eklenebilir; ancak kökçük stimülasyonu esnasında MAC < 0.3\'e çekilir.',
-      'Elektrofizyolojik Kökçük Uyarım Fazı (SDR Testing Protocol):',
-      '  - Cerrahi ekip mikroskop altında L2-S2 köklerini ventral (motor) ve dorsal (duyu) olarak ayırır.',
-      '  - Her dorsal kök 3-7 adet ince kökçüğe (rootlets) bölünür ve bipolar elektrotla 0.1-1.0 mA tekil/tetanik akımla uyarılır.',
-      '  - Normal Cevap: Yalnızca ilgili myotomda kısa süreli tek bir seğirme.',
-      '  - Anormal Spastik Cevap (Derece 1-4): Sürekli klonik/tonik deşarj, komşu myotomlara yayılım veya kontralateral bacak kaslarına yayılım.',
-      '  - Karar: Anormal cevap veren kökçükler bipolar ile koagüle edilip kesilir (her seviyede ortalama %30-50 kökçük transeksiyonu).',
-      'Anal Sfinkter (S2-S4) Koruması:',
-      '  - S1 ve S2 köklerine gelindiğinde anal sfinkter EMG\'si sürekli dinlenir; sfinkter yanıtı veren kökçükler KESİNLİKLE KESİLMEZ (inkontinans önleme).',
-      'Normotermi ve Sıvı Yönetimi:',
-      '  - Sıvı ısıtıcıları, konvektif hava battaniyeleri ve 37°C ısıtılmış Ringer Laktat/Plazma-Lyte infüzyonu (4-6 mL/kg/saat). Açık subaraknoid irrigasyon sıvıları 37.5°C\'de ısıtılmalıdır.'
+      'İndüksiyon ve Modifiye RSI (SÜKSİNİLKOLİN MUTLAK YASAK!):',
+      '  - GÖRH/aspirasyon riski yüksek CP hastalarında Süksinilkolinsiz modifiye RSI: Propofol (2.5 - 3.5 mg/kg) + Remifentanil (2 - 4 mcg/kg bolus veya infüzyon) ile kas gevşeticisiz entübasyon VEYA düşük doz Rokuronyum (0.3 - 0.45 mg/kg) + cerrahi EMG testi öncesinde Sugammadeks ile tam antagonizasyon (TOF %100).',
+      '  - Premedikasyon/indüksiyonda Midazolamdan KAÇINILIR (SDR EMG ve H-reflekslerini baskılar!).',
+      'İdame (TIVA Altın Standart):',
+      '  - Propofol (100 - 160 mcg/kg/dk) + Remifentanil (0.1 - 0.3 mcg/kg/dk) — idamede KESİNLİKLE kas gevşetici eklenmez! > 0.5 MAC volatil anestezikler (Sevofluran/Desfluran/İzofluran) H-refleks ve polisinaptik EMG yanıtlarını baskıladığından kullanılmaz.',
+      'Elektrofizyolojik Kökçük Uyarım Fazı (SDR Testing):',
+      '  - L2 - S2 dorsal kökçükleri 0.1 - 1.0 mA ile uyarılır; sürekli klonik/yayılan/kontralateral anormal yanıt veren kökçükler (%30 - %50) kesilir; S2 - S4 anal sfinkter EMG yanıtı veren kökçükler KESİNLİKLE KORUNUR.',
+      'Kan Koruma, Sıvı ve Normotermi:',
+      '  - Çok seviyeli laminotomide TXA (10 - 15 mg/kg yükleme + 1 - 5 mg/kg/saat infüzyon) ve preop ABL takibi.',
+      '  - Ketojenik diyetteki CP çocuklarında yalnızca %0.9 NaCl (Dekstroz ve Ringer Laktat YASAK!); diğer hastalarda 37°C ısıtılmış dengeli kristalloid. Açık subaraknoid irrigasyon 37.5°C, oda sıcaklığı > 24°C ve aktif hava ısıtıcı battaniye kullanılır.',
+      'Dural Kapanış Öncesi İntratekal Analjezi:',
+      '  - Geniş dural açılış nedeniyle epidural/kaudal blok yerine, dural kapanış öncesinde cerrah tarafından doğrudan görüş altında koruyucusuz İNTRATEKAL MORFİN (2 - 5 mcg/kg) uygulanabilir (+ postop 24 saat sürekli SpO2/apne izlemi!).'
     ],
     airwayManagement: [
-      'Spiral (Zırhlı / Wire-reinforced) endotrakeal tüp ile oral entübasyon.',
-      'Pediatrik hastalarda tüp seviyesi oskültasyonla iki taraflı doğrulanır ve sağlam flasterlenir; prone pozisyonda baş hareketleriyle tüpün ana bronşa kayması (endobronşiyal entübasyon) EtCO2 ve SpO2 ile yakından izlenir.',
-      'Kaf basıncı sürekli manometre ile 20 cmH2O düzeyinde kontrol edilir.'
+      'Spiral telli (wire-reinforced) lateks-free oral endotrakeal tüp.',
+      'Pediatrik hastalarda prone pozisyonda baş hareketleriyle tüpün ana bronşa kayması veya çıkmasını önlemek için iki taraflı oskültasyon, sağlam sabitleme ve sürekli EtCO2/SpO2 takibi.',
+      'Kaf basıncı manometre ile ≤ 20 cmH2O düzeyinde korunur.'
     ],
     criticalSurgicalStages: [
-      '1. Pozisyonlama ve Floroskopi Eşliğinde L1-L2 Seviyesinin Tespiti.',
-      '2. Laminoplasti / Laminotomi: Kemik flebin korunarak kaldırılması ve epidural hemostaz.',
-      '3. Dural Açılış ve Konus Medullaris / Kauda Ekuina İntradural Diseksiyonu.',
-      '4. Ventral (Motor) ve Dorsal (Duyu) Köklerin Mikronöroşirürjikal Olarak Ayrılması.',
-      '5. L2-S2 Dorsal Kökçüklerinin Çok Kanallı EMG Eşliğinde Elektrofizyolojik Testlemesi ve Selektif Transeksiyonu.',
-      '6. Pudendal ve Anal Sfinkter (S2-S4) Liflerinin Doğrulanıp Korunması.',
-      '7. Su Geçirmez Dural Kapama ve Valsalva Manevrası (25-30 cmH2O ile BOS kaçağı kontrolü).',
-      '8. Laminoplasti Kemik Rekonstrüksiyonu ve Katmanlı Kapanış.'
+      '1. Lateks-Free Prone Pozisyonlama (Kontraktür koruması, serbest batın) ve Floroskopik L1 - L2 Seviye Doğrulama.',
+      '2. Laminoplasti / Çok Seviyeli Laminotomi (ABL ve TXA ile kanama kontrolü).',
+      '3. Geniş Dural Açılış ve Kauda Ekuina / Konus Medullaris Diseksiyonu.',
+      '4. Ventral (Motor) ve Dorsal (Duyu) Kök Ayrımı; TOF %100 ve TIVA derinliğinin sabitlenmesi.',
+      '5. L2 - S2 Dorsal Kökçük EMG Testlemesi, Selektif Transeksiyon ve S2 - S4 Anal Sfinkter Koruması.',
+      '6. İsteğe Bağlı Doğrudan Görüş Altında Koruyucusuz İntratekal Morfin (2 - 5 mcg/kg), Su Geçirmez Dural Tamir ve Valsalva (25 - 30 cmH2O) BOS Kaçağı Kontrolü.',
+      '7. Laminoplasti Kapanışı ve Supin Pozisyona Dönüş.'
     ],
     emergenceNotes: [
-      'Öksürme ve Ikınmasız Pürüzsüz Uyanma: Ameliyat sonunda ıkınma dural tamir hattında dikiş açılmasına, BOS fistülüne ve psödomeningosele yol açar. IV Lidokain (1.5 mg/kg) ile hava yolu refleksleri sakinleştirilir.',
-      'Akut Erken Nörolojik Muayene: Ekstremitelerde istemli ayak bileği ve parmak hareketleri doğrulanır; tam flask felç (over-resection) veya sfinkter tonus kaybı kontrol edilir.',
-      'Hipotermi ve Titreme Kontrolü: Hasta derlenme odasına normotermik (> 36.5°C) teslim edilmelidir; titreme cerrahi yara gerilimini ve metabolik yükü artırır.'
+      'Supin Pozisyonda Öksürmesiz Pürüzsüz Uyanma: Ikınma dural dikiş hattından BOS fistülü ve psödomeningosele yol açar. Ekstübasyon için IV Lidokain kullanılacaksa, cerrahi yara yerine uygulanan Ropivakain/Bupivakain ile KÜMÜLATİF LAST (maksimum lokal anestezik toksik dozu) titizlikle hesaplanmalıdır!',
+      'Erken Nörolojik Muayene: İstemli ayak bileği/parmak hareketleri (aşırı rezeksiyon/flask felç dışlanması) ve sfinkter tonusu değerlendirilir.',
+      'Normotermi (> 36.5°C) ve ITB Yoksunluk Alarmı: Titreme önlenir; ITB öykülü hastalarda ateş, aşırı rijidite, taşikardi veya kaşıntı gelişirse derhal ITB Yoksunluk Krizi protokolü başlatılır.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Multimodal Analjezi Protokolü:',
-      '  - Cerrahi Kapanış Sırasında Epidural Kateter veya Kaudal Blok / İnfiltrasyon (%0.2-0.25 Ropivakain): Postoperatif ilk 24-48 saatlik şiddetli radiküler/kemik ağrısını keser.',
-      '  - Düzenli IV Parasetamol (15 mg/kg, 6 saatte bir infüzyon).',
-      '  - IV / Oral NSAİİ (İbuprofen 10 mg/kg veya Ketorolak): Cerrahi hemostaz sağlandıktan sonra.',
-      '  - Postoperatif Kas Spazmları İçin: Oral/IV Diazepam (0.05-0.1 mg/kg) veya Baklofen (deafferentasyona bağlı rebound hiperrefleksik spazmları çözer).',
-      '  - Şiddetli Ağrıda Hasta Kontrollü Analjezi (PCA) / Hemşire Kontrollü Analjezi: Düşük doz Morfin veya Fentanil infüzyonu.'
+      'İntradural Cerrahiye Özel Güvenli Multimodal Analjezi Protokolü:',
+      '  - Doğrudan Görüş Altında Koruyucusuz İntratekal Morfin (2 - 5 mcg/kg — dural kapanış öncesi cerrah tarafından yerleştirilir; postop 24 saat sürekli SpO2 ve solunum hızı izlemi ZORUNLUDUR!). NOT: Geniş dural açılışta epidural kateter veya kaudal blok lokal anesteziğin intratekal sızıntısı (total spinal anestezi, BOS kaçağı, nörolojik muayenenin maskelenmesi) riski taşır!',
+      '  - Yara Yeri Subkütan İnfiltrasyonu (%0.2 Ropivakain — IV Lidokain ile kümülatif LAST limitine kesinlikle dikkat edilir!).',
+      '  - Düzenli IV Parasetamol (15 mg/kg 6 saatte bir infüzyon; erişkin 1000 mg).',
+      '  - Postoperatif Deafferentasyon Kas Spazmları İçin: Düzenli Oral/IV Diazepam (0.05 - 0.1 mg/kg) veya bazal oral Baklofen (rebound hiperrefleksik spazmları çözer).',
+      '  - Kurtarma Analjeziği: PCA / Hemşire Kontrollü Analjezi (düşük doz IV Morfin/Fentanil; intratekal morfin verildiyse solunum depresyonu açısından sıkı titre edilir).',
+      '  - ERKEN KETOROLAK / NSAİİ YASAĞI: Geniş intradural SDR/DREZ cerrahisi sonrası erken dönemde rutin Ketorolak veya NSAİİ verilmez (intraspinal/subaraknoid hematom riski! Yalnızca nöroşirürji hemostaz onayı sonrası ≥ 24 - 48 saatte değerlendirilir).'
     ],
     prospectRecommendations: [
-      'Pediatrik ve erişkin spinal nöroşirürjide preemptif lokal anestezik uygulaması, epidural analjezi ve parasetamol bazlı multimodal protokoller opioid tüketimini, sedasyonu ve solunum depresyonunu minimize eder.'
+      'Pediatrik SDR için özel yayımlanmış bir PROSPECT kılavuzu bulunmamaktadır; doğrudan görüş altında koruyucusuz intratekal morfin (sürekli SpO2 izlemiyle), düzenli Parasetamol (15 mg/kg) ve antispazmodik (Diazepam) kombinasyonu postoperatif şiddetli radiküler ağrıyı ve rebound spazmları güvenle kontrol eder.'
     ],
     erasRecommendations: [
-      'ERAS Pediatrik ve Fonksiyonel Nöroşirürji Rehberi:',
-      '  - Düz Sırtüstü (Supin) Yatak İstirahati: Dural dikiş hattını korumak ve BOS fistülünü engellemek için postoperatif ilk 24-48 saat hasta yatakta düz yatırılır (baş elevasyonu < 15-20°).',
-      '  - Erken Sfinkter Takibi: İdrar retansiyonu veya inkontinans varlığı izlenir; gerekirse mesane sondası 48 saat tutulur.',
-      '  - Yoğun Postoperatif Fizyoterapi Programı: 48-72. saatten itibaren agresif güçlendirme ve yeniden yürüyüş eğitimi başlatılır (spastisite azaldığında alttaki gizli kas güçsüzlüğü belirginleşir; antigravite kaslarının yeniden eğitilmesi şarttır).',
-      '  - Enfeksiyon ve Yara Takibi: İnsizyon yerinde BOS sızıntısı, şişlik (psödomeningosel) veya kızarıklık takibi.'
+      'Postoperatif SDR ve Spastisite Cerrahisi Güvenlik Protokolü:',
+      '  - Düz Supin Yatak İstirahati: Dural tamiri korumak ve BOS kaçağını önlemek için ilk 24 - 48 saat baş elevasyonu < 15 - 20° tutulur.',
+      '  - İntratekal Morfin ve Solunum İzlemi: Koruyucusuz intratekal morfin uygulanan tüm çocuklarda ilk 24 saat sürekli SpO2, solunum sayısı ve sedasyon skoru (ve hazır IV Nalokson) takibi zorunludur.',
+      '  - ITB Yoksunluk / Doz Aşımı Takibi: Pompadan geçiş yapılan veya yüksek doz oral baklofen alan olgularda ateş, rijidite, kaşıntı ve otonomik fırtına (yoksunluk) veya somnolans/apne (doz aşımı) yakından izlenir.',
+      '  - Sfinkter ve Yara Takibi: İdrar retansiyonu (Foley sonda 48 saat) ve insizyonda BOS sızıntısı/psödomeningosel kontrolü.',
+      '  - Erken Yoğun Fizyoterapi: 48 - 72. saatten itibaren güçlendirme ve yürüyüş rehabilitasyonu.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2014). Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section II: Neurosurgery - Stereotactic Procedures & Functional Neurosurgery: Surgery for Spasticity, pp. 498-502. Philadelphia: Lippincott Williams & Wilkins.',
-    erasReference: 'Hagan, K. B., et al. (2020). Enhanced Recovery After Surgery (ERAS) in Pediatric and Functional Neurosurgery: Consensus Guidelines. Journal of Neurosurgery: Pediatrics.',
-    prospectReference: 'PROSPECT Guidelines for Postoperative Pain Management in Pediatric Spine Surgery and Laminectomy. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
+    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2020). Anesthesiologist\'s Manual of Surgical Procedures (6th ed.). Section II: Neurosurgery - Functional Neurosurgery: Surgery for Spasticity. Philadelphia: Wolters Kluwer.',
     otherReferences: [
       'Peacock, W. J., & Staudt, L. A. (1991). Selective posterior rhizotomy: indications, surgical technique, and results. Child\'s Nervous System, 7(4), 182-188.',
-      'Farmer, J. P., et al. (2006). Selective dorsal rhizotomy in the treatment of spasticity in cerebral palsy. Pediatric Neurosurgery, 42(5), 325-334.',
-      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Intraoperative Neurophysiological Monitoring Considerations in Selective Dorsal Rhizotomy.',
-      'Tedroff, K., et al. (2015). Long-term effects of selective dorsal rhizotomy on gross motor function in children with spastic diplegia. Developmental Medicine & Child Neurology, 57(8), 754-759.'
+      'Farmer, J. P., & Sabbagh, A. J. (2007). Selective dorsal rhizotomies in the treatment of spasticity related to cerebral palsy. Child\'s Nervous System, 23(9), 991-1002.',
+      'Tedroff, K., Löwing, K., & Åström, E. (2015). A prospective cohort study investigating gross motor function, pain, and health-related quality of life 17 years after selective dorsal rhizotomy in cerebral palsy. Developmental Medicine & Child Neurology, 57(5), 484-490.',
+      'Coffey, R. J., Edgar, T. S., Francisco, G. E., et al. (2002). Abrupt withdrawal from intrathecal baclofen: recognition and management of a potentially life-threatening syndrome. Archives of Physical Medicine and Rehabilitation, 83(6), 735-741.',
+      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Intraoperative Neurophysiological Monitoring and Pediatric Anesthetic Considerations in Selective Dorsal Rhizotomy.'
     ]
   }
 };

@@ -1,13 +1,12 @@
 import { ProcedureDefinition } from '../../types/procedures';
 
 /**
- * Trigeminal Nevraljide Perkütan Girişimler: Radyofrekans Rizotomi (RFT), Balon Mikrokompresyonu ve Gliserol Rizolizisi
+ * Trigeminal Nevraljide Perkütan Girişimler: Radyofrekans Rizotomi (RFT), Balon Mikrokompresyonu (PMC) ve Gliserol Rizolizisi
  * (Percutaneous Procedures for Trigeminal Neuralgia: Radiofrequency Rhizotomy, Balloon Microcompression, and Glycerol Rhizolysis)
- * 
- * Jaffe (5th ed., Section II: Neurosurgery - Stereotactic Procedures & Functional Neurosurgery: 
- * Percutaneous Procedures for Trigeminal Neuralgia, pp. 502-506), American Association of Neurological Surgeons (AANS),
- * Congress of Neurological Surgeons (CNS), Society for Neuroscience in Anesthesiology and Critical Care (SNACC)
- * ve European Academy of Neurology (EAN) Kılavuzları referans alınarak yapılandırılmıştır.
+ *
+ * Jaffe (6th ed., 2020, Section II: Neurosurgery - Functional Neurosurgery: Percutaneous Procedures for Trigeminal Neuralgia),
+ * European Academy of Neurology (EAN) Trigeminal Neuralgia Guideline (Bendtsen et al., Eur J Neurol 2019),
+ * ve Society for Neuroscience in Anesthesiology and Critical Care (SNACC) referans alınarak yapılandırılmıştır.
  */
 export const percutaneousTrigeminalNeuralgia: ProcedureDefinition = {
   id: 'percutaneous-trigeminal-neuralgia',
@@ -18,161 +17,192 @@ export const percutaneousTrigeminalNeuralgia: ProcedureDefinition = {
   categoryTag: 'Fonksiyonel & Girişimsel Ağrı Nöroşirürjisi',
 
   // 1) Prosedür Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Medikal tedaviye (Karbamazepin, Okskarbazepin, Baklofen) dirençli, tolere edilemeyen veya cerrahi mikrovasküler dekompresyona (MVD) yüksek risk taşıyan ya da MVD sonrası nüks eden Trigeminal Nevralji (Tic Douloureux) olgularında uygulanan minimal invaziv perkütan kafa tabanı girişimleridir. Hartel tekniği ile yanak derisinden (ağız köşesinin 2.5-3.0 cm lateralinden) girilen özel kanüller floroskopi (submental-verteks veya oblik foramen ovale görüntüsü) rehberliğinde Foramen Ovale içerisinden geçirilerek Meckel Mağarası ve Gasser Gangliyonuna ulaştırılır. Üç temel teknik uygulanır: (1) Perkütan Radyofrekans Termokoagülasyon (RFT / Rizotomi): Elektrik stimülasyonu ile trigeminal dal (V1, V2, V3) doğrulanıp hasta derin sedasyona alınarak 60-80°C\'de termal lezyon oluşturulmasıdır; (2) Perkütan Balon Mikrokompresyonu (PMC): 4 Numara Fogarty balonunun Meckel mağarasında radyoopak kontrastla "armut" konfigürasyonunda şişirilerek ganglion liflerinin petröz apeks ve duraya 1-3 dakika mekanik olarak ezilmesidir; (3) Retrogasserian Gliserol Rizolizisi: Trigeminal sistern içine sterilitesi teyit edilmiş anhidr gliserol enjekte edilerek miyelinsiz ve ince miyelinli nosiseptif C ve A-delta liflerinin kimyasal nörolizisidir.',
+  description: 'Medikal tedaviye (Karbamazepin, Okskarbazepin, Baklofen) dirençli/intoleran, açık mikrovasküler dekompresyona (MVD) yüksek riskli veya MVD sonrası nüks eden Trigeminal Nevralji (Tic Douloureux) olgularında uygulanan minimal invaziv perkütan kafa tabanı girişimleridir. Hartel tekniği ile yanak derisinden (ağız köşesinin 2.5 - 3.0 cm lateralinden — bukkal mukoza delinmeden!) girilen kanül, floroskopi rehberliğinde Foramen Ovaleden geçirilerek Meckel Mağarası ve Gasser Gangliyonuna ulaştırılır. Üç temel yöntem uygulanır: (1) Perkütan Radyofrekans Termokoagülasyon (RFT): Uyanık elektrik stimülasyonu ile V1/V2/V3 dalı doğrulanıp kısa süreli derinleştirilmiş sedasyon altında 65 - 75°C termal lezyon oluşturulması; (2) Perkütan Balon Mikrokompresyonu (PMC): Genel anestezi altında 4 Fr Fogarty balonunun Meckel mağarasında radyoopak kontrastla "armut" (pear) şeklinde şişirilerek gangliyonun 60 - 90 SANİYE mekanik kompresyonu; (3) Retrogasserian Gliserol Rizolizisi: Hiperbarik anhidr gliserolün trigeminal sistern içine OTURUR / YARI OTURUR VE BOYUN FLEKSİYONDA (çene göğse yakın!) pozisyonda enjekte edilerek kimyasal nörolizis yapılmasıdır.',
   indications: [
-    'Medikal Tedaviye Dirençli Tip 1 veya Tip 2 Trigeminal Nevralji (Karbamazepin, Okskarbazepin, Gabapentin tedavisine yanıtsız veya şiddetli yan etkiler nedeniyle ilaç kesilmek zorunda kalınan olgular)',
-    'İleri Yaş veya Yüksek Kardiyopulmoner Risk (Cerrahi posterior fossa kraniyotomisi / MVD tolere edemeyecek ASA III-IV hastalar)',
+    'Medikal Tedaviye Dirençli veya İlaç Yan Etkileri Nedeniyle İntoleran Klasik (Tip 1) veya Sekonder Trigeminal Nevralji',
+    'İleri Yaş veya Yüksek Kardiyopulmoner Risk (Açık posterior fossa kraniyotomisi / MVD için yüksek riskli ASA III - IV hastalar)',
     'Multipl Skleroz (MS) Zemininde Gelişen Trigeminal Nevralji (MS plaklarına bağlı santral kök giriş lezyonlarında perkütan yöntemler birinci basamak cerrahi seçenektir)',
-    'Mikrovasküler Dekompresyon (MVD) Cerrahisi Sonrası Ağrı Nüksü veya Başarısızlığı',
-    'Açık Kraniyotomiyi Reddeden Kooperatif Hastalar',
-    'V1 Oftalmik Dal Nevraljisinde Dikkatli RFT veya Gliserol (Korneal anestezi ve keratit riski nedeniyle özel değerlendirme gerektirir)'
+    'Mikrovasküler Dekompresyon (MVD) Sonrası Ağrı Nüksü veya Başarısızlığı',
+    'Açık Kraniyotomiyi Reddeden Kooperatif Hastalar (V1 oftalmik dal tutulumunda korneal anestezi riski nedeniyle balon kompresyonu veya dikkatli gliserol/RFT seçimi)'
   ],
-  averageDuration: '45 - 90 dakika (Floroskopik açı ayarı ve pozisyonlama: 15-20 dk; Hartel tekniği ile kanülün foramen ovaleden Meckel mağarasına ilerletilmesi: 15-25 dk; Elektrofizyolojik stimülasyon haritalaması veya kontrastlı balon enflasyonu / gliserol uygulaması: 15-25 dk; İğnenin çekilmesi, yanak kompresyonu ve uyanma: 10-15 dk)',
+  averageDuration: '45 - 90 dakika (Pozisyonlama ve submental-verteks/oblik floroskopik foramen ovale görüntülemesi: 15-20 dk; Hartel tekniğiyle kanülün Meckel mağarasına ilerletilmesi: 15-25 dk; RFT stimülasyon/termokoagülasyon veya 60 - 90 sn PMC balon kompresyonu veya oturur pozisyonda gliserol enjeksiyonu: 15-25 dk; Kanül çekimi, yanak kompresyonu ve derlenme: 10-15 dk)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '< 20 - 50 mL (Standart perkütan girişimde ihmal edilebilir cerrahi kan kaybı)',
+    estimatedBloodLoss: '< 20 - 50 mL (Standart perkütan girişimde ihmal edilebilir kan kaybı; ancak kafa tabanı majör damar yaralanması hayatidir)',
     riskLevel: 'minimal',
-    riskLevelLabel: 'Minimal / İhmal Edilebilir (Ancak Kafa Tabanı Majör Damar Yaralanması Riski Hayatidir)',
-    crossMatchRequirement: 'Tip & Screen (T&S) kan grubu doğrulaması yeterlidir; rutin eritrosit süspansiyonu hazırlığı gerekmez',
+    riskLevelLabel: 'Minimal Beklenen Kan Kaybı (Ancak ICA / Kavernöz Sinüs / İntrakraniyel Kanama Riski Hayatidir)',
+    crossMatchRequirement: 'Tip & Screen (T&S) doğrulaması yeterlidir; rutin eritrosit süspansiyonu hazırlığı gerekmez',
     transfusionProbability: '< %1 (Son derece nadir)',
     criticalBleedingSources: [
-      'A. Carotis Interna (Foramen ovalenin hemen medial ve derin komşuluğudur; iğnenin mediyale aşırı yönelmesi karotid ponksiyonu, psödoanevrizma veya Karotiko-Kavernöz Fistüle [CCF] yol açar)',
-      'V. Jugularis Interna ve V. Emissaria (Foramen ovalenin posteriorunda ponksiyon riski)',
-      'Pterigoid Venöz Pleksus ve Fasiyal Damarlar (Yanak yumuşak doku geçişinde hematom)',
-      'Subdural / Subaraknoid İntrakraniyel Kanama (Kanülün kafa içine aşırı derin ilerletilmesi)'
+      'A. Carotis Interna (ICA — foramen ovalenin hemen medial ve derin komşuluğu; ponksiyonu masif hemoraji, psödoanevrizma veya Karotiko-Kavernöz Fistüle [CCF] yol açar)',
+      'Kavernöz Sinüs, V. Jugularis Interna ve Emisser Venler',
+      'Pterigoid Venöz Pleksus ve Fasiyal Damarlar (yanak/retrofarengeal hematom — hava yoluna bası yapabilir!)',
+      'Subdural / Subaraknoid İntrakraniyel Hemoraji (kanülün aşırı derin ilerletilmesi veya koagülopati)'
     ],
     hemostasisStrategies: [
-      'Floroskopi altında iğne derinliğinin milimetrik kontrolü (klivus çizgisi ve petröz apeks sınırları asla aşılmamalıdır)',
-      'Karotid ponksiyon şüphesinde (kanülden pulsatil parlak kırmızı arteriyel kan gelişi) iğne derhal çekilmeli, yanak ve farenks arkasından en az 10-15 dakika kesintisiz dijital kompresyon uygulanmalıdır',
-      'İşlem sonunda kanül çekildikten sonra yanak delinme noktasına 5 dakika manuel kompresyon'
+      'İşlem öncesi antikoagülan ve antiagreganların ajana özgü doğru sürelerde kesilmiş ve koagülasyonun tam normal olması',
+      'Lateral floroskopide klivus çizgisi ve petröz apeks sınırlarının asla aşılmaması',
+      'Karotid ponksiyon şüphesinde (kanülden pulsatil parlak kırmızı arteriyel kan gelişi): İğne derhal çekilir, yanak ve farenks bölgesine en az 10 - 15 dakika kesintisiz manuel kompresyon uygulanır, işlem iptal edilir ve nörovasküler görüntüleme/CCF takibi yapılır'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Perkütan Radyofrekans (RFT) ve Gliserol İçin: Monitörize Anestezi Bakımı (MAC) + Hızlı Açılıp Kapanan Sedasyon (Ultra-kısa etkili Propofol + Remifentanil titrasyonu). Kanül geçişinde derin hipnoz -> Test uyarımında TAM UYANIK VE KOOPERE -> Termal lezyonlama anında DERİN HİPNOZ',
-      'Perkütan Balon Mikrokompresyonu (PMC) İçin: Endotrakeal Genel Anestezi (GETA) veya Laringeal Maske (LMA) — Balon şişirilmesi son derece ağrılıdır ve masif trigeminokardiyak refleks yaratır; genel anestezi şarttır'
+      'Perkütan Radyofrekans (RFT) ve Gliserol Rizolizisi İçin: Monitörize Anestezi Bakımı (MAC) + Titre Edilmiş Kısa Etkili Sedasyon (Yavaş titre düşük doz Propofol 0.3 - 0.5 mg/kg veya TCI [1.0 - 2.0 mcg/mL] ± ultra-düşük doz Remifentanil) + ZORUNLU yan akım (sidestream) EtCO2 kapnografi. (Korunmasız hava yolunda 1 - 1.5 mg/kg Propofol bolusu apne/obstrüksiyon yarattığından KULLANILMAZ!)',
+      'Perkütan Balon Mikrokompresyonu (PMC) İçin: Genel Endotrakeal Anestezi (GETA) veya LMA — 60 - 90 saniyelik balon kompresyonu dayanılmaz ağrı, ani şiddetli hipertansif pik (> 200 mmHg) ve masif trigeminokardiyak bradikardi/asistoli yarattığından genel anestezi ZORUNLUDUR'
     ],
     alternative: [
-      'Yüksek Riskli Yaşlı Olgularda: Deksmedetomidin infüzyonu eşliğinde MAC ve lokal mandibulomaksiller blok desteği'
+      'Yüksek Riskli Yaşlı/Kooperatif Olgularda (RFT/Gliserol): Deksmedetomidin infüzyonu eşliğinde hafif MAC + lokal cilt infiltrasyonu'
     ],
-    clinicalRationale: 'Perkütan RFT\'de 50 Hz duyusal test için hastanın hızla uyanıp kooperasyon kurabilmesi gerektiğinden spontan solunum altında (nazal O2 + EtCO2) ultra-kısa etkili Propofol + Remifentanil ile açılıp kapanan MAC tercih edilir. Balon mikrokompresyonu (PMC) ise dayanılmaz ağrı ve şiddetli trigeminokardiyak bradikardi/asistoli refleksi doğurduğundan LMA veya kontralateral ağız köşesine sabitlenen ETT ile genel anestezi zorunludur.',
-    notes: 'TRİGEMİNAL PERKÜTAN GİRİŞİMLERDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) TRİGEMİNOKARDİYAK REFLEKS (TCR) ALARMI (MASİF BRADİKARDİ VE ASİSTOLİ!) — Foramen ovale kılıfı delinirken, Gasser ganglionu manipüle edilirken veya özellikle BALON ŞİŞİRİLİRKEN trigeminal afferentler (V1-V3) uyarılır ve beyin sapı vagal motor nükleus üzerinden ani, şiddetli bradikardi, hipotansiyon ve KARDİYAK ASİSTOLİ gelişir (vakaların %50-70\'inde görülür!). Eylem: Cerrah anında uyarılır, cerrahi manipülasyon / balon enflasyonu durdurulur; düzelmezse Atropin (0.5-1.0 mg IV) veya Glikopirolat uygulanır. Preoperatif masada atropin enjektöre çekili hazır olmalıdır! (2) RFT\'DE "UYUT-UYANDIR-UYUT" HASSAS SEDASYON YÖNETİMİ — Foramen ovale penetrasyonu ağrılıdır (hastaya propofol 0.5-1.0 mg/kg verilir). İğne yerine oturunca hasta tamamen uyandırılır; cerrah 50 Hz duyu uyarımı verdiğinde hastanın "karıncalanma tam ağrılı bölgede mi?" sorusuna net cevap vermesi, 2 Hz motor uyarımda ise masseter kas seğirmesi izlenmelidir. Tam hedef belirlenince 60-80 saniyelik 65-75°C termal lezyon oluşturulurken hasta TEKRAR DERİN UYUTULMALIDIR (lezyonlama uyanık hastada dayanılmaz ağrı yaratır!). (3) KORNEA REFLEKSİNİN KORUNMASI — V1 dalı lezyonlandığında korneal anestezi gelişir; kornea duyusu kaybolursa nörotrofik keratit, kornea ülseri ve körlük riski doğar. Termal lezyon öncesi ve sonrasında kornea refleksi steril pamukla kontrol edilmeli; V1 liflerinin aşırı koagülasyonundan kaçınılmalıdır. (4) İÇ KAROTİD ARTER (ICA) VE JUGULER BULB YARALANMASI — İğne kanülünden pulsatil arteriyel kan gelirse karotid arter delinmiştir. Kanül derhal aspire edilerek çekilmeli, yanak ve farenkse 15 dakika kompresyon yapılmalı, işlem ertelenmeli ve Karotiko-Kavernöz Fistül (CCF) takibi yapılmalıdır. (5) AMELİYAT SONRASI AKUT HİPERTANSİYON VE MASSETER GÜÇSÜZLÜĞÜ — Trigeminokardiyak refleks sonrasında reaktif sempatik deşarj ve ağrıya bağlı hipertansif kriz gelişebilir; postoperatif sistolik KB < 140 mmHg tutulmalıdır.'
+    clinicalRationale: 'RFT\'de 50 Hz duyu haritalaması ve kornea refleksi kontrolü için hasta hızla uyanıp kooperasyon kurabilmeli; korunmasız hava yolunda solunum depresyonu ve apneyi önlemek için 1 - 1.5 mg/kg bolus yerine titre düşük doz Propofol (0.3 - 0.5 mg/kg veya TCI) + zorunlu sidestream EtCO2 kullanılmalıdır. PMC\'de ise şiddetli ağrı ve masif TCR/hipertansiyon nedeniyle kontralateral ağız köşesine tespitli ETT veya LMA ile genel anestezi esastır.',
+    notes: 'TRİGEMİNAL PERKÜTAN GİRİŞİMLERDE 6 HAYATİ ANESTEZİ KURALI: (1) GLİSEROL RİZOLİZİSİNDE OTURUR POZİSYON + BOYUN FLEKSİYONU ŞARTI (SUPİN EKSTANSİYON BEYİN SAPINA AKAR!); (2) TRİGEMİNOKARDİYAK REFLEKS (TCR) VE ŞİDDETLİ HİPERTANSİF FIRTINA (> 200 mmHg) — YAŞLI/KAH\'DA PROFİLAKTİK ATROPİN YERİNE GLİKOPİROLAT + HAZIR ESMOLOL/NİKARDİPİN/LABETALOL; (3) RFT\'DE TİTRE DÜŞÜK DOZ PROPOFOL (0.3-0.5 MG/KG / TCI) + ZORUNLU SİDESTREAM EtCO2; (4) KARBAMAZEPİN CYP450 DİRENCİ + Na+ KANAL AV BLOK/BRADİKARDİ (TCR\'Yİ AĞIRLAŞTIRIR!) + ANTİKOAGÜLAN KESİMİ; (5) BUKKAL MUKOZA PERFORASYONU → BAKTERİYEL MENENJİT ÖNLEMİ; (6) UYANIK RFT\'DE GÖZÜ BANTLAMA (KORNEA REFLEKSİ KONTROLÜ!), 60-90 SN BALON SÜRESİ, CN IV/VI DİPLOPİ VE HSV REAKTİVASYONU.',
+    rulesTitle: 'TRİGEMİNAL PERKÜTAN GİRİŞİMLERDE ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'GLİSEROL RİZOLİZİSİNDE OTURUR POZİSYON VE BOYUN FLEKSİYONU (ÇENE GÖĞSE YAKIN!)',
+        content: 'Anhidr gliserol BOS\'tan daha yoğun (HİPERBARİK) bir sıvıdır! Gliserol enjeksiyonu sırasında ve işlem sonrası 1 - 2 saat boyunca hasta OTURUR / YARI OTURUR POZİSYONDA VE BOYUN FLEKSİYONDA (çene göğse yakın) tutulmalıdır. Supin + boyun ekstansiyonunda gliserol posterior fossaya ve beyin sapına akarak kranyal sinir felçlerine ve beyin sapı toksisitesine yol açar! Oturur pozisyonda ortostatik hipotansiyon, vazovagal senkop (TCR ile birleşince ağırlaşır!) ve hava yolu güvenliği yakından yönetilir.'
+      },
+      {
+        number: 2,
+        title: 'TRİGEMİNOKARDİYAK REFLEKS (TCR) VE AKUT HİPERTANSİF FIRTINA (> 200 mmHg) YÖNETİMİ',
+        content: 'Foramen ovale geçişi, lezyonlama ve özellikle balon şişirilmesi (60 - 90 sn) sırasında ani bradikardi/asistoli (TCR) YANI SIRA şiddetli sempatik HİPERTANSİF FIRTINA (SKB > 200 mmHg → intrakraniyel kanama/miyokard iskemisi!) gelişebilir. Kısa etkili IV ESMOLOL, NİKARDİPİN veya LABETALOL enjektörde çekili hazır tutulmalıdır! Yaşlı ve KAH\'lı hastalarda profilaktik Atropin (0.5 mg) tehlikeli taşikardi/iskemi yapabileceğinden profilaksi gerekiyorsa GLİKOPİROLAT (0.2 mg IV) tercih edilir; Atropin (0.5 - 1.0 mg IV) şiddetli bradikardi/asistoli tedavisine saklanır ve yüksek riskte transkütan pacing pedleri hazır bulundurulur.'
+      },
+      {
+        number: 3,
+        title: 'KORUNMASIZ HAVA YOLUNDA (RFT) TİTRE DÜŞÜK DOZ PROPOFOL (0.3 - 0.5 MG/KG) + SİDESTREAM EtCO2',
+        content: 'Uyanık-sedasyonlu RFT\'de 1 - 1.5 mg/kg Propofol bolusu ani apne, üst hava yolu obstrüksiyonu ve hipoksiye yol açar — KESİNLİKLE KAÇINILMALIDIR! Giriş ve termal lezyonlama fazlarında yavaş titre düşük doz Propofol (0.3 - 0.5 mg/kg IV veya TCI 1.0 - 2.0 mcg/mL) ± ultra-düşük doz Remifentanil kullanılır ve ZORUNLU yan akım (sidestream) EtCO2 kapnografi ile solunum kesintisiz izlenir.'
+      },
+      {
+        number: 4,
+        title: 'KARBAMAZEPİN FARMAKOLOJİSİ (CYP450 + AV BLOK/TCR RİSKİ) VE ANTİKOAGÜLAN KESİMİ',
+        content: 'Karbamazepin (1) güçlü CYP450 indükleyicisi olup aminosteroid kas gevşeticilere (Rokuronyum) ve opioidlere direnç oluşturur (NMB gerekiyorsa Hofmann eliminasyonlu Sisatrakuryum); (2) Na+ kanal blokajıyla sinüs bradikardisi ve AV iletim bloğu yaparak TCR\'yi tehlikeli biçimde ağırlaştırır; (3) SIADH/hiponatremi ve lökopeni yapar. ICA ve kavernöz sinüs kanama riski nedeniyle tüm antikoagülan/antiagreganlar ajana özgü doğru sürelerde kesilmiş ve koagülasyon tam normal olmalıdır.'
+      },
+      {
+        number: 5,
+        title: 'BUKKAL MUKOZA PERFORASYONU → BAKTERİYEL MENENJİT ÖNLEMİ',
+        content: 'Hartel tekniğinde kanülün ağız içi bukkal mukozayı delmesi oral flora bakterilerinin doğrudan Meckel mağarasına/BOS\'a taşınarak ölümcül bakteriyel menenjite yol açmasına neden olur! Cerrah bir parmağıyla ağız içinden mukozayı korur; mukoza delinirse kanül ve eldiven DERHAL yeni sterille değiştirilir ve uygun profilaktik antibiyotik uygulanır.'
+      },
+      {
+        number: 6,
+        title: 'UYANIK RFT\'DE KORNEA REFLEKSİ ERİŞİMİ, 60 - 90 SN BALON SÜRESİ, CN IV/VI VE HSV',
+        content: 'Uyanık RFT\'de lezyon öncesi ve sonrası kornea refleksi pamukla kontrol edileceğinden göz sıkıca bantlanmaz (erişilebilir bırakılır); koruyucu göz bandı/pomad yalnızca genel anestezi altındaki PMC\'de uygulanır. Güncel standart PMC balon kompresyon süresi 60 - 90 saniyedir. Postoperatif dönemde kavernöz sinüs komşuluğuna bağlı geçici CN IV/VI paralizisi (diplopi) ve Gasser gangliyonu manipülasyonuna bağlı perioral HSV reaktivasyonu izlenir.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Nöroloji Konsültasyonu: Trigeminal nevraljinin etiyolojisi (Tip 1 klasik nörovasküler bası vs Tip 2 atipik nevralji vs Multipl Skleroza ikincil nevralji), tutulan trigeminal dallar (V1 oftalmik, V2 maksiller, V3 mandibular) ve tetik noktaları (trigger points) belgelenmelidir.',
-      'Kardiyoloji Konsültasyonu: Trigeminokardiyak refleksin (asistoli, şiddetli bradikardi) yaratabileceği koroner iskemi ve hemodinamik riskler açısından değerlendirme; bazal EKG, ritim bozuklukları ve fonksiyonel kapasite analizi.',
-      'Göz Hastalıkları Konsültasyonu: Özellikle V1 tutulumu olan veya V1 dalına yakın lezyonlama planlanan hastalarda bazal kornea duyusu ve görme keskinliği muayenesi.',
-      'KBB / Ağız Diş Çene Cerrahisi: Ağız açıklığı kısıtlılığı, çene deformiteleri, temporomandibular eklem (TME) disfonksiyonu ve aktif intraoral/fasiyal enfeksiyon odağının dışlanması.'
+      'Nöroloji Konsültasyonu: Trigeminal nevralji alt tipi (klasik Tip 1, sekonder MS veya idiyopatik), etkilenen dallar (V1, V2, V3), tetik noktaları ve postoperatif Karbamazepin/Okskarbazepin kademeli azaltma planı.',
+      'Kardiyoloji Konsültasyonu: İleri yaş ve KAH hastalarında TCR (asistoli/bradikardi) ve intraoperatif hipertansif fırtına (> 200 mmHg) toleransı, bazal EKG iletim blokları (Karbamazepin ilişkili AV blok!) ve antikoagülan/antiagregan kesim güvenliği.',
+      'Göz Hastalıkları ve Ağız-Diş Değerlendirmesi: V1 tutulumunda bazal kornea duyusu; ağız içi aktif enfeksiyonun dışlanması (bukkal perforasyon/menenjit riski!).'
     ],
     historyAndPhysical: [
-      'Tetik Noktaları ve Ağrı Atağı Öyküsü: Dokunma, çiğneme, konuşma, traş olma veya rüzgarla tetiklenen şimşek çakar tarzda lancinating paroksizmal ağrı öyküsü.',
-      'Kullanılan Antiepileptik ve Nöropatik Ağrı İlaçları: Karbamazepin, Okskarbazepin, Baklofen, Pregabalin, Gabapentin dozları ve yan etkileri (sedasyon, ataksi, hiponatremi, lökopeni).',
-      'Kafa Tabanı Anatomisi ve Skolyoz/Boyun Sertliği: Floroskopide submental-verteks görüntüsü için boyun ekstansiyon toleransı incelenir.',
-      'Zor Hava Yolu Taraması: Balon kompresyonu genel anestezi ile yapılacaksa yaşlı, dişsiz veya servikal spondilozlu hastalarda maske ventilasyonu ve laringoskopi zorluğu.'
+      'Karbamazepin / Okskarbazepin ve İlaç Etkileşimleri: Dozlar, SIADH/hiponatremi, ataksi, lökopeni, CYP450 indüksiyonu ve kardiyak AV iletim/bradikardi etkileri değerlendirilir (ameliyat öncesi aniden kesilmez!).',
+      'Kardiyovasküler ve Ortostatik Tolerans: Gliserol rizolizisinde oturur pozisyonda ortostatik hipotansiyon ve vazovagal senkop yatkınlığı sorgulanır.',
+      'Boyun Hareketliliği ve Hava Yolu: RFT/PMC için boyun ekstansiyon toleransı; yaşlı/dişsiz/servikal spondilozlu hastalarda genel anestezi (PMC) veya acil kurtarma entübasyonu hazırlığı.'
     ],
     laboratoryAndTests: [
-      'Tam Kan Sayımı (Karbamazepin kullanımına bağlı aplastik anemi, nötropeni ve lökopeni kontrolü).',
-      'Serum Elektrolitleri: Özellikle Serum Sodyum düzeyi (Karbamazepin/Okskarbazepin SIADH benzeri hiponatremi yaratabilir).',
-      'Koagülasyon Paneli: PT, aPTT, INR tam normal olmalıdır (kafa tabanı ve pterigoid pleksus hematomunu önlemek için).',
-      '12 Derivasyonlu EKG (Bazal bradikardi, dal bloku veya AV iletim defekti varlığı).',
-      'Kranyal MRG / Sisternografi (CISS / 3D-FIESTA sekansları): Foramen ovale çapı, trigeminal sinir kök girişi (REZ), kitle/tümör ve Multipl Skleroz demiyelinizan plaklarının incelenmesi.'
+      'ANTİKOAGÜLAN VE ANTİAGREGAN KESİLME PROTOKOLÜ (ICA / Kavernöz Sinüs / İntrakraniyel Kanama Riski):',
+      '  - Varfarin: ~5 gün önce kesilir, işlem öncesi INR ≤ 1.2 - 1.3 doğrulanır (DMAH köprülemede profilaktik son doz ≥ 12 saat, terapötik son doz ≥ 24 saat önce kesilir).',
+      '  - DOAC (Apiksaban, Rivaroksaban, Edoksaban): En az 48 - 72 saat; Dabigatran: En az 72 - 96 saat (CrCl < 50 mL/dk ise ≥ 96 - 120 saat) önce kesilir.',
+      '  - Klopidogrel: 5 - 7 gün; Prasugrel: 7 - 10 gün; Tikagrelor: 5 gün; Aspirin: 5 - 7 gün önce kesilir (yüksek kardiyovasküler/stent riskinde kardiyoloji–nöroşirürji ortak değerlendirmesi).',
+      'Tam Kan Sayımı (Karbamazepin kaynaklı lökopeni/nötropeni/trombositopeni) ve Koagülasyon Paneli (PT, aPTT, INR).',
+      'Serum Elektrolitleri: Özellikle Serum Sodyum (Karbamazepin/Okskarbazepin SIADH hiponatremisi!).',
+      '12 Derivasyonlu EKG (Karbamazepin kaynaklı bazal bradikardi, PR uzaması, AV blok veya dal bloku kontrolü!).',
+      'Kranyal MRG / 3D-FIESTA (CISS) Sisternografi: Nörovasküler bası, kitle ve MS plaklarının dışlanması.'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: EKG (5 derivasyonlu — TCR asistolisini anında duymak için sesli QRS tonu açık olmalıdır), NIBP (1-2 dakikalık sık ölçüm modunda), SpO2, EtCO2 ve Sıcaklık.',
-      'İnvaziv Arter Basıncı İzlemi (A-Line): Balon mikrokompresyonu uygulanan veya şiddetli kardiyovasküler hastalığı olan yaşlı olgularda ani bradikardi/hipotansiyon ve balon sonrasındaki hipertansif tepeyi saniye saniye izlemek için tercih edilir.',
-      'Floroskopi (C-Kollu Skopi) Rehberliği: Foramen ovale ve kafa tabanı görüntüsü için submental-verteks ve lateral açılar; anestezi ekibi ve hasta tiroid koruyucu / kurşun önlükle korunur.',
-      'Kornea Refleksi Takibi: V1 liflerinin korunmasını teyit etmek için lezyonlama öncesi ve sonrası steril spanç/pamuk ucu ile kornea refleksi kontrolü.',
-      'Masseter Motor Seğirme Takibi: 2 Hz elektrik uyarımında mandibular motor dal uyarımı (çene seğirmesi) gözlenir.'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (TCR asistolisi için sesli QRS tonu açık!), sık NIBP (1 - 2 dk aralıkla — ani > 200 mmHg hipertansiyonu anında yakalamak için), SpO2, sıcaklık ve ZORUNLU sürekli EtCO2 kapnografi (RFT/Gliserol MAC olgularında sidestream nazal EtCO2).',
+      'İnvaziv Arter Basıncı İzlemi (A-Line): PMC uygulanan, ciddi KAH/hipertansiyonu olan veya oturur pozisyonda gliserol yapılan yüksek riskli yaşlı hastalarda saniyelik KB kontrolü için tercih edilir.',
+      'Transkütan Pacing Pedleri: Bazal AV bloku/bradikardisi (özellikle Karbamazepin altında) veya ciddi KAH\'ı olan yüksek riskli olgularda hazır bulundurulur.',
+      'Floroskopi (C-Kollu Skopi) Rehberliği ve Radyasyon Güvenliği (kurşun önlük/tiroid koruyucu).',
+      'Uyanık RFT\'de Kornea Refleksi (steril pamuk ucu) ve 2 Hz Masseter Motor Seğirme İzlemi.'
     ],
     vascularAccess: [
-      'En az 1 adet geniş çaplı (16-18G) güvenli periferik intravenöz yol (üst ekstremitede, acil atropin ve efedrin puşeleri için kesintisiz açık tutulmalıdır)'
+      'En az 1 - 2 adet geniş çaplı (16 - 18G) güvenli periferik intravenöz yol (acil IV Esmolol/Nikardipin/Labetalol, Glikopirolat/Atropin ve sıvı bolusları için kesintisiz açık)'
     ],
-    patientPosition: 'Supin (Sırtüstü) Pozisyon, Boyun Hafif Ekstansiyonda, Baş Floroskopi Altında Nötral',
+    patientPosition: 'RFT ve PMC İçin SUPİN (Boyun Hafif Ekstansiyonda); GLİSEROL RİZOLİZİSİ Enjeksiyonu ve Sonrası 1 - 2 Saat İçin OTURUR / YARI OTURUR + BOYUN FLEKSİYONDA (Çene Göğse Yakın!)',
     patientPositionDetails: [
-      'Hartel tekniğinde foramen ovalenin submental-verteks floroskopik eksende görüntülenebilmesi için baş hafif ekstansiyona getirilir.',
-      'Ağız köşesi, tragusun 3 cm anterioru ve pupilla hattı işaretlenir (Hartel üçgeni koordinatları).',
-      'Gözler şeffaf koruyucu göz bandı (Tegaderm) ile kapatılır; kornea abrazyonu ve işlem esnasında gözün uyarılması engellenir.',
-      'Hastanın omuz altına hafif destek konularak göğüs rahatlatılır.'
+      'RFT ve PMC Pozisyonu: Foramen ovalenin submental-verteks/oblik floroskopide görülmesi için hasta supin, boyun hafif ekstansiyondadır.',
+      'GLİSEROL RİZOLİZİSİ POZİSYONU (HAYATİ!): Hiperbarik anhidr gliserol enjeksiyonu aşamasında masa/hasta OTURUR / YARI OTURUR pozisyona getirilir ve BOYUN FLEKSİYONA (çene göğse yakın) alınır; bu pozisyon işlem sonrası 1 - 2 saat korunur (supin ekstansiyon gliserolü beyin sapına akıtır!). Oturur pozisyonda ortostatik hipotansiyon, vazovagal senkop ve acil hava yolu erişimine karşı yakın izlem yapılır.',
+      'GÖZ KORUMASI AYRIMI: Uyanık RFT\'de kornea refleksi lezyon öncesi/sonrası test edileceğinden göz BANTLANMAZ (erişilebilir bırakılır); koruyucu şeffaf göz bandı/pomad yalnızca genel anestezi altındaki PMC olgularında uygulanır!'
     ],
     anesthesiaManagement: [
-      'Radyofrekans Termokoagülasyon (RFT) Sedasyon Protokolü:',
-      '  - Giriş Fazı: Hartel iğnesi yanak derisinden foramen ovaleye doğru ilerletilirken ağrıyı kesmek için Propofol (0.5-1.0 mg/kg IV) + Fentanil/Remifentanil titre edilir.',
-      '  - İğne foramen ovaleyi geçip Meckel mağarasına ulaştığında propofol kesilir, hasta tamamen uyandırılır.',
-      '  - Stimülasyon Fazı: 50 Hz (0.1-0.5 V) duyu uyarımı verilir; hasta tam uyanıkken parestezinin nevralji ağrısının olduğu sahada (V2 üst çene/yanak, V3 alt çene) hissedildiğini cerraha bildirir. 2 Hz motor uyarımda çene seğirmesi kontrol edilir.',
-      '  - Lezyonlama Fazı: Hedef elektrot pozisyonu teyit edildiğinde hasta TEKRAR DERİN SEDASYONA alınır (Propofol 1-1.5 mg/kg bolus). Cerrah 65-75°C\'de 60-90 saniye termal lezyon oluşturur.',
+      'Acil Hemodinamik İlaç Hazırlığı (İndüksiyon/Başlangıç Öncesi Enjektörde Çekili!):',
+      '  - Kısa etkili antihipertansifler: IV Esmolol, Nikardipin veya Labetalol (ani > 200 mmHg hipertansif fırtına için!).',
+      '  - Antikolinerjikler: Yaşlı/KAH hastalarında profilaksi gerekiyorsa GLİKOPİROLAT (0.2 mg IV — Atropine göre daha ılımlı taşikardi!); şiddetli bradikardi/asistoli kurtarma tedavisi için IV ATROPİN (0.5 - 1.0 mg) + vazopresör (Fenilefrin/Efedrin/Adrenalin).',
+      'Radyofrekans Termokoagülasyon (RFT) Titre MAC Protokolü:',
+      '  - Kanül Giriş Fazı: Korunmasız hava yolunda 1 - 1.5 mg/kg bolus YERİNE yavaş titre düşük doz Propofol (0.3 - 0.5 mg/kg IV veya TCI 1.0 - 2.0 mcg/mL) ± ultra-düşük doz Remifentanil + ZORUNLU sidestream EtCO2.',
+      '  - Stimülasyon Fazı: Propofol durdurulur, hasta tam uyanır; 50 Hz (0.1 - 0.5 V) duyu uyarımıyla nevralji dalı (V2/V3) doğrulanır, 2 Hz motor uyarımda masseter seğirmesi izlenir, kornea refleksi (açık/erişilebilir gözde!) kontrol edilir.',
+      '  - Termal Lezyonlama Fazı: Yeniden titre kısa süreli sedasyon (düşük doz Propofol 0.3 - 0.5 mg/kg veya TCI artışı — spontan solunum/EtCO2 izlemiyle!) altında 65 - 75°C\'de 60 - 90 sn lezyon oluşturulur; ardından tekrar kornea refleksi test edilir.',
       'Balon Mikrokompresyonu (PMC) Genel Anestezi Protokolü:',
-      '  - GETA veya LMA ile genel anestezi indüksiyonu: Propofol + Remifentanil + Rokuronyum/Kürarsız idame.',
-      '  - Balon Enflasyonu Sırasında Akut Müdahale: Fogarty balonu şişirilirken şiddetli trigeminokardiyak refleks oluşur; balon şişirilmeden önce IV Atropin (0.5 mg) profilaktik uygulanabilir.',
+      '  - GETA (veya LMA) ile genel anestezi: Propofol + Remifentanil (Karbamazepin kullananlarda NMB gerekiyorsa Hofmann eliminasyonlu Sisatrakuryum tercih edilir).',
+      '  - 60 - 90 Saniye Balon Enflasyonu: Şiddetli TCR bradikardi/asistoli ve hemen ardından > 200 mmHg hipertansif pik gelişebilir; profilaktik Glikopirolat (yaşlı/KAH\'da Atropin yerine!) ve hazır Esmolol/Nikardipin ile yönetilir.',
+      'Gliserol Rizolizisi Protokolü:',
+      '  - Kanül yerleşimi supin/hafif sedasyonda yapıldıktan sonra hasta OTURUR + BOYUN FLEKSİYONDA (çene göğse yakın) pozisyona alınır; 0.15 - 0.35 mL hiperbarik anhidr gliserol yavaşça enjekte edilir. Ortostatik hipotansiyon ve vazovagal/TCR senkobuna karşı IV sıvı ve vazopresörler hazır tutulur.',
       'Trigeminokardiyak Refleks (TCR) Kriz Yönetimi:',
-      '  - Foramen ovale penetrasyonu veya balon şişirilmesiyle ani nabız düşüşü (< 40/dk) veya asistoli geliştiğinde:',
-      '    1. Cerraha sesli "ASİSTOLİ / BRADİKARDİ — MANİPÜLASYONU DURDUR!" uyarısı verilir.',
-      '    2. Cerrah balonu derhal indirir veya iğne traksiyonunu bırakır.',
-      '    3. IV Atropin (0.5-1.0 mg bolus) uygulanır; gerekirse Efedrin (5-10 mg) veya Adrenalin (10-20 mcg) titre edilir.'
+      '  - Ani kalp hızı düşüşü (< 40/dk) veya asistolide: (1) Cerraha sesli "ASİSTOLİ / BRADİKARDİ — DURDUR!" uyarısı → manipülasyon/balon derhal sonlandırılır; (2) Hızla düzelmezse IV Atropin (0.5 - 1.0 mg) ve gerekirse transkütan pacing / Adrenalin (10 - 20 mcg IV) uygulanır.',
+      'Bukkal Mukoza Perforasyonu Önlemi:',
+      '  - Kanül ağız içi mukozayı delerse derhal yeni steril kanül/eldivene geçilir ve bakteriyel menenjit profilaksisi için uygun IV antibiyotik başlanır.'
     ],
     airwayManagement: [
-      'MAC / Sedasyon Olgularında: Nazal kanül veya nazal yüksek akımlı oksijen; spontan solunum korunur. Foramen ovale ponksiyonu esnasında hastanın ani baş hareketi yapmaması için anestezi derinliği ile solunum dengesi hassas yönetilir.',
-      'Genel Anestezi (PMC) Olgularında: Standart endotrakeal tüp veya supraglottik hava yolu (LMA); tüp kontralateral ağız köşesine tespit edilir (ipsilateral yanak steril cerrahi sahadır).'
+      'MAC / RFT ve Gliserol Olgularında: Nazal kanül ile O2 + ZORUNLU sürekli yan akım (sidestream) EtCO2 kapnografi; oturur pozisyonda (gliserol) acil sırtüstü yatırma ve maske/LMA kurtarma hazırlığı.',
+      'Genel Anestezi (PMC) Olgularında: Kontralateral ağız köşesine tespitli oral ETT (veya LMA); ipsilateral yanak tamamen steril cerrahi sahadadır.'
     ],
     criticalSurgicalStages: [
-      '1. Submental-Verteks ve Oblik Floroskopi İle Foramen Ovalenin Netleştirilmesi.',
-      '2. Hartel Noktasından (Ağız köşesinin 2.5-3 cm lateralinden) Kanülün Girilmesi.',
-      '3. Kanülün Foramen Ovale Ağzına İlerletilmesi ve Kafa Tabanının Geçilmesi (TCR bradikardi riski!).',
-      '4. Meckel Mağarasında BOS Akışının Doğrulanması (Retrogasserian trigeminal sistern penetrasyonu).',
-      '5. RFT İçin Elektrofizyolojik Duyu/Motor Stimülasyonu ve Termal Koagülasyon (60-80 saniye).',
-      '6. PMC İçin Fogarty Balonunun Kontrast Maddeyle Şişirilmesi ("Armut" Şeklinin Skopiyle Doğrulanması, 1-3 dakika kompresyon).',
-      '7. Gliserol İçin Sisternografik Kontrast Teyidi ve 0.15-0.35 mL Anhidr Gliserolün Yavaşça Enjeksiyonu.',
-      '8. Kanülün Çekilmesi ve Yanak Ponksiyon Hattına 5-10 Dakika Manuel Kompresyon.'
+      '1. Submental-Verteks ve Oblik Floroskopi ile Foramen Ovale Görüntülemesi.',
+      '2. Hartel Noktasından Kanül Girişi (ağız içi parmak korumasıyla bukkal mukoza perforasyonu önlenir!).',
+      '3. Foramen Ovale Geçişi ve Meckel Mağarasında BOS Doğrulaması (TCR bradikardi + ICA ponksiyon riski!).',
+      '4. RFT: Uyanık 50 Hz/2 Hz Haritalama + Kornea Refleksi + Titre Sedasyonda 65 - 75°C Termal Lezyon.',
+      '5. PMC: 4 Fr Fogarty Balonunun "Armut" Konfigürasyonunda 60 - 90 Saniye Kompresyonu (TCR + > 200 mmHg hipertansiyon!).',
+      '6. Gliserol: Oturur + Boyun Fleksiyonda (Çene Göğse) 0.15 - 0.35 mL Hiperbarik Anhidr Gliserol Enjeksiyonu.',
+      '7. Kanül Çekilmesi ve Yanak Ponksiyon Hattına 5 - 10 Dakika Manuel Kompresyon.'
     ],
     emergenceNotes: [
-      'Postoperatif Sempatik Deşarj ve Hipertansiyon: Trigeminal ganglion manipülasyonu sonrası hastada ani kan basıncı fırlaması (sistolik KB > 160-180 mmHg) görülebilir. Labetalol (5-10 mg IV) veya Esmolol ile regüle edilir.',
-      'Korneal Refleks Kontrolü: Hasta uyanır uyanmaz ipsilateral kornea duyusu pamukla kontrol edilir; duyu kaybı varsa yapay gözyaşı damlası damlatılır ve göz şeffaf nem odası ile kapatılır.',
-      'Çiğneme Fonksiyonu ve Yanak Hematomu: Masseter kas tonusu ve ağız içi/yanak hematomu değerlendirilir.',
-      'Ağrının Durumu: Hasta ameliyat masasında iken paroksizmal elektrik çarpması ağrısının kaybolduğu doğrulanır.'
+      'Reaktif Hipertansiyon Kontrolü: İşlem sonrası sempatik pikle SKB > 160 - 200 mmHg çıkabilir; IV Esmolol, Labetalol veya Nikardipin ile SKB < 140 mmHg tutulur.',
+      'Kranyal Sinir ve Göz Muayenesi: Kornea refleksi (duyu kaybında yapay gözyaşı ve koruyucu nem odası), masseter kas kuvveti ve kavernöz sinüs basısına bağlı geçici CN IV / CN VI paralizisi (DİPLOPİ) kontrol edilir.',
+      'Yanak/Retrofarengeal Hematom ve Menenjit Uyanıklığı: Ağız içi şişlik, hematom veya şiddetli baş ağrısı/ense sertliği izlenir.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Multimodal Analjezi Protokolü:',
-      '  - İşlem sonrası trigeminal nevraljinin şimşek çakar tarzı ağrısı anında kesilir; geriye kalan yanak ponksiyon yeri ağrısı ve künt disestezi hafiftir.',
-      '  - Düzenli Oral / IV Parasetamol (1000 mg).',
-      '  - Gerekirse oral NSAİİ (İbuprofen 400 mg veya Deksketoprofen 25-50 mg).',
-      '  - Postoperatif Disestezi veya "Anesthesia Dolorosa" Yönetimi: Nadiren gelişebilecek kalıcı yanıcı disestezik ağrılar için düşük doz Gabapentin veya Pregabalin başlanabilir.',
-      '  - Preoperatif kullanılan yüksek doz Karbamazepin/Okskarbazepin aniden KESİLMEMELİ; 1-2 hafta içinde kademeli olarak azaltılarak kesilmelidir (ani kesilme yoksunluk nöbetlerine yol açabilir!).'
+      'Multimodal Analjezi ve İlaç Azaltma Protokolü:',
+      '  - Trigeminal nevralji ağrısı genellikle işlemle anında kesilir; hafif yanak ponksiyon ağrısı için düzenli Oral/IV Parasetamol (1000 mg 6 saatte bir) yeterlidir.',
+      '  - Yanak/kafa tabanı hemostazı kesin doğrulandıktan sonra gerekirse kısa süreli oral NSAİİ (İbuprofen 400 mg) eklenebilir (güçlü opioidlere gerek duyulmaz).',
+      '  - Postoperatif Disestezi / "Anesthesia Dolorosa": Nadir yanıcı nöropatik ağrı gelişirse Gabapentin veya Pregabalin başlanır.',
+      '  - KARBAMAZEPİN / OKSKARBAZEPİN KADEMELİ KESİMİ: Preoperatif yüksek doz kullanılan antiepileptikler ASLA aniden kesilmez; nöroloji kontrolünde 1 - 2 haftada kademeli azaltılır (ani kesilme yoksunluk nöbetine yol açar!).'
     ],
     prospectRecommendations: [
-      'Perkütan kafa tabanı girişimlerinde sistemik parasetamol ve selektif NSAİİ kullanımı cerrahi alan ağrısını kontrol etmede yeterlidir; güçlü opioid kullanımına ihtiyaç duyulmaz.'
+      'Perkütan trigeminal girişimler için özel bir PROSPECT kılavuzu bulunmamaktadır; sistemik Parasetamol bazlı non-opioid yaklaşım işlem sonrası hafif ponksiyon ağrısı için yeterlidir.'
     ],
     erasRecommendations: [
-      'ERAS ve EAN Trigeminal Girişim Kılavuzları:',
-      '  - Kornea Koruma Protokolü: Kornea refleksi zayıflamış veya kaybolmuş hastalarda günde 4-6 kez prezervansız suni gözyaşı damlası, gece koruyucu oftalmik pomad ve dış ortamda koruyucu rüzgar gözlüğü kullanımı reçete edilir.',
-      '  - Çiğneme Eğitimi: V3 mandibular motor lif hasarına bağlı geçici masseter zayıflığında hastaya gıdaları kontralateral (sağlam) tarafla çiğnemesi ve sıcak/sert gıdalardan kaçınması tembihlenir.',
-      '  - Günübirlik veya 1 Gece Yatış: Kanama, hematom ve hemodinamik instabilite görülmeyen olgular 4-6 saatlik derlenme takibi sonrası aynı gün taburcu edilebilir.',
-      '  - Erken Oral Beslenme ve 2. Saatte Mobilizasyon.'
+      'EAN 2019 Kılavuzu ve Postoperatif Güvenlik Takibi:',
+      '  - Gliserol Rizolizisi Sonrası Pozisyon: Hasta işlem sonrası 1 - 2 SAAT BOYUNCA OTURUR VE BOYUN FLEKSİYONDA (çene göğse yakın) tutulmalıdır!',
+      '  - Kornea Koruma Protokolü: Kornea refleksi zayıflayan olgularda prezervansız suni gözyaşı damlası (4 - 6 kez/gün), gece oftalmik pomad ve koruyucu gözlük reçete edilir.',
+      '  - Spesifik Komplikasyon İzlemi: Geçici CN IV/VI diplopi, geçici masseter zayıflığı (sağlam tarafla yumuşak çiğneme eğitimi), Gasser gangliyonu manipülasyonuna bağlı sık görülen perioral HERPES SİMPLEKS VİRÜS (HSV) REAKTİVASYONU (gerekirse antiviral tedavi) ve bukkal perforasyon olduysa bakteriyel menenjit bulguları yakından izlenir.',
+      '  - Komplikasyonsuz, hemodinamik olarak stabil olgular 4 - 6 saatlik gözlem sonrası aynı gün veya 1 gece yatışla taburcu edilir.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2014). Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section II: Neurosurgery - Stereotactic Procedures & Functional Neurosurgery: Percutaneous Procedures for Trigeminal Neuralgia, pp. 502-506. Philadelphia: Lippincott Williams & Wilkins.',
-    erasReference: 'Cruccu, G., et al. (2019). European Academy of Neurology (EAN) Guidelines on Trigeminal Neuralgia Management. European Journal of Neurology, 26(6), 831-845.',
-    prospectReference: 'PROSPECT Guidelines for Postoperative Pain and Anesthetic Management in Minor Craniofacial and Percutaneous Procedures. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
+    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2020). Anesthesiologist\'s Manual of Surgical Procedures (6th ed.). Section II: Neurosurgery - Functional Neurosurgery: Percutaneous Procedures for Trigeminal Neuralgia. Philadelphia: Wolters Kluwer.',
     otherReferences: [
+      'Bendtsen, L., Zakrzewska, J. M., Abbott, J., Braschinsky, M., Di Stefano, G., Donnet, A., Eide, P. K., Leal, P. R. L., Maarbjerg, S., May, A., Nurmikko, T., Obermann, M., Jensen, T. S., & Cruccu, G. (2019). European Academy of Neurology guideline on trigeminal neuralgia. European Journal of Neurology, 26(6), 831-849.',
       'Sweet, W. H., & Wepsic, J. G. (1974). Controlled thermocoagulation of trigeminal ganglion and rootlets for differential destruction of pain fibers: 1. Trigeminal neuralgia. Journal of Neurosurgery, 40(2), 143-156.',
       'Mullan, S., & Lichtor, T. (1983). Percutaneous microcompression of the trigeminal ganglion for trigeminal neuralgia. Journal of Neurosurgery, 59(6), 1007-1012.',
-      'Gharabaghi, A., et al. (2006). The trigeminocardiac reflex: a comprehensive review of literature and clinical implications. World Neurosurgery / Acta Neurochirurgica.',
-      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Anesthetic Considerations for Percutaneous Trigeminal Rhizotomy and Balloon Compression.'
+      'Meuwly, C., Golanov, E., Chowdhury, T., Erne, P., & Schaller, B. (2015). Trigeminal cardiac reflex: new thinking model about the definition based on a literature review. Medicine, 94(5), e484.',
+      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Anesthetic Considerations for Percutaneous Trigeminal Rhizotomy, Glycerol Rhizolysis, and Balloon Compression.'
     ]
   }
 };

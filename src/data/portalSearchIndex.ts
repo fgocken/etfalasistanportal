@@ -3488,6 +3488,94 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'proc-endovascular-mechanical-thrombectomy',
+    title: 'Endovasküler Mekanik Trombektomi (EVT — Akut İskemik İnme NİV / NORA)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Büyük damar oklüzyonunda (LVO) anjiyo ünitesinde mekanik trombektomi; MAC vs GETA (GASS/SIESTA/AMETIS), kapı-ponksiyon hızı, pre-rekanalizasyon SKB 140–180 mmHg ve post-TICI 2b-3 sıkı KB kontrolü.',
+    keywords: ['evt', 'mekanik trombektomi', 'endovasküler trombektomi', 'akut iskemik inme', 'lvo', 'büyük damar oklüzyonu', 'anjiyo', 'nora', 'niv', 'girişimsel nöroradyoloji', 'stent retriever', 'tici', 'snacc', 'aha asa', 'eso', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'endovascular-mechanical-thrombectomy',
+    popular: true
+  },
+  {
+    id: 'proc-endovascular-aneurysm-coiling-embolization',
+    title: 'Endovasküler Anevrizma Koilleme, Akım Yönlendirici (Flow Diverter) ve AVM Embolizasyonu',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Nöroradyoloji anjiyo ünitesinde anevrizma koilleme, WEB/flow diverter ve AVM/dAVF Onyx embolizasyonu; mutlak hareketsizlik, ACT 250–300 s heparinizasyon, intraprocedural rüptürde Protamin ve tromboemboli yönetimi.',
+    keywords: ['koilleme', 'coiling', 'endovasküler anevrizma', 'flow diverter', 'akım yönlendirici', 'avm embolizasyonu', 'onyx', 'dmso', 'protamin', 'act', 'heparin', 'anjiyo', 'nora', 'girişimsel nöroradyoloji', 'sak', 'snacc', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'endovascular-aneurysm-coiling-embolization',
+    popular: true
+  },
+  {
+    id: 'proc-chronic-subdural-hematoma-mma',
+    title: 'Kronik Subdural Hematom (KSDH): Burr-Hole Drenaj ve Orta Meningeal Arter (MMA) Embolizasyonu',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Geriatrik kırılgan hastalarda KSDH burr-hole drenajı ve EMBOLISE/MAGIC-MT/STEM kanıtlı MMA embolizasyonu; lokal/MAC vs GETA, antikoagülan/antiagregan yönetimi, N2O yasağı ve deliryum önlemi.',
+    keywords: ['ksdh', 'csdh', 'kronik subdural hematom', 'burr-hole', 'mma embolizasyonu', 'orta meningeal arter', 'embolise', 'magic-mt', 'geriatrik anestezi', 'deliryum', 'antikoagülan reversal', 'pcc', 'pnömosefali', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'chronic-subdural-hematoma-mma',
+    popular: true
+  },
+  {
+    id: 'proc-intracerebral-hemorrhage-evacuation',
+    title: 'Spontan İntraserebral Hematom (İSK) Cerrahisi: Minimal İnvaziv Tahliye (ENRICH), Kraniyotomi ve Dekompresif Kraniektomi (SWITCH)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Lober/serebellar spontan İSK tahliyesi ve dekompresyonu; 4-faktör PCC/idarucizumab/andeksanet alfa ile acil antikoagülan reversal, SKB 130–140 mmHg (INTERACT/AHA-ASA 2022), hiperozmolar terapi ve postop yeniden kanama koruması.',
+    keywords: ['isk', 'ich', 'intraserebral hematom', 'beyin kanaması', 'enrich', 'switch', 'mips', 'dekompresif kraniektomi', 'pcc', 'antikoagülan reversal', 'nikardipin', 'aha asa', 'kibas', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'intracerebral-hemorrhage-evacuation',
+    popular: true
+  },
+  {
+    id: 'proc-posterior-fossa-cpa-tumor',
+    title: 'Posterior Fossa ve Serebellopontin Köşe (CPA) Tümörü Cerrahisi: Vestibüler Şvannom, Menenjiyom ve 4. Ventrikül Tümörleri',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'CPA/arka çukur tümörlerinde yarı-oturur (PFO dışlama!) veya park-bench pozisyon; VAE prekordiyal Doppler/TEE, kürarsız TIVA ile CN VII/BAEP/alt kraniyal sinir İONM, trigeminokardiyak refleks ve alt kraniyal sinir ekstübasyon güvenliği.',
+    keywords: ['posterior fossa', 'arka çukur', 'cpa', 'serebellopontin köşe', 'vestibüler şvannom', 'akustik nörinom', 'yarı oturur pozisyon', 'park-bench', 'vae', 'venöz hava embolisi', 'pfo', 'fasiyal sinir emg', 'baep', 'kraniyal sinir', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'posterior-fossa-cpa-tumor',
+    popular: true
+  },
+  {
+    id: 'proc-pediatric-craniosynostosis',
+    title: 'Pediatrik Kraniyosinostoz Cerrahisi: Açık Kraniyal Vault Rekonstrüksiyonu ve Endoskopik Sütür Rezeksiyonu',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi · Çocuk',
+    description: 'İnfantlarda (3–12 ay) kraniyal vault rekonstrüksiyonu; yüksek EBV kan kaybı, TXA profilaksisi, masif transfüzyon hiperkalemisi (yıkanmış/taze ES), VAE alarmı, izotonik sıvılar ve sendromik zor havayolu (Crouzon/Apert).',
+    keywords: ['kraniyosinostoz', 'craniosynostosis', 'kraniyal vault', 'pediatrik nöroşirürji', 'infant', 'txa', 'traneksamik asit', 'masif kanama', 'hiperkalemi', 'vae', 'crouzon', 'apert', 'çocuk cerrahisi', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'pediatric-craniosynostosis',
+    popular: true
+  },
+  {
+    id: 'proc-pediatric-myelomeningocele-repair',
+    title: 'Yenidoğan Miyelomeningosel (Spina Bifida) Onarımı',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi · Çocuk',
+    description: 'İlk 24–48 saatte yenidoğan açık nöral tüp defekti onarımı; kese/plakod basısız (lateral/donut) entübasyon, %100 Lateks-Free OR, Süksinilkolin yasağı, yenidoğan hipotermi/hipoglisemi koruması ve Chiari II apne izlemi.',
+    keywords: ['miyelomeningosel', 'myelomeningocele', 'spina bifida', 'yenidoğan', 'neonatal nöroşirürji', 'lateks-free', 'latex free', 'chiari 2', 'chiari ii', 'plakod', 'donut', 'apne', 'çocuk cerrahisi', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'pediatric-myelomeningocele-repair',
+    popular: true
+  },
+  {
+    id: 'proc-endoscopic-third-ventriculostomy',
+    title: 'Endoskopik Üçüncü Ventrikülostomi (ETV ± Koroid Pleksus Koterizasyonu)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Beyin ve Sinir Cerrahisi',
+    description: 'Obstrüktif hidrosefalide nöroendoskopik ETV; 3. ventrikül tabanı perforasyonunda baziler arter kanama alarmı, sıcak irrigasyona bağlı KİBAS/bradikardi/Cushing yanıtı, hipotalamik etkiler ve pürüzsüz erken ekstübasyon.',
+    keywords: ['etv', 'endoskopik üçüncü ventrikülostomi', 'third ventriculostomy', 'nöroendoskopi', 'hidrosefali', 'akuadukt stenozu', 'baziler arter', 'koroid pleksus', 'irrigasyon', 'bradikardi', 'cushing refleksi', 'nöroşirürji'],
+    tabId: 'procedures',
+    subId: 'endoscopic-third-ventriculostomy',
+    popular: true
+  },
+  {
     id: 'proc-carotid-endarterectomy',
     title: 'Karotis Endarterektomi (KEA): Açık Karotis Bifurkasyonu Plak Rezeksiyonu ve Yama (Patch) / Primer Anjiyoplasti',
     category: 'Kılavuzlar & Protokoller',

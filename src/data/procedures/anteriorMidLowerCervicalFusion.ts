@@ -3,11 +3,9 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Orta ve Alt Servikal Omurga Anterior Füzyon ve Fiksasyonu: Anterior Servikal Diskektomi ve Füzyon (ACDF / ACCF)
  * (Anterior Fusion/Fixation of The Mid and Lower Cervical Spine: ACDF / ACCF)
- * 
- * Jaffe (5th ed., Section II: Neurosurgery - Spine Surgery: Anterior Fusion/Fixation of the Mid and Lower Cervical Spine, pp. 506-512),
- * Cervical Spine Research Society (CSRS), North American Spine Society (NASS),
- * Society for Neuroscience in Anesthesiology and Critical Care (SNACC)
- * ve ERAS Society Omurga Cerrahisi Kılavuzları referans alınarak yapılandırılmıştır.
+ *
+ * Jaffe (6th ed., 2020), AO Spine / Praxis (2024), CSRS, NASS, SNACC,
+ * PROSPECT (2021) ve ERAS Society (2021) kılavuzları referans alınarak yapılandırılmıştır.
  */
 export const anteriorMidLowerCervicalFusion: ProcedureDefinition = {
   id: 'anterior-mid-lower-cervical-fusion',
@@ -47,21 +45,49 @@ export const anteriorMidLowerCervicalFusion: ProcedureDefinition = {
       'Mikronöroşirürjikal bipolar koagülasyon (monopolar koter trakea, özofagus ve karotid kılıf komşuluğunda KESİNLİKLE kullanılmaz)',
       'Vertebra korpus ve posterior longitudinal ligaman kanamalarında kemik mumu ve hemostatik ajanlar (FloSeal, Surgicel, pamuk basısı)',
       'Vertebral arter yaralanması şüphesinde anında FloSeal tamponadı, cerrahi klips veya mikro-dikiş; acil anjiyo-embolizasyon hazırlığı',
-      'Operasyon sahasına subfasial negatif basınçlı mini-dren yerleştirilmesi'
+      'Operasyon sahasına subfasial negatif basınçlı mini-dren yerleştirilmesi; permisif / kontrollü hipotansiyondan KESİNLİKLE kaçınılır'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Endotrakeal Genel Anestezi (TIVA: Propofol + Remifentanil) — İntraoperatif MEP ve SSEP nöromonitörizasyonu yapılacak olgularda ALTIN STANDARTTIR',
-      'İkinci Seçenek (İONM Yapılmayan Standart Tek Seviye ACDF İçin): GETA + Düşük Doz Sevofluran/Desfluran (MAC 0.8-1.0) + Titre Edilmiş Opioid'
+      'Endotrakeal Genel Anestezi — Saf TIVA (Propofol + Remifentanil): İntraoperatif tcMEP ve SSEP nöromonitörizasyonu yapılan miyelopati, OPLL, travma ve çok seviyeli ACDF/ACCF olgularında ALTIN STANDARTTIR',
+      'İONM Yapılmayan Standart Tek Seviye Radikülopati ACDF İçin: Genel Anestezi + Standart Doz Volatil Anestezik (0.8–1.0 MAC Sevofluran/Desfluran) + Titre Edilmiş Opioid (N₂O KULLANILMAZ)'
     ],
     alternative: [
-      'Servikal Pleksus Bloğu + Sedasyon: Yalnızca genel anestezi alamayacak aşırı yüksek kardiyopulmoner riskli seçilmiş olgularda (rutin pratikte hava yolu kontrolü ve ekartör basısı nedeniyle tercih edilmez)'
+      'İONM Yapılan Olgularda Zorunlu Kombinasyon: Düşük Doz Volatil Anestezik (≤ 0.5 MAC, tercihen < 0.3–0.5 MAC) + Sürekli Remifentanil İnfüzyonu (N₂O KESİNLİKLE KONTRENDİKE!)'
     ],
-    clinicalRationale: 'İntraoperatif MEP/SSEP monitörizasyonu gereken anterior servikal cerrahide sinyalleri baskılamamak için kürarsız Propofol + Remifentanil TIVA altın standarttır. Miyelopatik servikal kordda ekstansiyondan kaçınmak için nötral videolaringoskop/AFOI ile entübasyon ve Caspar ekartör basısı altında lümen kollapsını önlemek için karşı ağız köşesine sabitlenen spiral telli ETT seçimi zorunludur.',
-    notes: 'ANTERİOR SERVİKAL FÜZYONDA (ACDF/ACCF) ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) İNSTABİL BOYUNDA HAVA YOLU VE ENTÜBASYON GÜVENLİĞİ — Şiddetli miyelopati, spinal darlık veya travmatik servikal kırığı olan hastalarda doğrudan laringoskopi sırasında boyna ekstansiyon verilmesi omuriliği sıkıştırarak masif kord iskemisine ve kuadriplejiye yol açar! Entübasyon boyun nötral pozisyondayken Manuel İn-Line Stabilizasyon (MILS) eşliğinde Videolaringoskop (GlideScope/McGrath) veya Uyanık Fiberoptik Entübasyon (AFOI) ile gerçekleştirilmelidir. (2) EKARTÖR BASINCI VE REKÜRREN LARİNGEAL SİNİR (RLN) KORUMASI (KAF BASINCI DEFLASYONU!) — Cerrah Caspar veya Cloward ekartörlerini yerleştirip trakea ve özofagusu mediale çektiğinde, endotrakeal tüpün kafı trakea mukozasını ve altındaki Rekürren Laringeal Siniri (RLN) tüp duvarı ile krikoid kıkırdak arasına sıkıştırır; bu durum kalıcı ses kısıklığına ve vokal kord felcine yol açar! Ekartörler yerleştirildikten hemen sonra ANESTEZİ UZMANI KAF BASINCINI GEÇİCİ OLARAK SÖNDÜRMELİ (deflate) VE YALNIZCA KAÇAĞI ÖNLEYECEK MİNİMUM BASINCA (20 cmH2O) YENİDEN ŞİŞİRMELİDİR. (3) İNTRAOPERATİF NÖROMONİTÖRİZASYON (MEP/SSEP) VE KAS GEVŞETİCİ DİSİPLİNİ — Diskektomi, korpektomi ve kafes yerleştirilmesi esnasında spinal kord gerilimini ve perfüzyonunu izlemek için Transkraniyal MEP ve SSEP kullanılır. Entübasyon sonrasında KESİNLİKLE nöromusküler bloker verilmemeli (TOF 4/4 korunmalı) ve anestezi TIVA ile idame ettirilmelidir. (4) OMURİLİK PERFÜZYON BASINCI HEDEFLERİ (MAP > 80 mmHg) — Spondilotik miyelopatik kord mikrovasküler iskemiye aşırı hassastır; ameliyat boyunca ortalama arter basıncı (MAP) kesinlikle 75-80 mmHg\'nin altına düşürülmemelidir; hipotansiyondan kaçınılmalı, gereğinde Efedrin veya Noradrenalin infüzyonu ile perfüzyon desteklenmelidir. (5) POSTOPERATİF HAVA YOLU KATASTROFİSİ: BASI HEMATOMU VE ACİL YATAKBAŞI PROTOKOLÜ — Anterior servikal cerrahinin en korkulan ölümcül komplikasyonu derin prevertebral hematom ve retrofaringeal ödemdir. Ameliyat sonrasında hasta derlenmede veya serviste aniden stridor, solunum sıkıntısı ve boyunda gergin şişlik geliştirirse RE-ENTÜBASYON İÇİN DAKİKALARCA BEKLENMEMELİ; DERHAL YATAKBAŞINDA TÜM DİKİŞLER SÖKÜLEREK HEMATOM BOŞALTILMALI VE TRAKEA BASIDAN KURTARILMALIDIR! Yatakbaşında hazır acil dikiş alma seti ve krikotirotomi kiti bulundurulmalıdır.'
+    clinicalRationale: 'İntraoperatif tcMEP/SSEP monitörizasyonu gereken anterior servikal cerrahide sinyalleri baskılamamak için kürarsız saf Propofol + Opioid TIVA (N₂O kesinlikle yok) altın standarttır. Miyelopatik/instabil servikal kordda ekstansiyondan kaçınmak için MILS + videolaringoskop veya AFOI ile nötral entübasyon, Caspar ekartör basısı altında lümen kollapsını önlemek için karşı ağız köşesine sabitlenen spiral telli ETT seçimi zorunludur.',
+    notes: 'ACDF/ACCF TEMEL ANESTEZİ İLKELERİ: (1) NÖTRAL HAVA YOLU VE SCI\'DE SÜKSİNİLKOLİN YASAĞI; (2) EKARTÖR SONRASI ETT KAF DEFLASYONU (RLN KORUMASI); (3) İONM İÇİN SAF TIVA, N₂O YASAĞI VE BİLATERAL YUMUŞAK BITE BLOCK; (4) PERMİSİF HİPOTANSİYON YASAĞI VE AO SPINE 2024 MAP; (5) GENİŞLEYEN BOYUN HEMATOMUNDA ACİL YATAKBAŞI DİKİŞ/FASYA AÇMA PROTOKOLÜ.',
+    rulesTitle: 'ANTERİOR SERVİKAL FÜZYONDA (ACDF / ACCF) 5 VAZGEÇİLMEZ ANESTEZİ KURALI',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'İNSTABİL/MİYELOPATİK BOYUNDA NÖTRAL ENTÜBASYON VE SCI\'DE SÜKSİNİLKOLİN YASAĞI',
+        content: 'Şiddetli CSM, OPLL veya travmatik servikal kırıkta direkt laringoskopi ile boyun ekstansiyonu masif kord iskemisi ve kuadripleji yaratır; MILS eşliğinde Videolaringoskopi veya Uyanık Fiberoptik Entübasyon (AFOI) uygulanır. Akut/subakut SCI, üst motor nöron lezyonu (>24–48 saat) ve uzun immobilizasyonda Süksinilkolin ölümcül hiperkalemik kardiyak arrest nedeniyle KESİNLİKLE KONTRENDİKEDİR (yerine orta etkili Rokuronyum kullanılır).'
+      },
+      {
+        number: 2,
+        title: 'EKARTÖR SONRASI ETT KAF BASINCI DEFLASYONU (RLN KORUMASI)',
+        content: 'Cerrah Caspar/Cloward ekartörlerini açıp trakea-özofagusu mediale çektiğinde ETT kaf basıncı hızla yükselir ve Rekürren Laringeal Siniri (RLN) sıkıştırır. Ekartör yerleşiminden hemen sonra ETT kafı indirilip (deflate) yalnızca kaçağı önleyecek minimum basınca (20–22 cmH2O) manometreyle yeniden ayarlanmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'İONM (tcMEP/SSEP) İÇİN SAF TIVA, N₂O YASAĞI VE BİLATERAL YUMUŞAK BITE BLOCK',
+        content: 'Miyelopati/OPLL/travma olgularında pozisyonlama öncesi ve sonrası bazal tcMEP/SSEP doğrulanmalıdır. Saf Propofol + Opioid TIVA altın standarttır (zorunlu volatil ≤ 0.5 MAC, tercihen < 0.3–0.5 MAC; N₂O KESİNLİKLE KULLANILMAZ; idamede kas gevşetici yok). tcMEP sırasında dil/dudak laserasyonu ve diş kırığını önlemek için bilateral yumuşak gazlı bez rulo molar bite block zorunludur (sert plastik Guedel airway KULLANILMAZ).'
+      },
+      {
+        number: 4,
+        title: 'SPİNAL KORD PERFÜZYONU (PERMİSİF HİPOTANSİYON YOK) VE AO SPINE 2024 HEDEFLERİ',
+        content: 'Permisif/kontrollü hipotansiyondan KESİNLİKLE kaçınılır. Miyelopati/servikal stenozda MAP ≥ 80–85 mmHg; akut travmatik SCI\'de (AO Spine/Praxis 2024) MAP alt sınır 75–80 mmHg, üst sınır 90–95 mmHg (3–7 gün) hedeflenir. Rutin yüksek doz NASCIS metilprednizolon güncel AANS/CNS ve AO Spine kılavuzlarınca önerilmez.'
+      },
+      {
+        number: 5,
+        title: 'GENİŞLEYEN BOYUN HEMATOMUNDA ACİL YATAKBAŞI DİKİŞ/ZIMBA VE DERİN FASYA AÇMA PROTOKOLÜ',
+        content: 'Anterior servikal cerrahinin en ölümcül erken komplikasyonu genişleyen prevertebral hematom ve retrofaringeal ödemdir. Stridor, dispne veya boyunda gergin şişlikte re-entübasyon için beklenmeden, re-entübasyondan ÖNCE veya EŞZAMANLI olarak yatakbaşında cilt dikiş/zımbaları ve derin platizma/fasya tabakaları DERHAL açılarak hematom boşaltılmalıdır. Yatakbaşında acil dikiş/zımba açma seti ve cerrahi hava yolu kiti hazır bulundurulur.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık
@@ -75,110 +101,116 @@ export const anteriorMidLowerCervicalFusion: ProcedureDefinition = {
     historyAndPhysical: [
       'Spinal Kord İskemisi ve İnstabilite Taraması: Boyun hareketleriyle kollarda elektriklenme hissi (Lhermitte belirtisi), yürüme ataksisi ve spastisite varlığı.',
       'Zor Hava Yolu Taraması: Servikal fleksiyon ve ekstansiyon kısıtlılığı, kısa ve kalın boyun, diş yapısı ve Mallampati skoru (boyna ekstansiyon verilmeden değerlendirilir).',
-      'Karotid Arter Patolojisi: Boyun üfürümü sorgulaması, karotid darlığı öyküsü (ameliyatta karotid kılıf mediale/laterale çekilecektir).',
-      'Disfaji ve Yutma Güçlüğü: Preoperatif bazal yutma fonksiyonu (özofagus retraksiyonuna bağlı postoperatif geçici disfaji sıktır).'
+      'Karotid Arter Patolojisi: Boyun üfürümü sorgulaması ve karotid darlığı öyküsü (ameliyatta karotid kılıf daima LATERALE ekarte edilir; ciddi karotid stenozda kros-bası/iskemi riski değerlendirilir).',
+      'Disfaji, Kronik Opioid & Sigara Taraması: Preoperatif bazal yutma fonksiyonu, kronik opioid toleransı ve füzyon kaynama oranı için ≥ 4 hafta önce sigara bırakma danışmanlığı (ERAS 2021).'
     ],
     laboratoryAndTests: [
-      'Tam Kan Sayımı (Hb, Hct, Trombosit sayısı ≥ 100.000/mm³).',
+      'Tam Kan Sayımı ve Preop PBM / Anemi Optimizasyonu: Hb, Hct, Trombosit ≥ 100.000/mm³; elektif çok seviyeli korpektomide 4 hafta önce ferritin/anemi taraması ve gerekirse IV demir.',
       'Koagülasyon Paneli: PT, aPTT, INR tam normal olmalıdır (servikal hematom gelişimini önlemek için antikoagülan ve antiagreganlar kılavuzlara uygun kesilmiş olmalıdır).',
-      'Serum Elektrolitleri, BUN, Kreatinin ve Glukoz düzeyi.',
-      'Kan Grubu, Antikor Tarama ve T&S doğrulaması (korpektomi planlanan olgularda 1-2 Ünite ES Cross-Match).',
-      'Servikal Omurga Dinamik Grafileri ve MRG / BT: İnstabilite (fleksiyon-ekstansiyon grafileri), spinal kord hiperintensitesi (miyelomalazi sinyali), osteofit boyutu ve vertebral arterin unkusla ilişkisi incelenir.'
+      'Serum Elektrolitleri, BUN, Kreatinin ve Glukoz düzeyi (perioperatif glisemik hedef 140–180 mg/dL).',
+      'Kan Grubu, Antikor Tarama ve T&S doğrulaması (korpektomi planlanan olgularda 1–2 Ünite ES Cross-Match).',
+      'Servikal Görüntüleme (MRG / BT ve Dinamik Grafi Uyarısı): Kronik dejeneratif instabilitede dinamik fleksiyon-ekstansiyon grafileri incelenir; ANCAK AKUT SERVİKAL TRAVMA, KIRIK VEYA AĞIR İNSTABİLİTEDE DİNAMİK FLEKSİYON-EKSTANSİYON GRAFİSİ KESİNLİKLE KONTRENDİKEDİR!'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG, SpO2, EtCO2 ve Sıcaklık.',
-      'İnvaziv Arter Basıncı İzlemi (A-Line): Miyelopatisi olan, çok seviyeli korpektomi yapılan veya kardiyovasküler riski bulunan hastalarda sürekli kan basıncı takibi ve spinal kord perfüzyonunun (MAP > 80 mmHg) kesintisiz korunması için önerilir.',
-      'İntraoperatif Nöromonitörizasyon (İONM): Transkraniyal Motor Uyarılmış Potansiyeller (tcMEP) ve Somatosensoriyel Uyarılmış Potansiyeller (SSEP) kaydı (üst ve alt ekstremitelerden bilateral kayıt alınır).',
-      'Nöromusküler İleti İzlemi (TOF): MEP izlemi için ameliyat boyunca TOF oranı 4/4 (%100) tutulmalıdır; kas gevşeticiden kaçınılır.',
-      'Endotrakeal Tüp Kaf Manometresi: Ekartörler açıldıktan sonra tüp kaf basıncını 20-25 cmH2O seviyesinde tutmak için sürekli manometrik izlem.',
-      'İdrar Çıkışı Takibi: Mesane sondası ile saatlik idrar takibi (> 0.5 mL/kg/saat).'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG, SpO2, EtCO2 (normokapni 35–40 mmHg) ve Sıcaklık.',
+      'İnvaziv Arter Basıncı İzlemi (A-Line — Flebotatik Aks / Sağ Atriyum Sıfırlaması): Miyelopatisi olan, çok seviyeli korpektomi yapılan, akut SCI veya kardiyovasküler riskli hastalarda sürekli MAP takibi için önerilir.',
+      'İntraoperatif Nöromonitörizasyon (İONM): Miyelopati/OPLL/travma ve çok seviyeli olgularda bilateral tcMEP ve SSEP kaydı; pozisyonlama öncesi (bazal) ve boyun/omuz pozisyonlaması sonrası kayıtlar karşılaştırılır.',
+      'Kantitatif Nöromusküler İleti İzlemi (TOF): tcMEP izlemi için ameliyat boyunca TOF oranı ≥ 0.90 (4/4) tutulur; idamede kas gevşetici verilmez.',
+      'Endotrakeal Tüp Kaf Manometresi: Ekartörler açıldıktan sonra tüp kaf basıncını 20–22 cmH2O seviyesinde tutmak için sürekli manometrik izlem.',
+      'İdrar Çıkışı Takibi: Uzun/çok seviyeli olgularda mesane sondası (> 0.5 mL/kg/saat; ERAS gereği postop 1. günde erken çekim).'
     ],
     vascularAccess: [
-      'En az 2 adet geniş çaplı (16-18G) güvenli periferik intravenöz yol (kollar gövde yanında sarılacağından uzatma hatları sağlam tespit edilmelidir)',
-      'Gereğinde radiyal arter kanülasyonu'
+      'En az 2 adet geniş çaplı (16–18G) güvenli periferik intravenöz yol (kollar gövde yanında sarılacağından uzatma hatları sağlam tespit edilmelidir)',
+      'Gereğinde radiyal arter kanülasyonu; antibiyotik profilaksisi (Sefazolin kesiden 30–60 dk önce; > 3–4 saat veya > 1.5 L kanamada tekrar doz)'
     ],
-    patientPosition: 'Supin (Sırtüstü) Pozisyon, Boyun Nötral-Hafif Ekstansiyonda, Baş Silikon Halka İle Desteklenmiş',
+    patientPosition: 'Supin (Sırtüstü) Pozisyon, Boyun Nötral (Cerrahi/Nöro Onaylı Hafif Lordoz Desteği), Baş Silikon Halkada',
     patientPositionDetails: [
-      'Kollar Vücut Yanına Nötral Pozisyonda Alınır ve Çarşafla Sarılır: Floroskopik görüntüde omuzların alt servikal mesafeyi (C6-C7) gölgelemesini engellemek için omuzlar aşağıya doğru nazikçe flasterle traksiyona alınır.',
-      'AŞIRI OMUZ TRAKSİYONUNDAN KAÇINILMALIDIR: Omuzların aşırı aşağı çekilmesi brakiyal pleksus gerilme hasarına (pleksopati) yol açar; İONM\'de brakiyal sinir yanıtları izlenir.',
-      'Boyun altına küçük bir silikon rulo konularak servikal lordoz nazikçe desteklenir; aşırı hiperekstansiyondan kaçınılır.',
+      'Kollar Vücut Yanına Nötral Pozisyonda Alınır ve Çarşafla Sarılır: Floroskopide omuzların C6-C7 seviyesini gölgelemesini engellemek için omuzlar nazikçe aşağıya flasterlenir.',
+      'AŞIRI OMUZ TRAKSİYONUNDAN KAÇINILMALIDIR: Brakiyal pleksus gerilme hasarı (pleksopati) yaratır; pozisyonlama sonrası üst ekstremite SSEP/tcMEP teyit edilir.',
+      'BOYUN EKSTANSİYON RULOSU GÜVENLİĞİ: Ağır CSM, OPLL veya travmatik servikal instabilitede nörolojik/İONM doğrulaması ve cerrah onayı olmadan boyun altına ekstansiyon rulosu KONULMAZ (kord basısı yaratır!).',
       'Gözler koruyucu pomadla kapatılır, bası noktaları jel pedlerle korunur.'
     ],
     anesthesiaManagement: [
       'İndüksiyon ve Hava Yolu:',
-      '  - Propofol (2-2.5 mg/kg) + Fentanil (2-3 mcg/kg) veya Remifentanil (0.1-0.2 mcg/kg/dk).',
-      '  - Entübasyonda MILS eşliğinde Videolaringoskop (GlideScope/McGrath) veya uyanık fiberoptik yaklaşım.',
-      '  - Entübasyon için kısa etkili Rokuronyum (0.6 mg/kg) verilebilir; ancak cerrahi ve İONM başlamadan önce nöromusküler blokaj Sugammadeks ile geri döndürülür veya kendiliğinden çözülmesi beklenir.',
-      'İdame: TIVA Protokolü (Propofol 80-140 mcg/kg/dk + Remifentanil 0.05-0.25 mcg/kg/dk). MEP sinyallerini baskılamamak için inhalasyon gazlarından kaçınılır veya < 0.3 MAC seviyesinde tutulur.',
+      '  - Propofol (2–2.5 mg/kg) + Fentanil (2–3 mcg/kg) veya Remifentanil (0.1–0.2 mcg/kg/dk).',
+      '  - İnstabil/miyelopatik boyunda MILS eşliğinde Videolaringoskop veya AFOI ile nötral entübasyon.',
+      '  - Entübasyonda orta etkili Rokuronyum (0.6 mg/kg) kullanılabilir (akut/subakut SCI >24–48 saatte Süksinilkolin KESİNLİKLE KONTRENDİKE!); İONM başlamadan önce TOF ≥ 0.90 doğrulanır (gerekirse Sugammadeks).',
+      'İdame: İONM yapılan olgularda saf TIVA (Propofol 80–140 mcg/kg/dk + Remifentanil 0.05–0.25 mcg/kg/dk) altın standarttır; zorunlu kombinasyonda volatil ≤ 0.5 MAC (tercihen < 0.3–0.5 MAC) ve N₂O KESİNLİKLE KULLANILMAZ. İntraoperatif multimodal adjuvan olarak düşük doz IV Ketamin (0.25–0.5 mg/kg bolus + 0.1–0.2 mg/kg/saat) ve/veya IV Lidokain (1.5 mg/kg bolus + 1–1.5 mg/kg/saat) eklenebilir.',
+      'Multimodal POBV Profilaksisi: Kusma ve ıkınma ölümcül boyun hematomunu tetiklediği için çift ajan profilaksi (Deksametazon 4–8 mg IV + Ondansetron 4 mg IV) rutin uygulanır.',
       'Ekartör Yerleşimi ve Kaf Basıncı Yönetimi:',
-      '  - Cerrahi ekartörler açıldığında tüp kaf basıncı fırlar; anestezi uzmanı kafı tamamen indirip şırınga veya manometre ile sadece kaçak kesilene dek (20-22 cmH2O) yeniden şişirir (RLN felci önleme).',
-      'Omurilik Perfüzyon Hedefleri:',
-      '  - Dekompresyon ve greft çakılması esnasında kord iskemisini önlemek için MAP > 80-85 mmHg seviyesinde tutulur; hipotansiyona izin verilmez.',
-      'İONM Sinyal Düşüşü Protokolü:',
-      '  - MEP veya SSEP genliğinde > %50 düşüş veya latansta > %10 uzama olursa:',
-      '    1. Cerraha anında bildirilir; cerrahi manipülasyon, ekartör gerginliği veya greft boyutu kontrol edilir.',
-      '    2. Ortalama arter basıncı (MAP) > 85-90 mmHg seviyesine yükseltilir (vazopressör desteği).',
-      '    3. Anestezi derinliği, hematokrit ve vücut sıcaklığı kontrol edilir.'
+      '  - Cerrahi ekartörler açıldığında tüp kafı tamamen indirilir ve yalnızca kaçağı önleyecek minimum basınca (20–22 cmH2O) manometreyle yeniden şişirilir (RLN koruması).',
+      'Omurilik Perfüzyon Hedefleri (Permisif Hipotansiyon YASAK!):',
+      '  - Miyelopati/stenozda MAP ≥ 80–85 mmHg; akut travmatik SCI\'de AO Spine 2024 hedefi MAP 75–80 ile 90–95 mmHg arası (3–7 gün). Rutin yüksek doz NASCIS metilprednizolon önerilmez.',
+      '  - Nörojenik Şok (yüksek servikal/T1–T4 sempatik kayıp → hipotansiyon + bradikardi) ve subakut/kronik SCI\'de Otonom Disrefleksi (≥ T6) farkındalığı korunur.',
+      '7 Adımlı İONM Sinyal Düşüşü Protokolü (> %50 amplitüd kaybı / > %10 latans uzaması):',
+      '  - 1. Cerrahı anında uyar; son cerrahi manevrayı/ekartör gerginliğini/greft boyutunu geri al.',
+      '  - 2. MAP\'ı hızla ≥ 85–90 mmHg seviyesine yükselt (Noradrenalin / Fenilefrin).',
+      '  - 3. Oksijenasyon (SpO2 / PaO2) ve normokapniyi (PaCO2 35–40 mmHg) doğrula.',
+      '  - 4. Hb / Hct ve kan gazını kontrol et (aktif kord iskemisinde Hb ≥ 8–9 g/dL).',
+      '  - 5. Normotermiyi (> 36.0–36.5°C) sağla.',
+      '  - 6. Anestezi derinliğini (< 0.5 MAC / TIVA) ve kantitatif TOF ile kazara NMB olmadığını doğrula.',
+      '  - 7. Elektrot/teknik empedans ve boyun/omuz pozisyonunu kontrol et.'
     ],
     airwayManagement: [
       'Spiral (Zırhlı / Wire-reinforced) endotrakeal tüp tercih edilir; cerrahi sahanın karşı tarafındaki ağız köşesine sağlam tespit edilir.',
-      'Kaf basıncı sürekli manometre ile takip edilir.',
-      'Ekstübasyonda Düzgün Uyanma: Öksürük ve ıkınmayı önlemek için IV Lidokain (1.5 mg/kg) uygulanır.'
+      'BİLATERAL YUMUŞAK MOLAR BITE BLOCK (TcMEP ZORUNLULUĞU): tcMEP sırasında şiddetli masseter kasılmasına bağlı dil/dudak laserasyonu ve ETT ısırmasını önlemek için bilateral yumuşak gazlı bez rulo ısırma bloğu yerleştirilir (sert plastik Guedel airway KULLANILMAZ!).',
+      'Kaf basıncı ekartör yerleşimi sonrası söndürülüp 20–22 cmH2O\'ya manometre ile yeniden ayarlanır.'
     ],
     criticalSurgicalStages: [
-      '1. Pozisyonlama ve Floroskopik Cerrahi Seviye Doğrulaması (C3-C7 aralığının işaretlenmesi).',
+      '1. Pozisyonlama, Bazal Pre/Post-Pozisyon İONM Kaydı ve Floroskopik Seviye Doğrulaması (C3-C7).',
       '2. Anterior Transvers veya Longitudinal Boyun İnsizyonu ve Platizma Kası Diseksiyonu.',
-      '3. Smith-Robinson Planı: Karotid kılıf ile trakeoözofageal kompartman arasından prevertebral fasyaya ulaşılması.',
-      '4. Cerrahi Ekartörlerin Yerleştirilmesi (Kaf basıncının söndürülüp yeniden ayarlanması!).',
-      '5. Diskektomi / Korpektomi ve Posterior Osteofitlerin Eksizyonu (Vertebral arter ve dura koruması).',
+      '3. Smith-Robinson Planı: Karotid kılıf LATERALE, trakeoözofageal kompartman mediale ekarte edilerek prevertebral fasyaya ulaşılması.',
+      '4. Cerrahi Ekartörlerin Yerleştirilmesi (ETT kafının söndürülüp 20–22 cmH2O\'ya yeniden ayarlanması!).',
+      '5. Diskektomi / Korpektomi ve Posterior Osteofitlerin Eksizyonu (Vertebral arter, dura ve özofagus koruması).',
       '6. Posterior Longitudinal Ligamanın Açılması ve Omuriliğin / Sinir Köklerinin Tam Dekompresyonu.',
-      '7. İntervertebral Kafes (Cage) / Kemik Greftinin Yerleştirilmesi ve Anterior Titanyum Plak-Vida Fiksasyonu.',
-      '8. Hemostaz Kontrolü, Valsalva Manevrası (Dural yırtık kontrolü), Subfasial Dren Yerleştirilmesi ve Tabakalı Kapanış.'
+      '7. İntervertebral Kafes (Cage) / Greft Yerleştirilmesi ve Anterior Titanyum Plak-Vida Fiksasyonu.',
+      '8. Hemostaz Kontrolü, Valsalva Manevrası (Dural yırtık kontrolü), Subfasial Dren ve Tabakalı Kapanış.'
     ],
     emergenceNotes: [
-      'ÖKSÜRMESİZ VE IKINMASIZ PÜRÜZSÜZ UYANMA: Ekstübasyon esnasında öksürme ve venöz hipertansiyon anterior prevertebral alanda kanamayı tetikleyerek dakikalar içinde ölümcül servikal hematom yaratır! IV Lidokain (1.5 mg/kg) veya Remifentanil infüzyonu altında uyanma sağlanır.',
-      'KAF KAÇAK TESTİ (CUFF LEAK TEST): Çok seviyeli cerrahilerde veya uzun süren ekartasyon olgularında laringeal/retrofaringeal ödem riski nedeniyle tüp kafı indirilerek kaçak sesi doğrulanmadan ekstübe edilmemelidir.',
-      'Erken Nörolojik Değerlendirme: Hasta uyanır uyanmaz her iki el, kol ve bacakta motor kuvvet (deltoid, biseps, el sıkma, kuadriseps, ayak bileği) teyit edilmelidir.',
-      'Ses Kalitesi Kontrolü: Hastanın konuşması dinlenir; kaba ses kısıklığı veya nefesli ses tek taraflı RLN zedelenmesini gösterir.'
+      'ÖKSÜRMESİZ VE IKINMASIZ PÜRÜZSÜZ UYANMA: Ekstübasyon esnasında öksürme ve venöz hipertansiyon anterior prevertebral alanda ölümcül servikal hematom tetikler; IV Lidokain (1.5 mg/kg) veya düşük doz Remifentanil altında pürüzsüz uyanma sağlanır.',
+      'KAF KAÇAK TESTİ (CUFF LEAK TEST): Çok seviyeli ACDF, korpektomi (ACCF), > 3 saat ekartasyon veya > 300 mL kanamada retrofaringeal/laringeal ödem açısından pozitif kaf kaçağı doğrulanmadan ekstübe edilmez.',
+      'ACİL YATAKBAŞI HEMATOM DEKOMPRESYONU: Postop stridor, dispne veya boyunda gergin şişlikte re-entübasyondan ÖNCE veya EŞZAMANLI olarak yatakbaşında cilt sütür/zımbaları VE derin platizma/fasya tabakaları DERHAL açılarak hematom boşaltılmalıdır (yatakbaşında dikiş/stapler sökme kiti ve cerrahi havayolu seti hazır tutulur).',
+      'Erken Nörolojik ve Komplikasyon Taraması: Her iki üst/alt ekstremite motor gücü (özellikle C5 kök felci: deltoid/biseps), ses kısıklığı (RLN felci), Horner sendromu (servikal sempatik zincir) ve subkutan amfizem/şiddetli disfaji (özofagus perforasyonu) kontrol edilir.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Multimodal Analjezi Protokolü:',
-      '  - Cerrahi Kapanış Sırasında Cilt ve Fasyaya Lokal Anestezik İnfiltrasyonu (Bupivakain %0.25 + Epinefrin): Erken postop kesi ağrısını belirgin azaltır.',
-      '  - Düzenli IV Parasetamol (1000 mg 6 saatte bir infüzyon).',
-      '  - Kısa Süreli Oral/IV NSAİİ (İbuprofen veya Deksketoprofen): Kemik füzyonunu olumsuz etkilememesi için düşük dozda ve kısa süreli (ilk 48 saat) tutulur.',
-      '  - Şiddetli Ağrıda Düşük Doz Titre Edilmiş Opioid (Tramadol veya kontrollü Fentanil).',
-      '  - Postoperatif Kas Spazmları ve Boyun Gerilimi İçin: Kısa süreli kas gevşetici (Tizanidin) veya düşük doz benzodiazepin.'
+      'PROSPECT (2021) & ERAS (2021) Uyumlu Multimodal Analjezi Protokolü:',
+      '  - Cerrahi Kapanışta Cilt/Fasya Lokal Anestezik İnfiltrasyonu (Bupivakain/Ropivakain %0.25 + Epinefrin).',
+      '  - Düzenli IV/Oral Parasetamol (1000 mg q6h).',
+      '  - Kısa Süreli Standart Doz NSAİİ / COX-2 (≤ 48–72 saat İbuprofen veya Selekoksib; cerrahi hemostaz kesinleştikten sonra; yüksek doz Ketorolak > 120 mg/gün veya > 2 haftalık kullanımdan kaçınılır).',
+      '  - İntraoperatif IV Ketamin (PROSPECT Grade A) ve/veya IV Lidokain infüzyonu; şiddetli atılım ağrısında BAZAL İNFÜZYONSUZ (yalnızca talep/bolus) düşük doz Fentanil/Morfin IV PCA.',
+      '  - KISITLAMALAR: Tramadol (PONV + nöbet riski) ve Opioid PCA ile eşzamanlı Benzodiazepin / Diazepam (FDA Black Box solunum depresyonu ve deliryum riski!) KULLANILMAZ. Rutin Gabapentinoid başlanmaz (PROSPECT 2021).',
+      '  - Kas Spazmı İçin: Gerekirse kısa süreli Tizanidin veya Metokarbamol.'
     ],
     prospectRecommendations: [
-      'Anterior servikal diskektomi ve füzyon olgularında insizyonel lokal anestezik infiltrasyonu, sistemik parasetamol ve kontrollü non-opioid analjezikler postoperatif ağrıyı güvenle kontrol altına alarak erken ekstübasyon ve mobilizasyonu kolaylaştırır.'
+      'PROSPECT Complex Spine (Waelkens et al., EJA 2021): Parasetamol + kısa süreli NSAİİ/COX-2 + cerrahi alan lokal anestezik infiltrasyonu + intraoperatif IV Ketamin (Grade A) temel multimodal omurgayı oluşturur; rutin gabapentinoidler sedasyon/solunum depresyonu nedeniyle önerilmez.'
     ],
     erasRecommendations: [
-      'ERAS Servikal Omurga Cerrahisi Rehberi:',
-      '  - Kırmızı Bayrak Alarmı (Genişleyen Servikal Hematom): İlk 24 saat boyunca boyun çevresi, solunum rahatlığı, stridor ve dren çıkışı saatlik izlenir. Boyunda gergin şişlik veya solunum sıkıntısında DERHAL YATAKBAŞINDA YARA AÇILIP DRENE EDİLMELİDİR.',
-      '  - Disfaji Takibi: Hastalarda özofagus retraksiyonuna bağlı geçici yutma güçlüğü sıktır; postop ilk saatlerde sıvı gıdalarla başlanır, tolere ettikçe yumuşak diyete geçilir.',
-      '  - Erken Mobilizasyon: Cerrahi stabilitesi anterior plakla sağlanan hastalar ameliyat sonrası 4-6. saatte servikal boyunluk (Philadelphia veya yumuşak boyunluk) desteğiyle ayağa kaldırılır.',
-      '  - Subfasial Dren Çekilmesi: 24 saatlik drenaj < 30-50 mL olduğunda genellikle postoperatif 1. günde çekilir.'
+      'ERAS Omurga Cerrahisi İlkeleri (Debono et al., Spine J 2021):',
+      '  - Preop Hazırlık: ≥ 4 hafta önce sigara bırakma, preop anemi/PBM taraması, ameliyattan 2 saat önce berrak karbonhidrat (CHO) yüklemesi ve multimodal POBV profilaksisi.',
+      '  - Kırmızı Bayrak Alarmı (Genişleyen Servikal Hematom): İlk 24 saat boyun çevresi, solunum, stridor ve dren çıkışı saatlik izlenir; hematom şüphesinde yatakbaşında cilt + derin fasya DERHAL açılır.',
+      '  - Disfaji, Özofagus & Komplikasyon İzlemi: Geçici disfajide sıvıdan yumuşak diyete geçilir; ateş/subkutan amfizemde özofagus perforasyonu, deltoid güçsüzlüğünde C5 kök felci, pitozis/miyoziste Horner sendromu araştırılır.',
+      '  - Erken Mobilizasyon & Foley: Stabil olgularda 4–6. saatte boyunluk desteğiyle mobilizasyon; Foley sonda ve drenlerin postop 1. günde erken çekilmesi, glisemik hedef 140–180 mg/dL.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2014). Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section II: Neurosurgery - Spine Surgery: Anterior Fusion/Fixation of the Mid and Lower Cervical Spine, pp. 506-512. Philadelphia: Lippincott Williams & Wilkins.',
-    erasReference: 'Debono, B., et al. (2021). Consensus statement for perioperative care in lumbar and cervical spine surgery: Enhanced Recovery After Surgery (ERAS®) Society recommendations. Spine, 46(11), 740-754.',
-    prospectReference: 'PROSPECT Guidelines for Postoperative Pain Management in Cervical Spine Decompression and Fusion Surgery. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
+    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2020). Anesthesiologist\'s Manual of Surgical Procedures (6th ed.). Neurosurgery — Spine Surgery: Anterior Cervical Spine Procedures. Philadelphia: Wolters Kluwer.',
+    erasReference: 'Debono, B., Wainwright, T. W., Wang, M. Y., et al. (2021). Consensus statement for perioperative care in lumbar spinal fusion: Enhanced Recovery After Surgery (ERAS®) Society recommendations. The Spine Journal, 21(5), 729-752.',
+    prospectReference: 'Waelkens, P., Alsabbagh, E., Sauter, A., Joshi, G. P., & Beloeil, H.; PROSPECT Working Group (2021). Pain management after complex spine surgery: A systematic review and procedure-specific postoperative pain management recommendations. European Journal of Anaesthesiology, 38(9), 985-994.',
     otherReferences: [
+      'Fehlings, M. G., et al. (2024). AO Spine / Praxis Clinical Practice Guideline for the Management of Acute Spinal Cord Injury: Hemodynamic Management (MAP 75-80 to 90-95 mmHg). Global Spine Journal, 14(3_suppl).',
       'Fountas, K. N., et al. (2007). Anterior cervical discectomy and fusion associated complications: results of 1015 consecutive cases. Spine, 32(21), 2310-2317.',
       'Sagi, H. C., et al. (2002). Airway complications associated with surgery on the anterior cervical spine. Spine, 27(9), 949-953.',
-      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Anesthetic Considerations for Patients Undergoing Anterior Cervical Spine Surgery.',
-      'Cervical Spine Research Society (CSRS). Clinical Practice Guidelines for the Diagnosis and Treatment of Cervical Spondylotic Myelopathy and Radiculopathy.'
+      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Clinical Consensus on Intraoperative Neuromonitoring and Airway Management in Cervical Spine Surgery.'
     ]
   }
 };

@@ -4,37 +4,46 @@ import {
   BookOpen, 
   Clock, 
   ChevronRight, 
-  Layers, 
-  Filter, 
   Stethoscope, 
   X,
   ArrowLeft,
   ArrowRight,
   Brain,
-  Scissors,
   Heart,
   Bone,
   Baby,
   Activity,
   Ear,
   Sparkles,
-  Wind,
   Eye,
-  Zap,
   LayoutGrid,
-  CheckCircle2,
-  Droplet
+  Droplet,
+  AlertTriangle
 } from 'lucide-react';
-import { SurgicalSpecialty, ProcedureDefinition, SurgicalSpecialtyMeta } from '../../types/procedures';
+import { SurgicalSpecialty, ProcedureDefinition } from '../../types/procedures';
 import { 
   SURGICAL_SPECIALTIES, 
   REGISTERED_PROCEDURES, 
   searchProcedures, 
-  getProcedureById 
+  getProcedureById,
+  getProceduresBySpecialty
 } from '../../data/procedures';
 import { ProcedureDetailView } from './ProcedureDetailView';
 import { PortalLink } from '../common/PortalLink';
 import { useHashSubRoute } from '../../hooks/useHashSubRoute';
+import {
+  NEURO_SUBGROUPS,
+  NEURO_RISK_FILTERS,
+  NeuroSubgroupId,
+  NeuroRiskFilterId,
+  ClinicalTagTone,
+  getNeuroSubgroup,
+  getClinicalTags,
+  matchesNeuroRiskFilter,
+  getShortDuration,
+  getSmartPosition,
+  getSmartGoldStandard
+} from '../../utils/neuroProcedureHelpers';
 
 interface ProceduresWorkspaceProps {
   isDark: boolean;
@@ -252,6 +261,8 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
     return null;
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedNeuroSubgroup, setSelectedNeuroSubgroup] = useState<'all' | NeuroSubgroupId>('all');
+  const [selectedNeuroRisk, setSelectedNeuroRisk] = useState<NeuroRiskFilterId | null>(null);
 
   useEffect(() => {
     if (activeProcedure) {
@@ -264,17 +275,67 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
     }
   }, [activeSubId, activeProcedure]);
 
+  useEffect(() => {
+    if (selectedSpecialty !== 'norosirurji') {
+      setSelectedNeuroSubgroup('all');
+      setSelectedNeuroRisk(null);
+    }
+  }, [selectedSpecialty]);
+
   // Arama sonuçları
   const filteredProcedures = useMemo(() => {
     const scope = selectedSpecialty === null ? 'all' : selectedSpecialty;
     return searchProcedures(searchQuery, scope);
   }, [searchQuery, selectedSpecialty]);
 
+  // Nöroşirürji alt grup sayıları (canlı)
+  const neuroSubgroupCounts = useMemo(() => {
+    const counts: Record<NeuroSubgroupId, number> = {
+      cranial_vascular_trauma: 0,
+      skull_base_posterior_csf: 0,
+      functional_epilepsy_pain: 0,
+      spine: 0
+    };
+    if (selectedSpecialty !== 'norosirurji') return counts;
+    for (const proc of filteredProcedures) {
+      const sg = getNeuroSubgroup(proc);
+      counts[sg] = (counts[sg] || 0) + 1;
+    }
+    return counts;
+  }, [filteredProcedures, selectedSpecialty]);
+
+  // Nöroşirürji alt grup + klinik risk filtresi uygulanmış liste
+  const neuroDisplayedProcedures = useMemo(() => {
+    if (selectedSpecialty !== 'norosirurji') return filteredProcedures;
+    return filteredProcedures.filter((proc) => {
+      if (selectedNeuroSubgroup !== 'all' && getNeuroSubgroup(proc) !== selectedNeuroSubgroup) {
+        return false;
+      }
+      if (selectedNeuroRisk && !matchesNeuroRiskFilter(proc, selectedNeuroRisk)) {
+        return false;
+      }
+      return true;
+    });
+  }, [filteredProcedures, selectedSpecialty, selectedNeuroSubgroup, selectedNeuroRisk]);
+
   // Seçili branşın meta bilgisi
   const activeSpecialtyMeta = useMemo(() => {
     if (!selectedSpecialty || selectedSpecialty === 'all') return null;
     return SURGICAL_SPECIALTIES.find(s => s.id === selectedSpecialty) || null;
   }, [selectedSpecialty]);
+
+  // Detay görünümünde Önceki / Sonraki prosedür navigasyonu
+  const adjacentProcedures = useMemo(() => {
+    if (!activeProcedure) return undefined;
+    const scope = selectedSpecialty === 'all' ? 'all' : activeProcedure.specialty;
+    const list = getProceduresBySpecialty(scope);
+    const idx = list.findIndex((p) => p.id === activeProcedure.id);
+    if (idx === -1) return undefined;
+    return {
+      prev: idx > 0 ? list[idx - 1] : undefined,
+      next: idx < list.length - 1 ? list[idx + 1] : undefined
+    };
+  }, [activeProcedure, selectedSpecialty]);
 
   // Branş başına düşen kayıtlı prosedür sayıları
   const procedureCountsBySpecialty = useMemo(() => {
@@ -294,11 +355,26 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
 
   // 1) Eğer bir prosedür seçiliyse doğrudan detay görünümünü göster
   if (activeProcedure) {
+    const backTargetSpecialty = selectedSpecialty || activeProcedure.specialty;
+    const backMeta =
+      backTargetSpecialty !== 'all'
+        ? SURGICAL_SPECIALTIES.find((s) => s.id === backTargetSpecialty)
+        : null;
+    const backLabel = backMeta
+      ? `${backMeta.name} Protokolleri`
+      : 'Tüm Prosedürler Kataloğuna Dön';
+
     return (
       <ProcedureDetailView 
         procedure={activeProcedure}
         isDark={isDark}
+        backLabel={backLabel}
         onBack={() => (selectedSpecialty ? selectSub(selectedSpecialty) : clearSub())}
+        onSelectProcedure={(id) => {
+          selectSub(id);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        adjacentProcedures={adjacentProcedures}
       />
     );
   }
@@ -397,7 +473,15 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
 
           {filteredProcedures.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              {filteredProcedures.map((proc) => renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub))}
+              {filteredProcedures.map((proc) =>
+                renderProcedureCard(
+                  proc,
+                  isDark,
+                  getSubHref(proc.id),
+                  selectSub,
+                  selectedSpecialty === 'norosirurji'
+                )
+              )}
             </div>
           ) : (
             renderEmptyState(isDark, searchQuery)
@@ -598,10 +682,163 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
             </div>
           )}
 
-          {/* Prosedür Kartları Grid */}
-          {filteredProcedures.length > 0 ? (
+          {/* Nöroşirürji Alt Uzmanlık Sekmeleri & 1-Tık Klinik Risk Filtreleri */}
+          {selectedSpecialty === 'norosirurji' && (
+            <div className={`p-3.5 rounded-xl border space-y-3 ${
+              isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              {/* 4 Alt Uzmanlık Sekmesi + Tümü */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
+                <button
+                  type="button"
+                  onClick={() => setSelectedNeuroSubgroup('all')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 border ${
+                    selectedNeuroSubgroup === 'all'
+                      ? isDark
+                        ? 'bg-purple-500/20 border-purple-500/50 text-purple-200'
+                        : 'bg-purple-700 border-purple-700 text-white shadow-2xs'
+                      : isDark
+                        ? 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-purple-500/40 hover:text-purple-200'
+                        : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-purple-400 hover:text-purple-800'
+                  }`}
+                >
+                  <span>Tümü</span>
+                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                    selectedNeuroSubgroup === 'all'
+                      ? isDark ? 'bg-purple-500/30 text-purple-100' : 'bg-white/20 text-white'
+                      : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200/80 text-slate-600'
+                  }`}>
+                    {filteredProcedures.length}
+                  </span>
+                </button>
+
+                {NEURO_SUBGROUPS.map((sg) => {
+                  const isActive = selectedNeuroSubgroup === sg.id;
+                  const count = neuroSubgroupCounts[sg.id] || 0;
+                  return (
+                    <button
+                      key={sg.id}
+                      type="button"
+                      onClick={() => setSelectedNeuroSubgroup(sg.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 border ${
+                        isActive
+                          ? isDark
+                            ? 'bg-purple-500/20 border-purple-500/50 text-purple-200'
+                            : 'bg-purple-700 border-purple-700 text-white shadow-2xs'
+                          : isDark
+                            ? 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-purple-500/40 hover:text-purple-200'
+                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-purple-400 hover:text-purple-800'
+                      }`}
+                    >
+                      <span>{sg.tabLabel}</span>
+                      <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                        isActive
+                          ? isDark ? 'bg-purple-500/30 text-purple-100' : 'bg-white/20 text-white'
+                          : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200/80 text-slate-600'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* 1-Tık Klinik Risk Filtre Çipleri */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 mr-1">
+                  Hızlı Risk Filtresi:
+                </span>
+                {NEURO_RISK_FILTERS.map((chip) => {
+                  const isSelected = selectedNeuroRisk === chip.id;
+                  return (
+                    <button
+                      key={chip.id}
+                      type="button"
+                      onClick={() => setSelectedNeuroRisk(isSelected ? null : chip.id)}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer border ${
+                        isSelected
+                          ? isDark
+                            ? 'bg-teal-500/20 border-teal-400/60 text-teal-200'
+                            : 'bg-teal-700 border-teal-700 text-white'
+                          : isDark
+                            ? 'bg-slate-950/50 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                            : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                      }`}
+                    >
+                      {chip.label}
+                    </button>
+                  );
+                })}
+                {(selectedNeuroRisk !== null || selectedNeuroSubgroup !== 'all') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedNeuroSubgroup('all');
+                      setSelectedNeuroRisk(null);
+                    }}
+                    className="ml-auto text-[11px] font-semibold text-teal-600 dark:text-teal-400 hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <X className="w-3 h-3" />
+                    <span>Filtreyi Sıfırla ({neuroDisplayedProcedures.length})</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Prosedür Kartları Grid (Nöroşirürji "Tümü" modunda alt grup başlıklarıyla) */}
+          {selectedSpecialty === 'norosirurji' ? (
+            neuroDisplayedProcedures.length > 0 ? (
+              selectedNeuroSubgroup === 'all' && selectedNeuroRisk === null ? (
+                <div className="space-y-7">
+                  {NEURO_SUBGROUPS.map((sg) => {
+                    const groupProcs = neuroDisplayedProcedures.filter(
+                      (p) => getNeuroSubgroup(p) === sg.id
+                    );
+                    if (groupProcs.length === 0) return null;
+                    return (
+                      <div key={sg.id} className="space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1 pb-1.5 border-b border-slate-200 dark:border-slate-800">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
+                            <h3 className="text-sm font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+                              {sg.sectionTitle}
+                            </h3>
+                            <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                              isDark ? 'bg-purple-500/15 text-purple-300' : 'bg-purple-50 text-purple-700 border border-purple-200'
+                            }`}>
+                              {groupProcs.length}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                            {sg.description}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                          {groupProcs.map((proc) =>
+                            renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub, true)
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  {neuroDisplayedProcedures.map((proc) =>
+                    renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub, true)
+                  )}
+                </div>
+              )
+            ) : (
+              renderEmptyState(isDark, searchQuery, selectedNeuroRisk !== null)
+            )
+          ) : filteredProcedures.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              {filteredProcedures.map((proc) => renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub))}
+              {filteredProcedures.map((proc) =>
+                renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub, false)
+              )}
             </div>
           ) : (
             renderEmptyState(isDark, searchQuery)
@@ -613,79 +850,104 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
 };
 
 /**
- * Pozisyon bilgisinden özet kokpit göstergesi çıkarır
- */
-function getShortPosition(pos?: string): string {
-  if (!pos) return 'Supin';
-  const clean = pos.toLowerCase();
-  if (clean.includes('prone') || clean.includes('yüzüstü')) return 'Prone';
-  if (clean.includes('lateral')) return 'Lateral Dekübit';
-  if (clean.includes('trendelenburg')) {
-    return clean.includes('ters') || clean.includes('reverse') ? 'Ters Trendelenburg' : 'Trendelenburg';
-  }
-  if (clean.includes('oturur') || clean.includes('fowler') || clean.includes('beach chair')) return 'Yarı-Oturur';
-  if (clean.includes('litotomi')) return 'Litotomi';
-  if (clean.includes('supin')) return 'Supin';
-  const shortPart = pos.split(',')[0].replace(/\(.*\)/g, '').trim();
-  return shortPart.length > 20 ? shortPart.substring(0, 18) + '...' : shortPart || 'Supin';
-}
-
-/**
  * Kanama riskinden özet kokpit göstergesi çıkarır
  */
-function getShortBleeding(proc: ProcedureDefinition): { text: string; colorClass: string } {
+function getShortBleeding(proc: ProcedureDefinition): {
+  text: string;
+  colorClass: string;
+  riskTag?: string;
+} {
   const bp = proc.bleedingProfile;
   if (!bp) return { text: 'Minimal', colorClass: 'text-emerald-500' };
 
   const isMinimal = bp.riskLevel === 'minimal';
   const isLow = bp.riskLevel === 'low';
   const isModerate = bp.riskLevel === 'moderate';
-  const colorClass = isMinimal 
-    ? 'text-emerald-500' 
-    : isLow 
-      ? 'text-teal-500' 
-      : isModerate 
-        ? 'text-amber-500' 
+  const isHigh = bp.riskLevel === 'high';
+  const isMassive = bp.riskLevel === 'massive_potential';
+
+  const colorClass = isMinimal
+    ? 'text-emerald-500'
+    : isLow
+      ? 'text-teal-500'
+      : isModerate
+        ? 'text-amber-500'
         : 'text-rose-500';
+
+  const riskTag = isMassive ? 'Masif Risk' : isHigh ? 'Yüksek' : undefined;
 
   const ebl = bp.estimatedBloodLoss ? bp.estimatedBloodLoss.split('(')[0].trim() : '';
   if (ebl && ebl.length <= 16) {
-    return { text: ebl, colorClass };
+    return { text: ebl, colorClass, riskTag };
   }
-  return { 
-    text: isMinimal ? 'Minimal (<50 mL)' : isLow ? 'Düşük (<100 mL)' : isModerate ? 'Orta Düzey' : 'Yüksek / Masif', 
-    colorClass 
+  return {
+    text: isMinimal
+      ? 'Minimal (<50 mL)'
+      : isLow
+        ? 'Düşük (<100 mL)'
+        : isModerate
+          ? 'Orta Düzey'
+          : 'Yüksek / Masif',
+    colorClass,
+    riskTag
   };
 }
 
-/**
- * Birincil anestezi tekniğinden kısa ve özet "Altın Standart" metni çıkarır
- */
-function getShortGoldStandard(proc: ProcedureDefinition): string {
-  const primary = proc.anesthesiaTechniques?.primary?.[0];
-  if (!primary) return 'Genel Anestezi (GETA)';
-
-  let clean = primary;
-  // If it contains "—", take the main technical part before the long rationale
-  if (clean.includes('—')) {
-    clean = clean.split('—')[0].trim();
-  } else if (clean.includes(' - ')) {
-    clean = clean.split(' - ')[0].trim();
+function getRiskLeftBorderClass(riskLevel?: ProcedureDefinition['bleedingProfile'] extends infer T ? T extends { riskLevel: infer R } ? R : never : never): string {
+  switch (riskLevel) {
+    case 'massive_potential':
+    case 'high':
+      return 'border-l-4 border-l-rose-500';
+    case 'moderate':
+      return 'border-l-4 border-l-amber-500';
+    case 'low':
+    case 'minimal':
+      return 'border-l-4 border-l-emerald-500';
+    default:
+      return 'border-l-4 border-l-slate-300 dark:border-l-slate-700';
   }
+}
 
-  // Remove trailing colon
-  clean = clean.replace(/:\s*$/, '').trim();
-
-  // Normalize common long phrases for cockpit glanceability
-  clean = clean.replace(/Ultrason Eşliğinde\s*/gi, 'USG ');
-  clean = clean.replace(/Endotrakeal Entübasyonlu/gi, 'Entübe');
-  clean = clean.replace(/Endotrakeal Entübasyon/gi, 'Entübasyon');
-
-  if (clean.length > 68) {
-    clean = clean.substring(0, 65) + '...';
-  }
-
-  return clean;
+function getTagToneClasses(tone: ClinicalTagTone, isDark: boolean): string {
+  const map: Record<ClinicalTagTone, { dark: string; light: string }> = {
+    violet: {
+      dark: 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+      light: 'bg-violet-50 text-violet-800 border-violet-200'
+    },
+    amber: {
+      dark: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      light: 'bg-amber-50 text-amber-900 border-amber-200'
+    },
+    sky: {
+      dark: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+      light: 'bg-sky-50 text-sky-800 border-sky-200'
+    },
+    orange: {
+      dark: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
+      light: 'bg-orange-50 text-orange-800 border-orange-200'
+    },
+    cyan: {
+      dark: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+      light: 'bg-cyan-50 text-cyan-800 border-cyan-200'
+    },
+    rose: {
+      dark: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+      light: 'bg-rose-50 text-rose-800 border-rose-200'
+    },
+    blue: {
+      dark: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+      light: 'bg-blue-50 text-blue-800 border-blue-200'
+    },
+    teal: {
+      dark: 'bg-teal-500/15 text-teal-300 border-teal-500/30',
+      light: 'bg-teal-50 text-teal-800 border-teal-200'
+    },
+    fuchsia: {
+      dark: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30',
+      light: 'bg-fuchsia-50 text-fuchsia-800 border-fuchsia-200'
+    }
+  };
+  return isDark ? map[tone].dark : map[tone].light;
 }
 
 /**
@@ -695,18 +957,24 @@ function renderProcedureCard(
   proc: ProcedureDefinition,
   isDark: boolean,
   href: string,
-  onSelect: (id: string) => void
+  onSelect: (id: string) => void,
+  showClinicalBadges = false
 ) {
   const bleeding = getShortBleeding(proc);
-  const positionText = getShortPosition(proc.intraoperative?.patientPosition);
-  const goldStandardText = getShortGoldStandard(proc);
+  const durationText = getShortDuration(proc.averageDuration);
+  const positionText = getSmartPosition(proc.intraoperative?.patientPosition);
+  const goldStandardText = getSmartGoldStandard(proc);
+  const riskStripeClass = getRiskLeftBorderClass(proc.bleedingProfile?.riskLevel);
+  const clinicalTags = showClinicalBadges && proc.specialty === 'norosirurji'
+    ? getClinicalTags(proc, 3)
+    : [];
 
   return (
     <PortalLink
       key={proc.id}
       href={href}
       onNavigate={() => onSelect(proc.id)}
-      className={`p-4 rounded-xl border transition-all cursor-pointer group flex flex-col justify-between gap-3 ${
+      className={`p-4 rounded-xl border ${riskStripeClass} transition-all cursor-pointer group flex flex-col justify-between gap-3 ${
         isDark 
           ? 'bg-slate-900/80 border-slate-800 hover:border-teal-500/50 hover:bg-slate-900 shadow-2xs hover:shadow-sm' 
           : 'bg-white border-slate-200 hover:border-teal-600 hover:shadow-sm'
@@ -715,7 +983,7 @@ function renderProcedureCard(
       <div className="space-y-2.5">
         {/* Üst Bar: Kısaltma Kodu + Kategori / Branş Etiketi */}
         <div className="flex items-center justify-between gap-2">
-          <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
+          <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded truncate max-w-[190px] ${
             isDark ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30' : 'bg-teal-50 text-teal-800 border border-teal-200'
           }`}>
             {proc.shortCode || proc.specialtyName}
@@ -739,34 +1007,53 @@ function renderProcedureCard(
           {/* 1. Satır: 3 Sütunlu Telemetri (Süre - Kanama - Pozisyon) */}
           <div className="grid grid-cols-3 gap-2 text-center">
             {/* 1. Süre */}
-            <div className="flex flex-col items-center justify-center p-0.5">
+            <div className="flex flex-col items-center justify-center p-0.5 min-w-0">
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
                 <Clock className="w-3 h-3 text-amber-500 shrink-0" />
                 Süre
               </span>
-              <span className="font-mono font-bold text-slate-800 dark:text-slate-200 truncate w-full text-xs">
-                {proc.averageDuration}
+              <span
+                className="font-mono font-bold text-slate-800 dark:text-slate-200 truncate w-full text-xs"
+                title={proc.averageDuration}
+              >
+                {durationText}
               </span>
             </div>
 
             {/* 2. Kanama / EBL */}
-            <div className="flex flex-col items-center justify-center p-0.5 border-x border-slate-200 dark:border-slate-800">
+            <div className="flex flex-col items-center justify-center p-0.5 border-x border-slate-200 dark:border-slate-800 min-w-0">
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
                 <Droplet className={`w-3 h-3 ${bleeding.colorClass} shrink-0`} />
                 Kanama
               </span>
-              <span className="font-mono font-bold text-slate-800 dark:text-slate-200 truncate w-full text-xs" title={proc.bleedingProfile?.estimatedBloodLoss}>
+              <span
+                className="font-mono font-bold text-slate-800 dark:text-slate-200 truncate w-full text-xs"
+                title={proc.bleedingProfile?.estimatedBloodLoss}
+              >
                 {bleeding.text}
               </span>
+              {bleeding.riskTag && (
+                <span className={`mt-0.5 inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider ${
+                  isDark
+                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                    : 'bg-rose-100 text-rose-800 border border-rose-200'
+                }`}>
+                  <AlertTriangle className="w-2.5 h-2.5 shrink-0" />
+                  {bleeding.riskTag}
+                </span>
+              )}
             </div>
 
             {/* 3. Pozisyon */}
-            <div className="flex flex-col items-center justify-center p-0.5">
+            <div className="flex flex-col items-center justify-center p-0.5 min-w-0">
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
                 <Activity className="w-3 h-3 text-sky-500 shrink-0" />
                 Pozisyon
               </span>
-              <span className="font-semibold text-slate-800 dark:text-slate-200 truncate w-full text-xs" title={proc.intraoperative?.patientPosition}>
+              <span
+                className="font-semibold text-slate-800 dark:text-slate-200 truncate w-full text-xs"
+                title={proc.intraoperative?.patientPosition}
+              >
                 {positionText}
               </span>
             </div>
@@ -794,11 +1081,24 @@ function renderProcedureCard(
         </div>
       </div>
 
-      {/* Alt Bar: Anestezi şekli kaldırıldı; sadece şık, sağa dayalı İncele CTA */}
-      <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
-        <span className="text-[11px] text-slate-400 font-medium">
-          {proc.specialtyName}
-        </span>
+      {/* Alt Bar: Nöroşirürji içinde 2-3 klinik mikro-etiket; çapraz aramada/tüm listede branş adı */}
+      <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+        {clinicalTags.length > 0 ? (
+          <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+            {clinicalTags.map((tag) => (
+              <span
+                key={tag.id}
+                className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border whitespace-nowrap ${getTagToneClasses(tag.tone, isDark)}`}
+              >
+                {tag.label}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <span className="text-[11px] text-slate-400 font-medium truncate">
+            {proc.specialtyName}
+          </span>
+        )}
         <div className="flex items-center gap-1 text-teal-600 dark:text-teal-400 font-semibold group-hover:translate-x-0.5 transition-transform text-xs shrink-0">
           <span>İncele</span>
           <ChevronRight className="w-3.5 h-3.5" />
@@ -811,7 +1111,7 @@ function renderProcedureCard(
 /**
  * Boş Durum (Empty State) Render Fonksiyonu
  */
-function renderEmptyState(isDark: boolean, searchQuery: string) {
+function renderEmptyState(isDark: boolean, searchQuery: string, isRiskFilterActive = false) {
   return (
     <div className={`p-8 rounded-2xl border text-center space-y-3 ${
       isDark ? 'bg-slate-900/40 border-slate-800 text-slate-400' : 'bg-white border-slate-200 text-slate-600'
@@ -821,12 +1121,16 @@ function renderEmptyState(isDark: boolean, searchQuery: string) {
       </div>
       <div className="space-y-1">
         <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-          Bu branşta henüz kayıtlı prosedür bulunmuyor
+          {isRiskFilterActive
+            ? 'Seçili risk filtresiyle eşleşen protokol bulunamadı'
+            : 'Bu branşta henüz kayıtlı prosedür bulunmuyor'}
         </h3>
         <p className="text-xs max-w-md mx-auto text-slate-500">
           {searchQuery 
             ? `"${searchQuery}" aramasıyla eşleşen herhangi bir prosedür bulunamadı.` 
-            : 'Bu cerrahi branş için protokol kayıtları hazırlanma aşamasındadır.'}
+            : isRiskFilterActive
+              ? 'Farklı bir alt uzmanlık sekmesi seçebilir veya aktif risk filtresini sıfırlayabilirsiniz.'
+              : 'Bu cerrahi branş için protokol kayıtları hazırlanma aşamasındadır.'}
         </p>
       </div>
     </div>

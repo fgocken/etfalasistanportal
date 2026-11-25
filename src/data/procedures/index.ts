@@ -1,17 +1,25 @@
 import { ProcedureDefinition, SurgicalSpecialty, SurgicalSpecialtyMeta } from '../../types/procedures';
-// 1) Beyin ve Sinir Cerrahisi (Nöroşirürji) — Kraniyal → Fonksiyonel → Spinal (Kraniyokaudal)
+// 1) Beyin ve Sinir Cerrahisi (Nöroşirürji) — Kraniyal/Vasküler/Girişimsel → Kafa Tabanı/BOS/Pediatrik → Fonksiyonel → Spinal (Kraniyokaudal)
 import { craniotomyAneurysm } from './craniotomyAneurysm';
+import { endovascularAneurysmCoilingEmbolization } from './endovascularAneurysmCoilingEmbolization';
 import { craniotomyVascularMalformation } from './craniotomyVascularMalformation';
 import { craniotomyEcIcBypass } from './craniotomyEcIcBypass';
+import { endovascularMechanicalThrombectomy } from './endovascularMechanicalThrombectomy';
 import { craniotomyEmbolectomy } from './craniotomyEmbolectomy';
 import { craniotomyTumor } from './craniotomyTumor';
 import { awakeCraniotomy } from './awakeCraniotomy';
 import { craniotomyTrauma } from './craniotomyTrauma';
+import { chronicSubduralHematomaMma } from './chronicSubduralHematomaMma';
+import { intracerebralHemorrhageEvacuation } from './intracerebralHemorrhageEvacuation';
 import { craniotomyMicrovascularDecompression } from './craniotomyMicrovascularDecompression';
+import { posteriorFossaCpaTumor } from './posteriorFossaCpaTumor';
 import { bifrontalCraniotomyCsfLeak } from './bifrontalCraniotomyCsfLeak';
 import { transsphenoidalPituitaryResection } from './transsphenoidalPituitaryResection';
 import { craniocervicalDecompressionChiari } from './craniocervicalDecompressionChiari';
 import { ventricularShuntProcedures } from './ventricularShuntProcedures';
+import { endoscopicThirdVentriculostomy } from './endoscopicThirdVentriculostomy';
+import { pediatricCraniosynostosis } from './pediatricCraniosynostosis';
+import { pediatricMyelomeningoceleRepair } from './pediatricMyelomeningoceleRepair';
 import { stereotacticNeurosurgery } from './stereotacticNeurosurgery';
 import { stereotacticDbsPallidotomyThalamotomy } from './stereotacticDbsPallidotomyThalamotomy';
 import { epilepsySurgery } from './epilepsySurgery';
@@ -82,17 +90,25 @@ import { ekt } from './ekt';
 
 export {
   craniotomyAneurysm,
+  endovascularAneurysmCoilingEmbolization,
   craniotomyVascularMalformation,
   craniotomyEcIcBypass,
+  endovascularMechanicalThrombectomy,
   craniotomyEmbolectomy,
   craniotomyTumor,
   awakeCraniotomy,
   craniotomyTrauma,
+  chronicSubduralHematomaMma,
+  intracerebralHemorrhageEvacuation,
   craniotomyMicrovascularDecompression,
+  posteriorFossaCpaTumor,
   bifrontalCraniotomyCsfLeak,
   transsphenoidalPituitaryResection,
   craniocervicalDecompressionChiari,
   ventricularShuntProcedures,
+  endoscopicThirdVentriculostomy,
+  pediatricCraniosynostosis,
+  pediatricMyelomeningoceleRepair,
   stereotacticNeurosurgery,
   stereotacticDbsPallidotomyThalamotomy,
   epilepsySurgery,
@@ -154,7 +170,7 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
     id: 'norosirurji',
     name: 'Beyin ve Sinir Cerrahisi',
     shortName: 'Nöroşirürji',
-    description: 'Kraniyotomi (tümör, anevrizma, hematom), fonksiyonel cerrahi ve kraniyokaudal omurga stabilizasyonları'
+    description: 'Kraniyotomi (anevrizma, tümör, hematom), girişimsel nöroradyoloji (EVT, koilleme), posterior fossa/pediatrik, fonksiyonel cerrahi ve kraniyokaudal omurga stabilizasyonları'
   },
   {
     id: 'goz',
@@ -196,7 +212,7 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
     id: 'cocuk_cerrahisi',
     name: 'Çocuk Cerrahisi',
     shortName: 'Çocuk Cerrahi',
-    description: 'Yenidoğan ve pediatrik genel, KBB, ürolojik ve torasik cerrahi girişimler'
+    description: 'Yenidoğan ve pediatrik genel, nöroşirürji, KBB, ürolojik ve torasik cerrahi girişimler'
   },
   {
     id: 'kardiyoloji',
@@ -241,19 +257,29 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
  * Branş ve anatomik/klinik hiyerarşiye göre sistematik sıralama
  */
 export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
-  // Nöroşirürji — Kraniyal Vasküler, Tümör, Travma ve Kafa Tabanı
+  // Nöroşirürji — Kraniyal Vasküler, Girişimsel Nöroradyoloji, Tümör & Travma
   craniotomyAneurysm,
+  endovascularAneurysmCoilingEmbolization,
   craniotomyVascularMalformation,
   craniotomyEcIcBypass,
+  endovascularMechanicalThrombectomy,
   craniotomyEmbolectomy,
   craniotomyTumor,
   awakeCraniotomy,
   craniotomyTrauma,
+  chronicSubduralHematomaMma,
+  intracerebralHemorrhageEvacuation,
+
+  // Nöroşirürji — Kafa Tabanı, Posterior Fossa, BOS & Pediatrik
   craniotomyMicrovascularDecompression,
+  posteriorFossaCpaTumor,
   bifrontalCraniotomyCsfLeak,
   transsphenoidalPituitaryResection,
   craniocervicalDecompressionChiari,
   ventricularShuntProcedures,
+  endoscopicThirdVentriculostomy,
+  pediatricCraniosynostosis,
+  pediatricMyelomeningoceleRepair,
 
   // Nöroşirürji — Fonksiyonel, Epilepsi ve Ağrı Cerrahisi
   stereotacticNeurosurgery,
@@ -344,26 +370,44 @@ export function getProceduresBySpecialty(specialty: SurgicalSpecialty | 'all'): 
   );
 }
 
+function normalizeTrSearch(value: string): string {
+  return value.toLocaleLowerCase('tr-TR');
+}
+
 /**
- * Serbest metin arama (İsim, Branş, Endikasyon, Kategori)
+ * Serbest metin arama (Türkçe İ/ı uyumlu; İsim, Branş, Endikasyon, Kategori, Anestezi Tekniği, Pozisyon, Monitör ve Hayati İlkeler)
  */
 export function searchProcedures(
   query: string, 
   specialty: SurgicalSpecialty | 'all' = 'all'
 ): ProcedureDefinition[] {
-  const normalized = query.trim().toLowerCase();
+  const normalized = normalizeTrSearch(query.trim());
   const pool = getProceduresBySpecialty(specialty);
 
   if (!normalized) return pool;
 
+  const tokens = normalized.split(/\s+/).filter(Boolean);
+
   return pool.filter(p => {
-    return (
-      p.name.toLowerCase().includes(normalized) ||
-      (p.shortCode && p.shortCode.toLowerCase().includes(normalized)) ||
-      p.specialtyName.toLowerCase().includes(normalized) ||
-      p.description.toLowerCase().includes(normalized) ||
-      (p.categoryTag && p.categoryTag.toLowerCase().includes(normalized)) ||
-      p.indications.some(ind => ind.toLowerCase().includes(normalized))
+    const haystack = normalizeTrSearch(
+      [
+        p.id,
+        p.name,
+        p.shortCode || '',
+        p.specialtyName,
+        p.description,
+        p.categoryTag || '',
+        ...(p.indications || []),
+        ...(p.anesthesiaTechniques?.primary || []),
+        ...(p.anesthesiaTechniques?.alternative || []),
+        p.anesthesiaTechniques?.notes || '',
+        ...(p.anesthesiaTechniques?.indispensableRules || []).map(r => `${r.title} ${r.content}`),
+        p.intraoperative?.patientPosition || '',
+        ...(p.intraoperative?.monitoring || []),
+        ...(p.intraoperative?.airwayManagement || [])
+      ].join(' ')
     );
+
+    return tokens.every(token => haystack.includes(token));
   });
 }

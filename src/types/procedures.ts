@@ -83,12 +83,12 @@ export interface ProcedureDefinition {
 
   // 4) Pre-operatif Hazırlık
   preoperative: {
-    // 4a) Prosedür Spesifik Dikkat Edilmesi Gereken Konsültasyonlar
-    consultations?: string[];
-    // 4b) Prosedür Spesifik Anamnez ve Fizik Muayenede Dikkat Edilecekler
+    // 4a) Prosedür Spesifik Anamnez ve Fizik Muayenede Dikkat Edilecekler
     historyAndPhysical?: string[];
-    // 4c) Prosedür Spesifik Kan ve Laboratuvar Sonuçlarında Dikkat Edilecekler
+    // 4b) Prosedür Spesifik Kan ve Laboratuvar Sonuçlarında Dikkat Edilecekler
     laboratoryAndTests?: string[];
+    // 4c) Prosedür Spesifik Dikkat Edilmesi Gereken Konsültasyonlar
+    consultations?: string[];
   };
 
   // 5) İntra-operatif Yönetim
@@ -97,13 +97,13 @@ export interface ProcedureDefinition {
     monitoring: string[];
     // 5b) Prosedür Spesifik Gerekli Vasküler Erişimler
     vascularAccess: string[];
-    // 5c) Hasta Pozisyonu & Fizyolojik Güvenlik Önlemleri
+    // 5c) Prosedür Bazlı Anestezi Yönetimi (İndüksiyon, İdame, Nöromusküler Strateji)
+    anesthesiaManagement: string[];
+    // 5d) Prosedür Bazlı Hava Yolu Yönetimi
+    airwayManagement: string[];
+    // 5e) Hasta Pozisyonu & Fizyolojik Güvenlik Önlemleri
     patientPosition: string;
     patientPositionDetails?: string[];
-    // 5d) Prosedür Bazlı Anestezi Yönetimi (İndüksiyon, İdame, Nöromusküler Strateji)
-    anesthesiaManagement: string[];
-    // 5e) Prosedür Bazlı Hava Yolu Yönetimi
-    airwayManagement: string[];
     // 5f) Prosedür Spesifik Dikkat Edilmesi Gereken Kritik Karar Noktaları ve Cerrahi Aşamaları
     criticalSurgicalStages: string[];
     // 5g) Uyandırmada (Emergence) Dikkat Edilmesi Gerekenler

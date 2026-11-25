@@ -16,19 +16,19 @@ export interface ParsedRulesResult {
  */
 function normalizePrinciplesTitle(rawTitle: string): string {
   return rawTitle
-    .replace(/(^|\s)[2-9]\s+VAZGEÇİLMEZ\s+KURALI(?=\s|$)/gi, '$1TEMEL İLKELERİ')
-    .replace(/(^|\s)[2-9]\s+ÖLÜMCÜL\s+KURALI(?=\s|$)/gi, '$1HAYATİ İLKELERİ')
-    .replace(/(^|\s)[2-9]\s+HAYATİ\s+ANESTEZİ\s+KURALI(?=\s|$)/gi, '$1HAYATİ ANESTEZİ İLKELERİ')
-    .replace(/(^|\s)[2-9]\s+VAZGEÇİLMEZ\s+DİREĞİ(?=\s|$)/gi, '$1TEMEL İLKELERİ')
-    .replace(/(^|\s)[2-9]\s+TEMEL\s+DİREĞİ(?=\s|$)/gi, '$1TEMEL İLKELERİ')
-    .replace(/(^|\s)[2-9]\s+KRİTİK\s+KLİNİK\s+NOKTASI(?=\s|$)/gi, '$1KRİTİK KLİNİK NOKTALARI')
-    .replace(/(^|\s)[2-9]\s+ALTIN\s+KURALI(?=\s|$)/gi, '$1ALTIN İLKELERİ')
-    .replace(/(^|\s)[2-9]\s+VAZGEÇİLMEZ\s+İLKESİ(?=\s|$)/gi, '$1VAZGEÇİLMEZ İLKELERİ')
-    .replace(/(^|\s)[2-9]\s+TEMEL\s+HEDEFİ(?=\s|$)/gi, '$1TEMEL HEDEFLERİ')
-    .replace(/(^|\s)[2-9]\s+HAYATİ\s+HEDEFİ(?=\s|$)/gi, '$1HAYATİ HEDEFLERİ')
-    .replace(/(^|\s)[2-9]\s+KRİTİK\s+SÜTUNU(?=\s|$)/gi, '$1KRİTİK SÜTUNLARI')
-    .replace(/(^|\s)[2-9]\s+TEMEL\s+AYAĞI(?=\s|$)/gi, '$1TEMEL AYAKLARI')
-    .replace(/(^|\s)[2-9]\s+HAYATİ\s+ZORUNLULUĞU(?=\s|$)/gi, '$1HAYATİ ÖNCELİKLERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+VAZGEÇİLMEZ\s+KURALI(?=\s|$)/gi, '$1TEMEL İLKELERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+ÖLÜMCÜL\s+KURALI(?=\s|$)/gi, '$1HAYATİ İLKELERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+HAYATİ\s+ANESTEZİ\s+KURALI(?=\s|$)/gi, '$1HAYATİ ANESTEZİ İLKELERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+VAZGEÇİLMEZ\s+DİREĞİ(?=\s|$)/gi, '$1TEMEL İLKELERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+TEMEL\s+DİREĞİ(?=\s|$)/gi, '$1TEMEL İLKELERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+KRİTİK\s+KLİNİK\s+NOKTASI(?=\s|$)/gi, '$1KRİTİK KLİNİK NOKTALARI')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+ALTIN\s+KURALI(?=\s|$)/gi, '$1ALTIN İLKELERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+VAZGEÇİLMEZ\s+İLKESİ(?=\s|$)/gi, '$1VAZGEÇİLMEZ İLKELERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+TEMEL\s+HEDEFİ(?=\s|$)/gi, '$1TEMEL HEDEFLERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+HAYATİ\s+HEDEFİ(?=\s|$)/gi, '$1HAYATİ HEDEFLERİ')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+KRİTİK\s+SÜTUNU(?=\s|$)/gi, '$1KRİTİK SÜTUNLARI')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+TEMEL\s+AYAĞI(?=\s|$)/gi, '$1TEMEL AYAKLARI')
+    .replace(/(^|\s)(?:[2-9]|[1-9]\d)\s+HAYATİ\s+ZORUNLULUĞU(?=\s|$)/gi, '$1HAYATİ ÖNCELİKLERİ')
     .replace(/(^|\s)ALTIN\s+ÜÇGENİ(?=\s|$)/gi, '$1TEMEL ANESTEZİ İLKELERİ')
     .replace(/\s{2,}/g, ' ')
     .trim();
@@ -49,7 +49,7 @@ export function getProcedureIndispensableRules(
     if (!cleanAirwayRationale) {
       const rawNotes = procedure.anesthesiaTechniques?.notes?.trim();
       if (rawNotes) {
-        const isDuplicateOfRules = /\([1-9]\)/.test(rawNotes) || 
+        const isDuplicateOfRules = /\([1-9]\d?\)/.test(rawNotes) || 
           /VAZGEÇİLMEZ|ALTIN KURAL|KRİTİK KURAL|HAYATİ KURAL|ÖLÜMCÜL KURAL|TEMEL DİREĞİ|TEMEL AYAR|ALTIN ÜÇGEN|TEMEL AYAK|KRİTİK KLİNİK NOKTA|HAYATİ ZORUNLULUK|TEMEL İLKE/i.test(rawNotes);
         if (!isDuplicateOfRules) {
           cleanAirwayRationale = rawNotes;
@@ -62,7 +62,11 @@ export function getProcedureIndispensableRules(
       headerTitle: normalizePrinciplesTitle(
         explicitTitle || `${procedure.name.toUpperCase()} — TEMEL ANESTEZİ İLKELERİ`
       ),
-      rules: explicitRules,
+      rules: explicitRules.map((rule) => ({
+        ...rule,
+        title: rule.title.trim().replace(/[,;]+\s*$/, '').trim(),
+        content: rule.content.trim().replace(/[,;]+\s*$/, '').trim()
+      })),
       airwayRationale: cleanAirwayRationale
     };
   }
@@ -109,18 +113,18 @@ export function getProcedureIndispensableRules(
   }
 
   // Eğer preNote başlık ile aynıysa veya kural belirteçleri içeriyorsa iptal et
-  if (!explicitRationale && preNote && (/\([1-9]\)/.test(preNote) || preNote.trim() === title.trim())) {
+  if (!explicitRationale && preNote && (/\([1-9]\d?\)/.test(preNote) || preNote.trim() === title.trim())) {
     preNote = undefined;
   }
 
-  // Kuralları ayrıştır: (1) ... (2) ... (3) ...
+  // Kuralları ayrıştır: (1) ... (2) ... (10) ...
   const rules: IndispensableRule[] = [];
-  const rulePattern = /\(([1-9])\)\s*([\s\S]+?)(?=\([1-9]\)|$)/g;
+  const rulePattern = /\(([1-9]\d?)\)\s*([\s\S]+?)(?=\([1-9]\d?\)|$)/g;
   let match: RegExpExecArray | null;
 
   while ((match = rulePattern.exec(notes)) !== null) {
     const num = parseInt(match[1], 10);
-    const body = match[2].trim();
+    const body = match[2].trim().replace(/[,;]+\s*$/, '').trim();
 
     // Başlık ile içeriği ayıran ayırıcıyı bul (em-dash, en-dash, tire veya iki nokta)
     const emDashIdx = body.indexOf(' — ');
@@ -148,7 +152,7 @@ export function getProcedureIndispensableRules(
 
     if (splitIdx !== -1) {
       ruleTitle = body.substring(0, splitIdx).trim();
-      content = body.substring(splitIdx + sepLen).trim();
+      content = body.substring(splitIdx + sepLen).trim().replace(/[,;]+\s*$/, '').trim();
     }
 
     rules.push({

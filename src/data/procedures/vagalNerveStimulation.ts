@@ -3,11 +3,10 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Vagal Sinir Stimülasyonu (VNS): Sol Vagus Siniri Stimülatörü İmplantasyonu (Dirençli Epilepsi Tedavisi)
  * (Vagal Nerve Stimulation - VNS: Left Vagus Nerve Stimulator Implantation)
- * 
- * Jaffe (5th ed., Section II: Neurosurgery - Functional Procedures: Vagal Nerve Stimulation, pp. 482-486),
- * American Epilepsy Society (AES), International League Against Epilepsy (ILAE),
- * Society for Neuroscience in Anesthesiology and Critical Care (SNACC)
- * ve ERAS Society Nöroşirürji Kılavuzları referans alınarak yapılandırılmıştır.
+ *
+ * Jaffe (6th ed., 2020, Section II: Neurosurgery - Functional Procedures: Vagal Nerve Stimulation),
+ * American Academy of Neurology (Morris et al., Neurology 2013),
+ * International League Against Epilepsy (ILAE) ve SNACC Kılavuzları referans alınarak yapılandırılmıştır.
  */
 export const vagalNerveStimulation: ProcedureDefinition = {
   id: 'vagal-nerve-stimulation',
@@ -18,154 +17,187 @@ export const vagalNerveStimulation: ProcedureDefinition = {
   categoryTag: 'Fonksiyonel & Epilepsi Nöroşirürjisi',
 
   // 1) Prosedür İsmi, Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Medikal tedaviye dirençli epilepsi ve tedaviye dirençli majör depresyon olgularında; sol servikal karotid kılıf içerisindeki N. vagus (CN X) ana gövdesine sarmal (helikal) elektrotların sarılması, elektrot kablosunun cilt altından tünellenerek sol subklaviküler/aksiller bölgede hazırlanan cebe yerleştirilen programlanabilir bir puls jeneratörüne (VNS pili / IPG) bağlanması ameliyatıdır. Elektriksel uyarılar vagus sinirinin afferent lifleri üzerinden beyin sapı nukleus traktus solitarius (NTS) ve talamokortikal ağlara iletilerek epileptik deşarjlar desenkronize edilir ve nöbet sıklığı azaltılır.',
+  description: 'Medikal tedaviye dirençli epilepsi ve tedaviye dirençli majör depresyon olgularında; sol servikal karotid kılıf içerisindeki N. vagus (CN X) ana gövdesine sarmal (helikal) elektrotların sarılması, elektrot kablosunun cilt altından tünellenerek sol subklaviküler/ön aksiller cebe yerleştirilen programlanabilir bir puls jeneratörüne (VNS pili / IPG) bağlanması ameliyatıdır. Elektriksel uyarılar vagus sinirinin afferent lifleri üzerinden nukleus traktus solitarius (NTS) ve talamokortikal ağlara iletilerek epileptik deşarjları desenkronize eder ve nöbet sıklığını azaltır.',
   indications: [
-    'Medikal Tedaviye Dirençli Fokal veya Jeneralize Epilepsi: En az 2-3 uygun antiepileptik ilacın (AED) maksimal tolere edilen dozda kullanılmasına rağmen kontrol altına alınamayan, rezeksiyona uygun olmayan veya cerrahi rezeksiyondan fayda görmemiş erişkin ve pediatrik (> 4 yaş) hastalar',
-    'Lennox-Gastaut Sendromu ve Pediatrik Epileptik Ensefalopatiler: Düşme atakları (atoni nöbetleri) ve çoklu nöbet tipleri gösteren dirençli olgular',
-    'Tedaviye Dirençli Majör Depresyon (TRD): Çoklu antidepresan ve EKT tedavilerine dirençli unipolar veya bipolar depresyon',
-    'Tuberoskleroz ve Kortikal Displaziye Bağlı Dirençli Nöbetler',
-    'VNS Pil / Jeneratör Değişimi veya Donanım Revizyonu: Batarya ömrü tükenen (genellikle 5-10 yıl) jeneratörlerin lokal/genel anestezi altında elektrot hattına dokunulmaksızın subklaviküler cepten değiştirilmesi'
+    'Medikal Tedaviye Dirençli Fokal veya Jeneralize Epilepsi: En az 2 - 3 uygun antiepileptik ilaca (AED) dirençli, rezektif cerrahiye uygun olmayan veya rezeksiyondan fayda görmemiş erişkin ve pediatrik (≥ 4 yaş) hastalar',
+    'Lennox-Gastaut Sendromu ve Pediatrik Epileptik Ensefalopatiler: Düşme atakları (atonik nöbetler) ve çoklu nöbet tipleri gösteren dirençli pediatrik olgular (sıklıkla ketojenik diyet eşlik eder!)',
+    'Tedaviye Dirençli Majör Depresyon (TRD): Çoklu antidepresan ve EKT tedavilerine dirençli depresyon',
+    'Tuberoskleroz ve Diffüz Kortikal Displaziye Bağlı Dirençli Nöbetler',
+    'VNS Jeneratör (Pil) Değişimi veya Donanım Revizyonu: Batarya ömrü tükenen (genellikle 5 - 10 yıl) jeneratörlerin değiştirilmesi veya elektrot revizyonu'
   ],
-  averageDuration: '1.0 - 2.0 saat (Anestezi indüksiyonu, pozisyonlama ve boyun/göğüs cerrahi örtümü: 25-35 dk; Sol servikal insizyon, karotid kılıf diseksiyonu ve sol vagus sinirinin serbestleştirilmesi: 25-35 dk; Helikal elektrotların sinire sarılması, subklaviküler cep açılışı ve subkütan tünelleme: 20-30 dk; Cihaz diagnostik testlemesi [empedans ve test stimülasyonu esnasında EKG/bradikardi kontrolü] ve çift tabakalı yara kapanışı: 20-30 dk)',
+  averageDuration: '1.0 - 2.0 saat (Anestezi indüksiyonu, pozisyonlama ve boyun/göğüs cerrahi örtümü: 25-35 dk; Sol servikal insizyon, karotid kılıf diseksiyonu ve sol vagus sinirinin serbestleştirilmesi: 25-35 dk; Helikal elektrotların sarılması, subklaviküler cep açılışı ve subkütan tünelleme: 20-30 dk; Sistem test stimülasyonu [EKG/bradikardi ve empedans doğrulaması] ve çift tabakalı kapanış: 20-30 dk)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
     estimatedBloodLoss: '< 30 - 100 mL (Minimal cerrahi kanama; standart VNS implantasyonunda kan kaybı ihmal edilebilir düzeydedir)',
     riskLevel: 'minimal',
-    riskLevelLabel: 'Minimal / İhmal Edilebilir Cerrahi Kan Kaybı',
-    crossMatchRequirement: 'Tip & Screen (T&S) doğrulaması yeterlidir; rutin kan hazırlığı gerekmez',
+    riskLevelLabel: 'Minimal Cerrahi Kan Kaybı (Ancak Postoperatif Servikal Hematom Hava Yolunu Hızla Tıkayabilir)',
+    crossMatchRequirement: 'Tip & Screen (T&S) doğrulaması yeterlidir; rutin eritrosit süspansiyonu hazırlığı gerekmez',
     transfusionProbability: '< %1 (Son derece nadir)',
     criticalBleedingSources: [
       'V. Jugularis Interna ve Yan Dalları (V. facialis, V. thyroidea superior — karotid kılıf diseksiyonunda yırtılma riski)',
-      'A. Carotis Communis (Derin diseksiyonda vasküler adventisya hasarı)',
-      'Subklaviküler Cep Kanayanları (A. thoracica interna perforatör dalları ve V. cephalica)',
-      'Servikal ve Pektoral Cilt Altı Mikrovasküler Yatak'
+      'A. Carotis Communis (Derin diseksiyonda vasküler adventisya yaralanması)',
+      'Subklaviküler Cep Kanamaları (A. thoracica interna perforatör dalları ve V. cephalica)',
+      'Servikal ve Pektoral Cilt Altı Mikrovasküler Yatak (postoperatif boyun hematomu trakeal bası riski taşır)'
     ],
     hemostasisStrategies: [
-      'Bipolar mikronöroşirürjikal hassas koagülasyon (vagus siniri doğrudan koterize edilmemelidir)',
-      'İntraoperatif boyun venöz yaralanmalarında pamuk/Surgicel kompresyonu ve vasküler sütür',
-      'Subklaviküler cepte hematom gelişimini önlemek için titiz hemostaz ve cep içine hafif kompresyon'
+      'Yalnızca BİPOLAR mikronöroşirürjikal koagülasyon (vagus siniri yakınında monopolar koter termal sinir hasarı yaratır!)',
+      'Boyun venöz yaralanmalarında pamuk/Surgicel kompresyonu ve vasküler sütür',
+      'Subklaviküler cepte ve boyun sahasında tam hemostaz (öksürmesiz pürüzsüz ekstübasyon ile desteklenir)'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Endotrakeal Genel Anestezi (GETA) — İnhalasyonel Anestezi (Sevofluran) veya TIVA (Propofol + Remifentanil): Hava yolu güvenliği ve hareketsiz cerrahi saha sağlar',
-      'İkinci Seçenek (Revizyon/Pil Değişimi İçin): Laringeal Maske (LMA) veya Lokal Anestezi + Sedasyon (yalnızca izole subklaviküler jeneratör değişimi yapılan erişkin olgularda)'
+      'Endotrakeal Genel Anestezi (GETA — Propofol + Remifentanil TIVA veya dengeli inhalasyonel anestezi [< 1.0 MAC Sevofluran; yüksek doz Sevofluran/hipokapniden kaçın!]): Karotid kılıf diseksiyonunda hareketsizlik ve laringeal spazma/bradikardiye karşı kesin hava yolu güvenliği sağlar',
+      'Vokal Kord / NIM ETT Monitörizasyonu Kullanılacaksa: Kas gevşeticisiz TIVA (Propofol + Remifentanil) VEYA entübasyonda düşük doz Rokuronyum (0.3 - 0.45 mg/kg) + cerrahi test öncesi Sugammadeks ile tam antagonizasyon (TOF %100)'
     ],
     alternative: [
-      'Monitörize Anestezi Bakımı (MAC) + Servikal Pleksus Bloğu: Yüksek anestezi riski taşıyan seçilmiş kooperatif erişkin olgularda'
+      'Yalnızca İzole Subklaviküler Pil Değişimi İçin (Seçilmiş Erişkinlerde): Lokal Anestezi + MAC veya LMA — ANCAK AKTİF VNS CİHAZI AÇIKKEN LMA/MAC ALTINDA EPİZODİK LARİNGOSPAZM VE VOKAL KORD ADDÜKSİYONU GELİŞEBİLİR! İşlem öncesi cihaz 0 mA\'ya kapatılmalı veya VNS mıknatısı IPG üzerine bantlanmalıdır'
     ],
-    clinicalRationale: 'Karotid kılıf diseksiyonu, subkütan elektrot tünellemesi ve sol vagus uyarımı sırasında hastanın mutlak hareketsizliğini, nöbet eşiği stabilitesini ve ani laringeal spazma/bradikardiye karşı kesin hava yolu güvenliğini sağlamak için endotrakeal genel anestezi (GETA) altın standarttır. Sol boyundaki cerrahi alandan uzak tutmak için tüp sağ ağız köşesine tespit edilir ve sol rekürren sinir basısını önlemek için kaf basıncı 20-25 cmH2O sınırında izlenir.',
-    notes: 'VNS İMPLANTASYONUNDA ANESTEZİNİN 5 VAZGEÇİLMEZ İLKESİ: (1) DAİMA SOL VAGUS SİNİRİ TERCİH EDİLİR! — Sağ vagus siniri sinoatriyal (SA) nodu yoğun inerve eder; sağ vagus uyarımı KATASROFİK ASİSTOLİ VE KALP DURMASINA yol açar! Sol vagus ise ağırlıklı olarak AV nodu ve beyin sapı duyu afferentlerini uyarır; bu nedenle implantasyon KESİNLİKLE SOL TARAFA yapılır. (2) SİNİR DİSEKSİYONU SIRASINDA VAGAL VE KAROTİD REFLEKSLER — Cerrahi ekip karotid kılıfı açarken veya vagus sinirini çengelle kaldırırken masif bradikardi, hipotansiyon ve asistoli tetiklenebilir; anestezi uzmanı EKG\'yi sürekli sesli izlemeli, cerraha manipülasyonu durdurması söylenmeli ve Atropin hazır tutulmalıdır! (3) CİHAZ SİSTEM TESTLEMESİ (LEAD INTERROGATION) — Elektrotlar pile bağlandığında cerrah test uyarıları gönderir; bu sırada anestezi uzmanı EKG\'de geçici bradikardi/AV blok ve sol vokal kord seğirmesi / laringeal spazm olup olmadığını saniye saniye takip etmelidir. (4) POSTOPERATİF SERVİKAL HEMATOM VE HAVA YOLU BASISI — Boyunda gelişecek küçük bir hematom dahi trakeayı basıya uğratarak akut hava yolu obstrüksiyonu yaratır; uyanma öksürmesiz (smooth emergence) sağlanmalıdır. (5) ANTİEPİLEPTİK İLAÇLARIN AKSATILMAMASI — Hastanın düzenli kullandığı antiepileptik ilaçlar ameliyat sabahı dahil kesintisiz sürdürülmelidir; ilaç atlanması ameliyat masasında status epileptikusu tetikler.'
+    clinicalRationale: 'Karotid kılıf diseksiyonu, subkütan tünelleme ve sol vagus uyarımı sırasında tam hareketsizlik, nöbet eşiği stabilitesi ve ani laringeal spazma karşı kesin koruma için oral ETT (sağ ağız köşesine sabitlenmiş) ile genel anestezi altın standarttır. Aktif VNS cihazlı olgularda (revizyon veya diğer ameliyatlar) cihazın periyodik uyarıları LMA/MAC altında tekrarlayan laringospazma yol açabileceğinden cihaz kapatılmalı veya VNS mıknatısı hazır tutulmalıdır.',
+    notes: 'VNS İMPLANTASYONUNDA 6 HAYATİ ANESTEZİ KURALI: (1) DAİMA SOL VAGUS — BRADİKARDİ/ASİSTOLİDE ATROPİN (PEDİATRİK 0.02 MG/KG) VE TRANSKÜTAN PACİNG PEDLERİ; (2) VNS MIKNATISI, KOTER/DİATERMİ VE MRG GÜVENLİĞİ (MIKNATIS BASILI TUTULURSA STİMÜLASYONU DURDURUR!); (3) AKTİF VNS\'TE LARİNGOSPAZM/VOKAL KORD ADDÜKSİYONU VE POSTOP SÜREKLİ SpO2/OSA İZLEMİ; (4) TRAMADOL VE KODEİN MUTLAK YASAK (EPİLEPSİ + FDA KARA KUTU PEDİATRİK/OSA!); (5) KETOJENİK DİYET (DEKSTROZ/RİNGER LAKTAT YASAK!) VE AED DEVAMLILIĞI; (6) SERVİKAL HEMATOM, SOL REKÜRREN/FRENİK SİNİR VE HORNER SENDROMU TAKİBİ.',
+    rulesTitle: 'VNS İMPLANTASYONUNDA ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'DAİMA SOL VAGUS: BRADİKARDİ / ASİSTOLİ YÖNETİMİ VE TRANSKÜTAN PACİNG PEDLERİ',
+        content: 'Sağ vagus siniri SA nodu yoğun inerve ettiğinden sağ uyarım katastrofik asistoli yapar — VNS DAİMA SOL VAGUSA takılır. Sol vagus diseksiyonu veya cihaz test stimülasyonunda şiddetli bradikardi/asistoli gelişirse cerrahi manipülasyon/uyarım derhal durdurulur, IV Atropin (erişkin 0.5 - 1.0 mg; pediatrik 0.02 mg/kg) uygulanır. Atropine dirençli refrakter asistoli için ameliyathanede TRANSKÜTAN PACİNG PEDLERİ hazır bulundurulmalıdır.'
+      },
+      {
+        number: 2,
+        title: 'VNS MIKNATISI, ELEKTROKOTER / DİATERMİ VE MRG GÜVENLİĞİ',
+        content: 'VNS mıknatısının IPG (pil) üzerine SÜREKLİ BASILI TUTULMASI/BANTLANMASI stimülasyonu geçici olarak DURDURUR (akut bradikardi, asistoli, laringospazm veya vokal kord addüksiyonunda hayat kurtarıcıdır!); kısa süreli (1 - 2 sn) kaydırma (swipe) ise nöbeti durduran ekstra uyarı tetikler. BİPOLAR koter tercih edilir (monopolar koter sol vagusta termal hasar riski taşır); KISA DALGA / MİKRODALGA DİATERMİ MUTLAK KONTRENDİKEDİR. MRG öncesinde cihaz çıkış akımı 0 mA\'ya indirilmeli ve T/R kafa koili kullanılmalıdır.'
+      },
+      {
+        number: 3,
+        title: 'TRAMADOL VE KODEİN MUTLAK YASAKTIR (EPİLEPSİ + FDA KARA KUTU PEDİATRİK/OSA)',
+        content: 'Epileptik ve sıklıkla pediatrik/OSA\'lı bu hasta grubunda TRAMADOL (nöbet eşiğini düşürür + CYP2D6 solunum depresyonu) ve KODEİN (FDA Kara Kutu uyarısı: < 12 yaş çocuklarda ve < 18 yaş OSA\'lı hastalarda ultra-hızlı metabolizasyonla ölümcül solunum depresyonu!) KESİNLİKLE KONTRENDİKEDİR! Multimodal analjezi insizyonel lokal anestezik + Parasetamol (erişkin 1000 mg, pediatrik 15 mg/kg) üzerine kurulur.'
+      },
+      {
+        number: 4,
+        title: 'AKTİF VNS\'TE EPİZODİK LARİNGOSPAZM VE POSTOPERATİF SÜREKLİ SpO2 / OSA İZLEMİ',
+        content: 'Aktif çalışan VNS cihazı her 3 - 5 dakikada bir sol rekürren laringeal siniri uyararak LMA veya MAC altında tekrarlayan vokal kord addüksiyonu, stridor ve laringospazma yol açabilir! Pil değişimi veya başka cerrahilerde VNS 0 mA\'ya kapatılmalı ya da mıknatıs pil üzerinde hazır tutulmalıdır. VNS Obstrüktif Uyku Apnesini (OSA) belirgin ağırlaştırdığından postoperatif sürekli SpO2 ve apne izlemi şarttır.'
+      },
+      {
+        number: 5,
+        title: 'KETOJENİK DİYET (DEKSTROZ/RİNGER LAKTAT YASAK!), AED DEVAMI VE SEVOFLURAN UYARISI',
+        content: 'Lennox-Gastaut ve pediatrik epilepsi olgularında ketojenik diyet mutlaka sorgulanır: Dekstroz içeren IV sıvılar, Ringer Laktat ve şekerli şuruplar KESİNLİKLE YASAKTIR (%0.9 NaCl + her 1 - 2 saatte glukoz/keton/HCO3- takibi!). Tüm AED\'ler ameliyat sabahı kesintisiz verilir. Yüksek doz Sevofluran (> 1.5 MAC) ve aşırı hipokapni pro-konvülzan olduğundan kaçınılır.'
+      },
+      {
+        number: 6,
+        title: 'SERVİKAL HEMATOM, SOL REKÜRREN/FRENİK SİNİR VE HORNER SENDROMU TAKİBİ',
+        content: 'Öksürmesiz pürüzsüz ekstübasyon (smooth emergence) derin boyun hematomu ve trakeal basıyı önler. Uyanmada sol rekürren laringeal sinir irritasyonu (ses kısıklığı, stridor) ile nadir ancak kritik SOL FRENİK SİNİR YARALANMASI (diyafram paralizisi/dispne) ve sempatik zincir hasarına bağlı HORNER SENDROMU (pitozis, miyozis, anhidrozis) kontrol edilir.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Epileptoloji / Pediatrik Nöroloji Konsültasyonu: Nöbet tipleri (fokal, atoni, sekonder jeneralize), nöbet sıklığı, antiepileptik ilaç rejimleri (AED kombinasyonları) ve son nöbet zamanı kaydedilmelidir.',
-      'Kardiyoloji Konsültasyonu: Bazal EKG ve kardiyak ritim değerlendirmesi (özellikle preoperatif bradikardi, AV blok, uzun QT veya hasta sinüs sendromu ekarte edilmelidir; kardiyak iletim defekti olan olgularda VNS göreceli kontrendikedir!).',
-      'KBB Konsültasyonu: Preoperatif ses kalitesi ve vokal kord muayenesi (hastanın bazal laringeal fonksiyonu kaydedilmelidir; sol rekürren laringeal sinir hasarı postop ses kısıklığı yaratabilir).',
-      'Göğüs Hastalıkları / Uyku Tıbbı: VNS uyarımı solunumsal kas tonusunu etkileyerek Obstrüktif Uyku Apnesini (OSA) tetikleyebilir veya derinleştirebilir; uyku apnesi öyküsü sorgulanmalıdır.'
+      'Epileptoloji / Pediatrik Nöroloji Konsültasyonu: Nöbet tipleri (fokal, atonik, Lennox-Gastaut), AED rejimi, son nöbet zamanı, ketojenik diyet durumu ve varsa mevcut VNS cihazının program/kapatma (0 mA) koordinasyonu.',
+      'Kardiyoloji Konsültasyonu: Bazal 12 derivasyonlu EKG ve kardiyak iletim değerlendirmesi (preoperatif bradikardi, AV blok, uzun QT veya hasta sinüs sendromu dışlanmalıdır; belirgin iletim bloğunda transkütan pacing hazırlığı şarttır).',
+      'KBB ve Uyku Tıbbı / Göğüs Hastalıkları Değerlendirmesi: Bazal ses kalitesi/vokal kord fonksiyonu ve Obstrüktif Uyku Apnesi (OSA) taraması (VNS, OSA ve uyku ilişkili hipopneleri belirgin ağırlaştırabilir!).'
     ],
     historyAndPhysical: [
-      'Nöbet Hikayesi ve Status Epileptikus Riski: İntraoperatif nöbet geçirme olasılığı; kullanılan ilaçların sedasyon ve karaciğer enzim indüksiyonu (Sitokrom P450) etkileri.',
-      'Kardiyak Otonomik Değerlendirme: Senkop öyküsü, vagal hiperaktivite ve karotid sinüs aşırı duyarlılığı.',
-      'Sol Boyun ve Klavikula Bölgesi Muayenesi: Daha önce geçirilmiş boyun cerrahisi, trakeostomi veya skarlar (karotid kılıf anatomisini değiştirebilir).',
-      'Hava Yolu Değerlendirmesi: Antiepileptik ilaçlara bağlı diş eti hipertrofisi (Fenitoin), obezite ve Mallampati skoru.'
+      'Nöbet Öyküsü, AED Politerapisi ve Ketojenik Diyet Taraması: Enzim indükleyici AED\'ler (Fenitoin, Karbamazepin, Fenobarbital — aminosteroid NMB direnci), Valproat (trombosit disfonksiyonu) ve pediatrik ketojenik diyet mutlaka belgelenir.',
+      'Kardiyak Otonomik Öykü: Senkop, bradikardi atakları veya karotid sinüs aşırı duyarlılığı.',
+      'Sol Boyun, Klavikula ve Hava Yolu Muayenesi: Önceki boyun cerrahisi/trakeostomi skarı, Fenitoin ilişkili gingival hiperplazi, pediatrik sendromik hava yolu özellikleri ve OSA bulguları.'
     ],
     laboratoryAndTests: [
-      'Kan Grubu, Antikor Tarama ve T&S doğrulaması.',
-      'Tam Kan Sayımı (AED kullanımına bağlı nötropeni/trombositopeni kontrolü) ve Koagülasyon Paneli.',
-      'Serum Elektrolitleri: Özellikle Sodyum (Karbamazepin ve Okskarbazepine bağlı hiponatremi sık görülür ve nöbet eşiğini düşürür!).',
-      'Karaciğer ve Böbrek Fonksiyon Testleri (AED metabolizması takibi).',
-      '12 Derivasyonlu EKG (PR mesafesi ve bazal kalp hızı kontrolü).'
+      'Kan Grubu, Antikor Tarama ve Tip & Screen (T&S) doğrulaması.',
+      'Tam Kan Sayımı (AED ilişkili nötropeni/trombositopeni) ve Koagülasyon Paneli (Valproat kullananlarda trombosit fonksiyon/fibrinojen kontrolü).',
+      'Serum Elektrolitleri: Özellikle Serum Sodyum (Karbamazepin/Okskarbazepin hiponatremisi nöbet eşiğini düşürür); ketojenik diyetli hastalarda bazal kan glukozu, kan ketonu ve HCO3-.',
+      'Karaciğer ve Böbrek Fonksiyon Testleri ile 12 Derivasyonlu EKG (PR mesafesi, bazal kalp hızı, QT).'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: Kesintisiz EKG (özellikle elektrot yerleşimi ve test uyarımı esnasında bradikardi takibi için sesli EKG puls tonu açık tutulmalıdır), Non-invaziv Kan Basıncı (3-5 dk aralıkla), SpO2, EtCO2 ve Vücut Sıcaklığı.',
-      'İntraoperatif Test Uyarımı (Diagnostic Lead Test) İzlemi: Cerrah cihazı test ettiğinde kalpte ani bradikardi, asistoli veya disritmi gelişimi saniye saniye izlenir.',
-      'Vokal Kord / Laringeal Yanıt İzlemi: İsteğe bağlı olarak vokal kord elektrotlu endotrakeal tüp (NIM ETT) kullanılarak vagal motor liflerin uyarımı doğrulanabilir.',
-      'Nöromusküler İleti İzlemi (TOF): İntraoperatif elektrot testinde laringeal motor yanıt gözlenecekse cerrah testi yapmadan önce nöromusküler blokajın çözülmüş olması gerekir.',
-      'Isı Takibi (Normotermi 36.5 - 37.5°C).'
+      'Standart ASA Monitörizasyonu: Kesintisiz 5 derivasyonlu EKG (elektrot yerleşimi ve test stimülasyonu sırasında sesli QRS puls tonu açık!), NIBP (3 - 5 dk), SpO2, EtCO2 ve vücut sıcaklığı.',
+      'Transkütan Pacing / Defibrilatör Pedleri: Atropine dirençli refrakter vagal asistoli riskine karşı ameliyathanede (yüksek riskli/iletim defektli olgularda göğse yapıştırılmış) hazır bulundurulmalıdır.',
+      'İntraoperatif Sistem Test Uyarımı (Diagnostic Lead Test) İzlemi: 1 mA test stimülasyonu sırasında ani bradikardi, AV blok, asistoli ve vokal kord yanıtının saniye saniye takibi.',
+      'Vokal Kord / NIM ETT Monitörizasyonu (Kullanılıyorsa) ve TOF İzlemi: Laringeal motor yanıt izlenecekse test öncesi TOF oranı %100 (4/4) olmalıdır.',
+      'Ketojenik Diyet Olgularında: Her 1 - 2 saatte bir kan glukozu, kan ketonu ve kan gazı (HCO3-).'
     ],
     vascularAccess: [
-      'En az 1 veya 2 adet güvenli periferik intravenöz hat (sağ kolda tercih edilir; sol göğüs ve boyun cerrahi örtü altında kalacaktır)',
-      'Pediatrik olgularda sıvı infüzyon pompası ve ısıtıcı pedler'
+      'En az 1 - 2 adet güvenli periferik intravenöz yol (SAĞ kolda tercih edilir; sol boyun ve sol göğüs steril cerrahi sahadadır)',
+      'Pediatrik olgularda mikro-infüzyon pompaları ve aktif ısıtma sistemleri (ketojenik diyette yalnızca %0.9 NaCl!)'
     ],
     patientPosition: 'Supin (Sırtüstü) Pozisyon, Baş Sağa 30 - 45° Döndürülmüş ve Sol Omuz Altına Hafif Destek Rulo Yerleştirilmiş',
     patientPositionDetails: [
-      'Sol boyun bölgesini germek ve karotid üçgeni rahat expose etmek için baş sağa çevrilir ve boyun hafif ekstansiyona getirilir.',
-      'AŞIRI BOYUN ROTASYONUNDAN KAÇINILMALIDIR: Aşırı çevirme endotrakeal tüpü bükebilir veya sol internal juguler veni gererek venöz yırtılma riskini artırır.',
-      'Geniş Cerrahi Örtüm: Sol boyun, sol klavikula, sol pektoral ve ön aksiller alan aynı steril sahada açık bırakılır.',
-      'Gözler koruyucu pomadla kapatılır; bası noktaları jel pedlerle desteklenir.'
+      'Sol karotid üçgeni rahatça ortaya koymak için baş sağa çevrilir ve boyun hafif ekstansiyona alınır.',
+      'Aşırı boyun rotasyonundan kaçınılır (ETT bükülmesi veya sol internal juguler ven gerilmesini önlemek için).',
+      'Sol boyun, sol klavikula, sol pektoral ve ön aksiller alan tek steril sahada açık bırakılır.',
+      'Gözler koruyucu pomad/bant ile kapatılır; tüm bası noktaları jel pedlerle desteklenir.'
     ],
     anesthesiaManagement: [
-      'İndüksiyon: Propofol (2 - 2.5 mg/kg) + Fentanil (2 mcg/kg) + Rokuronyum (0.6 mg/kg). Yumuşak ve atravmatik laringoskopi ile entübasyon.',
-      'İdame: İnhalasyon anestezisi (Sevofluran / Desfluran MAC 0.8 - 1.0) veya TIVA (Propofol + Remifentanil).',
-      'Vagal Manipülasyon Sırasında Bradikardi ve Asistoli Yönetimi:',
-      '  - Sol vagus siniri karotid kılıftan diseke edilirken cerrah siniri forseps veya lastik teyp ile gerdiğinde ani bradikardi gelişebilir.',
-      '  - Müdahale: Cerraha anında haber verilir, manipülasyon durdurulur; kalp hızı 5-10 saniyede düzelmezse IV Atropin (0.5 - 1.0 mg) veya Glikopirolat uygulanır.',
-      'Cihaz Test Uyarımı (Interrogation) Fazı:',
-      '  - Cerrah telemetri asası ile jeneratörü çalıştırıp 1 mA test stimülasyonu verdiğinde:',
-      '    1. EKG\'de geçici kalp yavaşlaması veya asistoli olup olmadığı teyit edilir.',
-      '    2. Sol vokal kord seğirmesi ve hafif trakeal titreşim hissedilerek elektrotun sinire tam temas ettiği cerraha bildirilir.',
-      'Subkütan Tünelleme Sırasında Analjezi:',
-      '  - Tünel boyundan subklaviküler cebe trokar ile açılırken anestezi derinliği artırılır veya hatta lokal anestezik infiltre edilir.'
+      'İndüksiyon ve NMB Stratejisi:',
+      '  - Propofol (2 - 2.5 mg/kg) + Fentanil (2 mcg/kg) veya Remifentanil. Vokal kord (NIM ETT) monitörizasyonu kullanılacaksa kas gevşeticisiz TIVA VEYA düşük doz Rokuronyum (0.3 - 0.45 mg/kg) + test öncesi Sugammadeks ile tam antagonizasyon (TOF %100). CYP450 indükleyici AED kullananlarda Hofmann eliminasyonlu Sisatrakuryum düşünülebilir.',
+      'İdame ve Nöbet Eşiği Koruması:',
+      '  - TIVA (Propofol + Remifentanil) veya dengeli inhalasyonel anestezi (< 1.0 MAC Sevofluran). Yüksek doz Sevofluran (> 1.5 MAC) ve derin hipokapni pro-konvülzan olduğundan kaçınılır.',
+      '  - Ketojenik Diyet Olgularında: Yalnızca %0.9 NaCl (Dekstrozlu sıvılar ve Ringer Laktat KESİNLİKLE YASAK!).',
+      'Vagal Manipülasyon ve Sistem Testinde Bradikardi / Asistoli Yönetimi:',
+      '  - Sol vagus diseksiyonunda veya 1 mA test stimülasyonunda ani bradikardi/asistoli gelişirse:',
+      '    1. Cerraha derhal manipülasyonu/stimülasyonu durdurması bildirilir (aktif cihazda IPG üzerine VNS mıknatısı basılı tutulur!).',
+      '    2. 5 - 10 saniyede düzelmezse IV Atropin (erişkin 0.5 - 1.0 mg; pediatrik 0.02 mg/kg) uygulanır; refrakter asistolide transkütan pacing ve Epinefrin başlatılır.',
+      'Koter / Diatermi ve Tünelleme Analjezisi:',
+      '  - Yalnızca BİPOLAR koter kullanılır (monopolar koter sol vagusta termal hasar riski taşır; kısa dalga/mikrodalga diatermi MUTLAK KONTRENDİKEDİR).',
+      '  - Boyundan subklaviküler cebe trokar ile tünelleme sırasında analjezi derinleştirilir ve insizyon/tünel hattına lokal anestezik infiltre edilir.'
     ],
     airwayManagement: [
-      'Standart Oral Endotrakeal Entübasyon; tüp sağ ağız köşesine sağlam bantlanır (sol cerrahi saha serbest kalmalıdır).',
-      'Sol Vagus ve Sol Rekürren Laringeal Sinir Koruması: Cerrahın manipülasyonu sol vokal kord fonksiyonunu etkileyebileceğinden, tüpün laringeal manşonunun aşırı şişirilmemesi (kaf basıncı 20-25 cmH2O) önemlidir.',
-      'Ekstübasyonda tüp laringeal travma yaratmadan yumuşakça çekilmelidir.'
+      'Standart Oral ETT (tercihen spiral telli), SAĞ ağız köşesine sağlam sabitlenir (sol boyun cerrahi sahasından uzak).',
+      'Sol Rekürren Laringeal Sinir Koruması: ETT kaf basıncı 20 - 25 cmH2O sınırında izlenir.',
+      'Aktif VNS Cihazı Bulunan Revizyon/Diğer Cerrahilerde: LMA/MAC altında epizodik laringospazm ve vokal kord addüksiyonu gelişebileceğinden cihaz 0 mA\'ya kapatılmalı veya VNS mıknatısı IPG üzerinde hazır tutulmalıdır.'
     ],
     criticalSurgicalStages: [
-      '1. Sol Servikal Karotid Kılıf Diseksiyonu: V. jugularis interna ve A. carotis communis arasından N. vagus\'un izole edilmesi (bradikardi izlemi).',
-      '2. Üç Helikal Elektrotun Vagus Sinirine Sarılması: Sinir travması ve gerginlikten kaçınılması; çapa ve aktif elektrotların sabitlenmesi.',
-      '3. Sol Subklaviküler Pektoral Cep Açılışı ve Subkütan Tünelleme: Şiddetli ağrılı uyaran kontrolü.',
-      '4. Lead Kablosunun Jeneratöre Kilitlenmesi ve Cihaz Test Uyarımı: EKG\'de kardiyak ritim ve impedans doğrulaması.',
-      '5. Çok Tabakalı Su Geçirmez Kapanış: Servikal hematom ve seroma gelişimini önlemek için titiz hemostaz.'
+      '1. Sol Servikal Karotid Kılıf Diseksiyonu: V. jugularis interna ve A. carotis communis arasından sol N. vagus izolasyonu (bradikardi/frenik sinir/sempatik zincir koruması).',
+      '2. Helikal Elektrotların Sol Vagus Sinirine Sarılması: Sinir gerilimi ve monopolar koter hasarından kaçınılması.',
+      '3. Sol Subklaviküler Cep Açılışı ve Subkütan Tünelleme: Şiddetli ağrılı uyaran kontrolü.',
+      '4. Jeneratör Bağlantısı ve Sistem Test Uyarımı (1 mA): EKG bradikardi/asistoli ve empedans kontrolü (Atropin + pacing pedleri + VNS mıknatısı hazır!).',
+      '5. Titiz Hemostaz ve Katmanlı Kapanış: Derin boyun hematomunu önleme.'
     ],
     emergenceNotes: [
-      'PÜRÜZSÜZ UYANMA (SMOOTH EMERGENCE): Ekstübasyon esnasında öksürme ve ıkınma boyun venöz basıncını artırarak derin servikal hematom gelişimine yol açar; bu durum trakeayı dakikalar içinde basıya uğratarak boğulmaya neden olabilir! IV Lidokain (1.5 mg/kg) ile öksürük refleksi baskılanır.',
-      'Ses Kısıklığı ve Laringeal Disfonksiyon Değerlendirmesi: Hasta uyanır uyanmaz ses kalitesi kontrol edilir (geçici ses kısıklığı, boğuk ses veya stridor sol rekürren laringeal sinir irritasyonunu gösterir).',
-      'Nörolojik Takip: Hastanın bilinci ve nöbet aktivitesi ameliyathanede değerlendirilir.'
+      'PÜRÜZSÜZ UYANMA (SMOOTH EMERGENCE): Ekstübasyonda öksürme ve ıkınma derin servikal hematom ve akut trakeal basıya yol açar! IV Lidokain (1 - 1.5 mg/kg) veya düşük doz Remifentanil ile sakin ekstübasyon sağlanır.',
+      'Sinir Fonksiyonları Kontrolü: Uyanmada ses kalitesi/stridor (sol rekürren laringeal sinir), tek taraflı dispne/paradoksal solunum (nadir sol frenik sinir yaralanması) ve pitozis/miyozis (nadir Horner sendromu) değerlendirilir.',
+      'Nöbet ve Hava Yolu Takibi: Bilinç, SpO2 ve nöbet aktivitesi ameliyathanede belgelenir.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Multimodal Analjezi Protokolü:',
-      '  - Boyun ve Subklaviküler İnsizyon Hatlarına Lokal Anestezik İnfiltrasyonu (%0.25 Bupivakain): Postoperatif ilk 8-12 saatlik analjezi konforu sağlar.',
-      '  - Düzenli IV Parasetamol (1000 mg 6 saatte bir infüzyon).',
-      '  - Oral / IV NSAİİ (İbuprofen / Deksketoprofen): Cerrahi hemostaz teyit edildikten sonra.',
-      '  - Şiddetli ağrı nadirdir; hafif oral tramadol veya parasetamol-kodein kombinasyonları kurtarma amaçlı yeterlidir.'
+      'Multimodal ve Pediatrik/Epilepsi Güvenli Analjezi Protokolü:',
+      '  - Boyun ve Subklaviküler İnsizyon Hatlarına Lokal Anestezik İnfiltrasyonu (%0.25 Bupivakain veya Ropivakain — pediatrik maksimum doz sınırına dikkat!).',
+      '  - Düzenli IV/Oral Parasetamol (erişkin 1000 mg, pediatrik 15 mg/kg, 6 saatte bir).',
+      '  - Cerrahi boyun hemostazı kesin olarak doğrulandıktan sonra oral/IV İbuprofen (pediatrik 10 mg/kg) veya seçilmiş erişkinlerde NSAİİ eklenebilir (servikal hematom riski nedeniyle erken dönemde cerrahi onay şarttır).',
+      '  - Kurtarma Analjeziği (nadiren gerekir): Çok düşük titre doz IV Fentanil veya pediatrik/erişkin uygun kısa etkili opioid (OSA/solunum depresyonu izlemiyle).',
+      '  - MUTLAK YASAKLAR: TRAMADOL (epileptik nöbet eşiği düşüşü + FDA Kara Kutu) ve KODEİN (FDA Kara Kutu uyarısı: < 12 yaş çocuklarda ve < 18 yaş OSA\'lı hastalarda ölümcül solunum depresyonu riski!) KESİNLİKLE KULLANILMAZ!'
     ],
     prospectRecommendations: [
-      'Minör servikal ve pektoral cerrahilerde insizyonel lokal anestezik infiltrasyonu ve sistemik parasetamol opiat gereksinimini ve sedasyon riskini minimize eder.'
+      'VNS implantasyonuna özel yayımlanmış bir PROSPECT kılavuzu bulunmamaktadır; minör yüzeyel servikal/pektoral cerrahi multimodal ilkeleri uyarınca insizyonel lokal anestezik infiltrasyonu + düzenli Parasetamol (pediatrik 15 mg/kg) opioid gereksinimini ve sedasyon/OSA riskini minimize eder.'
     ],
     erasRecommendations: [
-      'ERAS Epilepsi Cerrahisi Kılavuzları:',
-      '  - Antiepileptik Tedavinin Kesintisiz Devamı: Hastanın ameliyat öncesi kullandığı tüm antiepileptik ilaçlar ameliyat sonrası ilk saatlerde oral veya IV formda eksiksiz verilmelidir.',
-      '  - Boyun Hematomu Takibi: Boyunda şişlik, solunum sıkıntısı veya pansumanda kanama varlığında acil yara açılması ve hava yolu emniyeti sağlanmalıdır.',
-      '  - VNS Cihaz Aktivasyonu: Ameliyathanede cihaz genellikle "kapalı" (off) veya minimum bazal akımda bırakılır; kalıcı terapötik stimülasyon ameliyattan 2-4 hafta sonra nöroloji polikliniğinde kademeli olarak başlatılır.',
-      '  - Erken Oral Beslenme ve Mobilizasyon: Postoperatif 2-4. saatte oral sıvı alımı ve yatak dışı mobilizasyon.'
+      'Postoperatif VNS Güvenlik ve Takip Protokolü:',
+      '  - SÜREKLİ POSTOPERATİF SpO2 VE OSA İZLEMİ: Özellikle pediatrik, nörolojik engelli ve OSA öykülü hastalarda sürekli puls oksimetri ve apne takibi yapılır.',
+      '  - VNS Mıknatısı ve Cihaz Durumu: Cihaz ameliyathanede genellikle kapalı (0 mA) bırakılır ve 2 - 4 hafta sonra poliklinikte aktive edilir. Hasta/aile ve hemşire ekibi VNS mıknatısının acil durdurma (basılı tutma) ve nöbet sonlandırma (kısa kaydırma) işlevleri ile MRG (0 mA + T/R koil) / diatermi yasağı konusunda bilgilendirilir.',
+      '  - Antiepileptik İlaçlar ve Ketojenik Diyetin Kesintisiz Devamı: Tüm bazal AED\'ler oral veya IV eşdeğer dozlarda aksatılmadan sürdürülür.',
+      '  - Boyun Hematomu ve Sinir Komplikasyonu Alarmı: Boyunda şişlik, stridor, solunum sıkıntısı (hematom veya sol frenik/rekürren sinir hasarı) veya Horner sendromu yakından izlenir.',
+      '  - Erken Oral Alım ve Postoperatif 2 - 4. Saatte Mobilizasyon.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2014). Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section II: Neurosurgery - Functional Procedures: Vagal Nerve Stimulation (pp. 482-486). Philadelphia: Lippincott Williams & Wilkins.',
-    erasReference: 'Hagan, K. B., et al. (2020). Enhanced Recovery After Surgery (ERAS) in Functional Neurosurgery and Neuromodulation: Consensus Guidelines. Journal of Neurosurgery.',
-    prospectReference: 'PROSPECT Guidelines for Postoperative Pain Management in Minor Cervical and Chest Wall Procedures. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
+    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2020). Anesthesiologist\'s Manual of Surgical Procedures (6th ed.). Section II: Neurosurgery - Functional Procedures: Vagal Nerve Stimulation. Philadelphia: Wolters Kluwer.',
     otherReferences: [
-      'Morris, G. L., et al. (2013). Evidence-based guideline update: vagus nerve stimulation for the etiology of epilepsy: report of the Guideline Development Subcommittee of the American Academy of Neurology. Neurology, 81(16), 1453-1459.',
-      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Anesthetic Management of Patients Undergoing Vagus Nerve Stimulator Implantation.',
-      'Englot, D. J., et al. (2016). Vagus nerve stimulation for epilepsy: a systematic review of efficacy and predictors of response. The Lancet Neurology, 15(4), 369-379.'
+      'Morris, G. L., Gloss, D., Buchhalter, J., Mack, K. J., Nickels, K., & Harden, C. (2013). Evidence-based guideline update: vagus nerve stimulation for the treatment of epilepsy: report of the Guideline Development Subcommittee of the American Academy of Neurology. Neurology, 81(16), 1453-1459.',
+      'Englot, D. J., Rolston, J. D., Wright, C. W., Hassnain, K. H., & Chang, E. F. (2016). Rates and predictors of seizure freedom with vagus nerve stimulation for intractable epilepsy. Neurosurgery, 79(3), 345-353.',
+      'Hatton, K. W., McLarney, J. T., Pittman, T., & Fahy, B. G. (2006). Vagal nerve stimulation: overview and implications for anesthesiologists. Anesthesia & Analgesia, 103(5), 1241-1249.',
+      'U.S. Food and Drug Administration (FDA). (2017). FDA Drug Safety Communication: FDA restricts use of prescription codeine pain and cough medicines and tramadol pain medicines in children (<12 years) and adolescents with OSA (<18 years).',
+      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC). Anesthetic Management of Patients Undergoing Vagus Nerve Stimulator Implantation.'
     ]
   }
 };

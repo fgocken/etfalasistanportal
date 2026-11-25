@@ -1,51 +1,49 @@
 import { ProcedureDefinition } from '../../types/procedures';
 
 /**
- * Kraniyotomi: Serebral Embolektomi (Akut İskemik İnmede Cerrahi Trombektomi / Revaskülarizasyon)
+ * Kraniyotomi: Açık Mikrocerrahi Serebral Embolektomi (Kurtarma Revaskülarizasyonu)
  * 
- * Jaffe (5th ed.), AHA/ASA Guidelines for the Early Management of Patients With Acute Ischemic Stroke,
- * SNACC (Society for Neuroscience in Anesthesiology and Critical Care),
- * ESO (European Stroke Organisation) ve ERAS Society ilkeleri referans alınarak yapılandırılmıştır.
+ * Jaffe (6th ed., 2020), AHA/ASA Acute Ischemic Stroke Guidelines (Powers et al., 2018 / 2019 Update),
+ * ENCHANTED2/MT (Lancet 2022), OPTIMAL-BP (JAMA 2023), PATCH (Lancet 2016), SNACC,
+ * ERAS (Hagan et al., 2016) ve PROSPECT Craniotomy 2023 (Mestdagh et al.) referans alınarak yapılandırılmıştır.
  */
 export const craniotomyEmbolectomy: ProcedureDefinition = {
   id: 'craniotomy-embolectomy',
-  name: 'Kraniyotomi: Serebral Embolektomi',
+  name: 'Kraniyotomi: Serebral Embolektomi (Açık Mikrocerrahi Kurtarma)',
   shortCode: 'SEREBRAL-EMBOLEKTOMİ',
   specialty: 'norosirurji',
   specialtyName: 'Beyin ve Sinir Cerrahisi',
   categoryTag: 'Serebrovasküler Nöroşirürji / Akut İskemik İnme Cerrahisi',
 
   // 1) Prosedür ismi - tanımı - endikasyonları - tahmini ortalama prosedür süresi
-  description: 'Akut iskemik inme zemininde intrakraniyel majör arter dallarını (özellikle A. cerebri media [MCA M1/M2], A. carotis interna [ICA] bifurkasyonu veya nadiren baziler tepe) tıkayan akut tromboembolik tıkacın acil mikronöroşirürjikal kraniyotomi ve mikro-arteriyotomi ile cerrahi mikroskop altında doğrudan mekanik olarak çıkarılması (cerrahi embolektomi / tromboembolektomi), vasküler lümenin rekanalizasyonu ve kurtarılabilir iskemik penumbra dokusunun korunması amacıyla uygulanan ultra-acil, zaman kritik mikrocerrahi ameliyatıdır.',
+  description: 'NOT: Akut büyük damar oklüzyonlarının (LVO) >%99\'unda standart birinci basamak tedavi Endovasküler Mekanik Trombektomidir (EVT — standart bakım için ayrı "Endovasküler Mekanik Trombektomi [EVT]" protokolüne başvurunuz). Bu protokol yalnızca EVT\'nin teknik olarak başarısız/imkansız olduğu veya intrakraniyel cerrahi/girişim sırasında iyatrojenik akut arter tıkanması gelişen ÇOK NADİR olgularda uygulanan açık mikronöroşirürjikal kraniyotomi ve mikro-arteriyotomi ile kurtarma embolektomisini kapsar.',
   indications: [
-    'Başarısız veya Ulaşılamayan Endovasküler Trombektomi (EVT): Kateterin aşırı vasküler kıvrımlılık (tortuosity), kalsifiye aortik ark ateromu veya femoral/karotid erişim imkansızlığı nedeniyle hedefe ulaşamaması ya da anjiyografik stent-retriever/aspirasyon trombektomi denemelerinin başarısız kalması (TICI 0-1) durumu',
-    'İntraoperatif / İyatrojenik Tromboemboli: İntrakraniyel anevrizma kliplemesi, karotis endarterektomi, kafa tabanı cerrahisi veya tanısal/girişimsel kateterizasyon esnasında intrakraniyel artere (özellikle MCA bifurkasyonuna) akut trombüs atması ve ani damar tıkanması gelişmesi',
-    'Büyük Damar Oklüzyonu (LVO) ve Kurtarılabilir İskemik Penumbra Varlığı: ASPECTS skoru ≥6 olan, BT perfüzyon veya MR perfüzyon/diffüzyon incelemelerinde geniş kurtarılabilir iskemik penumbra alanı saptanmış ve irreversibl masif infarktı henüz gelişmemiş olgular',
-    'Endovasküler trombektominin teknik olarak kontrendike olduğu veya anjiyo ünitesi/girişimsel ekibin hazır bulunamadığı merkezlerde zaman penceresindeki hiperakut MCA M1/bifurkasyon tıkayıcı embolileri',
-    'Tıkayıcı Kardiyoembolik Masif Emboliler: Sol atriyal/ventriküler trombüs, AF veya kardiyak miksomadan kopan, endovasküler stentle çıkarılamayacak kadar sert, organize fibröz emboli olguları'
+    'Başarısız veya Ulaşılamayan Endovasküler Trombektomi (EVT) Kurtarma Olguları: Aşırı vasküler kıvrımlılık (tortuosity), kalsifiye aortik ark veya erişim imkansızlığı nedeniyle EVT\'nin yapılamadığı ya da stent-retriever/aspirasyon denemelerinin başarısız kaldığı (mTICI 0-1) çok seçilmiş nadir vakalar',
+    'İntraoperatif / İyatrojenik Tromboemboli: İntrakraniyel anevrizma kliplemesi, kafa tabanı cerrahisi veya tanısal/girişimsel kateterizasyon esnasında intrakraniyel artere (özellikle MCA M1/M2 bifurkasyonuna) akut trombüs atması ve ani damar tıkanması gelişmesi',
+    'Büyük Damar Oklüzyonu (LVO) ve Kurtarılabilir İskemik Penumbra Varlığı: ASPECTS skoru ≥6 olan, BT/MR perfüzyonda geniş kurtarılabilir penumbra saptanan ve endovasküler çıkarım mümkün olmayan nadir olgular',
+    'Sert / Organize Kardiyoembolik veya Kalsifiye Emboliler: Endovasküler cihazlarla yakalanamayan kalsifiye kapak veya kardiyak miksoma kaynaklı sert tıkayıcı emboli olguları'
   ],
-  averageDuration: '3 - 5 saat (Ultra-acil anestezi indüksiyonu ve eşzamanlı invaziv A-line/CVC yerleşimi: 30-45 dk; Acil frontotemporal/pteriyonal kraniyotomi ve dural açılış: 45-60 dk; Sylvian fissür diseksiyonu, MCA/ICA bifurkasyonuna ulaşım, geçici arteriyel klempleme ve mikro-arteriyotomi ile cerrahi embolektomi: 60-120 dk; Mikro-vasküler Doppler/ICG kontrolü, arteriyotominin 10-0 mikro-dikişlerle onarımı, hemostaz ve kraniyoplasti/kapanış: 45-60 dk)',
+  averageDuration: '3 - 5 saat (Zaman kritik ultra-acil indüksiyon — "Time is Brain": 10-15 dk, A-line/CVC cerrahi hazırlıkla eşzamanlı yerleştirilir; Acil frontotemporal/pteriyonal kraniyotomi ve dural açılış: 45-60 dk; Sylvian fissür diseksiyonu, MCA/ICA bifurkasyonuna ulaşım, geçici klempleme ve mikro-arteriyotomi ile embolektomi: 60-120 dk; Mikro-Doppler/ICG kontrolü, 10-0 arteriyotomi onarımı, hemostaz ve kapanış: 45-60 dk)',
 
   // 1.5) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '200 - 600 mL (Kontrollü mikrocerrahi koşullarında); ancak hastaların büyük çoğunluğunun acil servis veya anjiyo ünitesinde İV TROMBOLİTİK (IV tPA - Alteplase / Tenekteplase) veya yüksek doz sistemik Heparin almış olması sebebiyle cerrahi sahada sızıntı tarzında kontrolsüz mikrovasküler kanama, dural oozing, reperfüzyon hemorajisi veya hemorajik transformasyon riski YÜKSEKTİR.',
+    estimatedBloodLoss: '200 - 600 mL (Kontrollü mikrocerrahi koşullarında); ancak hastaların önemli bir bölümü öncesinde İV TROMBOLİTİK (Alteplase / Tenekteplase) veya anjiyo ünitesinde sistemik Heparin almış olabileceğinden skalp/dural sızıntı veya hemorajik transformasyon riski yüksektir.',
     riskLevel: 'high',
-    riskLevelLabel: 'Yüksek Risk / Trombolitik Reversal & Reperfüzyon Kanama Riski',
-    crossMatchRequirement: 'En az 2 - 4 Ünite Eritrosit Süspansiyonu (ES), 2 Ünite Taze Donmuş Plazma (TDP) ve 1 Aferez Trombosit Süspansiyonu Cross-Match yapılarak kan merkezinde ve ameliyathanede hazır bekletilmeli; önceden IV tPA alan olgularda Kriyopresipitat (10 Ünite) ve Traneksamik Asit (TXA) acil hazır bulundurulmalıdır',
-    transfusionProbability: '%30 - %50 (Preoperatif sistemik IV tPA veya Glikoprotein IIb/IIIa inhibitörü alan olgularda transfüzyon ihtiyacı %60-70 seviyesine çıkar)',
+    riskLevelLabel: 'Yüksek Risk / Trombolitik Kanama vs Akut Arteriyotomi Re-Trombozu Dengesi',
+    crossMatchRequirement: 'En az 2 - 4 Ünite Eritrosit Süspansiyonu (ES) ve 2 Ünite Taze Donmuş Plazma (TDP) Cross-Match hazır bekletilmeli; önceden IV tPA/TNK alan olgularda YALNIZCA hayatı tehdit eden kontrolsüz kanama için Kriyopresipitat (10 Ünite) kan bankasında erişilebilir olmalıdır (RUTİN TXA VE RUTİN TROMBOSİT TRANSFÜZYONU ÖNERİLMEZ!)',
+    transfusionProbability: '%25 - %45 (Preoperatif sistemik IV tPA/TNK almış olgularda kanama ve ürün ihtiyacı artabilir)',
     criticalBleedingSources: [
-      'Mikro-Arteriyotomi Kesi Hattı ve Dikiş Sızıntısı: MCA veya ICA arter duvarı açılıp pıhtı çıkarıldıktan sonra 9-0 / 10-0 monofilament dikişlerle kapatılan arter lümeninden yüksek basınçlı arteriyel jet kanama veya sızma',
-      'Akut Reperfüzyon Kanaması ve Hemorajik Transformasyon (Reperfusion Hemorrhage): Tıkalı ana arter açıldığında iskemik endotel hasarına uğramış kan-beyin bariyerinin yüksek perfüzyon basıncıyla yırtılması ve parankim içine masif hematom oluşumu',
-      'Preoperatif Sistemik IV Trombolitik (tPA) Etkisi: Fibrinojen lizisi ve sistemik litik durum nedeniyle skalp flebi, temporal kas dokusu ve dural yüzeylerde diffüz mikrovasküler durdurulamayan sızıntı (oozing)',
-      'Sylvian Venöz Pleksus ve Derin Kortikal Venler: Sylvian fissürün acil diseksiyonu sırasında venöz traksiyon ve yırtılmalar',
-      'Temporal ve Frontal Kemik Diploik Venöz Kanalları ile A. temporalis superficialis kesi kenarları'
+      'Mikro-Arteriyotomi Kesi Hattı ve Dikiş Sızıntısı: MCA veya ICA arter duvarı açılıp pıhtı çıkarıldıktan sonra 9-0 / 10-0 monofilament dikişlerle kapatılan arter lümeninden sızıntı veya arteriyel kanama',
+      'Akut Reperfüzyon Kanaması ve Hemorajik Transformasyon: Tıkalı ana arter açıldığında iskemik endotel hasarına uğramış kan-beyin bariyerinde aşırı hipertansiyonla parankim içi hematom gelişimi',
+      'Preoperatif Sistemik IV Trombolitik (tPA/TNK) Etkisi: Fibrinojen tüketimi ve sistemik litik durum nedeniyle skalp flebi, temporal kas ve dural yüzeylerde diffüz sızıntı (oozing)',
+      'Sylvian Venöz Pleksus ve Derin Kortikal Venler: Acil diseksiyon sırasında venöz traksiyon hasarı',
+      'Temporal/Frontal Kemik Diploik Venleri ve A. temporalis superficialis dalları'
     ],
     hemostasisStrategies: [
-      'Trombolitik (tPA) Etkisinin Tersine Çevrilmesi (Reversal): Preoperatif IV tPA almış ve cerrahi alanda kontrolsüz mikrovasküler kanaması olan olgularda acil Kriyopresipitat infüzyonu (hedef Fibrinojen >200 mg/dL; 10 Ünite IV) ve Traneksamik Asit (10-15 mg/kg IV yavaş bolus, ardından 1 mg/kg/saat infüzyon) uygulanması',
-      'Heparin Reversali: Anjiyo ünitesinde sistemik heparin uygulanmışsa, ACT/aPTT değerine göre uygun dozda IV Protamin Sülfat (1 mg protamin / 100 U heparin) titrasyonu',
-      'Trombosit Transfüzyonu: Antiplatelet ajan (Aspirin, Klopidogrel, Tikagrelor) veya tirofiban/eptifibatid almış olgularda cerrahi hemostaz için 1 ünite aferez trombosit süspansiyonu',
-      'Topikal Hemostatikler: Bipolar mikro-koagülasyon, mikrocerrahi hemostatik matrisler (FloSeal jelatin hemostatik granül, Tisseel fibrin yapıştırıcı, mikrofibriler kolajen ve pamuk kompresyon)',
-      'Mikro-Arteriyotomi Onarımı: Arteriyotomi hattına ince fibril hemostatik tül ve biyolojik doku yapıştırıcı desteği'
+      'RUTİN TXA VE RUTİN TROMBOSİT TRANSFÜZYONU KONTRENDİKEDİR: Akut arteriyel revaskülarizasyon / mikro-arteriyotomi sırasında rutin Traneksamik Asit (TXA) veya rutin Trombosit transfüzyonu KATASTROFİK MCA RE-TROMBOZUNA yol açar! PATCH (Lancet 2016) çalışması doğrultusunda antiagregan kullanan hastalarda hayatı tehdit eden aktif kontrolsüz kanama olmadıkça trombosit transfüzyonu YAPILMAZ.',
+      'Seçilmiş Trombolitik Kanama Yönetimi: Preoperatif IV tPA/TNK almış hastada YALNIZCA cerrahi kontrol sağlanamayan, hayatı tehdit eden aktif masif kanama ve düşük fibrinojen (<150-200 mg/dL) varlığında cerrahla ortak kararla hedefli Kriyopresipitat (veya fibrinojen konsantresi) değerlendirilir.',
+      'Heparin Yönetimi: Anjiyo ünitesinde yüksek doz heparin uygulanmış ve aktif kontrolsüz cerrahi kanama varsa ACT/aPTT rehberliğinde dikkatli/kısmi Protamin titrasyonu cerrahla koordine edilir (taze arteriyotomide aşırı/rutin reversalden kaçınılır).',
+      'Topikal Hemostatikler: Bipolar mikro-koagülasyon, nazik pamuk kompresyonu, jelatin matriks (FloSeal) ve arteriyotomi çevresinde lümeni daraltmadan ince fibril/doku yapıştırıcı desteği.'
     ]
   },
 
@@ -53,24 +51,34 @@ export const craniotomyEmbolectomy: ProcedureDefinition = {
   anesthesiaTechniques: {
     primary: [
       'Endotrakeal Genel Anestezi (TIVA - Propofol ve Remifentanil Hedef Kontrollü İnfüzyon [TCI])',
-      'TIVA + Düşük Doz Uçucu İnhalasyon Anesteziği (<0.5 - 0.7 MAC Sevofluran): İskemik penumbra perfüzyonunu bozmayan, serebral otoregülasyonu koruyan, serebral metabolik oksijen tüketimini (CMRO2) düşüren ve intraoperatif nöromonitörizasyona (MEP/SSEP) engel olmayan dengeli rejim'
+      'TIVA + Düşük Doz Uçucu İnhalasyon Anesteziği (<0.5 MAC Sevofluran): Serebral otoregülasyonu ve iskemik penumbra perfüzyonunu koruyan, CMRO2 düşüren dengeli rejim'
     ],
     alternative: [
-      'Etomidat İndüksiyonu + Titre Opioid Tabanlı Anestezi (Remifentanil/Süfentanil + Düşük MAC İnhalasyon): Ciddi hemodinamik instabilite, sol ventrikül sistolik disfonksiyonu veya ejeksiyon fraksiyonu düşük akut inme hastalarında hemodinamik çöküşü önlemek için'
+      'Etomidat İndüksiyonu + Titre Opioid Tabanlı Anestezi (Remifentanil/Fentanil + Düşük MAC Sevofluran): Ciddi hemodinamik instabilite veya düşük EF\'li akut inme hastalarında indüksiyon hipotansiyonunu önlemek için'
     ],
-    clinicalRationale: 'Propofol + Remifentanil TIVA veya <0.5 MAC Sevofluran kombinasyonu, serebral otoregülasyonu ve iskemik penumbra perfüzyonunu koruyarak CMRO2 düşüşü sağlar ve hızlı nörolojik uyanmaya imkan tanır. Kesin PaCO2 kontrolü (normokapni) ve baş rotasyonunda lümen açıklığını korumak için spiral telli (armored) endotrakeal entübasyon zorunludur; LMA kontrollü PaCO2 ve aspirasyon koruması açısından yetersizdir.',
-    notes: 'Serebral embolektomi anestezisinde en kritik kural iki farklı dönemin hemodinamik hedeflerini titizlikle ayırmaktır: (1) REKANALİZASYON ÖNCESİ — Penumbrayı yaşatmak için MAP ≥ 85-90 mmHg (SAB 140-160 mmHg) tutulur; (2) REKANALİZASYON SONRASI — Reperfüzyon kanamasını önlemek için MAP < 80-85 mmHg (SAB 110-130 mmHg) seviyesine düşürülür.',
-    rulesTitle: 'SEREBRAL EMBOLEKTOMİDE İKİ DÖNEMLİ HEMODİNAMİK YÖNETİM',
+    clinicalRationale: 'Propofol + Remifentanil TIVA veya <0.5 MAC Sevofluran, iskemik penumbra perfüzyonunu koruyarak CMRO2 düşüşü sağlar. Azot protoksit (N2O) KESİNLİKLE KONTRENDİKEDİR. Kesin normokapni (PaCO2 35-38 mmHg) ve aspirasyon koruması (akut inmede mide dolu kabul edilir → RSI) için spiral telli (armored) orotrakeal entübasyon zorunludur.',
+    notes: 'AÇIK MİKROCERRAHİ EMBOLEKTOMİDE TEMEL İLKELER (Standart >%99 LVO için EVT protokolüne bakınız): (1) "TIME IS BRAIN" — A-line, CVC veya İONM kurulumu için revaskülarizasyon ASLA geciktirilmez; periferik vazopressörle derhal başlanır; (2) KAN BASINCI (ENCHANTED2/MT & OPTIMAL-BP) — Rekanalizasyon sonrası agresif SKB 110-130 hedeflenmez (zararlıdır!); SKB <180 mmHg (tipik 140-160 mmHg; <120-130\'dan kaçınarak) korunur; (3) RUTİN TXA VE TROMBOSİT YASAĞI (PATCH — akut MCA re-trombozu riski); (4) NORMOKAPNİ, NORMOTERMİ (36.0-37.0°C) VE GLİSEMİ (140-180 mg/dL).',
+    rulesTitle: 'AÇIK SEREBRAL EMBOLEKTOMİDE TEMEL ANESTEZİ İLKELERİ',
     indispensableRules: [
       {
         number: 1,
-        title: 'REKANALİZASYON ÖNCESİ: PENUMBRA PERFÜZYONU İÇİN YÜKSEK TANSİYON (MAP ≥ 85-90 mmHg)',
-        content: 'Tıkalı serebral arter açılana kadar iskemik penumbra dokusu tamamen kollateral kan akımına ve sistemik kan basıncına bağımlıdır. İndüksiyondaki en kısa süreli hipotansiyon bile infarktı geri dönüşsüz büyütür; Noradrenalin veya Fenilefrin infüzyonu indüksiyonla eşzamanlı başlatılarak SAB 140-160 mmHg tutulmalı ve normokapni (hiperventilasyonsuz) korunmalıdır.'
+        title: '"TIME IS BRAIN": İNVAZİV HATLAR VE İONM İÇİN REVASKÜLARİZASYONU GECİKTİRME!',
+        content: 'SNACC önerisi gereği indüksiyon öncesi zorlu A-line, CVC veya İONM kurulumu nedeniyle zaman kaybedilmez! Geniş periferik venöz hattan dilüe vazopressör (Fenilefrin / Noradrenalin) eşliğinde derhal RSI uygulanır; Tragus seviyesinde sıfırlanmış A-line ve gerekirse CVC cerrahi hazırlıkla EŞZAMANLI yerleştirilir.'
       },
       {
         number: 2,
-        title: 'REKANALİZASYON SONRASI: HEMORAJİK TRANSFORMASYONA KARŞI SIKI BASINÇ DÜŞÜŞÜ',
-        content: 'Embolektomi yapılıp arteriyel akım sağlandığı anda hasarlı damar yatağı otoregülasyonu kaybetmiştir; kontrolsüz hipertansiyon öldürücü reperfüzyon ödemine ve intrakraniyal kanamaya yol açar. Damar açıldığı an Nikardipin/Labetalol ile SAB 110-130 mmHg (MAP < 80-85 mmHg) aralığına çekilmelidir.'
+        title: 'REKANALİZASYON ÖNCESİ VE SONRASI KAN BASINCI (ENCHANTED2/MT & OPTIMAL-BP)',
+        content: 'Rekanalizasyon öncesi hipotansiyondan kesinlikle kaçınılır (SKB 140-180 mmHg; IV tPA/TNK verilmişse SKB <180/105 mmHg). Rekanalizasyon sonrasında ENCHANTED2/MT (Lancet 2022 — zarar nedeniyle erken durduruldu) ve OPTIMAL-BP (JAMA 2023) gereği agresif hipotansiyon (SKB 110-130) UYGULANMAZ; hedef SKB <180 mmHg (tipik 140-160 mmHg; <120-130 mmHg\'den kesinlikle kaçınılır)!'
+      },
+      {
+        number: 3,
+        title: 'RUTİN TXA VE RUTİN TROMBOSİT TRANSFÜZYONU YASAĞI (PATCH 2016)',
+        content: 'Akut arteriyotomi ve revaskülarizasyon sırasında rutin TXA veya rutin trombosit transfüzyonu (PATCH Lancet 2016) KATASTROFİK MCA RE-TROMBOZUNA yol açar! Yalnızca tPA/TNK sonrası hayatı tehdit eden kontrolsüz masif kanama ve düşük fibrinojende hedefli Kriyopresipitat düşünülür.'
+      },
+      {
+        number: 4,
+        title: 'NORMOKAPNİ, HİPERTONİK SALİN TERCİHİ, SIKI NORMOTERMİ VE GLİSEMİ',
+        content: 'PaCO2 35-38 mmHg normokapnik tutulur (profilaktik hiperventilasyon penumbrayı enfarkta çevirir!). Ozmoterapi gerekirse hipovolemi yaratmamak için Mannitol yerine %3 Hipertonik Salin tercih edilir. Vücut ısısı kesinlikle 36.0-37.0°C (tPA ile hipotermiden kaçınılır), glukoz 140-180 mg/dL, N2O ve hipotonik/dekstrozlu sıvılar YASAKTIR.'
       }
     ]
   },
@@ -78,106 +86,107 @@ export const craniotomyEmbolectomy: ProcedureDefinition = {
   // 3) Pre-operatif hazırlığı
   preoperative: {
     consultations: [
-      'Nöroloji / Nörogirişimsel Radyoloji Konsültasyonu: Semptom başlangıç saati (Son normal görülme zamanı - LSN), NIHSS skoru, ASPECTS skoru, tPA/EVT geçmişi ve revaskülarizasyon için hedeflenen damar oklüzyon düzeyinin anlık değerlendirilmesi.',
-      'Girişimsel Anjiyografi Ekibi ile Koordinasyon: Kateter laboratuvarında verilen sistemik heparin dozu, intra-arteriyel vazodilatatörler, stent/trombektomi deneme sayısı ve damar diseksiyonu varlığının teyidi.',
-      'Nöro-Yoğun Bakım Konsültasyonu: Acil cerrahi sonrası invaziv mekanik ventilasyon, multimodal nöromonitörizasyon ve saatlik nörolojik takip için acil YBÜ yatak rezervasyonu.'
+      'Nöroloji / Nörogirişimsel Radyoloji Konsültasyonu: Semptom başlangıç saati (Son normal görülme zamanı - LSN), NIHSS skoru, ASPECTS skoru, IV tPA/Tenekteplase saati, başarısız EVT ayrıntıları ve hedef damar oklüzyon düzeyinin anlık değerlendirilmesi.',
+      'Girişimsel Anjiyografi Ekibi ile Koordinasyon: Kateter laboratuvarında verilen sistemik heparin dozu, intra-arteriyel ajanlar ve damar diseksiyonu/perforasyon varlığının teyidi.',
+      'Nöro-Yoğun Bakım Konsültasyonu: Acil cerrahi sonrası mekanik ventilasyon ve saatlik nörolojik takip için acil YBÜ yatak rezervasyonu.'
     ],
     historyAndPhysical: [
-      'Semptom Başlangıç Zamanı ve "Last Seen Normal" (LSN): Kurtarılabilir penumbra dokusunun mevcudiyeti zaman bağımlıdır ("Time is brain" - Zaman beyindir prensibi). Her geciken dakikada milyonlarca nöron ölmektedir.',
-      'Nörolojik Defisit Derecesi (NIHSS): Yüksek NIHSS skoru (özellikle >15-20) masif kortikal ve subkortikal iskemiye işaret eder; pupiller reaksiyon, anizokori ve bilateral ışık refleksi unkal herniasyon riski açısından saniyeler içinde kaydedilmelidir.',
-      'Aspirasyon Riski ve Mide Doluluğu: Akut inme hastalarında bulbar disfonksiyon, yutma refleksi kaybı, bilinç bozukluğu ve ultra-acil durum nedeniyle mide tam dolu kabul edilir; Hızlı Seri İndüksiyon (RSI) zorunludur.',
-      'Kardiyovasküler Anamnez: Atriyal fibrilasyon (AF), mekanik kapak, sol ventrikül trombüsü, yakın zamanda geçirilmiş Mİ veya karotis stenozu sorgulanmalıdır.'
+      'Semptom Başlangıç Zamanı ("Time is Brain"): Kurtarılabilir penumbra dokusu dakika bağımlıdır; preoperatif hazırlık hiçbir şekilde cerrahiye başlangıcı geciktirmemelidir.',
+      'Nörolojik Defisit Derecesi (NIHSS): Pupiller reaksiyon, anizokori ve bilateral ışık refleksi unkal herniasyon riski açısından saniyeler içinde kaydedilir.',
+      'Aspirasyon Riski ve Mide Doluluğu: Akut inme hastalarında bulbar disfonksiyon ve aciliyet nedeniyle mide tam dolu kabul edilir; Hızlı Seri İndüksiyon (RSI) zorunludur.',
+      'Kardiyovasküler Anamnez: Atriyal fibrilasyon (AF), mekanik kapak, sol ventrikül trombüsü, yakın zamanda geçirilmiş Mİ veya karotis stenozu sorgulanır.'
     ],
     laboratoryAndTests: [
-      'Koagülasyon Profili (PT, aPTT, INR, Fibrinojen): Özellikle preoperatif IV tPA (Alteplase/Tenecteplase) uygulanmışsa Fibrinojen düzeyi acilen bakılmalıdır (Hedef Fibrinojen >200 mg/dL; düşüklükte Kriyopresipitat infüzyonu planlanır).',
-      'Acil Kan Grubu ve Cross-Match: En az 2 - 4 Ünite ES + 2 Ünite TDP + 1 Aferez Trombosit süspansiyonu.',
-      'Arteriyel Kan Gazı, Bazal Laktat ve Kan Şekeri: HİPERGLİSEMİ (glukoz >180 mg/dL) ve HİPOGLİSEMİ (<70 mg/dL) iskemik laktik asidozu ve infarkt alanını genişletir; kan şekeri sıkı bir şekilde 140 - 180 mg/dL arasında tutulmalıdır.',
-      'Serum Elektrolitleri (Özellikle Na+ ve K+): Hiponatremi beyin ödemini katlar; normonatremi (138-145 mEq/L) hedeflenmelidir.'
+      'Koagülasyon Profili (PT, aPTT, INR, Fibrinojen): Preoperatif IV tPA/TNK uygulanmışsa bazal fibrinojen düzeyi istenir (ancak sonuç beklenerek cerrahi GECİKTİRİLMEZ!).',
+      'Acil Kan Grubu ve Cross-Match: En az 2 - 4 Ünite ES + 2 Ünite TDP (rutin trombosit transfüzyonu planlanmaz).',
+      'Arteriyel Kan Gazı, Bazal Laktat ve Kan Şekeri: Hiperglisemi (>180 mg/dL) ve hipoglisemi (<70 mg/dL) iskemik infarkt alanını genişletir; hedef kesinlikle 140 - 180 mg/dL\'dir.',
+      'Serum Elektrolitleri (Özellikle Na+ ve K+): Hiponatremi beyin ödemini ağırlaştırır; normonatremi (138-145 mEq/L) hedeflenir.'
     ]
   },
 
   // 4) İntra-operatif yönetim
   intraoperative: {
     monitoring: [
-      'İnvaziv Arteriyel Kan Basıncı (A-Line) — Kalp ve Dış Kulak Yolu (Tragus) Seviyesinde Kalibre Edilmiş: İndüksiyon anında penumbra perfüzyonunun çökmesini engellemek için mutlaka İNDÜKSİYON ÖNCESİ yerleştirilmelidir.',
-      'Santral Venöz Kateter (CVC): Norepinefrin, fenilefrin veya vazodilatatör infüzyonlarının güvenli santral titrasyonu ve hemodinamik izlem için.',
-      'İntraoperatif Nöromonitörizasyon (İONM - MEP, SSEP ve Sürekli EEG): Kortikal ve subkortikal iskeminin tespiti; geçici arteriyel klempleme ve embolektomi anında perfüzyon bütünlüğünün izlenmesi.',
-      'Mikro-Vasküler Doppler USG ve İndosiyanin Yeşili (ICG) Video-Anjiyografi: Trombüs çıkarılıp arter kapatıldıktan sonra damar içi akımın (TICI 3 revaskülarizasyon) ve perforatör arterlerin açık olduğunun intraoperatif teyidi.',
-      'Sürekli End-Tidal CO2 (EtCO2) ve Arteriyel Kan Gazı (ABG): PaCO2 hedefi 35 - 38 mmHg (Normokapni). DİKKAT: Anevrizma cerrahisinin aksine akut iskemik inmede AŞIRI HİPERVENTİLASYONDAN (PaCO2 <35 mmHg) KESİNLİKLE KAÇINILMALIDIR, çünkü vazokonstriksiyon yaparak iskemik penumbrayı geri dönüşsüz infarkta çevirir!',
-      'Sürekli Çift Isı Takibi (Özofagus/Mesane): Normotermi (36.0 - 37.0°C) korunmalıdır; hipertermi iskemik nöron ölümünü katlayarak artırır.',
-      'Saatlik İdrar Çıkışı Takibi için Sıcaklık Problu Foley Sonda.'
+      'İnvaziv Arteriyel Kan Basıncı (A-Line) — Dış Kulak Yolu (Tragus / Willis Poligonu / Foramen Monro) Seviyesinde Sıfırlanmış: Baş elevasyonunda doğru CPP ölçümü için transdüser yalnızca Tragus seviyesinde sıfırlanır. "TIME IS BRAIN" KURALI: İndüksiyon öncesi ilk denemede hızlıca takılamıyorsa cerrahiyi ASLA geciktirme — NIBP (2-3 dk aralıkla) + periferik vazopressörle derhal indükle, A-line\'ı cerrahi hazırlıkla EŞZAMANLI yerleştir!',
+      'Santral Venöz Kateter (CVC): İndüksiyonu geciktirmemek kaydıyla yalnızca gerekirse cerrahi hazırlık sırasında veya postop YBÜ\'de yerleştirilir; acil başlangıçta geniş periferik damaryolundan dilüe vazopressör (SNACC önerisi) güvenle başlanır.',
+      'İntraoperatif Nöromonitörizasyon (İONM): Acil revaskülarizasyonu ASLA geciktirmeyecekse selektif EEG/SSEP düşünülebilir; İONM kurulumu için kesinlikle zaman kaybedilmez.',
+      'Mikro-Vasküler Doppler USG ve İndosiyanin Yeşili (ICG) Video-Anjiyografi: Trombüs çıkarılıp arter kapatıldıktan sonra damar içi akımın (rekanalizasyon) ve perforatörlerin açık olduğunun intraoperatif teyidi.',
+      'Sürekli End-Tidal CO2 (EtCO2) ve Seri Arteriyel Kan Gazı (ABG): Bazal hedef sıkı normokapnidir (PaCO2 35 - 38 mmHg). Rutin profilaktik hiperventilasyon KESİNLİKLE YAPILMAZ (penumbrayı vazokonstriksiyonla enfarkta çevirir!); yalnızca akut herniasyon/tıkız beyinde kısa süreli kurtarma (30-35 mmHg) düşünülür.',
+      'Sürekli Isı Takibi ve Kan Şekeri: Sıkı NORMOTERMİ (36.0 - 37.0°C — özellikle tPA almış hastada hipotermiden kesinlikle kaçınılır!) ve kan şekeri 140 - 180 mg/dL takibi.',
+      'Isı Problu Foley İdrar Sondası (cerrahi başlangıcı geciktirmeden).'
     ],
     vascularAccess: [
-      'En az 2 adet geniş çaplı periferik damar yolu (14G ve/veya 16G) — acil sıvı ve kan replasmanına uygun.',
-      'Ultrason eşliğinde İnternal Juguler veya Subklavyen Santral Venöz Kateter (CVC).',
-      'İnvaziv Radial veya Brakial Arter Kateteri (anestezi indüksiyonu öncesinde yerleştirilmiş).'
+      'En az 2 adet geniş çaplı periferik damar yolu (14G veya 16G) — biri üzerinden indüksiyonla eşzamanlı dilüe vazopressör (Fenilefrin/Noradrenalin) infüzyonu hemen başlatılır (SNACC).',
+      'İnvaziv Radial Arter Kateteri (Tragus/Foramen Monro seviyesinde sıfırlanmış — zaman kaybettirmeden, gerekirse indüksiyon sonrası eşzamanlı).',
+      'Santral Venöz Kateter (CVC): Gerekli ise yalnızca revaskülarizasyonu geciktirmeyecek aşamada.'
     ],
     patientPosition: 'Supine (Sırtüstü), baş Mayfield 3 çivili başlık veya nöroşirürji halkasında lezyon karşı tarafına 30-45 derece hafif rotasyonda; serebral venöz dönüşü rahatlatmak için 15 derece Reverse Trendelenburg.',
     patientPositionDetails: [
-      'Boyun Rotasyonu ve Venöz Drenaj: Başın 45 dereceden fazla döndürülmesi ipsilateral juguler veni basıya uğratarak intrakraniyal venöz hipertansiyona, serebral perfüzyon basıncının düşmesine ve cerrahi sahada beyin şişmesine yol açar; çene ile sternum arasında en az 2 parmak mesafe korunmalıdır.',
-      'Mayfield Çivisi Uygulaması: İntrakraniyal basınç fırlamasını ve hipertansif atakları engellemek için çivi giriş yerlerine bol lokal anestezik (Bupivakain/Lidokain) infiltrasyonu ve ek bolus anestezi uygulanmalıdır.',
-      'Gözlerin Korunması: Sylvian fissür diseksiyonu sırasında baş açısı nedeniyle bağımlı kalan göze bası olmaması için koruyucu göz merhemi ve bası önleyici pedler yerleştirilmelidir.'
+      'Boyun Rotasyonu ve Venöz Drenaj: Başın 45 dereceden fazla döndürülmesi ipsilateral juguler veni basıya uğratarak serebral perfüzyon basıncını düşürür ve beyin şişmesine yol açar; çene ile sternum arasında en az 2 parmak mesafe korunmalıdır.',
+      'Mayfield Çivisi Uygulaması: Hipertansif atakları engellemek için çivi giriş yerlerine lokal anestezik (maksimum mg/kg ve LAST kurallarına uyarak) infiltrasyonu ve ek bolus analjezi uygulanır.',
+      'Gözlerin Korunması: Bağımlı kalan göze bası olmaması için koruyucu göz merhemi ve bası önleyici pedler yerleştirilir.'
     ],
     anesthesiaManagement: [
-      'Ultra-Acil Zaman Kritik Hızlı İndüksiyon (Time-Critical RSI): Mide doluluğu ve aspirasyon riskine karşı hızlı seri indüksiyon; MAP düşüşü yaratmayacak hemodinamik stabil ajanlar (Etomidat 0.2-0.3 mg/kg veya titre Propofol + Fentanil 2-3 mcg/kg + Rokuronyum 1-1.2 mg/kg).',
-      'İKİ AŞAMALI KAN BASINCI HEDEF PROTOKOLÜ: (1) REKANALİZASYON ÖNCESİ (Pre-Recanalization): İskemik penumbradaki kollateral perfüzyonu yaşatmak için KESİNLİKLE HİPOTANSİYONDAN KAÇINILMALI ve MAP ≥85-90 mmHg (SAB 140-160 mmHg) tutulmalıdır (Gerektiğinde Norepinefrin veya Fenilefrin infüzyonu); (2) REKANALİZASYON SONRASI (Post-Recanalization): Damar açılıp embolektomi tamamlandığında reperfüzyon hasarı ve ölümcül hemorajik transformasyonu (beyin kanamasını) engellemek için MAP derhal <80-85 mmHg (SAB 110-130 mmHg) seviyesine indirilmeli ve sıkı kontrol edilmelidir (Nikardipin, Labetalol veya Esmolol).',
-      'Optimal Beyin Gevşemesi (İskemiye Zarar Vermeden): Beyin gevşemesi için Mannitol (0.5 g/kg) veya Hipertonik Salin (%3 NaCl 150 mL) dikkatle uygulanabilir; derin hipovolemi ve hipotansiyondan kaçınmak için izotonik kristaloidlerle övolemi titizlikle korunmalıdır. İskemik alanda vazokonstriktif hasar yaratmamak için PaCO2 kesinlikle 35-38 mmHg seviyesinde tutulmalıdır.',
-      'Serebral Nöroproteksiyon: Trombüs çıkarılması için uygulanan mikro-arteriyotomi ve geçici klempleme esnasında CMRO2 süpresyonu (Propofol infüzyonu veya hafif kontrollü normotermi 35.5-36.5°C) ve sıkı kan şekeri kontrolü (140-180 mg/dL).',
-      'Trombolitik Reversal Protokolü: Preoperatif IV tPA almış hastada cerrahi alanda kontrolsüz mikrovasküler kanama gelişirse cerrah ile koordineli olarak derhal 10 Ünite Kriyopresipitat ve 1 g Traneksamik Asit IV uygulanır.'
+      'Ultra-Acil Zaman Kritik RSI (Time-Critical RSI): Mide doluluğuna karşı hızlı seri indüksiyon; hipotansiyon yaratmayacak ajanlar (Etomidat 0.2-0.3 mg/kg veya titre Propofol + Fentanil 2-3 mcg/kg + Rokuronyum 1-1.2 mg/kg) ve geniş periferik hattan derhal hazır dilüe vazopressör (Noradrenalin/Fenilefrin) desteği.',
+      'İdame, Gaz ve Sıvı Yönetimi: Propofol + Remifentanil TIVA (veya <0.5 MAC Sevofluran). Azot protoksit (N2O) KESİNLİKLE KONTRENDİKEDİR. Yalnızca izotonik kristaloidler (%0.9 NaCl veya dengeli izotonik Plasmalyte/İzolen) ile övolemi korunur; hipotonik (Ringer Laktat dahil) ve dekstroz içeren sıvılar KULLANILMAZ.',
+      'İKİ AŞAMALI KAN BASINCI PROTOKOLÜ (AHA/ASA, ENCHANTED2/MT Lancet 2022 & OPTIMAL-BP JAMA 2023):',
+      '  - (1) REKANALİZASYON ÖNCESİ: İskemik penumbra kollaterallerini yaşatmak için hipotansiyondan KESİNLİKLE kaçınılır (SKB 140 - 180 mmHg / bazal MAP korunur). Hasta IV tPA/Tenekteplase almışsa SKB < 180/105 mmHg üst sınırı aşılmaz!',
+      '  - (2) REKANALİZASYON SONRASI: ENCHANTED2/MT (zarar nedeniyle erken durduruldu) ve OPTIMAL-BP çalışmaları gereği agresif kan basıncı düşürülmesi (SKB 110-130 mmHg / MAP <80) KESİNLİKLE YAPILMAZ! Hedef SKB < 180 mmHg olup pratikte tipik olarak SKB 140 - 160 mmHg aralığında pürüzsüz tutulur (SKB < 120-130 mmHg\'ye düşmekten kaçınılır).',
+      'Beyin Gevşemesi (Hipertonik Salin Tercihi) ve Solunum: Ozmoterapi gerekirse Mannitol\'ün ozmotik diürezle yaratacağı hipovolemi ve penumbra kollapsından kaçınmak için %3 Hipertonik Salin (2-3 mL/kg IV) Mannitol\'e tercih edilir. PaCO2 sıkı normokapnik (35-38 mmHg) tutulur.',
+      'Sıkı Normotermi ve Glisemi: Vücut ısısı kesinlikle 36.0 - 37.0°C korunur — hipotermiden (<36.0°C) KESİNLİKLE KAÇINILIR (IV tPA ile koagülopatiyi/kanamayı ağırlaştırır ve faydası yoktur). Kan şekeri 140 - 180 mg/dL aralığında tutulur.',
+      'Kanama Yönetimi (TXA & Trombosit Uyarısı): Akut MCA re-trombozu riski nedeniyle rutin TXA ve rutin trombosit transfüzyonu (PATCH 2016) UYGULANMAZ; yalnızca tPA sonrası hayatı tehdit eden kontrolsüz kanama ve düşük fibrinojende (<150-200 mg/dL) cerrahla birlikte Kriyopresipitat değerlendirilir.'
     ],
     airwayManagement: [
       'Güvenli Orotrekeal Entübasyon: Fleksibl spiral telli (armored) endotrakeal tüp ile cerrahi sahayı ve mikroskop hareketlerini engellemeyecek şekilde karşı ağız köşesinden sağlam tespit.',
       'Venöz Dönüşün Korunması: Tüp tespit bantları ve flasterler juguler venöz dönüşü engelleyecek şekilde boyun venlerini sıkmamalıdır.',
-      'Postoperatif Ekstübasyon Stratejisi: Masif serebral iskemi, rekanalizasyon sonrası beyin ödemi riski ve nörolojik tablonun yoğun bakımda yakın takibi gerektiğinden hastaların büyük çoğunluğu ameliyat masasında EKSTÜBE EDİLMEZ; sedatize ve entübe halde Nöro-YBÜ\'ye nakledilir.'
+      'Postoperatif Ekstübasyon Stratejisi: Büyük iskemik alan, rekanalizasyon sonrası beyin ödemi/dekompresyon riski ve yakın YBÜ izlemi gerektiğinden hastaların çoğunluğu ameliyat masasında ekstübe edilmez; sedatize ve entübe halde Nöro-YBÜ\'ye nakledilir.'
     ],
     criticalSurgicalStages: [
-      'Acil Kraniyotomi ve Dural Açılış: Dura açıldığında iskemik parankim şişkin olabilir; masif ödem ve herniasyon bulguları varsa cerrah dekompresif hemikraniektomiye geçiş kararını değerlendirir.',
+      'Acil Kraniyotomi ve Dural Açılış: Dura açıldığında iskemik parankim şişkin olabilir; masif ödem ve herniasyon bulguları varsa cerrah dekompresif hemikraniektomi kararını değerlendirir.',
       'Sylvian Fissür Diseksiyonu ve Tıkalı Arterin Belirlenmesi: MCA bifurkasyonu veya M1 gövdesine ulaşılırken derin perforatör lentikülostriat dalların korunması hayati önem taşır.',
-      'Geçici Arteriyel Klempleme: Trombüsün proksimal ve distaline minyatür geçici mikrovasküler klerler yerleştirilir; iskemi süresi anestezi ekibi tarafından sesli olarak sayılır (hedef <10-15 dk).',
-      'Mikro-Arteriyotomi ve Embolektomi: Arter mikromakslarla açılarak pıhtı mikro-forseps ve hafif aspirasyonla çıkartılır; taze embolus patolojik ve mikrobiyolojik incelemeye gönderilir.',
-      'Arteriyotomi Onarımı ve Akımın Açılması (Rekanalizasyon Anı): 10-0 dikişlerle arter kapatılır, geçici klerler açılır ve cerrah mikro-Doppler veya ICG ile damar açıklığını teyit eder. BU ANDA ANESTEZİST KAN BASINCINI DERHAL DÜŞÜRMELİDİR (MAP <85 mmHg)!',
-      'Kemik Flebinin Durumu (Kraniyoplasti vs Dekompresif Kraniektomi): Beyin dokusunda malign ödem bulgusu varsa kemik flebi yerine konulmaz, kraniektomi olarak kapatılır.'
+      'Geçici Arteriyel Klempleme: Trombüsün proksimal ve distaline geçici mikroklipsler yerleştirilir; iskemi süresi anestezi ekibi tarafından sesli olarak sayılır.',
+      'Mikro-Arteriyotomi ve Embolektomi: Arter açılarak pıhtı çıkarılır; taze embolus patolojik/mikrobiyolojik incelemeye gönderilir.',
+      'Arteriyotomi Onarımı ve Rekanalizasyon Anı: 10-0 dikişlerle arter kapatılır, geçici klipsler açılır ve mikro-Doppler/ICG ile akım teyit edilir. Bu anda SKB <180 mmHg (tipik 140-160 mmHg; <120-130 mmHg hipotansiyondan kaçınarak) dengeli ve pürüzsüz yönetilir!',
+      'Kemik Flebinin Durumu (Kraniyoplasti vs Dekompresif Kraniektomi): Malign ödem bulgusu varsa kemik flebi yerine konulmaz, kraniektomi olarak kapatılır.'
     ],
     emergenceNotes: [
-      'Hastalar çoğunlukla yoğun bakım takibi için entübe tutulur; ancak uyanık devredilecek stabil seçilmiş olgularda ıkınma ve öksürük (bucking) tamamen engellenmelidir.',
-      'Hipertansif sıçramalar (rebound HT) reperfüzyon kanamasına yol açacağından uyanma evresinde nikardipin veya labetalol infüzyonu hazır bulundurulmalıdır.',
-      'Erken Nörolojik Muayene: Ekstübe edilen veya sedasyonu hafifletilen hastada pupiller refleksi, motor defisit ve GKS amortismanı hızla değerlendirilmelidir.'
+      'Hastalar çoğunlukla yoğun bakım takibi için entübe tutulur; uyanık devredilecek seçilmiş sınırlı olgularda öksürük ve ıkınma (bucking) tamamen engellenmelidir.',
+      'Hemodinamik Stabilite: Hem şiddetli hipertansiyon pikleri (SKB >180 mmHg — hemorajik transformasyon riski) hem de agresif hipotansiyon (<120-130 mmHg — ikincil penumbra iskemisi/re-tromboz) önlenir.',
+      'Erken Nörolojik Muayene: Ekstübe edilen veya sedasyonu hafifletilen hastada pupiller refleks, motor defisit ve GKS hızla değerlendirilir.'
     ]
   },
 
   // 5) Post-operatif yönetim dikkat edilmesi gerekenler
   postoperative: {
     painManagement: [
-      'Bölgesel Skalp Sinir Blokajı: Cerrahi bitiminde uygulanan skalp bloğu (%0.25 Bupivakain + Epinefrin) insizyon ağrısını ve postoperatif sistemik opioid ihtiyacını belirgin azaltır.',
+      'Bölgesel Skalp Sinir Blokajı / İnsizyonel İnfiltrasyon: Cerrahi bitiminde uygulanan skalp bloğu veya insizyonel infiltrasyon (Ropivakain ≤3 mg/kg veya Levobupivakain/Bupivakain ≤2.5 mg/kg [epinefrinli ≤3 mg/kg]; maksimum mg/kg dozu aşılmamalı ve LAST [%20 Lipid Emülsiyonu] hazır olmalıdır) insizyon ağrısını ve opioid ihtiyacını azaltır.',
       'Sistemik Non-Opioid Analjezi: IV Parasetamol (1 g q6h) düzenli bazal analjezik olarak verilir.',
-      'Opioid Titrasyonu: Pupiller yanıtı ve GKS takibini gölgelememek için sadece şiddetli atılım ağrılarında mikro-doz Tramadol (50 mg) veya Fentanil (25 mcg) titre edilir.',
-      'NSAİİ Kesin Kontrendikasyonu: Erken dönemde hemorajik transformasyon riski nedeniyle cerrahın kesin onayı olmaksızın NSAİİ kullanımı yasaktır.'
+      'Güvenli Kurtarıcı Opioid Titrasyonu (TRAMADOL KULLANILMAZ!): Tramadol nöbet eşiğini düşürdüğü ve şiddetli POBV tetiklediği için kraniyal cerrahide KESİNLİKLE KULLANILMAZ. Yalnızca şiddetli atılım ağrısında nörolojik izlemi gölgelemeyecek düşük doz titre IV Fentanil (25 mcg), Oksikodon veya bazal infüzyonsuz Morfin PCA kullanılır.',
+      'NSAİİ Kesin Kontrendikasyonu: Taze arteriyel revaskülarizasyon ve hemorajik transformasyon riski nedeniyle erken dönemde NSAİİ (Deksketoprofen dahil — non-selektif COX-1/2 inhibitörüdür!) KULLANILMAZ; yalnızca hemostaz ve kontrol BT sonrası cerrah onayıyla değerlendirilebilir.'
     ],
     prospectRecommendations: [
-      'Skalp Sinir Blokajı / İnsizyonel İnfiltrasyon: Ağrı skorlarını düşürmede ve hemodinamik stabiliteyi sağlamada en yüksek kanıt düzeyine sahip yöntemdir.',
-      'Sistemik Parasetamol: Rutin bazal analjezik olarak 6 saatte bir 1 g IV uygulanması önerilir.',
-      'Aşırı Sedatif Analjeziklerden Kaçınma: Nörolojik muayene doğruluğunu korumak adına sedasyon yapıcı ilaçlar sınırlandırılmalıdır.'
+      'PROSPECT Craniotomy 2023 (Mestdagh et al.): Skalp sinir blokajı / insizyonel lokal anestezik infiltrasyonu (maks mg/kg ve LAST kurallarına uyarak) ile düzenli sistemik Parasetamol (1 g IV q6h) temel analjeziyi oluşturur.',
+      'Tramadol ve erken NSAİİ\'den kaçınılır; nörolojik muayeneyi maskelemeyen mikro-doz kurtarıcı opioid ve çift ajan POBV profilaksisi uygulanır.'
     ],
     erasRecommendations: [
-      'Sıkı Kan Basıncı Hedefleri: Post-rekanalizasyon döneminde kan basıncı sistolik <140 mmHg ve diyastolik <90 mmHg (MAP <85 mmHg) tutulmalıdır (Hemorajik transformasyon profilaksisi).',
-      'Erken Kontrol Beyin BT / BT Anjiyografi: Postoperatif 2-4. saatte veya nörolojik kötüleşme anında reperfüzyon hematomu, beyin ödemi ve damar açıklığı için acil görüntüleme.',
-      'Normoglisemi ve Normotermi: Kan şekeri 140 - 180 mg/dL aralığında, vücut ısısı <37.5°C idame ettirilmelidir.',
-      'Antikoagülan / Antiplatelet Zamanlaması: Trombüs nüksünü önleme ile hematom riski arasında multidisipliner konsey kararı (genellikle postop 24-48 saat sonra kontrol BT temizse başlanır).'
+      'Güncel Post-Rekanalizasyon Kan Basıncı Hedefi (ENCHANTED2/MT & OPTIMAL-BP): SKB <180 mmHg (tipik 140-160 mmHg) korunur; agresif tansiyon düşüşünden (SKB <120-130 mmHg) kesinlikle kaçınılır.',
+      'Erken Kontrol Beyin BT / BT Anjiyografi: Hemorajik transformasyon, malign ödem ve damar açıklığı için erken görüntüleme yapılır.',
+      'Normoglisemi ve Normotermi: Kan şekeri 140 - 180 mg/dL aralığında, vücut ısısı 36.0 - 37.0°C (<37.5°C) idame ettirilir.',
+      'Antikoagülan / Antiplatelet Zamanlaması: Trombüs nüksünü önleme ile hemorajik transformasyon riski arasında multidisipliner konsey kararıyla (genellikle postop 24 saat kontrol BT temizse) başlanır.'
     ]
   },
 
   // Kullanılabilecek kaynaklar (en sonda yer alır)
   references: {
-    jaffeReference: "Jaffe, R. A., & Schmiesing, C. I. (2014). Anesthesiologist's Manual of Surgical Procedures (5th ed.). Section I: Neurosurgical Procedures - Craniotomy for Cerebral Revascularization and Embolectomy, pp. 45–52. Lippincott Williams & Wilkins.",
-    erasReference: 'Smith, M., et al. Consensus Statement for Perioperative Care in Neurovascular Surgery and Craniotomy: Enhanced Recovery After Surgery (ERAS®) Society Guidelines.',
-    prospectReference: 'PROSPECT Working Group. Evidence-based recommendations for postoperative pain management in craniotomy and neurovascular interventions. ESRA.',
+    jaffeReference: "Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (Eds.). (2020). Anesthesiologist's Manual of Surgical Procedures (6th ed.). Wolters Kluwer. Section: Neurosurgery — Craniotomy for Cerebral Revascularization and Embolectomy.",
+    erasReference: 'Hagan, K. B., Bhavsar, S., Raza, S. M., Arnold, B., Arunkumar, R., Dang, A., et al. (2016). Enhanced recovery after surgery for oncological craniotomies. Journal of Clinical Neuroscience, 24, 10–16.',
+    prospectReference: "Mestdagh, F., Lavand'homme, P., Pirard, G., Joshi, G. P., Sauter, A. R., & Van de Velde, M.; PROSPECT Working Group (ESRA). (2023). Pain management after elective craniotomy: A systematic review with procedure-specific postoperative pain management (PROSPECT) recommendations. European Journal of Anaesthesiology, 40(5), 301–314.",
     otherReferences: [
-      'Powers, W. J., et al. (2019/2023). Guidelines for the Early Management of Patients With Acute Ischemic Stroke: A Guideline for Healthcare Professionals From the American Heart Association/American Stroke Association (AHA/ASA). Stroke.',
-      'Society for Neuroscience in Anesthesiology and Critical Care (SNACC): Consensus Statement on Anesthetic Management of Endovascular and Surgical Recanalization in Acute Ischemic Stroke.',
-      "Cottrell, J. E., & Patel, P. (2016). Cottrell and Patel's Neuroanesthesia (6th ed.). Chapter 16: Anesthesia for Acute Ischemic Stroke and Cerebral Revascularization. Elsevier.",
-      'European Stroke Organisation (ESO) Guidelines on Acute Ischemic Stroke Management & Rescue Surgical Thrombectomy.',
-      'Miller, R. D., et al. Miller’s Anesthesia (9th ed.). Chapter 64: Anesthesia for Neurologic Surgery - Acute Cerebral Ischemia, Penumbral Perfusion and Surgical Embolectomy.',
-      'Yousef, K. M., et al. Blood Pressure Management in Acute Ischemic Stroke and Post-Recanalization Hemorrhagic Transformation: Current Evidence and Neurocritical Guidelines.'
+      'Powers, W. J., Rabinstein, A. A., Ackerson, T., Adeoye, O. M., Bambakidis, N. C., Becker, K., et al. (2019). Guidelines for the Early Management of Patients With Acute Ischemic Stroke: 2019 Update to the 2018 Guidelines for the Early Management of Acute Ischemic Stroke: A Guideline for Healthcare Professionals From the American Heart Association/American Stroke Association. Stroke, 50(12), e344–e418.',
+      'Yang, P., Song, L., Zhang, Y., Zhang, X., Chen, X., Li, Y., et al.; ENCHANTED2/MT Investigators. (2022). Intensive blood pressure control after endovascular thrombectomy for acute ischaemic stroke (ENCHANTED2/MT): a multicentre, open-label, blinded-endpoint, randomised controlled trial. The Lancet, 400(10363), 1585–1596.',
+      'Nam, H. S., Kim, Y. D., Heo, J., Lee, H., Jung, J. W., Choi, J. K., et al.; OPTIMAL-BP Trial Investigators. (2023). Intensive vs Conventional Blood Pressure Lowering After Endovascular Thrombectomy in Acute Ischemic Stroke: The OPTIMAL-BP Randomized Clinical Trial. JAMA, 330(9), 832–842.',
+      'Baharoglu, M. I., Cordonnier, C., Al-Shahi Salman, R., de Gans, K., Koopman, M. M., Brand, A., et al.; PATCH Investigators. (2016). Platelet transfusion versus standard care after acute stroke due to spontaneous cerebral haemorrhage associated with antiplatelet therapy (PATCH): a randomised, open-label, phase 3 trial. The Lancet, 387(10038), 2605–2613.',
+      'Talke, P. O., Sharma, D., Heyer, E. J., Bergese, S. D., Blackham, K. A., & Stevens, R. D.; Society for Neuroscience in Anesthesiology and Critical Care (SNACC). (2014). SNACC Expert Consensus Statement: Anesthetic Management of Endovascular Treatment for Acute Ischemic Stroke. Journal of Neurosurgical Anesthesiology, 26(2), 95–108.'
     ]
   }
 };
