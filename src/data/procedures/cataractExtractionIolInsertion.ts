@@ -3,10 +3,9 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Katarakt Cerrahisi ve Göz İçi Lens İmplantasyonu: Fakoemülsifikasyon (FAKO) Yöntemi ile İntraoküler Lens (İOL) Yerleşimi
  * (Cataract Extraction with Intraocular Lens Insertion / Phacoemulsification)
- * 
- * Jaffe (5th ed., Section VI: Ophthalmology - Cataract Extraction with Intraocular Lens Insertion, pp. 844-852),
- * American Academy of Ophthalmology (AAO), European Society of Cataract and Refractive Surgeons (ESCRS),
- * Ophthalmic Anesthesia Society (OAS) ve Türk Oftalmoloji Derneği (TOD) Klinik Protokolleri referans alınarak yapılandırılmıştır.
+ *
+ * Referanslar: Jaffe (5th ed., Section VI: Ophthalmic Surgery), RCoA / RCOphth Joint Guidelines (2012),
+ * Schein et al. (NEJM 2000), ASA OR Fire Practice Advisory (2013), AAO PPP: Cataract in the Adult Eye, ESCRS.
  */
 export const cataractExtractionIolInsertion: ProcedureDefinition = {
   id: 'cataract-extraction-iol-insertion',
@@ -35,110 +34,141 @@ export const cataractExtractionIolInsertion: ProcedureDefinition = {
     crossMatchRequirement: 'Rutin kan hazırlığı gerekmez (T&S veya Cross-Match endikasyonu yoktur)',
     transfusionProbability: '< %0.01 (Kan transfüzyonu endikasyonu yoktur)',
     criticalBleedingSources: [
-      'Ekspulsif Supracoroidal / Koroidal Hemoraji: Göz küresi açıkken ani GİB düşüşü veya hastanın öksürmesi/ıkınması sonucu arka siliyer arterlerin yırtılmasıyla gelişen ve göz içi dokularının dışarı fırlamasına yol açan katastrofik arteriyel kanama',
+      'Ekspulsif Suprakoroidal / Koroidal Hemoraji: Göz küresi açıkken ani GİB düşüşü veya hastanın öksürmesi/ıkınması sonucu arka siliyer arterlerin yırtılmasıyla gelişen ve göz içi dokularının dışarı fırlamasına yol açan katastrofik arteriyel kanama',
       'İris Kökü Kanaması (Hifema): İris yırtılması veya pupiller sineşi açılması esnasında küçük damarların açılması',
-      'Retrobulber / Peribulber İğne Hematomu: Blok esnasında oftalmik ven veya arter dallarının delinmesiyle retrobulber alanda gelişen masif kompresif hematom'
+      'Retrobulber / Peribulber İğne Hematomu: İğneli blok esnasında oftalmik ven veya arter dallarının delinmesiyle retrobulber alanda gelişen kompresif hematom (Orbital Kompartman Sendromu)'
     ],
     hemostasisStrategies: [
-      'Göz içi viskoelastik tamponad (Healon / OVD) ve ön kamaranın hızla basınçlandırılması',
-      'Ekspulsif kanama şüphesinde cerrahın korneal kesiyi derhal 10-0 naylon sütürle kapatması veya skleral arka dekompresyon insizyonu',
-      'Kan basıncının normotansif tutulması (SKB < 140 mmHg) ve intraoperatif ani hipertansif krizlerin önlenmesi',
-      'Öksürük ve ıkınmanın mutlak engellenmesi; uyanık hastanın derin soluk alması ve gevşetilmesinin sağlanması'
+      'Göz içi viskoelastik tamponad (OVD) ve ön kamaranın hızla basınçlandırılması',
+      'Ekspulsif kanama şüphesinde cerrahın korneal kesiyi derhal 10-0 naylon sütürle kapatması veya arka skleral dekompresyon insizyonu',
+      'Kan basıncının bazal değere yakın normotansif tutulması ve ani hipertansif krizlerin (ağrı/anksiyete/dolu mesane/hiperkapni) önlenmesi',
+      'Akut retrobulber hematom / Orbital Kompartman Sendromu gelişirse altın pencere (<60-90 dk) içinde acil lateral kantotomi + inferior kantolizis + 30° baş elevasyonu + IV Mannitol (1-2 g/kg) + IV Asetazolamid (500 mg)'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Topikal Anestezi (Lokal Anestezik Damla: Proparakain %0.5 / Tetrakain) + Koruyucusuz İntrakameral Lidokain %1 + Monitörize Anestezi Bakımı (MAC: Düşük Doz Midazolam / Fentanil ile Bilinçli Minimal Sedasyon) — Modern katarakt cerrahisinde DÜNYA GENELİNDE ALTIN STANDARTTIR'
+      'Topikal Anestezi (Proparakain %0.5 / Oksibuprokain) + Koruyucusuz İntrakameral Lidokain %1 + Minimal Bilinçli Sedasyon (MAC) veya Sedasyonsuz Takip — Modern katarakt cerrahisinde DÜNYA GENELİNDE ALTIN STANDARTTIR'
     ],
     alternative: [
-      'Sub-Tenon Bloğu (Künt Kanül ile Fasyal Anestezi): İğnesiz, optik sinir veya glob perforasyonu riski taşımayan, mükemmel anestezi ve akinezi sağlayan en güvenli rejyonel blok tekniği',
-      'Peribulber Blok (Kısa İğne ile İntrakonal/Ekstrakonal Enjeksiyon): Kooperasyonu zayıf, aşırı göz hareketi olan hastalarda',
-      'Genel Anestezi (Laringeal Maske [LMA] veya Endotrakeal Entübasyon): İleri derecede demansı, kontrolsüz Parkinson baş tremoru, mental retardasyonu olan veya klastrofobik/panik hastalarda'
+      'Sub-Tenon Bloğu (Künt Kanül ile İğnesiz Fasyal Blok): Antikoagülan kullanan veya aksiyel uzunluğu >26 mm (yüksek miyopi / posterior stafilom) olan hastalarda mükemmel analjezi ve akinezi sağlayan en güvenli rejyonel tekniktir',
+      'Peribulber Blok (Kısa İğne ile EKSTRAKONAL Enjeksiyon): Kooperasyonu zayıf veya akinezi gereken seçilmiş hastalarda (intrakonal olan Retrobulber bloktur; yüksek miyopide [>26 mm] iğneli bloklar glob perforasyonu riski nedeniyle KONTRENDİKEDİR!)',
+      'Genel Anestezi (Laringeal Maske [LMA] veya ETT): İleri demans, kontrolsüz Parkinson/esansiyel baş tremoru, ağır ortopne/kifoz, mental retardasyon veya şiddetli klostrofobisi olan hastalarda'
     ],
-    clinicalRationale: 'Topikal damla + koruyucusuz intrakameral lidokain ve hafif bilinçli sedasyon (MAC), iğneli retrobulber/peribulber blok komplikasyonlarını (glob perforasyonu, retrobulber hemoraji, beyin sapı anestezisi) ve geriatrik popülasyonda genel anesteziye bağlı kardiyopulmoner stresi ile ekstübasyon öksürüklerini önlediği için altın standarttır. Hava yolu doğal spontan solunumda korunur; örtü altına kurulan O2/medikal hava çadır sistemi klostrofobi ve CO2 birikimini engelleyerek derin sedasyondan kaynaklanan ani sıçramaların önüne geçer.',
-    notes: 'KATARAKT CERRAHİSİNDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE ANİ VAGAL DURAKLAMA — Ekstraoküler kaslara bası, göze spekulum takılması veya göz küresine traksiyon uygulandığında trigemino-vagal refleks arkı (CN V oftalmik dal afferent -> CN X vagus efferent) tetiklenir. Bu refleks ani bradikardi, nodal ritim, atriyoventriküler blok veya asistoli yaratabilir! Monitörde bradikardi görüldüğü anda cerraha derhal "TRAKSİYONU BIRAK" uyarısı verilmelidir; bası kalkınca nabız saniyeler içinde düzelir. Düzelmezse derhal İV Atropin (0.5 mg) veya Glikopirolat uygulanmalıdır. (2) GÖZ KÜRESİ AÇIKKEN ÖKSÜRÜK, IKINMA VE EKSPULSİF KOROİDAL HEMORAJİ FELAKETİ — Kornea kesilip ön kamara açıldığında göz küresi "açık küre" (open globe) haline gelir. Bu aşamada hastanın aniden öksürmesi, hapşırması, başını oynatması veya ıkınması intratorasik ve oküler venöz basıncı fırlatarak arka siliyer arterlerin patlamasına (ekspulsif koroidal kanama) yol açar; göz içi dokuları (iris, lens, retina) yaradan dışarı fırlar ve kalıcı körlük gelişir! Anestezi ekibi hastanın öksürük ve hapşırma uyarısını önceden sezinlemeli; aşırı hipoventilasyon kaynaklı huzursuz uyanmaları önlemeli ve sedasyonu titizlikle yönetmelidir. (3) RETROBULBER / PERİBULBER BLOKTA BEYİN SAPI ANESTEZİSİ VE RETROBULBER HEMATOM — İğneli bloklarda iğne ucu optik sinir kılıfının dural uzantısını delerse lokal anestezik doğrudan subaraknoid mesafeye enjekte olur. 2-5 dakika içinde kontralateral amaurozis (körlük), afoni, bilinç kaybı, konvülsiyon, solunum arresti ve kardiyovasküler kollaps (BEYİN SAPI ANESTEZİSİ) gelişir! Anestezi ekibi anında acil hava yolu ve kardiyak resüsitasyona hazır olmalıdır; ayrıca retrobulber hematom gelişirse göz içi basıncı fırlar ve optik sinir iskemisini önlemek için acil lateral kantotomi gerekebilir. (4) TOPİKAL / SEDASYON YÖNETİMİNDE "AŞIRI SEDASYON VE HİPOVENTİLASYON TUZAĞI" — Katarakt hastaları çoğunlukla yaşlı, KOAH\'lı ve kalp hastasıdır. Cerrahi örtülerin altında hava açlığı ve CO2 birikmesi (hiperkapni) hastada ani panik, örtüyü kaldırma refleksi ve kontrolsüz baş hareketi yaratır. Hastayı aşırı uyutmak (derin sedasyon) kesinlikle YASAKTIR; derin uyuyan hasta aniden sıçrayarak uyanır ve mikroskop altındaki gözde arka kapsül yırtığına yol açar. Örtü altına vakum veya 2-3 L/dk O2 köprüsü kurulmalı, hasta ile uyanık ve sakin sözel iletişim sürdürülmelidir. (5) İNTRAOPERATİF GEVŞEK İRİS SENDROMU (IFIS) VE ALFA-1 BLOKERLERİ (TAMSULOSİN) — Prostat hipertrofisi için Tamsulosin (Flomax vb.) veya diğer alfa-1 antagonistlerini kullanan hastalarda cerrahi esnasında iris sfinkter tonusu kaybolur; iris gevşekçe dalgalanır, pupilla hızla büzüşür (miyozis) ve iris fako ucuna aspire olarak yırtılır. Preoperatif sorgulamada tamsulosin öyküsü mutlaka tespit edilmeli, cerraha IFIS uyarısı verilmeli ve intrakameral fenilefrin/adrenalin ile iris kancaları (iris hooks / Malyugin halkası) hazır bulundurulmalıdır.'
+    clinicalRationale: 'Topikal damla + koruyucusuz intrakameral lidokain ve minimal MAC, iğneli blok komplikasyonlarını (glob perforasyonu, retrobulber hemoraji, beyin sapı anestezisi) ve geriatrik popülasyonda genel anesteziye bağlı kardiyopulmoner stres ile ekstübasyon öksürüklerini önlediği için altın standarttır. Hava yolu doğal spontan solunumda korunur; örtü altına kurulan medikal hava veya düşük FiO₂ (≤%30) çadır sistemi klostrofobi, CO₂ birikimi ve ameliyathane yangın riskini aynı anda önler.',
+    rulesTitle: 'KATARAKT CERRAHİSİNDE ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    notes: 'Topikal/MAC katarakt cerrahisinde temel güvenlik eksenleri: (1) Okülokardiyak refleks alarmı; (2) Açık korneal kesi sırasında öksürük/ıkınma ve ekspulsif hemoraji önlemi; (3) İğneli bloklarda beyin sapı anestezisi, yüksek miyopide (>26 mm) perforasyon yasağı ve retrobulber hematom acil kantotomi paketi; (4) Aşırı sedasyondan kaçınma ve ASA OR Yangın Üçgeni güvenliği (FiO₂ ≤%30); (5) Tamsulosin / IFIS hazırlığı ve oftalmik damla (Fenilefrin %2.5 vs %10) toksisite koruması.',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'OKÜLOKARDİYAK REFLEKS (ASCHNER–DAGNİNİ) VE ANİ VAGAL DURAKLAMA',
+        content: 'Ekstraoküler kaslara bası, göze spekulum takılması veya glob traksiyonu trigemino-vagal refleksi (CN V oftalmik dal → CN X vagus) tetikleyerek ani bradikardi, nodal ritim, AV blok veya asistoli yaratabilir. 1. basamak derhal cerraha "TRAKSİYONU BIRAK" uyarısı vermektir; 2. basamak hiperkapni/hipoksi kontrolü; düzelmezse İV Atropin 0.5 mg (veya Glikopirolat 0.2 mg) uygulanır. Rutin profilaktik Atropin önerilmez; refleks tekrarlayan uyarılarda yorulma (fatigability) gösterir.'
+      },
+      {
+        number: 2,
+        title: 'GÖZ KÜRESİ AÇIKKEN ÖKSÜRÜK, IKINMA VE EKSPULSİF KOROİDAL HEMORAJİ',
+        content: 'Kornea kesilip ön kamara açıldığında göz küresi açık hale gelir. Hastanın aniden öksürmesi, hapşırması, başını oynatması veya ıkınması oküler venöz basıncı fırlatarak arka siliyer arter yırtılmasına (ekspulsif koroidal kanama) ve kalıcı görme kaybına yol açabilir. Hasta öksürük hissettiğinde cerraha haber vermesi için önceden eğitilmeli; aşırı sedasyonla uykuya dalıp aniden sıçrayarak uyanması kesinlikle engellenmelidir.'
+      },
+      {
+        number: 3,
+        title: 'İĞNELİ BLOK RİSKLERİ: YÜKSEK MİYOPİ (>26 MM) YASAĞI, BEYİN SAPI ANESTEZİSİ VE RETROBULBER HEMATOM',
+        content: 'Peribulber blok EKSTRAKONAL, retrobulber blok İNTRAKONAL enjeksiyondur. Aksiyel uzunluğu >26 mm (yüksek miyopi / posterior stafilom) olan gözlerde iğneli blok glob perforasyonu riskini ~30 kat artırdığı için KONTRENDİKEDİR (topikal veya künt Sub-Tenon seçilir). İğneli blok sonrası 2-10 dk içinde kontralateral körlük, afoni, apne ve kollaps gelişirse BEYİN SAPI ANESTEZİSİ tanısıyla anında hava yolu ve kardiyak destek sağlanır; akut retrobulber hematomda <60-90 dk içinde acil lateral kantotomi + inferior kantolizis + 30° baş elevasyonu + IV Mannitol + IV Asetazolamid uygulanır.'
+      },
+      {
+        number: 4,
+        title: 'ASA AMELİYATHANE YANGIN ÜÇGENİ VE AŞIRI SEDASYON TUZAĞI',
+        content: 'Yüz ve göz çevresi MAC cerrahisinde örtü altında yüksek akımlı %100 O₂ birikimi + koter/lazer kullanımı ameliyathane yüz yanıklarının 1 numaralı nedenidir! Örtü altına medikal hava veya FiO₂ ≤%30 verilmeli, koter gerekirse O₂ ≥1 dk önceden kesilerek havalandırma yapılmalı ve alkol bazlı antiseptik yerine sulu %5 Povidon-İyot kullanılmalıdır. Derin sedasyon (kontrolsüz Propofol bolusları) hipoventilasyon, hiperkapni ve ani sıçrayarak uyanmaya yol açtığı için YASAKTIR.'
+      },
+      {
+        number: 5,
+        title: 'OFTALMİK DAMLA SİSTEMİK TOKSİSİTESİ VE HİPERTANSİYONDA NTG YASAĞI',
+        content: 'Midriyazis için %10 yerine daima %2.5 Fenilefrin damla kullanılmalıdır (%10 Fenilefrin hipertansif kriz, koroner spazm ve akciğer ödemi yapabilir; tedavisinde non-selektif beta-bloker KULLANILMAZ!). Göz içi açık cerrahide hipertansiyon gelişirse önce ağrı, anksiyete, hiperkapni ve dolu mesane dışlanır; ilaç gerekirse kısa etkili İV Labetalol, Esmolol veya Nikardipin titre edilir — İV Nitrogliserin (NTG) koroidal vazodilatasyon ve GİB artışı riski nedeniyle tercih edilmez.'
+      },
+      {
+        number: 6,
+        title: 'İNTRAOPERATİF GEVŞEK İRİS SENDROMU (IFIS) — TAMSULOSİN ÖYKÜSÜ',
+        content: 'Prostat hipertrofisi için Tamsulosin veya diğer alfa-1 antagonistlerini (geçmişte bile) kullanan hastalarda iris gevşekçe dalgalanır, pupilla hızla daralır ve iris fako ucuna aspire olabilir. İlacın kesilmesi IFIS\'i önlemez; preoperatif sorgulamada tespit edilip cerraha bildirilmeli, intrakameral fenilefrin/adrenalin ve Malyugin halkası / iris kancaları hazır bulundurulmalıdır.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Göz Hastalıkları / Ön Segment Muayenesi: Biyomikroskopi ile katarakt tipi ve sertliği, kornea endotel hücre sayısı (speküler mikroskopi), ön kamara derinliği, zonül gevşekliği (psödoeksfoliyasyon sendromu) ve optik biyometri (İOL numarasının tespiti).',
-      'Kardiyoloji Konsültasyonu: İleri yaş popülasyonda yaygın olan hipertansiyon, koroner arter hastalığı ve kalp yetmezliği optimizasyonu; katarakt günü kan basıncının regüle olması (SKB < 150-160 mmHg) koroid kanamasını önlemek için şarttır.',
-      'Göğüs Hastalıkları Konsültasyonu: Kronik bronşit, KOAH veya alerjik riniti olan hastalarda ameliyat masasında gelebilecek öksürük veya hapşırma nöbetlerinin önceden medikal olarak baskılanması (inhaler, bronkodilatör ve antihistaminik desteği).',
-      'Anestezi Değerlendirmesi: Sırtüstü yatma (ortopne, kifoz, boyun artriti) toleransı, mental kognitif uyum ve fobi/anksiyete düzeyi.'
+      'Göz Hastalıkları / Ön Segment Muayenesi: Biyomikroskopi, kornea endotel durumu, zonül gevşekliği (PEX), aksiyel uzunluk (yüksek miyopi >26 mm kontrolü) ve İOL biyometrisi.',
+      'Kardiyoloji / İç Hastalıkları (Yalnızca Klinik Endikasyonda): Dekompanse kalp yetmezliği, yeni/kararsız anjina, ağır semptomatik aritmi veya kontrolsüz malign hipertansiyon (KB ≥180/110 mmHg + hedef organ hasarı) varlığında istenir; stabil ASA II–III hastalarda katarakt cerrahisi için rutin kardiyoloji konsültasyonu GEREKMEZ.',
+      'Anestezi Değerlendirmesi: Sırtüstü yatma toleransı (ortopne, ağır kifoz, kronik öksürük), kognitif kooperasyon, alfa-1 bloker (IFIS) ve oftalmik damla öyküsü.'
     ],
     historyAndPhysical: [
-      'Alfa-1 Antagonisti İlaç Öyküsü: Tamsulosin, Doksazosin, Terazosin, Alfuzosin veya Silodosin kullanımı (İntraoperatif Gevşek İris Sendromu [IFIS] riskini belirlemek için zorunludur; ilacın kesilmesi sendromu engellemez, cerrahi hazırlık gerekir!).',
-      'Antikoagülan / Antiagregan Kullanımı: Aspirin, Klopidogrel ve DOAK kullanımı; modern dikişsiz saydam korneal fakoemülsifikasyon avasküler olduğundan kılavuzlara göre antikoagülan ve antiagreganların KESİLMESİ GEREKMEZ (tromboemboli riskini artırmamak için devam edilir; ancak retrobulber blok yapılacaksa dikkat edilmelidir).',
-      'Öksürük ve Reflü Öyküsü: Cerrahi örtü altında öksürük krizi geçirme riski taşıyan aktif üst solunum yolu enfeksiyonu veya şiddetli reflü.',
-      'Sırtüstü Yatamama / Ağır Kifoz: Hastanın ameliyat masasında mikroskop altına başını paralel yerleştirebilmesi için yastık ve rulo desteği planlaması.'
+      'Alfa-1 Antagonisti İlaç Öyküsü: Tamsulosin, Silodosin, Alfuzosin, Doksazosin veya Terazosin kullanımı (IFIS riski — ilacı kesmek yarar sağlamaz, cerraha önceden bildirim zorunludur).',
+      'Antikoagülan / Antiagregan Yönetimi (RCoA/RCOphth & ASRA 2025): Saydam korneal topikal FAKO ve künt Sub-Tenon blokta Aspirin, Klopidogrel, Warfarin (terapötik INR aralığında) ve DOAC\'ların KESİLMESİ GEREKMEZ; kesilmeleri tromboembolik inme/stent trombozu riskini artırır. İğneli blok planlanıyorsa ASRA/RCoA eşikleri kontrol edilir.',
+      'Oftalmik Damla Öyküsü: Topikal Timolol (bradikardi/bronkospazm), Brimonidin (sedasyon/hipotansiyon) ve eski/nadir Ekotiyofat iyodür (psödokolinesteraz inhibisyonu → genel anestezide Süksinilkolin/Mivakuryum uzamış apnesi).',
+      'Sırtüstü Yatamama, Kronik Öksürük ve Dolu Mesane: Operasyon öncesi mesane boşaltılmalı; ağır kifoz/ortopnede yastık ve rulo desteği planlanmalıdır.'
     ],
     laboratoryAndTests: [
-      'Açlık Kan Şekeri (Diyabetik hastalarda glukoz < 200 mg/dL olmalıdır; cerrahi alan enfeksiyonu ve endoftalmiyi önlemek için).',
-      'Kan Basıncı Ölçümü ve 12 Derivasyonlu EKG.',
-      'Göz İçi Basıncı (GİB) Ölçümü: Tonometri ile bazal GİB takibi.',
-      'Gerekli olgularda Tam Kan Sayımı ve Serum Elektrolitleri (İleri evre sistemik hastalık varlığında).'
+      'RUTİN PREOPERATİF LABORATUVAR VE EKG İSTENMEZ! (Schein NEJM 2000 [19.557 hasta RCT], AAO Choosing Wisely ve ASA Advisory: Düşük riskli katarakt cerrahisinde rutin TKS, koagülasyon, biyokimya ve EKG perioperatif komplikasyonları azaltmaz.)',
+      'Yalnızca Klinik Endikasyon Bazlı Tetkikler: Warfarin kullananlarda güncel INR (terapötik aralık teyidi), diyabetiklerde vaka günü parmak ucu kan şekeri (hedef <200-250 mg/dL; ketoasidoz/hiperosmolarite dışlaması), diüretik/Asetazolamid kullananlarda K⁺ ve yeni kardiyak semptom varlığında 12 derivasyonlu EKG.',
+      'Oftalmolojik Ölçümler: Bazal GİB tonometrisi ve optik biyometri (aksiyel uzunluk >26 mm yüksek miyopi uyarısı).'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: EKG (özellikle bradikardi ve disritmi izlemi), SpO2 (örtü altı hipoksemiyi erken yakalamak için), non-invaziv kan basıncı (NIBP — 5 dakikada bir otomatik ölçüm).',
-      'Solunum Eforu ve Göğüs Hareketlerinin Gözlenmesi: Örtü altı hipoventilasyon, apoid solunum duraklaması veya CO2 birikiminin fiziksel takibi.',
-      'Sözel Temas ve Nörolojik Kooperasyon: Uyanık hastada ses tonu, anksiyete ve panik belirtilerinin izlenmesi.'
+      'Standart ASA Monitörizasyonu: EKG (OCR bradikardi ve aritmi izlemi), SpO₂, NIBP (5 dakikada bir), sedasyon veriliyorsa nazal EtCO₂ (kapnografi).',
+      'Solunum Eforu ve Göğüs Hareketlerinin Gözlenmesi: Örtü altı hipoventilasyon, apneik solunum duraklaması veya CO₂ birikiminin fiziksel ve kapnografik takibi.',
+      'Sözel Temas ve Nörolojik Kooperasyon: Uyanık hastada ses tonu, ağrı, anksiyete ve mesane doluluğu belirtilerinin izlenmesi.'
     ],
     vascularAccess: [
-      'En az 1 adet güvenli periferik intravenöz yol (20-22G) — tercihen ameliyat edilecek gözün karşı tarafındaki koldan açılır (operasyon sahasına engel olmaması için)',
-      'Acil Bradikardi / Hipotansiyon Kiti: Atropin (0.5 mg ampul), Efedrin, Noradrenalin ve Midazolam enjektöre çekilmiş ve hazır'
+      '1 adet güvenli periferik intravenöz yol (20-22G) — tercihen ameliyat edilecek gözün karşı tarafındaki koldan (RCoA/RCOphth: sedasyon veya iğneli blok yapılacaksa IV yol zorunludur).',
+      'Acil İlaçlar Hazır: İV Atropin (0.5 mg), Efedrin, Labetalol/Esmolol ve blok yapılıyorsa %20 Lipid Emülsiyonu (LAST) ulaşılabilir.'
     ],
     patientPosition: 'Supin (Sırtüstü) Pozisyon, Baş Destekli ve Nötral',
     patientPositionDetails: [
-      'Baş "donut" silikon halka veya oyuk baş desteğine sabitlenir; başın sağa/sola rotasyonu tamamen engellenir.',
-      'Ağır kifozu olan hastalarda bel ve omuz altına kademeli rulo yastıklar konularak yüz ameliyat mikroskobuna tam paralel hale getirilir.',
-      'ÖRTÜ ALTI HAVA SİRKÜLASYONU VE ÇADIR SİSTEMİ: Cerrahi örtü hastanın ağız ve burnunu kapatmayacak şekilde özel L-bar veya fleksibl borularla yukarı kaldırılır; örtü altına 2-3 L/dk medikal hava veya O2 köprüsü kurularak klostrofobi ve CO2 göllenmesi önlenir.',
-      'Göz kapakları özel tel blefarostele (spekulum) ile nazikçe açılır; aşırı gerdirme okülokardiyak refleksi tetikleyebilir.'
+      'Baş "donut" silikon halka veya oyuk baş desteğine sabitlenir; başın sağa/sola rotasyonu engellenir.',
+      'Ağır kifozu veya ortopnesi olan hastalarda sırt/diz altına kama yastıklar konularak yüz ameliyat mikroskobuna paralel hale getirilir.',
+      'ÖRTÜ ALTI HAVA SİRKÜLASYONU VE YANGIN GÜVENLİĞİ: Cerrahi örtü L-bar / çadır ile kaldırılır; örtü altına 4-6 L/dk MEDİKAL HAVA (veya SpO₂ gerektiriyorsa FiO₂ ≤%30) verilerek hem CO₂ birikimi hem de O₂ zenginleşmesine bağlı yangın riski önlenir.',
+      'Göz kapakları tel blefarosta ile nazikçe açılır; aşırı gerdirme okülokardiyak refleksi tetikleyebilir.'
     ],
     anesthesiaManagement: [
       'Topikal ve İntrakameral Anestezi Protokolü:',
-      '  - Ameliyattan 15-20 dakika önce: 5 dakika arayla 3 kez Proparakain %0.5 (Alcaine) veya Tetrakain göz damlası damlatılır.',
-      '  - Pupil Dilatasyonu: Tropikamid %1 + Fenilefrin %2.5 damlalar ile sağlanır.',
-      '  - Kesi Yapıldıktan Hemen Sonra: Cerrah tarafından ön kamaraya 0.2 - 0.5 mL KORUYUCUSUZ (Preservative-free) Lidokain %1 yavaşça enjekte edilir (iris ve siliyer cisim anestezisi sağlar).',
+      '  - Ameliyattan 15-20 dakika önce: Proparakain %0.5 veya Oksibuprokain damla.',
+      '  - Pupil Dilatasyonu: Tropikamid %1 + Fenilefrin %2.5 damla (sistemik hipertansif kriz riski nedeniyle %10 Fenilefrin KULLANILMAZ; punktum basısı ile sistemik emilim azaltılır).',
+      '  - Kesi Yapıldıktan Hemen Sonra: Ön kamaraya 0.2 - 0.5 mL KORUYUCUSUZ (Preservative-free) Lidokain %1 yavaşça enjekte edilir.',
       'Sedasyon ve Monitörize Anestezi Bakımı (MAC):',
-      '  - Minimal Anksiyoliz: Midazolam 0.5 - 1.0 mg İV yavaş bolus (hastanın bilinci tamamen açık kalmalı, emirleri uygulayabilmelidir).',
-      '  - Gereğinde Hafif Analjezi: Fentanil 25 mcg İV bolus.',
-      '  - DERİN SEDASYONDAN (Propofol bolusları veya yüksek doz benzodiazepin) KESİNLİKLE KAÇINILMALIDIR! Derin uyuyan hasta aniden disoryante uyanıp başını çevirirse fako ucu arka kapsülü patlatır ve nükleus vitreusa düşer.',
-      'Okülokardiyak Refleks Yönetimi:',
-      '  - Spekulum takılırken veya nükleus manipülasyonunda ani bradikardi gelişirse anestezi derhal cerraha bildirir; cerrah teması keser.',
-      '  - Düzelmeyen bradikardide derhal İV Atropin 0.5 mg uygulanır.',
-      'Kan Basıncı Yönetimi:',
-      '  - Preoperatif ve intraoperatif SKB > 160-170 mmHg olursa koroidal kanama riskini önlemek için İV Nitrogliserin sprey/infüzyon veya Esmolol / Labetalol ile tansiyon kontrol altına alınır.',
+      '  - Birçok hasta yalnızca sözlü güven telkini ("vocal local") ile sedasyonsuz güvenle opere edilebilir.',
+      '  - Gerekirse ultra-hafif anksiyoliz: Midazolam 0.5 - 1.0 mg İV yavaş bolus (geriatrik hastalarda deliryum riski nedeniyle minimal doz) ve/veya Fentanil 25 mcg İV.',
+      '  - DERİN SEDASYONDAN (kontrolsüz Propofol bolusları) KESİNLİKLE KAÇINILMALIDIR! Derin uyuyan hasta aniden sıçrayarak uyanırsa arka kapsül yırtılır ve nükleus vitreusa düşer.',
+      'Okülokardiyak Refleks (OCR) Yönetimi:',
+      '  - Bradikardi anında 1. adım cerrahı durdurmak, 2. adım normokapni/oksijenizasyon kontrolü, 3. adım düzelmezse İV Atropin 0.5 mg.',
+      'İntraoperatif Hipertansiyon Yönetimi:',
+      '  - İlk basamak: Ağrı (ek topikal/intrakameral lidokain), anksiyete, örtü altı hiperkapni ve dolu mesane dışlanır.',
+      '  - Sistolik KB >180 mmHg veya bazalin >%25-30 üzerinde dirençli seyrederse kısa etkili İV Labetalol (5-10 mg), Esmolol (10-20 mg) veya Nikardipin titre edilir. İV Nitrogliserin (NTG) koroidal venöz vazodilatasyon ve GİB artışı riski nedeniyle göz içi açık cerrahide TERCİH EDİLMEZ.',
       'Öksürük Krizi Alarmı:',
-      '  - Hasta boğazında gıcıklanma veya öksürük hissettiğinde cerraha "DUR" demesi için önceden eğitilir; cerrah aletleri gözden çektikten sonra hastaya kontrollü öksürme izni verilir.'
+      '  - Hasta öksürük hissettiğinde cerraha "DUR" demesi için önceden eğitilir; aletler gözden çekildikten sonra kontrollü öksürük izni verilir.'
     ],
     airwayManagement: [
-      'Topikal/lokal anestezide hava yolu açıktır; burun kanülü ile 2-3 L/dk O2 verilir.',
-      'Örtü altında karbondioksit birikimini önlemek için aspiratör hortumu veya hava üfleyici ile aktif havalandırma sağlanır.',
-      'Genel anestezi gereken nadir olgularda Laringeal Maske (LMA) tercih edilir (öksürmesiz ve pürüzsüz uyanma için).'
+      'Topikal/MAC anestezide hava yolu spontan solunumdadır; ASA OR Fire Advisory gereği rutin yüksek akımlı O₂ yerine örtü altına medikal hava (veya hipoksemi varsa FiO₂ ≤%30) verilir.',
+      'Koter kullanımı gerekirse oksijen en az 1 dakika önceden kesilir ve örtü altı havalandırılır; antisepside sulu %5 Povidon-İyot kullanılır (alkol bazlı solüsyon YASAK).',
+      'Genel anestezi gereken nadir olgularda Laringeal Maske (LMA) ve pürüzsüz uyanma (smooth emergence) tercih edilir.'
     ],
     criticalSurgicalStages: [
-      '1. Hastanın Masaya Alınması, Baş Pozisyonu ve Örtü Altı O2 Çadırının Kurulması.',
-      '2. Topikal Anestezi Damlası ve Göz Çevresi Povidon İyot (%5) Antisepsisi.',
-      '3. Blefaroste Takılması (Göz kapaklarının açılması — Okülokardiyak refleks kontrolü!).',
+      '1. Taraf Doğrulaması (OD/OS), İOL Numarası Teyidi, Baş Pozisyonu ve Örtü Altı Medikal Hava Çadırının Kurulması.',
+      '2. Topikal Anestezi Damlası ve Sulu %5 Povidon-İyot Antisepsisi.',
+      '3. Blefarosta Takılması (Okülokardiyak refleks kontrolü!).',
       '4. Şeffaf Korneal Mikroinsizyon (2.2-2.8 mm) ve Parasentez Girişleri.',
       '5. Ön Kamaraya Viskoelastik Madde ve Koruyucusuz İntrakameral Lidokain %1 Verilmesi.',
       '6. Sürekli Dairesel Kapsüloreksis (CCC) ve Hidrodisseksiyon.',
-      '7. Fakoemülsifikasyon Fazı: Nükleusun ultrasonik enerjiyle kırılıp emilmesi (Göz içi basınç dalgalanmaları ve öksürük yasağı!).',
+      '7. Fakoemülsifikasyon Fazı: Nükleusun ultrasonik enerjiyle kırılıp emilmesi (Sıfır hareket ve öksürük yasağı!).',
       '8. Korteks Temizliği (İrrigasyon / Aspirasyon).',
-      '9. Katlanabilir İntraoküler Lensin (İOL) Kapsül Kesesi İçine Enjeksiyonu ve Santralizasyonu.',
-      '10. Viskoelastik Maddenin Boşaltılması, İntrakameral Sefuroksim (Endoftalmi profilaksisi) ve Stromal Hidrasyonla Kesi Kapanışı.'
+      '9. Katlanabilir İOL\'nin Kapsül Kesesi İçine Enjeksiyonu ve Santralizasyonu.',
+      '10. Viskoelastik Maddenin Boşaltılması, İntrakameral Sefuroksim (ESCRS endoftalmi profilaksisi) ve Stromal Hidrasyonla Kesi Kapanışı.'
     ],
     emergenceNotes: [
-      'Topikal cerrahide uyanma süreci yoktur; hasta ameliyat biter bitmez masadan yürüyerek veya tekerlekli sandalyeyle ayrılabilir.',
-      'Ameliyat edilen göze koruyucu şeffaf plastik kapak (eye shield) takılır; hastanın gözü ovuşturması kesinlikle engellenir.',
-      'Genel anestezi uygulanan nadir olgularda ekstübasyon evresinde öksürük ve ıkınmayı sıfırlamak için IV Lidokain (1.5 mg/kg) uygulanır.'
+      'Topikal/MAC cerrahide uyanma süreci yoktur; PADSS kriterlerini karşılayan hasta kısa gözlem sonrası refakatçisiyle taburcu edilir.',
+      'Ameliyat edilen göze basısız şeffaf plastik koruyucu kalkan (eye shield) takılır; gözün ovuşturulması kesinlikle engellenir.',
+      'Genel anestezi uygulanan nadir olgularda öksürük/ıkınmayı sıfırlamak için İV Lidokain (1.5 mg/kg) + düşük doz Remifentanil/Deksmedetomidin + çift PONV profilaksisi (Deksametazon + Ondansetron) uygulanır.'
     ]
   },
 
@@ -146,33 +176,36 @@ export const cataractExtractionIolInsertion: ProcedureDefinition = {
   postoperative: {
     painManagement: [
       'Hafif / Minimal Ağrı Yönetimi:',
-      '  - Fakoemülsifikasyon sonrası ağrı genellikle yok denecek kadar azdır; batma ve yabancı cisim hissi normaldir.',
-      '  - Gerektiğinde Oral Parasetamol (500-1000 mg).',
-      '  - Şiddetli zonklayıcı baş ve göz ağrısı gelişirse bu durum analjezik eksikliği değil, akut Göz İçi Basıncı (GİB) fırlaması (oküler hipertansiyon veya viskoelastik kalıntısı) belirtisidir; acil göz tansiyonu ölçülmelidir!'
+      '  - Fakoemülsifikasyon sonrası ağrı minimaldir; hafif batma ve yabancı cisim hissi normaldir.',
+      '  - Gerektiğinde Oral Parasetamol (500-1000 mg). Opioidlere (özellikle Tramadol/Kodein) ihtiyaç yoktur ve bulantı-kusma/deliryum riski nedeniyle kaçınılır.',
+      '  - KIRMIZI BAYRAK: Şiddetli zonklayıcı baş-göz ağrısı + bulantı gelişirse analjezik verilmeden önce AKUT GİB ARTIŞI (viskoelastik kalıntısı/pupil bloğu) veya endoftalmi açısından acil oftalmolojik değerlendirme ve tonometri yapılmalıdır!'
     ],
     prospectRecommendations: [
-      'PROSPECT Oftalmik Cerrahi Kılavuzları: Topikal anestezi ve koruyucusuz intrakameral lidokain kombinasyonu sistemik analjezik ihtiyacını neredeyse tamamen ortadan kaldırır; sedatif ve opioid ilaçların minimalize edilmesi taburculuk süresini kısaltır ve kognitif disfonksiyonu önler.'
+      'Oftalmik cerrahi için yayımlanmış özel bir PROSPECT (ESRA) kılavuzu bulunmamaktadır; RCoA/RCOphth, AAO ve 4th PONV Consensus ilkeleri doğrultusunda:',
+      '  - Topikal anestezi + koruyucusuz intrakameral lidokain kombinasyonu sistemik analjezik ve opioid gereksinimini ortadan kaldırır.',
+      '  - Sedatif ve opioidlerin minimalize edilmesi geriatrik deliryumu, PONV\'yi ve taburculuk gecikmesini önler.'
     ],
     erasRecommendations: [
-      'ERAS Göz Cerrahisi ve Ayaktan Günübirlik Cerrahi (Day-Surgery) Protokolleri:',
-      '  - Hızlı Taburculuk: Hasta operasyondan 30-60 dakika sonra oral sıvı alarak refakatçisiyle birlikte taburcu edilir.',
-      '  - Pozisyon ve Basınç Kısıtlamaları: İlk 48 saat öne doğru ağır eğilmekten, 5 kg üzeri ağırlık kaldırmaktan ve ıkınmaktan (Valsalva) kaçınılmalıdır.',
-      '  - Enfeksiyon ve Travma Koruması: İlk 1 hafta uyurken koruyucu plastik kalkan takılır; göze su değdirilmez; reçete edilen topikal antibiyotik ve steroid damlalar tarif edilir.',
-      '  - Kırmızı Bayrak Bulguları: Ani görme kaybı, artan kızarıklık, çapaklanma veya şiddetli ağrı durumunda derhal acil servise başvuru eğitimi verilir (Endoftalmi alarmı!).'
+      'Günübirlik Oftalmik Cerrahi (Day-Surgery / RCoA-RCOphth & SAMBA) İlkeleri:',
+      '  - Hızlı Taburculuk: PADSS ≥9 kriteriyle ameliyattan 30-60 dakika sonra oral sıvı alarak refakatçisiyle taburcu edilir.',
+      '  - Pozisyon ve Basınç Kısıtlamaları: İlk 48 saat öne aşırı eğilmekten, ağır kaldırmaktan ve ıkınmaktan (Valsalva) kaçınılır.',
+      '  - Enfeksiyon ve Travma Koruması: İlk 1 hafta uyurken koruyucu plastik kalkan takılır; göze su değdirilmez; topikal antibiyotik ve steroid damlalar düzenli kullanılır.',
+      '  - Endoftalmi Alarmı: Ani görme azalması, artan kızarıklık, çapaklanma veya şiddetli ağrıda acil başvuru eğitimi verilir.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2014). Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmology - Cataract Extraction with Intraocular Lens Insertion, pp. 844-852. Philadelphia: Lippincott Williams & Wilkins.',
-    erasReference: 'European Society of Cataract and Refractive Surgeons (ESCRS). (2020). Guidelines on prevention, investigation and management of post-operative endophthalmitis and perioperative care.',
-    prospectReference: 'PROSPECT Guidelines for Postoperative Pain Management in Ophthalmic Day Surgery. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
+    jaffeReference: 'Jaffe RA, Schmiesing CA, Golianu B. Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmic Surgery — Cataract Extraction with Intraocular Lens Insertion. Wolters Kluwer / LWW.',
+    erasReference: 'Kumar CM, Eke T, Dodds C, et al. Local anaesthesia for ophthalmic surgery — Joint guidelines from the Royal College of Anaesthetists (RCoA) and the Royal College of Ophthalmologists (RCOphth). 2012.',
+    prospectReference: 'Oftalmik cerrahi için yayımlanmış özel bir PROSPECT kılavuzu yoktur; perioperatif analjezi ve PONV stratejisi RCoA/RCOphth (2012) ve 4th Consensus Guidelines for PONV (Gan et al., Anesth Analg 2020) ilkelerine dayanmaktadır.',
     otherReferences: [
-      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern Guidelines: Cataract in the Adult Eye (2021).',
-      'Ophthalmic Anesthesia Society (OAS). Clinical practice advisory for monitored anesthesia care and regional blocks in cataract surgery.',
-      'Chang, D. F., & Campbell, J. R. (2005). Intraoperative floppy iris syndrome associated with tamsulosin. Journal of Cataract & Refractive Surgery, 31(4), 664-673.',
-      'Ling, R., et al. (2004). Suprachoroidal haemorrhage complicating cataract surgery: Clinical features and visual outcome. British Journal of Ophthalmology, 88(4), 478-480.',
-      'Türk Oftalmoloji Derneği (TOD) Katarakt ve Refraktif Cerrahi Birimi Uygulama Kılavuzu.'
+      'Schein OD, Katz J, Bass EB, et al. The value of routine preoperative medical testing before cataract surgery. N Engl J Med. 2000;342(3):168-175.',
+      'American Society of Anesthesiologists (ASA) Task Force on Operating Room Fires. Practice Advisory for the Prevention and Management of Operating Room Fires. Anesthesiology. 2013;118(2):271-290.',
+      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Cataract in the Adult Eye.',
+      'European Society of Cataract and Refractive Surgeons (ESCRS) Guidelines for Prevention and Treatment of Endophthalmitis Following Cataract Surgery.',
+      'Chang DF, Campbell JR. Intraoperative floppy iris syndrome associated with tamsulosin. J Cataract Refract Surg. 2005;31(4):664-673.',
+      'Kopp SL, Vandermeulen E, et al. ASRA Pain Medicine Evidence-Based Guidelines (5th ed.). Reg Anesth Pain Med. 2025.'
     ]
   }
 };

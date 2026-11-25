@@ -44,6 +44,15 @@ import {
   getSmartPosition,
   getSmartGoldStandard
 } from '../../utils/neuroProcedureHelpers';
+import {
+  OPHTHALMOLOGY_SUBGROUPS,
+  OPHTHALMOLOGY_RISK_FILTERS,
+  OphthalmologySubgroupId,
+  OphthalmologyRiskFilterId,
+  getOphthalmologySubgroup,
+  getOphthalmologyClinicalTags,
+  matchesOphthalmologyRiskFilter
+} from '../../utils/ophthalmologyProcedureHelpers';
 
 interface ProceduresWorkspaceProps {
   isDark: boolean;
@@ -263,6 +272,8 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNeuroSubgroup, setSelectedNeuroSubgroup] = useState<'all' | NeuroSubgroupId>('all');
   const [selectedNeuroRisk, setSelectedNeuroRisk] = useState<NeuroRiskFilterId | null>(null);
+  const [selectedEyeSubgroup, setSelectedEyeSubgroup] = useState<'all' | OphthalmologySubgroupId>('all');
+  const [selectedEyeRisk, setSelectedEyeRisk] = useState<OphthalmologyRiskFilterId | null>(null);
 
   useEffect(() => {
     if (activeProcedure) {
@@ -279,6 +290,10 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
     if (selectedSpecialty !== 'norosirurji') {
       setSelectedNeuroSubgroup('all');
       setSelectedNeuroRisk(null);
+    }
+    if (selectedSpecialty !== 'goz') {
+      setSelectedEyeSubgroup('all');
+      setSelectedEyeRisk(null);
     }
   }, [selectedSpecialty]);
 
@@ -317,6 +332,36 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
       return true;
     });
   }, [filteredProcedures, selectedSpecialty, selectedNeuroSubgroup, selectedNeuroRisk]);
+
+  // Göz Hastalıkları alt grup sayıları (canlı)
+  const eyeSubgroupCounts = useMemo(() => {
+    const counts: Record<OphthalmologySubgroupId, number> = {
+      anterior_cornea: 0,
+      retina_trauma: 0,
+      pediatric_strabismus_rop: 0,
+      oculoplastic_lacrimal_orbit: 0
+    };
+    if (selectedSpecialty !== 'goz') return counts;
+    for (const proc of filteredProcedures) {
+      const sg = getOphthalmologySubgroup(proc);
+      counts[sg] = (counts[sg] || 0) + 1;
+    }
+    return counts;
+  }, [filteredProcedures, selectedSpecialty]);
+
+  // Göz Hastalıkları alt grup + klinik risk filtresi uygulanmış liste
+  const eyeDisplayedProcedures = useMemo(() => {
+    if (selectedSpecialty !== 'goz') return filteredProcedures;
+    return filteredProcedures.filter((proc) => {
+      if (selectedEyeSubgroup !== 'all' && getOphthalmologySubgroup(proc) !== selectedEyeSubgroup) {
+        return false;
+      }
+      if (selectedEyeRisk && !matchesOphthalmologyRiskFilter(proc, selectedEyeRisk)) {
+        return false;
+      }
+      return true;
+    });
+  }, [filteredProcedures, selectedSpecialty, selectedEyeSubgroup, selectedEyeRisk]);
 
   // Seçili branşın meta bilgisi
   const activeSpecialtyMeta = useMemo(() => {
@@ -479,7 +524,7 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
                   isDark,
                   getSubHref(proc.id),
                   selectSub,
-                  selectedSpecialty === 'norosirurji'
+                  selectedSpecialty === 'norosirurji' || selectedSpecialty === 'goz'
                 )
               )}
             </div>
@@ -786,7 +831,111 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
             </div>
           )}
 
-          {/* Prosedür Kartları Grid (Nöroşirürji "Tümü" modunda alt grup başlıklarıyla) */}
+          {/* Göz Hastalıkları Alt Uzmanlık Sekmeleri & 1-Tık Oftalmik Risk Filtreleri */}
+          {selectedSpecialty === 'goz' && (
+            <div className={`p-3.5 rounded-xl border space-y-3 ${
+              isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+            }`}>
+              {/* 4 Alt Uzmanlık Sekmesi + Tümü */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
+                <button
+                  type="button"
+                  onClick={() => setSelectedEyeSubgroup('all')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 border ${
+                    selectedEyeSubgroup === 'all'
+                      ? isDark
+                        ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-200'
+                        : 'bg-cyan-700 border-cyan-700 text-white shadow-2xs'
+                      : isDark
+                        ? 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-cyan-500/40 hover:text-cyan-200'
+                        : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-cyan-400 hover:text-cyan-800'
+                  }`}
+                >
+                  <span>Tümü</span>
+                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                    selectedEyeSubgroup === 'all'
+                      ? isDark ? 'bg-cyan-500/30 text-cyan-100' : 'bg-white/20 text-white'
+                      : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200/80 text-slate-600'
+                  }`}>
+                    {filteredProcedures.length}
+                  </span>
+                </button>
+
+                {OPHTHALMOLOGY_SUBGROUPS.map((sg) => {
+                  const isActive = selectedEyeSubgroup === sg.id;
+                  const count = eyeSubgroupCounts[sg.id] || 0;
+                  return (
+                    <button
+                      key={sg.id}
+                      type="button"
+                      onClick={() => setSelectedEyeSubgroup(sg.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 border ${
+                        isActive
+                          ? isDark
+                            ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-200'
+                            : 'bg-cyan-700 border-cyan-700 text-white shadow-2xs'
+                          : isDark
+                            ? 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-cyan-500/40 hover:text-cyan-200'
+                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-cyan-400 hover:text-cyan-800'
+                      }`}
+                    >
+                      <span>{sg.tabLabel}</span>
+                      <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                        isActive
+                          ? isDark ? 'bg-cyan-500/30 text-cyan-100' : 'bg-white/20 text-white'
+                          : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200/80 text-slate-600'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* 1-Tık Oftalmik Risk Filtre Çipleri */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 mr-1">
+                  Hızlı Risk Filtresi:
+                </span>
+                {OPHTHALMOLOGY_RISK_FILTERS.map((chip) => {
+                  const isSelected = selectedEyeRisk === chip.id;
+                  return (
+                    <button
+                      key={chip.id}
+                      type="button"
+                      onClick={() => setSelectedEyeRisk(isSelected ? null : chip.id)}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer border ${
+                        isSelected
+                          ? isDark
+                            ? 'bg-cyan-500/20 border-cyan-400/60 text-cyan-200'
+                            : 'bg-cyan-700 border-cyan-700 text-white'
+                          : isDark
+                            ? 'bg-slate-950/50 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                            : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                      }`}
+                    >
+                      {chip.label}
+                    </button>
+                  );
+                })}
+                {(selectedEyeRisk !== null || selectedEyeSubgroup !== 'all') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedEyeSubgroup('all');
+                      setSelectedEyeRisk(null);
+                    }}
+                    className="ml-auto text-[11px] font-semibold text-cyan-600 dark:text-cyan-400 hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <X className="w-3 h-3" />
+                    <span>Filtreyi Sıfırla ({eyeDisplayedProcedures.length})</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Prosedür Kartları Grid (Nöroşirürji ve Göz "Tümü" modunda alt grup başlıklarıyla) */}
           {selectedSpecialty === 'norosirurji' ? (
             neuroDisplayedProcedures.length > 0 ? (
               selectedNeuroSubgroup === 'all' && selectedNeuroRisk === null ? (
@@ -833,6 +982,53 @@ export const ProceduresWorkspace: React.FC<ProceduresWorkspaceProps> = ({
               )
             ) : (
               renderEmptyState(isDark, searchQuery, selectedNeuroRisk !== null)
+            )
+          ) : selectedSpecialty === 'goz' ? (
+            eyeDisplayedProcedures.length > 0 ? (
+              selectedEyeSubgroup === 'all' && selectedEyeRisk === null ? (
+                <div className="space-y-7">
+                  {OPHTHALMOLOGY_SUBGROUPS.map((sg) => {
+                    const groupProcs = eyeDisplayedProcedures.filter(
+                      (p) => getOphthalmologySubgroup(p) === sg.id
+                    );
+                    if (groupProcs.length === 0) return null;
+                    return (
+                      <div key={sg.id} className="space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1 pb-1.5 border-b border-slate-200 dark:border-slate-800">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-cyan-500 shrink-0" />
+                            <h3 className="text-sm font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+                              {sg.sectionTitle}
+                            </h3>
+                            <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                              isDark ? 'bg-cyan-500/15 text-cyan-300' : 'bg-cyan-50 text-cyan-700 border border-cyan-200'
+                            }`}>
+                              {groupProcs.length}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                            {sg.description}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                          {groupProcs.map((proc) =>
+                            renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub, true)
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  {eyeDisplayedProcedures.map((proc) =>
+                    renderProcedureCard(proc, isDark, getSubHref(proc.id), selectSub, true)
+                  )}
+                </div>
+              )
+            ) : (
+              renderEmptyState(isDark, searchQuery, selectedEyeRisk !== null)
             )
           ) : filteredProcedures.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
@@ -965,9 +1161,13 @@ function renderProcedureCard(
   const positionText = getSmartPosition(proc.intraoperative?.patientPosition);
   const goldStandardText = getSmartGoldStandard(proc);
   const riskStripeClass = getRiskLeftBorderClass(proc.bleedingProfile?.riskLevel);
-  const clinicalTags = showClinicalBadges && proc.specialty === 'norosirurji'
-    ? getClinicalTags(proc, 3)
-    : [];
+  const clinicalTags = !showClinicalBadges
+    ? []
+    : proc.specialty === 'norosirurji'
+      ? getClinicalTags(proc, 3)
+      : proc.specialty === 'goz'
+        ? getOphthalmologyClinicalTags(proc, 3)
+        : [];
 
   return (
     <PortalLink

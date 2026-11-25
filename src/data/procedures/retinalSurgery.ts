@@ -3,12 +3,10 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Vitreoretinal Cerrahi: Pars Plana Vitrektomi (PPV), Skleral Çökertme (Scleral Buckle), Endolazer ve Gaz/Silikon Tamponad
  * (Retinal Surgery / Vitreoretinal Procedures: Pars Plana Vitrectomy, Scleral Buckling, Endolaser and Intravitreal Gas/Silicone Oil)
- * 
- * Jaffe (5th ed., Section VI: Ophthalmology - Vitreoretinal Surgery: Retinal Detachment Repair - Scleral Buckling and Pars Plana Vitrectomy, pp. 864-868),
- * American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Retinal Detachment and Vitreoretinal Surgery,
- * American Society of Retina Specialists (ASRS) Clinical Practice Guidelines,
- * British Ophthalmic Anaesthesia Society (BOAS) & Royal College of Anaesthetists (RCoA),
- * Türk Oftalmoloji Derneği (TOD) Retina ve Vitreoretinal Cerrahi Birimi Protokolleri referans alınarak yapılandırılmıştır.
+ *
+ * Referanslar: Jaffe (5th ed., Section VI: Ophthalmic Surgery), RCoA / RCOphth Joint Guidelines (2012),
+ * AAO PPP: Posterior Vitreous Detachment, Retinal Breaks, and Lattice Degeneration,
+ * Gan et al. 4th PONV Consensus (2020), ASA OR Fire Advisory (2013), ASRA 5th Ed. (2025).
  */
 export const retinalSurgery: ProcedureDefinition = {
   id: 'retinal-surgery-vitrectomy-scleral-buckle',
@@ -19,73 +17,79 @@ export const retinalSurgery: ProcedureDefinition = {
   categoryTag: 'Vitreoretinal & Arka Segment Cerrahisi',
 
   // 1) Prosedür Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Gözün arka segmentini dolduran jöle kıvamındaki vitreus cisminin ve görmeyi sağlayan nörosensoryal retina tabakasının yırtık, dekolman, kanama, traksiyon veya proliferatif membranlar sonucu gelişen patolojilerinin mikrocerrahi ve mikro-endoskopik yöntemlerle onarılması ameliyatıdır. Temel teknikler: (1) Pars Plana Vitrektomi (PPV - 23G, 25G, 27G Dikişsiz MIVS): Limbusun 3.5 - 4.0 mm gerisinden pars planaya 3 veya 4 adet mikro-trokar yerleştirilir; infüzyon kanülü, aydınlatma ışık probu ve yüksek hızlı mikro-vitrektör (dakikada 5000-10.000 kesi) ile kor ve periferik vitreus temizlenir; arka vitreus dekolmanı (PVD) indüklenir; makula üzerindeki epiretinal membranlar ve internal limitan membran (İLM) triamsinolon veya parlak mavi boya (Brilliant Blue) eşliğinde mikro-forsepslerle mikron hassasiyetinde soyulur; retina yırtıkları etrafına endolazer fotokoagülasyon uygulanır; sıvı-hava değişimi (FAX) yapılarak göz içine uzun etkili endotamponad gaz (SF6 veya C3F8) ya da silikon yağı (1000/5000 cSt) enjekte edilir; (2) Skleral Çökertme (Scleral Buckling / Serklaj): Dört rektus kası askıya alınır; retina yırtığı bölgesine transskleral kriyoterapi uygulanır; sklera üzerine 360 derece silikon bant/lastik (tire/sponge) dikilerek göz duvarı içeri doğru çökertilir; subretinal sıvı (SRF) drene edilerek retinanın pigment epiteline yapışması sağlanır; (3) Kombine Fako-Vitrektomi: İntraoperatif lens kesafetini gidermek ve arka segmente rahat ulaşmak için katarakt fakoemülsifikasyonu ile vitrektominin aynı seansta icra edilmesi.',
+  description: 'Gözün arka segmentini dolduran vitreus cisminin ve nörosensoryal retina tabakasının yırtık, dekolman, kanama, traksiyon veya proliferatif membranlar sonucu gelişen patolojilerinin mikrocerrahi yöntemlerle onarılması ameliyatıdır. Temel teknikler: (1) Pars Plana Vitrektomi (PPV — 23G/25G/27G MIVS): Limbusun 3.5-4.0 mm gerisinden pars planaya 3-4 valfli mikro-trokar yerleştirilir; kor ve periferik vitreus temizlenir, epiretinal/internal limitan membran (İLM) mikron hassasiyetinde soyulur, yırtıklar etrafına endolazer fotokoagülasyon uygulanır ve sıvı-hava değişimi (FAX) sonrası göz içine tamponad gaz (Hava, SF₆ veya C₃F₈) ya da silikon yağı enjekte edilir; (2) Skleral Çökertme (Scleral Buckling / Serklaj): Dört rektus kası askıya alınır, kriyoterapi uygulanır ve sklera üzerine silikon bant/sünger dikilerek göz duvarı içeri çökertilir; (3) Kombine Fako-Vitrektomi.',
   indications: [
-    'Regmatojen Retina Dekolmanı (RRD): Retina yırtığına bağlı subretinal sıvı toplanması ve makula dekolmanı (acil körlük tehdidi)',
-    'Traksiyonel Retina Dekolmanı (TRD): Proliferatif diyabetik retinopatiye (PDR) bağlı fibrovasküler zarların retinayı çekip kaldırması',
-    'Açılmayan / Rezorbe Olmayan Vitreus Kanaması: Diyabetik retinopati, retina ven dal tıkanıklığı (BRVO/CRVO) veya travma sekeli',
-    'Makula Deliği (Macular Hole) ve Epiretinal Membran (ERM / Makuler Pucker): Santral görmeyi bozan vitreomakuler arayüz patolojileri',
-    'Proliferatif Vitreoretinopati (PVR): Rekürren retina dekolmanları sekeli yaygın retina büzüşmesi ve fibrozisi',
-    'Göz İçi Enfeksiyonu (Endoftalmi): Vitreus aspirasyonu, pars plana debulking ve intravitreal antibiyotik enjeksiyonu',
-    'Arka Segmente Düşmüş Nükleus / Disloke Göz İçi Lensi (İOL)'
+    'Regmatojen Retina Dekolmanı (RRD): Retina yırtığına bağlı subretinal sıvı toplanması ve makula dekolmanı',
+    'Traksiyonel Retina Dekolmanı (TRD): Proliferatif diyabetik retinopatiye (PDR) bağlı fibrovasküler zarlar',
+    'Rezorbe Olmayan Vitreus Kanaması: Diyabetik retinopati, retinal ven tıkanıklığı veya travma sekeli',
+    'Makula Deliği (Macular Hole) ve Epiretinal Membran (ERM / Makuler Pucker)',
+    'Proliferatif Vitreoretinopati (PVR) ve Endoftalmi',
+    'Arka Segmente Düşmüş Lens Nükleusu / Disloke Göz İçi Lensi (İOL)'
   ],
-  averageDuration: '60 - 150 dakika (Standart 25G PPV makula deliği/ERM: 45-60 dk; Kompleks PDR/diyabetik traksiyonel dekolman: 90-120 dk; Kombine vitrektomi + skleral çökertme + silikon: 120-150 dk)',
+  averageDuration: '60 - 150 dakika (Standart 25G PPV makula deliği/ERM: 45-60 dk; Kompleks PDR: 90-120 dk; Kombine vitrektomi + skleral çökertme: 120-150 dk)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '< 10 - 30 mL (Sklerotomi girişleri ve konjonktiva kesilerinden olan minimal kanamalar; diyabetik fibrovasküler zarlar kesilirken vitreus içi kanama görülebilir ancak sistemik dolaşım için kan kaybı ihmal edilebilir düzeydedir)',
+    estimatedBloodLoss: '< 10 - 30 mL (Sistemik dolaşım için ihmal edilebilir düzeydedir; ancak göz içi neovasküler veya suprakoroidal kanama görmeyi tehdit eder)',
     riskLevel: 'minimal',
-    riskLevelLabel: 'Minimal Sistemik Kan Kaybı / Ancak Katastrofik İntraoperatif Ekspulsif Koroidal Hemoraji Riski',
+    riskLevelLabel: 'Minimal Sistemik Kan Kaybı / Ancak Ekspulsif Koroidal Hemoraji Riski',
     crossMatchRequirement: 'Rutin kan hazırlığı gerekmez (T&S ve Cross-Match endikasyonu yoktur)',
     transfusionProbability: '< %0.01 (Kan transfüzyonu endikasyonu yoktur)',
     criticalBleedingSources: [
-      'Ekspulsif Suprakoroidal Hemoraji: Sklerotomi açılırken, sıvı-gaz değişiminde ani oküler hipotoni veya hastanın öksürmesi/ıkınmasıyla arka siliyer arterlerin patlaması (gözün tamamen kaybına yol açan en korkulan felaket)',
-      'Diyabetik Fibrovasküler Zarların Kanaması: Neovasküler damarların disseksiyonunda masif intraoküler kanama',
-      'İntraretinal ve Subretinal Kanamalar: İLM soyulurken veya fovea komşuluğunda vasküler travma'
+      'Ekspulsif Suprakoroidal Hemoraji: Ani oküler hipotoni, öksürük, ıkınma veya hipertansiyon ile arka siliyer arterlerin patlaması',
+      'Diyabetik Fibrovasküler Zarların Kanaması: Neovasküler membran disseksiyonunda intraoküler kanama',
+      'İntraretinal / Subretinal Kanamalar ve İğneli Blok Yapılırsa Retrobulber Hematom'
     ],
     hemostasisStrategies: [
-      'İnfüzyon Basıncının Geçici Yükseltilmesi: Vitreus içi kanama başladığında cerrahın vitrektomi makinesinden şişe/infüzyon basıncını 40-60 mmHg seviyesine çıkararak tamponad sağlaması',
-      'Endolazer veya Endodiatermi ile aktif kanayan retinovasküler odakların yakılması',
-      'Anestezi tarafından arteriyel kan basıncının normotansif sınırda tutulması; tansiyon piklerinin ve öksürüğün mutlak engellenmesi'
+      'Vitreus içi kanamada cerrahın infüzyon basıncını geçici olarak 40-60 mmHg\'ye çıkararak tamponad sağlaması',
+      'Endolazer veya endodiatermi ile kanayan retinovasküler odakların koagülasyonu',
+      'Normotansiyon, normokapni ve öksürüksüz/ıkınmasız pürüzsüz anestezi idamesi'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Endotrakeal Genel Anestezi (GETA) + Spiral Telli Tüp + Tam Nöromusküler Blokaj (TOF 0/4) + AZOT PROTOKSİT (N2O) KESİNLİKLE YASAKTIR + Pürüzsüz Ekstübasyon Protokolü — DÜNYA GENELİNDE ALTIN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (GETA — Propofol + Remifentanil TIVA) + Spiralli Tüp + TOF 0/4 + N₂O KESİN YASAK — Uzun PPV, skleral çökertme, diyabetik TRD ve genç/anksiyeteli olgularda ALTIN STANDARTTIR',
+      'Genişletilmiş Künt Sub-Tenon Bloğu + Minimal MAC: Komorbiditesi yüksek, 60-90 dk sırtüstü yatabilen koopere erişkin 25G/27G PPV olgularında güvenle uygulanır (yüksek miyopide [>26 mm] iğneli blok KONTRENDİKEDİR!)'
     ],
     alternative: [
-      'Derin Rejyonel Blok (Genişletilmiş Sub-Tenon Bloğu veya Peribulber Blok) + Monitörize Anestezi Bakımı (MAC: Bilinçli Minimal Sedasyon): Genel anestezi riski çok yüksek olan, sırtüstü 1.5 saat kımıldamadan yatabilen, koopere erişkin hastalarda; ancak tam oküler akinezi şarttır. DİKKAT: Hasta kesinlikle derin uyutulmamalıdır (aşırı sedasyon apneye ve panikle sıçrayarak uyanmaya yol açar; bu durum fovea perforasyonuna neden olabilir!)'
+      'Laringeal Maske (LMA) ile Propofol TIVA: Aspirasyon riski düşük, 60-90 dk altı seçilmiş PPV olgularında öksürüksüz pürüzsüz uyanma avantajıyla',
+      'Peribulber Blok (Ekstrakonal): Yalnızca aksiyel uzunluğu ≤26 mm ve antikoagülasyonu uygun seçilmiş erişkinlerde'
     ],
-    clinicalRationale: 'Vitrektomide makula ve foveaya mikron mesafede çalışılırken tam hareketsizlik (TOF 0/4), skleral çökertmede dört rektus kas traksiyonunun ağrısız tolere edilmesi ve intraoküler SF6/C3F8 gaz kabarcığını şişirip santral retinal arteri tıkayan azot protoksitten (N2O) kesin kaçınılması için genel anestezi idealdir. Baş-boyun örtüleri altında uzun süre tüp kayması veya kinking olmaksızın güvenli ventilasyon ve pürüzsüz ekstübasyon sağlamak amacıyla spiralli (zırhlı) kaflı endotrakeal tüp kullanılır.',
-    rulesTitle: 'VİTREORETİNAL CERRAHİDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',
-    notes: 'VİTREORETİNAL CERRAHİDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) AZOT PROTOKSİT (N2O / GÜLDÜRÜCÜ GAZ) VE İNTRAOKÜLER GAZ (SF6 / C3F8) ÖLÜMCÜL ETKİLEŞİMİ — ANINDA VE KALICI KÖRLÜK ALARMI — Vitreoretinal cerrahide yırtığı tamponlamak için vitrektomi sonunda göz içine gaz (SF6 - Kükürt hekzaflorür veya C3F8 - Perfloropropan) veya hava verilir. Eğer anestezide Azot Protoksit (N2O) kullanılıyorsa, kanda çözünürlüğü yüksek olan N2O gaz kabarcığının içine hızla difüze olur; göz içi gaz kabarcığını dakikalar içinde 2-3 kat şişirir! Göz içi basıncı (GİB) 60-100 mmHg seviyesine fırlayarak santral retinal arteri tıkar ve ANINDA KALICI KÖRLÜK yaratır! Bu nedenle vitreoretinal cerrahide N2O gaz enjeksiyonundan EN AZ 20 DAKİKA ÖNCE KESİLMELİDİR (tercihen anestezide N2O KESİNLİKLE KULLANILMAMALIDIR!). Ayrıca gözünde gaz kabarcığı olan hastada postoperatif 4-8 hafta boyunca hiçbir ameliyatta N2O kullanılamaz! (2) MAKULA VE RETİNA ÜZERİNDE MİKRON DÜZEYİNDE MANİPÜLASYONDA "MUTLAK HAREKETSİZLİK" VE SIFIR SARSINTI DİSİPLİNİ — 23G, 25G veya 27G vitrektomi probları (dakikada 5000-10.000 kesi) ve mikro-forsepsler retinaya ve foveaya 50-100 mikron mesafede çalışır (İLM soyulması). Bu aşamada hastanın aniden başını çevirmesi, öksürmesi, solunum eforu yapması veya sarsılması mikro-aletlerin foveayı yırtmasına, dev retinal deliklere ve subretinal masif kanamaya yol açarak hastayı kör eder! Genel anestezide tam nöromusküler blok (TOF 0/4) sürdürülmeli; rejyonel anestezide (Retrobulber/Sub-Tenon) derin akinezi sağlanmalı, aşırı sedasyon kaynaklı apne ve sıçrayarak uyanmalar kesinlikle önlenmelidir. (3) SKLERAL ÇÖKERTME VE DÖRT REKTUS KAS TRAKSİYONUNDA OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE ASİSTOLİ — Skleral çökertme (scleral buckle) cerrahisinde dört rektus kası tek tek askıya alınır, sklera derin dikişlerle gerdirilir ve transskleral kriyoterapi uygulanır. Bu traksiyon ve bası en güçlü trigemino-vagal refleks arkını (CN V oftalmik dal -> CN X vagus) tetikler. EKG\'de ani derin sinüs bradikardisi, junctional ritim, dal blokları ve ventriküler asistoli gelişebilir! EKG ritmi anlık izlenmeli; bradikardide cerraha derhal "TRAKSİYONU BIRAK" ikazı verilmeli, düzelmezse İV Atropin (0.5 - 1.0 mg) uygulanmalıdır. (4) PÜRÜZSÜZ UYANMA (SMOOTH EMERGENCE), DİKİŞSİZ (23/25G) TROKAR GÜVENLİĞİ VE AGRESİF PONV ÖNLEMİ — Cerrahi bittiğinde 23G veya 25G dikişsiz sklerotomi trokarları çekilmiştir ve göz içinde gaz veya silikon tamponadı vardır. Ekstübasyonda tüpü ısırma, ıkınma veya ameliyat sonrası kusma baş-boyun venöz basıncını fırlatarak dikişsiz sklerotomilerden aköz/gaz kaçağına, subkonjonktival gaz birikimine, koroidal kanamaya ve göz içi basıncının çökmesine (akut hipotoni) yol açar! Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg) uygulanmalı, hasta öksürmeden uyandırılmalı; ikili kombine antiemetik profilaksisi (İV Ondansetron + Deksametazon) eksiksiz verilmelidir. (5) POSTOPERATİF YÜZÜSTÜ (PRONE / FACE-DOWN) POZİSYONLAMA DİSİPLİNİ VE AKUT AÇI KAPANMASI GLOKOMU UYARISI — Göz içine gaz veya silikon yağı verilen hastaların retinanın yapışmasını sağlamak için ameliyat sonrası günlerce sıkı yüzüstü (prone / face-down) veya oturur-baş önde yatması zorunludur. Eğer hasta sırtüstü (supin) yatarsa gaz kabarcığı öne doğru iris-lens diyaframını iter; ön kamarayı kapatarak akut açı kapanması glokomuna, kornea endotel hasarına ve şiddetli katarakta yol açar! Anestezi ekibi ve servis hemşireliği hastayı derlenme odasından itibaren sırtüstü yatırmamalı; hasta ve refakatçisine yüzüstü pozisyonun görme kurtarıcı önemi anlatılmalıdır.',
+    clinicalRationale: 'Vitrektomide makula ve foveaya mikron mesafede çalışılırken tam hareketsizlik, skleral çökertmede dört rektus kas traksiyonunun ağrısız tolere edilmesi ve SF₆/C₃F₈ gaz kabarcığını genişleten N₂O\'dan kesin kaçınılması için Propofol TIVA temelli genel anestezi (düşük PONV avantajıyla) idealdir. Rejyonel blok seçilirse yüksek miyopi (>26 mm / stafilom) perforasyon riski nedeniyle künt Sub-Tenon tercih edilmeli, aşırı sedasyon apnesinden ve örtü altı yangın riskinden kaçınılmalıdır.',
+    rulesTitle: 'VİTREORETİNAL CERRAHİDE ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    notes: 'Vitreoretinal cerrahide hayati kurallar: (1) N₂O + SF₆/C₃F₈ gaz kabarcığı CRAO/körlük yasağı ve uçuş/irtifa takvimi; (2) Makula/fovea çalışılırken sıfır hareket (TOF 0/4) ve yüksek miyopide iğneli blok yasağı; (3) Skleral çökertmede yüksek OCR protokolü; (4) Pürüzsüz uyanma + ikili PONV (Tramadol/Kodein YASAK); (5) Postop yüzüstü pozisyon ve gaz uyarı bilekliği; (6) Oftalmik damla toksisitesi (%2.5 Fenilefrin) ve MAC\'te ASA OR Yangın Üçgeni.',
     indispensableRules: [
       {
         number: 1,
-        title: 'AZOT PROTOKSİT (N2O / GÜLDÜRÜCÜ GAZ) VE İNTRAOKÜLER GAZ (SF6 / C3F8) ÖLÜMCÜL ETKİLEŞİMİ — ANINDA VE KALICI KÖRLÜK ALARMI',
-        content: 'Vitreoretinal cerrahide yırtığı tamponlamak için vitrektomi sonunda göz içine gaz (SF6 - Kükürt hekzaflorür veya C3F8 - Perfloropropan) veya hava verilir. Eğer anestezide Azot Protoksit (N2O) kullanılıyorsa, kanda çözünürlüğü yüksek olan N2O gaz kabarcığının içine hızla difüze olur; göz içi gaz kabarcığını dakikalar içinde 2-3 kat şişirir! Göz içi basıncı (GİB) 60-100 mmHg seviyesine fırlayarak santral retinal arteri tıkar ve ANINDA KALICI KÖRLÜK yaratır! Bu nedenle vitreoretinal cerrahide N2O gaz enjeksiyonundan EN AZ 20 DAKİKA ÖNCE KESİLMELİDİR (tercihen anestezide N2O KESİNLİKLE KULLANILMAMALIDIR!). Ayrıca gözünde gaz kabarcığı olan hastada postoperatif 4-8 hafta boyunca hiçbir ameliyatta N2O kullanılamaz!'
+        title: 'AZOT PROTOKSİT (N₂O) + İNTRAOKÜLER GAZ (HAVA / SF₆ / C₃F₈) KESİN YASAĞI VE UÇUŞ KURALLARI',
+        content: 'Kanda çözünürlüğü yüksek olan N₂O, göz içindeki hava veya gaz kabarcığına hızla difüze olarak kabarcığı 2-3 kat genişletir → GİB 60-100 mmHg\'ye fırlayarak santral retinal arter tıkanıklığı (CRAO) ve KALICI KÖRLÜK yapar! N₂O gaz enjeksiyonundan en az 15-20 dk önce kesilmelidir — en güvenli kural vitreoretinal cerrahide N₂O\'yu HİÇ KULLANMAMAKTIR. Gözünde gaz olan hastada tam rezorpsiyona dek (Hava: 3-7 gün · SF₆: 2-3 hafta · C₃F₈: 6-8 [bazen 10-12] hafta) hiçbir ameliyatta N₂O verilemez ve uçak/yüksek irtifa kesinlikle yasaktır!'
       },
       {
         number: 2,
-        title: 'MAKULA VE RETİNA ÜZERİNDE MİKRON DÜZEYİNDE MANİPÜLASYONDA "MUTLAK HAREKETSİZLİK" VE SIFIR SARSINTI DİSİPLİNİ',
-        content: '23G, 25G veya 27G vitrektomi probları (dakikada 5000-10.000 kesi) ve mikro-forsepsler retinaya ve foveaya 50-100 mikron mesafede çalışır (İLM soyulması). Bu aşamada hastanın aniden başını çevirmesi, öksürmesi, solunum eforu yapması veya sarsılması mikro-aletlerin foveayı yırtmasına, dev retinal deliklere ve subretinal masif kanamaya yol açarak hastayı kör eder! Genel anestezide tam nöromusküler blok (TOF 0/4) sürdürülmeli; rejyonel anestezide (Retrobulber/Sub-Tenon) derin akinezi sağlanmalı, aşırı sedasyon kaynaklı apne ve sıçrayarak uyanmalar kesinlikle önlenmelidir.'
+        title: 'MAKULA / FOVEADA MUTLAK HAREKETSİZLİK (TOF 0/4) VE YÜKSEK MİYOPİDE (>26 MM) İĞNELİ BLOK YASAĞI',
+        content: '23G/25G/27G vitrektör ve forsepsler foveaya mikron mesafede çalışır; en ufak hareket dev retinal yırtık veya masif subretinal kanama yaratır (GA\'da TOF 0/4 korunur). Retina dekolmanı hastalarının önemli kısmı yüksek miyoptur (>26 mm aksiyel uzunluk / posterior stafilom): Bu gözlerde iğneli retrobulber/peribulber blok glob perforasyonu riskini ~30 kat artırdığı için KONTRENDİKEDİR → künt Sub-Tenon bloğu veya GA seçilir.'
       },
       {
         number: 3,
-        title: 'SKLERAL ÇÖKERTME VE DÖRT REKTUS KAS TRAKSİYONUNDA OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE ASİSTOLİ',
-        content: 'Skleral çökertme (scleral buckle) cerrahisinde dört rektus kası tek tek askıya alınır, sklera derin dikişlerle gerdirilir ve transskleral kriyoterapi uygulanır. Bu traksiyon ve bası en güçlü trigemino-vagal refleks arkını (CN V oftalmik dal -> CN X vagus) tetikler. EKG\'de ani derin sinüs bradikardisi, junctional ritim, dal blokları ve ventriküler asistoli gelişebilir! EKG ritmi anlık izlenmeli; bradikardide cerraha derhal "TRAKSİYONU BIRAK" ikazı verilmeli, düzelmezse İV Atropin (0.5 - 1.0 mg) uygulanmalıdır.'
+        title: 'SKLERAL ÇÖKERTME VE DÖRT REKTUS KAS TRAKSİYONUNDA OKÜLOKARDİYAK REFLEKS (OCR)',
+        content: 'Skleral çökertmede dört rektus kasının askıya alınması ve kriyoterapi çok güçlü trigemino-vagal refleks (CN V → CN X) tetikleyerek ani bradikardi, AV blok veya asistoli yapabilir. İlk adım cerrahı durdurmak ("TRAKSİYONU BIRAK"), 2. adım normokapni/oksijenizasyon kontrolü, 3. adım düzelmezse İV Atropin 0.5 mg uygulamaktır (rutin profilaktik Atropin önerilmez; refleks yorulma/fatigability gösterir).'
       },
       {
         number: 4,
-        title: 'PÜRÜZSÜZ UYANMA (SMOOTH EMERGENCE), DİKİŞSİZ (23/25G) TROKAR GÜVENLİĞİ VE AGRESİF PONV ÖNLEMİ',
-        content: 'Cerrahi bittiğinde 23G veya 25G dikişsiz sklerotomi trokarları çekilmiştir ve göz içinde gaz veya silikon tamponadı vardır. Ekstübasyonda tüpü ısırma, ıkınma veya ameliyat sonrası kusma baş-boyun venöz basıncını fırlatarak dikişsiz sklerotomilerden aköz/gaz kaçağına, subkonjonktival gaz birikimine, koroidal kanamaya ve göz içi basıncının çökmesine (akut hipotoni) yol açar! Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg) uygulanmalı, hasta öksürmeden uyandırılmalı; ikili kombine antiemetik profilaksisi (İV Ondansetron + Deksametazon) eksiksiz verilmelidir.'
+        title: 'PÜRÜZSÜZ UYANMA, ÇİFTLİ PONV PROFİLAKSİSİ VE TRAMADOL / KODEİN YASAĞI',
+        content: 'Öksürme, ıkınma ve kusma 23G/25G dikişsiz sklerotomilerden gaz/aköz kaçağına, akut hipotoniye ve suprakoroidal kanamaya yol açar. Propofol TIVA + ikili PONV profilaksisi (Deksametazon + Ondansetron) + İV Lidokain (1.5 mg/kg) + düşük doz Remifentanil ile pürüzsüz ekstübasyon uygulanır. Kusmayı tetikleyen Tramadol ve Kodein postoperatif analjezide KULLANILMAZ!'
       },
       {
         number: 5,
-        title: 'POSTOPERATİF YÜZÜSTÜ (PRONE / FACE-DOWN) POZİSYONLAMA DİSİPLİNİ VE AKUT AÇI KAPANMASI GLOKOMU UYARISI',
-        content: 'Göz içine gaz veya silikon yağı verilen hastaların retinanın yapışmasını sağlamak için ameliyat sonrası günlerce sıkı yüzüstü (prone / face-down) veya oturur-baş önde yatması zorunludur. Eğer hasta sırtüstü (supin) yatarsa gaz kabarcığı öne doğru iris-lens diyaframını iter; ön kamarayı kapatarak akut açı kapanması glokomuna, kornea endotel hasarına ve şiddetli katarakta yol açar! Anestezi ekibi ve servis hemşireliği hastayı derlenme odasından itibaren sırtüstü yatırmamalı; hasta ve refakatçisine yüzüstü pozisyonun görme kurtarıcı önemi anlatılmalıdır.'
+        title: 'POSTOPERATİF YÜZÜSTÜ (FACE-DOWN) POZİSYON VE GAZ UYARI BİLEKLİĞİ',
+        content: 'İntraoküler gaz/silikon verilen hasta derlenme odasından itibaren sırtüstü yatırılmamalı, cerrahın tarif ettiği baş-aşağı/yüzüstü pozisyona alınmalıdır (sırtüstü yatış gazı öne iterek akut açı kapanması glokomu ve kornea endotel hasarı yapar). Hastaya mutlaka "Gözümde Gaz Vardır — N₂O ve Uçuş Yasak" bilekliği takılır.'
+      },
+      {
+        number: 6,
+        title: 'OFTALMİK DAMLA TOKSİSİTESİ (%2.5 FENİLEFRİN) VE MAC\'TE ASA YANGIN ÜÇGENİ',
+        content: 'Geniş midriyazis için %10 yerine daima %2.5 Fenilefrin damla kullanılır (%10 Fenilefrin hipertansif kriz ve akciğer ödemi yapabilir; tedavisinde non-selektif beta-bloker KULLANILMAZ!). Karanlık ameliyat salonunda monitör sesli alarmları açık tutulur; MAC/blok vakalarında örtü altı medikal hava veya FiO₂ ≤%30 ile ASA OR yangın güvenliği korunur.'
       }
     ]
   },
@@ -93,113 +97,102 @@ export const retinalSurgery: ProcedureDefinition = {
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Göz Hastalıkları / Vitreoretinal Konsültasyonu: Biyomikroskopi ve indirekt oftalmoskopi ile retina dekolmanının yayılımı (makula açık/on vs kapalı/off), yırtıkların yeri ve saati, PVR evresi, vitreus kanamasının yoğunluğu ve gaz/silikon tamponad seçimi.',
-      'Oküler B-Scan Ultrasonografi: Opak ortamlarda (yoğun vitreus kanaması, katarakt) retinanın yatışıklığı, koroid dekolmanı ve arka hyaloid durumu.',
-      'Dahiliye ve Kardiyoloji Konsültasyonu: Diyabetik vitrektomi olgularında sistemik glisemik kontrol (HbA1c), nefropati, hipertansiyon ve koroner arter hastalığı değerlendirmesi.',
-      'Anestezi Polikliniği: Genel anestezi hazırlığı, N2O kontrendikasyonunun kaydı ve postoperatif yüzüstü pozisyon toleransı (boyun omurga artriti/kifoz).'
+      'Göz Hastalıkları / Vitreoretinal Konsültasyonu: Dekolman yayılımı (makula-on acil vs makula-off), aksiyel uzunluk (>26 mm yüksek miyopi kontrolü), tamponad planı (Hava / SF₆ / C₃F₈ / Silikon) ve postop pozisyon gereksinimi.',
+      'Dahiliye / Kardiyoloji (Klinik Endikasyonda): Diyabetik vitrektomi hastalarında yaygın olan KAH, otonom nöropati (gastroparezi/aspirasyon riski!), diyabetik nefropati ve hipertansiyon optimizasyonu.',
+      'Anestezi Değerlendirmesi: N₂O kesin yasağının kaydı, diyabetik gastroparezi/açlık kontrolü ve boyun/omurga yüzüstü yatış toleransı.'
     ],
     historyAndPhysical: [
-      'Diyabet ve İnsülin Kullanımı: Diyabetik hastalarda ameliyat günü açlık kan şekeri izlemi (hedef 120-180 mg/dL); hipoglisemiden ve ketoasidozdan kaçınma.',
-      'Antikoagülan / Antiagregan İlaç Kullanımı: Aspirin, Klopidogrel ve DOAK; mikroinsizyonel vitrektomide (23/25G) tromboemboli riskine karşı aspirin genellikle KESİLMEZ, ancak cerrahla hemostatik risk teyit edilir.',
-      'Boyun ve Omurga Patolojileri: Postoperatif günlerce yüzüstü (prone) pozisyonda kalma zorunluluğu için boyun eklem hareket açıklığı sorgulanır.',
-      'Daha Önce Geçirilmiş Göz Cerrahileri: Psödofaki, trabekülektomi veya penetran keratoplasti varlığı.'
+      'Diyabet ve Otonom Nöropati: Proliferatif diyabetik retinopati hastalarında gastroparezi ve sessiz miyokard iskemisi sıktır; ameliyat günü kan şekeri 120-180 mg/dL hedeflenir.',
+      'Antikoagülan / Antiagregan Yönetimi (ASRA 2025 & RCoA/RCOphth): 23G/25G mikroinsizyonel PPV\'de tromboemboli riski yüksek hastalarda Aspirin genellikle devam ettirilir; Warfarin/DOAC/Klopidogrel yönetimi cerrahla bireyselleştirilir ve rutin köprüleme yapılmaz (bkz. #infografik=antithrombotic-matrix).',
+      'Önceki İntraoküler Gaz Öyküsü: Yakın dönemde gözüne gaz verilmiş bir hastada yeniden ameliyat gerekirse N₂O kesinlikle kapalıdır!'
     ],
     laboratoryAndTests: [
-      'Tam Kan Sayımı (Hb, Hct, Trombosit).',
-      'Koagülasyon Paneli: PT, aPTT, INR.',
-      'Açlık Kan Şekeri, Serum Elektrolitleri ve Böbrek Fonksiyonları (Üre, Kreatinin).',
-      '12 Derivasyonlu EKG ve Akciğer Grafisi.'
+      'Diyabetik ve Komorbid Genel Anestezi Adaylarında: Vaka günü kan şekeri, serum elektrolitleri (K⁺), böbrek fonksiyonları (kreatinin/eGFR) ve 12 derivasyonlu EKG.',
+      'Antikoagülan kullananlarda güncel INR (Warfarin); klinik endikasyonda TKS.',
+      'Oftalmolojik Değerlendirme: Aksiyel uzunluk (yüksek miyopi kontrolü) ve opak ortamlarda B-Scan USG.'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (Aschner okülokardiyak refleksi ve ani bradikardi analizi), SpO2, EtCO2 ve Vücut Sıcaklığı.',
-      'Sürekli Kan Basıncı Takibi: Normotansif sınır (SKB < 130-140 mmHg); intraoperatif diyabetik kanama ve koroid efüzyonunu önlemek için tansiyon piki engellenir.',
-      'Nöromusküler İleti Monitörizasyonu (TOF): Makula ve retina membran soyulması aşamasında hastanın mutlak hareketsizliği için TOF 0/4 (tam paralizi) korunmalıdır.',
-      'EtCO2 Takibi: Normokapni (EtCO2 35-38 mmHg); hiperkapni kaynaklı koroidal venöz basınç artışı önlenir.'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (OCR alarmı — karanlık salonda sesli nabız tonu mutlaka açık!), SpO₂, EtCO₂, NIBP ve Sıcaklık.',
+      'Kantitatif Nöromusküler Monitör (TOF): İLM/makula soyulması sırasında TOF 0/4; ekstübasyon öncesi Sugammadeks ile TOF ≥0.9.',
+      'EtCO₂ Takibi: Sıkı normokapni (EtCO₂ 35-38 mmHg — hiperkapni hem koroidal konjesyon hem de OCR şiddetlenmesi yapar!).',
+      'Kan Şekeri İzlemi: Uzun diyabetik PPV olgularında perioperatif KŞ kontrolü.'
     ],
     vascularAccess: [
-      '1-2 adet güvenli periferik intravenöz damar yolu (18-20G)',
-      'Acil Bradikardi Kiti: İV Atropin (0.5 - 1.0 mg) masada hazır',
-      'Gereğinde Hipertansiyon Yönetimi: İV Esmolol veya Labetalol'
+      '1-2 adet güvenli periferik intravenöz damar yolu (18-20G).',
+      'Acil Bradikardi / Hemodinami İlaçları: İV Atropin (0.5 mg), Esmolol/Labetalol ve İV Lidokain hazır.'
     ],
-    patientPosition: 'Supin (Sırtüstü) Pozisyon, Baş Silikon Donüt ile Sabit ve Nötral',
+    patientPosition: 'Supin (Sırtüstü) Pozisyon, Baş Silikon Donut ile Sabit ve Nötral',
     patientPositionDetails: [
-      'Hasta sırtüstü yatırılır; baş mikroskobun optik eksenine tam paralel hizalanır.',
-      'Başın ani dönmesini veya istemsiz omuz/el hareketlerini engellemek için bilekler ve alın nazikçe sabitlenir.',
-      'Ameliyat sahasına bası yapmayan ve mikroskop altında cerrahın eline engel olmayan L-bar köprüsü veya örtü askısı kurulur.'
+      'Baş silikon donut yastıkla mikroskop eksenine paralel sabitlenir; jugüler bası engellenir.',
+      'Karanlık ameliyat salonunda IV hatların, ETT bağlantılarının ve monitör kablolarının cerrahi ayak pedallarına takılmaması için düzenli sabitleme yapılır.',
+      'MAC/Sub-Tenon vakalarında örtü altı medikal hava veya FiO₂ ≤%30 sağlanır.'
     ],
     anesthesiaManagement: [
       'İndüksiyon:',
-      '  - Propofol (2.0 mg/kg) + Fentanil (2 mcg/kg) veya Remifentanil + Rokuronyum (0.6 mg/kg).',
-      '  - İV Lidokain (1.5 mg/kg) indüksiyondan 90 saniye önce verilir (öksürük ve laringoskopi refleksini baskılar).',
-      'İdame ve N2O KONTRENDİKASYONU:',
-      '  - TIVA (Propofol + Remifentanil) veya Sevofluran/Desfluran + O2/Hava.',
-      '  - AZOT PROTOKSİT (N2O) KESİNLİKLE KULLANILMAZ (gaz tamponadı fırlatarak körlük yapar!).',
-      '  - TOF 0/4 seviyesinde tam kas gevşemesi sürdürülür.',
-      'Skleral Çökertme / Rektus Kas Çekimi:',
-      '  - Dört rektus kası askıya alınırken kalp hızı anlık izlenir; ani bradikardide cerrah uyarılır.'
+      '  - Propofol (1.5-2.5 mg/kg) + Remifentanil (0.1-0.2 mcg/kg/dk) veya Fentanil (2 mcg/kg) + Rokuronyum (0.6 mg/kg).',
+      '  - İV Lidokain (1.5 mg/kg) laringoskopi ve öksürük yanıtını baskılar.',
+      'İdame (N₂O KESİN YASAK!):',
+      '  - Propofol + Remifentanil TIVA (en düşük PONV riski!) veya Hava/O₂ içinde Sevofluran + Remifentanil.',
+      '  - AZOT PROTOKSİT (N₂O) HİÇ KULLANILMAZ! (Kayıtlarda ve anestezi cihazında N₂O kapalı teyidi).',
+      '  - Makula/fovea aşamasında TOF 0/4 ve sıkı normokapni (EtCO₂ 35-38 mmHg) sürdürülür.',
+      '  - Skleral çökertme ve kriyoterapi sırasında OCR alarmı; bradikardide önce cerrah durdurulur, gerekirse İV Atropin 0.5 mg verilir.',
+      '  - Şiddetli skleral çökertme ağrısı için cerrahi sonunda cerrah tarafından Sub-Tenon / peribulber lokal anestezik eklenmesi postop analjeziyi dramatik iyileştirir.'
     ],
     airwayManagement: [
-      'Spiral telli (reinforced) endotrakeal tüp baş hareketlerine ve cerrahın el basısına karşı güvenlidir.',
-      'Tüp ağız köşesine sağlam flasterlenir; trakeal manşon basıncı 20-25 cmH2O seviyesinde kontrol edilir.'
+      'Spiralli (zırhlı) kaflı endotrakeal tüp uzun vitrektomide ve karanlık salonda en güvenli hava yoludur; cerrahi tarafın karşısından sağlam tespit edilir.',
+      'Seçilmiş kısa PPV olgularında LMA; rejyonel blok+MAC olgularında spontan solunum + örtü altı medikal hava / FiO₂ ≤%30 (ASA OR Fire uyumlu).'
     ],
     criticalSurgicalStages: [
-      '1. Pozisyonlandırma, Monitörizasyon ve Başın Sabitlenmesi.',
-      '2. Göz Çevresi ve Konjonktiva Kese Povidon İyot (%5) Antisepsisi.',
-      '3. Blefaroste Takılması ve Pars Planaya 3 Adet 23G veya 25G Valfli Mikro-Trokar Yerleştirilmesi.',
-      '4. İnfüzyon Hattının Açılması ve Göz İçi Basıncının Otomatik Dengelenmesi.',
-      '5. Kor Vitrektomi Yapılması ve Arka Vitreus Dekolmanı (PVD) İndüksiyonu.',
-      '6. Periferik Vitrektomi ve Skleral Çökertme / Kriyoterapi (Rektus kas çekimlerinde Aschner refleksi kontrolü!).',
-      '7. Makula Cerrahisi: Triamsinolon veya Parlak Mavi boya eşliğinde Epiretinal Membran ve İLM Soyulması (Sıfır hareket aşaması!).',
-      '8. Sıvı-Hava Değişimi (Fluid-Air Exchange - FAX) ve Subretinal Sıvının Yırtıktan Aspire Edilmesi.',
-      '9. Yırtık Etrafına Endolazer Fotokoagülasyon Yapılması.',
-      '10. Endotamponad Enjeksiyonu: İntraoküler Gaz (SF6 veya C3F8) ya da Silikon Yağı Verilmesi (N2O kesinlikle kapalı olmalıdır!).',
-      '11. Trokarların Çekilmesi (Gereğinde sklerotomilere 8-0 vikril dikiş) ve Kaçak Kontrolü.',
-      '12. Subkonjonktival Antibiyotik/Steroid Enjeksiyonu ve Koruyucu Şeffaf Kapak.'
+      '1. Taraf Doğrulaması, N₂O Kilidi Teyidi ve Baş Sabitleme.',
+      '2. Sulu %5 Povidon-İyot Antisepsisi ve 23G/25G/27G Valfli Mikro-Trokar Yerleşimi.',
+      '3. İnfüzyon Hattının Açılması, Kor Vitrektomi ve PVD İndüksiyonu.',
+      '4. Skleral Çökertme / 4 Rektus Askısı ve Kriyoterapi (EN YÜKSEK OCR AŞAMASI!).',
+      '5. Makula Cerrahisi: Epiretinal Membran ve İLM Soyulması (TOF 0/4 — sıfır hareket!).',
+      '6. Sıvı-Hava Değişimi (FAX) ve Endolazer Fotokoagülasyon (Lazer göz güvenliği!).',
+      '7. İntraoküler Gaz (Hava / SF₆ / C₃F₈) veya Silikon Yağı Enjeksiyonu (N₂O kesin kapalı teyidi!).',
+      '8. Trokar Çekimi, Kaçak Kontrolü, Sub-Tenon Adjuvan Analjezi, Basısız Kalkan ve Gaz Uyarı Bilekliği.'
     ],
     emergenceNotes: [
-      'Pürüzsüz Ekstübasyon (Smooth Emergence) Hayati Önem Taşır: Öksürme ve ıkınma dikişsiz sklerotomilerden gaz/aköz kaçağına ve koroid kanamasına yol açar.',
-      'Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg) uygulanır.',
-      'İntraoperatif kombine İV Ondansetron (4-8 mg) + Deksametazon (4 mg) ile postoperatif kusma kesinlikle önlenir.',
-      'Hasta ameliyathanede sırtüstü uyandırıldıktan hemen sonra başı yana veya hafif öne çevrilir; servis yatağına alınırken yüzüstü (prone) pozisyon verilir.'
+      'Pürüzsüz Ekstübasyon (Smooth Emergence): Düşük doz Remifentanil (0.03-0.05 mcg/kg/dk) veya Deksmedetomidin + İV Lidokain (1.5 mg/kg) + Sugammadeks (TOF ≥0.9) ile sıfır öksürük/ıkınma sağlanır.',
+      'Çiftli PONV Profilaksisi: İV Deksametazon (4-8 mg) + Ondansetron (4 mg) zorunludur.',
+      'Gaz/silikon tamponadlı hasta derlenme odasından itibaren cerrahın belirttiği yüzüstü / baş-aşağı pozisyona alınır (sırtüstü yatırılmaz!).'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Vitrektomi sonrası ağrı genellikle hafif-orta düzeydedir; skleral çökertme yapılmışsa künt orbital gerginlik daha belirgin olabilir.',
-      'Oral / İV Parasetamol (1000 mg) her 6-8 saatte bir temel analjeziktir.',
-      'Gereğinde Tramadol (50 mg).',
-      'Hifema ve koroid kanaması riskini artırabilecek aspirin ve agresif NSAİİ kullanımından kaçınılmalıdır.',
-      'Şiddetli ani göz ağrısı gaz genleşmesine bağlı akut glokom krizini (GİB > 50 mmHg) işaret edebileceğinden derhal tonometri yapılmalıdır.'
+      'PPV sonrası ağrı hafif-orta, skleral çökertme sonrası derin künt orbital ağrı belirgin olabilir.',
+      'Temel Analjezi: Cerrahi sonu Sub-Tenon lokal anestezik + düzenli Oral/İV Parasetamol (1000 mg 6-8 saatte bir).',
+      'KAÇINILACAK AJANLAR: TRAMADOL ve KODEİN yüksek PONV riskiyle dikişsiz sklerotomilerde gaz kaçağı ve koroidal kanamaya yol açabileceğinden rutin analjezide KULLANILMAZ! Şiddetli dirençli kurtarma ağrısında önce AKUT GİB ARTIŞI (gaz genleşmesi / GİB >50 mmHg) dışlanır, gerekirse mikro-doz titre İV Fentanil (25 mcg) + ek antiemetik verilir.',
+      'Erken dönemde hifema/koroid kanaması riskini artıran agresif antiplatelet etkili NSAİİ\'lerden kaçınılır.'
     ],
     prospectRecommendations: [
-      'PROSPECT Vitreoretinal Cerrahi Rehberleri:',
-      'Preoperatif ve intraoperatif multimodal analjezi;',
-      'Opioid kullanımının sınırlandırılarak PONV (bulantı/kusma) riskinin sıfırlanması önerilir.'
+      'Vitreoretinal cerrahi için yayımlanmış özel bir PROSPECT (ESRA) kılavuzu bulunmamaktadır; 4th PONV Consensus (2020) ve RCoA/RCOphth ilkeleri doğrultusunda:',
+      '  - Propofol TIVA + preemptif/kapanış Sub-Tenon lokal anestezik + Parasetamol + çiftli antiemetik profilaksisi (Deksametazon + Ondansetron) hem skleral çökertme ağrısını hem de PONV\'yi etkin kontrol eder.'
     ],
     erasRecommendations: [
-      'ERAS ve ASRS Vitreoretinal Protokolleri:',
-      'ZORUNLU YÜZÜSTÜ (FACE-DOWN / PRONE) POZİSYONLAMA: Gaz veya silikon yağı verilen hastalar günde en az 16-18 saat boyunca yüzüstü veya baş önde oturur pozisyonda kalmalıdır (retinanın yatışması için hayati önem taşır; sırtüstü yatmak açı kapanması glokomuna yol açar).',
-      'UÇAK VE YÜKSEK İRTİFA YASAĞI: Gözünde gaz (SF6/C3F8) olan hastalar gaz tamamen emilene kadar (SF6 için 2-3 hafta, C3F8 için 6-8 hafta) UÇAĞA BİNEMEZ ve yüksek rakımlı dağlara çıkamaz (kabin basıncı düşüklüğü gazı fırlatarak gözü patlatır ve kör eder!). Hastaya "Gözümde Gaz Vardır" uyarı bilekliği takılır.',
-      'GELECEKTEKİ ANESTEZİLERDE N2O YASAĞI: Gözünde gaz olan hastaya acil cerrahi gerekirse N2O KESİNLİKLE VERİLEMEZ.'
+      'Vitreoretinal Perioperatif Güvenlik ve Taburculuk Protokolü (RCoA-RCOphth & AAO):',
+      '  - ZORUNLU POZİSYONLAMA: Gaz/silikon tamponadlı hastalar cerrahın talimatına göre baş-aşağı/yüzüstü pozisyonda kalır; sırtüstü yatış açı kapanması glokomu yapar.',
+      '  - UÇAK VE YÜKSEK İRTİFA YASAĞI (DOĞRU FİZYOPATOLOJİ): Uçak kabin basıncı düşüşünde veya yüksek irtifada intraoküler gaz kabarcığı (Boyle yasası gereği) genişleyerek GİB\'i >60-80 mmHg\'ye fırlatır → SANTRAL RETİNAL ARTER TIKANIKLIĞI (CRAO) ve KALICI KÖRLÜK yaratır! Gaz tamamen emilene dek uçuş ve dağ geçişi yasaktır: Hava 3-7 gün · SF₆ 2-3 hafta · C₃F₈ 6-8 (bazen 10-12) hafta. Hastaya uyarı bilekliği takılır.',
+      '  - GELECEK ANESTEZİLERDE N₂O YASAĞI: Gaz tamamen rezorbe olana dek hiçbir ameliyatta N₂O verilemez.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe\'s Anesthesiologist\'s Manual of Surgical Procedures (5th Edition), Section VI: Ophthalmology, Chapter: Vitreoretinal Surgery - Retinal Detachment Repair: Scleral Buckling and Pars Plana Vitrectomy (PPV), pp. 864-868.',
-    erasReference: 'Enhanced Recovery After Surgery (ERAS) Society & British Ophthalmic Anaesthesia Society (BOAS): Consensus for Vitreoretinal Day-Case Surgery.',
-    prospectReference: 'PROSPECT Guidelines: Postoperative Pain and PONV Management in Complex Vitreoretinal Procedures.',
+    jaffeReference: 'Jaffe RA, Schmiesing CA, Golianu B. Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmic Surgery — Vitreoretinal Surgery (Pars Plana Vitrectomy and Scleral Buckling). Wolters Kluwer / LWW.',
+    erasReference: 'Kumar CM, Eke T, Dodds C, et al. Local anaesthesia for ophthalmic surgery — Joint guidelines from the Royal College of Anaesthetists (RCoA) and the Royal College of Ophthalmologists (RCOphth). 2012.',
+    prospectReference: 'Vitreoretinal cerrahi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; analjezi ve PONV yaklaşımı 4th Consensus Guidelines for PONV (Gan et al., Anesth Analg 2020) ve RCoA/RCOphth (2012) ilkelerine dayanmaktadır.',
     otherReferences: [
-      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Retinal Detachment and Vitreoretinal Disorders.',
-      'American Society of Retina Specialists (ASRS): Vitreoretinal Surgical Guidelines and Gas Tamponade Safety.',
-      'Royal College of Anaesthetists (RCoA): Nitrous Oxide Safety and Guidelines in Vitreoretinal Gas Surgeries.',
-      'Türk Oftalmoloji Derneği (TOD) Retina ve Vitreoretinal Cerrahi Birimi: Retina Dekolmanı Tedavi ve Vitrektomi Rehberi.'
+      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Posterior Vitreous Detachment, Retinal Breaks, and Lattice Degeneration.',
+      'Gan TJ, Belani KG, Bergese S, et al. Fourth Consensus Guidelines for the Management of Postoperative Nausea and Vomiting. Anesth Analg. 2020;131(2):411-448.',
+      'ASA Task Force on Operating Room Fires. Practice Advisory for the Prevention and Management of Operating Room Fires. Anesthesiology. 2013;118(2):271-290.',
+      'Kopp SL, Vandermeulen E, et al. ASRA Pain Medicine Evidence-Based Guidelines (5th ed.). Reg Anesth Pain Med. 2025.'
     ]
   }
 };

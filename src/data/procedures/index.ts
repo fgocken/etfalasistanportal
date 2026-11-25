@@ -39,19 +39,23 @@ import { posteriorLumbarSpineSurgery } from './posteriorLumbarSpineSurgery';
 import { posteriorLumbarFusionInstrumentation } from './posteriorLumbarFusionInstrumentation';
 import { combinedAnteriorPosteriorThoracolumbarInstrumentation } from './combinedAnteriorPosteriorThoracolumbarInstrumentation';
 
-// 2) Göz Hastalıkları — Ön Segment → Arka Segment → Oküler Travma → Oküloplastik & Orbita
+// 2) Göz Hastalıkları — Ön Segment → Vitreoretinal & Travma → Pediatrik/Şaşılık/ROP → Oküloplastik & Orbita
 import { cataractExtractionIolInsertion } from './cataractExtractionIolInsertion';
 import { pterygiumExcision } from './pterygiumExcision';
 import { cornealTransplant } from './cornealTransplant';
 import { trabeculectomy } from './trabeculectomy';
 import { retinalSurgery } from './retinalSurgery';
 import { repairRupturedLaceratedGlobe } from './repairRupturedLaceratedGlobe';
+import { strabismusSurgery } from './strabismusSurgery';
+import { pediatricCataractGlaucomaEua } from './pediatricCataractGlaucomaEua';
+import { ropLaserAntiVegf } from './ropLaserAntiVegf';
 import { ptosisRepair } from './ptosisRepair';
 import { ectropionRepair } from './ectropionRepair';
 import { entropionRepair } from './entropionRepair';
 import { eyelidReconstruction } from './eyelidReconstruction';
 import { dacryocystorhinostomy } from './dacryocystorhinostomy';
 import { orbitotomyAnteriorLateral } from './orbitotomyAnteriorLateral';
+import { enucleationEviscerationExenteration } from './enucleationEviscerationExenteration';
 
 // 3) Kulak Burun Boğaz (KBB) — Faringeal/Özofageal → Laringoloji → Onkoloji → Acil/İleri Hava Yolu
 import { tonsillectomyAdenoidectomy } from './tonsillectomyAdenoidectomy';
@@ -133,12 +137,16 @@ export {
   trabeculectomy,
   retinalSurgery,
   repairRupturedLaceratedGlobe,
+  strabismusSurgery,
+  pediatricCataractGlaucomaEua,
+  ropLaserAntiVegf,
   ptosisRepair,
   ectropionRepair,
   entropionRepair,
   eyelidReconstruction,
   dacryocystorhinostomy,
   orbitotomyAnteriorLateral,
+  enucleationEviscerationExenteration,
   tonsillectomyAdenoidectomy,
   zenkersDiverticulectomy,
   laryngoscopy,
@@ -176,7 +184,7 @@ export const SURGICAL_SPECIALTIES: SurgicalSpecialtyMeta[] = [
     id: 'goz',
     name: 'Göz Hastalıkları',
     shortName: 'Göz Cerrahisi',
-    description: 'Ön segment (FAKO, keratoplasti, glokom), vitreoretinal cerrahi, glob travması ve oküloplastik ameliyatlar'
+    description: 'Ön segment (FAKO, keratoplasti, glokom), vitreoretinal & açık küre travması, pediatrik/şaşılık/ROP ve oküloplastik/DCR/orbita cerrahileri'
   },
   {
     id: 'kbb',
@@ -303,19 +311,23 @@ export const REGISTERED_PROCEDURES: ProcedureDefinition[] = [
   posteriorLumbarFusionInstrumentation,
   combinedAnteriorPosteriorThoracolumbarInstrumentation,
 
-  // Göz Hastalıkları — Ön Segment -> Arka Segment -> Travma -> Oküloplastik & Orbita
+  // Göz Hastalıkları — Ön Segment -> Vitreoretinal & Travma -> Pediatrik, Şaşılık & ROP -> Oküloplastik & Orbita
   cataractExtractionIolInsertion,
   pterygiumExcision,
   cornealTransplant,
   trabeculectomy,
   retinalSurgery,
   repairRupturedLaceratedGlobe,
+  strabismusSurgery,
+  pediatricCataractGlaucomaEua,
+  ropLaserAntiVegf,
   ptosisRepair,
   ectropionRepair,
   entropionRepair,
   eyelidReconstruction,
   dacryocystorhinostomy,
   orbitotomyAnteriorLateral,
+  enucleationEviscerationExenteration,
 
   // Kulak Burun Boğaz — Faringeal/Özofageal -> Laringoloji -> Onkoloji -> Acil/İleri Hava Yolu
   tonsillectomyAdenoidectomy,

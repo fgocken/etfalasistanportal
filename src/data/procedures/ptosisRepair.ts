@@ -3,11 +3,9 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Pitozis Onarımı: Levator Aponörozu İlerletmesi / Rezeksiyonu, Müller Kası-Konjonktiva Rezeksiyonu (MMCR) ve Frontalis Askı Cerrahisi
  * (Ptosis Repair / Blepharoptosis Surgery: Levator Aponeurosis Advancement, Müller's Muscle Resection and Frontalis Sling)
- * 
- * Jaffe (5th ed., Section VI: Ophthalmology - Oculoplastics: Ptosis Repair, pp. 874-880),
- * American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Blepharoptosis,
- * European Society of Ophthalmic Plastic and Reconstructive Surgery (ESOPRS),
- * British Ophthalmic Anaesthesia Society (BOAS) ve Türk Oftalmoloji Derneği (TOD) Oküloplastik Cerrahi Birimi Protokolleri referans alınarak hazırlanmıştır.
+ *
+ * Referanslar: Jaffe (5th ed., Section VI: Ophthalmic Surgery), RCoA / RCOphth (2012),
+ * Schein et al. (NEJM 2000), ASA OR Fire Advisory (2013), ASRA 5th Ed. (2025), Gan et al. 4th PONV Consensus (2020).
  */
 export const ptosisRepair: ProcedureDefinition = {
   id: 'ptosis-repair',
@@ -18,71 +16,76 @@ export const ptosisRepair: ProcedureDefinition = {
   categoryTag: 'Oküloplastik & Kapak Cerrahisi',
 
   // 1) Prosedür Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Üst göz kapağının serbest kenarının normal anatomik seviyesinden (kornea üst limbusunun 1.5 - 2 mm altı veya pupilla ışık refleksinden kapağa olan mesafe [MRD1] > 4.0 - 4.5 mm) aşağı düşmesi (blefaropitozis) sonucu üst görme alanının daralması, baş pozisyonu (çene yukarıda yürüme), astenopi, yorgunluk hissi ve kozmetik disfonksiyon yaşayan hastalarda kapak yüksekliğinin, kıvrımının ve simetrisinin cerrahi olarak düzeltilmesi ameliyatıdır. Temel mikrocerrahi teknikler: (1) Anterior Yaklaşım - Levator Aponörozu İlerletmesi / Rezeksiyonu (LPS Advancement): Aponevrotik ve involüsyonel pitoziste dünya genelinde altın standarttır. Üst kapak cilt kıvrımından (crease) insizyon yapılır; orbikülaris kası geçilerek orbital septum açılır, preaponevrotik yağ yastıkçıkları ekarte edilerek Whitnall ligamenti ve levator aponörozu ortaya konur; aponöroz tarsus ön yüzüne 5-0 veya 6-0 kalıcı dikişlerle asılır. Ameliyat esnasında hasta oturtularak kapak seviyesi ve kontürü milimetrik ayarlanır; (2) Posterior Yaklaşım - Müller Kası-Konjonktiva Rezeksiyonu (MMCR / Putterman Prosedürü): Fenilefrin testi pozitif olan hafif-orta pitoziste konjonktival yaklaşımla 8 mm rezeksiyon; (3) Frontalis Askı Cerrahisi (Frontalis Sling): Levator fonksiyonu çok zayıf (< 4 mm) olan konjenital pitoziste fasya lata veya silikon askı materyali ile kapağın alın (frontalis) kasına bağlanması.',
+  description: 'Üst göz kapağının normal anatomik seviyesinden aşağı düşmesi (blefaropitozis) sonucu üst görme alanının daralması, baş pozisyonu ve görsel yorgunluk yaşayan hastalarda kapak yüksekliğinin, kıvrımının ve simetrisinin cerrahi olarak düzeltilmesi ameliyatıdır. Temel teknikler: (1) Anterior Yaklaşım — Levator Aponörozu İlerletmesi (LPS Advancement): İnvolüsyonel pitoziste altın standarttır; üst kapak kıvrımından girilerek aponöroz tarsusa asılır ve hasta masada oturtularak kapak seviyesi canlı ayarlanır; (2) Posterior Yaklaşım — Müller Kası-Konjonktiva Rezeksiyonu (MMCR): Fenilefrin testi pozitif hafif-orta pitoziste; (3) Frontalis Askı Cerrahisi (Frontalis Sling): Levator fonksiyonu <4 mm olan konjenital veya miyojenik pitoziste.',
   indications: [
-    'Aponevrotik (İnvolüsyonel / Senil) Pitozis: İleri yaşta levator aponörozunun tarsustan ayrılması (dehissens/dezinsersiyon) veya incelmesi (en sık endikasyon; yüksek kapak kıvrımı ve iyi levator fonksiyonu > 10-12 mm)',
-    'Post-Cerrahi ve Kontakt Lens Pitozisi: Katarakt, glokom veya vitrektomi ameliyatlarında blefaroste (spekulum) basısına veya kronik sert lens kullanımına bağlı aponöroz ayrılması',
-    'Miyojenik ve Konjenital Pitozis: Levator kasının gelişimsel disfonksiyonu (çocuklarda ambliyopi riski) veya Kronik Progresif Eksternal Oftalmopleji (CPEO)',
-    'Nörojenik Pitozis: Parsiyel 3. kranyal sinir felci sekeli veya Horner Sendromu (Müller kası denervasyonu)',
-    'Travmatik ve Mekanik Pitozis: Kapak laserasyonu sonrası aponevrotik yırtılma veya kitle eksizyonu sonrası rekonstrüksiyon'
+    'Aponevrotik (İnvolüsyonel / Senil) Pitozis: İleri yaşta levator aponörozunun ayrılması/incelmesi (en sık endikasyon)',
+    'Post-Cerrahi ve Kontakt Lens Pitozisi: Önceki göz ameliyatı veya sert kontakt lens kullanımı sonrası aponöroz ayrılması',
+    'Miyojenik ve Konjenital Pitozis: Gelişimsel levator disfonksiyonu (çocuklarda ambliyopi riski), Miyastenia Gravis (medikal stabilize), CPEO / Mitokondriyal Miyopati veya Miyotonik Distrofi',
+    'Nörojenik Pitozis: Parsiyel 3. kraniyal sinir felci sekeli veya Horner Sendromu',
+    'Travmatik ve Mekanik Pitozis'
   ],
-  averageDuration: '30 - 60 dakika (Tek taraflı levator ilerletmesi: 30-45 dk; Bilateral olgular: 60-75 dk; Frontalis askı cerrahisi: 60-90 dk)',
+  averageDuration: '30 - 60 dakika (Tek taraflı levator ilerletmesi: 30-45 dk; Bilateral: 60-75 dk; Frontalis askı: 60-90 dk)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '< 5 - 20 mL (Üst göz kapağı ve preaponevrotik orbital yağ dokusu son derece zengin mikrovasküler ağa sahiptir; ancak lokal vazokonstriktör [epinefrin] ve titiz bipolar koterizasyon ile kan kaybı ihmal edilebilir düzeydedir)',
+    estimatedBloodLoss: '< 5 - 20 mL (Zengin mikrovasküler ağa karşın düşük hacimli adrenalinli lokal infiltrasyon ve bipolar koter ile kan kaybı minimaldir)',
     riskLevel: 'minimal',
-    riskLevelLabel: 'Minimal Kan Kaybı / Ancak Postoperatif Derin Orbital/Retrobulber Hematom Riski',
+    riskLevelLabel: 'Minimal Kan Kaybı / Ancak Derin Preaponevrotik Yağ Kanaması → Orbital Hematom Riski',
     crossMatchRequirement: 'Rutin kan hazırlığı gerekmez (T&S ve Cross-Match endikasyonu yoktur)',
     transfusionProbability: '< %0.01 (Kan transfüzyonu endikasyonu yoktur)',
     criticalBleedingSources: [
-      'Preaponevrotik Orbital Yağ Damarları: Orbital septum açıldığında sarı renkli yağ dokusu içindeki perforatör damarların kanayarak orbitaya sızması (akut orbital kompartman sendromu ve optik sinir iskemisi riski)',
-      'Marginal ve Periferik Palpebral Arter Arkadları: Tarsusun üst sınırında yer alan periferik arkadın aponöroz diseksiyonunda zedelenmesi',
-      'Medial ve Lateral Palpebral Arter Dallarından Kanamalar'
+      'Preaponevrotik Orbital Yağ Damarları: Orbital septum açıldığında orbitaya sızarak akut retrobulber hematom / Orbital Kompartman Sendromu (OCS) oluşturabilir',
+      'Marginal ve Periferik Palpebral Arter Arkadları',
+      'Medial ve Lateral Palpebral Arter Dalları'
     ],
     hemostasisStrategies: [
-      'Lokal anestezik solüsyonuna 1:100.000 veya 1:200.000 Epinefrin (Adrenalin) eklenmesi ve insizyondan 7-10 dakika önce dokuya infüze edilmesi',
-      'Bipolar wet-field mikro-koter ile doku nekrozu yaratmadan selektif hemostaz',
-      'Preaponevrotik yağ eksize edilecekse tabanına hemostatik klemp konulup koterize edilmesi'
+      'Lokal anesteziğe 1:100.000 veya 1:200.000 Adrenalin eklenmesi ve insizyondan 7-10 dk önce enjeksiyon',
+      'Bipolar wet-field mikro-koter ile selektif hemostaz (koter öncesi O₂ kesimi zorunlu!)',
+      'Akut orbital hematom / OCS şüphesinde <60-90 dk içinde acil lateral kantotomi + inferior kantolizis + 30° baş elevasyonu + IV Mannitol (1-2 g/kg) + IV Asetazolamid (500 mg)'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Lokal İnfiltrasyon Anestezisi (Lidokain %2 + Bupivakain %0.5 + 1:100.000 Epinefrin, Düşük Hacim: 1.0 - 1.5 mL) + Monitörize Anestezi Bakımı (MAC: Titre Edilmiş Ultra-Hafif Bilinçli Sedasyon) — İntraoperatif hasta kooperasyonu ve kapak seviyesi ayarlanabilmesi için DÜNYA GENELİNDE ALTIN STANDARTTIR'
+      'Düşük Hacimli Lokal İnfiltrasyon (Lidokain %2 + Bupivakain %0.5 + 1:100.000 Adrenalin, Maks. 1.0 - 1.5 mL) + Minimal Bilinçli Sedasyon (MAC) — İntraoperatif göz aç-kapa kooperasyonu ve simetri ayarı için ALTIN STANDARTTIR'
     ],
     alternative: [
-      'Genel Endotrakeal Anestezi (GETA) veya Laringeal Maske (LMA): Pediatrik konjenital pitozis olgularında (frontalis askı cerrahisi), ileri derecede demansı, kontrolsüz baş tremoru, mental retardasyonu, klostrofobisi veya panik bozukluğu olan erişkinlerde (ameliyat masasında intraoperatif kapak yüksekliği testi yapılamaz; cerrah kapak seviyesini milimetrik cetvelle tahmin eder)'
+      'Genel Anestezi (LMA veya Spiralli ETT): Pediatrik konjenital pitozis (frontalis askı), ileri demans, kontrolsüz tremor veya klostrofobisi olan hastalarda (canlı kapak seviyesi testi yapılamaz; altta yatan Miyastenia Gravis vs. Mitokondriyal Miyopati / CPEO kas gevşetici kurallarına kesinlikle uyulur!)'
     ],
-    clinicalRationale: 'Düşük hacimli (1-1.5 mL) lokal infiltrasyon + ultra-hafif bilinçli sedasyon (MAC), cerrahın hastayı ameliyat masasında oturtarak gözlerini açıp kapatmasını istemesine ve levator aponöroz gerginliğini gerçek zamanlı simetriyle ayarlamasına imkan tanıdığı için mutlak altın standarttır. Hava yolu doğal spontan solunumda tutulur; genel anestezi veya ağır sedasyon kapak kas fonksiyonunu ve hasta kooperasyonunu bozacağından yalnızca pediatrik ya da uyumsuz olgularda tercih edilir.',
-    rulesTitle: 'PİTOZİS ONARIMINDA ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',
-    notes: 'PİTOZİS ONARIMINDA ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) İNTRAOPERATİF HASTA KOOPERASYONU, OTURUR POZİSYON VE KAPAK KONTÜRÜ AYARLAMASI İÇİN "SIFIR DERİN SEDASYON" DİSİPLİNİ — Levator aponörozu tarsusa dikilirken cerrah hastayı ameliyat masasında dik/yarı-oturur (fowler) pozisyona getirir ve gözlerini açıp kapamasını, yukarı ve tam karşıya bakmasını ister (kapak yüksekliği, kıvrımı ve simetrisi ancak tam uyanık ve koopere hastada ayarlanabilir!). Derin sedasyon, propofol bolusları veya aşırı opioid alan hasta disoryante olur, gözlerini açamaz, kapak dinamiği çöker veya pitozis aşırı/yetersiz düzeltilir (overcorrection/undercorrection). Hasta ile sözel temas kesintisiz sürdürülmeli; sedasyon yalnızca lokal enjeksiyon esnasında ultra-kısa ve minimal tutulmalıdır. (2) LOKAL ANESTEZİKTE DÜŞÜK HACİM KURALI, MOTOR BLOK VE MÜLLER KASI / EPİNEFRİN YANILSAMASI — Üst kapağa verilecek lokal anestezik hacmi 1–1.5 mL\'yi KESİNLİKLE GEÇMEMELİDİR! Yüksek hacimli enjeksiyon mekanik ödem yaratarak kapağı aşağı iter; orbikülaris kası motor blokajı kapak açıklığını bozar. Ayrıca lokal anestezikteki Epinefrin sempatomimetik etkiyle Müller kasını kasarak kapağı yapay olarak 1-2 mm yukarı kaldırır. Cerrah ve anestezi bu "adrenalin yanılsamasını" hesaba katmalı, gereksiz yüksek doz epinefrinden kaçınmalıdır. (3) KORNEA GÜVENLİĞİ, CORNEAL SHIELD (KORUYUCU SKLERAL KALKAN) VE BELL FENOMENİ KONTROLÜ — Cilt insizyonu, orbital septum açılması ve tarsal dikişler korneanın birkaç milimetre üzerinde icra edilir. Kornea epitel erozyonu veya perforasyonunu önlemek için insizyon öncesi antibiyotikli pomad sürülerek opak plastik Kornea Kalkanı (Corneal Shield) yerleştirilmelidir. Ameliyat öncesi hastanın Bell fenomeni (göz kapandığında kürenin yukarı kayma refleksi) mutlaka değerlendirilmelidir; Bell refleksi zayıf olan hastalarda ameliyat sonrası lagoftalmi ve ağır kornea ülseri riski çok yüksektir! (4) OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE WHITNALL LİGAMENTİ / LEVATOR TRAKSİYONU ALARMI — Levator aponörozu disseke edilirken ve Whitnall ligamenti altından serbestleştirilirken uygulanan orbital çekme manevraları trigemino-vagal refleksi (CN V oftalmik dal -> CN X vagus) tetikleyebilir. Monitörde ani derin bradikardi, nodal kaçış ritmi veya ventriküler asistoli gelişebilir. Ritim kesintisiz izlenmeli, bradikardi görüldüğünde cerraha çekmeyi gevşetmesi söylenmeli; düzelmezse derhal İV Atropin (0.5 mg) uygulanmalıdır. (5) MİYOPATİK PİTOZİSTE (MİYASTENİ, MİTOKONDRİYAL HASTALIK, CPEO) GENEL ANESTEZİ VE KAS GEVŞETİCİ TEHLİKESİ — Pitozis altta yatan Miyastenia Gravis, Kronik Progresif Eksternal Oftalmopleji (CPEO) veya miyotonik distrofilere bağlı olabilir. Genel anestezi uygulanacaksa: Non-depolarizan kas gevşeticilere (rokuronyum vb.) karşı aşırı duyarlılık vardır; süksinilkolin rabdomiyoliz, hiperkalemi ve malign hipertermi benzeri reaksiyon riski nedeniyle KONTRENDİKEDİR! Solunum yetmezliği ve uzamış postoperatif mekanik ventilasyon riskine karşı TOF kesintisiz izlenmeli, Sugammadeks hazır bulundurulmalı ve hasta tam uyanık olmadan ekstübe edilmemelidir.',
+    clinicalRationale: 'Düşük hacimli (1-1.5 mL) lokal infiltrasyon + minimal MAC, cerrahın hastayı ameliyat masasında yarı-oturur konuma getirip gözlerini açıp kapamasını istemesine ve levator aponöroz gerginliğini gerçek zamanlı ayarlamasına imkan tanır. Yüzde bipolar koter/radyofrekans kullanıldığı için örtü altı medikal hava veya FiO₂ ≤%30 kuralıyla ASA OR yangın güvenliği sağlanmalıdır.',
+    rulesTitle: 'PİTOZİS ONARIMINDA ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    notes: 'Pitozis onarımında hayati kurallar: (1) Canlı kapak seviyesi ayarı için sıfır derin sedasyon; (2) Düşük lokal hacim (1-1.5 mL) ve adrenalin-Müller kası yanılsaması; (3) Miyastenia Gravis vs. Mitokondriyal Miyopati (CPEO) / Miyotonik Distrofi nöromusküler farmakoloji ayrımı!; (4) ASA OR Yangın Üçgeni (yüz koteri + FiO₂ ≤%30); (5) Kornea kalkanı ve Bell fenomeni koruması; (6) Whitnall/levator traksiyonunda OCR ve retrobulber hematom alarmı.',
     indispensableRules: [
       {
         number: 1,
-        title: 'İNTRAOPERATİF HASTA KOOPERASYONU, OTURUR POZİSYON VE KAPAK KONTÜRÜ AYARLAMASI İÇİN "SIFIR DERİN SEDASYON" DİSİPLİNİ',
-        content: 'Levator aponörozu tarsusa dikilirken cerrah hastayı ameliyat masasında dik/yarı-oturur (fowler) pozisyona getirir ve gözlerini açıp kapamasını, yukarı ve tam karşıya bakmasını ister (kapak yüksekliği, kıvrımı ve simetrisi ancak tam uyanık ve koopere hastada ayarlanabilir!). Derin sedasyon, propofol bolusları veya aşırı opioid alan hasta disoryante olur, gözlerini açamaz, kapak dinamiği çöker veya pitozis aşırı/yetersiz düzeltilir (overcorrection/undercorrection). Hasta ile sözel temas kesintisiz sürdürülmeli; sedasyon yalnızca lokal enjeksiyon esnasında ultra-kısa ve minimal tutulmalıdır.'
+        title: 'CANLI KAPAK KONTÜRÜ AYARI İÇİN "SIFIR DERİN SEDASYON" DİSİPLİNİ',
+        content: 'Levator aponörozu tarsusa dikilirken hasta masada yarı-oturur (Fowler) konuma getirilir ve gözlerini açıp kapaması istenir. Derin sedasyon veya Propofol infüzyonu/bolusları levator dinamiğini bozarak aşırı/yetersiz düzeltmeye (over/undercorrection) ve ani sıçramalı uyanmaya yol açar. Sedasyon yalnızca lokal enjeksiyon anında ultra-kısa ve minimal tutulmalı, diseksiyon ve ayar fazında hasta tam uyanık ve koopere olmalıdır.'
       },
       {
         number: 2,
-        title: 'LOKAL ANESTEZİKTE DÜŞÜK HACİM KURALI, MOTOR BLOK VE MÜLLER KASI / EPİNEFRİN YANILSAMASI',
-        content: 'Üst kapağa verilecek lokal anestezik hacmi 1–1.5 mL\'yi KESİNLİKLE GEÇMEMELİDİR! Yüksek hacimli enjeksiyon mekanik ödem yaratarak kapağı aşağı iter; orbikülaris kası motor blokajı kapak açıklığını bozar. Ayrıca lokal anestezikteki Epinefrin sempatomimetik etkiyle Müller kasını kasarak kapağı yapay olarak 1-2 mm yukarı kaldırır. Cerrah ve anestezi bu "adrenalin yanılsamasını" hesaba katmalı, gereksiz yüksek doz epinefrinden kaçınmalıdır.'
+        title: 'MİYASTENİA GRAVİS vs. MİTOKONDRİYAL MİYOPATİ (CPEO) / MİYOTONİK DİSTROFİ FARMAKOLOJİ AYRIMI!',
+        content: 'Pitozis nöromusküler hastalığın ilk bulgusu olabilir ve iki tablonun kas gevşetici farmakolojisi TAMAMEN FARKLIDIR: (a) MİYASTENİA GRAVİS (MG): Süksinilkoline DİRENÇ (yüksek doz gereksinimi + Faz II blok riski) ve non-depolarizanlara (Rokuronyum) AŞIRI DUYARLILIK vardır → mümkünse kas gevşeticisiz/LMA veya Rokuronyum dozu %50-75 azaltılarak + kantitatif TOF + Sugammadeks kullanılır (sabah piridostigmin dozu sürdürülür). (b) CPEO / MİTOKONDRİYAL MİYOPATİ / MİYOTONİK DİSTROFİ: Süksinilkolin HİPERKALEMİ, RABDOMİYOLİZ ve MİYOTONİK SPAZM nedeniyle KESİN KONTRENDİKEDİR! Mitokondriyal hastalıkta uzun/yüksek doz Propofol infüzyonunda PRIS/laktik asidoz riski vardır, laktatlı sıvılardan (Ringer Laktat) kaçınılır, normoglisemi ve normotermi titizlikle korunur.'
       },
       {
         number: 3,
-        title: 'KORNEA GÜVENLİĞİ, CORNEAL SHIELD (KORUYUCU SKLERAL KALKAN) VE BELL FENOMENİ KONTROLÜ',
-        content: 'Cilt insizyonu, orbital septum açılması ve tarsal dikişler korneanın birkaç milimetre üzerinde icra edilir. Kornea epitel erozyonu veya perforasyonunu önlemek için insizyon öncesi antibiyotikli pomad sürülerek opak plastik Kornea Kalkanı (Corneal Shield) yerleştirilmelidir. Ameliyat öncesi hastanın Bell fenomeni (göz kapandığında kürenin yukarı kayma refleksi) mutlaka değerlendirilmelidir; Bell refleksi zayıf olan hastalarda ameliyat sonrası lagoftalmi ve ağır kornea ülseri riski çok yüksektir!'
+        title: 'ASA AMELİYATHANE YANGIN ÜÇGENİ (YÜZ KOTERİ + OKSİJEN GÜVENLİĞİ)',
+        content: 'Üst kapakta bipolar koter veya radyofrekans mikro-iğne kullanılır. Örtü altında yüksek akımlı O₂ birikimi ciddi yüz yanıklarına yol açar! Örtü altına medikal hava veya FiO₂ ≤%30 verilmeli, koter öncesi O₂ ≥1 dk kesilip havalandırma yapılmalı ve sulu %5 Povidon-İyot (alkol bazlı prep YASAK!) kullanılmalıdır.'
       },
       {
         number: 4,
-        title: 'OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE WHITNALL LİGAMENTİ / LEVATOR TRAKSİYONU ALARMI',
-        content: 'Levator aponörozu disseke edilirken ve Whitnall ligamenti altından serbestleştirilirken uygulanan orbital çekme manevraları trigemino-vagal refleksi (CN V oftalmik dal -> CN X vagus) tetikleyebilir. Monitörde ani derin bradikardi, nodal kaçış ritmi veya ventriküler asistoli gelişebilir. Ritim kesintisiz izlenmeli, bradikardi görüldüğünde cerraha çekmeyi gevşetmesi söylenmeli; düzelmezse derhal İV Atropin (0.5 mg) uygulanmalıdır.'
+        title: 'LOKAL ANESTEZİKTE DÜŞÜK HACİM (≤1.5 ML) VE MÜLLER KASI / ADRENALİN YANILSAMASI',
+        content: 'Üst kapağa verilecek lokal anestezik hacmi 1.0-1.5 mL\'yi geçmemelidir (yüksek volüm mekanik pitozis ve orbikülaris bloğu yapar). Adrenalin Müller kasını uyararak kapağı yapay olarak 1-2 mm yükseltir; enjeksiyon sırasında negatif aspirasyon ve EKG/KB takibi zorunludur.'
       },
       {
         number: 5,
-        title: 'MİYOPATİK PİTOZİSTE (MİYASTENİ, MİTOKONDRİYAL HASTALIK, CPEO) GENEL ANESTEZİ VE KAS GEVŞETİCİ TEHLİKESİ',
-        content: 'Pitozis altta yatan Miyastenia Gravis, Kronik Progresif Eksternal Oftalmopleji (CPEO) veya miyotonik distrofilere bağlı olabilir. Genel anestezi uygulanacaksa: Non-depolarizan kas gevşeticilere (rokuronyum vb.) karşı aşırı duyarlılık vardır; süksinilkolin rabdomiyoliz, hiperkalemi ve malign hipertermi benzeri reaksiyon riski nedeniyle KONTRENDİKEDİR! Solunum yetmezliği ve uzamış postoperatif mekanik ventilasyon riskine karşı TOF kesintisiz izlenmeli, Sugammadeks hazır bulundurulmalı ve hasta tam uyanık olmadan ekstübe edilmemelidir.'
+        title: 'KORNEA KALKANI (CORNEAL SHIELD) VE BELL FENOMENİ GÜVENLİĞİ',
+        content: 'İnsizyon öncesi antibiyotikli pomad ile kornea kalkanı yerleştirilir ve vaka sonunda çıkarıldığı teyit edilir. Zayıf Bell fenomeni olan hastalarda postop lagoftalmi ve kornea ülseri riski yüksek olduğundan aşırı düzeltmeden kaçınılır.'
+      },
+      {
+        number: 6,
+        title: 'LEVATOR / WHITNALL TRAKSİYONUNDA OCR VE RETROBULBER HEMATOM ALARMI',
+        content: 'Orbital septum ve Whitnall ligamenti çekilirken OCR (bradikardi/asistoli) gelişebilir (1. adım cerrahı durdur → 2. adım oksijenasyon/ventilasyon → 3. adım İV Atropin 0.5 mg). Preaponevrotik yağ kanaması sonrası ani ağrı/proptozis gelişirse <60-90 dk içinde acil lateral kantotomi + inferior kantolizis + IV Mannitol + IV Asetazolamid uygulanır.'
       }
     ]
   },
@@ -90,108 +93,98 @@ export const ptosisRepair: ProcedureDefinition = {
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Göz Hastalıkları / Oküloplasti Konsültasyonu: Pitozis tipi (aponevrotik, konjenital, miyojenik, nörojenik), MRD1 ölçümü, levator fonksiyonu (üst kapak hareketi > 10 mm iyi, 5-9 mm orta, < 4 mm zayıf), kapak kıvrımı yüksekliği, fenilefrin testi (Müller kası yanıtı), Bell fenomeni ve kornea hassasiyeti.',
-      'Nöroloji Konsültasyonu: Şüpheli olgularda Miyastenia Gravis taraması (AChR antikorları, Tensilon/Buz testi, EMG), Horner Sendromu veya CPEO araştırması.',
-      'Kardiyoloji Konsültasyonu: Geriatrik grupta hipertansiyon, aritmiler ve koroner arter hastalığının optimizasyonu; adrenalinli lokal anestezik güvenliği.',
-      'Anestezi Polikliniği: Genel vs lokal/MAC değerlendirmesi, sedasyon planı ve hasta kooperasyonu.'
+      'Göz Hastalıkları / Oküloplasti Konsültasyonu: Pitozis etiyolojisi, MRD1, levator fonksiyonu, fenilefrin testi, Bell fenomeni ve kuru göz değerlendirmesi.',
+      'Nöroloji Konsültasyonu (Şüpheli Miyojenik/Nörojenik Olgularda): Miyastenia Gravis (AChR/MuSK antikoru, piridostigmin optimizasyonu), CPEO / Kearns-Sayre (kardiyak iletim bloğu / pacemaker taraması!) veya miyotonik distrofi değerlendirmesi.',
+      'Kardiyoloji / Anestezi (Klinik Endikasyonda): Stabil lokal/MAC involüsyonel pitozis hastasında rutin kardiyoloji konsültasyonu gerekmez; Kearns-Sayre/CPEO ve miyotonik distrofi hastalarında 12 derivasyonlu EKG ve kardiyak iletim incelemesi ZORUNLUDUR.'
     ],
     historyAndPhysical: [
-      'Antikoagülan / Antiagregan İlaç Kullanımı: Aspirin, Klopidogrel, DOAK ve Warfarin; preaponevrotik yağ disseksiyonunda orbital hematom riskini önlemek için hemostatik planlama cerrah ile yapılır.',
-      'Göz Kuruluğu (Kuru Göz) ve Lagoftalmi Öyküsü: Cerrahi sonrası kapak yukarı kalkacağından yetersiz göz kırpma ve Bell fenomeni eksikliği korneayı kurutabilir (Schirmer testi).',
-      'Hipertansiyon ve Taşikardi Öyküsü: İntraoperatif adrenalin enjeksiyonuna ve hasta oturtulmasına karşı kardiyovasküler yanıt stabilitesi.',
-      'Klostrofobi ve Anksiyete Düzeyi.'
+      'Nöromusküler Hastalık Sorgulaması: Gün içinde artan yorgunluk/diplopi (MG), progresif göz hareketi kısıtlılığı/sağırlık/iletim bloğu (CPEO/Kearns-Sayre), gevşeme güçlüğü (miyotonik distrofi) veya ailede Malign Hipertermi öyküsü.',
+      'Antikoagülan / Antiagregan Yönetimi (ASRA 2025 & PAUSE): Yüzeyel kapak insizyonunda kanama riski ile preaponevrotik yağ hematomu riski cerrahla tartılır; DOAC kesilecekse 48 sa (5-7 gün değil!) ve rutin köprüleme YAPILMAZ (bkz. #infografik=antithrombotic-matrix).',
+      'Kuru Göz / Bell Fenomeni ve Hipertansiyon Öyküsü.'
     ],
     laboratoryAndTests: [
-      'Tam Kan Sayımı (Hb, Hct, Trombosit düzeyi).',
-      'Koagülasyon Paneli: PT, aPTT, INR.',
-      'Açlık Kan Şekeri ve Temel Biyokimya (Böbrek ve karaciğer fonksiyonları).',
-      '12 Derivasyonlu EKG.'
+      'DÜŞÜK RİSKLİ LOKAL / MAC İNVOLÜSYONEL PİTOZİSTE RUTİN PREOP LABORATUVAR VE EKG İSTENMEZ! (Schein NEJM 2000 & ASA Advisory).',
+      'Klinik Endikasyon Bazlı Tetkikler: Warfarin kullananlarda güncel INR, diyabetiklerde vaka günü kan şekeri; CPEO / Kearns-Sayre / miyotonik distrofi / kardiyak semptomu olanlarda 12 derivasyonlu EKG (AV blok / uzamış PR-QRS taraması!) ve mitokondriyal hastalıkta bazal laktat/glukoz.'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (Aschner okülokardiyak refleksi ve adrenalin kaynaklı taşiaritmi analizi), SpO2, NIBP ve Solunum Sayısı.',
-      'Kan Basıncı Takibi (3-5 dakikada bir): Adrenalinli infiltrasyon ve hastayı masada oturtup kaldırma esnasında tansiyon dalgalanmalarının izlenmesi.',
-      'Sedasyon ve Solunum Takibi: Nazal kanülden kapnografi ve oksijenasyon izlemi.'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (OCR ve adrenalin taşiaritmi takibi), SpO₂, NIBP (masada oturtma sırasında ortostatik KB izlemi) ve sedasyon varsa nazal EtCO₂.',
+      'Genel Anestezi / Nöromusküler Hastalıkta: Kantitatif TOF monitörizasyonu ve core sıcaklık takibi zorunludur.'
     ],
     vascularAccess: [
-      '1 adet güvenli periferik intravenöz damar yolu (20-22G)',
-      'Acil Bradikardi Kiti: İV Atropin (0.5 mg ampul)',
-      'Gereğinde Hipertansiyon Yönetimi: İV Esmolol veya Labetalol'
+      '1 adet güvenli periferik intravenöz damar yolu (20-22G).',
+      'Acil İlaçlar Hazır: İV Atropin (0.5 mg), Esmolol/Labetalol; genel anestezi + MG/miyopatide Sugammadeks ve Dantrolen erişimi.'
     ],
-    patientPosition: 'Supin Başlangıç, İntraoperatif Ayarlanabilir Yarı-Oturur / Oturur (Fowler) Pozisyon',
+    patientPosition: 'Supin Başlangıç, İntraoperatif Ayarlanabilir Yarı-Oturur (45-60° Fowler) Pozisyon',
     patientPositionDetails: [
-      'Hasta sırtüstü yatırılır; baş silikon donüt yastıkla sabitlenir.',
-      'Ameliyat masasının sırt kısmı motorlu ve kolayca oturur pozisyona (45-60 derece) getirilebilir olmalıdır.',
-      'Kapak yüksekliği ayarlanırken yerçekiminin kapağa gerçek etkisini görebilmek için hasta oturur pozisyona alınır ve cerrah ile tam karşı karşıya bakar.',
-      'Cerrahi örtülerin yüze yapışmaması ve hasta oturtulduğunda görüşün engellenmemesi için esnek askı çadırı veya L-bar köprüsü kurulur.'
+      'Motorlu ameliyat masası intraoperatif kapak seviyesi testi için kolayca 45-60° oturur konuma getirilebilmelidir.',
+      'Örtü altı medikal hava veya FiO₂ ≤%30 sağlanır; hasta oturtulduğunda cerrahla yüz yüze bakış engellenmemelidir.'
     ],
     anesthesiaManagement: [
       'Lokal İnfiltrasyon Protokolü (Minimal Volüm):',
-      '  - Solüsyon: Lidokain %2 + Bupivakain %0.5 (1:1 karışım) + 1:100.000 veya 1:200.000 Epinefrin.',
-      '  - Enjeksiyon Hacmi: Üst kapak cilt altı ve preseptal alana MAKSİMUM 1.0 - 1.5 mL! Aşırı volüm mekanik pitozis yapar ve kapak ayarını bozar.',
-      '  - Tam vazokonstrüksiyon için insizyondan önce EN AZ 7-10 DAKİKA BEKLENMELİDİR.',
+      '  - Lidokain %2 + Bupivakain %0.5 (1:1) + 1:100.000 veya 1:200.000 Adrenalin; üst kapak başına MAKSİMUM 1.0 - 1.5 mL (negatif aspirasyon sonrası).',
+      '  - Vazokonstriksiyon için insizyondan 7-10 dakika önce enjeksiyon yapılır.',
       'Monitörize Anestezi Bakımı (MAC):',
-      '  - Yalnızca lokal enjeksiyon yapılırken ağrıyı kesmek amacıyla ultra-kısa sedasyon: Midazolam 0.5 - 1.0 mg İV veya çok düşük doz Fentanil 25 mcg İV.',
-      '  - Diseksiyon ve kapak ayarı aşamasında HASTA TAMAMEN UYANIK OLMALIDIR; propofol infüzyonu veya bolusları KESİNLİKLE YASAKTIR.',
-      'Genel Anestezi (Pediatrik / Frontalis Askı / İleri Demans):',
-      '  - LMA veya Endotrakeal Entübasyon; miyopati/CPEO hastalarında süksinilkolin kontrendikedir, TOF takibi şarttır.'
+      '  - Sadece enjeksiyon anı için ultra-hafif anksiyoliz: Gerekirse Midazolam 0.5-1.0 mg İV veya Fentanil 25 mcg İV.',
+      '  - Diseksiyon ve oturur kapak ayarı sırasında hasta tamamen uyanık ve koopere olmalıdır.',
+      'Genel Anestezi (Pediatrik Frontalis Askı / Uyumsuz Erişkin / Miyopati):',
+      '  - LMA veya spiralli ETT; MG\'de NMB %50-75 azaltılır (veya NMB\'siz LMA) + TOF + Sugammadeks.',
+      '  - CPEO/Mitokondriyal miyopatide: Süksinilkolin KESİN YASAK; laktatsız dengeli/izotonik sıvı + normoglisemi + normotermi; uzun/yüksek doz Propofol infüzyonundan kaçınılır.'
     ],
     airwayManagement: [
-      'MAC yönetiminde hava yolu hastanın spontan solunumudur; burun kanülü ile 2 L/dk O2 verilir.',
-      'Örtü altında karbondioksit birikimini ve sıcaklık hissini önlemek için vakum hortumu ile aktif örtü altı havalandırma kurulur.'
+      'MAC\'te spontan solunum korunur; ASA OR Fire kuralı gereği örtü altı medikal hava (veya FiO₂ ≤%30), koter/radyofrekans öncesi O₂ ≥1 dk kesilir ve sulu %5 Povidon-İyot kullanılır.',
+      'Genel anestezide LMA (öksürüksüz uyanma) veya spiralli ETT tercih edilir.'
     ],
     criticalSurgicalStages: [
-      '1. Pozisyonlandırma, Monitörizasyon ve Başın Sabitlenmesi.',
-      '2. Üst Kapak Cilt Kıvrımının (Crease) Cerrahi Kalemle İşaretlenmesi (Simetri kontrolü).',
-      '3. Koruyucu Pomad Eşliğinde Kornea Kalkanının (Corneal Shield) Yerleştirilmesi.',
-      '4. Minimal Hacimli (1-1.5 mL) Lokal Anestezik ve Epinefrin İnfiltrasyonu (7-10 dk bekleme süresi).',
-      '5. Cilt ve Orbikülaris İnsizyonu (15 numara bistüri veya radyofrekans mikro-iğne).',
-      '6. Orbital Septumun Transvers Açılması ve Preaponevrotik Sarı Yağ Yastıkçıklarının Görülmesi.',
-      '7. Levator Aponörozu ve Whitnall Ligamentinin Ortaya Konması (Orbital çekme manevralarında okülokardiyak refleks kontrolü!).',
-      '8. Aponörozun Tarsus Ön Yüzüne Geçici Sütürlerle Tespiti (5-0 veya 6-0 kalıcı dikişler).',
-      '9. Ameliyat Masasının Oturur Pozisyona Getirilmesi ve Hastanın Uyandırılarak Gözlerini Açmasının İstenmesi (Kapak yüksekliği, eğimi ve simetrisinin canlı ayarlanması).',
-      '10. Sütürlerin Kalıcı Bağlanması, Kornea Kalkanının Çıkarılması, Cilt Kapanışı ve Basısız Pansuman.'
+      '1. Taraf Doğrulaması, Üst Kapak Kıvrımının (Crease) Oturur Pozisyonda İşaretlenmesi.',
+      '2. Sulu %5 Povidon-İyot Antisepsisi ve Kornea Kalkanının (Corneal Shield) Yerleştirilmesi.',
+      '3. Düşük Hacimli (1-1.5 mL) Adrenalinli Lokal İnfiltrasyon (7-10 dk bekleme; EKG/KB izlemi).',
+      '4. Cilt, Orbikülaris ve Orbital Septum İnsizyonu (Koter öncesi O₂ KAPALI teyidi!).',
+      '5. Preaponevrotik Yağ Ekartasyonu ve Levator Aponörozu / Whitnall Ligamenti Disseksiyonu (OCR kontrolü!).',
+      '6. Aponörozun Tarsusa Geçici Sütürlerle Tespiti.',
+      '7. Masanın 45-60° Oturur Konuma Getirilmesi ve Canlı Göz Aç-Kapa Simetri Ayarı.',
+      '8. Kalıcı Sütürasyon, Titiz Hemostaz, Kornea Kalkanının Çıkarılma Teyidi ve Cilt Kapanışı.'
     ],
     emergenceNotes: [
-      'Lokal/MAC cerrahisinde uyanma dönemi yoktur; ameliyat bitiminde hasta tekerlekli sandalyeye oturur vaziyette alınabilir.',
-      'Ameliyat edilen göze baskılı pansuman yapılmaz; korneanın kurumasını önlemek için göz kapağı üzerine antibiyotikli pomad ve steril gevşek gazlı bez konulur.',
-      'Postoperatif ilk 24-48 saatte aralıklı soğuk jel uygulaması ödemi ve hematom riskini azaltır.'
+      'Lokal/MAC cerrahisinde hasta PADSS ≥9 kriteriyle kısa gözlem sonrası taburcu edilir.',
+      'Genel anestezi uygulanan MG/miyopati olgularında TOF ≥0.9, tam solunum gücü ve normotermi doğrulanmadan ekstübasyon yapılmaz.',
+      'Göze sıkı baskılı pansuman yapılmaz (görme ve retrobulber hematom takibini engeller!); ilk 24-48 saat aralıklı soğuk kompres uygulanır.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Pitozis onarımı sonrası ağrı genellikle hafif düzeydedir ve cerrahi sahada sızlama şeklindedir.',
-      'Oral Parasetamol (500-1000 mg) ilk 24-48 saatte tamamen yeterlidir.',
-      'Trombosit fonksiyonlarını baskılayarak hematom riskini artırabilecek aspirin veya agresif NSAİİ kullanımından kaçınılmalıdır.',
-      'İlk 24-48 saat cerrahi sahaya aralıklı soğuk jel kompres uygulanması ödemi belirgin şekilde azaltır.'
+      'Pitozis onarımı sonrası ağrı hafiftir; lokal infiltrasyon ilk saatlerde etkin analjezi sağlar.',
+      'Oral Parasetamol (500-1000 mg) yeterlidir; sistemik opioidlere (Tramadol/Kodein) gerek yoktur ve PONV/venöz basınç artışı nedeniyle kaçınılır.',
+      'İlk 24-48 saat aralıklı soğuk jel kompres ödem ve kapak hematomunu azaltır; erken dönemde agresif antiplatelet NSAİİ\'lerden kaçınılır.'
     ],
     prospectRecommendations: [
-      'PROSPECT Oküloplastik Cerrahi Rehberleri:',
-      'Preoperatif ve intraoperatif lokal infiltrasyonun postoperatif analjezik gereksinimini sıfıra indirdiği;',
-      'Opioid kullanımından kaçınılarak PONV (bulantı/kusma) ve buna bağlı venöz basınç artışının engellenmesi tavsiye edilir.'
+      'Oküloplastik kapak cerrahisi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; RCoA/RCOphth (2012) ve 4th PONV Consensus (2020) ilkeleri doğrultusunda:',
+      '  - Uzun etkili lokal anestezik infiltrasyonu + Parasetamol ile opioid gerektirmeyen konforlu iyileşme sağlanır.'
     ],
     erasRecommendations: [
-      'ERAS Göz ve Oküloplastik Cerrahi Protokolleri:',
-      'Günübirlik cerrahi (Day-case surgery): Hasta operasyondan 30-45 dakika sonra oral alıma başlayabilir ve aynı gün güvenle taburcu edilir.',
-      'Postoperatif Baş Pozisyonu: İlk gece başın 2 yastıkla (30-45 derece) yükseltilmesi ödem ve kanama riskini önler.',
-      'Lagoftalmi Takibi: Ameliyat sonrası erken dönemde kapak tam kapanamayabileceğinden korneayı korumak için gündüz suni gözyaşı damlaları, gece ise yoğun oftalmik jel/pomad kullanılması esastır.'
+      'Günübirlik Oküloplastik Cerrahi İlkeleri:',
+      '  - Hızlı Taburculuk: PADSS ≥9 ile aynı gün taburcu edilir (ağır MG/miyopati genel anestezi olguları solunum takibi için yatırılabilir).',
+      '  - Baş 30-45° Elevasyonu: İlk 48 saat baş yüksek yatış ödem ve hematomu azaltır.',
+      '  - Lagoftalmi & Kornea Koruması: Gündüz koruyucusuz suni gözyaşı, gece yoğun oftalmik jel/pomad; ani şiddetli göz ağrısı veya görme kaybında (retrobulber hematom) acil başvuru eğitimi verilir.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe\'s Anesthesiologist\'s Manual of Surgical Procedures (5th Edition), Section VI: Ophthalmology, Chapter: Oculoplastics - Ptosis Repair (Levator Resection/Advancement and Frontalis Sling), pp. 874-880.',
-    erasReference: 'Enhanced Recovery After Surgery (ERAS) Society & British Ophthalmic Anaesthesia Society (BOAS): Recommendations for Day-Case Oculofacial Surgery.',
-    prospectReference: 'PROSPECT Guidelines: Postoperative Pain Management in Ophthalmic and Oculoplastic Procedures.',
+    jaffeReference: 'Jaffe RA, Schmiesing CA, Golianu B. Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmic Surgery — Ptosis Repair (Blepharoptosis). Wolters Kluwer / LWW.',
+    erasReference: 'Kumar CM, Eke T, Dodds C, et al. Local anaesthesia for ophthalmic surgery — Joint guidelines from the Royal College of Anaesthetists (RCoA) and the Royal College of Ophthalmologists (RCOphth). 2012.',
+    prospectReference: 'Oküloplastik cerrahi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; analjezi ve PONV yaklaşımı RCoA/RCOphth (2012) ve 4th Consensus Guidelines for PONV (Gan et al., Anesth Analg 2020) ilkelerine dayanmaktadır.',
     otherReferences: [
-      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Blepharoptosis Management Guidelines.',
-      'European Society of Ophthalmic Plastic and Reconstructive Surgery (ESOPRS): Consensus on Levator Advancement and Ptosis Surgery.',
-      'Türk Oftalmoloji Derneği (TOD) Oküloplastik Cerrahi Birimi: Pitozis Tanı ve Tedavi Rehberi.'
+      'Schein OD, Katz J, Bass EB, et al. The value of routine preoperative medical testing before cataract surgery. N Engl J Med. 2000;342(3):168-175.',
+      'ASA Task Force on Operating Room Fires. Practice Advisory for the Prevention and Management of Operating Room Fires. Anesthesiology. 2013;118(2):271-290.',
+      'Blichfeldt-Lauridsen L, Hansen BD. Anesthesia and myasthenia gravis. Acta Anaesthesiol Scand. 2012;56(1):17-22.',
+      'Niezgoda J, Morgan PG. Anesthetic considerations in patients with mitochondrial defects. Paediatr Anaesth. 2013;23(9):785-793.',
+      'Kopp SL, Vandermeulen E, et al. ASRA Pain Medicine Evidence-Based Guidelines (5th ed.). Reg Anesth Pain Med. 2025.'
     ]
   }
 };

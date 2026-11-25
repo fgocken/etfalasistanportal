@@ -3,11 +3,9 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Kornea Nakli (Keratoplasti): Penetran Keratoplasti (PKP) ve Lameller Kornea Nakli (DALK, DSAEK, DMEK)
  * (Corneal Transplant / Penetrating and Lamellar Keratoplasty)
- * 
- * Jaffe (5th ed., Section VI: Ophthalmology - Corneal Transplant [Penetrating Keratoplasty], pp. 852-858),
- * American Academy of Ophthalmology (AAO), Cornea Society,
- * European Society of Cataract and Refractive Surgeons (ESCRS),
- * Ophthalmic Anesthesia Society (OAS) ve Türk Oftalmoloji Derneği (TOD) Kornea Birimi Protokolleri referans alınarak yapılandırılmıştır.
+ *
+ * Referanslar: Jaffe (5th ed., Section VI: Ophthalmic Surgery), RCoA / RCOphth (2012),
+ * Gan et al. 4th PONV Consensus (2020), ASRA 5th Ed. (2025), ASA OR Fire Advisory (2013).
  */
 export const cornealTransplant: ProcedureDefinition = {
   id: 'corneal-transplant',
@@ -18,7 +16,7 @@ export const cornealTransplant: ProcedureDefinition = {
   categoryTag: 'Kornea & Ön Segment Cerrahisi',
 
   // 1) Prosedür Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Gözün en ön saydam tabakası olan korneanın hastalık, travma, enfeksiyon veya distrofiler sonucu saydamlığını veya optik biçimini kaybetmesi durumunda, donör göz bankasından temin edilen sağlıklı insan korneası ile değiştirilmesi (allogreft transplantasyonu) ameliyatıdır. İki ana grupta icra edilir: (1) Penetran Keratoplasti (PKP - Tam Kat Kornea Nakli): Kornea trefini ile hastanın hastalıklı korneasından 7.5 - 8.5 mm çapında tam kat yuvarlak bir düğme kesilip çıkarılır; göz küresi dakikalarca tamamen "açık küre" (open globe) haline gelir. Ardından donör kornea düğmesi alıcı yatağa 16 tekli veya devamlı 10-0 naylon mikrosütürle dikilir. Skleral kollapsı önlemek için sklera üzerine metal Flieringa halkası dikilebilir. (2) Lameller Keratoplasti: Yalnızca hastalıklı kornea katmanının değiştirildiği seçici mikrocerrahi yöntemlerdir. DALK (Derin Anterior Lameller Keratoplasti) yönteminde endotel korunarak stroma değiştirilir; DSAEK ve DMEK yöntemlerinde ise sadece disfonksiyonel kornea endoteli ve Descemet zarı değiştirilir ve ön kamaraya verilen hava veya gaz (SF6) kabarcığı ile greft arkadan stromaya yapıştırılır.',
+  description: 'Gözün en ön saydam tabakası olan korneanın hastalık, travma, enfeksiyon veya distrofiler sonucu saydamlığını veya optik biçimini kaybetmesi durumunda, donör göz bankasından temin edilen sağlıklı insan korneası ile değiştirilmesi (allogreft transplantasyonu) ameliyatıdır. İki ana grupta icra edilir: (1) Penetran Keratoplasti (PKP - Tam Kat Kornea Nakli): Kornea trefini ile hastanın hastalıklı korneasından 7.5 - 8.5 mm çapında tam kat yuvarlak bir düğme kesilip çıkarılır; göz küresi dakikalarca tamamen "açık küre" (open-sky) haline gelir. Ardından donör kornea düğmesi alıcı yatağa 16 tekli veya devamlı 10-0 naylon mikrosütürle dikilir. Skleral kollapsı önlemek için sklera üzerine metal Flieringa halkası dikilebilir. (2) Lameller Keratoplasti: Yalnızca hastalıklı kornea katmanının değiştirildiği seçici mikrocerrahidir. DALK yönteminde endotel korunarak stroma değiştirilir; DSAEK ve DMEK yöntemlerinde yalnızca kornea endoteli ve Descemet zarı değiştirilir ve ön kamaraya verilen hava veya %20 SF₆ gaz kabarcığı ile greft arkadan stromaya yapıştırılır.',
   indications: [
     'Keratokonus: İlerleyici kornea dikleşmesi, incelmesi ve gözlük/kontakt lensle düzeltilemeyen ileri evre ektaziler',
     'Psödofakik ve Afakik Büllöz Keratopati (PBK): Önceki katarakt veya ön segment cerrahileri sonrası kornea endotel yetmezliği ve kronik kornea ödemi (DMEK / DSAEK veya PKP)',
@@ -26,154 +24,181 @@ export const cornealTransplant: ProcedureDefinition = {
     'Kornea Skarları ve Lökomlar: Geçirilmiş travma, kornea perforasyonu veya enfeksiyöz keratit (Herpes simplex, bakteriyel veya fungal ülser) sekeli',
     'Kornea Greft Rejeksiyonu ve Yetmezliği: Önceki kornea naklinin reaksiyon veya yaşlanma sonucu saydamlığını kaybetmesi (Re-PKP)'
   ],
-  averageDuration: '1.0 - 2.5 saat (Standart PKP: 60-90 dk; Katarakt ekstraksiyonu ve İOL değişimi ile kombine "Üçlü Prosedür / Triple Procedure": 90-120 dk; DALK: 75-100 dk; DMEK / DSAEK: 45-75 dk)',
+  averageDuration: '1.0 - 2.5 saat (Standart PKP: 60-90 dk; Katarakt + İOL ile kombine "Triple Procedure": 90-120 dk; DALK: 75-100 dk; DMEK / DSAEK: 45-75 dk)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '< 10 - 20 mL (Kornea avasküler bir dokudur; kanama yalnızca konjonktiva, episklera veya Flieringa halkası dikişlerinden kaynaklanan minimal sızıntılardır)',
+    estimatedBloodLoss: '< 10 - 20 mL (Kornea avaskülerdir; kanama yalnızca konjonktiva, episklera veya Flieringa halkası dikişlerinden kaynaklanan minimal sızıntılardır)',
     riskLevel: 'minimal',
     riskLevelLabel: 'Minimal Kan Kaybı / Ancak Açık Kürede Katastrofik Ekspulsif Koroidal Kanama Riski',
     crossMatchRequirement: 'Rutin kan hazırlığı gerekmez (T&S ve Cross-Match endikasyonu yoktur)',
     transfusionProbability: '< %0.01 (Kan transfüzyonu endikasyonu yoktur)',
     criticalBleedingSources: [
-      'Ekspulsif Supracoroidal / Koroidal Hemoraji: Trefinasyon sonrası göz açıkken (açık küre evresinde) ani intraoküler hipotansiyon, öksürük veya ıkınma ile arka siliyer arterlerin yırtılması sonucu gelişen masif intraoküler kanama (gözün tamamen kaybına yol açar)',
+      'Ekspulsif Suprakoroidal / Koroidal Hemoraji: Trefinasyon sonrası "open-sky" evresinde ani intraoküler hipotansiyon, öksürük veya ıkınma ile arka siliyer arterlerin yırtılması (gözün kaybına yol açabilen en ağır komplikasyon)',
       'İris Kökü Kanamaları ve Ön Kamara Hifeması: İridektomi veya periferik sineşi lizisi esnasında mikrodamar yırtılmaları',
       'Flieringa Halkası Skleral Dikiş Sızıntıları'
     ],
     hemostasisStrategies: [
       'Ekspulsif koroid kanaması şüphesinde cerrahın donör düğmeyi derhal yerleştirip 4 kardinal sütürle gözü acilen kapatması veya arka sklerotomi',
-      'Tam nöromusküler blokaj ve derin genel anestezi ile açık küre evresinde öksürük ve ıkınmanın mutlak engellenmesi',
-      'İntraoperatif kan basıncının normotansif sınırda tutulması (SKB < 130-140 mmHg) ve intraoküler basıncı artıran ani manevralardan kaçınılması'
+      'Tam nöromusküler blokaj (TOF 0/4) ve derin genel anestezi ile açık küre evresinde öksürük ve ıkınmanın mutlak engellenmesi',
+      'İntraoperatif kan basıncının bazal değere yakın normotansif sınırda tutulması ve 10-15° baş elevasyonu ile oküler venöz drenajın korunması'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Endotrakeal Genel Anestezi (GETA) + Tam Nöromusküler Blokaj (TOF 0/4 - 1/4) + Pürüzsüz Ekstübasyon Protokolü — Penetran Keratoplastide (PKP) gözün 8 mm açık küre haline gelmesi nedeniyle DÜNYA GENELİNDE MUTLAK TERCİH EDİLEN STANDARTTIR'
+      'Endotrakeal Genel Anestezi (GETA — Propofol + Remifentanil TIVA veya N₂O\'suz Dengeli Anestezi) + Derin Nöromusküler Blokaj (TOF 0/4) + Pürüzsüz Ekstübasyon — Penetran Keratoplastide (PKP) "open-sky" evresi nedeniyle ALTIN STANDARTTIR'
     ],
     alternative: [
-      'Derin Rejyonel Blok (Genişletilmiş Sub-Tenon Bloğu veya Peribulber Blok) + Monitörize Anestezi Bakımı (MAC): Genel anestezi riski çok yüksek olan, kooperasyonu tam yaşlı hastalarda veya lameller keratoplastilerde (DMEK/DSAEK); ancak trefinasyon öncesi tam oküler akinezi ve hipotonik göz şarttır',
-      'Laringeal Maske (LMA) ile Genel Anestezi: Yalnızca lameller keratoplastilerde (DMEK/DSAEK); tam kat açık küre (PKP) olgularında hava yolu aspirasyon güvenliği ve tam solunum kontrolü için endotrakeal tüp tercih edilir'
+      'Genişletilmiş Sub-Tenon Bloğu (Künt Kanül) + Hafif MAC: Özellikle kapalı sistem lameller endotel nakillerinde (DMEK / DSAEK) veya genel anestezi riski aşırı yüksek koopere erişkinlerde (yüksek miyopide [>26 mm] iğneli blok KONTRENDİKEDİR; tam kat PKP\'de tercih edilmez)',
+      'Laringeal Maske (LMA) ile Genel Anestezi: Seçilmiş lameller keratoplastilerde (DMEK / DSAEK) pürüzsüz uyanma avantajı ile; tam kat açık küre PKP\'de güvenli ventilasyon ve sıkı PaCO₂ kontrolü için spiralli ETT tercih edilir'
     ],
-    clinicalRationale: 'Penetran keratoplastide kornea trefinasyonu sırasında gözün 8 mm çapında tam kat "açık küre" (open globe) haline gelmesi nedeniyle ekspulsif koroidal hemorajiyi önlemek için derin anestezi ve tam nöromusküler blokaj (TOF 0/4) sağlayan genel anestezi standarttır. Hava yolunda ise baş-boyun örtüleri altında tüp kayması/kinking olmaksızın PaCO2\'nin 35-38 mmHg\'de kesin kontrolü (koroidal venöz konjesyonu önlemek için) ve pozitif basınç altında güvenli ventilasyon amacıyla spiralli kaflı endotrakeal tüp tercih edilir.',
-    notes: 'KORNEA NAKLİNDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) GENİŞ AÇIK KÜRE (OPEN GLOBE) EVRESİNDE SIFIR GÖZ İÇİ BASINCI (GİB) VE SIFIR HAREKET / ÖKSÜRÜK DİSİPLİNİ — Penetran keratoplastide kornea trefinasyonu yapıldığı anda gözün ön yüzeyi 8 mm çapında açık bir pencereye dönüşür ve ön kamara ile dış ortam arasında sıfır bariyer kalır. Bu aşamada hastanın aniden öksürmesi, ıkınması, kafasını oynatması, yüzeyel anesteziye kayması veya hiperkapniye bağlı koroidal venöz dolgunluk gelişmesi; vitreusun öne fırlamasına ve saniyeler içinde arka siliyer arterlerin patlayarak tüm göz içi dokularının dışarı fırlamasına (EKSPULSİF KOROİDAL HEMORAJİ) ve KALICI KÖRLÜĞE yol açar! Bu evrede derin anestezi, tam nöromusküler blok (TOF 0/4 veya 1/4) sürdürülmeli; PaCO2 35-38 mmHg seviyesinde normokapnik tutulmalıdır. (2) PÜRÜZSÜZ ÖKSÜRMESİZ UYANMA (SMOOTH EMERGENCE) VE DİKİŞ HATTI GÜVENLİĞİ — Donör kornea alıcı yatağa 16-24 adet saç kılından ince 10-0 naylon dikişle tutturulur. Ekstübasyon anında hastanın tüpü ısırması, öksürmesi veya hipertansif kriz geliştirmesi yeni atılan dikişleri patlatır, yara ayrışması (wound dehiscence), iris prolapsusu ve hifemaya yol açar. Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg), profilaktik antiemetik (Ondansetron), nazik orofaringeal aspirasyon uygulanmalı; hasta kesinlikle öksürmeden, ıkınmadan ve normotansif uyandırılmalıdır. (3) OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE FLIERINGA HALKASI TEHLİKESİ — Sklera kollapsını önlemek için göz küresine Flieringa halkası dikilirken veya rektus kaslarına tespit sütürleri atılırken trigemino-vagal refleks (CN V -> CN X) tetiklenir. Bu durum ani derin bradikardi, nodal ritim ve kardiyak duraklamaya (asistoli) neden olabilir. EKG ritmi anlık izlenmeli; bradikardi görüldüğünde cerraha traksiyonu gevşetmesi söylenmeli, düzelmezse İV Atropin (0.5 mg) uygulanmalıdır. (4) ENDOTEL NAKLİNDE (DMEK / DSAEK) ÖN KAMARA HAVA/GAZ (SF6) KABARCIĞI VE AZOT PROTOKSİT (N2O) KONTRENDİKASYONU — Lameller endotel nakillerinde donör Descemet zarını alıcı stromaya yapıştırmak için ön kamaraya hava veya %20 SF6 (kükürt hekzaflorür) gaz kabarcığı enjekte edilir. Eğer anestezide Azot Protoksit (N2O / Güldürücü Gaz) kullanılıyorsa, N2O gaz kabarcığının içine kandan hızla difüze olarak kabarcığı şişirir; göz içi basıncını (GİB) 50-70 mmHg üzerine fırlatarak santral retinal arteri tıkar ve ANINDA KÖRLÜK yaratır! Bu nedenle kornea cerrahisinde AZOT PROTOKSİT KESİNLİKLE YASAKTIR. Postoperatif dönemde hastanın sırtüstü (supin) yatması zorunludur. (5) MANNİTOL KULLANIMI, HONAN BALON SINIRI VE PERİOPERATİF GLİSEMİ YÖNETİMİ — Cerrahi öncesi göz içi basıncını düşürmek ve vitreus hacmini küçültmek amacıyla İV Mannitol (%20 solüsyon, 1-1.5 g/kg) indüksiyonda yavaşça infüze edilebilir. Ancak dikkat: Trepanasyon öncesi kullanılan mekanik Honan balonu veya oküler kompresyon cihazları, kornea kesildikten sonra KESİNLİKLE KULLANILAMAZ. Greft rejeksiyonunu engellemek için operasyon esnasında yüksek doz topikal/sistemik steroid uygulanacağından diyabetik hastalarda kan şekeri yakından izlenmeli (hedef < 180 mg/dL) ve dekompanse hiperglisemi önlenmelidir.'
+    clinicalRationale: 'Penetran keratoplastide kornea trefinasyonu sırasında göz 8 mm çapında tam kat "open-sky" haline geldiğinden ekspulsif koroidal hemorajiyi önlemek için derin anestezi ve tam nöromusküler blokaj (TOF 0/4) sağlayan genel anestezi standarttır. Spiralli kaflı endotrakeal tüp baş-boyun örtüleri altında tüp kıvrılmaksızın PaCO₂\'nin 35-38 mmHg\'de tutulmasını sağlar; N₂O kesinlikle kullanılmaz.',
+    rulesTitle: 'KORNEA NAKLİNDE ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    notes: 'Keratoplastide hayati anestezi kuralları: (1) Open-sky evresinde TOF 0/4 + normokapni + sıfır öksürük; (2) DMEK/DSAEK hava/SF₆ kabarcığı nedeniyle N₂O kesin yasağı; (3) Pürüzsüz ekstübasyon + ikili PONV profilaksisi (Tramadol/Kodein YASAK); (4) Flieringa halkası / rektus askısında OCR protokolü; (5) Mannitolün yalnızca endikasyonda düşük-orta doz (0.25-0.5 g/kg) ve mesane takibiyle verilmesi; (6) Yüksek miyopi/Honan balon/steroid glisemi güvenliği.',
+    indispensableRules: [
+      {
+        number: 1,
+        title: 'OPEN-SKY (AÇIK KÜRE) EVRESİNDE SIFIR HAREKET, DERİN NMB (TOF 0/4) VE NORMOKAPNİ',
+        content: 'Penetran keratoplastide kornea trefinasyonu yapıldığı anda gözün ön yüzeyi 8 mm çapında açık bir pencereye dönüşür. Bu aşamada yüzeyel anestezi, öksürük, ıkınma veya hiperkapni (koroidal venöz dolgunluk) arka siliyer arterleri patlatarak EKSPULSİF KOROİDAL HEMORAJİ ve kalıcı körlük yaratır! Derin anestezi + TOF 0/4 nöromusküler blokaj + EtCO₂/PaCO₂ 35-38 mmHg sıkı normokapni + 10-15° baş elevasyonu sürdürülmelidir.'
+      },
+      {
+        number: 2,
+        title: 'DMEK / DSAEK ÖN KAMARA HAVA / SF₆ KABARCIĞI VE AZOT PROTOKSİT (N₂O) YASAĞI',
+        content: 'Endotel nakillerinde (DMEK/DSAEK) donör grefti stromaya yapıştırmak için ön kamaraya hava veya %20 SF₆ gazı verilir. N₂O gaz kabarcığına hızla difüze olarak GİB\'i 50-70 mmHg üzerine fırlatır ve santral retinal arter tıkanıklığı (CRAO) ile körlük yaratır! Keratoplastide N₂O KESİNLİKLE YASAKTIR. Postoperatif ilk 24-48 saat hasta kesinlikle SUPİN (sırtüstü) yatırılır.'
+      },
+      {
+        number: 3,
+        title: 'PÜRÜZSÜZ ÖKSÜRÜKSÜZ UYANMA VE ÇİFTLİ PONV PROFİLAKSİSİ (TRAMADOL/KODEİN YASAK!)',
+        content: 'Donör kornea 16-24 adet 10-0 naylon mikrosütürle tutturulur; ekstübasyonda öksürme veya postop kusma GİB\'i 30-50 mmHg fırlatarak dikiş ayrışması ve iris prolapsusu yaratır. Ekstübasyon öncesi düşük doz Remifentanil (0.03-0.05 mcg/kg/dk) veya Deksmedetomidin + İV Lidokain (1.5 mg/kg) + Sugammadeks (TOF ≥0.9) + ikili PONV profilaksisi (Deksametazon + Ondansetron) uygulanır. Kusmayı tetikleyen Tramadol ve Kodein KULLANILMAZ!'
+      },
+      {
+        number: 4,
+        title: 'FLIERINGA HALKASI VE REKTUS SÜTÜRÜNDE OKÜLOKARDİYAK REFLEKS (OCR)',
+        content: 'Skleral kollapsı önlemek için Flieringa halkası dikilirken veya rektus askı sütürü çekilirken trigemino-vagal refleks (CN V → CN X) ani derin bradikardi/asistoli yapabilir. İlk adım cerrahı durdurmak, ardından ventilasyon/normokapni kontrolü, düzelmezse İV Atropin 0.5 mg uygulamaktır (rutin profilaktik Atropin önerilmez).'
+      },
+      {
+        number: 5,
+        title: 'MANNİTOL DOZ DİSİPLİNİ (0.25–0.5 G/KG) VE MESANE DİSTANSİYONU TUZAĞI',
+        content: 'Yaşlı ve kalp yetmezliği riski olan hastalarda rutin 1-1.5 g/kg yüksek doz Mannitol akut pulmoner ödem ve idrar sondasız hastada şiddetli mesane distansiyonu (uyanmada ajitasyon, hipertansiyon ve dikiş patlaması!) yaratır. Mannitol yalnızca cerrahın açık endikasyonuyla (pozitif vitreus basıncı riski) 0.25-0.5 g/kg (maks. 1 g/kg) yavaş infüze edilir ve idrar çıkışı/mesane doluluğu mutlaka takip edilir.'
+      },
+      {
+        number: 6,
+        title: 'YÜKSEK MİYOPİDE İĞNELİ BLOK YASAĞI, OR YANGIN GÜVENLİĞİ VE GLİSEMİ',
+        content: 'Blokla yapılan DMEK/DSAEK olgularında yüksek miyopi (>26 mm) varsa iğneli blok perforasyon riski nedeniyle YASAKTIR (künt Sub-Tenon seçilir); örtü altı medikal hava / FiO₂ ≤%30 ile ASA OR yangın güvenliği korunur. Trefinasyon başladıktan sonra Honan balonu kesinlikle kullanılmaz. Sistemik/topikal steroid alan diyabetiklerde kan şekeri <180 mg/dL hedeflenir.'
+      }
+    ]
   },
 
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Göz Hastalıkları / Kornea Konsültasyonu: Kornea patolojisinin tespiti (keratokonus, PBK, skar), ön kamara derinliği, ön sineşiler, lens durumu (afak, psödofak veya katarakt) ve donör kornea dokusunun (endotel hücre sayısı > 2000-2500 hücre/mm²) göz bankası kayıtlarının doğrulanması.',
-      'Kardiyoloji Konsültasyonu: Genel anestezi alacak ileri yaş popülasyonda koroner arter hastalığı, hipertansiyon ve aritmi tespiti; hemodinamik stabilite planlaması.',
-      'Göğüs Hastalıkları Konsültasyonu: Ameliyat sonrası öksürüğü tamamen engellemek için KOAH, astım veya kronik bronşit olgularının preoperatif bronkodilatörlerle optimize edilmesi.',
-      'Anestezi Polikliniği: Zor hava yolu taraması, aspirasyon riski ve genel anestezi ekstübasyon planı.'
+      'Göz Hastalıkları / Kornea Konsültasyonu: Kornea patolojisi, ön kamara derinliği, lens durumu, aksiyel uzunluk (>26 mm yüksek miyopi kontrolü) ve donör kornea göz bankası teyidi.',
+      'Kardiyoloji / İç Hastalıkları (Klinik Endikasyonda): İleri yaş genel anestezi adaylarında koroner arter hastalığı, KKY (Mannitol riski!) ve hipertansiyon optimizasyonu.',
+      'Göğüs Hastalıkları (KOAH/Astım Varsa): Postoperatif öksürük krizlerini önlemek için inhaler ve bronkodilatör optimizasyonu.',
+      'Anestezi Değerlendirmesi: Zor hava yolu, reflü/aspirasyon riski ve pürüzsüz ekstübasyon planı.'
     ],
     historyAndPhysical: [
-      'Önceki Oküler Cerrahi Öyküsü: Geçirilmiş vitrektomi, katarakt, trabekülektomi veya glokom tüp şantı varlığı (vitrektomize gözlerde vitreus desteği olmadığı için skleral kollaps riski çok yüksektir).',
-      'Kronik Öksürük ve Reflü: Ekstübasyon ve postoperatif dönemde kornea dikişlerini patlatabilecek öksürük krizleri ve reflü öyküsü.',
-      'Antikoagülan / Antiagregan Kullanımı: Aspirin, Klopidogrel ve DOAK; PKP avasküler kornea cerrahisi olsa da sklera dikişleri ve iris manipülasyonu içerdiğinden hemostatik profil cerrahla teyit edilir.',
-      'Sistemik İlaçlar: Diyabet ilaçları ve steroid kullanımı.'
+      'Önceki Oküler Cerrahi Öyküsü: Vitrektomize veya afak gözlerde vitreus desteği olmadığından skleral kollaps ve ekspulsif hemoraji riski belirgin artar (Flieringa halkası gerekir).',
+      'Kronik Öksürük ve Reflü: 10-0 kornea dikişlerini tehdit eden aktif ÜSYE/öksürük varsa elektif nakil ertelenebilir (#arac=preop&sub=cancellation-matrix).',
+      'Antikoagülan / Antiagregan Yönetimi (ASRA 2025 / RCoA): Kornea avaskülerdir; ancak PKP\'de iris manipülasyonu/suprakoroidal kanama riski nedeniyle Warfarin/DOAC/antiagregan planı cerrahla birlikte bireyselleştirilir (rutin köprüleme yapılmaz).',
+      'Oftalmik Damla ve Sistemik İlaçlar: Timolol (bradikardi/bronkospazm), Asetazolamid (hipokalemi/asidoz), diyabet ve steroid kullanımı.'
     ],
     laboratoryAndTests: [
-      'Tam Kan Sayımı (Hb, Hct, Trombosit).',
-      'Koagülasyon Paneli: PT, aPTT, INR.',
-      'Açlık Kan Şekeri ve Serum Elektrolitleri (Özellikle Mannitol verilecek hastalarda sodyum, potasyum ve böbrek fonksiyonları [üre, kreatinin]).',
-      '12 Derivasyonlu EKG ve Akciğer Grafisi.',
-      'Göz İçi Basıncı (GİB) Ölçümü ve B-Scan Oküler Ultrasonografi (Opak kornealarda arka segment ve retina dekolmanı kontrolü).'
+      'Klinik Endikasyon Bazlı Laboratuvar: Genel anestezi alacak ileri yaş/komorbid hastalarda TKS, kreatinin ve elektrolitler (özellikle Mannitol veya Asetazolamid planlanıyorsa Na⁺, K⁺, böbrek fonksiyonu).',
+      'Antikoagülan kullananlarda güncel INR (Warfarin); diyabetiklerde kan şekeri; kardiyovasküler hastalığı olanlarda 12 derivasyonlu EKG.',
+      'Oftalmolojik Değerlendirme: Bazal GİB ve opak kornealarda B-Scan oküler USG.'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (Aschner okülokardiyak refleks ve bradikardi analizi), SpO2, EtCO2 ve Sıcaklık.',
-      'Nöromusküler İleti Monitörizasyonu (TOF): Açık küre evresinde hastanın en ufak kas hareketi yapmaması için TOF %0-25 (0-1 yanıt) seviyesinde derin blokaj korunmalıdır.',
-      'EtCO2 Takibi: Normokapni (EtCO2 35-38 mmHg) hedeflenir; hipoventilasyon ve hiperkapni koroidal vazodilatasyona yol açarak göz içi basıncını tehlikeli biçimde fırlatır.',
-      'Non-İnvaziv veya İnvaziv Arter Basıncı İzlemi: Ani hipertansif dalgalanmaların engellenmesi (SKB < 130-140 mmHg).'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (OCR bradikardi izlemi), SpO₂, EtCO₂, NIBP ve Sıcaklık.',
+      'Kantitatif Nöromusküler Monitörizasyon (TOF): Open-sky fazında TOF 0/4 (derin blokaj) korunur; ekstübasyon öncesi Sugammadeks ile TOF ≥0.9 doğrulanır.',
+      'EtCO₂ Takibi: Sıkı normokapni (EtCO₂ 35-38 mmHg); hiperkapni koroidal vazodilatasyonla GİB\'i ve vitreus basıncını fırlatır.',
+      'Hemodinami ve Mesane Takibi: Bazal KB ±%15 korunur; Mannitol uygulanacaksa mesane distansiyonu/idrar sondası mutlaka değerlendirilir.'
     ],
     vascularAccess: [
-      'En az 1-2 adet güvenli periferik intravenöz damar yolu (18-20G)',
-      'İntravenöz Mannitol %20 Solüsyonu (1.0 - 1.5 g/kg) — Ameliyat başlangıcında vitreus hacmini küçültmek ve GİB\'i düşürmek için 20-30 dakikada infüzyon',
-      'Acil Bradikardi Kiti: Atropin (0.5 mg ampul) ve Glikopirolat masada hazır'
+      '1-2 adet güvenli periferik intravenöz damar yolu (18-20G).',
+      'Acil Bradikardi / Hipertansiyon İlaçları: İV Atropin (0.5 mg), Esmolol/Labetalol ve İV Lidokain hazır.',
+      'İV Mannitol %20 (YALNIZCA cerrah endikasyonunda ve KKY yoksa: 0.25-0.5 g/kg, maks. 1 g/kg, 20-30 dakikada yavaş infüzyon).'
     ],
-    patientPosition: 'Supin (Sırtüstü) Pozisyon, Baş Silikon Halka ile Nötral ve Sabit',
+    patientPosition: 'Supin (Sırtüstü) Pozisyon, 10-15° Baş Elevasyonu ve Silikon Donut Sabitleme',
     patientPositionDetails: [
-      'Baş donüt silikon yastığa alınır; cerrahi mikroskobun eksenine tam paralel hizalanır.',
-      'Başın operasyon boyunca hiçbir şekilde oynamaması için yanlardan jel desteklerle sabitlenir.',
-      'Venöz dönüşü rahatlatmak ve göz içi venöz basıncı düşürmek için ameliyat masasına 10-15° anti-Trendelenburg (baş yukarı) eğim verilir.',
-      'Göz çevresi povidon iyot (%5-10) ile temizlenir; göz kapakları blefaroste ile açılır.'
+      'Baş silikon donut yastıkla mikroskop optik eksenine paralel sabitlenir; boyun nötral tutulur (jugüler venöz bası sıfır!).',
+      '10-15° ters Trendelenburg (baş yukarı) eğim oküler venöz drenajı kolaylaştırarak vitreus itişini (posterior vitreous pressure) azaltır.',
+      'Göz çevresi sulu %5 Povidon-İyot ile temizlenir (alkolsüz); bloklu DMEK olgularında örtü altı medikal hava / FiO₂ ≤%30 sağlanır.'
     ],
     anesthesiaManagement: [
       'İndüksiyon ve Hava Yolu:',
-      '  - Propofol (2-2.5 mg/kg) + Fentanil (2-3 mcg/kg) veya Remifentanil (0.1-0.2 mcg/kg/dk) + Nöromusküler Bloker (Rokuronyum 0.6-0.8 mg/kg veya Sisatrakuryum 0.15 mg/kg).',
-      '  - Süksinilkolin KULLANILMAZ (Ön kamara açıkken ekstraoküler kas fasikülasyonları GİB\'i 10-15 mmHg artırarak ekspulsif kanama yaratabilir; yalnızca tam kapalı gözde acil hava yolunda ezilerek verilebilir).',
-      '  - Videolaringoskop ile atravmatik entübasyon; spiral (zırhlı) endotrakeal tüp tercih edilir.',
-      'İdame: TIVA veya Dengeli Anestezi:',
-      '  - Propofol + Remifentanil TIVA veya Düşük Doz Sevofluran + Remifentanil.',
-      '  - AZOT PROTOKSİT (N2O) KESİNLİKLE YASAKTIR! (DMEK/DSAEK gaz kabarcığını şişirir; ayrıca intraoküler gaz kalıntılarını genişleterek körlük yapar).',
-      '  - Cerrahi boyunca derin kas gevşemesi (TOF 0/4) sürdürülür.',
-      'Vitreus Hacminin Küçültülmesi:',
-      '  - Trefinasyon öncesi İV Mannitol (%20, 1 g/kg) infüze edilerek vitreus kurutulur; ön kamaranın derinleşmesi sağlanır.',
-      'Açık Küre (Trefinasyon) Fazı:',
-      '  - Kornea düğmesi kesildiği andan itibaren cerrahi sahada çıt çıkmamalı, hasta derin hipnotik ve nöromusküler blokaj altında tutulmalıdır.',
-      '  - Cerrah 16 adet 10-0 naylon sütürle donör korneayı yerleştirip ön kamarayı serum fizyolojik veya BSS ile basınçlandırana kadar GİB kontrol altında tutulur.'
+      '  - Propofol (1.5-2.5 mg/kg) + Remifentanil (0.1-0.2 mcg/kg/dk) veya Fentanil (2 mcg/kg) + Rokuronyum (0.6-0.9 mg/kg).',
+      '  - Süksinilkolin rutin elektif keratoplastide KULLANILMAZ (ekstraoküler kas tonus artışı ile geçici GİB yükselmesi yapar; zor havayolu/RSI gereken kapalı gözde yüksek doz Rokuronyum 1.2 mg/kg + Sugammadeks 16 mg/kg 1. tercihtir).',
+      '  - Laringoskopi sempatik yanıtını baskılamak için İV Lidokain (1.5 mg/kg) veya Remifentanil bolusu kullanılır; spiralli ETT tercih edilir.',
+      'İdame (N₂O KESİN YASAK!):',
+      '  - Propofol + Remifentanil TIVA (PONV\'yi dramatik azaltır ve pürüzsüz uyanma sağlar) veya Sevofluran + Remifentanil (Hava/O₂ karışımı).',
+      '  - AZOT PROTOKSİT (N₂O) KESİNLİKLE YASAKTIR! (DMEK/DSAEK ön kamara hava/SF₆ kabarcığını genişleterek CRAO ve körlük yapar).',
+      '  - Open-sky fazında derin NMB (TOF 0/4) ve sıkı normokapni (EtCO₂ 35-38 mmHg) korunur.',
+      'Vitreus Basıncı Yönetimi:',
+      '  - Rutin yüksek doz Mannitol önerilmez; pozitif vitreus basıncı yüksek riskli olgularda cerrah talebiyle 0.25-0.5 g/kg İV Mannitol (KKY dışlanarak ve mesane kontrolüyle) verilir.',
+      '  - Hipertansiyonda kısa etkili İV Labetalol/Esmolol/Nikardipin tercih edilir (koroidal vazodilatasyon yapan NTG\'den kaçınılır).'
     ],
     airwayManagement: [
-      'Endotrakeal entübasyon altın standarttır; tüp ağız köşesinden cerrahi tarafın karşısına doğru sağlam flasterlerle yapıştırılır.',
-      'Kaf basıncı manometre ile 20-25 cmH2O seviyesinde sabitlenir.',
-      'Ameliyat esnasında hastanın tüpü ısırmasını engellemek için ısırma bloğu (bite-block) yerleştirilir.'
+      'Penetran keratoplastide (PKP) spiralli (zırhlı) kaflı endotrakeal tüp altın standarttır; cerrahi tarafın karşı ağız köşesinden sağlam tespit edilir.',
+      'Kaf basıncı 20-25 cmH₂O sabitlenir; ısırık bloğu yerleştirilir.',
+      'Bloklu lameller keratoplastilerde (DMEK/DSAEK) spontan solunumda örtü altı medikal hava veya FiO₂ ≤%30 korunur.'
     ],
     criticalSurgicalStages: [
-      '1. Pozisyonlandırma, Mikroskop Odağı ve Skleraya Flieringa Halkasının Dikilmesi (Okülokardiyak refleks kontrolü!).',
-      '2. Donör Korneanın Hazırlanması (Yapay ön kamara üzerinde uygun çapta trefinasyon [genellikle 7.75 - 8.25 mm]).',
-      '3. Alıcı Korneanın Trefinasyonu (Gözün tam kat açılması — Açık Küre Fazı Başlangıcı!).',
-      '4. Hastalıklı Kornea Düğmesinin Çıkarılması (Makasla korneal tabanın ayrılması).',
-      '5. Gereğinde Ek Cerrahi: Ön vitrektomi, katarakt aspirasyonu veya İOL değişimi (Triple Procedure).',
-      '6. Donör Kornea Düğmesinin Alıcı Yatağa Taşınması ve 4 Kardinal Sütürle Tutturulması (Gözün Kapatılması).',
-      '7. 16 Tekli veya Sürekli 10-0 Naylon Sütürlerin Atılması, Doku Uyumu ve Astigmatizma Kontrolü (Keratoskopi).',
-      '8. Ön Kamaranın BSS ile Şişirilmesi, Seidel Testi (Kaçak kontrolü) ve Subkonjonktival Antibiyotik/Steroid Enjeksiyonu.'
+      '1. Pozisyonlandırma, 10-15° Baş Elevasyonu ve Flieringa Halkası Dikilmesi (OCR kontrolü!).',
+      '2. Donör Korneanın Hazırlanması (Yapay ön kamara üzerinde trefinasyon).',
+      '3. Alıcı Korneanın Trefinasyonu (OPEN-SKY / AÇIK KÜRE FAZI — TOF 0/4 ve mutlak hareketsizlik!).',
+      '4. Hastalıklı Kornea Düğmesinin Çıkarılması ve Gereğinde Ek Cerrahi (Triple Procedure).',
+      '5. Donör Korneanın 4 Kardinal Sütürle Tutturulması (Gözün Kapatılması).',
+      '6. 16 Tekli veya Sürekli 10-0 Naylon Sütürlerin Atılması ve Keratoskopi.',
+      '7. DMEK/DSAEK İse Ön Kamaraya Hava / %20 SF₆ Kabarcığı Verilmesi (N₂O KAPALI TEYİDİ!).',
+      '8. Seidel Kaçak Kontrolü, Subkonjonktival İlaçlar ve Basısız Koruyucu Kalkan.'
     ],
     emergenceNotes: [
-      'PÜRÜZSÜZ EKSTÜBASYON KURALI: Kornea dikişlerini patlatmamak için öksürük ve ıkınma tamamen engellenmelidir.',
-      'Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg) uygulanır.',
-      'Kürar bloğu Sugammadeks ile tam antagonize edilir (TOF > %90 teyidi).',
-      'Tüp derin anestezi altında veya hasta gözlerini açıp sakin nefes almaya başladığı anda nazikçe çekilir.',
-      'Ameliyat edilen göze steril pomad sürülerek şeffaf koruyucu plastik kalkan (eye shield) bantlanır; göze hiçbir mekanik bası uygulanmaz.'
+      'PÜRÜZSÜZ ÖKSÜRÜKSÜZ EKSTÜBASYON: 10-0 kornea dikişlerini korumak için öksürük, ıkınma ve kusma mutlak engellenmelidir.',
+      'Düşük doz Remifentanil (0.03-0.05 mcg/kg/dk) veya Deksmedetomidin + İV Lidokain (1.5 mg/kg) eşliğinde, Sugammadeks ile TOF ≥0.9 doğrulandıktan sonra pürüzsüz ekstübasyon yapılır.',
+      'İkili PONV profilaksisi (Deksametazon 4-8 mg indüksiyonda + Ondansetron 4 mg kapanışta) zorunludur.',
+      'Ameliyat edilen göze mekanik bası olmadan şeffaf plastik kalkan (eye shield) takılır; DMEK/DSAEK hastaları derhal tam SUPİN (sırtüstü) pozisyona alınır.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Hafif-Orta Şiddette Analjezi Protokolü:',
-      '  - 10-0 naylon sütür batmaları ve yüzeyel epitel defekti nedeniyle yabancı cisim hissi ve batma ağrısı sıktır.',
-      '  - Düzenli Oral / İV Parasetamol (1000 mg 6 saatte bir).',
-      '  - Gerektiğinde Oral Tramadol (50 mg) veya hafif NSAID (kontrendikasyon yoksa).',
-      '  - Şiddetli zonklayıcı baş-göz ağrısı ve bulantı gelişirse AKUT GLOKOM / GİB ARTIŞI (viskoelastik bloğu veya pupil bloğu) düşünülmeli ve acilen tonometri yapılmalıdır!'
+      'Multimodal, Opioid-Sparing Analjezi Protokolü:',
+      '  - 10-0 naylon sütürlere ve epitel defektine bağlı batma/yabancı cisim hissi için düzenli Oral / İV Parasetamol (1000 mg 6 saatte bir).',
+      '  - Kontrendikasyon yoksa kısa süreli oral NSAİİ eklenebilir.',
+      '  - KAÇINILACAK AJANLAR: Postoperatif bulantı-kusmayı güçlü tetikleyerek GİB\'i 30-50 mmHg fırlatıp kornea dikişlerini patlatan TRAMADOL ve KODEİN rutin analjezide KULLANILMAZ! Şiddetli dirençli kurtarma ağrısında yalnızca mikro-doz titre İV Fentanil (25 mcg) + ek antiemetik kullanılır.',
+      '  - KIRMIZI BAYRAK: Şiddetli zonklayıcı baş-göz ağrısı + bulantı gelişirse AKUT GİB ARTIŞI (pupil bloğu / gaz bloğu / viskoelastik) açısından acil tonometri yapılmalıdır!'
     ],
     prospectRecommendations: [
-      'PROSPECT Kornea Cerrahisi Kılavuzları: Multimodal analjezide sistemik parasetamol ve profilaktik antiemetik (Ondansetron) kombinasyonu esastır; bulantı-kusmanın önlenmesi intraoküler basınç fırlamalarını ve greft dikişlerinin ayrışmasını engeller.'
+      'Kornea transplantasyonu için yayımlanmış özel bir PROSPECT (ESRA) kılavuzu bulunmamaktadır; 4th PONV Consensus (2020) ve RCoA/RCOphth ilkeleri doğrultusunda:',
+      '  - Propofol TIVA + ikili antiemetik profilaksisi (Deksametazon + Ondansetron) ve opioid-sparing Parasetamol bazlı analjezi, öğürme/kusma kaynaklı dikiş ayrışmasını ve ekspulsif kanamayı önler.'
     ],
     erasRecommendations: [
-      'ERAS Göz Cerrahisi ve Kornea Transplantasyonu Protokolleri:',
-      '  - Pozisyon Disiplini: DMEK/DSAEK endotel nakli yapılan hastalar greftin tutunması için ilk 24-48 saat KESİNLİKLE SIRTÜSTÜ (SUPİN) yatırılır.',
+      'Perioperatif Keratoplasti İyileşme İlkeleri:',
+      '  - Pozisyon Disiplini: DMEK/DSAEK endotel nakli yapılan hastalar greftin tutunması için ilk 24-48 saat KESİNLİKLE SIRTÜSTÜ (SUPİN) yatırılır; SF₆ gazı verilen hastalar gaz emilene dek uçak yolculuğu ve yüksek irtifa YAPAMAZ.',
       '  - Basınç Kısıtlamaları: Öne eğilmek, ıkınmak, ağır kaldırmak ve gözü ovuşturmak kesinlikle yasaktır.',
-      '  - Doku Rejeksiyonu Eğitimi: Hastaya "RSVP" semptomları öğretilir (Redness [Kızarıklık], Sensitivity [Işığa hassasiyet], Vision loss [Görme azalması], Pain [Ağrı]); bu bulgulardan biri bile olursa acil servise başvurulmalıdır (Akut Kornea Greft Rejeksiyonu!).',
-      '  - Topikal İmmünsüpresyon: Rejeksiyonu önlemek için saatlik topikal steroid (Prednizolon / Deksametazon) damla tedavisi başlanır.'
+      '  - Akut Rejeksiyon "RSVP" Eğitimi: Redness (Kızarıklık), Sensitivity (Işık hassasiyeti), Vision loss (Görme azalması), Pain (Ağrı) bulgularından biri gelişirse acil başvuru öğretilir.',
+      '  - Topikal İmmünsüpresyon: Saatlik topikal steroid damlalar düzenli uygulanır.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe, R. A., Schmiesing, C. A., & Golianu, B. (2014). Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmology - Corneal Transplant (Penetrating Keratoplasty), pp. 852-858. Philadelphia: Lippincott Williams & Wilkins.',
-    erasReference: 'European Society of Cataract and Refractive Surgeons (ESCRS). (2021). Clinical Practice Guidelines for Keratoplasty and Endothelial Transplantation (DMEK/DSAEK).',
-    prospectReference: 'PROSPECT Guidelines for Pain and Hemodynamic Management in Ophthalmic Micro-Surgery. European Society of Regional Anaesthesia & Pain Therapy (ESRA).',
+    jaffeReference: 'Jaffe RA, Schmiesing CA, Golianu B. Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmic Surgery — Corneal Transplant (Penetrating Keratoplasty). Wolters Kluwer / LWW.',
+    erasReference: 'Kumar CM, Eke T, Dodds C, et al. Local anaesthesia for ophthalmic surgery — Joint guidelines from the RCoA and RCOphth (2012) & ESCRS Corneal Transplantation Consensus.',
+    prospectReference: 'Kornea cerrahisi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; analjezi ve PONV stratejisi 4th Consensus Guidelines for PONV (Gan et al., Anesth Analg 2020) esas alınarak yapılandırılmıştır.',
     otherReferences: [
-      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern Guidelines: Corneal Ectasia and Keratoplasty (2022).',
-      'Cornea Society. Quality standards and perioperative guidelines for penetrating and lamellar keratoplasty.',
-      'Ophthalmic Anesthesia Society (OAS). Anesthetic management of open globe injuries and elective full-thickness keratoplasty.',
-      'Eye Bank Association of America (EBAA). Medical standards for donor corneal tissue recovery and transplantation.',
-      'Türk Oftalmoloji Derneği (TOD) Kornea ve Oküler Yüzey Birimi Keratoplasti Rehberi.'
+      'Gan TJ, Belani KG, Bergese S, et al. Fourth Consensus Guidelines for the Management of Postoperative Nausea and Vomiting. Anesth Analg. 2020;131(2):411-448.',
+      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Corneal Ectasia & Corneal Edema and Opacification.',
+      'ASA Task Force on Operating Room Fires. Practice Advisory for the Prevention and Management of Operating Room Fires. Anesthesiology. 2013;118(2):271-290.',
+      'Kopp SL, Vandermeulen E, et al. ASRA Pain Medicine Evidence-Based Guidelines (5th ed.). Reg Anesth Pain Med. 2025.'
     ]
   }
 };

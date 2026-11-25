@@ -35,6 +35,13 @@ import {
   ContextualPortalLink,
   ClinicalTagTone
 } from '../../utils/neuroProcedureHelpers';
+import {
+  extractOphthalmologyCockpit,
+  getOphthalmologyContextualLinks,
+  buildOphthalmologyQuickChecklist,
+  buildOphthalmologyDutySummaryText,
+  getOphthalmologyClinicalTags
+} from '../../utils/ophthalmologyProcedureHelpers';
 import { copyToClipboard } from '../../utils/deepLink';
 import { PortalLink } from '../common/PortalLink';
 
@@ -315,6 +322,7 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
   adjacentProcedures
 }) => {
   const isNeuro = procedure.specialty === 'norosirurji';
+  const isEye = procedure.specialty === 'goz';
 
   const [viewMode, setViewMode] = useState<DetailViewMode>('all');
   const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>(DEFAULT_SECTION_OPEN);
@@ -337,15 +345,31 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
 
   // Akıllı ayrıştırılmış Hayati İlkeler (memoized)
   const parsedRules = useMemo(() => getProcedureIndispensableRules(procedure), [procedure]);
-  const neuroCockpit = useMemo(
-    () => (isNeuro ? extractNeuroCockpit(procedure) : []),
-    [isNeuro, procedure]
+  const specialtyCockpit = useMemo(
+    () =>
+      isNeuro
+        ? extractNeuroCockpit(procedure)
+        : isEye
+          ? extractOphthalmologyCockpit(procedure)
+          : [],
+    [isNeuro, isEye, procedure]
   );
-  const contextualLinks = useMemo(() => getContextualPortalLinks(procedure), [procedure]);
-  const checklistItems = useMemo(() => buildProcedureQuickChecklist(procedure), [procedure]);
+  const contextualLinks = useMemo(
+    () => (isEye ? getOphthalmologyContextualLinks(procedure) : getContextualPortalLinks(procedure)),
+    [isEye, procedure]
+  );
+  const checklistItems = useMemo(
+    () => (isEye ? buildOphthalmologyQuickChecklist(procedure) : buildProcedureQuickChecklist(procedure)),
+    [isEye, procedure]
+  );
   const clinicalTags = useMemo(
-    () => (isNeuro ? getClinicalTags(procedure, 4) : []),
-    [isNeuro, procedure]
+    () =>
+      isNeuro
+        ? getClinicalTags(procedure, 4)
+        : isEye
+          ? getOphthalmologyClinicalTags(procedure, 4)
+          : [],
+    [isNeuro, isEye, procedure]
   );
 
   // Protokol içi hızlı arama eşleşme sayacı ve otomatik bölüm açma
@@ -474,7 +498,9 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
   };
 
   const handleCopySummary = async () => {
-    const text = buildProcedureDutySummaryText(procedure);
+    const text = isEye
+      ? buildOphthalmologyDutySummaryText(procedure)
+      : buildProcedureDutySummaryText(procedure);
     const ok = await copyToClipboard(text);
     if (ok) {
       setCopiedSummary(true);
@@ -540,9 +566,13 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
                 ? isDark
                   ? 'bg-purple-500/15 border-purple-500/35 text-purple-200'
                   : 'bg-purple-50 border-purple-200 text-purple-800'
-                : isDark
-                  ? 'bg-blue-500/10 border-blue-500/30 text-blue-300'
-                  : 'bg-blue-50 border-blue-200 text-blue-800'
+                : isEye
+                  ? isDark
+                    ? 'bg-cyan-500/15 border-cyan-500/35 text-cyan-200'
+                    : 'bg-cyan-50 border-cyan-200 text-cyan-800'
+                  : isDark
+                    ? 'bg-blue-500/10 border-blue-500/30 text-blue-300'
+                    : 'bg-blue-50 border-blue-200 text-blue-800'
             }`}
           >
             {procedure.specialtyName}
@@ -588,7 +618,11 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
       {/* Hero Overview Card */}
       <div
         className={`p-5 rounded-2xl border transition-colors ${
-          isNeuro ? 'border-t-2 border-t-purple-500/70' : ''
+          isNeuro
+            ? 'border-t-2 border-t-purple-500/70'
+            : isEye
+              ? 'border-t-2 border-t-cyan-500/70'
+              : ''
         } ${
           isDark
             ? 'bg-slate-900/90 border-slate-800 shadow-md'
@@ -639,18 +673,24 @@ export const ProcedureDetailView: React.FC<ProcedureDetailViewProps> = ({
           </h1>
         </div>
 
-        {/* 6 HÜCRELİ NÖROANESTEZİ HEDEF KOKPİTİ (5 Saniyelik Salon Özeti) */}
-        {isNeuro && neuroCockpit.length > 0 && (
+        {/* 6 HÜCRELİ BRANŞ HEDEF KOKPİTİ (5 Saniyelik Salon Özeti) */}
+        {(isNeuro || isEye) && specialtyCockpit.length > 0 && (
           <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-600 dark:text-purple-300 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-purple-500" />
-                <span>Nöroanestezi Hedef Kokpiti</span>
+              <span
+                className={`text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 ${
+                  isEye
+                    ? 'text-cyan-600 dark:text-cyan-300'
+                    : 'text-purple-600 dark:text-purple-300'
+                }`}
+              >
+                <Sparkles className={`w-3.5 h-3.5 ${isEye ? 'text-cyan-500' : 'text-purple-500'}`} />
+                <span>{isEye ? 'Oftalmo-Anestezi Hedef Kokpiti' : 'Nöroanestezi Hedef Kokpiti'}</span>
               </span>
               <span className="text-[10px] text-slate-400">Hızlı salon referansı</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-              {neuroCockpit.map((cell) => {
+              {specialtyCockpit.map((cell) => {
                 const tone = getCockpitToneStyles(cell.tone, isDark);
                 return (
                   <div

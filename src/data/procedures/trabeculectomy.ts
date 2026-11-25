@@ -3,11 +3,9 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Trabekülektomi: Korunan Skleral Flep ve Antimetabolit (Mitomisin C / 5-FU) Eşliğinde Glokom Filtrasyon Cerrahisi
  * (Trabeculectomy / Guarded Filtration Surgery with MMC / 5-FU)
- * 
- * Jaffe (5th ed., Section VI: Ophthalmology - Glaucoma Procedures: Trabeculectomy, pp. 858-864),
- * American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP) Guidelines: Primary Open-Angle Glaucoma,
- * European Glaucoma Society (EGS) Terminology and Guidelines for Glaucoma,
- * Ophthalmic Anesthesia Society (OAS) ve Türk Oftalmoloji Derneği (TOD) Glokom Birimi Protokolleri referans alınarak hazırlanmıştır.
+ *
+ * Referanslar: Jaffe (5th ed., Section VI: Ophthalmic Surgery), RCoA / RCOphth (2012),
+ * AAO PPP: Primary Open-Angle Glaucoma, EGS 5th Ed., ASA OR Fire Advisory (2013), Gan et al. 4th PONV Consensus (2020).
  */
 export const trabeculectomy: ProcedureDefinition = {
   id: 'trabeculectomy',
@@ -18,73 +16,79 @@ export const trabeculectomy: ProcedureDefinition = {
   categoryTag: 'Glokom & Ön Segment Filtrasyon Cerrahisi',
 
   // 1) Prosedür Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Maksimum tolere edilebilir medikal tedaviye ve/veya lazer trabeküloplastiye (SLT/ALT) rağmen göz içi basıncı (GİB) hedef düzeye düşürülemeyen veya görme alanı/optik sinir lifi kaybı ilerleyen glokom hastalarında, aköz hümörün ön kamaradan subkonjonktival/sub-Tenon mesafeye kontrollü drenajını sağlayarak yeni bir filtre edici yastıkçık (filtrasyon blebi) oluşturulması ameliyatıdır. Mikrocerrahi aşamaları: (1) Üst konjonktiva ve Tenon kapsülü forniks veya limbus tabanlı diseke edilir; (2) Episklera ve skleral flep yatağına skarlaşmayı/fibrozisi engellemek amacıyla antimetabolit (Mitomisin C [MMC, 0.2 - 0.4 mg/mL] veya 5-Fluorourasil [5-FU]) emdirilmiş mikro-süngerler 1-3 dakika uygulanır ve bol BSS ile yıkanır; (3) Yaklaşık 3x3 mm veya 4x4 mm ebatlarında yarım kat (parsiyel kalınlıkta / guarded) skleral flep disseksiyonu yapılır; (4) Yan parasentez açılarak ön kamara kontrolü sağlanır; (5) Kelly punch veya mikro-bıçak ile trabeküler ağ ve Schlemm kanalı bloğu çıkarılır (trabekülektomi penceresi); (6) İrisin iç ostiyumu tıkamasını önlemek için periferik cerrahi iridektomi (PI) yapılır; (7) Skleral flep aköz hümör akış direncini titre edecek şekilde 10-0 naylon gevşetilebilir (releasable/çekilebilir) veya ayarlanabilir sütürlerle kapatılır; (8) Tenon ve konjonktiva su geçirmez (watertight) biçimde dikilerek subkonjonktival filtrasyon blebi şekillendirilir.',
+  description: 'Maksimum tolere edilebilir medikal tedaviye ve/veya lazer trabeküloplastiye (SLT/ALT) rağmen göz içi basıncı (GİB) hedef düzeye düşürülemeyen veya görme alanı/optik sinir lifi kaybı ilerleyen glokom hastalarında, aköz hümörün ön kamaradan subkonjonktival/sub-Tenon mesafeye kontrollü drenajını sağlayarak yeni bir filtre edici yastıkçık (filtrasyon blebi) oluşturulması ameliyatıdır. Mikrocerrahi aşamaları: (1) Üst konjonktiva ve Tenon kapsülü forniks veya limbus tabanlı diseke edilir; (2) Episklera ve skleral flep yatağına fibrozisi engellemek için antimetabolit (Mitomisin C [MMC, 0.2-0.4 mg/mL] veya 5-Fluorourasil [5-FU]) emdirilmiş mikro-süngerler 1-3 dakika uygulanır ve bol BSS ile yıkanır; (3) Yarım kat (parsiyel kalınlıkta / guarded) skleral flep hazırlanır; (4) Yan parasentez ile kontrollü dekompresyon yapılır; (5) Kelly punch ile trabeküler ağ bloğu çıkarılır; (6) Periferik cerrahi iridektomi (PI) yapılır; (7) Skleral flep 10-0 naylon ayarlanabilir/gevşetilebilir sütürlerle, Tenon ve konjonktiva su geçirmez (watertight) biçimde kapatılır.',
   indications: [
-    'Primer Açık Açılı Glokom (POAG): Maksimum 3-4\'lü topikal/sistemik medikal tedaviye rağmen ilerleyici optik nöropati ve kontrolsüz GİB',
-    'Psödoeksfolyatif Glokom (PXG) ve Pigmenter Glokom: Dirençli yüksek GİB ve geniş basınç dalgalanmaları gösteren sekonder açık açılı glokomlar',
-    'Kronik Açı Kapanması Glokomu: Periferik ön sineşiler (PAS) nedeniyle trabeküler ağın tıkandığı ve iridotomiye yanıt vermeyen olgular',
-    'Normal Basınçlı Glokom (NTG): Çok düşük hedef GİB (örn: < 10-12 mmHg) gerektiren ve dokümante edilmiş görme alanı daralması olan hastalar',
-    'Sekonder Glokomlar ve Jüvenil/Konjenital Glokom: Üveitik (inaktif dönemde), psödofakik veya post-travmatik glokom olguları'
+    'Primer Açık Açılı Glokom (POAG): Maksimum medikal tedaviye rağmen ilerleyici optik nöropati ve kontrolsüz GİB',
+    'Psödoeksfolyatif Glokom (PXG) ve Pigmenter Glokom: Dirençli yüksek GİB ve geniş basınç dalgalanmaları',
+    'Kronik Açı Kapanması Glokomu: Periferik ön sineşiler (PAS) nedeniyle iridotomiye yanıt vermeyen olgular',
+    'Normal Basınçlı Glokom (NTG): Çok düşük hedef GİB (<10-12 mmHg) gerektiren progresif görme alanı kayıpları',
+    'Sekonder Glokomlar ve Jüvenil/Konjenital Glokom: Üveitik (inaktif), psödofakik veya post-travmatik glokomlar'
   ],
-  averageDuration: '45 - 75 dakika (Katarakt cerrahisi ile kombine fako-trabekülektomide süre 75 - 100 dakikaya uzayabilir)',
+  averageDuration: '45 - 75 dakika (Katarakt cerrahisi ile kombine fako-trabekülektomide 75 - 100 dakika)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '< 5 - 15 mL (Yalnızca konjonktival damarlar, episklera ve periferik iridektomi esnasında iristen sızan mikro-damarsal kanamalar)',
+    estimatedBloodLoss: '< 5 - 15 mL (Konjonktival, episkleral ve periferik iridektomi kaynaklı mikro-sızıntılar)',
     riskLevel: 'minimal',
     riskLevelLabel: 'Minimal Kan Kaybı / Ancak Açık Kürede Katastrofik Ekspulsif Koroidal Hemoraji Riski',
     crossMatchRequirement: 'Rutin kan hazırlığı gerekmez (T&S ve Cross-Match endikasyonu yoktur)',
     transfusionProbability: '< %0.01 (Kan transfüzyonu endikasyonu yoktur)',
     criticalBleedingSources: [
-      'Ekspulsif Suprakoroidal Hemoraji: Kelly punch ile trabeküler blok çıkarıldığında veya periferik iridektomide ani intraoküler dekompresyon (GİB\'in aniden 0 mmHg\'ye düşmesi) ve eşlik eden öksürük/ıkınma/hipertansiyon sonucu arka siliyer arterlerin yırtılması (gözün tamamen kaybına yol açabilecek en korkulan felaket)',
-      'Ön Kamara Hifeması: Periferik iridektomide iris kök damarlarının veya skleral flep yatağındaki skleral venlerin kanaması',
-      'Konjonktival ve Episkleral Hematom: Skleral diseksiyon ve antimetabolit uygulama sahasında kanama'
+      'Ekspulsif Suprakoroidal Hemoraji: Yüksek GİB\'li gözde trabeküler blok çıkarılırken ani dekompresyon (GİB → 0 mmHg) + öksürük/ıkınma/hipertansiyon sonucu arka siliyer arter yırtılması',
+      'Ön Kamara Hifeması: Periferik iridektomide iris kök damarları veya skleral venlerin kanaması (bleb başarısızlığına yol açabilir)',
+      'Subkonjonktival / Retrobulber Hematom: İğneli blok yapılırsa oftalmik damar travması'
     ],
     hemostasisStrategies: [
-      'Mikro-koter / Bipolar wet-field koagülasyon ile skleral flep yatağındaki episklera perforatör damarlarının nazikçe koterize edilmesi',
-      'Trabekülektomi ostiyumu açılırken göz içi basıncının kademeli düşürülmesi (öncesinde parasentezden kontrollü dekompresyon)',
-      'Ekspulsif kanama şüphesinde cerrahın derhal skleral flebi ve parasentezi parmak basısıyla veya sütürle kapatıp arka sklerotomi yapması',
-      'Hastanın öksürme, ıkınma ve hipertansiyon krizlerinin anestezi tarafından mutlak engellenmesi'
+      'Bipolar wet-field mikro-koter ile skleral flep yatağında noktasal hemostaz (koter öncesi O₂ kesimi zorunlu!)',
+      'Trabekülektomi ostiyumu açılmadan önce yan parasentezden kademeli kontrollü GİB düşürülmesi',
+      'Ekspulsif kanama şüphesinde skleral flebin derhal kapatılması ve arka sklerotomi',
+      'Antikoagülan yönetiminin ASRA 2025 / RCoA-RCOphth ilkeleriyle cerrahla bireyselleştirilmesi (Sub-Tenon blokta antikoagülan kesimi genellikle gerekmez)'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Rejyonel Anestezi (Genişletilmiş Sub-Tenon Bloğu veya Peribulber Blok) + Monitörize Anestezi Bakımı (MAC: Bilinçli Minimal Sedasyon) — Koopere, sırtüstü yatabilen erişkin glokom hastalarında DÜNYA GENELİNDE İLK TERCİHTİR'
+      'Rejyonel Anestezi (Genişletilmiş Künt Sub-Tenon Bloğu) + Minimal Bilinçli Sedasyon (MAC) — İleri glokomlu (optik sinir rezerv kaybı!) ve yüksek miyopik/antikoagülanlı erişkin hastalarda İLK TERCİHTİR'
     ],
     alternative: [
-      'Endotrakeal Genel Anestezi (GETA) + Tam Nöromusküler Blokaj (TOF 0/4) + Pürüzsüz Ekstübasyon Protokolü: Aşırı anksiyeteli, panik, sırtüstü yatamayan (ortopne, ağır kifoz), kontrolsüz esansiyel veya Parkinson baş tremoru olan, klostrofobik, demanslı, nistagmuslu veya pediatrik hastalarda',
-      'Laringeal Maske (LMA) ile Genel Anestezi: Aspirasyon riski düşük, öksürmesiz ve pürüzsüz uyanma hedeflenen genel anestezi adaylarında'
+      'Topikal + Subkonjonktival Anestezi + Minimal MAC: Deneyimli cerrah ve tam koopere hastalarda ("wipe-out" sendromlu ileri tünel görmede orbital hacim artışı yaratmadığı için tercih edilebilir)',
+      'Peribulber Blok (Ekstrakonal): Yalnızca aksiyel uzunluk ≤26 mm ve ileri optik sinir hasarı olmayan olgularda (yüksek volümlü blok ileri glokomda optik sinir perfüzyonunu tehlikeye atabilir!)',
+      'Genel Anestezi (Propofol + Remifentanil TIVA + LMA veya Spiralli ETT): Aşırı anksiyete, ortopne/kifoz, tremor, demans, nistagmus veya pediatrik olgularda'
     ],
-    clinicalRationale: 'Genişletilmiş Sub-Tenon veya peribulber blok + hafif MAC, tam oküler akinezi ve derin analjezi sağlarken genel anestezi ekstübasyonunda gelişebilecek öksürme/ıkınma ile taze 10-0 skleral flep dikişlerinin yırtılmasını (overfiltrasyon ve ön kamara çökmesi) önlediği için erişkin olgularda ilk tercihtir. Doğal spontan solunum örtü altı O2/medikal hava akışıyla desteklenerek hiperkapni ve koroidal venöz dolgunluk engellenir; genel anestezi gereken uyumsuz hastalarda ise PaCO2 kontrolü ve öksürüksüz uyanma için kaflı ETT veya LMA kullanılır.',
-    rulesTitle: 'TRABEKÜLEKTOMİDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',
-    notes: 'TRABEKÜLEKTOMİDE ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) ÖN KAMARA AÇILIRKEN ANİ HİPOTONİ DEKOMPRESYONU, SIFIR ÖKSÜRÜK VE EKSPULSİF KOROİDAL KANAMA ALARMI — Kelly punch ile trabeküler doku bloğu kesilip ön kamara dış ortama açıldığı ve periferik iridektomi yapıldığı an göz içi basıncı saniyeler içinde patolojik yüksek seviyelerden (30-50 mmHg) aniden 0 mmHg seviyesine çakılır. Bu akut dekompresyon evresinde hastanın en ufak bir öksürmesi, ıkınması, başını oynatması veya kontrolsüz kan basıncı yükselmesi arka siliyer arterlerin aniden patlamasına (ekspulsif suprakoroidal hemoraji), göz içi dokularının yaradan dışarı fırlamasına ve kalıcı körlüğe yol açar! Bu kritik aşamada hasta mutlak hareketsiz, derin analjezi/sedasyonda veya tam nöromusküler blokajda, öksürüksüz ve normotansif tutulmalıdır. (2) ANTİMETABOLİT (MİTOMİSİN C - MMC / 5-FU) DİSİPLİNİ, SÜRE TAKİBİ VE KORNEA ENDOTELİ KORUMASI — Skleral flep ve sub-Tenon alanına konjonktival fibrozisi ve bleb tıkanmasını önlemek amacıyla MMC (0.2-0.4 mg/mL) veya 5-FU emdirilmiş mikro-süngerler yerleştirilir. Süngerlerin dokuda kalış süresi (genellikle 1 ila 3 dakika) cerrahi ekip ile anestezi ekibi tarafından kronometre ile titizlikle tutulmalı ve tam süre bitiminde cerraha sesli bildirim yapılmalıdır. MMC\'nin korneaya veya ön kamaraya temas etmesi kornea endotel nekrozuna ve katarakta yol açar; süngerler çıkarıldıktan sonra alanın en az 20-30 mL BSS (Balanced Salt Solution) ile yıkanması izlenmelidir. (3) ÜST REKTUS ÇEKME SÜTÜRÜNDE (BRIDLE SUTURE) OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE ASİSTOLİ TEHLİKESİ — Trabekülektomide cerrahi alan üst limbus ve superior sklera olduğundan cerrah göz küresini aşağı baktırmak için üst rektus kasına traksiyon sütürü (bridle suture) atar veya skleral askı dikişini gerdirir. Üst rektus kasının çekilmesi trigemino-vagal refleks arkını (CN V oftalmik dal -> CN X vagus) tetikleyerek anında şiddetli bradikardi, nodal ritim, hipotansiyon ve ventriküler asistoliye yol açabilir! EKG ritmi anlık takip edilmeli; bradikardi görüldüğünde derhal cerraha "ÇEKMEYİ BIRAKIN" denmeli, traksiyonun gevşemesiyle nabız düzelmezse İV Atropin (0.5 mg) uygulanmalıdır. (4) EKSTÜBASYONDA SIFIR IKINMA / SIFIR ÖKSÜRÜK, SU GEÇİRMEZ BLEB GÜVENLİĞİ VE MALİGN GLOKOM ÖNLEMİ — Genel anestezi ile yapılan trabekülektomide uyanma (emergence) cerrahinin en tehlikeli aşamasıdır. Ekstübasyonda tüpü ısırma, ıkınma, öğürme veya öksürme intratorasik basıncı artırarak baş-boyun venöz basıncını fırlatır; yeni atılan mikroskobik 10-0 naylon skleral ve konjonktival sütürleri patlatarak aşırı filtrasyona (overfiltration), ön kamaranın tamamen çökmesine (athalamia / flat anterior chamber), koroidal dekolmana ve malign glokoma yol açar! Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg), derin/öksürmesiz ekstübasyon tekniği ve profilaktik antiemetik (İV Ondansetron) uygulanmalı; hasta asla ıkındırılmamalıdır. (5) KRONİK GLOKOM İLAÇLARININ SİSTEMİK ANESTEZİK ETKİLEŞİMLERİ (TİMOLOL, ASETOMİD, BRİMONİDİN) — Glokom hastaları operasyona kadar çoklu topikal ve sistemik anti-glokomatöz ajanlar kullanır: (a) Topikal beta-blokerler (Timolol damla) nazolakrimal kanaldan emilerek bradikardi, hipotansiyon, AV blok ve astım/KOAH hastalarında şiddetli bronkospazm yapabilir; (b) Topikal alfa-2 agonistler (Brimonidin) santral sedasyon, hipotansiyon ve bradikardi yaratabilir; (c) Sistemik karbonik anhidraz inhibitörleri (oral Asetazolamid - Diamox) hipokalemi, metabolik asidoz ve dehidratasyona yol açar. Preoperatif kanda potasyum ve bikarbonat düzeyi mutlaka kontrol edilmeli; perioperatif bradikardi ve bronkospazma karşı hazırlıklı olunmalıdır.',
+    clinicalRationale: 'Genişletilmiş Sub-Tenon bloğu + minimal MAC, iğnesiz güvenli akinezi/analjezi sağlarken genel anestezi ekstübasyonunda gelişebilecek öksürme/ıkınma ile taze 10-0 skleral flep dikişlerinin yırtılmasını (overfiltrasyon, düz ön kamara, suprakoroidal kanama) önler. İleri glokomda aşırı orbital enjeksiyon hacminden kaçınılmalı ve yüzde bipolar koter nedeniyle ASA OR yangın güvenliği (FiO₂ ≤%30) titizlikle uygulanmalıdır.',
+    rulesTitle: 'TRABEKÜLEKTOMİDE ANESTEZİNİN 6 VAZGEÇİLMEZ KURALI',
+    notes: 'Trabekülektomide hayati kurallar: (1) Ani dekompresyon fazında sıfır öksürük ve ekspulsif koroidal kanama önlemi; (2) MMC/5-FU kronometre ve BSS yıkama disiplini; (3) Üst rektus askı sütüründe OCR yönetimi; (4) Kronik glokom ilaçlarının sistemik toksisitesi (Timolol, Asetazolamid, Brimonidin, Ekotiyofat); (5) ASA OR Yangın Üçgeni (FiO₂ ≤%30) ve hipertansiyonda NTG yasağı; (6) Pürüzsüz uyanma, çift PONV profilaksisi ve Tramadol/Kodein yasağı.',
     indispensableRules: [
       {
         number: 1,
-        title: 'ÖN KAMARA AÇILIRKEN ANİ HİPOTONİ DEKOMPRESYONU, SIFIR ÖKSÜRÜK VE EKSPULSİF KOROİDAL KANAMA ALARMI',
-        content: 'Kelly punch ile trabeküler doku bloğu kesilip ön kamara dış ortama açıldığı ve periferik iridektomi yapıldığı an göz içi basıncı saniyeler içinde patolojik yüksek seviyelerden (30-50 mmHg) aniden 0 mmHg seviyesine çakılır. Bu akut dekompresyon evresinde hastanın en ufak bir öksürmesi, ıkınması, başını oynatması veya kontrolsüz kan basıncı yükselmesi arka siliyer arterlerin aniden patlamasına (ekspulsif suprakoroidal hemoraji), göz içi dokularının yaradan dışarı fırlamasına ve kalıcı körlüğe yol açar! Bu kritik aşamada hasta mutlak hareketsiz, derin analjezi/sedasyonda veya tam nöromusküler blokajda, öksürüksüz ve normotansif tutulmalıdır.'
+        title: 'ÖN KAMARA AÇILIRKEN ANİ DEKOMPRESYON VE EKSPULSİF KOROİDAL KANAMA ALARMI',
+        content: 'Kelly punch ile trabeküler blok kesilip ön kamara açıldığında GİB saniyeler içinde yüksek değerlerden (30-50 mmHg) 0 mmHg\'ye düşer. Bu evrede en ufak öksürme, ıkınma, baş hareketi veya hipertansiyon arka siliyer arter yırtılmasına (ekspulsif suprakoroidal hemoraji) yol açar! Mutlak hareketsizlik, normokapni ve normotansiyon şarttır.'
       },
       {
         number: 2,
-        title: 'ANTİMETABOLİT (MİTOMİSİN C - MMC / 5-FU) DİSİPLİNİ, SÜRE TAKİBİ VE KORNEA ENDOTELİ KORUMASI',
-        content: 'Skleral flep ve sub-Tenon alanına konjonktival fibrozisi ve bleb tıkanmasını önlemek amacıyla MMC (0.2-0.4 mg/mL) veya 5-FU emdirilmiş mikro-süngerler yerleştirilir. Süngerlerin dokuda kalış süresi (genellikle 1 ila 3 dakika) cerrahi ekip ile anestezi ekibi tarafından kronometre ile titizlikle tutulmalı ve tam süre bitiminde cerraha sesli bildirim yapılmalıdır. MMC\'nin korneaya veya ön kamaraya temas etmesi kornea endotel nekrozuna ve katarakta yol açar; süngerler çıkarıldıktan sonra alanın en az 20-30 mL BSS (Balanced Salt Solution) ile yıkanması izlenmelidir.'
+        title: 'ANTİMETABOLİT (MİTOMİSİN C / 5-FU) KRONOMETRE DİSİPLİNİ',
+        content: 'Skleral flep yatağına fibrozisi önlemek için konulan MMC (0.2-0.4 mg/mL) veya 5-FU süngerlerinin kalış süresi (1-3 dakika) kronometre ile takip edilip sesli bildirim yapılmalı; süngerler çıkarıldıktan sonra sahanın ≥20-30 mL BSS ile bol yıkanması teyit edilmelidir.'
       },
       {
         number: 3,
-        title: 'ÜST REKTUS ÇEKME SÜTÜRÜNDE (BRIDLE SUTURE) OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) VE ASİSTOLİ TEHLİKESİ',
-        content: 'Trabekülektomide cerrahi alan üst limbus ve superior sklera olduğundan cerrah göz küresini aşağı baktırmak için üst rektus kasına traksiyon sütürü (bridle suture) atar veya skleral askı dikişini gerdirir. Üst rektus kasının çekilmesi trigemino-vagal refleks arkını (CN V oftalmik dal -> CN X vagus) tetikleyerek anında şiddetli bradikardi, nodal ritim, hipotansiyon ve ventriküler asistoliye yol açabilir! EKG ritmi anlık takip edilmeli; bradikardi görüldüğünde derhal cerraha "ÇEKMEYİ BIRAKIN" denmeli, traksiyonun gevşemesiyle nabız düzelmezse İV Atropin (0.5 mg) uygulanmalıdır.'
+        title: 'ÜST REKTUS ÇEKME SÜTÜRÜNDE (BRIDLE SUTURE) OKÜLOKARDİYAK REFLEKS (OCR)',
+        content: 'Üst rektus kasının traksiyonu trigemino-vagal refleksi (CN V → CN X) tetikleyerek ani bradikardi, AV blok veya asistoli yapabilir. İlk adım cerrahı durdurmak, 2. adım normokapni/oksijenizasyon kontrolü, düzelmezse İV Atropin 0.5 mg uygulamaktır (rutin profilaktik Atropin önerilmez).'
       },
       {
         number: 4,
-        title: 'EKSTÜBASYONDA SIFIR IKINMA / SIFIR ÖKSÜRÜK, SU GEÇİRMEZ BLEB GÜVENLİĞİ VE MALİGN GLOKOM ÖNLEMİ',
-        content: 'Genel anestezi ile yapılan trabekülektomide uyanma (emergence) cerrahinin en tehlikeli aşamasıdır. Ekstübasyonda tüpü ısırma, ıkınma, öğürme veya öksürme intratorasik basıncı artırarak baş-boyun venöz basıncını fırlatır; yeni atılan mikroskobik 10-0 naylon skleral ve konjonktival sütürleri patlatarak aşırı filtrasyona (overfiltration), ön kamaranın tamamen çökmesine (athalamia / flat anterior chamber), koroidal dekolmana ve malign glokoma yol açar! Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg), derin/öksürmesiz ekstübasyon tekniği ve profilaktik antiemetik (İV Ondansetron) uygulanmalı; hasta asla ıkındırılmamalıdır.'
+        title: 'KRONİK GLOKOM İLAÇLARININ SİSTEMİK ETKİLEŞİMLERİ (TİMOLOL, ASETAZOLAMİD, BRİMONİDİN, EKOTİYOFAT)',
+        content: '(a) Topikal Timolol nazolakrimal emilimle bradikardi, AV blok ve KOAH/astımda şiddetli bronkospazm yapabilir; (b) Oral/IV Asetazolamid (Diamox) hipokalemi, hiperkloremik metabolik asidoz ve sülfonamid alerjisi riski taşır (preop K⁺ ve HCO₃⁻ kontrol!); (c) Topikal Brimonidin santral sedasyon, hipotansiyon ve çocukta (<2 yaş kesin yasak!) santral apne/koma yapar; (d) Nadir Ekotiyofat iyodür damlası psödokolinesterazı inhibe ederek Süksinilkolin/Mivakuryum uzamış apnesine yol açar.'
       },
       {
         number: 5,
-        title: 'KRONİK GLOKOM İLAÇLARININ SİSTEMİK ANESTEZİK ETKİLEŞİMLERİ (TİMOLOL, ASETOMİD, BRİMONİDİN)',
-        content: 'Glokom hastaları operasyona kadar çoklu topikal ve sistemik anti-glokomatöz ajanlar kullanır: (a) Topikal beta-blokerler (Timolol damla) nazolakrimal kanaldan emilerek bradikardi, hipotansiyon, AV blok ve astım/KOAH hastalarında şiddetli bronkospazm yapabilir; (b) Topikal alfa-2 agonistler (Brimonidin) santral sedasyon, hipotansiyon ve bradikardi yaratabilir; (c) Sistemik karbonik anhidraz inhibitörleri (oral Asetazolamid - Diamox) hipokalemi, metabolik asidoz ve dehidratasyona yol açar. Preoperatif kanda potasyum ve bikarbonat düzeyi mutlaka kontrol edilmeli; perioperatif bradikardi ve bronkospazma karşı hazırlıklı olunmalıdır.'
+        title: 'ASA OR YANGIN ÜÇGENİ (KOTER + O₂) VE HİPERTANSİYONDA NTG YASAĞI',
+        content: 'Sklera yatağında bipolar koter kullanıldığı için MAC sırasında örtü altına medikal hava veya FiO₂ ≤%30 verilmeli, koter öncesi O₂ ≥1 dk kesilip havalandırılmalı ve sulu %5 Povidon-İyot kullanılmalıdır. İntraoperatif hipertansiyonda önce ağrı/anksiyete/hiperkapni/dolu mesane dışlanır; ilaç gerekirse İV Labetalol, Esmolol veya Nikardipin titre edilir — İV Nitrogliserin (NTG) koroidal vazodilatasyon ve GİB artışı riski nedeniyle göz içi açık cerrahide TERCİH EDİLMEZ.'
+      },
+      {
+        number: 6,
+        title: 'BLEB GÜVENLİĞİ: PÜRÜZSÜZ UYANMA, ÇİFT PONV VE TRAMADOL/KODEİN YASAĞI',
+        content: 'Genel anestezi uyanmasında öksürme/ıkınma veya postop kusma 10-0 skleral dikişleri patlatarak aşırı filtrasyona, ön kamara çökmesine (athalamia) ve malign glokoma yol açar! İV Lidokain (1.5 mg/kg) + düşük doz Remifentanil/Deksmedetomidin + Sugammadeks (TOF ≥0.9) + çift antiemetik (Deksametazon + Ondansetron) uygulanır. Postop Tramadol ve Kodein yüksek PONV riski nedeniyle KULLANILMAZ!'
       }
     ]
   },
@@ -92,116 +96,104 @@ export const trabeculectomy: ProcedureDefinition = {
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Göz Hastalıkları / Glokom Konsültasyonu: Glokom tipi (açık açılı, açı kapanması, psödoeksfoliyatif), bazal GİB değerleri (tonometri), optik disk çukurluk/disk oranı (C/D ratio), görme alanı defisitinin ağırlığı ve hedeflenen postoperatif GİB düzeyinin tespiti.',
-      'Kardiyoloji Konsültasyonu: İleri yaş glokom popülasyonunda yaygın olan esansiyel hipertansiyon, koroner arter hastalığı ve aritmilerin tespiti; topikal beta-bloker (Timolol) kullanan hastalarda bazal bradikardi ve iletim bloklarının incelenmesi.',
-      'Göğüs Hastalıkları Konsültasyonu: Topikal non-selektif beta-bloker kullanan astım/KOAH olgularında bronkospazm riskinin ve operasyon esnasında/sonrasında dikişleri patlatabilecek öksürük krizlerinin önceden inhalerlerle stabilize edilmesi.',
-      'Anestezi Polikliniği: Sırtüstü yatma toleransı, boyun hareketleri (kifoz/artrit), klostrofobi sorgulaması ve anestezi tekniği seçimi (rejyonel MAC vs genel anestezi).'
+      'Göz Hastalıkları / Glokom Konsültasyonu: Glokom tipi, bazal GİB, C/D oranı, ileri tünel görme ("wipe-out" riski — iğneli yüksek volümlü bloktan kaçınma), aksiyel uzunluk (>26 mm yüksek miyopi kontrolü) ve hedef GİB.',
+      'Kardiyoloji / Göğüs Hastalıkları (Klinik Endikasyonda): Topikal Timolol kullananlarda bradikardi/AV blok veya astım/KOAH bronkospazmı, dekompanse kardiyopulmoner hastalık ve kronik öksürük optimizasyonu.',
+      'Anestezi Değerlendirmesi: Sırtüstü yatma toleransı, klostrofobi, glokom damla/ilaç listesi ve rejyonel MAC vs. GA seçimi.'
     ],
     historyAndPhysical: [
-      'Kullanılan Glokom İlaçlarının Ayrıntılı Listesi: Topikal Timolol (beta-bloker), Brimonidin (alfa-2 agonist), Latanoprost/Travoprost/Bimatoprost (prostaglandin analogları), Pilokarpin (parasempatomimetik) ve oral Asetazolamid (Diamox - karbonik anhidraz inhibitörü).',
-      'Antikoagülan / Antiagregan İlaç Kullanımı: Aspirin, Klopidogrel ve oral antikoagülanlar (DOAK / Warfarin); trabekülektomi mikro-vasküler skleral ve iris disseksiyonu içerdiğinden hifema ve suprakoroidal hemoraji riskini azaltmak için hemostatik strateji cerrah ile konsülte edilir.',
-      'Sırtüstü Yatamama / Ağır Kifoz / Ortopne: Cerrahi örtü altında başın sabit kalamama riski ve örtü altı oksijenizasyon planı.',
-      'Önceki Cerrahi Öyküsü: Önceki başarısız trabekülektomi, katarakt, vitrektomi veya skleral çökertme cerrahisi (önceden cerrahi görmüş konjonktiva Tenon yapışıklığı ve fibrozis riski taşır).'
+      'Ayrıntılı Glokom İlaç Listesi: Topikal Timolol (beta-bloker), Brimonidin (alfa-2 agonist), Prostaglandin analogları, Pilokarpin, nadir Ekotiyofat iyodür ve oral Asetazolamid (Diamox — sülfa alerjisi, hipokalemi, metabolik asidoz).',
+      'Antikoagülan / Antiagregan Yönetimi (ASRA 2025 & RCoA/RCOphth): Sub-Tenon blok + trabekülektomide antikoagülan kesimi tromboembolik risk ile hifema/suprakoroidal kanama riski tartılarak cerrahla bireyselleştirilir; rutin köprüleme yapılmaz (bkz. #infografik=antithrombotic-matrix).',
+      'Önceki Oküler Cerrahi Öyküsü ve Sırtüstü Yatamama: Önceki başarısız bleb/vitrektomi, kifoz/ortopne ve mesane boşaltma planı.'
     ],
     laboratoryAndTests: [
-      'Serum Elektrolitleri (Özellikle oral Asetazolamid / Diamox kullanan hastalarda K+, Na+, Cl- ve bikarbonat düzeyi — hipokalemi ve metabolik asidoz taraması).',
-      'Tam Kan Sayımı (Hb, Hct, Trombosit).',
-      'Koagülasyon Paneli: PT, aPTT, INR.',
-      'Açlık Kan Şekeri ve Böbrek Fonksiyon Testleri (Üre, Kreatinin).',
-      '12 Derivasyonlu EKG (Bradikardi, sinüs duraklaması veya dal bloğu kontrolü).',
-      'Göz İçi Basıncı (GİB) Ölçümü ve B-Scan Ultrasonografi (Gereğinde aksiyel uzunluk ve arka segment değerlendirmesi).'
+      'Oral Asetazolamid (Diamox) veya Diüretik Kullananlarda: Serum Elektrolitleri (K⁺, Na⁺, Cl⁻, HCO₃⁻) ve Böbrek Fonksiyonları (Üre, Kreatinin) — hipokalemi ve hiperkloremik metabolik asidoz taraması zorunludur.',
+      'Klinik Endikasyon Bazlı Tetkikler: Warfarin kullananlarda güncel INR; diyabetiklerde vaka günü kan şekeri; topikal Timolol veya kardiyak öyküsü olanlarda 12 derivasyonlu EKG (bradikardi / AV blok kontrolü). Stabil lokal/MAC hastada rutin geniş koagülasyon/TKS paneli gerekmez.',
+      'Oftalmolojik Değerlendirme: Bazal GİB tonometrisi ve aksiyel uzunluk ölçümü.'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (Aschner okülokardiyak refleksi ve ani bradikardi analizi), SpO2, NIBP, EtCO2 (genel anestezide) ve Vücut Sıcaklığı.',
-      'Sürekli Ritim Takibi: Üst rektus çekme sütürü (bridle suture) atılırken veya skleral flep gerdirilirken ani bradikardi oluşumu açısından gözler monitörde olmalıdır.',
-      'Solunum Dinamikleri ve Sedasyon Düzeyi (MAC uygulamasında): Nazal kanül veya cerrahi örtü altından sürekli CO2 örneklemesi ve O2 insüflasyonu (2-3 L/dk); hipoventilasyon ve hiperkapni kaynaklı GİB yükselişi önlenir.',
-      'Nöromusküler Monitörizasyon (TOF): Genel anestezi uygulanıyorsa trabeküler punch ve iridektomi evresinde TOF 0/4 (tam paralizi) korunmalıdır.'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (OCR bradikardi ve Timolol iletim bloğu analizi), SpO₂, NIBP ve EtCO₂ (genel anestezide ve sedasyonlu MAC\'te nazal kapnografi).',
+      'Sürekli Ritim Takibi: Üst rektus çekme sütürü (bridle suture) ve skleral flep manipülasyonunda OCR alarmı.',
+      'Kantitatif TOF Monitörü (Genel Anestezide): Kelly punch ve iridektomi fazında TOF 0/4; ekstübasyonda TOF ≥0.9.'
     ],
     vascularAccess: [
-      'En az 1 adet güvenli periferik intravenöz damar yolu (18-20G)',
-      'Acil Bradikardi Kiti: İntravenöz Atropin (0.5 mg ampul) ve Glikopirolat daima enjektörde hazır bulundurulur',
-      'Gereğinde Hipertansif Kriz Ajanları: İV Esmolol, Labetalol veya Gliseril Trinitrat (Nitrogliserin)'
+      '1 adet güvenli periferik intravenöz damar yolu (18-20G).',
+      'Acil Bradikardi Kiti: İV Atropin (0.5 mg) ve Glikopirolat hazır.',
+      'Hipertansiyon Yönetimi: İV Labetalol, Esmolol veya Nikardipin (İV Nitrogliserin koroidal vazodilatasyon riski nedeniyle TERCİH EDİLMEZ).'
     ],
-    patientPosition: 'Supin (Sırtüstü) Pozisyon, Baş Silikon Halka ile Nötral ve Hareketsiz',
+    patientPosition: 'Supin (Sırtüstü) Pozisyon, 10-15° Baş Elevasyonu ve Silikon Donut Sabitleme',
     patientPositionDetails: [
-      'Hasta ameliyat masasına sırtüstü yatırılır; baş silikon donüt yastıkla desteklenerek mikroskobun optik eksenine tam paralel konuma getirilir.',
-      'Kifotik veya boyun artriti olan hastalarda baş ve göğüs altına silikon kama/yastıklar konularak boyun hiperekstansiyonu önlenir.',
-      'Cerrahi örtülerin hastanın yüzüne bası yapmasını ve örtü altında CO2 birikmesini önlemek için esnek örtü köprüsü (L-bar) veya aktif emici aspirasyon borusu kurulur.',
-      'Başın ani dönmesini veya istemsiz el hareketlerini engellemek için bilekler ve alın nazikçe sabitlenir.'
+      'Baş silikon donut yastıkla mikroskop eksenine paralel sabitlenir; jugüler venöz bası önlenir.',
+      '10-15° hafif baş elevasyonu episkleral venöz basıncı düşürerek GİB kontrolüne yardımcı olur.',
+      'Cerrahi örtü L-bar çadır sistemi ile kaldırılır; örtü altına medikal hava (veya yalnızca gerekirse FiO₂ ≤%30) verilerek CO₂ göllenmesi ve koter yangın riski önlenir.'
     ],
     anesthesiaManagement: [
       'Rejyonel Anestezi & Monitörize Anestezi Bakımı (MAC):',
-      '  - Genişletilmiş Sub-Tenon Bloğu (Künt Kanül Tekniği) veya Peribulber Blok: 3-5 mL Lidokain %2 + Bupivakain %0.5 karışımı (isteğe bağlı Hyaluronidaz ilavesi ile). Mükemmel korneal/skleral analjezi ve tam akinezi sağlar.',
-      '  - Hafif Bilinçli Sedasyon: Midazolam (0.5 - 1.0 mg İV bolus) + Fentanil (25 mcg İV bolus).',
-      '  - DİKKAT: Derin sedasyondan (Propofol bolusları veya aşırı benzodiazepin) kesinlikle kaçınılmalıdır! Derin sedasyondaki hasta uyku apnesine girer, hiperkapniyle paniğe kapılarak aniden uyanır ve mikroskop altındaki gözü sarsarak skleral flep yırtığına veya ekspulsif hemorajiye yol açar.',
+      '  - Genişletilmiş Künt Sub-Tenon Bloğu (3-4 mL Lidokain %2 + Bupivakain %0.5 veya Ropivakain; ileri glokomlu gözde optik sinir perfüzyonunu bozmamak için aşırı volümden kaçınılır).',
+      '  - Minimal Bilinçli Sedasyon: Gerekirse Midazolam 0.5-1.0 mg İV ve/veya Fentanil 25 mcg İV. Kontrolsüz Propofol bolusları YASAKTIR (apne + hiperkapni + ani sıçramalı uyanma).',
+      '  - İntraoperatif Hipertansiyonda: Önce ağrı, anksiyete, hiperkapni ve dolu mesane dışlanır; gerekirse İV Labetalol, Esmolol veya Nikardipin titre edilir (NTG kullanılmaz!).',
       'Genel Anestezi Uygulanıyorsa:',
-      '  - İndüksiyon: Propofol (1.5 - 2.0 mg/kg) + Fentanil / Remifentanil + Rokuronyum (0.6 mg/kg). Maske ventilasyonu nazik yapılmalı, hava yolunda öksürük veya ıkınma olmamalıdır.',
-      '  - İdame: Sevofluran/Desfluran veya TIVA (Propofol + Remifentanil infüzyonu).',
-      '  - Normokapni Disiplini: PaCO2 35-38 mmHg seviyesinde tutulmalıdır; hiperkapni koroid damarlarını genişleterek GİB\'i artırır, hipokapni ise serebral/oküler iskemi yaratır.',
-      '  - Azot Protoksit (N2O) Kontrolü: Trabekülektomide gaz kabarcığı kullanılmasa bile cerrahi sonrası hava/gaz tamponadı olasılığına karşı N2O kullanılmaması tercih edilir.'
+      '  - Propofol + Remifentanil TIVA (düşük PONV ve pürüzsüz uyanma) + Rokuronyum (0.6 mg/kg).',
+      '  - Sıkı Normokapni: EtCO₂/PaCO₂ 35-38 mmHg (hiperkapni koroid vazodilatasyonu ile GİB\'i fırlatır).',
+      '  - N₂O KULLANILMAZ (PONV artışı ve olası intraoküler hava/gaz riski).'
     ],
     airwayManagement: [
-      'Rejyonel anestezi (MAC): Burun kanülü ile 2-3 L/dk O2 verilir; örtü altı aktif havalandırma ile CO2 çadırı engellenir.',
-      'Genel anestezi: Laringeal Maske (LMA) veya Endotrakeal Tüp (spiral telli tüp baş hareketlerine karşı güvenlidir). Ekstübasyon anında öksürmeyi engellemek için LMA mükemmel bir konfor sağlar.'
+      'Rejyonel MAC: Spontan solunumda örtü altına medikal hava (veya FiO₂ ≤%30); bipolar koter açılmadan önce O₂ ≥1 dk kesilir ve havalandırılır (ASA OR Fire Advisory). Antisepside sulu %5 Povidon-İyot kullanılır.',
+      'Genel Anestezi: LMA (düşük öksürük avantajı) veya spiralli kaflı ETT.'
     ],
     criticalSurgicalStages: [
-      '1. Hastanın Pozisyonlanması, Monitörizasyon ve Rejyonel Blok Uygulaması (Göz kapağı ve küre akinezisi kontrolü).',
-      '2. Üst Konjonktiva ve Tenon Disseksiyonu (Forniks veya Limbus tabanlı flep hazırlanması).',
-      '3. Üst Rektus Kası Traksiyon Sütürü (Bridle Suture) Atılması — (Okülokardiyak refleks kontrolü!).',
-      '4. Antimetabolit Uygulaması: MMC (0.2-0.4 mg/mL) veya 5-FU emdirilmiş süngerlerin skleral yatağa yerleştirilmesi (Kronometre başlatılır: 1-3 dakika).',
-      '5. Süngerlerin Çıkarılması ve Alanın En Az 20-30 mL BSS ile Bol Yıkanması (MMC\'nin kornea ve ön kamaraya kaçışının önlenmesi).',
-      '6. Parsiyel Kalınlıkta Skleral Flebin Hazırlanması (Yaklaşık 3x3 veya 4x4 mm ebadında yarım kat sklera diseksiyonu).',
-      '7. Ön Kamaraya Yan Giriş (Parasentez) Açılması ve BSS ile Ön Kamara Derinliğinin Kontrolü.',
-      '8. Kelly Punch ile Trabekülektomi Penceresi (Sklerokorneal blok eksizyonu) — (Kritik dekompresyon ve sıfır hareket aşaması!).',
-      '9. Cerrahi Periferik İridektomi (PI) Yapılması (İris damarı kanaması kontrolü).',
-      '10. Skleral Flebin 10-0 Naylon Sütürlerle Kapatılması (Gevşetilebilir / releasable dikişler ve filtrasyon akım testi).',
-      '11. Konjonktiva ve Tenon Kapsülünün Su Geçirmez (Watertight) Kapatılması ve Filtrasyon Blebinin Şişirilmesi.',
-      '12. Seidel Testi (Kaçak kontrolü), Subkonjonktival Antibiyotik/Steroid Enjeksiyonu ve Koruyucu Şeffaf Kapak.'
+      '1. Taraf Doğrulaması, Baş Elevasyonu ve Künt Sub-Tenon Bloğu (Akinezi & GİB kontrolü).',
+      '2. Sulu %5 Povidon-İyot Antisepsisi ve Üst Konjonktiva/Tenon Disseksiyonu.',
+      '3. Üst Rektus Traksiyon Sütürü (Bridle Suture) — Okülokardiyak refleks kontrolü!',
+      '4. Bipolar Wet-Field Koter Hemostazı (O₂ KAPALI teyidi!).',
+      '5. Antimetabolit (MMC 0.2-0.4 mg/mL veya 5-FU) Sünger Uygulaması (Kronometre 1-3 dk + ≥20-30 mL BSS yıkama).',
+      '6. Parsiyel Kalınlıkta Skleral Flep Hazırlanması ve Yan Parasentez ile Kademeli Dekompresyon.',
+      '7. Kelly Punch ile Trabekülektomi Penceresi (Ani dekompresyon — sıfır hareket/öksürük!).',
+      '8. Cerrahi Periferik İridektomi (PI) — İris kanaması kontrolü.',
+      '9. Skleral Flebin 10-0 Naylon Ayarlanabilir Sütürlerle Kapatılması ve Filtrasyon Testi.',
+      '10. Konjonktiva/Tenon Su Geçirmez Kapatma, Seidel Testi ve Basısız Şeffaf Koruyucu Kalkan.'
     ],
     emergenceNotes: [
-      'Genel Anestezi Ekstübasyon Protokolü: Ekstübasyondan 5-10 dakika önce İV Lidokain (1.5 mg/kg) uygulanır.',
-      'Hasta uyanırken tüpe karşı öksürmemesi, öğürmemesi ve ıkınmaması için derin plan ekstübasyon veya LMA değişimi uygulanabilir.',
-      'Şiddetli kusma ve öğürmeyi engellemek için ameliyat bitiminden önce İV Ondansetron (4-8 mg) ve Deksametazon (4 mg) verilmiş olmalıdır.',
-      'Ameliyat edilen göze baskı yapılmaz; steril gazlı bez ve şeffaf delikli plastik koruyucu kapak (eye shield) gevşekçe flasterlenir.'
+      'Genel Anestezi Pürüzsüz Ekstübasyon: İV Lidokain (1.5 mg/kg) + düşük doz Remifentanil (0.03-0.05 mcg/kg/dk) veya Deksmedetomidin + Sugammadeks (TOF ≥0.9) ile sıfır öksürük/ıkınma sağlanır.',
+      'Çiftli PONV Profilaksisi: Deksametazon (4-8 mg) + Ondansetron (4 mg) zorunludur (kusma blebi patlatır!).',
+      'Ameliyat edilen göze baskılı pansuman YAPILMAZ; şeffaf delikli plastik koruyucu kalkan (eye shield) gevşekçe bantlanır.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Trabekülektomi genellikle şiddetli somatik ağrı yaratmaz; hastalar daha çok batma, yabancı cisim hissi ve hafif künt oküler sızı tarif eder.',
-      'Oral / İV Parasetamol (1000 mg) çoğu olguda mükemmel ve yeterli analjezi sağlar.',
-      'Gereğinde Hafif NSAİİ veya Tramadol (50 mg): Ancak trombosit fonksiyonlarını bozabilecek ve ön kamara hifema riskini artırabilecek agresif NSAİİ\'lerden kaçınılmalıdır.',
-      'Gözü ovuşturma isteğini ve ağrıyı önlemek için koruyucu plastik göz kapağı postoperatif ilk günlerde mutlaka takılmalıdır.'
+      'Trabekülektomi sonrası şiddetli somatik ağrı beklenmez; hafif batma ve yabancı cisim hissi sık görülür.',
+      'Oral / İV Parasetamol (1000 mg) çoğu olguda yeterlidir; Sub-Tenon bloğu ilk saatlerde mükemmel analjezi sağlar.',
+      'KAÇINILACAK AJANLAR: TRAMADOL ve KODEİN yüksek PONV riskiyle bleb ayrışmasına ve ön kamara çökmesine yol açabileceğinden KULLANILMAZ! Hifema riski nedeniyle agresif antiplatelet etkili NSAİİ\'lerden de kaçınılır; şiddetli dirençli ağrıda önce cerrahi komplikasyon (akut GİB artışı / malign glokom / suprakoroidal kanama) dışlanır, gerekirse mikro-doz İV Fentanil (25 mcg) + ek antiemetik verilir.'
     ],
     prospectRecommendations: [
-      'PROSPECT Oftalmik Cerrahi Rehberleri:',
-      'Preoperatif ve intraoperatif multimodal analjezi yaklaşımı ile postoperatif opioid tüketiminin ve buna bağlı bulantı-kusmanın sıfırlanması.',
-      'Lokal / Rejyonel anestezi tekniklerinin (Sub-Tenon veya Peribulber) postoperatif ilk saatlerdeki ağrıyı dramatik düzeyde baskıladığı ve genel anesteziye üstün olduğu vurgulanmaktadır.'
+      'Glokom filtrasyon cerrahisi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; RCoA/RCOphth (2012) ve 4th PONV Consensus (2020) ilkeleri doğrultusunda:',
+      '  - Künt Sub-Tenon rejyonel bloğu + Parasetamol + çiftli PONV profilaksisi ile opioid tüketimi ve kusma kaynaklı bleb rüptürü önlenir.'
     ],
     erasRecommendations: [
-      'ERAS Göz Cerrahisi Protokolleri:',
-      'Minimal Preoperatif Açlık: Berrak sıvılar operasyondan 2 saat öncesine kadar serbest bırakılır.',
-      'Agresif PONV Profilaksisi: Postoperatif kusma ve ıkınma filtrasyon blebini patlatıp ön kamarayı çökertebileceğinden (athalamia), çiftli kombine antiemetik profilaksisi (Ondansetron + Deksametazon) esastır.',
-      'Erken Mobilizasyon: Rejyonel anestezi alan hasta ameliyattan 30-60 dakika sonra oral gıdaya başlayabilir ve taburcu edilebilir.',
-      'Başın 30 Derece Yükseltilmesi: Postoperatif dönemde başın hafif yukarıda tutulması episklera ve göz içi venöz basıncını düşürerek bleb fonksiyonunu ve koroidal perfüzyonu destekler.'
+      'Günübirlik / Kısa Yatışlı Glokom Cerrahisi İlkeleri (RCoA-RCOphth & EGS):',
+      '  - Minimal Açlık: Berrak sıvılar operasyondan 2 saat öncesine kadar serbesttir.',
+      '  - Agresif PONV Profilaksisi: Çiftli antiemetik (Ondansetron + Deksametazon) standarttır.',
+      '  - Baş 30° Elevasyonu: Episkleral venöz basıncı düşürerek bleb fonksiyonunu korur ve suprakoroidal kanama riskini azaltır.',
+      '  - Kısıtlamalar: İlk haftalarda öne eğilme, ıkınma (laksatif gerekebilir), ağır kaldırma ve gözü ovuşturma yasaklanır.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe\'s Anesthesiologist\'s Manual of Surgical Procedures (5th Edition), Section VI: Ophthalmology, Chapter: Glaucoma Procedures - Trabeculectomy (Guarded Filtration Procedure), pp. 858-864.',
-    erasReference: 'Enhanced Recovery After Surgery (ERAS) Society & British Ophthalmic Anaesthesia Society (BOAS) Perioperative Consensus Guidelines for Day-Case Ophthalmic Surgery.',
-    prospectReference: 'PROSPECT Guidelines for Postoperative Pain Management in Ophthalmic and Anterior Segment Surgery.',
+    jaffeReference: 'Jaffe RA, Schmiesing CA, Golianu B. Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmic Surgery — Glaucoma Procedures (Trabeculectomy). Wolters Kluwer / LWW.',
+    erasReference: 'Kumar CM, Eke T, Dodds C, et al. Local anaesthesia for ophthalmic surgery — Joint guidelines from the Royal College of Anaesthetists (RCoA) and the Royal College of Ophthalmologists (RCOphth). 2012.',
+    prospectReference: 'Glokom cerrahisi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; analjezi ve PONV yaklaşımı RCoA/RCOphth (2012) ve 4th Consensus Guidelines for PONV (Gan et al., Anesth Analg 2020) ilkelerine dayanmaktadır.',
     otherReferences: [
-      'European Glaucoma Society (EGS): Terminology and Guidelines for Glaucoma, 5th Edition, Surgical Management and Guarded Filtration Surgery.',
-      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Primary Open-Angle Glaucoma Surgery.',
-      'Ophthalmic Anesthesia Society (OAS): Clinical Practice Guidelines for Anesthesia in Glaucoma Filtration Surgery.',
-      'Türk Oftalmoloji Derneği (TOD) Glokom Birimi: Glokom Tedavi Rehberi ve Cerrahi Komplikasyonların Yönetimi.'
+      'European Glaucoma Society (EGS). Terminology and Guidelines for Glaucoma (5th ed.). Br J Ophthalmol. 2021.',
+      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Primary Open-Angle Glaucoma.',
+      'ASA Task Force on Operating Room Fires. Practice Advisory for the Prevention and Management of Operating Room Fires. Anesthesiology. 2013;118(2):271-290.',
+      'Gan TJ, Belani KG, Bergese S, et al. Fourth Consensus Guidelines for the Management of Postoperative Nausea and Vomiting. Anesth Analg. 2020;131(2):411-448.',
+      'Kopp SL, Vandermeulen E, et al. ASRA Pain Medicine Evidence-Based Guidelines (5th ed.). Reg Anesth Pain Med. 2025.'
     ]
   }
 };

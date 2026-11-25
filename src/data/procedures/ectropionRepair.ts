@@ -3,11 +3,9 @@ import { ProcedureDefinition } from '../../types/procedures';
 /**
  * Ektropiyon Onarımı: Lateral Tarsal Strip, Horizontal Kapak Kısaltması ve Greft/Flep ile Kapak Ektropiyonu Rekonstrüksiyonu
  * (Ectropion Repair / Lateral Tarsal Strip [LTS], Horizontal Shortening, Canthoplasty and Skin Flap/Graft)
- * 
- * Jaffe (5th ed., Section VI: Ophthalmology - Oculoplastics: Ectropion and Entropion Repair, pp. 868-874),
- * American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Oculofacial Plastic Surgery,
- * European Society of Ophthalmic Plastic and Reconstructive Surgery (ESOPRS),
- * British Ophthalmic Anaesthesia Society (BOAS) ve Türk Oftalmoloji Derneği (TOD) Oküloplastik Cerrahi Birimi Protokolleri referans alınarak yapılandırılmıştır.
+ *
+ * Referanslar: Jaffe (5th ed., Section VI: Ophthalmic Surgery), RCoA / RCOphth (2012),
+ * Schein et al. (NEJM 2000), ASA OR Fire Advisory (2013), ASRA 5th Ed. (2025), Gan et al. 4th PONV Consensus (2020).
  */
 export const ectropionRepair: ProcedureDefinition = {
   id: 'ectropion-repair',
@@ -18,71 +16,70 @@ export const ectropionRepair: ProcedureDefinition = {
   categoryTag: 'Oküloplastik & Kapak Cerrahisi',
 
   // 1) Prosedür Tanımı, Endikasyonları ve Tahmini Süresi
-  description: 'Göz kapağının (özellikle alt kapağın) kenarının dışa doğru dönmesi (eversiyonu) sonucu palpebral konjonktivanın açıkta kalması, lakrimal punktumun eversiyonuna bağlı sürekli göz sulanması (epifora), kuru göz, maruziyet keratopati (exposure keratitis) ve kornea ülseri gelişen hastalarda kapak anatomisinin, tonusunun ve glob ile temasının cerrahi olarak yeniden sağlanması ameliyatıdır. En sık uygulanan mikrocerrahi teknikler: (1) Lateral Tarsal Strip (LTS / Bick Prosedürü): İnvolüsyonel (senil) gevşeklikte altın standarttır; lateral kantotomi ve inferior kantolizis sonrası alt tarsus lateralinden bir şerit hazırlanıp fazla doku eksize edilir ve tarsal şerit orbita lateral tüberkülü periostuna (Whitnall tüberkülü) 4-0/5-0 erimeyen dikişlerle asılarak kapak yatay gerginliği sağlanır; (2) Medial İğsi / Tarsokonjonktival Eksizyon (Medial Spindle): Punktum eversiyonu ve medial laksitede punktum altına eliptik eksizyon; (3) Tam Kat Pentagonal Kısaltma: Kapağın santral/lateralinden kama şeklinde doku çıkarılması; (4) Skatrisyel Ektropiyon Rekonstrüksiyonu: Yanık, skar veya aktinik hasara bağlı ön lamel kısalığında retroauriküler/üst kapak tam kat serbest deri grefti veya lokal transpozisyonel flep (Z-plasti).',
+  description: 'Göz kapağının (özellikle alt kapağın) kenarının dışa doğru dönmesi (eversiyonu) sonucu palpebral konjonktivanın açıkta kalması, epifora, kuru göz ve maruziyet keratopatisi (exposure keratitis) gelişen hastalarda kapak anatomisinin, tonusunun ve glob ile temasının yeniden sağlanması ameliyatıdır. Temel teknikler: (1) Lateral Tarsal Strip (LTS): İnvolüsyonel gevşeklikte altın standarttır; lateral kantotomi ve inferior kantolizis sonrası hazırlanan tarsus şeridi orbita lateral tüberkülü periostuna (Whitnall tüberkülü) asılır; (2) Medial Spindle (Tarsokonjonktival Eksizyon): Punktum eversiyonunda; (3) Tam Kat Pentagonal Kısaltma; (4) Skatrisyel Ektropiyon Rekonstrüksiyonu: Serbest tam kat deri grefti veya lokal transpozisyonel flep.',
   indications: [
-    'İnvolüsyonel (Senil) Ektropiyon: İleri yaşta kantal tendonların uzaması, alt kapak retraktörlerinin ayrılması ve orbikülaris kas atrofisine bağlı alt kapak sarkması (en sık endikasyon)',
-    'Paralitik Ektropiyon: Fasiyal sinir felci (Bell paralizisi, akustik nörinom veya parotis cerrahisi sekeli) sonucu orbikülaris okuli kas tonusunun kaybı ve lagoftalmi',
-    'Skatrisyel Ektropiyon: Travma, termal/kimyasal yanık, önceki başarısız blefaroplasti veya deri tümörü eksizyonu sonrası skar kontraktürü ile kapağın aşağı çekilmesi',
-    'Mekanik ve Konjenital Ektropiyon: Kapakta kitle/tümör ağırlığı ile dışa dönme veya doğumsal kraniofasial malformasyonlar',
-    'İlerleyici Maruziyet Keratopati (Exposure Keratopathy) ve Kornea Enfeksiyon/Perforasyon Riski'
+    'İnvolüsyonel (Senil) Ektropiyon: Kantal tendon gevşekliği ve orbikülaris atrofisine bağlı alt kapak sarkması (en sık)',
+    'Paralitik Ektropiyon: Fasiyal sinir felci (Bell paralizisi, akustik nörinom veya parotis cerrahisi sekeli) sonrası lagoftalmi',
+    'Skatrisyel Ektropiyon: Travma, yanık, önceki blefaroplasti veya tümör eksizyonu sonrası skar kontraktürü',
+    'Mekanik / Konjenital Ektropiyon ve İlerleyici Maruziyet Keratopatisi'
   ],
-  averageDuration: '30 - 60 dakika (Tek taraflı izole LTS: 30-40 dk; Bilateral LTS veya deri grefti/lokal flep ile kombine skatrisyel onarımlar: 60-90 dk)',
+  averageDuration: '30 - 60 dakika (Tek taraflı LTS: 30-40 dk; Bilateral LTS veya serbest deri grefti/flep: 60-90 dk)',
 
   // 2) Beklenen Kanama ve Transfüzyon Profili
   bleedingProfile: {
-    estimatedBloodLoss: '< 5 - 20 mL (Göz kapağı ve kantus zengin kan dolaşımına sahiptir; ancak lokal vazokonstriktör [epinefrin] ve titiz bipolar koterizasyon ile kanama minimaldir)',
+    estimatedBloodLoss: '< 5 - 20 mL (Lokal adrenalin ve bipolar koter ile kan kaybı minimaldir)',
     riskLevel: 'minimal',
-    riskLevelLabel: 'Minimal Kan Kaybı / Ancak Postoperatif Retrobulber/Orbital Hematom Riski',
+    riskLevelLabel: 'Minimal Kan Kaybı / Ancak Derin Retrobulber / Orbital Hematom Riski',
     crossMatchRequirement: 'Rutin kan hazırlığı gerekmez (T&S ve Cross-Match endikasyonu yoktur)',
     transfusionProbability: '< %0.01 (Kan transfüzyonu endikasyonu yoktur)',
     criticalBleedingSources: [
-      'Orbital Kompartman / Retrobulber Hematom: Lateral kantotomi ve periostal disseksiyon esnasında derin orbital damarların veya lakrimal arter dallarının kanayarak orbita içine sızması (akut kompartman sendromu ve optik sinir basısı yaratan en kritik acil durum)',
-      'Angular Damarlar ve Medial Palpebral Arter: Medial kantal alanda yapılan disseksiyonlarda',
-      'Marginal ve Periferik Palpebral Arter Arkadları: Tarsal strip hazırlığı ve tam kat kapak insizyonlarında mikrovasküler kanama'
+      'Orbital Kompartman / Retrobulber Hematom: Lateral kantotomi ve periostal disseksiyon sırasında kanamanın orbita içine sızması (görmeyi tehdit eden acil kompartman sendromu)',
+      'Angular Damarlar ve Medial/Lateral Palpebral Arter Arkadları',
+      'Tarsal Strip Hazırlığı ve Tam Kat Kapak İnsizyonu Mikrovasküler Sızıntıları'
     ],
     hemostasisStrategies: [
-      'Lokal anestezik solüsyonuna 1:100.000 veya 1:200.000 Epinefrin (Adrenalin) eklenmesi ve insizyondan 7-10 dakika önce dokuya infüze edilmesi',
-      'Bipolar wet-field mikro-koter ile doku nekrozu yaratmadan selektif hemostaz',
-      'Antikoagülan / antiagregan ilaçların perioperatif hemostaz planlaması'
+      'Lokal anesteziğe 1:100.000 veya 1:200.000 Adrenalin eklenmesi ve insizyondan 7-10 dk önce enjeksiyon',
+      'Bipolar wet-field mikro-koter ile selektif hemostaz (koter öncesi O₂ kesimi zorunlu!)',
+      'Akut retrobulber hematom / OCS şüphesinde <60-90 dk içinde acil lateral kantotomi + inferior kantolizis + 30° baş elevasyonu + IV Mannitol (1-2 g/kg) + IV Asetazolamid (500 mg)'
     ]
   },
 
   // 3) Olası Anestezi Yönetimi Teknikleri
   anesthesiaTechniques: {
     primary: [
-      'Lokal İnfiltrasyon Anestezisi (Lidokain %2 + Bupivakain %0.5 + 1:100.000 Epinefrin) + Rejyonel Sinir Bloğu (İnfraorbital ve Zigomatikofasiyal Blok) + Monitörize Anestezi Bakımı (MAC: Bilinçli Minimal Sedasyon) — DÜNYA GENELİNDE ALTIN STANDARTTIR'
+      'Lokal İnfiltrasyon (Lidokain %2 + Bupivakain %0.5 + 1:100.000 Adrenalin) ± İnfraorbital / Zigomatikofasiyal Sinir Bloğu + Minimal Bilinçli Sedasyon (MAC) — DÜNYA GENELİNDE ALTIN STANDARTTIR'
     ],
     alternative: [
-      'Genel Endotrakeal Anestezi (GETA) veya Laringeal Maske (LMA): İleri derecede demansı, kontrolsüz baş tremoru, mental retardasyonu, klostrofobisi veya panik bozukluğu olan yaşlı hastalarda; pediatrik olgularda veya büyük serbest deri grefti / kompleks rekonstrüksiyon gerektiren olgularda'
+      'Genel Anestezi (LMA veya Spiralli ETT): İleri demans, kontrolsüz baş tremoru, şiddetli klostrofobi, pediatrik olgular veya geniş deri grefti / kompleks rekonstrüksiyon gerektiren olgularda'
     ],
-    clinicalRationale: 'Epinefrinli lokal infiltrasyon + infraorbital/zigomatikofasiyal sinir bloğu ve hafif MAC, ekstraoküler yapıların güvenliğini korurken yaşlı oküloplastik hastalarda genel anestezi morbiditesini önler ve gerektiğinde kapağın yatay gerginliğini/pozisyonunu uyanık hastada test etmeye olanak tanır. Yüz örtülerinin altında nazal O2 ve sidestream EtCO2 ile spontan solunumun sürdürülmesi derin sedasyon apnesi ve ani baş sıçramalarını engeller.',
+    clinicalRationale: 'Adrenalinli lokal infiltrasyon + bölgesel sinir bloğu ve minimal MAC, yaşlı oküloplastik popülasyonda genel anestezi morbiditesini önler ve uyanık hastada kapak gerginliğinin değerlendirilmesine olanak tanır. Yüzde bipolar koter kullanıldığı için ASA OR yangın üçgeni güvenliği (örtü altı medikal hava veya FiO₂ ≤%30, alkolsüz sulu %5 Povidon-İyot) hayati önem taşır.',
     rulesTitle: 'EKTROPİYON ONARIMINDA ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI',
-    notes: 'EKTROPİYON ONARIMINDA ANESTEZİNİN 5 VAZGEÇİLMEZ KURALI: (1) LOKAL ANESTEZİK VE EPİNEFRİN (ADRENALİN) TOKSİSİTESİ, İNTRAVASKÜLER ENJEKSİYON VE KARDİYOVASKÜLER DALGALANMA ALARMI — Kapak derisi ve kantal bölge son derece zengin mikrovasküler ağa sahiptir. Kanama kontrolü için Lidokain/Bupivakain karışımına 1:100.000 veya 1:200.000 Epinefrin eklenir. Enjeksiyon esnasında negatif aspirasyon yapılmazsa veya yaşlı kardiyak hastada aşırı doz uygulanırsa akut taşikardi, ventriküler aritmiler, şiddetli hipertansif kriz ve miyokardiyal iskemi gelişebilir! Anestezi ekibi enjeksiyon anında ritmi ve tansiyonu kesintisiz izlemeli, cerrah ile verilen lokal anestezik hacmini mililitre bazında teyit etmeli ve kardiyak dalgalanmalara karşı beta-bloker/vazodilatatör hazır bulundurmalıdır. (2) KORNEAL KORUMA, KORNEA SHIELD (KORUYUCU SKLERAL PLASTİK KALKAN) VE SIFIR İYATROJENİK KORNEA TRAVMASI — Kapak diseksiyonu, koterizasyon ve dikiş atımı korneanın yalnızca 1-2 milimetre yakınında icra edilir. Korneanın cerrahi örtü altında kurumasını, koter yanığını veya iğne/bıçak perforasyonunu önlemek için insizyon öncesi göze antibiyotikli göz merhemi sürülerek steril opak plastik veya silikon kornea kalkanı (Corneal Shield) yerleştirilmelidir. Kalkan yerleştirilirken ve operasyon sonunda çıkarılırken kornea epiteline sıfır travma prensibine uyulmalı, operasyon bitiminde florosein ile epitel sağlamlığı teyit edilmelidir. (3) LATERAL KANTUS DİSSEKSİYONU VE PERİOSTAL DİKİŞTE OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ) — Lateral tarsal strip hazırlanırken inferior kantolizis yapılması ve tarsal şeridin orbita lateral tüberkül periostuna (Whitnall tüberkülü) 4-0/5-0 dikişlerle asılması derin trigemino-vagal refleksi (CN V oftalmik/maksiller dal -> CN X vagus) tetikleyebilir. Monitörde ani derin bradikardi, nodal kaçış ritmi veya asistoli gelişebilir! Ritim anında takip edilmeli, bradikardi görüldüğünde cerraha çekmeyi gevşetmesi söylenmeli; düzelmezse derhal İV Atropin (0.5 mg) uygulanmalıdır. (4) MONİTÖRİZE ANESTEZİ BAKIMINDA (MAC) "AŞIRI SEDASYON VE HİPOVENTİLASYON TUZAĞI" — Ektropiyon hastaları çoğunlukla ileri yaşta, kardiyak ve akciğer patolojisi olan bireylerdir. Hastayı sakinleştirmek amacıyla kontrolsüz Propofol bolusları veya yüksek doz benzodiazepin verilmesi solunum depresyonuna, hiperkapniye ve örtü altında hava açlığıyla ani sıçrayarak uyanmaya yol açar. Bu istemsiz baş hareketi cerrahın elindeki bistüri veya koterin glob perforasyonu yapmasına yol açabilecek en büyük tehlikedir! Yalnızca titre edilmiş minimal Midazolam (0.5-1 mg) ve Fentanil (25 mcg) uygulanmalı, nazal O2 ile örtü altı aktif aspirasyon sürdürülmeli ve hasta ile sakin sözel iletişim korunmalıdır. (5) POSTOPERATİF DERİN ORBİTAL / RETROBULBER HEMATOM, GÖZ İÇİ BASINCI (GİB) VE KALICI KÖRLÜK RİSKİ — Lateral kantotomi ve periostal disseksiyon sahasındaki yetersiz hemostaz, kanın orbita kompartmanına sızarak retrobulber/orbital hematom oluşturmasına neden olabilir. Hematom intraorbital basıncı ve GİB\'i hızla yükselterek santral retinal arter tıkanıklığı ve optik sinir iskemisiyle saatler içinde KALICI KÖRLÜK yaratır! Operasyon bitiminde koterizasyon eksiksiz olmalı; derlenme odasında hastada ani gelişen şiddetli göz ağrısı, proptozis, kapakta gergin şişlik veya görme kaybı görüldüğünde anestezi ve cerrahi ekibi derhal acil lateral kantotomi/kantolizis ile orbitayı dekomprese etmeye hazır olmalıdır.',
+    notes: 'Ektropiyon onarımında temel kurallar: (1) ASA OR Yangın Üçgeni (yüz koteri + FiO₂ ≤%30) ve aşırı sedasyon tuzağı; (2) Adrenalinli lokal anestezik toksisitesi (negatif aspirasyon + EKG/KB takibi); (3) Kornea kalkanı (Corneal Shield) koruması; (4) Whitnall periostal dikişinde OCR yönetimi; (5) Akut retrobulber hematom / OCS (<60-90 dk) acil dekompresyon paketi.',
     indispensableRules: [
       {
         number: 1,
-        title: 'LOKAL ANESTEZİK VE EPİNEFRİN (ADRENALİN) TOKSİSİTESİ, İNTRAVASKÜLER ENJEKSİYON VE KARDİYOVASKÜLER DALGALANMA ALARMI',
-        content: 'Kapak derisi ve kantal bölge son derece zengin mikrovasküler ağa sahiptir. Kanama kontrolü için Lidokain/Bupivakain karışımına 1:100.000 veya 1:200.000 Epinefrin eklenir. Enjeksiyon esnasında negatif aspirasyon yapılmazsa veya yaşlı kardiyak hastada aşırı doz uygulanırsa akut taşikardi, ventriküler aritmiler, şiddetli hipertansif kriz ve miyokardiyal iskemi gelişebilir! Anestezi ekibi enjeksiyon anında ritmi ve tansiyonu kesintisiz izlemeli, cerrah ile verilen lokal anestezik hacmini mililitre bazında teyit etmeli ve kardiyak dalgalanmalara karşı beta-bloker/vazodilatatör hazır bulundurmalıdır.'
+        title: 'ASA AMELİYATHANE YANGIN ÜÇGENİ (YÜZ KOTERİ + OKSİJEN) VE AŞIRI SEDASYON TUZAĞI',
+        content: 'Kapak cerrahisinde bipolar koter yüzün tam ortasında kullanılır! Örtü altında yüksek akımlı O₂ birikimi ameliyathane yüz yanıklarının 1 numaralı sebebidir: Örtü altına medikal hava veya FiO₂ ≤%30 verilmeli, koter öncesi O₂ ≥1 dk kesilip havalandırılmalı, alkol bazlı antiseptik yerine sulu %5 Povidon-İyot kullanılmalıdır. Geriatrik hastada kontrolsüz Propofol bolusları apne ve panikle sıçramalı uyanmaya yol açtığından YASAKTIR.'
       },
       {
         number: 2,
-        title: 'KORNEAL KORUMA, KORNEA SHIELD (KORUYUCU SKLERAL PLASTİK KALKAN) VE SIFIR İYATROJENİK KORNEA TRAVMASI',
-        content: 'Kapak diseksiyonu, koterizasyon ve dikiş atımı korneanın yalnızca 1-2 milimetre yakınında icra edilir. Korneanın cerrahi örtü altında kurumasını, koter yanığını veya iğne/bıçak perforasyonunu önlemek için insizyon öncesi göze antibiyotikli göz merhemi sürülerek steril opak plastik veya silikon kornea kalkanı (Corneal Shield) yerleştirilmelidir. Kalkan yerleştirilirken ve operasyon sonunda çıkarılırken kornea epiteline sıfır travma prensibine uyulmalı, operasyon bitiminde florosein ile epitel sağlamlığı teyit edilmelidir.'
+        title: 'LOKAL ANESTEZİK & ADRENALİN TOKSİSİTESİ VE İNTRAVASKÜLER ENJEKSİYON ALARMI',
+        content: 'Kapak ve kantal bölge yüksek vaskülariteye sahiptir; 1:100.000 Adrenalinli Lidokain/Bupivakain enjeksiyonunda negatif aspirasyon şarttır. Yaşlı koroner arter hastalarında ani taşikardi, aritmi ve hipertansiyon gelişebilir; EKG/NIBP kesintisiz izlenir, gerekirse kısa etkili İV Esmolol veya Labetalol titre edilir.'
       },
       {
         number: 3,
-        title: 'LATERAL KANTUS DİSSEKSİYONU VE PERİOSTAL DİKİŞTE OKÜLOKARDİYAK REFLEKS (ASCHNER FENOMENİ)',
-        content: 'Lateral tarsal strip hazırlanırken inferior kantolizis yapılması ve tarsal şeridin orbita lateral tüberkül periostuna (Whitnall tüberkülü) 4-0/5-0 dikişlerle asılması derin trigemino-vagal refleksi (CN V oftalmik/maksiller dal -> CN X vagus) tetikleyebilir. Monitörde ani derin bradikardi, nodal kaçış ritmi veya asistoli gelişebilir! Ritim anında takip edilmeli, bradikardi görüldüğünde cerraha çekmeyi gevşetmesi söylenmeli; düzelmezse derhal İV Atropin (0.5 mg) uygulanmalıdır.'
+        title: 'KORNEA KALKANI (CORNEAL SHIELD) VE SIFIR İYATROJENİK KORNEA TRAVMASI',
+        content: 'Diseksiyon, koter ve dikişler korneaya 1-2 mm mesafededir. İnsizyon öncesi antibiyotikli pomad eşliğinde kornea kalkanı yerleştirilmeli ve operasyon bitiminde çıkarıldığı sözel olarak teyit edilmelidir.'
       },
       {
         number: 4,
-        title: 'MONİTÖRİZE ANESTEZİ BAKIMINDA (MAC) "AŞIRI SEDASYON VE HİPOVENTİLASYON TUZAĞI"',
-        content: 'Ektropiyon hastaları çoğunlukla ileri yaşta, kardiyak ve akciğer patolojisi olan bireylerdir. Hastayı sakinleştirmek amacıyla kontrolsüz Propofol bolusları veya yüksek doz benzodiazepin verilmesi solunum depresyonuna, hiperkapniye ve örtü altında hava açlığıyla ani sıçrayarak uyanmaya yol açar. Bu istemsiz baş hareketi cerrahın elindeki bistüri veya koterin glob perforasyonu yapmasına yol açabilecek en büyük tehlikedir! Yalnızca titre edilmiş minimal Midazolam (0.5-1 mg) ve Fentanil (25 mcg) uygulanmalı, nazal O2 ile örtü altı aktif aspirasyon sürdürülmeli ve hasta ile sakin sözel iletişim korunmalıdır.'
+        title: 'LATERAL KANTUS / WHİTNALL PERİOST DİKİŞİNDE OKÜLOKARDİYAK REFLEKS (OCR)',
+        content: 'İnferior kantolizis ve tarsal şeridin orbita lateral periostuna asılması trigemino-vagal refleksle (CN V → CN X) ani bradikardi/asistoli yapabilir. İlk adım cerrahı durdurmak, 2. adım oksijenasyon/ventilasyon kontrolü, düzelmezse İV Atropin 0.5 mg uygulamaktır.'
       },
       {
         number: 5,
-        title: 'POSTOPERATİF DERİN ORBİTAL / RETROBULBER HEMATOM, GÖZ İÇİ BASINCI (GİB) VE KALICI KÖRLÜK RİSKİ',
-        content: 'Lateral kantotomi ve periostal disseksiyon sahasındaki yetersiz hemostaz, kanın orbita kompartmanına sızarak retrobulber/orbital hematom oluşturmasına neden olabilir. Hematom intraorbital basıncı ve GİB\'i hızla yükselterek santral retinal arter tıkanıklığı ve optik sinir iskemisiyle saatler içinde KALICI KÖRLÜK yaratır! Operasyon bitiminde koterizasyon eksiksiz olmalı; derlenme odasında hastada ani gelişen şiddetli göz ağrısı, proptozis, kapakta gergin şişlik veya görme kaybı görüldüğünde anestezi ve cerrahi ekibi derhal acil lateral kantotomi/kantolizis ile orbitayı dekomprese etmeye hazır olmalıdır.'
+        title: 'POSTOPERATİF AKUT RETROBULBER HEMATOM / ORBİTAL KOMPARTMAN SENDROMU (OCS) ACİL PAKETİ',
+        content: 'Lateral kantotomi ve periostal alandaki sızıntı orbita kompartmanına ilerleyip ani şiddetli göz ağrısı, proptozis, sert kapak ödemi, RAPD ve görme kaybı yaratırsa altın pencere (<60-90 dk) içinde derhal: (1) Sütürlerin açılması + acil lateral kantotomi / inferior kantolizis, (2) Baş 30° elevasyon, (3) İV Mannitol (1-2 g/kg) ve (4) İV Asetazolamid (500 mg) uygulanır!'
       }
     ]
   },
@@ -90,108 +87,95 @@ export const ectropionRepair: ProcedureDefinition = {
   // 4) Pre-operatif Hazırlık
   preoperative: {
     consultations: [
-      'Göz Hastalıkları / Oküloplasti Konsültasyonu: Ektropiyon etiyolojisi (involüsyonel, paralitik, skatrisyel), kapak distraksiyon testi (pinch test > 6 mm), snap-back testi, punktum pozisyonu, maruziyet keratopati düzeyi ve cerrahi teknik planı.',
-      'Kardiyoloji Konsültasyonu: İleri yaş hasta grubunda hipertansiyon, aritmiler ve koroner arter hastalığının kontrolü; lokal anestezik içindeki adrenalin etkileşimi planı.',
-      'Göğüs Hastalıkları Konsültasyonu: Cerrahi örtü altında nefes darlığı yaşamaması için KOAH veya astım hastalarının preoperatif bronkodilatör optimizasyonu.',
-      'Anestezi Değerlendirmesi: Sırtüstü yatma (kifoz/artrit) toleransı, mental kognitif durum ve sedasyon güvenliği.'
+      'Göz Hastalıkları / Oküloplasti Konsültasyonu: Ektropiyon etiyolojisi, horizontal laksite (pinch/snap-back testi), punktum pozisyonu ve maruziyet keratopatisi.',
+      'Kardiyoloji / İç Hastalıkları (Yalnızca Klinik Endikasyonda): Dekompanse kardiyopulmoner hastalık veya kontrolsüz malign hipertansiyon yoksa stabil lokal/MAC hastada rutin konsültasyon GEREKMEZ.',
+      'Anestezi Değerlendirmesi: Sırtüstü yatma toleransı, geriatrik deliryum riski ve minimal sedasyon planı.'
     ],
     historyAndPhysical: [
-      'Antikoagülan ve Antiagregan Kullanımı: Aspirin, Klopidogrel, Warfarin ve DOAK (Apiksaban, Rivaroksaban vb.); oküloplastik kapak cerrahisinde ameliyat sonrası orbital hematom ve görme kaybı riskini en aza indirmek için hemostatik ilaç planı cerrah ile konsülte edilir.',
-      'Hipertansiyon Öyküsü: İntraoperatif ve postoperatif tansiyon piki hematom riskini tetikleyeceğinden bazal kan basıncı SKB < 140 mmHg seviyesinde hedeflenir.',
-      'Önceki Göz ve Kapak Girişimleri: Geçirilmiş blefaroplasti, katarakt, radyoterapi veya fasiyal travma.',
-      'Klostrofobi ve Anksiyete Düzeyi: Cerrahi örtünün yüze kapanmasını tolere edememe öyküsü.'
+      'Antikoagülan / Antiagregan Yönetimi (ASRA 2025 & PAUSE): Komprese edilebilir yüzeyel kapak cerrahisinde tromboembolik risk ile orbital hematom riski cerrahla birlikte tartılır; DOAC kesilecekse 48 sa (5-7 gün değil!) ve rutin köprüleme YAPILMAZ (bkz. #infografik=antithrombotic-matrix).',
+      'Hipertansiyon Öyküsü: Bazal KB regülasyonu kapak ve orbital hematom riskini azaltır.',
+      'Önceki Kapak Cerrahisi, Fasiyal Paralizi ve Klostrofobi Öyküsü.'
     ],
     laboratoryAndTests: [
-      'Tam Kan Sayımı (Hb, Hct, Trombosit düzeyi).',
-      'Koagülasyon Parametreleri: PT, aPTT, INR.',
-      'Açlık Kan Şekeri ve Temel Biyokimya (Böbrek ve karaciğer fonksiyonları).',
-      '12 Derivasyonlu EKG (Aritmi ve iskemi taraması).'
+      'DÜŞÜK RİSKLİ LOKAL / MAC KAPAK CERRAHİSİNDE RUTİN PREOP LABORATUVAR VE EKG İSTENMEZ! (Schein NEJM 2000 & ASA Advisory).',
+      'Klinik Endikasyon Bazlı Tetkikler: Warfarin kullananlarda güncel INR, diyabetiklerde vaka günü kan şekeri ve aktif/yeni kardiyak semptom varlığında 12 derivasyonlu EKG.'
     ]
   },
 
   // 5) İntra-operatif Yönetim
   intraoperative: {
     monitoring: [
-      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (Aschner okülokardiyak refleksi ve adrenalin kaynaklı taşiaritmi analizi), SpO2, NIBP ve Solunum Sayısı.',
-      'Kan Basıncı Takibi (3-5 dakikada bir): Adrenalin enjeksiyonu ve kantal periostal diseksiyon esnasında hipertansif dalgalanmaların takibi.',
-      'Sedasyon ve Solunum Takibi: Nazal kanülden CO2 örneklemesi (kapnografi) ve örtü altı oksijenizasyon izlemi.'
+      'Standart ASA Monitörizasyonu: 5 derivasyonlu EKG (OCR ve adrenalin aritmi analizi), SpO₂, NIBP (3-5 dk) ve sedasyon veriliyorsa nazal EtCO₂.',
+      'Sözel Kooperasyon ve Solunum Eforu İzlemi.'
     ],
     vascularAccess: [
-      '1 adet güvenli periferik intravenöz damar yolu (20-22G)',
-      'Acil Bradikardi Kiti: İV Atropin (0.5 mg ampul)',
-      'Gereğinde Hipertansiyon Yönetimi: İV Esmolol veya Labetalol'
+      '1 adet güvenli periferik intravenöz damar yolu (20-22G).',
+      'Acil İlaçlar Hazır: İV Atropin (0.5 mg), Esmolol veya Labetalol.'
     ],
-    patientPosition: 'Supin (Sırtüstü) Pozisyon, Baş Hafif Yükseltilmiş (15-20 Derece) ve Hareketsiz',
+    patientPosition: 'Supin (Sırtüstü) Pozisyon, 15-20° Ters Trendelenburg ve Sabit Baş',
     patientPositionDetails: [
-      'Hasta sırtüstü yatırılır; baş silikon donüt yastıkla sabitlenerek yüzün hafifçe cerraha doğru paralel olması sağlanır.',
-      'Kafa ve boyun venöz basıncını azaltarak cerrahi kanamayı minimize etmek için yatağın baş kısmı 15-20 derece yükseltilir (Reverse Trendelenburg eğimi).',
-      'Cerrahi örtülerin yüze doğrudan temas etmemesi ve solunum alanının açık kalması için esnek L-bar köprüsü kurulur.',
-      'Hastaya burun kanülü ile 2-3 L/dk O2 verilir ve örtü altına temiz hava/aspirasyon hattı yerleştirilir.'
+      'Baş silikon donut yastıkla nötral sabitlenir.',
+      '15-20° ters Trendelenburg eğimi baş-boyun venöz basıncını düşürerek kapak kanamasını ve ödemi azaltır.',
+      'Cerrahi örtü L-bar çadır ile kaldırılır; örtü altına medikal hava (veya yalnızca hipoksemi varsa FiO₂ ≤%30) verilerek CO₂ göllenmesi ve yangın riski önlenir.'
     ],
     anesthesiaManagement: [
       'Lokal İnfiltrasyon ve Rejyonel Blok Protokolü:',
-      '  - Solüsyon: Lidokain %2 + Bupivakain %0.5 (1:1 karışım) + 1:100.000 Epinefrin + Hyaluronidaz (15 IU/mL, doku difüzyonunu artırmak için).',
-      '  - Enjeksiyon Alanı: Alt kapak subkutan/pretarsal doku, lateral kantus ve periost sahası (toplam 2-4 mL). Enjeksiyon öncesi kanama olmaması için negatif aspirasyon zorunludur.',
-      '  - Tam vazokonstrüksiyon ve anestezi oturması için insizyondan önce EN AZ 7-10 DAKİKA BEKLENMELİDİR.',
+      '  - Lidokain %2 + Bupivakain %0.5 (1:1) + 1:100.000 Adrenalin (toplam 2-4 mL; negatif aspirasyon zorunlu).',
+      '  - Tam vazokonstriksiyon için insizyondan 7-10 dakika önce enjeksiyon yapılır.',
       'Monitörize Anestezi Bakımı (MAC):',
-      '  - Minimal sedasyon: Midazolam 0.5 - 1.0 mg İV + Fentanil 25 mcg İV.',
-      '  - Derin sedasyondan kesinlikle kaçınılır; hasta sözel komutlara yanıt verebilmeli, derin uyku ve apneye girmemelidir.',
-      'Genel Anestezi Gereken Nadir Durumlarda:',
-      '  - Laringeal Maske (LMA) veya Spiral Telli Endotrakeal Tüp ile pürüzsüz uyanma sağlanır; ekstübasyonda öksürük engellenir.'
+      '  - Minimal anksiyoliz/analjezi: Gerekirse Fentanil 25 mcg İV ve/veya Midazolam 0.5-1.0 mg İV (geriatrik hastalarda deliryum riski nedeniyle benzodiazepin minimal tutulur).',
+      '  - Kontrolsüz Propofol boluslarından kesinlikle kaçınılır.',
+      'Genel Anestezi Gereken Nadir Durumlarda: LMA veya spiralli ETT ile pürüzsüz öksürüksüz uyanma.'
     ],
     airwayManagement: [
-      'MAC yönetiminde hava yolu hastanın kendi spontan solunumudur; nazal kanül ile 2 L/dk O2 verilir.',
-      'Örtü altında karbondioksit birikimini ve sıcaklık hissini önlemek için vakum hortumu ile aktif örtü altı havalandırma kurulur.'
+      'MAC\'te spontan solunum korunur; ASA OR Fire Advisory gereği örtü altı medikal hava (veya FiO₂ ≤%30), bipolar koter açılmadan önce O₂ ≥1 dk kesilir ve sulu %5 Povidon-İyot kullanılır (alkollü antiseptik YASAK).'
     ],
     criticalSurgicalStages: [
-      '1. Pozisyonlandırma, Monitörizasyon ve Başın Sabitlenmesi.',
-      '2. Topikal Anestezi Damlası (Proparakain %0.5) Damlatılması ve Koruyucu Merhem Eşliğinde Kornea Kalkanının (Corneal Shield) Yerleştirilmesi.',
-      '3. Lokal Anestezik ve Epinefrin İnfiltrasyonu (Lateral kantus ve alt kapak — 7-10 dk bekleme süresi).',
-      '4. Lateral Kantotomi Yapılması (15 numara bistüri veya Westcott makası ile lateral kantal tendonun kesilmesi).',
-      '5. İnferior Kantolizis (Alt kapağın orbita kenarından serbestleştirilmesi).',
-      '6. Lateral Tarsal Şeridin (Tarsal Strip) Hazırlanması (Ön lamel deri/orbikülaris ve konjonktiva epitelinin sıyrılarak çıplak tarsus şeridi oluşturulması).',
-      '7. Kapak Boyunun Ölçülmesi ve Fazla Tarsal Dokunun Kısaltılması (Horizontal laksitenin düzeltilmesi).',
-      '8. Tarsal Şeridin Orbita Lateral Tüberkülü Periostuna (Whitnall Tüberkülü) Tespiti (4-0 veya 5-0 erimeyen dikiş — Okülokardiyak refleks kontrolü!).',
-      '9. Kantal Açının (Lateral Canthal Angle) Yeniden Oluşturulması ve Deri Sütürasyonu (6-0 sütürler).',
-      '10. Kornea Kalkanının Nazikçe Çıkarılması, Kornea Epitel Muayenesi, Antibiyotikli Pomad ve Basısız Pansuman.'
+      '1. Taraf Doğrulaması, 15-20° Baş Elevasyonu ve Örtü Altı Medikal Hava Çadırı.',
+      '2. Topikal Proparakain, Sulu %5 Povidon-İyot ve Kornea Kalkanının (Corneal Shield) Yerleştirilmesi.',
+      '3. Adrenalinli Lokal İnfiltrasyon (7-10 dk bekleme; EKG/KB izlemi).',
+      '4. Lateral Kantotomi ve İnferior Kantolizis (Koter öncesi O₂ KAPALI teyidi!).',
+      '5. Lateral Tarsal Şeridin (Tarsal Strip) Hazırlanması ve Horizontal Kısaltma.',
+      '6. Tarsal Şeridin Whitnall Tüberkülü Periostuna Tespiti (OCR kontrolü!).',
+      '7. Lateral Kantal Açının Oluşturulması ve Cilt Kapanışı.',
+      '8. Kornea Kalkanının Çıkarılma Teyidi, Antibiyotikli Pomad ve Görmeyi Kapatmayan Hafif Pansuman.'
     ],
     emergenceNotes: [
-      'Lokal/MAC cerrahisinde uyanma dönemi yoktur; ameliyat bitiminde hasta sedyeye veya tekerlekli sandalyeye oturur vaziyette alınabilir.',
-      'Ameliyat edilen göze baskı yapılmaz; steril gazlı bezle hafif pansuman uygulanır (görme keskinliği ve hematom kontrolü için bantlar çok sıkı olmamalıdır).',
-      'Hastaya ve refakatçisine ameliyat sonrası ani gelişen şiddetli göz ağrısı veya görme kaybında acilen hekime başvurması tembihlenir.'
+      'Lokal/MAC cerrahisinde hasta PADSS ≥9 kriteriyle kısa gözlem sonrası aynı gün taburcu edilir.',
+      'Sıkı baskılı göz bandajı YAPILMAZ (retrobulber hematom ve görme kaybı takibini maskeler!).',
+      'Hastaya ani şiddetli göz ağrısı, proptozis veya görme azalmasında acil başvuru (OCS alarmı) anlatılır.'
     ]
   },
 
   // 6) Post-operatif Yönetimde Dikkat Edilmesi Gerekenler
   postoperative: {
     painManagement: [
-      'Ektropiyon onarımı sonrası ağrı genellikle hafif düzeydedir ve cerrahi sahada künt gerginlik/sızlama şeklindedir.',
-      'Oral Parasetamol (500-1000 mg) ilk 24-48 saatte tamamen yeterlidir.',
-      'Trombosit fonksiyonlarını baskılayarak hematom riskini artırabilecek aspirin veya agresif NSAİİ kullanımından ilk günlerde kaçınılmalıdır.',
-      'İlk 24-48 saat cerrahi sahaya aralıklı soğuk jel kompres uygulanması ödemi ve hematom riskini belirgin şekilde azaltır.'
+      'Ağrı genellikle hafiftir; uzun etkili lokal anestezik infiltrasyonu ilk 4-6 saatte etkin analjezi sağlar.',
+      'Oral Parasetamol (500-1000 mg) yeterlidir; sistemik opioidlere (Tramadol/Kodein) gerek yoktur.',
+      'İlk 24-48 saat aralıklı soğuk jel kompres ödem ve ekimozu azaltır; erken dönemde agresif antiplatelet NSAİİ\'lerden kaçınılır.'
     ],
     prospectRecommendations: [
-      'PROSPECT Oküloplastik Cerrahi Rehberleri:',
-      'Preoperatif ve intraoperatif lokal infiltrasyon + sinir bloğunun postoperatif analjezik gereksinimini sıfıra indirdiği;',
-      'Opioid kullanımından kaçınılarak PONV (bulantı/kusma) ve buna bağlı venöz basınç artışının engellenmesi tavsiye edilir.'
+      'Oküloplastik kapak cerrahisi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; RCoA/RCOphth (2012) ve 4th PONV Consensus (2020) ilkeleri doğrultusunda:',
+      '  - Bupivakain/Lidokain lokal infiltrasyonu + Parasetamol ile opioid ve PONV riski olmaksızın güvenli günübirlik analjezi sağlanır.'
     ],
     erasRecommendations: [
-      'ERAS Göz ve Oküloplastik Cerrahi Protokolleri:',
-      'Günübirlik cerrahi (Day-case surgery): Hasta operasyondan 30-45 dakika sonra oral alıma başlayabilir ve aynı gün güvenle taburcu edilir.',
-      'Postoperatif Baş Pozisyonu: İlk gece başın 2 yastıkla (30-45 derece) yükseltilmesi ödem ve kanama riskini önler.',
-      'Gözü Ovuşturma Yasağı: Yeni atılan kantal dikişlerin korunması için hastanın gözünü ovuşturması kesinlikle yasaklanır.'
+      'Günübirlik Oküloplastik Cerrahi İlkeleri (RCoA-RCOphth):',
+      '  - Hızlı Taburculuk: PADSS ≥9 kriteriyle 30-45 dakika içinde oral alım ve aynı gün taburculuk.',
+      '  - Baş 30-45° Elevasyonu: İlk 48 saat baş yüksek yatış ödem ve hematom riskini azaltır.',
+      '  - Gözü Ovuşturma Yasağı: Lateral kantal dikişlerin ayrışmasını önlemek için göz ovuşturulmaz.'
     ]
   },
 
   // 7) Kullanılan Kaynaklar ve Literatür Referansları
   references: {
-    jaffeReference: 'Jaffe\'s Anesthesiologist\'s Manual of Surgical Procedures (5th Edition), Section VI: Ophthalmology, Chapter: Oculoplastics - Ectropion and Entropion Repair, pp. 868-874.',
-    erasReference: 'Enhanced Recovery After Surgery (ERAS) Society & British Ophthalmic Anaesthesia Society (BOAS): Recommendations for Day-Case Oculofacial Surgery.',
-    prospectReference: 'PROSPECT Guidelines: Postoperative Pain Management in Ophthalmic and Oculoplastic Procedures.',
+    jaffeReference: 'Jaffe RA, Schmiesing CA, Golianu B. Anesthesiologist\'s Manual of Surgical Procedures (5th ed.). Section VI: Ophthalmic Surgery — Ectropion and Entropion Repair. Wolters Kluwer / LWW.',
+    erasReference: 'Kumar CM, Eke T, Dodds C, et al. Local anaesthesia for ophthalmic surgery — Joint guidelines from the Royal College of Anaesthetists (RCoA) and the Royal College of Ophthalmologists (RCOphth). 2012.',
+    prospectReference: 'Oküloplastik cerrahi için yayımlanmış özel bir PROSPECT kılavuzu bulunmamaktadır; analjezi yaklaşımı RCoA/RCOphth (2012) ve 4th Consensus Guidelines for PONV (Gan et al., Anesth Analg 2020) ilkelerine dayanmaktadır.',
     otherReferences: [
-      'American Academy of Ophthalmology (AAO) Preferred Practice Pattern (PPP): Oculofacial Plastic Surgery (Involutional Ectropion Management).',
-      'European Society of Ophthalmic Plastic and Reconstructive Surgery (ESOPRS): Consensus on Lateral Tarsal Strip and Canthoplasty Techniques.',
-      'Türk Oftalmoloji Derneği (TOD) Oküloplastik Cerrahi Birimi: Kapak Malpozisyonları ve Ektropiyon Tedavi Rehberi.'
+      'Schein OD, Katz J, Bass EB, et al. The value of routine preoperative medical testing before cataract surgery. N Engl J Med. 2000;342(3):168-175.',
+      'ASA Task Force on Operating Room Fires. Practice Advisory for the Prevention and Management of Operating Room Fires. Anesthesiology. 2013;118(2):271-290.',
+      'Kopp SL, Vandermeulen E, et al. ASRA Pain Medicine Evidence-Based Guidelines (5th ed.). Reg Anesth Pain Med. 2025.',
+      'Gan TJ, Belani KG, Bergese S, et al. Fourth Consensus Guidelines for the Management of Postoperative Nausea and Vomiting. Anesth Analg. 2020;131(2):411-448.'
     ]
   }
 };
