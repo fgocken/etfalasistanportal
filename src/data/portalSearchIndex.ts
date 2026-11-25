@@ -2014,6 +2014,23 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'asa-basic-monitoring',
     popular: true
   },
+  {
+    id: 'info-diuretics-nephron',
+    title: 'Böbrek Nefronu, Diüretik Etki Mekanizmaları & Klinik Karar Matrisi',
+    category: 'Klinik İnfografikler',
+    badge: 'İnteraktif Animasyon · ESC / ADVOR',
+    description: '6 diüretik sınıfının (KAI, Ozmotik, Loop, Tiyazid, K⁺-Tutucu, Vaptan) canlı makro nefron ve hücresel iyon taşıma animasyonu, 7 klinik senaryo karar matrisi, ardışık nefron blokajı kombinasyonları (ADVOR, CLOROTIC, EASL 100:40) ve güncel kılavuz önerileri.',
+    keywords: [
+      'diüretik', 'diüretikler', 'nefron', 'böbrek nefronu', 'furosemid', 'loop diüretik', 'kıvrım diüretiği',
+      'asetazolamid', 'karbonik anhidraz', 'mannitol', 'ozmotik diüretik', 'tiyazid', 'hidroklorotiyazid',
+      'spironolakton', 'amilorid', 'potasyum tutucu', 'vaptan', 'tolvaptan', 'nkcc2', 'ncc', 'enac', 'aqp2',
+      'ardışık nefron blokajı', 'diüretik direnci', 'advor', 'clorotic', 'dose', 'kibas', 'siroz asit',
+      'siadh', 'hiponatremi', 'metabolik alkaloz', 'fst', 'furosemid stres testi', 'infografik', 'animasyon'
+    ],
+    tabId: 'infographics',
+    subId: 'diuretics-nephron',
+    popular: true
+  },
 
   // 4. Rehber & Nöbet
   {

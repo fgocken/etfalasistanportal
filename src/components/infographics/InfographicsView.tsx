@@ -29,6 +29,7 @@ import { RespiratoryFailureInfographic } from './RespiratoryFailureInfographic';
 import { TivaCshtInfographic } from './TivaCshtInfographic';
 import { SpontaneousVsPpvInfographic } from './SpontaneousVsPpvInfographic';
 import { AsaBasicMonitoringInfographic } from './AsaBasicMonitoringInfographic';
+import { DiureticsNephronInfographic } from './DiureticsNephronInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { PortalLink } from '../common/PortalLink';
 import { buildHashHref, updateHashRoute } from '../../utils/deepLink';
@@ -319,6 +320,23 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Sıcaklık', rate: 'Koşullu', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
     ],
     accentColor: 'emerald'
+  },
+  {
+    id: 'diuretics-nephron',
+    title: 'Böbrek Nefronu, Diüretik Etki Mekanizmaları & Klinik Karar Matrisi',
+    source: 'ESC 2021/2023 · ADVOR · CLOROTIC · NCS 2020 · EASL 2018',
+    sourceBadge: 'İnteraktif Animasyon',
+    category: 'Renal Farmakoloji & Sıvı',
+    shortDesc: '6 diüretik sınıfının senkronize makro nefron ve hücresel iyon taşınma animasyonu, 7 klinik senaryo karar matrisi, ardışık nefron blokajı kombinasyonları ve güncel kılavuz önerileri.',
+    pillsHeader: 'İnteraktif Modüller:',
+    publisher: 'ESC / NEJM / EHJ / NCS / EASL',
+    riskPills: [
+      { label: 'Canlı Nefron', rate: '6 Sınıf', colorClass: 'text-sky-600 dark:text-sky-400', bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30' },
+      { label: 'Karar Matrisi', rate: '7 Senaryo', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'Kombinasyon', rate: 'ADVOR / CLOROTIC', colorClass: 'text-indigo-600 dark:text-indigo-400', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30' },
+      { label: 'Kılavuzlar', rate: '8 PubMed', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+    ],
+    accentColor: 'teal'
   }
 ];
 
@@ -642,6 +660,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {/* VIEW: ASA Standards for Basic Anesthetic Monitoring Infographic */}
       {activeInfographicId === 'asa-basic-monitoring' && (
         <AsaBasicMonitoringInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: Nephron & Diuretics Interactive Animation + Clinical Decision Matrix */}
+      {activeInfographicId === 'diuretics-nephron' && (
+        <DiureticsNephronInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}

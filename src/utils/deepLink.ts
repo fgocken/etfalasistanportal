@@ -34,7 +34,8 @@ export const VALID_INFOGRAPHIC_IDS = [
   'respiratory-failure',
   'tiva-csht',
   'spontaneous-vs-ppv',
-  'asa-basic-monitoring'
+  'asa-basic-monitoring',
+  'diuretics-nephron'
 ] as const;
 
 export type ValidInfographicId = typeof VALID_INFOGRAPHIC_IDS[number];
