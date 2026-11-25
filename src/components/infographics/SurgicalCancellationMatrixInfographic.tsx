@@ -37,6 +37,7 @@ import {
   UrgencyMode
 } from '../../data/cancellationCriteriaData';
 import { PortalLink } from '../common/PortalLink';
+import { copyToClipboard } from '../../utils/deepLink';
 
 interface SurgicalCancellationMatrixInfographicProps {
   isDark: boolean;
@@ -357,12 +358,10 @@ export const SurgicalCancellationMatrixInfographic: React.FC<
     });
     lines.push('', 'Kaynak: Şişli Hamidiye Etfal Anestezi Asistan Portalı');
 
-    try {
-      await navigator.clipboard.writeText(lines.join('\n'));
+    const ok = await copyToClipboard(lines.join('\n'));
+    if (ok) {
       setCopiedNote(true);
       setTimeout(() => setCopiedNote(false), 2200);
-    } catch {
-      // Clipboard izin hatasında sessiz düş
     }
   };
 

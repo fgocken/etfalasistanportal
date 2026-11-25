@@ -39,6 +39,7 @@ import {
   SurgicalBleedMode
 } from '../../data/antithromboticMatrixData';
 import { PortalLink } from '../common/PortalLink';
+import { copyToClipboard } from '../../utils/deepLink';
 
 interface PerioperativeAntithromboticMatrixInfographicProps {
   isDark: boolean;
@@ -195,12 +196,10 @@ export const PerioperativeAntithromboticMatrixInfographic: React.FC<
       'Kaynak: Şişli Hamidiye Etfal Anestezi Asistan Portalı'
     ].join('\n');
 
-    try {
-      await navigator.clipboard.writeText(text);
+    const ok = await copyToClipboard(text);
+    if (ok) {
       setCopiedSummary(true);
       setTimeout(() => setCopiedSummary(false), 2200);
-    } catch {
-      // Clipboard izni yoksa sessiz kal
     }
   };
 
