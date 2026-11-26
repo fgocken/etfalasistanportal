@@ -3391,6 +3391,144 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
               </div>
             )}
 
+            {/* Yağ Embolizm Sendromu (FES) Alt Protokolleri */}
+            {protocol.crisisManagement.fesProtocols && (
+              <div className="space-y-4">
+                {/* 1. FES vs BCIS vs PE Ayırıcı Karar Matriksi */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-amber-950/15 border-amber-500/35' : 'bg-amber-50/60 border-amber-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-amber-600 dark:text-amber-400 text-xs sm:text-sm">
+                    <Layers className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.fesProtocols.differentialMatrixTitle}</span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-[11px]">
+                      <thead>
+                        <tr className={`border-b ${isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                          <th className="py-2 pr-3 font-bold">Klinik Antite</th>
+                          <th className="py-2 px-3 font-bold">Başlangıç Zamanı</th>
+                          <th className="py-2 px-3 font-bold">Kardinal Klinik</th>
+                          <th className="py-2 px-3 font-bold">Tanısal Anahtar</th>
+                          <th className="py-2 pl-3 font-bold">Kritik Tedavi Farkı</th>
+                        </tr>
+                      </thead>
+                      <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                        {protocol.crisisManagement.fesProtocols.differentialComparison.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="py-2.5 pr-3 font-bold text-slate-900 dark:text-white">{row.entity}</td>
+                            <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">{row.timing}</td>
+                            <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">{row.cardinalFeatures}</td>
+                            <td className="py-2.5 px-3 text-sky-700 dark:text-sky-400 font-semibold">{row.diagnosticKey}</td>
+                            <td className="py-2.5 pl-3 text-rose-600 dark:text-rose-400 font-bold">{row.criticalTherapyRule}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 2. İki Fazlı Patofizyoloji (Mekanik + Biyokimyasal) */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-purple-600 dark:text-purple-400 text-xs sm:text-sm">
+                    <Activity className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.fesProtocols.dualPhaseMechanism.title}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-slate-200'
+                    }`}>
+                      <span className="font-bold text-amber-600 dark:text-amber-400 block mb-1">1. Mekanik Oklüzyon Fazı</span>
+                      <p className="leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.fesProtocols.dualPhaseMechanism.mechanicalPhase}
+                      </p>
+                    </div>
+                    <div className={`p-3.5 rounded-xl border ${
+                      isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-white border-slate-200'
+                    }`}>
+                      <span className="font-bold text-rose-600 dark:text-rose-400 block mb-1">2. Biyokimyasal FFA Fazı</span>
+                      <p className="leading-relaxed text-slate-700 dark:text-slate-300">
+                        {protocol.crisisManagement.fesProtocols.dualPhaseMechanism.biochemicalPhase}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={`p-3 rounded-lg border text-[11px] font-semibold leading-relaxed ${
+                    isDark ? 'bg-purple-950/25 border-purple-500/35 text-purple-200' : 'bg-purple-50 border-purple-200 text-purple-950'
+                  }`}>
+                    {protocol.crisisManagement.fesProtocols.dualPhaseMechanism.latentWindowNote}
+                  </div>
+                </div>
+
+                {/* 3. Destek Tedavisi & İlaç Politikası */}
+                <div className={`p-4 rounded-xl border space-y-3 ${
+                  isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm">
+                    <Syringe className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.fesProtocols.supportiveAndDrugPolicy.title}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    {protocol.crisisManagement.fesProtocols.supportiveAndDrugPolicy.items.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-3.5 rounded-xl border space-y-1.5 ${
+                          item.status === 'AVOID'
+                            ? isDark ? 'bg-red-950/30 border-red-500/45 text-red-100' : 'bg-red-50 border-red-300 text-red-950'
+                            : item.status === 'SELECTIVE'
+                              ? isDark ? 'bg-amber-950/20 border-amber-500/35 text-amber-100' : 'bg-amber-50 border-amber-200 text-amber-950'
+                              : isDark ? 'bg-emerald-950/20 border-emerald-500/35 text-emerald-100' : 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-bold text-xs">{item.domain}</span>
+                          <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                            item.status === 'AVOID'
+                              ? 'bg-red-600 text-white'
+                              : item.status === 'SELECTIVE'
+                                ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
+                                : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                          }`}>
+                            {item.status === 'AVOID' ? 'YASAK / KAÇIN' : item.status === 'SELECTIVE' ? 'SEÇİCİ / TARTIŞMALI' : 'ÖNERİLİR'}
+                          </span>
+                        </div>
+                        <div className="text-[11px] font-semibold">{item.recommendation}</div>
+                        <p className="text-[11px] opacity-90 leading-relaxed">{item.evidenceAndCaution}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Ortopedik Cerrahi Zamanlama & İntraoperatif Önleme */}
+                <div className={`p-4 rounded-xl border space-y-2.5 ${
+                  isDark ? 'bg-sky-950/20 border-sky-500/35' : 'bg-sky-50/70 border-sky-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold text-sky-600 dark:text-sky-400 text-xs sm:text-sm">
+                    <ShieldAlert className="w-4 h-4 shrink-0" />
+                    <span>{protocol.crisisManagement.fesProtocols.orthopedicPreventionAndTiming.title}</span>
+                  </div>
+                  <div className={`p-3 rounded-lg border text-[11px] font-semibold leading-relaxed ${
+                    isDark ? 'bg-slate-950/60 border-slate-800 text-sky-200' : 'bg-white border-sky-200 text-sky-950'
+                  }`}>
+                    {protocol.crisisManagement.fesProtocols.orthopedicPreventionAndTiming.surgicalTimingRule}
+                  </div>
+                  <ul className="space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
+                    {protocol.crisisManagement.fesProtocols.orthopedicPreventionAndTiming.intraopTechniques.map((tech, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
+                        <span>{tech}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
             {/* Cooling, Hyperkalemia and Arrhythmia Sub-Protocols (Only when available) */}
             {protocol.crisisManagement.coolingProtocol && protocol.crisisManagement.hyperkalemiaProtocol && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

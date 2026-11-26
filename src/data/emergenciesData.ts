@@ -24,7 +24,7 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'tension-pneumothorax' | 'airway-fire' | 'generic';
+  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'fes' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'tension-pneumothorax' | 'airway-fire' | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -509,6 +509,38 @@ export interface EmergencyProtocol {
         bronchoscopyProtocol: string;
         toxicInhalationCheck: string;
         edemaAndSteroids: string;
+      };
+    };
+
+    // Yağ Embolizm Sendromu (FES) acil protokolleri
+    fesProtocols?: {
+      differentialMatrixTitle: string;
+      differentialComparison: {
+        entity: string;
+        timing: string;
+        cardinalFeatures: string;
+        diagnosticKey: string;
+        criticalTherapyRule: string;
+      }[];
+      dualPhaseMechanism: {
+        title: string;
+        mechanicalPhase: string;
+        biochemicalPhase: string;
+        latentWindowNote: string;
+      };
+      supportiveAndDrugPolicy: {
+        title: string;
+        items: {
+          domain: string;
+          recommendation: string;
+          evidenceAndCaution: string;
+          status: 'RECOMMENDED' | 'SELECTIVE' | 'AVOID';
+        }[];
+      };
+      orthopedicPreventionAndTiming: {
+        title: string;
+        surgicalTimingRule: string;
+        intraopTechniques: string[];
       };
     };
   };
@@ -6226,6 +6258,416 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         journal: 'McGraw-Hill Education / Wolters Kluwer.',
         year: '2017 / 2022',
         relevance: 'Yangın üçgeni bileşenleri, N₂O oksidan kinetiği, PVC yanma toksinleri (HCl, CO, HCN) ve post-yangın bronkoskopik yoğun bakım takibi.'
+      }
+    ]
+  },
+
+  'fes': {
+    id: 'fes',
+    // 1) Başlık
+    title: 'Yağ Embolizm Sendromu (FES) Kriz Protokolü',
+    subTitle: 'Uzun Kemik Travması, İntramedüller Çivileme / Artroplasti & Çoklu Organ Disfonksiyonu',
+    codeColor: 'amber',
+    severityBadge: 'KOD KIRMIZI / AMBER · AKUT HİPOKSEMİ · NÖROLOJİK & SAĞ KALP YÜKÜ',
+    keyCallout: 'Uzun kemik kırığı veya intramedüller/artroplasti cerrahisinden 12–72 saat sonra (veya intraop reaming/sementlemede) açıklanamayan hipoksemi + akut konfüzyon/deliryum + aksiller/konjonktival peteşi triadı = Yağ Embolizm Sendromu (FES)! Spesifik antidotu YOKTUR: Derhal yüksek akımlı O₂ / akciğer koruyucu PEEP, övolemik perfüzyon, RV yükü varsa Noradrenalin ve erken kırık fiksasyonu uygulayın. Heparin ve rutin yüksek doz steroid ÖNERİLMEZ!',
+    quickCalculatorType: 'fes',
+
+    // 2) Tanımlama ve Introduction
+    introduction: {
+      definition: 'Yağ Embolisi (FE), travma veya ortopedik cerrahi sonrası kemik iliği yağ globüllerinin venöz dolaşıma geçmesiyle karakterize olup uzun kemik kırıklarının >%90’ında subklinik olarak izlenir. Yağ Embolizm Sendromu (FES) ise bu mikroembolilerin mekanik tıkanma ve özellikle toksik Serbest Yağ Asidi (FFA) aracılı biyokimyasal inflamasyon yoluyla ağır solunum yetmezliği (ARDS), serebral disfonksiyon ve kutanöz peteşiyel döküntü gibi sistemik çoklu organ hasarına ilerlediği hayatı tehdit eden klinik tablodur.',
+      epidemiology: 'İzole uzun kemik (femur şaftı, tibia) kırıklarında klinik FES insidansı %1–3, bilateral femur kırığı veya çoklu travmada %5–10+ düzeyindedir; erken cerrahi stabilizasyonun geciktiği olgularda insidans belirgin artar. Klasik sunum travma veya ortopedik cerrahiden 24–72 saat sonra (nadiren ilk 12 saatte veya intraoperatif reaming/sementleme sırasında "fulminan FES") ortaya çıkar. Modern yoğun bakım ve akciğer koruyucu ventilasyon ile mortalite %5–15 aralığındadır; ancak fulminan sağ ventrikül yetmezliğinde mortalite katlanır.',
+      triggers: [
+        'Uzun Kemik & Pelvis Kırıkları: Özellikle kapalı femur şaftı, tibia ve pelvis kırıkları (kapalı kırıklarda intramedüller basınç artışı açık kırıklara göre daha yüksek risk taşır)',
+        'İntramedüller Oyma (Reaming) & Çivileme: Yüksek basınçlı kanal içi oyma ve çivi çakma işlemi sırasında intramedüller basıncın >300–500 mmHg’ye fırlaması',
+        'Total Kalça / Diz Artroplastisi & Kemik Çimentosu (PMMA): Protez sapı yerleştirilmesi ve sement basınçlandırması (Kemik Çimentosu İmplantasyon Sendromu — BCIS ile örtüşebilir)',
+        'Kozmetik Liposuction / Otolog Yağ Greftleme (Gluteal / Fasiyal), Omurga Enstrümantasyonu ve Kemik İliği Nakli',
+        'Non-Travmatik Nedenler (Nadir): Akut hemorajik pankreatit, orak hücreli anemi kemik iliği krizi, ağır yanıklar, uzun süreli yüksek doz kortikosteroid ve yağlı karaciğer rüptürü'
+      ],
+      safeAgents: [
+        'Oksijenasyon & ARDSNet Ventilasyon: FiO₂ 1.0 → SpO₂ %92–96 hedefi; entübasyon gerekirse Vt 6 mL/kg PBW, Pplat < 30 cmH₂O, uygun PEEP (8–12 cmH₂O)',
+        'Övolemik Sıvı Dengesi: Hipovolemiyi engelleyecek nazik dengeli kristaloid (ancak RV disfonksiyonu varsa aşırı bolustan kaçın!) + FFA bağlayıcı fizyolojik destek olarak seçili hipovolemik olguda Albümin',
+        'Vazopressör / İnotrop (Fulminan RV Yükünde): Noradrenalin (0,05–0,5 mcg/kg/dk; MAP ≥65–70 mmHg), normotansif RV yetersizliğinde Dobutamin veya iNO (10–20 ppm)',
+        'Erken Kırık Stabilizasyonu: İlk 24 saat içinde immobilizasyon; politravmada Hasar Kontrol Ortopedisi (eksternal fiksatör)',
+        'KESİN KAÇINILACAKLAR: Rutin Heparin (lipoprotein lipazı uyararak toksik serbest yağ asidini artırır ve kanamayı tetikler!), Aspirin ve yerleşik FES sonrası rutin yüksek doz steroid'
+      ],
+      mortalityStats: 'İyileşen hastalarda nörolojik ve pulmoner sekel genelde tama yakın düzelir; ancak geç tanınan ağır ARDS, sekonder enfeksiyon veya intraoperatif fulminan sağ ventrikül çöküşü gelişen olgularda mortalite %10–20’nin üzerine çıkabilir. Prognostik en belirleyici unsur erken solunum desteği ve kırık stabilizasyonudur.',
+      clinicalUrgency: 'Ortopedik cerrahi sırasında ani EtCO₂/SpO₂ düşüşü veya postoperatif 12–72. saatte açıklanamayan hipoksemi + akut konfüzyon geliştiğinde derhal oksijen desteği artırılmalı, travmatik intrakraniyal kanama ile masif PE/BCIS hızla ekarte edilmelidir.'
+    },
+
+    // 3) Tanı
+    diagnosis: {
+      overview: 'FES tanısı spesifik bir laboratuvar belirteci olmadığı için KLİNİK bir dışlama ve örüntü tanısıdır. Klasik Triad (Hipoksemi + Nörolojik Disfonksiyon + Peteşiyal Döküntü) hastaların yalnızca %20–50’sinde tam olarak bir arada görülür; peteşi sıklıkla geç ortaya çıktığı veya hiç görülmediği için yokluğu asla FES’i dışlamaz. Toraks BT’de bilateral yamasal buzlu cam opasiteleri ve Beyin DWI MRG’de "Starfield (Yıldızlı Gökyüzü)" paterni tanıyı güçlü biçimde destekler.',
+      clinicalCriteria: [
+        'Klasik Klinik Triad: (1) Akut solunum yetmezliği / hipoksemi (en erken ve en sık bulgu, >%90), (2) Serebral tutulum (konfüzyon, ajitasyon, stupor, fokal defisit; ~%60–80), (3) Aksiller, ön göğüs, boyun ve subkonjonktival peteşiyal döküntü (%20–50)',
+        'Gurd & Wilson Kriterleri (1974): En az 1 Majör + 4 Minör kriter (veya 2 Majör + 2 Minör kriter) + yağ makroglobülinemisi varlığı',
+        'Schonfeld Yağ Embolisi İndeksi (1983): İlk 72 saat içinde ≥ 5 puan tanısal kabul edilir (Peteşi +5, Diffüz infiltrat +4, PaO₂ <70 mmHg +3, Konfüzyon +1, Ateş >38°C +1, Nabız >120 +1, SS >30 +1)',
+        'Lindeque Kriterleri (1987 — Travma Hastası): Sürekli PaO₂ <60 mmHg, PaCO₂ >55 mmHg veya pH <7.3, solunum sayısı >35/dk, dispne/anksiyete/taşikardi',
+        'Beyin MRG (DWI): Beyaz cevher, bazal ganglionlar, talamus ve korpus kallozumda yaygın punktat difüzyon kısıtlılığı — patognomonik "Starfield (Yıldızlı Gökyüzü)" görünümü',
+        'İntraoperatif TEE (Fulminan Formda): İntramedüller çivileme/sementleme anında sağ atriyum ve ventrikülde yoğun ekojenik "kar fırtınası (snowstorm)" + RV dilatasyonu ve EtCO₂ düşüşü'
+      ],
+      gradingScaleTitle: 'Gurd & Wilson (1974) Kriterleri ve Schonfeld Yağ Embolisi İndeksi',
+      gradingScaleSource: 'Gurd AR & Wilson RI (J Bone Joint Surg Br 1974) / Schonfeld SA et al. (Ann Intern Med 1983)',
+      larachScale: [
+        { category: 'Gurd Majör — Solunum Yetmezliği', points: 'Majör Kriter', description: 'PaO₂ < 60 mmHg (FiO₂ > 0.4 altında), takipne, siyanoz ve akciğer grafisinde bilateral "snowstorm" / diffüz alveoler infiltrat.' },
+        { category: 'Gurd Majör — Serebral Tutulum', points: 'Majör Kriter', description: 'Kafa travması ve hipoksemiden bağımsız akut konfüzyon, deliryum, ajitasyon, stupor, koma veya geçici fokal nörolojik defisit.' },
+        { category: 'Gurd Majör — Peteşiyal Döküntü', points: 'Majör Kriter (+5 Schonfeld)', description: 'Özellikle aksilla, ön toraks duvarı, boyun kıvrımları, oral mukoza ve alt konjonktivada basmakla solmayan peteşiler (sıklıkla 24–36. sa).' },
+        { category: 'Gurd Minör — Hemodinami & Ateş', points: 'Minör (2 Kriter)', description: 'Açıklanamayan taşikardi (> 110–120/dk) ve yüksek ateş (> 38.5°C).' },
+        { category: 'Gurd Minör — Oküler & Renal', points: 'Minör (2 Kriter)', description: 'Fundoskopide retinal yağ embolisi / pamuk atığı eksüdaları (Purtscher retinopatisi) ve idrarda yağ globülleri / ani oligüri-anüri.' },
+        { category: 'Gurd Minör — Hematolojik Değişiklik', points: 'Minör (3 Kriter)', description: 'Açıklanamayan ani Hb düşüşü (>%20), ani trombositopeni (>%50 düşüş, <%150.000), ESH > 71 mm/sa veya balgamda yağ globülleri.' },
+        { category: 'Schonfeld Skoru Toplamı', points: '≥ 5 Puan = FES', description: 'Peteşi (+5), Akciğer grafisi diffüz infiltrat (+4), PaO₂ <70 mmHg (+3), Konfüzyon (+1), Ateş >38°C (+1), Nabız >120 (+1), SS >30 (+1).' }
+      ],
+      larachInterpretation: 'Gurd & Wilson’a göre tanı için en az 1 Majör + 4 Minör kriter (veya 2 Majör + 2 Minör) gereklidir. Schonfeld indeksinde ≥5 puan tanısaldır. Travma hastasında solunum bulguları ön plandayken peteşi henüz çıkmamışsa Lindeque kriterleri erken şüphe ve yoğun bakım yatışı için daha duyarlıdır.',
+      differentialDiagnosis: [
+        {
+          condition: 'Kemik Çimentosu İmplantasyon Sendromu (BCIS)',
+          differentiatingFactors: 'İntraoperatif olarak akrilik kemik çimentosu (PMMA) basınçlandırması veya protez sapı çakılmasından SANİYELER–DAKİKALAR sonra ani hipoksi, hipotansiyon, EtCO₂ çöküşü ve arrest ile ortaya çıkar. FES ise genellikle 12–72 saat sonra gelişir ve ateş + peteşi + Starfield MRG ile ayrılır (ancak intraop mikst tablo sık görülür).'
+        },
+        {
+          condition: 'Trombotik Akut Pulmoner Embolizm (PE / PTE)',
+          differentiatingFactors: 'BT Pulmoner Anjiyografi (BTPA)’da ana/lober pulmoner arterlerde dolma defekti ve alt ekstremitede DVT görülür; ateş, trombositopeni ve peteşi beklenmez. FES’te BTPA’da büyük proksimal trombüs yoktur, diffüz parankimal buzlu cam opasiteleri vardır.'
+        },
+        {
+          condition: 'Kafa Travması / İntrakraniyal Hemoraji / Opioid Aşırı Dozu',
+          differentiatingFactors: 'Politravmalı ve nörolojik bozulma gelişen hastada mutlaka acil kontrastsız Beyin BT çekilerek epidural/subdural/parankimal kanama ekarte edilmelidir. FES’te Beyin BT genellikle normaldir; DWI MRG’de "Starfield" lezyonları görülür.'
+        },
+        {
+          condition: 'Sepsis / ARDS / TRALI',
+          differentiatingFactors: 'TRALI transfüzyondan ilk 6 saat içinde ateş ve akciğer ödemi yapar ancak nörolojik fokal bulgu ve peteşi yapmaz. Sepsis genelde lökositoz/prokalsitonin yükselmesi ve enfeksiyon odağı ile seyreder.'
+        },
+        {
+          condition: 'Venöz Hava Embolisi (VAE)',
+          differentiatingFactors: 'Cerrahi sahada açık venöz pleksus + yerçekimi gradienti (oturur/baş yukarı pozisyon) gerektirir; ani "değirmen çarkı" üfürümü verir, N₂O kesilip Durant manevrası yapıldığında hızla geriler.'
+        }
+      ]
+    },
+
+    // 4) Akut Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'ORTOPEDİK KRİZ & YBÜ KOORDİNASYONU · İntraoperatif ani desatürasyonda cerraha oymayı/çivilemeyi DURDURMA komutu verin; postop konfüzyon + hipoksemi için Acil AKG, Beyin BT ve YBÜ yatağı hazırlayın.',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'CERRAHİ MANİPÜLASYONU DURDUR (İNTRAOP) & %100 OKSİJEN BAŞLAT',
+          action: 'Vaka sürüyorsa cerraha intramedüller oymayı (reaming), çivi çakmayı veya protez basınçlandırmayı derhal durdurmasını söyleyin. N₂O varsa kapatın ve %100 O₂ (FiO₂ 1.0) verin. Postop/servisteki hastaya yüksek akımlı oksijen (rezervuarlı maske veya HFNC) uygulayın.',
+          criticalNote: 'Erken ve agresif oksijenasyon ile doku hipoksisinin önlenmesi FES mortalitesini düşüren birincil adımdır.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'HAVA YOLU GÜVENLİĞİ & AKCİĞER KORUYUCU VENTİLASYON (ARDSNet)',
+          action: 'Oksijen tedavisine rağmen PaO₂/FiO₂ < 150–200, takipne (>30–35/dk) veya nörolojik bilinç depresyonu (GKS ≤ 8) varsa erken entübasyon yapın. Düşük tidal volüm (6 mL/kg İdeal Vücut Ağırlığı), plato basıncı < 30 cmH₂O, driving pressure < 15 cmH₂O ve hipoksemi kontrolü için uygun PEEP (8–12 cmH₂O) ayarlayın.',
+          criticalNote: 'İntraoperatif fulminan sağ kalp yetmezliği eşlik ediyorsa aşırı yüksek PEEP (>12–15 cmH₂O) PVR’yi artırıp RV’yi daha da zorlayabilir — PEEP’i hemodinamiye göre titre edin.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'ÖVOLEMİK SIVI RESÜSİTASYONU & HEMODİNAMİK / RV DESTEĞİ',
+          action: 'İntravasküler hipovolemi pulmoner kapiller stazı ve organ hipoperfüzyonunu ağırlaştırır; dengeli kristaloidlerle övolemiyi koruyun. ANCAK hipotansiyon RV disfonksiyonuna bağlıysa aşırı sıvı vermeyin (250–500 mL dikkatli deneme)! Derhal Noradrenalin (0,05–0,5 mcg/kg/dk; MAP ≥65–70 mmHg) başlayın; RV yetmezliği derinleşirse Dobutamin veya iNO (10–20 ppm) ekleyin.',
+          criticalNote: 'Hipovolemik hastada Albümin kullanımı hem intravasküler volümü destekler hem de toksik Serbest Yağ Asitlerini (FFA) bağlayarak endotel hasarını sınırlayabilir.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'YATAK BAŞI TEE / TTE & AKCİĞER POCUS İLE AYIRICI TANI',
+          action: 'İntraoperatif veya YBÜ’de yatak başı ekokardiyografi ile sağ ventrikül dilatasyonu, pulmoner hipertansiyon, sağ kalpte "snowstorm" mikroemboli yağmuru ve PFO varlığını değerlendirin. Aynı anda BCIS, masif trombotik PE ve kardiyak tamponadı dışlayın.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 5,
+          title: 'NÖROLOJİK DEĞERLENDİRME & KAFA TRAVMASI EKARTASYONU',
+          action: 'Konfüzyon, ajitasyon veya stupor gelişen travma hastasında serebral hipoksiyi düzelttikten sonra acil kontrastsız Beyin BT çekerek subdural/epidural/intraserebral kanamayı dışlayın. Stabilizasyon sonrası Beyin DWI MRG ile klasik "Starfield (Yıldızlı Gökyüzü)" paterni tanıyı kesinleştirir.',
+          criticalNote: 'Nöbet gelişirse Lorazepam/Midazolam ve Levetirasetam ile hızla kontrol altına alın; ateş >38.3°C ise antipiretik/normotermi uygulayın (ateş serebral O₂ tüketimini artırır).',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 6,
+          title: 'HEPARİN VE RUTİN ANTİKOAGÜLASYONDAN KAÇININ!',
+          action: 'FES tedavisinde sistemik Heparin veya Aspirin KULLANMAYIN! Trombotik PE kesin olarak kanıtlanmadıkça tedavi edici doz antikoagülasyon verilmez (yalnızca hasta stabilize olduktan sonra standart DVT profilaksisi sürdürülür).',
+          criticalNote: 'Heparin lipoprotein lipaz enzimini aktive ederek dolaşımdaki trigliseridlerin toksik Serbest Yağ Asitlerine (FFA) parçalanmasını hızlandırır ve ortopedik travmada kanamayı tetikler!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 7,
+          title: 'KORTİKOSTEROİD & ALKOL POLİTİKASI (KANITA DAYALI SEÇİM)',
+          action: 'Yerleşik FES/ARDS tablosunda rutin yüksek doz kortikosteroidlerin mortaliteyi azalttığına dair kesin kanıt yoktur; enfeksiyon ve GİS kanaması riski nedeniyle yalnızca refrakter vazopresör bağımlı şokta veya ağır hipoksemik ARDS protokolü kapsamında seçici değerlendirilir. Geçmişte kullanılan IV etanol veya dekstran tedavileri kesinlikle terk edilmiştir.',
+          priority: 'MEDIUM'
+        },
+        {
+          stepNumber: 8,
+          title: 'KIRIK İMMOBİLİZASYONU & ERKEN CERRAHİ STABİLİZASYON (DCO)',
+          action: 'Hastanın kırık ekstremitesini derhal uygun atel/traksiyonla hareketsiz hale getirin (hareket devam ettikçe medüller yağ boşalımı sürer!). Hemodinamik olarak stabil hastada ilk 24 saat içinde erken fiksasyon; unstabil politravma veya aktif FES’te ise Hasar Kontrol Ortopedisi (Damage Control — geçici eksternal fiksatör) uygulanmalıdır.',
+          priority: 'HIGH'
+        }
+      ],
+      fesProtocols: {
+        differentialMatrixTitle: 'FES vs BCIS (Kemik Çimentosu Sendromu) vs Trombotik PE Ayırıcı Karar Matriksi',
+        differentialComparison: [
+          {
+            entity: 'Yağ Embolizm Sendromu (FES)',
+            timing: 'Genellikle travma/cerrahiden 12–72 saat sonra (nadir fulminan intraop reaming)',
+            cardinalFeatures: 'Klasik Triad: Hipoksemi (>%90) + Akut konfüzyon/deliryum + Aksiller/konjonktival peteşi (%20–50) + Ateş',
+            diagnosticKey: 'Gurd & Schonfeld (≥5) · Beyin DWI MRG "Starfield" · Toraks BT diffüz GGO · Anemi & Trombositopeni',
+            criticalTherapyRule: 'Spesifik antidot YOK · O₂/ARDSNet + Övolemi + Erken fiksasyon · HEPARİN ÖNERİLMEZ'
+          },
+          {
+            entity: 'Kemik Çimentosu Sendromu (BCIS)',
+            timing: 'PMMA sement basınçlandırma / protez çakma anından SANİYELER–DAKİKALAR sonra',
+            cardinalFeatures: 'Ani EtCO₂ çöküşü, derin hipotansiyon, bradikardi/arrest, akut sağ kalp dilatasyonu',
+            diagnosticKey: 'İntraoperatif zamanlama (Donaldson Evre 1–3) · TEE’de sağ kalpte kar fırtınası ve RV yetmezliği',
+            criticalTherapyRule: 'FiO₂ 1.0, erken Adrenalin/Noradrenalin bolusu + sıvı kısıtlaması/dikkatli destek, KPR'
+          },
+          {
+            entity: 'Trombotik Pulmoner Embolizm (PE)',
+            timing: 'İmmobilizasyon/cerrahi sonrası saatler–günler (veya intraop turnike sonrası)',
+            cardinalFeatures: 'Ani EtCO₂ düşüşü, obstrüktif şok, plöritik göğüs ağrısı, DVT bulguları; peteşi/yıldızlı gökyüzü MRG YOK',
+            diagnosticKey: 'BTPA’da ana/lober pulmoner arter trombüsü · TEE’de McConnell bulgusu & D-LV',
+            criticalTherapyRule: 'UFH Antikoagülasyon + Masif şokta Alteplase/Tenecteplase trombolizi (FES’ten tamamen zıt!)'
+          }
+        ],
+        dualPhaseMechanism: {
+          title: 'Neden 24–72 Saat Gecikir? İki Fazlı Patofizyoloji (Mekanik + Biyokimyasal)',
+          mechanicalPhase: '1) MEKANİK FAZ (Dakikalar–Saatler): Uzun kemik kırığı, reaming veya protez yerleştirilmesi intramedüller basıncı (>300–500 mmHg) venöz basınç üzerine çıkarır. Nötr yağ damlacıkları yırtılmış kemik iliği sinüzoidlerinden sağ kalbe geçer; pulmoner arteriyolleri (<10–20 µm) tıkayarak PVR artışı, V/Q uyumsuzluğu ve PFO/pulmoner AV şantlar üzerinden sistemik embolizasyon yapar.',
+          biochemicalPhase: '2) BİYOKİMYASAL FAZ (12–72 Saat — Esas Organ Hasarı): Akciğer kapillerlerindeki nötr trigliseridler pulmoner Lipoprotein Lipaz tarafından toksik Serbest Yağ Asitlerine (FFA — özellikle oleik asit) hidrolize edilir. FFA doğrudan pnömosit ve endotel hücre yıkımına, sürfaktan inaktivasyonuna, interstisyel kanama-ödeme (ARDS), TNF-α/IL-1β/IL-6 salınımına ve trombosit tüketimine yol açar.',
+          latentWindowNote: 'Klinik İnci: Mekanik yağ globülleri hemen akciğere ulaşsa da, lipaz enziminin nötr yağları toksik Serbest Yağ Asitlerine dönüştürüp alveoler-kapiller bariyeri yıkması 12–48 saat sürdüğü için FES tipik olarak postoperatif 1–3. günlerde patlar!'
+        },
+        supportiveAndDrugPolicy: {
+          title: 'FES Destek Tedavisi & Farmakoterapi Kanıt Politikası',
+          items: [
+            {
+              domain: 'Oksijenasyon & ARDSNet Ventilasyon',
+              recommendation: 'FiO₂ 1.0 ile başla (SpO₂ %92–96); entübasyonda Vt 6 mL/kg PBW, Pplat <30 cmH₂O, PEEP 8–12 cmH₂O',
+              evidenceAndCaution: 'Tedavinin temel taşıdır. Refractory hipoksemide pron pozisyonu, iNO veya VV-ECMO kurtarma olarak başarıyla uygulanmıştır.',
+              status: 'RECOMMENDED'
+            },
+            {
+              domain: 'Sıvı Dengesi & Albümin + Vazopressör',
+              recommendation: 'Övolemiyi koru; RV yükü varsa agresif sıvı verme, Noradrenalin (0,05–0,5 mcg/kg/dk) başla; hipovolemide %5 Albümin düşün',
+              evidenceAndCaution: 'Albümin dolaşımdaki serbest yağ asitlerini (FFA) bağlayarak vasküler endotel toksisitesini azaltır ve intravasküler onkotik basıncı korur.',
+              status: 'RECOMMENDED'
+            },
+            {
+              domain: 'Kortikosteroidler (Metilprednizolon)',
+              recommendation: 'Yerleşik FES’te rutin yüksek doz ÖNERİLMEZ (profilaksi yüksek riskli izole travmada tartışmalı)',
+              evidenceAndCaution: 'Bazı erken meta-analizler travmada profilaktik metilprednizolonun (ör. 1.5 mg/kg/8sa) hipoksemiyi azaltabileceğini gösterse de, enfeksiyon/GİS kanaması riski nedeniyle evrensel rehber standardı değildir.',
+              status: 'SELECTIVE'
+            },
+            {
+              domain: 'Heparin / Aspirin / Etanol / Dekstran',
+              recommendation: 'KESİNLİKLE ÖNERİLMEZ (FES Tedavisinde Kullanılmaz!)',
+              evidenceAndCaution: 'Heparin lipoprotein lipazı uyararak toksik FFA yükünü artırır ve taze ortopedik kırık/cerrahi sahada ağır kanama yapar. Yalnızca stabilize olduktan sonra standart VTE profilaksisi verilir.',
+              status: 'AVOID'
+            }
+          ]
+        },
+        orthopedicPreventionAndTiming: {
+          title: 'Ortopedik Cerrahi Zamanlama & İntraoperatif Emboli Azaltma Protokolü',
+          surgicalTimingRule: 'Hasar Kontrol Ortopedisi (DCO) İlkesi: İzole uzun kemik kırığı olan stabil hastada ilk 24 saat içinde erken fiksasyon FES riskini %50’den fazla azaltır. Ancak hasta şokta, ağır toraks travmalı veya aktif gelişmiş FES içindeyse uzun süren oymalı (reamed) intramedüller çivileme yerine acil geçici EKSTERNAL FİKSATÖR (DCO) tercih edilir.',
+          intraopTechniques: [
+            'İntramedüller oyma (reaming) öncesi medüller kanalın basınçlı serum fizyolojik ile lavajı ve vakumlu aspirasyon (RIA — Reamer-Irrigator-Aspirator sistemi yağ yükünü belirgin azaltır).',
+            'Oymasız (unreamed) ince çivi veya plak-vida fiksasyonu yüksek pulmoner riskli hastalarda intramedüller basınç pikini düşürür.',
+            'Sementli kalça/diz protezlerinde distal kemik tıkaç (plug) kullanımı, kanal içi vent deliği (venting hole) açılması, sementin düşük basınçla yavaş uygulanması ve işlem öncesi anestezi ekibinin uyarılması (FiO₂ 1.0 + övolemi teyidi).',
+            'Kırık ekstremitenin acil serviste ve transport sırasında gereksiz manipülasyonundan kaçınılarak erken atel/traksiyona alınması.'
+          ]
+        }
+      }
+    },
+
+    // 5) Patofizyoloji
+    pathophysiology: {
+      molecularBasis: 'Yağ Embolizm Sendromu iki sinerjik mekanizmayla gelişir: (1) Yüksek intramedüller basınç sonucu kemik iliği yağ damlacıklarının yırtılmış venöz sinüzoidlere mekanik geçişi ve pulmoner/sistemik kapillerleri tıkaması; (2) Pulmoner endoteldeki lipoprotein lipazın bu nötr yağları toksik Serbest Yağ Asitlerine (FFA — özellikle oleik asit) hidrolize ederek kimyasal pnömonit, endotel yıkımı ve ARDS başlatması.',
+      stepsTitle: 'Mekanik Oklüzyon + Biyokimyasal Serbest Yağ Asidi (FFA) Çift Eksenli Kaskadı',
+      flowType: 'dual-axis',
+      cycleWarning: 'İntraoperatif reaming veya kemik çimentolaması sırasında akut sağ kalp (RV) yüklenmesi saniyeler içinde gelişebilirken, toksik Serbest Yağ Asitlerine bağlı kimyasal ARDS ve serebral ödem 12–72 saatte progresif pik yapar!',
+      cascadeSteps: [
+        {
+          phase: '1. İntramedüller Basınç Pik & Sinüzoid İntravazasyon',
+          mechanism: 'Uzun kemik kırığı veya intramedüller oyma/sementleme kemik iliği basıncını venöz basıncın üzerine fırlatır; nötr yağ globülleri, kemik iliği hücreleri ve tromboplastin dolaşıma pompalanır.',
+          badge: 'MEKANİK GİRİŞ',
+          color: 'amber'
+        },
+        {
+          phase: '2. Pulmoner Kapiller Tıkanma & PVR Artışı',
+          mechanism: '8–20 µm çapındaki yağ damlacıkları pulmoner arteriyolleri tıkar; V/Q uyumsuzluğu, PVR yükselmesi ve akut sağ ventrikül straini gelişir. PFO veya transpulmoner şant ile sistemik dolaşıma geçer.',
+          badge: 'RV YÜKÜ & ŞANT',
+          color: 'red'
+        },
+        {
+          phase: '3. Lipoprotein Lipaz → Toksik Serbest Yağ Asidi (FFA)',
+          mechanism: '12–48 saat içinde akciğer lipazı nötr trigliseridleri toksik FFA’ya (oleik asit) dönüştürür. FFA tip II pnömositleri tahrip eder, sürfaktantı bozar ve kapiller permeabiliteyi yıkar (hemorajik alveolit / ARDS).',
+          badge: 'BİYOKİMYASAL HASAR',
+          color: 'purple'
+        },
+        {
+          phase: '4. Sistemik İnflamasyon, Trombosit Tüketimi & Serebral Mikrovaskülit',
+          mechanism: 'TNF-α, IL-1β ve IL-6 fırtınası ateş, konfüzyon/ödem (DWI MRG’de Starfield lezyonları), trombositlerin yağ globülleri etrafında kümelenmesine bağlı trombositopeni ve deri kapiller frajilitesiyle peteşilere yol açar.',
+          badge: 'TRİAD & ARDS',
+          color: 'rose'
+        }
+      ],
+      summaryText: 'FES yalnızca mekanik bir "damar tıkanıklığı" değil, serbest yağ asitlerinin tetiklediği ağır bir kimyasal endotelyal ve alveoler inflamasyon sendromudur. Bu nedenle pıhtı eritici/antikoagülanlar işe yaramaz; esas tedavi oksijenasyon, hemodinamik koruma ve kemik kaynağının sabitlenmesidir.'
+    },
+
+    // 6) Klinik Özellikler & Prezentasyon
+    presentation: {
+      earlySigns: [
+        'Travma veya ortopedik cerrahi sonrası 12–24 saatte açıklanamayan inatçı sinüs taşikardisi (>110/dk) ve takipne (>25–30/dk)',
+        'SpO₂’de kademeli veya ani düşüş (ilk belirti genellikle subklinik/erken hipoksemidir)',
+        'Ateş yükselmesi (>38.3–38.5°C; enfeksiyon odağı olmaksızın)',
+        'İntraoperatif Fulminan Formda: Reaming/sementleme anında ani EtCO₂ düşüşü, hipotansiyon ve TEE’de sağ kalpte kar fırtınası'
+      ],
+      progressingSigns: [
+        'Oksijen ihtiyacının hızla artması, PaO₂/FiO₂ < 200 (ARDS tablosu) ve akciğer grafisinde bilateral "snowstorm" infiltratlar',
+        'Nörolojik Disfonksiyon (~%60–80): Ajitasyon, dezoryantasyon, konfüzyon, deliryum veya letarji (kafa travması yokken veya oksijenle düzelmeyen)',
+        'Peteşiyal Döküntü (~%20–50): Ön aksiller kıvrımlar, boyun, subklaviküler göğüs duvarı, oral mukoza ve alt konjonktivada basmakla solmayan 1–2 mm peteşiler',
+        'Laboratuvar: Açıklanamayan ani Hb düşüşü (>%20), trombositopeni (<150.000/mm³) ve ESH yükselmesi'
+      ],
+      lateSigns: [
+        'Ağır hipoksemik solunum yetmezliği (PaO₂/FiO₂ < 100), yüksek tepe/plato basınçları ve mekanik ventilasyon bağımlılığı',
+        'Derin nörolojik depresyon: Stupor, koma, fokal hemiparezi veya jeneralize nöbetler',
+        'Oküler & Renal Tutulum: Fundoskopide Purtscher retinopatisi (pamuk atığı eksüdalar, maküler ödem) ve oligürik ABY / DİK / refrakter RV şoku'
+      ],
+      specialAlertTitle: 'Klasik Triad & Peteşi Tuzağı — Yokluğu FES’i Dışlamaz!',
+      specialAlertContent: 'Ders kitaplarındaki "Hipoksemi + Nörolojik Bozulma + Peteşi" triadı hastaların yalnızca %20–50’sinde tam görülür! Peteşiyal döküntü çoğunlukla 24–36. saatte geç çıkar ve kısa sürede solabilir (aksilla ve alt göz kapağı konjonktivası mutlaka aktif aranmalıdır). Femur/tibia kırığı veya artroplasti sonrası açıklanamayan hipoksemi + akut konfüzyon varsa peteşi beklenmeden FES kabul edilip YBÜ/oksijen tedavisine geçilmelidir!'
+    },
+
+    // 7) Önleyici Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Bilateral femur kırığı, kapalı uzun kemik kırıkları, eşlik eden toraks kontüzyonu/ARDS veya yaşlı kırılgan artroplasti hastaları yüksek FES/BCIS risk grubu olarak işaretlenmelidir.',
+        'Travma hastalarının acil servisten ameliyathaneye taşınmasında kırık ekstremite mutlaka traksiyon ateli ile sabitlenmelidir; stabilize edilmemiş kemik uçlarının hareketi yağ embolisi yükünü katlar.',
+        'Ameliyat öncesi hipovolemi mutlaka dengeli kristaloidlerle düzeltilmeli ve hemoglobin optimize edilmelidir (hipovolemi intramedüller venöz emilimi ve pulmoner stazı artırır).'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Yüksek Riskli Ortopedik Vakalarda İntraoperatif Anestezi & Cerrahi Güvenlik Protokolü',
+        steps: [
+          'İntramedüller oyma (reaming), çivi çakma veya femoral sement basınçlandırması öncesi cerrah anestezi ekibini sesli uyarmalıdır ("Sement / Reaming Başlıyor!").',
+          'Kritik manipülasyon öncesinde FiO₂ geçici olarak %100’e çıkarılmalı, N₂O kapalı tutulmalı ve normovolemi teyit edilmelidir.',
+          'Yüksek kardiyopulmoner riskli artroplastilerde invaziv arteriyel monitörizasyon ve gereğinde TEE probu hazır bulundurulmalıdır.',
+          'Postoperatif ilk 72 saatte SpO₂, solunum sayısı ve bilinç durumu (RASS / CAM-ICU) sık aralıklarla izlenmeli; erken desatürasyon saptanırsa taburculuk/servis izlemi yerine yakın gözlem yapılmalıdır.'
+        ]
+      },
+      cleanAnesthesiaProtocol: [
+        'Yüksek riskli politravma hastasında erken definitiv oymalı çivileme yerine Hasar Kontrol Ortopedisi (geçici eksternal fiksatör) seçimi için ortopedi ekibiyle ortak karar alınması',
+        'İntramedüller kanalın oyma öncesi yıkanıp aspire edilmesi (RIA veya vakumlu lavaj) ve çimentolu protezlerde medüller kanalın kurutulup havalandırma deliği (vent hole) kullanılması',
+        'Sementleme aşamasında PEEP ve hipotansif anesteziden kaçınılması (normotansiyonun korunması)'
+      ],
+      cartTitle: 'Yağ Embolizm Sendromu (FES) & Ortopedik Kriz Hazırlık Listesi:',
+      cartChecklist: [
+        'Yüksek Akımlı Oksijen (Rezervuarlı Maske / HFNC) & Akciğer Koruyucu Ventilatör (ARDSNet Ayarlı)',
+        'Noradrenalin İnfüzyon Seti (4 mg / 50 mL) & Dobutamin Ampul (RV yetmezliği için)',
+        'Dengeli Kristaloidler & %5 / %20 İnsan Albümini (FFA bağlayıcı destek için)',
+        'İntraoperatif TEE / Yatak Başı TTE & Akciğer POCUS Probu',
+        'Arter Kan Gazı Seti, Tam Kan / Koagülasyon Tüpleri (Hb, Trombosit, Fibrinojen, D-dimer)',
+        'Acil Entübasyon & Zor Havayolu Arabası + Acil Nöbet Antikonvülzanı (Midazolam / Levetirasetam)'
+      ]
+    },
+
+    // 8) Postoperatif Takip & Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'Klinik FES gelişen tüm hastalar hipoksemi ve nörolojik durum tamamen stabilize olana dek (genellikle 3–7 gün) Yoğun Bakım Ünitesi (YBÜ) veya yüksek bağımlılık biriminde izlenmelidir.',
+      recurrenceRate: 'Kırık cerrahi olarak stabilize edilmediği veya tekrarlayan ortopedik manipülasyon gerektiği sürece ilk 72 saatte sekonder emboli atakları görülebilir (%5–10).',
+      recurrenceRiskBadge: 'İLK 72 SAAT PULMONER & NÖROLOJİK PROGRESYON RİSKİ',
+      maintenanceTherapy: 'Akciğer koruyucu mekanik ventilasyon veya HFNC ile PaO₂/FiO₂ >250 sağlanana dek oksijenizasyon desteği, nötral-övolemik sıvı dengesi, ateş ve ağrı kontrolü, nöbet profilaksisi/tedavisi (varsa) ve hasta hemodinamik/solunumsal olarak stabilize olduktan sonra standart mekanik + farmakolojik VTE (DVT) profilaksisinin başlatılması.',
+      monitoringParameters: [
+        'Sürekli SpO₂ ve seri Arter Kan Gazı (PaO₂/FiO₂ oranı, PaCO₂, pH ve laktat klirensi)',
+        'Günlük Akciğer Grafisi veya Akciğer POCUS (B-çizgileri ve alveoler infiltratların gerileme takibi)',
+        'Saatlik Nörolojik Muayene & GKS / CAM-ICU Deliryum Takibi (kötüleşme varsa tekrar Beyin BT / DWI MRG)',
+        'Günlük Hemogram (açıklanamayan Hb düşüşü ve trombositopeni toparlanması), Koagülasyon (D-dimer, PT/aPTT, Fibrinojen) ve Renal Fonksiyonlar',
+        'Sağ Ventrikül yükü olan olgularda seri Ekokardiyografi (sPAP ve RV/LV oranı)'
+      ],
+      expectedComplications: [
+        'Akut Solunum Sıkıntısı Sendromu (ARDS) ve uzamış mekanik ventilasyon / ventilatör ilişkili pnömoni (VİP)',
+        'Akut Sağ Ventrikül Yetmezliği ve Obstrüktif / Kardiyojenik Şok (özellikle intraoperatif fulminan formda)',
+        'Uzamış Postoperatif Deliryum, Nöbet veya Geçici Fokal Nörolojik Defisitler',
+        'Purtscher Retinopatisi (geçici/nadiren kalıcı görme keskinliği azalması)',
+        'Hafif-Orta Trombositopeni, Anemi ve nadir Yaygın İntravasküler Koagülasyon (DİK)'
+      ],
+      definitiveDiagnosticTesting: [
+        {
+          testName: 'Beyin MRG — Difüzyon Ağırlıklı Görüntüleme (DWI & SWI)',
+          description: 'FES için en özgül görüntüleme bulgusudur: Serebral beyaz cevher, bazal ganglionlar ve korpus kallozumda yaygın punktat hiperintensiteler ("Starfield / Yıldızlı Gökyüzü Paterni") ve SWI’da mikrohemorajiler.'
+        },
+        {
+          testName: 'Yüksek Çözünürlüklü Toraks BT & BT Pulmoner Anjiyografi (BTPA)',
+          description: 'Bilateral yamasal buzlu cam opasiteleri, sentrilobüler nodüller ve interlobüler septal kalınlaşmayı gösterirken eşzamanlı olarak masif trombotik PE’yi kesin dışlar.'
+        },
+        {
+          testName: 'Fundoskopik Göz Dibi Muayenesi',
+          description: 'Retinal arteriyollerde yağ globülleri, pamuk atığı eksüdalar ve yüzeyel retinal kanamaların (Purtscher benzeri retinopati) saptanması.'
+        },
+        {
+          testName: 'Bronkoalveoler Lavaj (BAL) Makrofaj Boyaması (Seçili Olguda)',
+          description: 'Alveoler makrofajlar içinde Oil Red O veya Sudan Black ile boyanan intrasitoplazmik yağ damlacıklarının görülmesi (>%5–30 destekleyicidir; tek başına özgül değildir).'
+        }
+      ],
+      prognosisSummary: 'Fulminan sağ kalp yetmezliği veya ağır kafa travması eşlik etmeyen olgularda uygun YBÜ oksijen desteğiyle hastaların ~%85–90’ı pulmoner ve nörolojik fonksiyonları tamamen normale dönerek sekel kalmadan iyileşir. Kırığın erken stabilizasyonu ve agresif oksijenizasyon en güçlü sağkalım belirleyicileridir.'
+    },
+
+    // 9) High-Yield Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Heparin FES’te Zararlıdır — Lipoprotein Lipaz Tuzağı!',
+        takeaway: 'Trombotik PE ile karıştırılıp verilen Heparin, lipoprotein lipazı aktive ederek nötr yağ damlacıklarını akciğere toksik Serbest Yağ Asitlerine (FFA) parçalar ve taze kırık bölgesinde ağır kanamaya yol açar. FES’te tedavi edici Heparin KULLANILMAZ!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Peteşiyal Döküntüyü Beklemek Tanıyı Geciktirir',
+        takeaway: 'Klasik triad (Hipoksemi + Konfüzyon + Peteşi) hastaların yarısından azında görülür. Peteşi tipik olarak 24–36. saatte geç çıkar veya hiç çıkmaz; aksilla ve alt göz kapağı konjonktivasına mutlaka bakın ama yokluğunda FES’i asla dışlamayın!',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'Neden Travmadan 24–72 Saat Sonra Ortaya Çıkar?',
+        takeaway: 'Kemik iliği yağ globülleri hemen akciğere ulaşsa da, pulmoner endoteldeki lipaz enziminin nötr trigliseridleri toksik Serbest Yağ Asitlerine (oleik asit) dönüştürüp kimyasal ARDS başlatması 12–48 saat sürer. Bu biyokimyasal faz latent dönemi açıklar.',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'Beyin DWI MRG’de Patognomonik İşaret: "Starfield (Yıldızlı Gökyüzü)"',
+        takeaway: 'Travma sonrası Beyin BT’si tamamen normal olan ancak konfüzyon/stuporu düzelmeyen hastada Beyin DWI MRG’de beyaz cevher ve korpus kallozumda görülen yaygın punktat difüzyon kısıtlılığı serebral yağ embolisi için klasiktir.',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'Kritik Yaklaşım: İntraop BCIS ile FES Ayrımı & Erken Fiksasyon',
+        takeaway: 'Sement çakılır çakılmaz saniyeler içinde çöken hasta BCIS’tir; 12–72 saat sonra ateş, hipoksemi, anemi, trombositopeni ve deliryumla gelen hasta FES’tir. Stabil hastada ilk 24 saatte erken kırık fiksasyonu (unstabilde DCO eksternal fiksatör) FES riskini yarıdan fazla azaltır.',
+        category: 'Kritik Doz'
+      }
+    ],
+
+    // 10) Kaynaklar ve İleri Okuma
+    references: [
+      {
+        authors: 'Kosova E, Bergmark B, Piazza G.',
+        title: 'Fat Embolism Syndrome.',
+        journal: 'Circulation. 2015;131(3):317–320.',
+        year: '2015',
+        relevance: 'FES’in mekanik ve biyokimyasal çift fazlı patofizyolojisi, Gurd/Schonfeld tanı kriterleri, Starfield MRG ve destek tedavi standartları.'
+      },
+      {
+        authors: 'Rothberg DL, Makarewich CA.',
+        title: 'Fat Embolism and Fat Embolism Syndrome.',
+        journal: 'Journal of the American Academy of Orthopaedic Surgeons (JAAOS). 2019;27(8):e346–e355.',
+        year: '2019',
+        relevance: 'Uzun kemik kırıklarında insidans, erken fiksasyon vs Hasar Kontrol Ortopedisi (DCO), RIA/oyma teknikleri ve kortikosteroid/heparin kanıt değerlendirmesi.'
+      },
+      {
+        authors: 'Donaldson AJ, Thomson HE, Harper NJ, Kenny NW.',
+        title: 'Bone cement implantation syndrome.',
+        journal: 'British Journal of Anaesthesia (BJA). 2009;102(1):12–22.',
+        year: '2009',
+        relevance: 'İntraoperatif çimentolu artroplastide akut BCIS ile gecikmiş FES ayrımı, TEE bulguları, sementleme öncesi anestezi/cerrahi önlemleri.'
+      },
+      {
+        authors: 'Gurd AR, Wilson RI & Schonfeld SA, Ploysongsang Y, DiLisio R, et al.',
+        title: 'The fat embolism syndrome (Gurd & Wilson 1974) & Fat embolism prophylaxis with corticosteroids (Schonfeld 1983).',
+        journal: 'J Bone Joint Surg Br. 1974;56B(3):408–416 & Ann Intern Med. 1983;99(4):438–443.',
+        year: '1974 / 1983',
+        relevance: 'Gurd & Wilson majör/minör tanı kriterleri ve Schonfeld Yağ Embolisi İndeksi (≥5 puan).'
+      },
+      {
+        authors: 'Hines RL, Jones SB (Eds.) & Gropper MA, Cohen NH, et al.',
+        title: "Stoelting's Anesthesia and Co-Existing Disease (8th Ed.) & Miller's Anesthesia (9th/10th Eds.) — Orthopedic Trauma & Fat Embolism.",
+        journal: 'Elsevier.',
+        year: '2020–2024',
+        relevance: 'Perioperatif FES, pulmoner vasküler reaktivite, akciğer koruyucu ventilasyon, N₂O/PEEP kuralları ve yoğun bakım yönetimi.'
       }
     ]
   }

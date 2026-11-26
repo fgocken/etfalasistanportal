@@ -223,6 +223,12 @@ function getProtocolHeaderMeta(protocolId: string): ProtocolHeaderMeta {
         subtitle: 'Küçük Çaplı Kaflı ETT & IV Deksametazon',
         icon: <Flame className="w-5 h-5 text-orange-500" />,
       };
+    case 'fes':
+      return {
+        title: 'Yağ Embolizm Sendromu (FES) — Akciğer & Hemodinamik Destek',
+        subtitle: 'ARDSNet Vt (6 mL/kg PBW), Noradrenalin, Övolemi & İlaç Uyarıları',
+        icon: <Activity className="w-5 h-5 text-amber-500" />,
+      };
     default:
       return {
         title: 'Acil Doz Hesaplayıcı',
@@ -755,6 +761,41 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               label="Deksametazon IV"
               value={`${doses.airwayFireDexaMg} mg IV`}
               detail="0.15 mg/kg IV (maks 10 mg) — havayolu ödemi kontrolü"
+              tone="amber"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'fes':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="Akciğer Koruyucu Tidal Volüm (ARDSNet)"
+              value={`${doses.fesVtMin}–${doses.fesVtMax} mL`}
+              detail="Hedef 6 mL/kg PBW · Pplat <30 cmH₂O · PEEP 8–12 cmH₂O"
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Noradrenalin İnfüzyonu (RV & Perfüzyon)"
+              value={`${doses.fesNoradMinMcgMin}–${doses.fesNoradMaxMcgMin} mcg/dk`}
+              detail={`0.05–0.5 mcg/kg/dk IV (Hedef MAP ≥65–70 mmHg) · Dobutamin: ${doses.fesDobutaMinMcgMin}–${doses.fesDobutaMaxMcgMin} mcg/dk`}
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Sıvı Dengesi & Övolemi"
+              value={doses.fesFluidTryLabel}
+              detail="Hipovolemiden kaçın; RV yükü varsa aşırı bolustan kaçın (gereğinde %5 Albümin FFA bağlayıcı destek)"
+              tone="emerald"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Kesin İlaç Kuralı (Spesifik Antidot YOK)"
+              value="Heparin YASAK · Rutin Steroid YOK"
+              detail="Heparin lipoprotein lipazı aktive ederek toksik serbest yağ asidi (FFA) yükünü ve kırık kanamasını artırır."
+              warning="Trombotik PE kanıtlanmadıkça antikoagülasyon VERİLMEZ; yerleşik FES'te rutin yüksek doz steroid önerilmez!"
               tone="amber"
               isDark={isDark}
             />

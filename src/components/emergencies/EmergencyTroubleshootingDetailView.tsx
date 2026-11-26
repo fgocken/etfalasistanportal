@@ -198,7 +198,10 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
   };
 
   const hasWaveforms = Boolean(
-    item.capnogramPatterns?.length || item.pressurePatterns?.length || item.spo2Patterns?.length
+    item.capnogramPatterns?.length ||
+      item.pressurePatterns?.length ||
+      item.spo2Patterns?.length ||
+      item.arterialPatterns?.length
   );
   const diffSectionNumber = hasWaveforms ? 3 : 2;
   const algoSectionNumber = hasWaveforms ? 4 : 3;
@@ -595,6 +598,40 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
               )}`}
             >
               {pat.spo2Badge}
+            </div>
+          )}
+        />
+      )}
+
+      {/* C4. İnvaziv Arteriyel Basınç Dalga Formu & PPV / Dikrotik Çentik Ayrımı */}
+      {item.arterialPatterns && item.arterialPatterns.length > 0 && (
+        <WaveformPatternGrid
+          title="2. İnvaziv Arteriyel Dalga Formu, Dikrotik Çentik & PPV / SVV Ayrımı"
+          subtitle="Vazopleji vs Hipovolemi vs Düşük Debi / Artefakt Hızlı Tanı"
+          icon={<Activity className="w-4 h-4 text-cyan-500" />}
+          patterns={item.arterialPatterns}
+          isDark={isDark}
+          viewBox="0 0 160 62"
+          svgHeightClass="h-16"
+          renderSvgGuides={() => (
+            <>
+              <line x1="2" y1="26" x2="158" y2="26" stroke="#7f1d1d" strokeWidth="1" strokeDasharray="3 3" />
+              <text x="3" y="22" fill="#fca5a5" fontSize="6" fontFamily="monospace">
+                MAP 65 mmHg Eşiği
+              </text>
+              <line x1="2" y1="50" x2="158" y2="50" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
+              <text x="3" y="57" fill="#64748b" fontSize="6" fontFamily="monospace">
+                Diyastolik Bazal
+              </text>
+            </>
+          )}
+          renderExtraMeta={(pat) => (
+            <div
+              className={`px-2 py-1 rounded border text-[10px] font-mono font-bold tabular-nums text-center ${getToneBadgeClass(
+                pat.tone
+              )}`}
+            >
+              {pat.mapBadge}
             </div>
           )}
         />

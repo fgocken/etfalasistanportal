@@ -120,6 +120,15 @@ export interface EmergencyDoses {
   // 14. Airway Fire
   airwayFireDexaMg: number;
   airwayFireEttNote: string;
+
+  // 15. Fat Embolism Syndrome (FES)
+  fesVtMin: number;
+  fesVtMax: number;
+  fesNoradMinMcgMin: number;
+  fesNoradMaxMcgMin: number;
+  fesDobutaMinMcgMin: number;
+  fesDobutaMaxMcgMin: number;
+  fesFluidTryLabel: string;
 }
 
 export interface StickyDoseHighlight {
@@ -326,6 +335,17 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     ? 'Pediatrik: Normal yaştan 0,5 mm küçük kaflı ETT ([Yaş/4]+3,0 mm)'
     : 'Erişkin: 0,5–1,0 mm küçük kaflı ETT (ID 6,0–7,0 mm)';
 
+  // 15. Fat Embolism Syndrome (FES)
+  const fesVtMin = Math.round(w * 6);
+  const fesVtMax = Math.round(w * 8);
+  const fesNoradMinMcgMin = +(w * 0.05).toFixed(1);
+  const fesNoradMaxMcgMin = +(w * 0.5).toFixed(1);
+  const fesDobutaMinMcgMin = Math.round(w * 2);
+  const fesDobutaMaxMcgMin = Math.round(w * 10);
+  const fesFluidTryLabel = isPediatric
+    ? `${Math.round(w * 10)} mL (10 mL/kg dikkatli övolemi)`
+    : '250–500 mL dikkatli deneme (RV yükünde aşırı sıvı YASAK)';
+
   return {
     weightNum,
     isValidWeight,
@@ -434,6 +454,14 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
 
     airwayFireDexaMg,
     airwayFireEttNote,
+
+    fesVtMin,
+    fesVtMax,
+    fesNoradMinMcgMin,
+    fesNoradMaxMcgMin,
+    fesDobutaMinMcgMin,
+    fesDobutaMaxMcgMin,
+    fesFluidTryLabel,
   };
 }
 
@@ -718,6 +746,25 @@ export function getStickyDoseHighlights(
           label: 'Re-entübasyon',
           value: doses.isPediatric ? '0,5 mm küçük kaflı ETT' : 'ID 6,0–7,0 mm kaflı ETT',
           tone: 'blue',
+        },
+      ];
+
+    case 'fes':
+      return [
+        {
+          label: 'Vt (6 mL/kg PBW)',
+          value: `${doses.fesVtMin} mL (Pplat <30)`,
+          tone: 'blue',
+        },
+        {
+          label: 'Noradrenalin İnf.',
+          value: `${doses.fesNoradMinMcgMin}–${doses.fesNoradMaxMcgMin} mcg/dk`,
+          tone: 'red',
+        },
+        {
+          label: 'İlaç Kuralı',
+          value: 'Övolemi · Heparin YASAK',
+          tone: 'amber',
         },
       ];
 

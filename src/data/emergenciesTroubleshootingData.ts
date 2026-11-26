@@ -60,6 +60,17 @@ export interface Spo2WaveformPattern {
   svgPath: string;
 }
 
+export interface ArterialWaveformPattern {
+  id: string;
+  label: string;
+  subtitle: string;
+  mapBadge: string;
+  meaning: string;
+  action: string;
+  tone: 'normal' | 'warning' | 'danger' | 'info';
+  svgPath: string;
+}
+
 export interface TroubleshootingReference {
   citation: string;
   pmid?: string;
@@ -78,6 +89,7 @@ export interface EmergencyTroubleshootingItem {
   capnogramPatterns?: CapnogramWaveformPattern[];
   pressurePatterns?: PressureWaveformPattern[];
   spo2Patterns?: Spo2WaveformPattern[];
+  arterialPatterns?: ArterialWaveformPattern[];
   differentialDiagnosis: TroubleshootingDifferentialItem[];
   algorithmicSteps: TroubleshootingAlgorithmicStep[];
   pearlsAndPitfalls: {
@@ -1577,6 +1589,546 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
       'hipotermi',
       'co2 narkozu',
       'inme',
+      'troubleshooting'
+    ]
+  },
+  {
+    id: 'hypotension',
+    title: 'İntraoperatif Hipotansiyon (IOH)',
+    subtitle: 'MAP < 65 mmHg Hemodinamik Çöküş: SVR, Preload, Kontraktilite, Hız/Ritim ve Obstrüktif Şok Ayrımı',
+    categoryLabel: 'Hemodinamik & Dolaşım Krizi',
+    urgency: 'critical',
+    primaryAlarm: 'MAP < 65 mmHg · SKB < 90 mmHg veya Bazale Göre > %20–30 Düşüş · PPV / SVV > %13',
+    physiologyFormula: 'MAP = CO × SVR + CVP   |   CO = HR × SV (Preload · Afterload · Kontraktilite)',
+    summary:
+      'İntraoperatif hipotansiyon (MAP < 65 mmHg; hatta kısa süreli MAP < 55 mmHg atakları); akut böbrek hasarı (AKI), miyokardiyal hasar (MINS), inme ve 30 günlük mortalite ile doğrudan ilişkilidir (POQI / Salmasi / Walsh). İlk 60 saniyede ölçüm artefaktı (NIBP manşonu / transdüser sıfır seviyesi) dışlanmalı, anestezik derinlik azaltılmalı ve fizyolojik eksene göre (↓SVR vazodilatasyon, ↓Preload hipovolemi/kanama, ↓Kontraktilite, Hız/Ritim bozukluğu veya Obstrüktif şok) hedefe yönelik vazopressör ve sıvı tedavisi başlatılmalıdır.',
+    goldenSixtySeconds: [
+      'Karotis/radial nabzı, SpO₂ pleth dalgasını ve EtCO₂’yi kontrol et: EtCO₂ < 15–20 mmHg ise ölçüm hatası DEĞİL gerçek kardiyak debi çöküşü veya peri-arresttir!',
+      'Ölçüm doğruluğunu 5 saniyede teyit et: NIBP’yi STAT tekrarla; arter hattı varsa transdüserin flebostatik eksende (4. İKA orta aksiller hat / oturur pozisyonda dış kulak yolu) olduğunu ve sönümlenmediğini doğrula.',
+      'Volatil anestezik (MAC) veya Propofol/Remifentanil TIVA hızını derhal azalt; yüksek PEEP / oto-PEEP veya laparoskopik aşırı insuflasyon basıncını kontrol et.',
+      'Cerrahi sahayı ve cerrahı sorgula: Gizli/masif kanama, vena kava kompresyonu, pnömoperitonyum, kemik çimentosu (BCIS) veya vagal traksiyon var mı? Varsa manipülasyonu durdurt!',
+      'Organ perfüzyonunu kurtarmak için hemen titre vazopressör (Fenilefrin 50–100 mcg, Efedrin 5–10 mg veya Noradrenalin 5–10 mcg IV puşe / infüzyon) + açık IV hattan 250–500 mL dengeli kristaloid bolusu başlat.'
+    ],
+    arterialPatterns: [
+      {
+        id: 'normal-art',
+        label: 'Normal Arteriyel Dalga Formu',
+        subtitle: 'MAP 75–95 mmHg · PPV < %10',
+        mapBadge: '120/75 (MAP ~90 mmHg)',
+        meaning: 'Keskin sistolik çıkış, belirgin dikrotik çentik (aort kapağı kapanması) ve solunum siklusu boyunca sabit tepe basıncı.',
+        action: 'Normovolemi ve yeterli SVR; mevcut hemodinamik hedefleri koru (MAP ≥ 65 mmHg).',
+        tone: 'normal',
+        svgPath: 'M 4 46 L 14 46 L 20 14 L 25 32 L 28 27 L 38 46 L 52 46 L 58 14 L 63 32 L 66 27 L 76 46 L 90 46 L 96 14 L 101 32 L 104 27 L 114 46 L 128 46 L 134 14 L 139 32 L 142 27 L 154 46'
+      },
+      {
+        id: 'vasoplegia-art',
+        label: 'Vazodilatasyon / Vazopleji (↓SVR)',
+        subtitle: 'Düşük Diyastolik · Aşağı Kaymış Dikrotik Çentik',
+        mapBadge: '85/38 (MAP ~54 mmHg)',
+        meaning: 'Geniş nabız basıncı, çok düşük diyastolik basınç ve dikrotik çentiğin tabana yaklaşması: Anestezik/spinal sempatoliz, anafilaksi veya septik şok.',
+        action: 'Anestezik derinliği azalt; Fenilefrin (50–100 mcg) veya Noradrenalin (0.05–0.5 mcg/kg/dk) ile SVR’yi hızla yükselt.',
+        tone: 'warning',
+        svgPath: 'M 4 54 L 14 54 L 20 20 L 26 48 L 29 44 L 40 54 L 52 54 L 58 20 L 64 48 L 67 44 L 78 54 L 90 54 L 96 20 L 102 48 L 105 44 L 116 54 L 128 54 L 134 20 L 140 48 L 143 44 L 154 54'
+      },
+      {
+        id: 'hypovolemia-ppv',
+        label: 'Hipovolemi & Yüksek PPV / SVV (>%13)',
+        subtitle: 'Solunumla Dalgalanan (Swing) Dar Dalga',
+        mapBadge: '78/52 (MAP ~60 · PPV %22)',
+        meaning: 'Pozitif basınçlı ventilasyonla sistolik tepelerin belirgin inip çıkması (solunumsal swing) ve dar nabız basıncı: Sıvı yanıtlı preload eksikliği / kanama.',
+        action: '250–500 mL dengeli kristaloid bolusu / kan ürünü ver, cerrahi kanamayı kontrol et ve PPV yanıtını izle.',
+        tone: 'danger',
+        svgPath: 'M 4 48 L 12 48 L 17 16 L 21 34 L 24 30 L 32 48 L 44 48 L 49 24 L 53 38 L 56 35 L 64 48 L 76 48 L 81 33 L 85 43 L 88 41 L 96 48 L 108 48 L 113 22 L 117 37 L 120 34 L 128 48 L 140 48 L 145 16 L 149 34 L 154 48'
+      },
+      {
+        id: 'damped-or-low-co',
+        label: 'Düşük Debi / Obstrüktif Şok vs Sönümlenmiş Hat',
+        subtitle: 'Yavaş Çıkış · Dikrotik Çentik Kaybı',
+        mapBadge: '65/48 (MAP ~53 mmHg)',
+        meaning: 'Çok dar nabız basıncı ve basık tepe: Ağır LV/RV yetmezliği, tamponad, tansiyon pnömotoraks, PE VEYA kateterde pıhtı/hava kabarcığı (overdamped artefakt).',
+        action: 'Önce hızlı yıkama (fast-flush) testi ve NIBP ile artefaktı dışla; EtCO₂ düşükse obstrüktif/kardiyojenik şok tedavi et!',
+        tone: 'danger',
+        svgPath: 'M 4 46 L 14 46 Q 24 32 34 46 L 52 46 Q 62 32 72 46 L 90 46 Q 100 32 110 46 L 128 46 Q 138 32 148 46 L 156 46'
+      }
+    ],
+    differentialDiagnosis: [
+      {
+        condition: 'Aşırı Anestezik Derinlik (Volatil MAC / Propofol-Remifentanil Doz Aşımı)',
+        mechanism: 'Afterload (↓SVR) & Miyokard Depresyonu',
+        frequency: 'Çok Yaygın',
+        clues: 'İndüksiyon hemen sonrası veya cerrahi uyarı başlamadan önceki "cerrahi sessizlik" döneminde düşük MAP, düşük BIS (< 35–40), yüksek end-tidal MAC (> 1.0–1.2) ve refleks taşikardi olmaksızın vazodilatasyon.',
+        confirmatoryTest: 'End-tidal anestezik gaz konsantrasyonu (MAC), TIVA pompa hızları ve BIS/PSI EEG derinlik kontrolü.',
+        immediateAction: 'Vaporizatör/TIVA hızını azalt, FGF’yi geçici yükselterek fazla anesteziği yıka; Efedrin 5–10 mg veya Fenilefrin 50–100 mcg IV puşe ile köprüle.'
+      },
+      {
+        condition: 'Hipovolemi ve Akut İntraoperatif Kanama',
+        mechanism: 'Preload (↓Venöz Dönüş)',
+        frequency: 'Çok Yaygın',
+        clues: 'Taşikardi, arter eğrisinde solunumsal dalgalanma (PPV / SVV > %13), daralmış nabız basıncı, aspiratör kabında/gazlı bezlerde kan birikimi, düşük CVP ve idrar çıkışında azalma.',
+        confirmatoryTest: 'Arteriyel PPV/SVV analizi, yatak başı TTE/TEE’de "öpüşen (kissing) papiller kaslar" / kollabe IVC, seri AKG Hb/Hct ve laktat.',
+        immediateAction: 'İki geniş damar yolundan ısıtılmış dengeli kristaloid bolusu ve kanama sürüyorsa erken ES/TDP/TXA (Masif Transfüzyon Protokolü) başlat; cerrahi hemostaz/aort-kava kompresyonu iste.'
+      },
+      {
+        condition: 'Nöraksiyel (Spinal / Epidural) Yüksek Sempatik Blok & Bezold-Jarisch Refleksi',
+        mechanism: 'Afterload (↓SVR) + Preload + Bradikardi',
+        frequency: 'Çok Yaygın',
+        clues: 'Spinal/epidural enjeksiyondan 5–20 dk sonra özellikle T4 üzeri blokta venöz göllenme + arteriyoler dilatasyon ve ani paradoksal bradikardi + bulantı/kusma (Bezold-Jarisch kardiyoinhibitör refleksi).',
+        confirmatoryTest: 'Soğuk/pinprick ile yüksek duyusal blok seviyesi (T1–T4) ve hipopotansiyona eşlik eden sinüs bradikardisi.',
+        immediateAction: 'Efedrin 10–15 mg IV (veya Fenilefrin 50–100 mcg + Atropin 0.5 mg), hızlı kristaloid ko-loading, gebede sol uterin deplasman; refrakter bradikardi+hipotansiyonda erken düşük doz IV Adrenalin (10–20 mcg) uygula!'
+      },
+      {
+        condition: 'Cerrahi Kompresyon, Pnömoperitonyum veya Pozisyon (Prone / Beach-Chair / Ters Trendelenburg)',
+        mechanism: 'Preload (Mekanik Venöz Dönüş Azalması)',
+        frequency: 'Yaygın',
+        clues: 'Laparoskopik CO₂ insuflasyonu (> 15 mmHg), cerrahi ekartörün veya kitle/uterusun Vena Kava İnferior’a (IVC) basısı, prone pozisyonda batın basısı veya oturur (beach-chair) pozisyona geçiş anında ani tansiyon düşüşü.',
+        confirmatoryTest: 'Cerrahi manevra veya pozisyon değişikliği ile zamansal çakışma; CVP ve EtCO₂’de eşzamanlı azalma.',
+        immediateAction: 'Cerrahı uyararak IVC basısını kaldırttır veya pnömoperitonyum basıncını < 12 mmHg’ye düşürt (gerekirse batını söndür); bacakları yükselt / hafif Trendelenburg ver ve vazopressör + sıvı ile destekle.'
+      },
+      {
+        condition: 'Yüksek İntratorasik Basınç: Aşırı PEEP, Oto-PEEP (Hava Hapsi) veya Valsalva',
+        mechanism: 'Preload (↓Sağ Kalp Dolumu) & ↑RV Afterload',
+        frequency: 'Yaygın',
+        clues: 'KOAH/astım/bronkospazm hastasında yüksek solunum sayısı ve kısa ekspirasyon süresi; akım-zaman eğrisinde ekspiratuvar akımın sıfıra dönmemesi, yüksek Pplat ve hipotansiyon.',
+        confirmatoryTest: 'Ventilatör devresini ETT’den 10–15 saniye ayırınca (apneik dekompresyon) sıkışmış havanın çıkması ve kan basıncının saniyeler içinde yükselmesi ("Lazarus testi").',
+        immediateAction: 'Devreyi 10–15 sn ayırarak oto-PEEP’i boşalt; solunum sayısını düşür (8–10/dk), I:E oranını 1:3–1:4’e uzat, PEEP’i azalt ve bronkodilatör uygula.'
+      },
+      {
+        condition: 'İntraoperatif Anafilaksi (Rokuronyum, Antibiyotik, Klorheksidin, Lateks)',
+        mechanism: 'Afterload (Ağır Vazopleji) & Kapiller Kaçak',
+        frequency: 'Acil',
+        clues: 'İlaç uygulamasından dakikalar sonra refrakter derin hipotansiyon, taşikardi, bronkospazm (↑Ppeak), ciltte kızarıklık/ürtiker (örtü altında gizli kalabilir!) ve EtCO₂ düşüşü.',
+        confirmatoryTest: 'Şüpheli ajanla zamansal ilişki; 1., 2. ve 24. saat serum Triptaz yüksekliği.',
+        immediateAction: 'Şüpheli ajanı kes, %100 O₂ ver, erken IV Adrenalin titrasyonu (Grade 2: 20 mcg; Grade 3: 50–100 mcg IV bolus → infüzyon) ve 20–30 mL/kg hızlı kristaloid bolusu başlat (Anafilaksi Protokolü).'
+      },
+      {
+        condition: 'Tansiyon Pnömotoraks',
+        mechanism: 'Obstrüktif Şok (Kaval Kinking)',
+        frequency: 'Acil',
+        clues: 'SVK, supraklaviküler blok, barotravma veya diyafram cerrahisi sonrası ani Ppeak/Pplat fırlaması, hipoksemi, tek taraflı solunum sesi kaybı, JVD ve derin hipotansiyon.',
+        confirmatoryTest: 'Klinik tanıdır (radyografi beklenmez!); Akciğer POCUS’ta plevral kayma (lung sliding) kaybı ve M-modda barkod işareti.',
+        immediateAction: 'N₂O’yu kapat, PEEP = 0 yap ve derhal 4–5. İKA ön/orta aksiller hattan 14G (≥ 5 cm) iğne dekompresyonu veya parmak torakostomi uygula (Tansiyon Pnömotoraks Protokolü).'
+      },
+      {
+        condition: 'Masif Pulmoner Embolizm (PE), Hava Embolisi (VAE) veya Kemik Çimentosu Sendromu (BCIS)',
+        mechanism: 'Obstrüktif Şok (Akut Sağ Ventrikül Çöküşü)',
+        frequency: 'Acil',
+        clues: 'Turnike açılması, oturur kraniyotomi veya ortopedik protez sementlemesi/reaming sırasında akciğer kompliyansı normalken ANİ EtCO₂ çöküşü (< 15–20 mmHg), hipoksemi, CVP artışı ve hipotansiyon.',
+        confirmatoryTest: 'TEE/TTE’de akut RV dilatasyonu (D-şeklinde LV, McConnell bulgusu veya sağ kalpte hava/sement "kar fırtınası").',
+        immediateAction: 'AŞIRI SIVI VERME (RV septal shift riski)! %100 O₂, hemen Noradrenalin (MAP ≥ 65–70 mmHg) ± Dobutamin/Adrenalin başla; VAE’de Durant manevrası + CVC aspirasyonu, masif PE’de tromboliz değerlendir.'
+      },
+      {
+        condition: 'Akut Miyokard İskemisi / Sol Ventrikül Yetmezliği veya Aritmi (AF / VT / Tam Blok)',
+        mechanism: 'Kontraktilite (↓SV) veya Hız/Ritim Bozukluğu',
+        frequency: 'Acil',
+        clues: 'EKG’de yeni ST segment çökmesi/yükselmesi veya T inversiyonu, yeni başlayan hızlı ventrikül yanıtlı AF (> 130/dk → atriyal katkı kaybı), ciddi bradikardi (< 40/dk) veya pulmoner ödem/juguler dolgunluk.',
+        confirmatoryTest: '5-derivasyonlu EKG (V5 + D2), TEE/TTE’de yeni bölgesel duvar hareket kusuru (RWMA) ve yüksek duyarlıklı Troponin.',
+        immediateAction: 'Stabil olmayan taşiaritmide senkronize kardiyoversiyon, bradiaritmide Atropin/Adrenalin/Pacing; miyokard iskemisinde koroner perfüzyon için MAP ≥ 65–70 mmHg (Noradrenalin) ve inotrop (Dobutamin) sağla.'
+      },
+      {
+        condition: 'Preoperatif ACEİ / ARB Kullanımına Bağlı Refrakter Vazopleji veya Adrenal Kriz / İyonize Hipokalsemi',
+        mechanism: 'Afterload (Katekolamin Dirençli Vazopleji)',
+        frequency: 'Yaygın',
+        clues: 'Sabah ACEİ/ARB (ramipril, valsartan vb.) almış hastada indüksiyon sonrası Efedrin ve Fenilefrine yanıtsız derin hipotansiyon; masif sitratlı kan transfüzyonu sonrası iCa²⁺ < 0.9 mmol/L veya kronik steroid kullanan hastada stres doz unutulması.',
+        confirmatoryTest: 'İlaç öyküsü, AKG’de iyonize kalsiyum (iCa²⁺), hiponatremi/hipoglisemi.',
+        immediateAction: 'ACEİ/ARB refrakter vazoplejisinde Vazopressin (0.5–2 IU IV bolus veya 0.01–0.04 IU/dk infüzyon; veya Terlipressin 1 mg) ya da Metilen Mavisi (1–2 mg/kg); hipokalsemide %10 Kalsiyum Klorür 5–10 mL (veya Kalsiyum Glukonat 10–20 mL); adrenal krizde Hidrokortizon 100 mg IV ver.'
+      },
+      {
+        condition: 'Ölçüm Artefaktı (Transdüser Yüksekliği, Sönümlenme veya Yanlış NIBP Manşonu)',
+        mechanism: 'Monitör / Ekipman Artefaktı (Yalancı Hipotansiyon)',
+        frequency: 'Yaygın',
+        clues: 'EtCO₂, SpO₂ pleth genliği ve kapiller dolum tamamen normalken arter ekranında ani düşük basınç: Transdüserin hasta kalp seviyesinin (flebostatik eksen) üzerinde kalması (her 10 cm yükseklik = −7.5 mmHg hata!), basınç torbasının < 300 mmHg’ye inmesi, üç yollu musluk yarı açık kalması veya hastaya çok geniş NIBP manşonu takılması.',
+        confirmatoryTest: 'Kare dalga hızlı yıkama (fast-flush) testi, transdüserin kalp hizasında yeniden sıfırlanması (zeroing) ve karşı koldan NIBP doğrulaması.',
+        immediateAction: 'Yüksek doz vazopressör puşelemeden önce transdüseri kalp (veya beach-chair’da tragus/Willis poligonu) hizasına getir, sıfırla, hattı yıka ve NIBP ile doğrula.'
+      }
+    ],
+    algorithmicSteps: [
+      {
+        stepNumber: 1,
+        phase: '0–15 sn · Gerçeklik & Perfüzyon Kontrolü',
+        action: 'Nabız, EtCO₂ ve Pleth ile Gerçek Şoku Artefakttan Ayır',
+        detail:
+          'Karotis/radial nabzı palpe et, EtCO₂ ve SpO₂ pleth dalga genliğine bak. EtCO₂ aniden < 15–20 mmHg’ye düştüyse kardiyak debi çökmüştür (peri-arrest). Arter transdüseri kalp seviyesinde mi, basınç torbası 300 mmHg’de mi kontrol et; şüphede NIBP STAT başlat.',
+        checkTip: 'Transdüser hastanın 20 cm yukarısında kalırsa MAP gerçek değerinden ~15 mmHg düşük okunur!'
+      },
+      {
+        stepNumber: 2,
+        phase: '15–45 sn · İlk Kurtarma & Anestezik Kısma',
+        action: 'Anestezik Derinliği Azalt, %100 O₂ Ver ve Köprü Vazopressör Puşele',
+        detail:
+          'Volatil anestezik veya propofol/opioid infüzyonunu hemen azalt. Beyin, kalp ve böbrek perfüzyon basıncını (MAP ≥ 65 mmHg) korumak için neden araştırılırken hemen titre vazopressör bolusu uygula: Taşikardik hastada Fenilefrin 50–100 mcg IV; normal/bradikardik hastada Efedrin 5–10 mg IV veya seyreltilmiş Noradrenalin 5–10 mcg IV.',
+        checkTip: 'MAP < 55 mmHg’de geçirilen her dakika AKI ve miyokard hasarı (MINS) riskini katlar.'
+      },
+      {
+        stepNumber: 3,
+        phase: '45–90 sn · Cerrahi Saha & Ventilatör Taraması',
+        action: 'Cerrahi Bası/Kanama ve İntratorasik Basınç (Oto-PEEP / Pnömotoraks) Kontrolü',
+        detail:
+          'Cerrahi örtünün altına ve aspiratöre bak; cerraha IVC basısı, vagal çekme veya gizli kanama olup olmadığını sor. Laparoskopik basıncı kontrol et (< 12 mmHg). Ventilatörde Ppeak/Pplat yüksekse akciğerleri dinle; KOAH/bronkospazmda devreyi 10 sn ayırarak oto-PEEP’i boşalt.',
+        checkTip: 'Devre ayrılınca tansiyon hızla yükseliyorsa tanı oto-PEEP / aşırı ventilasyondur.'
+      },
+      {
+        stepNumber: 4,
+        phase: '1–3 dk · 5 Hemodinamik Eksende Sınıflandır',
+        action: 'Preload · SVR · Kontraktilite · Hız/Ritim · Obstrüktif Nedenleri Ayırt Et',
+        detail:
+          'Arter dalga formuna (PPV/SVV > %13 = hipovolemi; düşük diyastolik + geniş nabız basıncı = vazopleji; dar nabız basıncı = düşük SV/obstrüksiyon), kalp hızına, EKG’ye (ST değişimi/aritmi) ve EtCO₂’ye göre ana mekanizmayı belirle.',
+        checkTip: 'Normal akciğer mekaniği + ani EtCO₂ düşüşü + CVP artışı = PE / VAE / BCIS (Sağ kalp yükü!).'
+      },
+      {
+        stepNumber: 5,
+        phase: '3–10 dk · Hedefe Yönelik Tedavi & İnfüzyon',
+        action: 'Sıvı/Kan Resüsitasyonu, Sürekli Vazopressör İnfüzyonu ve İyonize Kalsiyum',
+        detail:
+          'PPV > %13 veya kanama varsa 250–500 mL dengeli kristaloid bolusu ve kan ürünlerini başlat (ancak akut RV yetmezliğinde sıvı kısıtla!). Tekrarlayan bolus gerekiyorsa erken Noradrenalin infüzyonuna (0.05–0.5 mcg/kg/dk) geç. ACEİ/ARB kullanan refrakter vazoplejide Vazopressin (0.5–2 IU bolus / 0.01–0.04 IU/dk) ve AKG’de iCa²⁺ < 1.0 mmol/L ise Kalsiyum ekle.',
+        checkTip: 'Periferik damar yolundan seyreltilmiş Noradrenalin (ör. 16–40 mcg/mL) acilde güvenle başlatılabilir.'
+      },
+      {
+        stepNumber: 6,
+        phase: '> 10 dk · Refrakter Şok & İleri Monitörizasyon',
+        action: 'Arter Hattı, Yatak Başı TEE/TTE (POCUS) ve İnotrop / Anafilaksi / Adrenal Kriz',
+        detail:
+          'Hipotansiyon düzeltilemiyorsa invaziv arter kanülasyonu ve SVK aç, yatak başı TTE/TEE ile LV/RV kontraktilitesini, kapakları ve perikardı görüntüle. Gizli anafilaksi (cilt döküntüsüz bronkospazm+vazopleji → IV Adrenalin), gizli retroperitoneal/torasik kanama ve adrenal yetmezliği (Hidrokortizon 100 mg IV) tedavi et.',
+        checkTip: 'TEE/TTE, hipovolemik "boş kalp" ile obstrüktif/kardiyojenik "dolu ve kasılmayan kalbi" 30 saniyede ayırır.'
+      }
+    ],
+    pearlsAndPitfalls: {
+      pearls: [
+        'POQI Konsensüsü & Walsh/Salmasi Kuralı: Popülasyon bazında intraoperatif MAP < 60–65 mmHg eşiğinin altında geçirilen kümülatif süre (özellikle MAP < 55 mmHg’de 1–5 dakika bile!) postoperatif Akut Böbrek Hasarı (AKI) ve Miyokard Hasarı (MINS) riskini anlamlı artırır.',
+        'Oturur (Beach-Chair / Plaj Sandalyesi) pozisyonda serebral perfüzyon basıncını korumak için arter transdüseri kalp hizasına değil, dış kulak yolu (tragus / Willis poligonu) hizasına sıfırlanmalı ve tragus seviyesinde MAP ≥ 65 mmHg tutulmalıdır!',
+        'Spinal anestezi sonrası gelişen ciddi bradikardi + hipotansiyonda (Bezold-Jarisch refleksi) yalnızca Fenilefrin vermek baroreseptör refleksle bradikardiyi derinleştirip kardiyak debiyi düşürebilir; Efedrin, Atropin veya erken düşük doz Adrenalin (10–20 mcg) tercih edilmelidir.',
+        'ACE inhibitörü veya ARB kullanan hastalarda sempatik sistem ve anjiyotensin aksı bloke olduğu için Efedrin/Fenilefrin yanıtı zayıftır; spesifik fizyolojik tedavi Vazopressin (V1 reseptör agonisti) veya Noradrenalindir.'
+      ],
+      pitfalls: [
+        'Arter transdüseri ameliyat masası yükseltildiğinde aşağıda/yukarıda kalmışken veya hat sönümlenmişken NIBP ve EtCO₂’ye bakmadan yüksek doz vazopressör puşelemek (ağır iyatrojenik hipertansiyon ve intrakraniyal/cerrahi kanama riski!).',
+        'Akut sağ ventrikül yetmezliğine (Masif PE, BCIS, VAE) bağlı hipotansiyonda hastayı "hipovolemik" sanıp litrelerce sıvı yüklemek (RV’yi şişirip interventriküler septumu sola iterek LV doluşunu tamamen kilitler!).',
+        'Efedrin’i ardı ardına yüksek dozlarda (> 30–50 mg) tekrarlamak: Presinaptik endojen noradrenalin depoları tükendiği için hızla taşifilaksi gelişir; 2–3 bolustan sonra doğrudan etkili vazopressör (Noradrenalin / Fenilefrin) infüzyonuna geçilmelidir.',
+        'Şiddetli KOAH/astım hastasında entübasyon sonrası gelişen ani hipotansiyonu "anestezik etkisi" sanıp oto-PEEP (dinamik hiperinflasyon) ve tansiyon pnömotoraksı atlamak.'
+      ]
+    },
+    equipmentChecklist: [
+      'Kullanıma hazır çekili vazopressör enjektörleri: Efedrin (5 mg/mL), Fenilefrin (50–100 mcg/mL) ve Push-Dose Noradrenalin (10 mcg/mL) / Adrenalin (10 mcg/mL)',
+      'Sürekli infüzyon pompası: Noradrenalin (4 mg / 50 mL = 80 mcg/mL) ve Vazopressin (20 IU / 50 mL = 0.4 IU/mL)',
+      'İnvaziv arteriyel kanülasyon kiti (20G radial kateter), 300 mmHg basınçlı yıkama torbası ve sıfırlama (zeroing) hattı',
+      'Geniş çaplı (14G–16G) periferik IV kanüller, basınçlı sıvı infüzyon manşonu, sıvı ısıtıcısı ve %10 Kalsiyum Klorür / Glukonat',
+      'Yatak başı Transtorasik / Transözofageal Ekokardiyografi (TTE / TEE) ve Akciğer POCUS probu',
+      'Acil Arteriyel Kan Gazı (Hb, Laktat, iCa²⁺, Baz Açığı) enjektörü ve kan grubu / cross-match tüpleri'
+    ],
+    references: [
+      {
+        citation:
+          'Sessler DI, Bloomstone JA, Aronson S, et al.; Perioperative Quality Initiative (POQI) 3 Workgroup. Perioperative Quality Initiative consensus statement on intraoperative blood pressure, risk and outcomes for elective surgery. Br J Anaesth. 2019;122(5):563–574.',
+        pmid: '30916004'
+      },
+      {
+        citation:
+          'Salmasi V, Maheshwari K, Yang D, et al. Relationship between Intraoperative Hypotension, Defined by Either Reduction from Baseline or Absolute Thresholds, and Acute Kidney and Myocardial Injury after Noncardiac Surgery: A Retrospective Cohort Analysis. Anesthesiology. 2017;126(1):47–65.',
+        pmid: '27792044'
+      },
+      {
+        citation:
+          'Walsh M, Devereaux PJ, Garg AX, et al. Relationship between intraoperative mean arterial pressure and clinical outcomes after noncardiac surgery: toward an empirical definition of hypotension. Anesthesiology. 2013;119(3):507–515.',
+        pmid: '23835589'
+      },
+      {
+        citation:
+          'Futier E, Lefrant JY, Guinot PG, et al.; INPRESS Study Group. Effect of Individualized vs Standard Blood Pressure Management Strategies on Postoperative Organ Dysfunction Among High-Risk Patients Undergoing Major Surgery: A Randomized Clinical Trial. JAMA. 2017;318(14):1346–1357.',
+        pmid: '28973220'
+      },
+      {
+        citation:
+          "Gropper MA, Eriksson LI, Fleisher LA, et al. (Eds.). Miller's Anesthesia. 10th ed. Elsevier; 2024 & Butterworth JF, Mackey DC, Wasnick JD. Morgan & Mikhail's Clinical Anesthesiology. 7th ed. McGraw-Hill; 2022. (Cardiovascular Physiology, Hemodynamic Monitoring & Intraoperative Hypotension)."
+      }
+    ],
+    tags: [
+      'intraoperatif hipotansiyon',
+      'hipotansiyon',
+      'ioh',
+      'map 65',
+      'ortalama arter basıncı',
+      'şok',
+      'vazopleji',
+      'hipovolemi',
+      'ppv',
+      'svv',
+      'efedrin',
+      'fenilefrin',
+      'noradrenalin',
+      'vazopressin',
+      'bezold jarisch',
+      'acei',
+      'arb',
+      'oto peep',
+      'mins',
+      'aki',
+      'flebostatik eksen',
+      'beach chair',
+      'troubleshooting'
+    ]
+  },
+  {
+    id: 'hypertension',
+    title: 'İntraoperatif Hipertansiyon & Hipertansif Kriz',
+    subtitle: 'SKB ≥ 160–180 mmHg / DKB ≥ 100–110 mmHg: Yüzeyel Anestezi, Hiperkapni, İlaç Hatası, KİBAS (Cushing) ve Katekolamin Fırtınası Ayrımı',
+    categoryLabel: 'Hemodinamik & Sempatik Kriz',
+    urgency: 'critical',
+    primaryAlarm: 'SKB ≥ 160–180 mmHg · DKB ≥ 100–110 mmHg · MAP > 110–120 mmHg veya Bazale Göre > %20–30 Artış',
+    physiologyFormula: 'MAP = (HR × SV) × SVR + CVP   |   CPP = MAP − ICP (Cushing Refleksi: ↑ICP → ↑MAP + ↓HR)',
+    summary:
+      'İntraoperatif hipertansiyon; miyokardiyal oksijen tüketimini (MVO₂) ve sol ventrikül ard yükünü artırarak akut miyokard iskemisi (MINS), sol kalp yetmezliği/pulmoner ödem, intrakraniyal kanama ve cerrahi anastomoz/saha kanamasına yol açar. İlk 60 saniyede en büyük tuzak; yüzeyel anestezi/yetersiz analjezi, hipoksi/hiperkapni, mesane distansiyonu veya KİBAS (Cushing refleksi) gibi birincil nedeni çözmeden doğrudan antihipertansif puşelemektir! Antihipertansif tedaviye geçildiğinde ise hedef organ hasarı/aort diseksiyonu yoksa MAP ilk saatte en fazla %20–25 (veya hastanın bazaline) kontrollü indirilmelidir.',
+    goldenSixtySeconds: [
+      'Ölçüm doğruluğunu ve IV hatları 10 saniyede kontrol et: Arter transdüseri kalp seviyesinin altında mı? Çok dar NIBP manşonu mu takılı? Açık kalan vazopressör infüzyonu veya şırınga karışıklığı (Efedrin/Adrenalin/Noradrenalin) var mı?',
+      'Anestezi ve analjezi derinliğini hemen değerlendir (En sık neden!): Vaporizatör/MAC düzeyini, TIVA infüzyon hattının damar dışına çıkıp çıkmadığını ve BIS/PSI (< 40–60) değerini kontrol et; önce anestezi/opioid derinliğini artır.',
+      'Solunum ve oksijenasyonu tara: SpO₂ düşüşü veya EtCO₂ yükselmesi (hiperkapni → güçlü sempatik deşarj!) ya da hastanın ventilatörle boğuşması (TOF derlenmesi / tüp ısırma) var mı?',
+      'Kalp hızına (HR) ve cerrahi sahaya bak: Taşikardi + hipertansiyon (sempatik/ağrı/feokromositoma/tiroid/MH) vs Bradikardi + hipertansiyon (KİBAS Cushing refleksi veya saf α-agonist/Lokal anestezik+adrenalin emilimi); aort klempi, turnike veya dolu Foley sondasını kontrol et.',
+      'Birincil nedenler düzeltilmesine rağmen SKB > 180 / MAP > 115 mmHg sürüyorsa kalp hızı ve komorbiditeye göre titre IV antihipertansif (Esmolol, Labetalol, Nikardipin, Klevidipin, Nitrogliserin veya Nitroprussid) başlat.'
+    ],
+    arterialPatterns: [
+      {
+        id: 'normal-bp-htn',
+        label: 'Normal Arteriyel Dalga Formu',
+        subtitle: 'MAP 75–95 mmHg · Normal SVR',
+        mapBadge: '120/75 (MAP ~90 mmHg)',
+        meaning: 'Dengeli sistolik çıkış, normal nabız basıncı (40–45 mmHg) ve orta seviyede dikrotik çentik.',
+        action: 'Hastanın preoperatif bazal MAP değerinin ±%20 aralığında idame et.',
+        tone: 'normal',
+        svgPath: 'M 4 46 L 14 46 L 20 22 L 25 35 L 28 31 L 38 46 L 52 46 L 58 22 L 63 35 L 66 31 L 76 46 L 90 46 L 96 22 L 101 35 L 104 31 L 114 46 L 128 46 L 134 22 L 139 35 L 142 31 L 154 46'
+      },
+      {
+        id: 'sympathetic-surge-htn',
+        label: 'Sempatik Fırtına & Yüksek SVR',
+        subtitle: 'Taşikardi · Dik Çıkış · Yüksek Dikrotik Çentik',
+        mapBadge: '195/115 (MAP ~142 · HR 118)',
+        meaning: 'Çok yüksek sistolik/diyastolik basınç, yukarı kaymış dikrotik çentik ve hızlı ritim: Yüzeyel anestezi/ağrı, hiperkapni, feokromositoma veya turnike ağrısı.',
+        action: 'Önce anestezi/analjeziyi derinleştir; sürüyorsa β-bloker (Esmolol/Labetalol) veya Nikardipin uygula (Feokromositomada tek başına β-bloker YASAK!).',
+        tone: 'danger',
+        svgPath: 'M 4 36 L 10 36 L 15 6 L 19 20 L 22 16 L 29 36 L 37 36 L 42 6 L 46 20 L 49 16 L 56 36 L 64 36 L 69 6 L 73 20 L 76 16 L 83 36 L 91 36 L 96 6 L 100 20 L 103 16 L 110 36 L 118 36 L 123 6 L 127 20 L 130 16 L 137 36 L 145 36 L 150 6 L 155 36'
+      },
+      {
+        id: 'cushing-brady-htn',
+        label: 'Cushing Refleksi / Refleks Bradikardi',
+        subtitle: 'Geniş Nabız Basıncı · Belirgin Bradikardi',
+        mapBadge: '210/105 (MAP ~140 · HR 44)',
+        meaning: 'Yüksek sistolik tepe, geniş nabız basıncı ve yavaş kalp hızı: Akut KİBAS (Cushing triadı) VEYA Fenilefrin/Noradrenalin/Adrenalinli LA emilimine bağlı baroreseptör bradikardi.',
+        action: 'KİBAS’ta MAP’ı agresif düşürme (CPP = MAP − ICP çöker!) ve β-bloker/atropin verme; ozmotik tedavi (Mannitol/%3 NaCl) + normokapni sağla!',
+        tone: 'danger',
+        svgPath: 'M 4 38 L 22 38 L 30 5 L 38 22 L 42 17 L 64 38 L 92 38 L 100 5 L 108 22 L 112 17 L 134 38 L 156 38'
+      },
+      {
+        id: 'underdamped-whip',
+        label: 'Underdamped (Rezonans / Ringing) Artefaktı',
+        subtitle: 'Yapay Sivri Sistolik Pik · Normal MAP',
+        mapBadge: 'SKB 190 (Yapay) · MAP 88 mmHg',
+        meaning: 'Sert/uzun arter hattı veya taşikardiye bağlı rezonans ("catheter whip"): Sistolik basınç yapay olarak 25–40 mmHg yüksek okunurken MAP doğrudur.',
+        action: 'Hızlı yıkama (fast-flush) testinde >2–3 salınım görülür; gereksiz antihipertansif verme, tedaviyi MAP değerine ve NIBP doğrulamasına göre yönet!',
+        tone: 'warning',
+        svgPath: 'M 4 46 L 14 46 L 18 4 L 20 26 L 22 14 L 25 32 L 28 28 L 38 46 L 52 46 L 56 4 L 58 26 L 60 14 L 63 32 L 66 28 L 76 46 L 90 46 L 94 4 L 96 26 L 98 14 L 101 32 L 104 28 L 114 46 L 128 46 L 132 4 L 134 26 L 136 14 L 139 32 L 142 28 L 154 46'
+      }
+    ],
+    differentialDiagnosis: [
+      {
+        condition: 'Yetersiz Anestezi Derinliği, Ağrı (Nosisepsiyon) veya TIVA/Vaporizatör Teknik Hatası',
+        mechanism: 'Sempatoadrenal Deşarj (En Sık Neden)',
+        frequency: 'Çok Yaygın',
+        clues: 'Laringoskopi/entübasyon, cilt insizyonu, sternotomi, periton traksiyonu veya ekstübasyon sırasında taşikardi, hipertansiyon, terleme, gözyaşı, pupil dilatasyonu, BIS > 60 veya TOF derlenmesi. TIVA’da IV kanülün cilt altına (ekstravazasyon) çıkması veya boş vaporizatör!',
+        confirmatoryTest: 'End-tidal volatil konsantrasyonu (MAC), TIVA IV kateter giriş yeri ve pompa kontrolü, BIS/PSI ve TOF ölçümü.',
+        immediateAction: 'Antihipertansif vermeden önce anestezi ve analjeziyi derinleştir (Remifentanil/Fentanil veya Propofol bolusu + MAC artırımı); rejyonel blok yetersizse ek analjezi uygula.'
+      },
+      {
+        condition: 'Akut Hiperkapni (↑PaCO₂) veya Hipoksemi (↓PaO₂)',
+        mechanism: 'Kemoreseptör Aracılı Sempatik Deşarj',
+        frequency: 'Çok Yaygın',
+        clues: 'Yükselmiş EtCO₂ (> 50–55 mmHg) veya FiCO₂ > 0 (tükenmiş soda lime / valf arızası), taşikardi, flushing, bounding nabız; laparoskopik CO₂ insuflasyonu veya hipoventilasyon.',
+        confirmatoryTest: 'Kapnografi (EtCO₂ ve FiCO₂), ventilatör dakika hacmi (V̇E) ve Arteriyel Kan Gazı (PaCO₂, PaO₂).',
+        immediateAction: 'Dakika ventilasyonunu artır, soda lime/devre sorununu çöz, %100 O₂ ile hipoksiyi düzelt. (Hiperkapniyi çözmeden β-bloker vermek kardiyovasküler kollaps yapabilir!).'
+      },
+      {
+        condition: 'İlaç Hatası (Vazopressör Bolusu) veya Cerrahi Sahadan Adrenalin / Kokain Emilimi',
+        mechanism: 'İyatrojenik α/β-Adrenerjik Stimülasyon',
+        frequency: 'Yaygın',
+        clues: 'KBB (septoplasti/FESS), plastik veya nöroşirürji sahasına Adrenalinli lokal anestezik / kokainli tampon uygulanmasından 1–3 dk sonra ani şiddetli hipertansiyon (± taşikardi/aritmi veya Fenilefrin sonrası refleks bradikardi); ya da açık unutulan Noradrenalin/Efedrin hattı.',
+        confirmatoryTest: 'Son 5 dakikada verilen enjektörlerin/infüzyonların ve cerrahi lokal infiltrasyonun kontrolü.',
+        immediateAction: 'İnfüzyonu kapat, cerrahi sahadaki adrenalinli tamponu çıkarttır. Genellikle 5–10 dk içinde sönümlenir; ağır iskemik/serebral risk varsa kısa etkili vazodilatatör (Nitrogliserin 50–100 mcg IV veya Nikardipin/Fentolamin 1–2 mg IV) kullan. Saf α-uyarıda veya kokainde tek başına β-bloker VERME!'
+      },
+      {
+        condition: 'Mesane Distansiyonu (Klempli/Tıkalı Foley), Turnike Ağrısı (45–60 dk) veya Pnömoperitonyum',
+        mechanism: 'Visseral / Somatik Otonomik Refleks',
+        frequency: 'Yaygın',
+        clues: 'Ameliyatın 45–60. dakikasında yeterli MAC ve opioid dozuna rağmen açıklanamayan dirençli hipertansiyon + taşikardi (turnike hipertansiyonu) veya uzun vakada Foley sondasının kıvrılması/takılmaması.',
+        confirmatoryTest: 'Foley torbasının ve suprapubik dolgunluğun kontrolü; turnike süresinin (> 45–60 dk) sorgulanması.',
+        immediateAction: 'Tıkalı/klempli Foley sondasını aç (saniyeler içinde tansiyon düşer!). Turnike ağrısında Ketamin (0.15–0.25 mg/kg IV), derinleştirilmiş anestezi veya cerrahla görüşerek turnikenin erken indirilmesi.'
+      },
+      {
+        condition: 'Preoperatif Antihipertansif Kesilmesi (Rebound: Klonidin / Beta-Bloker) ve Kronik Kontrolsüz HT',
+        mechanism: 'Sempatik Hiperreaktivite & Vasküler Sertlik',
+        frequency: 'Yaygın',
+        clues: 'Preoperatif Klonidin (α₂-agonist) veya β-blokerin aniden kesilmesi sonrası şiddetli rebound hipertansiyon + taşikardi; ya da sabah antihipertansifini almamış kronik hipertansif hastada indüksiyon/entübasyon yanıtı.',
+        confirmatoryTest: 'Preoperatif ilaç öyküsü ve hastanın bazal kan basıncı kayıtları.',
+        immediateAction: 'Labetalol (5–20 mg IV bolus) veya Esmolol (0.5 mg/kg bolus → 50–200 mcg/kg/dk) ya da Deksmedetomidin / Nikardipin ile kademeli kontrol; bazal MAP’ın >%20–25 altına indirme!'
+      },
+      {
+        condition: 'Kafa İçi Basınç Artışı (KİBAS) — Cushing Triadı',
+        mechanism: 'Serebral İskemiye Yanıt (CPP = MAP − ICP)',
+        frequency: 'Acil',
+        clues: 'Kraniyotomi, kafa travması, intrakraniyal kanama veya dik Trendelenburg vakasında ŞİDDETLİ HİPERTANSİYON + BRADİKARDİ + Düzensiz solunum/pupil asimetrisi (Cushing refleksi).',
+        confirmatoryTest: 'Pupil muayenesi (anizokori/dilatasyon), ICP monitörü, optik sinir kılıfı çapı (ONSD > 5.5 mm) veya acil Beyin BT.',
+        immediateAction: 'KAN BASINCINI AGRESİF DÜŞÜRME (yüksek MAP beyni perfüze eden tek güçtür; düşürülürse beyin sapı herniasyonu/iskemisi gelişir!). Başı 30° yükselt, venöz dönüşü rahatlat, Mannitol (0.5–1 g/kg) veya %3 Hipertonik NaCl (2–5 mL/kg) ver, PaCO₂’yi 30–35 mmHg’ye getir ve acil cerrahi dekompresyon sağla.'
+      },
+      {
+        condition: 'Aort Klempi Konulması (Cross-Clamping) veya Karotis Endarterektomi Baroreseptör Disfonksiyonu',
+        mechanism: 'Mekanik Afterload Sıçraması / Barorefleks Kaybı',
+        frequency: 'Acil',
+        clues: 'Abdominal veya torasik aort klempi konulduğu anda klemp proksimalinde ani SVR ve LV ard yükü fırlaması (TEE’de akut LV dilatasyonu/duvar hareket kusuru); karotis cerrahisinde sinüs denervasyonu veya serebral hiperperfüzyon sendromu.',
+        confirmatoryTest: 'Cerrahi klemp zamanlaması, TEE’de sol ventrikül yüklenmesi ve EKG’de ST çökmesi.',
+        immediateAction: 'Klemp konulmadan 1–2 dk önce cerrahla iletişim kurarak kısa etkili vazodilatatör (Sodyum Nitroprussid 0.3–3 mcg/kg/dk, Nitrogliserin veya Nikardipin/Klevidipin) titre et; klemp açılmadan 3–5 dk önce vazodilatatörü kapatıp volüm yükle.'
+      },
+      {
+        condition: 'Feokromositoma / Paraganglioma Kriz Deşarjı (Tanılı veya Gizli/İnsidentaloma)',
+        mechanism: 'Masif Katekolamin (Adrenalin / Noradrenalin) Deşarjı',
+        frequency: 'Acil',
+        clues: 'İndüksiyon, pnömoperitonyum veya retroperitoneal/adrenal tümör manipülasyonu sırasında paroksismal ekstrem hipertansiyon (SKB > 220–250 mmHg), şiddetli taşikardi/VT, solukluk/terleme ve pulmoner ödem.',
+        confirmatoryTest: 'Cerrahi tümör manipülasyonu ile ani başlangıç; postop plazma/idrar metanefrinleri.',
+        immediateAction: 'Cerrahi manipülasyonu DURDUR! Önce α-blokaj / direkt arteriyel vazodilatasyon uygula: Fentolamin (1–5 mg IV bolus), Sodyum Nitroprussid (0.5–5 mcg/kg/dk), Nikardipin (5–15 mg/sa) veya Magnezyum Sülfat (2–4 g IV). KESİN KURAL: Yeterli α-blokaj sağlanmadan ASLA saf β-bloker (veya Labetalol) VERME (karşılanmamış α-vazokonstriksiyon ile ölümcül kalp yetmezliği yapar!).'
+      },
+      {
+        condition: 'Preeklampsi / Eklampsi / HELLP Sendromu (Obstetrik Hipertansif Acil)',
+        mechanism: 'Endotelyal Vazospazm & Serebral Hemoraji Riski',
+        frequency: 'Acil',
+        clues: 'Gebelik (> 20. hafta) veya erken postpartum dönemde SKB ≥ 160 mmHg veya DKB ≥ 110 mmHg, baş ağrısı, görme bozukluğu, hiperrefleksi/klonus, epigastrik ağrı, trombositopeni ve pulmoner ödem.',
+        confirmatoryTest: 'Proteinüri, KCFT yüksekliği, trombosit < 100.000, hemoliz ve nörolojik muayene.',
+        immediateAction: 'Serebral kanamayı önlemek için hedef < 160/105 mmHg: Labetalol (20 mg → 40 mg → 80 mg IV), Hidralazin (5–10 mg IV) veya Nikardipin infüzyonu + Eklampsi profilaksisi/tedavisi için Magnezyum Sülfat (4–6 g IV 20 dk yükleme → 1–2 g/sa infüzyon). Entübasyon öncesi Remifentanil/Esmolol/Nitrogliserin ile basınç pikini mutlaka körelt!'
+      },
+      {
+        condition: 'Otonomik Disrefleksi (T6 ve Üzeri Spinal Kord Yaralanması)',
+        mechanism: 'İnhibe Edilemeyen Spinal Sempatik Refleks',
+        frequency: 'Acil',
+        clues: 'T6 ve üzeri kronik omurilik kesisi olan hastada mesane/bağırsak distansiyonu veya alt ekstremite/ürolojik cerrahi uyarıyla lezyon altında şiddetli vazokonstriksiyon + malign hipertansiyon, lezyon üstünde kızarıklık/terleme ve baroreseptör BRADİKARDİ.',
+        confirmatoryTest: 'Spinal kord yaralanması öyküsü (≥ T6) + mesane/cerrahi pelvik uyarı.',
+        immediateAction: 'Uyarıyı derhal durdur, dolu mesaneyi/kateteri boşalt, hastayı dik oturt (ortostatik düşüş), genel/nöroaksiyel anesteziyi derinleştir ve hızlı etkili direkt vazodilatatör (Nitrogliserin, Nikardipin veya Nitroprussid) uygula.'
+      },
+      {
+        condition: 'Hipermetabolik Krizler (Malign Hipertermi, Tiroid Fırtınası, Serotonin Sendromu) veya İlaç/Ketamin/Ergot',
+        mechanism: 'Hipermetabolik / Farmakolojik Sempatik Fırtına',
+        frequency: 'Acil',
+        clues: 'Hipertansiyona eşlik eden hızlı EtCO₂ tırmanışı, şiddetli taşikardi (> 130–150/dk), hipertermi ve rijidite (MH / Tiroid fırtınası); obstetride Metilergonovin (Methergine) IV verilmesi, Ketamin indüksiyonu veya MAO inhibitörü + İndirekt sempatomimetik (Efedrin) etkileşimi.',
+        confirmatoryTest: 'EtCO₂ trendi, kor sıcaklık, ilaç öyküsü, AKG (asidoz/K⁺) ve serbest T4/TSH.',
+        immediateAction: 'MH’de volatilleri kes + Dantrolen 2.5 mg/kg; Tiroid fırtınasında Esmolol/Propranolol + PTU/Metimazol + Steroid + Soğutma; MAOİ/Ergot krizinde direkt vazodilatatör (Fentolamin / Nikardipin / Nitroprussid).'
+      }
+    ],
+    algorithmicSteps: [
+      {
+        stepNumber: 1,
+        phase: '0–15 sn · Artefakt & İlaç Kontrolü',
+        action: 'Transdüser Seviyesini, NIBP Manşonunu ve Açık Vazopressör Hatlarını Doğrula',
+        detail:
+          'Arter transdüserinin ameliyat masası hareketiyle kalp seviyesinin altına düşüp düşmediğini (her 10 cm düşüş = +7.5 mmHg yapay yükseklik) ve "underdamped" rezonans artefaktını (MAP’a bak!) kontrol et. IV hatta açık kalan Noradrenalin/Fenilefrin veya yanlış enjektör puşesini ve cerrahi adrenalin infiltrasyonunu sorgula.',
+        checkTip: 'Arter eğrisinde SKB 190 ama MAP 85 mmHg ise bu underdamped artefakttır — antihipertansif verme!'
+      },
+      {
+        stepNumber: 2,
+        phase: '15–45 sn · Anestezi, Analjezi & Solunum',
+        action: 'Önce Anestezi/Analjezi Derinliğini Artır ve Hipoksi/Hiperkapniyi Düzelt',
+        detail:
+          'İntraoperatif hipertansiyonun >%70 nedeni ağrı veya yüzeyel anestezidir. MAC’ı veya Propofol/Remifentanil/Fentanil dozunu artır; TIVA damar yolunun sağlam olduğunu gör. Eşzamanlı olarak SpO₂, EtCO₂, FiCO₂ ve TOF değerlerini kontrol ederek hiperkapni veya uyanık paraliziyi gider.',
+        checkTip: 'Yüzeyel anesteziyi β-blokerle maskelemek intraoperatif farkındalık (awareness) riskini artırır!'
+      },
+      {
+        stepNumber: 3,
+        phase: '45–90 sn · Mekanik & Cerrahi Tetikleyiciler',
+        action: 'Foley Sondası, Turnike, Aort Klempi ve KİBAS (Cushing) Taraması',
+        detail:
+          'Foley sondasının kıvrılıp kıvrılmadığını kontrol et (mesane distansiyonu!), turnike süresini (> 45–60 dk) ve pnömoperitonyum basıncını değerlendir. Hipertansiyona BRADİKARDİ eşlik ediyorsa KİBAS (Cushing triadı) ve otonomik disrefleksiyi düşün.',
+        checkTip: 'KİBAS (Cushing) varlığında kan basıncını hızlı düşürmek beyin perfüzyonunu (CPP) sıfırlar!'
+      },
+      {
+        stepNumber: 4,
+        phase: '1–3 dk · İV Antihipertansif Seçimi (HR & Organ Hedefli)',
+        action: 'Kalp Hızı ve Klinik Senaryoya Göre Titre Edilebilir İV Ajan Başlat',
+        detail:
+          'Birincil nedenler çözülmesine rağmen SKB > 180 / MAP > 115 mmHg ise:\n• Taşikardi + Hipertansiyon: Esmolol (0.5 mg/kg IV bolus → 50–200 mcg/kg/dk; yarı ömür 9 dk) veya Labetalol (5–20 mg IV yavaş bolus, 5–10 dk’da bir; α:β = 1:7, astım/AV blokta kaçın).\n• Normal/Bradikardi + Hipertansiyon (veya Nöro/Renal/Kalsiyum kanalı): Nikardipin (5 mg/sa infüzyon, maks 15 mg/sa veya 100–500 mcg mikro-bolus) ya da Klevidipin (1–2 mg/sa; esterazla yıkılır, yarı ömür 1 dk).\n• Miyokard İskemisi / Pulmoner Ödem / Volüm Yükü: Nitrogliserin (50–100 mcg IV puşe veya 5–200 mcg/dk infüzyon).\n• Aort Klempi / Diseksiyon (β-bloker sonrası) / Feokromositoma: Sodyum Nitroprussid (0.3–3 mcg/kg/dk; ışıktan koru, siyanür sınırına dikkat) veya Fentolamin (1–5 mg IV).',
+        checkTip: 'Aort diseksiyonunda refleks taşikardi ve dP/dt artışını önlemek için vazodilatatörden ÖNCE mutlaka Esmolol (HR < 60/dk) ver!'
+      },
+      {
+        stepNumber: 5,
+        phase: '3–15 dk · Kontrollü Hedef & Otoregülasyon',
+        action: 'MAP’ı Bazale Göre Kademeli (%20–25) İndir ve Organ İskemisini İzle',
+        detail:
+          'Kronik hipertansif hastalarda serebral ve renal otoregülasyon eğrisi sağa kaymıştır. Aort diseksiyonu veya akut sol kalp yetmezliği dışında MAP’ı ilk saatte >%20–25’ten fazla düşürme ve hastanın preoperatif bazal MAP değerinin altına inme. 5-derivasyonlu EKG’de ST segmentlerini ve cerrahi saha kanamasını takip et.',
+        checkTip: 'Kronik hipertansif (bazal 170/100) hastada MAP’ı aniden 65 mmHg’ye düşürmek inme ve AKI yapar!'
+      },
+      {
+        stepNumber: 6,
+        phase: 'PACU & Postop · Geçiş Planı',
+        action: 'Derlenme Odasında (PACU) Ağrı/Mesane/Hipotermi Kontrolü ve Oral Tedaviye Geçiş',
+        detail:
+          'PACU’da postoperatif hipertansiyonun en sık nedenleri ağrı, dolu mesane, titreme (hipotermi), hipoksi/hiperkapni ve kronik ilaçların alınmamasıdır. Nedenleri çöz, gereğinde kısa etkili IV infüzyondan hastanın kendi oral antihipertansif rejimine kademeli geçiş yap.',
+        checkTip: 'Tiroid fırtınası, feokromositoma, eklampsi veya malign hipertansiyon olgularını doğrudan YBÜ’ye devret.'
+      }
+    ],
+    pearlsAndPitfalls: {
+      pearls: [
+        'Altın Kural: İntraoperatif hipertansiyonda antihipertansif enjektörüne uzanmadan önce DAİMA 4 soruyu yanıtla: (1) Hasta yüzeyel mi / ağrısı mı var? (2) Hipoksik veya hiperkapnik mi? (3) Mesanesi mi dolu / turnike mi sıkıyor? (4) Ölçüm artefaktı veya yanlış vazopressör puşesi mi?',
+        'Bradikardi + Hipertansiyon ikilisi aksi kanıtlanana dek 3 mekanizmayı düşündürür: (1) Akut KİBAS — Cushing Refleksi, (2) Saf α₁-agonist (Fenilefrin/Adrenalinli LA) baroreseptör refleksi, (3) T6 üzeri omurilik yaralanmasında Otonomik Disrefleksi.',
+        'Feokromositoma veya kokain toksisitesinde sempatik kriz varken tek başına β-bloker (veya β etkisi baskın Labetalol) verilmesi β₂-vazodilatasyonu ortadan kaldırıp karşılanmamış α₁-vazokonstriksiyon ile ölümcül hipertansif kriz ve akut sol kalp yetmezliği yapar — önce Fentolamin/Nikardipin/Nitroprussid!',
+        'Preeklampsi/eklampside hedef kan basıncı normotansiyon değil, serebral hemorajiyi önleyecek < 160/105 mmHg seviyesidir; aşırı düşüş uteroplasental perfüzyonu bozar (ACEİ, ARB ve Nitroprussid gebede fetotoksiktir / kaçınılır).'
+      ],
+      pitfalls: [
+        'Yüzeyel anestezi veya uyanık paralizideki hastaya anestezik/opioid vermek yerine Esmolol/Labetalol vererek taşikardi ve hipertansiyonu maskelemek (intraoperatif farkındalık — awareness ve PTSD felaketi!).',
+        'KİBAS (Cushing refleksi) olan nöroşirürji/travma hastasında yüksek tansiyonu Nitroprussid/Nikardipin ile hızla normale indirmek (CPP = MAP − ICP formülü gereği serebral kan akımını kesip herniasyonu hızlandırır!).',
+        'Hidralazin’i akut intraoperatif hipertansiyonda ilk tercih olarak kullanmak: Etkisi geç başlar (10–20 dk), pik etkisi öngörülemez, yarı ömrü uzundur ve refleks taşikardi/miyokard iskemisi tetikler (obstetrik dışı krizde kısa etkili Esmolol/Nikardipin/Klevidipin üstündür).',
+        'Underdamped (rezonans/kamçı) arteriyel dalga formunda yalnızca yapay yüksek sistolik değere (ör. 190 mmHg) bakıp MAP normalken (85 mmHg) vazodilatatör başlayarak gerçek derin hipotansiyona yol açmak.'
+      ]
+    },
+    equipmentChecklist: [
+      'Kısa etkili IV β-blokerler: Esmolol (10 mg/mL) ve Labetalol (5 mg/mL)',
+      'Dihidropiridin kalsiyum kanal blokerleri: Nikardipin (0.1–0.2 mg/mL infüzyon) veya Klevidipin (0.5 mg/mL)',
+      'Nitrat vazodilatatörler: Nitrogliserin (50 mcg/mL dilüsyon & infüzyon) ve Sodyum Nitroprussid (ışıktan korumalı set) + Fentolamin (feokromositoma için)',
+      'Preeklampsi / Feokromositoma / Turnike krizleri için Magnezyum Sülfat (%15 MgSO₄ ampul)',
+      'Anestezi derinliği (BIS / PSI) & Nöromüsküler (TOF) monitörü + Kapnografi (EtCO₂/FiCO₂)',
+      'İnvaziv arteriyel basınç hattı, doğru boyutta NIBP manşonları ve Foley sonda açıklık kontrolü'
+    ],
+    references: [
+      {
+        citation:
+          'Whelton PK, Carey RM, Aronow WS, et al. 2017 ACC/AHA/AAPA/ABC/ACCP/AGS/APhA/ASH/ASPC/NMA/PCNA Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults (Hypertensive Crises: Emergencies and Urgencies). J Am Coll Cardiol. 2018;71(19):e127–e248.',
+        pmid: '29146535'
+      },
+      {
+        citation:
+          'Sessler DI, Bloomstone JA, Aronson S, et al.; Perioperative Quality Initiative (POQI) 3 Workgroup. Perioperative Quality Initiative consensus statement on intraoperative blood pressure, risk and outcomes for elective surgery. Br J Anaesth. 2019;122(5):563–574.',
+        pmid: '30916004'
+      },
+      {
+        citation:
+          'Lenders JWM, Duh QY, Eisenhofer G, et al.; Endocrine Society. Pheochromocytoma and paraganglioma: an endocrine society clinical practice guideline. J Clin Endocrinol Metab. 2014;99(6):1915–1942.',
+        pmid: '24893135'
+      },
+      {
+        citation:
+          "Gropper MA, Eriksson LI, Fleisher LA, et al. (Eds.). Miller's Anesthesia. 10th ed. Elsevier; 2024 & Hines RL, Marschall KE. Stoelting's Anesthesia and Co-Existing Disease. 8th ed. Elsevier; 2022. (Perioperative Hypertension, Autonomic Hyperreflexia, Pheochromocytoma & Preeclampsia)."
+      }
+    ],
+    tags: [
+      'intraoperatif hipertansiyon',
+      'hipertansiyon',
+      'hipertansif kriz',
+      'yüksek tansiyon',
+      'esmolol',
+      'labetalol',
+      'nikardipin',
+      'klevidipin',
+      'nitrogliserin',
+      'nitroprussid',
+      'fentolamin',
+      'cushing refleksi',
+      'kibas',
+      'feokromositoma',
+      'preeklampsi',
+      'eklampsi',
+      'otonomik disrefleksi',
+      'turnike ağrısı',
+      'aort klempi',
+      'underdamped',
+      'yüzeyel anestezi',
       'troubleshooting'
     ]
   }

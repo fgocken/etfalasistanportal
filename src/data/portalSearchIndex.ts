@@ -1676,6 +1676,23 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'emergency-fat-embolism',
+    title: 'Yağ Embolizm Sendromu (FES) Kriz Protokolü',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'FES · Gurd & Schonfeld',
+    description: '10 aşamalı kriz protokolü: Uzun kemik kırığı ve reaming/sementleme sonrası hipoksemi + konfüzyon + peteşi triadı, Gurd/Schonfeld kriterleri, Beyin DWI MRG Starfield, ARDSNet + övolemi, BCIS ayrımı ve Heparin yasağı.',
+    keywords: [
+      'yağ embolisi', 'yağ embolizm sendromu', 'fat embolism', 'fes', 'gurd wilson', 'schonfeld',
+      'lindeque', 'starfield', 'yıldızlı gökyüzü', 'peteşiyal döküntü', 'peteşi', 'uzun kemik kırığı',
+      'femur kırığı', 'tibia kırığı', 'intramedüller çivileme', 'reaming', 'artroplasti',
+      'bcis', 'kemik çimentosu implantasyon sendromu', 'serbest yağ asidi', 'lipoprotein lipaz',
+      'purtscher retinopatisi', 'hasar kontrol ortopedisi', 'dco', 'heparin yasağı', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'fes',
+    popular: true
+  },
+  {
     id: 'emergency-etco2-elevation',
     title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Yükselmesi',
     category: 'Kılavuzlar & Protokoller',
@@ -1771,6 +1788,38 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     ],
     tabId: 'emergencies',
     subId: 'emergence-delay',
+    popular: true
+  },
+  {
+    id: 'emergency-hypotension',
+    title: 'İntraoperatif Hipotansiyon (IOH — MAP < 65 mmHg)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · MAP ↓',
+    description: 'MAP < 65 mmHg hemodinamik kriz yönetimi: İnvaziv arter dalga formu (dikrotik çentik & PPV >%13), SVR/Preload/Kontraktilite/Obstrüktif şok ayrımı, Efedrin/Fenilefrin/Noradrenalin/Vazopressin seçimi, Bezold-Jarisch ve ACEİ/ARB vazoplejisi.',
+    keywords: [
+      'intraoperatif hipotansiyon', 'hipotansiyon', 'ioh', 'map 65', 'ortalama arter basıncı', 'tansiyon düşmesi',
+      'vazopleji', 'hipovolemi', 'ppv', 'svv', 'nabız basıncı varyasyonu', 'dikrotik çentik', 'efedrin',
+      'fenilefrin', 'noradrenalin', 'vazopressin', 'bezold jarisch', 'spinal hipotansiyon', 'acei', 'arb',
+      'oto peep', 'flebostatik eksen', 'beach chair', 'mins', 'aki', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    subId: 'hypotension',
+    popular: true
+  },
+  {
+    id: 'emergency-hypertension',
+    title: 'İntraoperatif Hipertansiyon & Hipertansif Kriz',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Troubleshooting · KB ↑',
+    description: 'SKB ≥ 160–180 / DKB ≥ 100–110 mmHg yönetimi: Yüzeyel anestezi, hiperkapni, ilaç hatası, mesane/turnike, KİBAS (Cushing refleksi), feokromositoma, preeklampsi, otonomik disrefleksi, aort klempi ve Esmolol/Labetalol/Nikardipin/Nitrogliserin/Nitroprussid seçimi.',
+    keywords: [
+      'intraoperatif hipertansiyon', 'hipertansiyon', 'hipertansif kriz', 'yüksek tansiyon', 'esmolol',
+      'labetalol', 'nikardipin', 'klevidipin', 'nitrogliserin', 'sodyum nitroprussid', 'fentolamin',
+      'cushing refleksi', 'kibas', 'feokromositoma', 'preeklampsi', 'eklampsi', 'otonomik disrefleksi',
+      'turnike ağrısı', 'aort klempi', 'underdamped', 'yüzeyel anestezi', 'anestezi acili', 'troubleshooting'
+    ],
+    tabId: 'emergencies',
+    subId: 'hypertension',
     popular: true
   },
 
