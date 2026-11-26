@@ -99,6 +99,9 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
           }
         }, 120);
       }
+    } else if (initialBlockId === null) {
+      setExpandedBlockId(null);
+      setExpandedNeuraxialId(null);
     }
   }, [initialBlockId]);
 

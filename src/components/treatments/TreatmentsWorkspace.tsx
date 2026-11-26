@@ -1817,8 +1817,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
   const [naViewMode, setNaViewMode] = useState<SodiumViewMode>('all');
 
   useEffect(() => {
-    if (initialProtocolId !== undefined && initialProtocolId !== null) {
-      setActiveProtocolId(initialProtocolId);
+    if (initialProtocolId !== undefined) {
+      setActiveProtocolId(initialProtocolId || null);
     }
   }, [initialProtocolId]);
 
@@ -1832,7 +1832,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       }
     };
     window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleHash);
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('popstate', handleHash);
+    };
   }, []);
 
   const handleSelectProtocol = (id: string) => {

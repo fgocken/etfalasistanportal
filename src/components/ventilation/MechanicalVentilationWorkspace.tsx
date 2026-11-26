@@ -87,7 +87,11 @@ export const MechanicalVentilationWorkspace: React.FC<MechanicalVentilationWorks
       }
     };
     window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleHash);
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('popstate', handleHash);
+    };
   }, [onActiveCardChange]);
 
   const handleSelectCard = (cardId: VentilationCardId) => {

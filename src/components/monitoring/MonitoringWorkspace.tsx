@@ -1365,7 +1365,11 @@ export const MonitoringWorkspace: React.FC<MonitoringWorkspaceProps> = ({
       }
     };
     window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleHash);
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('popstate', handleHash);
+    };
   }, [onActiveModuleChange]);
 
   const setActiveModuleId = (nextId: MonitoringModuleId | null) => {

@@ -35,7 +35,7 @@ import { PerioperativeAntithromboticMatrixInfographic } from './PerioperativeAnt
 import { PONVInfographic } from './PONVInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { PortalLink } from '../common/PortalLink';
-import { buildHashHref, updateHashRoute } from '../../utils/deepLink';
+import { buildHashHref, parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 
 interface InfographicsViewProps {
   isDark: boolean;
@@ -406,12 +406,29 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
     return normalizeId(initialInfographicId);
   });
 
-  // Sync state if initialInfographicId changes (e.g. hash navigation)
+  // Sync state if initialInfographicId changes (e.g. hash navigation or Back/ESC)
   React.useEffect(() => {
-    if (initialInfographicId) {
+    if (initialInfographicId !== undefined) {
       setActiveInfographicId(normalizeId(initialInfographicId));
     }
   }, [initialInfographicId]);
+
+  React.useEffect(() => {
+    const handleRouteSync = () => {
+      const route = parseHashRoute();
+      if (route.type === 'infografik' && route.id) {
+        setActiveInfographicId(normalizeId(route.id));
+      } else if (route.type === 'arac' && route.id === 'infographics' && !route.subId) {
+        setActiveInfographicId(null);
+      }
+    };
+    window.addEventListener('hashchange', handleRouteSync);
+    window.addEventListener('popstate', handleRouteSync);
+    return () => {
+      window.removeEventListener('hashchange', handleRouteSync);
+      window.removeEventListener('popstate', handleRouteSync);
+    };
+  }, []);
 
   const handleSelectInfographic = (id: string | null) => {
     setActiveInfographicId(id);

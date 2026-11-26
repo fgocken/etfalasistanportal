@@ -66,7 +66,7 @@ import { QuestionBankWorkspace } from './question-bank/QuestionBankWorkspace';
 import { BasicsWorkspace } from './basics/BasicsWorkspace';
 import { CampusWeatherBar } from './campus/CampusWeatherBar'; /* [MODULAR_CAMPUS_WIDGET: Unified Weather & Nav Bar] */
 import { ShareLinkButton } from './common/ShareLinkButton';
-import { HashRouteType, ParsedHashRoute, updateHashRoute, parseHashRoute } from '../utils/deepLink';
+import { HashRouteType, ParsedHashRoute, updateHashRoute, parseHashRoute, getParentRoute } from '../utils/deepLink';
 
 export type ToolTabId = 'calculator' | 'abg' | 'mechanical-ventilation' | 'monitoring' | 'basics' | 'intraop' | 'infusion' | 'preop' | 'airway' | 'treatments' | 'nerve-blocks' | 'vascular-access' | 'emergencies' | 'infographics' | 'podcast' | 'question-bank' | 'contacts' | 'roster' | 'schedule' | 'icu' | 'procedures' | 'ekt' | 'references';
 
@@ -569,7 +569,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     return 'tools';
   });
 
-  // Keep activeTab synced if initialRoute changes via hash
+  // Keep activeTab synced if initialRoute changes via hash / Back / ESC
   useEffect(() => {
     const route = (initialRoute?.type && initialRoute.id) ? initialRoute : parseHashRoute();
     if (route?.type === 'infografik') {
@@ -583,9 +583,29 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
       setSelectedNerveBlockId(route.id || null);
     } else if (route?.type === 'arac' && (route.id === 'dashboard' || route.id === 'tools')) {
       setActiveTab('tools');
+      setSelectedTreatmentProtocolId(null);
+      setSelectedInfographicId(null);
+      setSelectedEmergencyProtocolId(null);
+      setSelectedNerveBlockId(null);
+      setSelectedPreopToolId(null);
+      setSelectedAirwayCardId(null);
+      setSelectedBasicsCardId(null);
+      setSelectedVentilationCardId(null);
+      setSelectedMonitoringModuleId(null);
+      setSelectedProcedureId(null);
+      setSelectedVascularSubId(null);
+      setSelectedIcuSubId(null);
     } else if (route?.type === 'arac' && route.id && route.id in ALL_CLINICAL_TOOLS) {
       setActiveTab(route.id as ToolTabId);
-      if (route.id === 'nerve-blocks') {
+      if (route.id === 'treatments') {
+        setSelectedTreatmentProtocolId(route.subId || null);
+      } else if (route.id === 'infographics') {
+        setSelectedInfographicId(route.subId || null);
+      } else if (route.id === 'preop') {
+        setSelectedPreopToolId((route.subId as PreopToolId) || null);
+      } else if (route.id === 'airway') {
+        setSelectedAirwayCardId((route.subId as AirwayCardId) || null);
+      } else if (route.id === 'nerve-blocks') {
         setSelectedNerveBlockId(route.subId || null);
       } else if (route.id === 'basics') {
         setSelectedBasicsCardId(route.subId || null);
@@ -661,7 +681,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     }
     if (tabId === 'tools') {
       updateHashRoute('arac', 'dashboard');
-    } else if (tabId !== 'infographics') {
+    } else if (!(tabId === 'infographics' && options?.preserveInfographic)) {
       updateHashRoute('arac', tabId);
     }
   };
@@ -856,7 +876,7 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
     };
   }, []);
 
-  // Global keyboard shortcut for quick search: ⌘K, Ctrl+K or '/'
+  // Global keyboard shortcuts: ⌘K / Ctrl+K / '/' quick search + ESC one-step back (stops at dashboard)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -868,11 +888,51 @@ export const PortalWorkspace: React.FC<PortalWorkspaceProps> = ({
           e.preventDefault();
           setIsSearchModalOpen(true);
         }
+      } else if (e.key === 'Escape') {
+        if (e.defaultPrevented) return;
+        // 1. Önce açık modal / arama / lightbox varsa onları kapat
+        if (isSearchModalOpen) {
+          e.preventDefault();
+          setIsSearchModalOpen(false);
+          return;
+        }
+        if (isRosterModalOpen) {
+          e.preventDefault();
+          setIsRosterModalOpen(false);
+          return;
+        }
+        if (document.querySelector('[role="dialog"], [aria-modal="true"]')) {
+          return;
+        }
+        // 2. Metin girişi odaklıysa sayfadan çıkmak yerine odağı kaldır
+        const activeEl = document.activeElement as HTMLElement | null;
+        if (
+          activeEl &&
+          (activeEl.tagName === 'INPUT' ||
+            activeEl.tagName === 'TEXTAREA' ||
+            activeEl.tagName === 'SELECT' ||
+            activeEl.isContentEditable)
+        ) {
+          activeEl.blur();
+          return;
+        }
+        // 3. Bir üst seviyeye geri dön (en geri: dashboard)
+        const currentRoute = parseHashRoute();
+        const parent = getParentRoute(currentRoute);
+        if (parent) {
+          e.preventDefault();
+          updateHashRoute(parent.type, parent.id);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (activeTab !== 'tools') {
+          e.preventDefault();
+          handleSelectTab('tools');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isSearchModalOpen]);
+  }, [isSearchModalOpen, isRosterModalOpen, activeTab]);
 
   // Declarative deep-link dispatcher: driven directly by item.tabId + item.subId
   const handleSelectSearchResult = (item: PortalSearchItem) => {

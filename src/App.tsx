@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { PortalWorkspace } from './components/PortalWorkspace';
 import { DisclaimerView } from './components/DisclaimerView';
-import { parseHashRoute, ParsedHashRoute, updateHashRoute, HashRouteType } from './utils/deepLink';
+import {
+  buildCleanPath,
+  parseHashRoute,
+  ParsedHashRoute,
+  trackRoutePageView,
+  updateHashRoute,
+  HashRouteType
+} from './utils/deepLink';
 import { initFirestoreRealtimeSync, stopFirestoreRealtimeSync } from './services/firestoreSyncService';
 import { testConnection } from './firebase';
 
@@ -18,6 +25,7 @@ export default function App() {
     return 'welcome';
   });
   const [previousView, setPreviousView] = useState<'welcome' | 'portal'>('welcome');
+  const lastTrackedPathRef = useRef<string | null>(null);
 
   // Theme state: defaults to dark or stored preference
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -70,16 +78,37 @@ export default function App() {
       }
     };
 
+    const syncAnalytics = (route: ParsedHashRoute) => {
+      const routePath =
+        route.type && route.id
+          ? buildCleanPath(route.type, route.id, route.subId)
+          : window.location.pathname || '/';
+      if (lastTrackedPathRef.current !== routePath) {
+        lastTrackedPathRef.current = routePath;
+        trackRoutePageView(route);
+      }
+    };
+
     const handleRouteChange = () => {
-      syncCanonicalMeta();
       const route = parseHashRoute();
+      // Eski #tedavi=... / #infografik=... / #arac=... / #blok=... linklerini temiz pathname'e normalize et (sayfa içi #sec-... anchor'larına dokunma!)
+      const isLegacyRouteHash = /^#(?:tedavi|ilac|ilaç|protocol|blok|block|infografik|infographic|arac|araç|tool)=/i.test(
+        window.location.hash
+      );
+      if (route.type && route.id && isLegacyRouteHash) {
+        const cleanId = route.subId ? `${route.id}&sub=${route.subId}` : route.id;
+        updateHashRoute(route.type, cleanId, { replace: true });
+      }
+      syncCanonicalMeta();
+      syncAnalytics(route);
       if (route.type !== null && route.id !== null) {
         setInitialRoute(route);
         setCurrentView('portal');
       }
     };
 
-    syncCanonicalMeta();
+    // İlk açılışta canonical + GA4/GTM sanal sayfa görüntülemesi + eski hash normalizasyonu
+    handleRouteChange();
     window.addEventListener('hashchange', handleRouteChange);
     window.addEventListener('popstate', handleRouteChange);
     return () => {
@@ -109,6 +138,19 @@ export default function App() {
     setCurrentView(previousView);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    if (currentView !== 'disclaimer') return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !e.defaultPrevented) {
+        e.preventDefault();
+        setCurrentView(previousView);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [currentView, previousView]);
 
   const handleBackToWelcome = () => {
     updateHashRoute(null, null);
