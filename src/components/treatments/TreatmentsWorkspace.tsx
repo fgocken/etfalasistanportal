@@ -56,13 +56,16 @@ import { NicardipineProtocol } from './NicardipineProtocol';
 import { GlycerylTrinitrateProtocol } from './GlycerylTrinitrateProtocol';
 import { SodiumNitroprussideProtocol } from './SodiumNitroprussideProtocol';
 import { PheniramineProtocol } from './PheniramineProtocol';
+import { PantoprazoleProtocol } from './PantoprazoleProtocol';
+import { AntimicrobialMonographView } from './AntimicrobialMonographView';
+import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
 interface Props {
   isDark: boolean;
   initialProtocolId?: string | null;
 }
 
-type TreatmentCategory = 'medications' | 'general_anesthetics' | 'sedation' | 'antidotes' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
+type TreatmentCategory = 'medications' | 'general_anesthetics' | 'antihypertensives' | 'antibiotics' | 'sedation' | 'antidotes' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 type SodiumViewMode = 'all' | 'calc' | 'infographic';
@@ -472,7 +475,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'lidocaine',
     category: 'medications',
-    categories: ['medications', 'vasoactive'],
+    categories: ['medications'],
     categoryLabel: 'Lokal / Antiaritmik',
     badge: 'Aritmal · Jetokain · Sınıf Ib',
     title: 'Lidokain',
@@ -874,7 +877,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'atropine',
     category: 'medications',
-    categories: ['medications', 'vasoactive'],
+    categories: ['medications'],
     categoryLabel: 'Antikolinerjik · M₁–M₅',
     badge: 'ACLS 1 mg · NMB · Antidot',
     title: 'Atropin Sülfat (ATROPINE)',
@@ -925,7 +928,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'ephedrine',
     category: 'medications',
-    categories: ['medications', 'vasoactive'],
+    categories: ['medications'],
     categoryLabel: 'Vazopresör · Karma α/β Agonist',
     badge: '5 mg/mL · Taşiflaksi · Obstetrik',
     title: 'Efedrin Hidroklorür (EPHEDRINE)',
@@ -1231,7 +1234,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'hydrocortisone',
     category: 'medications',
-    categories: ['medications', 'vasoactive'],
+    categories: ['medications'],
     categoryLabel: 'Kortikosteroid (1:1) · Septik Şok & Adrenal Kriz',
     badge: 'Septik Şok 200 mg/gün · Adrenal Kriz 100 mg',
     title: 'Hidrokortizon Sodyum Süksinat (HYDROCORTISONE · Hydrocort-Liyo)',
@@ -1486,7 +1489,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'esmolol',
     category: 'vasoactive',
-    categories: ['vasoactive', 'medications'],
+    categories: ['antihypertensives', 'vasoactive', 'medications'],
     categoryLabel: 'Vazoaktif · Ultra-Kısa Kardiyoselektif β₁-Bloker',
     badge: 't½ 9 dk · Eritrosit Esteraz · Brevibloc®',
     title: 'Esmolol (ESmolol · Brevibloc®)',
@@ -1537,7 +1540,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'nicardipine',
     category: 'vasoactive',
-    categories: ['vasoactive', 'medications'],
+    categories: ['antihypertensives', 'vasoactive', 'medications'],
     categoryLabel: 'Vazoaktif · IV Vasküler Selektif KKB',
     badge: '5–15 mg/sa · ATACH-2 / İKH / Preeklampsi',
     title: 'Nikardipin (niCARdipine · Cardene® / Loxen®)',
@@ -1588,7 +1591,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'glyceryl-trinitrate',
     category: 'vasoactive',
-    categories: ['vasoactive', 'medications'],
+    categories: ['antihypertensives', 'vasoactive', 'medications'],
     categoryLabel: 'Vazoaktif · Organik Nitrat / NO Donörü',
     badge: 'Perlinganit® 1 mg/mL · Venodilatatör & Tokoliz',
     title: 'Gliserol Trinitrat (Nitrogliserin · Perlinganit®)',
@@ -1639,7 +1642,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'sodium-nitroprusside',
     category: 'vasoactive',
-    categories: ['vasoactive', 'medications'],
+    categories: ['antihypertensives', 'vasoactive', 'medications'],
     categoryLabel: 'Vazoaktif · Dengeli Direkt NO Donörü (High-Alert)',
     badge: 'Nipruss® · 30–60 sn · Siyanür Güvenliği',
     title: 'Sodyum Nitroprussid (Nipruss® · SNP)',
@@ -1737,7 +1740,72 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-purple-500/30'
       }
     ]
-  }
+  },
+  {
+    id: 'pantoprazole',
+    category: 'medications',
+    categories: ['medications'],
+    categoryLabel: 'Proton Pompa İnhibitörü (PPI · IV / PO)',
+    badge: 'Pantpas® / Pulcet® 40 mg · REVISE / SUP-ICU',
+    title: 'Pantoprazol Sodyum (PANTOprazole · Pantpas® / Pulcet®)',
+    shortDesc: 'En düşük CYP2C19 inhibisyonuna sahip IV/PO proton pompa inhibitörü; akut üst GİS kanaması (80 mg bolus → 8 mg/sa vs 40 mg q12sa), YBÜ stres ülseri profilaksisi (SUP-ICU & REVISE NEJM 2024), aspirasyon profilaksisi ve pH 9–10,5 Y-site güvenliği.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Akut Üst GİS Kanaması (ACG/ESGE)',
+        value: '80 mg IV → 8 mg/sa (72 sa)',
+        subtext: 'Alternatif: 40 mg IV q12sa (Sachar)',
+        tooltip: '80 mg / 100 mL SF (0,8 mg/mL → 10 mL/sa) veya 40 mg IV q12sa aralıklı rejim non-varisiyel yüksek riskli ülser kanamasında etkindir',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'YBÜ Stres Ülseri (REVISE 2024)',
+        value: '40 mg IV q24sa (Yüksek Risk)',
+        subtext: 'Mekanik Ventilasyon / Koagülopati',
+        tooltip: 'REVISE (NEJM 2024) ve SUP-ICU (NEJM 2018): Klinik anlamlı GİS kanamasını azaltır, mortaliteye nötrdür; risk geçince kesilmelidir',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Klopidogrel & CYP2C19 Avantajı',
+        value: 'En Düşük CYP2C19 İnhibisyonu',
+        subtext: 'Omeprazol Yerine 1. Tercih PPI',
+        tooltip: 'Klopidogrelin aktif metabolite dönüşümünü anlamlı bozmaz; dual antiplatelet kullanan hastalarda tercih edilen PPI’dir',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'Alkali pH & Uzun Süreli Riskler',
+        value: 'pH 9–10,5 · Mg²⁺ / C. diff / Beers',
+        subtext: 'Midazolam / NA / Vankomisin Uyumsuz',
+        tooltip: 'Alkali çözelti nedeniyle Y-site çökelti yapar (ayrı lümen/SF flush); kronik kullanımda hipomagnezemi, C. difficile ve AIN riski izlenir',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
+  ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
+    id: abx.id,
+    category: 'antibiotics',
+    categories: ['antibiotics', 'medications'],
+    categoryLabel: abx.cardCategoryLabel,
+    badge: abx.cardBadge,
+    title: abx.cardTitle,
+    shortDesc: abx.cardShortDesc,
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: abx.accentColor,
+    highlightsHeader: 'YBÜ & Perioperatif Temel Parametreler:',
+    highlights: abx.cardHighlights
+  }))
 ];
 
 export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId }) => {
@@ -1788,6 +1856,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
 
   const medCount = getCategoryCount('medications');
   const generalAnestheticsCount = getCategoryCount('general_anesthetics');
+  const antihypertensivesCount = getCategoryCount('antihypertensives');
+  const antibioticsCount = getCategoryCount('antibiotics');
   const sedationCount = getCategoryCount('sedation');
   const antidotesCount = getCategoryCount('antidotes');
   const diureticsCount = getCategoryCount('diuretics');
@@ -1876,10 +1946,17 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     feniramin: 'pheniramine',
     'feniramin-maleat': 'pheniramine',
     'pheniramine-maleate': 'pheniramine',
-    avil: 'pheniramine'
+    avil: 'pheniramine',
+    pantoprazol: 'pantoprazole',
+    pantpas: 'pantoprazole',
+    pulcet: 'pantoprazole',
+    panto: 'pantoprazole',
+    protonix: 'pantoprazole',
+    ...ANTIMICROBIAL_ALIAS_MAP
   };
-  const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
+  const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
+  const activeAntimicrobial = normalizedProtocolId ? ANTIMICROBIAL_MAP[normalizedProtocolId] : undefined;
 
   return (
     <div className="space-y-6">
@@ -2075,7 +2152,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               </span>
             </button>
 
-            {/* 4. İnfüzyon & Vazoaktif Protokolleri */}
+            {/* Sürekli İnfüzyon & Vazoaktif Protokolleri */}
             <button
               type="button"
               onClick={() => setActiveCategory('vasoactive')}
@@ -2090,7 +2167,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               }`}
             >
               <Syringe className="w-3.5 h-3.5 text-cyan-500" />
-              <span>İnfüzyon &amp; Vazoaktif Protokolleri</span>
+              <span>Sürekli İnfüzyon &amp; Vazoaktif Protokolleri</span>
               <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-bold ${
                 vasoactiveCount > 0 
                   ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400' 
@@ -2100,7 +2177,49 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               </span>
             </button>
 
-            {/* 5. Hemostaz & Kan Transfüzyon Yönetimi */}
+            {/* Anti-hipertansifler */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('antihypertensives')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'antihypertensives'
+                  ? isDark
+                    ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/50 shadow-xs'
+                    : 'bg-indigo-50 text-indigo-800 border border-indigo-400 shadow-xs'
+                  : isDark
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent'
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Anti-hipertansifler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-mono font-bold">
+                {antihypertensivesCount} İlaç
+              </span>
+            </button>
+
+            {/* Antibiyotikler (YBÜ & Perioperatif) */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('antibiotics')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'antibiotics'
+                  ? isDark
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-xs'
+                    : 'bg-emerald-50 text-emerald-800 border border-emerald-400 shadow-xs'
+                  : isDark
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent'
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <FlaskConical className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Antibiyotikler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono font-bold">
+                {antibioticsCount} Ajan
+              </span>
+            </button>
+
+            {/* Hemostaz & Kan Transfüzyon Yönetimi */}
             <button
               type="button"
               onClick={() => setActiveCategory('hemostasis')}
@@ -2584,6 +2703,16 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <PheniramineProtocol isDark={isDark} />
       )}
 
+      {/* GÖRÜNÜM 35: PANTOPRAZOL SODYUM MONOGRAFİSİ & GİS KANAMA / YBÜ SUP / ASPİRASYON HESAPLAYICISI */}
+      {normalizedProtocolId === 'pantoprazole' && (
+        <PantoprazoleProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 36–52: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {activeAntimicrobial && (
+        <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
+      )}
+
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
       {!activeProtocolId && filteredCards.length === 0 && (
         <div className={`p-8 rounded-xl border text-center space-y-3 ${
@@ -2594,9 +2723,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
           </div>
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
             {activeCategory === 'general_anesthetics' && 'Genel Anestezikler (İnhalasyon & IV)'}
+            {activeCategory === 'antihypertensives' && 'Anti-hipertansifler'}
+            {activeCategory === 'antibiotics' && 'Antibiyotikler & Antifungaller'}
             {activeCategory === 'antidotes' && 'Antidotlar'}
             {activeCategory === 'diuretics' && 'Diüretikler'}
-            {activeCategory === 'vasoactive' && 'İnfüzyon & Vazoaktif Protokolleri'}
+            {activeCategory === 'vasoactive' && 'Sürekli İnfüzyon & Vazoaktif Protokolleri'}
             {activeCategory === 'sedation' && 'Sedoanaljezi & Nöromüsküler Blokaj'}
             {activeCategory === 'hemostasis' && 'Hemostaz & Kan Transfüzyon Yönetimi'}
           </h3>

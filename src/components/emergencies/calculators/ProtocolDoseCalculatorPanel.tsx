@@ -10,6 +10,7 @@ import {
   Droplets,
   Activity,
   Zap,
+  Brain,
 } from 'lucide-react';
 import { EmergencyDoses } from './emergencyDoseCalculations';
 
@@ -276,6 +277,12 @@ function getProtocolHeaderMeta(protocolId: string): ProtocolHeaderMeta {
         title: 'Adrenal Kriz — İV Hidrokortizon, Hızlı Kristaloid & Vazopressör Köprüleme',
         subtitle: 'AAGBI / SfE 2020 Stres Dozu (100 mg → 200 mg/24 sa) & Elektrolit Düzeltme',
         icon: <Syringe className="w-5 h-5 text-amber-500" />,
+      };
+    case 'icp-crisis':
+      return {
+        title: 'Akut İKB Krizi (KİBAS) — Ozmoterapi, TIVA & Tier 3 Doz Hesaplayıcı',
+        subtitle: '%20 Mannitol (g & mL), %3 / %23,4 Hipertonik Salin, Propofol, Tiyopental & Sempatik Baskılama',
+        icon: <Brain className="w-5 h-5 text-red-500" />,
       };
     default:
       return {
@@ -1145,6 +1152,61 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               warning="Etomidat 11β-hidroksilazı inhibe ederek adrenal steroid sentezini 24–48 saat baskılar — riskli hastada tekrar doz/infüzyondan kaçın!"
               tone="emerald"
               isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'icp-crisis':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <DoseCard
+              label="%20 Mannitol (0,25 · 0,5 · 1 g/kg)"
+              value={`${doses.icpMannitolLowG} g (${doses.icpMannitolLowMl} mL) · ${doses.icpMannitolMidG} g (${doses.icpMannitolMidMl} mL) · ${doses.icpMannitolHighG} g (${doses.icpMannitolHighMl} mL)`}
+              detail="%20 = 0,2 g/mL (5 mL/g) · 15–20 dk IV infüzyon (inline filtre kullan!) · Ozmotik diürez kaybını %0,9 NaCl ile karşıla."
+              warning="Tekrar öncesi Ozmolalite <320 mOsm/kg VE Ozmolal Gap <20 mOsm/kg doğrula! Hipotansif hastada HTS seç!"
+              tone="red"
+              isDark={isDark}
+              className="sm:col-span-2 lg:col-span-3"
+            />
+            <DoseCard
+              label="%3 Hipertonik Salin (2–5 mL/kg)"
+              value={doses.icpHts3Label}
+              detail="15–20 dk IV (maks 250 mL/bolus; geniş periferik ven veya CVC) · Hipotansif/hipovolemik hastada ilk tercih!"
+              warning="Hedef serum Na⁺ 145–155 mEq/L (maks 160) · Her 4–6 saatte Na⁺ kontrol et!"
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="%23,4 Hipertonik Salin (Herniasyon Kurtarma)"
+              value={doses.icpHts234Label}
+              detail="Akut transtentoryal herniasyon veya refrakter İKB pikinde 10–20 dk yavaş infüzyon."
+              warning="YALNIZCA SANTRAL VENÖZ HATTAN! Periferik ekstravazasyon ciddi doku nekrozu yapar!"
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Tiyopental (Tier 3 Burst-Supresyon)"
+              value={`${doses.icpThiopentalLoadMinMg}–${doses.icpThiopentalLoadMaxMg} mg IV`}
+              detail={`Yükleme: 3–5 mg/kg yavaş/bölünmüş → İdame: ${doses.icpThiopentalInfMinMgHr}–${doses.icpThiopentalInfMaxMgHr} mg/saat (1–5 mg/kg/saat, sürekli EEG kılavuzluğunda)`}
+              warning="Ağır hipotansiyon riski — Noradrenalin (CPP 60–70 mmHg) hazır olmadan başlama!"
+              tone="purple"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Propofol (Nörokoruyucu TIVA)"
+              value={`${doses.icpPropofolBolusMinMg}–${doses.icpPropofolBolusMaxMg} mg bolus`}
+              detail={`1–2 mg/kg IV bolus → TIVA idame: ${doses.icpPropofolInfMinMgHr}–${doses.icpPropofolInfMaxMgHr} mg/saat (4–6 mg/kg/saat) · Volatil >1 MAC & N₂O’yu KAPAT!`}
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Sempatik Yanıt Baskılama (Fentanil & Lidokain)"
+              value={`Fentanil ${doses.icpFentanylMinMcg}–${doses.icpFentanylMaxMcg} mcg · Lidokain ${doses.icpLidocaineMg} mg`}
+              detail="Fentanil 1–2 mcg/kg IV + Lidokain 1,5 mg/kg IV (maks 150 mg, 2–3 dk önce) — entübasyon/pinleme/aspirasyon İKB pikini önler."
+              warning="Hedefler: Baş 30° orta hat · CPP 60–70 mmHg (tragus sıfır!) · Geçici PaCO₂ 30–35 · TBH’de STEROİD YASAK!"
+              tone="emerald"
+              isDark={isDark}
+              className="sm:col-span-2"
             />
           </div>
         );

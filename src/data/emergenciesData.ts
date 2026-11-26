@@ -1,6 +1,7 @@
 // Types and Master Data for Anesthesia Emergencies (Anestezi Acilleri)
 import { CARDIAC_EMERGENCIES_DATA } from './emergencies/cardiacEmergenciesData';
 import { ENDOCRINE_METABOLIC_EMERGENCIES_DATA } from './emergencies/endocrineMetabolicEmergenciesData';
+import { NEURO_EMERGENCIES_DATA } from './emergencies/neuroEmergenciesData';
 
 export interface EmergencyReference {
   authors: string;
@@ -44,6 +45,7 @@ export interface EmergencyProtocol {
     | 'myxedema-coma'
     | 'pheochromocytoma-crisis'
     | 'adrenal-crisis'
+    | 'icp-crisis'
     | 'last'
     | 'anaphylaxis'
     | 'acls'
@@ -7233,7 +7235,8 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     ]
   },
   ...CARDIAC_EMERGENCIES_DATA,
-  ...ENDOCRINE_METABOLIC_EMERGENCIES_DATA
+  ...ENDOCRINE_METABOLIC_EMERGENCIES_DATA,
+  ...NEURO_EMERGENCIES_DATA
 };
 
 // Alias 'cico' -> 'airway-crisis' (zero duplication, full backward compatibility)

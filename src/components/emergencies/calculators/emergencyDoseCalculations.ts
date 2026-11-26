@@ -180,6 +180,27 @@ export interface EmergencyDoses {
   adrenalHydrocortLabel: string;
   adrenalFluid1hLabel: string;
   adrenalNoradRangeMcgMin: string;
+
+  // 24. ICP Crisis (KİBAS / Akut İKB Krizi)
+  icpMannitolLowG: number;
+  icpMannitolLowMl: number;
+  icpMannitolMidG: number;
+  icpMannitolMidMl: number;
+  icpMannitolHighG: number;
+  icpMannitolHighMl: number;
+  icpHts3Label: string;
+  icpHts234Label: string;
+  icpThiopentalLoadMinMg: number;
+  icpThiopentalLoadMaxMg: number;
+  icpThiopentalInfMinMgHr: number;
+  icpThiopentalInfMaxMgHr: number;
+  icpPropofolBolusMinMg: number;
+  icpPropofolBolusMaxMg: number;
+  icpPropofolInfMinMgHr: number;
+  icpPropofolInfMaxMgHr: number;
+  icpFentanylMinMcg: number;
+  icpFentanylMaxMcg: number;
+  icpLidocaineMg: number;
 }
 
 export interface StickyDoseHighlight {
@@ -490,6 +511,35 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     : '1000 mL %0,9 NaCl / dengeli kristaloid (1. saat)';
   const adrenalNoradRangeMcgMin = `${+(w * 0.05).toFixed(1)}–${+(w * 0.5).toFixed(1)} mcg/dk`;
 
+  // 24. ICP Crisis (KİBAS / Akut İKB Krizi)
+  // %20 Mannitol = 0,2 g/mL -> 5 mL/g (0,25 g/kg = 1,25 mL/kg; 0,5 g/kg = 2,5 mL/kg; 1 g/kg = 5 mL/kg)
+  const icpMannitolLowG = +(w * 0.25).toFixed(1);
+  const icpMannitolLowMl = Math.round(w * 1.25);
+  const icpMannitolMidG = +(w * 0.5).toFixed(1);
+  const icpMannitolMidMl = Math.round(w * 2.5);
+  const icpMannitolHighG = +(w * 1.0).toFixed(1);
+  const icpMannitolHighMl = Math.round(w * 5);
+  const hts3MinMl = Math.min(250, Math.round(w * 2));
+  const hts3MaxMl = Math.min(250, Math.round(w * 5));
+  const icpHts3Label =
+    hts3MinMl === hts3MaxMl
+      ? `${hts3MaxMl} mL (maks/bolus)`
+      : `${hts3MinMl}–${hts3MaxMl} mL`;
+  const icpHts234Label = isPediatric
+    ? `${Math.min(30, +(w * 0.5).toFixed(1))} mL (0,5 mL/kg, maks 30 mL · SANTRAL!)`
+    : '30 mL (10–20 dk · YALNIZCA SANTRAL HAT!)';
+  const icpThiopentalLoadMinMg = Math.round(w * 3);
+  const icpThiopentalLoadMaxMg = Math.round(w * 5);
+  const icpThiopentalInfMinMgHr = Math.round(w * 1);
+  const icpThiopentalInfMaxMgHr = Math.round(w * 5);
+  const icpPropofolBolusMinMg = Math.round(w * 1);
+  const icpPropofolBolusMaxMg = Math.round(w * 2);
+  const icpPropofolInfMinMgHr = Math.round(w * 4);
+  const icpPropofolInfMaxMgHr = Math.round(w * 6);
+  const icpFentanylMinMcg = Math.round(w * 1);
+  const icpFentanylMaxMcg = Math.round(w * 2);
+  const icpLidocaineMg = Math.min(150, Math.round(w * 1.5));
+
   return {
     weightNum,
     isValidWeight,
@@ -649,6 +699,26 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     adrenalHydrocortLabel,
     adrenalFluid1hLabel,
     adrenalNoradRangeMcgMin,
+
+    icpMannitolLowG,
+    icpMannitolLowMl,
+    icpMannitolMidG,
+    icpMannitolMidMl,
+    icpMannitolHighG,
+    icpMannitolHighMl,
+    icpHts3Label,
+    icpHts234Label,
+    icpThiopentalLoadMinMg,
+    icpThiopentalLoadMaxMg,
+    icpThiopentalInfMinMgHr,
+    icpThiopentalInfMaxMgHr,
+    icpPropofolBolusMinMg,
+    icpPropofolBolusMaxMg,
+    icpPropofolInfMinMgHr,
+    icpPropofolInfMaxMgHr,
+    icpFentanylMinMcg,
+    icpFentanylMaxMcg,
+    icpLidocaineMg,
   };
 }
 
@@ -1104,6 +1174,25 @@ export function getStickyDoseHighlights(
           label: '3. Noradrenalin Köprü',
           value: `${doses.adrenalNoradRangeMcgMin} · KŞ & K⁺ Kontrol`,
           tone: 'amber',
+        },
+      ];
+
+    case 'icp-crisis':
+      return [
+        {
+          label: '%20 Mannitol (0,5–1 g/kg)',
+          value: `${doses.icpMannitolMidG}–${doses.icpMannitolHighG} g (${doses.icpMannitolMidMl}–${doses.icpMannitolHighMl} mL)`,
+          tone: 'red',
+        },
+        {
+          label: '%3 HTS / %23,4 Santral',
+          value: `${doses.icpHts3Label} · ${doses.isPediatric ? `${Math.min(30, +(doses.weightNum * 0.5).toFixed(1))} mL` : '30 mL'} Santral`,
+          tone: 'amber',
+        },
+        {
+          label: 'Tier 3 Tiyopental / CPP',
+          value: `${doses.icpThiopentalLoadMinMg}–${doses.icpThiopentalLoadMaxMg} mg · CPP 60–70`,
+          tone: 'blue',
         },
       ];
 

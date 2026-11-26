@@ -37,7 +37,8 @@ export const VALID_INFOGRAPHIC_IDS = [
   'asa-basic-monitoring',
   'diuretics-nephron',
   'surgical-cancellation-matrix',
-  'antithrombotic-matrix'
+  'antithrombotic-matrix',
+  'ponv-management'
 ] as const;
 
 export type ValidInfographicId = typeof VALID_INFOGRAPHIC_IDS[number];

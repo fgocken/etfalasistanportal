@@ -17,7 +17,8 @@ import {
   Search,
   X,
   Clock,
-  Zap
+  Zap,
+  Brain
 } from 'lucide-react';
 import { ANESTHESIA_EMERGENCIES_DATA } from '../../data/emergenciesData';
 import { EMERGENCY_TROUBLESHOOTING_ITEMS } from '../../data/emergenciesTroubleshootingData';
@@ -257,6 +258,15 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
     shortDesc: 'Sıvı ve vazopressöre dirençli şok, hipoglisemi & primer formda hiponatremi/hiperkalemi: Kortizol sonucu beklemeden İV Hidrokortizon 100 mg → 200 mg/24 sa, hızlı kristaloid ve Etomidat uyarısı.',
     icon: ShieldAlert,
     accentColor: 'amber',
+    isReady: true
+  },
+  {
+    id: 'icp-crisis',
+    category: 'cardiovascular',
+    title: 'İntrakraniyel Basınç Artışı (KİBAS / Akut İKB Krizi ve Herniasyon)',
+    shortDesc: 'SIBICC Tier 0–3, İKB >22 / CPP 60–70, Cushing triadı, anizokori & intraop “tight brain”: Baş 30° orta hat, geçici PaCO₂ 30–35, %20 Mannitol vs %3/%23,4 Hipertonik Salin, Propofol TIVA, Tiyopental ve TBH steroid yasağı.',
+    icon: Brain,
+    accentColor: 'red',
     isReady: true
   }
 ];

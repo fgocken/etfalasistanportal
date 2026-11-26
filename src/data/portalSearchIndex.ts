@@ -1,4 +1,5 @@
 import { ToolTabId } from '../components/PortalWorkspace';
+import { ALL_ANTIMICROBIALS } from './antimicrobials';
 
 export type SearchCategory = 
   | 'Hesaplayıcılar' 
@@ -1816,6 +1817,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'emergency-icp-crisis',
+    title: 'İntrakraniyel Basınç Artışı (KİBAS / Akut İKB Krizi & Herniasyon)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'KİBAS · SIBICC Tier 0–3 · Mannitol / HTS',
+    description: '10 aşamalı nöroanestezi kriz protokolü: Monro-Kellie, Cushing triadı, transtentoryal herniasyon, intraoperatif tight brain 60 sn kontrol listesi, SIBICC Tier 0–3, %20 Mannitol vs %3/%23,4 Hipertonik Salin, CPP 60–70 mmHg ve barbitürat koması.',
+    keywords: [
+      'kibas', 'ikb', 'icp', 'intrakraniyel basınç', 'intrakraniyal basınç', 'kafa içi basınç',
+      'herniasyon', 'cushing triadı', 'anizokori', 'tight brain', 'monro kellie', 'sibicc',
+      'btf', 'mannitol', 'hipertonik salin', '%3 nacl', '%23.4 nacl', 'cpp', 'tiyopental',
+      'barbitürat koması', 'dekompresif kraniyektomi', 'hiperventilasyon', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'icp-crisis',
+    popular: true
+  },
+  {
     id: 'emergency-etco2-elevation',
     title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Yükselmesi',
     category: 'Kılavuzlar & Protokoller',
@@ -2128,6 +2145,23 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     keywords: ['antitrombotik matris', 'asra 2025', 'esaic 2022', 'nöraksiyel antikoagülan', 'indwelling catheter', 'epidural kateter çekme', 'derin sinir bloğu', 'yüzeyel blok', 'doac kesme', 'apiksaban', 'rivaroksaban', 'dabigatran', 'varfarin', 'dmah', 'enoksaparin', 'ufh', 'fondaparinuks', 'klopidogrel', 'tikagrelor', 'prasugrel', 'kangrelor', 'trombolitik'],
     tabId: 'infographics',
     subId: 'antithrombotic-matrix',
+    popular: true
+  },
+  {
+    id: 'info-ponv-management',
+    title: 'Postoperatif Bulantı ve Kusma (PONV): Önleme, Profilaksi & Kurtarma (Gan 2020)',
+    category: 'Klinik İnfografikler',
+    badge: 'Gan 2020 · Apfel & POVOC · TR Matris',
+    description: 'İnteraktif 5 yolak nöro-reseptör haritası, Apfel ve pediatrik POVOC risk skoru hesaplayıcıları, Türkiye’de bulunanlar filtreli 19 ajanlı antiemetik matrisi, TR kombinasyon reçeteleri, P6 akupresür, kurtarma (rescue) seçicisi ve pediatrik dozaj.',
+    keywords: [
+      'ponv', 'pov', 'pdnv', 'bulantı', 'kusma', 'postoperatif bulantı kusma', 'apfel', 'apfel skoru',
+      'povoc', 'eberhart', 'gan 2020', 'antiemetik', 'ondansetron', 'granisetron', 'palonosetron',
+      'deksametazon', 'metoklopramid', 'haloperidol', 'droperidol', 'amisülprid', 'aprepitant',
+      'dimenhidrinat', 'skopolamin', 'p6', 'neiguan', 'kurtarma', 'rescue', 'çene fiksasyonu', 'imf',
+      'pediatrik ponv', 'şaşılık', 'tonsillektomi', 'propofol tiva'
+    ],
+    tabId: 'infographics',
+    subId: 'ponv-management',
     popular: true
   },
   {
@@ -3190,6 +3224,32 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'pheniramine',
     popular: true
   },
+  {
+    id: 'treatment-pantoprazole-protocol',
+    title: 'Pantoprazol Sodyum (Pantpas® / Pulcet®) GİS Kanama, YBÜ SUP & Aspirasyon Profilaksisi',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'PPI · 80 mg + 8 mg/sa · REVISE / SUP-ICU',
+    description: 'En düşük CYP2C19 inhibisyonuna sahip IV/PO proton pompa inhibitörü; akut üst GİS kanaması (80 mg bolus → 8 mg/sa vs 40 mg q12sa), YBÜ stres ülseri profilaksisi (SUP-ICU & REVISE NEJM 2024), aspirasyon profilaksisi ve pH 9–10,5 Y-site güvenliği.',
+    keywords: [
+      'pantoprazol', 'pantoprazole', 'pantpas', 'pulcet', 'panto', 'protonix', 'ppi',
+      'proton pompa inhibitörü', 'gis kanama', 'stres ülseri', 'sup-icu', 'revise',
+      'aspirasyon profilaksisi', 'klopidogrel', 'cyp2c19', 'hipomagnezemi', 'c difficile'
+    ],
+    tabId: 'treatments',
+    subId: 'pantoprazole',
+    popular: true
+  },
+  ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
+    id: `treatment-${abx.id}-protocol`,
+    title: abx.cardTitle,
+    category: 'Tedaviler & İlaçlar',
+    badge: abx.cardBadge,
+    description: abx.cardShortDesc,
+    keywords: Array.from(new Set(['antibiyotik', 'antimikrobiyal', ...abx.aliases, ...abx.searchKeywords])),
+    tabId: 'treatments',
+    subId: abx.id,
+    popular: true
+  })),
   {
     id: 'airway-management-search',
     title: 'Havayolu Yönetimi & Algoritmalar',

@@ -32,6 +32,7 @@ import { AsaBasicMonitoringInfographic } from './AsaBasicMonitoringInfographic';
 import { DiureticsNephronInfographic } from './DiureticsNephronInfographic';
 import { SurgicalCancellationMatrixInfographic } from './SurgicalCancellationMatrixInfographic';
 import { PerioperativeAntithromboticMatrixInfographic } from './PerioperativeAntithromboticMatrixInfographic';
+import { PONVInfographic } from './PONVInfographic';
 import { ShareLinkButton } from '../common/ShareLinkButton';
 import { PortalLink } from '../common/PortalLink';
 import { buildHashHref, updateHashRoute } from '../../utils/deepLink';
@@ -373,6 +374,23 @@ const INFOGRAPHIC_COLLECTION: InfographicCardItem[] = [
       { label: 'Kılavuzlar', rate: '13 PubMed · SGLT2i', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
     ],
     accentColor: 'teal'
+  },
+  {
+    id: 'ponv-management',
+    title: 'Postoperatif Bulantı ve Kusma (PONV): Önleme, Profilaksi & Kurtarma',
+    source: '4th Consensus Guidelines (Gan et al. Anesth Analg 2020) · Apfel · POVOC',
+    sourceBadge: 'Gan 2020 · Apfel & POVOC',
+    category: 'Postop & Derlenme (PACU)',
+    shortDesc: 'İnteraktif 5 yolak nöro-reseptör haritası, Apfel & pediatrik POVOC hesaplayıcıları, Türkiye’de bulunanlar filtreli antiemetik matrisi + TR kombinasyon reçeteleri, P6 akupresür ve kurtarma (rescue) seçicisi.',
+    pillsHeader: 'İnteraktif PONV Modülleri:',
+    publisher: 'Anesth Analg / NEJM / BMJ / Cochrane',
+    riskPills: [
+      { label: 'Apfel Skoru', rate: '%10 → %79', colorClass: 'text-teal-600 dark:text-teal-400', bgClass: 'bg-teal-500/10', borderClass: 'border-teal-500/30' },
+      { label: 'TR Matris', rate: '19 Ajan · TR ✓', colorClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30' },
+      { label: 'Kurtarma', rate: 'Farklı Sınıf', colorClass: 'text-rose-600 dark:text-rose-400', bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30' },
+      { label: 'Pediatri', rate: 'POVOC · kg Doz', colorClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30' },
+    ],
+    accentColor: 'teal'
   }
 ];
 
@@ -711,6 +729,11 @@ export const InfographicsView: React.FC<InfographicsViewProps> = ({ isDark, init
       {/* VIEW: Perioperative Antithrombotic & Regional Anesthesia Management Matrix */}
       {activeInfographicId === 'antithrombotic-matrix' && (
         <PerioperativeAntithromboticMatrixInfographic isDark={isDark} />
+      )}
+
+      {/* VIEW: PONV Prevention & Rescue Management Interactive Infographic */}
+      {activeInfographicId === 'ponv-management' && (
+        <PONVInfographic isDark={isDark} />
       )}
 
       {/* VIEW 2B: ESC 2022 Surgical Risk Infographic */}
