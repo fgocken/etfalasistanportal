@@ -609,6 +609,11 @@ export interface EmergencyProtocol {
 
   // 10) Kaynaklar ve İleri Okuma
   references: EmergencyReference[];
+  relatedLinks?: {
+    label: string;
+    href: string;
+    badge?: string;
+  }[];
 }
 
 export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
@@ -6280,14 +6285,14 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Uzun Kemik & Pelvis Kırıkları: Özellikle kapalı femur şaftı, tibia ve pelvis kırıkları (kapalı kırıklarda intramedüller basınç artışı açık kırıklara göre daha yüksek risk taşır)',
         'İntramedüller Oyma (Reaming) & Çivileme: Yüksek basınçlı kanal içi oyma ve çivi çakma işlemi sırasında intramedüller basıncın >300–500 mmHg’ye fırlaması',
         'Total Kalça / Diz Artroplastisi & Kemik Çimentosu (PMMA): Protez sapı yerleştirilmesi ve sement basınçlandırması (Kemik Çimentosu İmplantasyon Sendromu — BCIS ile örtüşebilir)',
-        'Kozmetik Liposuction / Otolog Yağ Greftleme (Gluteal / Fasiyal), Omurga Enstrümantasyonu ve Kemik İliği Nakli',
+        'Kozmetik Liposuction / Otolog Yağ Greftleme (Gluteal “BBL” / Fasiyal — gluteal venöz pleksus hasarında makroskopik yağ embolisi saniyeler içinde fulminan sağ kalp arresti yapabilir!), Omurga Enstrümantasyonu ve Kemik İliği Nakli',
         'Non-Travmatik Nedenler (Nadir): Akut hemorajik pankreatit, orak hücreli anemi kemik iliği krizi, ağır yanıklar, uzun süreli yüksek doz kortikosteroid ve yağlı karaciğer rüptürü'
       ],
       safeAgents: [
-        'Oksijenasyon & ARDSNet Ventilasyon: FiO₂ 1.0 → SpO₂ %92–96 hedefi; entübasyon gerekirse Vt 6 mL/kg PBW, Pplat < 30 cmH₂O, uygun PEEP (8–12 cmH₂O)',
+        'Oksijenasyon & ARDSNet Ventilasyon: FiO₂ 1.0 → SpO₂ %92–96 hedefi; entübasyon gerekirse Vt 4–6 mL/kg PBW (boy bazlı ideal ağırlık!), Pplat < 30 cmH₂O, uygun PEEP (8–12 cmH₂O)',
         'Övolemik Sıvı Dengesi: Hipovolemiyi engelleyecek nazik dengeli kristaloid (ancak RV disfonksiyonu varsa aşırı bolustan kaçın!) + FFA bağlayıcı fizyolojik destek olarak seçili hipovolemik olguda Albümin',
         'Vazopressör / İnotrop (Fulminan RV Yükünde): Noradrenalin (0,05–0,5 mcg/kg/dk; MAP ≥65–70 mmHg), normotansif RV yetersizliğinde Dobutamin veya iNO (10–20 ppm)',
-        'Erken Kırık Stabilizasyonu: İlk 24 saat içinde immobilizasyon; politravmada Hasar Kontrol Ortopedisi (eksternal fiksatör)',
+        'Erken Kırık Stabilizasyonu: İlk 24 saat içinde immobilizasyon; politravmada veya aktif hipoksemik FES’te Hasar Kontrol Ortopedisi (eksternal fiksatör)',
         'KESİN KAÇINILACAKLAR: Rutin Heparin (lipoprotein lipazı uyararak toksik serbest yağ asidini artırır ve kanamayı tetikler!), Aspirin ve yerleşik FES sonrası rutin yüksek doz steroid'
       ],
       mortalityStats: 'İyileşen hastalarda nörolojik ve pulmoner sekel genelde tama yakın düzelir; ancak geç tanınan ağır ARDS, sekonder enfeksiyon veya intraoperatif fulminan sağ ventrikül çöküşü gelişen olgularda mortalite %10–20’nin üzerine çıkabilir. Prognostik en belirleyici unsur erken solunum desteği ve kırık stabilizasyonudur.',
@@ -6299,7 +6304,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       overview: 'FES tanısı spesifik bir laboratuvar belirteci olmadığı için KLİNİK bir dışlama ve örüntü tanısıdır. Klasik Triad (Hipoksemi + Nörolojik Disfonksiyon + Peteşiyal Döküntü) hastaların yalnızca %20–50’sinde tam olarak bir arada görülür; peteşi sıklıkla geç ortaya çıktığı veya hiç görülmediği için yokluğu asla FES’i dışlamaz. Toraks BT’de bilateral yamasal buzlu cam opasiteleri ve Beyin DWI MRG’de "Starfield (Yıldızlı Gökyüzü)" paterni tanıyı güçlü biçimde destekler.',
       clinicalCriteria: [
         'Klasik Klinik Triad: (1) Akut solunum yetmezliği / hipoksemi (en erken ve en sık bulgu, >%90), (2) Serebral tutulum (konfüzyon, ajitasyon, stupor, fokal defisit; ~%60–80), (3) Aksiller, ön göğüs, boyun ve subkonjonktival peteşiyal döküntü (%20–50)',
-        'Gurd & Wilson Kriterleri (1974): En az 1 Majör + 4 Minör kriter (veya 2 Majör + 2 Minör kriter) + yağ makroglobülinemisi varlığı',
+        'Gurd & Wilson Kriterleri (1974): En az 2 Majör kriter VEYA 1 Majör + 4 Minör kriter (orijinal 1974 tanımında yağ makroglobülinemisi de yer alır; günümüzde özgüllüğü düşük olduğu için rutin aranmaz)',
         'Schonfeld Yağ Embolisi İndeksi (1983): İlk 72 saat içinde ≥ 5 puan tanısal kabul edilir (Peteşi +5, Diffüz infiltrat +4, PaO₂ <70 mmHg +3, Konfüzyon +1, Ateş >38°C +1, Nabız >120 +1, SS >30 +1)',
         'Lindeque Kriterleri (1987 — Travma Hastası): Sürekli PaO₂ <60 mmHg, PaCO₂ >55 mmHg veya pH <7.3, solunum sayısı >35/dk, dispne/anksiyete/taşikardi',
         'Beyin MRG (DWI): Beyaz cevher, bazal ganglionlar, talamus ve korpus kallozumda yaygın punktat difüzyon kısıtlılığı — patognomonik "Starfield (Yıldızlı Gökyüzü)" görünümü',
@@ -6312,11 +6317,11 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         { category: 'Gurd Majör — Serebral Tutulum', points: 'Majör Kriter', description: 'Kafa travması ve hipoksemiden bağımsız akut konfüzyon, deliryum, ajitasyon, stupor, koma veya geçici fokal nörolojik defisit.' },
         { category: 'Gurd Majör — Peteşiyal Döküntü', points: 'Majör Kriter (+5 Schonfeld)', description: 'Özellikle aksilla, ön toraks duvarı, boyun kıvrımları, oral mukoza ve alt konjonktivada basmakla solmayan peteşiler (sıklıkla 24–36. sa).' },
         { category: 'Gurd Minör — Hemodinami & Ateş', points: 'Minör (2 Kriter)', description: 'Açıklanamayan taşikardi (> 110–120/dk) ve yüksek ateş (> 38.5°C).' },
-        { category: 'Gurd Minör — Oküler & Renal', points: 'Minör (2 Kriter)', description: 'Fundoskopide retinal yağ embolisi / pamuk atığı eksüdaları (Purtscher retinopatisi) ve idrarda yağ globülleri / ani oligüri-anüri.' },
-        { category: 'Gurd Minör — Hematolojik Değişiklik', points: 'Minör (3 Kriter)', description: 'Açıklanamayan ani Hb düşüşü (>%20), ani trombositopeni (>%50 düşüş, <%150.000), ESH > 71 mm/sa veya balgamda yağ globülleri.' },
+        { category: 'Gurd Minör — Oküler, Renal & Hepatik', points: 'Minör (3 Kriter)', description: 'Fundoskopide retinal yağ embolisi / pamuk atığı eksüdaları (Purtscher retinopatisi), idrarda yağ globülleri / ani oligüri-anüri ve açıklanamayan sarılık (jaundice).' },
+        { category: 'Gurd Minör — Hematolojik Değişiklik', points: 'Minör (4 Kriter)', description: 'Açıklanamayan ani Hb düşüşü (>%20), ani trombositopeni (>%50 düşüş, <%150.000), ESH > 71 mm/sa, balgamda yağ globülleri veya yağ makroglobülinemisi (günümüzde rutin bakılmaz).' },
         { category: 'Schonfeld Skoru Toplamı', points: '≥ 5 Puan = FES', description: 'Peteşi (+5), Akciğer grafisi diffüz infiltrat (+4), PaO₂ <70 mmHg (+3), Konfüzyon (+1), Ateş >38°C (+1), Nabız >120 (+1), SS >30 (+1).' }
       ],
-      larachInterpretation: 'Gurd & Wilson’a göre tanı için en az 1 Majör + 4 Minör kriter (veya 2 Majör + 2 Minör) gereklidir. Schonfeld indeksinde ≥5 puan tanısaldır. Travma hastasında solunum bulguları ön plandayken peteşi henüz çıkmamışsa Lindeque kriterleri erken şüphe ve yoğun bakım yatışı için daha duyarlıdır.',
+      larachInterpretation: 'Gurd & Wilson klinik modifikasyonuna göre tanı için en az 2 Majör kriter VEYA 1 Majör + 4 Minör kriter gereklidir (yağ makroglobülinemisi özgüllüğü düşük olduğu için günümüzde rutin aranmaz). Schonfeld indeksinde ≥5 puan tanısaldır. Travma hastasında solunum bulguları ön plandayken peteşi henüz çıkmamışsa Lindeque kriterleri erken şüphe ve yoğun bakım yatışı için daha duyarlıdır.',
       differentialDiagnosis: [
         {
           condition: 'Kemik Çimentosu İmplantasyon Sendromu (BCIS)',
@@ -6435,8 +6440,8 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           items: [
             {
               domain: 'Oksijenasyon & ARDSNet Ventilasyon',
-              recommendation: 'FiO₂ 1.0 ile başla (SpO₂ %92–96); entübasyonda Vt 6 mL/kg PBW, Pplat <30 cmH₂O, PEEP 8–12 cmH₂O',
-              evidenceAndCaution: 'Tedavinin temel taşıdır. Refractory hipoksemide pron pozisyonu, iNO veya VV-ECMO kurtarma olarak başarıyla uygulanmıştır.',
+              recommendation: 'FiO₂ 1.0 ile başla (SpO₂ %92–96); entübasyonda Vt 4–6 mL/kg PBW (boy bazlı!), Pplat <30 cmH₂O, PEEP 8–12 cmH₂O',
+              evidenceAndCaution: 'Tedavinin temel taşıdır. Refrakter hipoksemide pron pozisyonu, iNO veya VV-ECMO kurtarma olarak başarıyla uygulanmıştır.',
               status: 'RECOMMENDED'
             },
             {
@@ -6448,7 +6453,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
             {
               domain: 'Kortikosteroidler (Metilprednizolon)',
               recommendation: 'Yerleşik FES’te rutin yüksek doz ÖNERİLMEZ (profilaksi yüksek riskli izole travmada tartışmalı)',
-              evidenceAndCaution: 'Bazı erken meta-analizler travmada profilaktik metilprednizolonun (ör. 1.5 mg/kg/8sa) hipoksemiyi azaltabileceğini gösterse de, enfeksiyon/GİS kanaması riski nedeniyle evrensel rehber standardı değildir.',
+              evidenceAndCaution: 'Bazı erken meta-analizler izole travmada profilaktik metilprednizolonun (ör. 1.5 mg/kg IV her 8 saatte bir, 6 doz / 48 saat — Schonfeld 1983) hipoksemiyi azaltabileceğini gösterse de, enfeksiyon/GİS kanaması riski nedeniyle evrensel rehber standardı değildir.',
               status: 'SELECTIVE'
             },
             {
@@ -6461,7 +6466,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         },
         orthopedicPreventionAndTiming: {
           title: 'Ortopedik Cerrahi Zamanlama & İntraoperatif Emboli Azaltma Protokolü',
-          surgicalTimingRule: 'Hasar Kontrol Ortopedisi (DCO) İlkesi: İzole uzun kemik kırığı olan stabil hastada ilk 24 saat içinde erken fiksasyon FES riskini %50’den fazla azaltır. Ancak hasta şokta, ağır toraks travmalı veya aktif gelişmiş FES içindeyse uzun süren oymalı (reamed) intramedüller çivileme yerine acil geçici EKSTERNAL FİKSATÖR (DCO) tercih edilir.',
+          surgicalTimingRule: 'Hasar Kontrol Ortopedisi (DCO) İlkesi: İzole uzun kemik kırığı olan stabil hastada ilk 24 saat içinde erken fiksasyon FES riskini %50’den fazla azaltır. Ancak hasta şokta, ağır toraks travmalı veya aktif hipoksemik FES (PaO₂/FiO₂ <200) içindeyse oymalı (reamed) intramedüller çivileme KONTRENDİKEDİR — acil geçici EKSTERNAL FİKSATÖR (DCO) tercih edilir.',
           intraopTechniques: [
             'İntramedüller oyma (reaming) öncesi medüller kanalın basınçlı serum fizyolojik ile lavajı ve vakumlu aspirasyon (RIA — Reamer-Irrigator-Aspirator sistemi yağ yükünü belirgin azaltır).',
             'Oymasız (unreamed) ince çivi veya plak-vida fiksasyonu yüksek pulmoner riskli hastalarda intramedüller basınç pikini düşürür.',
@@ -6549,7 +6554,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       cleanAnesthesiaProtocol: [
         'Yüksek riskli politravma hastasında erken definitiv oymalı çivileme yerine Hasar Kontrol Ortopedisi (geçici eksternal fiksatör) seçimi için ortopedi ekibiyle ortak karar alınması',
         'İntramedüller kanalın oyma öncesi yıkanıp aspire edilmesi (RIA veya vakumlu lavaj) ve çimentolu protezlerde medüller kanalın kurutulup havalandırma deliği (vent hole) kullanılması',
-        'Sementleme aşamasında PEEP ve hipotansif anesteziden kaçınılması (normotansiyonun korunması)'
+        'Sementleme aşamasında aşırı yüksek PEEP (>10–12 cmH₂O) ve kontrollü hipotansiyondan kaçınılması; fizyolojik PEEP (5 cmH₂O), normotansiyon ve övoleminin korunması'
       ],
       cartTitle: 'Yağ Embolizm Sendromu (FES) & Ortopedik Kriz Hazırlık Listesi:',
       cartChecklist: [
@@ -6669,6 +6674,13 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         year: '2020–2024',
         relevance: 'Perioperatif FES, pulmoner vasküler reaktivite, akciğer koruyucu ventilasyon, N₂O/PEEP kuralları ve yoğun bakım yönetimi.'
       }
+    ],
+    relatedLinks: [
+      { label: 'Pulmoner Emboli (PE) Kriz Protokolü', href: '#arac=emergencies&sub=pe', badge: 'Ayırıcı Tanı' },
+      { label: 'Venöz Hava Embolisi (VAE)', href: '#arac=emergencies&sub=vae', badge: 'İntraop Emboli' },
+      { label: 'İntraoperatif Hipotansiyon (IOH)', href: '#arac=emergencies&sub=hypotension', badge: 'RV / Şok' },
+      { label: 'Mekanik Ventilasyon & ARDS', href: '#arac=mechanical-ventilation', badge: 'ARDSNet' },
+      { label: 'ARDS PBW & Doz Hesaplayıcıları', href: '#arac=calculator', badge: 'Hesaplayıcı' }
     ]
   }
 };

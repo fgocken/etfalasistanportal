@@ -257,18 +257,18 @@ const TROUBLESHOOTING_PREVIEWS: TroubleshootingPreview[] = [
     id: 'hypotension',
     category: 'cardiovascular',
     title: 'İntraoperatif Hipotansiyon (MAP < 65 mmHg)',
-    shortDesc: 'MAP < 65 mmHg veya >%20–30 düşüş: Arteriyel dalga formu (dikrotik çentik & PPV >%13), ↓SVR vazopleji vs ↓Preload kanama vs ↓Kontraktilite vs Obstrüktif şok (PE/BCIS/Pnömotoraks/Oto-PEEP) ve Efedrin/Fenilefrin/Noradrenalin/Vazopressin seçimi.',
+    shortDesc: 'MAP < 65 mmHg veya >%20–30 düşüş: Arteriyel dalga formu (dikrotik çentik & PPV >%13), ↓SVR vazopleji vs ↓Preload kanama vs ↓Kontraktilite vs Obstrüktif şok (Tamponad/PE/BCIS/Pnömotoraks/Oto-PEEP) ve Efedrin/Fenilefrin/Noradrenalin/Vazopressin seçimi.',
     tag: 'MAP ↓ · Hemodinamik & Perfüzyon',
-    footerNote: 'İlk 60 sn · 4 Arter Eğrisi & 11 Neden',
+    footerNote: 'İlk 60 sn · 4 Arter Eğrisi & 12 Neden',
     icon: Activity
   },
   {
     id: 'hypertension',
     category: 'cardiovascular',
     title: 'İntraoperatif Hipertansiyon & Hipertansif Kriz',
-    shortDesc: 'SKB ≥ 160–180 / DKB ≥ 100–110 mmHg: Yüzeyel anestezi/ağrı, hiperkapni, ilaç hatası, mesane/turnike, KİBAS (Cushing bradikardisi), feokromositoma (saf β-bloker yasağı!), preeklampsi, otonomik disrefleksi ve Esmolol/Labetalol/Nikardipin/NTG/SNP titrasyonu.',
+    shortDesc: 'SKB ≥ 160–180 / DKB ≥ 100–110 mmHg: Yüzeyel anestezi/ağrı, Desfluran sıçraması, hiperkapni, ilaç hatası, mesane/turnike, KİBAS (Cushing bradikardisi), feokromositoma (saf β-bloker yasağı!), preeklampsi, otonomik disrefleksi ve Esmolol/Labetalol/Nikardipin/NTG/SNP titrasyonu.',
     tag: 'KB ↑ · Sempatik & Vasküler Kriz',
-    footerNote: 'İlk 60 sn · 4 Arter Eğrisi & 11 Neden',
+    footerNote: 'İlk 60 sn · 4 Arter Eğrisi & 12 Neden',
     icon: Activity
   }
 ];

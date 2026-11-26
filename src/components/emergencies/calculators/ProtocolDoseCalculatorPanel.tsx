@@ -771,16 +771,21 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
         return (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <DoseCard
-              label="Akciğer Koruyucu Tidal Volüm (ARDSNet)"
+              label="Akciğer Koruyucu Tidal Volüm (ARDSNet — PBW!)"
               value={`${doses.fesVtMin}–${doses.fesVtMax} mL`}
-              detail="Hedef 6 mL/kg PBW · Pplat <30 cmH₂O · PEEP 8–12 cmH₂O"
-              tone="blue"
+              detail={`4–6 mL/kg PBW (ARDS dışı üst sınır: ${doses.fesVtUpperNonArds} mL) · Pplat <30 cmH₂O · Driving Pressure <15 · PEEP 8–12 cmH₂O`}
+              warning={
+                doses.fesPbwCaution
+                  ? `DİKKAT: ${doses.weightNum} kg gerçek kilo (TBW) ise obez hastada volutravma yapar! Boya göre İdeal Vücut Ağırlığı (PBW) girin — Erkek: 50 + 0,91×(boy−152,4) · Kadın: 45,5 + 0,91×(boy−152,4).`
+                  : 'Tidal volüm daima boya göre İdeal Vücut Ağırlığı (PBW) ile hesaplanır (Erkek: 50 + 0,91×[boy−152,4] · Kadın: 45,5 + 0,91×[boy−152,4]).'
+              }
+              tone={doses.fesPbwCaution ? 'amber' : 'blue'}
               isDark={isDark}
             />
             <DoseCard
               label="Noradrenalin İnfüzyonu (RV & Perfüzyon)"
               value={`${doses.fesNoradMinMcgMin}–${doses.fesNoradMaxMcgMin} mcg/dk`}
-              detail={`0.05–0.5 mcg/kg/dk IV (Hedef MAP ≥65–70 mmHg) · Dobutamin: ${doses.fesDobutaMinMcgMin}–${doses.fesDobutaMaxMcgMin} mcg/dk`}
+              detail={`0,05–0,5 mcg/kg/dk IV (Hedef MAP ≥65–70 mmHg; santral: 4 mg/50 mL = 80 mcg/mL, acil periferik: 4 mg/250 mL = 16 mcg/mL) · Dobutamin: ${doses.fesDobutaMinMcgMin}–${doses.fesDobutaMaxMcgMin} mcg/dk (2–10 mcg/kg/dk)`}
               tone="red"
               isDark={isDark}
             />

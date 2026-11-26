@@ -23,10 +23,12 @@ import {
   ChevronUp,
   ChevronsUpDown,
   Wind,
-  Droplets
+  Droplets,
+  ArrowUpRight
 } from 'lucide-react';
 import { EmergencyProtocol } from '../../data/emergenciesData';
 import { ShareLinkButton } from '../common/ShareLinkButton';
+import { PortalLink } from '../common/PortalLink';
 import { computeEmergencyDoses } from './calculators/emergencyDoseCalculations';
 import { StickyCrisisHeaderBar } from './calculators/StickyCrisisHeaderBar';
 import { ProtocolDoseCalculatorPanel } from './calculators/ProtocolDoseCalculatorPanel';
@@ -4274,6 +4276,40 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
           </div>
         )}
       </section>
+
+      {/* İlgili Kriz Protokolleri & Portal Araçları */}
+      {protocol.relatedLinks && protocol.relatedLinks.length > 0 && (
+        <div
+          className={`p-4 rounded-xl border space-y-2.5 ${
+            isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+          }`}
+        >
+          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+            İlgili Kriz Protokolleri &amp; Portal Araçları
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {protocol.relatedLinks.map((link, idx) => (
+              <PortalLink
+                key={idx}
+                href={link.href}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${
+                  isDark
+                    ? 'bg-slate-950 border-slate-700 text-slate-200 hover:border-amber-500/60 hover:text-amber-300'
+                    : 'bg-slate-50 border-slate-200 text-slate-800 hover:border-amber-400 hover:bg-amber-50/50 hover:text-amber-800'
+                }`}
+              >
+                {link.badge && (
+                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300">
+                    {link.badge}
+                  </span>
+                )}
+                <span>{link.label}</span>
+                <ArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+              </PortalLink>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* EKG Büyütme Modalı (Lightbox) */}
       {selectedEcgItem && (

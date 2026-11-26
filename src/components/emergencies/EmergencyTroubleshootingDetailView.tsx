@@ -16,10 +16,12 @@ import {
   Wind,
   Wrench,
   Play,
-  Pause
+  Pause,
+  ArrowUpRight
 } from 'lucide-react';
 import { EmergencyTroubleshootingItem } from '../../data/emergenciesTroubleshootingData';
 import { ShareLinkButton } from '../common/ShareLinkButton';
+import { PortalLink } from '../common/PortalLink';
 
 type WaveformTone = 'normal' | 'warning' | 'danger' | 'info';
 
@@ -603,39 +605,87 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
         />
       )}
 
-      {/* C4. İnvaziv Arteriyel Basınç Dalga Formu & PPV / Dikrotik Çentik Ayrımı */}
-      {item.arterialPatterns && item.arterialPatterns.length > 0 && (
-        <WaveformPatternGrid
-          title="2. İnvaziv Arteriyel Dalga Formu, Dikrotik Çentik & PPV / SVV Ayrımı"
-          subtitle="Vazopleji vs Hipovolemi vs Düşük Debi / Artefakt Hızlı Tanı"
-          icon={<Activity className="w-4 h-4 text-cyan-500" />}
-          patterns={item.arterialPatterns}
-          isDark={isDark}
-          viewBox="0 0 160 62"
-          svgHeightClass="h-16"
-          renderSvgGuides={() => (
-            <>
-              <line x1="2" y1="26" x2="158" y2="26" stroke="#7f1d1d" strokeWidth="1" strokeDasharray="3 3" />
-              <text x="3" y="22" fill="#fca5a5" fontSize="6" fontFamily="monospace">
-                MAP 65 mmHg Eşiği
-              </text>
-              <line x1="2" y1="50" x2="158" y2="50" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
-              <text x="3" y="57" fill="#64748b" fontSize="6" fontFamily="monospace">
-                Diyastolik Bazal
-              </text>
-            </>
-          )}
-          renderExtraMeta={(pat) => (
-            <div
-              className={`px-2 py-1 rounded border text-[10px] font-mono font-bold tabular-nums text-center ${getToneBadgeClass(
-                pat.tone
-              )}`}
-            >
-              {pat.mapBadge}
-            </div>
-          )}
-        />
-      )}
+      {/* C4. İnvaziv Arteriyel Basınç Dalga Formu Ayrımı (Hipotansiyon vs Hipertansiyon dinamik) */}
+      {item.arterialPatterns && item.arterialPatterns.length > 0 && (() => {
+        const isHtn = item.id === 'hypertension';
+        const guide = item.arterialGuideConfig ?? (isHtn
+          ? {
+              title: '2. İnvaziv Arteriyel Dalga Formu, Sempatik Yük & Rezonans Artefaktı Ayrımı',
+              subtitle: 'Normal vs Sempatik Fırtına vs Cushing Refleksi vs Underdamped Artefaktı',
+              thresholdY: 14,
+              thresholdLabel: 'SKB ≥ 180 / MAP 115 Eşiği',
+              baselineY: 46,
+              baselineLabel: 'Normal Diyastolik'
+            }
+          : {
+              title: '2. İnvaziv Arteriyel Dalga Formu, Dikrotik Çentik & PPV / SVV Ayrımı',
+              subtitle: 'Vazopleji vs Hipovolemi vs Düşük Debi / Artefakt Hızlı Tanı',
+              thresholdY: 26,
+              thresholdLabel: 'MAP 65 mmHg Eşiği',
+              baselineY: 50,
+              baselineLabel: 'Diyastolik Bazal'
+            });
+        return (
+          <WaveformPatternGrid
+            title={guide.title}
+            subtitle={guide.subtitle}
+            icon={<Activity className={`w-4 h-4 ${isHtn ? 'text-rose-500' : 'text-cyan-500'}`} />}
+            patterns={item.arterialPatterns}
+            isDark={isDark}
+            viewBox="0 0 160 62"
+            svgHeightClass="h-16"
+            renderSvgGuides={() => (
+              <>
+                <line
+                  x1="2"
+                  y1={guide.thresholdY}
+                  x2="158"
+                  y2={guide.thresholdY}
+                  stroke="#7f1d1d"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+                <text
+                  x="3"
+                  y={Math.max(7, guide.thresholdY - 3)}
+                  fill="#fca5a5"
+                  fontSize="6"
+                  fontFamily="monospace"
+                >
+                  {guide.thresholdLabel}
+                </text>
+                <line
+                  x1="2"
+                  y1={guide.baselineY}
+                  x2="158"
+                  y2={guide.baselineY}
+                  stroke="#334155"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+                <text
+                  x="3"
+                  y={Math.min(59, guide.baselineY + 7)}
+                  fill="#64748b"
+                  fontSize="6"
+                  fontFamily="monospace"
+                >
+                  {guide.baselineLabel}
+                </text>
+              </>
+            )}
+            renderExtraMeta={(pat) => (
+              <div
+                className={`px-2 py-1 rounded border text-[10px] font-mono font-bold tabular-nums text-center ${getToneBadgeClass(
+                  pat.tone
+                )}`}
+              >
+                {pat.mapBadge}
+              </div>
+            )}
+          />
+        );
+      })()}
 
       {/* D. Sistematik Ayırıcı Tanı Matriksi */}
       <div
@@ -852,6 +902,40 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
           </ul>
         </div>
       </div>
+
+      {/* F2. İlgili Kriz Protokolleri & Portal Araçları */}
+      {item.relatedLinks && item.relatedLinks.length > 0 && (
+        <div
+          className={`p-4 rounded-xl border space-y-2.5 ${
+            isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
+          }`}
+        >
+          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+            İlgili Kriz Protokolleri &amp; Portal Araçları
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {item.relatedLinks.map((link, idx) => (
+              <PortalLink
+                key={idx}
+                href={link.href}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${
+                  isDark
+                    ? 'bg-slate-950 border-slate-700 text-slate-200 hover:border-teal-500/60 hover:text-teal-300'
+                    : 'bg-slate-50 border-slate-200 text-slate-800 hover:border-teal-400 hover:bg-teal-50/50 hover:text-teal-800'
+                }`}
+              >
+                {link.badge && (
+                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-teal-500/15 text-teal-700 dark:text-teal-300">
+                    {link.badge}
+                  </span>
+                )}
+                <span>{link.label}</span>
+                <ArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+              </PortalLink>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* G. Kaynaklar */}
       {item.references && item.references.length > 0 && (
