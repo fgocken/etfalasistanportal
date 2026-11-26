@@ -50,6 +50,12 @@ import { HydrocortisoneProtocol } from './HydrocortisoneProtocol';
 import { DexamethasoneProtocol } from './DexamethasoneProtocol';
 import { MethylprednisoloneProtocol } from './MethylprednisoloneProtocol';
 import { ThiopentalProtocol } from './ThiopentalProtocol';
+import { TranexamicAcidProtocol } from './TranexamicAcidProtocol';
+import { EsmololProtocol } from './EsmololProtocol';
+import { NicardipineProtocol } from './NicardipineProtocol';
+import { GlycerylTrinitrateProtocol } from './GlycerylTrinitrateProtocol';
+import { SodiumNitroprussideProtocol } from './SodiumNitroprussideProtocol';
+import { PheniramineProtocol } from './PheniramineProtocol';
 
 interface Props {
   isDark: boolean;
@@ -1425,6 +1431,312 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
         borderClass: 'border-rose-500/30'
       }
     ]
+  },
+  {
+    id: 'tranexamic-acid',
+    category: 'hemostasis',
+    categories: ['hemostasis', 'medications'],
+    categoryLabel: 'Hemostaz · Antifibrinolitik (Lizin Analoğu)',
+    badge: 'CRASH-2 / WOMAN / POISE-3 · İlk 3 Saat',
+    title: 'Traneksamik Asit (TXA · Transamine® / Herajit®)',
+    shortDesc: 'Plazminojen lizin bağlanma bölgesini bloke eden sentetik antifibrinolitik; travma/PPH ilk 3 saat 1 g + 1 g protokolü, non-kardiyak cerrahi (POISE-3), CPB yüksek doz nöbet uyarısı, renal doz ayarlama ve ölümcül intratekal LASA güvenlik önlemleri.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul & Sunum',
+        value: '250 mg / 500 mg (100 mg/mL)',
+        subtext: 'Transamine® · Herajit® · Tranex®',
+        tooltip: '250 mg/2,5 mL ve 500 mg/5 mL IV ampul; kan ürünleri ve penisilinlerle aynı lümenden asla verilmez',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Travma / PPH (İlk 3 Saat!)',
+        value: '1 g IV (10 dk) → 1 g / 8 sa',
+        subtext: 'CRASH-2 · CRASH-3 · WOMAN',
+        tooltip: 'Kanama başlangıcından >3 saat sonra uygulanması faydasızdır ve kanamaya bağlı mortaliteyi artırabilir',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Majör Cerrahi & CPB Nöbet Eşiği',
+        value: 'POISE-3: 1+1 g · CPB <50 mg/kg',
+        subtext: '>100 mg/kg: GABA_A/Glisin Nöbet Riski',
+        tooltip: 'Kardiyak cerrahide kümülatif yüksek doz (>50–100 mg/kg) ve böbrek yetmezliğinde doz-bağımlı postop nöbet riski belirgin artar',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'WHO / ISMP LASA Never-Event',
+        value: 'İNTRATEKAL = ÖLÜMCÜL!',
+        subtext: 'Bupivakain ampul karışma riski',
+        tooltip: 'Kazara spinal/intratekal enjeksiyon refrakter miyoklonus, status epileptikus, VF ve >%50 mortaliteye yol açar — nöraksiyel masadan kesinlikle ayrı tutulmalıdır',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
+  },
+  {
+    id: 'esmolol',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'Vazoaktif · Ultra-Kısa Kardiyoselektif β₁-Bloker',
+    badge: 't½ 9 dk · Eritrosit Esteraz · Brevibloc®',
+    title: 'Esmolol (ESmolol · Brevibloc®)',
+    shortDesc: 'Eritrosit sitozolik esterazlarıyla organ-bağımsız yıkılan ultra-kısa etkili (t½ 9 dk) kardiyoselektif β₁-bloker; entübasyon yanıtı, SVT/AF hız kontrolü, aort diseksiyonu dP/dt kontrolü, 250 mg/mL konsantre ampul tuzağı ve feokromositoma güvenliği.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Ultra-Kısa PK (Organ-Bağımsız)',
+        value: 'Başlangıç 1–2 dk · t½ 9 dk',
+        subtext: 'Eritrosit Esteraz Hidrolizi',
+        tooltip: 'Böbrek ve karaciğer yetmezliğinden bağımsız yıkılır (plazma psödokolinesteraz DEĞİL, eritrosit esterazı); kesilince 10–30 dk’da etki silinir',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'Bolus & İnfüzyon Aralığı',
+        value: '0,5–1 mg/kg → 50–300 mcg/kg/dk',
+        subtext: 'Hazır flakon: 100 mg / 10 mL (10 mg/mL)',
+        tooltip: 'SVT/AF için 500 mcg/kg/dk 1 dk yükleme → 50–200 mcg/kg/dk titrasyon; >300 mcg/kg/dk’da β₁ selektivitesi azalır',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Konsantre Ampul Tuzağı',
+        value: '250 mg/mL ASLA DİREKT PUŞE!',
+        subtext: 'Periferik maks 10 mg/mL · SVK 20 mg/mL',
+        tooltip: '2500 mg/10 mL konsantre ampul seyreltilmeden puşelenirse 25× doz aşımı ve kardiyak arrest yapar; >10 mg/mL periferik nekroz riski taşır',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Aort Diseksiyonu & Feokromositoma',
+        value: 'Diseksiyon: Önce β · Feo: Önce α!',
+        subtext: 'Antidot: Atropin · Glukagon 3–5 mg',
+        tooltip: 'Aort diseksiyonunda vazodilatatörden önce KH <60/dk hedeflenir; feokromositoma ve kokain krizinde α-blokaj öncesi tek başına β-bloker yasaktır',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
+  {
+    id: 'nicardipine',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'Vazoaktif · IV Vasküler Selektif KKB',
+    badge: '5–15 mg/sa · ATACH-2 / İKH / Preeklampsi',
+    title: 'Nikardipin (niCARdipine · Cardene® / Loxen®)',
+    shortDesc: '2. kuşak dihidropiridin L-tipi Ca²⁺ kanal blokeri; minimal miyokard depresyonuyla öngörülebilir arteriyoler vazodilatasyon, nöroşirürji/İKH, intraoperatif HT (5–15 mg/sa & mikro-bolus), şiddetli preeklampsi, flebit ve RL/NaHCO₃ geçimsizliği.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Standart İnfüzyon & Mikro-Bolus',
+        value: '5 mg/sa → Maks 15 mg/sa',
+        subtext: 'Mikro-bolus: 100–500 mcg IV',
+        tooltip: '5–15 dk aralıklarla 2,5 mg/sa artırılır; hedefe ulaşınca 3 mg/sa idameye inilir. Pediatri: 0,5–3 (maks 5) mcg/kg/dk',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Serebral & Koroner Profil',
+        value: 'Yüksek Vasküler Selektivite',
+        subtext: 'Başlangıç 1–5 dk · Offset 30–60 dk',
+        tooltip: 'İntraserebral kanama (ATACH-2), kraniyotomi ve karotis cerrahisinde KİBAS’ı SNP/GTN gibi artırmadan güvenli kan basıncı kontrolü sağlar',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'Flebit & Y-Site Geçimsizlik',
+        value: '0,1 mg/mL (12 sa) · RL/NaHCO₃ Yasak',
+        subtext: 'Yalnızca SF veya %5 Dekstroz',
+        tooltip: 'Ringer Laktat ve %8,4 Sodyum Bikarbonat ile çökelti oluşturur; periferik 0,1 mg/mL hatta 12 saatte bir damar yolu değişimi şarttır',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Aort Darlığı & MgSO₄ Etkileşimi',
+        value: 'İleri AD: Yasak · MgSO₄ Sinerji',
+        subtext: 'Hepatik CYP3A4 · Antidot: CaCl₂ + VP',
+        tooltip: 'İleri aort darlığında kontrendikedir; preeklampside MgSO₄ ile kombine kullanımda derin hipotansiyon ve NDMB potansiyalizasyonu gelişebilir',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
+  },
+  {
+    id: 'glyceryl-trinitrate',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'Vazoaktif · Organik Nitrat / NO Donörü',
+    badge: 'Perlinganit® 1 mg/mL · Venodilatatör & Tokoliz',
+    title: 'Gliserol Trinitrat (Nitrogliserin · Perlinganit®)',
+    shortDesc: 'Düşük dozda baskın venodilatatör, yüksek dozda arteriyoler/koroner vazodilatatör; intraoperatif MI, SCAPE pulmoner ödem, akut obstetrik uterin relaksasyon (50–100 mcg bolus), PDE-5/RV MI yasakları, PVC adsorpsiyonu ve methemoglobinemi.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'purple',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul & Standart İnfüzyon',
+        value: '5–200 mcg/dk (Perlinganit®)',
+        subtext: '10 mg/10 mL (1 mg/mL) · t½ 1–4 dk',
+        tooltip: 'Düşük doz (<40–50 mcg/dk) baskın venodilatasyon (↓preload/↓LVEDP), yüksek doz (>50–200 mcg/dk) arteriyoler + epikardiyal koroner vazodilatasyon',
+        colorClass: 'text-purple-700 dark:text-purple-300',
+        bgClass: 'bg-purple-500/10',
+        borderClass: 'border-purple-500/30'
+      },
+      {
+        label: 'Obstetrik Akut Tokoliz Bolusu',
+        value: '50–100 mcg IV Puşe',
+        subtext: 'Retansiyo Plasenta · İkiz Baş Takılması',
+        tooltip: '60–90 sn içinde geçici hızlı uterin gevşeme sağlar (gerekirse tekrar, maks 500 mcg); kısa süreli hipotansiyon için vazopressör hazır bulundurulur',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'PVC Adsorpsiyon & Tolerans',
+        value: 'PVC: %40–80 Kayıp → PE Hat!',
+        subtext: '24–48 sa Nitrat Toleransı · MetHb',
+        tooltip: 'Standart PVC setlere hızla adsorbe olur — Polietilen (PE) hat kullanın; >7 mcg/kg/dk veya uzamış infüzyonda MetHb (Metilen Mavisi) izleyin',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Ölümcül Mutlak Kontrendikasyon',
+        value: 'PDE-5 (24–48 sa) · RV İnfarktı',
+        subtext: 'İleri AD · Tamponad · KİBAS',
+        tooltip: 'Sildenafil/Vardenafil sonrası 24 sa, Tadalafil sonrası 48 sa içinde ve sağ ventrikül infarktında (V4R ST↑) refrakter ölümcül kollaps yapar',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
+  },
+  {
+    id: 'sodium-nitroprusside',
+    category: 'vasoactive',
+    categories: ['vasoactive', 'medications'],
+    categoryLabel: 'Vazoaktif · Dengeli Direkt NO Donörü (High-Alert)',
+    badge: 'Nipruss® · 30–60 sn · Siyanür Güvenliği',
+    title: 'Sodyum Nitroprussid (Nipruss® · SNP)',
+    shortDesc: '30–60 saniyede etki eden dengeli arteriyel/venöz ultra-hızlı vazodilatatör; zorunlu invaziv arter izlemi, yalnızca %5 Dekstroz & ışıktan koruma, KİBAS/koroner çalma yasakları, kümülatif siyanür/tiyosiyanat hesaplayıcı ve Hidroksokobalamin/Tiyosülfat antidotları.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Güvenli Aralık & Tavan Doz',
+        value: '0,3–2 mcg/kg/dk (Tavan 10 / 10 dk)',
+        subtext: 'Başlangıç 30–60 sn · Offset 1–3 dk',
+        tooltip: '>2 mcg/kg/dk üzerinde siyanür birikim hızı hepatik rodanaz kapasitesini aşar; 10 mcg/kg/dk kesinlikle 10 dakikadan uzun verilmez',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Yalnızca D5W & Işıktan Koruma',
+        value: '%5 Dekstroz + Opak Enjektör/Hat',
+        subtext: 'Mavi/Yeşil Renk = Fotoliz → İMHA!',
+        tooltip: 'SF ile değil yalnızca %5 Dekstroz ile sulandırılır (Nipruss® 60 mg / 50 mg flakon); ışığa maruziyet hızla serbest siyanür (CN⁻) oluşturur',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Siyanür & Tiyosiyanat Antidotu',
+        value: 'Hidroksokobalamin 5 g IV',
+        subtext: 'Alternatif: Na-Tiyosülfat %25 12,5 g',
+        tooltip: 'Erken triad: Taşiflaksi + açıklanamayan laktik asidoz + artmış SvO₂ (venöz hiperoksi). KC yetmezliğinde CN⁻, böbrek yetmezliğinde Tiyosiyanat birikir',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'İnvaziv Arter & Kritik Yasaklar',
+        value: 'A-Line Zorunlu · KİBAS / Steal Yasak',
+        subtext: 'Aort Diseksiyonunda Önce Esmolol!',
+        tooltip: 'KİBAS (↑ICP), koroner çalma (KAH’ta GTN tercih), gebelik (fetal CN⁻) ve beta-blokaj öncesi aort diseksiyonunda tehlikelidir',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
+  },
+  {
+    id: 'pheniramine',
+    category: 'medications',
+    categories: ['medications'],
+    categoryLabel: 'Antihistaminik · 1. Kuşak Parenteral H₁ Bloker',
+    badge: 'Avil® 45,5 mg/2 mL · Anafilaksi 2. Basamak',
+    title: 'Feniramin Maleat (Avil® 45,5 mg/2 mL)',
+    shortDesc: 'Türkiye hastane pratiğinin temel parenteral 1. kuşak H₁ antihistaminiği (Avil®); anafilakside Adrenalin’i geciktirmeyen 2.–3. basamak adjuvan rolü, ≥1–2 dk yavaş IV uygulaması, <2 yaş bebek kontrendikasyonu ve AGS Beers geriatrik deliryum uyarısı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul & Erişkin Doz',
+        value: '45,5 mg / 2 mL (Yavaş IV ≥1–2 dk)',
+        subtext: 'Avil® · Maks 2 ampul/gün (91 mg)',
+        tooltip: 'Tercihen 1 ampul (2 mL) + 8 mL %0,9 NaCl ile 10 mL’ye tamamlanarak (4,55 mg/mL) ≥1–2 dk yavaş IV veya derin IM verilir; hızlı IV puşe hipotansiyon/nöbet yapabilir',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Anafilaksi Altın Kuralı (WAO/EAACI)',
+        value: 'ASLA 1. BASAMAK DEĞİLDİR!',
+        subtext: 'Önce ADRENALİN · Avil® = Cilt Adjuvanı',
+        tooltip: 'H₁ antihistaminikler şoku, laringeal ödemi veya bronkospazmı düzeltmez; yalnızca stabilizasyon sonrası ürtiker ve kaşıntı için adjuvan olarak verilir',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Pediatrik Yaş Sınırı',
+        value: '<2 Yaş Bebeklerde KONTRENDİKE!',
+        subtext: '≥2 Yaş: 0,5–1 mg/kg (Maks 45,5 mg)',
+        tooltip: 'Yenidoğan ve <1–2 yaş süt çocuklarında paradoksal SSS eksitasyonu, konvülsiyon ve solunum depresyonu riski nedeniyle kontrendikedir',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Geriatri (Beers 2023) & Opioid Kaşıntısı',
+        value: 'M₁ Antikolinerjik Deliryum Riski',
+        subtext: 'Nöraksiyel Morfin: Ondansetron/Nalokson',
+        tooltip: '>65 yaşta postop deliryum, idrar retansiyonu ve dar açılı glokom tetikler; nöraksiyel opioid kaşıntısı histamin değil µ-reseptör aracılıdır',
+        colorClass: 'text-purple-700 dark:text-purple-300',
+        bgClass: 'bg-purple-500/10',
+        borderClass: 'border-purple-500/30'
+      }
+    ]
   }
 ];
 
@@ -1535,7 +1847,36 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     'tiyopental-sodyum': 'thiopental',
     pental: 'thiopental',
     'pental-sodyum': 'thiopental',
-    tyosod: 'thiopental'
+    tyosod: 'thiopental',
+    txa: 'tranexamic-acid',
+    'traneksamik-asit': 'tranexamic-acid',
+    traneksamik: 'tranexamic-acid',
+    transamine: 'tranexamic-acid',
+    herajit: 'tranexamic-acid',
+    tranex: 'tranexamic-acid',
+    esmelol: 'esmolol',
+    'esmolol-hcl': 'esmolol',
+    brevibloc: 'esmolol',
+    nikardipin: 'nicardipine',
+    cardene: 'nicardipine',
+    loxen: 'nicardipine',
+    'gliserol-trinitrat': 'glyceryl-trinitrate',
+    nitrogliserin: 'glyceryl-trinitrate',
+    nitroglycerin: 'glyceryl-trinitrate',
+    perlinganit: 'glyceryl-trinitrate',
+    nitronal: 'glyceryl-trinitrate',
+    gtn: 'glyceryl-trinitrate',
+    ntg: 'glyceryl-trinitrate',
+    'sodyum-nitroprussid': 'sodium-nitroprusside',
+    'sodyum-nitroprusid': 'sodium-nitroprusside',
+    nitroprussid: 'sodium-nitroprusside',
+    nitroprusid: 'sodium-nitroprusside',
+    nipruss: 'sodium-nitroprusside',
+    snp: 'sodium-nitroprusside',
+    feniramin: 'pheniramine',
+    'feniramin-maleat': 'pheniramine',
+    'pheniramine-maleate': 'pheniramine',
+    avil: 'pheniramine'
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId] || activeProtocolId) : null;
   const selectedProtocol = PROTOCOL_CARDS.find(card => card.id === normalizedProtocolId);
@@ -2211,6 +2552,36 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
       {/* GÖRÜNÜM 28: TİYOPENTAL SODYUM MONOGRAFİSİ & İNDÜKSİYON / BARBİTÜRAT KOMASI / SRSE / IA ACİL HESAPLAYICISI */}
       {(activeProtocolId === 'thiopental' || activeProtocolId === 'tiyopental' || activeProtocolId === 'tiyopental-sodyum' || activeProtocolId === 'pental' || activeProtocolId === 'pental-sodyum' || activeProtocolId === 'tyosod') && (
         <ThiopentalProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 29: TRANEKSAMİK ASİT (TXA) MONOGRAFİSİ & HEMOSTAZ / CPB / RENAL HESAPLAYICISI */}
+      {normalizedProtocolId === 'tranexamic-acid' && (
+        <TranexamicAcidProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 30: ESMOLOL MONOGRAFİSİ & ULTRA-KISA β₁ İNFÜZYON / AORT DİSEKSİYONU HESAPLAYICISI */}
+      {normalizedProtocolId === 'esmolol' && (
+        <EsmololProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 31: NİKARDİPİN MONOGRAFİSİ & VASKÜLER SELEKTİF KKB / İKH / PREEKLAMPSİ HESAPLAYICISI */}
+      {normalizedProtocolId === 'nicardipine' && (
+        <NicardipineProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 32: GLİSEROL TRİNİTRAT (NİTROGLİSERİN / PERLINGANIT) MONOGRAFİSİ & VENODİLATATÖR / TOKOLİZ HESAPLAYICISI */}
+      {normalizedProtocolId === 'glyceryl-trinitrate' && (
+        <GlycerylTrinitrateProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 33: SODYUM NİTROPRUSSİD (NİPRUSS / SNP) MONOGRAFİSİ & SİYANÜR TOKSİSİTESİ HESAPLAYICISI */}
+      {normalizedProtocolId === 'sodium-nitroprusside' && (
+        <SodiumNitroprussideProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 34: FENİRAMİN MALEAT (AVİL) MONOGRAFİSİ & H₁ ANTİHİSTAMİNİK / PEDİATRİK / ANAFİLAKSİ ADJUVAN HESAPLAYICISI */}
+      {normalizedProtocolId === 'pheniramine' && (
+        <PheniramineProtocol isDark={isDark} />
       )}
 
       {/* HENÜZ PROTOKOL EKLENMEMİŞ DİĞER KATEGORİLER İÇİN MODÜLER GÖRÜNÜM */}
