@@ -213,14 +213,20 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
   const allGoldenDone =
     item.goldenSixtySeconds.length > 0 && checkedGoldenSteps.length === item.goldenSixtySeconds.length;
 
+  const isRedAccent = item.id === 'hypotension' || item.id === 'hypertension';
+
   return (
     <div className="space-y-5 animate-in fade-in duration-300">
       {/* Üst Başlık ve Geri Dönüş */}
       <div
         className={`p-5 sm:p-6 rounded-2xl border ${
-          isDark
-            ? 'bg-gradient-to-r from-teal-950/40 via-slate-900 to-slate-900 border-teal-500/35 shadow-lg shadow-slate-950/30'
-            : 'bg-gradient-to-r from-teal-50/80 via-white to-cyan-50/50 border-teal-200 shadow-xs'
+          isRedAccent
+            ? isDark
+              ? 'bg-gradient-to-r from-red-950/50 via-slate-900 to-slate-900 border-red-500/45 shadow-lg shadow-slate-950/30'
+              : 'bg-gradient-to-r from-red-50/90 via-white to-rose-50/60 border-red-200 shadow-xs'
+            : isDark
+              ? 'bg-gradient-to-r from-teal-950/40 via-slate-900 to-slate-900 border-teal-500/35 shadow-lg shadow-slate-950/30'
+              : 'bg-gradient-to-r from-teal-50/80 via-white to-cyan-50/50 border-teal-200 shadow-xs'
         }`}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -236,7 +242,7 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
               }`}
               title="Listeye Dön"
             >
-              <ArrowLeft className="w-5 h-5 text-teal-500" />
+              <ArrowLeft className={`w-5 h-5 ${isRedAccent ? 'text-red-500' : 'text-teal-500'}`} />
             </button>
 
             <div className="space-y-1">
@@ -244,7 +250,11 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
                 <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                   {item.title}
                 </h1>
-                <span className="text-xs font-medium text-teal-600 dark:text-teal-400">
+                <span
+                  className={`text-xs font-medium ${
+                    isRedAccent ? 'text-red-600 dark:text-red-400' : 'text-teal-600 dark:text-teal-400'
+                  }`}
+                >
                   · {item.categoryLabel}
                 </span>
               </div>
@@ -270,7 +280,7 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
                   : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-xs'
               }`}
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-teal-500" />
+              <ArrowLeft className={`w-3.5 h-3.5 ${isRedAccent ? 'text-red-500' : 'text-teal-500'}`} />
               <span>Listeye Dön</span>
             </button>
           </div>
@@ -284,9 +294,13 @@ export const EmergencyTroubleshootingDetailView: React.FC<EmergencyTroubleshooti
             ? isDark
               ? 'bg-rose-950/90 border-rose-500/45 text-rose-100'
               : 'bg-rose-50/95 border-rose-300 text-rose-950'
-            : isDark
-              ? 'bg-slate-900/90 border-teal-500/35 text-slate-100'
-              : 'bg-white/95 border-teal-200 text-slate-900'
+            : isRedAccent
+              ? isDark
+                ? 'bg-slate-900/90 border-red-500/40 text-slate-100'
+                : 'bg-white/95 border-red-200 text-slate-900'
+              : isDark
+                ? 'bg-slate-900/90 border-teal-500/35 text-slate-100'
+                : 'bg-white/95 border-teal-200 text-slate-900'
         }`}
       >
         <div className="flex flex-wrap items-center gap-2.5">

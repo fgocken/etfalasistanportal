@@ -141,6 +141,45 @@ export interface EmergencyDoses {
   totalSpinalFluidBolusMl: number;
   totalSpinalKetamineLabel: string;
   totalSpinalMidazolamMg: number;
+
+  // 17. Intraop MI
+  miEsmololBolusMg: number;
+  miEsmololInfMinMgMin: number;
+  miEsmololInfMaxMgMin: number;
+  miUfhMinIu: number;
+  miUfhMaxIu: number;
+
+  // 18. Malignant Arrhythmias
+  arrDefibLabel: string;
+  arrCardioversionLabel: string;
+  arrAmioLabel: string;
+  arrTorsadesMgLabel: string;
+  arrAdenosineLabel: string;
+
+  // 19. Intraop Bradycardia
+  bradyAtropineLabel: string;
+  bradyEpiLabel: string;
+  bradyDopamineRangeMcgMin: string;
+
+  // 20. Intraop Hypoglycemia
+  hypoDextroseLabel: string;
+  hypoDextroseGrams: string;
+  hypoGlucagonLabel: string;
+
+  // 21. Myxedema Coma
+  myxedemaHydrocortLabel: string;
+  myxedemaT4Label: string;
+  myxedemaT3Label: string;
+
+  // 22. Pheochromocytoma Crisis
+  pheoSnpRangeMcgMin: string;
+  pheoMgLoadLabel: string;
+  pheoEsmololBolusMg: number;
+
+  // 23. Adrenal Crisis
+  adrenalHydrocortLabel: string;
+  adrenalFluid1hLabel: string;
+  adrenalNoradRangeMcgMin: string;
 }
 
 export interface StickyDoseHighlight {
@@ -382,6 +421,75 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
   const totalSpinalKetamineLabel = `${Math.round(w * 0.5)}–${Math.round(w * 1)} mg IV`;
   const totalSpinalMidazolamMg = +(Math.min(3, Math.max(0.5, w * 0.03))).toFixed(1);
 
+  // 17. Intraop MI
+  const miEsmololBolusMg = Math.round(w * 0.5);
+  const miEsmololInfMinMgMin = +(w * 0.05).toFixed(1);
+  const miEsmololInfMaxMgMin = +(w * 0.2).toFixed(1);
+  const miUfhMinIu = Math.min(5000, Math.round(w * 60));
+  const miUfhMaxIu = Math.min(5000, Math.round(w * 70));
+
+  // 18. Malignant Arrhythmias
+  const arrDefibLabel = isPediatric
+    ? `${Math.round(w * 2)} J → ${Math.round(w * 4)} J (2→4 J/kg)`
+    : '150–200 J Bifazik (Defibrilasyon)';
+  const arrCardioversionLabel = isPediatric
+    ? `${Math.round(w * 0.5)}–${Math.round(w * 1)} J → ${Math.round(w * 2)} J Senk.`
+    : '100 J (VT) · 50–100 J (SVT) · 120–200 J (AF)';
+  const arrAmioLabel = isPediatric
+    ? `${Math.min(300, Math.round(w * 5))} mg IV (5 mg/kg)`
+    : '300 mg IV (VF/pVT) · 150 mg/10 dk (Nabızlı VT)';
+  const arrTorsadesMgLabel = isPediatric
+    ? `${Math.min(2000, Math.round(w * 25))}–${Math.min(2000, Math.round(w * 50))} mg IV (25–50 mg/kg)`
+    : '2 g (2000 mg) IV (1–2 dk; stabilde 10–15 dk)';
+  const arrAdenosineLabel = isPediatric
+    ? `${+(Math.min(6, w * 0.1)).toFixed(1)} mg → ${+(Math.min(12, w * 0.2)).toFixed(1)} mg`
+    : '6 mg → 12 mg hızlı IV puşe + SF flush';
+
+  // 19. Intraop Bradycardia
+  const bradyAtropineLabel = isPediatric
+    ? `${+(Math.min(0.5, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg)`
+    : '1 mg IV her 3–5 dk (maks 3 mg · AHA 2020)';
+  const bradyEpiLabel = isPediatric
+    ? `${Math.min(1000, Math.round(w * 10))} mcg IV (10 mcg/kg — HR<60 + KPR!)`
+    : '2–10 mcg/dk IV infüzyon (köprü: 10–50 mcg bolus)';
+  const bradyDopamineRangeMcgMin = `${Math.round(w * 5)}–${Math.round(w * 20)} mcg/dk`;
+
+  // 20. Intraop Hypoglycemia (Rule of 50 in pediatrics — NO D50!)
+  const hypoDextroseLabel = isPediatric
+    ? `${Math.round(w * 2)}–${Math.round(w * 5)} mL %10 Dekstroz (2–5 mL/kg)`
+    : '100–250 mL %10 Dekstroz (veya 25–50 mL %50 Dekstroz)';
+  const hypoDextroseGrams = isPediatric
+    ? `${+(w * 0.2).toFixed(1)}–${+(w * 0.5).toFixed(1)} g glukoz`
+    : '12,5–25 g glukoz IV';
+  const hypoGlucagonLabel = w < 20 ? '0,5 mg IM/SC (<20 kg)' : '1 mg IM/SC (IV yol yoksa)';
+
+  // 21. Myxedema Coma
+  const myxedemaHydrocortLabel = isPediatric
+    ? `${Math.min(100, Math.max(25, Math.round(w * 2)))} mg IV (2 mg/kg)`
+    : '100 mg IV bolus → 50–100 mg her 6–8 saat';
+  const myxedemaT4Label = isPediatric
+    ? `${Math.round(w * 5)}–${Math.round(w * 10)} mcg IV yükleme`
+    : '200–400 mcg IV yükleme (yaşlı/KAH: 200 mcg)';
+  const myxedemaT3Label = isPediatric
+    ? 'Pediatrik Endokrinoloji konsültasyonu'
+    : '5–20 mcg IV → 2,5–10 mcg/8 sa (KAH/aritmide kaçın)';
+
+  // 22. Pheochromocytoma Crisis
+  const pheoSnpRangeMcgMin = `${+(w * 0.3).toFixed(1)}–${+(w * 2).toFixed(1)} mcg/dk`;
+  const pheoMgLoadLabel = isPediatric
+    ? `${Math.min(2000, Math.round(w * 40))} mg IV (40 mg/kg)`
+    : '2–4 g IV (15–20 dk yükleme) → 1–2 g/sa';
+  const pheoEsmololBolusMg = Math.round(w * 0.5);
+
+  // 23. Adrenal Crisis
+  const adrenalHydrocortLabel = isPediatric
+    ? `${Math.min(100, Math.max(25, Math.round(w * 2)))} mg IV (2 mg/kg)`
+    : '100 mg IV bolus → 200 mg/24 sa infüzyon (50 mg/6 sa)';
+  const adrenalFluid1hLabel = isPediatric
+    ? `${Math.min(1000, Math.round(w * 20))} mL dengeli kristaloid / %0,9 NaCl (20 mL/kg)`
+    : '1000 mL %0,9 NaCl / dengeli kristaloid (1. saat)';
+  const adrenalNoradRangeMcgMin = `${+(w * 0.05).toFixed(1)}–${+(w * 0.5).toFixed(1)} mcg/dk`;
+
   return {
     weightNum,
     isValidWeight,
@@ -509,6 +617,38 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     totalSpinalFluidBolusMl,
     totalSpinalKetamineLabel,
     totalSpinalMidazolamMg,
+
+    miEsmololBolusMg,
+    miEsmololInfMinMgMin,
+    miEsmololInfMaxMgMin,
+    miUfhMinIu,
+    miUfhMaxIu,
+
+    arrDefibLabel,
+    arrCardioversionLabel,
+    arrAmioLabel,
+    arrTorsadesMgLabel,
+    arrAdenosineLabel,
+
+    bradyAtropineLabel,
+    bradyEpiLabel,
+    bradyDopamineRangeMcgMin,
+
+    hypoDextroseLabel,
+    hypoDextroseGrams,
+    hypoGlucagonLabel,
+
+    myxedemaHydrocortLabel,
+    myxedemaT4Label,
+    myxedemaT3Label,
+
+    pheoSnpRangeMcgMin,
+    pheoMgLoadLabel,
+    pheoEsmololBolusMg,
+
+    adrenalHydrocortLabel,
+    adrenalFluid1hLabel,
+    adrenalNoradRangeMcgMin,
   };
 }
 
@@ -831,6 +971,139 @@ export function getStickyDoseHighlights(
           label: 'Hızlı Kristaloid + Pozisyon',
           value: `${doses.totalSpinalFluidBolusMl} mL · Bacak Kaldır (LUD)`,
           tone: 'blue',
+        },
+      ];
+
+    case 'intraop-mi':
+      return [
+        {
+          label: 'Esmolol (MVO₂ / HR)',
+          value: `${doses.miEsmololBolusMg} mg → ${doses.miEsmololInfMinMgMin}–${doses.miEsmololInfMaxMgMin} mg/dk`,
+          tone: 'blue',
+        },
+        {
+          label: 'Nitrogliserin / Aspirin',
+          value: 'NTG 50–100 mcg (RV/PDE-5 YASAK!)',
+          tone: 'red',
+        },
+        {
+          label: 'UFH (Cerrahi Onaylı)',
+          value: `${doses.miUfhMinIu}–${doses.miUfhMaxIu} IU IV`,
+          tone: 'amber',
+        },
+      ];
+
+    case 'malignant-arrhythmias':
+      return [
+        {
+          label: 'Defibrilasyon / Senk. Şok',
+          value: doses.arrDefibLabel,
+          tone: 'red',
+        },
+        {
+          label: 'Amiodaron (VF/VT)',
+          value: doses.arrAmioLabel,
+          tone: 'amber',
+        },
+        {
+          label: 'Torsades (Uzun QT)',
+          value: `MgSO₄ ${doses.arrTorsadesMgLabel.split(' (')[0]} (Amio YASAK!)`,
+          tone: 'blue',
+        },
+      ];
+
+    case 'intraop-bradycardia':
+      return [
+        {
+          label: 'Atropin (Sinüs / Nodal)',
+          value: doses.bradyAtropineLabel.split(' (')[0],
+          tone: 'amber',
+        },
+        {
+          label: 'Adrenalin / Pacing',
+          value: doses.bradyEpiLabel.split(' (')[0],
+          tone: 'red',
+        },
+        {
+          label: 'İstisna Kuralı',
+          value: 'Mobitz II / Tam Blok / Nakil → TCP',
+          tone: 'blue',
+        },
+      ];
+
+    case 'intraop-hypoglycemia':
+      return [
+        {
+          label: 'Acil İV Dekstroz',
+          value: doses.hypoDextroseLabel,
+          tone: 'red',
+        },
+        {
+          label: 'Wernicke Koruması',
+          value: 'Önce Tiamin 100 mg IV (Alkol/Maln.)',
+          tone: 'amber',
+        },
+        {
+          label: '15 dk Kontrol Hedefi',
+          value: 'KŞ 100–180 mg/dL · Glukagon IM',
+          tone: 'emerald',
+        },
+      ];
+
+    case 'myxedema-coma':
+      return [
+        {
+          label: '1. ÖNCE Hidrokortizon!',
+          value: doses.myxedemaHydrocortLabel.split(' →')[0],
+          tone: 'red',
+        },
+        {
+          label: '2. İV Levotiroksin (T4)',
+          value: doses.myxedemaT4Label.split(' (')[0],
+          tone: 'amber',
+        },
+        {
+          label: 'Isıtma Kuralı',
+          value: 'Pasif Isıtma (Aktif Isıtma = ŞOK!)',
+          tone: 'blue',
+        },
+      ];
+
+    case 'pheochromocytoma-crisis':
+      return [
+        {
+          label: 'Faz 1 · Önce α-Blokaj',
+          value: `Fentolamin 1–5 mg · SNP ${doses.pheoSnpRangeMcgMin}`,
+          tone: 'red',
+        },
+        {
+          label: 'MgSO₄ & Saf β Yasağı',
+          value: `${doses.pheoMgLoadLabel.split(' (')[0]} · Labetalol YASAK!`,
+          tone: 'amber',
+        },
+        {
+          label: 'Faz 2 (Ligasyon Sonrası)',
+          value: 'Noradrenalin + Vazopressin + KŞ!',
+          tone: 'blue',
+        },
+      ];
+
+    case 'adrenal-crisis':
+      return [
+        {
+          label: '1. İV Hidrokortizon',
+          value: doses.adrenalHydrocortLabel.split(' →')[0],
+          tone: 'red',
+        },
+        {
+          label: '2. Hızlı Kristaloid',
+          value: doses.adrenalFluid1hLabel.split(' (')[0],
+          tone: 'blue',
+        },
+        {
+          label: '3. Noradrenalin Köprü',
+          value: `${doses.adrenalNoradRangeMcgMin} · KŞ & K⁺ Kontrol`,
+          tone: 'amber',
         },
       ];
 

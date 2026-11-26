@@ -34,7 +34,8 @@ interface CycleConfig {
 function getCycleConfig(protocolId: string): CycleConfig {
   switch (protocolId) {
     case 'acls':
-      return { seconds: 120, label: 'KPR döngüsü' };
+    case 'malignant-arrhythmias':
+      return { seconds: 120, label: 'KPR / Ritim döngüsü' };
     case 'last':
       return { seconds: 300, label: 'Lipid tekrarı' };
     case 'mh':
@@ -42,6 +43,10 @@ function getCycleConfig(protocolId: string): CycleConfig {
       return { seconds: 300, label: 'Dantrolen tekrarı' };
     case 'anaphylaxis':
       return { seconds: 180, label: 'Adrenalin tekrarı' };
+    case 'intraop-bradycardia':
+      return { seconds: 180, label: 'Atropin / Pacing' };
+    case 'intraop-hypoglycemia':
+      return { seconds: 900, label: '15 dk KŞ kontrol' };
     default:
       return { seconds: 60, label: 'İlk 60 sn' };
   }

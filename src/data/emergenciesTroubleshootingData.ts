@@ -589,7 +589,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
   },
   {
     id: 'fico2-elevation',
-    title: 'İntraoperatif Dönemde FiCO₂ Yükselmesi (Yeniden Soluma)',
+    title: 'İntraoperatif FiCO₂ Yükselmesi (Yeniden Soluma / Rebreathing)',
     subtitle: 'İnspiratuvar CO₂ > 0 mmHg · Soda Lime Tükenmesi, Tek Yönlü Valf Arızası ve Devre Kaynaklı Rebreathing',
     categoryLabel: 'Solunum Devresi & Absorban Krizleri',
     urgency: 'critical',
@@ -1848,6 +1848,8 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
     ],
     relatedLinks: [
       { label: 'Yüksek / Total Spinal Anestezi', href: '#arac=emergencies&sub=total-spinal', badge: 'Nöroaksiyel' },
+      { label: 'İntraoperatif Adrenal Kriz', href: '#arac=emergencies&sub=adrenal-crisis', badge: 'Refrakter Şok' },
+      { label: 'İntraoperatif Bradikardi', href: '#arac=emergencies&sub=intraop-bradycardia', badge: 'Ritim' },
       { label: 'Anafilaksi Kriz Protokolü', href: '#arac=emergencies&sub=anaphylaxis', badge: 'Kriz' },
       { label: 'Tansiyon Pnömotoraks', href: '#arac=emergencies&sub=tension-pneumothorax', badge: 'Obstrüktif' },
       { label: 'Pulmoner Emboli (PE)', href: '#arac=emergencies&sub=pe', badge: 'RV Yükü' },
@@ -2164,6 +2166,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
       'İnvaziv arteriyel basınç hattı, doğru boyutta NIBP manşonları ve Foley sonda açıklık kontrolü'
     ],
     relatedLinks: [
+      { label: 'İntraoperatif Feokromositoma Krizi', href: '#arac=emergencies&sub=pheochromocytoma-crisis', badge: 'Katekolamin' },
       { label: 'Malign Hipertermi (MH) Kriz Protokolü', href: '#arac=emergencies&sub=mh', badge: 'Hipermetabolik' },
       { label: 'İntraoperatif Hipotansiyon (IOH)', href: '#arac=emergencies&sub=hypotension', badge: 'Rebound / MAP' },
       { label: 'EtCO₂ Yükselmesi (Hiperkapni)', href: '#arac=emergencies&sub=etco2-elevation', badge: 'Sempatik Tetik' },

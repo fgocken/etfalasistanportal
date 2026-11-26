@@ -1,4 +1,6 @@
 // Types and Master Data for Anesthesia Emergencies (Anestezi Acilleri)
+import { CARDIAC_EMERGENCIES_DATA } from './emergencies/cardiacEmergenciesData';
+import { ENDOCRINE_METABOLIC_EMERGENCIES_DATA } from './emergencies/endocrineMetabolicEmergenciesData';
 
 export interface EmergencyReference {
   authors: string;
@@ -24,7 +26,31 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'fes' | 'total-spinal' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'tension-pneumothorax' | 'airway-fire' | 'generic';
+  quickCalculatorType?:
+    | 'dantrolene'
+    | 'bronchospasm'
+    | 'laryngospasm'
+    | 'cico'
+    | 'airway-obstruction'
+    | 'aspiration'
+    | 'pe'
+    | 'vae'
+    | 'fes'
+    | 'total-spinal'
+    | 'intraop-mi'
+    | 'malignant-arrhythmias'
+    | 'intraop-bradycardia'
+    | 'intraop-hypoglycemia'
+    | 'myxedema-coma'
+    | 'pheochromocytoma-crisis'
+    | 'adrenal-crisis'
+    | 'last'
+    | 'anaphylaxis'
+    | 'acls'
+    | 'mtp'
+    | 'tension-pneumothorax'
+    | 'airway-fire'
+    | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -575,6 +601,46 @@ export interface EmergencyProtocol {
         title: string;
         obstetricRule: string;
         preventionChecks: string[];
+      };
+    };
+
+    // Yeniden kullanılabilir yapısal alt-protokol blokları (Kardiyak & Endokrin/Metabolik Aciller)
+    structuredCrisisBlocks?: {
+      tieredLadder?: {
+        title: string;
+        accent?: 'red' | 'amber' | 'cyan' | 'purple' | 'rose';
+        levels: {
+          badge: string;
+          target: string;
+          presentation: string;
+          intervention: string;
+          severity: 'WARNING' | 'HIGH' | 'CRITICAL';
+        }[];
+      };
+      comparisonTable?: {
+        title: string;
+        columns: [string, string, string, string, string];
+        rows: {
+          col1: string;
+          col2: string;
+          col3: string;
+          col4: string;
+          col5: string;
+        }[];
+      };
+      drugPolicyCards?: {
+        title: string;
+        items: {
+          domain: string;
+          recommendation: string;
+          rationaleAndCaution: string;
+          status: 'RECOMMENDED' | 'CAUTION' | 'AVOID';
+        }[];
+      };
+      preventionBox?: {
+        title: string;
+        highlightRule: string;
+        checks: string[];
       };
     };
   };
@@ -7165,7 +7231,9 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       { label: 'CICO / Zor Havayolu Krizi', href: '#arac=emergencies&sub=airway-crisis', badge: 'Havayolu' },
       { label: 'Vazoaktif İlaç Karar Matriksi', href: '#infografik=vasoactive-decision-matrix', badge: 'İnfografik' }
     ]
-  }
+  },
+  ...CARDIAC_EMERGENCIES_DATA,
+  ...ENDOCRINE_METABOLIC_EMERGENCIES_DATA
 };
 
 // Alias 'cico' -> 'airway-crisis' (zero duplication, full backward compatibility)

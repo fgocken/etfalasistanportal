@@ -302,9 +302,9 @@ export const ALL_CLINICAL_TOOLS: Record<ToolTabId, ToolItemDef> = {
   },
   emergencies: {
     id: 'emergencies',
-    title: 'Anestezi Acilleri',
-    desc: 'Malign hipertermi kriz yönetimi (Dantrolen hazırlığı & soğutma), perioperatif kardiyak arrest (ACLS), şiddetli anafilaksi (İM adrenalin) ve kriz algoritmaları.',
-    clinicalKey: 'Ameliyathane krizlerinde gecikmeksizin uygulanacak öncelikli adım adım medikal eylem kontrol listeleri.',
+    title: 'Anestezi Acilleri ve İntraoperatif Troubleshooting Meseleleri',
+    desc: 'Malign hipertermi, ACLS, anafilaksi, total spinal, intraoperatif MI, malign aritmiler, bradikardi, endokrin/metabolik krizler ve intraoperatif monitör/ventilatör troubleshooting algoritmaları.',
+    clinicalKey: 'Ameliyathane krizlerinde ve monitör alarmlarında saniyeler içinde uygulanacak kanıta dayalı eylem protokolleri.',
     icon: ShieldAlert,
     iconBgDark: 'bg-red-500/15',
     iconBgLight: 'bg-red-50',

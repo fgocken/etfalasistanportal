@@ -16,7 +16,8 @@ import {
   Wrench,
   Search,
   X,
-  Clock
+  Clock,
+  Zap
 } from 'lucide-react';
 import { ANESTHESIA_EMERGENCIES_DATA } from '../../data/emergenciesData';
 import { EMERGENCY_TROUBLESHOOTING_ITEMS } from '../../data/emergenciesTroubleshootingData';
@@ -194,6 +195,69 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
     icon: Flame,
     accentColor: 'red',
     isReady: true
+  },
+  {
+    id: 'intraop-mi',
+    category: 'cardiovascular',
+    title: 'İntraoperatif Miyokard İnfarktüsü (PMI / MINS)',
+    shortDesc: 'Tip 1 vs Tip 2 MI ayrımı, 5-derivasyonlu EKG (V5+D2) & TEE RWMA, MVO₂ / HR kontrolü, RV infarktı & PDE-5 nitrat yasağı, Aspirin/UFH ve primer PKG kararı.',
+    icon: HeartCrack,
+    accentColor: 'red',
+    isReady: true
+  },
+  {
+    id: 'malignant-arrhythmias',
+    category: 'cardiovascular',
+    title: 'İntraoperatif Malign Aritmiler (VT / VF / Torsades)',
+    shortDesc: 'Nabızsız VT/VF defibrilasyonu, unstabil monomorfik VT/SVT/AF senkronize kardiyoversiyonu, Torsades (MgSO₄ 2 g — Amiodaron yasağı!) ve WPW pre-eksitasyonlu AF (AV bloker yasağı!).',
+    icon: Zap,
+    accentColor: 'red',
+    isReady: true
+  },
+  {
+    id: 'intraop-bradycardia',
+    category: 'cardiovascular',
+    title: 'İntraoperatif Bradikardi & Yüksek Dereceli AV Blok',
+    shortDesc: 'Cerrahi vagal refleksler (OCR/TCR/pnömoperitonyum), AHA 2020 Atropin 1 mg, Mobitz II/Tam AV blokta erken TCP/Adrenalin, denerve kalp nakli, Cushing refleksi ve pediatrik hipoksi kuralı.',
+    icon: Activity,
+    accentColor: 'amber',
+    isReady: true
+  },
+  {
+    id: 'pheochromocytoma-crisis',
+    category: 'cardiovascular',
+    title: 'İntraoperatif Feokromositoma Krizi',
+    shortDesc: 'Bifazik kriz: Ven ligasyonu öncesi katekolamin fırtınası (Fentolamin/Nikardipin/SNP/MgSO₄ — önce α-blokaj, saf β-bloker/Labetalol yasağı!) ve ligasyon sonrası vazopleji + hipoglisemi.',
+    icon: Flame,
+    accentColor: 'rose',
+    isReady: true
+  },
+  {
+    id: 'intraop-hypoglycemia',
+    category: 'metabolic-toxic',
+    title: 'İntraoperatif Hipoglisemi (Akut Nöroglikopeni)',
+    shortDesc: 'Genel anestezide maskeli nöroglikopeni (<70 / <54 mg/dL), erişkin %10/%50 Dekstroz, pediatrik Rule of 50 (%10 Dekstroz — %50 yasağı!), Tiamin/Wernicke, Glukagon ve Oktreotid.',
+    icon: AlertTriangle,
+    accentColor: 'amber',
+    isReady: true
+  },
+  {
+    id: 'myxedema-coma',
+    category: 'metabolic-toxic',
+    title: 'İntraoperatif Miksödem Koması',
+    shortDesc: 'Dekompanse hipotiroidi krizi: Önce İV Hidrokortizon 100 mg, ardından İV Levotiroksin (T4) 200–400 mcg ± T3; pasif ısıtma (rewarming şoku yasağı!), makroglossi zor havayolu ve hiponatremi.',
+    icon: AlertOctagon,
+    accentColor: 'purple',
+    isReady: true
+  },
+  {
+    id: 'adrenal-crisis',
+    category: 'metabolic-toxic',
+    title: 'İntraoperatif Adrenal Kriz (Adrenokortikal Yetmezlik)',
+    shortDesc: 'Sıvı ve vazopressöre dirençli şok, hipoglisemi & primer formda hiponatremi/hiperkalemi: Kortizol sonucu beklemeden İV Hidrokortizon 100 mg → 200 mg/24 sa, hızlı kristaloid ve Etomidat uyarısı.',
+    icon: ShieldAlert,
+    accentColor: 'amber',
+    isReady: true
   }
 ];
 
@@ -204,6 +268,7 @@ interface TroubleshootingPreview {
   shortDesc: string;
   tag: string;
   footerNote: string;
+  accentTone?: 'teal' | 'red';
   icon: React.ComponentType<{ className?: string }>;
 }
 
@@ -229,7 +294,7 @@ const TROUBLESHOOTING_PREVIEWS: TroubleshootingPreview[] = [
   {
     id: 'fico2-elevation',
     category: 'airway',
-    title: 'İntraoperatif Dönemde FiCO₂ Yükselmesi (Yeniden Soluma)',
+    title: 'İntraoperatif FiCO₂ Yükselmesi (Yeniden Soluma / Rebreathing)',
     shortDesc: 'İnspiratuvar CO₂ > 0–2 mmHg: Tükenmiş soda lime, tek yönlü ekspiratuvar/inspiratuvar valf takılması, kanister kanalizasyonu/bypass, Mapleson/Bain düşük FGF ve sıfır kalibrasyon kayması.',
     tag: 'FiCO₂ ↑ · Devre & Hava Yolu',
     footerNote: 'İlk 60 sn · 4 Kapnogram & 8 Neden',
@@ -269,6 +334,7 @@ const TROUBLESHOOTING_PREVIEWS: TroubleshootingPreview[] = [
     shortDesc: 'MAP < 65 mmHg veya >%20–30 düşüş: Arteriyel dalga formu (dikrotik çentik & PPV >%13), ↓SVR vazopleji vs ↓Preload kanama vs ↓Kontraktilite vs Obstrüktif şok (Tamponad/PE/BCIS/Pnömotoraks/Oto-PEEP) ve Efedrin/Fenilefrin/Noradrenalin/Vazopressin seçimi.',
     tag: 'MAP ↓ · Hemodinamik & Perfüzyon',
     footerNote: 'İlk 60 sn · 4 Arter Eğrisi & 12 Neden',
+    accentTone: 'red',
     icon: Activity
   },
   {
@@ -278,6 +344,7 @@ const TROUBLESHOOTING_PREVIEWS: TroubleshootingPreview[] = [
     shortDesc: 'SKB ≥ 160–180 / DKB ≥ 100–110 mmHg: Yüzeyel anestezi/ağrı, Desfluran sıçraması, hiperkapni, ilaç hatası, mesane/turnike, KİBAS (Cushing bradikardisi), feokromositoma (saf β-bloker yasağı!), preeklampsi, otonomik disrefleksi ve Esmolol/Labetalol/Nikardipin/NTG/SNP titrasyonu.',
     tag: 'KB ↑ · Sempatik & Vasküler Kriz',
     footerNote: 'İlk 60 sn · 4 Arter Eğrisi & 12 Neden',
+    accentTone: 'red',
     icon: Activity
   }
 ];
@@ -482,7 +549,7 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
             isDark ? 'text-white' : 'text-slate-900'
           }`}>
             <ShieldAlert className="w-6 h-6 text-red-500 shrink-0" />
-            <span>Anestezi Acilleri</span>
+            <span>Anestezi Acilleri ve İntraoperatif Troubleshooting Meseleleri</span>
           </h3>
 
           <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -714,13 +781,13 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           }`}>
             <HelpCircle className="w-4 h-4 text-red-500 shrink-0" />
             <span>
-              Tüm 14 klinik acil senaryo; <strong>Hava Yolu Acilleri</strong>, <strong>Kardiyovasküler &amp; Kanama</strong> ve <strong>Metabolik, Toksik &amp; Alerjik</strong> grupları altında 10 aşamalı şablon ve kilo bazlı doz hesaplayıcılarıyla kullanıma hazırdır.
+              Tüm {EMERGENCY_PREVIEWS.length} klinik acil senaryo; <strong>Hava Yolu Acilleri</strong>, <strong>Kardiyovasküler &amp; Kanama</strong> ve <strong>Metabolik, Toksik &amp; Alerjik</strong> grupları altında 10 aşamalı şablon ve kilo bazlı doz hesaplayıcılarıyla kullanıma hazırdır.
             </span>
           </div>
         </div>
       )}
 
-      {/* 4. İntraoperatif Troubleshooting Meseleleri (Klinik Hastalık Şemasından Ayrı — Teal/Slate Tema) */}
+      {/* 4. İntraoperatif Troubleshooting Meseleleri (Klinik Hastalık Şemasından Ayrı — Teal/Slate Tema; Hipotansiyon/Hipertansiyon kırmızı istisna) */}
       {filteredTroubleshooting.length > 0 && (
         <div className={`p-6 rounded-2xl border transition-all ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
@@ -746,24 +813,39 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredTroubleshooting.map((item) => {
               const Icon = item.icon;
+              const isRed = item.accentTone === 'red';
               return (
                 <PortalLink
                   key={item.id}
                   href={buildHashHref('arac', 'emergencies', item.id)}
                   onNavigate={() => handleSelectEmergency(item.id)}
                   className={`block p-4 rounded-xl border relative overflow-hidden transition-all group cursor-pointer ${
-                    isDark
-                      ? 'bg-gradient-to-b from-teal-950/20 to-slate-800/70 border-teal-500/35 hover:border-teal-400 shadow-sm'
-                      : 'bg-gradient-to-b from-teal-50/60 to-white border-teal-200 hover:border-teal-400 hover:shadow-md'
+                    isRed
+                      ? isDark
+                        ? 'bg-gradient-to-b from-red-950/35 to-slate-800/75 border-red-500/45 hover:border-red-400 shadow-sm'
+                        : 'bg-gradient-to-b from-red-50/80 to-white border-red-200 hover:border-red-400 hover:shadow-md'
+                      : isDark
+                        ? 'bg-gradient-to-b from-teal-950/20 to-slate-800/70 border-teal-500/35 hover:border-teal-400 shadow-sm'
+                        : 'bg-gradient-to-b from-teal-50/60 to-white border-teal-200 hover:border-teal-400 hover:shadow-md'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-2.5">
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-teal-600 text-white shadow-xs">
+                    <div
+                      className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 text-white shadow-xs ${
+                        isRed ? 'bg-red-600' : 'bg-teal-600'
+                      }`}
+                    >
                       <Icon className="w-5 h-5" />
                     </div>
                     <span
                       className={`text-[11px] font-medium text-right ${
-                        isDark ? 'text-teal-300' : 'text-teal-700'
+                        isRed
+                          ? isDark
+                            ? 'text-red-300'
+                            : 'text-red-700'
+                          : isDark
+                            ? 'text-teal-300'
+                            : 'text-teal-700'
                       }`}
                     >
                       {item.tag}
@@ -772,7 +854,13 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
 
                   <h5
                     className={`text-sm font-bold mb-1.5 transition-colors ${
-                      isDark ? 'text-white group-hover:text-teal-300' : 'text-slate-900 group-hover:text-teal-700'
+                      isRed
+                        ? isDark
+                          ? 'text-white group-hover:text-red-300'
+                          : 'text-slate-900 group-hover:text-red-700'
+                        : isDark
+                          ? 'text-white group-hover:text-teal-300'
+                          : 'text-slate-900 group-hover:text-teal-700'
                     }`}
                   >
                     {item.title}
@@ -786,7 +874,11 @@ export const AnesthesiaEmergenciesView: React.FC<AnesthesiaEmergenciesViewProps>
                     <span className={`font-mono text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
                       {item.footerNote}
                     </span>
-                    <span className="font-bold text-xs inline-flex items-center gap-1 text-teal-600 dark:text-teal-400 group-hover:translate-x-0.5 transition-transform">
+                    <span
+                      className={`font-bold text-xs inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform ${
+                        isRed ? 'text-red-600 dark:text-red-400' : 'text-teal-600 dark:text-teal-400'
+                      }`}
+                    >
                       <span>Algoritmayı Aç</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>

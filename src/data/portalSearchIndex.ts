@@ -1711,6 +1711,111 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'emergency-intraop-mi',
+    title: 'İntraoperatif Miyokard İnfarktüsü & Akut Koroner Sendrom (PMI / MINS)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'PMI / MINS · Tip 1 vs Tip 2',
+    description: '10 aşamalı kardiyak kriz protokolü: Tip 1 vs Tip 2 MI, 5-derivasyonlu EKG (V5+D2) & TEE RWMA, MVO₂ / HR kontrolü (Esmolol), Nitrogliserin (RV infarktı & PDE-5 yasağı!), Aspirin/UFH ve primer PKG kararı.',
+    keywords: [
+      'miyokard infarktüsü', 'intraoperatif mi', 'pmi', 'mins', 'akut koroner sendrom', 'stemi', 'nstemi',
+      'st elevasyonu', 'st depresyonu', 'troponin', 'rwma', 'tee', 'esmolol', 'nitrogliserin', 'rv infarktı',
+      'sildenafil', 'aspirin', 'heparin', 'primer pkg', 'anjiyo', 'mvo2', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'intraop-mi',
+    popular: true
+  },
+  {
+    id: 'emergency-malignant-arrhythmias',
+    title: 'İntraoperatif Malign Aritmiler (VT / VF / Torsades / Unstabil Taşiaritmiler)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'VT / VF / Torsades / WPW',
+    description: '10 aşamalı aritmi kriz protokolü: VF/pVT defibrilasyonu, unstabil VT/SVT/AF senkronize kardiyoversiyonu, Amiodaron/Lidokain, Torsades (MgSO₄ 2 g — Amiodaron yasağı!) ve WPW pre-eksitasyonlu AF (AV bloker yasağı!).',
+    keywords: [
+      'malign aritmi', 'ventriküler taşikardi', 'vt', 'ventriküler fibrilasyon', 'vf', 'torsades de pointes',
+      'uzun qt', 'magnezyum', 'defibrilasyon', 'senkronize kardiyoversiyon', 'amiodaron', 'lidokain',
+      'adenozin', 'svt', 'atriyal fibrilasyon', 'wpw', 'wolff parkinson white', 'prokainamid', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'malignant-arrhythmias',
+    popular: true
+  },
+  {
+    id: 'emergency-intraop-bradycardia',
+    title: 'İntraoperatif Bradikardi & Yüksek Dereceli AV Blok Kriz Protokolü',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Bradikardi · AV Blok & TCP',
+    description: '10 aşamalı bradikardi protokolü: Cerrahi vagal refleksler (OCR/TCR/pnömoperitonyum), AHA 2020 Atropin 1 mg, Mobitz II/Tam AV blokta TCP & Adrenalin, denerve kalp nakli, KİBAS Cushing refleksi ve pediatrik hipoksi kuralı.',
+    keywords: [
+      'intraoperatif bradikardi', 'bradikardi', 'av blok', 'mobitz', 'tam blok', 'atropin', 'transkutanöz pacing',
+      'tcp', 'adrenalin', 'dopamin', 'izoproterenol', 'okülokardiyak refleks', 'ocr', 'trigeminokardiyak',
+      'bezold jarisch', 'kalp nakli', 'denerve kalp', 'cushing refleksi', 'pediatrik bradikardi', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'intraop-bradycardia',
+    popular: true
+  },
+  {
+    id: 'emergency-intraop-hypoglycemia',
+    title: 'İntraoperatif Hipoglisemi Kriz Protokolü (Akut Nöroglikopeni)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Hipoglisemi · <70 / <54 mg/dL',
+    description: '10 aşamalı metabolik kriz protokolü: Genel anestezide maskeli hipoglisemi, erişkin %10/%50 Dekstroz, pediatrik Rule of 50 (%10 Dekstroz — %50 yasağı!), Tiamin/Wernicke, Glukagon ve sülfonilürede Oktreotid.',
+    keywords: [
+      'intraoperatif hipoglisemi', 'hipoglisemi', 'kan şekeri düşmesi', 'nöroglikopeni', 'dekstroz', 'glukoz',
+      'rule of 50', 'tiamin', 'wernicke', 'glukagon', 'oktreotid', 'insülin', 'sülfonilüre', 'diyabet',
+      'pediatrik hipoglisemi', 'insülinoma', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'intraop-hypoglycemia',
+    popular: true
+  },
+  {
+    id: 'emergency-myxedema-coma',
+    title: 'İntraoperatif Miksödem Koması (Dekompanse Ağır Hipotiroidi Krizi)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Miksödem · Önce Hidrokortizon!',
+    description: '10 aşamalı endokrin kriz protokolü: Önce İV Hidrokortizon 100 mg, ardından İV Levotiroksin (T4) 200–400 mcg ± T3; pasif ısıtma (rewarming şoku yasağı!), makroglossi zor havayolu, hipoventilasyon ve hiponatremi.',
+    keywords: [
+      'miksödem koması', 'miksödem', 'hipotiroidi krizi', 'levotiroksin', 't4', 'liyotironin', 't3',
+      'hidrokortizon', 'hipotermi', 'rewarming shock', 'pasif ısıtma', 'makroglossi', 'hiponatremi',
+      'gecikmiş uyanma', 'endokrin acil', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'myxedema-coma',
+    popular: true
+  },
+  {
+    id: 'emergency-pheochromocytoma-crisis',
+    title: 'İntraoperatif Feokromositoma Krizi (Katekolamin Fırtınası & Vazopleji)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Feokromositoma · Bifazik Kriz',
+    description: '10 aşamalı bifazik kriz protokolü: Ven ligasyonu öncesi α-blokaj (Fentolamin/Nikardipin/SNP/MgSO₄ — saf β-bloker & Labetalol yasağı!), yasak ilaçlar (Metoklopramid/Desfluran/Morfin) ve ligasyon sonrası vazopleji + hipoglisemi.',
+    keywords: [
+      'feokromositoma', 'feokromasitoma', 'paraganglioma', 'katekolamin fırtınası', 'fentolamin', 'nikardipin',
+      'nitroprussid', 'magnezyum', 'esmolol', 'labetalol yasağı', 'adrenal ven ligasyonu', 'vazopressin',
+      'metoklopramid', 'insidentaloma', 'hipertansif kriz', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'pheochromocytoma-crisis',
+    popular: true
+  },
+  {
+    id: 'emergency-adrenal-crisis',
+    title: 'İntraoperatif Adrenal Kriz (Akut Adrenokortikal Yetmezlik & Şok)',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Adrenal Kriz · Hidrokortizon 100 mg',
+    description: '10 aşamalı endokrin kriz protokolü: Sıvı ve vazopressöre dirençli şok, hipoglisemi, primer formda hiponatremi/hiperkalemi; kortizol beklemeden İV Hidrokortizon 100 mg → 200 mg/24 sa, hızlı kristaloid ve Etomidat uyarısı.',
+    keywords: [
+      'adrenal kriz', 'adrenal yetmezlik', 'addison', 'hidrokortizon', 'stres dozu', 'steroid', 'hpa aksı',
+      'refrakter şok', 'vazopleji', 'etomidat', 'hiponatremi', 'hiperkalemi', 'hipoglisemi',
+      'endokrin acil', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'adrenal-crisis',
+    popular: true
+  },
+  {
     id: 'emergency-etco2-elevation',
     title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Yükselmesi',
     category: 'Kılavuzlar & Protokoller',
@@ -1744,7 +1849,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
   },
   {
     id: 'emergency-fico2-elevation',
-    title: 'İntraoperatif Dönemde FiCO₂ Yükselmesi (Yeniden Soluma)',
+    title: 'İntraoperatif FiCO₂ Yükselmesi (Yeniden Soluma / Rebreathing)',
     category: 'Kılavuzlar & Protokoller',
     badge: 'Troubleshooting · FiCO₂ ↑',
     description: 'İnspiratuvar CO2 > 0–2 mmHg: Tükenmiş soda lime, tek yönlü ekspiratuvar/inspiratuvar valf takılması, kanister kanalizasyonu/bypass, Mapleson/Bain yetersiz FGF ve sıfır kalibrasyon kayması.',
@@ -3069,7 +3174,7 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
   },
   {
     id: 'anesthesia-emergencies',
-    title: 'Anestezi Acilleri ve Kriz Yönetimi',
+    title: 'Anestezi Acilleri ve İntraoperatif Troubleshooting Meseleleri',
     category: 'Kılavuzlar & Protokoller',
     badge: 'Acil Protokol',
     description: 'Perioperatif kriz yönetimi, malign hipertermi, tansiyon pnömotoraks, hava yolu yangını (airway fire), masif transfüzyon (MTP), arrest/ACLS, anafilaksi, LAST, EtCO2, FiCO2, Ppeak ve hipoksemi algoritmaları.',

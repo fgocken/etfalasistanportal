@@ -3682,6 +3682,168 @@ export const EmergencyProtocolDetailView: React.FC<EmergencyProtocolDetailViewPr
               </div>
             )}
 
+            {/* Yapısal Alt-Protokol Blokları (Kardiyak & Endokrin/Metabolik Aciller) */}
+            {protocol.crisisManagement.structuredCrisisBlocks && (() => {
+              const blocks = protocol.crisisManagement.structuredCrisisBlocks;
+              return (
+                <div className="space-y-4">
+                  {/* 1. Kademeli Şiddet / Eylem Merdiveni */}
+                  {blocks.tieredLadder && (
+                    <div className={`p-4 rounded-xl border space-y-3 ${
+                      isDark ? 'bg-red-950/15 border-red-500/35' : 'bg-red-50/60 border-red-200'
+                    }`}>
+                      <div className="flex items-center gap-2 font-bold text-red-600 dark:text-red-400 text-xs sm:text-sm">
+                        <Activity className="w-4 h-4 shrink-0" />
+                        <span>{blocks.tieredLadder.title}</span>
+                      </div>
+
+                      <div className="space-y-2">
+                        {blocks.tieredLadder.levels.map((lvl, idx) => (
+                          <div
+                            key={idx}
+                            className={`p-3 rounded-xl border text-[11px] grid grid-cols-1 md:grid-cols-12 gap-2.5 items-start ${
+                              lvl.severity === 'CRITICAL'
+                                ? isDark ? 'bg-red-950/35 border-red-500/45' : 'bg-red-50 border-red-300'
+                                : lvl.severity === 'HIGH'
+                                  ? isDark ? 'bg-amber-950/20 border-amber-500/35' : 'bg-amber-50/80 border-amber-200'
+                                  : isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+                            }`}
+                          >
+                            <div className="md:col-span-3 flex md:flex-col gap-1.5 items-center md:items-start">
+                              <span className={`font-mono font-black text-xs px-2 py-0.5 rounded ${
+                                lvl.severity === 'CRITICAL'
+                                  ? 'bg-red-600 text-white'
+                                  : lvl.severity === 'HIGH'
+                                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
+                                    : 'bg-sky-500/15 text-sky-700 dark:text-sky-300'
+                              }`}>
+                                {lvl.badge}
+                              </span>
+                              <span className="font-bold text-slate-800 dark:text-slate-200 leading-snug">
+                                {lvl.target}
+                              </span>
+                            </div>
+                            <div className="md:col-span-4 text-slate-700 dark:text-slate-300 leading-relaxed">
+                              <span className="font-bold text-slate-900 dark:text-white">Klinik: </span>
+                              {lvl.presentation}
+                            </div>
+                            <div className="md:col-span-5 text-emerald-700 dark:text-emerald-300 font-semibold leading-relaxed">
+                              <span className="font-bold">Müdahale: </span>
+                              {lvl.intervention}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 2. Ayırıcı Karar / Karşılaştırma Tablosu */}
+                  {blocks.comparisonTable && (
+                    <div className={`p-4 rounded-xl border space-y-3 ${
+                      isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+                    }`}>
+                      <div className="flex items-center gap-2 font-bold text-amber-600 dark:text-amber-400 text-xs sm:text-sm">
+                        <Layers className="w-4 h-4 shrink-0" />
+                        <span>{blocks.comparisonTable.title}</span>
+                      </div>
+
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-[11px]">
+                          <thead>
+                            <tr className={`border-b ${isDark ? 'border-slate-700 text-slate-400' : 'border-slate-200 text-slate-600'}`}>
+                              <th className="py-2 pr-3 font-bold">{blocks.comparisonTable.columns[0]}</th>
+                              <th className="py-2 px-3 font-bold">{blocks.comparisonTable.columns[1]}</th>
+                              <th className="py-2 px-3 font-bold">{blocks.comparisonTable.columns[2]}</th>
+                              <th className="py-2 px-3 font-bold">{blocks.comparisonTable.columns[3]}</th>
+                              <th className="py-2 pl-3 font-bold">{blocks.comparisonTable.columns[4]}</th>
+                            </tr>
+                          </thead>
+                          <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                            {blocks.comparisonTable.rows.map((row, idx) => (
+                              <tr key={idx}>
+                                <td className="py-2.5 pr-3 font-bold text-slate-900 dark:text-white">{row.col1}</td>
+                                <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">{row.col2}</td>
+                                <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300">{row.col3}</td>
+                                <td className="py-2.5 px-3 text-sky-700 dark:text-sky-400 font-semibold">{row.col4}</td>
+                                <td className="py-2.5 pl-3 text-rose-600 dark:text-rose-400 font-bold">{row.col5}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 3. İlaç & Güvenlik Politikası Kartları */}
+                  {blocks.drugPolicyCards && (
+                    <div className={`p-4 rounded-xl border space-y-3 ${
+                      isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
+                    }`}>
+                      <div className="flex items-center gap-2 font-bold text-rose-600 dark:text-rose-400 text-xs sm:text-sm">
+                        <Syringe className="w-4 h-4 shrink-0" />
+                        <span>{blocks.drugPolicyCards.title}</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        {blocks.drugPolicyCards.items.map((item, idx) => (
+                          <div
+                            key={idx}
+                            className={`p-3.5 rounded-xl border space-y-1.5 ${
+                              item.status === 'AVOID'
+                                ? isDark ? 'bg-red-950/30 border-red-500/45 text-red-100' : 'bg-red-50 border-red-300 text-red-950'
+                                : item.status === 'CAUTION'
+                                  ? isDark ? 'bg-amber-950/20 border-amber-500/35 text-amber-100' : 'bg-amber-50 border-amber-200 text-amber-950'
+                                  : isDark ? 'bg-emerald-950/20 border-emerald-500/35 text-emerald-100' : 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-bold text-xs">{item.domain}</span>
+                              <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                                item.status === 'AVOID'
+                                  ? 'bg-red-600 text-white'
+                                  : item.status === 'CAUTION'
+                                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
+                                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                              }`}>
+                                {item.status === 'AVOID' ? 'YASAK / KAÇIN' : item.status === 'CAUTION' ? 'DİKKAT / TİTRE' : 'ÖNERİLİR'}
+                              </span>
+                            </div>
+                            <div className="text-[11px] font-semibold">{item.recommendation}</div>
+                            <p className="text-[11px] opacity-90 leading-relaxed">{item.rationaleAndCaution}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 4. Özel Senaryo & Önleme Kutusu */}
+                  {blocks.preventionBox && (
+                    <div className={`p-4 rounded-xl border space-y-2.5 ${
+                      isDark ? 'bg-sky-950/20 border-sky-500/35' : 'bg-sky-50/70 border-sky-200'
+                    }`}>
+                      <div className="flex items-center gap-2 font-bold text-sky-600 dark:text-sky-400 text-xs sm:text-sm">
+                        <ShieldAlert className="w-4 h-4 shrink-0" />
+                        <span>{blocks.preventionBox.title}</span>
+                      </div>
+                      <div className={`p-3 rounded-lg border text-[11px] font-semibold leading-relaxed ${
+                        isDark ? 'bg-slate-950/60 border-slate-800 text-sky-200' : 'bg-white border-sky-200 text-sky-950'
+                      }`}>
+                        {blocks.preventionBox.highlightRule}
+                      </div>
+                      <ul className="space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
+                        {blocks.preventionBox.checks.map((chk, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
+                            <span>{chk}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
             {/* Cooling, Hyperkalemia and Arrhythmia Sub-Protocols (Only when available) */}
             {protocol.crisisManagement.coolingProtocol && protocol.crisisManagement.hyperkalemiaProtocol && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

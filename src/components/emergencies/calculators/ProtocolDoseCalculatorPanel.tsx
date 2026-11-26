@@ -235,6 +235,48 @@ function getProtocolHeaderMeta(protocolId: string): ProtocolHeaderMeta {
         subtitle: 'Kardiyoakceleratör (T1–T4) & Frenik (C3–C5) Blokajında ABC + Perfüzyon Kurtarma',
         icon: <ShieldAlert className="w-5 h-5 text-red-500" />,
       };
+    case 'intraop-mi':
+      return {
+        title: 'İntraoperatif Miyokard İnfarktüsü — MVO₂, Nitrat & Antitrombotik Dozları',
+        subtitle: 'Esmolol, Nitrogliserin (RV/PDE-5 Uyarılı), Aspirin & Cerrahi Onaylı UFH',
+        icon: <HeartPulse className="w-5 h-5 text-red-500" />,
+      };
+    case 'malignant-arrhythmias':
+      return {
+        title: 'Malign Aritmiler — Defibrilasyon, Kardiyoversiyon & Antiaritmik Dozları',
+        subtitle: 'VF/pVT, Unstabil VT/SVT/AF, Torsades (MgSO₄) & WPW Kuralı',
+        icon: <Zap className="w-5 h-5 text-red-500" />,
+      };
+    case 'intraop-bradycardia':
+      return {
+        title: 'İntraoperatif Bradikardi — Atropin, Kronotropi & Pacing Dozları',
+        subtitle: 'AHA 2020 Atropin 1 mg, Adrenalin/Dopamin İnfüzyon & Mobitz II / Tam Blok İstisnası',
+        icon: <Activity className="w-5 h-5 text-amber-500" />,
+      };
+    case 'intraop-hypoglycemia':
+      return {
+        title: 'İntraoperatif Hipoglisemi — İV Dekstroz, Tiamin & Glukagon Dozları',
+        subtitle: 'Erişkin %10/%50 Dekstroz, Pediatrik Rule of 50 (%10!) & Wernicke Koruması',
+        icon: <AlertTriangle className="w-5 h-5 text-amber-500" />,
+      };
+    case 'myxedema-coma':
+      return {
+        title: 'Miksödem Koması — Önce Hidrokortizon, Ardından İV T4 / T3 Dozları',
+        subtitle: 'ATA Kılavuzu Hormon Sırası, Pasif Isıtma & Hiponatremi Güvenliği',
+        icon: <ShieldAlert className="w-5 h-5 text-purple-500" />,
+      };
+    case 'pheochromocytoma-crisis':
+      return {
+        title: 'Feokromositoma Krizi — Bifazik α-Blokaj & Post-Rezeksiyon Vazopleji',
+        subtitle: 'Faz 1 Fentolamin/Nikardipin/SNP/MgSO₄ · Faz 2 Noradrenalin/Vazopressin + KŞ',
+        icon: <Flame className="w-5 h-5 text-rose-500" />,
+      };
+    case 'adrenal-crisis':
+      return {
+        title: 'Adrenal Kriz — İV Hidrokortizon, Hızlı Kristaloid & Vazopressör Köprüleme',
+        subtitle: 'AAGBI / SfE 2020 Stres Dozu (100 mg → 200 mg/24 sa) & Elektrolit Düzeltme',
+        icon: <Syringe className="w-5 h-5 text-amber-500" />,
+      };
     default:
       return {
         title: 'Acil Doz Hesaplayıcı',
@@ -845,6 +887,262 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               value={`Ketamin ${doses.totalSpinalKetamineLabel} / Midazolam ${doses.totalSpinalMidazolamMg} mg`}
               detail="Apne, fısıltı ses veya bilinç kaybında %100 O₂ + erken RSI entübasyon · Dolaşım toparlanınca 0,5–0,7 MAC volatil / titre sedasyon + BIS"
               warning="Hasta apneik & hareketsiz ama BİLİNÇLİ olabilir! Şokta standart tam doz Propofol (2 mg/kg) ölümcül arrest yapar — düşük doz Ketamin/Etomidat seç."
+              tone="emerald"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'intraop-mi':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="Kalp Hızı & MVO₂ Kontrolü (Esmolol)"
+              value={`${doses.miEsmololBolusMg} mg bolus → ${doses.miEsmololInfMinMgMin}–${doses.miEsmololInfMaxMgMin} mg/dk`}
+              detail="0,5 mg/kg IV bolus → 50–200 mcg/kg/dk (Hedef HR 60–70/dk, diyastolik koroner doluşu uzatır; alternatif Metoprolol 1–5 mg IV)"
+              warning="Akut dekompanse KKY, kardiyojenik şok, bradikardi veya 2.–3. derece AV blokta β-bloker VERME!"
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Koroner Vazodilatasyon (Nitrogliserin)"
+              value="50–100 mcg bolus · 5–200 mcg/dk inf."
+              detail="Preload ve koroner spazmı azaltır (SKB ≥100 mmHg ise). Eşzamanlı Hb ≥8–9 g/dL, SpO₂ ≥%95, normotermi ve ağrı kontrolü sağla."
+              warning="İnferior/Sağ Ventrikül (RV) infarktında (D2/D3/aVF + V4R) ve son 24–48 saatte PDE-5 inhibitörü (Sildenafil/Tadalafil) alanlarda YASAK!"
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Antitrombotik (Cerrahi Ekiple Ortak Karar)"
+              value={`Aspirin 162–325 mg · UFH ${doses.miUfhMinIu}–${doses.miUfhMaxIu} IU`}
+              detail="Aspirin çiğneme/NG/rektal (kanama kontrendikasyonu yoksa); UFH 60–70 IU/kg (maks 5000 IU) yalnızca cerrah onayıyla"
+              warning="Aktif cerrahide FİBRİNOLİTİK KESİN KONTRENDİKEDİR! STEMI / yüksek riskli Tip 1 MI'da hedef acil Primer PKG (anjiyo)!"
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Kardiyojenik Şok & Perfüzyon Hedefi"
+              value={`Noradrenalin ${doses.adrenalNoradRangeMcgMin}`}
+              detail="Koroner perfüzyon için MAP ≥65–70 mmHg · Düşük debi/RWMA varsa Dobutamin (2–10 mcg/kg/dk) + erken Kardiyoloji / IABP / VA-ECMO"
+              tone="emerald"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'malignant-arrhythmias':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="Defibrilasyon (VF / Nabızsız VT / Polimorfik VT)"
+              value={doses.arrDefibLabel}
+              detail="ASENKRON (defibrilasyon) şok + hemen 2 dk kesintisiz KPR (100–120/dk) + Adrenalin 1 mg (çocuk 10 mcg/kg) her 3–5 dk"
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Senkronize Kardiyoversiyon (Nabızlı Unstabil)"
+              value={doses.arrCardioversionLabel}
+              detail="Hipotansiyon, iskemi veya şok bulgusu varsa SENKRONİZE şok uygula (bilinçli hastada sedasyon ver; nabızsız/polimorfik VT'de senkronize ETME, defibrilasyon uygula!)."
+              warning={`Stabil düzenli dar SVT'de Adenozin: ${doses.arrAdenosineLabel} · WPW pre-eksitasyonlu AF'de AV düğüm blokerleri YASAK (VF yapar)!`}
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Antiaritmik (VF / Monomorfik VT)"
+              value={doses.arrAmioLabel}
+              detail="Alternatif: Lidokain 1–1,5 mg/kg IV (→ 0,5–0,75 mg/kg) · Stabil monomorfik VT'de Prokainamid 20–50 mg/dk (maks 17 mg/kg)"
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Torsades de Pointes (Uzun QT · Polimorfik VT)"
+              value={`IV MgSO₄ ${doses.arrTorsadesMgLabel}`}
+              detail="K⁺ >4,0 mEq/L hedefle; bradikardi bağımlı edinsel uzun QT'de overdrive pacing veya İzoproterenol · Nabızsızda hemen defibrilasyon!"
+              warning="Torsades de Pointes'te Amiodaron VERME (QT aralığını daha da uzatıp aritmiyi şiddetlendirir!)"
+              tone="purple"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'intraop-bradycardia':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="1. Basamak: Cerrahi Uyarıyı Durdur + Atropin"
+              value={doses.bradyAtropineLabel}
+              detail="Önce vagal uyaranı (pnömoperitonyum, OCR/TCR, mezenter traksiyon) durdur ve %100 O₂/ventilasyonu doğrula."
+              warning="Mobitz Tip II, 3. Derece (Tam) AV Blok ve Kalp Nakli (denerve kalp) hastasında Atropin ETKİSİZDİR — zaman kaybetmeden TCP/Adrenalin geç!"
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="2. Basamak: Adrenalin / Dopamin İnfüzyon"
+              value={doses.bradyEpiLabel}
+              detail={`Alternatif Dopamin: ${doses.bradyDopamineRangeMcgMin} (5–20 mcg/kg/dk) · Denerve kalpte İzoproterenol 2–10 mcg/dk`}
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Transkutanöz Pacing (TCP) Ayarları"
+              value="Hız 70–80/dk · Akım Eşik +10 mA"
+              detail="Elektrik yakalama (capture) sonrası MUTLAKA mekanik nabız (radial/femoral/pleth/arter) teyit et; bilinçli hastada analgosedasyon ver."
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Pediatrik & KİBAS (Cushing) İstisnaları"
+              value="Pediatrik: Önce %100 O₂ · HR<60 = KPR!"
+              detail="Çocukta bradikardinin 1 numaralı nedeni HİPOKSİDİR (O₂/ventilasyona rağmen HR <60 + kötü perfüzyon → hemen KPR + Adrenalin 10 mcg/kg)."
+              warning="KİBAS + Hipertansiyon + Bradikardi (Cushing Refleksi) varlığında Atropin VERME — ICP'yi düşür (Mannitol/%3 NaCl)!"
+              tone="emerald"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'intraop-hypoglycemia':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="Acil İV Dekstroz Bolusu"
+              value={doses.hypoDextroseLabel}
+              detail={`Toplam glukoz yükü: ${doses.hypoDextroseGrams} · Periferik ven dostu %10 Dekstroz ekstravazasyon nekrozu riskini azaltır.`}
+              warning={
+                doses.isPediatric
+                  ? 'PEDİATRİK KURAL (Rule of 50): Çocuk/yenidoğanda %50 Dekstroz YASAK (hiperozmotik venöz nekroz & İVH riski)! Yalnızca %10 Dekstroz (2–5 mL/kg; yenidoğan 2 mL/kg) ver!'
+                  : 'İnsülin infüzyonunu DERHAL kapat; 15 dk sonra KŞ tekrarla (hedef 100–180 mg/dL) ve %5–10 Dekstroz idame başlat.'
+              }
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Wernicke Koruması (Alkolizm / Malnütrisyon)"
+              value="Tiamin 100–500 mg IV"
+              detail="Alkol kullanım bozukluğu, kronik malnütrisyon, bariatrik cerrahi veya uzamış açlıkta dekstrozla birlikte (tercihen hemen önce) uygula."
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="İV Yol Yoksa: Glukagon"
+              value={doses.hypoGlucagonLabel}
+              detail="Hepatik glikojenoliz üzerinden etki eder (etki 10–15 dk); karaciğer yetmezliği, alkolizm ve uzun açlıkta glikojen boşsa ETKİSİZDİR!"
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Sülfonilüre / İnsülinoma Nüks Koruması"
+              value="Oktreotid 50–100 mcg SC/IV (6–8 sa)"
+              detail="Sülfonilüre aşırı dozunda tek başına dekstroz pankreatik insülin salınımını yeniden tetikler; Oktreotid rebound hipoglisemiyi keser."
+              tone="emerald"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'myxedema-coma':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="1. ÖNCE İV Hidrokortizon (Adrenal Kriz Önlemi!)"
+              value={doses.myxedemaHydrocortLabel}
+              detail="Bazal TSH, sT4, sT3 ve serum kortizol örneğini al — SONUCU BEKLEMEDEN tiroid hormonundan ÖNCE Hidrokortizon ver!"
+              warning="Önce T4/T3 vermek kortizol yıkımını hızlandırıp ölümcül ADRENAL KRİZ tetikler!"
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="2. İV Levotiroksin (T4) Yükleme"
+              value={doses.myxedemaT4Label}
+              detail="İdame: 50–100 mcg/gün IV (yaşlı, düşük kilolu veya KAH/aritmi riskli hastada 200 mcg alt sınırı seç)"
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Seçili Olguda Liyotironin (T3)"
+              value={doses.myxedemaT3Label}
+              detail="Ağır refrakter hipotermi/şokta periferik T4→T3 dönüşümü bozuksa seçili eklenir; yüksek T3 miyokard iskemisi ve aritmi riskini artırır."
+              tone="purple"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Isıtma, Havayolu & Hiponatremi Güvenliği"
+              value="Pasif Isıtma · Na⁺ ≤6–8 mEq/L/24 sa"
+              detail="Makroglossi/laringeal miksödem = ZOR HAVAYOLU (küçük ETT + videolaringoskop) · Minimum anestezik/opioid + BIS"
+              warning="Agresif aktif eksternal ısıtma periferik vazodilatasyonla 'rewarming şoku' (kardiyak kollaps) yapar — pasif ısıtma uygula!"
+              tone="blue"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'pheochromocytoma-crisis':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="Faz 1 · Önce α-Blokaj / Direkt Vazodilatasyon"
+              value={`Fentolamin 1–5 mg · SNP ${doses.pheoSnpRangeMcgMin}`}
+              detail="Nikardipin 5–15 mg/sa (veya Klevidipin 1–16 mg/sa) · Sodyum Nitroprussid 0,3–2 mcg/kg/dk (kısa pik maks 3–5; ışıktan koru)"
+              warning="Yeterli α-blokaj sağlanmadan ASLA tek başına β-bloker veya IV Labetalol (α:β = 1:7) VERME — karşılanmamış α₁ krizi & pulmoner ödem!"
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Faz 1 · Magnezyum Sülfat & α-Sonrası Esmolol"
+              value={`MgSO₄ ${doses.pheoMgLoadLabel}`}
+              detail={`MgSO₄ katekolamin salınımını inhibe eder + antiaritmik · Yeterli α-blokaj SONRASI taşiaritmi için Esmolol ${doses.pheoEsmololBolusMg} mg bolus → 50–200 mcg/kg/dk`}
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Faz 2 · Adrenal Ven Ligasyonu Sonrası Vazopleji"
+              value={`Noradrenalin ${doses.adrenalNoradRangeMcgMin} + Vazopressin`}
+              detail="Ligasyon anında tüm vazodilatatörleri KAPAT! Agresif dengeli kristaloid + Noradrenalin; katekolamin direncinde Vazopressin 0,01–0,04 IU/dk"
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Yasak Tetikleyiciler & Post-Rezeksiyon Hipoglisemi"
+              value="30–60 dk'da bir KŞ Takibi!"
+              detail="Ven ligasyonu sonrası rebound insülin salınımı ağır HİPOGLİSEMİ yapar."
+              warning="KESİN KAÇIN: Metoklopramid, Droperidol, Morfin/Atrakuryum (histamin), Desfluran, Ketamin, Efedrin, Süksinilkolin ve Glukagon!"
+              tone="emerald"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'adrenal-crisis':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="1. Acil İV Hidrokortizon (Sonuç Bekleme!)"
+              value={doses.adrenalHydrocortLabel}
+              detail="Mümkünse öncesi 1 tüp serum kortizol/ACTH al ama sonucu BEKLEME! ≥50–100 mg/gün Hidrokortizon güçlü mineralokortikoid etki de sağlar."
+              warning="Deksametazon'un mineralokortikoid etkisi YOKTUR — yalnızca Hidrokortizon yoksa geçici alternatif olarak kullanılır."
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="2. Agresif Sıvı Resüsitasyonu"
+              value={doses.adrenalFluid1hLabel}
+              detail="İlk 24 saatte erişkinde 3–4 L kristaloid (hemodinamiye titre) · Hiponatremi varsa düzeltme hızı ≤6–8 mEq/L/24 sa (ODS önlemi!)"
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="3. Noradrenalin Köprüleme"
+              value={`${doses.adrenalNoradRangeMcgMin} (0,05–0,5 mcg/kg/dk)`}
+              detail="Hedef MAP ≥65 mmHg · İV Hidrokortizon 1–2 saat içinde vasküler α₁-adrenerjik reseptör duyarlılığını geri kazandırır."
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="4. Hipoglisemi, Hiperkalemi & Etomidat Uyarısı"
+              value="KŞ + K⁺ + AKG STAT Kontrol"
+              detail="KŞ <70 mg/dL ise İV Dekstroz; primer krizde K⁺ >6,0/EKG değişikliği varsa %10 Ca Glukonat + İnsülin-Dekstroz"
+              warning="Etomidat 11β-hidroksilazı inhibe ederek adrenal steroid sentezini 24–48 saat baskılar — riskli hastada tekrar doz/infüzyondan kaçın!"
               tone="emerald"
               isDark={isDark}
             />
