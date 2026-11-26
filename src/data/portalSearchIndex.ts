@@ -1693,6 +1693,24 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     popular: true
   },
   {
+    id: 'emergency-total-spinal',
+    title: 'Yüksek / Total Spinal Anestezi Kriz Protokolü',
+    category: 'Kılavuzlar & Protokoller',
+    badge: 'Total Spinal · T1–T4 & C3–C5',
+    description: '10 aşamalı nöroaksiyel kriz protokolü: Dermatomal merdiven (el sıkma/fısıltı ses/apne), erken IV Adrenalin (10–50 mcg → 1 mg), hiperbarik barisite/pozisyon yasağı, farkındalık koruması, Subdural/LAST/AFE ayrımı ve gebede LUD + 4. dk PMCS.',
+    keywords: [
+      'total spinal', 'yüksek spinal', 'high spinal', 'yüksek nöroaksiyel blok', 'nöroaksiyel komplikasyon',
+      'spinal anestezi krizi', 'subdural blok', 'kardiyoakceleratör', 'frenik sinir', 'apne',
+      'failed epidural', 'başarısız epidural', 'epidural top-up', 'test dozu', 'bupivakain', 'hiperbarik',
+      'trendelenburg yasağı', 'pasif bacak kaldırma', 'uyanık paralizi', 'awareness', 'sabit dilate pupil',
+      'sol uterin deplasman', 'lud', 'perimortem sezaryen', 'resüsitatif histerotomi', 'soap score',
+      'obstetrik anestezi acili', 'anestezi acili'
+    ],
+    tabId: 'emergencies',
+    subId: 'total-spinal',
+    popular: true
+  },
+  {
     id: 'emergency-etco2-elevation',
     title: 'İntraoperatif End-Tidal Karbondioksit (EtCO₂) Yükselmesi',
     category: 'Kılavuzlar & Protokoller',

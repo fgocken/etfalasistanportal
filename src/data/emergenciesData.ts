@@ -24,7 +24,7 @@ export interface EmergencyProtocol {
   codeColor: 'red' | 'rose' | 'amber' | 'purple' | 'cyan' | 'teal';
   severityBadge: string;
   keyCallout: string;
-  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'fes' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'tension-pneumothorax' | 'airway-fire' | 'generic';
+  quickCalculatorType?: 'dantrolene' | 'bronchospasm' | 'laryngospasm' | 'cico' | 'airway-obstruction' | 'aspiration' | 'pe' | 'vae' | 'fes' | 'total-spinal' | 'last' | 'anaphylaxis' | 'acls' | 'mtp' | 'tension-pneumothorax' | 'airway-fire' | 'generic';
 
   // 2) Tanımlama ve Introduction
   introduction: {
@@ -541,6 +541,40 @@ export interface EmergencyProtocol {
         title: string;
         surgicalTimingRule: string;
         intraopTechniques: string[];
+      };
+    };
+
+    // Yüksek / Total Spinal Anestezi acil alt-protokolleri
+    totalSpinalProtocols?: {
+      dermatomalLadderTitle: string;
+      dermatomalLevels: {
+        level: string;
+        anatomicalTarget: string;
+        clinicalPresentation: string;
+        immediateIntervention: string;
+        severity: 'WARNING' | 'HIGH' | 'CRITICAL';
+      }[];
+      differentialMatrixTitle: string;
+      differentialComparison: {
+        entity: string;
+        onset: string;
+        cardinalFeatures: string;
+        hemodynamicsAndMotor: string;
+        criticalTherapyRule: string;
+      }[];
+      positioningAndAwarenessRules: {
+        title: string;
+        items: {
+          domain: string;
+          recommendation: string;
+          rationaleAndTrap: string;
+          status: 'RECOMMENDED' | 'CAUTION' | 'AVOID';
+        }[];
+      };
+      obstetricAndPreventionProtocol: {
+        title: string;
+        obstetricRule: string;
+        preventionChecks: string[];
       };
     };
   };
@@ -6681,6 +6715,455 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       { label: 'İntraoperatif Hipotansiyon (IOH)', href: '#arac=emergencies&sub=hypotension', badge: 'RV / Şok' },
       { label: 'Mekanik Ventilasyon & ARDS', href: '#arac=mechanical-ventilation', badge: 'ARDSNet' },
       { label: 'ARDS PBW & Doz Hesaplayıcıları', href: '#arac=calculator', badge: 'Hesaplayıcı' }
+    ]
+  },
+
+  'total-spinal': {
+    id: 'total-spinal',
+    // 1) Başlık
+    title: 'Yüksek / Total Spinal Anestezi Kriz Protokolü',
+    subTitle: 'Kardiyoakceleratör (T1–T4), Frenik Sinir (C3–C5) & Beyin Sapı Blokajı · Akut Kardiyorespiratuvar Kollaps',
+    codeColor: 'red',
+    severityBadge: 'KOD KIRMIZI · AKUT HİPOTANSİYON + BRADİKARDİ + APNE + BİLİNÇ KAYBI',
+    keyCallout: 'Spinal anestezi, epidural top-up veya başarısız epidural sonrası kurtarma spinalinden saniyeler–dakikalar sonra hızla yükselen blok + derin hipotansiyon + bradikardi + el sıkma güçsüzlüğü / fısıltı ses / dispne / bilinç kaybı = YÜKSEK / TOTAL SPİNAL! Önce oksijenasyon ve erken entübasyon (ABC), erken düşük doz IV Adrenalin (10–50 mcg → arrestte 1 mg), hızlı kristaloid + pasif bacak kaldırma (hiperbarikte dik Trendelenburg YASAK!), gebede Manuel Sol Uterin Deplasman (arrestte 4. dk resüsitatif histerotomi) ve hemodinami elverdiğince farkındalık (awareness) önleyici sedasyon uygula!',
+    quickCalculatorType: 'total-spinal',
+
+    // 2) Tanımlama ve Introduction
+    introduction: {
+      definition: 'Yüksek Nöroaksiyel Blok, lokal anesteziğin hedeflenen cerrahi dermatomların (genellikle T4) üzerine çıkarak torakal kardiyoakceleratör sempatik lifleri (T1–T4) ve servikal motor kökleri (C5–C8 üst ekstremite, C3–C5 frenik sinir) etkilemesidir. Total Spinal Anestezi ise bloğun intrakraniyal beyin sapı ve kraniyal sinir düzeyine ulaşarak ani apne, bilinç kaybı, sabit dilate pupiller ve derin vazopleji/bradikardiye bağlı kardiyovasküler kollapsa yol açtığı hayatı tehdit eden nöroaksiyel acildir.',
+      epidemiology: 'SOAP SCORE (D’Angelo et al., Anesthesiology 2014) veritabanında obstetrik nöroaksiyel anestezilerde entübasyon gerektiren yüksek nöroaksiyel blok insidansı 1:4.336 olarak bildirilmiştir ve en sık ciddi obstetrik anestezi komplikasyonudur. Kritik bulgu: Olguların >%25’i başarısız/yetersiz doğum epidurali sonrasında kurtarma amacıyla yapılan spinal anestezi (“failed epidural → spinal”) bağlamında gelişmektedir. UKOSS CAPS çalışmasında (Beckett et al., BJOG 2017) gebelikte kardiyak arrestlerin %25’i anestezi kaynaklı olup total spinal ve epidural top-up kollapsı başı çekmektedir; ancak zamanında ABC + vazopressör + perimortem sezaryen ile anne sağkalımı son derece yüksektir.',
+      triggers: [
+        'Başarısız / Yetersiz Epidural Sonrası Kurtarma Spinali (“Failed Epidural → Rescue Spinal”): Epidural boşlukta biriken sıvı hacmi dural keseyi sıkıştırarak BOS volümünü daraltır; standart spinal doz verildiğinde blok hızla C-seviyesine / beyin sapına fırlar!',
+        'Fark Edilmeyen İntratekal Epidural Kateter Göçü veya Yanlışlıkla Epidural Dozun (10–20 mL LA) İntratekal Verilmesi: Özellikle test dozu atlandığında veya fraksiyone top-up yapılmadığında saniyeler içinde fulminan total spinal gelişir',
+        'Aşırı İntratekal Doz, Hiperbarik Ajan + Hızlı/Dik Trendelenburg Pozisyonu veya Yüksek Basınçlı Hızlı Enjeksiyon (Barbotaj)',
+        'Hasta Anatomik Risk Faktörleri: Gebelik (engorged epidural venöz pleksus + progesteron artmış sinir duyarlılığı + daralmış BOS hacmi), morbid obezite, kısa boy (<150 cm), kifoskolyoz, ileri yaş ve geçirilmiş spinal cerrahi',
+        'Periferik/Paravertebral Blok Komplikasyonu (Nadir): İnterskalen brakiyal pleksus, torasik paravertebral, lumbar pleksus veya stellat ganglion bloklarında dural manşon (dural sleeve) içine kazara intratekal enjeksiyon'
+      ],
+      safeAgents: [
+        'Hava Yolu & %100 Oksijen: Derhal %100 O₂ balon-valf-maske desteği → apne, desatürasyon, ses/yutma kaybı veya bilinç depresyonunda gecikmeden hızlı seri entübasyon (RSI) + kapnografi (EtCO₂)',
+        'Erken Vazopressör & Kronotropi (Kardiyak Kollapsı Önle!): Ciddi bradikardi + hipotansiyonda Atropin (0,5–1 mg IV) / Efedrin (10–25 mg IV) yetmezse SANİYELER kaybetmeden düşük doz IV Adrenalin (10–50 mcg → gerekirse 100 mcg; arrestte 1 mg ACLS) + Noradrenalin infüzyonu',
+        'Preload & Güvenli Pozisyon: 500–1000 mL (10–20 mL/kg) hızlı dengeli kristaloid + yalnızca bacakların kaldırılması (Pasif Bacak Kaldırma — baş/gövde hafif nötral/10–15° yukarı) + gebede Manuel Sol Uterin Deplasman (LUD)',
+        'Farkındalık (Awareness) Önleme: Total spinalde hasta hareketsiz ve apneik ama BİLİNCİ AÇIK olabilir! Hemodinami stabilize edilir edilmez düşük doz titre amnestik/hipnotik (Midazolam 1–2 mg IV, Ketamin 0,5–1 mg/kg veya düşük doz volatil 0,5–0,7 MAC)',
+        'KESİN KAÇINILACAKLAR: Hiperbarik lokal anestezik sonrası dik baş-aşağı (Trendelenburg) pozisyonu, kardiyovasküler kollapsta standart tam doz Propofol bolusu (2 mg/kg) ve derin bradikardide tek başına yüksek doz Fenilefrin'
+      ],
+      mortalityStats: 'Total spinal lokal anesteziğin geçici ve tamamen geri dönüşlü (1–4 saat) farmakolojik bir bloğudur; beyin hasarı veya ölümün nedeni ilacın kendisi değil gecikmiş ventilasyon (hipoksik arrest) ve düzeltilmemiş dolaşım kollapsıdır. Erken entübasyon ve agresif vazopressörle mortalite sıfıra yakındır.',
+      clinicalUrgency: 'Spinal veya epidural bolus sonrası hastada el parmaklarında uyuşma/el sıkma güçsüzlüğü, fısıltı ses, göğüste “nefes alamıyorum” hissi, ani bulantı + bradikardi + derin hipotansiyon başladığı anda KRİZ İLAN EDİLMELİ ve havayolu + adrenalin saniyeler içinde hazırlanmalıdır.'
+    },
+
+    // 3) Tanı
+    diagnosis: {
+      overview: 'Yüksek / Total Spinal tanısı KLİNİKTİR ve dakikalar (epidural top-up intratekal kaçışında 1–3 dk; hiperbarik spinalde 3–15 dk) içinde hızla ilerleyen kraniyal dermatom yükselişiyle konur. Erken dönemde göğüste sıkışma hissi (interkostal paralizi — hasta diyaframı sağlamken bile göğüs duvarı hareketini hissedemediği için “nefes alamıyorum” der!), el sıkma gücünde zayıflama (C8–T1), sesin kısılması/fısıltıya dönmesi, bulantı-kusma, derin hipotansiyon ve bradikardi kritik habercilerdir. Beyin sapı düzeyine ulaşınca ani apne, bilinç kaybı ve pupiller dilatasyon gelişir.',
+      clinicalCriteria: [
+        'T4–T1 Sempatik & İnterkostal Blok: Derin hipotansiyon (vazopleji + venöz göllenme), T1–T4 kardiyoakceleratör liflerin blokajıyla paradoksal bradikardi ve “nefesim yetmiyor” hissi (interkostal kas paralizisi)',
+        'C5–C8 Servikal Blok (Kritik Uyarı İşareti!): Ellerde/kollarda uyuşma, omuz abduksiyonu (C5) ve el sıkma gücünde (C8–T1) azalma, Horner sendromu (pitozis/miyozis) ve öksürük/ses gücünde zayıflama (fısıltı ses)',
+        'C3–C5 Frenik Sinir Blokajı: Diyafram paralizisi, solunum eforunun hızla sönümlenmesi, hiperkapni, desatürasyon ve akut apne',
+        'İntrakraniyal / Beyin Sapı Blokajı (Total Spinal): Ani bilinç kaybı (kortikal hipoperfüzyon + santral LA etkisi), kraniyal sinir paralizisi (disfaji, konuşamama), sabit dilate pupiller ve asistoli/PEA kardiyak arrest',
+        'Gebe Hastada Ek Bulgu: Maternal hipotansiyon ve aortokaval kompresyona bağlı ani fetal bradikardi (CTG’de derin deselerasyon)'
+      ],
+      gradingScaleTitle: 'Yüksek / Total Spinal Anestezi Klinik Şiddet ve Dermatomal Evreleme',
+      gradingScaleSource: 'OAA / AAGBI Yüksek Nöroaksiyel Blok Kılavuzu & SOAP SCORE (Anesthesiology 2014)',
+      larachScale: [
+        { category: 'Evre 1 — Yüksek Torakal Blok (T2–T4)', points: 'Erken Uyarı', description: 'Hipotansiyon, bulantı-kusma, interkostal kas güçsüzlüğüne bağlı dispne hissi; ancak ses güçlü, el sıkma sağlam ve SpO₂ normal (güvence ver, O₂ + vazopressör + seri seviye takibi).' },
+        { category: 'Evre 2 — Kardiyoakceleratör & Alt Servikal Blok (C6–T1)', points: 'Yüksek Risk', description: 'T1–T4 blokajı ile belirgin bradikardi (<50/dk) + derin hipotansiyon; ellerde uyuşma, el sıkma (C8–T1) ve dirsek fleksiyonunda zayıflık; her an C3–C5’e çıkabilir!' },
+        { category: 'Evre 3 — Frenik Sinir Tutulumu (C3–C5)', points: 'Kritik Solunum', description: 'Diyafram paralizisi, yüzeyel solunum/apne, fısıltı ses veya konuşamama, öksürük kaybı ve hızlı desatürasyon — DERHAL %100 O₂ balon-maske ve entübasyon!' },
+        { category: 'Evre 4 — Total Spinal (Beyin Sapı / İntrakraniyal)', points: 'KOD KIRMIZI', description: 'Tam apne, bilinç kaybı, sabit dilate pupiller, derin vazoplejik şok veya asistoli/PEA kardiyak arrest (acil entübasyon + erken Adrenalin / ACLS + gebede 4. dk PMCS).' }
+      ],
+      larachInterpretation: 'El sıkma gücünde azalma (C8–T1) veya sesin fısıltıya dönmesi, bloğun C3–C5 frenik sinire ulaşmak üzere olduğunun EN DEĞERLİ yatak başı erken alarmıdır. Bu bulgular görüldüğünde apne beklenmeden entübasyon hazırlığı tamamlanmalı ve erken vazopressör/kronotrop başlanmalıdır.',
+      differentialDiagnosis: [
+        {
+          condition: 'Kazara Subdural Blok (Dura–Araknoid Arası Enjeksiyon)',
+          differentiatingFactors: 'Başlangıcı daha yavaştır (15–30 dk, total spinalde 1–5 dk); duyusal blok orantısız biçimde çok yüksek (C-seviyesine dek) ve sıklıkla asimetrik/yamasaldır. Anterior motor ve sempatik kökler göreceli korunduğu için motor blok ve hipotansiyon total spinale göre tipik olarak daha hafiftir (ancak yüksek servikal/intrakraniyal yayılımda apne yine gelişebilir!).'
+        },
+        {
+          condition: 'Lokal Anestezik Sistemik Toksisitesi (LAST)',
+          differentiatingFactors: 'İntravasküler enjeksiyon sonrası saniyeler–dakikalar içinde metalik tat, kulak çınlaması, perioral uyuşma, ajitasyon → TONİK-KLONİK NÖBET ve refrakter ventriküler aritmi/VF (QRS genişlemesi) ile seyreder. Total spinalde nöbet ve primer QRS genişlemesi beklenmez; LAST’ta %20 Lipid Emülsiyonu esastır (şüphe varsa her ikisi de düşünülmelidir).'
+        },
+        {
+          condition: 'Amniyotik Sıvı Embolisi (AFE) / Masif Pulmoner Embolizm (PE)',
+          differentiatingFactors: 'Obstetrikte ani kardiyorespiratuvar kollaps yapar ancak hızla ağır pulmoner hipertansiyon/sağ kalp yetmezliği, derin hipoksemi ve dakikalar içinde DİK/masif obstetrik kanama gelişir; yükselen dermatomal motor/duyusal blok paterni yoktur.'
+        },
+        {
+          condition: 'Vazovagal Senkop / Bezold-Jarisch Refleksi',
+          differentiatingFactors: 'Spinal sonrası izole hipotansiyon + bradikardi + terleme/bulantı ve geçici senkop yapar; ancak üst ekstremite motor gücü (el sıkma), ses tonu ve diyafram solunumu tamamen korunmuştur ve Atropin/Efedrin/sıvı ile hızla düzelir.'
+        },
+        {
+          condition: 'İntrakraniyal Hemoraji / Eklampsi / Anafilaksi',
+          differentiatingFactors: 'Anafilakside bronkospazm (↑Ppeak), ürtiker/eritem ve taşikardi ön plandadır (total spinalde bradikardi ve normal akciğer kompliyansı vardır). Eklampside şiddetli hipertansiyon ve nöbet görülür.'
+        }
+      ]
+    },
+
+    // 4) Akut Kriz Yönetimi
+    crisisManagement: {
+      hotlineInfo: 'ACİL YARDIM ÇAĞIR · Havayolu Ekibi + Kıdemli Anestezist + (Gebe ise) Kadın Doğum & Yenidoğan Ekibini DERHAL Odaya Çağırın! Epidural infüzyonu kapatın.',
+      coreAlgorithm: [
+        {
+          stepNumber: 1,
+          title: 'YARDIM ÇAĞIR, İNFÜZYONU DURDUR & %100 OKSİJEN BAŞLAT',
+          action: 'Yüksek sesle yardım çağırın; devam eden epidural infüzyon/bolus varsa derhal durdurun. Hastaya %100 O₂ verin; solunum yüzeyelleşmişse veya apne geliştiyse saniye kaybetmeden balon-valf-maske (çift el/airway) ile pozitif basınçlı ventilasyona başlayın.',
+          criticalNote: 'Total spinalde mortalitenin birincil nedeni hipoksemidir — önce oksijenle ve ventile et!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 2,
+          title: 'ERKEN HAVAYOLU GÜVENLİĞİ (ENTÜBASYON) — FARKINDALIK TUZAĞINA DİKKAT!',
+          action: 'Apne, hipoventilasyon (↑EtCO₂ / ↓SpO₂), ses/yutma/öksürük kaybı veya bilinç kaybı varsa derhal endotrakeal entübasyon yapın (gebede ve tok hastada hızlı seri entübasyon — videolaringoskop + küçük çaplı ETT 6,5–7,0 mm).',
+          criticalNote: 'KRİTİK UYARI: Hasta tamamen paralize ve apneik olsa bile BİLİNCİ AÇIK olabilir! Ancak derin hipotansiyonda tam doz Propofol (2 mg/kg) ölümcül arrest yapar. İndüksiyon için hemodinamiye göre düşük doz Ketamin (0,5–1 mg/kg) veya Etomidat (0,15–0,2 mg/kg) ± düşük doz Midazolam (1–2 mg) tercih edin; gerekirse Rokuronyum/Süksinilkolin ekleyin.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 3,
+          title: 'DOĞRU POZİSYON & GEBEDE MANUEL SOL UTERİN DEPLASMAN (LUD)',
+          action: 'Venöz dönüşü artırmak için yalnızca bacakları yükseltin (Pasif Bacak Kaldırma — Passive Leg Raise); baş ve üst gövdeyi hafif nötral/10–15° yukarıda tutun. Gebe hastada (>20 hafta) derhal el ile (manuel) Sol Uterin Deplasman (LUD) uygulayarak aortokaval basıyı kaldırın!',
+          criticalNote: 'POZİSYON TUZAĞI: Hiperbarik lokal anestezik (ağır Bupivakain) verildiyse ve ilk 15–20 dk içindeyse DİK TRENDELENBURG (baş-aşağı) pozisyonu ilacı yerçekimiyle beyin sapına doğru daha da yukarı iter — YALNIZCA bacakları kaldırın!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 4,
+          title: 'AGRESİF HEMODİNAMİK DESTEK — ERKEN ADRENALİN & ÖNYÜK (PRELOAD)',
+          action: 'Geniş IV hattan hızlı 500–1000 mL (10–20 mL/kg) dengeli kristaloid bolusu verin. Hipotansiyon + bradikardide: Efedrin (10–25 mg IV) ve Atropin (0,5–1 mg IV, maks 3 mg) uygulayın. Şiddetli/refrakter bradikardi (<40–45/dk) veya derin şokta (MAP <50 mmHg) HİÇ BEKLEMEDEN düşük doz IV Adrenalin (10–50 mcg, yanıt yoksa 100 mcg bolus → infüzyon) veya Noradrenalin (0,05–0,5 mcg/kg/dk) başlatın!',
+          criticalNote: 'T1–T4 kardiyoakceleratör blokajında vagal tonus baskın olduğu için tek başına yüksek doz Fenilefrin baroreseptör refleksle bradikardiyi derinleştirip asistoliye götürebilir — bradikardide β₁-etkili Efedrin / Atropin / erken Adrenalin esastır!',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 5,
+          title: 'KARDİYAK ARREST GELİŞİRSE: ACLS & GEBEDE 4. DAKİKA RESÜSİTATİF HİSTEROTOMİ',
+          action: 'Nabız alınamıyorsa (asistoli / PEA) derhal yüksek kaliteli göğüs kompresyonlarına (100–120/dk) ve standart ACLS’ye (Adrenalin 1 mg IV her 3–5 dk) başlayın. Gebe hastada (>20 hafta / fundus göbek hizasında) supin pozisyonda sürekli Manuel LUD eşliğinde KPR yapın; 4. dakikada ROSC sağlanamazsa anne sağkalımı için yatak başında DERHAL resüsitatif histerotomi (perimortem sezaryen — 5. dakikada doğum) uygulayın!',
+          criticalNote: 'UKOSS CAPS verisi: Total spinale bağlı maternal arrestte hızlı KPR + erken perimortem sezaryen ile anne sağkalımı son derece yüksektir.',
+          priority: 'CRITICAL'
+        },
+        {
+          stepNumber: 6,
+          title: 'BİLİNÇ & FARKINDALIK (AWARENESS) KORUMASI + İDAME SEDASYON',
+          action: 'Dolaşım stabilize edilip entübasyon doğrulandıktan sonra (EtCO₂ + bilateral solunum sesi), hastanın bilincinin açık olabileceği unutulmamalıdır! Hemodinami elverdiğince düşük doz volatil anestezik (0,5–0,7 MAC Sevofluran) veya titre Midazolam / Propofol / Ketamin infüzyonu ile amnezi ve sedasyon sağlayın; BIS monitörü takın.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 7,
+          title: 'EPİDURAL KATETERİ KONTROL ET, BLOĞUN GERİLEMESİNİ BEKLE & EKSTÜBASYON KRİTERLERİ',
+          action: 'Şüpheli epidural kateteri net biçimde etiketleyin/kilitleyin ve olgu güvenle sonlanınca (veya nöroaksiyel komplikasyon şüphesi değerlendirilip) çekin — kesinlikle tekrar test/top-up vermeyin! Lokal anesteziğin etkisi (ajan ve doza göre 1–4 saat) geçip tam spontan solunum, güçlü el sıkma/öksürük, tam bilinç ve vazopressörsüz hemodinamik stabilite dönene kadar mekanik ventilasyonu sürdürün.',
+          priority: 'HIGH'
+        },
+        {
+          stepNumber: 8,
+          title: 'FİZYOLOJİK İYİLEŞME, GEBEDE FETAL DEĞERLENDİRME & AÇIK BİLGİLENDİRME (DEBRIEFING)',
+          action: 'Gebe hastada anne stabilize olur olmaz sürekli fetal kalp hızı (CTG) izlemi yapın; maternal perfüzyon düzeldiğinde fetal bradikardi çoğu kez hızla toparlar (acil sezaryen kararı anne stabilitesi sağlandıktan sonra obstetri ile birlikte verilir). Ekstübasyon sonrası hastaya yaşananları açıkça anlatın, olası uyanık paralizi/anksiyete travması açısından psikolojik destek ve tıbbi kayıt/bildirim sağlayın.',
+          priority: 'MEDIUM'
+        }
+      ],
+      totalSpinalProtocols: {
+        dermatomalLadderTitle: 'Dermatomal Yükselme Merdiveni — Hangi Seviyede Ne Olur?',
+        dermatomalLevels: [
+          {
+            level: 'T4 – T6',
+            anatomicalTarget: 'Torakal Sempatik Zincir & Splanknik Yatak',
+            clinicalPresentation: 'Venöz göllenme, hipotansiyon, bulantı-kusma, soğuk terleme; alt interkostal güçsüzlük başlangıcı.',
+            immediateIntervention: 'Hızlı kristaloid + vazopressör (obstetrikte Fenilefrin; bradikardide Efedrin), %100 O₂, seri soğuk/pinprick seviye takibi.',
+            severity: 'WARNING'
+          },
+          {
+            level: 'T1 – T4',
+            anatomicalTarget: 'Kardiyoakceleratör Sempatik Lifler & Tüm İnterkostaller',
+            clinicalPresentation: 'Belirgin bradikardi (<50/dk) + derin hipotansiyon + hastada “göğsüm sıkışıyor, nefes alamıyorum” paniği (diyafram sağlam ama göğüs duvarı hissiz!).',
+            immediateIntervention: 'Atropin (0,5–1 mg) + Efedrin (10–25 mg) → yanıt yoksa erken Adrenalin (10–50 mcg); hastaya sakin güvence ver ve entübasyon setini hazırla.',
+            severity: 'HIGH'
+          },
+          {
+            level: 'C5 – C8',
+            anatomicalTarget: 'Brakiyal Pleksus & Servikal Sempatik (Horner)',
+            clinicalPresentation: 'El parmaklarında uyuşma, el sıkma gücünde düşüş (C8–T1), omuz/kol kaldıramama (C5–C6), Horner sendromu (pitozis/miyozis), ses kısıklığı/fısıltı.',
+            immediateIntervention: 'C3–C5 frenik bloğun HABERCİSİDİR! Yardım çağır, preoksijenasyonu (%100 O₂) başlat, pasif bacak kaldırma + erken Adrenalin/Noradrenalin hazırla.',
+            severity: 'HIGH'
+          },
+          {
+            level: 'C3 – C5',
+            anatomicalTarget: 'Frenik Sinir (Diyafram Motor İnnervasyonu)',
+            clinicalPresentation: 'Diyafram paralizisi, yüzeyel solunum → AKUT APNE, konuşamama/öksürememe, hızla derinleşen desatürasyon (hasta hâlâ BİLİNÇLİ olabilir!).',
+            immediateIntervention: 'DERHAL %100 O₂ balon-maske ventilasyonu + düşük doz Ketamin/Etomidat/Midazolam ile RSI endotrakeal entübasyon!',
+            severity: 'CRITICAL'
+          },
+          {
+            level: 'Beyin Sapı / Kraniyal',
+            anatomicalTarget: 'Medulla Oblongata, Vazomotor/Solunum Merkezi & Kraniyal Sinirler',
+            clinicalPresentation: 'Tam apne, ani bilinç kaybı, sabit dilate pupiller (CN III bloğu + hipoksi), derin vazoplejik şok → ASİSTOLİ / PEA ARREST.',
+            immediateIntervention: 'Entübasyon + Mekanik Ventilasyon + Erken Adrenalin / ACLS (1 mg IV) + Gebede Manuel LUD & 4. dk Resüsitatif Histerotomi!',
+            severity: 'CRITICAL'
+          }
+        ],
+        differentialMatrixTitle: 'Yüksek / Total Spinal vs Subdural Blok vs LAST vs Amniyotik Sıvı Embolisi (AFE)',
+        differentialComparison: [
+          {
+            entity: 'Yüksek / Total Spinal',
+            onset: 'Çok hızlı (intratekal epidural dozda 1–3 dk; spinalde 3–15 dk)',
+            cardinalFeatures: 'Simetrik hızla yükselen blok: el sıkma kaybı, fısıltı ses, apne, bilinç kaybı, dilate pupiller; nöbet/QRS genişlemesi YOK',
+            hemodynamicsAndMotor: 'Ağır bradikardi + derin hipotansiyon + tam flask motor blok (Bromage 3)',
+            criticalTherapyRule: 'ABC (O₂ + Erken Entübasyon) + Erken Adrenalin (10–50 mcg → 1 mg) + Pasif Bacak Kaldırma + Farkındalık Sedasyonu'
+          },
+          {
+            entity: 'Kazara Subdural Blok',
+            onset: 'Gecikmiş (tipik olarak 15–30 dk sonra sinsi ilerler)',
+            cardinalFeatures: 'Orantısız yüksek (servikal/kraniyal) ama sıklıkla ASİMETRİK / yamasal duyusal blok; bazen Horner sendromu',
+            hemodynamicsAndMotor: 'Anterior kökler göreceli korunduğu için motor blok ve hipotansiyon genelde hafif-orta (ama yine apne yapabilir!)',
+            criticalTherapyRule: 'Yakın solunum/hemodinami izlemi, gerekirse entübasyon; kateteri İŞARETLE & ÇEK (tekrar doz verme!)'
+          },
+          {
+            entity: 'LAST (LA Sistemik Toksisitesi)',
+            onset: 'İntravasküler enjeksiyonda saniyeler–1–5 dk (absorpsiyonda 15–30 dk)',
+            cardinalFeatures: 'Metalik tat, tinnitus, ajitasyon → TONİK-KLONİK NÖBET + QRS genişlemesi / VT-VF / refrakter asistoli',
+            hemodynamicsAndMotor: 'Yükselen dermatomal motor paralizi paterni YOK; miyokardiyal toksisite + aritmi hakim',
+            criticalTherapyRule: '%20 Lipid Emülsiyonu (1,5 mL/kg bolus → 0,25 mL/kg/dk) + Midazolam + Düşük doz Adrenalin (≤1 mcg/kg)'
+          },
+          {
+            entity: 'Amniyotik Sıvı Embolisi (AFE)',
+            onset: 'Doğum / membran rüptürü / sezaryen anında ani ve öngörülemez',
+            cardinalFeatures: 'Ani derin hipoksemi, akut sağ kalp/pulmoner hipertansiyon şoku ve dakikalar içinde DİK / masif kanama',
+            hemodynamicsAndMotor: 'Nöroaksiyel seviye yükselmesi yok; hızla koagülopati (fibrinojen çöküşü) ve ARDS gelişir',
+            criticalTherapyRule: 'A-OK / Destekleyici KPR + RV desteği (Noradrenalin) + Masif Transfüzyon (1:1:1 + Fibrinojen/TXA) + PMCS'
+          }
+        ],
+        positioningAndAwarenessRules: {
+          title: 'Kritik Klinik Kurallar: Barisite/Pozisyon, Farkındalık & İndüksiyon Güvenliği',
+          items: [
+            {
+              domain: 'Pozisyon & Barisite Kuralı (Hiperbarik LA)',
+              recommendation: 'Baş ve üst gövdeyi hafif nötral/10–15° yukarıda tut; venöz dönüş için YALNIZCA bacakları kaldır (Passive Leg Raise)!',
+              rationaleAndTrap: 'Hiperbarik Bupivakain (ağır Marcaine) BOS’tan yoğundur. İlk 15–20 dk içinde dik Trendelenburg (baş-aşağı) vermek ilacı yerçekimiyle beyin sapına sürükleyip yüksek spinali total spinale çevirir!',
+              status: 'AVOID'
+            },
+            {
+              domain: 'İndüksiyon Ajanı & Propofol Tuzağı',
+              recommendation: 'Entübasyon gerekirse hemodinamiyi koruyan düşük doz Ketamin (0,5–1 mg/kg) veya Etomidat (0,15–0,2 mg/kg) ± düşük doz Midazolam (1–2 mg) kullan.',
+              rationaleAndTrap: 'Sempatik tonusun tamamen silindiği total spinal hastasına standart tam doz Propofol (2 mg/kg) puşelemek geri dönüşsüz kardiyak arrest tetikleyebilir!',
+              status: 'CAUTION'
+            },
+            {
+              domain: 'Uyanık Paralizi (Awareness) Koruması',
+              recommendation: 'Hasta apneik, gözkapakları kapalı ve hareketsiz görünse dahi bilincinin açık olabileceğini varsay; hemodinami toparlanır toparlanmaz sedasyon/amnezi (0,5–0,7 MAC volatil / Midazolam) + BIS sağla!',
+              rationaleAndTrap: 'C3–C5 bloğunda hasta konuşamaz ve hareket edemez ama her şeyi duyar. Yatıştırıcı konuşma + erken amnestik ajan ciddi PTSD’yi önler.',
+              status: 'RECOMMENDED'
+            },
+            {
+              domain: 'Vazopressör Seçimi (Bradikardi Varken)',
+              recommendation: 'Bradikardide (<50–55/dk) β₁-etkili Efedrin (10–25 mg), Atropin (0,5–1 mg) ve yanıtsızda ERKEN düşük doz IV Adrenalin (10–50 mcg) seç!',
+              rationaleAndTrap: 'T1–T4 kardiyoakceleratör bloğunda tek başına yüksek doz saf α₁-agonist (Fenilefrin) refleks vagal deşarjla derin bradikardi ve asistoliye yol açabilir.',
+              status: 'RECOMMENDED'
+            }
+          ]
+        },
+        obstetricAndPreventionProtocol: {
+          title: 'Obstetrik Özel Yönetim & Yüksek Blok Önleme Kontrol Listesi',
+          obstetricRule: 'Gebelikte (>20 hafta) Yüksek/Total Spinal: (1) Derhal Manuel Sol Uterin Deplasman (LUD) başlat; (2) Anneyi stabilize etmeden bebeğe odaklanma — anne perfüzyonu düzelince fetal kalp hızı çoğunlukla normale döner; (3) Kardiyak arrestte 4. dakikada ROSC yoksa 5. dakikada doğumu sağlayacak şekilde yatak başında Resüsitatif Histerotomi (Perimortem Sezaryen) uygula!',
+          preventionChecks: [
+            'Epidural Kateter Test Dozu (Altın Standart): Her kateter yerleşimi sonrası negatif aspirasyon + 3 mL %1,5 Lidokain + 1:200.000 Adrenalin (45 mg Lidokain + 15 mcg Adrenalin) — 3–5 dk içinde hızlı motor/duyusal blok (intratekal!) ve 1–2 dk’da HR ≥+10–20/dk artış (intravasküler!) tara.',
+            'Fraksiyone Epidural Top-Up: Sezaryen için epidural yükseltirken 15–20 mL’yi tek seferde ASLA basma; 5 mL’lik bölünmüş dozlar halinde her doz öncesi nazik aspirasyon ve 2–3 dk klinik gözlemle ver.',
+            'Başarısız Epidural Sonrası Spinal (“Failed Epidural → Rescue Spinal”) Tuzağı: Son 30–60 dk içinde yüksek hacimli epidural bolus/top-up almış hastada dural kese sıkışmıştır! Kurtarma spinali yapılacaksa dozu %20–30 azalt, oturur pozisyonda yavaş enjekte et, dik baş-aşağı pozisyondan kaçın veya mümkünse epidurali yenile / genel anesteziyi seç.',
+            'Kısa Boy (<150 cm), Morbid Obezite ve Gebelikte Doz Optimizasyonu: Hiperbarik Bupivakain dozunu hasta boyu/gebelik fizyolojisine göre dikkatle titre et (sezaryende genellikle 9–11 mg + intratekal opioid).'
+          ]
+        }
+      }
+    },
+
+    // 5) Patofizyoloji
+    pathophysiology: {
+      molecularBasis: 'Lokal anestezikler (Bupivakain, Ropivakain, Lidokain) nöronal akson membranındaki voltaj kapılı sodyum kanallarını (NaV) intraselüler yüzden bloke ederek aksiyon potansiyeli iletimini durdurur. İntratekal/subaraknoid boşlukta kraniyale doğru aşırı yayılım gerçekleştiğinde, ince miyelinsiz pregangliyonik sempatik B-lifleri (T1–L2) en geniş alanda bloke olur; ardından servikal motor Aα-lifleri (C3–C5 frenik sinir) ve beyin sapı merkezleri etkilenir.',
+      stepsTitle: 'Kraniyal Yayılım → Çift Kollu Kardiyorespiratuvar Çöküş Kaskadı',
+      flowType: 'dual-axis',
+      cycleWarning: 'T1–T4 kardiyoakceleratör sempatik liflerin blokajı + venöz göllenmeye bağlı sağ atriyal gerilim kaybı (Bainbridge & Bezold-Jarisch refleksleri) birleşerek ani derin bradikardi ve asistoli kısır döngüsünü tetikler!',
+      cascadeSteps: [
+        {
+          phase: '1. Kontrolsüz Kraniyal BOS Yayılımı',
+          mechanism: 'Yüksek intratekal doz, kazara intratekal epidural top-up, dural kese kompresyonu (failed epidural / gebelik / obezite) veya hiperbarik ilaçta baş-aşağı pozisyon lokal anesteziği üst torakal ve servikal BOS’a taşır.',
+          badge: 'SEFALİK YAYILIM',
+          color: 'amber'
+        },
+        {
+          phase: '2. Total Sempatoliz & T1–T4 Kardiyoakceleratör Blokaj',
+          mechanism: 'Arteriyoler dilatasyon (↓SVR) ve yoğun venöz göllenme (↓↓Preload) gelişir. T1–T4 kardiyoakceleratör liflerin kapanmasıyla refleks taşikardi yanıtı yok olur; karşılanmamış parasempatik (vagal) tonus + Bezold-Jarisch refleksi derin bradikardi ve şoka yol açar.',
+          badge: 'ŞOK + BRADİKARDİ',
+          color: 'red'
+        },
+        {
+          phase: '3. C3–C5 Frenik Sinir & Medüller Solunum Merkezi Bloğu',
+          mechanism: 'İnterkostal paraliziyi takiben C3–C5 frenik sinirlerin tutulması diyaframı durdurur; medüller hipoperfüzyon ve direkt intrakraniyal LA etkisiyle tam apne ve bilinç kaybı yerleşir.',
+          badge: 'APNE & BİLİNÇ KAYBI',
+          color: 'purple'
+        },
+        {
+          phase: '4. Sekonder Hipoksik-İskemik Kardiyak Arrest (Önlenebilir Sonuç)',
+          mechanism: 'Solunum ve dolaşım saniyeler içinde desteklenmezse hipoksemi + koroner hipoperfüzyon dakikalar içinde asistoli/PEA arrestine ilerler. Oysa LA klirensi gerçekleşene kadar ABC sürdürüldüğünde nöronal blok %100 geri dönüşlüdür.',
+          badge: 'GERİ DÖNÜŞLÜ BLOK',
+          color: 'rose'
+        }
+      ],
+      summaryText: 'Total spinal anestezi doğrudan yapısal organ hasarı yaratmaz; tamamen geçici bir farmakolojik bloktur. Kritik başarı anahtarı, blok gerileyene kadar (1–4 saat) oksijenasyon, ventilasyon, organ perfüzyonu ve psikolojik/amnestik korumayı eksiksiz sürdürmektir.'
+    },
+
+    // 6) Klinik Özellikler & Prezentasyon
+    presentation: {
+      earlySigns: [
+        'Spinal veya epidural bolus/top-up’tan 1–10 dk sonra ani derin hipotansiyon, bulantı-kusma, baş dönmesi ve huzursuzluk/ajitasyon',
+        'T1–T4 sempatik blokajla açıklanamayan bradikardi (<50–55/dk)',
+        'Hastanın “göğsüm ağırlaştı / nefesim yetmiyor” demesi (interkostal paralizi — SpO₂ henüz %98–99 olabilir!)',
+        'Ellerde karıncalanma/uyuşma ve el sıkma gücünde zayıflama (C8–T1 tutulumu — kritik alarm!)'
+      ],
+      progressingSigns: [
+        'Omuz kaldırma (C5) ve kol hareketlerinin kaybı, Horner sendromu (pitozis, miyozis, konjonktival kızarıklık)',
+        'Sesin kısılması, fısıltı şeklinde konuşma, öksürememe ve yutma güçlüğü',
+        'Solunum eforunun sönümlenmesi, yüzeyel diyafragmatik solunum (C3–C5 frenik blok) ve SpO₂ düşüşü',
+        'Gebe hastada ani fetal bradikardi / derin deselerasyon'
+      ],
+      lateSigns: [
+        'Tam apne ve hızla derinleşen hipoksemi / hiperkapni',
+        'Bilinç kaybı, konuşamama ve ağrılı uyarana yanıtsızlık',
+        'Sabit dilate pupiller (CN III bloğu ve/veya ağır serebral hipoperfüzyon — kalıcı beyin hasarı göstergesi DEĞİLDİR, blok geçince düzelir!)',
+        'Refrakter derin vazopleji, ağır bradikardi (<30–40/dk) ve asistoli / PEA kardiyak arrest'
+      ],
+      specialAlertTitle: 'Sabit Dilate Pupiller & Hareketsiz Hasta Tuzağı!',
+      specialAlertContent: 'Total spinalde lokal anesteziğin intrakraniyal kraniyal sinirlere (CN III) ulaşması çift taraflı SABİT DİLATE PUPİLLER oluşturabilir — bu bulgu tek başına geri dönüşsüz beyin hasarı anlamına GELMEZ ve resüsitasyonu sonlandırma gerekçesi DEĞİLDİR! Benzer şekilde, tamamen hareketsiz ve apneik görünen hasta hâlâ uyanık olabilir; hemodinami izin verir vermez amnestik/sedatif ajan başlatılmalıdır.'
+    },
+
+    // 7) Önleyici Tedbirler ve Hazırlıklı Olma
+    preventionAndPreparedness: {
+      preopRiskAssessment: [
+        'Gebelik, morbid obezite, kısa boy (<150 cm), şiddetli kifoskolyoz, geçirilmiş omurga cerrahisi ve dar spinal kanal öyküsü yüksek blok risk faktörü olarak işaretlenmeli ve intratekal doz bireyselleştirilmelidir.',
+        'Doğum analjezisinde başarısız/tek taraflı epidural sonrası acil sezaryene geçerken “kurtarma spinali” kararı çok dikkatle verilmelidir (SOAP SCORE’da yüksek blokların >%25’i bu senaryodadır — doz %20–30 azaltılmalı veya alternatif plan seçilmelidir).',
+        'Nöroaksiyel blok yapılan HER odada (doğum salonu dahil!) aktif oksijen kaynağı, balon-valf-maske, aspiratör, acil entübasyon seti ve çekili vazopressörler hazır olmadan işlem BAŞLATILMAMALIDIR.'
+      ],
+      anesthesiaMachinePreparation: {
+        title: 'Güvenli Nöroaksiyel Uygulama & Erken Tanı Protokolü',
+        steps: [
+          'İşlem öncesi sürekli EKG, SpO₂ ve 1–2 dk aralıklı NIBP monitörizasyonu + çalışan geniş çaplı IV damar yolu teyit edilmelidir.',
+          'Epidural kateter yerleşiminde her zaman nazik aspirasyon + standart test dozu (3 mL %1,5 Lidokain + 1:200.000 Adrenalin) uygulanmalı ve en az 3–5 dk motor/duyusal/HR yanıtı izlenmelidir.',
+          'Epidural top-up dozları 5 mL’lik fraksiyone porsiyonlar halinde, her bolus öncesi aspirasyon ve konuşma/el sıkma kontrolü yapılarak verilmelidir.',
+          'Spinal enjeksiyon sonrası ilk 20 dakikada seri dermatomal seviye (soğuk/pinprick), el sıkma gücü (C8–T1) ve ses tonu sorgulanmalıdır.'
+        ]
+      },
+      cleanAnesthesiaProtocol: [
+        'Hiperbarik lokal anestezik (ağır Bupivakain) uygulanan hastalarda ilk 15–20 dakikada dik baş-aşağı (Trendelenburg) pozisyonundan kesinlikle kaçınılması',
+        'Epidural ve intratekal setlerin/enjektörlerin net renkli etiketlenmesi (NR-Fit / luer karışıklığını ve yüksek hacimli ilaç hatasını önlemek için)',
+        'Gebe hastalarda spinal/epidural sonrasında derhal sol lateral tilt veya manuel sol uterin deplasman uygulanması ve profilaktik vazopressör (Fenilefrin infüzyonu) hazır tutulması'
+      ],
+      cartTitle: 'Yüksek / Total Spinal Acil Müdahale & Havayolu Hazırlık Listesi:',
+      cartChecklist: [
+        'Oksijen Kaynağı, Balon-Valf-Maske (Ambu), Oral Airway & Videolaringoskop + ETT (6,5–7,5 mm) + Kapnografi (EtCO₂)',
+        'Çekili Vazopressörler: Adrenalin (10 mcg/mL push-dose + 1 mg ampul), Efedrin (5 mg/mL), Fenilefrin (50–100 mcg/mL) ve Atropin (0,5–1 mg)',
+        'Noradrenalin İnfüzyon Pompası (santral: 4 mg/50 mL; acil periferik: 4 mg/250 mL = 16 mcg/mL)',
+        'Hızlı İV Dengeli Kristaloid (2 × 1000 mL) + Basınçlı İnfüzyon Torbası',
+        'Hemodinami Dostu İndüksiyon & Sedasyon: Ketamin, Etomidat, Midazolam + Rokuronyum / Süksinilkolin',
+        'Obstetrik Ünitede: Resüsitatif Histerotomi (Perimortem Sezaryen) Bistüri/Acil Seti + %20 Lipid Emülsiyonu (LAST dışlaması için)'
+      ]
+    },
+
+    // 8) Postoperatif Takip & Prognoz
+    postopManagement: {
+      icuMonitoringDuration: 'Entübasyon gerektiren yüksek/total spinal olguları, blok tamamen gerileyip güvenli ekstübasyon sağlandıktan sonra dahi en az 4–6 saat (arrest/resüsitasyon veya obstetrik komplikasyon varsa ≥24 saat YBÜ’de) yakın monitörizasyonda izlenmelidir.',
+      recurrenceRate: 'Kateter intratekal/subdural konumda bırakılıp tekrar doz verilmediği sürece nüks etmez; ancak lipofilik/uzun etkili Bupivakain bloğunun tam gerilemesi 2–4 saat (epidural hacmin intratekal geçişinde 4–6 saate dek) sürebilir.',
+      recurrenceRiskBadge: 'BLOĞUN TAM GERİLEMESİ 2–6 SAAT · ERKEN EKSTÜBASYON YAPMA',
+      maintenanceTherapy: 'Akciğer koruyucu mekanik ventilasyon, düşük doz amnestik/sedasyon (farkındalık koruması!), hedef MAP ≥65 mmHg için titre vazopressör infüzyonu, normotermi ve şüpheli epidural kateterin etiketlenip güvenli biçimde çıkarılması.',
+      monitoringParameters: [
+        'Saatlik nörolojik ve dermatomal gerileme takibi (bilinç/GKS, pupil ışık refleksi, el sıkma gücü, diyafram/spontan tidal volüm ve Bromage motor skoru)',
+        'Sürekli EKG, SpO₂, EtCO₂ ve invaziv arter/sık NIBP (vazopressör ihtiyacının azalması sempatik tonusun döndüğünü gösterir)',
+        'Ekstübasyon öncesi yeterli spontan solunum mekaniği (Vt >5–6 mL/kg, NIF <−25 cmH₂O, güçlü öksürük, tam uyanıklık ve 5 sn baş kaldırma)',
+        'Gebe hastalarda anne stabilizasyonu sonrası sürekli fetal kalp hızı (CTG) ve uterus tonusu izlemi',
+        'Postoperatif dönemde olası uyanık paralizi / anksiyete travması taraması ve kalıcı nörolojik defisit (epidural hematom / kauda ekina dışlaması) muayenesi'
+      ],
+      expectedComplications: [
+        'Gecikmiş ventilasyona bağlı hipoksik ensefalopati veya kardiyak arrest (zamanında müdahale ile önlenebilir)',
+        'Yeterli sedasyon sağlanmadıysa intraoperatif farkındalık (uyanık paralizi) ve akut stres / PTSD',
+        'Tok veya gebe hastada pulmoner aspirasyon (özellikle faringeal reflekslerin kaybıyla)',
+        'Yüksek doz intratekal epidural solüsyon sonrası postdural ponksiyon baş ağrısı (PDPH) veya geçici nörolojik semptomlar',
+        'Gebe hastada uzamış maternal hipotansiyona sekonder fetal asidoz'
+      ],
+      definitiveDiagnosticTesting: [
+        {
+          testName: 'Seri Nörolojik & Dermatomal Muayene (Tam Geri Dönüş Doğrulaması)',
+          description: 'Bloğun 2–6 saat içinde kademeli olarak kraniyalden kaudale tamamen gerilediğinin belgelenmesi tanıyı kesinleştirir. >6–8 saatte motor blok hiç gerilemiyorsa acil Spinal MRG ile epidural hematom/apse dışlanmalıdır!'
+        },
+        {
+          testName: 'Arteriyel Kan Gazı & Laktat (Arrest / Ağır Şok Sonrası)',
+          description: 'Oksijenizasyon (PaO₂/FiO₂), ventilasyon (PaCO₂), asit-baz dengesi ve doku perfüzyonunun (laktat klirensi) değerlendirilmesi.'
+        },
+        {
+          testName: 'Olay Sonrası Kök Neden & Kateter Analizi',
+          description: 'Kullanılan ilaç etiketleri, hacim, barisite, test dozu kaydı ve epidural kateterin ucunun bütünlüğü ile aspirasyon bulgularının resmi kalite güvenliği dosyasına işlenmesi.'
+        }
+      ],
+      prognosisSummary: 'Yüksek/total spinal anestezi, zamanında tanınıp oksijenasyon ve dolaşım desteği sağlandığında %100 geri dönüşlü ve nörolojik sekelsiz iyileşen bir komplikasyondur. Prognozu belirleyen tek faktör hipoksi ve kardiyak arrestin önlenme hızıdır.'
+    },
+
+    // 9) High-Yield Bilgiler
+    highYieldPearls: [
+      {
+        title: 'Erken Alarm: El Sıkma Gücü (C8–T1) ve Fısıltı Ses!',
+        takeaway: 'Spinal/epidural sonrası hasta “nefesim daralıyor” dediğinde SpO₂ henüz %99 olabilir (interkostal his kaybı). Derhal el sıkma gücünü ve ses tonunu kontrol edin: El sıkma zayıfladıysa veya ses fısıltıya döndüyse blok C3–C5 frenik sinire ulaşmak üzeredir — entübasyonu hemen hazırlayın!',
+        category: 'Ezber Bozan'
+      },
+      {
+        title: 'Hiperbarik Ajan + Dik Trendelenburg = Total Spinale Davetiye!',
+        takeaway: 'Hipotansiyonu düzeltmek için hiperbarik Bupivakain sonrası ilk 15–20 dk içinde masayı dik baş-aşağı (Trendelenburg) eğmek, ağır ilacı yerçekimiyle beyin sapına sürükler. Baş/gövdeyi nötral veya hafif yukarıda tutup YALNIZCA bacakları kaldırın (Passive Leg Raise)!',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Total Spinalde Hasta Hareketsiz & Apneik Ama UYANIK Olabilir!',
+        takeaway: 'C3–C5 paralizisinde hasta konuşamaz ve kıpırdayamaz ancak serebral perfüzyon korunuyorsa bilinci açıktır. Yine de şoktaki hastaya 2 mg/kg Propofol vermek arrest yapar: Hemodinamiyi koruyan düşük doz Ketamin/Etomidat veya dolaşım toparlanınca titre Midazolam/düşük MAC volatil ile farkındalığı önleyin.',
+        category: 'Tuzak'
+      },
+      {
+        title: 'Başarısız Epidural Sonrası Spinal (“Failed Epidural → Rescue Spinal”)',
+        takeaway: 'SOAP SCORE çalışmasında entübasyon gerektiren yüksek nöroaksiyel blokların >%25’i başarısız epidural sonrası kurtarma spinali sırasında gelişmiştir. Epiduraldeki sıvı dural keseyi sıkıştırıp BOS hacmini daralttığı için standart spinal doz verilmemeli (doz %20–30 azaltılmalı veya alternatif teknik seçilmelidir).',
+        category: 'Sınav / Klinik Notu'
+      },
+      {
+        title: 'Bradikardide Erken Düşük Doz Adrenalin & Sabit Dilate Pupil Tuzağı',
+        takeaway: 'T1–T4 kardiyoakceleratör bloğunda bradikardi + derin şok geliştiğinde Atropin/Efedrin’e yanıt yoksa saniye kaybetmeden 10–50 mcg IV Adrenalin (arrestte 1 mg) verin. Çift taraflı sabit dilate pupiller total spinalde CN III bloğuna bağlı geçici bir bulgudur — asla geri dönüşsüz beyin ölümü sanıp resüsitasyonu bırakmayın!',
+        category: 'Kritik Doz'
+      }
+    ],
+
+    // 10) Kaynaklar ve İleri Okuma
+    references: [
+      {
+        authors: "D'Angelo R, Smiley RM, Riley ET, Segal S.",
+        title: 'Serious complications related to obstetric anesthesia: the Serious Complication Repository (SCORE) Project of the Society for Obstetric Anesthesia and Perinatology.',
+        journal: 'Anesthesiology. 2014;120(6):1505–1512. (PMID: 24845921)',
+        year: '2014',
+        relevance: 'Yüksek nöroaksiyel blok insidansı (1:4.336) ve başarısız epidural sonrası kurtarma spinali (>%25 olgu) risk profilinin temel kanıtı.'
+      },
+      {
+        authors: 'Beckett VA, Knight M, Sharpe P.',
+        title: 'The CAPS Study: incidence, management and outcomes of cardiac arrest in pregnancy in the UK: a prospective, descriptive study.',
+        journal: 'BJOG. 2017;124(9):1374–1381. (PMID: 28233414)',
+        year: '2017',
+        relevance: 'Gebelikte kardiyak arrestlerin %25’inin anestezi kaynaklı (total spinal / epidural top-up) olduğunu ve hızlı KPR + perimortem sezaryen ile yüksek sağkalımı gösteren UKOSS çalışması.'
+      },
+      {
+        authors: 'Jeejeebhoy FM, Zelop CM, Lipman S, et al.; American Heart Association.',
+        title: 'Cardiac Arrest in Pregnancy: A Scientific Statement From the American Heart Association.',
+        journal: 'Circulation. 2015;132(18):1747–1773. (PMID: 26443610)',
+        year: '2015',
+        relevance: 'Gebede manuel sol uterin deplasman (LUD), supin KPR ve 4. dakikada resüsitatif histerotomi (5. dk doğum) kılavuzu.'
+      },
+      {
+        authors: 'Agarwal D, Mohta M, Tyagi A, Sethi AK.',
+        title: 'Subdural block and the anaesthetist.',
+        journal: 'Anaesthesia and Intensive Care. 2010;38(1):20–26. (PMID: 20191772)',
+        year: '2010',
+        relevance: 'Kazara subdural blok anatomisi, gecikmiş başlangıç (15–30 dk), yamasal duyusal dağılım ve total spinal ile ayırıcı tanı ilkeleri.'
+      },
+      {
+        authors: 'Kinsella SM, Carvalho B, Dyer RA, et al. & Gropper MA, Eriksson LI, Fleisher LA, et al. (Eds.).',
+        title: "International consensus statement on the management of hypotension with vasopressors during caesarean section under spinal anaesthesia (Anaesthesia 2018) & Miller's Anesthesia (10th Ed.).",
+        journal: 'Anaesthesia. 2018;73(1):71–92 & Elsevier; 2024.',
+        year: '2018 / 2024',
+        relevance: 'Spinal hipotansiyonda vazopressör yönetimi, barisite/pozisyon fizyolojisi ve nöroaksiyel komplikasyon standartları.'
+      }
+    ],
+    relatedLinks: [
+      { label: 'İntraoperatif Hipotansiyon (IOH)', href: '#arac=emergencies&sub=hypotension', badge: 'Vazopleji / Bezold-Jarisch' },
+      { label: 'LAST (Lokal Anestezik Toksisitesi)', href: '#arac=emergencies&sub=last', badge: 'Ayırıcı Tanı' },
+      { label: 'Perioperatif Kardiyak Arrest & ACLS', href: '#arac=emergencies&sub=acls', badge: 'Arrest / Gebe KPR' },
+      { label: 'CICO / Zor Havayolu Krizi', href: '#arac=emergencies&sub=airway-crisis', badge: 'Havayolu' },
+      { label: 'Vazoaktif İlaç Karar Matriksi', href: '#infografik=vasoactive-decision-matrix', badge: 'İnfografik' }
     ]
   }
 };

@@ -131,6 +131,16 @@ export interface EmergencyDoses {
   fesDobutaMinMcgMin: number;
   fesDobutaMaxMcgMin: number;
   fesFluidTryLabel: string;
+
+  // 16. High / Total Spinal Anesthesia
+  totalSpinalEpiBridgeLabel: string;
+  totalSpinalEpiArrestLabel: string;
+  totalSpinalAtropineLabel: string;
+  totalSpinalEphedrineLabel: string;
+  totalSpinalPhenylephrineLabel: string;
+  totalSpinalFluidBolusMl: number;
+  totalSpinalKetamineLabel: string;
+  totalSpinalMidazolamMg: number;
 }
 
 export interface StickyDoseHighlight {
@@ -350,6 +360,28 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     ? `${Math.round(w * 10)} mL (10 mL/kg dikkatli övolemi)`
     : '250–500 mL dikkatli deneme (RV yükünde aşırı sıvı YASAK)';
 
+  // 16. High / Total Spinal Anesthesia
+  const totalSpinalEpiBridgeLabel = isPediatric
+    ? `${Math.max(5, Math.round(w * 1))}–${Math.max(10, Math.round(w * 2))} mcg IV`
+    : '10–50 mcg IV (yanıt yoksa 100 mcg)';
+  const totalSpinalEpiArrestLabel = isPediatric
+    ? `${Math.min(1000, Math.round(w * 10))} mcg (${+(Math.min(1, w * 0.01)).toFixed(2)} mg) IV`
+    : '1 mg (1000 mcg) IV her 3–5 dk (ACLS)';
+  const totalSpinalAtropineLabel = isPediatric
+    ? `${+(Math.min(0.5, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg)`
+    : '0,5–1 mg IV (maks 3 mg)';
+  const totalSpinalEphedrineLabel = isPediatric
+    ? `${+(w * 0.1).toFixed(1)}–${+(w * 0.2).toFixed(1)} mg IV`
+    : '10–25 mg IV';
+  const totalSpinalPhenylephrineLabel = isPediatric
+    ? `${Math.round(w * 1)}–${Math.round(w * 2)} mcg IV`
+    : '50–100 mcg IV';
+  const totalSpinalFluidBolusMl = isPediatric
+    ? Math.min(1000, Math.round(w * 20))
+    : Math.min(1000, Math.max(500, Math.round(w * 10)));
+  const totalSpinalKetamineLabel = `${Math.round(w * 0.5)}–${Math.round(w * 1)} mg IV`;
+  const totalSpinalMidazolamMg = +(Math.min(3, Math.max(0.5, w * 0.03))).toFixed(1);
+
   return {
     weightNum,
     isValidWeight,
@@ -468,6 +500,15 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     fesDobutaMinMcgMin,
     fesDobutaMaxMcgMin,
     fesFluidTryLabel,
+
+    totalSpinalEpiBridgeLabel,
+    totalSpinalEpiArrestLabel,
+    totalSpinalAtropineLabel,
+    totalSpinalEphedrineLabel,
+    totalSpinalPhenylephrineLabel,
+    totalSpinalFluidBolusMl,
+    totalSpinalKetamineLabel,
+    totalSpinalMidazolamMg,
   };
 }
 
@@ -771,6 +812,25 @@ export function getStickyDoseHighlights(
           label: 'İlaç Kuralı',
           value: 'Övolemi · Heparin YASAK',
           tone: 'amber',
+        },
+      ];
+
+    case 'total-spinal':
+      return [
+        {
+          label: 'Erken Adrenalin (Köprü)',
+          value: doses.totalSpinalEpiBridgeLabel,
+          tone: 'red',
+        },
+        {
+          label: 'Atropin / Efedrin',
+          value: `${doses.totalSpinalAtropineLabel.split(' (')[0]} · ${doses.totalSpinalEphedrineLabel}`,
+          tone: 'amber',
+        },
+        {
+          label: 'Hızlı Kristaloid + Pozisyon',
+          value: `${doses.totalSpinalFluidBolusMl} mL · Bacak Kaldır (LUD)`,
+          tone: 'blue',
         },
       ];
 

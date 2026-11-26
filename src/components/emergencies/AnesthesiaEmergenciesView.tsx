@@ -88,6 +88,15 @@ const EMERGENCY_PREVIEWS: EmergencyCategoryPreview[] = [
     isReady: true
   },
   {
+    id: 'total-spinal',
+    category: 'cardiovascular',
+    title: 'Yüksek / Total Spinal Anestezi',
+    shortDesc: 'T1–T4 kardiyoakceleratör & C3–C5 frenik sinir/beyin sapı bloğu: Derin hipotansiyon, bradikardi, el sıkma kaybı, apne, erken Adrenalin, hiperbarikte dik Trendelenburg yasağı ve gebede LUD + 4. dk PMCS.',
+    icon: ShieldAlert,
+    accentColor: 'red',
+    isReady: true
+  },
+  {
     id: 'bronchospasm',
     category: 'airway',
     title: 'İntraoperatif Akut Bronkospazm',

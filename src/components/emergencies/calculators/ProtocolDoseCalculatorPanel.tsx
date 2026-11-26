@@ -226,8 +226,14 @@ function getProtocolHeaderMeta(protocolId: string): ProtocolHeaderMeta {
     case 'fes':
       return {
         title: 'Yağ Embolizm Sendromu (FES) — Akciğer & Hemodinamik Destek',
-        subtitle: 'ARDSNet Vt (6 mL/kg PBW), Noradrenalin, Övolemi & İlaç Uyarıları',
+        subtitle: 'ARDSNet Vt (4–6 mL/kg PBW), Noradrenalin, Övolemi & İlaç Uyarıları',
         icon: <Activity className="w-5 h-5 text-amber-500" />,
+      };
+    case 'total-spinal':
+      return {
+        title: 'Yüksek / Total Spinal — Erken Adrenalin, Kronotropi & Farkındalık Dozları',
+        subtitle: 'Kardiyoakceleratör (T1–T4) & Frenik (C3–C5) Blokajında ABC + Perfüzyon Kurtarma',
+        icon: <ShieldAlert className="w-5 h-5 text-red-500" />,
       };
     default:
       return {
@@ -802,6 +808,44 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               detail="Heparin lipoprotein lipazı aktive ederek toksik serbest yağ asidi (FFA) yükünü ve kırık kanamasını artırır."
               warning="Trombotik PE kanıtlanmadıkça antikoagülasyon VERİLMEZ; yerleşik FES'te rutin yüksek doz steroid önerilmez!"
               tone="amber"
+              isDark={isDark}
+            />
+          </div>
+        );
+
+      case 'total-spinal':
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <DoseCard
+              label="Erken IV Adrenalin (Refrakter Bradikardi / Şok)"
+              value={doses.totalSpinalEpiBridgeLabel}
+              detail={`Kardiyak arrestte ACLS dozu: ${doses.totalSpinalEpiArrestLabel} · İdame vazoplejide Noradrenalin 0,05–0,5 mcg/kg/dk`}
+              warning="T1–T4 kardiyoakceleratör bloğunda Atropin/Efedrin yetmezse asistoli gelişmeden erken düşük doz IV Adrenalin başlat!"
+              tone="red"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Atropin · Efedrin · Fenilefrin"
+              value={`${doses.totalSpinalAtropineLabel.split(' (')[0]} · ${doses.totalSpinalEphedrineLabel}`}
+              detail={`Atropin: ${doses.totalSpinalAtropineLabel} · Efedrin: ${doses.totalSpinalEphedrineLabel} · Fenilefrin (yalnızca taşikardide/obstetrikte): ${doses.totalSpinalPhenylephrineLabel}`}
+              warning="Bradikardide (<50/dk) tek başına yüksek doz Fenilefrin refleks vagal deşarjla bradikardiyi derinleştirip asistoli yapabilir!"
+              tone="amber"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Hızlı Önyük (Preload) & Güvenli Pozisyon"
+              value={`${doses.totalSpinalFluidBolusMl} mL Dengeli Kristaloid`}
+              detail="Geniş IV hattan hızlı bolus (10–20 mL/kg) + Pasif Bacak Kaldırma (Passive Leg Raise) + Gebede (>20 hf) Manuel Sol Uterin Deplasman (LUD)"
+              warning="Hiperbarik LA sonrası ilk 15–20 dk'da DİK TRENDELENBURG (baş-aşağı) YASAK — ilacı beyin sapına sürükler! Yalnızca bacakları kaldır."
+              tone="blue"
+              isDark={isDark}
+            />
+            <DoseCard
+              label="Havayolu & Farkındalık (Awareness) Koruması"
+              value={`Ketamin ${doses.totalSpinalKetamineLabel} / Midazolam ${doses.totalSpinalMidazolamMg} mg`}
+              detail="Apne, fısıltı ses veya bilinç kaybında %100 O₂ + erken RSI entübasyon · Dolaşım toparlanınca 0,5–0,7 MAC volatil / titre sedasyon + BIS"
+              warning="Hasta apneik & hareketsiz ama BİLİNÇLİ olabilir! Şokta standart tam doz Propofol (2 mg/kg) ölümcül arrest yapar — düşük doz Ketamin/Etomidat seç."
+              tone="emerald"
               isDark={isDark}
             />
           </div>

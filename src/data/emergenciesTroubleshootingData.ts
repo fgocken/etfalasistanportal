@@ -1847,6 +1847,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
       'Acil Arteriyel Kan Gazı (Hb, Laktat, iCa²⁺, Baz Açığı) enjektörü ve kan grubu / cross-match tüpleri'
     ],
     relatedLinks: [
+      { label: 'Yüksek / Total Spinal Anestezi', href: '#arac=emergencies&sub=total-spinal', badge: 'Nöroaksiyel' },
       { label: 'Anafilaksi Kriz Protokolü', href: '#arac=emergencies&sub=anaphylaxis', badge: 'Kriz' },
       { label: 'Tansiyon Pnömotoraks', href: '#arac=emergencies&sub=tension-pneumothorax', badge: 'Obstrüktif' },
       { label: 'Pulmoner Emboli (PE)', href: '#arac=emergencies&sub=pe', badge: 'RV Yükü' },
