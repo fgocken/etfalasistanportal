@@ -33,6 +33,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1196,6 +1197,7 @@ export const NicardipineProtocol: React.FC<Props> = ({ isDark }) => {
           'Child-Pugh B/C’de başlangıç hızı azaltılmalı (örn. 2,5 mg/saat), titrasyon aralıkları en az 15–30 dakikaya uzatılmalı ve hedefe yaklaşırken erkenden 1–3 mg/saat’e inilmelidir.',
           'Siroz ve portal hipertansiyonda hepatik venöz basınç gradienti (HVPG) artabileceğinden özofagus varisi kanama riski olanlarda yakın izlem gerekir.',
         ]}
+        {...STANDALONE_ORGAN_PART2['nicardipine']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

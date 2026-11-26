@@ -175,6 +175,60 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
     },
     regimenCards: [
       {
+        title: 'MRSA Nozokomiyal Pnömoni (HAP / VAP — AUC 400–600)',
+        setting: 'core',
+        badge: 'IDSA/ATS HAP-VAP • ASHP 2020',
+        dose: 'Yükleme: 25–30 mg/kg TBW → İdame: 15–20 mg/kg IV q8–12sa',
+        infusionDuration: 'Yükleme ≥2–3 sa • İdame ≥1–2 sa (≤10–15 mg/dk)',
+        interval: 'q8–12sa (7 gün; hedef AUC₂₄/MIC 400–600)',
+        note: 'Akciğer epitelyal sıvısına (ELF) geçiş %20–40 olduğundan ilk yükleme şarttır. MRSA MİK ≥2 mg/L ise veya klinik yanıtsızlıkta/ABH riskinde Linezolid 600 mg q12sa tercih edilir.',
+      },
+      {
+        title: 'Bakteriyel Menenjit & Şant / EVD Ventriküliti (Ampirik + Seftriakson / MRSA)',
+        setting: 'core',
+        badge: 'IDSA Menenjit & Ventrikülit',
+        dose: 'Yükleme: 25–30 mg/kg → İdame: 15–20 mg/kg IV q8–12sa (45–60 mg/kg/gün; maks 2 g/doz)',
+        infusionDuration: '≥1,5–2 sa yavaş IV infüzyon (≤10–15 mg/dk)',
+        interval: 'q8–12sa (hedef AUC₂₄/MIC 400–600; menenjitte 10–14 gün, MRSA şant/EVD 14–21 gün)',
+        note: 'Toplum kökenli bakteriyel menenjitte ampirik olarak Seftriakson 2 g q12sa (+ >50 yaş/immünsüpresifte Ampisilin) ile kombine edilir. Dirençli MRSA/MRSE şant/EVD ventrikülitinde IV tedaviye ek intraventriküler (IVT) 10–20 mg q24sa (prezervatifsiz SF) eklenebilir.',
+      },
+      {
+        title: 'MRSA Doğal & Protez Kapak İnfektif Endokarditi (IE)',
+        setting: 'core',
+        badge: 'AHA / ESC Endokardit',
+        dose: 'Yükleme: 25–30 mg/kg → İdame: 15–20 mg/kg IV q8–12sa (hedef AUC₂₄/MIC 400–600)',
+        infusionDuration: '≥1,5–2 sa yavaş IV infüzyon',
+        interval: 'q8–12sa (Doğal kapak 6 hafta • Protez kapak ≥6 hafta + Rifampisin + ilk 2 hf Gentamisin)',
+        note: 'MSSA izole edildiğinde DERHAL Sefazolin veya anti-stafilokokal β-laktama de-eskalasyon yapılır (vankomisin MSSA endokarditinde daha yüksek mortaliteye sahiptir). MİK ≥2 mg/L veya persistan bakteriyemide Daptomisin (8–10 mg/kg) değerlendirilir.',
+      },
+      {
+        title: 'MRSA Osteomiyelit / Septik Artrit / Protez Eklem Enfeksiyonu (PJI)',
+        setting: 'core',
+        badge: 'IDSA Kemik-Eklem / PJI',
+        dose: '15–20 mg/kg IV q8–12sa (ağır olguda 25 mg/kg yükleme; hedef AUC₂₄/MIC 400–600)',
+        infusionDuration: '≥1–2 sa yavaş IV infüzyon',
+        interval: 'q8–12sa (Septik artrit 3–4 hf • Osteomiyelit / PJI ≥6–8 hf)',
+        note: 'Cerrahi debridman/drenaj tedavinin temelidir. Protez eklem enfeksiyonunda (DAIR/protez korunacaksa) biyofilm eradikasyonu için Rifampisin (300–450 mg PO q12sa) kombinasyonu eklenir; uzun tedavide haftalık CBC (nötropeni) ve kreatinin/AUC izlenir.',
+      },
+      {
+        title: 'Komplike Deri-Yumuşak Doku Enfeksiyonu (cSSTI) & Nekrotizan Fasiit',
+        setting: 'core',
+        badge: 'IDSA SSTI Kılavuzu',
+        dose: '15–20 mg/kg IV q8–12sa (nekrotizan fasiit/sepsiste 25–30 mg/kg yükleme)',
+        infusionDuration: '≥1–2 sa yavaş IV infüzyon',
+        interval: 'q8–12sa (cSSTI 7–14 gün; nekrotizan fasiitte klinik stabiliteye dek)',
+        note: 'Nekrotizan yumuşak doku enfeksiyonunda (NSTI) geniş spektrumlu β-laktam (Piperasilin-Tazobaktam yerine ABH riskinden kaçınmak için Meropenem/Sefepim+Metronidazol) + anti-toksin Klindamisin (veya Linezolid) + acil cerrahi debridman ile kombine edilir.',
+      },
+      {
+        title: 'Non-Fulminan Clostridioides difficile Enfeksiyonu (Hafif-Orta / Ağır)',
+        setting: 'core',
+        badge: 'IDSA / SHEA C. difficile',
+        dose: '125 mg PO (veya NG) q6sa × 10 gün',
+        infusionDuration: 'Oral / Enteral uygulama (ASLA IV değil!)',
+        interval: 'q6sa × 10 gün (rekürrenste uzatılmış/azaltmalı taper-pulse şeması)',
+        note: 'Non-fulminan ilk epizotta Fidaksomisin ile birlikte temel birinci basamak oral tedavidir. IV vankomisin bağırsak lümenine geçmediğinden C. difficile tedavisinde ETKİSİZDİR; oral kapsül yoksa IV flakon sulandırılıp içirilebilir.',
+      },
+      {
         title: 'Perioperatif Cerrahi Profilaksi (MRSA / Protez / Ciddi β-Laktam Alerjisi)',
         setting: 'perioperative',
         badge: 'ASHP/IDSA Cerrahi Profilaksi',
@@ -406,6 +460,103 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
       hepaticDetails: [
         'Siroz/Child-Pugh C hastalarında kas kitlesi azlığı nedeniyle serum kreatinini normal görünse bile gerçek GFR düşüktür; TDM olmadan yüksek doz idameden kaçınılmalıdır.',
       ],
+      renalMatrix: [
+        {
+          stage: 'ARC (eGFR >130 mL/dk)',
+          doseBadge: '15 mg/kg q8sa',
+          severeDoseBadge: 'Yükleme 25–30 mg/kg → 15 mg/kg q8sa veya 30–40 mg/kg/gün CI',
+          note: 'Genç travma, yanık ve erken sepsis hastalarında standart q12sa rejim subterapötik AUC (<400) üretir; q8sa veya sürekli infüzyon + 24. saat erken Bayesian AUC TDM zorunludur.',
+          tone: 'indigo',
+        },
+        {
+          stage: 'Normal Böbrek (eGFR ≥90 mL/dk)',
+          doseBadge: '15 mg/kg q12sa',
+          severeDoseBadge: 'Yükleme 25–30 mg/kg → 15–20 mg/kg q8–12sa',
+          note: 'ASHP/IDSA 2020: Hedef AUC₂₄/MIC 400–600 (MIC ≤1 mg/L). İlk 24–48 saatte Bayesian veya 2-noktalı (pik + dip) TDM ile bireyselleştirilir.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Hafif-Orta BY (eGFR 50–89 mL/dk)',
+          doseBadge: '15 mg/kg q12sa',
+          severeDoseBadge: 'Yükleme 25 mg/kg → 15 mg/kg q12sa (+ Erken TDM)',
+          note: 'eGFR 50–69 aralığında 3–4. dozlarda birikim gelişebilir; 4. doz öncesi (veya ilk 24–48 saatte) AUC/TDM ile doz veya aralık revize edilir.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Orta-İleri BY (eGFR 30–49 mL/dk)',
+          doseBadge: '15 mg/kg q24sa',
+          severeDoseBadge: 'Yükleme 25 mg/kg → 15 mg/kg q24sa',
+          note: 'İlk yükleme dozu tam verilir; 24. saatte serum düzeyi ölçülerek AUC 400–600 hedefinde tutulur (AUC >600 ABH’yi hızlandırır).',
+          tone: 'amber',
+        },
+        {
+          stage: 'Ağır BY (eGFR 15–29 mL/dk)',
+          doseBadge: '15 mg/kg q48sa',
+          severeDoseBadge: 'Yükleme 25 mg/kg → Dose-by-Level (<15 mg/L ise redozaj)',
+          note: '24–48. saatlerde rastgele düzey takibi ile "dose-by-level" stratejisi en güvenlidir; sabit tekrarlayan dozlar toksik birikime yol açar.',
+          tone: 'rose',
+        },
+        {
+          stage: 'SDBY / Anürik ABH (eGFR <15, Diyalizsiz)',
+          doseBadge: 'Yükleme 20–25 mg/kg → Düzeye Göre',
+          severeDoseBadge: 'Yükleme 25 mg/kg → Düzey <15 mg/L olunca 10–15 mg/kg',
+          note: 'Anürik hastada t½ 120–180 saate (5–7 gün) uzar; sonraki doz kesinlikle serum düzeyi görülmeden uygulanmamalıdır.',
+          tone: 'rose',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD — High-Flux vs Low-Flux)',
+          doseBadge: 'High-Flux: 7,5–10 mg/kg post-HD • Low-Flux: 500 mg / Düzeye Göre',
+          severeDoseBadge: 'Yükleme 25 mg/kg (maks 2,5–3 g) → High-Flux post-HD 7,5–10 mg/kg',
+          note: 'High-flux membranlar seans başına %30–50 temizler (son 1 saatte veya bitimde 500–1000 mg; pre-HD hedef 15–20 mg/L). Low-flux membranlar <%10 temizler (pre-HD düzey <15 mg/L olduğunda 15 mg/kg veya post-HD 500 mg).',
+          tone: 'sky',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF)',
+          doseBadge: '20–25 mL/kg/sa: 7,5–10 mg/kg q12sa (veya 15 mg/kg q24sa)',
+          severeDoseBadge: '≥30 mL/kg/sa Effluent: Yükleme 25 mg/kg → 10–15 mg/kg q12sa',
+          note: 'Yüksek geçirgenlikli CRRT membranlarından anlamlı temizlenir. 20–25 mL/kg/sa effluentte 7,5–10 mg/kg q12sa; ≥30 mL/kg/sa yüksek akımda 10–15 mg/kg q12sa başlanıp 24. saatte TDM/AUC alınır.',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT (8–12 sa Uzamış Diyaliz)',
+          doseBadge: 'Yükleme 25 mg/kg → SLED Sonrası 10–15 mg/kg',
+          severeDoseBadge: 'Yükleme 25 mg/kg → SLED Sonrası 15 mg/kg (veya TDM’ye göre)',
+          note: 'SLED seans başına vankomisinin %25–45’ini temizler; ilaç seans bitiminde (veya son saatinde) verilir ve bir sonraki SLED öncesi serum düzeyi (hedef 15–20 mg/L) kontrol edilir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD — ISPD 2022)',
+          doseBadge: 'Sistemik IV: 20–25 mg/kg → Düzeye Göre q4–7g',
+          severeDoseBadge: 'PD Peritoniti (ISPD 2022): IP 15–30 mg/kg q5–7g (veya 1000→25 mg/L)',
+          note: 'Sistemik enfeksiyonda CAPD klirensi düşüktür (IV yükleme sonrası düzey >15 mg/L tutulur). PD peritonitinde ISPD 2022 standardı intraperitoneal (IP) 15–30 mg/kg q5–7g (≥6 sa bekleme; serum düzeyi <15 mg/L ise redozaj) şeklindedir.',
+          tone: 'indigo',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Hepatik metabolizma ihmal edilebilir olduğundan standart böbrek fonksiyonuna dayalı yükleme ve AUC₂₄/MIC 400–600 rejimleri uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'Doz Sabit • Erken TDM',
+          detail:
+            'Primer hepatik doz azaltımı gerekmez; ancak assit ve hipoalbüminemi nedeniyle Vd genişleyip serbest fraksiyon artabileceğinden 24–48. saatte AUC TDM alınmalıdır.',
+          tone: 'amber',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'Kreatinin Tuzağı! • Zorunlu AUC TDM',
+          detail:
+            'Ağır sirozda sarkopeni nedeniyle serum kreatinini yalancı düşük ölçülür ve gerçek GFR ciddi biçimde abartılır. İlk yükleme tam (20–25 mg/kg) verilip idame mutlaka erken 2-noktalı/Bayesian AUC TDM ile titre edilmelidir.',
+          tone: 'rose',
+        },
+      ],
+      dualOrganNote:
+        'Siroz + Assit + ABH (Hepatorenal Sendrom) Tuzağı: Dekompanse sirozda masif assit vankomisinin dağılım hacmini (Vd) artırırken, düşük kas kitlesi gerçek renal yetmezliği gizler. Ayrıca hipoalbüminemi serbest (aktif ve nefrotoksik) vankomisin fraksiyonunu yükseltir; bu hastalarda Piperasilin-Tazobaktam kombinasyonundan kaçınılmalı, ilk yükleme sonrası erken TDM ile AUC 400–600 korunmalı veya Teikoplanin/Linezolid alternatifleri değerlendirilmelidir.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: eGFR Azalmasına Göre Aralık Uzatma + Sıkı TDM',
@@ -804,6 +955,51 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
     },
     regimenCards: [
       {
+        title: 'Osteomiyelit, Septik Artrit & Protez Eklem Enfeksiyonu (OPAT Avantajı!)',
+        setting: 'core',
+        badge: 'EMA / TİTCK • OPAT Avantajı',
+        dose: 'Yükleme: 12 mg/kg IV q12sa × 3–5 doz → İdame: 12 mg/kg IV/IM q24sa',
+        infusionDuration: '30 dk IV infüzyon veya 3–5 dk yavaş bolus / IM',
+        interval: 'İlk 3–5 doz q12sa → q24sa (seçilmiş OPAT’ta 3×/hf 15–20 mg/kg; 4–8 hafta)',
+        note: 'Hedef trough >20 mg/L (protez/osteomiyelitte 20–30 mg/L). 70–160 saatlik uzun yarı ömrü ve düşük nefrotoksisitesi sayesinde günde tek doz veya haftada 3 gün ayaktan parenteral tedavi (OPAT) için vankomisine büyük üstünlük sağlar; PJI’da Rifampisin ile kombine edilir.',
+      },
+      {
+        title: 'MRSA / Enterococcus İnfektif Endokarditi (IE)',
+        setting: 'core',
+        badge: 'ESC / EMA Endokardit',
+        dose: 'Yükleme: 12 mg/kg IV q12sa × 3–5 doz → İdame: 12 mg/kg IV q24sa',
+        infusionDuration: '30 dk IV infüzyon',
+        interval: 'İlk 3–5 doz q12sa → q24sa (4–6 hafta; hedef trough >20–30 mg/L, protezde 30–40 mg/L)',
+        note: 'Endokarditte 6 mg/kg rejimi YETERSİZDİR; mutlaka 12 mg/kg yüksek yükleme + 4–5. gün serum trough (>30 mg/L) teyidi gerekir. Enterokok endokarditinde Gentamisin/Ampisilin sinerjisi, MRSA protez kapakta Rifampisin kombinasyonu değerlendirilir.',
+      },
+      {
+        title: 'Kateter İlişkili Kan Dolaşımı Enfeksiyonu (CRBSI)',
+        setting: 'core',
+        badge: 'EMA / IDSA Alternatifi',
+        dose: 'Yükleme: 6–12 mg/kg IV q12sa × 3 doz (MRSA/sepsiste 12 mg/kg × 3–5) → 6–12 mg/kg q24sa',
+        infusionDuration: '30 dk IV infüzyon veya 3–5 dk yavaş bolus',
+        interval: 'q24sa (CoNS 5–7 gün; komplikasyonsuz MRSA ≥14 gün — kateter çekimi ile)',
+        note: 'Hedef trough >15 mg/L (MRSA’da >20 mg/L). Özellikle eşzamanlı Piperasilin-Tazobaktam alan veya ABH riskli kateter bakteriyemisi hastalarında vankomisine kıyasla anlamlı düşük nefrotoksisite sunar; S. haemolyticus izolatlarında antibiyogram MİK teyidi şarttır.',
+      },
+      {
+        title: 'Komplike Deri-Yumuşak Doku (cSSTI) & MRSA Nozokomiyal Pnömoni',
+        setting: 'core',
+        badge: 'EMA / TİTCK Onaylı',
+        dose: 'cSSTI: 6 mg/kg q12sa × 3 → 6 mg/kg q24sa | MRSA HAP/VAP: 12 mg/kg q12sa × 3–5 → 12 mg/kg q24sa',
+        infusionDuration: '30 dk IV infüzyon (cSSTI’de 3–5 dk bolus veya IM verilebilir)',
+        interval: 'q24sa (cSSTI 7–14 gün; MRSA nozokomiyal pnömoni 7 gün)',
+        note: 'MRSA nozokomiyal pnömonide akciğer parankimi/ELF penetrasyonu sınırlı olduğundan mutlaka yüksek doz yükleme (12 mg/kg q12sa × 3–5; hedef trough >20 mg/L) kullanılmalıdır.',
+      },
+      {
+        title: 'Oral Clostridioides difficile Enfeksiyonu (EMA / TİTCK Onaylı)',
+        setting: 'core',
+        badge: 'Oral Vankomisin Alternatifi',
+        dose: '100–200 mg PO q12sa × 7–10 gün',
+        infusionDuration: 'Oral uygulama (IV flakon 3 mL suyla sulandırılıp meyve suyu/su ile içirilir)',
+        interval: 'q12sa × 7–10 gün',
+        note: 'Oral biyoyararlanımı ihmal edilebilir düzeyde olduğundan kolonik lümende yüksek konsantrasyon sağlar; Avrupa ve Türkiye KÜB’ünde C. difficile ilişkili ishal/psödomembranöz kolit için onaylı oral alternatiftir (IV teikoplanin C. difficile’de ETKİSİZDİR!).',
+      },
+      {
         title: 'Perioperatif Ortopedik Protez / Kardiyak / MRSA Profilaksisi',
         setting: 'perioperative',
         badge: 'TR & Avrupa Pratiği',
@@ -992,6 +1188,96 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
       hepaticDetails: [
         'Siroz / Child-Pugh C ve ağır hipoalbüminemide (albümin <2,5 g/dL) toplam serum düzeyi düşük çıkabilirken serbest (aktif) ilaç düzeyi yeterli veya yüksek olabilir; klinik ve renal izlem önemlidir.',
       ],
+      renalMatrix: [
+        {
+          stage: '1–3. Gün Yükleme Fazı (TÜM Evreler & RRT)',
+          doseBadge: '6 mg/kg q12sa × 3 doz (TAM YÜKLEME!)',
+          severeDoseBadge: '12 mg/kg q12sa × 3–5 doz (TAM YÜKLEME!)',
+          note: 'KRİTİK KURAL: Böbrek yetmezliğinin derecesi ne olursa olsun (CrCl <30, IHD, CRRT, CAPD dahil) ilk 3–4 gün YÜKLEME DOZU AZALTILMAZ! Doz azaltımı yalnızca 4. günden itibaren uygulanır.',
+          tone: 'indigo',
+        },
+        {
+          stage: 'ARC (eGFR >130 mL/dk — 4. Günden Sonra)',
+          doseBadge: '6–12 mg/kg q24sa',
+          severeDoseBadge: '12 mg/kg q24sa (5 yükleme dozu + TDM)',
+          note: 'Artmış renal klirenste (ARC) ve ağır hipoalbüminemide 5 yükleme dozu (12 mg/kg q12sa × 5) sonrası 4–5. gün trough (>20–30 mg/L) doğrulanmalıdır.',
+          tone: 'indigo',
+        },
+        {
+          stage: 'Normal Böbrek (CrCl >80 mL/dk — 4. Günden Sonra)',
+          doseBadge: '6 mg/kg q24sa',
+          severeDoseBadge: '12 mg/kg q24sa (Hedef trough >20–30 mg/L)',
+          note: 'Standart enfeksiyonlarda trough >15 mg/L, ağır MRSA/YBÜ’de >20 mg/L, endokardit/protezde 30–40 mg/L hedeflenir (toksisite eşiği >60 mg/L).',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Orta BY (CrCl 30–80 mL/dk — 4. Günden Sonra)',
+          doseBadge: '3 mg/kg q24sa veya 6 mg/kg q48sa (%50)',
+          severeDoseBadge: '6 mg/kg q24sa veya 12 mg/kg q48sa (%50)',
+          note: '4. günden itibaren günlük idame dozu yarıya indirilir veya tam doz 48 saatte bir verilir; 4–5. gün TDM ile hedef trough doğrulanır.',
+          tone: 'amber',
+        },
+        {
+          stage: 'Ağır BY (CrCl <30 mL/dk — 4. Günden Sonra)',
+          doseBadge: '2 mg/kg q24sa veya 6 mg/kg q72sa (1/3 Doz)',
+          severeDoseBadge: '4 mg/kg q24sa veya 12 mg/kg q72sa (1/3 Doz)',
+          note: '4. günden itibaren 1/3 günlük doz veya tam doz 72 saatte bir uygulanır; trough >60 mg/L trombositopeni/nefrotoksisite riskini artırır.',
+          tone: 'rose',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD)',
+          doseBadge: '4. Günden Sonra: 1/3 Doz q24sa veya Tam Doz q72sa',
+          severeDoseBadge: '1–3. Gün 12 mg/kg q12sa × 3–5 → 4. Günden Sonra 12 mg/kg q72sa',
+          note: 'Büyük molekül ağırlığı (~1880 Da) ve %90–95 protein bağlanması nedeniyle IHD ile <%10 atılır — HD SONRASI EK DOZ GEREKMEZ!',
+          tone: 'sky',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF)',
+          doseBadge: '4. Günden Sonra: 6 mg/kg q24–48sa',
+          severeDoseBadge: '1–3. Gün 12 mg/kg q12sa × 3–5 → 6 mg/kg q24sa veya 12 mg/kg q48sa',
+          note: 'Yüksek protein bağlanması nedeniyle CRRT klirensi sınırlıdır; ancak ağır hipoalbüminemide (<2,5 g/dL) serbest fraksiyon ve CRRT klirensi arttığından 6–8 mg/kg q24sa + TDM değerlendirilir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT',
+          doseBadge: '4. Günden Sonra: 1/3–1/2 Doz q24sa veya Tam Doz q48–72sa',
+          severeDoseBadge: '1–3. Gün Tam Yükleme → 4. Günden Sonra 6 mg/kg q24sa / 12 mg/kg q48–72sa',
+          note: 'SLED ile uzaklaştırılması çok düşüktür; ek post-SLED dozu gerekmez, 4–5. gün trough kontrolü önerilir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD — ISPD 2022)',
+          doseBadge: 'Sistemik IV: 4. Günden Sonra 1/3 Doz q24sa veya q72sa',
+          severeDoseBadge: 'PD Peritoniti (ISPD 2022): IP 15 mg/kg q5–7g (veya 400 mg → 20 mg/L)',
+          note: 'Sistemik enfeksiyonda CAPD ile anlamlı atılmaz (ek doz yok). PD peritonitinde ISPD 2022 rejimi intraperitoneal (IP) 15 mg/kg q5–7g (≥6 sa bekleme) veya yükleme 400 mg/torba sonrası sürekli 20 mg/L şeklindedir.',
+          tone: 'indigo',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Hepatik metabolizması minimal olduğundan standart q12sa × 3–5 yükleme ve eGFR bazlı idame şeması uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'Doz Sabit • Albümin İzlemi',
+          detail:
+            'Doğrudan hepatik doz ayarı gerekmez; ancak azalan serum albümini serbest fraksiyonu artırmaya başlar, transaminazlar ve böbrek fonksiyonu izlenir.',
+          tone: 'amber',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'Hipoalbüminemi Tuzağı! • Serbest Fraksiyon ↑',
+          detail:
+            'Teikoplanin %90–95 albümine bağlandığından ağır hipoalbüminemide (<2,5 g/dL) toplam (total) serum trough düzeyi yapay düşük ölçülürken serbest aktif konsantrasyon yüksektir; yalnızca düşük total trough’a bakıp aşırı doz artırımı yapılmamalıdır.',
+          tone: 'rose',
+        },
+      ],
+      dualOrganNote:
+        'Hipoalbüminemi & Kombine Siroz + ABH Notu: Teikoplanin %90–95 albümine bağlanır; Child-Pugh C sirozda veya ağır YBÜ hipoalbüminemisinde (<2,5 g/dL) serbest fraksiyon 2–3 kat yükselir. Eşzamanlı ABH/HRS varsa ilk 1–3. gün yükleme tamamlandıktan sonra 4. günden itibaren mutlaka renal kademe azaltımına geçilmeli, düşük total trough değerleri albümin düzeyiyle birlikte yorumlanmalıdır.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: Yükleme Tam, 4. Günden Sonra eGFR’ye Göre Azalt',
@@ -1368,6 +1654,42 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
     },
     regimenCards: [
       {
+        title: 'Komplike Deri ve Yumuşak Doku Enfeksiyonu — cSSTI (FDA Temel Dozu)',
+        setting: 'core',
+        badge: 'FDA / EMA / TİTCK Temel Onay',
+        dose: '4 mg/kg IV q24sa (bakteriyemi şüphesi / nekrotizan fasiit varsa 6–8 mg/kg)',
+        infusionDuration: '30 dk IV infüzyon (%0,9 NaCl) veya 2 dk yavaş IV bolus',
+        interval: 'q24sa (7–14 gün; CrCl <30’da q48sa)',
+        note: 'FDA onaylı temel cSSTI dozu 4 mg/kg’dır (ASLA D5W ile seyreltilmez!). KRİTİK KONTRENDİKASYON: Pulmoner sürfaktan daptomisini hızla inaktive ettiğinden pnömonide (HAP/VAP/TKP) KESİNLİKLE KULLANILMAZ!',
+      },
+      {
+        title: 'S. aureus (MSSA / MRSA) Bakteriyemisi & Sağ Kalp İnfektif Endokarditi',
+        setting: 'core',
+        badge: 'FDA / IDSA MRSA',
+        dose: '6–10 mg/kg IV q24sa (FDA: 6 mg/kg; IDSA yüksek doz MRSA/YBÜ: 8–10 mg/kg)',
+        infusionDuration: '30 dk IV infüzyon (50 mL %0,9 NaCl)',
+        interval: 'q24sa (komplikasyonsuz ≥14 gün; komplike bakteriyemi / sağ kalp IE 4–6 hf; CrCl <30’da q48sa)',
+        note: 'MSSA bakteriyemisinde Sefazolin/anti-stafilokokal penisilin birinci tercihtir; MRSA’da ve vankomisin MİK ≥1,5–2 mg/L izolatlarında IDSA 8–10 mg/kg yüksek dozu önerir. Akciğer/septik pulmoner emboli pnömonisi eşlik ediyorsa (sürfaktan inaktivasyonu!) daptomisin kullanılmaz; statinler kesilir, haftalık CPK izlenir.',
+      },
+      {
+        title: 'Sol Kalp İnfektif Endokarditi (MRSA / VRE — Yüksek Doz Kombinasyon)',
+        setting: 'core',
+        badge: 'ESC / AHA Yüksek Doz + Sinerji',
+        dose: '8–10 mg/kg IV q24sa (VRE’de 10–12 mg/kg) + β-Laktam (Seftarolin / Sefazolin / Nafsilin / Ampisilin) veya Fosfomisin',
+        infusionDuration: '30 dk IV infüzyon (%0,9 NaCl)',
+        interval: 'q24sa (6 hafta; CrCl <30’da q48sa — haftada 2× CPK)',
+        note: 'Sol kalp IE’de monoterapi tedavi altında daptomisin direnci (mprF mutasyonu) geliştirebildiğinden 8–10 mg/kg + β-laktam ("see-saw" sinerjisi) veya IV Fosfomisin kombinasyonu önerilir. Pulmoner enfeksiyonda sürfaktan inaktivasyonu nedeniyle kontrendikedir!',
+      },
+      {
+        title: 'MRSA / VRE Osteomiyelit & Protez Eklem Enfeksiyonu (PJI)',
+        setting: 'core',
+        badge: 'IDSA Kemik-Eklem / PJI',
+        dose: '6–8 mg/kg IV q24sa (protez eklem/biyofilmde + Rifampisin 300–450 mg PO q12sa)',
+        infusionDuration: '30 dk IV infüzyon (%0,9 NaCl) veya 2 dk yavaş IV bolus',
+        interval: 'q24sa × 6 hafta (OPAT için günde tek doz avantajı!; CrCl <30’da q48sa)',
+        note: 'Günde tek doz uygulanabilmesi ve düşük nefrotoksisitesi sayesinde uzun süreli osteomiyelit/PJI tedavisinde (OPAT) vankomisine güçlü alternatiftir; haftalık CPK ve eozinofilik pnömoni bulguları izlenmelidir (pnömoni tedavisi için ASLA kullanılmaz — sürfaktan inaktivasyonu!).',
+      },
+      {
         title: 'YBÜ Ağır MRSA Bakteriyemi / Sağ Kalp Endokarditi (IDSA Yüksek Doz)',
         setting: 'icu',
         badge: 'IDSA MRSA Kılavuzu',
@@ -1386,13 +1708,13 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
         note: 'Enterokok MİK değerleri stafilokoklardan yüksektir; 10–12 mg/kg yüksek doz + β-laktam ("see-saw" sinerjisi) direnç gelişimini önler ve bakterisidal aktiviteyi artırır.',
       },
       {
-        title: 'Komplike Deri ve Yumuşak Doku Enfeksiyonu (cSSTI)',
+        title: 'Kateter Kilit Tedavisi (MRSA / VRE CRBSI — Seçilmiş Kurtarma)',
         setting: 'special',
-        badge: 'Standart Onaylı Doz',
-        dose: '4 mg/kg IV q24sa (bakteriyemi şüphesi varsa 6–8 mg/kg)',
-        infusionDuration: '30 dk IV infüzyon veya 2 dk yavaş IV bolus',
-        interval: 'q24sa (7–14 gün; eGFR <30’da q48sa)',
-        note: 'Nekrotizan fasiit veya sepsis eşlik ediyorsa yüksek doz (≥6–8 mg/kg) ve cerrahi debridman gerekir.',
+        badge: 'Özel Kateter Kilit Protokolü',
+        dose: '5 mg/mL Daptomisin + Laktatlı Ringer (Ca²⁺ destekli; 50 mg/L Ca²⁺ aktivite için şart!)',
+        infusionDuration: 'İntralüminal kateter kilidi (24 saat bekleme — sistemik tedaviye EK)',
+        interval: 'q24sa (kateter çekilemeyen seçilmiş tünelli/port hastalarda; sistemik 6–10 mg/kg IV ile birlikte)',
+        note: 'Daptomisinin kalsiyum-bağımlı biyofilm aktivitesi için kateter kilidinde Ca²⁺ içeren Laktatlı Ringer kullanılır (ASLA D5W değil!). Primer akciğer/pnömoni odağında pulmoner sürfaktan inaktivasyonu nedeniyle daptomisin kontrendikedir.',
       },
     ],
     calculator: {
@@ -1561,6 +1883,82 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
       hepaticDetails: [
         'CYP450 sistemiyle etkileşmediğinden karaciğer nakli / siroz hastalarında ilaç-ilaç etkileşimi açısından çok güvenlidir.',
       ],
+      renalMatrix: [
+        {
+          stage: 'ARC (eGFR >130 mL/dk)',
+          doseBadge: 'cSSTI: 4–6 mg/kg q24sa',
+          severeDoseBadge: 'SAB/MRSA: 8–10 mg/kg q24sa • VRE: 10–12 mg/kg q24sa',
+          note: 'Artmış renal klirenste (ARC) alt sınır dozlar (6 mg/kg) MRSA bakteriyemisi/VRE’de subterapötik AUC oluşturabilir; üst aralık (8–12 mg/kg) ve haftalık CPK izlemi tercih edilir.',
+          tone: 'indigo',
+        },
+        {
+          stage: 'Normal – Orta Böbrek (CrCl ≥30 mL/dk)',
+          doseBadge: 'cSSTI: 4 mg/kg q24sa',
+          severeDoseBadge: 'SAB/IE: 6–10 mg/kg q24sa • VRE: 10–12 mg/kg q24sa',
+          note: 'CrCl ≥30 mL/dk’da doz veya aralık değişikliği gerekmez. Statinler kesilmeli ve bazal + haftalık CPK izlenmelidir.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Ağır Böbrek Yetmezliği (CrCl <30 mL/dk, Diyalizsiz)',
+          doseBadge: 'cSSTI: 4 mg/kg q48sa',
+          severeDoseBadge: 'SAB/IE: 6–10 mg/kg q48sa • VRE: 10–12 mg/kg q48sa',
+          note: 'Konsantrasyon-bağımlı olduğundan DOZ AZALTILMAZ, ARALIK q48sa’ya uzatılır! Trough >24,3 mg/L miyopati/rabdomiyoliz riskini fırlatır → haftada 2× CPK şart.',
+          tone: 'rose',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD)',
+          doseBadge: '4 mg/kg q48sa veya 3×/hf HD Sonrası (72 sa Cuma +%35–50!)',
+          severeDoseBadge: '6–10 mg/kg q48sa veya 3×/hf HD Sonrası (72 sa Cuma +%35–50!)',
+          note: '4 saatlik HD dozun ~%15’ini temizler; ilaç HD bitiminde uygulanır. Haftada 3 gün (Pzt-Çar-Cum) HD şemasında Cuma günkü 72 saatlik hafta sonu aralığı için doz +%35–50 artırılır (örn. 6→9 mg/kg veya 8→10–12 mg/kg)!',
+          tone: 'amber',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF)',
+          doseBadge: 'Effluent <25 mL/kg/sa: 6–8 mg/kg q48sa',
+          severeDoseBadge: 'Effluent ≥25–30 mL/kg/sa: 6–8 mg/kg q24sa (VRE: 8–10 mg/kg q24sa)',
+          note: 'KRİTİK CRRT AYRIMI: Düşük effluentte (<25 mL/kg/sa) q48sa yeterliyken, ≥25–30 mL/kg/sa yüksek akımlı CRRT’de daptomisin anlamlı temizlenir ve q48sa 24–48. saatlerde subterapötik kalır → 6–8 mg/kg q24sa + haftada 2× CPK!',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT (8–12 sa Uzamış Diyaliz)',
+          doseBadge: '4–6 mg/kg q24–48sa (SLED Sonrası)',
+          severeDoseBadge: '6–8 mg/kg q24sa (SLED Günlerinde Seans Bitiminde)',
+          note: 'Uzamış yüksek akımlı SLED daptomisini anlamlı düzeyde uzaklaştırır; ağır MRSA/VRE’de 6–8 mg/kg q24sa (SLED sonrası) ve haftada 2× CPK takibi önerilir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD — ISPD 2022)',
+          doseBadge: 'Sistemik IV: 4–10 mg/kg q48sa',
+          severeDoseBadge: 'PD Peritoniti (ISPD 2022): IP 100 mg/L Yükleme → 20 mg/L İdame',
+          note: 'CAPD sistemik dozun <%11’ini temizler (IV q48sa uygulanır). Dirençli MRSA/VRE PD peritonitinde ISPD 2022 intraperitoneal (IP) protokolü 100 mg/L yükleme → 20 mg/L sürekli idame şeklindedir (dekstrozlu PD solüsyonunda stabilite kısıtlı olduğundan taze hazırlayıp hemen uygula!).',
+          tone: 'indigo',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Hepatik metabolizma ve CYP450 etkileşimi yoktur; standart eGFR bazlı mg/kg rejimleri güvenle uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Farmakokinetik çalışmalar Child-Pugh B’de anlamlı AUC değişikliği göstermemiştir; standart doz korunur, haftalık CPK izlenir.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'Veri Sınırlı • Hipoalbüminemi & CPK İzlemi',
+          detail:
+            'Ağır sirozda spesifik PK verisi kısıtlıdır; hepatik metabolizma minimal olsa da %90–93 protein bağlanması nedeniyle hipoalbüminemide serbest fraksiyon artar → haftada 2× CPK ve transaminaz takibi önerilir.',
+          tone: 'amber',
+        },
+      ],
+      dualOrganNote:
+        'Kombine Siroz (Hipoalbüminemi) + ABH/HRS Notu: Daptomisin %90–93 proteinlere bağlanır ve böbrekten atılır. Child-Pugh C sirozda kas kitlesi azlığı nedeniyle gerçek CrCl <30 mL/dk gözden kaçabilir; bu durumda q24sa devam etmek trough >24,3 mg/L birikimine ve ağır rabdomiyolize yol açar. CrCl <30 ise kesinlikle q48sa aralığına geçilmeli, statin kesilmeli ve haftada 2× CPK izlenmelidir.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: CrCl <30 ise q48sa + Yakın CPK İzlemi',
@@ -1940,6 +2338,51 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
     },
     regimenCards: [
       {
+        title: 'Helicobacter pylori Eradikasyonu (Üçlü / Bizmutsuz Dörtlü Tedavi)',
+        setting: 'core',
+        badge: 'ACG / Maastricht VI',
+        dose: '500 mg PO q12sa × 14 gün (Yüksek doz PPI + Amoksisilin 1 g q12sa ± Metronidazol 500 mg q12sa)',
+        infusionDuration: 'Oral uygulama (yemeklerle veya aç alınabilir)',
+        interval: 'q12sa × 14 gün (CrCl <30’da 250 mg q12sa veya alternatif rejim)',
+        note: 'Klaritromisin direncinin >%15 olduğu bölgelerde (Türkiye dahil!) ampirik klaritromisinli üçlü tedavi önerilmez; moleküler/kültür duyarlılığı teyit edilmedikçe bizmutlu dörtlü tedavi (PPI + Bizmut + Tetrasiklin + Metronidazol) tercih edilir.',
+      },
+      {
+        title: 'Mycobacterium avium Kompleks (MAC) & NTM Enfeksiyonları',
+        setting: 'core',
+        badge: 'ATS / IDSA / ERS NTM',
+        dose: '500 mg PO q12sa (Etambutol 15 mg/kg/gün ± Rifabutin/Rifampisin ile KOMBİNE!)',
+        infusionDuration: 'Oral uygulama',
+        interval: 'q12sa (Kültür negatifliğinden sonra ≥12 ay; HIV/CD4 <50 dissemine MAC)',
+        note: 'ASLA monoterapi olarak kullanılmaz (hızla makrolid direnci gelişir!). Rifampisin CYP3A4 indüksiyonuyla klaritromisin düzeyini düşürür; Rifabutin ile de çift yönlü etkileşim (üveit/nötropeni) ve CYP3A4 ilaç yükü nedeniyle günümüzde birçok vakada Azitromisin tercih edilir.',
+      },
+      {
+        title: 'Boğmaca (Bordetella pertussis) Tedavi & Temas Sonrası Profilaksisi',
+        setting: 'core',
+        badge: 'CDC Boğmaca Kılavuzu',
+        dose: '500 mg PO q12sa × 7 gün (Pediatrik ≥1 ay: 7,5 mg/kg q12sa × 7 gün)',
+        infusionDuration: 'Oral uygulama',
+        interval: 'q12sa × 7 gün',
+        note: 'Bulaştırıcılığı kesmek için kataral veya erken paroksismal fazda ve yakın temaslı profilaksisinde etkilidir. <1 ay yenidoğanlarda infantil hipertrofik pilor stenozu riski nedeniyle KULLANILMAZ (Azitromisin seçilir!).',
+      },
+      {
+        title: 'Ayaktan Toplum Kökenli & Atipik Pnömoni (Mycoplasma / Chlamydophila / Legionella)',
+        setting: 'core',
+        badge: 'ATS / IDSA TKP',
+        dose: '500 mg PO q12sa (veya 1000 mg MR/XL q24sa) × 5–7 gün (Legionella’da 7–14 gün)',
+        infusionDuration: 'Oral uygulama (MR/XL tabletler yemekle alınır ve ezilmez!)',
+        interval: 'q12sa (veya MR q24sa) × 5–7 gün',
+        note: 'Atipik pnömonide (M. pneumoniae, C. pneumoniae, L. pneumophila) güçlü hücre içi etkinlik gösterir. Pnömokok makrolid direncinin >%25 olduğu bölgelerde ve komorbiditeli hastalarda β-laktam (Amoksisilin-Klavulanat / Seftriakson) ile kombine edilmelidir.',
+      },
+      {
+        title: 'Akut Bakteriyel Rinosinüzit, Farenjit/Tonsillit, KOAH Alevlenme & cSSTI (β-Laktam Alerjisi)',
+        setting: 'core',
+        badge: 'FDA / EMA / TİTCK Alternatif',
+        dose: '250–500 mg PO q12sa × 5–10 gün (GAS farenjit: 250 mg q12sa × 10 gün; Sinüzit/KOAH/cSSTI: 500 mg q12sa × 5–7 gün)',
+        infusionDuration: 'Oral uygulama',
+        interval: 'q12sa × 5–10 gün',
+        note: 'Yalnızca ciddi Tip-1 β-laktam alerjisi olan hastalarda alternatif olarak düşünülür; S. pneumoniae ve S. pyogenes’te yüksek makrolid direnci ile CYP3A4/QTc riskleri her reçetede kontrol edilmelidir.',
+      },
+      {
         title: 'YBÜ Ağır Toplum Kökenli Pnömoni — TKP (β-Laktam ile Kombine)',
         setting: 'icu',
         badge: 'ERS/ESICM/ATS-IDSA',
@@ -2098,6 +2541,75 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
       hepaticDetails: [
         'Klaritromisin nadiren kolestatik/hepatoselüler ilaca bağlı karaciğer hasarı (DILI) yapabilir; transaminaz/bilirubin yükselirse kesilmelidir.',
       ],
+      renalMatrix: [
+        {
+          stage: 'ARC (eGFR >130 mL/dk)',
+          doseBadge: '500 mg IV/PO q12sa',
+          note: 'Mikst hepatik (CYP3A4) + renal atılım ve QTc/GİS toksisite tavanı nedeniyle ARC durumunda doz artırılmaz (maks 1000 mg/gün).',
+          tone: 'indigo',
+        },
+        {
+          stage: 'Normal – Orta Böbrek (eGFR ≥30 mL/dk)',
+          doseBadge: '500 mg IV/PO q12sa (Standart 250–500 mg q12sa)',
+          note: 'İzole eGFR ≥30’da doz değişikliği gerekmez. ANCAK eGFR 30–59 + eşzamanlı orta-ağır KC yetmezliği veya ritonavir/atazanavir kullanımında doz %50 azaltılmalıdır!',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Ağır Böbrek Yetmezliği (eGFR <30 mL/dk)',
+          doseBadge: '%50 Azalt: 250 mg IV/PO q12sa veya 500 mg IV/PO q24sa',
+          note: 'Ana ilaç ve aktif 14-OH metabolit birikir; azaltılmazsa QTc/Torsades ve SSS deliryumu riski fırlar. MR/XL uzatılmış salımlı tabletler CrCl <30’da KULLANILMAZ!',
+          tone: 'rose',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD)',
+          doseBadge: '250 mg q12sa veya 500 mg q24sa (%50 Doz — HD Sonrası)',
+          note: 'Hemodiyaliz klaritromisini anlamlı temizlemez; %50 azaltılmış günlük doz HD günlerinde diyaliz bitiminde uygulanır, ek doz gerekmez.',
+          tone: 'amber',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF)',
+          doseBadge: '500 mg IV q24sa (Yüksek Effluent Ağır TKP: 500 mg IV q12sa)',
+          note: 'Orta protein bağlanması (%42–70) nedeniyle kısmi CRRT klirensi vardır; düşük akımda veya QTc riskinde 500 mg q24sa, yüksek akımlı ağır TKP’de 500 mg q12sa + günlük EKG izlemi.',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT',
+          doseBadge: '500 mg IV q24sa (veya 250 mg q12sa — Seans Sonrası)',
+          note: 'SLED sonrası uygulanır; eşzamanlı QTc uzatan YBÜ ilaçları ve CYP3A4 substratları (midazolam, fentanil, takrolimus) yakından kontrol edilmelidir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD)',
+          doseBadge: '250 mg PO/IV q12sa veya 500 mg q24sa (%50 Doz)',
+          note: 'Periton diyaliziyle anlamlı uzaklaştırılmaz; CrCl <30 dozu (%50 azaltım) uygulanır.',
+          tone: 'amber',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Normal Böbrekte Doz Sabit',
+          detail:
+            'Normal böbrek fonksiyonu (eGFR ≥60) varsa 14-OH metabolit oluşumu azalırken renal atılım kompanse eder; standart doz uygulanabilir, KCFT izlenir.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'eGFR <60 ise %50 Azalt • KCFT & QTc İzle',
+          detail:
+            'İzole Child-Pugh B’de böbrek normalse doz korunabilir; ancak eGFR <60 mL/dk eşlik ediyorsa doz mutlaka %50 azaltılmalıdır. Kolestatik hepatit bulgularında kesilir.',
+          tone: 'amber',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'KAÇIN — Kolestatik Hepatit & Birikim Riski!',
+          detail:
+            'Ağır sirozda hepatik klirens ve CYP3A4 kapasitesi çöktüğünden ve klaritromisin kolestatik/hepatoselüler DILI (nadiren fatal karaciğer yetmezliği) yapabildiğinden kullanılmamalıdır.',
+          tone: 'rose',
+        },
+      ],
+      dualOrganNote:
+        'Kombine KC + eGFR <60 Tuzağı & Kolestatik Hepatit: Klaritromisinin çift eliminasyon (hepatik CYP3A4 + renal) dengesi, orta-ağır karaciğer yetmezliği ile eGFR <60 mL/dk birleştiğinde tamamen bozulur ve ciddi plazma birikimi/QTc uzaması gelişir (%50 azaltım veya tercihen alternatif ajan!). Ayrıca kolşisin alan böbrek veya karaciğer yetmezlikli hastada klaritromisin KESİNLİKLE KONTRENDİKEDİR (fatal pansitopeni/çoklu organ yetmezliği!). Kolestatik hepatit (sarılık, ALP/bilirubin artışı) gelişirse ilaç derhal kesilir.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: Yüksek QTc & Polifarmasi/CYP3A4 Riski!',
@@ -2501,6 +3013,51 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
     },
     regimenCards: [
       {
+        title: 'Chlamydia trachomatis Üretrit / Servisit & Şankroid (H. ducreyi)',
+        setting: 'core',
+        badge: 'CDC STI Kılavuzu',
+        dose: '1 g PO TEK DOZ (Chlamydia & Şankroid)',
+        infusionDuration: 'Oral uygulama (tek seferde doğrudan gözlemli verilebilir)',
+        interval: 'Tek doz (Chlamydia gebelikte 1. seçenek; gebe olmayan erişkinde Doksisiklin 100 mg q12sa × 7g sonrası ana alternatif)',
+        note: 'Uyum sorunu olan hastalarda ve gebelikte klamidya için temel rejimdir; şankroid (H. ducreyi) için birinci basamaktır. Gonore (N. gonorrhoeae) yüksek direnç nedeniyle artık tek başına azitromisinle tedavi EDİLMEZ (Seftriakson 500 mg IM şarttır!).',
+      },
+      {
+        title: 'Ayaktan & Hastane Yatışlı TKP + Atipik Pnömoni (Mycoplasma / Chlamydophila / Legionella)',
+        setting: 'core',
+        badge: 'ATS / IDSA TKP Kılavuzu',
+        dose: 'Ayaktan: 1. gün 500 mg PO → 2–5. gün 250 mg PO q24sa (veya 500 mg × 3g) | Yatışlı: 500 mg IV/PO q24sa (+ β-Laktam)',
+        infusionDuration: 'PO veya IV 250 mL ≥60 dk (≤2 mg/mL)',
+        interval: 'q24sa (toplam 5 gün; Legionella’da 7–10 gün)',
+        note: 'Ayaktan komorbiditesiz ve pnömokok makrolid direnci <%25 olan bölgelerde monoterapi; komorbiditeli ayaktan ve tüm hastane yatışlı TKP hastalarında Seftriakson veya Ampisilin-Sulbaktam ile kombine edilir.',
+      },
+      {
+        title: 'KOAH Akut Alevlenme & Kronik Bronşektazi İmmünomodülasyonu',
+        setting: 'core',
+        badge: 'GOLD KOAH • ERS Bronşektazi',
+        dose: 'Akut Alevlenme: 500 mg PO q24sa × 3g | Uzun Dönem Profilaksi: 250–500 mg PO haftada 3× (Pzt-Çar-Cum) veya 250 mg/gün',
+        infusionDuration: 'Oral uygulama',
+        interval: 'Akut: 3–5 gün • Kronik profilaksi: haftada 3× (en az 6–12 ay değerlendirme)',
+        note: 'Sık alevlenen KOAH ve non-KF bronşektazide anti-inflamatuvar/immünomodülatör etkiyle alevlenmeleri azaltır. Uzun dönem başlamadan önce MUTLAKA balgamda NTM (tüberküloz dışı mikobakteri) dışlanmalı, bazal QTc (<450–470 ms) ve işitme kontrolü yapılmalıdır!',
+      },
+      {
+        title: 'Campylobacter / Turist İshali & Enterik Ateş (Tifo — S. Typhi)',
+        setting: 'core',
+        badge: 'IDSA Diyare • WHO Tifo',
+        dose: 'Turist İshali / Campylobacter: 1 g PO tek doz (veya 500 mg q24sa × 3g) | MDR Tifo: 1. gün 1 g → 500 mg PO q24sa × 5–7 gün',
+        infusionDuration: 'Oral uygulama',
+        interval: 'Tek doz / q24sa × 3–7 gün',
+        note: 'Florokinolon-dirençli Campylobacter (özellikle Güney/Güneydoğu Asya seyahatleri) ve komplike olmayan MDR/XDR S. enterica serovar Typhi enterik ateşinde birinci basamak oral tedavi seçeneğidir.',
+      },
+      {
+        title: 'Boğmaca (B. pertussis), MAC Profilaksi/Tedavisi & Babezyoz (+ Atovakuon)',
+        setting: 'core',
+        badge: 'CDC / IDSA Özel Endikasyonlar',
+        dose: 'Boğmaca: 500→250 mg PO × 5g (<1 ay: 10 mg/kg) | MAC: 250–500 mg q24sa (+ Etambutol ± Rifabutin) | Babezyoz: 500–1000→250–500 mg + Atovakuon 750 mg q12sa',
+        infusionDuration: 'Oral (ağır babezyozda 500 mg IV q24sa)',
+        interval: 'Boğmaca 5 gün • HIV/CD4 <50 MAC profilaksisi 1200 mg haftada 1× • Babezyoz 7–10 gün',
+        note: '<1 ay yenidoğan boğmacasında pilor stenozu riski en düşük olduğundan İLK SEÇENEK makroliddir. MAC tedavisinde CYP3A4 etkileşimi minimal olduğu için klaritromisine tercih edilir; ASLA monoterapi verilmez. Hafif-orta B. microti babezyozunda Atovakuon ile ilk basamaktır.',
+      },
+      {
         title: 'Obstetrik Acil / Travaylı / EMR’li Sezaryen Profilaksisi (C/SOAP — ACOG)',
         setting: 'perioperative',
         badge: 'C/SOAP NEJM 2016 • ACOG',
@@ -2648,6 +3205,75 @@ export const GRAM_POSITIVE_MACROLIDE_ANTIMICROBIALS: AntimicrobialMonographData[
       hepaticDetails: [
         'Nadiren kolestatik sarılık, hepatoselüler hasar ve fulminan hepatit bildirilmiştir; karaciğer fonksiyon testleri bozulursa tedavi sonlandırılır.',
       ],
+      renalMatrix: [
+        {
+          stage: 'ARC (eGFR >130 mL/dk)',
+          doseBadge: '500 mg IV/PO q24sa (Doz Ayarı Yok)',
+          note: 'Primer safra/feçes eliminasyonu ve çok geniş doku dağılımı (Vd ~31 L/kg) nedeniyle ARC klirensi etkilemez; doz artırımı gerekmez.',
+          tone: 'indigo',
+        },
+        {
+          stage: 'Normal – Ağır BY (eGFR ≥10 mL/dk)',
+          doseBadge: '500 mg IV/PO q24sa (DOZ AYARI GEREKMEZ)',
+          note: 'Renal atılım <%6–12 olduğundan eGFR 10–90+ tüm kademelerde tam doz uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Son Dönem Böbrek Yetmezliği (eGFR <10 mL/dk, Diyalizsiz)',
+          doseBadge: '500 mg IV/PO q24sa (AUC +%35 — Dikkat!)',
+          note: 'Doz azaltımı önerilmez ancak sistemik AUC ~%35 artar! Elektrolit bozukluğu (K⁺/Mg²⁺) düzeltilmeli ve bazal/seri EKG (QTc <500 ms) izlenmelidir.',
+          tone: 'amber',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD)',
+          doseBadge: '500 mg IV/PO q24sa (HD Sonrası Ek Doz Yok)',
+          note: 'Hemodiyaliz azitromisini anlamlı düzeyde uzaklaştırmaz; diyaliz zamanlamasından bağımsız standart doz uygulanır.',
+          tone: 'sky',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF)',
+          doseBadge: '500 mg IV q24sa (Tam Doz)',
+          note: 'Çok geniş doku dağılım hacmi (31 L/kg) ve biliyer eliminasyon nedeniyle CRRT klirensi ihmal edilebilir; doz değişikliği gerekmez.',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT',
+          doseBadge: '500 mg IV q24sa (Tam Doz)',
+          note: 'SLED ile anlamlı atılım yoktur; standart 500 mg q24sa dozu korunur.',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD)',
+          doseBadge: '500 mg IV/PO q24sa (Tam Doz)',
+          note: 'Periton diyaliziyle uzaklaştırılmaz; tam doz uygulanır, eGFR <10 benzeri QTc/elektrolit izlemi önerilir.',
+          tone: 'sky',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Hafif karaciğer yetmezliğinde standart 500 mg q24sa dozları güvenle kullanılır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'Doz Ayarı Gerekmez • KCFT İzlemi',
+          detail:
+            'Orta karaciğer yetmezliğinde doz azaltımı önerilmez; ancak primer atılım yolu safra olduğundan KCFT/bilirubin takibi yapılmalıdır.',
+          tone: 'amber',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'Biliyer Klirens Bozulur! • Kolestatik Hepatit Riski',
+          detail:
+            'Ağır siroz ve biliyer obstrüksiyonda safra atılımı bozulur; kolestatik sarılık, transaminaz artışı veya fulminan hepatit bulgularında ilaç DERHAL kesilmelidir. Siroz kaynaklı bazal QTc uzaması açısından EKG izlenir.',
+          tone: 'rose',
+        },
+      ],
+      dualOrganNote:
+        'Kombine Ağır Karaciğer + Böbrek Yetmezliği & Kolestatik Hepatit Notu: Azitromisin primer olarak safrayla atılır; Child-Pugh C sirozda safra klirensi aksarken eşlik eden eGFR <10 mL/dk durumu sistemik AUC’yi ~%35 daha yükseltir. Kombine yetmezlikte CYP3A4 etkileşimi olmaması nedeniyle klaritromisine kıyasla çok daha güvenli kalsa da, bazal/seri QTc (sirozda sıklıkla uzundur!), K⁺/Mg²⁺ ve KCFT/bilirubin yakından izlenmeli; kolestatik hepatit gelişirse tedavi derhal sonlandırılmalıdır.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: Doz Sabit — Kardiyak QTc İzlemi Şart!',

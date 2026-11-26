@@ -31,6 +31,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -1417,6 +1418,7 @@ export const HydrocortisoneProtocol: React.FC<Props> = ({ isDark }) => {
           'Siroz ve ağır karaciğer yetmezliğinde (Child-Pugh C) A-halkası redüksiyonu ve konjugasyon yavaşladığından plazma yarı ömrü uzar; ayrıca CBG (Transkortin) ve albümin düşüklüğü serbest aktif kortizol fraksiyonunu yükseltir.',
           'Refrakter septik şok veya akut adrenal krizde 200 mg/gün başlangıç dozu korunur; ancak kritik sirotik hastalarda hiperglisemi, enfeksiyon (SBP/fungal) ve varis/peptik ülser kanaması riski nedeniyle tedavi süresi mümkün olan en kısa sürede sonlandırılmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART1['hydrocortisone']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

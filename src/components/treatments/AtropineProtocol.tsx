@@ -26,6 +26,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -1092,6 +1093,7 @@ export const AtropineProtocol: React.FC<Props> = ({ isDark }) => {
           'Siroz/hepatik ensefalopatiye yatkın hastalarda tersiyer amin SSS geçişi konfüzyonu ağırlaştırabilir.',
           'NMB reversal için ağır karaciğer yetmezliğinde antikolinerjik deliryum riski nedeniyle mümkünse Glikopirolat veya Sugammadeks tercih edilir.',
         ]}
+        {...STANDALONE_ORGAN_PART1['atropine']}
       />
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

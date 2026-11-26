@@ -27,6 +27,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -806,6 +807,7 @@ export const DesfluraneProtocol: React.FC<Props> = ({ isDark }) => {
           'TFA hapten oluşumu diğer tüm halojenlilerden en düşüktür; volatil ilişkili hepatit riski teorik düzeydedir.',
           'Siroz ve karaciğer transplantasyonunda hızlı nörolojik derlenme sağlayarak postoperatif ensefalopati ayrımını kolaylaştırır.',
         ]}
+        {...STANDALONE_ORGAN_PART1['desflurane']}
       />
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

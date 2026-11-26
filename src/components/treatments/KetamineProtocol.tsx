@@ -45,6 +45,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1639,6 +1640,7 @@ export const KetamineProtocol: React.FC<Props> = ({ isDark }) => {
           'Child-Pugh A: Tek doz indüksiyonda ayar gerekmez; infüzyonda standart klinik titrasyon.',
           'Child-Pugh B / C: Hepatik kan akımına bağımlı yüksek ekstraksiyonlu ilaçtır; sirozda yarı ömür uzar ve uyanma gecikir — idame infüzyonu %25–50 azaltın, tekrarlayan bolus aralıklarını uzatın.',
         ]}
+        {...STANDALONE_ORGAN_PART2['ketamine']}
       />
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

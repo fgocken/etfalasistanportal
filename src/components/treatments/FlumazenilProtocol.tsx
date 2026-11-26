@@ -25,6 +25,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -961,6 +962,7 @@ export const FlumazenilProtocol: React.FC<Props> = ({ isDark }) => {
           'Orta karaciğer yetmezliğinde klirens %40–60’a, ağır yetmezlikte ~%25’e düşer; t½ ~1,3 sa / ~2,4 sa’e uzar.',
           'Karaciğer yetmezliğinde BZD klirensi de bozulduğundan resedasyon ve hepatik ensefalopati ayrımı açısından uzatılmış izlem gerekir.',
         ]}
+        {...STANDALONE_ORGAN_PART1['flumazenil']}
       />
 
       {/* 10. GERİATRİ & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

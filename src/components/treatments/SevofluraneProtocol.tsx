@@ -27,6 +27,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 
 interface Props {
   isDark: boolean;
@@ -838,6 +839,7 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
           'Halotan hepatiti tipinde immün TFA-protein kompleksi neredeyse oluşturmaz (HFIP metaboliti glukuronidasyonla atılır).',
           'Ağır sirozda kardiyak debi ve vasküler tonus kırılgan olduğundan MAC titrasyonu BIS eşliğinde düşük tutulmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART2['sevoflurane']}
       />
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

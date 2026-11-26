@@ -2,6 +2,8 @@ import type {
   AdverseEffectItem,
   ClinicalCautionItem,
   MechanismPillar,
+  OrganHepaticTierCard,
+  OrganRenalMatrixRow,
   StructuredDrugInteraction,
   TissueOrganSystemCard,
   TurkeyPreparationItem,
@@ -20,7 +22,7 @@ export type AntimicrobialClassTag =
 
 export interface AntimicrobialRegimenCard {
   title: string;
-  setting: 'perioperative' | 'icu' | 'special';
+  setting: 'core' | 'perioperative' | 'icu' | 'special';
   badge: string;
   dose: string;
   infusionDuration: string;
@@ -197,6 +199,9 @@ export interface AntimicrobialMonographData {
     renalDetails: string[];
     hepaticSummary: string;
     hepaticDetails: string[];
+    renalMatrix?: OrganRenalMatrixRow[];
+    hepaticMatrix?: OrganHepaticTierCard[];
+    dualOrganNote?: string;
   };
 
   /** 10. Geriatri & Obezite */

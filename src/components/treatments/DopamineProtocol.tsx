@@ -32,6 +32,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1234,6 +1235,7 @@ export const DopamineProtocol: React.FC<Props> = ({ isDark }) => {
           'İleri evre sirozda (Child-Pugh C) splanknik dolaşım dinamikleri değiştiğinden yüksek doz (>10 mcg/kg/dk) dopamin portal basıncı ve mezenterik vazokonstriksiyonu etkileyebilir.',
           'Hepatorenal sendromda (HRS) dopamin etkisizdir; Terlipressin veya Noradrenalin + Albümin tercih edilmelidir.',
         ]}
+        {...STANDALONE_ORGAN_PART1['dopamine']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

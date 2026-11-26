@@ -31,6 +31,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 
 interface Props {
   isDark: boolean;
@@ -1648,6 +1649,7 @@ export const MethylprednisoloneProtocol: React.FC<Props> = ({ isDark }) => {
           'Metilprednizolon sodyum süksinat esterazlarla plazmada hızla aktive olduğundan (prednizonun aksine hepatik 11β-HSD1 aktivasyonuna ihtiyaç duymaz!) karaciğer yetmezliğinde biyolojik olarak tam aktiftir.',
           'Bununla birlikte ağır sirozda CYP3A4 aracılı metabolizma yavaşlar ve düşük albümin serbest ilaç fraksiyonunu artırır; çok günlük YBÜ tedavilerinde (ARDS, bronkospazm) hiperglisemi, spontan bakteriyel peritonit (SBP) ve GİS kanama açısından yakın izlem yapılmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART2['methylprednisolone']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

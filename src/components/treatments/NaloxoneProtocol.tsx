@@ -25,6 +25,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 
 interface Props {
   isDark: boolean;
@@ -1016,6 +1017,7 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
         hepaticDetails={[
           'Ağır karaciğer yetmezliğinde opioid klirensi de ciddi biçimde bozulduğundan renarkotizasyon takibi ve hepatik ensefalopati ayrımı kritiktir.',
         ]}
+        {...STANDALONE_ORGAN_PART2['naloxone']}
       />
 
       {/* 10. GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

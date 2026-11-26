@@ -31,6 +31,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -985,6 +986,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           'Child-Pugh B/C veya portal hipertansiyon/siroz: İdrar alkalinizasyonu tübülde amonyum (NH₄⁺) iyonunu lipofilik amonyağa (NH₃) dönüştürür ve sistemik geri emilimi artırır.',
           'Hızlı hiperamonyemi ve hepatik ensefalopati / koma presipitasyonu nedeniyle sirotik asitte asla diüretik olarak tercih edilmez (spironolakton + furosemid seçilir).',
         ]}
+        {...STANDALONE_ORGAN_PART1['acetazolamide']}
       />
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

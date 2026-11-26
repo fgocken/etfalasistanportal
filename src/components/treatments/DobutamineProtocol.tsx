@@ -31,6 +31,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1265,6 +1266,7 @@ export const DobutamineProtocol: React.FC<Props> = ({ isDark }) => {
           'İleri evre karaciğer yetmezliğinde (Child-Pugh C) glukuronid konjugasyonu hafif yavaşlayabilir; düşük dozla (2,5 mcg/kg/dk) başlanarak hedef kardiyak debi ve ScvO₂ yanıtına göre titre edilir.',
           'İskemik hepatopatide ("şok karaciğeri") kardiyak debiyi artırıp hepatik venöz konjesyonu azaltarak transaminaz ve laktat klirensini destekler.',
         ]}
+        {...STANDALONE_ORGAN_PART1['dobutamine']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

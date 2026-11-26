@@ -31,6 +31,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 
 interface Props {
   isDark: boolean;
@@ -1735,6 +1736,7 @@ export const ThiopentalProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
           'İndüksiyon Dozu: Tek bolus sonrası uyanma redistribüsyonla olduğu için hafif hepatik yetmezlikte uyanma belirgin gecikmeyebilir; ancak hipoalbüminemi nedeniyle serbest ilaç arttığından indüksiyon dozu %25–50 azaltılarak yavaş titre edilmelidir.',
           'Uzun İnfüzyon / Tekrarlayan Dozlar: Child-Pugh B/C sirozda hepatik klirens belirgin düşer, aktif pentobarbital birikimi ve sıfır-derece kinetik nedeniyle çok uzun süreli koma ve hipotansiyon gelişir.',
         ]}
+        {...STANDALONE_ORGAN_PART2['thiopental']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

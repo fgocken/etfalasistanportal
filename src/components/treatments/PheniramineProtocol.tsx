@@ -28,6 +28,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 type CalcTab = 'adult_allergy' | 'pediatric' | 'perioperative_pruritus';
@@ -1195,6 +1196,7 @@ export const PheniramineProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =
           'Child-Pugh B/C Siroz: Hepatik klirens düşüşüne bağlı olarak santral sedasyon ve antikolinerjik deliryum çok uzar; hepatik ensefalopatiyi maskeleyebilir veya presipite edebilir.',
           'Doz Stratejisi: İleri karaciğer yetmezliğinde zorunlu hallerde yarım ampul (22,75 mg) tek dozla sınırlayın ve tekrarlamayın.',
         ]}
+        {...STANDALONE_ORGAN_PART2['pheniramine']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

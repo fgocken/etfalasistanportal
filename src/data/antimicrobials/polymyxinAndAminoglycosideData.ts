@@ -172,6 +172,33 @@ export const POLYMYXIN_AMINOGLYCOSIDE_ANTIMICROBIALS: AntimicrobialMonographData
     },
     regimenCards: [
       {
+        title: 'CRE / CRAB / DTR-P. aeruginosa Bakteriyemi & Septik Şok',
+        setting: 'core',
+        badge: 'Tsuji 2019 • İlk Polimiksin',
+        dose: 'Yükleme: 2,0–2,5 mg/kg TBW (20.000–25.000 IU/kg) → İdame: 1,25–1,5 mg/kg IV q12sa',
+        infusionDuration: '1 saat yavaş IV infüzyon (100–500 mL %5 Dekstroz)',
+        interval: 'Yüklemeden 12 saat sonra q12sa (toplam 2,5–3,0 mg/kg/gün; 7–14 gün)',
+        note: 'Yeni nesil β-laktam/BLI (Seftazidim-Avibaktam, Seftolozan-Tazobaktam, Sefiderokol) duyarlıysa önce onlar seçilir. Polimiksin gerektiren sistemik bakteriyemide Kolistin’e göre daha öngörülebilir PK ve düşük ABH riski sunar; heterodirenci bastırmak için duyarlı/sinerjik ikinci ajanla kombinasyon önerilir.',
+      },
+      {
+        title: 'MDR Hastane / Ventilatör İlişkili Pnömoni (HABP / VABP — Kombinasyon)',
+        setting: 'core',
+        badge: 'Tsuji 2019 • IDSA/ESCMID',
+        dose: 'Yükleme: 2,5 mg/kg TBW → İdame: 1,25–1,5 mg/kg IV q12sa (+ Kombine Ajan)',
+        infusionDuration: '1 saat yavaş IV infüzyon (%5 Dekstroz)',
+        interval: 'q12sa (7 gün; klinik yanıt/prokalsitonine göre)',
+        note: 'Akciğer epitelyal sıvısına (ELF) sistemik geçiş sınırlı olduğundan tek başına monoterapi önerilmez; CRAB’da yüksek doz Ampisilin-Sulbaktam veya Tigesiklin/Minosiklin, CRE’de yüksek doz uzamış infüzyon Meropenem ile kombine edilir ve seçilmiş MDR VAP’ta adjuvan nebülize polimiksin değerlendirilir.',
+      },
+      {
+        title: 'MDR Komplike İntra-Abdominal (cIAI) & Yumuşak Doku Enfeksiyonları (ÜSE HARİÇ!)',
+        setting: 'core',
+        badge: 'Kurtarma Kombinasyonu',
+        dose: 'Yükleme: 2,0–2,5 mg/kg TBW → İdame: 1,25–1,5 mg/kg IV q12sa',
+        infusionDuration: '1 saat yavaş IV infüzyon (%5 Dekstroz)',
+        interval: 'q12sa (yeterli cerrahi kaynak kontrolü sonrası 4–7 gün; yumuşak doku 7–14 gün)',
+        note: 'cIAI’da anaerob ve Gram-pozitif kapsam için ek ajan şarttır. KRİTİK KURAL: Polimiksin B idrara aktif olarak <%4 geçtiğinden komplike ÜSE (cUTI) / piyelonefritte KULLANILMAZ → MDR cUTI’de mutlaka Kolistin (CMS) seçilmelidir!',
+      },
+      {
         title: 'YBÜ MDR Acinetobacter / CRE / DTR P. aeruginosa (2019 Uluslararası Konsensüs)',
         setting: 'icu',
         badge: 'Tsuji et al. 2019',
@@ -332,6 +359,89 @@ export const POLYMYXIN_AMINOGLYCOSIDE_ANTIMICROBIALS: AntimicrobialMonographData
       hepaticDetails: [
         'Hepatik CYP450 metabolizması yoktur; sirozda standart mg/kg dozlama uygulanır.',
       ],
+      renalMatrix: [
+        {
+          stage: 'ARC (eGFR >130 mL/dk)',
+          doseBadge: 'Yükleme 2,0–2,5 → 1,25–1,5 mg/kg q12sa',
+          severeDoseBadge: 'Yükleme 2,5 → 1,5 mg/kg q12sa (Maks 3 mg/kg/gün!)',
+          note: 'Eliminasyon non-renal (<%4 idrar) olduğundan ARC durumunda klirens artmaz ve doz ARTIRILMAZ (>3 mg/kg/gün şiddetli ABH yapar!).',
+          tone: 'indigo',
+        },
+        {
+          stage: 'Normal Böbrek (eGFR ≥60 mL/dk)',
+          doseBadge: 'Yükleme 2,0–2,5 → 1,25 mg/kg q12sa',
+          severeDoseBadge: 'Yükleme 2,5 → 1,5 mg/kg q12sa (30.000 IU/kg/gün)',
+          note: '1 mg = 10.000 IU (1 flakon 500.000 IU = 50 mg). Hedef AUCss,24h 50–100 mg·sa/L; ÜSE’de KULLANILMAZ (Kolistin seç!).',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Orta Böbrek Yetmezliği (eGFR 30–59 mL/dk)',
+          doseBadge: 'DOZ AYARI YOK (1,25 mg/kg q12sa)',
+          severeDoseBadge: 'Yükleme 2,5 → 1,25–1,5 mg/kg q12sa (Aynı Doz!)',
+          note: '2019 Tsuji Konsensüsü: CrCl düşüklüğünde doz azaltılmaz! Eşlikçi nefrotoksikleri (vankomisin, aminoglikozid, NSAİİ) kes ve günlük kreatinin izle.',
+          tone: 'amber',
+        },
+        {
+          stage: 'Ağır BY / ABH (eGFR <30 mL/dk)',
+          doseBadge: 'DOZ AYARI YOK (1,25 mg/kg q12sa)',
+          severeDoseBadge: 'Yükleme 2,0–2,5 → 1,25–1,5 mg/kg q12sa',
+          note: 'ABH’de dozu düşürmek subterapötik maruziyet ve sepsis mortalitesi yaratır. Günlük 2,5 mg/kg/gün alt sınırı (1,25 mg/kg q12sa) tercih edilebilir; duyarlı yeni β-laktam/BLI varsa geçiş düşünülmelidir.',
+          tone: 'amber',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD)',
+          doseBadge: 'DOZ AYARI / EK DOZ YOK',
+          severeDoseBadge: 'Yükleme 2,0–2,5 → 1,25–1,5 mg/kg q12sa',
+          note: 'Hemodiyaliz Polimiksin B’yi anlamlı temizlemez (<%5–10); diyaliz günlerinden bağımsız standart q12sa rejim sürdürülür.',
+          tone: 'sky',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF)',
+          doseBadge: 'DOZ AYARI / EK DOZ YOK',
+          severeDoseBadge: 'Yükleme 2,0–2,5 → 1,25–1,5 mg/kg q12sa',
+          note: 'CRRT toplam Polimiksin B klirensinin <%10–12’sini oluşturur (Kolistin’in aksine CRRT’de doz artırılmaz veya azaltılmaz!).',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT',
+          doseBadge: 'DOZ AYARI / EK DOZ YOK',
+          severeDoseBadge: 'Yükleme 2,0–2,5 → 1,25–1,5 mg/kg q12sa',
+          note: 'SLED ile ekstrakorporeal atılım ihmal edilebilir düzeydedir; standart q12sa doz korunur.',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD)',
+          doseBadge: 'DOZ AYARI YOK (1,25–1,5 mg/kg IV q12sa)',
+          severeDoseBadge: 'Yükleme 2,0–2,5 → 1,25–1,5 mg/kg IV q12sa',
+          note: 'Periton diyaliziyle anlamlı uzaklaştırılmaz; sistemik MDR enfeksiyonda standart IV doz uygulanır (IP kullanım verisi sınırlıdır).',
+          tone: 'sky',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Hepatik CYP450 metabolizması olmadığından standart 2,0–2,5 mg/kg yükleme ve 1,25–1,5 mg/kg q12sa dozlama uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Klirens etkilenmez; standart mg/kg rejimi sürdürülür ve günlük böbrek/nörolojik takip yapılır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'Doz Sabit • Kuru Ağırlık & ABH İzlemi',
+          detail:
+            'Hepatik doz azaltımı gerekmez; ancak masif assit/anasarka TBW’yi yapay şişirip >3 mg/kg/gün aşırı dozuna yol açabileceğinden kuru ağırlık/AdjBW çapraz kontrolü ve günlük böbrek takibi yapılmalıdır.',
+          tone: 'amber',
+        },
+      ],
+      dualOrganNote:
+        'Kombine Siroz + ABH/CRRT Yönetimi: Polimiksin B hem renal hem hepatik eliminasyondan bağımsız olduğundan kombine organ yetmezliğinde dahi doz azaltımı yapılmaz. Ancak dekompanse sirozda (hepatorenal sendrom zemininde) nefrotoksisite eşiği düşer ve masif assit TBW’yi abartır → 1,25 mg/kg q12sa (2,5 mg/kg/gün) alt sınırı, kuru/düzeltilmiş ağırlık kontrolü ve eşlikçi nefrotoksiklerin kesilmesi esastır.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: Doz Azaltılmaz — Yakın Renal & Nörolojik İzlem',
@@ -709,6 +819,42 @@ export const POLYMYXIN_AMINOGLYCOSIDE_ANTIMICROBIALS: AntimicrobialMonographData
     },
     regimenCards: [
       {
+        title: 'MDR Komplike Üriner Sistem Enfeksiyonu — cUTI / Akut Piyelonefrit (ÜSE Üstünlüğü!)',
+        setting: 'core',
+        badge: 'Tsuji 2019 • ÜSE’de İlk Polimiksin',
+        dose: 'Yükleme: 300 mg CBA (9 MIU) IV → İdame: CrCl tablosuna göre q12sa (normal böbrekte 150–180 mg CBA q12sa)',
+        infusionDuration: '30–60 dakika IV infüzyon (TAZE HAZIRLA!)',
+        interval: 'q12sa (7–14 gün; yeni β-laktam/BLI dirençli CRE/CRAB/DTR-PA cUTI)',
+        note: 'İnaktif CMS ön-ilacı idrara yoğun atılıp renal pelvis ve mesanede yüksek konsantrasyonda aktif kolistine hidrolize olduğundan MDR cUTI / piyelonefritte Polimiksin B’ye kesinlikle ÜSTÜNDÜR!',
+      },
+      {
+        title: 'CRE / CRAB / DTR-P. aeruginosa Bakteriyemi & Sepsis',
+        setting: 'core',
+        badge: 'Tsuji 2019 • Kurtarma',
+        dose: 'Yükleme: 300 mg CBA (9 MIU) IV → İdame: CrCl tablosuna göre q12sa',
+        infusionDuration: '30–60 dakika IV infüzyon',
+        interval: 'Yüklemeden 12 saat sonra q12sa (7–14 gün)',
+        note: 'Sistemik enfeksiyonlarda Polimiksin B temin edilebiliyorsa (ÜSE hariç) daha öngörülebilir PK ve düşük ABH nedeniyle Polimiksin B tercih edilir. Kolistin kullanıldığında ağır CRAB/CRE sepsiste heterodirenci bastırmak için kombinasyon (örn. yüksek doz Ampisilin-Sulbaktam veya Meropenem) önerilir.',
+      },
+      {
+        title: 'MDR Hastane / Ventilatör İlişkili Pnömoni (HABP / VABP — Sistemik + Nebülize)',
+        setting: 'core',
+        badge: 'Tsuji 2019 • Kombine + İnhale',
+        dose: 'IV Yükleme 300 mg CBA → CrCl İdame + Adjuvan Nebülize 75–150 mg CBA (2–4,5 MIU) q12sa',
+        infusionDuration: 'IV 30–60 dk + Nebülize 15–20 dk (vibrating mesh; öncesi bronkodilatör!)',
+        interval: 'q12sa (7 gün; mutlaka taze hazırlanmış nebülize çözelti ile!)',
+        note: 'IV kolistinin akciğer epitelyal sıvısına (ELF) penetrasyonu yetersiz olduğundan MDR HABP/VABP’ta sistemik kombinasyona ek olarak taze hazırlanmış nebülize kolistin eklenmesi önerilir (tek başına inhale monoterapi kullanılmaz).',
+      },
+      {
+        title: 'Kistik Fibrozis Kronik P. aeruginosa İnhale Tedavisi',
+        setting: 'core',
+        badge: 'EMA / TİTCK Onaylı İnhale',
+        dose: '1–2 MIU (33–66 mg CBA) nebülize q12sa (Kuru toz inhaler: 1,6625 MIU [125 mg CMS] q12sa)',
+        infusionDuration: '10–15 dk nebülizasyon (TAZE sulandır ve DERHAL uygula!)',
+        interval: 'q12sa (uzun süreli kronik baskılama / eradikasyon protokolleri)',
+        note: 'BEKLETİLMİŞ ÇÖZELTİ YASAĞI: Sulandırılıp bekletilen solüsyon serbest kolistine hidrolize olarak şiddetli bronkospazm ve ölümcül akciğer hasarı yapar! İlk doz öncesi bronkodilatör verilmeli ve FEV₁ / bronkospazm izlenmelidir.',
+      },
+      {
         title: 'YBÜ MDR Gram-Negatif — Yükleme + Normal Böbrek İdame (Tsuji 2019)',
         setting: 'icu',
         badge: '2019 International Consensus',
@@ -944,6 +1090,129 @@ export const POLYMYXIN_AMINOGLYCOSIDE_ANTIMICROBIALS: AntimicrobialMonographData
       hepaticDetails: [
         'Sirozda kas kitlesi azlığı nedeniyle serum kreatinini yalancı düşük ölçülebilir → CrCl abartılıp aşırı doz verilmemesine dikkat edilmelidir!',
       ],
+      renalMatrix: [
+        {
+          stage: 'YÜKLEME DOZU (TÜM CrCl / IHD / CRRT / SLED / CAPD)',
+          doseBadge: '300 mg CBA (9 MIU) Tek Doz IV',
+          note: 'Tsuji 2019 KURALI: Böbrek fonksiyonundan BAĞIMSIZ tüm erişkinlerde 300 mg CBA (9 MIU = 720 mg CMS) 30–60 dk IV yükleme zorunludur (<50–60 kg düşük kilolu hastada ~4–5 mg CBA/kg IBW, maks 300 mg CBA). İdame 12 saat sonra başlar.',
+          tone: 'indigo',
+        },
+        {
+          stage: 'ARC (CrCl >130 mL/dk)',
+          doseBadge: '360 mg CBA/gün (~10,9 MIU/gün) → 180 mg CBA q12sa',
+          note: 'DİKKAT: CrCl >100–130 mL/dk’da CMS ön-ilacı aktif kolistine dönüşemeden hızla idrarla atıldığından plazma hedefi (Css,avg 2 mg/L) zor tutturulur! Sistemik enfeksiyonda Polimiksin B veya yeni β-laktam/BLI tercih edilmelidir.',
+          tone: 'indigo',
+        },
+        {
+          stage: 'CrCl ≥ 90 mL/dk',
+          doseBadge: '360 mg CBA/gün (~10,9 MIU/gün) → 180 mg CBA (~5,5 MIU) q12sa',
+          note: 'Tsuji 2019 normal böbrek maksimum idame dozu; günlük >360 mg CBA (>10,9 MIU) nefrotoksisite nedeniyle rutin olarak aşılmaz.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'CrCl 80–89 mL/dk',
+          doseBadge: '340 mg CBA/gün (~10,3 MIU/gün) → 170 mg CBA (~5,15 MIU) q12sa',
+          note: 'Tsuji 2019 CrCl 80–89 basamağı; 2 eşit dozda q12sa uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'CrCl 70–79 mL/dk',
+          doseBadge: '300 mg CBA/gün (9,0 MIU/gün) → 150 mg CBA (4,5 MIU) q12sa',
+          note: 'Tam olarak 2 × 1 flakon Colimycin® 150 mg CBA (= 2 × 4,5 MIU) rejimine karşılık gelir.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'CrCl 60–69 mL/dk',
+          doseBadge: '275 mg CBA/gün (~8,3 MIU/gün) → ~135–140 mg CBA (~4,15 MIU) q12sa',
+          note: 'Tsuji 2019 CrCl 60–69 basamağı; q12sa iki eşit doza bölünerek uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          stage: 'CrCl 50–59 mL/dk',
+          doseBadge: '245 mg CBA/gün (~7,4 MIU/gün) → ~120–125 mg CBA (~3,7 MIU) q12sa',
+          note: 'Tsuji 2019 CrCl 50–59 basamağı; günlük kreatinin ve idrar çıkışı izlenir.',
+          tone: 'amber',
+        },
+        {
+          stage: 'CrCl 40–49 mL/dk',
+          doseBadge: '220 mg CBA/gün (~6,65 MIU/gün) → 110 mg CBA (~3,3 MIU) q12sa',
+          note: 'Tsuji 2019 CrCl 40–49 basamağı; CMS klirensi yavaşladıkça aktif kolistine dönüşüm fraksiyonu artar.',
+          tone: 'amber',
+        },
+        {
+          stage: 'CrCl 30–39 mL/dk',
+          doseBadge: '195 mg CBA/gün (~5,9 MIU/gün) → ~95–100 mg CBA (~2,95 MIU) q12sa',
+          note: 'Tsuji 2019 CrCl 30–39 basamağı; nörotoksisite (parestezi/konfüzyon) ve böbrek fonksiyonu günlük izlenir.',
+          tone: 'amber',
+        },
+        {
+          stage: 'CrCl 20–29 mL/dk',
+          doseBadge: '175 mg CBA/gün (~5,3 MIU/gün) → ~85–90 mg CBA (~2,65 MIU) q12sa',
+          note: 'Tsuji 2019 CrCl 20–29 basamağı; eşlikçi nefrotoksikler (vankomisin, aminoglikozid, NSAİİ) kesilmelidir.',
+          tone: 'rose',
+        },
+        {
+          stage: 'CrCl 10–19 mL/dk',
+          doseBadge: '160 mg CBA/gün (~4,85 MIU/gün) → 80 mg CBA (~2,4 MIU) q12sa',
+          note: 'Tsuji 2019 CrCl 10–19 basamağı; CMS birikimi nedeniyle sıkı nörolojik ve solunumsal takip gerekir.',
+          tone: 'rose',
+        },
+        {
+          stage: 'CrCl < 10 mL/dk (Diyalizsiz)',
+          doseBadge: '130–145 mg CBA/gün (~3,95–4,4 MIU/gün) → 65–72,5 mg CBA q12sa',
+          note: 'Tsuji 2019 CrCl <10 basamağı (CrCl 0 için 130 mg CBA/gün = 3,95 MIU/gün; CrCl 5–9 için 145 mg CBA/gün = 4,4 MIU/gün).',
+          tone: 'rose',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD)',
+          doseBadge: '130 mg CBA/gün (65 mg q12sa) + HD Sonrası +40–50 mg CBA (+1,2–1,5 MIU)',
+          note: 'Diyaliz dışı günlerde 130 mg CBA/gün (~3,95 MIU/gün = 2 MIU q12sa). 3 saatlik HD için +40 mg CBA (~1,2 MIU), 4 saatlik HD için +50 mg CBA (~1,5 MIU) seans bitiminde eklenir; HD mümkünse doz aralığının sonuna planlanır.',
+          tone: 'sky',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF) — YÜKSEK DOZ!',
+          doseBadge: '440 mg CBA/gün (~13,3 MIU/gün) → 220 mg CBA (~6,65 MIU) q12sa',
+          note: 'KRİTİK YBÜ KURALI (Tsuji 2019): CRRT hem CMS’yi hem aktif kolistini verimli şekilde temizler → normal böbrekten bile yüksek 440 mg CBA/gün gerekir! Filtre pıhtılaşıp CRRT durduğu an derhal CrCl <10 (130 mg CBA/gün) rejimine düş!',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT (Gece / Uzamış Diyaliz)',
+          doseBadge: 'Bazal 130 mg CBA/gün + SLED Her Saati İçin +%10 Ek Doz',
+          note: 'Tsuji 2019: Bazal anürik doza (130 mg CBA/gün) SLED süresinin her saati için +%10 eklenir (örn. 10 saatlik gece SLED’inde bazal doza +%100 ek → ~260 mg CBA/gün, seans bitiminde veya bölünmüş q12sa).',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD)',
+          doseBadge: '130 mg CBA/gün (~3,95 MIU/gün) → 65 mg CBA (~2 MIU) q12sa',
+          note: 'Periton diyaliziyle CMS ve aktif kolistin klirensi çok düşüktür; CrCl 0 rejimi (130 mg CBA/gün) uygulanır, ek doz gerekmez.',
+          tone: 'sky',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'CMS aktif kolistine spontan (non-enzimatik) hidrolizle dönüşür; karaciğer yetmezliği metabolizmayı doğrudan değiştirmez, Tsuji 2019 CrCl tablosu uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Primer hepatik doz ayarı yoktur; ancak renal fonksiyonun doğru hesaplanması ve nefrotoksik eşlikçilerin kesilmesi kritiktir.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'Kreatinin Tuzağı! • Aşırı Doz & HRS Riski',
+          detail:
+            'Sarkopeni nedeniyle serum kreatinini yalancı düşük ölçülür ve tahmini CrCl gerçek GFR’yi abartır → Tsuji tablosundan aşırı yüksek idame seçilmesi hızla CMS birikimi, hepatorenal sendrom ve solunum paralizisine yol açabilir!',
+          tone: 'amber',
+        },
+      ],
+      dualOrganNote:
+        'Siroz + Yalancı Düşük Kreatinin & Hepatorenal Sendrom Tuzağı: Child-Pugh C sirozda kas kitlesi kaybı serum kreatininini olduğundan düşük gösterir; bu durum Tsuji 2019 CrCl tablosunda üst basamaktan aşırı yüksek kolistin idamesi yazılmasına ve %60+ ABH / HRS / nörotoksisite gelişmesine neden olur. İleri sirozda 24 saatlik CrCl veya sistatin-C ile gerçek GFR teyit edilmeli, sistemik enfeksiyonlarda mümkünse non-renal Polimiksin B veya yeni β-laktam/BLI tercih edilmelidir.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: Yüksek ABH (%50+) & Nörotoksisite — CrCl Tablosu Şart!',
@@ -1326,6 +1595,51 @@ export const POLYMYXIN_AMINOGLYCOSIDE_ANTIMICROBIALS: AntimicrobialMonographData
     },
     regimenCards: [
       {
+        title: 'Komplike ÜSE & Akut Piyelonefrit — ESBL / CRE (IDSA 2024: Tek Doz / Kısa Süreli!)',
+        setting: 'core',
+        badge: 'IDSA 2024 AMR Kılavuzu',
+        dose: '15 mg/kg IV (AdjBW) TEK DOZ (sistit) veya 15 mg/kg IV q24sa × 3–5 gün (cUTI / piyelonefrit)',
+        infusionDuration: '30–60 dakika IV infüzyon (100–250 mL SF/D5W)',
+        interval: 'Tek doz (komplike olmayan ESBL/CRE sistit) veya q24sa (kısa süreli — hızlı oral/β-laktam geçiş!)',
+        note: 'IDSA 2024 kılavuzu: Amikasin böbrekten değişmeden atılıp idrarda çok yüksek konsantrasyona ulaştığından, oral seçeneği olmayan ESBL/CRE sistitte TEK DOZ 15 mg/kg küratif ve minimum nefrotoksiktir; piyelonefrit/cUTI’de kısa süreli (≤3–5 gün) + TDM ile uygulanır.',
+      },
+      {
+        title: 'MDR-Tüberküloz (M. tuberculosis) & NTM (M. abscessus / Kaviter MAC)',
+        setting: 'core',
+        badge: 'WHO MDR-TB • ATS/IDSA NTM',
+        dose: '15 mg/kg IV/IM q24sa veya 15–25 mg/kg haftada 3× (maks 1000 mg/doz; >50–60 yaşta 10 mg/kg)',
+        infusionDuration: '30–60 dk IV infüzyon (veya IM; kaviter/refrakter MAC’ta lipozomal inhale seçenek)',
+        interval: 'q24sa veya 3×/hf (ilk 2–3 ay yoğun faz; çoklu antimikobakteriyel kombinasyonla)',
+        note: 'WHO MDR-TB Grup C kurtarma ajanı ve ATS/IDSA kaviter MAC / M. abscessus temel parenteral ajanıdır. Uzun tedavide bazal ve AYLIK odyometri (yüksek frekans işitme testi), vestibüler muayene ve haftalık kreatinin + dip (<2,5 mg/L) TDM zorunludur!',
+      },
+      {
+        title: 'Dissemine / SSS Nocardia Enfeksiyonları (+ TMP-SMX / İmipenem)',
+        setting: 'core',
+        badge: 'AST / IDSA Nokardiyoz',
+        dose: '15 mg/kg IV q24sa (veya 7,5 mg/kg IV q12sa — AdjBW)',
+        infusionDuration: '30–60 dakika IV infüzyon',
+        interval: 'q24sa (veya q12sa) × 3–6 hafta indüksiyon (yüksek doz TMP-SMX ± İmipenem/Meropenem ile)',
+        note: 'İmmünsüpresif (solid organ/HSCT nakil) hastada ağır pulmoner, dissemine veya SSS Nocardia enfeksiyonlarında 2–3’lü başlangıç indüksiyon kombinasyonunun temel parçasıdır (TMP-SMX + İmipenem/Linezolid ± Amikasin; sıkı TDM ve odyometri ile).',
+      },
+      {
+        title: 'Febril Nötropeni & Septik Şokta Çift Gram-Negatif Ampirik Kapsama',
+        setting: 'core',
+        badge: 'ECIL / IDSA Febril Nötropeni',
+        dose: '15–20 mg/kg IV q24sa (septik şokta ilk yükleme 25–30 mg/kg AdjBW)',
+        infusionDuration: '30 dakika IV infüzyon (β-laktamdan AYRI HATTA!)',
+        interval: 'q24sa — Kültür ve stabilizasyonla 48–72 saat içinde de-eskalasyon!',
+        note: 'Hemodinamik instabilite, önceki MDR/ESBL/Pseudomonas kolonizasyonu veya ağır nötropenik septik şokta anti-psödomonal β-laktama (Sefepim, Piperasilin-Tazobaktam veya Meropenem) kısa süreli eklenir; β-laktamla aynı Y-hattında kimyasal inaktivasyon gelişir!',
+      },
+      {
+        title: 'Seçilmiş İnfektif Endokardit Sinerjisi (Enterococcus / Gram-Negatif / Bartonella)',
+        setting: 'core',
+        badge: 'ESC / AHA Endokardit Sinerjisi',
+        dose: '15 mg/kg IV q24sa veya 7,5 mg/kg IV q12sa (hücre duvarı ajanı ile kombine)',
+        infusionDuration: '30–60 dakika IV infüzyon (β-laktam/glikopeptidden ayrı hat)',
+        interval: 'q12–24sa (sınırlı sinerji süresi + sıkı pik/dip TDM)',
+        note: 'Yüksek düzey gentamisin/streptomisin direnci olmayan seçilmiş vakalarda (veya non-HACEK Gram-negatif protez kapak endokarditinde anti-psödomonal β-laktamla kombine) sinerjik bakterisidal aktivite için kullanılır; böbrek ve işitme takibi şarttır.',
+      },
+      {
         title: 'Perioperatif Cerrahi Profilaksi (β-Laktam Alerjili Üroloji / Kolorektal / Gastroduodenal)',
         setting: 'perioperative',
         badge: 'ASHP/IDSA Cerrahi Profilaksi',
@@ -1529,6 +1843,96 @@ export const POLYMYXIN_AMINOGLYCOSIDE_ANTIMICROBIALS: AntimicrobialMonographData
       hepaticDetails: [
         'İleri sirozda (Child-Pugh C) aminoglikozid nefrotoksisite riski belirgin yükseldiğinden (hepatorenal sendrom tetiklenmesi!) mümkünse alternatif ajanlar tercih edilir.',
       ],
+      renalMatrix: [
+        {
+          stage: 'ARC (eGFR >130 mL/dk) / Septik Şok (Geniş Vd)',
+          doseBadge: '15–20 mg/kg AdjBW q24sa',
+          severeDoseBadge: 'Yükleme 25–30 mg/kg AdjBW → 15–20 mg/kg q24sa + TDM',
+          note: 'Septik şokta genişleyen Vd ve ARC nedeniyle 15 mg/kg başlangıç dozu Cmax ≥60–80 mg/L hedefine ulaşamaz → 25–30 mg/kg yükleme + 30. dk pik ve 24. sa dip (<2,5 mg/L) TDM zorunludur!',
+          tone: 'indigo',
+        },
+        {
+          stage: 'Normal Böbrek (CrCl ≥60 mL/dk)',
+          doseBadge: '15 mg/kg AdjBW q24sa',
+          severeDoseBadge: 'Yükleme 25–30 mg/kg → 15–20 mg/kg AdjBW q24sa',
+          note: 'Extended-interval (günde tek doz) rejimi Cmax/MIC ≥8–10 etkinliğini maksimize edip tübüler/koklear toparlanma sağlar. Hedef dip <2,5 mg/L (<5 mg/L üst sınır).',
+          tone: 'emerald',
+        },
+        {
+          stage: 'Orta Böbrek Yetmezliği (CrCl 40–59 mL/dk)',
+          doseBadge: '15 mg/kg AdjBW q36sa',
+          severeDoseBadge: 'Yükleme 25 mg/kg → 15 mg/kg q36sa (Dip <2,5–5 olunca)',
+          note: 'Konsantrasyon-bağımlı olduğundan tek doz miktarını düşürme, ARALIĞI q36sa’ya uzat! İkinci doz öncesi dip (<2,5–5 mg/L) teyit edilmelidir.',
+          tone: 'amber',
+        },
+        {
+          stage: 'İleri Böbrek Yetmezliği (CrCl 20–39 mL/dk)',
+          doseBadge: '15 mg/kg AdjBW q48sa',
+          severeDoseBadge: 'Yükleme 20–25 mg/kg → 15 mg/kg q48sa (Dose-by-Level TDM)',
+          note: '48. saatte dip düzeyi <2,5–5 mg/L doğrulanmadan yeni doz verilmemelidir; dip >5 mg/L ise 12–24 sa bekleyip tekrar ölç!',
+          tone: 'rose',
+        },
+        {
+          stage: 'Ağır BY / Anürik ABH (CrCl <20 mL/dk, Diyalizsiz)',
+          doseBadge: 'Yükleme 15 mg/kg → Yalnızca TDM (Dose-by-Level)',
+          severeDoseBadge: 'Yükleme 20–25 mg/kg → Düzey <2,5–5 mg/L olunca 7,5–15 mg/kg',
+          note: 't½ 30–86 saate uzar! Sabit aralıkla redozaj yapılmaz; rastgele serum düzeyi <2,5–5 mg/L’ye düşmeden ek doz uygulanmaz ve tedavi süresi en kısa (≤48–72 sa) tutulur.',
+          tone: 'rose',
+        },
+        {
+          stage: 'İntermittan Hemodiyaliz (IHD)',
+          doseBadge: 'Yükleme 15 mg/kg → HD Sonrası 5–7,5 mg/kg',
+          severeDoseBadge: 'Yükleme 20–25 mg/kg → HD Sonrası 5–7,5 mg/kg (Pre-HD TDM ile)',
+          note: '4 saatlik HD amikasinin ~%50’sini temizler! Yükleme sonrası her HD bitiminde 5–7,5 mg/kg (pre-HD düzey <5–10 mg/L kontrolüyle) uygulanır. Alternatif yüksek pik stratejisi: seçilmiş merkezlerde HD’den 1–2 sa önce 15 mg/kg verilip HD ile temizlenir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'CRRT (CVVH / CVVHDF)',
+          doseBadge: 'Yükleme 20–25 mg/kg → 24. sa TDM’ye Göre 15 mg/kg q24–48sa',
+          severeDoseBadge: 'Yükleme 25–30 mg/kg AdjBW → 24. sa TDM (<2,5–5 mg/L ise redozaj)',
+          note: 'Çok düşük protein bağlanması (<%10) nedeniyle CRRT filtresinden serbestçe süzülür. İlk yükleme 25–30 mg/kg AdjBW verilir, 24. saatte serum düzeyi ölçülerek (<2,5–5 mg/L ise 15 mg/kg q24–48sa) bireyselleştirilir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'SLED / PIRRT (8–12 sa Uzamış Diyaliz)',
+          doseBadge: 'Yükleme 15–20 mg/kg → SLED Sonrası 7,5–10 mg/kg (TDM ile)',
+          severeDoseBadge: 'Yükleme 20–25 mg/kg AdjBW → Post-SLED Düzey <2,5–5 ise 15 mg/kg',
+          note: 'SLED seans başına amikasinin %40–60’ını temizler; yüksek pik sağlamak için doz seans bitiminde (veya seans öncesi seçilmiş protokolde) verilir ve mutlaka TDM ile takip edilir.',
+          tone: 'sky',
+        },
+        {
+          stage: 'Periton Diyalizi (CAPD / APD — ISPD 2022)',
+          doseBadge: 'Sistemik IV: Yükleme 15 mg/kg → TDM’ye Göre',
+          severeDoseBadge: 'PD Peritoniti (ISPD 2022): IP 2 mg/kg q24sa (≤5 GÜN SINIRI!)',
+          note: 'ISPD 2022 PD peritoniti protokolü: İntraperitoneal (IP) 2 mg/kg q24sa (≥6 sa bekleme). KRİTİK UYARI: Rezidüel böbrek fonksiyon kaybı ve kalıcı vestibüler/koklear ototoksisite riski nedeniyle IP aminoglikozid süresi ≤5 günle sınırlandırılmalıdır!',
+          tone: 'indigo',
+        },
+      ],
+      hepaticMatrix: [
+        {
+          childPugh: 'Child-Pugh A (5–6 puan)',
+          badge: 'Doz Ayarı Gerekmez',
+          detail:
+            'Hepatik metabolizması yoktur; standart AdjBW tabanlı extended-interval dozlama ve pik/dip TDM uygulanır.',
+          tone: 'emerald',
+        },
+        {
+          childPugh: 'Child-Pugh B (7–9 puan)',
+          badge: 'Assit Vd Artışı & Kreatinin Tuzağı • Erken TDM',
+          detail:
+            'Assit nedeniyle hidrofilik Vd genişlerken sarkopeni gerçek GFR’yi maskeleyebilir; ilk doz sonrası 24. saat dip düzeyi (<2,5 mg/L) görülmeden redozaj yapılmamalıdır.',
+          tone: 'amber',
+        },
+        {
+          childPugh: 'Child-Pugh C (10–15 puan)',
+          badge: 'Yüksek HRS / ABH Riski! — Mümkünse Kaçın',
+          detail:
+            'Dekompanse siroz, aminoglikozid nefrotoksisitesi ve hepatorenal sendrom (HRS) tetiklenmesi için bağımsız güçlü bir risk faktörüdür. Mümkünse β-laktam/alternatif seç; zorunluysa tek yükleme veya ≤48 sa + zorunlu TDM!',
+          tone: 'rose',
+        },
+      ],
+      dualOrganNote:
+        'Siroz + Assit + Düşük Kreatinin (HRS) Tuzağı: Amikasin karaciğerden metabolize olmasa da Child-Pugh B–C sirozda (1) masif assit ve ödem ekstraselüler Vd’yi genişletir, (2) sarkopeni nedeniyle düşük ölçülen serum kreatinini gerçek renal yetmezliği gizler ve (3) renal vazokonstriksiyon/prostaglandin bağımlılığı nedeniyle tübüler nefrotoksisite ve hepatorenal sendrom (HRS) riski katlanır. İleri sirozda alternatif yoksa AdjBW üzerinden tek yükleme sonrası mutlaka 24. saat TDM (<2,5 mg/L) ile yönetilip 48–72 saatte kesilmelidir.',
     },
     geriatricObesity: {
       geriatricReductionBadge: 'Geriatri: Yüksek Kalıcı Ototoksisite & ABH — Kısa Süre + TDM',

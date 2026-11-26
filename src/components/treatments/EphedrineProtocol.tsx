@@ -26,6 +26,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -1092,6 +1093,7 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
         hepaticDetails={[
           'İleri sirozda splanknik vazodilatasyon ve otonom disfonksiyon nedeniyle efedrin yanıtı öngörülemez olabilir → erken Noradrenalin infüzyonu üstündür.',
         ]}
+        {...STANDALONE_ORGAN_PART1['ephedrine']}
       />
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

@@ -383,6 +383,27 @@ export const ContraindicationsGridBlock: React.FC<ContraindicationsGridBlockProp
   );
 };
 
+export interface OrganRenalMatrixRow {
+  stage: string;
+  doseBadge: string;
+  severeDoseBadge?: string;
+  note: string;
+  tone?: 'emerald' | 'sky' | 'amber' | 'rose' | 'indigo';
+}
+
+export interface OrganHepaticTierCard {
+  childPugh: string;
+  badge: string;
+  detail: string;
+  tone?: 'emerald' | 'amber' | 'rose';
+}
+
+export interface OrganImpairmentMatrixPayload {
+  renalMatrix: OrganRenalMatrixRow[];
+  hepaticMatrix: OrganHepaticTierCard[];
+  dualOrganNote?: string;
+}
+
 interface OrganImpairmentGridBlockProps {
   isDark: boolean;
   sectionId?: string;
@@ -391,39 +412,100 @@ interface OrganImpairmentGridBlockProps {
   renalDetails: string[];
   hepaticSummary: string;
   hepaticDetails: string[];
+  renalMatrix?: OrganRenalMatrixRow[];
+  hepaticMatrix?: OrganHepaticTierCard[];
+  dualOrganNote?: string;
 }
 
 export const OrganImpairmentGridBlock: React.FC<OrganImpairmentGridBlockProps> = ({
   isDark,
   sectionId = 'sec-organ',
-  sectionTitle = 'Böbrek ve Karaciğer Yetmezliğinde Doz Yönetimi',
+  sectionTitle = 'Böbrek ve Karaciğer Yetmezliğinde Doz Yönetimi (eGFR · IHD · PD · CRRT · Child-Pugh)',
   renalSummary,
   renalDetails,
   hepaticSummary,
   hepaticDetails,
+  renalMatrix,
+  hepaticMatrix,
+  dualOrganNote,
 }) => {
+  const hasSevereCol = Boolean(renalMatrix?.some((row) => Boolean(row.severeDoseBadge)));
+
+  const renalToneBadge = (tone: OrganRenalMatrixRow['tone'] = 'sky') => {
+    switch (tone) {
+      case 'emerald':
+        return isDark
+          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+          : 'bg-emerald-50 text-emerald-800 border-emerald-200';
+      case 'amber':
+        return isDark
+          ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+          : 'bg-amber-50 text-amber-800 border-amber-200';
+      case 'rose':
+        return isDark
+          ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+          : 'bg-rose-50 text-rose-800 border-rose-200';
+      case 'indigo':
+        return isDark
+          ? 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
+          : 'bg-indigo-50 text-indigo-800 border-indigo-200';
+      default:
+        return isDark
+          ? 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+          : 'bg-sky-50 text-sky-800 border-sky-200';
+    }
+  };
+
+  const hepaticToneStyles = (tone: OrganHepaticTierCard['tone'] = 'emerald') => {
+    if (tone === 'rose') {
+      return {
+        card: isDark ? 'border-rose-900/50 bg-rose-950/20' : 'border-rose-200 bg-rose-50/40',
+        title: isDark ? 'text-rose-100' : 'text-rose-950',
+        badge: isDark ? 'bg-rose-500/15 text-rose-300 border-rose-500/30' : 'bg-rose-100 text-rose-800 border-rose-200',
+      };
+    }
+    if (tone === 'amber') {
+      return {
+        card: isDark ? 'border-amber-900/50 bg-amber-950/15' : 'border-amber-200 bg-amber-50/40',
+        title: isDark ? 'text-amber-100' : 'text-amber-950',
+        badge: isDark ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-amber-100 text-amber-800 border-amber-200',
+      };
+    }
+    return {
+      card: isDark ? 'border-slate-800 bg-slate-950/60' : 'border-slate-200 bg-slate-50/70',
+      title: isDark ? 'text-slate-100' : 'text-slate-900',
+      badge: isDark ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    };
+  };
+
   return (
     <section
       id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
+      className={`rounded-2xl border p-5 sm:p-6 space-y-5 ${
         isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
       }`}
     >
       <div className="flex items-center gap-2.5">
         <Stethoscope className={`h-5 w-5 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
+        <div>
+          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            {sectionTitle}
+          </h3>
+          <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+            eGFR kademeleri, İntermittan Hemodiyaliz (IHD), Periton Diyalizi (CAPD/APD), CRRT, SLED ve Child-Pugh A / B / C doz matrisi
+          </p>
+        </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      {/* Özet & Klinik Kurallar Grid */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div
           className={`rounded-xl border p-4 ${
             isDark ? 'border-slate-800 bg-slate-950/60' : 'border-slate-200 bg-slate-50/70'
           }`}
         >
           <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-sky-300' : 'text-sky-700'}`}>
-            Böbrek Yetmezliği & RRT (eGFR / CRRT)
+            Böbrek Yetmezliği &amp; RRT Özeti (eGFR / IHD / CRRT)
           </p>
           <p className={`mt-1.5 text-xs sm:text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
             {renalSummary}
@@ -444,7 +526,7 @@ export const OrganImpairmentGridBlock: React.FC<OrganImpairmentGridBlockProps> =
           }`}
         >
           <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-indigo-300' : 'text-indigo-700'}`}>
-            Karaciğer Yetmezliği (Child-Pugh A / B / C)
+            Karaciğer Yetmezliği Özeti (Child-Pugh A / B / C)
           </p>
           <p className={`mt-1.5 text-xs sm:text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
             {hepaticSummary}
@@ -459,6 +541,129 @@ export const OrganImpairmentGridBlock: React.FC<OrganImpairmentGridBlockProps> =
           </ul>
         </div>
       </div>
+
+      {/* TAM BÖBREK & RRT DOZ MATRİSİ TABLOSU */}
+      {renalMatrix && renalMatrix.length > 0 && (
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between gap-2">
+            <h4 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-sky-300' : 'text-sky-800'}`}>
+              Böbrek Fonksiyon Kademeleri &amp; Renal Replasman (IHD · PD · CRRT · SLED) Doz Matrisi
+            </h4>
+          </div>
+          <div
+            className={`overflow-x-auto rounded-xl border ${
+              isDark ? 'border-slate-800' : 'border-slate-200'
+            }`}
+          >
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className={isDark ? 'bg-slate-800/80 text-slate-200' : 'bg-slate-100 text-slate-700'}>
+                  <th className="p-3 text-xs font-bold whitespace-nowrap">Böbrek Fonksiyonu / RRT</th>
+                  <th className="p-3 text-xs font-bold whitespace-nowrap">
+                    {hasSevereCol ? 'Standart Endikasyon Dozu' : 'Önerilen Doz / Revizyon'}
+                  </th>
+                  {hasSevereCol && (
+                    <th className="p-3 text-xs font-bold whitespace-nowrap">Ağır / YBÜ / MDR / Menenjit Dozu</th>
+                  )}
+                  <th className="p-3 text-xs font-bold">Klinik Yönetim, Diyaliz Klirensi &amp; Zamanlama</th>
+                </tr>
+              </thead>
+              <tbody className={`divide-y text-xs ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
+                {renalMatrix.map((row, idx) => (
+                  <tr
+                    key={`${row.stage}-${idx}`}
+                    className={
+                      isDark
+                        ? idx % 2 === 0
+                          ? 'bg-slate-950/40'
+                          : 'bg-slate-900/40'
+                        : idx % 2 === 0
+                          ? 'bg-white'
+                          : 'bg-slate-50/60'
+                    }
+                  >
+                    <td className={`p-3 font-bold align-top whitespace-nowrap ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                      {row.stage}
+                    </td>
+                    <td className="p-3 align-top">
+                      <span
+                        className={`inline-block rounded-lg border px-2 py-1 font-mono text-[11px] font-bold leading-snug ${renalToneBadge(
+                          row.tone
+                        )}`}
+                      >
+                        {row.doseBadge}
+                      </span>
+                    </td>
+                    {hasSevereCol && (
+                      <td className="p-3 align-top">
+                        {row.severeDoseBadge ? (
+                          <span
+                            className={`inline-block rounded-lg border px-2 py-1 font-mono text-[11px] font-bold leading-snug ${
+                              isDark
+                                ? 'border-purple-500/30 bg-purple-950/40 text-purple-200'
+                                : 'border-purple-200 bg-purple-50 text-purple-900'
+                            }`}
+                          >
+                            {row.severeDoseBadge}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400">—</span>
+                        )}
+                      </td>
+                    )}
+                    <td className={`p-3 align-top leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                      {row.note}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* CHILD-PUGH A / B / C KARACİĞER YETMEZLİĞİ KARTLARI */}
+      {hepaticMatrix && hepaticMatrix.length > 0 && (
+        <div className="space-y-2.5">
+          <h4 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
+            Karaciğer Yetmezliği Sınıflaması (Child-Turcotte-Pugh A / B / C)
+          </h4>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            {hepaticMatrix.map((tier, idx) => {
+              const st = hepaticToneStyles(tier.tone);
+              return (
+                <div key={`${tier.childPugh}-${idx}`} className={`rounded-xl border p-4 space-y-2 ${st.card}`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className={`text-xs sm:text-sm font-bold ${st.title}`}>{tier.childPugh}</span>
+                    <span className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-bold ${st.badge}`}>
+                      {tier.badge}
+                    </span>
+                  </div>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    {tier.detail}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {dualOrganNote && (
+        <div
+          className={`flex items-start gap-2.5 rounded-xl border p-3.5 text-xs leading-relaxed ${
+            isDark
+              ? 'border-amber-500/30 bg-amber-950/20 text-amber-200'
+              : 'border-amber-200 bg-amber-50/70 text-amber-950'
+          }`}
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+          <div>
+            <strong>Kombine Organ Yetmezliği / Hipoalbüminemi / Siroz Notu: </strong>
+            <span>{dualOrganNote}</span>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

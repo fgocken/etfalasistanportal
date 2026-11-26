@@ -29,6 +29,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1162,6 +1163,7 @@ export const SugammadexProtocol: React.FC<Props> = ({ isDark }) => {
           'Hafif-orta hepatik yetmezlikte (Child-Pugh A–B) dağılım ve renal atılım etkilenmez; standart dozlar kullanılır.',
           'Ağır karaciğer yetmezliğinde (Child-Pugh C) eşlik eden koagülopati (yüksek dozda aPTT/PT uzaması) veya yaygın ödem/asite bağlı artmış ekstraselüler dağılım hacmi (Vd↑) nedeniyle dikkatli olunmalı ve kantitatif TOF ile tam dönüş doğrulanmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART2['sugammadex']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

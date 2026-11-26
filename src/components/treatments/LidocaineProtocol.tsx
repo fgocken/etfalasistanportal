@@ -45,6 +45,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1898,6 +1899,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
           'Child-Pugh B–C sirozda veya düşük debili kalp yetmezliğinde sürekli IV infüzyon dozu %40–50 azaltılmalıdır.',
           'Tekrarlayan rejyonel/lokal blok dozlarında toplam tavan doz %30–40 daraltılmalı ve erken MSS toksisite bulguları (tinnitus, metalik tat) sık sorgulanmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART2['lidocaine']}
       />
 
       {/* =========================================================================

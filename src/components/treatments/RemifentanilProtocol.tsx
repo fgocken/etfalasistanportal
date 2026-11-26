@@ -1542,7 +1542,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             tissueTarget: 'Eritrosit Esterazları · Miyenterik Pleksus · LES & Oddi',
             accent: 'teal',
             points: [
-              'Eritrosit & Doku Esteraz Klirensi (~40–50 mL/kg/dk): Karaciğer kan akımını aşan ekstrahepatik klirensi sayesinde an체patik fazda (karaciğer nakli), ağır sirozda ve anürik böbrek yetmezliğinde dahi sabit 3–4 dakikalık CSHT değişmez; kan ürünleriyle aynı hattan verilirse hat içinde eritrosit esterazlarıyla parçalanır.',
+              'Eritrosit & Doku Esteraz Klirensi (~40–50 mL/kg/dk): Karaciğer kan akımını aşan ekstrahepatik klirensi sayesinde anhepatik fazda (karaciğer nakli), ağır sirozda ve anürik böbrek yetmezliğinde dahi sabit 3–4 dakikalık CSHT değişmez; kan ürünleriyle aynı hattan verilirse hat içinde eritrosit esterazlarıyla parçalanır.',
               'Alt Özofagus Sfinkteri (LES) & Enterik Miyenterik Pleksus: Miyenterik (Auerbach) pleksusta asetilkolin salınımını inhibe ederek gastrik boşalmayı yavaşlatır, LES tonusunu düşürür ve primer özofagus peristaltizmini bozar (spontan soluyan MAC sedasyonunda subklinik regürjitasyon riski!).',
               'Oddi Sfinkteri & Area Postrema (CTZ / PONV): Biliyer düz kas ve Oddi sfinkter tonusunu artırabilir; area postrema kemoreseptör tetik bölgesi (CTZ) ve vestibüler çekirdek uyarımıyla postoperatif bulantı-kusma (PONV) tetikler (ancak ultra-kısa yarı ömrü nedeniyle etkisi infüzyon sonrası hızla azalır).',
             ],

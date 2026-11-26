@@ -32,6 +32,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1487,6 +1488,7 @@ export const SodiumNitroprussideProtocol: React.FC<Props> = ({ isDark }) => {
           'Child-Pugh B/C siroz, akut karaciğer yetmezliği veya malnütrisyonlu (tiyosülfat depoları düşük) hastalarda düşük dozlarda (<2 mcg/kg/dk) dahi hızla siyanür birikip açıklanamayan laktik asidoz oluşturabilir.',
           'Ağır hepatik yetmezlikte SNP yerine mümkünse Nikardipin, Klevidipin veya Esmolol tercih edilmelidir.',
         ]}
+        {...STANDALONE_ORGAN_PART2['sodium-nitroprusside']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

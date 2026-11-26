@@ -30,6 +30,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -1525,6 +1526,7 @@ export const DexamethasoneProtocol: React.FC<Props> = ({ isDark }) => {
           'Siroz ve ağır hepatik disfonksiyonda CYP3A4 aracılı 6β-hidroksilasyon azaldığından plazma yarı ömrü 1,5–2 kat uzayabilir; hipoalbüminemi de serbest aktif fraksiyonu (yaklaşık %23’ten yukarı) artırır.',
           'Perioperatif tek doz (4–8 mg IV) PONV profilaksisinde doz azaltımı gerekmez; ancak çok günlük YBÜ tedavilerinde (COVID-19, ARDS, tümör ödemi) hiperglisemi, enfeksiyon (SBP) ve GİS kanama açısından yakın izlem yapılmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART1['dexamethasone']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

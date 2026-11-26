@@ -29,6 +29,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
 interface Props {
   isDark: boolean;
@@ -1228,6 +1229,7 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
           'Siroz + Asit: Standart başlangıç 40 mg/gün PO furosemid + 100 mg/gün spironolakton (maks 160 mg furosemid / 400 mg spironolakton). Aşırı diürez hepatorenal sendromu (HRS) tetikler; günde maks 0,5 kg (ödem yoksa) veya 1 kg (ödem varsa) kilo kaybı hedeflenir.',
           'Hepatik Ensefalopati / Pre-koma: Furosemidin yaptığı hipokalemi ve metabolik alkaloz renal amonyogenezi ve NH₃’ün beyne geçişini artırır → ensefalopati geliştiğinde derhal kesilmelidir.',
         ]}
+        {...STANDALONE_ORGAN_PART1['furosemide']}
       />
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}

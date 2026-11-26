@@ -31,6 +31,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1128,6 +1129,7 @@ export const EsmololProtocol: React.FC<Props> = ({ isDark }) => {
           'Metabolizma tamamen eritrosit içi esterazlarla yürütüldüğünden ağır siroz, karaciğer transplantasyonu (anhepatik faz dahil!) ve akut karaciğer yetmezliğinde eliminasyon hızı tamamen korunur.',
           'Dekompanse sirozda mevcut yüksek bazal kardiyak debi ve splanknik vazodilatasyon nedeniyle sistemik hipotansiyona karşı standart yavaş titrasyonla başlanmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART1['esmolol']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

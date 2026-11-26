@@ -42,6 +42,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1305,6 +1306,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           'Karaciğer yetmezliğinde splenik ve portal vazokonstriksiyon nedeniyle mezenterik perfüzyon ve laktat trendi yakından izlenmelidir.',
           'Sirotik vazodilatasyon ve hepatorenal sendrom (HRS) tip-1 tedavisinde terlipresine güçlü alternatif vazopressördür.',
         ]}
+        {...STANDALONE_ORGAN_PART2['norepinephrine']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

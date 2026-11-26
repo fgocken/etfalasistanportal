@@ -39,6 +39,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1316,6 +1317,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
           'Karaciğer hastalığında β₂ aracılı glikojenoliz ve laktat klirensi yavaşladığından Tip-B laktat artışı daha belirgin ve uzun sürebilir.',
           'Hedef MAP ve kardiyak debi yanıtına göre klinik titre edilir.',
         ]}
+        {...STANDALONE_ORGAN_PART1['epinephrine']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

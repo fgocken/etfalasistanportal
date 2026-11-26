@@ -442,6 +442,7 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
   // Regimen cards grouped by setting
   const periopCards = useMemo(() => data.regimenCards.filter((c) => c.setting === 'perioperative'), [data.regimenCards]);
   const icuCards = useMemo(() => data.regimenCards.filter((c) => c.setting === 'icu'), [data.regimenCards]);
+  const coreCards = useMemo(() => data.regimenCards.filter((c) => c.setting === 'core'), [data.regimenCards]);
   const specialCards = useMemo(() => data.regimenCards.filter((c) => c.setting === 'special'), [data.regimenCards]);
 
   // Clinical order copy generator
@@ -684,7 +685,7 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
           <Syringe className={`h-5 w-5 ${accent.text}`} />
           <div>
             <p className={`text-[11px] font-bold uppercase tracking-wider ${accent.text}`}>
-              ASHP / IDSA / Surviving Sepsis · Perioperatif &amp; YBÜ Protokolleri
+              FDA / EMA / TİTCK / IDSA / ASHP · Temel, YBÜ &amp; Perioperatif Doz Rejimleri
             </p>
             <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
               Klinik Endikasyonlar ve Doz Rejimleri
@@ -695,24 +696,32 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
         <div className="mt-5 space-y-5">
           {[
             {
-              key: 'perioperative',
-              heading: 'Perioperatif Cerrahi Profilaksi & İntraoperatif Yönetim',
+              key: 'core',
+              heading: '1. Temel Klinik Endikasyonlar (FDA / EMA / TİTCK / IDSA Standart Tedavi)',
               badgeCls: isDark
-                ? 'border-teal-500/30 bg-teal-950/50 text-teal-300'
-                : 'border-teal-200 bg-teal-50 text-teal-800',
-              cards: periopCards,
+                ? 'border-emerald-500/30 bg-emerald-950/50 text-emerald-300'
+                : 'border-emerald-200 bg-emerald-50 text-emerald-800',
+              cards: coreCards,
             },
             {
               key: 'icu',
-              heading: 'Yoğun Bakım (YBÜ) · Sepsis / Septik Şok & MDR Enfeksiyonlar',
+              heading: '2. Yoğun Bakım (YBÜ) · Sepsis / Septik Şok & MDR Enfeksiyonlar',
               badgeCls: isDark
                 ? 'border-sky-500/30 bg-sky-950/50 text-sky-300'
                 : 'border-sky-200 bg-sky-50 text-sky-800',
               cards: icuCards,
             },
             {
+              key: 'perioperative',
+              heading: '3. Perioperatif Cerrahi Profilaksi & İntraoperatif Yönetim',
+              badgeCls: isDark
+                ? 'border-teal-500/30 bg-teal-950/50 text-teal-300'
+                : 'border-teal-200 bg-teal-50 text-teal-800',
+              cards: periopCards,
+            },
+            {
               key: 'special',
-              heading: 'Özel Klinik Senaryolar, Kurtarma & Kombinasyon Rejimleri',
+              heading: '4. Özel Klinik Senaryolar, Kurtarma & Kombinasyon Rejimleri',
               badgeCls: isDark
                 ? 'border-purple-500/30 bg-purple-950/50 text-purple-300'
                 : 'border-purple-200 bg-purple-50 text-purple-800',
@@ -1700,6 +1709,9 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
         renalDetails={data.organImpairment.renalDetails}
         hepaticSummary={data.organImpairment.hepaticSummary}
         hepaticDetails={data.organImpairment.hepaticDetails}
+        renalMatrix={data.organImpairment.renalMatrix}
+        hepaticMatrix={data.organImpairment.hepaticMatrix}
+        dualOrganNote={data.organImpairment.dualOrganNote}
       />
 
       {/* 11. GERİATRİ & OBEZİTE DOZ YÖNETİMİ */}

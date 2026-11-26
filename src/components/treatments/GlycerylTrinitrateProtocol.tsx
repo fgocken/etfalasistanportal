@@ -31,6 +31,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 interface Props {
@@ -1409,6 +1410,7 @@ export const GlycerylTrinitrateProtocol: React.FC<Props> = ({ isDark }) => {
           'Hepatik glutatyon-organik nitrat redüktaz aktivitesi azalsa da ekstrahepatik (damar duvarı ve eritrosit) klirens kısmen kompanse eder.',
           'Sirozlu hastalarda bazal splanknik vazodilatasyon ve düşük SVR mevcut olduğundan standart dozlarda beklenenden derin hipotansiyon gelişebilir; 5 mcg/dk ile başlayıp yavaş titre edin.',
         ]}
+        {...STANDALONE_ORGAN_PART1['glyceryl-trinitrate']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

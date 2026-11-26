@@ -28,6 +28,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 type CalcTab = 'trauma_pph' | 'noncardiac_ortho' | 'cardiac_cpb' | 'renal_adjust';
@@ -1522,6 +1523,7 @@ export const TranexamicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isDark }
           'Karaciğer Transplantasyonu & Siroz: Hiperfibrinolizin sık görüldüğü karaciğer nakli ve majör hepatektomilerde standart veya ROTEM/TEG güdümlü TXA rejimleri güvenle kullanılabilir.',
           'Kombine Hepatorenal Sendrom: Sirozlu hastada eşlik eden böbrek disfonksiyonu varsa (Cr düşük kas kütlesi nedeniyle gerçek GFR’yi maskeleyebilir!) renal klirense göre dikkatli doz ayarlaması yapılmalıdır.',
         ]}
+        {...STANDALONE_ORGAN_PART2['tranexamic-acid']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}

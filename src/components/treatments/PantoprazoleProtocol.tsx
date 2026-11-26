@@ -28,6 +28,7 @@ import {
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
 } from './shared/DrugMonographBlocks';
+import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
 type CalcTab = 'ugib' | 'icu_sup' | 'periop_peds';
@@ -1567,6 +1568,7 @@ export const PantoprazoleProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) 
           'Akut Üst GİS Kanaması İstisnası: Sirotik hastada akut kanamada kısa süreli (72 sa) standart IV protokol uygulanabilir; ancak varis kanaması şüphesinde asıl hayat kurtarıcı tedavi Vazoaktif ajan (Oktreotid/Terlipressin) + Antibiyotik profilaksisi (Seftriakson) + Acil Endoskopik Bant Ligasyonudur!',
           'Sirozda Kronik PPI Riski: Endikasyonsuz kronik PPI kullanımı sirotik hastalarda Spontan Bakteriyel Peritonit (SBP) ve hepatik ensefalopati riskini artırabilir — yalnızca net endikasyonda sürdürün.',
         ]}
+        {...STANDALONE_ORGAN_PART2['pantoprazole']}
       />
 
       {/* ─────────────────────────────────────────────────────────────────── */}
