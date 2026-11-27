@@ -3,6 +3,7 @@ import type { OrganImpairmentMatrixPayload } from '../../components/treatments/s
 export type StandaloneOrganPart2Id =
   | 'aspirin'
   | 'clopidogrel'
+  | 'heparin'
   | 'ibuprofen'
   | 'ketamine'
   | 'lidocaine'
@@ -1481,6 +1482,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Ağır karaciğer yetmezliğinde (Child-Pugh C) CYP3A4 klirensi durur; üstüne böbrek yetmezliği (üremi) eklenirse diyalizle de temizlenemeyen ve trombosit transfüzyonuyla geri çevrilemeyen ölümcül kanama gelişir — KESİNLİKLE YASAKTIR!',
+  },
+
+  heparin: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (aPTT / Anti-Xa / ACT Titre)',
+        tone: 'emerald',
+        note: 'Terapötik dozlarda ağırlıklı olarak endotel ve retiküloendotelyal makrofajlarca hızlı/doyurulabilir yolla temizlenir (t½ ~60 dk); yüksek dozlarda renal atılım devreye girer. Standart nomogram uygulanır.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: '%100 Standart (Doz Ayarı Yok)',
+        tone: 'emerald',
+        note: 'Doz ayarlaması gerekmez; aPTT (1,5–2,5×) veya anti-Xa (0,3–0,7 IU/mL) ile standart titre edilir.',
+      },
+      {
+        stage: 'Ağır KBY / ABH (eGFR < 30 mL/dk)',
+        doseBadge: '1. TERCİH ANTİKOAGÜLAN! (%100 Standart · Titre)',
+        tone: 'emerald',
+        note: 'DMAH (Enoksaparin) ve DOAC’lardan farklı olarak ağır KBY ve ABH’de birikmez, kısa yarı ömürlüdür ve Protaminle %100 geri çevrilebilir! Profilaksi: 5.000 IU SC q8–12sa; tedavi: standart IV nomogram (yüksek üremik kanama riskini izle!).',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'Diyaliz Devre 1. Tercih · Diyalizlenmez (Protaminle Geri Döner)',
+        tone: 'sky',
+        note: 'Büyük molekül ağırlığı (3.000–30.000 Da) nedeniyle hemodiyalizle uzaklaştırılmaz — post-HD ek doz gerekmez. Diyaliz devresi antikoagülasyonu ve ESRD VTE tedavisinde 1. tercihtir (tipik HD devresi: 25–50 IU/kg bolus → 500–1.500 IU/sa).',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: '%100 Standart (1. Tercih Parenteral Antikoagülan)',
+        tone: 'sky',
+        note: 'Periton diyalizinde standart SC/IV protokollerle güvenle kullanılır (peritonit fibrin tıkaçlarında intraperitoneal 500–1.000 IU/L eklenebilir).',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'Standart Sistemik / Devre İçi (aPTT / Anti-Xa İzle)',
+        tone: 'indigo',
+        note: 'Bölgesel sitrat antikoagülasyonu yoksa CRRT devre antikoagülasyonunda 5–10 IU/kg/sa pre-filtre infüzyonla kullanılır; sistemik tedavide CRRT ile temizlenmez, kanama ve HIT açısından günlük trombosit izlenir!',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (aPTT / Anti-Xa İzle)',
+        tone: 'emerald',
+        detail:
+          'Kompanse sirozda standart IV/SC dozlar uygulanabilir; ancak bazal aPTT uzunsa izlemde aPTT yerine Anti-Xa (0,3–0,7 IU/mL) tercih edin.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Dikkatle Titre · Anti-Xa İzle · AT-III Eksikliği!',
+        tone: 'amber',
+        detail:
+          'Sirozda iki zıt tuzak vardır: (1) Bazal aPTT/INR uzunluğu nedeniyle aPTT heparini olduğundan fazla gösterir; (2) Hepatik Antitrombin-III sentezi düştüğünden paradoksal "heparin direnci" görülebilir! Ayrıca özofagus varis kanaması riski yüksektir.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'Yüksek Kanama Riski · Çok Yakın Anti-Xa & Varis İzlemi',
+        tone: 'rose',
+        detail:
+          'Aktif varis kanaması yoksa ve kesin tromboz (örn. akut portal ven trombozu/PE) mevcutsa UFH kısa ömürlü ve Protaminle geri çevrilebilir olduğu için dikkatle titre edilerek (başlangıç bolusu atlanarak veya düşük infüzyonla, Anti-Xa hedefli) kullanılabilir; aktif kanamada kontrendikedir!',
+      },
+    ],
+    dualOrganNote:
+      'Kombine hepatorenal yetmezlikte UFH birikmeyen ve Protaminle anında nötralize edilebilen tek parenteral antikoagülandır; ancak bazal aPTT bozukluğu + AT-III eksikliği + üremik trombosit disfonksiyonu nedeniyle mümkünse Anti-Xa düzeyiyle ve bolussuz/düşük başlangıç hızıyla titre edilmelidir.',
   },
 };
 

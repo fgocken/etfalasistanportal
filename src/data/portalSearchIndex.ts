@@ -3377,6 +3377,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'ticagrelor',
     popular: true
   },
+  {
+    id: 'treatment-heparin-protocol',
+    title: 'Standart Heparin / UFH (Nevparin® · Vasparin® · Koparin® 25.000 IU / 5 mL) Antitrombotik · Parenteral Antikoagülan',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'ISMP High-Alert · VTE/AKS/KPB/Vasküler · %100 Protamin · HIT 4T · ASRA',
+    description: 'Antitrombin-III aracılı indirekt FIIa/FXa inhibitörü; VTE (80/18), AKS (60/12), KPB (300–400 IU/kg · ACT ≥480), vasküler klemp, SC profilaksi (eGFR <30 1. tercih), zaman bazlı Protamin Sülfat antidot hesaplayıcısı, HIT 4T skoru ve ASRA 2018 nöraksiyel rehberi.',
+    keywords: [
+      'heparin', 'standart heparin', 'ufh', 'unfractionated heparin', 'fraksiyone olmayan heparin',
+      'nevparin', 'vasparin', 'koparin', 'poliparin', 'antitrombotik', 'antikoagülan', 'protamin',
+      'protamin sülfat', 'hit', '4t skoru', 'raschke', 'aptt', 'act', 'anti-xa', 'kpb', 'bypass',
+      'heparin direnci', 'at-iii', 'asra', 'heparin rebound'
+    ],
+    tabId: 'treatments',
+    subId: 'heparin',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

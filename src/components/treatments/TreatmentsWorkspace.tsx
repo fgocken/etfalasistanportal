@@ -68,6 +68,7 @@ import { AcetylsalicylicAcidProtocol } from './AcetylsalicylicAcidProtocol';
 import { ClopidogrelProtocol } from './ClopidogrelProtocol';
 import { PrasugrelProtocol } from './PrasugrelProtocol';
 import { TicagrelorProtocol } from './TicagrelorProtocol';
+import { UnfractionatedHeparinProtocol } from './UnfractionatedHeparinProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2262,6 +2263,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'heparin',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Parenteral Antikoagülan (İndirekt FIIa/FXa · IV / SC)',
+    badge: 'ISMP High-Alert · Nevparin® 25.000 IU / 5 mL · Protamin · HIT 4T',
+    title: 'Standart Heparin / UFH (Nevparin® · Vasparin® · Koparin®)',
+    shortDesc: 'AT-III aracılı 1:1 FIIa/FXa inhibitörü; VTE (80/18 Raschke), AKS (60/12), KPB (300–400 IU/kg · ACT ≥480), vasküler klemp, KBY/ABH 1. tercih SC profilaksi, zaman bazlı Protamin antidot hesaplayıcısı, HIT 4T skoru ve ASRA 2018 nöraksiyel rehberi.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'VTE / AKS & KPB / Vasküler',
+        value: 'VTE 80/18 · KPB 300–400 IU/kg',
+        subtext: 'AKS 60/12 (4.000 / 1.000 tavan) · SC 5.000',
+        tooltip: 'VTE: 80 IU/kg bolus → 18 IU/kg/sa (aPTT 1,5–2,5×); AKS: 60 IU/kg (maks 4.000) → 12 IU/kg/sa (maks 1.000); KPB: 300–400 IU/kg (ACT ≥480 sn).',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: '%100 Antidot: Protamin Sülfat',
+        value: '1 mg / 100 IU · ≤5 mg/dk IV',
+        subtext: 'Non-KPB maks 50 mg · ≥10–15 dk yavaş!',
+        tooltip: 'Hızlı Protamin puşesi hipotansiyon, anafilaksi ve ani pulmoner hipertansiyon/RV yetmezliği (Tip III) tetikler; bolustan geçen süreye göre doz azaltılır!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'KBY/ABH & Gebelik Avantajı',
+        value: 'eGFR <30 1. Tercih · Plasenta ❌',
+        subtext: 'Diyalizlenmez · 36. hf doğum geçişi',
+        tooltip: 'DMAH’tan farklı olarak ağır böbrek yetmezliğinde birikmez, Protaminle anında nötralize olur, plasentaya ve anne sütüne geçmez!',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      },
+      {
+        label: 'HIT Tip II (4T) & ASRA 2018',
+        value: '4T ≥4 → KES · ASRA 4–6 sa + aPTT',
+        subtext: '5.000 IU/mL flakonu ASLA flush yapma!',
+        tooltip: 'HIT’te DMAH, erken Varfarin (<150.000 Plt) ve profilaktik trombosit YASAK! ASRA: Terapötik IV 4–6 sa kes + normal aPTT; intraop vasküler heparin ponksiyondan ≥1 sa sonra!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2498,6 +2550,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     tikagrel: 'ticagrelor',
     tikalor: 'ticagrelor',
     tikarda: 'ticagrelor',
+    ufh: 'heparin',
+    'standart-heparin': 'heparin',
+    'unfractionated-heparin': 'heparin',
+    nevparin: 'heparin',
+    vasparin: 'heparin',
+    koparin: 'heparin',
+    poliparin: 'heparin',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3362,7 +3421,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <TicagrelorProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 45–61: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 45: STANDART HEPARİN (UFH) MONOGRAFİSİ & RASCHKE / KPB / PROTAMİN / HIT 4T / ASRA 2018 HESAPLAYICISI */}
+      {normalizedProtocolId === 'heparin' && (
+        <UnfractionatedHeparinProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 46–62: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}
