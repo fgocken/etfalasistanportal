@@ -1,6 +1,7 @@
 import type { OrganImpairmentMatrixPayload } from '../../components/treatments/shared/DrugMonographBlocks';
 
 export type StandaloneOrganPart2Id =
+  | 'aspirin'
   | 'ibuprofen'
   | 'ketamine'
   | 'lidocaine'
@@ -1213,6 +1214,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Tenoksikamın >%99 albumin bağlanması ve ~72 saatlik yarı ömrü nedeniyle hepatorenal yetmezlikte veya hipoalbuminemide (<2,5 g/dL) serbest ilaç hızla yükselir, diyalizle temizlenemez ve renal/GİS toksisitesi 10–15 gün boyunca devam eder — KESİNLİKLE YASAKTIR!',
+  },
+
+  aspirin: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (Düşük & Yüksek Doz)',
+        tone: 'emerald',
+        note: 'ASA dakikalar içinde salisilik aside hidrolize olur (t½ ~15–20 dk; salisilat t½ terapötik dozda 2–3 sa, yüksek dozda sıfırıncı derece kinetikle 15–30 sa!). İdrar pH’sı arttıkça (alkali idrar) salisilat atılımı hızla artar.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: '81–100 mg DEVAM · Yüksek Dozdan KAÇIN',
+        tone: 'amber',
+        note: 'Kardiyoprotektif düşük doz (81–100 mg/gün) böbrek fonksiyonunu anlamlı bozmaz ve sekonder CV korumada güvenle sürdürülür. Ancak analjezik/antiinflamatuar yüksek dozlardan (≥1–3 g/gün) salisilat birikimi ve ABH riskiyle kaçının!',
+      },
+      {
+        stage: 'Ağır KBY / ABH (eGFR < 30 mL/dk)',
+        doseBadge: '81–100 mg Seçilmiş KAH · Yüksek Doz YASAK!',
+        tone: 'rose',
+        note: 'Yüksek doz (analjezik/perikardit) salisilat birikimi, üremik kanama ve renal PG blokajı nedeniyle KONTRENDİKEDİR! Sekonder CV koruma (stent/AKS) için 81–100 mg/gün fayda/zarar dengesiyle verilebilir (+ PPI); primer korumada kullanmayın.',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'Diyalizlenebilir! · 81–100 mg Post-HD / Günlük',
+        tone: 'sky',
+        note: 'Klasik NSAİİ’lerden farklı olarak salisilat küçük molekül ağırlığı ve doz bağımlı düşük-orta protein bağlanmasıyla HEMODİYALİZLE ETKİN TEMİZLENİR (salisilat zehirlenmesinde hayat kurtarıcı EXTRIP tedavisi!). KAH/stent hastasında 81–100 mg/gün genelde sürdürülür (kanama/fistül hematomu + PPI izlemiyle).',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: '81–100 mg Sekonder KAH · Yüksek Doz YASAK',
+        tone: 'sky',
+        note: 'Periton diyalizi salisilat temizliğinde HD kadar etkin değildir. Sekonder CV koruma için 81–100 mg/gün kullanılabilir; yüksek analjezik/antiinflamatuar dozlardan kesinlikle kaçının.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: '81–100 mg (Stent/AKS) · Yüksek Doz YASAK',
+        tone: 'indigo',
+        note: 'Salisilat CRRT ile kısmen temizlenir (ancak ağır salisilat toksisitesinde CRRT yerine yüksek akımlı İntermittan HD 1. tercihtir!). YBÜ’de taze koroner stent/AKS varsa 81–100 mg/gün + IV PPI sürdürülür; analjezik amaçlı kullanılmaz.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '81–100 mg KAH Dikkatle · Yüksek Dozdan KAÇIN',
+        tone: 'amber',
+        detail:
+          'Salisilatın hepatik glisin/glukuronid konjugasyonu yavaşlayabilir. Kompanse sirozda sekonder KAH/stent endikasyonu varsa düşük doz (81–100 mg/gün + PPI) sürdürülebilir; yüksek analjezik/antiinflamatuar dozlardan kaçının.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Yüksek Doz YASAK · Düşük Doz Sadece Kesin KAH',
+        tone: 'rose',
+        detail:
+          'Portal hipertansiyon, trombositopeni ve koagülopati nedeniyle GİS/varis kanaması riski çok yüksektir; ayrıca hipoalbuminemi serbest salisilat düzeyini artırır. Sadece zorunlu koroner stent/AKS’de kardiyoloji-hepatoloji ortak kararıyla 81–100 mg + PPI.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'Yüksek Doz KONTRENDİKE · Düşük Doz Çok Yüksek Kanama Riski',
+        tone: 'rose',
+        detail:
+          'Ağır sirozda yüksek doz ASA kesinlikle kontrendikedir (HRS-AKI, masif varis kanaması, salisilat hepatotoksisitesi). Düşük doz antiplatelet kullanımı dahi yüksek varis kanaması ve ağır trombositopeni nedeniyle ancak çok seçilmiş akut koroner olaylarda yakın izlemle değerlendirilir.',
+      },
+    ],
+    dualOrganNote:
+      'Ağır hepatorenal yetmezlikte veya hipoalbuminemide salisilatın hem hepatik konjugasyonu hem de renal atılımı bozulur; yüksek doz salisilat toksisitesi, metabolik asidoz ve varis/GİS kanaması ölümcül seyreder — yüksek doz ASA kesinlikle yasaktır!',
   },
 };
 

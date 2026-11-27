@@ -64,6 +64,7 @@ import { ParacetamolProtocol } from './ParacetamolProtocol';
 import { IbuprofenProtocol } from './IbuprofenProtocol';
 import { MetamizoleProtocol } from './MetamizoleProtocol';
 import { TenoxicamProtocol } from './TenoxicamProtocol';
+import { AcetylsalicylicAcidProtocol } from './AcetylsalicylicAcidProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -72,7 +73,7 @@ interface Props {
   initialProtocolId?: string | null;
 }
 
-type TreatmentCategory = 'medications' | 'general_anesthetics' | 'analgesics' | 'antipyretics' | 'antihypertensives' | 'antibiotics' | 'sedation' | 'antidotes' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
+type TreatmentCategory = 'medications' | 'general_anesthetics' | 'analgesics' | 'antipyretics' | 'antithrombotics' | 'antihypertensives' | 'antibiotics' | 'sedation' | 'antidotes' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 type SodiumViewMode = 'all' | 'calc' | 'infographic';
@@ -2054,6 +2055,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'aspirin',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics', 'analgesics', 'antipyretics'],
+    categoryLabel: 'Antitrombotik (Antiplatelet) · Analjezik & Antipiretik (PO)',
+    badge: 'Coraspin® · Ecopirin® 81–300 mg · ESC 2022/2023 · ASRA 2018 · EXTRIP',
+    title: 'Asetilsalisilik Asit / Aspirin (Coraspin® · Ecopirin® · Aspirin®)',
+    shortDesc: 'Geri dönüşsüz trombosit COX-1 inhibitörü (7–10 gün etki); AKS 150–300 mg çiğneme yüklemesi, 75–100 mg sekonder koruma, ASPRE preeklampsi (100–150 mg/gece), ESC 2022 & ASRA 2018 perioperatif/nöraksiyel karar motoru, Reye sendromu ve salisilat toksisitesi (NaHCO₃ / EXTRIP HD).',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'AKS / İnme Yükleme & İdame',
+        value: '150–300 mg ÇİĞNE → 100 mg/gün',
+        subtext: 'Enterik tableti AKS’de bütün YUTMA!',
+        tooltip: 'STEMI/NSTEMI’de non-enterik 150–300 mg çiğnenerek 15–30 dk’da etki eder; akut inmede tPA sonrası 24 saat dolmadan ASA başlanmaz!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Perioperatif & ASRA 2018',
+        value: 'Nöraksiyel & KABG: DEVAM',
+        subtext: 'Primer koruma (POISE-2): 7g önce KES',
+        tooltip: 'İzole düşük doz ASA (75–100 mg) spinal/epidural blok için kontrendike değildir; sekonder KAH/stent ve KABG’de sürdürülür!',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Preeklampsi & Perikardit',
+        value: '100–150 mg Gece (12–36 hf)',
+        subtext: 'Perikardit: 750–1000 mg q8sa + PPI',
+        tooltip: 'ASPRE / ACOG: Yüksek riskli gebelikte düşük doz ASA güvenlidir ve preeklampsiyi >%60 azaltır; yüksek doz 3. trimesterde yasaktır!',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      },
+      {
+        label: 'Reye · COX-1 · Toksisite',
+        value: '<18y Reye · NaHCO₃ / EXTRIP HD',
+        subtext: 'İbuprofen/Metamizol ≥30–60 dk SONRA',
+        tooltip: '<16–18 yaş viral ateşte Reye sendromu nedeniyle yasak; salisilat zehirlenmesinde gereksiz entübasyondan kaçın, IV NaHCO₃ + HD uygula!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2124,6 +2176,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
   const generalAnestheticsCount = getCategoryCount('general_anesthetics');
   const analgesicsCount = getCategoryCount('analgesics');
   const antipyreticsCount = getCategoryCount('antipyretics');
+  const antithromboticsCount = getCategoryCount('antithrombotics');
   const antihypertensivesCount = getCategoryCount('antihypertensives');
   const antibioticsCount = getCategoryCount('antibiotics');
   const sedationCount = getCategoryCount('sedation');
@@ -2261,6 +2314,14 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     tenoktil: 'tenoxicam',
     viena: 'tenoxicam',
     tenox: 'tenoxicam',
+    'asetilsalisilik-asit': 'aspirin',
+    asetilsalisilik: 'aspirin',
+    asa: 'aspirin',
+    coraspin: 'aspirin',
+    ecopirin: 'aspirin',
+    'aspirin-protect': 'aspirin',
+    dispril: 'aspirin',
+    salisilat: 'aspirin',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -2567,6 +2628,27 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <span>Antibiyotikler</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono font-bold">
                 {antibioticsCount} Ajan
+              </span>
+            </button>
+
+            {/* Antitrombotikler */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('antithrombotics')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'antithrombotics'
+                  ? isDark 
+                    ? 'bg-red-500/20 text-red-300 border border-red-500/50 shadow-xs' 
+                    : 'bg-red-50 text-red-800 border border-red-400 shadow-xs'
+                  : isDark 
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent' 
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <HeartPulse className="w-3.5 h-3.5 text-red-500" />
+              <span>Antitrombotikler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-red-500/20 text-red-700 dark:text-red-300 font-mono font-bold">
+                {antithromboticsCount} İlaç
               </span>
             </button>
 
@@ -3084,7 +3166,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <TenoxicamProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 41–57: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 41: ASETİLSALİSİLİK ASİT / ASPİRİN MONOGRAFİSİ & AKS / ASRA 2018 / SALİSİLAT TOKSİKOLOJİ HESAPLAYICISI */}
+      {normalizedProtocolId === 'aspirin' && (
+        <AcetylsalicylicAcidProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 42–58: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}
@@ -3101,6 +3188,7 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
             {activeCategory === 'general_anesthetics' && 'Genel Anestezikler (İnhalasyon & IV)'}
             {activeCategory === 'analgesics' && 'Analjezikler & Opioidler'}
             {activeCategory === 'antipyretics' && 'Antipiretikler'}
+            {activeCategory === 'antithrombotics' && 'Antitrombotikler (Antiplatelet & Antikoagülanlar)'}
             {activeCategory === 'antihypertensives' && 'Anti-hipertansifler'}
             {activeCategory === 'antibiotics' && 'Antibiyotikler & Antifungaller'}
             {activeCategory === 'antidotes' && 'Antidotlar'}

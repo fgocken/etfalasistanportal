@@ -3316,6 +3316,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'tenoxicam',
     popular: true
   },
+  {
+    id: 'treatment-aspirin-protocol',
+    title: 'Asetilsalisilik Asit / Aspirin (Coraspin® · Ecopirin® 81–300 mg · Aspirin® 500 mg) Antitrombotik, Analjezik & Antipiretik',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Antitrombotik (COX-1) · AKS / İnme / Preeklampsi · ASRA 2018 · EXTRIP',
+    description: 'Geri dönüşsüz trombosit COX-1 inhibitörü (7–10 gün etki); AKS 150–300 mg çiğneme yüklemesi, 75–100 mg sekonder koruma, ASPRE preeklampsi profilaksisi (100–150 mg/gece), ESC 2022 & ASRA 2018 perioperatif/nöraksiyel karar motoru, Reye sendromu ve salisilat toksisitesi (NaHCO₃ / EXTRIP diyaliz).',
+    keywords: [
+      'asetilsalisilik asit', 'asetilsalisilik', 'aspirin', 'asa', 'coraspin', 'ecopirin', 'aspirin protect',
+      'dispril', 'salisilat', 'antitrombotik', 'antiplatelet', 'antiagregan', 'kan sulandırıcı', 'analjezik',
+      'antipiretik', 'aks', 'stemi', 'nstemi', 'stent', 'dapt', 'preeklampsi', 'aspre', 'perikardit',
+      'kawasaki', 'reye', 'asra', 'poise-2', 'extrip', 'salisilat zehirlenmesi'
+    ],
+    tabId: 'treatments',
+    subId: 'aspirin',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,
