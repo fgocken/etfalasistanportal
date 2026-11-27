@@ -3347,6 +3347,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'clopidogrel',
     popular: true
   },
+  {
+    id: 'treatment-prasugrel-protocol',
+    title: 'Prasugrel (Effient® · Efient® · Prasugel® · Prensor® 10/5 mg) Antitrombotik · 3. Kuşak P2Y₁₂ İnhibitörü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Antitrombotik (P2Y₁₂) · ISAR-REACT 5 · İnme/TIA YASAK · ASRA 7–10g',
+    description: 'Tek basamaklı CYP3A4/2B6 aktivasyonlu (CYP2C19 & PPI bağımsız) geri dönüşsüz P2Y₁₂ antiplatelet; PCI’ya giden NSTE-ACS’de ESC 2023 tercih ajanı (60→10 mg, <60 kg/≥75y 5 mg), inme/TIA mutlak kontrendike, anjiyo öncesi yasak (ACCOAST), cerrahi/KABG 7g & ASRA 7–10g kesme.',
+    keywords: [
+      'prasugrel', 'effient', 'efient', 'prasugel', 'prensor', 'pragrel', 'antitrombotik', 'antiplatelet',
+      'antiagregan', 'p2y12', 'tiyenopiridin', 'isar-react 5', 'triton-timi 38', 'accoast', 'dapt',
+      'asra', 'stent', 'pci', 'inme kontrendike', '5 mg'
+    ],
+    tabId: 'treatments',
+    subId: 'prasugrel',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

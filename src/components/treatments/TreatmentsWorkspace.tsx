@@ -66,6 +66,7 @@ import { MetamizoleProtocol } from './MetamizoleProtocol';
 import { TenoxicamProtocol } from './TenoxicamProtocol';
 import { AcetylsalicylicAcidProtocol } from './AcetylsalicylicAcidProtocol';
 import { ClopidogrelProtocol } from './ClopidogrelProtocol';
+import { PrasugrelProtocol } from './PrasugrelProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2158,6 +2159,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'prasugrel',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · 3. Kuşak Geri Dönüşsüz P2Y₁₂ İnhibitörü (PO)',
+    badge: 'Effient® · Prasugel® 10/5 mg · ISAR-REACT 5 · ASRA 7–10g',
+    title: 'Prasugrel (Effient® · Efient® · Prasugel® · Prensor®)',
+    shortDesc: 'Hızlı 1-basamaklı CYP3A4/2B6 aktivasyonlu (CYP2C19 & PPI bağımsız) geri dönüşsüz P2Y₁₂ antiplatelet; PCI’ya giden NSTE-ACS’de ESC 2023 tercih ajanı (60→10 mg, <60 kg/≥75y: 5 mg), inme/TIA mutlak kontrendike, anjiyo öncesi yasak (ACCOAST), cerrahi/KABG 7g & ASRA 7–10g kesme.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'PCI Yükleme & Doz Azaltımı',
+        value: '60 mg → 10 mg q24sa',
+        subtext: '<60 kg veya seçilmiş ≥75y: 5 mg!',
+        tooltip: 'ISAR-REACT 5 / ESC 2023: Anjiyo sonrası PCI kararıyla 60 mg yükleme (30–60 dk etki), ≥60 kg ve <75 yaşta 10 mg/gün; <60 kg’da mutlaka 5 mg/gün!',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: '3 Mutlak Kırmızı Çizgi',
+        value: 'İnme/TIA · Anjiyo Öncesi YASAK',
+        subtext: 'Fibrinoliz & AF+DOAC’ta KULLANMA!',
+        tooltip: 'Geçirilmiş inme/TIA’da FDA Kutu Uyarısı MUTLAK KONTRENDİKE (TRITON-TIMI 38); NSTE-ACS’de anjiyografi öncesi ön-tedavi ESC Sınıf III ZARAR (ACCOAST)!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'En Uzun Kesme Süresi!',
+        value: 'Cerrahi/KABG 7g · ASRA 7–10g',
+        subtext: 'KABG <7g = 4× Majör Kanama!',
+        tooltip: 'Oral P2Y₁₂’ler içinde en uzun kesme süresi gerekir: elektif cerrahi/KABG ≥7 gün, spinal/epidural blok 7–10 gün önceden kesilir!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'CYP2C19 Bağımsız & Acil Plt',
+        value: 'PPI Etkileşimsiz · 2 Ü Plt (>6 sa)',
+        subtext: 'Dispne/bradikardi YOK · Günde 1×',
+        tooltip: 'Omeprazol/CYP2C19 polimorfizminden etkilenmez; acil kanamada son dozdan ≥4–6 sa sonra 2 ünite aferez trombosit etkindir.',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2383,6 +2435,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     baclan: 'clopidogrel',
     klogel: 'clopidogrel',
     duoplavin: 'clopidogrel',
+    effient: 'prasugrel',
+    efient: 'prasugrel',
+    prasugel: 'prasugrel',
+    prensor: 'prasugrel',
+    pragrel: 'prasugrel',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3237,7 +3294,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <ClopidogrelProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 43–59: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 43: PRASUGREL (3. KUŞAK P2Y12 İNHİBİTÖRÜ) MONOGRAFİSİ & TRITON/ACCOAST/ISAR-REACT 5 / ASRA 7–10G HESAPLAYICISI */}
+      {normalizedProtocolId === 'prasugrel' && (
+        <PrasugrelProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 44–60: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

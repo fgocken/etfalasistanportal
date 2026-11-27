@@ -14,6 +14,7 @@ export type StandaloneOrganPart2Id =
   | 'pantoprazole'
   | 'paracetamol'
   | 'pheniramine'
+  | 'prasugrel'
   | 'sevoflurane'
   | 'sodium-bicarbonate'
   | 'sodium-nitroprusside'
@@ -1347,6 +1348,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Kombine ağır karaciğer yetmezliği (Child-Pugh C) + böbrek yetmezliğinde (HRS/üremi) hem pıhtılaşma faktör eksikliği hem üremik trombosit disfonksiyonu birleşerek masif kanama yaratır — Klopidogrel kontrendikedir!',
+  },
+
+  prasugrel: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (10 mg · <60 kg: 5 mg)',
+        tone: 'emerald',
+        note: 'İntestinal/plazma esterazı (hCE2) ardından tek basamakta CYP3A4/CYP2B6 ile aktif R-138727’ye dönüşür; inaktif metabolitlerin ~%68’i idrar, ~%27’si feçesle atılır. Standart doz uygulanır.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: '%100 Standart (Doz Azaltılmaz · Kanama İzle)',
+        tone: 'emerald',
+        note: 'Aktif metabolit maruziyeti anlamlı değişmez, doz ayarı gerekmez; ancak orta KBY’de majör kanama riski arttığından mutlaka Pantoprazol 40 mg/gün ekleyin ve <60 kg / ≥75 yaş kurallarına dikkat edin.',
+      },
+      {
+        stage: 'Ağır KBY / ABH (eGFR < 30 mL/dk)',
+        doseBadge: 'Sınırlı Deneyim · Çok Yüksek Kanama Riski (Klopidogrel Düşün)',
+        tone: 'amber',
+        note: 'ESRD / ağır KBY’de aktif metabolit maruziyeti ~%40 azalmakla birlikte üremik trombosit disfonksiyonu ve güçlü P2Y₁₂ blokajı ağır kanamaya yol açar; deneyim kısıtlıdır, çoğu merkezde Klopidogrel tercih edilir.',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'Diyalizlenmez · Sınırlı Deneyim / Dikkat!',
+        tone: 'rose',
+        note: 'Aktif metabolit R-138727 ~%98 albumin bağlı ve trombositlere kovalent bağlı olduğundan HEMODİYALİZLE TEMİZLENMEZ! Diyaliz hastalarında klinik veri kısıtlı ve kanama riski yüksek olduğundan dikkatle kaçının (Klopidogrel daha deneyimlidir).',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'Sınırlı Deneyim · Yüksek Kanama Riski',
+        tone: 'amber',
+        note: 'Periton diyalizinde veri kısıtlıdır; yüksek kanama riski nedeniyle dikkatli bireysel değerlendirme gerekir (Klopidogrel alternatifi değerlendirilir).',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'CRRT İle Temizlenmez · Kanama Riski Çok Yüksek',
+        tone: 'indigo',
+        note: 'Kovalent trombosit bağlanması ve ~%98 protein bağlanması nedeniyle CRRT ile uzaklaştırılamaz; kritik septik/ABH hastasında majör YBÜ kanaması açısından yakın takip ve IV PPI zorunludur.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (10 mg · <60 kg: 5 mg)',
+        tone: 'emerald',
+        detail:
+          'Hafif karaciğer bozukluğunda aktif metabolit (R-138727) farmakokinetiği ve trombosit inhibisyonu değişmez; standart doz (+ PPI) güvenle uygulanır.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Dikkatle Kullanım (Kanama & Varis Riski!)',
+        tone: 'amber',
+        detail:
+          'Orta sirozda PK büyük ölçüde korunur ancak portal hipertansiyon, trombositopeni ve özofagus varis kanaması nedeniyle güçlü P2Y₁₂ blokajı yüksek kanama riski taşır — endoskopik kontrol + PPI şarttır.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'MUTLAK KONTRENDİKE (EMA / TR SmPC!)',
+        tone: 'rose',
+        detail:
+          'Ağır karaciğer yetmezliğinde ağır koagülopati ve hayatı tehdit eden varis/GİS kanaması riski nedeniyle EMA ve TR kısa ürün bilgisine göre KESİNLİKLE KONTRENDİKEDİR!',
+      },
+    ],
+    dualOrganNote:
+      'Kombine ağır karaciğer yetmezliği (Child-Pugh C) + ileri böbrek yetmezliğinde (üremi) Prasugrelin güçlü ve 7–10 gün süren geri dönüşsüz trombosit blokajı ölümcül hemoraji yaratır — KESİNLİKLE KONTRENDİKEDİR!',
   },
 };
 
