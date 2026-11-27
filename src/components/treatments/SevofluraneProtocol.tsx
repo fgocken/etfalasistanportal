@@ -20,12 +20,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 
@@ -77,7 +79,7 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
   const [dialPercent, setDialPercent] = useState<number>(2.0); // Vaporizatör %
   const [caseHours, setCaseHours] = useState<number>(2.0); // saat
 
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   const ageInputId = useId();
   const n2oSelectId = useId();
@@ -302,7 +304,7 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. FARMAKOKİNETİK & FİZİKOKİMYA (AKORDİYON) */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
@@ -413,18 +415,14 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* 4. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar ve Uygulama Protokolleri"
+        icon={<Stethoscope className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-4"
       >
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-            Klinik Endikasyonlar ve Uygulama Protokolleri
-          </h3>
-        </div>
 
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
           <table className="w-full text-left text-xs">
@@ -470,30 +468,26 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
             </tbody>
           </table>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* 2. İNTERAKTİF MAC & TÜKETİM HESAPLAYICISI */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border space-y-5 ${
-          isDark ? 'bg-slate-900/95 border-amber-500/30 shadow-xl' : 'bg-white border-amber-200 shadow-lg'
-        }`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
-              <Gauge className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                İnteraktif Yaş-Düzeltmeli MAC &amp; Sıvı Tüketimi Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Mapleson yaş formülü, N₂O/opioid aditif etkisi, hipotermi düzeltmesi ve taze gaz akımına (FGF) göre şişe tüketimi
-              </p>
-            </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Yaş-Düzeltmeli MAC & Sıvı Tüketimi Hesaplayıcısı"
+        subtitle="Mapleson yaş formülü, N₂O/opioid aditif etkisi, hipotermi düzeltmesi ve taze gaz akımına (FGF) göre şişe tüketimi"
+        icon={
+          <div className="p-2 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
+            <Gauge className="w-5 h-5" />
           </div>
-
+        }
+        defaultOpen={false}
+        containerClassName={
+          isDark ? 'bg-slate-900/95 border-amber-500/30 shadow-xl' : 'bg-white border-amber-200 shadow-lg'
+        }
+        bodyClassName="p-5 sm:p-6 space-y-5"
+      >
+        <div className="flex flex-wrap items-center justify-end gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
           <MonographCopyButton isDark={isDark} getText={getReportText} />
         </div>
 
@@ -772,7 +766,7 @@ export const SevofluraneProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
       <TurkeyFormulationBlock

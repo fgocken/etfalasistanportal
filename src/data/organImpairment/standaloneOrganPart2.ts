@@ -4,6 +4,7 @@ export type StandaloneOrganPart2Id =
   | 'aspirin'
   | 'clopidogrel'
   | 'enoxaparin'
+  | 'fondaparinux'
   | 'heparin'
   | 'ibuprofen'
   | 'ketamine'
@@ -1616,7 +1617,74 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     dualOrganNote:
       'Kombine karaciğer + böbrek yetmezliğinde (HRS / CrCl <30) Enoksaparin hızla birikir, diyalizle temizlenemez ve Protaminle tam geri çevrilemez — KESİNLİKLE Standart Heparin (UFH) tercih edilmelidir!',
   },
+
+  fondaparinux: {
+    renalMatrix: [
+      {
+        stage: 'CrCl ≥ 50 mL/dk (Normal / Hafif Azalmış)',
+        doseBadge: '%100 Standart (Prof. 2,5 mg · Tedavi 5 / 7,5 / 10 mg q24sa)',
+        tone: 'emerald',
+        note: 'İlaç karaciğerde metabolize olmaz, %100’e yakını (~%77–100) değişmeden böbreklerden elimine edilir (t½ 17–21 saat). CrCl ≥50 mL/dk ve ağırlık ≥50 kg (profilaksi için) ise standart günde tek doz güvenle verilir.',
+      },
+      {
+        stage: 'Orta KBY (CrCl 30–49 mL/dk)',
+        doseBadge: 'ÇOK DİKKAT! (Klirens −%40 · Kanama Riski Yüksek)',
+        tone: 'amber',
+        note: 'Renal klirens ~%40 azalır ve birikim/majör kanama riski belirgin yükselir! EMA KÜB profilakside 1,5 mg SC q24sa seçeneği tanır (TR’de 1,5 mg enjektör çoğu merkezde bulunmadığından 2,5 mg verilecekse çok yakın Cr/Hb izlemi yapın); terapötik antikoagülasyonda veya dalgalı ABH’de UFH/Enoksaparin tercih edin!',
+      },
+      {
+        stage: 'Ağır KBY / ABH (CrCl < 30 mL/dk)',
+        doseBadge: 'MUTLAK KONTRENDİKE! (FDA / EMA) → UFH SEÇ!',
+        tone: 'rose',
+        note: 'CrCl <30 mL/dk’da klirens ~%55–75 çöker, yarı ömür >30–40 saate uzar ve FATAL kanamaya yol açar! Üstelik Protamin Sülfat Fondaparinuksu %0 nötralize eder (spesifik antidot YOK!). Kesinlikle vermeyin — Standart Heparin (UFH) kullanın!',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'MUTLAK KONTRENDİKE! (HD yalnızca ~%20 temizler)',
+        tone: 'rose',
+        note: 'Hemodiyaliz Fondaparinuks klirensini yalnızca ~%20 artırır — etkili diyaliz temizlenmesi YOKTUR! Ağır birikim ve kontrolsüz kanama riski nedeniyle IHD hastasında kesinlikle kullanmayın (UFH seçin).',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'MUTLAK KONTRENDİKE! → UFH Kullanın',
+        tone: 'rose',
+        note: 'Periton diyalizi ile elimine edilmez; ciddi birikim ve geri çevrilemez kanama riski nedeniyle kesinlikle kontrendikedir.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'MUTLAK KONTRENDİKE! → UFH / Bölgesel Sitrat',
+        tone: 'rose',
+        note: 'CRRT’de klirens öngörülemez, 17–21+ saatlik uzun yarı ömür ve spesifik antidot yokluğu nedeniyle kritik YBÜ hastasında güvenli değildir — UFH veya bölgesel sitrat tercih edin!',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (Renal Atılım Baskın)',
+        tone: 'emerald',
+        detail:
+          'Fondaparinuks hepatik CYP enzimleriyle metabolize olmaz; böbrek fonksiyonu (CrCl ≥50 mL/dk) normalse doz ayarı gerekmez. Ancak bazal koagülasyon ve özofagus varis riski değerlendirilmelidir.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Dikkatle Kullanım · Kanama & AT-III İzlemi',
+        tone: 'amber',
+        detail:
+          'PK değişimi sınırlıdır (serbest fraksiyon hafif artabilir); ancak sirotik koagülopati, trombositopeni, düşük AT-III ve portal hipertansiyon nedeniyle kanama riski yüksektir — kısa ömürlü ve Protaminle nötralize edilebilen UFH daha güvenlidir.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'KAÇININ / ÖNERİLMEZ! (Ağır Kanama · Antidot Yok)',
+        tone: 'rose',
+        detail:
+          'Ağır hepatik yetmezlikte (Child-Pugh C) koagülasyon faktör eksikliği + trombositopeni + 17–21 saatlik geri çevrilemez etki ölümcül varis/intrakraniyal kanamaya yol açabilir (EMA KÜB: ağır karaciğer yetmezliğinde kullanmayın!).',
+      },
+    ],
+    dualOrganNote:
+      'Kombine hepatorenal yetmezlikte (HRS / CrCl <30 / Child-Pugh C) Fondaparinuks hem böbrekten atılamaz, hem diyalizle etkili temizlenemez, hem de Protamin ile %0 geri çevrilir — kesinlikle KONTRENDİKEDİR, Standart Heparin (UFH) seçilmelidir!',
+  },
 };
+
 
 
 

@@ -19,12 +19,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
@@ -38,7 +40,7 @@ type DilutionMode = 5 | 10 | 1;
 
 export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState<CalcTab>('intraop');
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // 1. İntraoperatif Bolus & Taşiflaksi Takip State
   const [patientGroup, setPatientGroup] = useState<PatientGroup>('adult');
@@ -315,7 +317,7 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. FARMAKOKİNETİK / FARMAKODİNAMİK (PK/PD) */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border p-5 sm:p-6 ${
+        className={`scroll-mt-20 rounded-2xl border p-5 sm:p-6 ${
           isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
         }`}
       >
@@ -410,18 +412,14 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* 5. KLİNİK ENDİKASYONLAR VE DOZ REJİMLERİ */}
-      <section
-        id="sec-dozlar"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri"
+        icon={<Syringe className={`h-5 w-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-4"
       >
-        <div className="flex items-center gap-2.5">
-          <Syringe className={`h-5 w-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri
-          </h3>
-        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs sm:text-sm">
@@ -499,28 +497,20 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
             </tbody>
           </table>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* 6. ETKİLEŞİMLİ DOZ, TAŞİFLAKSİ & OBSTETRİK KARAR HESAPLAYICISI */}
-      <section
-        id="sec-hesaplayici"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-5 ${
-          isDark ? 'border-purple-500/30 bg-slate-900/80' : 'border-purple-200 bg-white shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Etkileşimli Efedrin Bolus, Taşiflaksi & Obstetrik Karar Hesaplayıcısı"
+        subtitle="TR 50 mg/1 mL ampul sulandırma hacmi, kümülatif 50 mg tavan takibi ve sezaryen vazopresör seçimi"
+        icon={<Activity className={`h-5 w-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />}
+        defaultOpen={false}
+        containerClassName={isDark ? 'border-purple-500/30 bg-slate-900/80' : 'border-purple-200 bg-white shadow-xs'}
+        bodyClassName="p-5 sm:p-6 space-y-5"
       >
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <Activity className={`h-5 w-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-            <div>
-              <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Etkileşimli Efedrin Bolus, Taşiflaksi &amp; Obstetrik Karar Hesaplayıcısı
-              </h3>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                TR 50 mg/1 mL ampul sulandırma hacmi, kümülatif 50 mg tavan takibi ve sezaryen vazopresör seçimi
-              </p>
-            </div>
-          </div>
-
+        <div className="flex justify-end">
           <MonographCopyButton isDark={isDark} getText={getReportText} label="Yatak Başı Rapor Kopyala" />
         </div>
 
@@ -1018,7 +1008,7 @@ export const EphedrineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
       <TurkeyFormulationBlock

@@ -24,12 +24,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -121,7 +123,7 @@ const TAB_CONFIGS: Record<EsmololTabId, TabConfig> = {
 
 export const EsmololProtocol: React.FC<Props> = ({ isDark }) => {
   // --- AKORDİYON STATE ---
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // --- HESAPLAYICI STATE ---
   const [activeTab, setActiveTab] = useState<EsmololTabId>('intraop');
@@ -358,7 +360,7 @@ export const EsmololProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -497,21 +499,16 @@ export const EsmololProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ                             */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar & Kanıta Dayalı Doz Rejimleri"
+        icon={<BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        badge={<span className="hidden md:inline text-xs font-mono text-slate-500">Maks Erişkin: 200 (SVT) – 300 (HT) mcg/kg/dk</span>}
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'}
+        bodyClassName="p-5 sm:p-6"
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Klinik Endikasyonlar &amp; Kanıta Dayalı Doz Rejimleri
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Maks Erişkin: 200 (SVT) – 300 (HT) mcg/kg/dk</span>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* 1. İntraoperatif Taşikardi / HT & Laringoskopi */}
@@ -590,64 +587,56 @@ export const EsmololProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. İNTERAKTİF ÇOK SEKMELİ DOZ & POMPA HIZI HESAPLAYICISI            */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Esmolol Bolus & İnfüzyon Pompası Hesaplayıcısı"
+        subtitle="4 klinik endikasyon sekmesi, 10 mg/mL (periferik/premiks) vs 20 mg/mL (santral) pompa hızı ve bolus hacmi."
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+            <Syringe className="w-5 h-5" />
+          </div>
+        }
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'}
+        bodyClassName="p-5 sm:p-6"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif Esmolol Bolus &amp; İnfüzyon Pompası Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                4 klinik endikasyon sekmesi, 10 mg/mL (periferik/premiks) vs 20 mg/mL (santral) pompa hızı ve bolus hacmi.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <MonographCopyButton
-              isDark={isDark}
-              label="Klinik Order Kopyala"
-              getText={() =>
-                [
-                  `ESMOLOL HCl (BREVİBLOC) KLİNİK ORDER ÖZETİ`,
-                  `Endikasyon: ${tabCfg.title}`,
-                  `Hasta Ağırlığı: ${weightKg} kg`,
-                  `Hemodinamik Hedef: ${tabCfg.target}`,
-                  `Yükleme Bolusu (10 mg/mL hazır flakondan): ${bolusMgKg.toFixed(2)} mg/kg = ${calc.bolusTotalMg.toFixed(1)} mg (${calc.bolusVolumeMlFrom10.toFixed(1)} mL) — ${tabCfg.bolusDurationLabel}`,
-                  `İdame İnfüzyon Dozu: ${infusionMcgKgMin} mcg/kg/dk (${calc.doseMgMin.toFixed(2)} mg/dk · ${calc.hourlyMg.toFixed(0)} mg/saat)`,
-                  `Seçili Konsantrasyon: ${concLabel}`,
-                  `İnfüzyon Pompası Hızı: ${calc.pumpRateMlHr.toFixed(1)} mL/saat`,
-                  `24 Saatlik Tüketim: ${calc.dailyGrams.toFixed(2)} g/gün (${calc.dailyMl.toFixed(0)} mL/gün · ~${Math.ceil(calc.dailyPremixBags)} adet 2500 mg premiks torba)`,
-                  `GÜVENLİK: 250 mg/mL konsantre ampul ASLA direkt puşelenmez; >10 mg/mL konsantrasyon yalnızca SVK ile verilir.`,
-                ].join('\n')
-              }
-            />
-            <button
-              type="button"
-              onClick={handleReset}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
-                isDark
-                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
-                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Sıfırla</span>
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <MonographCopyButton
+            isDark={isDark}
+            label="Klinik Order Kopyala"
+            getText={() =>
+              [
+                `ESMOLOL HCl (BREVİBLOC) KLİNİK ORDER ÖZETİ`,
+                `Endikasyon: ${tabCfg.title}`,
+                `Hasta Ağırlığı: ${weightKg} kg`,
+                `Hemodinamik Hedef: ${tabCfg.target}`,
+                `Yükleme Bolusu (10 mg/mL hazır flakondan): ${bolusMgKg.toFixed(2)} mg/kg = ${calc.bolusTotalMg.toFixed(1)} mg (${calc.bolusVolumeMlFrom10.toFixed(1)} mL) — ${tabCfg.bolusDurationLabel}`,
+                `İdame İnfüzyon Dozu: ${infusionMcgKgMin} mcg/kg/dk (${calc.doseMgMin.toFixed(2)} mg/dk · ${calc.hourlyMg.toFixed(0)} mg/saat)`,
+                `Seçili Konsantrasyon: ${concLabel}`,
+                `İnfüzyon Pompası Hızı: ${calc.pumpRateMlHr.toFixed(1)} mL/saat`,
+                `24 Saatlik Tüketim: ${calc.dailyGrams.toFixed(2)} g/gün (${calc.dailyMl.toFixed(0)} mL/gün · ~${Math.ceil(calc.dailyPremixBags)} adet 2500 mg premiks torba)`,
+                `GÜVENLİK: 250 mg/mL konsantre ampul ASLA direkt puşelenmez; >10 mg/mL konsantrasyon yalnızca SVK ile verilir.`,
+              ].join('\n')
+            }
+          />
+          <button
+            type="button"
+            onClick={handleReset}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
+              isDark
+                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+                : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Sıfırla</span>
+          </button>
         </div>
 
         {/* Endikasyon Sekmeleri */}
@@ -1031,7 +1020,7 @@ export const EsmololProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ                         */}

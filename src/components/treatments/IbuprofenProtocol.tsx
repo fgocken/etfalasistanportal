@@ -21,12 +21,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -127,7 +129,7 @@ export const IbuprofenProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
   const [selectedFactors, setSelectedFactors] = useState<string[]>(['aspirin_low']);
 
   // Akordiyon State (Varsayılan Kapalı)
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik ID'leri
   const pedAgeSliderId = useId();
@@ -428,7 +430,7 @@ export const IbuprofenProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -591,21 +593,14 @@ export const IbuprofenProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ (#sec-dozlar)               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar & Doz Rejimleri (Genel Tıp · ERAS · ESC Perikardit · Pediatri · PDA)"
+        subtitle="IV ≤4 mg/mL · ≥30 dk · PO 400–800 mg"
+        icon={<BookOpen className={`w-5 h-5 ${isDark ? 'text-orange-400' : 'text-orange-600'}`} />}
+        defaultOpen={false}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <BookOpen className={`w-5 h-5 ${isDark ? 'text-orange-400' : 'text-orange-600'}`} />
-            <h2 className={`text-base sm:text-lg font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-              Klinik Endikasyonlar &amp; Doz Rejimleri (Genel Tıp · ERAS · ESC Perikardit · Pediatri · PDA)
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">IV ≤4 mg/mL · ≥30 dk · PO 400–800 mg</span>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* A. Hafif-Orta Ağrı, Ateş & İnflamatuvar Hastalıklar */}
@@ -721,36 +716,29 @@ export const IbuprofenProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. İNTERAKTİF 4 SEKMELİ DOZ & GÜVENLİK HESAPLAYICI (#sec-hesaplayici)*/}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all space-y-5 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <div
-              className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                isDark ? 'bg-orange-500/15 text-orange-400' : 'bg-orange-50 text-orange-600'
-              }`}
-            >
-              <Activity className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className={`text-base sm:text-lg font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                İnteraktif İbuprofen Doz, IV Dilüsyon (≤4 mg/mL), PDA &amp; Güvenlik Hesaplayıcısı
-              </h2>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                Erişkin 30 dk IV seyreltme, pediatrik 100 mg/5 mL şurup &amp; IV, Pedea® 10-5-5 PDA ve Aspirin / Triple Whammy denetimi
-              </p>
-            </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif İbuprofen Doz, IV Dilüsyon (≤4 mg/mL), PDA & Güvenlik Hesaplayıcısı"
+        subtitle="Erişkin 30 dk IV seyreltme, pediatrik 100 mg/5 mL şurup & IV, Pedea® 10-5-5 PDA ve Aspirin / Triple Whammy denetimi"
+        icon={
+          <div
+            className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+              isDark ? 'bg-orange-500/15 text-orange-400' : 'bg-orange-50 text-orange-600'
+            }`}
+          >
+            <Activity className="w-5 h-5" />
           </div>
-
+        }
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-5"
+      >
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <MonographCopyButton isDark={isDark} label="Hesaplanan Order’ı Kopyala" getText={buildCopySummary} />
         </div>
 
@@ -1343,7 +1331,7 @@ export const IbuprofenProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (#sec-tr-preparat)      */}

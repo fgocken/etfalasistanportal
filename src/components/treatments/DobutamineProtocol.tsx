@@ -24,12 +24,14 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -57,7 +59,7 @@ export const DobutamineProtocol: React.FC<Props> = ({ isDark }) => {
   const [doseMcgKgMin, setDoseMcgKgMin] = useState<number>(5.0);
 
   // Akordiyon State'i
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik Kimlikleri
   const weightInputId = useId();
@@ -276,7 +278,7 @@ export const DobutamineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -416,18 +418,15 @@ export const DobutamineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 4. ENDİKASYONLAR & KLİNİK KANIT (#sec-endikasyon)                    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-endikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar & Klinik Kanıt (ESC 2021 · SSC 2021 · DOREMI · CATS)"
+        icon={<BookOpen className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'}
+        bodyClassName="p-5 sm:p-6"
       >
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar &amp; Klinik Kanıt (ESC 2021 · SSC 2021 · DOREMI · CATS)
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* 1. Kardiyojenik Şok & Akut Dekompanse Kalp Yetmezliği */}
@@ -574,26 +573,21 @@ export const DobutamineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 5. DOZAJ KADEMELERİ & TİTRASYON ALGORİTMASI (#sec-dozaj)             */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozaj"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozaj"
+        title="Dozaj Kademeleri & Hemodinamik Titrasyon Algoritması"
+        icon={<Layers className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+        badge={<span className="hidden md:inline text-xs font-mono text-slate-500">β₁ İnotropi + β₂ Vazodilatasyon Spektrumu</span>}
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'}
+        bodyClassName="p-5 sm:p-6"
       >
-        <div className="flex items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Dozaj Kademeleri &amp; Hemodinamik Titrasyon Algoritması
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">β₁ İnotropi + β₂ Vazodilatasyon Spektrumu</span>
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Kademe 1: 2–5 mcg/kg/dk */}
@@ -724,65 +718,57 @@ export const DobutamineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. İNTERAKTİF DOZ & İNFÜZYON HESAPLAYICISI (#sec-hesaplayici)        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Dobutamin Doz & İnfüzyon Pompası Hesaplayıcısı"
+        subtitle="TR 250 mg / 20 mL flakon/ampul sulandırma şemaları, obezite IBW/AdjBW ölçekleyici ve canlı hemodinamik faz göstergesi."
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <Syringe className="w-5 h-5" />
+          </div>
+        }
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'}
+        bodyClassName="p-5 sm:p-6"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif Dobutamin Doz &amp; İnfüzyon Pompası Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                TR 250 mg / 20 mL flakon/ampul sulandırma şemaları, obezite IBW/AdjBW ölçekleyici ve canlı hemodinamik faz göstergesi.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <MonographCopyButton
-              isDark={isDark}
-              getText={() =>
-                [
-                  `DOBUTAMİN İNFÜZYON POMPASI ÖZETİ`,
-                  `Hasta Ağırlığı: ${weightKg} kg`,
-                  `Çözelti Konsantrasyonu: ${concentrationMcgMl} mcg/mL (${(concentrationMcgMl / 1000).toFixed(1)} mg/mL)`,
-                  `Hedef Doz: ${doseMcgKgMin.toFixed(1)} mcg/kg/dk`,
-                  `Dakikalık / Saatlik Doz: ${doseMcgMin.toFixed(0)} mcg/dk (${hourlyDoseMg.toFixed(2)} mg/saat)`,
-                  `İnfüzyon Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat (${infusionRateMlMin.toFixed(3)} mL/dk)`,
-                  `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(0)} mg/gün (~${dailyVialsNeeded.toFixed(1)} adet 250 mg flakon)`,
-                ].join('\n')
-              }
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setWeightKg(70);
-                setPrepType('bag_250_1vial');
-                setCustomConcInput(1000);
-                setDoseMcgKgMin(5.0);
-              }}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
-                isDark
-                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
-                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Sıfırla</span>
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() =>
+              [
+                `DOBUTAMİN İNFÜZYON POMPASI ÖZETİ`,
+                `Hasta Ağırlığı: ${weightKg} kg`,
+                `Çözelti Konsantrasyonu: ${concentrationMcgMl} mcg/mL (${(concentrationMcgMl / 1000).toFixed(1)} mg/mL)`,
+                `Hedef Doz: ${doseMcgKgMin.toFixed(1)} mcg/kg/dk`,
+                `Dakikalık / Saatlik Doz: ${doseMcgMin.toFixed(0)} mcg/dk (${hourlyDoseMg.toFixed(2)} mg/saat)`,
+                `İnfüzyon Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat (${infusionRateMlMin.toFixed(3)} mL/dk)`,
+                `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(0)} mg/gün (~${dailyVialsNeeded.toFixed(1)} adet 250 mg flakon)`,
+              ].join('\n')
+            }
+          />
+          <button
+            type="button"
+            onClick={() => {
+              setWeightKg(70);
+              setPrepType('bag_250_1vial');
+              setCustomConcInput(1000);
+              setDoseMcgKgMin(5.0);
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
+              isDark
+                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+                : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Sıfırla</span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
@@ -1173,7 +1159,7 @@ export const DobutamineProtocol: React.FC<Props> = ({ isDark }) => {
             )}
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. TÜRKİYE PREPARAT & SULANDIRMA REHBERİ (#sec-tr-preparat)          */}

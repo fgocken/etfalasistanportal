@@ -37,10 +37,12 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -169,7 +171,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
   const [flumazenilInitialDoseMg, setFlumazenilInitialDoseMg] = useState<number>(0.2); // mg
 
   // UI Durumları
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Benzersiz ID'ler
   const weightInputId = useId();
@@ -447,7 +449,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 2. FARMAKOKİNETİK PROFİLİ (AKORDİYON: TIKLAYINCA AÇILIR) */}
       <div
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all ${
+        className={`rounded-2xl border transition-all scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
         }`}
       >
@@ -530,16 +532,13 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
       </div>
 
       {/* 3. KONTRENDİKASYONLARI */}
-      <div
-        id="sec-kontrendikasyon"
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-kontrendikasyon"
+        title="Kontrendikasyonlar ve Kesin Kaçınılması Gereken Durumlar"
+        icon={<ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2.5 mb-4 text-rose-600 dark:text-rose-400">
-          <ShieldAlert className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Kontrendikasyonlar ve Kesin Kaçınılması Gereken Durumlar</h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           <div className={`p-4 rounded-xl border ${isDark ? 'bg-rose-500/10 border-rose-500/30' : 'bg-rose-50 border-rose-200'}`}>
@@ -582,19 +581,16 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 4. ENDİKASYONLARI VE OFF-LABEL KULLANIMLARI (GENİŞLETİLMİŞ 10 KLİNİK ALAN) */}
-      <div
-        id="sec-endikasyon"
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar ve Klinik Kullanım Alanları"
+        icon={<Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2.5 mb-4 text-purple-600 dark:text-purple-400">
-          <Sparkles className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Endikasyonlar ve Klinik Kullanım Alanları</h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
@@ -697,29 +693,22 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 5. UYGULAMA YOLLARI VE ERİŞKİN / PEDİATRİK DOZ REJİMLERİ */}
-      <div
-        id="sec-dozlar"
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Uygulama Yolları, Erişkin ve Pediatrik Doz Rejimleri"
+        subtitle="(İnfüzyonlar literatür standardı gereği mg/saat ve mg/kg/saat cinsindedir)"
+        icon={<Stethoscope className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
+        badge={
+          <span className="hidden sm:inline-block text-xs px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 font-semibold">
+            IV · IM · İntranazal · Bukkal · Oral
+          </span>
+        }
+        defaultOpen={false}
       >
-        <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-          <div className="flex items-center gap-2.5 text-indigo-600 dark:text-indigo-400">
-            <Stethoscope className="w-5 h-5" />
-            <h2 className="text-base sm:text-lg font-bold">Uygulama Yolları, Erişkin ve Pediatrik Doz Rejimleri</h2>
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[10px] text-slate-500 font-semibold italic">
-              (İnfüzyonlar literatür standardı gereği mg/saat ve mg/kg/saat cinsindedir)
-            </span>
-            <span className="text-xs px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 font-semibold">
-              IV · IM · İntranazal · Bukkal · Oral
-            </span>
-          </div>
-        </div>
 
         {/* KLİNİK UYGULAMA YOLLARI */}
         <div className="mb-6 space-y-2">
@@ -881,36 +870,32 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 6. İNTERAKTİF DOZ HESAPLAYICISI VE İNFÜZYON POMPASI (DOZ REJİMLERİNDEN HEMEN SONRA) */}
-      <div
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Midazolam Çok Yollu Doz Hesaplayıcısı & İnfüzyon Pompası"
+        subtitle="Sürekli infüzyon perfüzörü, akut nöbet, ciddi ajitasyon, intoksikasyonlar, alkol yoksunluğu ve flumazenil antidot takibi"
+        icon={
+          <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
+            <Zap className="w-6 h-6" />
+          </div>
+        }
+        badge={
+          <span className="hidden sm:inline-block text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-700 dark:text-purple-300 font-mono">
+            mg/saat & mg/kg/saat
+          </span>
+        }
+        containerClassName={
           isDark
             ? 'bg-slate-900 border-purple-500/40 text-slate-100 shadow-xl'
             : 'bg-white border-purple-500/50 text-slate-900 shadow-lg'
-        }`}
+        }
+        defaultOpen={false}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
-              <Zap className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
-                  Midazolam Çok Yollu Doz Hesaplayıcısı & İnfüzyon Pompası
-                </h2>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-700 dark:text-purple-300 font-mono">
-                  mg/saat & mg/kg/saat
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Sürekli infüzyon perfüzörü, akut nöbet, ciddi ajitasyon, intoksikasyonlar, alkol yoksunluğu ve flumazenil antidot takibi
-              </p>
-            </div>
-          </div>
+        <div className="flex items-center justify-end gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
           <MonographCopyButton
             isDark={isDark}
             getText={() =>
@@ -1679,7 +1664,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </div>
+      </MonographAccordionSection>
 
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
       <TurkeyFormulationBlock
@@ -1764,16 +1749,13 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* 7. BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU */}
-      <div
-        id="sec-organ"
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-organ"
+        title="Böbrek Yetmezliğinde Doz Revizyonları (Renal Profil & Metabolit Riski)"
+        icon={<Droplet className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2.5 mb-4 text-cyan-600 dark:text-cyan-400">
-          <Droplet className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Böbrek Yetmezliğinde Doz Revizyonları (Renal Profil & Metabolit Riski)</h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
@@ -1811,18 +1793,15 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 8. KARACİĞER YETMEZLİĞİNDE DOZ REVİZYONU */}
-      <div
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        title="Karaciğer Yetmezliğinde Doz Revizyonları (Child-Turcotte-Pugh Skoru)"
+        icon={<Activity className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2.5 mb-4 text-amber-600 dark:text-amber-400">
-          <Activity className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Karaciğer Yetmezliğinde Doz Revizyonları (Child-Turcotte-Pugh Skoru)</h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
           <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
@@ -1857,7 +1836,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0) */}
       <GeriatricAndObesityBlock
@@ -1878,16 +1857,13 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* 9. GEBELİK VE LAKTASYON KILAVUZU */}
-      <div
-        id="sec-gebelik"
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-gebelik"
+        title="Gebelik ve Laktasyon Kılavuzu"
+        icon={<HeartPulse className="w-5 h-5 text-pink-600 dark:text-pink-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2.5 mb-4 text-pink-600 dark:text-pink-400">
-          <HeartPulse className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Gebelik ve Laktasyon Kılavuzu</h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
           <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'} space-y-2`}>
@@ -1922,19 +1898,16 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 10. O İLACA ÖZEL ÖNEMLİ OLUMSUZ ETKİLER */}
-      <div
-        id="sec-olumsuz"
-        className={`p-5 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-olumsuz"
+        title="Midazolama Özel Önemli Olumsuz Etkiler (Adverse Effects)"
+        icon={<AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2.5 mb-4 text-rose-600 dark:text-rose-400">
-          <AlertTriangle className="w-5 h-5" />
-          <h2 className="text-base sm:text-lg font-bold">Midazolama Özel Önemli Olumsuz Etkiler (Adverse Effects)</h2>
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
@@ -1991,7 +1964,7 @@ export const MidazolamProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 11. KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0) */}
       <SpecialClinicalCautionsBlock

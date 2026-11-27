@@ -31,10 +31,12 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -64,7 +66,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
   const [infusionDurationHours, setInfusionDurationHours] = useState<number>(12); // saat
 
   // UI Durumları
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Benzersiz id'ler
   const weightInputId = useId();
@@ -267,7 +269,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -388,20 +390,17 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 3: KONTRENDİKASYONLAR */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-kontrendikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-kontrendikasyon"
+        title="Kontrendikasyonlar"
+        icon={
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-rose-500/10 text-rose-500">
             <AlertTriangle className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">Kontrendikasyonlar</h2>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* Mutlak Kontrendikasyonlar */}
@@ -466,24 +465,19 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </ul>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 4: ENDİKASYONLAR VE OFF-LABEL KULLANIMLAR                     */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-endikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar ve Off-Label Kullanımlar"
+        icon={<CheckCircle2 className="w-5 h-5 text-teal-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <CheckCircle2 className="w-5 h-5 text-teal-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar ve Off-Label Kullanımlar
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* Ruhsatlı Endikasyonlar */}
@@ -534,23 +528,18 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </ul>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 5: UYGULAMA YOLLARI VE DOZ REJİMLERİ (ERİŞKİN & PEDİATRİK)   */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Uygulama Yolları ve Doz Rejimleri (Erişkin & Pediatrik)"
+        icon={<Syringe className="w-5 h-5 text-indigo-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Syringe className="w-5 h-5 text-indigo-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Uygulama Yolları ve Doz Rejimleri (Erişkin &amp; Pediatrik)
-          </h2>
-        </div>
 
         {/* 8 TEMEL UYGULAMA YOLU */}
         <div className="mb-6 space-y-2">
@@ -911,75 +900,68 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 6: ⚡ FENTANİL İNFÜZYON POMPASI & DOZ HESAPLAYICISI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-7 rounded-2xl border transition-all ${
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Fentanil İnfüzyon Pompası & Doz Hesaplayıcısı"
+        subtitle="Sürekli IV infüzyon hızı (mL/saat), eşzamanlı birim dönüşümleri (mcg/kg/saat, mcg/saat, mcg/kg/dk) ve isteğe bağlı yükleme bolus hesabı"
+        icon={
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-rose-500 text-white shadow-sm">
+            <HeartPulse className="w-5 h-5 animate-pulse" />
+          </div>
+        }
+        badge={
+          <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-600 dark:text-rose-400">
+            IV İnfüzyon &amp; Birim Dönüştürücü
+          </span>
+        }
+        containerClassName={
           isDark
             ? 'bg-gradient-to-br from-slate-900 via-rose-950/20 to-slate-900 border-rose-900/40'
             : 'bg-gradient-to-br from-white via-rose-50/40 to-slate-50 border-rose-200 shadow-md'
-        }`}
+        }
+        defaultOpen={false}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-rose-500 text-white shadow-sm">
-              <HeartPulse className="w-5 h-5 animate-pulse" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                  Fentanil İnfüzyon Pompası &amp; Doz Hesaplayıcısı
-                </h2>
-                <span className="text-[11px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-600 dark:text-rose-400">
-                  IV İnfüzyon &amp; Birim Dönüştürücü
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Sürekli IV infüzyon hızı (mL/saat), eşzamanlı birim dönüşümleri (mcg/kg/saat, mcg/saat, mcg/kg/dk) ve isteğe bağlı yükleme bolus hesabı
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <MonographCopyButton
-              isDark={isDark}
-              getText={() =>
-                [
-                  'FENTANİL İNFÜZYON ÖZETİ',
-                  `Hesaplama Ağırlığı (LBW/IBW): ${weightKg} kg`,
-                  `Çözelti Konsantrasyonu: ${concentrationMcgMl.toFixed(1)} mcg/mL`,
-                  `İdame Dozu: ${doseMcgKgHr.toFixed(2)} mcg/kg/saat (${doseMcgHr.toFixed(1)} mcg/saat | ${doseMcgKgMin.toFixed(3)} mcg/kg/dk)`,
-                  `Pompa Akış Hızı: ${infusionRateMlHr.toFixed(2)} mL/saat`,
-                  giveBolus
-                    ? `Yükleme Bolus: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(2)} mL, ${bolusDurationMin} dk)`
-                    : 'Yükleme Bolus: Devre dışı',
-                  `Tahmini CSHT (${infusionDurationHours} sa): ~${Math.round(cshtEstimateMinutes)} dk`,
-                  `24 Saatlik Tüketim: ${consumption24HrMg.toFixed(2)} mg (~${Math.ceil(vialsNeeded500mcg)} adet 500 mcg/10 mL ampul)`,
-                ].join('\n')
-              }
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setWeightKg(70);
-                setPrepType('standard_10');
-                setDoseUnit('mcg_kg_hr');
-                setCustomDoseValue(1.0);
-                setGiveBolus(false);
-                setBolusDoseMcgKg(1.0);
-                setBolusDurationMin(2);
-                setInfusionDurationHours(12);
-              }}
-              className="p-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer transition-colors"
-              title="Varsayılan Değerlere Sıfırla"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </button>
-          </div>
+        <div className="flex items-center justify-end gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() =>
+              [
+                'FENTANİL İNFÜZYON ÖZETİ',
+                `Hesaplama Ağırlığı (LBW/IBW): ${weightKg} kg`,
+                `Çözelti Konsantrasyonu: ${concentrationMcgMl.toFixed(1)} mcg/mL`,
+                `İdame Dozu: ${doseMcgKgHr.toFixed(2)} mcg/kg/saat (${doseMcgHr.toFixed(1)} mcg/saat | ${doseMcgKgMin.toFixed(3)} mcg/kg/dk)`,
+                `Pompa Akış Hızı: ${infusionRateMlHr.toFixed(2)} mL/saat`,
+                giveBolus
+                  ? `Yükleme Bolus: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(2)} mL, ${bolusDurationMin} dk)`
+                  : 'Yükleme Bolus: Devre dışı',
+                `Tahmini CSHT (${infusionDurationHours} sa): ~${Math.round(cshtEstimateMinutes)} dk`,
+                `24 Saatlik Tüketim: ${consumption24HrMg.toFixed(2)} mg (~${Math.ceil(vialsNeeded500mcg)} adet 500 mcg/10 mL ampul)`,
+              ].join('\n')
+            }
+          />
+          <button
+            type="button"
+            onClick={() => {
+              setWeightKg(70);
+              setPrepType('standard_10');
+              setDoseUnit('mcg_kg_hr');
+              setCustomDoseValue(1.0);
+              setGiveBolus(false);
+              setBolusDoseMcgKg(1.0);
+              setBolusDurationMin(2);
+              setInfusionDurationHours(12);
+            }}
+            className="p-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer transition-colors"
+            title="Varsayılan Değerlere Sıfırla"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
         </div>
 
         {/* İNFÜZYON VE HESAPLAMA GİRİŞLERİ */}
@@ -1415,7 +1397,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                     */}
@@ -1503,25 +1485,18 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 7: BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU KILAVUZU */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-organ"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-organ"
+        title="Böbrek Yetmezliğinde Doz Revizyonu Kılavuzu"
+        subtitle="GFR kademeleri, Hemodiyaliz, Periton Diyalizi ve Sürekli Renal Replasman (CRRT) kuralları"
+        icon={
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-cyan-500/10 text-cyan-500">
             <Activity className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Böbrek Yetmezliğinde Doz Revizyonu Kılavuzu
-            </h2>
-            <p className="text-xs text-slate-500">
-              GFR kademeleri, Hemodiyaliz, Periton Diyalizi ve Sürekli Renal Replasman (CRRT) kuralları
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="space-y-4 text-xs sm:text-sm">
           <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
@@ -1602,29 +1577,22 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </table>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 8: KARACİĞER YETMEZLİĞİNDE DOZ REVİZYONU */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
+      <MonographAccordionSection
+        isDark={isDark}
+        title="Karaciğer Yetmezliğinde Doz Revizyonu (Child-Pugh Sınıflaması)"
+        subtitle="CYP3A4 metabolizması bozulması, uzamış yarı ömür ve hepatik ensefalopati risk yönetimi"
+        icon={
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-500/10 text-amber-500">
             <Activity className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Karaciğer Yetmezliğinde Doz Revizyonu (Child-Pugh Sınıflaması)
-            </h2>
-            <p className="text-xs text-slate-500">
-              CYP3A4 metabolizması bozulması, uzamış yarı ömür ve hepatik ensefalopati risk yönetimi
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="space-y-4 text-xs sm:text-sm">
           <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
@@ -1679,7 +1647,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v4.0)      */}
@@ -1704,25 +1672,18 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 9: GEBELİK VE LAKTASYON KILAVUZU                             */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-gebelik"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-gebelik"
+        title="Gebelik ve Laktasyon Kılavuzu"
+        subtitle="FDA / TGA gebelik kategorisi, plasental geçiş, neonatal solunum depresyonu ve emzirme yönetimi"
+        icon={
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-pink-500/10 text-pink-500">
             <HeartPulse className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Gebelik ve Laktasyon Kılavuzu
-            </h2>
-            <p className="text-xs text-slate-500">
-              FDA / TGA gebelik kategorisi, plasental geçiş, neonatal solunum depresyonu ve emzirme yönetimi
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
@@ -1757,30 +1718,23 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* BÖLÜM 10: ÖNEMLİ OLUMSUZ ETKİLER */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-olumsuz"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 mb-4">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-olumsuz"
+        title="Önemli Olumsuz Etkiler (Adverse Effects)"
+        subtitle="Göğüs rijiditesi (Wooden Chest), solunum depresyonu, bradikardi, tolerans ve yoksunluk"
+        icon={
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-rose-500/10 text-rose-500">
             <Flame className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Önemli Olumsuz Etkiler (Adverse Effects)
-            </h2>
-            <p className="text-xs text-slate-500">
-              Göğüs rijiditesi (Wooden Chest), solunum depresyonu, bradikardi, tolerans ve yoksunluk
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
           <div className="p-3.5 rounded-xl border border-rose-300 dark:border-rose-800/60 bg-rose-50/50 dark:bg-rose-950/20 space-y-1">
@@ -1847,7 +1801,7 @@ export const FentanylProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0)       */}

@@ -21,12 +21,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -58,7 +60,7 @@ export const PrasugrelProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
   const [isAcutePhase, setIsAcutePhase] = useState<boolean>(true);
 
   // Akordeon
-  const [showAdmeDetails, setShowAdmeDetails] = useState<boolean>(false);
+  const [showAdmeDetails, setShowAdmeDetails] = useMonographAccordion('prs-moa', false);
 
   const uniqueId = useId();
   const basePanel = isDark
@@ -390,11 +392,12 @@ export const PrasugrelProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
         />
 
         {/* Genişletilebilir ADME Akordeonu */}
-        <div className={`rounded-2xl border overflow-hidden ${basePanel}`}>
+        <div className={`rounded-2xl border overflow-hidden scroll-mt-20 ${basePanel}`}>
           <button
             type="button"
             onClick={() => setShowAdmeDetails((v) => !v)}
-            className={`w-full px-5 py-3.5 flex items-center justify-between text-left transition-colors ${
+            aria-expanded={showAdmeDetails}
+            className={`w-full px-5 py-3.5 flex items-center justify-between text-left transition-colors cursor-pointer ${
               isDark ? 'hover:bg-slate-800/70' : 'hover:bg-slate-50'
             }`}
           >
@@ -474,19 +477,14 @@ export const PrasugrelProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
       />
 
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ */}
-      <div id="prs-indications" className="scroll-mt-24">
-        <div className={`p-5 sm:p-6 rounded-2xl border ${basePanel}`}>
-          <div className="flex items-center gap-2.5 mb-4">
-            <BookOpen className="w-5 h-5 text-teal-500 shrink-0" />
-            <div>
-              <h2 className="text-lg font-black tracking-tight">
-                Klinik Endikasyonlar &amp; Kanıta Dayalı Doz Rejimleri (ESC 2023 · ISAR-REACT 5 · TRITON-TIMI 38)
-              </h2>
-              <p className={`text-xs ${mutedText}`}>
-                Prasugrel yalnızca PCI ile yönetilen AKS hastalarının ilacıdır — hasta ve zamanlama seçimi her şeydir!
-              </p>
-            </div>
-          </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="prs-indications"
+        title="Klinik Endikasyonlar & Kanıta Dayalı Doz Rejimleri (ESC 2023 · ISAR-REACT 5 · TRITON-TIMI 38)"
+        subtitle="Prasugrel yalnızca PCI ile yönetilen AKS hastalarının ilacıdır — hasta ve zamanlama seçimi her şeydir!"
+        icon={<BookOpen className="w-5 h-5 text-teal-500 shrink-0" />}
+        defaultOpen={false}
+      >
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs leading-relaxed">
             <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
@@ -554,32 +552,28 @@ export const PrasugrelProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
               </p>
             </div>
           </div>
-        </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 7. 4 SEKMELİ ETKİLEŞİMLİ HESAPLAYICI */}
-      <div id="prs-calc" className="scroll-mt-24">
-        <div className={`p-5 sm:p-6 rounded-2xl border ${basePanel}`}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                <HeartPulse className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-lg font-black tracking-tight">
-                  Prasugrel Uygunluk, ASRA 2018 (7–10g) &amp; P2Y₁₂ Geçiş Hesaplayıcısı
-                </h2>
-                <p className={`text-xs ${mutedText}`}>
-                  TRITON-TIMI 38 / ACCOAST / ISAR-REACT 5 kırmızı çizgi kilidi, KABG 7 gün kuralı &amp; P2Y₁₂ switching
-                </p>
-              </div>
-            </div>
-            <MonographCopyButton
-              isDark={isDark}
-              getText={buildOrderText}
-              label="Order Kopyala"
-            />
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="prs-calc"
+        title="Prasugrel Uygunluk, ASRA 2018 (7–10g) & P2Y₁₂ Geçiş Hesaplayıcısı"
+        subtitle="TRITON-TIMI 38 / ACCOAST / ISAR-REACT 5 kırmızı çizgi kilidi, KABG 7 gün kuralı & P2Y₁₂ switching"
+        icon={
+          <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+            <HeartPulse className="w-5 h-5" />
           </div>
+        }
+        defaultOpen={false}
+      >
+        <div className="flex items-center justify-end mb-4">
+          <MonographCopyButton
+            isDark={isDark}
+            getText={buildOrderText}
+            label="Order Kopyala"
+          />
+        </div>
 
           {/* Sekmeler */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-5">
@@ -978,8 +972,7 @@ export const PrasugrelProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) => 
               </table>
             </div>
           )}
-        </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 8. TÜRKİYE PİYASA FORMLARI */}
       <TurkeyFormulationBlock

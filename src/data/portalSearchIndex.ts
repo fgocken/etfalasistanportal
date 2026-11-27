@@ -3408,6 +3408,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'enoxaparin',
     popular: true
   },
+  {
+    id: 'treatment-fondaparinux-protocol',
+    title: 'Fondaparinuks Sodyum (Arixtra® 2,5 mg · 7,5 mg) Antitrombotik · Selektif Faktör Xa İnhibitörü (Sentetik Pentasakkarit)',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Saf Anti-Xa · t½ 17–21 sa · CrCl <30 YASAK · Protamin %0',
+    description: 'Sentetik pentasakkarit selektif indirekt Faktör Xa inhibitörü (anti-IIa = 0); VTE profilaksi (2,5 mg ≥6–8 sa postop), kilo basamaklı DVT/PE (5/7,5/10 mg q24sa), NSTE-AKS (OASIS-5 + PKG’de zorunlu IV UFH 70–85 IU/kg), SVT (CALISTO 45g), stabil HIT (ASH 2018), ESAIC/ASRA 36–42 sa / 3–4 gün nöraksiyel rehberi & rFVIIa kanama kurtarma.',
+    keywords: [
+      'fondaparinuks', 'fondaparinux', 'arixtra', 'pentasakkarit', 'pentasaccharide', 'fonda',
+      'faktör xa', 'anti-xa', 'antitrombotik', 'antikoagülan', 'oasis-5', 'oasis-6', 'calisto',
+      'hit', 'heparin trombositopeni', 'protamin', 'rfviia', 'novoseven', 'nöraksiyel', '36 saat', '42 saat',
+      'yüzeyel ven trombozu', 'svt', 'dvt', 'pulmoner emboli', 'nste-aks'
+    ],
+    tabId: 'treatments',
+    subId: 'fondaparinux',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

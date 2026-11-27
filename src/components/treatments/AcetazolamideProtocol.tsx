@@ -24,12 +24,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
@@ -56,7 +58,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
   const [baselineK, setBaselineK] = useState<number>(3.9);
   const [hasCirrhosis, setHasCirrhosis] = useState<boolean>(false);
   const [route, setRoute] = useState<RouteMode>('po_ng');
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   const weightId = useId();
   const crClId = useId();
@@ -385,7 +387,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. FARMAKOKİNETİK & FARMAKODİNAMİK PROFİLİ */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border p-5 sm:p-6 ${
+        className={`scroll-mt-20 rounded-2xl border p-5 sm:p-6 ${
           isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
         }`}
       >
@@ -483,23 +485,15 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* 5. KLİNİK ENDİKASYONLAR VE DOZ REJİMLERİ */}
-      <section
-        id="sec-dozlar"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri"
+        subtitle="Yoğun bakım, kardiyoloji (ADVOR), nöroşirürji/nöroloji (NORDIC), oftalmoloji ve pediatri protokolleri"
+        icon={<Stethoscope className={`h-5 w-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-4"
       >
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className={`h-5 w-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
-          <div>
-            <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri
-            </h3>
-            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              Yoğun bakım, kardiyoloji (ADVOR), nöroşirürji/nöroloji (NORDIC), oftalmoloji ve pediatri protokolleri
-            </p>
-          </div>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Card 1: ICU Metabolic Alkalosis */}
@@ -584,28 +578,20 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
           <strong className={isDark ? 'text-white' : 'text-slate-900'}>Pediatrik Doz Özeti: </strong>
           Metabolik alkaloz / diürez: <span className="font-mono font-semibold">5 mg/kg/doz</span> (maks 250 mg) 12–24 sa arayla · İİH / glokom: <span className="font-mono font-semibold">8–30 mg/kg/gün</span> (3–4 bölünmüş dozda, maks 1.000 mg/gün) · Geçici hidrosefali/BOS azaltımı: <span className="font-mono font-semibold">20–50 mg/kg/gün</span> (yakın AKG ve K⁺ izlemiyle).
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* 6. ETKİLEŞİMLİ YATAK BAŞI DOZ & GÜVENLİK HESAPLAYICISI */}
-      <section
-        id="sec-hesaplayici"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-5 ${
-          isDark ? 'border-teal-500/35 bg-slate-900/90' : 'border-teal-200 bg-white shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Yatak Başı Doz, Renal Uyarlama ve Güvenlik Hesaplayıcısı"
+        subtitle="Endikasyon, eGFR/CrCl, bazal HCO₃⁻, K⁺ ve siroz durumuna göre otomatik doz ve kontrendikasyon kontrolü"
+        icon={<Activity className="h-5 w-5 text-teal-500" />}
+        defaultOpen={false}
+        containerClassName={isDark ? 'border-teal-500/35 bg-slate-900/90' : 'border-teal-200 bg-white shadow-xs'}
+        bodyClassName="p-5 sm:p-6 space-y-5"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <Activity className="h-5 w-5 text-teal-500" />
-            <div>
-              <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Yatak Başı Doz, Renal Uyarlama ve Güvenlik Hesaplayıcısı
-              </h3>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                Endikasyon, eGFR/CrCl, bazal HCO₃⁻, K⁺ ve siroz durumuna göre otomatik doz ve kontrendikasyon kontrolü
-              </p>
-            </div>
-          </div>
-
+        <div className="flex justify-end">
           <MonographCopyButton isDark={isDark} getText={getReportText} label="Doz Raporunu Kopyala" />
         </div>
 
@@ -909,7 +895,7 @@ export const AcetazolamideProtocol: React.FC<Props> = ({ isDark }) => {
             )}
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
       <TurkeyFormulationBlock

@@ -22,12 +22,14 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -42,7 +44,7 @@ export const SugammadexProtocol: React.FC<Props> = ({ isDark }) => {
   // --- HESAPLAYICI STATE'LERİ ---
   const [weightKg, setWeightKg] = useState<number>(75);
   const [blockScenario, setBlockScenario] = useState<BlockScenario>('moderate');
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik Kimlikleri
   const weightInputId = useId();
@@ -267,7 +269,7 @@ export const SugammadexProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -400,18 +402,13 @@ export const SugammadexProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 4. ENDİKASYONLAR & KLİNİK KANIT (#sec-endikasyon)                    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-endikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar & Klinik Kanıt (ASA 2023 · ESAIC 2023 · Cochrane 2017)"
+        icon={<BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar &amp; Klinik Kanıt (ASA 2023 · ESAIC 2023 · Cochrane 2017)
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* 1. Orta Düzey Blok Reversali */}
@@ -555,26 +552,19 @@ export const SugammadexProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 5. DOZAJ KADEMELERİ & TOF/PTC ALGORİTMASI (#sec-dozaj)              */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozaj"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozaj"
+        title="Dozaj Kademeleri & TOF / PTC Reversal Algoritması"
+        icon={<Layers className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        badge={<span className="hidden sm:inline-block text-xs font-mono text-slate-500">Gerçek Vücut Ağırlığı (TBW) · 10 sn Hızlı IV Bolus</span>}
+        defaultOpen={false}
       >
-        <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
-          <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Dozaj Kademeleri &amp; TOF / PTC Reversal Algoritması
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Gerçek Vücut Ağırlığı (TBW) · 10 sn Hızlı IV Bolus</span>
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Kademe 1: 2 mg/kg */}
@@ -711,39 +701,31 @@ export const SugammadexProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. İNTERAKTİF DOZ, FLAKON & RE-NMB HESAPLAYICISI (#sec-hesaplayici)  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/15 text-teal-600 dark:text-teal-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif Sugammadeks Doz, Flakon &amp; Re-NMB Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                TR 200 mg/2 mL &amp; 500 mg/5 mL (100 mg/mL) flakon adedi ve acil CICO hacmi anında hesaplanır
-              </p>
-            </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Sugammadeks Doz, Flakon & Re-NMB Hesaplayıcısı"
+        subtitle="TR 200 mg/2 mL & 500 mg/5 mL (100 mg/mL) flakon adedi ve acil CICO hacmi anında hesaplanır"
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/15 text-teal-600 dark:text-teal-400">
+            <Syringe className="w-5 h-5" />
           </div>
-
+        }
+        defaultOpen={false}
+      >
+        <div className="flex items-center justify-end gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
           <button
             type="button"
             onClick={() => {
               setWeightKg(75);
               setBlockScenario('moderate');
             }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors cursor-pointer self-start sm:self-auto ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors cursor-pointer ${
               isDark
                 ? 'border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700'
                 : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
@@ -1080,7 +1062,7 @@ export const SugammadexProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (#sec-tr-preparat)       */}

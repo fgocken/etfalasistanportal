@@ -70,6 +70,7 @@ import { PrasugrelProtocol } from './PrasugrelProtocol';
 import { TicagrelorProtocol } from './TicagrelorProtocol';
 import { UnfractionatedHeparinProtocol } from './UnfractionatedHeparinProtocol';
 import { EnoxaparinProtocol } from './EnoxaparinProtocol';
+import { FondaparinuxProtocol } from './FondaparinuxProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2366,6 +2367,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'fondaparinux',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Selektif Faktör Xa İnhibitörü (Sentetik Pentasakkarit)',
+    badge: 'Arixtra® 2,5 / 7,5 mg · t½ 17–21 sa · CrCl <30 YASAK · Protamin %0',
+    title: 'Fondaparinuks Sodyum (Arixtra® 2,5 mg · 7,5 mg)',
+    shortDesc: 'Saf Anti-Xa sentetik pentasakkarit (anti-IIa = 0); VTE profilaksi (2,5 mg ≥6–8 sa postop), kilo basamaklı DVT/PE (5/7,5/10 mg q24sa), NSTE-AKS (OASIS-5 + PKG’de zorunlu IV UFH 70–85 IU/kg), SVT (CALISTO 45g), stabil HIT (ASH 2018), ESAIC/ASRA 36–42 sa / 3–4g nöraksiyel & rFVIIa kurtarma.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Günde Tek Doz (t½ 17–21 sa)',
+        value: 'Prof: 2,5 mg · DVT/PE: 5 / 7,5 / 10 mg',
+        subtext: 'Postop EN ERKEN 6–8. saat · <50 kg prof. ❌',
+        tooltip: 'VTE profilaksisi 2,5 mg SC q24sa (hemostazdan ≥6–8 sa sonra, <50 kg’da FDA kontrendike); DVT/PE kilo basamaklı (<50 kg: 5 mg, 50–100: 7,5 mg, >100: 10 mg).',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'Renal & Antidot Kırmızı Çizgisi',
+        value: 'CrCl <30 YASAK · Protamin %0',
+        subtext: 'HD ~%20 · Masif kanama: rFVIIa / aPCC',
+        tooltip: '%100’e yakın değişmeden böbrekten atılır; CrCl <30 mL/dk ve diyalizde mutlak kontrendike! Protamin etkisizdir (%0); kurtarma için rFVIIa (90 mcg/kg) veya aPCC düşünülür.',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'NSTE-AKS (OASIS-5) & PKG Kuralı',
+        value: '2,5 mg q24sa + PKG’de IV UFH!',
+        subtext: 'PKG: 70–85 IU/kg UFH · STEMI pPKG ❌',
+        tooltip: 'OASIS-5: NSTE-AKS’de majör kanamayı yarıya indirir; ancak PKG sırasında kateter trombozunu önlemek için tam doz IV UFH (70–85 IU/kg) eklemek ZORUNLUDUR!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Nöraksiyel (ESAIC) & HIT Rolü',
+        value: '36–42 sa / 3–4g · HIT Güvenli',
+        subtext: 'Epidural kateter ❌ · ASH 2018 HIT',
+        tooltip: 'En uzun nöraksiyel bekleme (profilaksi 36–42 sa, tedavi 72–96 sa; kalıcı epidural kateter YASAK). Anti-PF4 çapraz reaksiyonu yapmadığı için stabil HIT’te (CrCl ≥30) kullanılır.',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2617,6 +2669,10 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     enoksa: 'enoxaparin',
     klexane: 'enoxaparin',
     enox: 'enoxaparin',
+    fondaparinuks: 'fondaparinux',
+    arixtra: 'fondaparinux',
+    pentasakkarit: 'fondaparinux',
+    fonda: 'fondaparinux',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3491,7 +3547,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <EnoxaparinProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 47–63: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 47: FONDAPARİNUKS SODYUM (Arixtra®) MONOGRAFİSİ & DOZ/PKG-UFH / ESAIC 36-96SA / PROTAMİN %0 HESAPLAYICISI */}
+      {normalizedProtocolId === 'fondaparinux' && (
+        <FondaparinuxProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 48–64: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

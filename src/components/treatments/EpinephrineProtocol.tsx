@@ -32,12 +32,14 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -73,7 +75,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
   const [anaphylaxisRoute, setAnaphylaxisRoute] = useState<'im' | 'iv'>('iv');
 
   // Akordiyon State'leri
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik ID'leri
   const weightInputId = useId();
@@ -340,7 +342,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
         }`}
       >
@@ -443,48 +445,40 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 3. İNTERAKTİF İNFÜZYON POMPASI & DOZ HESAPLAYICISI                  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif İnfüzyon Pompası & Doz Hesaplayıcısı"
+        subtitle="Erişkin ve pediatrik ağırlık aralığı (5–150 kg), standart 50 mL enjektör ve torba seyreltme şemaları."
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <Syringe className="w-5 h-5" />
+          </div>
+        }
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'}
+        bodyClassName="p-5 sm:p-6"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-600 dark:text-amber-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif İnfüzyon Pompası &amp; Doz Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Erişkin ve pediatrik ağırlık aralığı (5–150 kg), standart 50 mL enjektör ve torba seyreltme şemaları.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <MonographCopyButton isDark={isDark} getText={getSummaryText} label="Rapor Kopyala" />
-            <button
-              type="button"
-              onClick={() => {
-                setWeightKg(70);
-                setPrepType('vial_50_std');
-                setDoseMode('weight_based');
-                setDoseMcgKgMin(0.05);
-                setDoseMcgMin(3.5);
-              }}
-              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
-                isDark
-                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
-                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Sıfırla</span>
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <MonographCopyButton isDark={isDark} getText={getSummaryText} label="Rapor Kopyala" />
+          <button
+            type="button"
+            onClick={() => {
+              setWeightKg(70);
+              setPrepType('vial_50_std');
+              setDoseMode('weight_based');
+              setDoseMcgKgMin(0.05);
+              setDoseMcgMin(3.5);
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+              isDark
+                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+                : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Sıfırla</span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
@@ -816,33 +810,25 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             )}
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 4. ACİL BOLUS, PUSH-DOSE, ANAFİLAKSİ, LAST & NEBÜLİZASYON MODÜLÜ    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-acildoz"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400">
-              <Timer className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                Acil Endikasyonlara Göre Bolus, Push-Dose &amp; İnhalasyon Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Seçili hasta ağırlığına (<span className="font-mono tabular-nums font-bold">{weightKg} kg</span>) göre
-                anında hesaplanan klinik dozlar.
-              </p>
-            </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-acildoz"
+        title="Acil Endikasyonlara Göre Bolus, Push-Dose & İnhalasyon Hesaplayıcısı"
+        subtitle={`Seçili hasta ağırlığına (${weightKg} kg) göre anında hesaplanan klinik dozlar.`}
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            <Timer className="w-5 h-5" />
           </div>
-        </div>
+        }
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'}
+        bodyClassName="p-5 sm:p-6"
+      >
 
         {/* Senaryo Sekmeleri */}
         <div
@@ -1156,23 +1142,20 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           )}
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 5. LOKAL ANESTEZİK KATKISI & TEST DOZU REHBERİ                       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-rejyonel"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-rejyonel"
+        title="Rejyonel Anestezi: Lokal Anestezik Katkısı & Epidural Test Dozu"
+        icon={<BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        defaultOpen={false}
+        containerClassName={isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'}
+        bodyClassName="p-5 sm:p-6"
       >
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Rejyonel Anestezi: Lokal Anestezik Katkısı &amp; Epidural Test Dozu
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
@@ -1218,7 +1201,7 @@ export const EpinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                      */}

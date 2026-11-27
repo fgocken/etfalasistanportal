@@ -39,11 +39,13 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -154,7 +156,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
   const [lastInfusionSpeed, setLastInfusionSpeed] = useState<'standard' | 'double_escalated'>('standard');
 
   // UI Durumları
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Benzersiz ID'ler
   const weightInputId = useId();
@@ -416,25 +418,19 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* =========================================================================
           BÖLÜM 2: FARMAKODİNAMİK VE ETKİ MEKANİZMASI
           ========================================================================= */}
-      <section
-        id="sec-etki"
-        className={`p-6 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-etki"
+        title="Farmakodinamik ve Moleküler Etki Mekanizması"
+        subtitle="Nav1.5 voltaj kapılı sodyum kanal blokajı, faz 0 inhibisyonu, antiaritmik ve sistemik anti-enflamatuar etki"
+        icon={
           <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
             <Zap className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Farmakodinamik ve Moleküler Etki Mekanizması
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Nav1.5 voltaj kapılı sodyum kanal blokajı, faz 0 inhibisyonu, antiaritmik ve sistemik anti-enflamatuar etki
-            </p>
-          </div>
-        </div>
+        }
+        bodyClassName="p-5 sm:p-6 space-y-4"
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
@@ -487,14 +483,14 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* =========================================================================
           BÖLÜM 3: FARMAKOKİNETİK PROFİLİ
           ========================================================================= */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -637,25 +633,18 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* =========================================================================
           BÖLÜM 8: KONTRENDİKASYONLAR VE YÜKSEK RİSK DURUMLARI
           ========================================================================= */}
-      <section
-        id="sec-kontrendikasyon"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-kontrendikasyon"
+        title="Kontrendikasyonlar & Yüksek Risk Durumları"
+        subtitle="Kardiyovasküler ileti defektleri, anatomik uç organlar ve genetik bozukluklar"
+        icon={
           <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
             <AlertTriangle className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Kontrendikasyonlar &amp; Yüksek Risk Durumları
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Kardiyovasküler ileti defektleri, anatomik uç organlar ve genetik bozukluklar
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 space-y-3">
@@ -708,30 +697,23 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             </ul>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* =========================================================================
           BÖLÜM 4: KLİNİK ENDİKASYONLAR VE UYGULAMA YOLLARI
           ========================================================================= */}
-      <section
-        id="sec-endikasyon"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Klinik Endikasyonlar & Uygulama Yolları"
+        subtitle="Lokal, rejyonel, sistemik IV, kardiyak resüsitasyon ve hava yolu endotrakeal anestezisi"
+        icon={
           <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
             <Stethoscope className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Klinik Endikasyonlar &amp; Uygulama Yolları
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Lokal, rejyonel, sistemik IV, kardiyak resüsitasyon ve hava yolu endotrakeal anestezisi
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Endikasyon 1: Lokal İnfiltrasyon */}
@@ -885,30 +867,23 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* =========================================================================
           BÖLÜM 5: KAPSAMLI DOZAJ TABLOLARI VE PROTOKOL KILAVUZU
           ========================================================================= */}
-      <section
-        id="sec-dozaj"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozaj"
+        title="Dozaj Tablosu & Klinik Uygulama Kılavuzu"
+        subtitle="Endikasyonlara göre güvenli tavan dozları, infüzyon hızları ve solüsyon konsantrasyonları"
+        icon={
           <div className="p-2 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400">
             <FileText className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Dozaj Tablosu &amp; Klinik Uygulama Kılavuzu
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Endikasyonlara göre güvenli tavan dozları, infüzyon hızları ve solüsyon konsantrasyonları
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         {/* Tablo: Temel Klinik Dozlar */}
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
@@ -998,39 +973,35 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             </tbody>
           </table>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* =========================================================================
           BÖLÜM 6: İNTERAKTİF HESAPLAYICI VE AKILLI KLİNİK ARAÇLAR
           ========================================================================= */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-6 rounded-2xl border space-y-6 ${
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Doz & Toksisite Hesaplayıcısı"
+        subtitle="Lokal güvenli hacim, ACLS resüsitasyonu, perioperatif infüzyon pompası ve ASRA LAST İntralipid acil kurtarma"
+        icon={
+          <div className="p-2.5 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30">
+            <Sparkles className="w-6 h-6" />
+          </div>
+        }
+        badge={
+          <span className="hidden sm:inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-mono">
+            4 Özel Klinik Araç
+          </span>
+        }
+        containerClassName={
           isDark
             ? 'bg-slate-900/95 border-blue-500/40 shadow-2xl shadow-blue-950/30'
             : 'bg-white border-blue-300 shadow-xl shadow-blue-500/10'
-        }`}
+        }
+        bodyClassName="p-5 sm:p-6 space-y-6"
+        defaultOpen={false}
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4 border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-xl font-black text-slate-900 dark:text-white">
-                  İnteraktif Doz &amp; Toksisite Hesaplayıcısı
-                </h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-mono">
-                  4 Özel Klinik Araç
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Lokal güvenli hacim, ACLS resüsitasyonu, perioperatif infüzyon pompası ve ASRA LAST İntralipid acil kurtarma
-              </p>
-            </div>
-          </div>
-
+        <div className="flex items-center justify-end gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
           <MonographCopyButton
             isDark={isDark}
             getText={() => {
@@ -1800,7 +1771,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* =========================================================================
           TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)
@@ -1925,25 +1896,18 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* =========================================================================
           BÖLÜM 11: GEBELİK VE LAKTASYON KILAVUZU
           ========================================================================= */}
-      <section
-        id="sec-gebelik"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-gebelik"
+        title="Gebelik ve Laktasyon Kılavuzu"
+        subtitle="Obstetrik anestezi, plasental transfer, fetal iyon tuzağı ve emzirme güvenliği"
+        icon={
           <div className="p-2 rounded-lg bg-pink-500/15 text-pink-600 dark:text-pink-400">
             <HeartPulse className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Gebelik ve Laktasyon Kılavuzu
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Obstetrik anestezi, plasental transfer, fetal iyon tuzağı ve emzirme güvenliği
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
@@ -2006,30 +1970,23 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* =========================================================================
           BÖLÜM 9: TOKSİSİTE (LAST - LOKAL ANESTEZİK SİSTEMİK TOKSİSİTESİ)
           ========================================================================= */}
-      <section
-        id="sec-last"
-        className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200'
-        }`}
-      >
-        <div className="flex items-center gap-2.5 border-b pb-3 border-slate-200 dark:border-slate-800">
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-last"
+        title="LAST (Lokal Anestezik Sistemik Toksisitesi) Aşamaları"
+        subtitle="Plazma konsantrasyonuna bağlı progresif MSS eksitasyonu ve kardiyovasküler kollaps kademeleri"
+        icon={
           <div className="p-2 rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
             <ShieldAlert className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              LAST (Lokal Anestezik Sistemik Toksisitesi) Aşamaları
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Plazma konsantrasyonuna bağlı progresif MSS eksitasyonu ve kardiyovasküler kollaps kademeleri
-            </p>
-          </div>
-        </div>
+        }
+        defaultOpen={false}
+      >
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-1.5">
@@ -2072,7 +2029,7 @@ export const LidocaineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS) */}
       <AdverseEffectsBlock

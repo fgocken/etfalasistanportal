@@ -24,12 +24,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -44,7 +46,7 @@ type PedPrepKey = 'ped_100' | 'ped_200' | 'ped_custom';
 
 export const GlycerylTrinitrateProtocol: React.FC<Props> = ({ isDark }) => {
   // --- AKORDİYON STATE ---
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // --- HESAPLAYICI STATE'LERİ ---
   const [activeTab, setActiveTab] = useState<CalcTab>('adult_infusion');
@@ -319,7 +321,7 @@ export const GlycerylTrinitrateProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -456,21 +458,15 @@ export const GlycerylTrinitrateProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. KLİNİK ENDİKASYONLAR VE DOZ REJİMLERİ (#sec-dozlar)              */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all space-y-5 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar & Doz Rejimleri"
+        subtitle="Erişkin: 5–200 mcg/dk · SCAPE · Obstetrik Bolus"
+        icon={<BookOpen className="w-5 h-5 text-sky-600 dark:text-sky-400" />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-5"
       >
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-sky-600 dark:text-sky-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Klinik Endikasyonlar &amp; Doz Rejimleri
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Erişkin: 5–200 mcg/dk · SCAPE · Obstetrik Bolus</span>
-        </div>
 
         {/* Endikasyon Kartları */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
@@ -650,56 +646,46 @@ export const GlycerylTrinitrateProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. İNTERAKTİF ÇOK SEKMELİ DOZ & POMPA HIZI HESAPLAYICISI            */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Doz, Seyreltme & Pompa Hızı Hesaplayıcısı"
+        subtitle="Erişkin IV infüzyon (mcg/dk ↔ mcg/kg/dk), Akut Obstetrik Tokoliz Bolusu ve Pediatrik İnfüzyon."
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <Syringe className="w-5 h-5" />
+          </div>
+        }
+        defaultOpen={false}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-sky-500/10 text-sky-600 dark:text-sky-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif Doz, Seyreltme &amp; Pompa Hızı Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Erişkin IV infüzyon (mcg/dk ↔ mcg/kg/dk), Akut Obstetrik Tokoliz Bolusu ve Pediatrik İnfüzyon.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <MonographCopyButton isDark={isDark} getText={getOrderSummaryText} label="Order Kopyala" />
-            <button
-              type="button"
-              onClick={() => {
-                setWeightKg(70);
-                setAdultPrep('std_200');
-                setAdultDoseMcgMin(20);
-                setObsBolusMcg(50);
-                setObsPrepConc(50);
-                setPedWeightKg(18);
-                setPedDoseMcgKgMin(1.0);
-                setPedPrep('ped_100');
-              }}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
-                isDark
-                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
-                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Sıfırla</span>
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <MonographCopyButton isDark={isDark} getText={getOrderSummaryText} label="Order Kopyala" />
+          <button
+            type="button"
+            onClick={() => {
+              setWeightKg(70);
+              setAdultPrep('std_200');
+              setAdultDoseMcgMin(20);
+              setObsBolusMcg(50);
+              setObsPrepConc(50);
+              setPedWeightKg(18);
+              setPedDoseMcgKgMin(1.0);
+              setPedPrep('ped_100');
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
+              isDark
+                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+                : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Sıfırla</span>
+          </button>
         </div>
 
         {/* Endikasyon Sekmeleri */}
@@ -1303,7 +1289,7 @@ export const GlycerylTrinitrateProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (#sec-tr-preparat)      */}

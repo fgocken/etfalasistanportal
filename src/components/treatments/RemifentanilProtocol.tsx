@@ -28,11 +28,13 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -57,7 +59,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
   const [maintenanceDoseMcgKgMin, setMaintenanceDoseMcgKgMin] = useState<number>(0.15); // mcg/kg/dakika
   
   // Akordiyon State: Farmakokinetik (Varsayılan KAPALI)
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Benzersiz erişilebilirlik kimlikleri (ARIA)
   const weightInputId = useId();
@@ -226,7 +228,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -341,18 +343,13 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 3. KONTRENDİKASYONLAR                                               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-kontrendikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-kontrendikasyon"
+        title="Kontrendikasyonlar"
+        icon={<ShieldAlert className="w-5 h-5 text-rose-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <ShieldAlert className="w-5 h-5 text-rose-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Kontrendikasyonlar
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Mutlak Kontrendikasyonlar */}
@@ -405,23 +402,18 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </ul>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 4. ENDİKASYONLAR VE OFF-LABEL KULLANIMLAR                          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-endikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar ve Off-Label Kullanımlar"
+        icon={<CheckCircle2 className="w-5 h-5 text-teal-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <CheckCircle2 className="w-5 h-5 text-teal-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar ve Off-Label Kullanımlar
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* Ruhsatlı Endikasyonlar */}
@@ -475,23 +467,18 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </ul>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 5. UYGULAMA YOLLARI, ERİŞKİN VE PEDİATRİK DOZ REJİMLERİ            */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Uygulama Yolları ve Doz Rejimleri (Erişkin & Pediatrik)"
+        icon={<Syringe className="w-5 h-5 text-cyan-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Syringe className="w-5 h-5 text-cyan-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Uygulama Yolları ve Doz Rejimleri (Erişkin &amp; Pediatrik)
-          </h2>
-        </div>
 
         {/* Uygulama Yolları Uyarısı */}
         <div className="p-3.5 rounded-xl border border-rose-300 dark:border-rose-900/60 bg-rose-500/10 text-rose-900 dark:text-rose-200 text-xs sm:text-sm mb-3.5 flex items-start gap-2.5">
@@ -638,73 +625,64 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. İNTERAKTİF İNFÜZYON VE DOZ HESAPLAYICISI                         */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-7 rounded-2xl border transition-all ${
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Remifentanil İnfüzyon Pompası & Doz Hesaplayıcısı"
+        subtitle="Türkiye formu (5 mg flakon), mcg/kg/dk idame hesabı ve tahmini bolus infüzyon hızı (kronometreli geçiş)"
+        icon={
+          <span className="inline-flex p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            <Sparkles className="w-5 h-5" />
+          </span>
+        }
+        containerClassName={
           isDark
             ? 'bg-slate-900 border-rose-500/30 ring-1 ring-rose-500/20'
             : 'bg-white border-rose-300 shadow-md ring-1 ring-rose-200'
-        }`}
+        }
+        defaultOpen={false}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-6 border-b border-slate-200 dark:border-slate-800">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
-                <Sparkles className="w-5 h-5" />
-              </span>
-              <div>
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
-                  Remifentanil İnfüzyon Pompası &amp; Doz Hesaplayıcısı
-                </h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Türkiye formu (5 mg flakon), mcg/kg/dk idame hesabı ve tahmini bolus infüzyon hızı (kronometreli geçiş)
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <MonographCopyButton
-              isDark={isDark}
-              getText={() =>
-                [
-                  `REMİFENTANİL İNFÜZYON ÖZETİ`,
-                  `Hesaplama Ağırlığı (IBW/LBM): ${weightKg} kg`,
-                  `Çözelti Konsantrasyonu: ${concentrationMcgMl.toFixed(1)} mcg/mL`,
-                  `İdame Dozu: ${activeDoseMcgKgMin.toFixed(3)} mcg/kg/dk (${minuteDoseMcg.toFixed(1)} mcg/dk)`,
-                  `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat`,
-                  enableBolus
-                    ? `Yükleme Bolus: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(1)} mL, ${bolusDurationSec} sn)`
-                    : `Yükleme Bolus: Devre dışı`,
-                  `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(1)} mg (~${vialsNeeded5mg.toFixed(1)} adet 5 mg flakon)`,
-                ].join('\n')
-              }
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setWeightKg(70);
-                setPrepType('vial_5mg_100');
-                setEnableBolus(false);
-                setBolusDoseMcgKg(0.5);
-                setBolusDurationSec(60);
-                setMaintenanceDoseMcgKgMin(0.15);
-              }}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
-                isDark
-                  ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700'
-                  : 'bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-200'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Varsayılana Sıfırla</span>
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2 pb-4 mb-5 border-b border-slate-200 dark:border-slate-800">
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() =>
+              [
+                `REMİFENTANİL İNFÜZYON ÖZETİ`,
+                `Hesaplama Ağırlığı (IBW/LBM): ${weightKg} kg`,
+                `Çözelti Konsantrasyonu: ${concentrationMcgMl.toFixed(1)} mcg/mL`,
+                `İdame Dozu: ${activeDoseMcgKgMin.toFixed(3)} mcg/kg/dk (${minuteDoseMcg.toFixed(1)} mcg/dk)`,
+                `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat`,
+                enableBolus
+                  ? `Yükleme Bolus: ${bolusDoseMcgKg} mcg/kg (${totalBolusDoseMcg.toFixed(1)} mcg / ${totalBolusVolumeMl.toFixed(1)} mL, ${bolusDurationSec} sn)`
+                  : `Yükleme Bolus: Devre dışı`,
+                `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(1)} mg (~${vialsNeeded5mg.toFixed(1)} adet 5 mg flakon)`,
+              ].join('\n')
+            }
+          />
+          <button
+            type="button"
+            onClick={() => {
+              setWeightKg(70);
+              setPrepType('vial_5mg_100');
+              setEnableBolus(false);
+              setBolusDoseMcgKg(0.5);
+              setBolusDurationSec(60);
+              setMaintenanceDoseMcgKgMin(0.15);
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+              isDark
+                ? 'bg-slate-800 text-slate-300 hover:text-white border-slate-700'
+                : 'bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Varsayılana Sıfırla</span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1113,7 +1091,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0)                      */}
@@ -1179,18 +1157,13 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. BÖBREK YETMEZLİĞİNDE DOZ REVİZYONU                               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-organ"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-organ"
+        title="Böbrek Yetmezliğinde Doz Revizyonu Kılavuzu"
+        icon={<Droplet className="w-5 h-5 text-teal-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Droplet className="w-5 h-5 text-teal-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Böbrek Yetmezliğinde Doz Revizyonu Kılavuzu
-          </h2>
-        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm border-collapse">
@@ -1282,22 +1255,17 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </tbody>
           </table>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. KARACİĞER YETMEZLİĞİNDE DOZ REVİZYONU                            */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        title="Karaciğer Yetmezliğinde Doz Revizyonu (Child-Turcotte-Pugh Sınıflaması)"
+        icon={<Activity className="w-5 h-5 text-amber-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Activity className="w-5 h-5 text-amber-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Karaciğer Yetmezliğinde Doz Revizyonu (Child-Turcotte-Pugh Sınıflaması)
-          </h2>
-        </div>
 
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
           Remifentanil karaciğer metabolizmasına bağımlı <strong>DEĞİLDİR</strong>. Karaciğer sirozu, fulminan hepatit
@@ -1345,7 +1313,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* GERİATRİ (>65 YAŞ / KIRILGANLIK) & OBEZİTE DOZ YÖNETİMİ (v3.0)       */}
@@ -1387,18 +1355,13 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 10. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-olumsuz"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-olumsuz"
+        title="Önemli Olumsuz Etkiler (Adverse Effects)"
+        icon={<HeartPulse className="w-5 h-5 text-rose-500" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <HeartPulse className="w-5 h-5 text-rose-500" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Önemli Olumsuz Etkiler (Adverse Effects)
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs sm:text-sm">
           <div className="p-3.5 rounded-xl border border-rose-200 dark:border-rose-900/40 bg-rose-500/5 space-y-1">
@@ -1449,7 +1412,7 @@ export const RemifentanilProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       <SpecialClinicalCautionsBlock
         isDark={isDark}

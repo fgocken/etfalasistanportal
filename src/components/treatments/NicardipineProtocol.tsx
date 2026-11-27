@@ -26,12 +26,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -93,7 +95,7 @@ const TAB_META: Record<NicardipineTabId, TabMeta> = {
 
 export const NicardipineProtocol: React.FC<Props> = ({ isDark }) => {
   // --- AKORDİYON STATE ---
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // --- HESAPLAYICI STATE ---
   const [activeTab, setActiveTab] = useState<NicardipineTabId>('crisis_neuro');
@@ -347,7 +349,7 @@ export const NicardipineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -480,21 +482,14 @@ export const NicardipineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ                             */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar & Kanıta Dayalı Doz Rejimleri"
+        subtitle="Erişkin Standart: 5 → 15 mg/sa · İdame: 3 mg/sa"
+        icon={<BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        defaultOpen={false}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Klinik Endikasyonlar &amp; Kanıta Dayalı Doz Rejimleri
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Erişkin Standart: 5 → 15 mg/sa · İdame: 3 mg/sa</span>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* 1. Nöroşirürji, İKH, Akut İnme */}
@@ -571,73 +566,63 @@ export const NicardipineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. İNTERAKTİF ÇOK SEKMELİ DOZ, POMPA HIZI & SIVI YÜKÜ HESAPLAYICISI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Nikardipin İnfüzyon, Mikro-Bolus & Sıvı Yükü Hesaplayıcısı"
+        subtitle="0,1 mg/mL (periferik 50–150 mL/sa) vs 0,2 / 0,5 mg/mL (santral) pompa hızı ve 24 saatlik sıvı yükü uyarısı."
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/10 text-teal-600 dark:text-teal-400">
+            <Syringe className="w-5 h-5" />
+          </div>
+        }
+        defaultOpen={false}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/10 text-teal-600 dark:text-teal-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif Nikardipin İnfüzyon, Mikro-Bolus &amp; Sıvı Yükü Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                0,1 mg/mL (periferik 50–150 mL/sa) vs 0,2 / 0,5 mg/mL (santral) pompa hızı ve 24 saatlik sıvı yükü uyarısı.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <MonographCopyButton
-              isDark={isDark}
-              label="Klinik Order Kopyala"
-              getText={() =>
-                calc.isMicroBolus
-                  ? [
-                      `NİKARDİPİN HCl (IV) İNTRAOPERATİF MİKRO-BOLUS ÖZETİ`,
-                      `Endikasyon: ${tabMeta.title}`,
-                      `Hasta Ağırlığı: ${weightKg} kg`,
-                      `Seyreltme: 100 mcg/mL (0,1 mg/mL — 1 mg + 9 mL SF veya D5W; LR/NaHCO₃ YASAK!)`,
-                      `Seçili Mikro-Bolus Dozu: ${microBolusMcg} mcg (${calc.bolusMg.toFixed(2)} mg · ${calc.bolusMcgKg.toFixed(1)} mcg/kg)`,
-                      `Uygulanacak Hacim: ${calc.bolusMlAt100McgMl.toFixed(1)} mL yavaş IV puşe (Etki: 1–2 dk, Pik: 2–5 dk)`,
-                      `Gerekirse Köprü İdame İnfüzyon (3 mg/saat @ ${concMgMl} mg/mL): ${calc.pumpRateMlHr.toFixed(1)} mL/saat`,
-                    ].join('\n')
-                  : [
-                      `NİKARDİPİN HCl (IV) İNFÜZYON ORDER ÖZETİ`,
-                      `Endikasyon: ${tabMeta.title}`,
-                      `Hasta Ağırlığı: ${weightKg} kg`,
-                      `Hemodinamik Hedef: ${tabMeta.target}`,
-                      `Hedef İnfüzyon Dozu: ${calc.effectiveHourlyMg.toFixed(2)} mg/saat (${calc.doseMcgKgMin.toFixed(2)} mcg/kg/dk)`,
-                      `Çözelti Konsantrasyonu: ${concLabel}`,
-                      `İnfüzyon Pompası Hızı: ${calc.pumpRateMlHr.toFixed(1)} mL/saat`,
-                      `24 Saatlik Sarfiyat: ${calc.dailyMg.toFixed(1)} mg/gün · Toplam Sıvı Yükü: ${calc.dailyMl.toFixed(0)} mL / 24 saat`,
-                      `Taşıyıcı / Güvenlik: YALNIZCA SF veya D5W (Ringer Laktat ve %8,4 NaHCO₃ ile ÇÖKELTİ!). Periferik 0,1 mg/mL damar yolu her 12 saatte değiştirilir.`,
-                    ].join('\n')
-              }
-            />
-            <button
-              type="button"
-              onClick={handleReset}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
-                isDark
-                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
-                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Sıfırla</span>
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <MonographCopyButton
+            isDark={isDark}
+            label="Klinik Order Kopyala"
+            getText={() =>
+              calc.isMicroBolus
+                ? [
+                    `NİKARDİPİN HCl (IV) İNTRAOPERATİF MİKRO-BOLUS ÖZETİ`,
+                    `Endikasyon: ${tabMeta.title}`,
+                    `Hasta Ağırlığı: ${weightKg} kg`,
+                    `Seyreltme: 100 mcg/mL (0,1 mg/mL — 1 mg + 9 mL SF veya D5W; LR/NaHCO₃ YASAK!)`,
+                    `Seçili Mikro-Bolus Dozu: ${microBolusMcg} mcg (${calc.bolusMg.toFixed(2)} mg · ${calc.bolusMcgKg.toFixed(1)} mcg/kg)`,
+                    `Uygulanacak Hacim: ${calc.bolusMlAt100McgMl.toFixed(1)} mL yavaş IV puşe (Etki: 1–2 dk, Pik: 2–5 dk)`,
+                    `Gerekirse Köprü İdame İnfüzyon (3 mg/saat @ ${concMgMl} mg/mL): ${calc.pumpRateMlHr.toFixed(1)} mL/saat`,
+                  ].join('\n')
+                : [
+                    `NİKARDİPİN HCl (IV) İNFÜZYON ORDER ÖZETİ`,
+                    `Endikasyon: ${tabMeta.title}`,
+                    `Hasta Ağırlığı: ${weightKg} kg`,
+                    `Hemodinamik Hedef: ${tabMeta.target}`,
+                    `Hedef İnfüzyon Dozu: ${calc.effectiveHourlyMg.toFixed(2)} mg/saat (${calc.doseMcgKgMin.toFixed(2)} mcg/kg/dk)`,
+                    `Çözelti Konsantrasyonu: ${concLabel}`,
+                    `İnfüzyon Pompası Hızı: ${calc.pumpRateMlHr.toFixed(1)} mL/saat`,
+                    `24 Saatlik Sarfiyat: ${calc.dailyMg.toFixed(1)} mg/gün · Toplam Sıvı Yükü: ${calc.dailyMl.toFixed(0)} mL / 24 saat`,
+                    `Taşıyıcı / Güvenlik: YALNIZCA SF veya D5W (Ringer Laktat ve %8,4 NaHCO₃ ile ÇÖKELTİ!). Periferik 0,1 mg/mL damar yolu her 12 saatte değiştirilir.`,
+                  ].join('\n')
+            }
+          />
+          <button
+            type="button"
+            onClick={handleReset}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
+              isDark
+                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+                : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Sıfırla</span>
+          </button>
         </div>
 
         {/* 4 Endikasyon Sekmesi */}
@@ -1097,7 +1082,7 @@ export const NicardipineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. TÜRKİYE & KLİNİK PREPARAT / KONSANTRASYON REHBERİ                */}

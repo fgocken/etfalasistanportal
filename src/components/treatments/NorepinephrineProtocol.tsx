@@ -35,12 +35,14 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -71,8 +73,8 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
   const [doseMcgMin, setDoseMcgMin] = useState<number>(7.0); // mcg/dk
 
   // Akordiyon State'leri
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
-  const [pushDoseOpen, setPushDoseOpen] = useState<boolean>(true);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
+  const [pushDoseOpen, setPushDoseOpen] = useMonographAccordion('sec-push-dose', false);
 
   // Push-Dose Simülasyonu
   const [pushDosePrep, setPushDosePrep] = useState<'10mcg' | '16mcg'>('10mcg');
@@ -294,7 +296,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -413,18 +415,13 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 3. ENDİKASYONLAR & KLİNİK KANIT DÜZEYLERİ                           */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-endikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar & Kılavuz Kanıt Düzeyleri"
+        icon={<BookOpen className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar &amp; Kılavuz Kanıt Düzeyleri
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* Septik Şok */}
@@ -507,26 +504,19 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 4. DOZAJ REJİMLERİ & TİTRASYON BASAMAKLARI                          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozaj"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozaj"
+        title="Dozaj Kademeleri & Titrasyon Algoritması"
+        icon={<Layers className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
+        badge={<span className="hidden sm:inline-block text-xs font-mono text-slate-500">Hedef MAP ≥ 65 mmHg</span>}
+        defaultOpen={false}
       >
-        <div className="flex items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Dozaj Kademeleri &amp; Titrasyon Algoritması
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Hedef MAP ≥ 65 mmHg</span>
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Kademe 1: Düşük Doz */}
@@ -638,65 +628,55 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 5. İNTERAKTİF İNFÜZYON POMPASI & DOZ HESAPLAYICISI                  */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif İnfüzyon Pompası & Doz Hesaplayıcısı"
+        subtitle="Erişkin/pediatrik ağırlık (5–150 kg), 4 mg/4 mL ampul ve 50 mL enjektör / torba parametreleri."
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            <Syringe className="w-5 h-5" />
+          </div>
+        }
+        defaultOpen={false}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif İnfüzyon Pompası &amp; Doz Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Erişkin/pediatrik ağırlık (5–150 kg), 4 mg/4 mL ampul ve 50 mL enjektör / torba parametreleri.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <MonographCopyButton
-              isDark={isDark}
-              getText={() =>
-                [
-                  `NORADRENALİN (NOREPİNEFRİN) İNFÜZYON ÖZETİ`,
-                  `Hasta Ağırlığı: ${weightKg} kg`,
-                  `Çözelti Konsantrasyonu: ${concentrationMcgMl} mcg/mL`,
-                  `Hedef Doz: ${activeDoseMcgKgMin.toFixed(2)} mcg/kg/dk (${activeDoseMcgMin.toFixed(1)} mcg/dk)`,
-                  `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat`,
-                  `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(1)} mg/gün (~${dailyAmpoulesNeeded.toFixed(1)} adet 4 mg ampul)`,
-                ].join('\n')
-              }
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setWeightKg(70);
-                setPrepType('vial_50');
-                setDoseMode('weight_based');
-                setDoseMcgKgMin(0.10);
-                setDoseMcgMin(7.0);
-              }}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
-                isDark
-                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
-                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Sıfırla</span>
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <MonographCopyButton
+            isDark={isDark}
+            getText={() =>
+              [
+                `NORADRENALİN (NOREPİNEFRİN) İNFÜZYON ÖZETİ`,
+                `Hasta Ağırlığı: ${weightKg} kg`,
+                `Çözelti Konsantrasyonu: ${concentrationMcgMl} mcg/mL`,
+                `Hedef Doz: ${activeDoseMcgKgMin.toFixed(2)} mcg/kg/dk (${activeDoseMcgMin.toFixed(1)} mcg/dk)`,
+                `Pompa Hızı: ${infusionRateMlHr.toFixed(1)} mL/saat`,
+                `24 Saatlik Tüketim: ${dailyTotalMg.toFixed(1)} mg/gün (~${dailyAmpoulesNeeded.toFixed(1)} adet 4 mg ampul)`,
+              ].join('\n')
+            }
+          />
+          <button
+            type="button"
+            onClick={() => {
+              setWeightKg(70);
+              setPrepType('vial_50');
+              setDoseMode('weight_based');
+              setDoseMcgKgMin(0.10);
+              setDoseMcgMin(7.0);
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
+              isDark
+                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+                : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Sıfırla</span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
@@ -1057,13 +1037,14 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. İNTERAKTİF PUSH-DOSE NORADRENALİN (AKUT BOLUS KÖPRÜSÜ)           */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        id="sec-push-dose"
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -1347,18 +1328,13 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 9. ÖNEMLİ OLUMSUZ ETKİLER (ADVERSE EFFECTS)                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-olumsuz"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-olumsuz"
+        title="Önemli Olumsuz Etkiler (Adverse Effects)"
+        icon={<HeartPulse className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <HeartPulse className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Önemli Olumsuz Etkiler (Adverse Effects)
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
           <div className={`p-3.5 rounded-xl border ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
@@ -1403,7 +1379,7 @@ export const NorepinephrineProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* KLİNİSYENİN DİKKAT ETMESİ GEREKEN ÖZEL KLİNİK DURUMLAR (v4.0)       */}

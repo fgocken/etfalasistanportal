@@ -20,12 +20,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -134,7 +136,7 @@ export const AcetylsalicylicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isD
   const [selectedRisks, setSelectedRisks] = useState<string[]>([]);
 
   // Akordeon
-  const [showAdmeDetails, setShowAdmeDetails] = useState<boolean>(false);
+  const [showAdmeDetails, setShowAdmeDetails] = useMonographAccordion('asa-moa', false);
 
   const uniqueId = useId();
   const basePanel = isDark
@@ -473,11 +475,12 @@ export const AcetylsalicylicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isD
         />
 
         {/* Genişletilebilir ADME Akordeonu */}
-        <div className={`rounded-2xl border overflow-hidden ${basePanel}`}>
+        <div className={`rounded-2xl border overflow-hidden scroll-mt-20 ${basePanel}`}>
           <button
             type="button"
             onClick={() => setShowAdmeDetails((v) => !v)}
-            className={`w-full px-5 py-3.5 flex items-center justify-between text-left transition-colors ${
+            aria-expanded={showAdmeDetails}
+            className={`w-full px-5 py-3.5 flex items-center justify-between text-left transition-colors cursor-pointer ${
               isDark ? 'hover:bg-slate-800/70' : 'hover:bg-slate-50'
             }`}
           >
@@ -559,19 +562,14 @@ export const AcetylsalicylicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isD
       />
 
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ */}
-      <div id="asa-indications" className="scroll-mt-24">
-        <div className={`p-5 sm:p-6 rounded-2xl border ${basePanel}`}>
-          <div className="flex items-center gap-2.5 mb-4">
-            <BookOpen className="w-5 h-5 text-teal-500 shrink-0" />
-            <div>
-              <h2 className="text-lg font-black tracking-tight">
-                Klinik Endikasyonlar &amp; Kanıta Dayalı Doz Rejimleri (ESC · AHA · ACOG · ASPRE)
-              </h2>
-              <p className={`text-xs ${mutedText}`}>
-                Aynı molekül — doza bağlı tamamen farklı farmakolojik hedefler (81 mg vs 300 mg çiğneme vs 3 g/gün)
-              </p>
-            </div>
-          </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="asa-indications"
+        title="Klinik Endikasyonlar & Kanıta Dayalı Doz Rejimleri (ESC · AHA · ACOG · ASPRE)"
+        subtitle="Aynı molekül — doza bağlı tamamen farklı farmakolojik hedefler (81 mg vs 300 mg çiğneme vs 3 g/gün)"
+        icon={<BookOpen className="w-5 h-5 text-teal-500 shrink-0" />}
+        defaultOpen={false}
+      >
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs leading-relaxed">
             <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
@@ -639,32 +637,28 @@ export const AcetylsalicylicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isD
               </p>
             </div>
           </div>
-        </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 7. 4 SEKMELİ ETKİLEŞİMLİ HESAPLAYICI */}
-      <div id="asa-calc" className="scroll-mt-24">
-        <div className={`p-5 sm:p-6 rounded-2xl border ${basePanel}`}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                <HeartPulse className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-lg font-black tracking-tight">
-                  Aspirin Doz, Perioperatif / ASRA 2018 &amp; Salisilat Toksikoloji Hesaplayıcısı
-                </h2>
-                <p className={`text-xs ${mutedText}`}>
-                  AKS çiğneme yüklemesi, ESC 2022 / ASRA 2018 nöraksiyel karar motoru, EXTRIP diyaliz &amp; NaHCO₃ alkalinizasyonu
-                </p>
-              </div>
-            </div>
-            <MonographCopyButton
-              isDark={isDark}
-              getText={buildOrderText}
-              label="Order Kopyala"
-            />
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="asa-calc"
+        title="Aspirin Doz, Perioperatif / ASRA 2018 & Salisilat Toksikoloji Hesaplayıcısı"
+        subtitle="AKS çiğneme yüklemesi, ESC 2022 / ASRA 2018 nöraksiyel karar motoru, EXTRIP diyaliz & NaHCO₃ alkalinizasyonu"
+        icon={
+          <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+            <HeartPulse className="w-5 h-5" />
           </div>
+        }
+        defaultOpen={false}
+      >
+        <div className="flex items-center justify-end mb-4">
+          <MonographCopyButton
+            isDark={isDark}
+            getText={buildOrderText}
+            label="Order Kopyala"
+          />
+        </div>
 
           {/* Sekmeler */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-5">
@@ -1144,8 +1138,7 @@ export const AcetylsalicylicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isD
               </div>
             </div>
           )}
-        </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 8. TÜRKİYE PİYASA FORMLARI */}
       <TurkeyFormulationBlock

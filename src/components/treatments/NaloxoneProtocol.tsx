@@ -18,12 +18,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 
@@ -36,7 +38,7 @@ type PatientGroup = 'adult' | 'pediatric';
 
 export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState<CalcTab>('pacu_oird');
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // 1. PACU / Postoperatif Solunum Depresyonu (OIRD) State
   const [pacuGroup, setPacuGroup] = useState<PatientGroup>('adult');
@@ -290,7 +292,7 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. FARMAKOKİNETİK / FARMAKODİNAMİK (PK/PD) */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border p-5 sm:p-6 ${
+        className={`scroll-mt-20 rounded-2xl border p-5 sm:p-6 ${
           isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
         }`}
       >
@@ -384,18 +386,14 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* 5. KLİNİK ENDİKASYONLAR VE DOZ REJİMLERİ */}
-      <section
-        id="sec-dozlar"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri"
+        icon={<Syringe className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-4"
       >
-        <div className="flex items-center gap-2.5">
-          <Syringe className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri
-          </h3>
-        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs sm:text-sm">
@@ -484,28 +482,22 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
             </tbody>
           </table>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* 6. ETKİLEŞİMLİ TİTRASYON, İNFÜZYON & KAŞINTI HESAPLAYICISI */}
-      <section
-        id="sec-hesaplayici"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-5 ${
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Etkileşimli Nalokson Titrasyon & İnfüzyon Pompası Hesaplayıcısı"
+        subtitle="PACU analjezi koruyucu 40 mcg titrasyonu, Boyer 2/3 sürekli infüzyon pompası ve nöroaksiyel kaşıntı protokolü"
+        icon={<Activity className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />}
+        defaultOpen={false}
+        containerClassName={
           isDark ? 'border-rose-500/30 bg-slate-900/80' : 'border-rose-200 bg-white shadow-xs'
-        }`}
+        }
+        bodyClassName="p-5 sm:p-6 space-y-5"
       >
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <Activity className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
-            <div>
-              <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Etkileşimli Nalokson Titrasyon &amp; İnfüzyon Pompası Hesaplayıcısı
-              </h3>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                PACU analjezi koruyucu 40 mcg titrasyonu, Boyer 2/3 sürekli infüzyon pompası ve nöroaksiyel kaşıntı protokolü
-              </p>
-            </div>
-          </div>
-
+        <div className="flex flex-wrap items-center justify-end gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
           <MonographCopyButton isDark={isDark} getText={getReportText} label="Yatak Başı Rapor Kopyala" />
         </div>
 
@@ -945,7 +937,7 @@ export const NaloxoneProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* 7. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
       <TurkeyFormulationBlock

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Activity,
   AlertOctagon,
@@ -26,34 +26,13 @@ import {
 } from 'lucide-react';
 
 /**
- * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v5.0)
+ * BİRLEŞİK ALTIN STANDART İLAÇ MONOGRAFİ ŞABLONU (v5.1 — Tam Akordiyon Mimarisi)
  * -------------------------------------------------------------------------
- * Tedaviler ve İlaçlar modülüne eklenecek her yeni ilaç monografisi ve
- * güncellenen mevcut monografiler aşağıdaki çekirdek klinik sütunları
- * ve sıralamayı (Kontrendikasyonlar DAİMA Endikasyonlardan önce; tekrarsız
- * tek kaynak mimarisi ve 4 Kademeli Hücre Zarı → Hücre İçi → Doku → Organ
- * Derin Farmakodinami Analizi) içermelidir:
- *
- * 1. Hızlı Bölüm Navigasyon Barı (`MonographQuickNav`) — En Üstte
- * 2. ISMP Yüksek Riskli İlaç Güvenliği, Tall-Man Lettering & Antidot (`HighAlertSafetyBlock` — En Üstte, Varsayılan Kapalı Akordiyon)
- * 3. Kimlik, Klinik Özet Header & Yatak Başı Kısa Etki Mekanizması (`#sec-ozet` & `#sec-etki` / `MechanismOfActionBlock`)
- * 4. Farmakokinetik (ADME) Özellikleri (`#sec-pkpd` — Varsayılan Kapalı Akordiyon)
- * 5. Mutlak ve Relatif Kontrendikasyonlar (`ContraindicationsGridBlock`, `#sec-kontrendikasyon`) — Endikasyonlardan ÖNCE
- * 6. Klinik Endikasyonlar ve Doz Rejimleri (`#sec-endikasyon` / `#sec-dozlar` / `#sec-dozaj`)
- * 7. Etkileşimli Doz & İnfüzyon Hesaplayıcı (`#sec-hesaplayici`, `MonographCopyButton` + `ObesityDosingScaler`)
- * 8. Türkiye Preparat & Konsantrasyon Rehberi (`TurkeyFormulationBlock`, `#sec-tr-preparat`)
- * 9. Damar Yolu, pH/Ozmolalite, Y-Site Uyumluluk & Ekstravazasyon (`CompatibilityAndLineBlock`, `#sec-uyumluluk`)
- * 10. Böbrek ve Karaciğer Yetmezliğinde Doz Ayarlaması (`OrganImpairmentGridBlock`, `#sec-organ`)
- * 11. Geriatri (>65 Yaş / Kırılganlık) & Obezite Doz Yönetimi (`GeriatricAndObesityBlock`, `#sec-geriatri-obezite`)
- * 12. Gebelik, Obstetrik ve Laktasyon (`PregnancyLactationBlock`, `#sec-gebelik`)
- * 13. Önemli Olumsuz Etkiler (`AdverseEffectsBlock`, `#sec-olumsuz`)
- * 14. Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar (`SpecialClinicalCautionsBlock`, `#sec-ozel-durumlar`)
- * 15. Derin Farmakodinamik & Çok Ölçekli Fizyoloji Analizi (`DeepPharmacodynamicsBlock`, `#sec-derin-pd` — Varsayılan Kapalı Akordiyon; üstteki kısa klinik özeti tekrar etmeden doğrudan 4 kademeli biyofiziksel/hücresel analiz):
- *     - 1. Kademe (`receptorMechanism`): Hücre Zarı & Moleküler Hedef (Membran Reseptör / İyon Kanalı / Taşıyıcı / Enzim Bağlanma Bölgesi Biyofiziği)
- *     - 2. Kademe (`intracellularSignaling`): Hücre İçi Sinyal Kaskadı, İkincil Haberciler & Organel / İyon Dinamiği
- *     - 3. Kademe (`tissueOrganSystems`): Doku & Organ Sistemleri Düzeyinde Fizyolojik Yansıma (2x2 Eşit Kartlar, Doku → Organ Eşleşmesi)
- *     - 4. Kademe (`synergyAndCeiling` & `clinicalPearls`): Reseptör Kinetiği, Desensitizasyon/Taşiflaksi, Sinerji, Tavan Etkisi & Klinik Tuzaklar
- * 16. Şiddet Dereceli İlaç Etkileşimleri & Kanıta Dayalı Kaynakça (`DrugReferencesAndInteractionsBlock`, `#sec-kaynaklar`)
+ * Tüm monografi alt başlıkları varsayılan olarak kapalı (`defaultOpen = false`)
+ * akordiyon kartlar halinde sunulur; yalnızca en üstteki İlaç Kimlik & Hızlı Özet
+ * kartı (`#sec-ozet`) açık kalır. `MonographQuickNav` bağlantıları tıklandığında
+ * ilgili akordiyonu otomatik açar ve ekrana kaydırır; "Tümünü Aç / Kapat"
+ * düğmeleri tüm başlıkları tek tıkla kontrol eder.
  */
 export interface GoldStandardSectionSpec {
   id: string;
@@ -80,6 +59,142 @@ export const GOLD_STANDARD_SECTIONS: GoldStandardSectionSpec[] = [
   { id: 'sec-kaynaklar', order: 15, title: 'İlaç Etkileşimleri & Kaynakça (PubMed/DOI)', requiredComponent: 'DrugReferencesAndInteractionsBlock' },
 ];
 
+export interface MonographAccordionControlDetail {
+  action: 'open' | 'open-all' | 'close-all';
+  sectionId?: string;
+}
+
+export const MONOGRAPH_ACCORDION_EVENT = 'monograph-accordion-control';
+
+export const dispatchMonographAccordionControl = (
+  action: MonographAccordionControlDetail['action'],
+  sectionId?: string,
+) => {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent<MonographAccordionControlDetail>(MONOGRAPH_ACCORDION_EVENT, {
+      detail: { action, sectionId },
+    }),
+  );
+};
+
+export const useMonographAccordion = (sectionId?: string, defaultOpen = false) => {
+  const [open, setOpen] = useState<boolean>(defaultOpen);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleControl = (event: Event) => {
+      const detail = (event as CustomEvent<MonographAccordionControlDetail>).detail;
+      if (!detail) return;
+      if (detail.action === 'open-all') {
+        setOpen(true);
+      } else if (detail.action === 'close-all') {
+        setOpen(false);
+      } else if (detail.action === 'open' && sectionId && detail.sectionId === sectionId) {
+        setOpen(true);
+      }
+    };
+    window.addEventListener(MONOGRAPH_ACCORDION_EVENT, handleControl);
+    return () => window.removeEventListener(MONOGRAPH_ACCORDION_EVENT, handleControl);
+  }, [sectionId]);
+
+  return [open, setOpen] as const;
+};
+
+export interface MonographAccordionSectionProps {
+  isDark: boolean;
+  sectionId?: string;
+  title: string;
+  subtitle?: string;
+  eyebrow?: string;
+  icon?: React.ReactNode;
+  badge?: React.ReactNode;
+  defaultOpen?: boolean;
+  containerClassName?: string;
+  headerHoverClassName?: string;
+  bodyClassName?: string;
+  children: React.ReactNode;
+}
+
+export const MonographAccordionSection: React.FC<MonographAccordionSectionProps> = ({
+  isDark,
+  sectionId,
+  title,
+  subtitle,
+  eyebrow,
+  icon,
+  badge,
+  defaultOpen = false,
+  containerClassName,
+  headerHoverClassName,
+  bodyClassName,
+  children,
+}) => {
+  const [open, setOpen] = useMonographAccordion(sectionId, defaultOpen);
+
+  return (
+    <section
+      id={sectionId}
+      className={`overflow-hidden rounded-2xl border transition-all scroll-mt-20 ${
+        containerClassName ||
+        (isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white')
+      }`}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        className={`flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors ${
+          headerHoverClassName ||
+          (isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50/90')
+        }`}
+      >
+        <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+          {icon && <div className="shrink-0">{icon}</div>}
+          <div className="min-w-0">
+            {eyebrow && (
+              <p className={`text-[10.5px] font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                {eyebrow}
+              </p>
+            )}
+            <h3 className={`text-sm sm:text-base font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {title}
+            </h3>
+            {subtitle && (
+              <p className={`mt-0.5 text-xs line-clamp-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                {subtitle}
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          {badge}
+          <span
+            className={`hidden sm:inline-flex items-center rounded-md px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+              isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'
+            }`}
+          >
+            {open ? 'Gizle' : 'Aç'}
+          </span>
+          <div className={isDark ? 'text-slate-400' : 'text-slate-500'}>
+            {open ? <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5" /> : <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5" />}
+          </div>
+        </div>
+      </button>
+
+      {open && (
+        <div
+          className={`border-t ${isDark ? 'border-slate-800' : 'border-slate-200'} ${
+            bodyClassName || 'p-5 sm:p-6'
+          }`}
+        >
+          {children}
+        </div>
+      )}
+    </section>
+  );
+};
+
 export interface MonographNavItem {
   id: string;
   label: string;
@@ -92,26 +207,68 @@ interface MonographQuickNavProps {
 
 export const MonographQuickNav: React.FC<MonographQuickNavProps> = ({ isDark, items }) => {
   if (!items.length) return null;
+
+  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    event.preventDefault();
+    dispatchMonographAccordionControl('open', id);
+    window.setTimeout(() => {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 45);
+  };
+
   return (
     <nav
       aria-label="Monografi Bölüm Gezgini"
-      className={`flex flex-wrap items-center gap-1.5 rounded-xl border p-2 ${
+      className={`flex flex-wrap items-center justify-between gap-2 rounded-xl border p-2 ${
         isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-slate-50/90'
       }`}
     >
-      {items.map((item) => (
-        <a
-          key={item.id}
-          href={`#${item.id}`}
-          className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+      <div className="flex flex-wrap items-center gap-1">
+        {items.map((item) => (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            onClick={(e) => handleNavClick(e, item.id)}
+            className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+              isDark
+                ? 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                : 'text-slate-700 hover:bg-white hover:text-slate-950 hover:shadow-xs'
+            }`}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+
+      <div className="flex shrink-0 items-center gap-1.5 border-l pl-2 border-slate-200 dark:border-slate-800">
+        <button
+          type="button"
+          onClick={() => dispatchMonographAccordionControl('open-all')}
+          className={`inline-flex cursor-pointer items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-semibold transition-colors ${
             isDark
-              ? 'text-slate-300 hover:bg-slate-800 hover:text-white'
-              : 'text-slate-700 hover:bg-white hover:text-slate-950 hover:shadow-xs'
+              ? 'border-teal-500/30 bg-teal-950/40 text-teal-300 hover:bg-teal-900/50'
+              : 'border-teal-200 bg-teal-50 text-teal-700 hover:bg-teal-100'
           }`}
         >
-          {item.label}
-        </a>
-      ))}
+          <ChevronDown className="h-3 w-3" />
+          <span>Tümünü Aç</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => dispatchMonographAccordionControl('close-all')}
+          className={`inline-flex cursor-pointer items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-semibold transition-colors ${
+            isDark
+              ? 'border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white'
+              : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+          }`}
+        >
+          <ChevronUp className="h-3 w-3" />
+          <span>Tümünü Kapat</span>
+        </button>
+      </div>
     </nav>
   );
 };
@@ -180,12 +337,12 @@ export const HighAlertSafetyBlock: React.FC<HighAlertSafetyBlockProps> = ({
   antidoteOrRescue,
   defaultOpen = false,
 }) => {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
+  const [open, setOpen] = useMonographAccordion(sectionId, defaultOpen);
 
   return (
     <section
       id={sectionId}
-      className={`overflow-hidden rounded-2xl border transition-all ${
+      className={`overflow-hidden rounded-2xl border transition-all scroll-mt-20 ${
         isDark
           ? 'border-rose-900/60 bg-rose-950/20'
           : 'border-rose-200 bg-rose-50/70'
@@ -219,10 +376,10 @@ export const HighAlertSafetyBlock: React.FC<HighAlertSafetyBlockProps> = ({
                   isDark ? 'bg-rose-950/80 text-rose-200' : 'bg-white text-rose-700 border border-rose-200'
                 }`}
               >
-                {open ? 'Gizle' : 'Tıkla & Göster'}
+                {open ? 'Gizle' : 'Aç'}
               </span>
             </div>
-            <h3 className={`mt-0.5 text-base sm:text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <h3 className={`mt-0.5 text-sm sm:text-base font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
               {sectionTitle}
             </h3>
           </div>
@@ -303,6 +460,7 @@ interface ContraindicationsGridBlockProps {
   relativeTitle?: string;
   relativeItems: string[];
   clinicalNote?: string;
+  defaultOpen?: boolean;
 }
 
 export const ContraindicationsGridBlock: React.FC<ContraindicationsGridBlockProps> = ({
@@ -314,22 +472,28 @@ export const ContraindicationsGridBlock: React.FC<ContraindicationsGridBlockProp
   relativeTitle = 'Relatif Kontrendikasyonlar & Dikkat Edilecek Durumlar',
   relativeItems,
   clinicalNote,
+  defaultOpen = false,
 }) => {
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      defaultOpen={defaultOpen}
+      icon={<AlertTriangle className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />}
+      badge={
+        <span
+          className={`rounded-md border px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+            isDark
+              ? 'border-rose-500/30 bg-rose-950/50 text-rose-300'
+              : 'border-rose-200 bg-rose-50 text-rose-700'
+          }`}
+        >
+          {absoluteItems.length} Mutlak · {relativeItems.length} Relatif
+        </span>
+      }
     >
-      <div className="flex items-center gap-2.5">
-        <AlertTriangle className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div
           className={`rounded-xl border p-4 ${
             isDark ? 'border-rose-500/30 bg-rose-950/20' : 'border-rose-200 bg-rose-50/60'
@@ -379,7 +543,7 @@ export const ContraindicationsGridBlock: React.FC<ContraindicationsGridBlockProp
           {clinicalNote}
         </p>
       )}
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -415,6 +579,7 @@ interface OrganImpairmentGridBlockProps {
   renalMatrix?: OrganRenalMatrixRow[];
   hepaticMatrix?: OrganHepaticTierCard[];
   dualOrganNote?: string;
+  defaultOpen?: boolean;
 }
 
 export const OrganImpairmentGridBlock: React.FC<OrganImpairmentGridBlockProps> = ({
@@ -428,6 +593,7 @@ export const OrganImpairmentGridBlock: React.FC<OrganImpairmentGridBlockProps> =
   renalMatrix,
   hepaticMatrix,
   dualOrganNote,
+  defaultOpen = false,
 }) => {
   const hasSevereCol = Boolean(renalMatrix?.some((row) => Boolean(row.severeDoseBadge)));
 
@@ -479,24 +645,15 @@ export const OrganImpairmentGridBlock: React.FC<OrganImpairmentGridBlockProps> =
   };
 
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 space-y-5 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      subtitle="eGFR kademeleri, IHD, Periton Diyalizi, CRRT, SLED ve Child-Pugh A / B / C doz matrisi"
+      defaultOpen={defaultOpen}
+      icon={<Stethoscope className={`h-5 w-5 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />}
+      bodyClassName="p-5 sm:p-6 space-y-5"
     >
-      <div className="flex items-center gap-2.5">
-        <Stethoscope className={`h-5 w-5 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
-        <div>
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            {sectionTitle}
-          </h3>
-          <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-            eGFR kademeleri, İntermittan Hemodiyaliz (IHD), Periton Diyalizi (CAPD/APD), CRRT, SLED ve Child-Pugh A / B / C doz matrisi
-          </p>
-        </div>
-      </div>
-
       {/* Özet & Klinik Kurallar Grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div
@@ -664,7 +821,7 @@ export const OrganImpairmentGridBlock: React.FC<OrganImpairmentGridBlockProps> =
           </div>
         </div>
       )}
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -676,6 +833,7 @@ interface PregnancyLactationBlockProps {
   pregnancyDetails: string[];
   lactationSummary: string;
   lactationDetails: string[];
+  defaultOpen?: boolean;
 }
 
 export const PregnancyLactationBlock: React.FC<PregnancyLactationBlockProps> = ({
@@ -686,22 +844,18 @@ export const PregnancyLactationBlock: React.FC<PregnancyLactationBlockProps> = (
   pregnancyDetails,
   lactationSummary,
   lactationDetails,
+  defaultOpen = false,
 }) => {
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      subtitle={pregnancySummary}
+      defaultOpen={defaultOpen}
+      icon={<Baby className={`h-5 w-5 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />}
     >
-      <div className="flex items-center gap-2.5">
-        <Baby className={`h-5 w-5 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div
           className={`rounded-xl border p-4 ${
             isDark ? 'border-slate-800 bg-slate-950/60' : 'border-slate-200 bg-slate-50/70'
@@ -710,7 +864,7 @@ export const PregnancyLactationBlock: React.FC<PregnancyLactationBlockProps> = (
           <div className="flex items-center gap-2">
             <HeartPulse className={`h-4 w-4 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />
             <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-pink-300' : 'text-pink-700'}`}>
-              Gebelik & Uteroplasental Etki
+              Gebelik &amp; Uteroplasental Etki
             </p>
           </div>
           <p className={`mt-1.5 text-xs sm:text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -732,7 +886,7 @@ export const PregnancyLactationBlock: React.FC<PregnancyLactationBlockProps> = (
           }`}
         >
           <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>
-            Laktasyon & Emzirme
+            Laktasyon &amp; Emzirme
           </p>
           <p className={`mt-1.5 text-xs sm:text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
             {lactationSummary}
@@ -747,7 +901,7 @@ export const PregnancyLactationBlock: React.FC<PregnancyLactationBlockProps> = (
           </ul>
         </div>
       </div>
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -762,6 +916,7 @@ interface MechanismOfActionBlockProps {
   sectionTitle?: string;
   summary: string;
   pillars: MechanismPillar[];
+  defaultOpen?: boolean;
 }
 
 export const MechanismOfActionBlock: React.FC<MechanismOfActionBlockProps> = ({
@@ -770,22 +925,18 @@ export const MechanismOfActionBlock: React.FC<MechanismOfActionBlockProps> = ({
   sectionTitle = 'Etki Mekanizması & Moleküler Farmakodinamik',
   summary,
   pillars,
+  defaultOpen = false,
 }) => {
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      subtitle={summary}
+      defaultOpen={defaultOpen}
+      icon={<Zap className={`h-5 w-5 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />}
     >
-      <div className="flex items-center gap-2.5">
-        <Zap className={`h-5 w-5 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
-      </div>
-
-      <p className={`mt-3 text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
         {summary}
       </p>
 
@@ -806,7 +957,7 @@ export const MechanismOfActionBlock: React.FC<MechanismOfActionBlockProps> = ({
           </div>
         ))}
       </div>
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -822,6 +973,7 @@ interface AdverseEffectsBlockProps {
   sectionId?: string;
   sectionTitle?: string;
   items: AdverseEffectItem[];
+  defaultOpen?: boolean;
 }
 
 export const AdverseEffectsBlock: React.FC<AdverseEffectsBlockProps> = ({
@@ -829,6 +981,7 @@ export const AdverseEffectsBlock: React.FC<AdverseEffectsBlockProps> = ({
   sectionId = 'sec-olumsuz',
   sectionTitle = 'Önemli Olumsuz Etkiler (Adverse Effects)',
   items,
+  defaultOpen = false,
 }) => {
   const toneStyles = (tone: AdverseEffectItem['tone'] = 'rose') => {
     switch (tone) {
@@ -856,20 +1009,25 @@ export const AdverseEffectsBlock: React.FC<AdverseEffectsBlockProps> = ({
   };
 
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      defaultOpen={defaultOpen}
+      icon={<HeartPulse className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />}
+      badge={
+        <span
+          className={`rounded-md border px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+            isDark
+              ? 'border-rose-500/30 bg-rose-950/40 text-rose-300'
+              : 'border-rose-200 bg-rose-50 text-rose-700'
+          }`}
+        >
+          {items.length} Etki
+        </span>
+      }
     >
-      <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-        <HeartPulse className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
         {items.map((item, idx) => {
           const styles = toneStyles(item.tone);
           return (
@@ -889,7 +1047,7 @@ export const AdverseEffectsBlock: React.FC<AdverseEffectsBlockProps> = ({
           );
         })}
       </div>
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -903,6 +1061,7 @@ interface SpecialClinicalCautionsBlockProps {
   sectionId?: string;
   sectionTitle?: string;
   items: ClinicalCautionItem[];
+  defaultOpen?: boolean;
 }
 
 export const SpecialClinicalCautionsBlock: React.FC<SpecialClinicalCautionsBlockProps> = ({
@@ -910,22 +1069,28 @@ export const SpecialClinicalCautionsBlock: React.FC<SpecialClinicalCautionsBlock
   sectionId = 'sec-ozel-durumlar',
   sectionTitle = 'Klinisyenin Dikkat Etmesi Gereken Özel Klinik Durumlar',
   items,
+  defaultOpen = false,
 }) => {
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      defaultOpen={defaultOpen}
+      icon={<Stethoscope className={`h-5 w-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />}
+      badge={
+        <span
+          className={`rounded-md border px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+            isDark
+              ? 'border-teal-500/30 bg-teal-950/40 text-teal-300'
+              : 'border-teal-200 bg-teal-50 text-teal-700'
+          }`}
+        >
+          {items.length} Başlık
+        </span>
+      }
     >
-      <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-        <Stethoscope className={`h-5 w-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {items.map((item, idx) => (
           <div
             key={idx}
@@ -941,7 +1106,7 @@ export const SpecialClinicalCautionsBlock: React.FC<SpecialClinicalCautionsBlock
           </div>
         ))}
       </div>
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -975,6 +1140,7 @@ interface DrugReferencesAndInteractionsBlockProps {
   medscapeUrl?: string;
   drugsComLabel?: string;
   medscapeLabel?: string;
+  defaultOpen?: boolean;
 }
 
 export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInteractionsBlockProps> = ({
@@ -988,6 +1154,7 @@ export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInter
   medscapeUrl,
   drugsComLabel = 'Drugs.com Interaction Checker',
   medscapeLabel = 'Medscape Drug Reference & Interactions',
+  defaultOpen = false,
 }) => {
   const severityStyles = (severity: StructuredDrugInteraction['severity']) => {
     if (severity === 'X') {
@@ -1018,21 +1185,29 @@ export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInter
   };
 
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      defaultOpen={defaultOpen}
+      icon={<BookOpen className={`h-5 w-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />}
+      badge={
+        <span
+          className={`rounded-md border px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+            isDark
+              ? 'border-teal-500/30 bg-teal-950/40 text-teal-300'
+              : 'border-teal-200 bg-teal-50 text-teal-700'
+          }`}
+        >
+          {structuredInteractions && structuredInteractions.length > 0
+            ? `${structuredInteractions.length} Etkileşim · `
+            : ''}
+          {references.length} Kaynak
+        </span>
+      }
     >
-      <div className="flex items-center gap-2.5">
-        <BookOpen className={`h-5 w-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
-      </div>
-
       {structuredInteractions && structuredInteractions.length > 0 && (
-        <div className="mt-4 space-y-2.5">
+        <div className="space-y-2.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
               Kritik Klinik İlaç Etkileşimleri (Şiddet Dereceli)
@@ -1079,7 +1254,7 @@ export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInter
         </div>
       )}
 
-      <div className="mt-5 space-y-2.5">
+      <div className={structuredInteractions && structuredInteractions.length > 0 ? 'mt-5 space-y-2.5' : 'space-y-2.5'}>
         {structuredInteractions && structuredInteractions.length > 0 && (
           <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
             Kanıta Dayalı Birincil Kaynaklar (PubMed / DOI)
@@ -1226,7 +1401,7 @@ export const DrugReferencesAndInteractionsBlock: React.FC<DrugReferencesAndInter
           )}
         </div>
       )}
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -1250,6 +1425,7 @@ interface TurkeyFormulationBlockProps {
   preparations: TurkeyPreparationItem[];
   standardDilutions?: string[];
   concentrationTrapWarning?: string;
+  defaultOpen?: boolean;
 }
 
 export const TurkeyFormulationBlock: React.FC<TurkeyFormulationBlockProps> = ({
@@ -1259,27 +1435,29 @@ export const TurkeyFormulationBlock: React.FC<TurkeyFormulationBlockProps> = ({
   preparations,
   standardDilutions,
   concentrationTrapWarning,
+  defaultOpen = false,
 }) => {
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      eyebrow="TİTCK / Türkiye Klinik Pratiği · Formülasyon Doğrulama"
+      title={sectionTitle}
+      defaultOpen={defaultOpen}
+      icon={<Pill className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />}
+      badge={
+        <span
+          className={`rounded-md border px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+            isDark
+              ? 'border-rose-500/30 bg-rose-950/40 text-rose-300'
+              : 'border-rose-200 bg-rose-50 text-rose-700'
+          }`}
+        >
+          {preparations.length} Preparat
+        </span>
+      }
     >
-      <div className="flex items-center gap-2.5">
-        <Pill className={`h-5 w-5 ${isDark ? 'text-rose-400' : 'text-rose-600'}`} />
-        <div>
-          <p className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-rose-300' : 'text-rose-700'}`}>
-            TİTCK / Türkiye Klinik Pratiği · Formülasyon Doğrulama
-          </p>
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            {sectionTitle}
-          </h3>
-        </div>
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {preparations.map((prep, idx) => {
           const isHigh = prep.alertLevel === 'high';
           return (
@@ -1356,7 +1534,7 @@ export const TurkeyFormulationBlock: React.FC<TurkeyFormulationBlockProps> = ({
           </p>
         </div>
       )}
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -1373,6 +1551,7 @@ interface CompatibilityAndLineBlockProps {
   ySiteIncompatible: string[];
   stabilityNote?: string;
   extravasationProtocol?: string;
+  defaultOpen?: boolean;
 }
 
 export const CompatibilityAndLineBlock: React.FC<CompatibilityAndLineBlockProps> = ({
@@ -1388,6 +1567,7 @@ export const CompatibilityAndLineBlock: React.FC<CompatibilityAndLineBlockProps>
   ySiteIncompatible,
   stabilityNote,
   extravasationProtocol,
+  defaultOpen = false,
 }) => {
   const accessBadge = (() => {
     if (accessRequirement === 'central-mandatory') {
@@ -1409,25 +1589,19 @@ export const CompatibilityAndLineBlock: React.FC<CompatibilityAndLineBlockProps>
   })();
 
   return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
-    >
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2.5">
-          <Syringe className={`h-5 w-5 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            {sectionTitle}
-          </h3>
-        </div>
-        <span className={`inline-flex w-fit rounded-lg border px-2.5 py-1 text-xs font-bold ${accessBadge.cls}`}>
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      defaultOpen={defaultOpen}
+      icon={<Syringe className={`h-5 w-5 ${isDark ? 'text-sky-400' : 'text-sky-600'}`} />}
+      badge={
+        <span className={`hidden md:inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-bold ${accessBadge.cls}`}>
           {accessBadge.label}
         </span>
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+      }
+    >
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <div
           className={`rounded-xl border p-3.5 md:col-span-2 ${
             isDark ? 'border-slate-800 bg-slate-950/60' : 'border-slate-200 bg-slate-50/70'
@@ -1546,7 +1720,7 @@ export const CompatibilityAndLineBlock: React.FC<CompatibilityAndLineBlockProps>
           <strong>Ekstravazasyon / Ölü Boşluk Güvenliği:</strong> {extravasationProtocol}
         </div>
       )}
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -1561,6 +1735,7 @@ interface GeriatricAndObesityBlockProps {
   obesityWeightScalarBadge?: string;
   obesityPoints: string[];
   clinicalNote?: string;
+  defaultOpen?: boolean;
 }
 
 export const GeriatricAndObesityBlock: React.FC<GeriatricAndObesityBlockProps> = ({
@@ -1574,22 +1749,32 @@ export const GeriatricAndObesityBlock: React.FC<GeriatricAndObesityBlockProps> =
   obesityWeightScalarBadge,
   obesityPoints,
   clinicalNote,
+  defaultOpen = false,
 }) => {
-  return (
-    <section
-      id={sectionId}
-      className={`rounded-2xl border p-5 sm:p-6 ${
-        isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-      }`}
-    >
-      <div className="flex items-center gap-2.5">
-        <Users className={`h-5 w-5 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
-        <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-          {sectionTitle}
-        </h3>
-      </div>
+  const headerBadgeText = [geriatricReductionBadge, obesityWeightScalarBadge].filter(Boolean).join(' · ');
 
-      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+  return (
+    <MonographAccordionSection
+      isDark={isDark}
+      sectionId={sectionId}
+      title={sectionTitle}
+      defaultOpen={defaultOpen}
+      icon={<Users className={`h-5 w-5 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />}
+      badge={
+        headerBadgeText ? (
+          <span
+            className={`hidden md:inline-flex rounded-md border px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
+              isDark
+                ? 'border-indigo-500/30 bg-indigo-950/40 text-indigo-300'
+                : 'border-indigo-200 bg-indigo-50 text-indigo-700'
+            }`}
+          >
+            {headerBadgeText}
+          </span>
+        ) : undefined
+      }
+    >
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div
           className={`rounded-xl border p-4 ${
             isDark ? 'border-indigo-900/50 bg-indigo-950/15' : 'border-indigo-200 bg-indigo-50/50'
@@ -1661,7 +1846,7 @@ export const GeriatricAndObesityBlock: React.FC<GeriatricAndObesityBlockProps> =
           <strong>Klinik Not:</strong> {clinicalNote}
         </p>
       )}
-    </section>
+    </MonographAccordionSection>
   );
 };
 
@@ -1727,7 +1912,7 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
   clinicalPearls,
   clinicalPearlsTitle,
 }) => {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
+  const [open, setOpen] = useMonographAccordion(sectionId, defaultOpen);
   const isFourTier = Boolean(intracellularSignaling || (tissueOrganSystems && tissueOrganSystems.length > 0));
 
   const getCardAccentClasses = (accent: TissueOrganSystemCard['accent'] = 'sky') => {
@@ -1780,7 +1965,7 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
   return (
     <section
       id={sectionId}
-      className={`overflow-hidden rounded-2xl border transition-all ${
+      className={`overflow-hidden rounded-2xl border transition-all scroll-mt-20 ${
         isDark ? 'border-violet-900/50 bg-slate-900/80' : 'border-violet-200 bg-white shadow-xs'
       }`}
     >
@@ -1802,15 +1987,15 @@ export const DeepPharmacodynamicsBlock: React.FC<DeepPharmacodynamicsProps> = ({
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className={`text-base sm:text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              <h3 className={`text-sm sm:text-base font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 {sectionTitle}
               </h3>
               <span
-                className={`rounded-md px-2 py-0.5 font-mono text-[11px] font-semibold ${
+                className={`rounded-md px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
                   isDark ? 'bg-slate-800 text-violet-300' : 'bg-violet-50 text-violet-700'
                 }`}
               >
-                {open ? 'Gizle' : 'Tıkla & Göster'}
+                {open ? 'Gizle' : 'Aç'}
               </span>
             </div>
             <p className={`mt-0.5 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>

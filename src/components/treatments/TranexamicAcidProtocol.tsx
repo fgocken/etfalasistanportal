@@ -21,12 +21,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -102,7 +104,7 @@ export const TranexamicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isDark }
   const [serumCr, setSerumCr] = useState<number>(1.8);
 
   // Akordiyon State
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik ID'leri
   const weightSliderId = useId();
@@ -375,7 +377,7 @@ export const TranexamicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isDark }
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -512,21 +514,14 @@ export const TranexamicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isDark }
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ (#sec-dozlar)               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar & Kanıta Dayalı Doz Rejimleri"
+        subtitle="Maks IV Hız ≤ 100 mg/dk · 1 g ≥ 10 dk"
+        icon={<BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        defaultOpen={false}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Klinik Endikasyonlar &amp; Kanıta Dayalı Doz Rejimleri
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Maks IV Hız ≤ 100 mg/dk · 1 g ≥ 10 dk</span>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* 1. Travma & TBH (CRASH-2 / CRASH-3) */}
@@ -670,29 +665,21 @@ export const TranexamicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isDark }
             </tbody>
           </table>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. ETKİLEŞİMLİ DOZ, SEYRELTME & RENAL HESAPLAYICI (#sec-hesaplayici) */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all space-y-5 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Etkileşimli Traneksamik Asit Doz, İnfüzyon & Renal Hesaplayıcı"
+        subtitle="Stok konsantrasyon: 100 mg/mL (500 mg/5 mL veya 250 mg/2,5 mL ampul) · Maksimum IV hız ≤ 100 mg/dk"
+        icon={<Layers className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-5"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <Layers className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                Etkileşimli Traneksamik Asit Doz, İnfüzyon &amp; Renal Hesaplayıcı
-              </h2>
-            </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Stok konsantrasyon: <span className="font-mono font-semibold">100 mg/mL</span> (500 mg/5 mL veya 250 mg/2,5 mL ampul) · Maksimum IV hız ≤ 100 mg/dk
-            </p>
-          </div>
+        <div className="flex items-center justify-end">
           <MonographCopyButton
             isDark={isDark}
             label="Order Özeti Kopyala"
@@ -1430,7 +1417,7 @@ export const TranexamicAcidProtocol: React.FC<{ isDark: boolean }> = ({ isDark }
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (#sec-tr-preparat)      */}

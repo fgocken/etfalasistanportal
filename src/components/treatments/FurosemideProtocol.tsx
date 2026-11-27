@@ -22,12 +22,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
@@ -41,7 +43,7 @@ type InfusionPrep = 'pure_10' | 'conc_4' | 'conc_2';
 
 export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
   const [activeTab, setActiveTab] = useState<CalcTab>('bolus');
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // 1. Bolus / ESC-DOSE State
   const [bolusScenario, setBolusScenario] = useState<BolusScenario>('adhf_edema');
@@ -368,7 +370,7 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
       {/* 3. FARMAKOKİNETİK & FARMAKODİNAMİK PROFİLİ */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border p-5 sm:p-6 ${
+        className={`scroll-mt-20 rounded-2xl border p-5 sm:p-6 ${
           isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
         }`}
       >
@@ -460,23 +462,15 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
       />
 
       {/* 5. KLİNİK ENDİKASYONLAR VE DOZ REJİMLERİ */}
-      <section
-        id="sec-dozlar"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-4 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri"
+        subtitle="ESC 2021 / DOSE · Furosemid Stres Testi (FST) · TACO · Hiperkalemi · Nöroşirürji & Pediatri"
+        icon={<Stethoscope className={`h-5 w-5 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-4"
       >
-        <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <Stethoscope className={`h-5 w-5 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
-          <div>
-            <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Klinik Endikasyonlar ve Kanıta Dayalı Doz Rejimleri
-            </h3>
-            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              ESC 2021 / DOSE · Furosemid Stres Testi (FST) · TACO · Hiperkalemi · Nöroşirürji &amp; Pediatri
-            </p>
-          </div>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className={`rounded-xl border p-4 space-y-2 ${isDark ? 'bg-slate-950/60 border-cyan-500/30' : 'bg-cyan-50/40 border-cyan-200'}`}>
@@ -556,28 +550,20 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
           <strong className={isDark ? 'text-white' : 'text-slate-900'}>Pediatrik Doz Özeti: </strong>
           IV/PO başlangıç <span className="font-mono font-semibold">1 mg/kg/doz</span> (yanıt yetersizse 2 sa sonra +1 mg/kg; tek doz tavanı genellikle 2 mg/kg, günlük maks 6 mg/kg/gün). Sürekli IV infüzyon: <span className="font-mono font-semibold">0,05 – 0,4 mg/kg/saat</span> (yenidoğanlarda ototoksisite ve nefrokalsinoz riski nedeniyle 12–24 sa arayla dikkatle uygulanır).
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* 6. ETKİLEŞİMLİ YATAK BAŞI HESAPLAYICI (BOLUS / SÜREKLİ İNFÜZYON / FST) */}
-      <section
-        id="sec-hesaplayici"
-        className={`rounded-2xl border p-5 sm:p-6 space-y-5 ${
-          isDark ? 'border-cyan-500/35 bg-slate-900/90' : 'border-cyan-200 bg-white shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Yatak Başı Doz, İnfüzyon Pompası & Furosemid Stres Testi (FST) Hesaplayıcısı"
+        subtitle="ESC/DOSE bolus hesabı, 20 mg/2 mL ampul dönüşümü, sürekli infüzyon mL/saat ve Chawla FST yorumlayıcısı"
+        icon={<Activity className="h-5 w-5 text-cyan-500" />}
+        defaultOpen={false}
+        containerClassName={isDark ? 'border-cyan-500/35 bg-slate-900/90' : 'border-cyan-200 bg-white shadow-xs'}
+        bodyClassName="p-5 sm:p-6 space-y-5"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <Activity className="h-5 w-5 text-cyan-500" />
-            <div>
-              <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Yatak Başı Doz, İnfüzyon Pompası &amp; Furosemid Stres Testi (FST) Hesaplayıcısı
-              </h3>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                ESC/DOSE bolus hesabı, 20 mg/2 mL ampul dönüşümü, sürekli infüzyon mL/saat ve Chawla FST yorumlayıcısı
-              </p>
-            </div>
-          </div>
-
+        <div className="flex justify-end">
           <MonographCopyButton isDark={isDark} getText={getReportText} label="Raporu Kopyala" />
         </div>
 
@@ -1141,7 +1127,7 @@ export const FurosemideProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (v4.0) */}
       <TurkeyFormulationBlock

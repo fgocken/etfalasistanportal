@@ -24,12 +24,14 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART1 } from '../../data/organImpairment/standaloneOrganPart1';
 
@@ -61,7 +63,7 @@ export const HydrocortisoneProtocol: React.FC<Props> = ({ isDark }) => {
   const [converterHydroMg, setConverterHydroMg] = useState<number>(100);
 
   // Akordiyon State'i
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik Kimlikleri
   const pedWeightSliderId = useId();
@@ -286,7 +288,7 @@ export const HydrocortisoneProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -424,18 +426,13 @@ export const HydrocortisoneProtocol: React.FC<Props> = ({ isDark }) => {
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 4. ENDİKASYONLAR & KLİNİK KANIT (#sec-endikasyon)                    */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-endikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar & Klinik Kanıt (SSC 2021 · ADRENAL · APROCCHSS · Woodcock 2020)"
+        icon={<BookOpen className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar &amp; Klinik Kanıt (SSC 2021 · ADRENAL · APROCCHSS · Woodcock 2020)
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* 1. Refrakter Septik Şok */}
@@ -585,26 +582,19 @@ export const HydrocortisoneProtocol: React.FC<Props> = ({ isDark }) => {
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 5. DOZAJ KADEMELERİ & KLİNİK SENARYO REJİMLERİ (#sec-dozaj)          */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozaj"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozaj"
+        title="Dozaj Kademeleri & Klinik Senaryo Rejimleri"
+        subtitle="Fizyolojik Kortizol Replasmanı & Eşdeğerlik"
+        icon={<Layers className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+        defaultOpen={false}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Dozaj Kademeleri &amp; Klinik Senaryo Rejimleri
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Fizyolojik Kortizol Replasmanı &amp; Eşdeğerlik</span>
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Kademe 1: Septik Şok */}
@@ -736,32 +726,24 @@ export const HydrocortisoneProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. İNTERAKTİF DOZ, SÜREKLİ İNFÜZYON & STEROİD EŞDEĞERLİK HESAPLAYICI */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/15 text-teal-600 dark:text-teal-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif Doz, Sürekli İnfüzyon &amp; Steroid Eşdeğerlik Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Septik şok pompası, adrenal kriz / perioperatif stres dozu, pediatrik hacim ve kortikosteroid dönüşümü
-              </p>
-            </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Doz, Sürekli İnfüzyon & Steroid Eşdeğerlik Hesaplayıcısı"
+        subtitle="Septik şok pompası, adrenal kriz / perioperatif stres dozu, pediatrik hacim ve kortikosteroid dönüşümü"
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/15 text-teal-600 dark:text-teal-400">
+            <Syringe className="w-5 h-5" />
           </div>
-
+        }
+        defaultOpen={false}
+      >
+        <div className="flex flex-wrap items-center justify-end gap-2 mb-4">
           <button
             type="button"
             onClick={() => {
@@ -1327,7 +1309,7 @@ export const HydrocortisoneProtocol: React.FC<Props> = ({ isDark }) => {
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. TÜRKİYE PREPARAT & SULANDIRMA REHBERİ (#sec-tr-preparat)          */}

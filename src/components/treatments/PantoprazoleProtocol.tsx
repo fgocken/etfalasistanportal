@@ -21,12 +21,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -110,7 +112,7 @@ export const PantoprazoleProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) 
   const [pedFreq, setPedFreq] = useState<'q24h' | 'q12h'>('q24h');
 
   // Akordiyon State (Varsayılan Kapalı)
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik ID'leri
   const adultWeightSliderId = useId();
@@ -367,7 +369,7 @@ export const PantoprazoleProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) 
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -534,21 +536,14 @@ export const PantoprazoleProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ (#sec-dozlar)               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar & Doz Rejimleri (ACG 2021 · ESGE 2021 · REVISE 2024 · SUP-ICU 2018)"
+        subtitle="1 Flakon = 40 mg IV · pH 9–10,5"
+        icon={<BookOpen className={`w-5 h-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />}
+        defaultOpen={false}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <BookOpen className={`w-5 h-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
-            <h2 className={`text-base sm:text-lg font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-              Klinik Endikasyonlar &amp; Doz Rejimleri (ACG 2021 · ESGE 2021 · REVISE 2024 · SUP-ICU 2018)
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">1 Flakon = 40 mg IV · pH 9–10,5</span>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* A. Akut Non-Varisiyel Üst GİS Kanaması */}
@@ -666,31 +661,21 @@ export const PantoprazoleProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) 
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. ETKİLEŞİMLİ 3 SEKMELİ DOZ & İNFÜZYON HESAPLAYICI (#sec-hesaplayici) */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all space-y-5 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Etkileşimli Pantoprazol Doz, İnfüzyon & SUP Karar Hesaplayıcı"
+        subtitle="Flakon: 40 mg liyofilize + 10 mL SF (4 mg/mL) · İnfüzyon: 0,8 mg/mL (10 mL/sa) veya 0,4 mg/mL (20 mL/sa)"
+        icon={<Layers className={`w-5 h-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />}
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-5"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <Layers className={`w-5 h-5 ${isDark ? 'text-teal-400' : 'text-teal-600'}`} />
-              <h2 className={`text-base sm:text-lg font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                Etkileşimli Pantoprazol Doz, İnfüzyon &amp; SUP Karar Hesaplayıcı
-              </h2>
-            </div>
-            <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              Flakon: <span className="font-mono font-semibold">40 mg liyofilize + 10 mL SF (4 mg/mL)</span> · İnfüzyon:{' '}
-              <span className="font-mono font-semibold">0,8 mg/mL (10 mL/sa)</span> veya{' '}
-              <span className="font-mono font-semibold">0,4 mg/mL (20 mL/sa)</span>
-            </p>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <MonographCopyButton
             isDark={isDark}
             label="Order Özeti Kopyala"
@@ -1480,7 +1465,7 @@ export const PantoprazoleProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) 
             )}
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (#sec-tr-preparat)      */}

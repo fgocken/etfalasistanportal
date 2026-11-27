@@ -21,12 +21,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -80,7 +82,7 @@ export const EnoxaparinProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
   const [hoursSinceEnox, setHoursSinceEnox] = useState<number>(5);
 
   // Akordeon
-  const [showAdmeDetails, setShowAdmeDetails] = useState<boolean>(false);
+  const [showAdmeDetails, setShowAdmeDetails] = useMonographAccordion('enx-moa', false);
 
   const uniqueId = useId();
   const basePanel = isDark
@@ -435,11 +437,12 @@ export const EnoxaparinProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
         />
 
         {/* Genişletilebilir ADME Akordeonu */}
-        <div className={`rounded-2xl border overflow-hidden ${basePanel}`}>
+        <div className={`rounded-2xl border overflow-hidden scroll-mt-20 ${basePanel}`}>
           <button
             type="button"
             onClick={() => setShowAdmeDetails((v) => !v)}
-            className={`w-full px-5 py-3.5 flex items-center justify-between text-left transition-colors ${
+            aria-expanded={showAdmeDetails}
+            className={`w-full px-5 py-3.5 flex items-center justify-between text-left transition-colors cursor-pointer ${
               isDark ? 'hover:bg-slate-800/70' : 'hover:bg-slate-50'
             }`}
           >
@@ -519,19 +522,14 @@ export const EnoxaparinProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
       />
 
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ */}
-      <div id="enx-indications" className="scroll-mt-24">
-        <div className={`p-5 sm:p-6 rounded-2xl border ${basePanel}`}>
-          <div className="flex items-center gap-2.5 mb-4">
-            <BookOpen className="w-5 h-5 text-teal-500 shrink-0" />
-            <div>
-              <h2 className="text-lg font-black tracking-tight">
-                Klinik Endikasyonlar &amp; Kanıta Dayalı Doz Protokolleri (CHEST · ESC 2023 · ExTRACT-TIMI 25 · RCOG)
-              </h2>
-              <p className={`text-xs ${mutedText}`}>
-                Türkiye’deki hazır enjektörler: 0,2 mL (20 mg) · 0,4 mL (40 mg) · 0,6 mL (60 mg) · 0,8 mL (80 mg) · 1,0 mL (100 mg)
-              </p>
-            </div>
-          </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="enx-indications"
+        title="Klinik Endikasyonlar & Kanıta Dayalı Doz Protokolleri (CHEST · ESC 2023 · ExTRACT-TIMI 25 · RCOG)"
+        subtitle="Türkiye’deki hazır enjektörler: 0,2 mL (20 mg) · 0,4 mL (40 mg) · 0,6 mL (60 mg) · 0,8 mL (80 mg) · 1,0 mL (100 mg)"
+        icon={<BookOpen className="w-5 h-5 text-teal-500 shrink-0" />}
+        defaultOpen={false}
+      >
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs leading-relaxed">
             <div className={`p-4 rounded-xl border ${isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
@@ -600,32 +598,28 @@ export const EnoxaparinProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
               </p>
             </div>
           </div>
-        </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 7. 4 SEKMELİ ETKİLEŞİMLİ HESAPLAYICI */}
-      <div id="enx-calc" className="scroll-mt-24">
-        <div className={`p-5 sm:p-6 rounded-2xl border ${basePanel}`}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                <Syringe className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-lg font-black tracking-tight">
-                  Enoksaparin Doz/Enjektör, ASRA 2018 (12/24 sa) &amp; Protamin (%60) Hesaplayıcısı
-                </h2>
-                <p className={`text-xs ${mutedText}`}>
-                  CrCl &lt;30 otomatik azaltım, STEMI ≥75y kilidi, TR hazır enjektör eşleştirmesi &amp; UFH vs DMAH kıyaslama
-                </p>
-              </div>
-            </div>
-            <MonographCopyButton
-              isDark={isDark}
-              getText={buildOrderText}
-              label="Order Kopyala"
-            />
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="enx-calc"
+        title="Enoksaparin Doz/Enjektör, ASRA 2018 (12/24 sa) & Protamin (%60) Hesaplayıcısı"
+        subtitle="CrCl <30 otomatik azaltım, STEMI ≥75y kilidi, TR hazır enjektör eşleştirmesi & UFH vs DMAH kıyaslama"
+        icon={
+          <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+            <Syringe className="w-5 h-5" />
           </div>
+        }
+        defaultOpen={false}
+      >
+        <div className="flex items-center justify-end mb-4">
+          <MonographCopyButton
+            isDark={isDark}
+            getText={buildOrderText}
+            label="Order Kopyala"
+          />
+        </div>
 
           {/* Sekmeler */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-5">
@@ -938,8 +932,7 @@ export const EnoxaparinProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
               </table>
             </div>
           )}
-        </div>
-      </div>
+      </MonographAccordionSection>
 
       {/* 8. TÜRKİYE PİYASA FORMLARI */}
       <TurkeyFormulationBlock

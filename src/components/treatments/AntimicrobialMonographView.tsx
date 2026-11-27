@@ -29,12 +29,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
 
@@ -172,8 +174,8 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
   const { calculator } = data;
   const { perioperative, icu, renalTiers } = calculator;
 
-  // Collapsible ADME accordion (default closed per v5.0 Gold Standard)
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  // Collapsible ADME accordion (default closed & synchronized with MonographQuickNav)
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Interactive 3-Tab Calculator state
   const [activeTab, setActiveTab] = useState<CalcTabId>(perioperative.applicable ? 'periop' : 'icu');
@@ -593,7 +595,7 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
       {/* 4. FARMAKOKİNETİK (ADME) AKORDİYONU (VARSAYILAN KAPALI) */}
       <section
         id="sec-pkpd"
-        className={`overflow-hidden rounded-2xl border transition-all ${
+        className={`overflow-hidden rounded-2xl border transition-all scroll-mt-20 ${
           isDark ? 'border-slate-800 bg-slate-900/90' : 'border-slate-200 bg-white shadow-xs'
         }`}
       >
@@ -601,7 +603,7 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
           type="button"
           onClick={() => setPkOpen((prev) => !prev)}
           aria-expanded={pkOpen}
-          className={`flex w-full cursor-pointer items-center justify-between p-5 sm:p-6 text-left transition-colors ${
+          className={`flex w-full cursor-pointer items-center justify-between p-4 sm:p-5 text-left transition-colors ${
             isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'
           }`}
         >
@@ -611,7 +613,7 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
             </div>
             <div>
               <h2
-                className={`flex flex-wrap items-center gap-2 text-base sm:text-lg font-bold ${
+                className={`flex flex-wrap items-center gap-2 text-sm sm:text-base font-bold ${
                   isDark ? 'text-slate-100' : 'text-slate-900'
                 }`}
               >
@@ -620,11 +622,11 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
                   {icu.pkPdBadge}
                 </span>
                 <span
-                  className={`rounded-md px-2 py-0.5 font-mono text-[11px] font-semibold ${
+                  className={`rounded-md px-2 py-0.5 font-mono text-[10.5px] font-semibold ${
                     isDark ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'
                   }`}
                 >
-                  {pkOpen ? 'Gizle' : 'Tıkla & Göster'}
+                  {pkOpen ? 'Gizle' : 'Aç'}
                 </span>
               </h2>
               <p className={`mt-0.5 text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
@@ -675,25 +677,19 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
       />
 
       {/* 6. KLİNİK ENDİKASYONLAR VE DOZ REJİMLERİ (PERİOPERATİF vs YBÜ vs ÖZEL) */}
-      <section
-        id="sec-dozlar"
-        className={`rounded-2xl border p-5 sm:p-6 ${
-          isDark ? 'border-slate-800 bg-slate-900/70' : 'border-slate-200 bg-white'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        eyebrow="FDA / EMA / TİTCK / IDSA / ASHP · Temel, YBÜ & Perioperatif Doz Rejimleri"
+        title="Klinik Endikasyonlar ve Doz Rejimleri"
+        icon={<Syringe className={`h-5 w-5 ${accent.text}`} />}
+        badge={
+          <span className={`rounded-md px-2 py-0.5 font-mono text-[10.5px] font-semibold ${accent.pill}`}>
+            {data.regimenCards.length} Rejim
+          </span>
+        }
       >
-        <div className="flex items-center gap-2.5">
-          <Syringe className={`h-5 w-5 ${accent.text}`} />
-          <div>
-            <p className={`text-[11px] font-bold uppercase tracking-wider ${accent.text}`}>
-              FDA / EMA / TİTCK / IDSA / ASHP · Temel, YBÜ &amp; Perioperatif Doz Rejimleri
-            </p>
-            <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              Klinik Endikasyonlar ve Doz Rejimleri
-            </h3>
-          </div>
-        </div>
-
-        <div className="mt-5 space-y-5">
+        <div className="space-y-5">
           {[
             {
               key: 'core',
@@ -799,49 +795,38 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
               </div>
             ))}
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* 7. ETKİLEŞİMLİ 3 SEKMELİ ANTIMİKROBİYAL HESAPLAYICI */}
-      <section
-        id="sec-hesaplayici"
-        className={`rounded-2xl border p-5 sm:p-6 ${
-          isDark ? 'border-slate-800 bg-slate-900/90' : 'border-slate-200 bg-white shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="Etkileşimli Antimikrobiyal Doz, Redozaj & İnfüzyon Hesaplayıcı"
+        subtitle="Perioperatif profilaksi, YBÜ uzamış infüzyon pompa hızı ve renal/CRRT doz uyarlaması"
+        icon={
+          <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${accent.iconBg}`}>
+            <Calculator className="h-5 w-5" />
+          </div>
+        }
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${accent.iconBg}`}>
-              <Calculator className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Etkileşimli Antimikrobiyal Doz, Redozaj &amp; İnfüzyon Hesaplayıcı
-              </h3>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                Perioperatif profilaksi, YBÜ uzamış infüzyon pompa hızı ve renal/CRRT doz uyarlaması
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={handleReset}
-              className={`inline-flex cursor-pointer items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
-                isDark
-                  ? 'border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white'
-                  : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              <span>Sıfırla</span>
-            </button>
-            <MonographCopyButton isDark={isDark} getText={buildOrderText} label="Order Kopyala" />
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <button
+            type="button"
+            onClick={handleReset}
+            className={`inline-flex cursor-pointer items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
+              isDark
+                ? 'border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white'
+                : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Sıfırla</span>
+          </button>
+          <MonographCopyButton isDark={isDark} getText={buildOrderText} label="Order Kopyala" />
         </div>
 
         {/* Hasta Ağırlığı + Obezite Skaler Yardımcısı */}
-        <div className="mt-5 space-y-3">
+        <div className="mt-4 space-y-3">
           <div
             className={`rounded-xl border p-4 ${
               isDark ? 'border-slate-800 bg-slate-950/60' : 'border-slate-200 bg-slate-50/70'
@@ -1675,7 +1660,7 @@ export const AntimicrobialMonographView: React.FC<Props> = ({ data, isDark }) =>
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* 8. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ */}
       <TurkeyFormulationBlock

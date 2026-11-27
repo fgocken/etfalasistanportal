@@ -24,12 +24,14 @@ import {
   DrugReferencesAndInteractionsBlock,
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 
@@ -173,7 +175,7 @@ export const ThiopentalProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
   const [checkedSteps, setCheckedSteps] = useState<Record<string, boolean>>({});
 
   // Akordiyon State'i
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik Kimlikleri
   const weightSliderId = useId();
@@ -430,7 +432,7 @@ export const ThiopentalProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`rounded-2xl border transition-all overflow-hidden scroll-mt-20 ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -576,18 +578,13 @@ export const ThiopentalProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. ENDİKASYONLAR & KLİNİK KANIT (#sec-endikasyon)                   */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-endikasyon"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-endikasyon"
+        title="Endikasyonlar & Klinik Kanıt (BTF 2017 · NCS 2012 · Pental KÜB)"
+        icon={<BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        defaultOpen={false}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Endikasyonlar &amp; Klinik Kanıt (BTF 2017 · NCS 2012 · Pental KÜB)
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* 1. Genel Anestezi İndüksiyonu & RSI */}
@@ -729,26 +726,19 @@ export const ThiopentalProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. DOZAJ KADEMELERİ & KLİNİK SENARYO REJİMLERİ (#sec-dozaj)         */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozaj"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozaj"
+        title="Dozaj Kademeleri & Klinik Senaryo Rejimleri"
+        icon={<Layers className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+        badge={<span className="hidden sm:inline-block text-xs font-mono text-slate-500">Standart %2,5 Çözelti: 25 mg/mL (1 g / 40 mL)</span>}
+        defaultOpen={false}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-              Dozaj Kademeleri &amp; Klinik Senaryo Rejimleri
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">Standart %2,5 Çözelti: 25 mg/mL (1 g / 40 mL)</span>
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Kademe 1: Erişkin / Geriatrik / Pediatrik İndüksiyon */}
@@ -879,32 +869,24 @@ export const ThiopentalProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
             </div>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. 4 SEKMELİ İNTERAKTİF HESAPLAYICI (#sec-hesaplayici)              */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/15 text-teal-600 dark:text-teal-400">
-              <Syringe className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                İnteraktif Klinik Doz, %2,5 / %1 İnfüzyon &amp; İntra-Arteriyel Kurtarma Hesaplayıcısı
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Pental Sodyum® / Tyosod® 0,5 g &amp; 1 g Flakon · Standart %2,5 (25 mg/mL) ve %1 (10 mg/mL) Pompa Modları
-              </p>
-            </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Klinik Doz, %2,5 / %1 İnfüzyon & İntra-Arteriyel Kurtarma Hesaplayıcısı"
+        subtitle="Pental Sodyum® / Tyosod® 0,5 g & 1 g Flakon · Standart %2,5 (25 mg/mL) ve %1 (10 mg/mL) Pompa Modları"
+        icon={
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-teal-500/15 text-teal-600 dark:text-teal-400">
+            <Syringe className="w-5 h-5" />
           </div>
-
+        }
+        defaultOpen={false}
+      >
+        <div className="flex items-center justify-end gap-2 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
           <button
             type="button"
             onClick={() => {
@@ -1646,7 +1628,7 @@ export const ThiopentalProtocol: React.FC<{ isDark: boolean }> = ({ isDark }) =>
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 9. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (#sec-tr-preparat)      */}

@@ -21,12 +21,14 @@ import {
   GeriatricAndObesityBlock,
   HighAlertSafetyBlock,
   MechanismOfActionBlock,
+  MonographAccordionSection,
   MonographCopyButton,
   MonographQuickNav,
   OrganImpairmentGridBlock,
   PregnancyLactationBlock,
   SpecialClinicalCautionsBlock,
   TurkeyFormulationBlock,
+  useMonographAccordion,
 } from './shared/DrugMonographBlocks';
 import { STANDALONE_ORGAN_PART2 } from '../../data/organImpairment/standaloneOrganPart2';
 import { ObesityDosingScaler } from './shared/ObesityDosingScaler';
@@ -67,7 +69,7 @@ export const SodiumBicarbonateProtocol: React.FC<{ isDark: boolean }> = ({ isDar
   const [pedForceHalfMolar, setPedForceHalfMolar] = useState<boolean>(true);
 
   // Akordiyon State (Varsayılan Kapalı)
-  const [pkOpen, setPkOpen] = useState<boolean>(false);
+  const [pkOpen, setPkOpen] = useMonographAccordion('sec-pkpd', false);
 
   // Erişilebilirlik ID'leri
   const acidWeightSliderId = useId();
@@ -368,7 +370,7 @@ export const SodiumBicarbonateProtocol: React.FC<{ isDark: boolean }> = ({ isDar
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section
         id="sec-pkpd"
-        className={`rounded-2xl border transition-all overflow-hidden ${
+        className={`scroll-mt-20 rounded-2xl border transition-all overflow-hidden ${
           isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
         }`}
       >
@@ -538,21 +540,14 @@ export const SodiumBicarbonateProtocol: React.FC<{ isDark: boolean }> = ({ isDar
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. KLİNİK ENDİKASYONLAR & DOZ REJİMLERİ (#sec-dozlar)               */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-dozlar"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-dozlar"
+        title="Klinik Endikasyonlar & Doz Rejimleri (BICAR-ICU · SSC 2021 · Toksikoloji · ADA 2024 · AHA 2020)"
+        subtitle="1 Ampul (10 mL %8,4) = 10 mEq = 840 mg"
+        icon={<BookOpen className={`w-5 h-5 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />}
+        defaultOpen={false}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <BookOpen className={`w-5 h-5 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
-            <h2 className={`text-base sm:text-lg font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-              Klinik Endikasyonlar &amp; Doz Rejimleri (BICAR-ICU · SSC 2021 · Toksikoloji · ADA 2024 · AHA 2020)
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-500">1 Ampul (10 mL %8,4) = 10 mEq = 840 mg</span>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* A. TCA & Sodyum Kanal Blokeri Zehirlenmesi */}
@@ -736,36 +731,29 @@ export const SodiumBicarbonateProtocol: React.FC<{ isDark: boolean }> = ({ isDar
             </p>
           </div>
         </div>
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 7. İNTERAKTİF 4 SEKMELİ KLİNİK DOZ HESAPLAYICI (#sec-hesaplayici)   */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      <section
-        id="sec-hesaplayici"
-        className={`p-5 sm:p-6 rounded-2xl border transition-all space-y-5 ${
-          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-xs'
-        }`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <div
-              className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                isDark ? 'bg-cyan-500/15 text-cyan-400' : 'bg-cyan-50 text-cyan-600'
-              }`}
-            >
-              <FlaskConical className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className={`text-base sm:text-lg font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                İnteraktif Sodyum Bikarbonat %8,4 Klinik Doz &amp; Hazırlama Hesaplayıcısı
-              </h2>
-              <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                TR standart 10 mL %8,4 ampul (10 mEq = 1 mEq/mL), izotonik D5W torba (150 mEq/L) ve yenidoğan %4,2 (0,5 mEq/mL) hesabı
-              </p>
-            </div>
+      <MonographAccordionSection
+        isDark={isDark}
+        sectionId="sec-hesaplayici"
+        title="İnteraktif Sodyum Bikarbonat %8,4 Klinik Doz & Hazırlama Hesaplayıcısı"
+        subtitle="TR standart 10 mL %8,4 ampul (10 mEq = 1 mEq/mL), izotonik D5W torba (150 mEq/L) ve yenidoğan %4,2 (0,5 mEq/mL) hesabı"
+        icon={
+          <div
+            className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+              isDark ? 'bg-cyan-500/15 text-cyan-400' : 'bg-cyan-50 text-cyan-600'
+            }`}
+          >
+            <FlaskConical className="w-5 h-5" />
           </div>
-
+        }
+        defaultOpen={false}
+        bodyClassName="p-5 sm:p-6 space-y-5"
+      >
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <MonographCopyButton isDark={isDark} label="Hesaplanan Order’ı Kopyala" getText={buildCopySummary} />
         </div>
 
@@ -1504,7 +1492,7 @@ export const SodiumBicarbonateProtocol: React.FC<{ isDark: boolean }> = ({ isDar
             </div>
           </div>
         )}
-      </section>
+      </MonographAccordionSection>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 8. TÜRKİYE PREPARAT & KONSANTRASYON REHBERİ (#sec-tr-preparat)      */}
