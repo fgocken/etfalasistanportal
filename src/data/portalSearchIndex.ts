@@ -3239,6 +3239,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'pantoprazole',
     popular: true
   },
+  {
+    id: 'treatment-sodium-bicarbonate-protocol',
+    title: 'Sodyum Bikarbonat %8,4 (NaHCO₃ · 1 mEq/mL) Asidoz, Toksikoloji, Hiperkalemi & Alkalinizasyon',
+    category: 'Tedaviler & İlaçlar',
+    badge: '%8,4 Molar · BICAR-ICU · TCA · 10 mL = 10 mEq',
+    description: '10 mL %8,4 (10 mEq = 840 mg) molar sodyum bikarbonat monografisi ve 4 sekmeli hesaplayıcı: bikarbonat açığı & BICAR-ICU (ABH), TCA/Na⁺ kanal blokeri antidotu, salisilat/MTX idrar alkalinizasyonu, asidozlu hiperkalemi, Lidokain 1:10 tamponlama ve yenidoğan %4,2 güvenliği.',
+    keywords: [
+      'sodyum bikarbonat', 'sodium bicarbonate', 'bikarbonat', 'nahco3', '8.4', '%8.4', '%8,4',
+      'molar bikarbonat', 'metabolik asidoz', 'bicar-icu', 'tca zehirlenmesi', 'sodyum kanal blokeri',
+      'salisilat', 'idrar alkalinizasyonu', 'hiperkalemi', 'metanol', 'dka', 'lokal anestezik tamponlama',
+      'yarı molar', '%4.2', 'bicarbonate', 'bikarbonat açığı'
+    ],
+    tabId: 'treatments',
+    subId: 'sodium-bicarbonate',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

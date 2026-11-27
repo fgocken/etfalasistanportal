@@ -10,6 +10,7 @@ export type StandaloneOrganPart2Id =
   | 'pantoprazole'
   | 'pheniramine'
   | 'sevoflurane'
+  | 'sodium-bicarbonate'
   | 'sodium-nitroprusside'
   | 'sugammadex'
   | 'thiopental'
@@ -879,4 +880,71 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     dualOrganNote:
       'Sirozlu hastalarda sarkopeni nedeniyle serum kreatinin gerçek GFR’yi maskeler; hepatorenal sendromda normal görünen kreatininle tam doz TXA verilmesi hızla BOS birikimi ve refrakter GABA_A antagonizmasına bağlı nöbetlere yol açar (üst üriner sistem hematürisinde üreter pıhtı obstrüksiyonu nedeniyle ayrıca kontrendikedir).',
   },
+
+  'sodium-bicarbonate': {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Endikasyona Göre',
+        tone: 'emerald',
+        note: 'Böbrekler fazla HCO₃⁻ ve Na⁺ yükünü hızla idrarla atar. İdrar alkalinizasyonu (salisilat, MTX, fenobarbital) bu grupta tam etkilidir; ancak K⁺ replasmanı ihmal edilirse paradoksal asidüri gelişir ve idrar alkalileşmez.',
+      },
+      {
+        stage: 'Orta KBY / ABH Evre 1 (eGFR 30–59 mL/dk)',
+        doseBadge: '%100 Akut Doz · Na⁺/Volüm İzlemi',
+        tone: 'emerald',
+        note: 'Akut ağır asidozda (pH ≤7,20) veya toksikoloji endikasyonlarında standart doz uygulanır. Her 100 mEq NaHCO₃ 100 mEq (2,3 g) Na⁺ yükü getirdiğinden kan basıncı, akciğer konjesyonu ve K⁺/iCa²⁺ yakından izlenmelidir.',
+      },
+      {
+        stage: 'Ağır KBY / AKIN 2–3 ABH / Oligo-Anüri (eGFR < 30 mL/dk)',
+        doseBadge: 'BICAR-ICU ABH’de Faydalı · Anüride Volüm/Diyaliz Uyarısı!',
+        tone: 'amber',
+        note: 'BICAR-ICU (Lancet 2018) verilerine göre pH ≤7,20 + AKIN 2–3 ABH alt grubunda hedef pH ≥7,30 için IV bikarbonat 28 günlük mortaliteyi ve RRT ihtiyacını azaltmıştır. ANCAK oligürik/anürik hastada 100–150 mEq Na⁺ yükü hızla akut pulmoner ödem ve hipernatremi yapar → yavaş titre edin, RRT/diyaliz hazırlığı yapın! Anürik hastada salisilat/MTX idrar alkalinizasyonu İŞE YARAMAZ — acil hemodiyaliz şarttır!',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'HD Köprüsü · Post-HD Ek Doz YOK!',
+        tone: 'sky',
+        note: 'Standart hemodiyaliz diyalizatı zaten 32–38 mEq/L bikarbonat içerir ve asidozu doğrudan düzeltir. Akut hiperkalemi, ağır asidemi veya toksisitede diyalize köprü olarak verilebilir; ancak seans sırasında/sonrasında gereksiz IV NaHCO₃ eklenmesi post-HD metabolik alkaloz, hipokalemi, tetani (↓iCa²⁺) ve interdiyalitik volüm yüküne yol açar.',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'Volüm Kısıtlı · Yavaş Titrasyon',
+        tone: 'sky',
+        note: 'PD sıvıları laktat/bikarbonat tamponludur. Akut ağır metabolik asidoz veya toksisitede standart endikasyona göre IV verilebilir; ancak rezidüel idrar çıkışı düşükse hipernatremi ve volüm yüklenmesi riski yüksektir (%8,4 konsantre küçük hacimli bolus veya ultrafiltrasyon artırımı gerekir).',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'Önce CRRT Tamponunu Optimize Et · Sitrat Alkalozu!',
+        tone: 'indigo',
+        note: 'CRRT replasman/diyalizat sıvıları 22–35 mEq/L HCO₃⁻ içerir; ayrıca bölgesel sitrat antikoagülasyonunda karaciğer her 1 mmol sitratı 3 mmol HCO₃⁻’ye çevirir! Bu nedenle CRRT’de dirençli asidoz varsa önce kan akımı/effluent/bikarbonat ayarı kontrol edilmeli; ilave IV NaHCO₃ yalnızca ağır refrakter asidemi (pH <7,15–7,20) veya toksisitede 2–4 saatlik AKG + iCa²⁺ + Na⁺ takibiyle verilmelidir.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (Na⁺ İzlemi)',
+        tone: 'emerald',
+        detail:
+          'Sodyum bikarbonat karaciğerde metabolize olmaz; kompanse sirozda akut endikasyonlarda standart doz güvenle uygulanır.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Dikkat · Asit / Ödem & Alkaloz Riski',
+        tone: 'amber',
+        detail:
+          'Farmakokinetik hepatik birikim yoktur; ancak her 10 mL %8,4 ampul 230 mg (10 mEq) Na⁺ içerir (150 mEq izotonik torba = 3,45 g Na⁺!). Portal hipertansiyonlu hastada asit ve ödemi belirgin artırabilir; aşırı alkalinizasyondan kaçının.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'Yüksek Risk · Ensefalopati & Volüm Yükü!',
+        tone: 'rose',
+        detail:
+          'İki kritik tehlike: (1) Ağır sodyum yükü refrakter asit, plevral efüzyon ve pulmoner ödemi hızla alevlendirir; (2) Metabolik alkaloz ve eşlik eden hipokalemi, NH₄⁺ → serbest NH₃ (amonyak) dönüşümünü ve amonyağın kan-beyin bariyerinden geçişini artırarak HEPATİK ENSEFALOPATİYİ tetikler! Ayrıca ağır karaciğer yetmezliğinde sitratlı CRRT yapılıyorsa sitrat metabolize olamayacağından bikarbonat üretilmez (sitrat birikimi: Total Ca / iCa >2,5 + artan anyon açıklı asidoz).',
+      },
+    ],
+    dualOrganNote:
+      'Hepatorenal sendromda (Child-Pugh C + oligo-anürik ABH) yüksek sodyum yükü ile metabolik alkalozun birleşimi hem akut akciğer ödemini hem de hiperamonyemik ensefalopatiyi hızla derinleştirir; bu hastalarda ağır refrakter asidozda (pH <7,15–7,20) bikarbonat tamponlu CRRT en kontrollü çözümdür.',
+  },
 };
+

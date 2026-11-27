@@ -57,6 +57,7 @@ import { GlycerylTrinitrateProtocol } from './GlycerylTrinitrateProtocol';
 import { SodiumNitroprussideProtocol } from './SodiumNitroprussideProtocol';
 import { PheniramineProtocol } from './PheniramineProtocol';
 import { PantoprazoleProtocol } from './PantoprazoleProtocol';
+import { SodiumBicarbonateProtocol } from './SodiumBicarbonateProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -1792,6 +1793,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'sodium-bicarbonate',
+    category: 'medications',
+    categories: ['medications', 'electrolyte', 'antidotes'],
+    categoryLabel: 'Sistemik Alkalinizan · Elektrolit & Antidot (IV)',
+    badge: '%8,4 Molar (1 mEq/mL) · BICAR-ICU / TCA / Alkalinizasyon',
+    title: 'Sodyum Bikarbonat %8,4 (NaHCO₃ · 10 mL Ampul = 10 mEq)',
+    shortDesc: 'Ekstrem hiperozmolar (~2.000 mOsm/L) 1 mEq/mL sistemik alkalinizan; TCA/Na⁺ kanal blokeri antidotu, salisilat/MTX idrar alkalinizasyonu, AKIN 2–3 ABH + ağır asidemi (BICAR-ICU), asidozlu hiperkalemi, Lidokain 1:10 tamponlama ve yenidoğan %4,2 güvenliği.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR Ampul & Konsantrasyon',
+        value: '10 mL %8,4 = 10 mEq (840 mg)',
+        subtext: '1 mL = 1 mEq · ~2.000 mOsm/L',
+        tooltip: 'Her 10 mL %8,4 ampul 10 mEq (230 mg) Na⁺ ve 10 mEq HCO₃⁻ içerir; izotonik infüzyon SF ile DEĞİL D5W ile (150 mEq + 850 mL D5W) hazırlanır!',
+        colorClass: 'text-cyan-700 dark:text-cyan-300',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'border-cyan-500/30'
+      },
+      {
+        label: 'TCA / Na⁺ Blokeri & Salisilat',
+        value: '1–2 mEq/kg IV → 150 mEq / D5W',
+        subtext: 'TCA pH 7,45–7,55 · İdrar pH 7,5–8',
+        tooltip: 'QRS >100 ms TCA/Na⁺ kanal blokeri zehirlenmesinde 1. basamak antidot; idrar alkalinizasyonunda K⁺ 4,0–4,5 tutulmazsa paradoksal asidüri gelişir!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Ağır Asidoz (BICAR-ICU)',
+        value: 'pH ≤7,20 + AKIN 2–3 ABH',
+        subtext: 'İlk %50 Açık (4–8 sa) · pH ≥7,30',
+        tooltip: 'BICAR-ICU (Lancet 2018): AKIN 2–3 ABH alt grubunda mortalite ve RRT azalır; rutin KPR (AHA 2020), pH ≥7,0 DKA ve CIN (PRESERVE 2018) için önerilmez',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Kırmızı Çizgiler (Y-Site & YD)',
+        value: 'Ca²⁺ Çöker · Katekolamin Bozulur',
+        subtext: 'Yenidoğan: Zorunlu %4,2 (1:1)',
+        tooltip: 'Kalsiyumla anında CaCO₃ çökeltisi, Adrenalin/Noradrenalin ile inaktivasyon! Yenidoğanda %8,4 hızlı puşe İVH yapar → 1:1 steril su ile %4,2 hazırla',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -1956,6 +2008,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     pulcet: 'pantoprazole',
     panto: 'pantoprazole',
     protonix: 'pantoprazole',
+    'sodyum-bikarbonat': 'sodium-bicarbonate',
+    'sodyum-bikarbonat-8-4': 'sodium-bicarbonate',
+    bikarbonat: 'sodium-bicarbonate',
+    bicarbonate: 'sodium-bicarbonate',
+    nahco3: 'sodium-bicarbonate',
+    bicarb: 'sodium-bicarbonate',
+    'molar-bikarbonat': 'sodium-bicarbonate',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -2712,7 +2771,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <PantoprazoleProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 36–52: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 36: SODYUM BİKARBONAT %8,4 MONOGRAFİSİ & ASİDOZ / TOKSİKOLOJİ / LA TAMPON / PEDİATRİ HESAPLAYICISI */}
+      {normalizedProtocolId === 'sodium-bicarbonate' && (
+        <SodiumBicarbonateProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 37–53: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}
