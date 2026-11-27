@@ -3270,6 +3270,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'paracetamol',
     popular: true
   },
+  {
+    id: 'treatment-ibuprofen-protocol',
+    title: 'İbuprofen (İntrafen® 400–800 mg IV · Brufen® · Dolven® · Pedea®) NSAİİ Analjezik & Antipiretik',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'NSAİİ · Analjezik & Antipiretik · ≤4 mg/mL IV · ESC Perikardit / PDA',
+    description: 'Non-selektif COX-1/COX-2 inhibitörü NSAİİ; perioperatif multimodal analjezi, ateş, akut perikardit (ESC), gut, pediatrik (≥6 ay) ve preterm PDA kapatma (Pedea® 10–5–5 mg/kg), 100 mg/mL konsantre seyreltme (≤4 mg/mL · ≥30 dk), Aspirin zamanlama & Triple Whammy denetleyici.',
+    keywords: [
+      'ibuprofen', 'ibuprufen', 'intrafen', 'brufen', 'dolven', 'nurofen', 'advil', 'arfen', 'pedifen',
+      'ibufen', 'pedea', 'caldolor', 'nsaii', 'nsaid', 'antiinflamatuar', 'analjezik', 'antipiretik',
+      'ateş düşürücü', 'ağrı kesici', 'multimodal analjezi', 'perikardit', 'pda', 'duktus arteriozus',
+      'triple whammy', 'aspirin etkileşimi', 'gut', 'dismenore', 'cabg'
+    ],
+    tabId: 'treatments',
+    subId: 'ibuprofen',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

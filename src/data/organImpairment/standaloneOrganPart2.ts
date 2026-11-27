@@ -1,6 +1,7 @@
 import type { OrganImpairmentMatrixPayload } from '../../components/treatments/shared/DrugMonographBlocks';
 
 export type StandaloneOrganPart2Id =
+  | 'ibuprofen'
   | 'ketamine'
   | 'lidocaine'
   | 'methylprednisolone'
@@ -1013,6 +1014,73 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     dualOrganNote:
       'Eş zamanlı malnütrisyon + böbrek yetmezliği (eGFR <30) + kronik parasetamol (± Flukloksasilin / sepsis) varlığında hepatik glutatyon tükenmesiyle nadir ama ölümcül 5-Oksoprolin (Piroglutamik Asit) Yüksek Anyon Açıklı Metabolik Asidozu (HAGMA) gelişebilir — açıklanamayan HAGMA’da parasetamolu derhal kesin ve NAC düşünün!',
   },
+
+  ibuprofen: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (Övolemi Şart!)',
+        tone: 'emerald',
+        note: 'Normovolemik ve renal perfüzyonu sağlıklı hastada tam doz (erişkin 400–600 mg q6–8sa; maks 2400–3200 mg/gün). Ancak akut hipovolemi, sepsis veya "Triple Whammy" (ACEİ/ARB + diüretik + NSAİİ) varlığında normal kreatininde dahi ani prerenal ABH gelişebilir!',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: 'MÜMKÜNSE KAÇIN · Zorunluysa Kısa Süre En Düşük Doz',
+        tone: 'amber',
+        note: 'KDIGO 2024: Afferent arteriyol vazodilatatör prostaglandinlerini (PGE₂/PGI₂) bloke ederek GFR’yi hızla düşürür, sıvı-Na⁺ retansiyonu ve hiperkalemi (hiporeninemik hipoaldosteronizm) yapar! Önce Parasetamol seçin; zorunluysa en düşük doz (400 mg q8sa), ≤3–5 gün ve 48–72 sa Cr/K⁺ kontrolü!',
+      },
+      {
+        stage: 'Ağır KBY / ABH / Oligo-Anüri (eGFR < 30 mL/dk)',
+        doseBadge: 'KONTRENDİKE / KAÇININ!',
+        tone: 'rose',
+        note: 'Ağır KBY’de (eGFR <30 mL/dk) ve tüm Akut Böbrek Hasarı (ABH) evrelerinde KULLANILMAMALIDIR! Kalan nefronlarda vazokonstriksiyonla kalıcı böbrek kaybı, ağır hiperkalemi, ödem/HT ve üremik trombosit disfonksiyonu üzerine GİS kanaması tetikler.',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'DİYALİZLENMEZ (%99 Albumin) · Rezidüel İdrar Varsa KAÇIN!',
+        tone: 'rose',
+        note: 'Plazma proteinlerine ~%99 bağlandığı için hemodiyalizle TEMİZLENMEZ! Rezidüel böbrek fonksiyonu (idrar çıkışı) olan HD hastasında NSAİİ rezidüel fonksiyonu kalıcı olarak bitirir — KAÇININ! Tam anürik hastada dahi üremik gastropati/kanama ve CV risk nedeniyle Parasetamol 1. tercihtir.',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'KAÇININ! (Rezidüel Böbrek Fonksiyonunu Yok Eder)',
+        tone: 'rose',
+        note: 'PD hastalarında rezidüel renal fonksiyon sağkalımın en güçlü belirleyicisidir; İbuprofen bunu hızla bozar ve diyalizle temizlenmez — kullanmayın!',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'KONTRENDİKE / KAÇININ! (Diyalizlenmez)',
+        tone: 'rose',
+        note: 'CRRT’deki kritik ABH/şok hastasında renal iyileşmeyi engeller, stres ülseri/GİS kanaması ve hiperkalemi riskini ciddi artırır; ~%99 protein bağlanması nedeniyle CRRT ile uzaklaştırılamaz.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: 'Dikkat · Kısa Süre En Düşük Doz (Parasetamol Tercih)',
+        tone: 'amber',
+        detail:
+          'Hepatik CYP2C9 metabolizması ve glukuronidasyon kısmen yavaşlar; ancak kompanse sirozda asıl risk portal gastropati kanaması ve böbrek perfüzyonunun PG bağımlı olmasıdır — mümkünse Parasetamol (≤2–3 g/gün) seçin.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'KAÇININ! (HRS & GİS Kanama Riski)',
+        tone: 'rose',
+        detail:
+          'Sirotik hastada böbrek perfüzyonu kompansatuvar renal prostaglandinlere doğrudan bağımlıdır. İbuprofen verilmesi hızla Akut Böbrek Hasarı / Hepatorenal Sendrom, diüretik direnci (asit artışı) ve özofagus varis/peptik ülser kanaması tetikler!',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'MUTLAK KAÇIN / KONTRENDİKE!',
+        tone: 'rose',
+        detail:
+          'Ağır siroz ve asitte (EASL / AASLD) tüm NSAİİ’ler kesinlikle KAÇINILMALIDIR! Tek bir doz bile hepatorenal sendromu (HRS-AKI), masif varis/GİS kanamasını ve koagülopatiyi alevlendirebilir; ayrıca serbest fraksiyon artışı (hipoalbuminemi!) toksisiteyi katlar.',
+      },
+    ],
+    dualOrganNote:
+      'Siroz + böbrek yetmezliği (Hepatorenal Sendrom) veya hipoalbuminemi (<2,5 g/dL) varlığında İbuprofen’in serbest aktif fraksiyonu hızla yükselir, renal PG blokajıyla GFR çöker ve GİS/varis kanaması ölümcül seyreder — tüm NSAİİ’ler kesinlikle yasaktır!',
+  },
 };
+
 
 

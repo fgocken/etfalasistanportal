@@ -61,6 +61,7 @@ import { PheniramineProtocol } from './PheniramineProtocol';
 import { PantoprazoleProtocol } from './PantoprazoleProtocol';
 import { SodiumBicarbonateProtocol } from './SodiumBicarbonateProtocol';
 import { ParacetamolProtocol } from './ParacetamolProtocol';
+import { IbuprofenProtocol } from './IbuprofenProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -1898,6 +1899,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'ibuprofen',
+    category: 'medications',
+    categories: ['medications', 'analgesics', 'antipyretics'],
+    categoryLabel: 'NSAİİ · Analjezik, Antipiretik & Antiinflamatuar (IV / PO)',
+    badge: 'İntrafen® 400–800 mg IV · Brufen® · Dolven® · Pedea®',
+    title: 'İbuprofen (İntrafen® IV · Brufen® · Dolven® · Pedea®)',
+    shortDesc: 'Non-selektif COX-1/COX-2 inhibitörü NSAİİ; perioperatif multimodal analjezi, ateş, akut perikardit (ESC), gut, pediatrik (≥6 ay) ve preterm PDA kapatma (Pedea® 10–5–5 mg/kg), 100 mg/mL seyreltme tuzağı (≤4 mg/mL · ≥30 dk), Aspirin zamanlama & Triple Whammy denetleyici.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'TR IV Seyreltme & Süre',
+        value: '≤4 mg/mL · ≥30 dk İV',
+        subtext: '100 mg/mL konsantreyi ASLA direkt verme!',
+        tooltip: 'İntrafen® 400/800 mg (100 mg/mL) konsantre flakonlar mutlaka ≥100 mL (400 mg) veya ≥200 mL (800 mg) %0,9 NaCl / %5 Dekstroz ile ≤4 mg/mL olacak şekilde seyreltilip ≥30 dk infüze edilir (hazır 4 mg/mL torbalar hariç).',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Erişkin & ESC Perikardit',
+        value: '400–600 mg q6–8sa',
+        subtext: 'Analjezik tavan ~400 mg · Maks 3200 mg/gün',
+        tooltip: 'Akut ağrı/ateşte 400 mg (tavan etki) q6sa; akut perikarditte ESC kılavuzuna göre 600 mg q8sa + kolşisin + PPI; perioperatif hidrasyonu sağla.',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Pediatri (≥6 Ay) & PDA',
+        value: '5–10 mg/kg q6–8sa · PDA 10–5–5',
+        subtext: '<6 ay rutin analjezi/ateş YOK',
+        tooltip: 'Pediatride 5–10 mg/kg (tek maks 400 mg, günlük maks 40 mg/kg veya 2400 mg). Preterm PDA kapatmada Pedea® 5 mg/mL: 1. gün 10 mg/kg, 2. ve 3. gün 5 mg/kg IV (24 saat arayla, 15 dk infüzyon).',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      },
+      {
+        label: 'Kırmızı Çizgiler & Etkileşim',
+        value: 'CABG · ≥20/30 hf · Triple Whammy',
+        subtext: 'Aspirin’den ≥30–60 dk SONRA ver!',
+        tooltip: 'CABG perioperatif dönemde FDA Kara Kutu kontrendike; gebelik ≥20 hf oligohidramnios / ≥30 hf PDA kapanması; ACEi/ARB + Diüretik + NSAİİ böbrek hasarı; düşük doz Aspirin’den önce verilirse COX-1 blokajı antiagregan etkiyi bozar.',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2079,6 +2131,17 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     partemol: 'paracetamol',
     minoset: 'paracetamol',
     tylol: 'paracetamol',
+    ibuprufen: 'ibuprofen',
+    intrafen: 'ibuprofen',
+    brufen: 'ibuprofen',
+    dolven: 'ibuprofen',
+    nurofen: 'ibuprofen',
+    advil: 'ibuprofen',
+    arfen: 'ibuprofen',
+    pedifen: 'ibuprofen',
+    ibufen: 'ibuprofen',
+    pedea: 'ibuprofen',
+    caldolor: 'ibuprofen',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -2887,7 +2950,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <ParacetamolProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 38–54: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 38: İBUPROFEN MONOGRAFİSİ & ERİŞKİN / PEDİATRİK / PDA / GÜVENLİK DENETLEYİCİ HESAPLAYICISI */}
+      {normalizedProtocolId === 'ibuprofen' && (
+        <IbuprofenProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 39–55: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}
