@@ -69,6 +69,7 @@ import { ClopidogrelProtocol } from './ClopidogrelProtocol';
 import { PrasugrelProtocol } from './PrasugrelProtocol';
 import { TicagrelorProtocol } from './TicagrelorProtocol';
 import { UnfractionatedHeparinProtocol } from './UnfractionatedHeparinProtocol';
+import { EnoxaparinProtocol } from './EnoxaparinProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2314,6 +2315,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'enoxaparin',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Düşük Molekül Ağırlıklı Heparin (DMAH · Anti-Xa 4:1)',
+    badge: 'Clexane® · Oksapar® 0,2–1,0 mL · ASRA 12/24 sa · CrCl <30 Azalt',
+    title: 'Enoksaparin Sodyum / DMAH (Clexane® · Oksapar® · Enoksa®)',
+    shortDesc: 'Seçici Anti-Xa DMAH (1 mg = 100 IU); VTE profilaksi (40 mg q24sa) ve tedavi (1 mg/kg q12sa), STEMI fibrinolizi (≥75y IV bolus yok), CrCl 15–29 q24sa azaltımı / <15 UFH, ASRA 2018 12/24 sa nöraksiyel rehberi, ~%60 Protamin kısmi reversal & UFH vs DMAH kıyaslama.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Profilaksi & Tedavi (CrCl ≥30)',
+        value: '40 mg q24sa · 1 mg/kg q12sa',
+        subtext: 'Obez ≥120 kg prof: 40 mg q12sa · 0,1 mL = 10 mg',
+        tooltip: '1 mg = 100 Anti-Xa IU = 0,01 mL; hazır enjektördeki hava kabarcığını çıkarmadan karın duvarına derin SC uygulanır (IM yasak!).',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'ASRA 2018 Nöraksiyel Kuralı',
+        value: 'Prof: 12 sa · Tedavi: 24 sa',
+        subtext: 'Kateter çekimi +4 sa · Kateterde q12sa ❌',
+        tooltip: 'Profilaktik (≤40 mg q24sa) ponksiyon ve kateter çekiminden 12 saat, terapötik 24 saat önce kesilir; kalıcı epidural kateterde q12sa/terapötik DMAH YASAK!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Böbrek (CrCl <30) & STEMI ≥75y',
+        value: 'CrCl 15–29: q24sa · <15: UFH!',
+        subtext: 'STEMI ≥75y: IV bolus YOK · 0,75 mg/kg',
+        tooltip: 'Renal atılımlıdır ve diyalizlenmez! CrCl 15–29’da profilaksi 20 mg q24sa, tedavi 1 mg/kg q24sa; CrCl <15 / ABH’de UFH seç!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Protamin (~%60) & Gebelik',
+        value: 'Protamin %60 · 4.sa Anti-Xa',
+        subtext: 'aPTT güvenilmez · Gebelik 1. tercih',
+        tooltip: 'Protamin Anti-Xa’yı yalnızca ~%60 nötralize eder (≤8 sa: 1 mg/mg); plasentaya ve anne sütüne geçmez (36. hf sonrası doğum/epidural için UFH’ye geçiş).',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2557,6 +2609,14 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     vasparin: 'heparin',
     koparin: 'heparin',
     poliparin: 'heparin',
+    enoksaparin: 'enoxaparin',
+    dmah: 'enoxaparin',
+    lmwh: 'enoxaparin',
+    clexane: 'enoxaparin',
+    oksapar: 'enoxaparin',
+    enoksa: 'enoxaparin',
+    klexane: 'enoxaparin',
+    enox: 'enoxaparin',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3426,7 +3486,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <UnfractionatedHeparinProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 46–62: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 46: ENOKSAPARİN SODYUM (DMAH) MONOGRAFİSİ & CrCl/OBEZİTE/ExTRACT / ASRA 12-24SA / PROTAMİN %60 HESAPLAYICISI */}
+      {normalizedProtocolId === 'enoxaparin' && (
+        <EnoxaparinProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 47–63: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

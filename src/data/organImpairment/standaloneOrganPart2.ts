@@ -3,6 +3,7 @@ import type { OrganImpairmentMatrixPayload } from '../../components/treatments/s
 export type StandaloneOrganPart2Id =
   | 'aspirin'
   | 'clopidogrel'
+  | 'enoxaparin'
   | 'heparin'
   | 'ibuprofen'
   | 'ketamine'
@@ -1548,6 +1549,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Kombine hepatorenal yetmezlikte UFH birikmeyen ve Protaminle anında nötralize edilebilen tek parenteral antikoagülandır; ancak bazal aPTT bozukluğu + AT-III eksikliği + üremik trombosit disfonksiyonu nedeniyle mümkünse Anti-Xa düzeyiyle ve bolussuz/düşük başlangıç hızıyla titre edilmelidir.',
+  },
+
+  enoxaparin: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (Profilaksi 40 mg q24sa · Tedavi 1 mg/kg q12sa)',
+        tone: 'emerald',
+        note: 'Büyük ölçüde böbreklerden elimine edilir (t½ tek doz ~4,5 sa, tekrarlı doz ~7 sa). Normal böbrek fonksiyonunda öngörülebilir etki nedeniyle rutin laboratuvar izlemi gerekmez.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: '%100 Standart · 30–49’da Kanama & 4.sa Anti-Xa İzle!',
+        tone: 'amber',
+        note: 'Resmi doz azaltımı <30 mL/dk’da başlasa da eGFR 30–49 mL/dk ve ileri yaşta çok günlük terapötik kullanımda birikim görülebilir; >3–5 gün terapötik kullanımda 4. saat pik Anti-Xa (0,6–1,0 IU/mL) kontrolü önerilir!',
+      },
+      {
+        stage: 'Ağır KBY (CrCl 15–29 mL/dk)',
+        doseBadge: 'ZORUNLU AZALTIM: Prof. 20 mg q24sa · Tedavi 1 mg/kg q24sa (veya UFH!)',
+        tone: 'rose',
+        note: 'Renal klirens %65’e kadar düşer — 1 mg/kg q12sa verilmesi FATAL retroperitoneal/GİS kanamaya yol açar! Profilaksi: 20 mg (0,2 mL · FDA: 30 mg) q24sa; Tedavi: 1 mg/kg q24sa (günde TEK doz + Anti-Xa kontrolü!). Dalgalı/akut ABH’de doğrudan Standart Heparin (UFH) seçin!',
+      },
+      {
+        stage: 'ESRD / CrCl <15 mL/dk & İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'KAÇININ / KONTRENDİKE! → STANDART HEPARİN (UFH) SEÇ! (Diyalizlenmez)',
+        tone: 'rose',
+        note: 'Sistemik antikoagülasyonda ağır birikim ve ölümcül kanama riski nedeniyle KAÇINILMALIDIR! Hemodiyaliz Enoksaparini TEMİZLEMEZ ve Protamin yalnızca ~%60 nötralize eder → IHD hastasında sistemik tedavi/profilaksi için UFH kullanın! (Yalnızca diyaliz devresi pıhtılaşma önlemi için ayrı özel devre protokolü hariç).',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'KAÇININ! → Standart Heparin (UFH) Tercih Edin',
+        tone: 'rose',
+        note: 'Periton diyaliziyle elimine edilmez ve ciddi birikim/kanama riski taşır; sistemik antikoagülasyonda UFH seçin.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'KAÇININ! → UFH veya Bölgesel Sitrat Tercih Edin',
+        tone: 'rose',
+        note: 'CRRT ile öngörülebilir temizlenme sağlanmaz, Protamin yalnızca ~%60 geri çevirir ve kritik YBÜ hastasında kanama kontrolü zordur — UFH tercih edilir!',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (Kanama & Trombosit İzle)',
+        tone: 'emerald',
+        detail:
+          'Kompanse sirozda (ör. akut portal ven trombozu) böbrek fonksiyonu normalse standart dozda güvenle kullanılabilir; özofagus varis taraması önerilir.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Dikkatle Kullanım · AT-III & Varis Kanaması Riski!',
+        tone: 'amber',
+        detail:
+          'Sirozda bazal INR/aPTT uzunluğu trombozdan korumaz ancak portal hipertansiyon/varis kanaması riski yüksektir ve AT-III düşüklüğü Anti-Xa yanıtını değiştirebilir (yüksek kanama riskinde kısa ömürlü UFH daha kontrollüdür!).',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'Yüksek Kanama Riski · Aktif Kanamada KONTRENDİKE (UFH Düşün)',
+        tone: 'rose',
+        detail:
+          'Ağır koagülopati, trombositopeni ve varis kanaması riskinde Enoksaparin uzun ömürlü ve yalnızca ~%60 geri çevrilebilir olduğundan tehlikelidir; kesin trombozda yakın izlemle kısa etkili UFH tercih edilir.',
+      },
+    ],
+    dualOrganNote:
+      'Kombine karaciğer + böbrek yetmezliğinde (HRS / CrCl <30) Enoksaparin hızla birikir, diyalizle temizlenemez ve Protaminle tam geri çevrilemez — KESİNLİKLE Standart Heparin (UFH) tercih edilmelidir!',
   },
 };
 

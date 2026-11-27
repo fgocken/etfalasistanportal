@@ -3393,6 +3393,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'heparin',
     popular: true
   },
+  {
+    id: 'treatment-enoxaparin-protocol',
+    title: 'Enoksaparin Sodyum / DMAH (Clexane® · Oksapar® · Enoksa® 0,2–1,0 mL) Antitrombotik · Düşük Molekül Ağırlıklı Heparin',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'DMAH (Anti-Xa 4:1) · ASRA 12/24 sa · CrCl <30 Azalt · Protamin ~%60',
+    description: 'Seçici Anti-Xa DMAH; VTE profilaksi (40 mg q24sa) ve tedavi (1 mg/kg q12sa), STEMI fibrinolizi (ExTRACT ≥75y IV bolus yok), CrCl 15–29 q24sa azaltımı / <15 UFH, ASRA 2018 12/24 sa nöraksiyel rehberi, ~%60 Protamin kısmi reversal ve 4. saat pik Anti-Xa izlemi.',
+    keywords: [
+      'enoksaparin', 'enoxaparin', 'dmah', 'lmwh', 'clexane', 'oksapar', 'enoksa', 'klexane', 'enox',
+      'düşük molekül ağırlıklı heparin', 'antitrombotik', 'antikoagülan', 'anti-xa', 'asra', '12 saat',
+      '24 saat', 'protamin', 'vte profilaksi', 'dvt', 'pulmoner emboli', 'extract', 'synergy', 'gebelik'
+    ],
+    tabId: 'treatments',
+    subId: 'enoxaparin',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,
