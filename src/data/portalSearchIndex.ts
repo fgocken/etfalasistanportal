@@ -3424,6 +3424,22 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'fondaparinux',
     popular: true
   },
+  {
+    id: 'treatment-warfarin-protocol',
+    title: 'Varfarin Sodyum (Coumadin® 5/10 mg · Orfarin® 5 mg) Antitrombotik · Oral Vitamin K Antagonisti (VKA)',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'INR 2–3 / 2,5–3,5 · 4F-PCC + IV K1 · BRIDGE · ASRA INR ≤1,4',
+    description: 'Oral VKORC1 inhibitörü (Faktör II, VII, IX, X & Protein C/S); mekanik kalp kapağı, mitral darlık ve APS altın standardı; 4F-PCC (25/35/50 IU/kg) + IV K1 Vitamini reversal hesaplayıcısı, BRIDGE/CHEST 2022 perioperatif köprüleme, ASRA nöraksiyel INR kontrolü ve CYP2C9 etkileşimleri.',
+    keywords: [
+      'varfarin', 'warfarin', 'coumadin', 'kumadin', 'orfarin', 'vka', 'vitamin k antagonisti',
+      'inr', '4f-pcc', 'pcc', 'cofact', 'octaplex', 'beriplex', 'k vitamini', 'konakion', 'fitomenadion',
+      'bridge', 'köprüleme', 'mekanik kapak', 'aps', 'antifosfolipid', 'cilt nekrozu', 'kalsifilaksi',
+      'antitrombotik', 'antikoagülan', 'cyp2c9', 'vkorc1', 'nöraksiyel', 'asra'
+    ],
+    tabId: 'treatments',
+    subId: 'warfarin',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

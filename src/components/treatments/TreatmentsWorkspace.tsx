@@ -71,6 +71,7 @@ import { TicagrelorProtocol } from './TicagrelorProtocol';
 import { UnfractionatedHeparinProtocol } from './UnfractionatedHeparinProtocol';
 import { EnoxaparinProtocol } from './EnoxaparinProtocol';
 import { FondaparinuxProtocol } from './FondaparinuxProtocol';
+import { WarfarinProtocol } from './WarfarinProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2418,6 +2419,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'warfarin',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Oral Vitamin K Antagonisti (VKA · VKORC1)',
+    badge: 'Coumadin® · Orfarin® · INR 2–3 / 2,5–3,5 · 4F-PCC + IV K1',
+    title: 'Varfarin Sodyum (Coumadin® 5/10 mg · Orfarin® 5 mg)',
+    shortDesc: 'Oral VKORC1 inhibitörü (Faktör II, VII, IX, X & Protein C/S); mekanik kalp kapağı, mitral darlık ve APS altın standardı; 4F-PCC (25/35/50 IU/kg) + IV K1 Vitamini reversal, BRIDGE/CHEST 2022 perioperatif köprüleme, ASRA nöraksiyel INR ≤1,4 & CYP2C9 etkileşim rehberi.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Hedef INR & Başlangıç',
+        value: '2,0–3,0 · Mitral 2,5–3,5',
+        subtext: 'Başlangıç 5 mg (yaşlı 2,5 mg) · Tam etki 5–7g',
+        tooltip: 'Yükleme dozu verilmez! Akut VTE’de en az 5 gün parenteral antikoagülanla köprülenip ardışık 2 gün INR ≥2,0 olunca kesilir.',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Acil Reversal (ACC 2020)',
+        value: '4F-PCC 25–50 IU/kg + IV K1',
+        subtext: 'IV K1 5–10 mg ≥30 dk inf. (Rebound önle!)',
+        tooltip: 'Majör/İKK kanamada 1. tercih 4F-PCC (INR 2–<4: 25 · 4–6: 35 · >6: 50 IU/kg) + mutlaka 5–10 mg IV K1 vitamini (FVII ömrü 6 sa!).',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Perioperatif & Nöraksiyel',
+        value: '5 Gün Kes · INR ≤1,4',
+        subtext: 'Düşük risk AF: Köprüleme YOK (BRIDGE)',
+        tooltip: 'BRIDGE Trial / CHEST 2022: Düşük-orta risk AF’de köprüleme kanamayı 3 kat artırır; yalnızca mekanik mitral, son 3 ay VTE/inme ve APS’de köprüle! ASRA: Blok INR ≤1,4, kateter çekimi <1,5.',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Gebelik, Laktasyon & Renal',
+        value: 'Gebelik ❌ · Emzirme ✅',
+        subtext: 'IHD’de doz ayarı yok · Kalsifilaksi uyarısı',
+        tooltip: '6–12. haftalarda teratojen (Fetal Varfarin Sendromu); anne sütüne GEÇMEZ (emzirme tamamen güvenli). Hemodiyalizle temizlenmez.',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2673,6 +2725,11 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     arixtra: 'fondaparinux',
     pentasakkarit: 'fondaparinux',
     fonda: 'fondaparinux',
+    varfarin: 'warfarin',
+    coumadin: 'warfarin',
+    kumadin: 'warfarin',
+    orfarin: 'warfarin',
+    vka: 'warfarin',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3552,7 +3609,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <FondaparinuxProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 48–64: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 48: VARFARİN SODYUM (Coumadin® / Orfarin®) MONOGRAFİSİ & 4F-PCC / BRIDGE / ASRA INR HESAPLAYICISI */}
+      {normalizedProtocolId === 'warfarin' && (
+        <WarfarinProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 49–65: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

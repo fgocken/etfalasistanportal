@@ -25,7 +25,8 @@ export type StandaloneOrganPart2Id =
   | 'tenoxicam'
   | 'thiopental'
   | 'ticagrelor'
-  | 'tranexamic-acid';
+  | 'tranexamic-acid'
+  | 'warfarin';
 
 export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairmentMatrixPayload> = {
   ketamine: {
@@ -1682,6 +1683,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Kombine hepatorenal yetmezlikte (HRS / CrCl <30 / Child-Pugh C) Fondaparinuks hem böbrekten atılamaz, hem diyalizle etkili temizlenemez, hem de Protamin ile %0 geri çevrilir — kesinlikle KONTRENDİKEDİR, Standart Heparin (UFH) seçilmelidir!',
+  },
+
+  warfarin: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (INR ile Titre · Başlangıç 5 mg)',
+        tone: 'emerald',
+        note: 'Tamamen hepatik CYP2C9 (S-varfarin) ve CYP1A2/3A4 (R-varfarin) ile inaktif metabolitlere çevrilir (<%1 değişmeden idrarda). Hedef INR’ye (2,0–3,0 veya 2,5–3,5) göre titre edilir.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: 'Resmi Doz Ayarı Yok · Daha Düşük İdame Gerekebilir',
+        tone: 'sky',
+        note: 'İleri KBY’de üremik toksinler CYP2C9 aktivitesini kısmen baskılayabileceğinden ortalama haftalık Varfarin ihtiyacı %10–20 düşebilir; sık INR takibi önerilir.',
+      },
+      {
+        stage: 'Ağır KBY (eGFR 15–29 mL/dk)',
+        doseBadge: 'Düşük Başla (2,5 mg/gün) · Sık INR & Kanama İzlemi',
+        tone: 'amber',
+        note: 'Resmi kontrendikasyon yoktur (DOAC’ların çoğunun kısıtlandığı evrede kullanılabilir); ancak üremik trombosit disfonksiyonu ve INR labilitesi nedeniyle majör kanama riski 2 kat artar — 2,5 mg/gün ile başlayıp yakından titre edin.',
+      },
+      {
+        stage: 'ESRD / İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'Diyalizlenmez (%99 Albümin) · Mekanik Kapakta Tek Oral · Kalsifilaksi Uyarısı!',
+        tone: 'amber',
+        note: '>%99 albümine bağlı olduğu için hemodiyalizle TEMİZLENMEZ (post-HD ek doz gerekmez). Mekanik kapaklı ESRD hastasında tek oral antikoagülandır; ancak non-valvüler AF’de yüksek kanama + nadir fakat fatal KALSİFİLAKSİ (MGP inhibisyonu!) riski nedeniyle fayda/zarar dikkatle tartılmalıdır!',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'Diyalizlenmez · Düşük Başla (2,5 mg) & Yakın INR',
+        tone: 'amber',
+        note: 'Periton diyaliziyle temizlenmez; hipoalbüminemi serbest Varfarin fraksiyonunu artırabileceğinden 2,5 mg/gün ile başlayıp sık INR ve kalsifilaksi/kanama bulguları izlenmelidir.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'YBÜ’de Tercih Edilmez (Uzun Etki · Diyalizlenmez → UFH Seç)',
+        tone: 'rose',
+        note: 'CRRT ile uzaklaştırılamaz ve 2–5 günlük yavaş açılma/kapanma kinetiği kritik YBÜ/ABH hastasında acil girişim ve kanama yönetimini zorlaştırır — akut YBÜ’de kısa etkili IV UFH seçin.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: 'Düşük Başla (2,5 mg/gün) · Çok Sık INR!',
+        tone: 'amber',
+        detail:
+          'Hem CYP2C9 metabolizması yavaşlar hem de K vitamini bağımlı faktör rezervi azalmıştır; başlangıçta 2,5 mg/gün kullanın, 2–3 günde bir INR kontrol edin ve varis kanaması açısından tarayın.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'YÜKSEK RİSK! (Bazal INR Bozuk · Aşırı Duyarlılık)',
+        tone: 'rose',
+        detail:
+          'Sirozda bazal INR zaten yüksek (1,4–2,0) olduğundan Varfarin dozunun gerçek antikoagülan düzeyini INR ile izlemek son derece güvenilmezdir; küçük dozlarda bile masif özofagus varis veya intrakraniyal kanama gelişebilir!',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'KONTRENDİKE / KAÇININ! (Fatal Kanama Riski)',
+        tone: 'rose',
+        detail:
+          'Ağır hepatoselüler yetmezlikte faktör II/VII/IX/X sentezi ve CYP2C9 klirensi çökmüştür, trombositopeni ve portal hipertansiyon eşlik eder — Varfarin kesinlikle kaçınılmalıdır (zorunlu trombozda hematoloji/hepatoloji eşliğinde kısa etkili UFH/DMAH değerlendirilir).',
+      },
+    ],
+    dualOrganNote:
+      'Kombine hepatorenal yetmezlik ve hipoalbüminemide (<2,5 g/dL) Varfarin’in hem serbest fraksiyonu artar hem de CYP2C9 klirensi ile faktör sentezi eşzamanlı çöker — kontrolsüz INR yükselmesi ve ölümcül kanama riski nedeniyle kullanılmamalıdır!',
   },
 };
 
