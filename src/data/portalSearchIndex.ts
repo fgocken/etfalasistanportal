@@ -3362,6 +3362,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'prasugrel',
     popular: true
   },
+  {
+    id: 'treatment-ticagrelor-protocol',
+    title: 'Tikagrelor (Brilinta® · Brilique® · Tikagrel® · Tikalor® 90/60 mg) Antitrombotik · Geri Dönüşlü P2Y₁₂ İnhibitörü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Antitrombotik (P2Y₁₂) · ASA ≤100 mg · Cerrahi 3–5g · Acil Plt Etkisiz',
+    description: 'Doğrudan etkili, geri dönüşlü P2Y₁₂ antiplatelet (CYP2C19 & PPI bağımsız); AKS 180→90 mg q12sa (PLATO), >12 ay 60 mg (PEGASUS), 3. ay monoterapi (TWILIGHT), minör inme 30g (THALES), ASA ≤100 mg FDA uyarısı, acil kanamada trombosit etkisizliği (CytoSorb®), CYP3A4 & adenozin dispnesi/bradikardi.',
+    keywords: [
+      'tikagrelor', 'ticagrelor', 'brilinta', 'brilique', 'tikagrel', 'tikalor', 'tikarda', 'antitrombotik',
+      'antiplatelet', 'antiagregan', 'p2y12', 'plato', 'pegasus', 'twilight', 'thales', 'cyp3a4',
+      'dispne', 'adenozin', 'bradikardi', 'cytosorb', 'bentracimab', 'asra', 'dapt', 'stent', 'paxlovid'
+    ],
+    tabId: 'treatments',
+    subId: 'ticagrelor',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

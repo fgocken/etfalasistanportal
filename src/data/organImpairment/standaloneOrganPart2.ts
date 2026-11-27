@@ -21,6 +21,7 @@ export type StandaloneOrganPart2Id =
   | 'sugammadex'
   | 'tenoxicam'
   | 'thiopental'
+  | 'ticagrelor'
   | 'tranexamic-acid';
 
 export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairmentMatrixPayload> = {
@@ -1414,6 +1415,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Kombine ağır karaciğer yetmezliği (Child-Pugh C) + ileri böbrek yetmezliğinde (üremi) Prasugrelin güçlü ve 7–10 gün süren geri dönüşsüz trombosit blokajı ölümcül hemoraji yaratır — KESİNLİKLE KONTRENDİKEDİR!',
+  },
+
+  ticagrelor: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (90 mg / 60 mg q12sa)',
+        tone: 'emerald',
+        note: 'Esas olarak hepatik CYP3A4 ile aktif AR-C124910XX’e metabolize olup safra/feçesle atılır (<%1 değişmeden renal). Standart doz uygulanır; tedavi sırasında adenozin ilişkili hafif geçici kreatinin artışı görülebilir.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: '%100 Standart (Doz Ayarı Yok · PLATO KBY Avantajı)',
+        tone: 'emerald',
+        note: 'PLATO KBY alt analizinde Tikagrelor, Klopidogrele göre mortaliteyi anlamlı azaltmıştır ve doz ayarı gerektirmez; DAPT’ta mutlaka Pantoprazol 40 mg/gün ekleyin.',
+      },
+      {
+        stage: 'Ağır KBY / ABH (eGFR < 30 mL/dk)',
+        doseBadge: '%100 Doz (PK Korunur · Üremik Kanama Riski Yüksek!)',
+        tone: 'amber',
+        note: 'Renal eliminasyon ihmal edilebilir düzeyde olduğundan PK açısından doz azaltımı gerekmez; ancak üremik trombosit disfonksiyonu üzerine güçlü P2Y₁₂ blokajı eklendiğinden majör kanama riski yüksektir (yakın izlem + PPI!).',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'DİYALİZLENMEZ (>%99,7 Protein) · Sınırlı Deneyim / Dikkat',
+        tone: 'amber',
+        note: 'Hem ana ilaç hem aktif metabolit >%99,7 proteine bağlı olduğu için HEMODİYALİZLE TEMİZLENMEZ (post-HD ek doz gerekmez). Diyaliz hastalarında klinik veri kısıtlı ve AV fistül/GİS kanaması riski yüksek olduğundan dikkatli kullanın!',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'Diyalizlenmez · Sınırlı Deneyim (Kanama İzle)',
+        tone: 'amber',
+        note: 'Doz ayarı gerekmez ancak ESRD’de kanama verileri kısıtlı olduğundan yakın hemogram/kanama izlemi şarttır.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'CRRT İle Temizlenmez · Acil Kanamada Plt Etkisiz!',
+        tone: 'indigo',
+        note: '>%99,7 protein bağlanması nedeniyle CRRT ile uzaklaştırılamaz (ancak KPB’de CytoSorb® hemoadsorpsiyon etkindir!). Acil YBÜ kanamasında trombosit transfüzyonu etkisiz kaldığından kritik hastada kanama izlemi hayati önem taşır.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (90 mg / 60 mg q12sa)',
+        tone: 'emerald',
+        detail:
+          'Hafif karaciğer bozukluğunda Tikagrelor maruziyeti hafif (~%23) artsa da doz ayarlaması gerekmez; standart doz (+ Pantoprazol) güvenle uygulanır.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'KAÇININ / Çok Dikkatli Kullanım (EMA SmPC!)',
+        tone: 'amber',
+        detail:
+          'Orta karaciğer yetmezliğinde CYP3A4 klirensi düşerek sistemik Tikagrelor düzeyi belirgin yükselir ve portal hipertansiyon/varis kanaması riski artar — EMA SmPC’ye göre orta bozuklukta dikkatle / mümkünse kaçınılarak kullanılır.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'MUTLAK KONTRENDİKE (FDA / EMA / TR SmPC!)',
+        tone: 'rose',
+        detail:
+          'Ağır karaciğer yetmezliğinde hepatik CYP3A4 eliminasyonu çöker, plazma Tikagrelor düzeyleri aşırı yükselir ve ağır koagülopati/varis kanaması ölümcül risk yaratır — KESİNLİKLE KONTRENDİKEDİR!',
+      },
+    ],
+    dualOrganNote:
+      'Ağır karaciğer yetmezliğinde (Child-Pugh C) CYP3A4 klirensi durur; üstüne böbrek yetmezliği (üremi) eklenirse diyalizle de temizlenemeyen ve trombosit transfüzyonuyla geri çevrilemeyen ölümcül kanama gelişir — KESİNLİKLE YASAKTIR!',
   },
 };
 

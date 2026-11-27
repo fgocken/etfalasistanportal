@@ -67,6 +67,7 @@ import { TenoxicamProtocol } from './TenoxicamProtocol';
 import { AcetylsalicylicAcidProtocol } from './AcetylsalicylicAcidProtocol';
 import { ClopidogrelProtocol } from './ClopidogrelProtocol';
 import { PrasugrelProtocol } from './PrasugrelProtocol';
+import { TicagrelorProtocol } from './TicagrelorProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2210,6 +2211,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'ticagrelor',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Doğrudan Geri Dönüşlü P2Y₁₂ İnhibitörü (PO)',
+    badge: 'Brilinta® · Tikagrel® 90/60 mg · ASA ≤100 mg · Cerrahi 3–5g',
+    title: 'Tikagrelor (Brilinta® · Brilique® · Tikagrel® · Tikalor®)',
+    shortDesc: 'Doğrudan aktif, geri dönüşlü P2Y₁₂ antiplatelet (CYP2C19 & PPI bağımsız); AKS 180→90 mg q12sa (PLATO), >12 ay 60 mg (PEGASUS), 3. ay monoterapi (TWILIGHT), ASA ≤100 mg kilidi, cerrahi 3–5g / ASRA 5–7g, acil kanamada trombosit etkisizliği (CytoSorb®), CYP3A4 & adenozin dispnesi.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'AKS & >12 Ay (Günde 2×!)',
+        value: '180 → 90 mg q12sa',
+        subtext: '>12 ay PEGASUS: 60 mg · ASA ≤100 mg!',
+        tooltip: 'FDA Kutu Uyarısı: Eşzamanlı Aspirin idame dozu KESİNLİKLE 75–100 mg/gün olmalıdır (>100 mg etkinliği azaltır)! Medikal AKS & iskemik inmede de kullanılabilir.',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Cerrahi & ASRA 2018 · Acil Plt!',
+        value: 'Cerrahi 3–5g · ASRA 5–7g',
+        subtext: 'Acil Plt ETKİSİZ (<24sa · CytoSorb®!)',
+        tooltip: 'Geri dönüşlü olduğundan cerrahi öncesi 3–5 gün kesmek yeterlidir; ancak serbest dolaştığı için ilk 24 saatte trombosit transfüzyonu ETKİSİZDİR (TXA + KPB’de CytoSorb®)!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'CYP3A4 & İKK Kırmızı Çizgileri',
+        value: 'İKK · CYP3A4 İnh. YASAK',
+        subtext: 'Simvastatin >40 mg & Child-Pugh C ❌',
+        tooltip: 'Geçmiş İKK, Child-Pugh C ve güçlü CYP3A4 inhibitörleri (Klaritromisin, Vorikonazol, Paxlovid) mutlak kontrendikedir; Simvastatin >40 mg rabdomiyoliz yapar!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'ENT-1 Adenozin Etkileri',
+        value: 'Dispne (~%14) · Bradikardi',
+        subtext: 'SpO₂ normal · Hiperürisemi / Gut',
+        tooltip: 'Adenozin artışı ~%14–15 hastada normal SpO₂ ile benign dispne ve erken noktürnal ventriküler duraklamalar yapabilir; tolere edilemezse 24 sa sonra Prasugrel/Klopidogrele geçilir.',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2440,6 +2492,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     prasugel: 'prasugrel',
     prensor: 'prasugrel',
     pragrel: 'prasugrel',
+    tikagrelor: 'ticagrelor',
+    brilinta: 'ticagrelor',
+    brilique: 'ticagrelor',
+    tikagrel: 'ticagrelor',
+    tikalor: 'ticagrelor',
+    tikarda: 'ticagrelor',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3299,7 +3357,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <PrasugrelProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 44–60: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 44: TİKAGRELOR (GERİ DÖNÜŞLÜ P2Y12 İNHİBİTÖRÜ) MONOGRAFİSİ & PLATO/PEGASUS/TWILIGHT / CYTOSORB / CYP3A4 HESAPLAYICISI */}
+      {normalizedProtocolId === 'ticagrelor' && (
+        <TicagrelorProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 45–61: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}
