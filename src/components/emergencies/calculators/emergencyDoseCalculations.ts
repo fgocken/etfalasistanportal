@@ -2,6 +2,7 @@ export interface EmergencyDoses {
   weightNum: number;
   isValidWeight: boolean;
   isPediatric: boolean;
+  isNeonate: boolean;
 
   // 1. MH Dantrolene
   initialDoseMg: number;
@@ -148,6 +149,7 @@ export interface EmergencyDoses {
   miEsmololInfMaxMgMin: number;
   miUfhMinIu: number;
   miUfhMaxIu: number;
+  miUfhLabel: string;
 
   // 18. Malignant Arrhythmias
   arrDefibLabel: string;
@@ -169,6 +171,7 @@ export interface EmergencyDoses {
   // 21. Myxedema Coma
   myxedemaHydrocortLabel: string;
   myxedemaT4Label: string;
+  myxedemaT4IvReference: string;
   myxedemaT3Label: string;
 
   // 22. Pheochromocytoma Crisis
@@ -188,6 +191,8 @@ export interface EmergencyDoses {
   icpMannitolMidMl: number;
   icpMannitolHighG: number;
   icpMannitolHighMl: number;
+  icpMannitolCapped: boolean;
+  icpMannitolStickyLabel: string;
   icpHts3Label: string;
   icpHts234Label: string;
   icpThiopentalLoadMinMg: number;
@@ -216,6 +221,7 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
   const isValidWeight = Number.isFinite(parsed) && weightNum >= 1 && weightNum <= 300;
   const w = isValidWeight ? weightNum : 0;
   const isPediatric = isValidWeight && weightNum < 40;
+  const isNeonate = isValidWeight && weightNum <= 5;
 
   // 1. MH Dantrolene
   const initialDoseMg = Math.round(w * 2.5);
@@ -240,14 +246,22 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     ? 0
     : Math.min(40, Math.max(2, Math.round(w * 0.25)));
   const succinylcholineImMg = Math.min(200, Math.round(w * 3.5));
-  const atropineLaryngoMg = Math.min(0.5, +(w * 0.02).toFixed(2));
+  const atropineLaryngoMg = !isValidWeight
+    ? 0
+    : w < 30
+      ? Math.min(0.5, +(w * 0.02).toFixed(2))
+      : Math.min(1.0, +(w * 0.02).toFixed(2));
   const rocuroniumLaryngoMg = Math.round(w * 1.2);
 
   // 4. CICO
   const sugammadexMg = Math.round(w * 16);
   const sugammadexVials200 = Math.ceil(sugammadexMg / 200);
   const sugammadexVials500 = Math.ceil(sugammadexMg / 500);
-  const atropineCicoMg = Math.min(1.0, +(w * 0.02).toFixed(2));
+  const atropineCicoMg = !isValidWeight
+    ? 0
+    : w < 30
+      ? Math.min(0.5, +(w * 0.02).toFixed(2))
+      : Math.min(1.0, +(w * 0.02).toFixed(2));
   const cicoEfonaRecommendation = isPediatric
     ? 'Pediatrik (<40 kg): Cerrahi krikotirotomi KONTRENDİKE (küçük çocukta iğne krikotirotomi / KBB acil trakeostomi)'
     : 'Erişkin: No. 10 Bistüri + 15 Fr Bougie + Kaflı ETT ID 6.0 mm';
@@ -427,9 +441,12 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
   const totalSpinalEpiArrestLabel = isPediatric
     ? `${Math.min(1000, Math.round(w * 10))} mcg (${+(Math.min(1, w * 0.01)).toFixed(2)} mg) IV`
     : '1 mg (1000 mcg) IV her 3–5 dk (ACLS)';
-  const totalSpinalAtropineLabel = isPediatric
-    ? `${+(Math.min(0.5, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg)`
-    : '0,5–1 mg IV (maks 3 mg)';
+  const totalSpinalAtropineLabel =
+    w < 30
+      ? `${+(Math.min(0.5, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg · çocuk maks 0,5 mg)`
+      : w < 45
+        ? `${+(Math.min(1.0, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg · çocuk 0,5 / adölesan 1 mg)`
+        : '0,5–1 mg IV (AHA 2020: 1 mg, maks 3 mg)';
   const totalSpinalEphedrineLabel = isPediatric
     ? `${+(w * 0.1).toFixed(1)}–${+(w * 0.2).toFixed(1)} mg IV`
     : '10–25 mg IV';
@@ -439,7 +456,16 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
   const totalSpinalFluidBolusMl = isPediatric
     ? Math.min(1000, Math.round(w * 20))
     : Math.min(1000, Math.max(500, Math.round(w * 10)));
-  const totalSpinalKetamineLabel = `${Math.round(w * 0.5)}–${Math.round(w * 1)} mg IV`;
+  // Total spinal şokta katekolamin rezervi tükendiği için yüksek doz hızlı Ketamin miyokard depresyonu yapar — IBW/LBW tavanı 50 mg!
+  const totalSpinalKetMinMg = isPediatric
+    ? Math.min(25, Math.max(5, Math.round(w * 0.25)))
+    : Math.min(25, Math.max(10, Math.round(w * 0.25)));
+  const totalSpinalKetMaxMg = isPediatric
+    ? Math.min(50, Math.max(10, Math.round(w * 0.5)))
+    : Math.min(50, Math.max(25, Math.round(w * 0.5)));
+  const totalSpinalKetamineLabel = isPediatric
+    ? `${totalSpinalKetMinMg}–${totalSpinalKetMaxMg} mg titre IV (0,25–0,5 mg/kg, maks 50 mg)`
+    : `${totalSpinalKetMinMg}–${totalSpinalKetMaxMg} mg titre IV (maks 50 mg · IBW/LBW!)`;
   const totalSpinalMidazolamMg = +(Math.min(3, Math.max(0.5, w * 0.03))).toFixed(1);
 
   // 17. Intraop MI
@@ -448,6 +474,10 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
   const miEsmololInfMaxMgMin = +(w * 0.2).toFixed(1);
   const miUfhMinIu = Math.min(5000, Math.round(w * 60));
   const miUfhMaxIu = Math.min(5000, Math.round(w * 70));
+  const miUfhLabel =
+    miUfhMinIu === miUfhMaxIu
+      ? `${miUfhMaxIu} IU (maks 5000 IU)`
+      : `${miUfhMinIu}–${miUfhMaxIu} IU`;
 
   // 18. Malignant Arrhythmias
   const arrDefibLabel = isPediatric
@@ -467,33 +497,54 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     : '6 mg → 12 mg hızlı IV puşe + SF flush';
 
   // 19. Intraop Bradycardia
-  const bradyAtropineLabel = isPediatric
-    ? `${+(Math.min(0.5, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg)`
-    : '1 mg IV her 3–5 dk (maks 3 mg · AHA 2020)';
+  const bradyAtropineLabel =
+    w < 30
+      ? `${+(Math.min(0.5, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg · çocuk maks 0,5 mg)`
+      : w < 45
+        ? `${+(Math.min(1.0, w * 0.02)).toFixed(2)} mg IV (0,02 mg/kg · çocuk 0,5 / adölesan 1 mg)`
+        : '1 mg IV her 3–5 dk (maks 3 mg · AHA 2020)';
   const bradyEpiLabel = isPediatric
     ? `${Math.min(1000, Math.round(w * 10))} mcg IV (10 mcg/kg — HR<60 + KPR!)`
     : '2–10 mcg/dk IV infüzyon (köprü: 10–50 mcg bolus)';
   const bradyDopamineRangeMcgMin = `${Math.round(w * 5)}–${Math.round(w * 20)} mcg/dk`;
 
-  // 20. Intraop Hypoglycemia (Rule of 50 in pediatrics — NO D50!)
-  const hypoDextroseLabel = isPediatric
-    ? `${Math.round(w * 2)}–${Math.round(w * 5)} mL %10 Dekstroz (2–5 mL/kg)`
-    : '100–250 mL %10 Dekstroz (veya 25–50 mL %50 Dekstroz)';
-  const hypoDextroseGrams = isPediatric
-    ? `${+(w * 0.2).toFixed(1)}–${+(w * 0.5).toFixed(1)} g glukoz`
-    : '12,5–25 g glukoz IV';
+  // 20. Intraop Hypoglycemia (Rule of 50 in pediatrics — NO D50!; Neonate ≤5 kg strict 2 mL/kg!)
+  const hypoChildMinMl = Math.min(250, Math.round(w * 2));
+  const hypoChildMaxMl = Math.min(250, Math.round(w * 5));
+  const hypoDextroseLabel = isNeonate
+    ? `${Math.round(w * 2)} mL %10 Dekstroz (Yenidoğan: katı 2 mL/kg!)`
+    : isPediatric
+      ? `${hypoChildMinMl}–${hypoChildMaxMl} mL %10 Dekstroz (2–5 mL/kg)`
+      : '100–250 mL %10 D · %20 (60–125 mL) / %30 (40–80 mL)';
+  const hypoDextroseGrams = isNeonate
+    ? `${+(w * 0.2).toFixed(1)} g glukoz (0,2 g/kg · 5 mL/kg VERME!)`
+    : isPediatric
+      ? `${+(Math.min(25, w * 0.2)).toFixed(1)}–${+(Math.min(25, w * 0.5)).toFixed(1)} g glukoz`
+      : '10–25 g glukoz IV (TR rutin: %10/%20/%30 · ABD %50 = 25–50 mL)';
   const hypoGlucagonLabel = w < 20 ? '0,5 mg IM/SC (<20 kg)' : '1 mg IM/SC (IV yol yoksa)';
 
-  // 21. Myxedema Coma
+  // 21. Myxedema Coma (TR'de İV T4 & İV T3 rutin stokta YOK — NG/OG oral LT4 ön planda; pediatrik tavan!)
+  const pedsHydroMg = Math.min(100, Math.max(25, Math.round(w * 2)));
   const myxedemaHydrocortLabel = isPediatric
-    ? `${Math.min(100, Math.max(25, Math.round(w * 2)))} mg IV (2 mg/kg)`
+    ? `${pedsHydroMg} mg IV (2 mg/kg · BSPED: <2y 25 / 2–12y 50 / >12y 100 mg)`
     : '100 mg IV bolus → 50–100 mg her 6–8 saat';
+  const pedsT4IvMin = Math.min(200, Math.round(w * 5));
+  const pedsT4IvMax = Math.min(200, Math.round(w * 10));
+  const pedsT4NgMin = Math.min(300, Math.round(w * 6));
+  const pedsT4NgMax = Math.min(300, Math.round(w * 10));
   const myxedemaT4Label = isPediatric
-    ? `${Math.round(w * 5)}–${Math.round(w * 10)} mcg IV yükleme`
-    : '200–400 mcg IV yükleme (yaşlı/KAH: 200 mcg)';
+    ? pedsT4NgMin === pedsT4NgMax
+      ? `NG/OG ${pedsT4NgMax} mcg ezilmiş LT4 (maks 300 mcg · Ped. Endokrin!)`
+      : `NG/OG ${pedsT4NgMin}–${pedsT4NgMax} mcg ezilmiş LT4 (maks 300 mcg)`
+    : 'NG/OG 300–500 mcg ezilmiş LT4 (yaşlı/KAH: 200–300 mcg · TR pratik)';
+  const myxedemaT4IvReference = isPediatric
+    ? pedsT4IvMin === pedsT4IvMax
+      ? `ATA İV T4: ${pedsT4IvMax} mcg (maks 200 mcg · TR'de rutin stokta YOK)`
+      : `ATA İV T4: ${pedsT4IvMin}–${pedsT4IvMax} mcg (maks 200 mcg · TR'de rutin stokta YOK)`
+    : "ATA 2014 İV T4: 200–400 mcg (yaşlı/KAH: 200 mcg) — TR'de İV T4 rutin stokta YOK!";
   const myxedemaT3Label = isPediatric
-    ? 'Pediatrik Endokrinoloji konsültasyonu'
-    : '5–20 mcg IV → 2,5–10 mcg/8 sa (KAH/aritmide kaçın)';
+    ? "Pediatrik Endokrinoloji konsültasyonu (TR'de İV T3 rutin stokta YOK)"
+    : "TR'de İV T3 rutin stokta YOK (ATA referans: 5–20 mcg IV → 2,5–10 mcg/8 sa; KAH'ta kaçın)";
 
   // 22. Pheochromocytoma Crisis
   const pheoSnpRangeMcgMin = `${+(w * 0.3).toFixed(1)}–${+(w * 2).toFixed(1)} mcg/dk`;
@@ -502,9 +553,9 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     : '2–4 g IV (15–20 dk yükleme) → 1–2 g/sa';
   const pheoEsmololBolusMg = Math.round(w * 0.5);
 
-  // 23. Adrenal Crisis
+  // 23. Adrenal Crisis (Woodcock 2020: 2 mg/kg [maks 100 mg] + BSPED yaş bandı referansı)
   const adrenalHydrocortLabel = isPediatric
-    ? `${Math.min(100, Math.max(25, Math.round(w * 2)))} mg IV (2 mg/kg)`
+    ? `${pedsHydroMg} mg IV (2 mg/kg · BSPED: <2y 25 / 2–12y 50 / >12y 100 mg)`
     : '100 mg IV bolus → 200 mg/24 sa infüzyon (50 mg/6 sa)';
   const adrenalFluid1hLabel = isPediatric
     ? `${Math.min(1000, Math.round(w * 20))} mL dengeli kristaloid / %0,9 NaCl (20 mL/kg)`
@@ -512,13 +563,18 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
   const adrenalNoradRangeMcgMin = `${+(w * 0.05).toFixed(1)}–${+(w * 0.5).toFixed(1)} mcg/dk`;
 
   // 24. ICP Crisis (KİBAS / Akut İKB Krizi)
-  // %20 Mannitol = 0,2 g/mL -> 5 mL/g (0,25 g/kg = 1,25 mL/kg; 0,5 g/kg = 2,5 mL/kg; 1 g/kg = 5 mL/kg)
-  const icpMannitolLowG = +(w * 0.25).toFixed(1);
-  const icpMannitolLowMl = Math.round(w * 1.25);
-  const icpMannitolMidG = +(w * 0.5).toFixed(1);
-  const icpMannitolMidMl = Math.round(w * 2.5);
-  const icpMannitolHighG = +(w * 1.0).toFixed(1);
-  const icpMannitolHighMl = Math.round(w * 5);
+  // %20 Mannitol = 0,2 g/mL -> 5 mL/g; tek bolus tavanı 100 g (500 mL) — obezitede IBW/AdjBW!
+  const icpMannitolLowG = Math.min(100, +(w * 0.25).toFixed(1));
+  const icpMannitolLowMl = Math.min(500, Math.round(w * 1.25));
+  const icpMannitolMidG = Math.min(100, +(w * 0.5).toFixed(1));
+  const icpMannitolMidMl = Math.min(500, Math.round(w * 2.5));
+  const icpMannitolHighG = Math.min(100, +(w * 1.0).toFixed(1));
+  const icpMannitolHighMl = Math.min(500, Math.round(w * 5));
+  const icpMannitolCapped = w > 100;
+  const icpMannitolStickyLabel =
+    icpMannitolMidG === icpMannitolHighG
+      ? `${icpMannitolHighG} g (${icpMannitolHighMl} mL · maks/bolus)`
+      : `${icpMannitolMidG}–${icpMannitolHighG} g (${icpMannitolMidMl}–${icpMannitolHighMl} mL)`;
   const hts3MinMl = Math.min(250, Math.round(w * 2));
   const hts3MaxMl = Math.min(250, Math.round(w * 5));
   const icpHts3Label =
@@ -526,8 +582,8 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
       ? `${hts3MaxMl} mL (maks/bolus)`
       : `${hts3MinMl}–${hts3MaxMl} mL`;
   const icpHts234Label = isPediatric
-    ? `${Math.min(30, +(w * 0.5).toFixed(1))} mL (0,5 mL/kg, maks 30 mL · SANTRAL!)`
-    : '30 mL (10–20 dk · YALNIZCA SANTRAL HAT!)';
+    ? `${Math.min(30, +(w * 0.5).toFixed(1))} mL %23,4 (TR yoksa: %3 HTS veya santralden %10/%20 NaCl)`
+    : '30 mL %23,4 (TR yoksa: ~35 mL %20 veya 70 mL %10 NaCl · SANTRAL!)';
   const icpThiopentalLoadMinMg = Math.round(w * 3);
   const icpThiopentalLoadMaxMg = Math.round(w * 5);
   const icpThiopentalInfMinMgHr = Math.round(w * 1);
@@ -544,6 +600,7 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     weightNum,
     isValidWeight,
     isPediatric,
+    isNeonate,
 
     initialDoseMg,
     dantriumVials,
@@ -673,6 +730,7 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     miEsmololInfMaxMgMin,
     miUfhMinIu,
     miUfhMaxIu,
+    miUfhLabel,
 
     arrDefibLabel,
     arrCardioversionLabel,
@@ -690,6 +748,7 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
 
     myxedemaHydrocortLabel,
     myxedemaT4Label,
+    myxedemaT4IvReference,
     myxedemaT3Label,
 
     pheoSnpRangeMcgMin,
@@ -706,6 +765,8 @@ export function computeEmergencyDoses(rawWeight: string): EmergencyDoses {
     icpMannitolMidMl,
     icpMannitolHighG,
     icpMannitolHighMl,
+    icpMannitolCapped,
+    icpMannitolStickyLabel,
     icpHts3Label,
     icpHts234Label,
     icpThiopentalLoadMinMg,
@@ -751,8 +812,8 @@ export function getStickyDoseHighlights(
           tone: 'amber',
         },
         {
-          label: 'Ryanodex (250 mg)',
-          value: `${doses.ryanodexVials} flk · ${doses.ryanodexWaterMl} mL`,
+          label: 'Ryanodex (TR YOK)',
+          value: `${doses.ryanodexVials} flk · ${doses.ryanodexWaterMl} mL (TR: Dantrium/Agilus)`,
           tone: 'emerald',
         },
       ];
@@ -1057,8 +1118,8 @@ export function getStickyDoseHighlights(
           tone: 'red',
         },
         {
-          label: 'UFH (Cerrahi Onaylı)',
-          value: `${doses.miUfhMinIu}–${doses.miUfhMaxIu} IU IV`,
+          label: 'UFH (Kanamalı/Nöroda YASAK!)',
+          value: doses.miUfhLabel,
           tone: 'amber',
         },
       ];
@@ -1128,7 +1189,7 @@ export function getStickyDoseHighlights(
           tone: 'red',
         },
         {
-          label: '2. İV Levotiroksin (T4)',
+          label: '2. NG/OG Levotiroksin (TR)',
           value: doses.myxedemaT4Label.split(' (')[0],
           tone: 'amber',
         },
@@ -1142,8 +1203,8 @@ export function getStickyDoseHighlights(
     case 'pheochromocytoma-crisis':
       return [
         {
-          label: 'Faz 1 · Önce α-Blokaj',
-          value: `Fentolamin 1–5 mg · SNP ${doses.pheoSnpRangeMcgMin}`,
+          label: 'Faz 1 · TR Öncelikli Vazodilatasyon',
+          value: `Nikardipin 5–15 mg/sa · SNP ${doses.pheoSnpRangeMcgMin}`,
           tone: 'red',
         },
         {
@@ -1153,7 +1214,7 @@ export function getStickyDoseHighlights(
         },
         {
           label: 'Faz 2 (Ligasyon Sonrası)',
-          value: 'Noradrenalin + Vazopressin + KŞ!',
+          value: 'Noradrenalin (+ Vazopressin/Terlipressin) + KŞ!',
           tone: 'blue',
         },
       ];
@@ -1180,13 +1241,13 @@ export function getStickyDoseHighlights(
     case 'icp-crisis':
       return [
         {
-          label: '%20 Mannitol (0,5–1 g/kg)',
-          value: `${doses.icpMannitolMidG}–${doses.icpMannitolHighG} g (${doses.icpMannitolMidMl}–${doses.icpMannitolHighMl} mL)`,
+          label: '%20 Mannitol (maks 100 g)',
+          value: doses.icpMannitolStickyLabel,
           tone: 'red',
         },
         {
-          label: '%3 HTS / %23,4 Santral',
-          value: `${doses.icpHts3Label} · ${doses.isPediatric ? `${Math.min(30, +(doses.weightNum * 0.5).toFixed(1))} mL` : '30 mL'} Santral`,
+          label: '%3 HTS / Santral Hipertonik',
+          value: `${doses.icpHts3Label} · Santral %20/%10 NaCl`,
           tone: 'amber',
         },
         {

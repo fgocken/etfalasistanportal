@@ -8,7 +8,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     subTitle: 'Tip 1 (Plak Rüptürü) vs Tip 2 (O₂ Sunum/Tüketim Dengesizliği) · Perioperatif Miyokard Hasarı & Akut İskemi Yönetimi',
     codeColor: 'red',
     severityBadge: 'KOD KIRMIZI · AKUT MİYOKARD İSKEMİSİ · KARDİYOJENİK ŞOK & ARİTMİ RİSKİ',
-    keyCallout: 'İntraoperatif yeni ST elevasyonu/depresyonu (>1 mm), T inversiyonu, yeni LBBB, malign aritmi veya TEE’de yeni bölgesel duvar hareket bozukluğu (RWMA) = AKUT MİYOKARD İSKEMİSİ! Perioperatif MI’ların çoğunluğu Tip 2 (O₂ sunum/tüketim dengesizliği) kaynaklıdır: Derhal O₂ sunumunu artır (SpO₂ ≥%95, Hb ≥8–9 g/dL, MAP ≥65–70 mmHg), MVO₂’yi düşür (HR kontrolü 60–75/dk — Esmolol/Metoprolol; ağrı/ısı/anestezi derinliğini optimize et), cerrahla aktif kanama riskini konuş (Aspirin + UFH; FİBRİNOLİTİK KESİN YASAK!). Sağ ventrikül infarktında (D2/D3/aVF + V4R) ve PDE-5 inhibitörü alanlarda NİTROGLİSERİN KONTRENDİKEDİR! STEMI veya refrakter şokta acil Kardiyoloji / Primer PKG planla!',
+    keyCallout: 'İntraoperatif yeni ST elevasyonu/depresyonu (>1 mm), T inversiyonu, yeni LBBB, malign aritmi veya TEE’de yeni bölgesel duvar hareket bozukluğu (RWMA) = AKUT MİYOKARD İSKEMİSİ! Perioperatif MI’ların çoğunluğu Tip 2 (O₂ sunum/tüketim dengesizliği) kaynaklıdır: Önce Tip 2 nedenleri düzelt — O₂ sunumunu artır (SpO₂ ≥%95, Hb ≥8–9 g/dL, MAP ≥65–70 mmHg), MVO₂’yi düşür (HR 60–75/dk — Esmolol/Metoprolol; ağrı/ısı/anestezi derinliği). KRİTİK KANAMA UYARISI: Aktif kraniyotomi, spinal, göz, majör ortopedik veya ürolojik/pelvik cerrahilerde UFH (60–70 IU/kg, maks 5000 IU) pratikte MUTLAK KONTRENDİKEDİR! Cerrahla kanama riskini değerlendir (Aspirin yalnızca cerrahi onay varsa NG/OG tüpten ezilmiş 150–300 mg veya İV Aspegic®; FİBRİNOLİTİK KESİN YASAK!). Sağ ventrikül infarktında (D2/D3/aVF + V4R) ve PDE-5 inhibitörü alanlarda NİTROGLİSERİN KONTRENDİKEDİR! STEMI / Tip 1 MI’da cerrahiyi hızla kapatıp acil Primer PKG (Cath Lab) planla!',
     quickCalculatorType: 'intraop-mi',
 
     // 2) Tanımlama ve Giriş
@@ -25,7 +25,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Oksijen Sunumu & Hemodinamik Stabilizasyon: SpO₂ %94–98 hedefi (aşırı hiperoksiden [PaO₂ >300 mmHg] kaçın), Hb ≥8–9 g/dL (aktif iskemide erken eritrosit transfüzyonu), normotermi (>36°C), derin dengeli analjezi (Fentanil/Sufentanil) ve normokapni (EtCO₂ 35–40 mmHg)',
         'Kalp Hızı (MVO₂) Kontrolü: Kısa etkili titre edilebilir β₁-selektif bloker Esmolol (0,5 mg/kg IV bolus → 50–200 mcg/kg/dk infüzyon) veya Metoprolol (1–5 mg IV yavaş bolus; hedef HR 60–75/dk) — YALNIZCA akut kalp yetmezliği, kardiyojenik şok, bradikardi veya AV blok YOKSA!',
         'Koroner Vazodilatasyon & Preload Azaltma: İV Nitrogliserin (50–100 mcg bolus → 5–200 mcg/dk infüzyon; SKB >100 mmHg ise) — SAĞ VENTRİKÜL İNFARKTI (inferior MI + V4R) ve PDE-5 inhibitörlerinde (Sildenafil/Tadalafil) KESİN KONTRENDİKE!',
-        'Antitrombotik & Reperfüzyon: Cerrahla kanama riski tartışılarak erken Aspirin (162–325 mg çiğneme/NG/rektal) ve geri çevrilebilir Anfraksiyone Heparin (UFH 60–70 IU/kg bolus, Protamin ile nötralize edilebilir); STEMI / refrakter iskemide Primer PKG (Fibrinolitikler KESİN YASAK!)',
+        'Antitrombotik & Reperfüzyon (Cerrahi Kanama Onayı Şart!): Cerrahi onay varsa entübe hastada NG/OG tüpten ezilmiş 150–300 mg Aspirin veya İV Lizin Asetilsalisilat (Aspegic® 250–500 mg IV — varsa; uyanık/rejyonal hastada çiğneme; TR’de rektal supozituvar rutin bulunmaz). UFH (60–70 IU/kg, maks 5000 IU; Protamin ile geri çevrilebilir) aktif kraniyotomi, spinal, göz, majör ortopedik veya ürolojik/pelvik cerrahilerde pratikte MUTLAK KONTRENDİKEDİR — önce Tip 2 nedenleri (HR, MAP, Hb, O₂) düzelt, STEMI/Tip 1 MI’da cerrahiyi hızla kapatıp acil Primer PKG (Cath Lab) planla (Fibrinolitikler KESİN YASAK!).',
         'Kardiyojenik Şok Desteği: Noradrenalin (ilk tercih vazopressör, hedef MAP ≥65 mmHg) + Dobutamin (inotropi, düşük CO/kardiyak indeks; taşikardi riskini izle) + erken mekanik destek (IABP / Impella / VA-ECMO) konsültasyonu'
       ],
       mortalityStats: 'Perioperatif MI gelişen hastalarda 30 günlük mortalite %10–25 civarındadır (kardiyojenik şok eşlik ederse >%40–50); klinik olarak sessiz MINS olgularında dahi 30 günlük mortalite 3–5 kat artmaktadır (VISION: %9–10 vs <%1). Erken tanı, MVO₂/DO₂ dengesinin hızla restorasyonu ve STEMI/refrakter olgularda acil koroner anjiyografi sağkalımı belirgin iyileştirir.',
@@ -96,7 +96,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 3,
           title: 'MVO₂ KONTROLÜ: KALP HIZI (HR), ANESTEZİ DERİNLİĞİ & HEMODİNAMİ',
-          action: 'Taşikardi (>90/dk) varsa önce yüzeyel anestezi, ağrı, hipovolemi, hiperkapni veya kanamayı hızla düzeltin. Yeterli analjezi (Fentanil/Sufentanil) ve normovolemiye rağmen taşikardi sürüyorsa ve akut kalp yetmezliği/şok/AV blok YOKSA kısa etkili β₁-bloker Esmolol (0,5 mg/kg IV bolus → 50–200 mcg/kg/dk infüzyon) veya Metoprolol (1–5 mg IV yavaş bolus) ile HR’yi 60–75/dk bandına indirin. MAP ≥65–70 mmHg (veya bazalin %80–100’ü) koruyun; hipotansiyonda düşük doz Fenilefrin (taşikardik hastada!) veya Noradrenalin infüzyonu kullanın.',
+          action: 'Taşikardi (>90/dk) varsa önce yüzeyel anestezi, ağrı, hipovolemi, hiperkapni veya kanamayı hızla düzeltin. Yeterli analjezi (Fentanil/Sufentanil) ve normovolemiye rağmen taşikardi sürüyorsa ve akut kalp yetmezliği/şok/AV blok YOKSA kısa etkili β₁-bloker Esmolol (0,5 mg/kg IV bolus → 50–200 mcg/kg/dk infüzyon) veya Metoprolol (1–5 mg IV yavaş bolus) ile HR’yi 60–75/dk bandına indirin. MAP ≥65–70 mmHg (veya bazalin %80–100’ü) koruyun; hipotansiyonda (özellikle taşikardik hastada!) dilüe Noradrenalin (5–10 mcg push-dose / infüzyon) veya varsa düşük doz Fenilefrin kullanın (Fenilefrin IV Türkiye’de birçok hastanede rutin stokta bulunmadığından pratikte dilüe Noradrenalin push-dose/infüzyon tercih edilir).',
           criticalNote: 'Sol ventrikül koroner perfüzyonu diyastolde olur: Kalp hızını 110’dan 70/dk’ya düşürmek diyastolik doluş süresini uzatarak iskemiyi düzeltmenin EN GÜÇLÜ yoludur — ancak kardiyojenik şokta β-bloker KESİN KONTRENDİKEDİR!',
           priority: 'CRITICAL'
         },
@@ -109,9 +109,9 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         },
         {
           stepNumber: 5,
-          title: 'ANTİTROMBOTİK STRATEJİ & FİBRİNOLİTİK YASAĞI (CERRAH + KARDİYOLOJİ ORTAK KARARI)',
-          action: 'Aktif cerrahi kanama riskini (intrakraniyal, spinal, retroperitoneal, göz içi, kontrolsüz cerrahi kanama) cerrahla saniyeler içinde değerlendirin. Mutlak kanama kontrendikasyonu yoksa: Aspirin 162–325 mg (çiğneme, NG/OG tüpten ezilerek veya rektal supozituvar) uygulayın. Tip 1 AKS / STEMI / stent trombozu şüphesi yüksekse ve cerrahi hemostaz uygunsa geri çevrilebilir Anfraksiyone Heparin (UFH 60–70 IU/kg IV bolus [maks 4000–5000 IU] → 12 IU/kg/saat infüzyon) düşünün. P2Y12 inhibitörünü (Klopidogrel/Tikagrelor/Prasugrel) koroner anjiyografi ve cerrahi kanama netleşene kadar kardiyoloji ile kararlaştırın.',
-          criticalNote: 'FİBRİNOLİTİK TEDAVİ (Alteplaz / Tenekteplaz) AKTİF CERRAHİDE VE YAKIN DÖNEM MAJÖR CERRAHİDE KESİNLİKLE KONTRENDİKEDİR! Reperfüzyon gerektiren STEMI’de tek yol Acil Primer PKG’dir.',
+          title: 'ANTİTROMBOTİK STRATEJİ, CERRAHİ KANAMA KONTRENDİKASYONU & FİBRİNOLİTİK YASAĞI',
+          action: 'Önce Tip 2 nedenleri (HR, MAP, Hb, O₂) hızla düzeltin ve aktif cerrahi kanama riskini cerrahla saniyeler içinde değerlendirin. Mutlak kanama kontrendikasyonu yoksa ve cerrahi onay varsa: entübe genel anestezi hastasında NG/OG tüpten ezilmiş 150–300 mg Aspirin veya İV Lizin Asetilsalisilat (Aspegic® 250–500 mg IV — varsa) uygulayın (çiğneme yalnızca uyanık/rejyonal hastada mümkündür; TR’de rektal Aspirin supozituvarı rutin bulunmaz!). Tip 1 AKS / STEMI / stent trombozu şüphesi yüksekse ve cerrahi hemostaz uygunsa Protaminle geri çevrilebilir Anfraksiyone Heparin (UFH 60–70 IU/kg IV bolus [maks 5000 IU] → 12 IU/kg/saat infüzyon) düşünün. ANCAK aktif kraniyotomi, spinal, göz, majör ortopedik veya ürolojik/pelvik cerrahilerde UFH (60–70 IU/kg, maks 5000 IU) pratikte MUTLAK KONTRENDİKEDİR — bu olgularda antikoagülan vermeden cerrahiyi hızla kapatıp acil Primer PKG (Cath Lab) planlayın! P2Y12 inhibitörünü (Klopidogrel/Tikagrelor/Prasugrel) koroner anjiyografi ve cerrahi kanama netleşene kadar kardiyoloji ile kararlaştırın.',
+          criticalNote: 'KRİTİK UYARI: (1) Aktif kraniyotomi, spinal, göz, majör ortopedik veya ürolojik/pelvik cerrahilerde UFH pratikte MUTLAK KONTRENDİKEDİR! (2) FİBRİNOLİTİK TEDAVİ (Alteplaz / Tenekteplaz) AKTİF CERRAHİDE VE YAKIN DÖNEM MAJÖR CERRAHİDE KESİNLİKLE KONTRENDİKEDİR! STEMI/Tip 1 MI’da cerrahiyi hızla kapatıp Acil Primer PKG’ye geçin.',
           priority: 'CRITICAL'
         },
         {
@@ -142,21 +142,21 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               badge: 'BASAMAK 1 · ERKEN İSKEMİ',
               target: 'ST Depresyonu 1–2 mm · Hemodinami Stabil (Olası Tip 2)',
               presentation: 'V5 veya D2’de yeni yatay/downsloping ST depresyonu, sıklıkla taşikardi (>95/dk), hipotansiyon veya akut kanama eşliğinde.',
-              intervention: 'Tetikleyiciyi düzelt (analjezi/derinlik, Hb ≥8–9, SpO₂ %94–98, MAP ≥65), Esmolol ile HR 60–75/dk’ya çek, normotermi sağla, 12-derivasyon EKG + hs-cTn gönder.',
+              intervention: 'Önce Tip 2 nedenleri düzelt (analjezi/derinlik, Hb ≥8–9, SpO₂ %94–98, MAP ≥65), Esmolol ile HR 60–75/dk’ya çek, normotermi sağla, 12-derivasyon EKG + hs-cTn gönder.',
               severity: 'WARNING'
             },
             {
               badge: 'BASAMAK 2 · ISRARCI NSTEMI / RWMA',
               target: 'Kalıcı ST Depresyonu ≥2 mm / T İnversiyonu / TEE’de Yeni RWMA',
               presentation: 'Hemodinami optimize edilmesine rağmen düzelmeyen ST değişikliği, yükselen CVP/PCWP, yeni ventriküler ektopi veya TEE’de fokal hipokinezi.',
-              intervention: 'Cerrahla ameliyatı hızlandırmayı konuş, İV Nitrogliserin (RV MI/PDE-5 yoksa!) başla, cerrahi onay ile Aspirin 162–325 mg ± UFH, acil Kardiyoloji konsültasyonu.',
+              intervention: 'Cerrahla kanama riskini değerlendir ve ameliyatı hızlandırmayı konuş, İV Nitrogliserin (RV MI/PDE-5 yoksa!) başla; cerrahi onay varsa NG/OG ezilmiş 150–300 mg Aspirin veya İV Aspegic® (250–500 mg — varsa) ± yüksek kanama riskli cerrahi (kraniyotomi/spinal/göz/majör ortopedik/ürolojik-pelvik) DEĞİLSE UFH; acil Kardiyoloji konsültasyonu.',
               severity: 'HIGH'
             },
             {
               badge: 'BASAMAK 3 · AKUT STEMI / STENT TROMBOZU',
               target: 'Yeni ST Elevasyonu ≥1–2 mm (≥2 Ardışık Derivasyon) veya Yeni LBBB',
               presentation: 'Transmural iskemi (Tip 1 plak rüptürü veya akut stent trombozu), resiprokal ST depresyonu, derin RWMA / akinezi, hızla bozulan hemodinami.',
-              intervention: 'CERRAHİYİ EN KISA SÜREDE SONLANDIR → Acil Primer PKG (Cath Lab)! Fibrinolitik YASAK! Aspirin + (cerrahi uygunsa) UFH; inferior STEMI’de V4R çek (RV MI dışla!).',
+              intervention: 'CERRAHİYİ HIZLA KAPAT → Acil Primer PKG (Cath Lab)! Fibrinolitik YASAK! Aktif kraniyotomi, spinal, göz, majör ortopedik veya ürolojik/pelvik cerrahilerde UFH (60–70 IU/kg, maks 5000 IU) pratikte MUTLAK KONTRENDİKEDİR! Cerrahi onay varsa NG/OG Aspirin veya İV Aspegic®; inferior STEMI’de V4R çek (RV MI dışla!).',
               severity: 'CRITICAL'
             },
             {
@@ -176,15 +176,15 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               col1: 'Tip 1 MI (STEMI / NSTEMI)',
               col2: 'Aterosklerotik plak rüptürü/erozyonu veya stent trombozu → akut koroner oklüzyon (~%15–30)',
               col3: 'ST elevasyonu (≥2 ardışık derivasyon), resiprokal depresyon, yeni LBBB veya fokal akinezi (RWMA)',
-              col4: 'Cerrahiyi hızla bitir → Acil Primer PKG (Cath Lab) + cerrahi onay ile Aspirin & UFH',
-              col5: 'Aktif cerrahide FİBRİNOLİTİK KESİN YASAK! Stent trombozunda anjiyografiyi geciktirme!'
+              col4: 'Cerrahiyi hızla kapat → Acil Primer PKG (Cath Lab) + cerrahi onay varsa NG/OG Aspirin 150–300 mg (veya İV Aspegic®) & yalnızca kanama riski uygunsa UFH',
+              col5: 'Aktif cerrahide FİBRİNOLİTİK KESİN YASAK! Kraniyotomi, spinal, göz, majör ortopedik veya ürolojik/pelvik cerrahilerde UFH pratikte MUTLAK KONTRENDİKE — cerrahiyi kapatıp Primer PKG planla!'
             },
             {
               col1: 'Tip 2 MI (O₂ Dengesizliği)',
               col2: 'Koroner darlık zemininde O₂ tüketimi ↑ (taşikardi) veya sunumu ↓ (hipotansiyon, anemi, hipoksi) (~%70–85)',
               col3: 'Tipik olarak yaygın/subendokardiyal ST depresyonu (özellikle V4–V5), geçici T inversiyonu',
-              col4: 'Önce tetikleyiciyi düzelt: HR 60–75 (Esmolol), MAP ≥65–70, Hb ≥8–9 g/dL, normotermi, ağrı kontrolü',
-              col5: 'Altta yatan kanama/hipovolemiyi düzeltmeden agresif β-bloker veya antikoagülan verme!'
+              col4: 'Önce tetikleyiciyi düzelt: HR 60–75 (Esmolol), MAP ≥65–70, Hb ≥8–9 g/dL, O₂, normotermi, ağrı kontrolü',
+              col5: 'Altta yatan kanama/hipovolemiyi düzeltmeden veya yüksek kanamalı cerrahide agresif β-bloker / UFH verme!'
             },
             {
               col1: 'Sağ Ventrikül İnfarktı (RV MI)',
@@ -218,9 +218,9 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               status: 'RECOMMENDED'
             },
             {
-              domain: 'Aspirin (162–325 mg) & UFH (60–70 IU/kg)',
-              recommendation: 'Cerrahla kanama riski mutabakatı sağlanır sağlanmaz erken Aspirin (NG/rektal/çiğneme) ve yüksek riskli Tip 1 AKS’de Protaminle geri çevrilebilir UFH tercih et.',
-              rationaleAndCaution: 'İntrakraniyal, spinal/epidural (kateter varlığında!) veya kontrolsüz cerrahi kanamada antikoagülan/antiplatelet kararını mutlaka cerrah ve kardiyologla birlikte ver.',
+              domain: 'Aspirin (150–300 mg NG/OG · İV Aspegic®) & UFH (60–70 IU/kg, maks 5000 IU)',
+              recommendation: 'Önce Tip 2 nedenleri (HR, MAP, Hb, O₂) düzelt! Cerrahi onay varsa entübede NG/OG tüpten ezilmiş 150–300 mg Aspirin veya İV Lizin Asetilsalisilat (Aspegic® 250–500 mg IV — varsa; uyanık/rejyonalde çiğneme; TR’de rektal supozituvar rutin yok); kanama riski uygunsa Tip 1 AKS’de Protaminle geri çevrilebilir UFH seç.',
+              rationaleAndCaution: 'Aktif kraniyotomi, spinal, göz, majör ortopedik veya ürolojik/pelvik cerrahilerde UFH (60–70 IU/kg, maks 5000 IU) pratikte MUTLAK KONTRENDİKEDİR! Bu vakalarda antikoagülasyon vermeden cerrahi ekiple kanama riskini konuş ve STEMI/Tip 1 MI’da cerrahiyi hızla kapatıp acil Primer PKG (Cath Lab) planla.',
               status: 'CAUTION'
             },
             {
@@ -327,7 +327,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         ]
       },
       cleanAnesthesiaProtocol: [
-        'İntraoperatif hipotansiyondan (MAP <65 mmHg veya bazalden >%20 düşüş) ve uzamış taşikardiden (>90–100/dk) kaçınmak için proaktif vazopressör (Noradrenalin/Fenilefrin) ve kısa etkili β-bloker (Esmolol) hazır bulundurulması',
+        'İntraoperatif hipotansiyondan (MAP <65 mmHg veya bazalden >%20 düşüş) ve uzamış taşikardiden (>90–100/dk) kaçınmak için proaktif vazopressör (dilüe Noradrenalin 5–10 mcg push-dose / infüzyon veya varsa Fenilefrin) ve kısa etkili β-bloker (Esmolol) hazır bulundurulması',
         'Kanama yönetiminde hedefe yönelik sıvı tedavisi (aşırı kristaloid → ↑LVEDP ve hemodilüsyon!) ve yüksek kardiyak riskli hastada Hb 8 g/dL altında erken transfüzyon eşiği',
         'Postoperatif dönemde kesintisiz multimodal analjezi (rejyonal blok / epidural / IV analjezi) ile katekolamin deşarjının ve ağrıya bağlı taşikardinin engellenmesi'
       ],
@@ -336,8 +336,8 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Bifazik Defibrilatör / Kardiyoverter + Yapışkan Pedler (Oda içinde hazır)',
         'İV Nitrogliserin İnfüzyonu (örn. 50 mg / 250 mL = 200 mcg/mL veya 10 mg / 100 mL = 100 mcg/mL)',
         'Esmolol (10 mg/mL bolus + infüzyon) & Metoprolol (5 mg ampul)',
-        'Vazopressör / İnotrop Seti: Noradrenalin, Fenilefrin (50–100 mcg/mL) ve Dobutamin',
-        'Antitrombotikler: Aspirin (300 mg çiğneme/NG/rektal), Anfraksiyone Heparin (UFH) & Protamin Sülfat',
+        'Vazopressör / İnotrop Seti: Noradrenalin (infüzyon + 5–10 mcg dilüe push-dose), varsa Fenilefrin (TR’de birçok hastanede rutin stokta yok) ve Dobutamin',
+        'Antitrombotikler: Aspirin (150–300 mg — entübede NG/OG ezilerek, uyanıkta çiğneme; TR’de rektal supozituvar rutin yok) / İV Lizin Asetilsalisilat (Aspegic® 250–500 mg IV — varsa), Anfraksiyone Heparin (UFH — kraniyotomi/spinal/göz/majör kanamalı cerrahide KULLANILMAZ!) & Protamin Sülfat',
         '12-Derivasyon EKG Cihazı, TEE Probu/Cihazı, Arter Kan Gazı & Seri hs-cTn Tüpleri'
       ]
     },
@@ -487,9 +487,9 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       safeAgents: [
         'Elektriksel Tedavi (Unstabil Hastada En Hızlı ve Güvenli Seçenek!): Nabızsız VT/VF ve Torsades’ta Senkronize Olmayan Defibrilasyon (150–200 J bifazik); Nabızlı Unstabil Taşikardide Senkronize Kardiyoversiyon (SVT 50–100 J, Monomorfik VT 100 J, AF/WPW 120–200 J)',
         'Nabızsız VT/VF & Stabil Monomorfik VT: Amiodaron (pVT/VF’de 300 mg → 150 mg IV; nabızlı stabil monomorfik VT’de 150 mg IV 10 dk’da → infüzyon) veya Lidokain (1–1,5 mg/kg IV bolus)',
-        'Torsades de Pointes (Polimorfik VT + Uzun QT): İlk basamak İV Magnezyum Sülfat 2 g (unstabilde 1–2 dk, stabilde 10–15 dk) + K⁺ >4,0–4,5 mEq/L + Overdrive Pacing / Edinsel Uzun QT’de İzoproterenol (2–10 mcg/dk) — AMIODARON VERME!',
+        'Torsades de Pointes (Polimorfik VT + Uzun QT): İlk basamak İV Magnezyum Sülfat 2 g (unstabilde 1–2 dk, stabilde 10–15 dk) + K⁺ >4,0–4,5 mEq/L + Overdrive Pacing (transkutanöz/transvenöz — TR’de İzoproterenol temini çok zor olduğundan pratikte öncelik overdrive pacingdir!) — AMIODARON VERME!',
         'Düzenli Dar-Kompleks Stabil SVT: Vagal manevra → Adenozin 6 mg hızlı IV puşe + 20 mL SF flaş → yanıt yoksa 12 mg (santral hattan veya kalp naklinde 3 mg)',
-        'WPW (Pre-Eksitasyonlu Düzensiz Geniş Kompleks AF): Unstabilde Senkronize Kardiyoversiyon (120–200 J); stabilde IV Prokainamid (20–50 mg/dk) veya İbutilid — AV DÜĞÜM BLOKERLERİ KESİNLİKLE YASAK!'
+        'WPW (Pre-Eksitasyonlu Düzensiz Geniş Kompleks AF): Unstabilde (veya TR’de pratikte çoğunlukla ilk seçenek olarak sedasyon eşliğinde!) Senkronize Kardiyoversiyon (120–200 J); stabilde yapısal kalp hastalığı yoksa Propafenon / Flekainid [IV Prokainamid (20–50 mg/dk) ve İbutilid TR ameliyathanelerinde rutin bulunmaz!] — AV DÜĞÜM BLOKERLERİ KESİNLİKLE YASAK!'
       ],
       mortalityStats: 'VF/pVT’de defibrilasyondaki her 1 dakikalık gecikme sağkalımı %7–10 azaltır; buna karşın ameliyathanede ilk 2 dakika içinde defibrilasyon ve altta yatan nedenin (elektrolit, iskemi, guidewire, LAST) hızla giderilmesiyle ROSC oranları >%60–75’e ulaşır. Pre-eksitasyonlu AF’ye yanlışlıkla Verapamil/Adenozin/Amiodaron verilmesi veya Torsades’a Amiodaron verilmesi iatrojenik VF ve ölüme yol açabilir.',
       clinicalUrgency: 'Monitörde malign aritmi görüldüğünde ilk 5 saniyede hastanın nabzı, arter dalga formu, EtCO₂ ve SpO₂ pletismografisi kontrol edilerek gerçek aritmi koter/elektrot artefaktından ayrılmalı; nabız yoksa KPR + defibrilasyon, nabızlı unstabilse acil senkronize kardiyoversiyon başlatılmalıdır.'
@@ -509,9 +509,9 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       gradingScaleSource: 'AHA 2020/2025 ACLS, ERC 2021 ALS & ESC 2022 Ventriküler Aritmiler Kılavuzu',
       larachScale: [
         { category: 'Sınıf 1 — Nabızsız VT / VF (Kardiyak Arrest)', points: 'DEFİBRİLASYON 150–200 J', description: 'Nabız, arter trasesi ve EtCO₂ yok. Senkronize OLMAYAN 150–200 J bifazik şok + kesintisiz KPR + Adrenalin 1 mg + Amiodaron 300 mg / Lidokain.' },
-        { category: 'Sınıf 2 — Polimorfik VT / Torsades de Pointes (Uzun QT)', points: 'MgSO₄ 2 g + DEFİB', description: 'Değişken eksenli polimorfik VT. Unstabil/nabızsızda senkronize OLMAYAN defibrilasyon + İV MgSO₄ 2 g + K⁺ >4,0 + overdrive pacing / İzoproterenol. AMIODARON YASAK!' },
+        { category: 'Sınıf 2 — Polimorfik VT / Torsades de Pointes (Uzun QT)', points: 'MgSO₄ 2 g + DEFİB', description: 'Değişken eksenli polimorfik VT. Unstabil/nabızsızda senkronize OLMAYAN defibrilasyon + İV MgSO₄ 2 g + K⁺ >4,0 + Overdrive Pacing (İzoproterenol TR’de temini çok zor!). AMIODARON YASAK!' },
         { category: 'Sınıf 3 — Nabızlı Unstabil Taşikardi (Monomorfik VT / WPW-AF / SVT / AF)', points: 'SENKRONİZE KARDİYOVERSİYON', description: 'MAP <65, şok, akut iskemi veya pulmoner ödem var! Dar düzenli SVT: 50–100 J; Monomorfik VT: 100 J; Hızlı AF veya WPW-AF: 120–200 J senkronize kardiyoversiyon.' },
-        { category: 'Sınıf 4 — Hemodinamik Stabil Taşiaritmi (Dar SVT / Monomorfik VT / WPW-AF)', points: 'HEDEF FARMAKOTERAPİ', description: 'Dar düzenli SVT → Adenozin 6→12 mg; Stabil monomorfik VT → Amiodaron 150 mg (10 dk) veya Prokainamid; Stabil WPW-AF → Prokainamid/İbutilid (AV bloker YASAK!).' }
+        { category: 'Sınıf 4 — Hemodinamik Stabil Taşiaritmi (Dar SVT / Monomorfik VT / WPW-AF)', points: 'HEDEF FARMAKOTERAPİ', description: 'Dar düzenli SVT → Adenozin 6→12 mg; Stabil monomorfik VT → Amiodaron 150 mg (10 dk) / Lidokain / sedasyonla senkronize KV; Stabil WPW-AF → sedasyonla senkronize KV veya yapısal kalp hastalığı yoksa Propafenon/Flekainid (IV Prokainamid/İbutilid TR’de rutin yok; AV bloker YASAK!).' }
       ],
       larachInterpretation: 'Hasta hemodinamik olarak unstabilse ritmin ince elektrofizyolojik ayrımıyla (örn. aberran SVT vs VT) vakit kaybedilmez: DERHAL senkronize kardiyoversiyon uygulanır! Tek istisna: Polimorfik VT / Torsades’ta cihaz QRS’leri senkronize edemeyeceği için senkronize olmayan defibrilasyon seçilir.',
       rhythmEcgGallery: [
@@ -586,21 +586,21 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 4,
           title: 'POLİMORFİK VT / TORSADES DE POINTES (UZUN QT): İV MAGNEZYUM 2 g + DEFİBRİLASYON!',
-          action: 'Uzamış QTc zemininde ekseni dönen polimorfik VT (Torsades) saptandığında: (1) Unstabil/nabızsız ise SENKRONİZE OLMAYAN 150–200 J defibrilasyon yapın (cihaz polimorfik QRS’yi senkronize edemez!). (2) İlk basamak spesifik ilaç olarak İV MAGNEZYUM SÜLFAT 2 g uygulayın (unstabilde 1–2 dk içinde; stabil/tekrarlayan TdP’de 10–15 dk’da, ardından 0,5–1 g/saat infüzyon). (3) Serum K⁺ düzeyini >4,0–4,5 mEq/L’ye çıkarın. (4) QT uzatan ajanları (Droperidol, Ondansetron, Sevofluran → TIVA’ya geçmeyi düşün!) kesin. (5) Tekrarlayan bradikardi-bağımlı (pause-dependent) TdP’de transkutanöz/transvenöz Overdrive Pacing (hedef HR 90–110/dk) veya edinsel uzun QT’de İzoproterenol (2–10 mcg/dk) başlatın.',
+          action: 'Uzamış QTc zemininde ekseni dönen polimorfik VT (Torsades) saptandığında: (1) Unstabil/nabızsız ise SENKRONİZE OLMAYAN 150–200 J defibrilasyon yapın (cihaz polimorfik QRS’yi senkronize edemez!). (2) İlk basamak spesifik ilaç olarak İV MAGNEZYUM SÜLFAT 2 g uygulayın (unstabilde 1–2 dk içinde; stabil/tekrarlayan TdP’de 10–15 dk’da, ardından 0,5–1 g/saat infüzyon). (3) Serum K⁺ düzeyini >4,0–4,5 mEq/L’ye çıkarın. (4) QT uzatan ajanları (Droperidol, Ondansetron, Sevofluran → TIVA’ya geçmeyi düşün!) kesin. (5) Tekrarlayan bradikardi-bağımlı (pause-dependent) TdP’de öncelikli olarak transkutanöz/transvenöz Overdrive Pacing (hedef HR 90–110/dk) uygulayın [uluslararası kılavuzlardaki İzoproterenol (2–10 mcg/dk) Türkiye’de temini çok zor olduğundan pratikte pacing esastır!].',
           criticalNote: 'KRİTİK YASAK: Torsades de Pointes’te AMIODARON (ve Prokainamid/Sotalol) KESİNLİKLE VERME — QT aralığını daha da uzatarak refrakter VF fırtınasını tetikler!',
           priority: 'CRITICAL'
         },
         {
           stepNumber: 5,
           title: 'PRE-EKSİTASYONLU AF (WPW — DÜZENSİZ GENİŞ KOMPLEKS): AV BLOKER KESİN YASAK!',
-          action: 'Çok hızlı (>200/dk), düzensiz ve değişken geniş QRS’li (FBI: Fast, Broad, Irregular) taşikardi = Pre-eksitasyonlu AF (WPW) olarak tanıyın! Unstabilse (veya şüphede) derhal Senkronize Kardiyoversiyon (120–200 J bifazik) uygulayın. Hemodinamik olarak stabilse aksesuar yolu bloke eden İV Prokainamid (20–50 mg/dk, maks 17 mg/kg; hipotansiyon veya QRS >%50 uzarsa dur!) veya İbutilid (1 mg IV 10 dk’da) kullanın.',
+          action: 'Çok hızlı (>200/dk), düzensiz ve değişken geniş QRS’li (FBI: Fast, Broad, Irregular) taşikardi = Pre-eksitasyonlu AF (WPW) olarak tanıyın! Unstabilse (veya şüphede) derhal Senkronize Kardiyoversiyon (120–200 J bifazik) uygulayın. Hemodinamik olarak stabil hastada Türkiye ameliyathanelerinde İV Prokainamid (20–50 mg/dk, maks 17 mg/kg) ve İbutilid (1 mg IV 10 dk’da) rutin bulunmadığından pratik yaklaşım: çoğu merkezde doğrudan sedasyon eşliğinde Senkronize Kardiyoversiyon VEYA yapısal kalp hastalığı yoksa Propafenon / Flekainid kullanmaktır.',
           criticalNote: 'ÖLÜMCÜL TUZAK: WPW’li AF’de ADENOZİN, VERAPAMİL, DİLTİAZEM, DİGOKSİN, β-BLOKER ve AMIODARON KESİNLİKLE KONTRENDİKEDİR! AV düğümün kapanması tüm atriyal uyarıların aksesuar yoldan ventriküle akmasına ve ani VENTRİKÜLER FİBRİLASYONA yol açar!',
           priority: 'CRITICAL'
         },
         {
           stepNumber: 6,
           title: 'STABİL MONOMORFİK VT & STABİL DAR-KOMPLEKS SVT / HIZLI AF YÖNETİMİ',
-          action: 'Stabil Monomorfik VT: Amiodaron 150 mg IV 10 dk’da infüzyon (gerekirse tekrar → 1 mg/dk 6 sa → 0,5 mg/dk 18 sa) veya Prokainamid (20–50 mg/dk) — yanıt yoksa veya hemodinami bozulursa senkronize kardiyoversiyon! Stabil Düzenli Dar SVT: Vagal manevra (modifiye Valsalva) → Adenozin 6 mg hızlı IV puşe + 20 mL SF flaş → yanıt yoksa 12 mg (santral hat/kalp nakli: 3 mg). Stabil Hızlı AF (WPW dışlandıysa!): Önce ağrı/hipovolemi/elektroliti düzelt; hız kontrolü için Esmolol (0,5 mg/kg → 50–200 mcg/kg/dk), Metoprolol (2,5–5 mg IV), Diltiazem (0,25 mg/kg IV) veya düşük EF’de Amiodaron 150 mg IV.',
+          action: 'Stabil Monomorfik VT: Amiodaron 150 mg IV 10 dk’da infüzyon (gerekirse tekrar → 1 mg/dk 6 sa → 0,5 mg/dk 18 sa) veya Lidokain 1–1,5 mg/kg IV [İV Prokainamid TR’de rutin yok] — yanıt yoksa veya hemodinami bozulursa sedasyonla senkronize kardiyoversiyon! Stabil Düzenli Dar SVT: Vagal manevra (modifiye Valsalva) → Adenozin 6 mg hızlı IV puşe + 20 mL SF flaş → yanıt yoksa 12 mg (santral hat/kalp nakli: 3 mg). Stabil Hızlı AF (WPW dışlandıysa!): Önce ağrı/hipovolemi/elektroliti düzelt; hız kontrolü için Esmolol (0,5 mg/kg → 50–200 mcg/kg/dk), Metoprolol (2,5–5 mg IV), Diltiazem (0,25 mg/kg IV) veya düşük EF’de Amiodaron 150 mg IV.',
           priority: 'HIGH'
         },
         {
@@ -625,7 +625,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               badge: 'BASAMAK 1 · STABİL TAŞİARİTMİ',
               target: 'MAP ≥65, İskemi/Şok Yok (Dar SVT, Hızlı AF veya Stabil VT)',
               presentation: 'Perfüzyon korunmuş; ritim düzenli dar SVT, hızlı AF veya hemodinamik olarak tolere edilen monomorfik VT.',
-              intervention: 'Tetikleyiciyi düzelt (O₂, ağrı, volüm, K⁺/Mg²⁺). Düzenli dar SVT: Adenozin 6→12 mg; Stabil AF: Esmolol/Metoprolol/Diltiazem; Stabil VT: Amiodaron 150 mg (10 dk) veya Prokainamid.',
+              intervention: 'Tetikleyiciyi düzelt (O₂, ağrı, volüm, K⁺/Mg²⁺). Düzenli dar SVT: Adenozin 6→12 mg; Stabil AF: Esmolol/Metoprolol/Diltiazem; Stabil VT: Amiodaron 150 mg (10 dk) / Lidokain / sedasyonla senkronize KV (IV Prokainamid TR’de rutin yok).',
               severity: 'WARNING'
             },
             {
@@ -639,7 +639,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               badge: 'BASAMAK 3 · UNSTABİL MONOMORFİK VT / WPW-AF',
               target: 'Geniş QRS (≥120 ms) + Hemodinamik Bozulma veya FBI Paterni',
               presentation: 'Düzenli geniş QRS (VT) veya çok hızlı düzensiz değişken geniş QRS (Pre-eksitasyonlu AF / WPW).',
-              intervention: 'Senkronize Kardiyoversiyon (Monomorfik VT: 100→150→200 J; WPW-AF: 120–200 J). WPW-AF’de stabilse Prokainamid — AV DÜĞÜM BLOKERLERİ KESİN YASAK!',
+              intervention: 'Senkronize Kardiyoversiyon (Monomorfik VT: 100→150→200 J; WPW-AF: 120–200 J). WPW-AF’de stabilse TR pratiğinde sedasyonla senkronize KV veya yapısal kalp hastalığı yoksa Propafenon/Flekainid (IV Prokainamid/İbutilid TR’de rutin yok) — AV DÜĞÜM BLOKERLERİ KESİN YASAK!',
               severity: 'CRITICAL'
             },
             {
@@ -666,21 +666,21 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               col1: 'Monomorfik VT (Nabızlı)',
               col2: 'Düzenli, tek tip geniş QRS (≥120 ms), HR >150/dk, AV disosiyasyon',
               col3: 'Senkronize Kardiyoversiyon: 100 J → 150 J → 200 J bifazik',
-              col4: 'Amiodaron 150 mg IV (10 dk) veya Prokainamid (20–50 mg/dk)',
+              col4: 'Amiodaron 150 mg IV (10 dk) / Lidokain / sedasyonla senkronize KV [IV Prokainamid TR’de rutin yok]',
               col5: '“Aberran SVT olabilir” diyerek Verapamil/Diltiazem vermek VT’de kardiyak arrest yapar!'
             },
             {
               col1: 'Torsades de Pointes (TdP)',
               col2: 'İzoelektrik eksen etrafında dönen polimorfik geniş QRS + bazal QTc >480–500 ms',
               col3: 'Senkronize OLMAYAN Defibrilasyon (150–200 J) + İV MgSO₄ 2 g (1–2 dk)',
-              col4: 'İV MgSO₄ 2 g (10–15 dk) + K⁺ >4,0–4,5 + Overdrive Pacing / İzoproterenol (edinsel LQTS)',
+              col4: 'İV MgSO₄ 2 g (10–15 dk) + K⁺ >4,0–4,5 + Overdrive Pacing (TCP/TVP) [İzoproterenol TR’de temini çok zor]',
               col5: 'AMIODARON (ve Sotalol/Prokainamid) KESİN YASAK — QT’yi uzatıp TdP fırtınasını alevlendirir!'
             },
             {
               col1: 'Pre-Eksitasyonlu AF (WPW)',
               col2: 'Çok hızlı (>200/dk), DÜZENSİZ R-R, GENİŞ ve değişken QRS morfolojisi (“FBI”)',
               col3: 'Senkronize Kardiyoversiyon: 120–200 J bifazik',
-              col4: 'İV Prokainamid (20–50 mg/dk) veya İbutilid (1 mg 10 dk’da)',
+              col4: 'TR pratik: Sedasyonla Senkronize KV veya yapısal hastalık yoksa Propafenon/Flekainid [IV Prokainamid/İbutilid TR’de rutin yok]',
               col5: 'AV DÜĞÜM BLOKERLERİ (Adenozin, Verapamil, Diltiazem, Digoksin, β-bloker, Amiodaron) KESİN YASAK → VF!'
             },
             {
@@ -714,9 +714,9 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               status: 'AVOID'
             },
             {
-              domain: 'Prokainamid (20–50 mg/dk IV, maks 17 mg/kg)',
-              recommendation: 'Hemodinamik olarak stabil Pre-eksitasyonlu AF (WPW) ve yapısal kalp hastalığı olmayan stabil monomorfik VT’de en güvenli farmakolojik seçenektir.',
-              rationaleAndCaution: 'Aksesuar yolun refrakter periyodunu uzatır. Hipotansiyon gelişirse, QRS bazale göre >%50 genişlerse veya aritmi sonlanırsa infüzyon hemen durdurulmalıdır; uzun QT/TdP’de kullanılmaz.',
+              domain: 'Stabil WPW-AF: Senkronize KV · Propafenon/Flekainid [Prokainamid/İbutilid TR’de Rutin Yok]',
+              recommendation: 'Türkiye ameliyathanelerinde İV Prokainamid (20–50 mg/dk, maks 17 mg/kg) ve İbutilid rutin bulunmaz → stabil WPW-AF’de pratik yaklaşım çoğu merkezde doğrudan sedasyon eşliğinde Senkronize Kardiyoversiyon (120–200 J) veya yapısal kalp hastalığı yoksa Propafenon / Flekainiddir.',
+              rationaleAndCaution: 'Klas IC ajanlar (Propafenon/Flekainid) KAH/yapısal kalp hastalığında proaritmik olduğundan kontrendikedir; şüphede veya en hızlı güvenli çözüm olarak sedasyonla senkronize kardiyoversiyon tercih edilir.',
               status: 'RECOMMENDED'
             },
             {
@@ -796,7 +796,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Elektriksel fırtına (24 saatte ≥3 tekrarlayan VT/VF atağı — acil derin sedasyon, iskemi/elektrolit düzeltmesi, stellat ganglion bloğu veya kateter ablasyon/ECMO gereksinimi!)'
       ],
       specialAlertTitle: 'İki Ölümcül İatrojenik Aritmi Tuzağı: Torsades’ta Amiodaron & WPW’de AV Bloker!',
-      specialAlertContent: 'İntraoperatif geniş-kompleks taşikardide tüm ilaçlar her ritme uymaz: (1) Uzun QT zeminindeki Polimorfik VT’ye (Torsades) Amiodaron vermek QT’yi daha da uzatıp durdurulamaz VF fırtınası yaratır (tedavi: İV MgSO₄ 2 g + defibrilasyon + overdrive pacing!). (2) Düzensiz geniş-kompleks taşikardide (WPW Pre-eksitasyonlu AF) Adenozin, Verapamil, Diltiazem, Digoksin, β-bloker veya Amiodaron vermek AV düğümü kapatıp VF’ye sürükler (tedavi: Senkronize Kardiyoversiyon veya Prokainamid!).'
+      specialAlertContent: 'İntraoperatif geniş-kompleks taşikardide tüm ilaçlar her ritme uymaz: (1) Uzun QT zeminindeki Polimorfik VT’ye (Torsades) Amiodaron vermek QT’yi daha da uzatıp durdurulamaz VF fırtınası yaratır (tedavi: İV MgSO₄ 2 g + defibrilasyon + overdrive pacing!). (2) Düzensiz geniş-kompleks taşikardide (WPW Pre-eksitasyonlu AF) Adenozin, Verapamil, Diltiazem, Digoksin, β-bloker veya Amiodaron vermek AV düğümü kapatıp VF’ye sürükler (tedavi: Senkronize Kardiyoversiyon veya yapısal kalp hastalığı yoksa Propafenon/Flekainid [IV Prokainamid/İbutilid TR’de rutin yok]!).'
     },
 
     // 7) Önleyici Tedbirler ve Hazırlıklı Olma
@@ -827,7 +827,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Amiodaron (150 mg ampul × 3–4) & Lidokain (%2 — 100 mg ampul × 3)',
         'Magnezyum Sülfat (MgSO₄ — %15 1,5 g ampul × 2–4; Torsades için 2 g hazır!)',
         'Adenozin (6 mg flakon × 3) + 20 mL Hızlı SF Flaş Enjektörleri + 3 Yollu Musluk',
-        'Prokainamid (stabil WPW-AF / VT) & Esmolol / Metoprolol / Diltiazem (stabil SVT/AF)',
+        'Esmolol / Metoprolol / Diltiazem (stabil SVT/AF) & Propafenon (yapısal hastalık yoksa stabil WPW-AF — IV Prokainamid/İbutilid TR’de rutin yok → sedasyonla senkronize KV!)',
         'Kalsiyum Klorür (%10 1 g) / Kalsiyum Glukonat (hiperkalemi!), Adrenalin (1 mg) & %20 Lipid Emülsiyonu (LAST)'
       ]
     },
@@ -873,12 +873,12 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     highYieldPearls: [
       {
         title: 'Torsades de Pointes: İV Magnezyum 2 g + Defibrilasyon — AMIODARON YASAK!',
-        takeaway: 'Uzun QT zemininde polimorfik VT (Torsades) gördüğünde serum Mg²⁺ normal olsa bile derhal 2 g İV MgSO₄ ver, unstabilse senkronize OLMAYAN defibrilasyon yap ve K⁺ >4,0 hedefle. Amiodaron QT’yi daha da uzatıp Torsades fırtınasını büyütür — edinsel uzun QT’de overdrive pacing veya İzoproterenol kullan!',
+        takeaway: 'Uzun QT zemininde polimorfik VT (Torsades) gördüğünde serum Mg²⁺ normal olsa bile derhal 2 g İV MgSO₄ ver, unstabilse senkronize OLMAYAN defibrilasyon yap ve K⁺ >4,0 hedefle. Amiodaron QT’yi daha da uzatıp Torsades fırtınasını büyütür — edinsel uzun QT’de öncelik Overdrive Pacingdir (İzoproterenol TR’de temini çok zor)!',
         category: 'Kritik Doz'
       },
       {
         title: 'WPW (Pre-Eksitasyonlu AF — “FBI”): AV Düğüm Blokerleri ÖLÜMCÜLDÜR!',
-        takeaway: 'Hızlı (>200/dk), DÜZENSİZ ve GENİŞ kompleksli (değişken QRS) taşikardi = Pre-eksitasyonlu AF! Adenozin, Verapamil, Diltiazem, Digoksin, β-bloker ve Amiodaron AV düğümü tıkayıp impulsları aksesuar yola yönlendirerek ani VF tetikler. Tedavi: Senkronize Kardiyoversiyon (120–200 J) veya stabilse Prokainamid!',
+        takeaway: 'Hızlı (>200/dk), DÜZENSİZ ve GENİŞ kompleksli (değişken QRS) taşikardi = Pre-eksitasyonlu AF! Adenozin, Verapamil, Diltiazem, Digoksin, β-bloker ve Amiodaron AV düğümü tıkayıp impulsları aksesuar yola yönlendirerek ani VF tetikler. TR pratiğinde tedavi: Senkronize Kardiyoversiyon (120–200 J; stabilde de sedasyonla!) veya yapısal kalp hastalığı yoksa Propafenon/Flekainid (IV Prokainamid/İbutilid TR’de rutin yok)!',
         category: 'Tuzak'
       },
       {
@@ -960,7 +960,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
     subTitle: 'Cerrahi Vagal Refleksler (OCR / TCR / Pnömoperitonyum) · Bezold-Jarisch · Mobitz II / Tam AV Blok & Transkutanöz Pacing',
     codeColor: 'amber',
     severityBadge: 'KOD AMBER / KIRMIZI · SEMPTOMATİK BRADİKARDİ · TAM AV BLOK & ASİSTOLİ RİSKİ',
-    keyCallout: 'İntraoperatif HR <50/dk + hipotansiyon/hipoperfüzyon veya ani asistoli duraklaması: (1) ÖNCE CERRAHİ VAGAL UYARANI DERHAL DURDUR (pnömoperitonyum dekompresyonu, göz kası/OCR, trigeminal/TCR, mezenter traksiyonu!) ve %100 O₂ + ventilasyonu kontrol et (ÇOCUKTA EN SIK NEDEN HİPOKSİDİR!). (2) Erişkin semptomatik sinüs/Mobitz I bradikardisinde AHA 2020 ACLS: ATROPİN 1 mg IV (her 3–5 dk, maks 3 mg — 2020’de 0,5 mg’dan 1 mg’a çıkarıldı!). (3) 4 KRİTİK ATROPİN İSTİSNASI: Mobitz Tip II / 3. Derece Tam AV Blok (doğrudan TCP + Adrenalin/Dopamin!), Kalp Nakli Denerve Kalp (Atropin ETKİSİZ → İzoproterenol/Adrenalin/TCP!), Pediatrik Bradikardi HR <60 + Kötü Perfüzyon (Önce %100 O₂ → KPR + Adrenalin 10 mcg/kg; Atropin 0,02 mg/kg — eski 0,1 mg minimumu KALDIRILDI!) ve KİBAS/Cushing Refleksi (Atropin VERME, KİBAS’ı tedavi et!).',
+    keyCallout: 'İntraoperatif HR <50/dk + hipotansiyon/hipoperfüzyon veya ani asistoli duraklaması: (1) ÖNCE CERRAHİ VAGAL UYARANI DERHAL DURDUR (pnömoperitonyum dekompresyonu, göz kası/OCR, trigeminal/TCR, mezenter traksiyonu!) ve %100 O₂ + ventilasyonu kontrol et (ÇOCUKTA EN SIK NEDEN HİPOKSİDİR!). (2) Erişkin semptomatik sinüs/Mobitz I bradikardisinde AHA 2020 ACLS: ATROPİN 1 mg IV (her 3–5 dk, maks 3 mg — 2020’de 0,5 mg’dan 1 mg’a çıkarıldı!). (3) 4 KRİTİK ATROPİN İSTİSNASI: Mobitz Tip II / 3. Derece Tam AV Blok (doğrudan TCP + Adrenalin/Dopamin!), Kalp Nakli Denerve Kalp (Atropin ETKİSİZ → TCP/TVP + düşük doz Adrenalin/Dopamin; İzoproterenol TR’de temini çok zor!), Pediatrik Bradikardi HR <60 + Kötü Perfüzyon (Önce %100 O₂ → KPR + Adrenalin 10 mcg/kg; Atropin 0,02 mg/kg — eski 0,1 mg minimumu KALDIRILDI!) ve KİBAS/Cushing Refleksi (Atropin VERME, KİBAS’ı tedavi et!).',
     quickCalculatorType: 'intraop-bradycardia',
 
     // 2) Tanımlama ve Giriş
@@ -977,7 +977,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'İlk ve En Hızlı Müdahale: Cerrahi vagal uyaranı DERHAL durdur (pnömoperitonyumu indir, göz/mezenter traksiyonunu bırak!) + %100 O₂ + yeterli ventilasyonu doğrula (EtCO₂/SpO₂)',
         'Erişkin Semptomatik Sinüs / Mobitz I Bradikardisi (AHA 2020 ACLS): Atropin 1 mg IV bolus, her 3–5 dakikada bir tekrar (maks toplam 3 mg) — Mobitz II/Tam Blok, Kalp Nakli ve Cushing’de ETKİSİZ/YASAK!',
         'Atropine Dirençli Bradikardi & İnfranodal AV Blok (Mobitz II / 3. Derece Tam Blok): Doğrudan Transkutanöz Pacing (TCP — 70–80/dk, mekanik nabız + elektrik capture teyidi!) VE/VEYA Adrenalin infüzyonu (2–10 mcg/dk; peri-arrestte 10–50 mcg bolus!) veya Dopamin infüzyonu (5–20 mcg/kg/dk)',
-        'Kalp Nakli (Denerve Kalp) Özel Seçeneği: İzoproterenol (2–10 mcg/dk), Adrenalin (2–10 mcg/dk), Efedrin/Aminofilin veya Transkutanöz Pacing (Atropin TAMAMEN ETKİSİZDİR!)',
+        'Kalp Nakli (Denerve Kalp) Özel Seçeneği: Transkutanöz/Transvenöz Pacing + düşük doz Adrenalin (2–10 mcg/dk) / Dopamin / Efedrin / Aminofilin [İzoproterenol 2–10 mcg/dk TR’de temini çok zor!] — Atropin TAMAMEN ETKİSİZDİR!',
         'Pediatrik Bradikardi (AHA PALS 2020): Önce %100 O₂ + etkin pozitif basınçlı ventilasyon! HR <60/dk + kötü perfüzyon sürerse DERHAL KPR + Adrenalin 0,01 mg/kg (10 mcg/kg) IV; vagal/AV blokta Atropin 0,02 mg/kg IV (maks 0,5 mg çocuk / 1 mg adolesan — eski 0,1 mg minimum dozu KALDIRILDI!)'
       ],
       mortalityStats: 'İzole refleks vagal bradikardi uyaranın kesilmesi ve zamanında antikolinerjik/kronotrop desteğiyle hızla ve sekelsiz düzelir. Ancak spinal anestezi altında tanınmayan Bezold-Jarisch progresyonu, infranodal tam AV blokta Atropin ile zaman kaybedilmesi veya pediatride hipoksik bradikardide KPR’nin gecikmesi ani asistoliye ve yüksek mortaliteye yol açar.',
@@ -1061,7 +1061,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 5,
           title: 'KRONOTROPİK İNFÜZYONLAR & PERİ-ARREST ADRENALİN',
-          action: 'TCP hazırlanırken, capture sağlanamazsa veya TCP’ye köprü/alternatif olarak kronotropik infüzyon başlatın: (1) ADRENALİN 2–10 mcg/dk IV infüzyon (peri-arrest / Bezold-Jarisch / spinal ağır bradikardide beklemeden 10–50 mcg IV push-dose bolus; asistoliye dönüyorsa 1 mg ACLS!), VEYA (2) DOPAMİN 5–20 mcg/kg/dk IV infüzyon. Kalp nakli (denerve kalp) hastasında doğrudan İZOPROTERENOL (2–10 mcg/dk) veya Adrenalin tercih edin (Atropin VERME!).',
+          action: 'TCP hazırlanırken, capture sağlanamazsa veya TCP’ye köprü/alternatif olarak kronotropik infüzyon başlatın: (1) ADRENALİN 2–10 mcg/dk IV infüzyon (peri-arrest / Bezold-Jarisch / spinal ağır bradikardide beklemeden 10–50 mcg IV push-dose bolus; asistoliye dönüyorsa 1 mg ACLS!), VEYA (2) DOPAMİN 5–20 mcg/kg/dk IV infüzyon. Kalp nakli (denerve kalp) hastasında Atropin VERMEYİN — TR’de İzoproterenol (2–10 mcg/dk) temini çok zor olduğundan pratikte öncelik Transkutanöz/Transvenöz Pacing + düşük doz Adrenalin (veya Dopamin/Aminofilin) uygulamasıdır.',
           priority: 'CRITICAL'
         },
         {
@@ -1107,7 +1107,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               badge: 'BASAMAK 3 · ATROPİNE DİRENÇLİ / TAM AV BLOK',
               target: 'Mobitz Tip II · 3. Derece Tam AV Blok · Kalp Nakli',
               presentation: 'Geniş QRS, AV disosiyasyon, Atropine yanıtsızlık veya denerve kalp nakli hastasında derin bradikardi.',
-              intervention: 'ATROPİNLE VAKİT KAYBETME! Doğrudan Transkutanöz Pacing (TCP 70–80/dk, mekanik nabız doğrula!) + Adrenalin (2–10 mcg/dk) veya Dopamin (5–20 mcg/kg/dk); kalp naklinde İzoproterenol!',
+              intervention: 'ATROPİNLE VAKİT KAYBETME! Doğrudan Transkutanöz Pacing (TCP 70–80/dk, mekanik nabız doğrula!) + Adrenalin (2–10 mcg/dk) veya Dopamin (5–20 mcg/kg/dk) [İzoproterenol TR’de temini çok zor]!',
               severity: 'CRITICAL'
             },
             {
@@ -1141,7 +1141,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               col1: 'Kalp Nakli (Denerve Kalp)',
               col2: 'Cerrahi vagal efferent denervasyon; muskarinik blokaj kalp hızını etkilemez',
               col3: 'TAMAMEN ETKİSİZ!',
-              col4: 'Direkt β-agonist: İzoproterenol (2–10 mcg/dk) / Adrenalin veya Transkutanöz Pacing',
+              col4: 'Transkutanöz/Transvenöz Pacing + düşük doz Adrenalin / Dopamin [İzoproterenol 2–10 mcg/dk TR’de temini çok zor]',
               col5: 'Atropin etkisizdir ve nadir paradoksal sinüs arresti/AV blok bildirilmiştir; Neostigmin de öngörülemez!'
             },
             {
@@ -1182,8 +1182,8 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               status: 'RECOMMENDED'
             },
             {
-              domain: 'İzoproterenol (2–10 mcg/dk IV)',
-              recommendation: 'Kalp nakli geçirmiş (denerve kalp) hastanın semptomatik bradikardisinde ve edinsel uzun QT’ye bağlı bradikardi-bağımlı Torsades’ta birinci basamak direkt β-agonisttir.',
+              domain: 'İzoproterenol (2–10 mcg/dk IV — TR’de Temini Çok Zor!)',
+              recommendation: 'Kalp nakli geçirmiş (denerve kalp) hastada ve edinsel uzun QT’li bradikardi-bağımlı TdP’de kılavuz seçeneğidir; ANCAK Türkiye’de temini çok zor olduğundan pratikte Transkutanöz/Transvenöz Pacing + (TdP dışı bradikardide) düşük doz Adrenalin/Dopamin kullanılır.',
               rationaleAndCaution: 'Saf β₁/β₂ agonist olduğu için vazodilatasyonla diyastolik basıncı düşürüp MVO₂’yi şiddetle artırır — akut koroner iskemide/MI’da kullanmaktan kaçın!',
               status: 'CAUTION'
             },
@@ -1240,7 +1240,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           color: 'rose'
         }
       ],
-      summaryText: 'İntraoperatif bradikardinin doğru tedavisi patofizyolojik odağa bağlıdır: Cerrahi reflekslerde mekanik uyaranı kesmek, çocukta hipoksiyi düzeltmek, supranodal vagotonide Atropin (1 mg), infranodal blokta ve denerve kalpte ise doğrudan Transkutanöz Pacing ve direkt β-agonist (Adrenalin/İzoproterenol) kullanmak hayat kurtarır.'
+      summaryText: 'İntraoperatif bradikardinin doğru tedavisi patofizyolojik odağa bağlıdır: Cerrahi reflekslerde mekanik uyaranı kesmek, çocukta hipoksiyi düzeltmek, supranodal vagotonide Atropin (1 mg), infranodal blokta ve denerve kalpte ise doğrudan Transkutanöz Pacing ve direkt β-agonist (düşük doz Adrenalin/Dopamin; varsa İzoproterenol) kullanmak hayat kurtarır.'
     },
 
     // 6) Klinik Özellikler & Prezentasyon
@@ -1294,7 +1294,7 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Transkutanöz Pacing (TCP) Özellikli Bifazik Defibrilatör + Yapışkan Pedler (Erişkin & Pediatrik)',
         'Atropin (1 mg / 0,5 mg ampuller — AHA 2020 erişkin 1 mg; PALS 0,02 mg/kg)',
         'Adrenalin (10 mcg/mL push-dose enjektör + 1 mg ampul + 2–10 mcg/dk infüzyon seti)',
-        'Dopamin İnfüzyonu (5–20 mcg/kg/dk) & İzoproterenol (kalp nakli / denerve kalp için!)',
+        'Dopamin İnfüzyonu (5–20 mcg/kg/dk) [İzoproterenol TR’de temini çok zor → kalp naklinde TCP/TVP + düşük doz Adrenalin!]',
         'Efedrin (5 mg/mL — spinal hipotansiyon + bradikardi) & Glikopirolat (0,2–0,4 mg)',
         'Özel Antidotlar: Glukagon (β-bloker toksisitesi), Kalsiyum Klorür (hiperkalemi / CCB), Mannitol / %3 Salin (KİBAS)'
       ]
@@ -1350,8 +1350,8 @@ export const CARDIAC_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         category: 'Tuzak'
       },
       {
-        title: 'Kalp Nakli (Denerve Kalp) = Atropin Sıfır Etki → İzoproterenol / Adrenalin / TCP!',
-        takeaway: 'Transplante kalpte vagal efferent lifler kesilmiştir; Atropin kalp hızını ARTIRMAZ (hatta nadir paradoksal sinüs arresti yapabilir). Doğrudan etkili β-agonist (İzoproterenol 2–10 mcg/dk veya Adrenalin) ya da Transkutanöz Pacing kullan!',
+        title: 'Kalp Nakli (Denerve Kalp) = Atropin Sıfır Etki → TCP/TVP + Düşük Doz Adrenalin!',
+        takeaway: 'Transplante kalpte vagal efferent lifler kesilmiştir; Atropin kalp hızını ARTIRMAZ (hatta nadir paradoksal sinüs arresti yapabilir). TR’de İzoproterenol (2–10 mcg/dk) temini çok zor olduğundan pratikte Transkutanöz/Transvenöz Pacing veya doğrudan etkili β-agonist (düşük doz Adrenalin/Dopamin) kullan!',
         category: 'Sınav / Klinik Notu'
       },
       {

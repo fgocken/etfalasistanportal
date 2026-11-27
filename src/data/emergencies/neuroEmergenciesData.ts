@@ -9,7 +9,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
   codeColor: 'red',
   severityBadge: 'KOD KIRMIZI · AKUT HERNİASYON & SEREBRAL İSKEMİ ACİLİ',
   keyCallout:
-    'İKB >22 mmHg (>5 dk), anizokori, Cushing triadı (HT + bradikardi + düzensiz solunum) veya dura açılınca beyin protrüzyonu (“tight brain”) = AKUT İKB KRİZİ! DERHAL başı 30° nötral orta hatta al, boyun venöz basısını (sıkı ETT bağı/servikal yakalık) çöz, N₂O ve >1 MAC volatili kapatıp Propofol TIVA’ya geç! Hipoksi (SpO₂ ≥%95) ve hipotansiyondan (CPP = MAP − İKB ≥60–70 mmHg; Noradrenalin!) mutlak kaçın. Hızlı ozmoterapi uygula: %20 Mannitol (0,25–1 g/kg = 1,25–5 mL/kg; ozmolal gap <20!) veya hipotansif hastada %3 Hipertonik Salin (2–5 mL/kg, maks 250 mL) ya da YALNIZCA SANTRAL HATTAN %23,4 NaCl (30 mL). Aktif herniasyonda geçici köprü hiperventilasyon (PaCO₂ 30–35 mmHg; uzamış <25–30 mmHg YASAK!). Cushing hipertansiyonunu körlemesine düşürme ve TBH’de STEROİD VERME (MRC CRASH)! Refrakter krizde (Tier 3) EVD BOS drenajı, Tiyopental burst-supresyon ve dekompresif kraniyektomi!',
+    'İKB >22 mmHg (>5 dk), anizokori, Cushing triadı (HT + bradikardi + düzensiz solunum) veya dura açılınca beyin protrüzyonu (“tight brain”) = AKUT İKB KRİZİ! DERHAL başı 30° nötral orta hatta al, boyun venöz basısını (sıkı ETT bağı/servikal yakalık) çöz, N₂O ve >1 MAC volatili kapatıp Propofol TIVA’ya geç! Hipoksi (SpO₂ ≥%95) ve hipotansiyondan (CPP = MAP − İKB ≥60–70 mmHg; Noradrenalin!) mutlak kaçın. Hızlı ozmoterapi uygula: %20 Mannitol (0,25–1 g/kg = 1,25–5 mL/kg; tek bolus tavanı 100 g [500 mL], obezitede IBW/AdjBW; ozmolal gap <20!) veya hipotansif hastada hazır %3 Hipertonik Salin (2–5 mL/kg, maks 250 mL) ya da herniasyon kurtarmasında YALNIZCA SANTRAL HATTAN eşdeğer hipertonik bolus (30 mL %23,4 NaCl hazır flakon TR’de yaygın değildir → santral hattan 35 mL %20 NaCl veya 70 mL %10 NaCl ≈ 7 g NaCl / 120 mEq Na⁺!). Aktif herniasyonda geçici köprü hiperventilasyon (PaCO₂ 30–35 mmHg; uzamış <25–30 mmHg YASAK!). Cushing hipertansiyonunu körlemesine düşürme ve TBH’de STEROİD VERME (MRC CRASH)! Refrakter krizde (Tier 3) EVD BOS drenajı, Tiyopental burst-supresyon ve dekompresif kraniyektomi!',
   quickCalculatorType: 'icp-crisis',
 
   // 2) Tanımlama ve Giriş
@@ -27,9 +27,9 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
     ],
     safeAgents: [
       'Nörokoruyucu Anestezi (TIVA): Propofol (CMRO₂ ve CBF’yi paralel azaltır, otoregülasyonu ve CO₂ reaktivitesini korur; #tedavi=propofol) + Remifentanil veya Fentanil (analjezi ve laringoskopi/pinleme sempatik yanıt baskılama)',
-      'Ozmoterapi Ajanları: %20 Mannitol (0,25–1 g/kg = 1,25–5 mL/kg; övolemik/normotansif hastada) veya %3 Hipertonik Salin (2–5 mL/kg, maks 250 mL; hipotansif/hipovolemik hastada ilk tercih!) ya da %23,4 NaCl (30 mL — YALNIZCA SANTRAL HAT!)',
-      'CPP Desteği & Vazopressörler: Noradrenalin (ilk tercih; hedef CPP 60–70 mmHg; #tedavi=norepinephrine) veya Fenilefrin; sıvı replasmanında izotonik %0,9 NaCl (308 mOsm/L) veya izotonik dengeli kristaloid',
-      'Serebral Güvenli Antihipertansifler: Nikardipin (5–15 mg/sa; #tedavi=nicardipine), Klevidipin, Labetalol veya Esmolol — serebral vazodilatasyon yapmadan kontrol sağlar (Nitrogliserin ve Sodyum Nitroprussid’den KAÇIN!)',
+      'Ozmoterapi Ajanları: %20 Mannitol (0,25–1 g/kg = 1,25–5 mL/kg; tek bolus tavanı 100 g [500 mL], obezitede IBW/AdjBW; övolemik/normotansif hastada) veya hazır %3 Hipertonik Salin (2–5 mL/kg, maks 250 mL; hipotansif/hipovolemik hastada ilk tercih!) ya da herniasyon kurtarmasında santral hattan %10 / %20 NaCl ampullerinden hazırlanan eşdeğer hipertonik bolus (30 mL %23,4 NaCl hazır flakon TR’de yaygın değildir → 35 mL %20 NaCl veya 70 mL %10 NaCl ≈ 7 g NaCl [120 mEq Na⁺], YALNIZCA SANTRAL HAT!)',
+      'CPP Desteği, Vazopressörler & Sıvılar: Noradrenalin (ilk tercih; hedef CPP 60–70 mmHg; #tedavi=norepinephrine) veya Fenilefrin (TR’de rutin stokta bulunmayan merkezlerde dilüe Noradrenalin push-dose/infüzyon kullanılır); sıvı replasmanında izotonik %0,9 NaCl (308 mOsm/L) veya büyük hacimli nöro-resüsitasyonda hiperkloremik metabolik asidozu önlemek için izo-ozmolar dengeli kristaloidler (Plasmalyte-A / Isofundin, ~295–304 mOsm/L; hipo-ozmolar Ringer Laktat [~273 mOsm/L] KULLANILMAZ!)',
+      'Serebral Güvenli Antihipertansifler: Öncelikle TR’de mevcut Nikardipin (5–15 mg/sa; #tedavi=nicardipine), Labetalol veya Esmolol (Klevidipin TR’de ruhsatlı/mevcut değil) — serebral vazodilatasyon yapmadan kontrol sağlar (Nitrogliserin ve Sodyum Nitroprussid’den KAÇIN!)',
       'Havayolu, Sempatik Baskılama & Tier 3 Ajanları: Lidokain (1,5 mg/kg IV entübasyon/ekstübasyon öksürük yanıtını baskılar; #tedavi=lidocaine), Rokuronyum/Vekuronyum (derin kas gevşemesi), Levetirasetam (nöbet profilaksisi), Tiyopental (Tier 3 burst-supresyon koması; #tedavi=thiopental) ve YALNIZCA tümör/apse vazojenik ödeminde Deksametazon (#tedavi=dexamethasone)'
     ],
     mortalityStats:
@@ -75,7 +75,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
         category: 'Evre 4 — Yaklaşan / Aktif Herniasyon (Unkal / Cushing Triadı)',
         points: 'KOD KIRMIZI',
         description:
-          'İpsilateral fiks dilate pupil (anizokori), ani hipertansiyon + bradikardi (Cushing refleksi), Lundberg A plato dalgaları (50–100 mmHg) veya hızla düşen GKS — dakikalar içinde acil ozmotik bolus (%23,4 veya %3 HTS / Mannitol) + geçici hiperventilasyon + acil BT/cerrahi!'
+          'İpsilateral fiks dilate pupil (anizokori), ani hipertansiyon + bradikardi (Cushing refleksi), Lundberg A plato dalgaları (50–100 mmHg) veya hızla düşen GKS — dakikalar içinde acil ozmotik bolus (hazır %3 HTS / %20 Mannitol [tek bolus maks 100 g] veya santral hattan %20/%10 NaCl eşdeğer kurtarma bolusu [30 mL %23,4 hazır flakon TR’de yaygın değildir]) + geçici hiperventilasyon + acil BT/cerrahi!'
       },
       {
         category: 'Evre 5 — Refrakter İKB / Tonsiller Herniasyon',
@@ -149,18 +149,18 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
       },
       {
         stepNumber: 4,
-        title: 'TİER 1 — HİPEROZMOLAR TEDAVİ: %20 MANNİTOL vs %3 / %23,4 HİPERTONİK SALİN',
+        title: 'TİER 1 — HİPEROZMOLAR TEDAVİ: %20 MANNİTOL vs %3 / YÜKSEK KONSANTRASYONLU HİPERTONİK SALİN',
         action:
-          'Akut İKB >22 mmHg, herniasyon veya “tight brain” varlığında gecikmeden ozmoterapi uygulayın:\n• %20 Mannitol: 0,25–1 g/kg IV (15–20 dk’da; %20 = 0,2 g/mL → 1,25–5 mL/kg; inline filtre kullanın!). Etki 15–30 dk’da başlar, 60 dk’da pik yapar. Ozmotik diürezle gelişen volüm kaybını %0,9 NaCl ile mutlaka yerine koyun.\n• %3 Hipertonik Salin (HTS): 2–5 mL/kg IV (maks 250 mL, 15–20 dk’da; geniş periferik venden verilebilir). Hipotansif, hipovolemik veya böbrek yetmezliği olan hastada İLK TERCİHTİR (intravasküler hacmi artırarak CPP’yi destekler!).\n• %23,4 Hipertonik Salin (Herniasyon Kurtarma): 30 mL IV (10–20 dk’da) — YALNIZCA SANTRAL VENÖZ HATTAN uygulanır!',
+          'Akut İKB >22 mmHg, herniasyon veya “tight brain” varlığında gecikmeden ozmoterapi uygulayın:\n• %20 Mannitol: 0,25–1 g/kg IV (15–20 dk’da; %20 = 0,2 g/mL → 1,25–5 mL/kg; tek bolus tavanı 100 g [500 mL], obezitede IBW/AdjBW baz alınır; inline filtre kullanın!). Etki 15–30 dk’da başlar, 60 dk’da pik yapar. Ozmotik diürezle gelişen volüm kaybını %0,9 NaCl veya izo-ozmolar dengeli kristaloidle mutlaka yerine koyun.\n• Hazır %3 Hipertonik Salin (HTS): 2–5 mL/kg IV (maks 250 mL, 15–20 dk’da; geniş periferik venden verilebilir). Hipotansif, hipovolemik veya böbrek yetmezliği olan hastada İLK TERCİHTİR (intravasküler hacmi artırarak CPP’yi destekler!).\n• Herniasyon Kurtarma Hipertonik Bolusu (TR Pratiği): Hazır 30 mL %23,4 NaCl flakonları TR’de yaygın değildir! Acil herniasyon kurtarmasında santral hattan %10 / %20 NaCl ampullerinden hazırlanan eşdeğer hipertonik bolus uygulanır: 30 mL %23,4 = ~7 g NaCl [120 mEq Na⁺] ≈ 35 mL %20 NaCl veya 70 mL %10 NaCl (10–20 dk’da, YALNIZCA SANTRAL VENÖZ HATTAN!).',
         criticalNote:
-          'Mannitol tekrarı öncesi serum ozmolalitesi <320 mOsm/kg VE özellikle OZMOLAL GAP <20 mOsm/kg doğrulanmalıdır (birikim → akut böbrek hasarı ve rebound ödem!). HTS’de hedef serum Na⁺ 145–155 mEq/L (maks 160 mEq/L); %23,4 NaCl periferik venden ASLA verilmez (doku nekrozu)! Seçili dirençli olgularda Furosemid 0,5–1 mg/kg (#tedavi=furosemide) sinerji için eklenebilir ancak agresif hipovolemiden kaçının.',
+          'Mannitol tekrarı öncesi serum ozmolalitesi <320 mOsm/kg VE özellikle OZMOLAL GAP <20 mOsm/kg doğrulanmalıdır (birikim → akut böbrek hasarı ve rebound ödem!). HTS’de hedef serum Na⁺ 145–155 mEq/L (maks 160 mEq/L); %10 / %20 / %23,4 NaCl periferik venden ASLA verilmez (doku nekrozu)! Seçili dirençli olgularda Furosemid 0,5–1 mg/kg (#tedavi=furosemide) sinerji için eklenebilir ancak agresif hipovolemiden kaçının.',
         priority: 'CRITICAL'
       },
       {
         stepNumber: 5,
-        title: 'TİER 1 — CPP OPTİMİZASYONU (60–70 mmHg) & CUSHİNG HİPERTANSİYONU KURALI',
+        title: 'TİER 1 — CPP OPTİMİZASYONU (60–70 mmHg), SIVI SEÇİMİ & CUSHİNG HİPERTANSİYONU KURALI',
         action:
-          'CPP = MAP − İKB denklemini her dakika koruyun (BTF hedefi: 60–70 mmHg; İKB monitörü yoksa SKB ≥100–110 mmHg, MAP ≥80–90 mmHg). Hipotansiyonda izotonik %0,9 NaCl bolusu + Noradrenalin infüzyonu (#tedavi=norepinephrine; 0,05–0,5 mcg/kg/dk) veya köprü olarak Fenilefrin başlatın; hipotonik/glukozlu sıvılardan (D5W, %0,45 NaCl) KESİN KAÇININ. Şiddetli hipertansiyonda (ör. SKB >180–200 mmHg, anevrizma rüptürü riski veya cerrahi kanama) serebral vazodilatasyon yapmayan Nikardipin (#tedavi=nicardipine; 5–15 mg/sa), Klevidipin, Labetalol veya Esmolol titre edin.',
+          'CPP = MAP − İKB denklemini her dakika koruyun (BTF hedefi: 60–70 mmHg; İKB monitörü yoksa SKB ≥100–110 mmHg, MAP ≥80–90 mmHg). Hipotansiyonda izotonik %0,9 NaCl (308 mOsm/L) veya büyük hacimli nöro-resüsitasyonda hiperkloremik metabolik asidozu önlemek için güçlü bir alternatif olan izo-ozmolar dengeli kristaloidler (Plasmalyte-A / Isofundin, ~295–304 mOsm/L) bolusu + Noradrenalin infüzyonu (#tedavi=norepinephrine; 0,05–0,5 mcg/kg/dk) veya köprü olarak Fenilefrin (TR’de rutin stokta bulunmayan merkezlerde dilüe Noradrenalin push-dose/infüzyon kullanılır) başlatın; hipotonik/glukozlu sıvılardan (D5W, %0,45 NaCl ve hipo-ozmolar Ringer Laktat [~273 mOsm/L]) KESİN KAÇININ. Şiddetli hipertansiyonda (ör. SKB >180–200 mmHg, anevrizma rüptürü riski veya cerrahi kanama) serebral vazodilatasyon yapmayan TR’de mevcut Nikardipin (#tedavi=nicardipine; 5–15 mg/sa), Labetalol veya Esmolol titre edin (Klevidipin TR’de ruhsatlı/mevcut değil).',
         criticalNote:
           'CUSHİNG TUZAĞI: Cushing refleksine bağlı hipertansiyonu altta yatan İKB’yi düşürmeden agresif antihipertansifle kırmak CPP’yi çökertir! Ayrıca Nitrogliserin ve Sodyum Nitroprussid serebral venöz/arteriyel vazodilatasyonla İKB’yi ARTIRDIĞI için KİBAS’ta KAÇINILMALIDIR!',
         priority: 'CRITICAL'
@@ -204,7 +204,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
             presentation:
               'Riskli kraniyotomi veya İKB monitörlü tüm hastalarda kesintisiz temel koruma (İKB yükselmeden önce uygulanır).',
             intervention:
-              'Baş 30° nötral orta hat, boyun venöz basısı yok, SpO₂ ≥%95, PaCO₂ 35–38 mmHg, normotermi (<37,5°C), Hb ≥7–9 g/dL, glukoz 140–180 mg/dL, izotonik sıvılar (Na⁺ ≥135), arter tragus hizasında sıfırlama, nöbet profilaksisi.',
+              'Baş 30° nötral orta hat, boyun venöz basısı yok, SpO₂ ≥%95, PaCO₂ 35–38 mmHg, normotermi (<37,5°C), Hb ≥7–9 g/dL, glukoz 140–180 mg/dL, izotonik/izo-ozmolar sıvılar (%0,9 NaCl veya Plasmalyte-A/Isofundin; Na⁺ ≥135), arter tragus hizasında sıfırlama, nöbet profilaksisi.',
             severity: 'WARNING'
           },
           {
@@ -213,7 +213,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
             presentation:
               'Sürekli İKB >22 mmHg, P2 > P1 kompliyans kaybı veya dura açılınca beyin gerginliği.',
             intervention:
-              'Analjezi/sedasyon derinleştir (Propofol TIVA; volatil >1 MAC & N₂O KAPAT), CPP 60–70 mmHg (Noradrenalin), ozmoterapi (%20 Mannitol 0,25–1 g/kg veya %3 HTS 2–5 mL/kg), EVD varsa BOS drenajı, PaCO₂ alt-normal 35 mmHg.',
+              'Analjezi/sedasyon derinleştir (Propofol TIVA; volatil >1 MAC & N₂O KAPAT), CPP 60–70 mmHg (Noradrenalin), ozmoterapi (%20 Mannitol 0,25–1 g/kg [tek bolus tavanı 100 g / 500 mL, obezitede IBW/AdjBW] veya hazır %3 HTS 2–5 mL/kg, maks 250 mL), EVD varsa BOS drenajı, PaCO₂ alt-normal 35 mmHg.',
             severity: 'HIGH'
           },
           {
@@ -222,7 +222,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
             presentation:
               'Ozmoterapi ve derin sedasyona rağmen yüksek İKB, gelişen anizokori veya ciddi intraop beyin protrüzyonu.',
             intervention:
-              'Kısa süreli hafif hiperventilasyon (PaCO₂ 32–35 mmHg), derin kas gevşemesi (NMB denemesi — TOF 0), MAP Challenge (otoregülasyon testi: MAP +10 mmHg ile İKB düşüyorsa yüksek CPP hedeflenir!), tekrar ozmotik doz (%23,4 HTS 30 mL santral!) ve acil Beyin BT.',
+              'Kısa süreli hafif hiperventilasyon (PaCO₂ 32–35 mmHg), derin kas gevşemesi (NMB denemesi — TOF 0), MAP Challenge (otoregülasyon testi: MAP +10 mmHg ile İKB düşüyorsa yüksek CPP hedeflenir!), tekrar ozmotik doz (hazır %3 HTS veya santral hattan %20 [35 mL] / %10 [70 mL] NaCl eşdeğer kurtarma bolusu — 30 mL %23,4 hazır flakon TR’de yaygın değildir!) ve acil Beyin BT.',
             severity: 'CRITICAL'
           },
           {
@@ -248,23 +248,23 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
         rows: [
           {
             col1: '%20 Mannitol (0,2 g/mL · 5 mL/g)',
-            col2: '0,25–1 g/kg IV (1,25–5 mL/kg) · 15–20 dk (inline filtre)',
+            col2: '0,25–1 g/kg IV (1,25–5 mL/kg; tek bolus tavanı 100 g [500 mL], obezitede IBW/AdjBW) · 15–20 dk (inline filtre)',
             col3: '15–30 dk (pik 60 dk) · Reolojik kan viskozitesi ↓ + ozmotik sıvı çekimi',
             col4: 'Normotansif, övolemik veya hipervolemik hasta; santral hat yokken hızlı bolus',
-            col5: 'Ozmotik diürez → HİPOTANSİYON (%0,9 NaCl ile yerine koy!). Ozmolalite <320 mOsm/kg ve OZMOLAL GAP <20 mOsm/kg kontrol et; ABH/rebound riski!'
+            col5: 'Tek bolus tavanı 100 g (500 mL) aşılmamalı! Ozmotik diürez → HİPOTANSİYON (%0,9 NaCl veya izo-ozmolar dengeli kristaloidle yerine koy!). Ozmolalite <320 mOsm/kg ve OZMOLAL GAP <20 mOsm/kg kontrol et; ABH/rebound riski!'
           },
           {
-            col1: '%3 Hipertonik Salin (513 mEq/L Na⁺)',
+            col1: '%3 Hipertonik Salin (513 mEq/L Na⁺ — TR’de Hazır)',
             col2: '2–5 mL/kg IV (maks 250 mL) · 15–20 dk (geniş periferik ven veya CVC)',
             col3: '5–15 dk · Yüksek yansıma katsayısı (σ = 1,0 vs Mannitol 0,9) + plazma hacim artışı',
             col4: 'Hipotansif / hipovolemik hasta, böbrek yetmezliği veya Mannitol’e dirençli İKB (NCS 2020 avantajlı!)',
             col5: 'Hedef serum Na⁺ 145–155 (maks 160 mEq/L). Hiperkloremik asidoz & kronik hiponatremide ODS (≤6–8 mEq/L/24 sa) riski!'
           },
           {
-            col1: '%23,4 Hipertonik Salin (4004 mEq/L Na⁺)',
-            col2: 'Erişkin 30 mL (Ped. 0,5 mL/kg, maks 30 mL) · 10–20 dk',
+            col1: '%23,4 NaCl (TR’de Yaygın Değil) → TR Eşdeğeri: %20 / %10 NaCl Santral Bolus',
+            col2: '30 mL %23,4 NaCl (~7 g NaCl / 120 mEq Na⁺) TR’de yaygın değildir → Eşdeğeri: 35 mL %20 NaCl veya 70 mL %10 NaCl (10–20 dk)',
             col3: '5–10 dk · Çok hızlı güçlü ozmotik gradient ile herniasyon geri çevirme',
-            col4: 'Akut transtentoryal herniasyon (anizokori / Cushing) ve refrakter İKB piklerinde kurtarma',
+            col4: 'Akut transtentoryal herniasyon (anizokori / Cushing) ve refrakter İKB piklerinde kurtarma (santral hat yoksa hazır %3 NaCl 2–5 mL/kg, maks 250 mL!)',
             col5: 'YALNIZCA SANTRAL VENÖZ HATTAN! Periferik ekstravazasyon ciddi doku nekrozu yapar; hızlı puşede geçici hipotansiyon/bradikardi olabilir.'
           },
           {
@@ -290,9 +290,9 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
           {
             domain: 'Hipotansif Hastada %3 HTS vs %20 Mannitol',
             recommendation:
-              'Hipotansif, hipovolemik veya travma/kanama eşlik eden KİBAS hastasında ilk ozmoterapi tercihi %3 Hipertonik Salin (2–5 mL/kg, maks 250 mL) olmalıdır.',
+              'Hipotansif, hipovolemik veya travma/kanama eşlik eden KİBAS hastasında ilk ozmoterapi tercihi hazır %3 Hipertonik Salin (2–5 mL/kg, maks 250 mL) olmalıdır.',
             rationaleAndCaution:
-              'Mannitol güçlü ozmotik diürezle intravasküler hacmi tüketerek MAP ve CPP’yi düşürebilir. Mannitol verildiğinde idrar çıkışı izotonik %0,9 NaCl ile karşılanmalı ve tekrar öncesi ozmolal gap (<20 mOsm/kg) kontrol edilmelidir.',
+              'Mannitol (tek bolus tavanı 100 g [500 mL], obezitede IBW/AdjBW) güçlü ozmotik diürezle intravasküler hacmi tüketerek MAP ve CPP’yi düşürebilir. Mannitol verildiğinde idrar çıkışı izotonik %0,9 NaCl veya izo-ozmolar dengeli kristaloidle karşılanmalı ve tekrar öncesi ozmolal gap (<20 mOsm/kg) kontrol edilmelidir.',
             status: 'RECOMMENDED'
           },
           {
@@ -306,7 +306,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
           {
             domain: 'Cushing Hipertansiyonu & NTG / Sodyum Nitroprussid',
             recommendation:
-              'Serebral vazodilatatör antihipertansiflerden (Nitrogliserin, Sodyum Nitroprussid, Hidralazin) KAÇIN; gerçek antihipertansif gereksiniminde Nikardipin (#tedavi=nicardipine), Klevidipin veya Labetalol seç.',
+              'Serebral vazodilatatör antihipertansiflerden (Nitrogliserin, Sodyum Nitroprussid, Hidralazin) KAÇIN; gerçek antihipertansif gereksiniminde TR’de mevcut Nikardipin (5–15 mg/sa; #tedavi=nicardipine), Labetalol veya Esmolol seç (Klevidipin TR’de ruhsatlı/mevcut değil).',
             rationaleAndCaution:
               'NTG ve SNP serebral kapasitans venlerini ve arteriyolleri genişleterek CBV ve İKB’yi fırlatırken MAP’ı düşürür → CPP’de çifte darbe! Ayrıca Cushing hipertansiyonu beyin sapı perfüzyonunu koruyan kompensatuvar yanıttır — önce İKB’yi düşür!',
             status: 'AVOID'
@@ -320,11 +320,11 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
             status: 'AVOID'
           },
           {
-            domain: 'Hipotonik & Dekstrozlu Sıvılar (D5W, %0,45 NaCl, Aşırı RL)',
+            domain: 'Hipotonik & Dekstrozlu Sıvılar (D5W, %0,45 NaCl, Hipo-Ozmolar RL)',
             recommendation:
-              'İdame ve resüsitasyonda izotonik %0,9 NaCl (308 mOsm/L) veya izotonik dengeli kristaloid kullan; hipotonik sıvılardan KESİN KAÇIN.',
+              'İdame ve resüsitasyonda izotonik %0,9 NaCl (308 mOsm/L) VEYA büyük hacimli nöro-resüsitasyonda hiperkloremik metabolik asidozu önlemek için güçlü bir alternatif olan izo-ozmolar dengeli kristaloidler (Plasmalyte-A / Isofundin, ~295–304 mOsm/L) kullan; D5W, %0,45 NaCl ve hipo-ozmolar Ringer Laktat (~273 mOsm/L) sıvılarından KESİN KAÇIN.',
             rationaleAndCaution:
-              'Plazma ozmolalitesindeki her 1 mOsm/kg düşüş beyin dokusuna net su geçişini tetikler! D5W ve %0,45 NaCl serbest su yüküyle serebral ödemi hızla ağırlaştırır; hiperglisemi (>180 mg/dL) ise anaerobik laktik asidozla iskemik beyin hasarını büyütür.',
+              'Plazma ozmolalitesindeki her 1 mOsm/kg düşüş beyin dokusuna net su geçişini tetikler! D5W, %0,45 NaCl ve hipo-ozmolar RL (~273 mOsm/L) serbest su yüküyle serebral ödemi hızla ağırlaştırır; öte yandan çok yüksek hacimli %0,9 NaCl hiperkloremik metabolik asidoz yapabileceğinden büyük hacimli nöro-resüsitasyonda Plasmalyte-A / Isofundin (~295–304 mOsm/L) ideal dengeli alternatiftir. Hiperglisemi (>180 mg/dL) ise anaerobik laktik asidozla iskemik beyin hasarını büyütür.',
             status: 'AVOID'
           }
         ]
@@ -337,8 +337,8 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
           '1. Pozisyon & Venöz Drenaj: Masa başını 15–30° yükselt, boyun aşırı dönük/fleksiyonda mı kontrol et, sıkı ETT bağını/flasterini gevşet, karın basısını (prone pozisyonda!) gider.',
           '2. Oksijenasyon, PaCO₂ & Hava Yolu Basıncı: SpO₂ ≥%95 doğrula; acil AKG al, kısa süreli PaCO₂ 30–35 mmHg hedefle; Ppeak/PEEP kontrolü (tansiyon pnömotoraks, bronkospazm, tek akciğer entübasyonu dışla!).',
           '3. Anestezi Derinliği & Kas Gevşemesi: N₂O kapalı mı? Volatil >1 MAC ise kapat ve Propofol TIVA’ya geç; öksürük/ıkınmayı dışlamak için TOF = 0 olacak şekilde ek NMB + opioid bolusu ver.',
-          '4. Hemodinami, Isı & Sıvı: Arter transdüserini tragus hizasında doğrula; MAP/CPP 60–70 mmHg koru, ateşi (<37,5°C) düşür, hipotonik sıvı gidiyorsa hemen %0,9 NaCl’ye çevir.',
-          '5. Hızlı Ozmoterapi & BOS / Cerrahi: %20 Mannitol (0,5–1 g/kg) veya %3 HTS (2–5 mL/kg) ver; EVD/lomber dren açıklığını kontrol et ve cerrahı olası gizli (kontralateral/epidural) kanama veya derin venöz obstrüksiyon açısından uyar.'
+          '4. Hemodinami, Isı & Sıvı: Arter transdüserini tragus hizasında doğrula; MAP/CPP 60–70 mmHg koru, ateşi (<37,5°C) düşür, hipotonik sıvı (D5W, %0,45 NaCl veya hipo-ozmolar Ringer Laktat [~273 mOsm/L]) gidiyorsa hemen %0,9 NaCl’ye veya büyük hacimlerde hiperkloremik asidozu önleyen izo-ozmolar dengeli kristaloidlere (Plasmalyte-A / Isofundin, ~295–304 mOsm/L) çevir.',
+          '5. Hızlı Ozmoterapi & BOS / Cerrahi: %20 Mannitol (0,5–1 g/kg; tek bolus tavanı 100 g [500 mL], obezitede IBW/AdjBW) veya hazır %3 HTS (2–5 mL/kg, maks 250 mL) ver; EVD/lomber dren açıklığını kontrol et ve cerrahı olası gizli (kontralateral/epidural) kanama veya derin venöz obstrüksiyon açısından uyar.'
         ]
       }
     }
@@ -425,7 +425,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
         'İndüksiyon öncesi sürekli beat-to-beat MAP takibi için invaziv arteriyel kateter yerleştirin ve basınç transdüserini TRAGUS (Foramen of Monro) seviyesinde sıfırlayın.',
         'Propofol + Remifentanil/Fentanil TIVA infüzyon pompalarını önceden hazırlayın; N₂O hattını kapalı/devre dışı konumda doğrulayın.',
         'Pürüzsüz, öksürüksüz ve hemodinamik dalgalanmasız indüksiyon planlayın: Yeterli opioid + Lidokain 1,5 mg/kg IV + titre Propofol/Etomidat + tam NMB (TOF = 0 doğrulamadan laringoskopi yapma!); kraniyal pinleme (Mayfield) öncesi ek analjezi/propofol veya kafa derisi bloğu uygulayın.',
-        'İzotonik %0,9 NaCl veya dengeli izotonik sıvı takın (D5W ve %0,45 NaCl odaya alınmamalı!), ısıtıcı/soğutucu ile normotermi (36–37°C) ve iki geniş IV yol (yüksek riskte santral venöz kateter — %23,4 HTS ve Noradrenalin için!) sağlayın.'
+        'İzotonik %0,9 NaCl veya büyük hacimli nöro-resüsitasyonda hiperkloremik asidozu önleyen izo-ozmolar dengeli kristaloidler (Plasmalyte-A / Isofundin, ~295–304 mOsm/L) takın (D5W, %0,45 NaCl ve hipo-ozmolar Ringer Laktat [~273 mOsm/L] odaya alınmamalı!), ısıtıcı/soğutucu ile normotermi (36–37°C) ve iki geniş IV yol (yüksek riskte santral venöz kateter — yüksek konsantrasyonlu %20/%10 HTS ve Noradrenalin için!) sağlayın.'
       ]
     },
     cleanAnesthesiaProtocol: [
@@ -435,10 +435,10 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
     ],
     cartTitle: 'Nöroanestezi & Akut İKB Krizi Acil Hazırlık Listesi:',
     cartChecklist: [
-      '%20 Mannitol (500 mL / 100 g; kristallenme kontrolü + inline mikron filtresi!)',
-      '%3 Hipertonik Salin (500 mL torba) & %23,4 Hipertonik Salin (30 mL flakon — YALNIZCA SANTRAL HAT etiketi!)',
-      'Noradrenalin İnfüzyonu (CPP 60–70 mmHg desteği) & Fenilefrin (50–100 mcg/mL hazır bolus)',
-      'Serebral Güvenli Antihipertansifler: Nikardipin, Labetalol & Esmolol (NTG/SNP KULLANMA!)',
+      '%20 Mannitol (500 mL = 100 g — tek bolus tavanı!; obezitede IBW/AdjBW; kristallenme kontrolü + inline mikron filtresi!)',
+      'Hazır %3 Hipertonik Salin (500 mL torba; bolus 2–5 mL/kg, maks 250 mL) & Herniasyon kurtarması için %20 / %10 NaCl ampulleri (30 mL %23,4 NaCl hazır flakon TR’de yaygın değildir → eşdeğer 35 mL %20 veya 70 mL %10 NaCl — YALNIZCA SANTRAL HAT etiketi!)',
+      'Noradrenalin İnfüzyonu (CPP 60–70 mmHg desteği + dilüe push-dose) & varsa Fenilefrin (TR’de rutin stokta bulunmayan merkezlerde dilüe Noradrenalin push-dose/infüzyon kullanılır)',
+      'Serebral Güvenli Antihipertansifler: Nikardipin (5–15 mg/sa), Labetalol & Esmolol [Klevidipin TR’de ruhsatlı/mevcut değil; NTG/SNP KULLANMA!]',
       'TIVA & Sempatik Baskılama: Propofol, Remifentanil/Fentanil, Lidokain (%2) & Rokuronyum',
       'Tier 3 & Ek İlaçlar: Tiyopental (500 mg / 1 g flakonlar), Levetirasetam IV, Furosemid & Deksametazon (tümör ödemi için)',
       'İnvaziv Arter Seti (Tragus seviyesi!), Santral Venöz Kateter, AKG / Serum Na⁺ / Ozmolalite Tüpleri & Sürekli EEG / BIS'
@@ -498,9 +498,9 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
       category: 'Tuzak'
     },
     {
-      title: 'Mannitol’de Ozmolal Gap (<20 mOsm/kg) > Serum Ozmolalitesi (<320) & Hipotansiyonda HTS!',
+      title: 'Mannitol’de Ozmolal Gap (<20 mOsm/kg) & 100 g Tavan + TR’de Hipertonik Salin Pratiği!',
       takeaway:
-        'NCS 2020 kılavuzuna göre Mannitol birikimini ve ozmotik nefropati riskini saptamada OZMOLAL GAP (<20 mOsm/kg) tek başına serum ozmolalitesinden (<320 mOsm/kg) daha güvenilirdir. Hipotansif veya hipovolemik hastada ise ozmotik diürez yapan Mannitol yerine intravasküler hacmi koruyan %3 Hipertonik Salin (2–5 mL/kg) ilk tercihtir; %23,4 NaCl (30 mL) YALNIZCA SANTRAL HATTAN verilir!',
+        'NCS 2020 kılavuzuna göre Mannitol (tek bolus tavanı 100 g [500 mL], obezitede IBW/AdjBW) birikimini ve ozmotik nefropati riskini saptamada OZMOLAL GAP (<20 mOsm/kg) tek başına serum ozmolalitesinden (<320 mOsm/kg) daha güvenilirdir. Hipotansif/hipovolemik hastada hazır %3 Hipertonik Salin (2–5 mL/kg, maks 250 mL) ilk tercihtir; hazır 30 mL %23,4 NaCl flakonları TR’de yaygın olmadığından herniasyon kurtarmasında santral hattan eşdeğer 35 mL %20 NaCl veya 70 mL %10 NaCl (~7 g NaCl / 120 mEq Na⁺) verilir (ASLA periferik venden verilmez)!',
       category: 'Kritik Doz'
     },
     {
@@ -518,7 +518,7 @@ export const ICP_CRISIS_PROTOCOL: EmergencyProtocol = {
     {
       title: 'Cushing Hipertansiyonunu Körlemesine Düşürme & NTG / SNP Yasağı!',
       takeaway:
-        'Hipertansiyon + bradikardi (Cushing refleksi) beyin sapı iskemisine karşı CPP’yi koruma mekanizmasıdır; önce İKB’yi düşür! Antihipertansif gerçekten gerekiyorsa Nikardipin/Klevidipin/Labetalol seç; serebral vazodilatasyon yaparak İKB’yi artıran Nitrogliserin ve Sodyum Nitroprussid’den kaçın!',
+        'Hipertansiyon + bradikardi (Cushing refleksi) beyin sapı iskemisine karşı CPP’yi koruma mekanizmasıdır; önce İKB’yi düşür! Antihipertansif gerçekten gerekiyorsa TR’de mevcut Nikardipin (5–15 mg/sa), Labetalol veya Esmolol seç (Klevidipin TR’de ruhsatlı/mevcut değil); serebral vazodilatasyon yaparak İKB’yi artıran Nitrogliserin ve Sodyum Nitroprussid’den kaçın!',
       category: 'Ezber Bozan'
     },
     {

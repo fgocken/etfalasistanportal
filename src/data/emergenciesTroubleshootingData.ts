@@ -2159,7 +2159,7 @@ export const EMERGENCY_TROUBLESHOOTING_ITEMS: EmergencyTroubleshootingItem[] = [
     },
     equipmentChecklist: [
       'Kısa etkili IV β-blokerler: Esmolol (10 mg/mL) ve Labetalol (5 mg/mL)',
-      'Kalsiyum kanal blokerleri: Nikardipin (0.1–0.2 mg/mL infüzyon) [veya erişilebilirse Klevidipin 0.5 mg/mL] + Obstetride oral acil salınımlı Nifedipin (10 mg)',
+      'Kalsiyum kanal blokerleri: Nikardipin (0.1–0.2 mg/mL infüzyon) [Klevidipin TR’de ruhsatlı/mevcut değildir] + Obstetride oral acil salınımlı Nifedipin (10 mg)',
       'Nitrat vazodilatatörler: Nitrogliserin / Perlinganit (50 mcg/mL dilüsyon & infüzyon) ve Sodyum Nitroprussid (ışıktan korumalı set) + Feokromositomada Fentolamin / MgSO₄',
       'Preeklampsi / Feokromositoma / Turnike krizleri için Magnezyum Sülfat (%15 MgSO₄ ampul) ve Deksmedetomidin',
       'Anestezi derinliği (BIS / PSI) & Nöromüsküler (TOF) monitörü + Kapnografi (EtCO₂/FiCO₂)',

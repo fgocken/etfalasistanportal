@@ -257,31 +257,31 @@ function getProtocolHeaderMeta(protocolId: string): ProtocolHeaderMeta {
     case 'intraop-hypoglycemia':
       return {
         title: 'İntraoperatif Hipoglisemi — İV Dekstroz, Tiamin & Glukagon Dozları',
-        subtitle: 'Erişkin %10/%50 Dekstroz, Pediatrik Rule of 50 (%10!) & Wernicke Koruması',
+        subtitle: 'TR Rutin %10/%20/%30 Dekstroz, Yenidoğan Katı 2 mL/kg (%10!) & Wernicke Koruması',
         icon: <AlertTriangle className="w-5 h-5 text-amber-500" />,
       };
     case 'myxedema-coma':
       return {
-        title: 'Miksödem Koması — Önce Hidrokortizon, Ardından İV T4 / T3 Dozları',
-        subtitle: 'ATA Kılavuzu Hormon Sırası, Pasif Isıtma & Hiponatremi Güvenliği',
+        title: 'Miksödem Koması — Önce Hidrokortizon, Sonra NG/OG Levotiroksin (TR)',
+        subtitle: "Önce İV Hidrokortizon · TR'de İV T4/T3 Stokta Yok → NG/OG LT4 + Pasif Isıtma",
         icon: <ShieldAlert className="w-5 h-5 text-purple-500" />,
       };
     case 'pheochromocytoma-crisis':
       return {
-        title: 'Feokromositoma Krizi — Bifazik α-Blokaj & Post-Rezeksiyon Vazopleji',
-        subtitle: 'Faz 1 Fentolamin/Nikardipin/SNP/MgSO₄ · Faz 2 Noradrenalin/Vazopressin + KŞ',
+        title: 'Feokromositoma Krizi — Bifazik Vazodilatasyon & Post-Rezeksiyon Vazopleji',
+        subtitle: 'Faz 1 Nikardipin/SNP/MgSO₄ (TR Öncelikli) · Faz 2 Noradrenalin (+Vazopressin/Terlipressin) + KŞ',
         icon: <Flame className="w-5 h-5 text-rose-500" />,
       };
     case 'adrenal-crisis':
       return {
         title: 'Adrenal Kriz — İV Hidrokortizon, Hızlı Kristaloid & Vazopressör Köprüleme',
-        subtitle: 'AAGBI / SfE 2020 Stres Dozu (100 mg → 200 mg/24 sa) & Elektrolit Düzeltme',
+        subtitle: 'AAGBI / SfE 2020 (2 mg/kg · BSPED Yaş Bandı) & Elektrolit Düzeltme',
         icon: <Syringe className="w-5 h-5 text-amber-500" />,
       };
     case 'icp-crisis':
       return {
         title: 'Akut İKB Krizi (KİBAS) — Ozmoterapi, TIVA & Tier 3 Doz Hesaplayıcı',
-        subtitle: '%20 Mannitol (g & mL), %3 / %23,4 Hipertonik Salin, Propofol, Tiyopental & Sempatik Baskılama',
+        subtitle: '%20 Mannitol (maks 100 g), %3 HTS / Santral %20–%10 NaCl, Propofol & Tiyopental',
         icon: <Brain className="w-5 h-5 text-red-500" />,
       };
     default:
@@ -316,17 +316,17 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               isDark={isDark}
             />
             <DoseCard
-              label="Dantrium® / Revonto® (20 mg Flk)"
+              label="Dantrium® / Revonto® (20 mg Flk — TR Rutin)"
               value={`${doses.dantriumVials} flakon`}
-              detail={`Sulandırma: ${doses.dantriumWaterMl} mL koruyucusuz steril enjeksiyonluk su (60 mL / flakon)`}
+              detail={`Sulandırma: ${doses.dantriumWaterMl} mL koruyucusuz steril enjeksiyonluk su (60 mL / flakon · yeni 120 mg Agilus® formu da mevcut)`}
               warning={`${doses.dantriumWaterMl} mL koruyucusuz steril enjeksiyonluk su — SF/D5W KULLANMA!`}
               tone="amber"
               isDark={isDark}
             />
             <DoseCard
-              label="Ryanodex® (250 mg Flk)"
+              label="Ryanodex® (250 mg Flk — TR'de YOK)"
               value={`${doses.ryanodexVials} flakon`}
-              detail={`Sulandırma: ${doses.ryanodexWaterMl} mL koruyucusuz steril enjeksiyonluk su (5 mL / flakon)`}
+              detail={`Sulandırma: ${doses.ryanodexWaterMl} mL koruyucusuz steril enjeksiyonluk su (5 mL / flakon) · Uluslararası referans (TR'de ruhsatlı/stokta değil)`}
               tone="emerald"
               isDark={isDark}
             />
@@ -396,7 +396,7 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             <DoseCard
               label="Atropin IV"
               value={`${doses.atropineLaryngoMg} mg IV`}
-              detail="0.02 mg/kg IV (bradikardi profilaksisi / tedavisi, maks 0.5 mg)"
+              detail="0.02 mg/kg IV (bradikardi profilaksisi / tedavisi) · <30 kg çocuk maks 0,5 mg · adölesan/erişkin maks 1 mg"
               tone="amber"
               isDark={isDark}
             />
@@ -426,7 +426,7 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             <DoseCard
               label="Atropin IV"
               value={`${doses.atropineCicoMg} mg IV`}
-              detail="0.02 mg/kg IV (hipoksik bradikardi için, maks 1 mg)"
+              detail="0.02 mg/kg IV (hipoksik bradikardi için) · <30 kg çocuk maks 0,5 mg · adölesan/erişkin maks 1 mg — asıl tedavi oksijenasyon!"
               tone="amber"
               isDark={isDark}
             />
@@ -874,10 +874,10 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               isDark={isDark}
             />
             <DoseCard
-              label="Atropin · Efedrin · Fenilefrin"
+              label="Atropin · Efedrin · Dilüe Noradrenalin"
               value={`${doses.totalSpinalAtropineLabel.split(' (')[0]} · ${doses.totalSpinalEphedrineLabel}`}
-              detail={`Atropin: ${doses.totalSpinalAtropineLabel} · Efedrin: ${doses.totalSpinalEphedrineLabel} · Fenilefrin (yalnızca taşikardide/obstetrikte): ${doses.totalSpinalPhenylephrineLabel}`}
-              warning="Bradikardide (<50/dk) tek başına yüksek doz Fenilefrin refleks vagal deşarjla bradikardiyi derinleştirip asistoli yapabilir!"
+              detail={`Atropin: ${doses.totalSpinalAtropineLabel} · Efedrin: ${doses.totalSpinalEphedrineLabel} · Dilüe Noradrenalin push-dose 5–10 mcg (TR pratik) · Fenilefrin (TR'de çoğu merkezde yok; yalnızca taşikardide/obstetrikte): ${doses.totalSpinalPhenylephrineLabel}`}
+              warning="Bradikardide (<50/dk) tek başına yüksek doz saf α-agonist (Fenilefrin) refleks vagal deşarjla bradikardiyi derinleştirip asistoli yapabilir!"
               tone="amber"
               isDark={isDark}
             />
@@ -893,7 +893,7 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               label="Havayolu & Farkındalık (Awareness) Koruması"
               value={`Ketamin ${doses.totalSpinalKetamineLabel} / Midazolam ${doses.totalSpinalMidazolamMg} mg`}
               detail="Apne, fısıltı ses veya bilinç kaybında %100 O₂ + erken RSI entübasyon · Dolaşım toparlanınca 0,5–0,7 MAC volatil / titre sedasyon + BIS"
-              warning="Hasta apneik & hareketsiz ama BİLİNÇLİ olabilir! Şokta standart tam doz Propofol (2 mg/kg) ölümcül arrest yapar — düşük doz Ketamin/Etomidat seç."
+              warning="Hasta apneik & hareketsiz ama BİLİNÇLİ olabilir! Şokta tam doz Propofol (2 mg/kg) ölümcül arrest yapar. Katekolamini tükenmiş (sempatektomize) hastada Ketaminin direkt miyokard depresyonu belirginleşir — küçük titre dozlar, maks 50 mg (obezitede IBW/LBW)."
               tone="emerald"
               isDark={isDark}
             />
@@ -921,10 +921,10 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             />
             <DoseCard
               label="Antitrombotik (Cerrahi Ekiple Ortak Karar)"
-              value={`Aspirin 162–325 mg · UFH ${doses.miUfhMinIu}–${doses.miUfhMaxIu} IU`}
-              detail="Aspirin çiğneme/NG/rektal (kanama kontrendikasyonu yoksa); UFH 60–70 IU/kg (maks 5000 IU) yalnızca cerrah onayıyla"
-              warning="Aktif cerrahide FİBRİNOLİTİK KESİN KONTRENDİKEDİR! STEMI / yüksek riskli Tip 1 MI'da hedef acil Primer PKG (anjiyo)!"
-              tone="amber"
+              value={`Aspirin 150–300 mg · UFH ${doses.miUfhLabel}`}
+              detail="Aspirin: entübe hasta çiğneyemez, TR'de rektal supozituvar yok → cerrahi onayla NG/OG ezilmiş 150–300 mg veya IV Lizin asetilsalisilat (Aspegic 250–500 mg) · UFH 60–70 IU/kg (maks 5000 IU) yalnızca cerrah onayıyla"
+              warning="Aktif kanamalı / kraniyotomi-spinal / göz / majör ortopedi / ürolojik-pelvik cerrahide UFH KESİNLİKLE UYGULANMAZ — önce Tip 2 nedenleri düzelt, cerrahiyi kapatıp acil PKG (Cath Lab) planla! Fibrinolitik YASAK."
+              tone="red"
               isDark={isDark}
             />
             <DoseCard
@@ -958,14 +958,14 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             <DoseCard
               label="Antiaritmik (VF / Monomorfik VT)"
               value={doses.arrAmioLabel}
-              detail="Alternatif: Lidokain 1–1,5 mg/kg IV (→ 0,5–0,75 mg/kg) · Stabil monomorfik VT'de Prokainamid 20–50 mg/dk (maks 17 mg/kg)"
+              detail="Alternatif: Lidokain 1–1,5 mg/kg IV (→ 0,5–0,75 mg/kg) · IV Prokainamid/İbutilid TR'de rutin YOK → stabil monomorfik VT / WPW-AF'de sedasyonla senkronize KV; yapısal kalp hastalığı yoksa WPW-AF'de Propafenon/Flekainid"
               tone="blue"
               isDark={isDark}
             />
             <DoseCard
               label="Torsades de Pointes (Uzun QT · Polimorfik VT)"
               value={`IV MgSO₄ ${doses.arrTorsadesMgLabel}`}
-              detail="K⁺ >4,0 mEq/L hedefle; bradikardi bağımlı edinsel uzun QT'de overdrive pacing veya İzoproterenol · Nabızsızda hemen defibrilasyon!"
+              detail="K⁺ >4,0 mEq/L hedefle; bradikardi bağımlı edinsel uzun QT'de öncelik overdrive pacing (İzoproterenol TR'de temini çok zor) · Nabızsızda hemen defibrilasyon!"
               warning="Torsades de Pointes'te Amiodaron VERME (QT aralığını daha da uzatıp aritmiyi şiddetlendirir!)"
               tone="purple"
               isDark={isDark}
@@ -987,7 +987,7 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             <DoseCard
               label="2. Basamak: Adrenalin / Dopamin İnfüzyon"
               value={doses.bradyEpiLabel}
-              detail={`Alternatif Dopamin: ${doses.bradyDopamineRangeMcgMin} (5–20 mcg/kg/dk) · Denerve kalpte İzoproterenol 2–10 mcg/dk`}
+              detail={`Alternatif Dopamin: ${doses.bradyDopamineRangeMcgMin} (5–20 mcg/kg/dk) · Denerve kalpte İzoproterenol 2–10 mcg/dk (TR'de temini çok zor) → pratikte TCP/transvenöz pacing + Adrenalin`}
               tone="red"
               isDark={isDark}
             />
@@ -1017,9 +1017,11 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               value={doses.hypoDextroseLabel}
               detail={`Toplam glukoz yükü: ${doses.hypoDextroseGrams} · Periferik ven dostu %10 Dekstroz ekstravazasyon nekrozu riskini azaltır.`}
               warning={
-                doses.isPediatric
-                  ? 'PEDİATRİK KURAL (Rule of 50): Çocuk/yenidoğanda %50 Dekstroz YASAK (hiperozmotik venöz nekroz & İVH riski)! Yalnızca %10 Dekstroz (2–5 mL/kg; yenidoğan 2 mL/kg) ver!'
-                  : 'İnsülin infüzyonunu DERHAL kapat; 15 dk sonra KŞ tekrarla (hedef 100–180 mg/dL) ve %5–10 Dekstroz idame başlat.'
+                doses.isNeonate
+                  ? 'YENİDOĞAN KURALI: Yalnızca %10 Dekstroz 2 mL/kg (200 mg/kg) yavaş IV → ardından 6–8 mg/kg/dk GIR idame. 5 mL/kg bolus VERME (rebound hiperinsülinemi & hiperozmolar İVH riski)!'
+                  : doses.isPediatric
+                    ? 'PEDİATRİK KURAL: Çocukta %50 (ve %30) Dekstroz YASAK (hiperozmotik venöz nekroz)! %10 Dekstroz 2–5 mL/kg (maks 250 mL) ver.'
+                    : 'TR acil arabası: %10 / %20 / %30 Dekstroz (%50 nadir). İnsülin infüzyonunu DERHAL kapat; 15 dk sonra KŞ tekrarla (hedef 100–180 mg/dL) ve %5–10 Dekstroz idame başlat.'
               }
               tone="red"
               isDark={isDark}
@@ -1060,16 +1062,16 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               isDark={isDark}
             />
             <DoseCard
-              label="2. İV Levotiroksin (T4) Yükleme"
+              label="2. NG/OG Ezilmiş Levotiroksin (TR Pratik)"
               value={doses.myxedemaT4Label}
-              detail="İdame: 50–100 mcg/gün IV (yaşlı, düşük kilolu veya KAH/aritmi riskli hastada 200 mcg alt sınırı seç)"
+              detail={`İdame 50–100 mcg/gün (yaşlı/KAH/aritmi riskinde alt sınır) · İleus/bağırsak ödeminde emilim öngörülemez · ${doses.myxedemaT4IvReference}`}
               tone="amber"
               isDark={isDark}
             />
             <DoseCard
-              label="Seçili Olguda Liyotironin (T3)"
+              label="Seçili Olguda Liyotironin (T3) — TR'de İV form yok"
               value={doses.myxedemaT3Label}
-              detail="Ağır refrakter hipotermi/şokta periferik T4→T3 dönüşümü bozuksa seçili eklenir; yüksek T3 miyokard iskemisi ve aritmi riskini artırır."
+              detail="Ağır refrakter hipotermi/şokta periferik T4→T3 dönüşümü bozuksa seçili eklenir (İV T3 TR'de rutin stokta yok; temin edilebilirse yurt dışı ilaç); yüksek T3 miyokard iskemisi ve aritmi riskini artırır."
               tone="purple"
               isDark={isDark}
             />
@@ -1088,9 +1090,9 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
         return (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <DoseCard
-              label="Faz 1 · Önce α-Blokaj / Direkt Vazodilatasyon"
-              value={`Fentolamin 1–5 mg · SNP ${doses.pheoSnpRangeMcgMin}`}
-              detail="Nikardipin 5–15 mg/sa (veya Klevidipin 1–16 mg/sa) · Sodyum Nitroprussid 0,3–2 mcg/kg/dk (kısa pik maks 3–5; ışıktan koru)"
+              label="Faz 1 · Direkt Vazodilatasyon / α-Blokaj"
+              value={`Nikardipin 5–15 mg/sa · SNP ${doses.pheoSnpRangeMcgMin}`}
+              detail="Sodyum Nitroprussid 0,3–2 mcg/kg/dk (kısa pik maks 3–5; ışıktan koru) · Ek: MgSO₄, Nitrogliserin · Fentolamin 1–5 mg / Urapidil 10–25 mg yalnızca varsa (birçok merkezde YOK) · Klevidipin TR'de ruhsatlı DEĞİL"
               warning="Yeterli α-blokaj sağlanmadan ASLA tek başına β-bloker veya IV Labetalol (α:β = 1:7) VERME — karşılanmamış α₁ krizi & pulmoner ödem!"
               tone="red"
               isDark={isDark}
@@ -1104,8 +1106,8 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             />
             <DoseCard
               label="Faz 2 · Adrenal Ven Ligasyonu Sonrası Vazopleji"
-              value={`Noradrenalin ${doses.adrenalNoradRangeMcgMin} + Vazopressin`}
-              detail="Ligasyon anında tüm vazodilatatörleri KAPAT! Agresif dengeli kristaloid + Noradrenalin; katekolamin direncinde Vazopressin 0,01–0,04 IU/dk"
+              value={`Noradrenalin ${doses.adrenalNoradRangeMcgMin} (+ Vazopressin varsa)`}
+              detail="Ligasyon anında tüm vazodilatatörleri KAPAT! Agresif dengeli kristaloid + Noradrenalin; katekolamin direncinde Vazopressin 0,01–0,04 IU/dk — TR'de Vazopressin yoksa NA titrasyonu + Terlipressin (1 mg bolus / 1–2 mcg/kg/sa) · Fenilefrin rutin stokta yok"
               tone="blue"
               isDark={isDark}
             />
@@ -1126,8 +1128,8 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             <DoseCard
               label="1. Acil İV Hidrokortizon (Sonuç Bekleme!)"
               value={doses.adrenalHydrocortLabel}
-              detail="Mümkünse öncesi 1 tüp serum kortizol/ACTH al ama sonucu BEKLEME! ≥50–100 mg/gün Hidrokortizon güçlü mineralokortikoid etki de sağlar."
-              warning="Deksametazon'un mineralokortikoid etkisi YOKTUR — yalnızca Hidrokortizon yoksa geçici alternatif olarak kullanılır."
+              detail="Mümkünse öncesi 1 tüp serum kortizol/ACTH al ama sonucu BEKLEME! Erişkin 100 mg IV bolus → 200 mg/24 sa. Çocukta 2 mg/kg (maks 100 mg) ile BSPED yaş bandı (<2 y 25 / 2–12 y 50 / >12 y 100 mg) uyumludur — hangisi pratikse, üst sınır 100 mg."
+              warning="İV Hidrokortizon TR'de dönemsel tedarik sıkıntısı yaşayabilir → yoksa köprü: Metilprednizolon 40 mg IV (çocuk 1 mg/kg) veya Deksametazon 4 mg IV; Deksametazon'un mineralokortikoid etkisi YOKTUR, Hidrokortizon bulunur bulunmaz geç."
               tone="red"
               isDark={isDark}
             />
@@ -1162,8 +1164,12 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
             <DoseCard
               label="%20 Mannitol (0,25 · 0,5 · 1 g/kg)"
               value={`${doses.icpMannitolLowG} g (${doses.icpMannitolLowMl} mL) · ${doses.icpMannitolMidG} g (${doses.icpMannitolMidMl} mL) · ${doses.icpMannitolHighG} g (${doses.icpMannitolHighMl} mL)`}
-              detail="%20 = 0,2 g/mL (5 mL/g) · 15–20 dk IV infüzyon (inline filtre kullan!) · Ozmotik diürez kaybını %0,9 NaCl ile karşıla."
-              warning="Tekrar öncesi Ozmolalite <320 mOsm/kg VE Ozmolal Gap <20 mOsm/kg doğrula! Hipotansif hastada HTS seç!"
+              detail="%20 = 0,2 g/mL (5 mL/g) · 15–20 dk IV infüzyon (inline filtre kullan!) · Tek bolus maks 100 g (500 mL) — obezitede IBW/AdjBW · Ozmotik diürez kaybını izo-ozmolar dengeli kristaloid (Plasmalyte/Isofundin) veya %0,9 NaCl ile karşıla."
+              warning={
+                doses.icpMannitolCapped
+                  ? 'Hesaplanan doz tek bolus üst sınırı olan 100 g / 500 mL ile SINIRLANDI! Tekrar öncesi Ozmolalite <320 mOsm/kg VE Ozmolal Gap <20 mOsm/kg doğrula.'
+                  : 'Tekrar öncesi Ozmolalite <320 mOsm/kg VE Ozmolal Gap <20 mOsm/kg doğrula! Hipotansif hastada HTS seç!'
+              }
               tone="red"
               isDark={isDark}
               className="sm:col-span-2 lg:col-span-3"
@@ -1177,10 +1183,10 @@ export const ProtocolDoseCalculatorPanel: React.FC<ProtocolDoseCalculatorPanelPr
               isDark={isDark}
             />
             <DoseCard
-              label="%23,4 Hipertonik Salin (Herniasyon Kurtarma)"
+              label="Santral Hipertonik NaCl (Herniasyon Kurtarma)"
               value={doses.icpHts234Label}
-              detail="Akut transtentoryal herniasyon veya refrakter İKB pikinde 10–20 dk yavaş infüzyon."
-              warning="YALNIZCA SANTRAL VENÖZ HATTAN! Periferik ekstravazasyon ciddi doku nekrozu yapar!"
+              detail="TR'de hazır 30 mL %23,4 flakon yaygın DEĞİL → eşdeğer ~7 g NaCl: santral hattan %20 NaCl ampul (~35 mL) veya %10 NaCl (~70 mL); santral hat yoksa %3 NaCl 250 mL. Akut herniasyon / refrakter İKB pikinde 10–20 dk yavaş infüzyon."
+              warning="%10 / %20 / %23,4 NaCl YALNIZCA SANTRAL VENÖZ HATTAN! Periferik ekstravazasyon ciddi doku nekrozu yapar!"
               tone="red"
               isDark={isDark}
             />

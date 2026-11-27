@@ -30,6 +30,12 @@ export const PortalLink: React.FC<PortalLinkProps> = ({
       return;
     }
 
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim().length > 0) {
+      e.preventDefault();
+      return;
+    }
+
     onClick?.(e);
     if (e.defaultPrevented) return;
 
@@ -45,9 +51,10 @@ export const PortalLink: React.FC<PortalLinkProps> = ({
   return (
     <a
       href={disabled ? undefined : href}
+      draggable={false}
       onClick={handleClick}
       aria-disabled={disabled || undefined}
-      className={`no-underline text-inherit ${className}`.trim()}
+      className={`no-underline text-inherit select-text ${className}`.trim()}
       {...rest}
     >
       {children}

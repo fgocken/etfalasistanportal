@@ -23,7 +23,7 @@ import { LastCalculator } from './LastCalculator';
 import { SensoryMapViewer } from './SensoryMapViewer';
 import { NeuraxialLibraryView, NEURAXIAL_LIBRARY_ITEMS } from './NeuraxialLibraryView';
 import { ShareLinkButton } from '../common/ShareLinkButton';
-import { updateHashRoute } from '../../utils/deepLink';
+import { buildHashHref, updateHashRoute } from '../../utils/deepLink';
 
 interface NerveBlocksWorkspaceProps {
   initialBlockId?: string | null;
@@ -347,8 +347,14 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
                 >
                   {/* Blok Kart Başlığı (Sol tık: aç/kapa, Sağ tık / Ctrl+Tık: yeni sekmede aç veya bağlantı kopyala) */}
                   <a
-                    href={`#blok=${block.id}`}
+                    href={buildHashHref('blok', block.id)}
+                    draggable={false}
                     onClick={(e) => {
+                      const selection = window.getSelection();
+                      if (selection && selection.toString().trim().length > 0) {
+                        e.preventDefault();
+                        return;
+                      }
                       if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
                         e.preventDefault();
                         const nextId = isExpanded ? null : block.id;
@@ -356,7 +362,7 @@ export const NerveBlocksWorkspace: React.FC<NerveBlocksWorkspaceProps> = ({
                         updateHashRoute(nextId ? 'blok' : 'arac', nextId || 'nerve-blocks');
                       }
                     }}
-                    className="group p-5 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors no-underline text-inherit"
+                    className="group p-5 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors no-underline text-inherit select-text"
                   >
                     <div>
                       <div className="flex items-center gap-2 flex-wrap mb-1.5">

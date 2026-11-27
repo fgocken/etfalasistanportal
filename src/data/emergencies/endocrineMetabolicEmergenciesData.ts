@@ -8,7 +8,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
     subTitle: 'Maskelenmiş Nöroglikopeni · Erişkin & Pediatrik ("Rule of 50") Acil Dekstroz Resüsitasyonu',
     codeColor: 'amber',
     severityBadge: 'KOD SARI / KIRMIZI · GENEL ANESTEZİ TÜM UYARI BULGULARINI MASKELER',
-    keyCallout: 'Genel anestezi hipogliseminin TÜM otonom (terleme, tremor, çarpıntı) ve nöroglikopenik (konfüzyon, koma) erken uyarı bulgularını MASKELER! Kan şekeri <70 mg/dL (Seviye 1) uyarı, <54 mg/dL (Seviye 2) ACİL NÖROGLİKOPENİ RİSKİDİR. Erişkinde %50 Dekstroz 25–50 mL (12,5–25 g) veya periferik ven dostu %10 Dekstroz 100–250 mL IV; ÇOCUK/YENİDOĞANDA "Rule of 50" (%10 Dekstroz 2–5 mL/kg; yenidoğanda 2 mL/kg — %50 DEKSTROZ KESİNLİKLE YASAK!). Alkolizm/malnütrisyonda dekstrozdan ÖNCE/EŞZAMANLI Tiamin 100–500 mg IV ver; 15 dk sonra KŞ kontrol et!',
+    keyCallout: 'Genel anestezi hipogliseminin TÜM otonom (terleme, tremor, çarpıntı) ve nöroglikopenik (konfüzyon, koma) erken uyarı bulgularını MASKELER! Kan şekeri <70 mg/dL (Seviye 1) uyarı, <54 mg/dL (Seviye 2) ACİL NÖROGLİKOPENİ RİSKİDİR. Erişkinde periferik ven dostu %10 Dekstroz 100–250 mL (10–25 g) IV veya Türkiye ameliyathanelerinde yaygın %20 Dekstroz 60–125 mL / %30 Dekstroz 40–80 mL (geniş/santral venden yavaş; uluslararası/ABD referansı %50 Dekstroz 25–50 mL TR’de nadirdir); ÇOCUK (>5 kg ve <40 kg) "Rule of 50" %10 Dekstroz 2–5 mL/kg (0,2–0,5 g/kg, maks 25 g), YENİDOĞAN (≤5 kg) katı 2 mL/kg %10 Dekstroz (0,2 g/kg — 5 mL/kg VERME: rebound hiperinsülinemi ve ozmolar dalgalanma riski; konsantre %50/%30/%20 DEKSTROZ KESİNLİKLE YASAK!). Alkolizm/malnütrisyonda dekstrozdan ÖNCE/EŞZAMANLI Tiamin 100–500 mg IV ver; 15 dk sonra KŞ kontrol et!',
     quickCalculatorType: 'intraop-hypoglycemia',
 
     // 2) Tanımlama ve Giriş
@@ -24,12 +24,12 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         'β-Bloker Kullanımı (Otonom Taşikardi ve Tremor Yanıtını Maskeler; Non-Selektif β-Blokerler Glikojenolizi de Bozar!) ve Kronik Alkolizm / Malnütrisyon (Glikojen Tükenmesi + Wernicke Ensefalopatisi Riski!)'
       ],
       safeAgents: [
-        'Erişkin Periferik Ven Dostu Kurtarma: %10 Dekstroz 100–250 mL IV (10–25 g glukoz; düşük ozmolarite ile flebit/ekstravazasyon nekrozu riskini minimize eder) veya santral/geniş venden %50 Dekstroz 25–50 mL (12,5–25 g)',
-        'Pediatrik & Yenidoğan Kurtarma ("Rule of 50"): %10 Dekstroz 2–5 mL/kg (0,2–0,5 g/kg); Yenidoğanda %10 Dekstroz 2 mL/kg (0,2 g/kg) → takiben 4–8 mg/kg/dk glukoz infüzyonu (GIR)',
+        'Erişkin Kurtarma (TR Stoklarına Uygun): Periferik ven dostu %10 Dekstroz 100–250 mL IV (10–25 g glukoz; düşük ozmolarite ile flebit/ekstravazasyon nekrozu riskini minimize eder) VEYA Türkiye ameliyathanelerinde yaygın %20 Dekstroz 60–125 mL (12–25 g) / %30 Dekstroz 40–80 mL (12–24 g) geniş/santral venden yavaş (uluslararası/ABD referansı: %50 Dekstroz 25–50 mL — TR’de nadirdir)',
+        'Pediatrik & Yenidoğan Kurtarma ("Rule of 50"): Çocuk (>5 kg ve <40 kg) %10 Dekstroz 2–5 mL/kg (0,2–0,5 g/kg, maks 25 g); Yenidoğan (≤5 kg) katı 2 mL/kg %10 Dekstroz (0,2 g/kg — 5 mL/kg VERME: rebound hiperinsülinemi ve ozmolar dalgalanma riski!) → takiben 4–8 mg/kg/dk glukoz infüzyonu (GIR)',
         'Wernicke Koruması: Alkolizm, malnütrisyon, bariatrik cerrahi öyküsü veya uzamış açlıkta Dekstrozdan ÖNCE veya EŞZAMANLI Tiamin (Vitamin B1) 100–500 mg IV (asla dekstrozu geciktirme, aynı anda ver!)',
         'Damar Yolu Yoksa: Glukagon 1 mg IM/SC (çocuk <20 kg için 0,5 mg) — Not: Karaciğer glikojen depoları boş olan karaciğer yetmezliği ve kronik alkolizmde ETKİSİZDİR!',
         'Sülfonilüre Kaynaklı Refrakter/Tekrarlayan Hipoglisemide: Oktreotid 50–100 mcg SC/IV her 6–8 saatte bir (pankreatik β-hücresinden insülin salınımını doğrudan baskılar)',
-        'KESİN KAÇINILACAKLAR: Çocuk ve yenidoğanda %50 Dekstroz bolusu (hiperozmotik venöz nekroz & intraventriküler hemoraji riski!), NICE-SUGAR kanıtına aykırı sıkı <81–110 mg/dL intraoperatif hedef ve tek bolus sonrası KŞ takibini kesmek'
+        'KESİN KAÇINILACAKLAR: Çocuk ve yenidoğanda %50 (veya seyreltilmemiş %20/%30) konsantre Dekstroz bolusu (hiperozmotik venöz nekroz & intraventriküler hemoraji riski!), yenidoğanda (≤5 kg) 5 mL/kg bolus (rebound hiperinsülinemi/ozmolar dalgalanma!), NICE-SUGAR kanıtına aykırı sıkı <81–110 mg/dL intraoperatif hedef ve tek bolus sonrası KŞ takibini kesmek'
       ],
       mortalityStats: 'Ağır intraoperatif hipoglisemi (<40–54 mg/dL) fark edilmeden 30–60 dakika sürdüğünde kortikal nöronal nekroz, kalıcı kognitif bozukluk, inatçı nöbetler, malign ventriküler aritmi (QT uzaması → Torsades de Pointes) ve ölüm gelişir. NICE-SUGAR’da ağır hipoglisemi gelişen hastalarda mortalite belirgin yükselmiştir.',
       clinicalUrgency: 'Genel anestezi altındaki hasta "kendimi kötü hissediyorum, terliyorum, titriyorum" DİYEMEZ! Yüksek riskli her hastada 1–2 saatte bir (insülin infüzyonunda 30–60 dk’da bir) kan gazı/glukometre ölçümü yapılmadıkça tanı yalnızca gecikmiş uyanma veya nöbetle — çok geç olarak — konur.'
@@ -51,7 +51,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       larachScale: [
         { category: 'Perioperatif Güvenli Hedef Aralık', points: '100–180 mg/dL', description: 'ADA & CPOC perioperatif hedef (5,6–10,0 mmol/L). NICE-SUGAR kanıtı: Sıkı <81–110 mg/dL hedefi hipoglisemiyi ve mortaliteyi artırır!' },
         { category: 'Seviye 1 — Hipoglisemi Uyarısı', points: '54–69 mg/dL', description: 'Klinik alarm eşiği (<70 mg/dL / 3,9 mmol/L). İnsülin infüzyonunu durdur, derhal dekstroz ver ve 15 dk sonra ölç.' },
-        { category: 'Seviye 2 — Klinik Anlamlı Hipoglisemi', points: '<54 mg/dL', description: 'Ciddi nöroglikopeni ve malign aritmi (<3,0 mmol/L). Acil IV Dekstroz bolusu (erişkin 12,5–25 g; çocuk %10 Dekstroz 2–5 mL/kg) + idame infüzyon!' },
+        { category: 'Seviye 2 — Klinik Anlamlı Hipoglisemi', points: '<54 mg/dL', description: 'Ciddi nöroglikopeni ve malign aritmi (<3,0 mmol/L). Acil IV Dekstroz (erişkin 10–25 g [%10/%20/%30 D]; çocuk >5 kg & <40 kg %10 D 2–5 mL/kg maks 25 g; yenidoğan ≤5 kg katı 2 mL/kg %10 D) + idame infüzyon!' },
         { category: 'Seviye 3 — Ağır Nöroglikopenik Kriz', points: 'Koma / Nöbet', description: 'Derin koma, gecikmiş uyanma, nöbet, fokal inme benzeri defisit veya arrest riski. Yüksek öncelikli IV Dekstroz + Tiamin + hava yolu koruması.' }
       ],
       larachInterpretation: 'Perioperatif dönemde hedef 100–180 mg/dL’dir. <70 mg/dL saptandığı anda insülin kapatılıp tedaviye başlanmalı; <54 mg/dL ise acil nöroglikopeni krizi kabul edilip saniyeler içinde IV Dekstroz uygulanmalıdır.',
@@ -81,7 +81,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
 
     // 4) Akut Kriz Yönetimi
     crisisManagement: {
-      hotlineInfo: 'ACİL METABOLİK KRİZ · İnsülin infüzyonunu/pompasını DERHAL durdur, erişkinde IV Dekstroz 12,5–25 g (pediatrikte %10 Dekstroz 2–5 mL/kg) uygula, 15 dk sonra kan şekerini doğrula!',
+      hotlineInfo: 'ACİL METABOLİK KRİZ · İnsülin infüzyonunu/pompasını DERHAL durdur, erişkinde %10 Dekstroz 100–250 mL veya %20 (60–125 mL) / %30 (40–80 mL) Dekstroz (10–25 g); çocukta (>5 kg, <40 kg) %10 D 2–5 mL/kg (maks 25 g), yenidoğanda (≤5 kg) katı 2 mL/kg %10 D uygula, 15 dk sonra kan şekerini doğrula!',
       coreAlgorithm: [
         {
           stepNumber: 1,
@@ -99,9 +99,9 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         },
         {
           stepNumber: 3,
-          title: 'ACİL İV DEKSTROZ UYGULA (ERİŞKİN vs PEDİATRİK "RULE OF 50")',
-          action: 'Erişkinde: Periferik damar yolundan %10 Dekstroz 100–250 mL (10–25 g) hızlı infüzyon (periferik ven dostu, ekstravazasyon nekrozu riski düşük!) VEYA santral/geniş venden %50 Dekstroz 25–50 mL (12,5–25 g) yavaş IV bolus verin. Pediatrik ve yenidoğanda ("Rule of 50"): %10 Dekstroz 2–5 mL/kg (0,2–0,5 g/kg); Yenidoğanda %10 Dekstroz 2 mL/kg (0,2 g/kg) yavaş IV uygulayın!',
-          criticalNote: 'PEDİATRİK KIRMIZI ÇİZGİ: Çocuk ve yenidoğanda %50 Dekstroz bolusu (ozmolarite ~2525 mOsm/L!) HİPEROZMOTİK VENÖZ NEKROZ ve prematüre/yenidoğanda İNTRAVENTRİKÜLER HEMORAJİ (İVH) riski nedeniyle KESİNLİKLE YASAKTIR!',
+          title: 'ACİL İV DEKSTROZ UYGULA (TR %10/%20/%30 STOKLARI & PEDİATRİK "RULE OF 50")',
+          action: 'Erişkinde: Periferik damar yolundan %10 Dekstroz 100–250 mL (10–25 g) hızlı infüzyon (periferik ven dostu, ekstravazasyon nekrozu riski düşük!) VEYA Türkiye ameliyathanelerinde yaygın bulunan %20 Dekstroz 60–125 mL (12–25 g) / %30 Dekstroz 40–80 mL (12–24 g) geniş/santral venden yavaş IV bolus verin (uluslararası/ABD referansı: %50 Dekstroz 25–50 mL — TR’de nadirdir). Pediatrik "Rule of 50": Çocuk (>5 kg ve <40 kg) %10 Dekstroz 2–5 mL/kg (0,2–0,5 g/kg, maks 25 g); Yenidoğan (≤5 kg) katı 2 mL/kg %10 Dekstroz (0,2 g/kg — 5 mL/kg VERME: rebound hiperinsülinemi ve ozmolar dalgalanma riski!) yavaş IV (2–3 dk) uygulayın!',
+          criticalNote: 'PEDİATRİK KIRMIZI ÇİZGİ: Çocuk ve yenidoğanda konsantre %50 Dekstroz (~2525 mOsm/L; TR’de nadir) ve seyreltilmemiş %20/%30 Dekstroz bolusu HİPEROZMOTİK VENÖZ NEKROZ ve prematüre/yenidoğanda İNTRAVENTRİKÜLER HEMORAJİ (İVH) riski nedeniyle KESİNLİKLE YASAKTIR! Yenidoğanda (≤5 kg) %10 Dekstroz dahi katı 2 mL/kg ile sınırlıdır (5 mL/kg verilmez!).',
           priority: 'CRITICAL'
         },
         {
@@ -145,61 +145,61 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
               badge: 'Seviye 1 (54–69 mg/dL)',
               target: 'Erken Uyarı Eşiği (<70 mg/dL)',
               presentation: 'Genel anestezide tamamen sessiz olabilir; nadiren açıklanamayan terleme veya hafif taşikardi (β-blokerde yok!).',
-              intervention: 'İnsülini durdur, erişkinde 10–12,5 g IV Dekstroz (%10 D 100–125 mL veya %50 D 25 mL), çocukta %10 D 2 mL/kg; 15 dk sonra KŞ kontrolü.',
+              intervention: 'İnsülini durdur, erişkinde 10–12,5 g IV Dekstroz (%10 D 100–125 mL veya geniş venden %20 D 60 mL / %30 D 40 mL; uluslararası %50 D 25 mL TR’de nadir), çocukta (>5 kg) ve yenidoğanda (≤5 kg) %10 D 2 mL/kg; 15 dk sonra KŞ kontrolü.',
               severity: 'WARNING'
             },
             {
               badge: 'Seviye 2 (<54 mg/dL)',
               target: 'Klinik Anlamlı Nöroglikopeni (<3,0 mmol/L)',
               presentation: 'Anestezi altında derinleşen BIS düşüşü, QTc uzaması, aritmi, vazopressör gereksinimi; uyanık/rejiyonalde konfüzyon.',
-              intervention: 'ACİL %10 Dekstroz 200–250 mL veya %50 D 50 mL (25 g) IV; çocukta %10 D 2–5 mL/kg (+ riskli grupta Tiamin 100–500 mg IV) + idame Dekstroz infüzyonu!',
+              intervention: 'ACİL erişkinde %10 Dekstroz 200–250 mL veya geniş/santral venden %20 D 100–125 mL / %30 D 60–80 mL (20–25 g; uluslararası %50 D 50 mL TR’de nadir) IV; çocukta (>5 kg ve <40 kg) %10 D 2–5 mL/kg (maks 25 g), yenidoğanda (≤5 kg) katı 2 mL/kg %10 D (+ riskli grupta Tiamin 100–500 mg IV) + idame Dekstroz infüzyonu!',
               severity: 'HIGH'
             },
             {
               badge: 'Seviye 3 (Ağır Nöroglikopeni)',
               target: 'Koma / Nöbet / Gecikmiş Uyanma / Arrest Riski',
               presentation: 'Uyanmama, fokal nörolojik defisit (inme taklidi), jeneralize nöbet, bradikardi/ventriküler aritmi veya kardiyak arrest.',
-              intervention: 'Derhal hava yolu koruması + %10/%50 IV Dekstroz (25 g erişkin; %10 D 2–5 mL/kg çocuk) + Tiamin 500 mg IV + 15 dk seri KŞ + sürekli %10 D infüzyonu + YBÜ!',
+              intervention: 'Derhal hava yolu koruması + erişkinde %10 D 200–250 mL veya %20 (100–125 mL) / %30 (60–80 mL) IV Dekstroz (20–25 g; uluslararası %50 D 50 mL TR’de nadir); çocukta (>5 kg, <40 kg) %10 D 2–5 mL/kg (maks 25 g), yenidoğanda (≤5 kg) katı 2 mL/kg %10 D + Tiamin 500 mg IV + 15 dk seri KŞ + sürekli %10 D infüzyonu + YBÜ!',
               severity: 'CRITICAL'
             }
           ]
         },
         comparisonTable: {
-          title: 'Erişkin, Pediatrik ve Yenidoğan Acil Dekstroz Protokolü ("Rule of 50")',
+          title: 'Erişkin (TR Stokları), Pediatrik ve Yenidoğan Acil Dekstroz Protokolü ("Rule of 50")',
           columns: ['Hasta Grubu', 'Tercih Edilen Solüsyon', 'Acil Bolus Dozu', 'İdame İnfüzyon', 'Kritik Güvenlik Kuralı'],
           rows: [
             {
               col1: 'Erişkin (Periferik IV)',
-              col2: '%10 Dekstroz (tercih) veya %20 Dekstroz',
+              col2: '%10 Dekstroz (1. tercih — periferik ven dostu)',
               col3: '100–250 mL %10 D (= 10–25 g) hızlı IV',
               col4: '%5–10 D 50–100 mL/sa (hedef 100–180 mg/dL)',
-              col5: 'Periferik ven dostudur; ekstravazasyon ve doku nekrozu riskini belirgin azaltır'
+              col5: 'Periferik ven dostudur (505 mOsm/L); ekstravazasyon ve doku nekrozu riskini belirgin azaltır'
             },
             {
-              col1: 'Erişkin (Santral / Geniş IV)',
-              col2: '%50 Dekstroz (yavaş bolus)',
-              col3: '25–50 mL %50 D (= 12,5–25 g) yavaş IV',
+              col1: 'Erişkin (Santral / Geniş IV — TR Stokları)',
+              col2: '%20 veya %30 Dekstroz (TR’de yaygın; %50 D TR’de nadir)',
+              col3: '60–125 mL %20 D (12–25 g) veya 40–80 mL %30 D (12–24 g) yavaş IV [uluslararası: 25–50 mL %50 D]',
               col4: '%5–10 D 50–100 mL/sa + 15 dk KŞ kontrolü',
-              col5: 'İnce periferik venden puşeleme — damar dışına kaçarsa ağır cilt nekrozu yapar!'
+              col5: 'İnce periferik venden puşeleme — yüksek ozmolarite nedeniyle damar dışına kaçarsa ağır cilt nekrozu yapar!'
             },
             {
-              col1: 'Çocuk (Rule of 50)',
+              col1: 'Çocuk (>5 kg ve <40 kg — Rule of 50)',
               col2: '%10 Dekstroz (10 × 5 = 50 kuralı!)',
-              col3: '2–5 mL/kg %10 D (= 0,2–0,5 g/kg) IV',
+              col3: '2–5 mL/kg %10 D (= 0,2–0,5 g/kg; maks 25 g) IV',
               col4: '4–6 mg/kg/dk GIR (%5–10 D dengeli sıvı)',
-              col5: '%50 Dekstroz KESİNLİKLE YASAK! Maks tek bolus genelde 25 g’ı aşmamalıdır'
+              col5: '%50 (ve seyreltilmemiş %20/%30) Dekstroz KESİNLİKLE YASAK! Maks tek bolus 25 g’ı aşmamalıdır'
             },
             {
-              col1: 'Yenidoğan / Preterm',
-              col2: '%10 Dekstroz (STANDART)',
-              col3: '2 mL/kg %10 D (= 0,2 g/kg) yavaş IV (2–3 dk)',
+              col1: 'Yenidoğan / Preterm (≤5 kg)',
+              col2: '%10 Dekstroz (STANDART — KATI 2 mL/kg)',
+              col3: 'Katı 2 mL/kg %10 D (= 0,2 g/kg) yavaş IV (2–3 dk) — 5 mL/kg VERME!',
               col4: '6–8 mg/kg/dk GIR (pretermde 4–6 mg/kg/dk)',
-              col5: '%50 (ve %25) Dekstroz YASAK — hiperozmolarite beyin İVH ve venöz nekroz yapar!'
+              col5: '5 mL/kg VERME (rebound hiperinsülinemi & ozmolar dalgalanma riski!); %20/%30/%50 Dekstroz YASAK — İVH ve venöz nekroz yapar!'
             },
             {
               col1: 'Sülfonilüre Aşırı Dozu',
               col2: 'IV Dekstroz + Oktreotid',
-              col3: '12,5–25 g IV D + Oktreotid 50–100 mcg SC/IV',
+              col3: '10–25 g IV D (%10/%20/%30 D) + Oktreotid 50–100 mcg SC/IV',
               col4: 'Oktreotid 6–8 sa’da bir + 24 sa gözlem',
               col5: 'Sadece dekstroz bolusları rebound insülin deşarjıyla tekrarlayan hipoglisemi yapar!'
             }
@@ -209,9 +209,9 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
           title: 'İntraoperatif Hipoglisemide Kritik İlaç & Sıvı Politikaları',
           items: [
             {
-              domain: 'Periferik Vende %10 Dekstroz Tercihi',
-              recommendation: 'Erişkinde periferik damar yolundan %50 yerine %10 Dekstroz 100–250 mL (10–25 g) infüzyonunu tercih et.',
-              rationaleAndCaution: '%10 Dekstroz (505 mOsm/L) aynı glukoz yükünü güvenle verir, rebound hiperglisemiyi azaltır ve %50 Dekstrozun (2525 mOsm/L) ekstravazasyon nekrozu riskini ortadan kaldırır.',
+              domain: 'Periferik Vende %10 Dekstroz & TR %20/%30 Stokları',
+              recommendation: 'Erişkinde periferik damar yolundan %10 Dekstroz 100–250 mL (10–25 g) tercih et; geniş/santral venden Türkiye’de yaygın %20 (60–125 mL) veya %30 (40–80 mL) Dekstroz yavaş ver (%50 Dekstroz TR’de nadirdir).',
+              rationaleAndCaution: '%10 Dekstroz (505 mOsm/L) aynı glukoz yükünü güvenle verir, rebound hiperglisemiyi azaltır ve konsantre dekstrozların (%20/%30/%50) ekstravazasyon nekrozu riskini ortadan kaldırır.',
               status: 'RECOMMENDED'
             },
             {
@@ -227,9 +227,9 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
               status: 'CAUTION'
             },
             {
-              domain: 'Çocuk / Yenidoğanda %50 Dekstroz',
-              recommendation: 'Pediatrik ve yenidoğan hastalarda %50 Dekstroz bolusundan KESİNLİKLE KAÇIN (%10 Dekstroz 2–5 mL/kg kullan).',
-              rationaleAndCaution: 'Aşırı hiperozmolarite nedeniyle ince pediatrik venlerde tromboflebit/doku nekrozu ve yenidoğan/pretermde ölümcül intraventriküler hemoraji (İVH) gelişir.',
+              domain: 'Çocuk / Yenidoğanda Konsantre Dekstroz & Yenidoğan 2 mL/kg Kuralı',
+              recommendation: 'Çocuk (>5 kg ve <40 kg) %10 Dekstroz 2–5 mL/kg (maks 25 g); Yenidoğan (≤5 kg) katı 2 mL/kg %10 Dekstroz kullan — %50 (ve seyreltilmemiş %20/%30) Dekstrozdan KESİNLİKLE KAÇIN!',
+              rationaleAndCaution: 'Yenidoğanda (≤5 kg) 5 mL/kg bolus rebound hiperinsülinemi ve ozmolar dalgalanma yapar; konsantre dekstrozlar ise ince pediatrik venlerde tromboflebit/doku nekrozu ve ölümcül intraventriküler hemoraji (İVH) geliştirir.',
               status: 'AVOID'
             }
           ]
@@ -329,8 +329,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       ],
       cartTitle: 'İntraoperatif Hipoglisemi Acil Müdahale Seti:',
       cartChecklist: [
-        '%10 Dekstroz 250–500 mL Torba (Erişkin periferik ven dostu & Pediatrik "Rule of 50" standart solüsyon!)',
-        '%50 Dekstroz 50 mL Flakon/Ampul (Yalnızca erişkin geniş/santral ven için; pediatride YASAK!)',
+        '%10 Dekstroz 250–500 mL Torba (Erişkin 100–250 mL periferik ven dostu & Pediatrik/Yenidoğan "Rule of 50" standart solüsyon!)',
+        '%20 Dekstroz (60–125 mL bolus) ve %30 Dekstroz (40–80 mL bolus) (Türkiye ameliyathane standart konsantre stokları — yalnızca erişkin geniş/santral venden yavaş; %50 Dekstroz TR’de nadirdir; pediatride YASAK!)',
         'Tiamin (Vitamin B1) 100 mg Ampuller (Alkolizm/malnütrisyonda 100–500 mg IV)',
         'Glukagon 1 mg IM/SC Acil Kiti (IV yol yokluğunda kurtarma — karaciğer yetmezliğinde etkisiz notuyla)',
         'Oktreotid 100 mcg Ampul (Sülfonilüre aşırı dozu / refrakter hiperinsülinemik hipoglisemi)',
@@ -352,7 +352,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       ],
       expectedComplications: [
         'Uzamış ağır hipoglisemiye bağlı kalıcı hipoglisemik ensefalopati, hafıza/kognitif bozukluk veya nöbet',
-        'Periferik venden verilen %50 Dekstroz ekstravazasyonuna bağlı ağır cilt/yumuşak doku nekrozu',
+        'Periferik venden verilen konsantre (%20/%30/%50) Dekstroz ekstravazasyonuna bağlı ağır cilt/yumuşak doku nekrozu',
         'Alkolik/malnütrisyonlu hastada Tiamin verilmeden dekstroz uygulanmasına bağlı akut Wernicke ensefalopatisi',
         'Rebound hiperglisemi (aşırı dekstroz bolusu sonrası >250–300 mg/dL) ve hipokalemi / QTc uzamasına bağlı ventriküler aritmi',
         'Yenidoğan/pretermde hiperozmotik dekstroz uygulanmasına bağlı intraventriküler hemoraji (İVH)'
@@ -382,8 +382,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         category: 'Tuzak'
       },
       {
-        title: 'Pediatrik "Rule of 50": %50 Dekstroz YASAK, %10 Dekstroz 2–5 mL/kg!',
-        takeaway: 'Çocuklarda %10 Dekstroz × 5 mL/kg = 50 (0,5 g/kg; yenidoğanda %10 Dekstroz 2 mL/kg = 0,2 g/kg) uygulanır. %50 Dekstroz (~2525 mOsm/L) çocuk ve yenidoğanda hiperozmotik venöz nekroz ve intraventriküler hemoraji (İVH) riski nedeniyle KESİNLİKLE KONTRENDİKEDİR!',
+        title: 'TR %10/%20/%30 Dekstroz & Pediatrik "Rule of 50" (Yenidoğan ≤5 kg Katı 2 mL/kg!)',
+        takeaway: 'Türkiye ameliyathanelerinde erişkin acil kurtarmada periferik ven dostu %10 Dekstroz (100–250 mL) veya geniş/santral venden %20 (60–125 mL) / %30 (40–80 mL) Dekstroz kullanılır (%50 Dekstroz TR’de nadirdir). Çocukta (>5 kg ve <40 kg) %10 Dekstroz 2–5 mL/kg (0,2–0,5 g/kg, maks 25 g); Yenidoğanda (≤5 kg) katı 2 mL/kg %10 Dekstroz (0,2 g/kg — 5 mL/kg VERME: rebound hiperinsülinemi & ozmolar dalgalanma riski!). Konsantre %20/%30/%50 Dekstroz pediatride hiperozmotik venöz nekroz ve İVH nedeniyle KESİNLİKLE YASAKTIR!',
         category: 'Kritik Doz'
       },
       {
@@ -454,16 +454,16 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
     id: 'myxedema-coma',
     // 1) Başlık
     title: 'İntraoperatif Miksödem Koması (Dekompanse Ağır Hipotiroidi Krizi)',
-    subTitle: 'Hipotermi · Hipoventilasyon · Refrakter Şok · Önce Hidrokortizon, Sonra IV Levotiroksin',
+    subTitle: 'Hipotermi · Hipoventilasyon · Refrakter Şok · Önce Hidrokortizon, Sonra Levotiroksin (TR: NG/OG Oral LT4 · ATA: İV T4)',
     codeColor: 'purple',
     severityBadge: 'KOD MOR / KIRMIZI · MORTALİTE %25–50 · ÖNCE İV HİDROKORTİZON VER!',
-    keyCallout: 'Miksödem koması nadir ancak mortalitesi %25–50 olan ağır hipotiroidi dekompansasyonudur! Derin hipotermi (enfeksiyona rağmen ateşsiz olabilir), hipoventilasyon/CO₂ narkozu, makroglossi/laringeal miksödem (ZOR HAVAYOLU!), bradikardi + düşük voltajlı EKG/uzun QT, vazopressöre dirençli şok, dilüsyonel hiponatremi ve uyanmama ile seyreder. ALTIN KURAL (ATA 2014): TSH/sT4/kortizol kanını al ama sonucu BEKLEME — Tiroid hormonundan ÖNCE/EŞZAMANLI MUTLAKA İV HİDROKORTİZON 100 mg ver (adrenal kriz tetiklenmesini önle!), ardından İV Levotiroksin (T4) 200–400 mcg yükle. Yalnızca PASİF ısıtma uygula (agresif aktif dış ısıtma "rewarming shock" yapar)!',
+    keyCallout: 'Miksödem koması nadir ancak mortalitesi %25–50 olan ağır hipotiroidi dekompansasyonudur! Derin hipotermi (enfeksiyona rağmen ateşsiz olabilir), hipoventilasyon/CO₂ narkozu, makroglossi/laringeal miksödem (ZOR HAVAYOLU!), bradikardi + düşük voltajlı EKG/uzun QT, vazopressöre dirençli şok, dilüsyonel hiponatremi ve uyanmama ile seyreder. ALTIN KURAL (ATA 2014): TSH/sT4/kortizol kanını al ama sonucu BEKLEME — Tiroid hormonundan ÖNCE/EŞZAMANLI MUTLAKA İV HİDROKORTİZON 100 mg ver (adrenal kriz tetiklenmesini önle; TR’de İV Hidrokortizon dönemsel stok yoksa geçici köprü olarak İV Metilprednizolon veya İV Deksametazon!), ardından Levotiroksin (T4) yükle: Türkiye’de İV T4 ve İV T3 rutin hastane stoklarında YOKTUR — pratik birincil yol NG/OG tüpten ezilmiş oral Levotiroksin 300–500 mcg yükleme (yaşlı/KAH hastasında 200–300 mcg düşük uç → 50–100 mcg/gün idame; miksödem ileusunda emilim öngörülemez olduğundan yakın sT4/klinik takip!) [ATA 2014 uluslararası: İV T4 200–400 mcg ± İV T3 5–20 mcg]. Pediatride (<40 kg) 5–10 mcg/kg yükleme (erişkin yaşlı/KAH tavanını ASLA aşma: IV maks 200 mcg, NG maks 300 mcg + Pediatrik Endokrinoloji konsültasyonu!). Yalnızca PASİF ısıtma uygula (agresif aktif dış ısıtma "rewarming shock" yapar)!',
     quickCalculatorType: 'myxedema-coma',
 
     // 2) Tanımlama ve Giriş
     introduction: {
       definition: 'Miksödem koması; uzun süreli, tedavi edilmemiş veya tanı konmamış ağır hipotiroidisi olan bir hastada homeostatik kompansasyon mekanizmalarının cerrahi stres, genel anestezi, opioid/sedatifler, soğuk ameliyathane ortamı veya enfeksiyonla aniden çökmesi sonucu gelişen, bilinç bozukluğu/gecikmiş uyanma, derin hipotermi, hipoventilasyon, bradikardi, refrakter hipotansiyon ve hiponatremi ile karakterize hayatı tehdit eden endokrin acildir.',
-      epidemiology: 'Oldukça nadir (tahmini insidans ~0,22/1.000.000/yıl) olmakla birlikte ileri yaşlı kadınlarda, kış aylarında ve acil cerrahiye (kalça kırığı, akut batın, enfeksiyon) alınan tanı konmamış hipotiroidi hastalarında perioperatif olarak tetiklenebilir. Modern yoğun bakım ve IV tiroid hormon replasmanına rağmen hastane mortalitesi hâlen %25–50 arasında seyretmektedir; gecikmiş tanı ve agresif ısıtma/steroidsiz T4 uygulaması mortaliteyi katlar.',
+      epidemiology: 'Oldukça nadir (tahmini insidans ~0,22/1.000.000/yıl) olmakla birlikte ileri yaşlı kadınlarda, kış aylarında ve acil cerrahiye (kalça kırığı, akut batın, enfeksiyon) alınan tanı konmamış hipotiroidi hastalarında perioperatif olarak tetiklenebilir. Modern yoğun bakım ve erken tiroid hormon replasmanına rağmen hastane mortalitesi hâlen %25–50 arasında seyretmektedir; gecikmiş tanı ve agresif ısıtma/steroidsiz T4 uygulaması mortaliteyi katlar.',
       triggers: [
         'Tanı Konmamış veya Tedavisini Bırakmış Ağır Hipotiroidi Hastasında Acil Cerrahi Stres ve Genel Anestezi',
         'Opioidler, Benzodiazepinler, Propofol ve Volatil Anestezikler (Hepatik/Renal Klirens ↓ + SSS Duyarlılığı ↑↑ → Solunum Depresyonu & CO₂ Narkozu!)',
@@ -472,15 +472,15 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         'Amiodaron, Lityum, β-Blokerler, Diüretikler (Hiponatremiyi Derinleştirir) ve Gastrointestinal Kanama / Travma / MI'
       ],
       safeAgents: [
-        'İLK VE ZORUNLU İLAÇ — İV Hidrokortizon: 100 mg IV bolus → 50–100 mg IV her 6–8 saatte bir (Tiroid hormonundan ÖNCE veya EŞZAMANLI; adrenal krizi önler!)',
-        'Tiroid Hormon Replasmanı (ATA 2014): İV Levotiroksin (T4) 200–400 mcg yükleme (yaşlı/KAH hastasında 200 mcg düşük uç!) → günde 50–100 mcg IV; ağır/refrakter olguda (KAH/aritmi yoksa) Liyotironin (T3) 5–20 mcg IV → 2,5–10 mcg/8 sa',
+        'İLK VE ZORUNLU İLAÇ — İV Hidrokortizon: 100 mg IV bolus → 50–100 mg IV her 6–8 saatte bir (Tiroid hormonundan ÖNCE veya EŞZAMANLI; adrenal krizi önler! TR Tedarik Notu: İV Hidrokortizon dönemsel stokta yoksa geçici köprü olarak İV Metilprednizolon veya İV Deksametazon başlanıp acilen Hidrokortizon temin edilir)',
+        'Tiroid Hormon Replasmanı — TÜRKİYE BİRİNCİL PRATİĞİ (NG/OG Oral LT4): Türkiye’de İV T4 ve İV T3 rutin hastane stoklarında YOKTUR! Birincil yaklaşım NG/OG tüpten ezilmiş oral Levotiroksin 300–500 mcg yükleme (yaşlı/KAH hastasında 200–300 mcg düşük uç) → 50–100 mcg/gün idame (miksödem ileusunda emilim öngörülemez olduğundan yakın sT4/klinik takip!). Uluslararası referans (ATA 2014 — TR’de İV T4 ve İV T3 rutin stokta YOKTUR): İV Levotiroksin (T4) 200–400 mcg (yaşlı/KAH 200 mcg) → 50–100 mcg/gün IV ± refrakter olguda (KAH/aritmi yoksa) İV Liyotironin (T3) 5–20 mcg → 2,5–10 mcg/8 sa. Pediatri (<40 kg): 5–10 mcg/kg yükleme (erişkin yaşlı/KAH tavanını ASLA aşmaz: IV maks 200 mcg, NG maks 300 mcg) + Pediatrik Endokrinoloji konsültasyonu!',
         'Havayolu & Anestezi: Makroglossi ve laringeal miksödem nedeniyle erken videolaringoskopi + küçük çaplı ETT (6,0–7,0 mm) hazırlığı; BIS eşliğinde minimum doz kısa etkili ajanlar (Ketamin/Etomidat, Remifentanil, düşük MAC volatil) ve rejiyonal anestezi tercihi',
         'Isıtma Stratejisi: Yalnızca PASİF ısıtma (ılık battaniye, oda ısısını yükseltme, ılık IV sıvı — yavaş ≤0,5°C/sa yükseliş)',
         'Sıvı & Hiponatremi Yönetimi: Konservatif sıvı (kalp yetmezliği/dilüsyonel hiponatremi riski!); ağır semptomatik Na⁺ <120 mEq/L’de dikkatli %3 NaCl (düzeltme hızı ≤6–8 mEq/L/24 sa — ozmotik demiyelinizasyon önlemi!)',
         'KESİN KAÇINILACAKLAR: Steroidsiz tek başına T4/T3 başlamak, agresif aktif eksternal ısıtma ("rewarming shock" / vazodilatasyon kollapsı!), standart tam doz uzun etkili opioid/benzodiazepin ve hipotonik sıvı yüklemesi!'
       ],
-      mortalityStats: 'Tedavisiz miksödem koması neredeyse %100 ölümcüldür. Erken IV Hidrokortizon + IV Levotiroksin + mekanik ventilasyon desteğiyle dahi ileri yaş, bradikardi, derin hipotermi (<34°C) ve eşlik eden sepsis varlığında mortalite %25–50 civarındadır.',
-      clinicalUrgency: 'Klinik şüphe doğduğu anda (açıklanamayan hipotermi + bradikardi + vazopressöre dirençli hipotansiyon + uyanmama/hiperkapni) TSH/sT4/kortizol için kan alınıp LABORATUVAR SONUCU BEKLENMEDEN derhal IV Hidrokortizon 100 mg ve ardından IV Levotiroksin başlanmalıdır!'
+      mortalityStats: 'Tedavisiz miksödem koması neredeyse %100 ölümcüldür. Erken IV Hidrokortizon + Levotiroksin (TR’de NG/OG oral LT4; uluslararası ATA 2014 İV T4) + mekanik ventilasyon desteğiyle dahi ileri yaş, bradikardi, derin hipotermi (<34°C) ve eşlik eden sepsis varlığında mortalite %25–50 civarındadır.',
+      clinicalUrgency: 'Klinik şüphe doğduğu anda (açıklanamayan hipotermi + bradikardi + vazopressöre dirençli hipotansiyon + uyanmama/hiperkapni) TSH/sT4/kortizol için kan alınıp LABORATUVAR SONUCU BEKLENMEDEN derhal IV Hidrokortizon 100 mg ve ardından Levotiroksin (TR’de NG/OG tüpten ezilmiş oral LT4 300–500 mcg; varsa ATA 2014 İV T4 200–400 mcg) başlanmalıdır!'
     },
 
     // 3) Tanı
@@ -501,7 +501,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         { category: 'Kardiyovasküler & Solunum', points: '10 – 40 Puan', description: 'Bradikardi (<40/dk: 30; 40–49: 20; 50–59: 10), düşük voltaj/uzun QT/efüzyon (+10), hipotansiyon (+20), hiperkapni/hipoventilasyon (+10).' },
         { category: 'Metabolik & Tetikleyici', points: '10 – 30 Puan', description: 'Hiponatremi (+10), hipoglisemi (+10), hipoksemi (+10), azalmış GFR (+10) ve cerrahi/anestezi/enfeksiyon tetikleyicisi (+10).' }
       ],
-      larachInterpretation: 'Toplam skor ≥60 puan miksödem koması için yüksek derecede tanısaldır; 25–59 puan arası miksödem koması riskini/başlangıcını gösterir. Skor ≥60 veya klinik şüphe yüksekse hormon sonuçları beklenmeden DERHAL IV Hidrokortizon + IV Levotiroksin başlanır!',
+      larachInterpretation: 'Toplam skor ≥60 puan miksödem koması için yüksek derecede tanısaldır; 25–59 puan arası miksödem koması riskini/başlangıcını gösterir. Skor ≥60 veya klinik şüphe yüksekse hormon sonuçları beklenmeden DERHAL IV Hidrokortizon + Levotiroksin (TR’de NG/OG oral LT4 300–500 mcg; ATA 2014 İV T4 200–400 mcg — TR’de rutin stokta YOKTUR) başlanır!',
       differentialDiagnosis: [
         {
           condition: 'İntraoperatif Adrenal Kriz',
@@ -528,7 +528,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
 
     // 4) Akut Kriz Yönetimi
     crisisManagement: {
-      hotlineInfo: 'ACİL ENDOKRİN KRİZ · Havayolunu güvenceye al (zor havayolu!), bazal TSH/sT4/kortizol kanını al, SONUCU BEKLEMEDEN ÖNCE İV HİDROKORTİZON 100 mg → SONRA İV LEVOTİROKSİN 200–400 mcg ver! Sadece PASİF ısıtma!',
+      hotlineInfo: 'ACİL ENDOKRİN KRİZ · Havayolunu güvenceye al (zor havayolu!), bazal TSH/sT4/kortizol kanını al, SONUCU BEKLEMEDEN ÖNCE İV HİDROKORTİZON 100 mg (dönemsel stok yoksa geçici İV Metilprednizolon/Deksametazon köprü) → SONRA LEVOTİROKSİN: TR’de İV T4/T3 rutin stokta YOK → NG/OG tüpten ezilmiş oral LT4 300–500 mcg (yaşlı/KAH 200–300 mcg) [ATA 2014: İV T4 200–400 mcg]! Sadece PASİF ısıtma!',
       coreAlgorithm: [
         {
           stepNumber: 1,
@@ -547,15 +547,15 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         {
           stepNumber: 3,
           title: 'ALTIN KURAL (ATA 2014): TİROİD HORMONUNDAN ÖNCE İV HİDROKORTİZON 100 mg!',
-          action: 'Tiroid hormonundan ÖNCE (veya eşzamanlı) derhal Hidrokortizon 100 mg IV bolus uygulayın; ardından adrenal yetmezlik dışlanana dek her 6–8 saatte bir 50–100 mg IV devam edin.',
+          action: 'Tiroid hormonundan ÖNCE (veya eşzamanlı) derhal Hidrokortizon 100 mg IV bolus uygulayın; ardından adrenal yetmezlik dışlanana dek her 6–8 saatte bir 50–100 mg IV devam edin. TR Tedarik Notu: İV Hidrokortizon dönemsel stokta yoksa tedaviyi geciktirmeden geçici köprü olarak İV Metilprednizolon veya İV Deksametazon başlayıp en kısa sürede Hidrokortizon temin edin.',
           criticalNote: 'NEDEN ÖNCE STEROİD? T4/T3 metabolizmayı hızlandırarak endojen kortizol klirensini artırır; eşlik eden primer (otoimmün) veya sekonder (hipofizer) adrenal yetmezliği olan hastada steroidsiz T4 vermek ÖLÜMCÜL ADRENAL KRİZ tetikler!',
           priority: 'CRITICAL'
         },
         {
           stepNumber: 4,
-          title: 'İV TİROİD HORMON REPLASMANI: LEVOTİROKSİN (T4) ± LİYOTİRONİN (T3)',
-          action: 'Hidrokortizon sonrası İV Levotiroksin (T4) 200–400 mcg yavaş IV yükleme yapın (ileri yaş, düşük vücut ağırlığı veya koroner arter hastalığı/aritmi varsa DÜŞÜK UÇ: 200 mcg!), ardından günde 50–100 mcg IV (veya emilim düzelince 1,6 mcg/kg/gün oral) idameye geçin. Çok ağır, derin koma/refrakter şok olgularında (KAH/aritmi yoksa!) periferik T4→T3 dönüşümü bozuk olduğundan ek olarak İV Liyotironin (T3) 5–20 mcg yükleme → 2,5–10 mcg IV her 8 saatte bir eklenebilir.',
-          criticalNote: 'KARDİYAK TUZAK: Yüksek doz T3 veya yaşlı/KAH hastasında agresif T4 yüklemesi miyokard O₂ tüketimini aniden artırarak akut MI, taşiaritmi ve VF tetikleyebilir — EKG’yi sürekli izleyin! IV T4 temin edilemiyorsa nazogastrik (NG) tüpten 300–500 mcg ezilmiş tablet alternatifidir (ancak miksödem ileusunda emilim öngörülemez!).',
+          title: 'TİROİD HORMON REPLASMANI: TR’DE NG/OG ORAL LT4 ÖN PLANDA (ATA 2014 İV T4/T3 TR’DE YOK!)',
+          action: 'Hidrokortizon sonrası derhal Levotiroksin (T4) yüklemesi yapın. TÜRKİYE BİRİNCİL PRATİĞİ (İV T4 ve İV T3 rutin hastane stoklarında YOKTUR!): NG/OG tüpten ezilmiş oral Levotiroksin 300–500 mcg yükleme (ileri yaş, düşük vücut ağırlığı veya koroner arter hastalığı/aritmi varsa düşük uç: 200–300 mcg!) → günde 50–100 mcg/gün NG/oral idame (miksödem ileusunda GİS emilimi öngörülemez olduğundan yakın sT4 ve klinik yanıt takibi şarttır!). Uluslararası referans (ATA 2014 — TR’de İV T4 ve İV T3 rutin stokta YOKTUR): İV Levotiroksin (T4) 200–400 mcg yavaş IV yükleme (yaşlı/KAH: 200 mcg) → 50–100 mcg/gün IV ± çok ağır/refrakter olguda (KAH/aritmi yoksa) İV Liyotironin (T3) 5–20 mcg → 2,5–10 mcg IV her 8 saatte bir. Pediatri (<40 kg): 5–10 mcg/kg yükleme — erişkin yaşlı/KAH tavanını ASLA aşmamalıdır (IV maks 200 mcg, NG maks 300 mcg) + Pediatrik Endokrinoloji konsültasyonu!',
+          criticalNote: 'KARDİYAK & EMİLİM TUZAĞI: Yaşlı/KAH hastasında agresif T4 yüklemesi (veya yüksek doz T3) miyokard O₂ tüketimini aniden artırarak akut MI, taşiaritmi ve VF tetikleyebilir — EKG’yi sürekli izleyin! Miksödem ileusunda NG/OG oral LT4 emilimi öngörülemez olduğundan 24–48 saatte bir sT4 trendi ve klinik/hemodinamik yanıt yakından takip edilmelidir.',
           priority: 'CRITICAL'
         },
         {
@@ -574,7 +574,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         {
           stepNumber: 7,
           title: 'HİPOGLİSEMİYİ DÜZELT & TETİKLEYİCİ ENFEKSİYONU AMPİRİK TEDAVİ ET',
-          action: 'Kan şekeri <70 mg/dL ise derhal IV Dekstroz (%10 D 100–250 mL veya %50 D 25–50 mL) verin ve 1–2 saatte bir KŞ izleyin. Ateş olmasa dahi miksödem komasında gizli enfeksiyon çok sıktır; kan/idrar/balgam kültürleri sonrası geniş spektrumlu ampirik IV antibiyotik başlatın.',
+          action: 'Kan şekeri <70 mg/dL ise derhal TR stoklarına uygun IV Dekstroz (%10 Dekstroz 100–250 mL periferik ven dostu veya geniş/santral venden %20 Dekstroz 60–125 mL / %30 Dekstroz 40–80 mL; %50 Dekstroz TR’de nadirdir; pediatride %10 D 2–5 mL/kg, yenidoğanda ≤5 kg katı 2 mL/kg) verin ve 1–2 saatte bir KŞ izleyin. Ateş olmasa dahi miksödem komasında gizli enfeksiyon çok sıktır; kan/idrar/balgam kültürleri sonrası geniş spektrumlu ampirik IV antibiyotik başlatın.',
           priority: 'HIGH'
         },
         {
@@ -586,7 +586,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       ],
       structuredCrisisBlocks: {
         tieredLadder: {
-          title: 'Miksödem Komasında Zaman-Kritik Müdahale Merdiveni (ATA 2014)',
+          title: 'Miksödem Komasında Zaman-Kritik Müdahale Merdiveni (ATA 2014 & TR Klinik Pratiği)',
           accent: 'purple',
           levels: [
             {
@@ -598,16 +598,16 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
             },
             {
               badge: '5–15. Dakika (Steroid → T4)',
-              target: 'ÖNCE Hidrokortizon 100 mg IV → SONRA IV Levotiroksin',
+              target: 'ÖNCE Hidrokortizon 100 mg IV → SONRA Levotiroksin (TR: NG/OG Oral LT4)',
               presentation: 'Vazopressöre dirençli şok, düşük voltajlı EKG / uzun QT, eşlik eden olası adrenal yetmezlik.',
-              intervention: 'ÖNCE İV Hidrokortizon 100 mg bolus → ardından İV Levotiroksin 200–400 mcg (yaşlı/KAH: 200 mcg) ± refrakter/KAH yoksa T3 5–20 mcg IV.',
+              intervention: 'ÖNCE İV Hidrokortizon 100 mg bolus (TR’de dönemsel stok yoksa geçici İV Metilprednizolon/Deksametazon köprü) → ardından TR birincil pratik: NG/OG tüpten ezilmiş oral LT4 300–500 mcg (yaşlı/KAH: 200–300 mcg; pediatri <40 kg: 5–10 mcg/kg, NG maks 300 / IV maks 200 mcg) [ATA 2014 uluslararası: İV T4 200–400 mcg ± İV T3 5–20 mcg — TR’de İV T4/T3 rutin stokta YOKTUR!].',
               severity: 'CRITICAL'
             },
             {
               badge: '15–60. Dakika (Pasif Isıtma & Metabolik)',
               target: 'Rewarming Shock Önleme, Hiponatremi & Sepsis',
               presentation: 'Hipotermi <34°C, Na⁺ <120–125 mEq/L, hipoglisemi, gizli ateşsiz enfeksiyon ve olası perikardiyal efüzyon.',
-              intervention: 'Yalnızca PASİF ısıtma (≤0,5°C/sa), Noradrenalin köprüleme, POCUS (tamponad dışla), Dekstroz, ağır Na⁺ <120’de kontrollü %3 NaCl (≤6–8 mEq/L/24 sa) + ampirik antibiyotik!',
+              intervention: 'Yalnızca PASİF ısıtma (≤0,5°C/sa), Noradrenalin köprüleme, POCUS (tamponad dışla), Dekstroz (%10/%20/%30), ağır Na⁺ <120’de kontrollü %3 NaCl (≤6–8 mEq/L/24 sa) + ampirik antibiyotik!',
               severity: 'HIGH'
             }
           ]
@@ -646,7 +646,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
             },
             {
               col1: 'Hayat Kurtarıcı İlk Adım',
-              col2: 'ÖNCE İV Hidrokortizon 100 mg → İV T4 200–400 mcg + PASİF ısıtma',
+              col2: 'ÖNCE İV Hidrokortizon 100 mg → TR: NG/OG oral LT4 300–500 mcg (ATA 2014 İV T4 200–400 mcg TR’de yok) + PASİF ısıtma',
               col3: 'İV Hidrokortizon 100 mg + 1 L %0,9 NaCl + Dekstroz',
               col4: 'Erken antibiyotik + 30 mL/kg kristaloid + Noradrenalin',
               col5: 'Ventilasyon desteği + Nalokson titre (40–100 mcg IV)'
@@ -658,14 +658,14 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
           items: [
             {
               domain: 'Önce İV Hidrokortizon (ATA 2014 Altın Kuralı)',
-              recommendation: 'Tiroid hormonundan ÖNCE veya EŞZAMANLI 100 mg IV Hidrokortizon bolus → 50–100 mg/6–8 sa ver.',
+              recommendation: 'Tiroid hormonundan ÖNCE veya EŞZAMANLI 100 mg IV Hidrokortizon bolus → 50–100 mg/6–8 sa ver (TR’de dönemsel stok yoksa geçici köprü: İV Metilprednizolon/Deksametazon).',
               rationaleAndCaution: 'T4/T3 kortizol yıkımını hızlandırır; eşlik edebilecek primer veya sekonder adrenal yetmezlikte steroidsiz tiroid hormonu ölümcül adrenal krizi tetikler.',
               status: 'RECOMMENDED'
             },
             {
-              domain: 'Yaşlı / KAH Hastasında Düşük Uç T4 & T3 Dikkat',
-              recommendation: 'Yaşlı veya koroner arter hastalığı olanda İV Levotiroksin 200 mcg (düşük uç) seç; yüksek doz T3’ten kaçın.',
-              rationaleAndCaution: 'Agresif T3 veya yüksek doz T4 metabolik hızı ve miyokard O₂ tüketimini aniden fırlatarak akut MI, atriyal fibrilasyon ve ventriküler taşiaritmiye yol açar.',
+              domain: 'TR’de NG/OG Oral LT4 Ön Planda · Yaşlı/KAH & Pediatri Tavanı',
+              recommendation: 'Türkiye’de İV T4 ve İV T3 rutin stokta YOKTUR — NG/OG tüpten ezilmiş oral LT4 300–500 mcg yükle (yaşlı/KAH: 200–300 mcg; pediatri <40 kg: 5–10 mcg/kg, IV maks 200 / NG maks 300 mcg tavanı + Pediatrik Endokrinoloji).',
+              rationaleAndCaution: 'ATA 2014 İV T4 (200–400 mcg) ve İV T3 (5–20 mcg) önerir ancak TR’de rutin temini yoktur. Miksödem ileusunda NG emilimi öngörülemez olduğundan yakın sT4/klinik takip şarttır; yaşlı/KAH hastasında agresif T4/T3 yüklemesi akut MI ve malign aritmi tetikler.',
               status: 'CAUTION'
             },
             {
@@ -684,9 +684,9 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         },
         preventionBox: {
           title: 'Hipotiroidi Hastasında Perioperatif Miksödem Koması Önleme Kontrol Listesi',
-          highlightRule: 'PREOP KURALI: Elektif cerrahi ağır/dekompanse semptomatik hipotiroidide (veya çok düşük sT4 + klinik bulgu) ERTELENİP ötiroidi sağlanmalıdır! Acil cerrahide ise indüksiyondan hemen önce İV Hidrokortizon + İV Levotiroksin + zor havayolu/BIS hazırlığı yapılır.',
+          highlightRule: 'PREOP KURALI: Elektif cerrahi ağır/dekompanse semptomatik hipotiroidide (veya çok düşük sT4 + klinik bulgu) ERTELENİP ötiroidi sağlanmalıdır! Acil cerrahide ise indüksiyondan hemen önce İV Hidrokortizon + Levotiroksin (TR’de NG/OG oral LT4; varsa ATA 2014 İV T4) + zor havayolu/BIS hazırlığı yapılır.',
           checks: [
-            'Levotiroksin Uzun Yarı Ömrü (~7 gün): Oral T4 ameliyat sabahı (az suyla) devam edilmelidir; postop 5–7 günden uzun NPO kalacaksa günlük oral dozun ~%75–80’i IV Levotiroksin olarak verilmelidir.',
+            'Levotiroksin Uzun Yarı Ömrü (~7 gün): Oral T4 ameliyat sabahı (az suyla) devam edilmelidir; postop 5–7 günden uzun NPO kalacaksa ATA 2014 günlük oral dozun ~%75–80’i İV T4 önerir — ancak Türkiye’de İV T4 rutin stokta olmadığından NG/OG tüpten oral LT4 devamı + endokrinoloji koordinasyonu planlanır.',
             'Hafif-Orta (Subklinik / Kompanse) Hipotiroidi: Elektif cerrahiyi iptal etmek gerekmez; ancak ağır semptomatik hipotiroidi (hipotermi, bradikardi, hiponatremi, perikard efüzyonu, letarji) elektif cerrahi için MUTLAK ERTELEME nedenidir.',
             'Anestezi Planı: Mümkünse rejiyonal/lokal anestezi seç; genel anestezi şartsa videolaringoskop + küçük ETT, BIS monitörizasyonu, ısı koruması (pasif), minimum doz kısa etkili ajanlar ve indüksiyonda hemodinami dostu Ketamin/Etomidat kullan.',
             'Ağrı Kontrolü: Uzun etkili sistemik opioidler yerine multimodal opioid-tasarruflu analjezi (parasetamol, periferik sinir bloğu, lokal infiltrasyon) uygula.'
@@ -727,7 +727,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
           color: 'red'
         }
       ],
-      summaryText: 'Miksödem koması yalnızca bir "tiroid hormonu eksikliği" değil; havayolu, solunum, dolaşım, termoregülasyon, su-elektrolit ve adrenal aksın eşzamanlı çöküşüdür. Bu nedenle tedavi sırası değişmez: ABC → Önce IV Hidrokortizon → Sonra IV Levotiroksin → Pasif Isıtma & Kontrollü Sıvı.'
+      summaryText: 'Miksödem koması yalnızca bir "tiroid hormonu eksikliği" değil; havayolu, solunum, dolaşım, termoregülasyon, su-elektrolit ve adrenal aksın eşzamanlı çöküşüdür. Bu nedenle tedavi sırası değişmez: ABC → Önce IV Hidrokortizon → Sonra Levotiroksin (TR’de NG/OG ezilmiş oral LT4; uluslararası ATA 2014 İV T4) → Pasif Isıtma & Kontrollü Sıvı.'
     },
 
     // 6) Klinik Özellikler & Prezentasyon
@@ -773,14 +773,14 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       cleanAnesthesiaProtocol: [
         'Opioid-tasarruflu multimodal analjezi ve mümkün olan her olguda rejiyonal/lokal anestezi tekniklerinin seçilmesi',
         'Uzun etkili sedatiflerden (Midazolam/Lorazepam) ve yüksek doz uzun etkili opioidlerden (Morfin/Meperidin) kaçınılması',
-        'Acil cerrahiye alınan ağır hipotiroidi hastasında indüksiyon öncesi profilaktik IV Hidrokortizon 100 mg + IV Levotiroksin planının endokrinoloji ile koordine edilmesi'
+        'Acil cerrahiye alınan ağır hipotiroidi hastasında indüksiyon öncesi profilaktik IV Hidrokortizon 100 mg + Levotiroksin (TR’de NG/OG oral LT4; varsa İV T4) planının endokrinoloji ile koordine edilmesi'
       ],
       cartTitle: 'Miksödem Koması Acil İlaç & Müdahale Hazırlık Listesi:',
       cartChecklist: [
-        'Hidrokortizon 100 mg IV Flakon (EN ÖNCE VERİLECEK İLAÇ!)',
-        'İV Levotiroksin (T4) 200–400 mcg (+ varsa İV Liyotironin 5–20 mcg veya NG tüp + oral Levotiroksin)',
+        'Hidrokortizon 100 mg IV Flakon (EN ÖNCE VERİLECEK İLAÇ! TR’de dönemsel tedarik sıkıntısı varsa geçici köprü: Metilprednizolon/Deksametazon)',
+        'NG/OG Tüp + Oral Levotiroksin Tablet (TR birincil pratiği: 300–500 mcg ezilmiş yükleme; İV T4 ve İV T3 Türkiye’de rutin stokta YOKTUR)',
         'Videolaringoskop + Küçük Çaplı ETT (6,0–7,0 mm) + Buji (Makroglossi / Laringeal Miksödem)',
-        'Noradrenalin İnfüzyonu + %10/%50 Dekstroz + %3 Hipertonik NaCl (Ağır semptomatik Na⁺ <120 için)',
+        'Noradrenalin İnfüzyonu + %10/%20/%30 Dekstroz (TR stokları) + %3 Hipertonik NaCl (Ağır semptomatik Na⁺ <120 için)',
         'Yatak Başı POCUS / EKO Cihazı (Perikardiyal efüzyon / tamponad & LV değerlendirmesi)',
         'Pasif Isıtma Malzemeleri (Ilık battaniyeler, sıvı ısıtıcı) + Geniş Spektrumlu Ampirik Antibiyotikler'
       ]
@@ -791,7 +791,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       icuMonitoringDuration: 'Miksödem koması tanılı veya şüpheli tüm hastalar kesinlikle Yoğun Bakım Ünitesinde (YBÜ) mekanik ventilasyon, sürekli EKG/invaziv arter monitörizasyonu ve endokrinoloji ortak takibinde en az 48–72 saat (klinik ve metabolik stabilizasyon sağlanana dek) izlenmelidir.',
       recurrenceRate: 'İlk 24–72 saatte tiroid hormonunun doku düzeyinde etkisi kademeli başlar; erken ekstübasyon, eksik steroid kapsamı veya tedavi edilmemiş gizli sepsis klinik çöküşün nüksetmesine yol açar.',
       recurrenceRiskBadge: 'HORMON YANITI 24–72 SAAT · ERKEN EKSTÜBASYON YAPMA',
-      maintenanceTherapy: 'Günlük 50–100 mcg IV Levotiroksin (oral alım ve GİS motilitesi dönünce ~1,6 mcg/kg/gün oral), adrenal yetmezlik dışlanana dek IV Hidrokortizon 50–100 mg/6–8 sa, pasif ısıtma, sıvı kısıtlaması (hiponatremi ≤6–8 mEq/L/24 sa), ampirik antibiyotik ve kademeli mekanik ventilasyon ayrılması.',
+      maintenanceTherapy: 'Günlük 50–100 mcg NG/OG Levotiroksin (veya varsa İV; GİS motilitesi tam dönünce ~1,6 mcg/kg/gün oral), adrenal yetmezlik dışlanana dek IV Hidrokortizon 50–100 mg/6–8 sa, pasif ısıtma, sıvı kısıtlaması (hiponatremi ≤6–8 mEq/L/24 sa), ampirik antibiyotik ve kademeli mekanik ventilasyon ayrılması.',
       monitoringParameters: [
         'Sürekli EKG (QTc süresi, bradikardi/AV blok, T4/T3 sonrası yeni iskemi veya taşiaritmi!) ve seri Troponin',
         'Saatlik çekirdek vücut sıcaklığı (hedef ≤0,5°C/saat yavaş yükselme) ve saatlik idrar çıkışı',
@@ -813,14 +813,14 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         },
         {
           testName: 'Bazal Serum Kortizol & ACTH (+ Stabilizasyon Sonrası Cosyntropin Testi)',
-          description: 'Eşlik eden primer veya sekonder adrenal yetmezliği doğrulamak veya dışlamak (steroidin güvenle kesilebilmesi) için gereklidir.'
+          description: 'Eşlik eden primer veya sekonder adrenal yetmezliği doğrulamak veya dışlamak (steroidin güvenle kesilebilmesi) için gereklidir (TR’de Synacthen/Cosyntropin dönemsel tedarik sıkıntısı yaşayabilir).'
         },
         {
           testName: 'Transtorasik Ekokardiyografi (TTE) & Enfeksiyon Taraması',
           description: 'Perikardiyal efüzyon/tamponad, sol ventrikül disfonksiyonu ve altta yatan ateşsiz pnömoni/sepsisin kesin saptanması.'
         }
       ],
-      prognosisSummary: 'Miksödem koması en yüksek mortaliteli (%25–50) perioperatif endokrin acillerden biridir. İleri yaş, derin hipotermi (<34°C), bradikardi, sepsis ve gecikmiş steroid/T4 tedavisi kötü prognoz göstergeleridir; buna karşın erken tanı, önce Hidrokortizon + sonra IV Levotiroksin, pasif ısıtma ve sabırlı YBÜ ventilasyon desteği sağkalımı dramatik artırır.'
+      prognosisSummary: 'Miksödem koması en yüksek mortaliteli (%25–50) perioperatif endokrin acillerden biridir. İleri yaş, derin hipotermi (<34°C), bradikardi, sepsis ve gecikmiş steroid/T4 tedavisi kötü prognoz göstergeleridir; buna karşın erken tanı, önce Hidrokortizon + sonra Levotiroksin (TR’de NG/OG oral LT4), pasif ısıtma ve sabırlı YBÜ ventilasyon desteği sağkalımı dramatik artırır.'
     },
 
     // 9) High-Yield Bilgiler
@@ -836,8 +836,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         category: 'Tuzak'
       },
       {
-        title: 'Yaşlı / KAH Hastasında Düşük Doz T4 (200 mcg) & Yüksek Doz T3 Uyarısı!',
-        takeaway: 'İV Levotiroksin yükleme aralığı 200–400 mcg’dir; ancak ileri yaş veya koroner arter hastalığı varsa 200 mcg alt sınırından başlanır ve yüksek doz T3’ten kaçınılır — aşırı hızlı tiroid yüklemesi akut MI ve malign aritmi tetikler!',
+        title: 'TR Pratiği (NG/OG Oral LT4) & Yaşlı/KAH Hastasında Düşük Doz Sınırı!',
+        takeaway: 'Türkiye’de İV T4 ve İV T3 ticari/rutin stokta yoktur — birincil yol NG/OG tüpten ezilmiş oral Levotiroksin 300–500 mcg’dir (yaşlı/KAH’ta 200–300 mcg; uluslararası ATA 2014 İV 200–400 mcg). Pediatride (<40 kg) erişkin yaşlı tavanı (IV 200 / NG 300 mcg) ASLA aşılmaz; aşırı hızlı yükleme akut MI ve malign aritmi tetikler!',
         category: 'Kritik Doz'
       },
       {
@@ -906,7 +906,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
     subTitle: 'Bifazik Kriz: Faz 1 Ekstrem Hipertansiyon/Aritmi → Faz 2 Ven Ligasyonu Sonrası Vazopleji & Hipoglisemi',
     codeColor: 'rose',
     severityBadge: 'KOD KIRMIZI / BİLATERAL FAZ · ÖNCE α-BLOKAJ — TEK BAŞINA β-BLOKER/LABETALOL YASAK!',
-    keyCallout: 'Feokromositoma/paraganglioma cerrahisinde veya TANISIZ insidentalomada indüksiyon, laringoskopi, pnömoperitonyum veya tümör manipülasyonuyla patlayan BİFAZİK KRİZ! FAZ 1 (Ven Ligasyonu Öncesi): Ekstrem HT (>220–260 mmHg), VT/taşiaritmi, flash akciğer ödemi/Takotsubo → Cerrahi manipülasyonu DURDUR; Fentolamin (1–5 mg IV), Nikardipin, Klevidipin, Sodyum Nitroprussid veya Magnezyum Sülfat (2–4 g IV → 1–2 g/sa) ver! Yeterli α-blokaj/vazodilatasyon olmadan ASLA tek başına β-bloker veya IV Labetalol (α:β = 1:7!) VERME! FAZ 2 (Ven Ligasyonu Sonrası): Tüm vazodilatatörleri KAPAT, agresif sıvı + Noradrenalin + Vazopressin (0,01–0,04 IU/dk) başlat ve 30–60 dk’da bir KAN ŞEKERİ izle (rebound hipoglisemi)!',
+    keyCallout: 'Feokromositoma/paraganglioma cerrahisinde veya TANISIZ insidentalomada indüksiyon, laringoskopi, pnömoperitonyum veya tümör manipülasyonuyla patlayan BİFAZİK KRİZ! FAZ 1 (Ven Ligasyonu Öncesi): Ekstrem HT (>220–260 mmHg), VT/taşiaritmi, flash akciğer ödemi/Takotsubo → Cerrahi manipülasyonu DURDUR; Türkiye pratiğinde öncelikle Nikardipin (5–15 mg/sa), Sodyum Nitroprussid (0,3–2 mcg/kg/dk), Magnezyum Sülfat (2–4 g IV → 1–2 g/sa), Nitrogliserin veya varsa Urapidil / Fentolamin (1–5 mg IV — birçok merkezde YOK; Klevidipin TR’de ruhsatlı DEĞİL!) ver! Yeterli α-blokaj/vazodilatasyon olmadan ASLA tek başına β-bloker veya IV Labetalol (α:β = 1:7!) VERME! FAZ 2 (Ven Ligasyonu Sonrası): Tüm vazodilatatörleri KAPAT, agresif sıvı + Noradrenalin + varsa Vazopressin (0,01–0,04 IU/dk; TR’de yoksa yüksek doz NA + Terlipressin!) başlat ve 30–60 dk’da bir KAN ŞEKERİ izle (rebound hipoglisemi)!',
     quickCalculatorType: 'pheochromocytoma-crisis',
 
     // 2) Tanımlama ve Giriş
@@ -921,10 +921,10 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         'Faz 2 Tetikleyicisi: Adrenal ven ligasyonuyla tümörün dolaşımdan aniden kesilmesi + kronik down-regüle α-reseptörler + preop uzun etkili α-blokaj (Fenoksibenzamin) + göreceli hipovolemi'
       ],
       safeAgents: [
-        'Faz 1 — Direkt Arteriyel Vazodilatatörler & α-Blokerler: Fentolamin (1–5 mg IV bolus; gerekirse 0,5–2 mg/dk), Nikardipin (5–15 mg/sa), Klevidipin (1–16 mg/sa; ultra kısa etkili!), Sodyum Nitroprussid (0,3–2 mcg/kg/dk, kısa pik maks 3–5 mcg/kg/dk)',
+        'Faz 1 — Direkt Arteriyel Vazodilatatörler & α-Blokerler (TR Stok Önceliği): Nikardipin (5–15 mg/sa), Sodyum Nitroprussid (0,3–2 mcg/kg/dk, kısa pik maks 3–5 mcg/kg/dk), Nitrogliserin (5–200 mcg/dk) ve varsa Urapidil / Fentolamin (1–5 mg IV bolus — birçok merkezde bulunmaz) [Uluslararası kılavuzlardaki Klevidipin (1–16 mg/sa) Türkiye’de ruhsatlı/mevcut değildir!]',
         'Faz 1 — Çok Yönlü Köşe Taşı: Magnezyum Sülfat (2–4 g [40–60 mg/kg] IV 10–15 dk yükleme → 1–2 g/sa infüzyon) — adrenal medulladan katekolamin salınımını inhibe eder + direkt arteriyel vazodilatatör + güçlü antiaritmik!',
         'Faz 1 — Yalnızca α-Blokaj SONRASI Taşiaritmi Kontrolü: Ultra kısa etkili β₁-bloker Esmolol (0,5 mg/kg bolus → 50–200 mcg/kg/dk; α-blokaj sağlanmış olmak şartıyla!) veya Lidokain/Amiodaron (malign VT)',
-        'Faz 2 (Ven Ligasyonu Sonrası Vazopleji): Tüm vazodilatatörleri DERHAL kapat → agresif dengeli kristaloid + Noradrenalin infüzyonu → katekolamin-dirençli vazoplejide VAZOPRESSİN (0,01–0,04 IU/dk; V1 reseptörü α-down-regülasyonundan bağımsızdır!) veya Fenilefrin',
+        'Faz 2 (Ven Ligasyonu Sonrası Vazopleji): Tüm vazodilatatörleri DERHAL kapat → agresif dengeli kristaloid + Noradrenalin infüzyonu → katekolamin-dirençli vazoplejide varsa VAZOPRESSİN (0,01–0,04 IU/dk; V1 reseptörü α-down-regülasyonundan bağımsızdır!) — TR’de Vazopressin/Fenilefrin birçok hastanede bulunmadığından pratikte yüksek doz Noradrenalin + Terlipressin (1 mg bolus / 1–2 mcg/kg/sa) kullanılır!',
         'Güvenli Anestezikler: Propofol / Etomidat, Sevofluran / İsofluran, Fentanil / Remifentanil / Sufentanil, Rokuronyum / Vekuronyum / Sisatrakuryum, Ondansetron (bulantı için Metoklopramid yerine!)',
         'KESİN KAÇINILACAKLAR: Tek başına β-bloker / IV Labetalol (α-blokajsız), Metoklopramid, Droperidol, Morfin, Atrakuryum, Desfluran, Ketamin, Efedrin, Süksinilkolin, Glukagon'
       ],
@@ -945,10 +945,10 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       gradingScaleTitle: 'İntraoperatif Feokromositoma Krizi Bifazik Evreleme & Hemodinamik Profil',
       gradingScaleSource: 'Endocrine Society Guideline (Lenders et al., JCEM 2014) & BJA Education (2016)',
       larachScale: [
-        { category: 'Faz 1A — Katekolamin Deşarjı Başlangıcı', points: 'SKB 180–220', description: 'İndüksiyon, pnömoperitonyum veya tümör dokunmasıyla hızlı KB artışı + taşikardi/VES. Anesteziyi derinleştir, cerraha manipülasyonu durdur de, Nikardipin/Klevidipin/Fentolamin/MgSO₄ titre et.' },
-        { category: 'Faz 1B — Fulminan Katekolamin Fırtınası', points: 'SKB >220–260', description: 'Ekstrem HT, VT/SVT, akut sol kalp yetmezliği, flash pulmoner ödem veya Takotsubo. Cerrahiyi DURDUR, hızlı etkili IV vazodilatatör (Fentolamin/SNP/Klevidipin/Nikardipin) + MgSO₄ yükle!' },
+        { category: 'Faz 1A — Katekolamin Deşarjı Başlangıcı', points: 'SKB 180–220', description: 'İndüksiyon, pnömoperitonyum veya tümör dokunmasıyla hızlı KB artışı + taşikardi/VES. Anesteziyi derinleştir, cerraha manipülasyonu durdur de, Nikardipin/SNP/MgSO₄ (varsa Fentolamin/Urapidil) titre et [Klevidipin TR’de yok].' },
+        { category: 'Faz 1B — Fulminan Katekolamin Fırtınası', points: 'SKB >220–260', description: 'Ekstrem HT, VT/SVT, akut sol kalp yetmezliği, flash pulmoner ödem veya Takotsubo. Cerrahiyi DURDUR, hızlı etkili IV vazodilatatör (Nikardipin/SNP/Nitrogliserin; varsa Fentolamin) + MgSO₄ yükle!' },
         { category: 'Faz 2A — Adrenal Ven Ligasyonu Geçişi', points: 'Ani MAP Çöküşü', description: 'Ven klipslenmeden 5–10 dk önce vazodilatatörleri azalt/hazırlan; ven kapandığı saniye TÜM vazodilatatörleri kes ve hızlı dengeli kristaloid yükle!' },
-        { category: 'Faz 2B — Refrakter Vazopleji & Rebound Hipoglisemi', points: 'MAP <60 + ↓KŞ', description: 'Down-regüle α-reseptörler + preop Fenoksibenzamin etkisiyle Noradrenaline dirençli şok → VAZOPRESSİN (0,01–0,04 IU/dk) ekle ve 30–60 dk’da bir KŞ ölç!' }
+        { category: 'Faz 2B — Refrakter Vazopleji & Rebound Hipoglisemi', points: 'MAP <60 + ↓KŞ', description: 'Down-regüle α-reseptörler + preop Fenoksibenzamin etkisiyle Noradrenaline dirençli şok → varsa VAZOPRESSİN (0,01–0,04 IU/dk; TR’de yoksa yüksek doz NA + Terlipressin) ekle ve 30–60 dk’da bir KŞ ölç!' }
       ],
       larachInterpretation: 'İntraoperatif feokromositoma yönetiminde en büyük başarı, Faz 1’de aşırı uzun etkili antihipertansiflerden kaçınmak (yoksa Faz 2 şoku derinleşir!) ve ven ligasyonu anında vazopleji + rebound hipoglisemiye saniyeler içinde geçiş yapmaktır.',
       differentialDiagnosis: [
@@ -977,7 +977,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
 
     // 4) Akut Kriz Yönetimi
     crisisManagement: {
-      hotlineInfo: 'ACİL BİFAZİK ENDOKRİN KRİZ · FAZ 1: Cerrahi manipülasyonu DURDUR, Fentolamin/Nikardipin/Klevidipin/SNP + MgSO₄ ver (α-blokajsız β-bloker/Labetalol YASAK!) · FAZ 2 (Ven Ligasyonu): Vazodilatatörü KAPAT, Sıvı + Noradrenalin + VAZOPRESSİN + 30–60 dk KŞ TAKİBİ!',
+      hotlineInfo: 'ACİL BİFAZİK ENDOKRİN KRİZ · FAZ 1: Cerrahi manipülasyonu DURDUR, Nikardipin/SNP/Nitrogliserin (+ varsa Fentolamin/Urapidil) + MgSO₄ ver (α-blokajsız β-bloker/Labetalol YASAK!) · FAZ 2 (Ven Ligasyonu): Vazodilatatörü KAPAT, Sıvı + Noradrenalin (+ Vazopressin/Terlipressin) + 30–60 dk KŞ TAKİBİ!',
       coreAlgorithm: [
         {
           stepNumber: 1,
@@ -988,8 +988,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         },
         {
           stepNumber: 2,
-          title: 'FAZ 1 — HIZLI ETKİLİ ARTERİYEL VAZODİLATATÖR / α-BLOKER BAŞLAT',
-          action: 'Saniyeler içinde kısa etkili, titre edilebilir IV vazodilatatör başlatın: Fentolamin (1–5 mg IV bolus → gerekirse 0,5–2 mg/dk infüzyon), Klevidipin (1–2 mg/sa → maks 16 mg/sa), Nikardipin (5 mg/sa → 15 mg/sa) veya Sodyum Nitroprussid (0,3–2 mcg/kg/dk; kısa pik maks 3–5 mcg/kg/dk — siyanür/tiyosiyanat toksisitesi için uzatma!).',
+          title: 'FAZ 1 — HIZLI ETKİLİ ARTERİYEL VAZODİLATATÖR / α-BLOKER BAŞLAT (TR PRATİĞİ)',
+          action: 'Saniyeler içinde kısa etkili, titre edilebilir IV vazodilatatör başlatın — Türkiye pratiğinde erişilebilir ön saf ajanlar: Nikardipin (5 mg/sa → 15 mg/sa), Sodyum Nitroprussid (0,3–2 mcg/kg/dk; kısa pik maks 3–5 mcg/kg/dk — ışıktan koru, siyanür toksisitesi için uzatma!) ve Nitrogliserin (5–200 mcg/dk); temin edilebilen merkezlerde Urapidil (10–25 mg IV) veya Fentolamin (1–5 mg IV bolus → 0,5–2 mg/dk; birçok merkezde bulunmaz). [Uluslararası kılavuzlardaki Klevidipin Türkiye’de ruhsatlı/mevcut değildir!]',
           criticalNote: 'KESİN KIRMIZI ÇİZGİ (Endocrine Society 2014): Yeterli α-blokaj / direkt arteriyel vazodilatasyon sağlanmadan ASLA tek başına β-bloker (Esmolol/Metoprolol) veya α:β oranı 1:7 olan IV LABETALOL VERMEYİN! Karşılanmamış α₁-vazokonstriksiyon ile ölümcül hipertansif kriz ve flash pulmoner ödem gelişir!',
           priority: 'CRITICAL'
         },
@@ -1009,7 +1009,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         {
           stepNumber: 5,
           title: 'GEÇİŞ ANI — ADRENAL VEN LİGASYONU ÖNCESİ CERRAHLA SENKRONİZASYON',
-          action: 'Cerrah adrenal veni bağlamadan 5–10 dk önce haber vermelidir: Vazodilatatör infüzyonlarını kademeli azaltın, MgSO₄’ü kapatın ve ön-yük (preload) için 500–1000 mL dengeli kristaloid yükleyin; Noradrenalin ve Vazopressin pompalarını hatta hazır bekletin!',
+          action: 'Cerrah adrenal veni bağlamadan 5–10 dk önce haber vermelidir: Vazodilatatör infüzyonlarını kademeli azaltın, MgSO₄’ü kapatın ve ön-yük (preload) için 500–1000 mL dengeli kristaloid yükleyin; Noradrenalin (ve varsa Vazopressin / Terlipressin) pompalarını hatta hazır bekletin!',
           priority: 'CRITICAL'
         },
         {
@@ -1020,8 +1020,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         },
         {
           stepNumber: 7,
-          title: 'FAZ 2 — KATEKOLAMİN-DİRENÇLİ VAZOPLEJİDE VAZOPRESSİN (+ FENİLEFRİN)',
-          action: 'Kronik yüksek katekolamin maruziyeti nedeniyle α₁-reseptörleri down-regüle olduğundan ve preop Fenoksibenzamin (irreversibl blok!) sürdüğünden Noradrenalin tek başına yetersiz kalabilir: Erken aşamada VAZOPRESSİN (0,01–0,04 IU/dk IV infüzyon) ekleyin (V1 reseptörü α-down-regülasyonundan etkilenmez!); gerekirse Fenilefrin veya refrakter vakada kurtarma Metilen Mavisi değerlendirin.',
+          title: 'FAZ 2 — KATEKOLAMİN-DİRENÇLİ VAZOPLEJİDE VAZOPRESSİN / TERLİPRESSİN',
+          action: 'Kronik yüksek katekolamin maruziyeti nedeniyle α₁-reseptörleri down-regüle olduğundan ve preop Fenoksibenzamin (irreversibl blok!) sürdüğünden Noradrenalin tek başına yetersiz kalabilir: Varsa erken aşamada VAZOPRESSİN (0,01–0,04 IU/dk IV infüzyon; V1 reseptörü α-down-regülasyonundan etkilenmez!) ekleyin. TR’de Vazopressin ve IV Fenilefrin birçok hastanede bulunmadığından pratikte yüksek doz Noradrenalin titrasyonu + Terlipressin (1 mg IV bolus / 1–2 mcg/kg/sa) veya kurtarma Metilen Mavisi (1–2 mg/kg) değerlendirilir.',
           criticalNote: 'Bilateral adrenalektomi yapıldıysa (veya refrakter şok varsa) derhal İV Hidrokortizon 100 mg bolus + 200 mg/24 sa infüzyon başlatmayı UNUTMAYIN!',
           priority: 'CRITICAL'
         },
@@ -1041,21 +1041,21 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
               badge: 'FAZ 1 — Katekolamin Fırtınası',
               target: 'Ven Ligasyonu Öncesi · Ekstrem HT (>220 mmHg) & VT/SVT',
               presentation: 'İndüksiyon, pnömoperitonyum veya tümör manipülasyonuyla patlayan malign HT, taşiaritmi, flash akciğer ödemi, Takotsubo.',
-              intervention: 'Manipülasyonu DURDUR + Fentolamin (1–5 mg) / Nikardipin / Klevidipin / SNP + MgSO₄ (2–4 g → 1–2 g/sa). α-blokajsız β-bloker/Labetalol YASAK! Yalnızca α-blokaj sonrası Esmolol.',
+              intervention: 'Manipülasyonu DURDUR + Nikardipin / SNP / Nitrogliserin (+ varsa Fentolamin/Urapidil; Klevidipin TR’de yok) + MgSO₄ (2–4 g → 1–2 g/sa). α-blokajsız β-bloker/Labetalol YASAK! Yalnızca α-blokaj sonrası Esmolol.',
               severity: 'CRITICAL'
             },
             {
               badge: 'GEÇİŞ — Ven Ligasyonu Anı',
               target: 'Adrenal Ven Klipslemesi (Saniyeler İçinde Faz Değişimi)',
               presentation: 'Cerrahi ekibin "adrenal veni bağlıyoruz" uyarısıyla ani katekolamin kesilmesi beklenir.',
-              intervention: 'Tüm vazodilatatörleri ve MgSO₄’ü KAPAT, 500–1000 mL dengeli kristaloid yükle, Noradrenalin ve Vazopressin infüzyonlarını hatta hazırla.',
+              intervention: 'Tüm vazodilatatörleri ve MgSO₄’ü KAPAT, 500–1000 mL dengeli kristaloid yükle, Noradrenalin (+ varsa Vazopressin / Terlipressin) infüzyonlarını hatta hazırla.',
               severity: 'HIGH'
             },
             {
               badge: 'FAZ 2 — Post-Rezeksiyon Vazopleji & Hipoglisemi',
               target: 'Ven Ligasyonu Sonrası · Refrakter Şok + Rebound İnsülin',
               presentation: 'Down-regüle α-reseptörler + preop α-blokaj + göreceli hipovolemi → derin şok; eşzamanlı sessiz ağır hipoglisemi!',
-              intervention: 'Agresif sıvı + Noradrenalin + erken VAZOPRESSİN (0,01–0,04 IU/dk) (+ bilateral cerrahide Hidrokortizon 100 mg IV) + 30–60 dk’da bir KŞ ölçümü ve IV Dekstroz!',
+              intervention: 'Agresif sıvı + Noradrenalin + varsa VAZOPRESSİN (0,01–0,04 IU/dk; yoksa Terlipressin / NA titrasyonu) (+ bilateral cerrahide Hidrokortizon 100 mg IV) + 30–60 dk’da bir KŞ ölçümü ve IV Dekstroz!',
               severity: 'CRITICAL'
             }
           ]
@@ -1065,39 +1065,39 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
           columns: ['İlaç / Ajan', 'Faz & Rol', 'Dozaj (Erişkin IV)', 'Etki Mekanizması', 'Kritik Klinik Uyarı'],
           rows: [
             {
-              col1: 'Fentolamin',
-              col2: 'Faz 1 · İlk Seçenek α-Bloker',
-              col3: '1–5 mg IV bolus (gerekirse 0,5–2 mg/dk)',
-              col4: 'Kısa etkili kompetitif α₁/α₂-antagonist',
-              col5: 'Refleks taşikardi yapabilir; vazodilatasyon sonrası Esmolol eklenebilir'
-            },
-            {
-              col1: 'Klevidipin / Nikardipin',
-              col2: 'Faz 1 · Direkt Arteriyel Vazodilatatör',
-              col3: 'Klevidipin 1–16 mg/sa; Nikardipin 5–15 mg/sa',
+              col1: 'Nikardipin [Klevidipin TR’de Yok]',
+              col2: 'Faz 1 · Ön Saf Arteriyel Vazodilatatör (TR)',
+              col3: 'Nikardipin 5–15 mg/sa [Klevidipin 1–16 mg/sa TR’de ruhsatlı değil]',
               col4: 'Dihidropiridin Ca²⁺ kanal blokeri (selektif arteriyel)',
-              col5: 'Klevidipin doku esterazlarıyla ~1 dk’da yıkılır — Faz 2’de hipotansiyon bırakmaz!'
+              col5: 'TR’de en erişilebilir titre edilebilir CCB; ven ligasyonundan 5–10 dk önce azalt!'
             },
             {
               col1: 'Sodyum Nitroprussid (SNP)',
-              col2: 'Faz 1 · Ultra Hızlı Kurtarma',
+              col2: 'Faz 1 · Ultra Hızlı Kurtarma (TR)',
               col3: '0,3–2 mcg/kg/dk (kısa pik maks 3–5)',
               col4: 'NO donörü (arteriyel + venöz vazodilatasyon)',
-              col5: 'Saniyeler içinde etki eder/kesilir; >2 mcg/kg/dk uzarsa siyanür toksisitesi!'
+              col5: 'Saniyeler içinde etki eder/kesilir (Faz 2’ye sarkmaz!); >2 mcg/kg/dk uzarsa siyanür toksisitesi!'
             },
             {
               col1: 'Magnezyum Sülfat',
-              col2: 'Faz 1 · Katekolamin İnhibitörü',
+              col2: 'Faz 1 · Katekolamin İnhibitörü (TR)',
               col3: '2–4 g IV yükleme (10–15 dk) → 1–2 g/sa',
               col4: 'Adrenal medulladan katekolamin salınımını keser + antiaritmik',
               col5: 'Nöromüsküler bloker etkisini belirgin uzatır (TOF izle); ven ligasyonunda kapat!'
             },
             {
-              col1: 'Vazopressin + Noradrenalin',
+              col1: 'Fentolamin / Urapidil (Varsa)',
+              col2: 'Faz 1 · Direkt α-Bloker (Birçok Merkezde Yok)',
+              col3: 'Fentolamin 1–5 mg IV bolus (0,5–2 mg/dk); Urapidil 10–25 mg IV',
+              col4: 'Kısa etkili kompetitif α₁/α₂ (veya selektif α₁) antagonisti',
+              col5: 'TR’de birçok hastanede stokta yok → yoksa Nikardipin + SNP + MgSO₄ + Nitrogliserin öne çıkar'
+            },
+            {
+              col1: 'Noradrenalin + Vazopressin / Terlipressin',
               col2: 'Faz 2 · Refrakter Vazopleji',
-              col3: 'NA 0,05–0,5 mcg/kg/dk + Vazopressin 0,01–0,04 IU/dk',
-              col4: 'Vazopressin V1 reseptörü α-down-regülasyonundan bağımsızdır!',
-              col5: 'Preop Fenoksibenzamin alan veya NA-dirençli Faz 2 şokunda hayat kurtarıcıdır'
+              col3: 'NA 0,05–0,5 mcg/kg/dk + Vazopressin 0,01–0,04 IU/dk (yoksa Terlipressin 1 mg)',
+              col4: 'V1 reseptörü α-down-regülasyonundan bağımsızdır!',
+              col5: 'TR’de Vazopressin/Fenilefrin birçok hastanede yok → yüksek doz NA + Terlipressin kullanılır'
             }
           ]
         },
@@ -1117,14 +1117,14 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
               status: 'AVOID'
             },
             {
-              domain: 'Magnezyum Sülfat + Kısa Etkili Vazodilatatör (Klevidipin/Fentolamin/SNP)',
-              recommendation: 'Faz 1’de MgSO₄ (2–4 g → 1–2 g/sa) + ultra kısa etkili vazodilatatör kombinasyonunu tercih et.',
+              domain: 'Magnezyum Sülfat + Kısa Etkili Vazodilatatör (Nikardipin / SNP / Nitrogliserin)',
+              recommendation: 'TR pratiğinde Faz 1’de MgSO₄ (2–4 g → 1–2 g/sa) + Nikardipin / Sodyum Nitroprussid / Nitrogliserin (varsa Fentolamin/Urapidil; Klevidipin TR’de ruhsatlı değil!) kombinasyonunu tercih et.',
               rationaleAndCaution: 'Kısa yarı ömürlü ajanlar ven ligasyonu anında kapatıldığında saniyeler–dakikalar içinde temizlenerek Faz 2 vazoplejisini ağırlaştırmaz.',
               status: 'RECOMMENDED'
             },
             {
-              domain: 'Faz 2’de Vazopressin & 30–60 dk Kan Şekeri Takibi',
-              recommendation: 'Ven ligasyonu sonrası NA-dirençli şokta erken Vazopressin (0,01–0,04 IU/dk) ekle ve 24 saat boyunca 30–60 dk’da bir KŞ izle.',
+              domain: 'Faz 2’de Noradrenalin + Vazopressin / Terlipressin & 30–60 dk KŞ Takibi',
+              recommendation: 'Ven ligasyonu sonrası NA-dirençli şokta varsa erken Vazopressin (0,01–0,04 IU/dk), TR’de Vazopressin yoksa Terlipressin (1 mg bolus) / NA titrasyonu ekle ve 24 saat boyunca 30–60 dk’da bir KŞ izle.',
               rationaleAndCaution: 'Kronik katekolamin down-regülasyonu Noradrenalin yanıtını köreltir (V1 yolu sağlamdır!); ayrıca katekolamin çekilmesine bağlı sessiz rebound hipoglisemi genel anestezi/derlenmede ölümcül olabilir.',
               status: 'RECOMMENDED'
             }
@@ -1175,7 +1175,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
           color: 'amber'
         }
       ],
-      summaryText: 'Feokromositoma krizi iki zıt kutuplu bir fırtınadır: Tümör veni bağlanana kadar hedef ekstrem ardyükü ve katekolamin deşarjını kısa etkili vazodilatatör + MgSO₄ ile dizginlemek; ven bağlandığı saniye ise 180 derece dönüp sıvı + Noradrenalin + Vazopressin ve sık glukoz takibiyle vazopleji ile hipoglisemiyi yönetmektir.'
+      summaryText: 'Feokromositoma krizi iki zıt kutuplu bir fırtınadır: Tümör veni bağlanana kadar hedef ekstrem ardyükü ve katekolamin deşarjını kısa etkili vazodilatatör + MgSO₄ ile dizginlemek; ven bağlandığı saniye ise 180 derece dönüp sıvı + Noradrenalin (+ Vazopressin/Terlipressin) ve sık glukoz takibiyle vazopleji ile hipoglisemiyi yönetmektir.'
     },
 
     // 6) Klinik Özellikler & Prezentasyon
@@ -1194,7 +1194,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       ],
       lateSigns: [
         'Faz 1’de tedavi edilmeyen krizde intrakraniyal kanama, aort diseksiyonu, refrakter VF veya kardiyojenik şok',
-        'Faz 2’de Noradrenaline zayıf yanıtlı derin vazoplejik şok (Vazopressin gerektiren refrakter hipotansiyon)',
+        'Faz 2’de Noradrenaline zayıf yanıtlı derin vazoplejik şok (Vazopressin/Terlipressin gerektiren refrakter hipotansiyon)',
         'Post-rezeksiyon döneminde (ilk 2–24 saat) gecikmiş uyanma, nöbet veya koma ile başvuran sessiz REBOUND HİPOGLİSEMİ',
         'Bilateral adrenalektomi sonrası steroid başlanmadıysa eşzamanlı akut adrenal kriz'
       ],
@@ -1213,8 +1213,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         title: 'Feokromositoma Cerrahisi İndüksiyon Öncesi Hazırlık Protokolü',
         steps: [
           'İndüksiyondan ÖNCE uyanık invaziv arteriyel kateter (saniye-saniye KB izlemi!), 2 geniş periferik damar yolu ve santral venöz kateter (çoklu vazoaktif infüzyon hatları için) yerleştirilmelidir.',
-          'Hazır çekili/pompalı Faz 1 ilaçları: Fentolamin veya Klevidipin/Nikardipin/Sodyum Nitroprussid + Magnezyum Sülfat + (α-blokaj sonrası için) Esmolol hazır edilmelidir.',
-          'Hazır çekili/pompalı Faz 2 ilaçları: Noradrenalin + Vazopressin infüzyonu, hızlı dengeli kristaloid (basınçlı torba) ve bilateral adrenalektomi ise İV Hidrokortizon 100 mg hazır tutulmalıdır.',
+          'Hazır çekili/pompalı Faz 1 ilaçları (TR pratiği): Nikardipin, Sodyum Nitroprussid, Nitrogliserin + Magnezyum Sülfat (+ varsa Fentolamin/Urapidil; Klevidipin TR’de yok) + (α-blokaj sonrası için) Esmolol hazır edilmelidir.',
+          'Hazır çekili/pompalı Faz 2 ilaçları: Noradrenalin + varsa Vazopressin (TR’de yoksa Terlipressin), hızlı dengeli kristaloid (basınçlı torba) ve bilateral adrenalektomi ise İV Hidrokortizon 100 mg hazır tutulmalıdır.',
           'Tetikleyici ilaçların (Metoklopramid, Droperidol, Morfin, Atrakuryum, Desfluran, Ketamin, Efedrin, Süksinilkolin) masadan/tepsiden fiziksel olarak uzaklaştırıldığı teyit edilmelidir.'
         ]
       },
@@ -1225,9 +1225,9 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       ],
       cartTitle: 'Feokromositoma Bifazik Kriz Acil Müdahale Seti:',
       cartChecklist: [
-        'Faz 1 Vazodilatatörler: Fentolamin (1–5 mg), Klevidipin veya Nikardipin, Sodyum Nitroprussid + Magnezyum Sülfat (2–4 g)',
+        'Faz 1 Vazodilatatörler (TR Pratiği): Nikardipin, Sodyum Nitroprussid, Nitrogliserin + Magnezyum Sülfat (2–4 g) [+ varsa Fentolamin/Urapidil; Klevidipin TR’de ruhsatlı değil!]',
         'Faz 1 Antiaritmik (α-Blokaj Sonrası): Esmolol + Lidokain / Amiodaron + Defibrilatör',
-        'Faz 2 Vazopressörler: Noradrenalin + VAZOPRESSİN (20 IU ampul — 0,01–0,04 IU/dk infüzyon!) + Fenilefrin',
+        'Faz 2 Vazopressörler: Noradrenalin + varsa Vazopressin (0,01–0,04 IU/dk) — TR’de Vazopressin/Fenilefrin rutin olmayan hastanelerde yüksek doz Noradrenalin + Terlipressin!',
         'Faz 2 Metabolik & Steroid: %10 Dekstroz + POCT Glukometre / Kan Gazı Enjektörleri + İV Hidrokortizon 100 mg (bilateral cerrahide)',
         'Hızlı Dengeli Kristaloid (3–4 L) + Yatak Başı TEE / POCUS (Takotsubo / LV / Volüm Durumu)'
       ]
@@ -1238,7 +1238,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       icuMonitoringDuration: 'Tüm feokromositoma/paraganglioma rezeksiyonları ve intraoperatif kriz geçiren hastalar en az 24–48 saat Yoğun Bakım Ünitesinde (YBÜ) invaziv arteriyel basınç, sürekli EKG ve saatlik kan şekeri takibiyle izlenmelidir.',
       recurrenceRate: 'İlk 24–48 saatte rezidüel α-blokaj (özellikle Fenoksibenzamin) nedeniyle ortostatik/vazoplejik hipotansiyon ve rebound hipoglisemi nüks edebilir; tam rezeksiyon yapılmadıysa veya metastatik/bilateral tümör varsa hipertansiyon devam edebilir.',
       recurrenceRiskBadge: 'İLK 24–48 SAAT VAZOPLEJİ + REBOUND HİPOGLİSEMİ RİSKİ',
-      maintenanceTherapy: 'Kademeli Noradrenalin/Vazopressin azaltılması, dengeli sıvı replasmanı, 30–60 dk’da bir kan şekeri takibi + gerekirse %5–10 Dekstroz infüzyonu, bilateral adrenalektomide steroid stres dozu (Hidrokortizon 200 mg/24 sa → idame + Fludrokortizon) ve Takotsubo/MI geliştiyse kardiyoloji takibi.',
+      maintenanceTherapy: 'Kademeli Noradrenalin (ve varsa Vazopressin/Terlipressin) azaltılması, dengeli sıvı replasmanı, 30–60 dk’da bir kan şekeri takibi + gerekirse %5–10 Dekstroz infüzyonu, bilateral adrenalektomide steroid stres dozu (Hidrokortizon 200 mg/24 sa → idame + Fludrokortizon) ve Takotsubo/MI geliştiyse kardiyoloji takibi.',
       monitoringParameters: [
         'Sürekli invaziv arteriyel kan basıncı ve EKG (postop vazopleji, inatçı HT veya aritmi/QTc takibi)',
         'İlk 24 saat boyunca her 30–60 dk’da bir kan şekeri (sessiz rebound hipoglisemi taraması!)',
@@ -1275,7 +1275,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
     highYieldPearls: [
       {
         title: 'KESİN KURAL: α-Blokaj Olmadan ASLA Tek Başına β-Bloker veya IV Labetalol Verme!',
-        takeaway: 'IV Labetalolün α:β bloke edici oranı 1:7’dir — feokromositomada yetersiz α-blokaj yapar! β₂-vazodilatasyonu kapatıp α₁-vazokonstriksiyonu başıboş bırakarak ölümcül hipertansif kriz ve flash pulmoner ödem patlatır. Önce Fentolamin / Nikardipin / Klevidipin / SNP + MgSO₄, ancak sonra gerekirse Esmolol!',
+        takeaway: 'IV Labetalolün α:β bloke edici oranı 1:7’dir — feokromositomada yetersiz α-blokaj yapar! β₂-vazodilatasyonu kapatıp α₁-vazokonstriksiyonu başıboş bırakarak ölümcül hipertansif kriz ve flash pulmoner ödem patlatır. TR pratiğinde önce Nikardipin / SNP / Nitrogliserin (+ varsa Fentolamin/Urapidil; Klevidipin TR’de yok) + MgSO₄, ancak sonra gerekirse Esmolol!',
         category: 'Tuzak'
       },
       {
@@ -1289,8 +1289,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         category: 'Kritik Doz'
       },
       {
-        title: 'Faz 2 Refrakter Vazoplejide Noradrenalin Yetmezse: VAZOPRESSİN (0,01–0,04 IU/dk)!',
-        takeaway: 'Tümör veni bağlandığında kronik katekolamin fazlalığına bağlı α₁-reseptör down-regülasyonu ve preop Fenoksibenzamin (irreversibl blok!) nedeniyle Noradrenaline yanıt körelmiştir. Vazopressin V1 reseptörleri üzerinden katekolaminden bağımsız vazokonstriksiyon yaparak şoku hızla kırar!',
+        title: 'Faz 2 Refrakter Vazoplejide Noradrenalin Yetmezse: VAZOPRESSİN / TERLİPRESSİN!',
+        takeaway: 'Tümör veni bağlandığında kronik katekolamin fazlalığına bağlı α₁-reseptör down-regülasyonu ve preop Fenoksibenzamin (irreversibl blok!) nedeniyle Noradrenaline yanıt körelmiştir. Varsa Vazopressin (0,01–0,04 IU/dk) V1 reseptörleriyle şoku kırar; TR’de Vazopressin bulunmayan merkezlerde yüksek doz NA + Terlipressin kullanılır!',
         category: 'Ezber Bozan'
       },
       {
@@ -1354,7 +1354,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
     subTitle: 'Vazopressöre Dirençli Vazoplejik Şok · İV Hidrokortizon 100 mg → 200 mg/24 sa · Perioperatif Stres Dozu',
     codeColor: 'amber',
     severityBadge: 'KOD SARI / KIRMIZI · SIVIYA & VAZOPRESSÖRE DİRENÇLİ ŞOK → KORTİZOL SONUCUNU BEKLEME!',
-    keyCallout: 'Kronik steroid kullanımı (≥5 mg/gün Prednizolon eşdeğeri ≥4 hafta — inhale/eklem-içi dahil!), primer/sekonder adrenal yetmezlik, bilateral adrenalektomi veya ETOMİDAT (11β-hidroksilaz inhibisyonu!) sonrası cerrahi stresle gelişen SIVIYA ve VAZOPRESSÖRE DİRENÇLİ VAZOPLEJİK ŞOK + açıklanamayan ateş + hipoglisemi (+ primerde ↓Na⁺ / ↑K⁺) = ADRENAL KRİZ! Şüphede kortizol sonucunu ASLA BEKLEME (mümkünse öncesi 1 tüp kan al): Derhal İV HİDROKORTİZON 100 mg bolus (çocuk <2 yaş 25 mg, 2–12 yaş 50 mg, >12 yaş 100 mg veya 2 mg/kg) → 200 mg/24 sa sürekli infüzyon (veya 50 mg/6 sa) + 1. saatte 1000 mL %0,9 NaCl/dengeli kristaloid + Dekstroz + Noradrenalin köprüleme!',
+    keyCallout: 'Kronik steroid kullanımı (≥5 mg/gün Prednizolon eşdeğeri ≥4 hafta — inhale/eklem-içi dahil!), primer/sekonder adrenal yetmezlik, bilateral adrenalektomi veya ETOMİDAT (11β-hidroksilaz inhibisyonu!) sonrası cerrahi stresle gelişen SIVIYA ve VAZOPRESSÖRE DİRENÇLİ VAZOPLEJİK ŞOK + açıklanamayan ateş + hipoglisemi (+ primerde ↓Na⁺ / ↑K⁺) = ADRENAL KRİZ! Şüphede kortizol sonucunu ASLA BEKLEME (mümkünse öncesi 1 tüp kan al): Derhal İV HİDROKORTİZON 100 mg bolus (çocukta Woodcock 2020: 2 mg/kg [maks 100 mg]; BSPED acil kriz paketi: <2 yaş 25 mg, 2–12 yaş 50 mg, >12 yaş 100 mg — TR’de İV Hidrokortizon dönemsel tedarik sıkıntısında geçici köprü olarak Metilprednizolon 40 mg IV veya Deksametazon 4 mg IV!) → 200 mg/24 sa sürekli infüzyon (veya 50 mg/6 sa) + 1. saatte 1000 mL %0,9 NaCl/dengeli kristaloid + Dekstroz + Noradrenalin köprüleme!',
     quickCalculatorType: 'adrenal-crisis',
 
     // 2) Tanımlama ve Giriş
@@ -1369,22 +1369,22 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         'Perioperatif Stres Dozunun Atlanması, Preop Steroidin Kesilmesi, İntraoperatif Sepsis/Kanama veya Miksödem Komasında Steroidsiz T4 Başlanması'
       ],
       safeAgents: [
-        'BİRİNCİ SEÇENEK — İV Hidrokortizon (Woodcock 2020 & Endocrine Society 2016): Erişkin 100 mg IV bolus → 200 mg/24 sa sürekli infüzyon (veya 50 mg IV her 6 saatte bir). Pediatrik: <2 yaş 25 mg, 2–12 yaş 50 mg, >12 yaş 100 mg (veya 2 mg/kg IV) → 2 mg/kg/24 sa veya ağırlığa göre infüzyon',
+        'BİRİNCİ SEÇENEK — İV Hidrokortizon (Woodcock 2020 & Endocrine Society 2016): Erişkin 100 mg IV bolus → 200 mg/24 sa sürekli infüzyon (veya 50 mg IV her 6 saatte bir). Pediatrik Doz Netleştirmesi: Majör cerrahi indüksiyonunda ağırlık bazlı 2 mg/kg IV (maks 100 mg; Woodcock 2020) VEYA BSPED acil kriz yaş bandı (<2 yaş 25 mg, 2–12 yaş 50 mg, >12 yaş 100 mg) → ağırlığa göre sürekli infüzyon (hangisi pratikse; üst sınır 100 mg!). [TR Tedarik Notu: İV Hidrokortizon dönemsel stok sıkıntısı yaşayabilir → yoksa geçici köprü olarak Metilprednizolon 40 mg IV (çocuk 1 mg/kg) veya Deksametazon 4 mg IV başlanıp acilen Hidrokortizon temin edilir.]',
         'Yüksek Doz Hidrokortizonun Ek Avantajı: ≥50–100 mg/gün Hidrokortizon güçlü MİNERALOKORTİKOİD aktiviteye de sahiptir; akut krizde ayrıca Fludrokortizon gerekmez!',
         'Agresif Sıvı Resüsitasyonu: 1. saatte 1000 mL %0,9 NaCl veya dengeli kristaloid (hipoglisemide dekstroz ekle), ilk 24 saatte 3–4 L — kronik hiponatremi varsa Na⁺ düzeltmesi ≤6–8 mEq/L/24 sa!',
         'Vazopressör Köprüleme: Noradrenalin infüzyonu (kortizol genomik/non-genomik etkiyle 1–2 saat içinde adrenerjik reseptör duyarlılığını geri kazandırır; erken dönemde yanıt zayıf olabilir)',
-        'Metabolik Kurtarma: Hipoglisemide IV %10/%50 Dekstroz; primer krizde ağır hiperkalemi (>6,0 mEq/L veya EKG değişikliği) varsa Kalsiyum Glukonat %10 10 mL IV + İnsülin-Dekstroz (dikkat: hipoglisemi takibi!)',
-        'GEÇİCİ ALTERNATİF (Deksametazon 4 mg IV): YALNIZCA tanı belirsiz olup hemen ACTH stimülasyon testi yapılacaksa veya Hidrokortizon yoksa geçici kullanılır — Deksametazonun MİNERALOKORTİKOİD ETKİSİ YOKTUR!'
+        'Metabolik Kurtarma: Hipoglisemide TR stoklarına uygun %10 Dekstroz 100–250 mL veya geniş/santral venden %20 (60–125 mL) / %30 (40–80 mL) Dekstroz (%50 Dekstroz TR’de nadirdir; çocukta yalnız %10 Dekstroz 2–5 mL/kg, yenidoğanda katı 2 mL/kg!); primer krizde ağır hiperkalemi (>6,0 mEq/L veya EKG değişikliği) varsa Kalsiyum Glukonat %10 10 mL IV + İnsülin-Dekstroz (dikkat: hipoglisemi takibi!)',
+        'GEÇİCİ ALTERNATİF (Deksametazon 4 mg IV veya Metilprednizolon 40 mg IV): YALNIZCA tanı belirsiz olup hemen ACTH stimülasyon testi yapılacaksa veya TR’de İV Hidrokortizon stokta yoksa geçici kullanılır — Deksametazonun MİNERALOKORTİKOİD ETKİSİ YOKTUR!'
       ],
       mortalityStats: 'Tanı konup IV Hidrokortizon başlanmayan akut adrenal kriz şoku hızla geri dönüşsüz vazoplejiye ve kardiyak arreste giderek yüksek mortaliteyle sonuçlanır. Buna karşın zamanında 100 mg IV Hidrokortizon + agresif sıvı resüsitasyonu ile hemodinamik toparlanma 1–2 saat içinde başlar ve sağkalım mükemmeldir.',
-      clinicalUrgency: 'Sıvıya ve artan Noradrenalin/Fenilefrin dozlarına dirençli açıklanamayan intraoperatif şokta, özellikle steroid öyküsü veya Etomidat kullanımı varsa, kortizol testi sonucunu BEKLEMEK ölümcüldür — 100 mg IV Hidrokortizonun ampirik verilmesinin zararı ihmal edilebilir, gecikmesinin bedeli hayattır!'
+      clinicalUrgency: 'Sıvıya ve artan Noradrenalin dozlarına (veya varsa Fenilefrin) dirençli açıklanamayan intraoperatif şokta, özellikle steroid öyküsü veya Etomidat kullanımı varsa, kortizol testi sonucunu BEKLEMEK ölümcüldür — 100 mg IV Hidrokortizonun ampirik verilmesinin zararı ihmal edilebilir, gecikmesinin bedeli hayattır!'
     },
 
     // 3) Tanı
     diagnosis: {
       overview: 'İntraoperatif adrenal kriz tanısı klinik şüphe ve tedaviye (Hidrokortizon sonrası 1–2 saatte vazopressör ihtiyacının hızla düşmesine) yanıtla konur! Klasik intraoperatif ipucu: yeterli intravasküler volüm ve kanama/kardiyak/anafilaksi dışlanmasına rağmen yükselen vazopressör dozlarına dirençli derin hipotansiyon, açıklanamayan ateş ve hipoglisemidir. Primer adrenal yetmezlikte aldosteron da eksik olduğu için hiponatremi + HİPERKALEMİ + normal/yüksek anyon açıklı metabolik asidoz görülür; sekonder (hipofizer veya eksojen steroid) formda ise renin-anjiyotensin-aldosteron aksı sağlam olduğundan K⁺ GENELLİKLE NORMALDİR!',
       clinicalCriteria: [
-        'Sıvıya ve Vazopressöre Dirençli Derin Vazoplejik Şok (Kardinal Bulgu): Artan Noradrenalin/Fenilefrin/Adrenalin dozlarına rağmen MAP <60 mmHg (katekolamin reseptör duyarlılığı için kortizol şarttır!)',
+        'Sıvıya ve Vazopressöre Dirençli Derin Vazoplejik Şok (Kardinal Bulgu): Artan Noradrenalin/Adrenalin (veya varsa Fenilefrin) dozlarına rağmen MAP <60 mmHg (katekolamin reseptör duyarlılığı için kortizol şarttır!)',
         'Metabolik & Termoregülatuvar İpuçları: Açıklanamayan intraoperatif ateş (enfeksiyonsuz!), tekrarlayan hipoglisemi (glukoneogenez kaybı) ve metabolik asidoz',
         'Primer Adrenal Yetmezlik (Addison / Bilateral Adrenalektomi) Elektrolit Profili: Hiponatremi (Na⁺ <135 mEq/L) + HİPERKALEMİ (K⁺ >5,0–5,5 mEq/L, sivri T/QRS genişlemesi!) + hipovolemi (aldosteron eksikliği!)',
         'Sekonder Adrenal Yetmezlik (Kronik Steroid / Hipofiz) Elektrolit Profili: Potasyum GENELLİKLE NORMALDİR (aldosteron RAAS üzerinden korunur!), ancak uygunsuz ADH artışıyla dilüsyonel hiponatremi ve hipoglisemi yine görülür!',
@@ -1430,8 +1430,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         {
           stepNumber: 1,
           title: 'ŞÜPHE ANINDA KORTİZOL SONUCUNU BEKLEME — İV HİDROKORTİZON 100 mg BOLUS!',
-          action: 'Tedaviyi geciktirmemek şartıyla (mümkünse aynı hattan 15 saniyede) 1’er tüp bazal serum kortizol + ACTH kanı alın; ancak sonucu ASLA BEKLEMEDEN derhal İV HİDROKORTİZON 100 mg bolus uygulayın! Pediatrik doz (Woodcock 2020): <2 yaş 25 mg, 2–12 yaş 50 mg, >12 yaş 100 mg (veya 2 mg/kg IV).',
-          criticalNote: 'NEDEN HİDROKORTİZON? Yüksek doz Hidrokortizon (≥50–100 mg/gün) hem güçlü glukokortikoid hem de güçlü MİNERALOKORTİKOİD aktivite sağlar! Deksametazonun (4 mg IV) mineralokortikoid etkisi YOKTUR — yalnızca Hidrokortizon yoksa veya acil ACTH testi planlanıyorsa geçici kullanılır.',
+          action: 'Tedaviyi geciktirmemek şartıyla (mümkünse aynı hattan 15 saniyede) 1’er tüp bazal serum kortizol + ACTH kanı alın; ancak sonucu ASLA BEKLEMEDEN derhal İV HİDROKORTİZON 100 mg bolus uygulayın! Pediatrik doz (maks 100 mg): Majör cerrahi indüksiyonunda ağırlık bazlı 2 mg/kg IV (Woodcock 2020) VEYA BSPED acil kriz yaş bandı (<2 yaş 25 mg, 2–12 yaş 50 mg, >12 yaş 100 mg).',
+          criticalNote: 'NEDEN HİDROKORTİZON & TR TEDARİK NOTU: Yüksek doz Hidrokortizon (≥50–100 mg/gün) hem güçlü glukokortikoid hem de güçlü MİNERALOKORTİKOİD aktivite sağlar! TR’de İV Hidrokortizon dönemsel tedarik sıkıntısı yaşayabilir — stokta yoksa geçici köprü olarak Metilprednizolon 40 mg IV (çocuk 1 mg/kg) veya Deksametazon 4 mg IV verilir; Deksametazonun mineralokortikoid etkisi YOKTUR, Hidrokortizon bulunur bulunmaz geçilir!',
           priority: 'CRITICAL'
         },
         {
@@ -1450,13 +1450,13 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         {
           stepNumber: 4,
           title: 'NORADRENALİN KÖPRÜLEME & DİĞER ŞOK NEDENLERİNİ DIŞLA',
-          action: 'Hedef MAP ≥65 mmHg için Noradrenalin infüzyonu (0,05–0,5 mcg/kg/dk; gerekirse geçici Vazopressin) başlatın. Kortizolün adrenerjik reseptör duyarlılığını geri kazandırması 1–2 saat alır — bu pencerede vazopressör ihtiyacı yüksek seyredebilir. Eşzamanlı POCUS, Hb ve EKG ile gizli kanama, tamponad, MI ve anafilaksiyi dışlayın.',
+          action: 'Hedef MAP ≥65 mmHg için Noradrenalin infüzyonu (0,05–0,5 mcg/kg/dk; gerekirse geçici Vazopressin — TR’de yoksa Terlipressin/yüksek doz NA) başlatın. Kortizolün adrenerjik reseptör duyarlılığını geri kazandırması 1–2 saat alır — bu pencerede vazopressör ihtiyacı yüksek seyredebilir. Eşzamanlı POCUS, Hb ve EKG ile gizli kanama, tamponad, MI ve anafilaksiyi dışlayın.',
           priority: 'CRITICAL'
         },
         {
           stepNumber: 5,
           title: 'HİPOGLİSEMİYİ DERHAL ÖLÇ VE DÜZELT',
-          action: 'Arteriyel kan gazı ve glukometre ile kan şekerini anında kontrol edin. <70 mg/dL ise erişkinde %10 Dekstroz 100–250 mL veya %50 Dekstroz 25–50 mL IV (pediatrikte %10 Dekstroz 2–5 mL/kg) uygulayın ve gerekirse dekstroz içeren idame infüzyonu başlatın.',
+          action: 'Arteriyel kan gazı ve glukometre ile kan şekerini anında kontrol edin. <70 mg/dL ise erişkinde periferik ven dostu %10 Dekstroz 100–250 mL IV veya Türkiye ameliyathanelerinde rutin bulunan %20 Dekstroz 60–125 mL / %30 Dekstroz 40–80 mL (geniş/santral venden yavaş; %50 Dekstroz 25–50 mL TR’de nadirdir); pediatrikte %10 Dekstroz 2–5 mL/kg (yenidoğanda katı 2 mL/kg!) uygulayın ve gerekirse dekstroz içeren idame infüzyonu başlatın.',
           priority: 'HIGH'
         },
         {
@@ -1487,14 +1487,14 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
               badge: '0–5. Dakika (Steroid Öncelikli)',
               target: 'Şüphe Anında İV Hidrokortizon 100 mg Bolus',
               presentation: 'Sıvıya ve vazopressöre dirençli derin vazoplejik şok, steroid öyküsü / Etomidat, açıklanamayan ateş veya ↓KŞ.',
-              intervention: '1 tüp kortizol/ACTH al (BEKLEME!) → Erişkin 100 mg IV Hidrokortizon (pediatrik <2y 25 mg, 2–12y 50 mg, >12y 100 mg) → 200 mg/24 sa sürekli infüzyon!',
+              intervention: '1 tüp kortizol/ACTH al (BEKLEME!) → Erişkin 100 mg IV Hidrokortizon (pediatrik Woodcock: 2 mg/kg [maks 100 mg] · BSPED yaş bandı: <2y 25 / 2–12y 50 / >12y 100 mg) → 200 mg/24 sa sürekli infüzyon!',
               severity: 'CRITICAL'
             },
             {
               badge: '5–30. Dakika (Sıvı + Metabolik + NA)',
               target: '1000 mL %0,9 NaCl + Dekstroz + Hiperkalemi + Noradrenalin',
               presentation: 'Hipovolemi, hipoglisemi (<70 mg/dL), primer formda hiperkalemi (>5,5–6,0) ve vazopleji.',
-              intervention: '1. saatte 1000 mL %0,9 NaCl/kristaloid, Noradrenalin köprüleme, hipoglisemide %10/%50 Dekstroz, ağır ↑K⁺’da Ca Glukonat 10 mL IV.',
+              intervention: '1. saatte 1000 mL %0,9 NaCl/kristaloid, Noradrenalin köprüleme, hipoglisemide %10 / %20 / %30 Dekstroz (pediatride yalnız %10!), ağır ↑K⁺’da Ca Glukonat 10 mL IV.',
               severity: 'CRITICAL'
             },
             {
@@ -1539,11 +1539,11 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
               col5: 'Bağırsak temizliği (kolonoskopi) sıvı/elektrolit kaybıyla krizi tetikleyebilir!'
             },
             {
-              col1: 'Pediatrik Majör Cerrahi (Woodcock 2020)',
-              col2: '<2 yaş 25 mg · 2–12 yaş 50 mg · >12 yaş 100 mg IV (veya 2 mg/kg)',
+              col1: 'Pediatrik Majör Cerrahi (Woodcock 2020 / BSPED)',
+              col2: 'Woodcock ağırlık bazlı: 2 mg/kg IV (maks 100 mg) · BSPED acil yaş bandı: <2 y 25 / 2–12 y 50 / >12 y 100 mg',
               col3: 'Sürekli infüzyon (≤10 kg: 25 mg/24 sa; 11–20 kg: 50 mg/24 sa; >20 kg: 100–150 mg/24 sa)',
               col4: 'Stabil olunca 48 sa çift oral doz → normal doza dön',
-              col5: 'Çocuklarda hipoglisemi çok hızlı gelişir — mutlaka dekstrozlu izotonik sıvı + sık KŞ!'
+              col5: 'İki kılavuz da maks 100 mg’da birleşir; çocuklarda hipoglisemi çok hızlı gelişir — dekstrozlu izotonik sıvı + sık KŞ!'
             }
           ]
         },
@@ -1553,13 +1553,13 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
             {
               domain: 'İV Hidrokortizon (Sürekli İnfüzyon 200 mg/24 sa)',
               recommendation: '100 mg IV bolus sonrası 200 mg/24 sa sürekli infüzyonu (veya 50 mg IV/6 sa) birinci seçenek olarak uygula.',
-              rationaleAndCaution: 'Hem glukokortikoid hem de güçlü mineralokortikoid aktivite sağlar; sürekli infüzyon pik-çukur dalgalanmalarını ve hiperglisemi ataklarını azaltır (Woodcock 2020).',
+              rationaleAndCaution: 'Hem glukokortikoid hem de güçlü mineralokortikoid aktivite sağlar; sürekli infüzyon pik-çukur dalgalanmalarını ve hiperglisemi ataklarını azaltır (Woodcock 2020). TR’de dönemsel tedarik sıkıntısında stokta yoksa geçici köprü: Metilprednizolon 40 mg IV veya Deksametazon 4 mg IV.',
               status: 'RECOMMENDED'
             },
             {
               domain: 'Deksametazonun Sınırlı Yeri',
               recommendation: 'Deksametazonu (4 mg IV) YALNIZCA tanı belirsiz olup hemen ACTH stimülasyon testi yapılacaksa veya Hidrokortizon yoksa geçici kullan.',
-              rationaleAndCaution: 'Deksametazonun MİNERALOKORTİKOİD ETKİSİ YOKTUR! Primer adrenal krizde aldosteron eksikliğini karşılayamaz; test biter bitmez Hidrokortizona geçilmelidir.',
+              rationaleAndCaution: 'Deksametazonun MİNERALOKORTİKOİD ETKİSİ YOKTUR! Primer adrenal krizde aldosteron eksikliğini karşılayamaz; test biter bitmez veya Hidrokortizon temin edilir edilmez geçilmelidir.',
               status: 'CAUTION'
             },
             {
@@ -1628,7 +1628,7 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
     presentation: {
       earlySigns: [
         'İndüksiyon veya cerrahi sırasında beklenen kan kaybı/anestezi derinliğiyle orantısız, sıvı boluslarına zayıf yanıtlı hipotansiyon',
-        'Artan Noradrenalin / Fenilefrin / Efedrin dozlarına rağmen MAP’ın 60–65 mmHg üzerine çıkmaması',
+        'Artan Noradrenalin / Efedrin (veya varsa Fenilefrin) dozlarına rağmen MAP’ın 60–65 mmHg üzerine çıkmaması',
         'Açıklanamayan sinüs taşikardisi ve enfeksiyon odağı olmadan başlayan intraoperatif ateş yükselmesi',
         'Kan gazında düşük-normal veya düşüş eğiliminde kan şekeri (<70–80 mg/dL)'
       ],
@@ -1671,12 +1671,12 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
       ],
       cartTitle: 'Adrenal Kriz Acil Müdahale Seti:',
       cartChecklist: [
-        'Hidrokortizon 100 mg IV Flakon (×3–4 adet: 100 mg bolus + 200 mg/24 sa sürekli infüzyon!)',
+        'Hidrokortizon 100 mg IV Flakon (×3–4 adet: 100 mg bolus + 200 mg/24 sa sürekli infüzyon! TR’de dönemsel tedarik sıkıntısı olabileceğinden stok teyidi + geçici köprü olarak Metilprednizolon/Deksametazon!)',
         '%0,9 NaCl 1000 mL (×3–4 torba — özellikle primer krizde hiperkalemi varken potasyumsuz izotonik!)',
-        'Noradrenalin İnfüzyonu (+ kurtarma Vazopressin)',
-        '%10 ve %50 Dekstroz + POCT Glukometre / Kan Gazı Enjektörleri',
+        'Noradrenalin İnfüzyonu (+ varsa kurtarma Vazopressin veya Terlipressin)',
+        '%10, %20 ve %30 Dekstroz (TR ameliyathane standart stokları; %50 Dekstroz TR’de nadir) + POCT Glukometre / Kan Gazı Enjektörleri',
         '%10 Kalsiyum Glukonat 10 mL Ampul (Primer krizde ağır hiperkalemi membran stabilizasyonu için)',
-        'Deksametazon 4 mg Ampul (Yalnızca Hidrokortizon yokluğunda veya acil ACTH testi yapılacaksa geçici)'
+        'Deksametazon 4 mg Ampul / Metilprednizolon 40 mg Flakon (Hidrokortizon stokta yoksa veya acil ACTH testi yapılacaksa geçici)'
       ]
     },
 
@@ -1706,8 +1706,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
           description: 'Ağır cerrahi stres altındaki bir hastada serum kortizolünün <18 mcg/dL (<500 nmol/L) olması adrenal yetmezliği kuvvetle destekler (primerde ACTH çok yüksek, sekonderde düşük/normal).'
         },
         {
-          testName: 'Kısa Synacthen (250 mcg Cosyntropin / ACTH) Stimülasyon Testi',
-          description: 'Akut kriz atlatılıp hasta stabilize edildikten sonra (endokrinoloji konsültasyonuyla) kesin HPA aksı tanısı için uygulanır.'
+          testName: 'Kısa Synacthen (250 mcg Cosyntropin / ACTH) Stimülasyon Testi [TR Tedarik Notu]',
+          description: 'Akut kriz atlatılıp hasta stabilize edildikten sonra (endokrinoloji konsültasyonuyla) kesin HPA aksı tanısı için uygulanır. Türkiye’de Synacthen (Cosyntropin) ampulü dönemsel tedarik sıkıntısı yaşayabildiğinden temin edilemeyen dönemlerde sabah 08:00 bazal kortizol + ACTH (ve endokrinoloji yönlendirmesiyle alternatif dinamik testler) kullanılır.'
         },
         {
           testName: 'Plazma Renin Aktivitesi & Aldosteron (Primer Şüphede)',
@@ -1730,8 +1730,8 @@ export const ENDOCRINE_METABOLIC_EMERGENCIES_DATA: Record<string, EmergencyProto
         category: 'Tuzak'
       },
       {
-        title: 'Neden Deksametazon Değil Hidrokortizon? Mineralokortikoid Farkı!',
-        takeaway: 'Yüksek doz Hidrokortizon (≥50–100 mg/gün) hem glukokortikoid hem de güçlü mineralokortikoid etki sağlar (akut krizde Fludrokortizon gerekmez!). Deksametazonun mineralokortikoid etkisi SIFIRDIR; yalnızca acil ACTH stimülasyon testi yapılacaksa veya Hidrokortizon yoksa geçici kullanılır.',
+        title: 'Neden Deksametazon Değil Hidrokortizon? Mineralokortikoid Farkı & TR Tedarik Notu!',
+        takeaway: 'Yüksek doz Hidrokortizon (≥50–100 mg/gün) hem glukokortikoid hem de güçlü mineralokortikoid etki sağlar (akut krizde Fludrokortizon gerekmez!). Deksametazonun mineralokortikoid etkisi SIFIRDIR; yalnızca acil ACTH testi yapılacaksa veya TR’de İV Hidrokortizon dönemsel stokta yoksa geçici köprü (veya Metilprednizolon 40 mg IV) olarak kullanılır.',
         category: 'Ezber Bozan'
       },
       {

@@ -815,7 +815,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         {
           stepNumber: 5,
           title: 'HİPERKALEMİ VE AŞIRI ASİDOZU YÖNETİN',
-          action: 'Arter kan gazı ve elektrolitleri her 10-15 dakikada bir tekrarlayın. Hiperkalemi (K > 5.5 - 6.0 mEq/L) durumunda: 1) Kalsiyum Klorür 10 mg/kg (%10 5-10 mL) veya Kalsiyum Glukonat 30 mg/kg ile miyokardı elektriksel olarak stabilize edin; 2) İnsülin 10 IU regüler + 50 mL %50 Dekstroz IV infüzyon; 3) Ağır metabolik asidozda (pH < 7.20, BE < -8) Sodyum Bikarbonat 1-2 mEq/kg IV verin.',
+          action: 'Arter kan gazı ve elektrolitleri her 10-15 dakikada bir tekrarlayın. Hiperkalemi (K > 5.5 - 6.0 mEq/L) durumunda: 1) Kalsiyum Klorür 10 mg/kg (%10 5-10 mL) veya Kalsiyum Glukonat 30 mg/kg ile miyokardı elektriksel olarak stabilize edin; 2) İnsülin 10 IU regüler + 25 g Dekstroz IV infüzyon (TR’de mevcut: 125 mL %20 Dekstroz, 80–100 mL %30 Dekstroz veya 250 mL %10 Dekstroz; %50 Dekstroz 50 mL [TR’de nadir]); 3) Ağır metabolik asidozda (pH < 7.20, BE < -8) Sodyum Bikarbonat 1-2 mEq/kg IV verin.',
           criticalNote: 'Kalsiyum klorür SADECE hiperkalemiye bağlı EKG arrest riskini önlemek içindir; Dantrolen öncesi rutin verilmez.',
           priority: 'HIGH'
         },
@@ -847,11 +847,11 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
             timeToPrepare: '70 kg hasta (200 mg başlangıç) için 10 flakon ve 600 mL su gerekir; çözünmesi 15-20 dakika sürebilir (en az 3-4 kişi aynı anda çalkalamalıdır).'
           },
           {
-            name: 'Ryanodex (Yeni Nesil Nano-Süspansiyon Formülasyonu)',
+            name: 'Ryanodex (Yeni Nesil Nano-Süspansiyon Formülasyonu — TR’de mevcut değil; Türkiye’de rutin stok klasik 20 mg Dantrium® / yeni 120 mg Agilus® üzerindendir)',
             vialContent: '250 mg Dantrolen sodyum + 125 mg Mannitol',
             reconstitution: 'Tek bir flakon SADECE 5 mL Koruyucusuz Steril Enjeksiyonluk Su (bakteriyostatik su kullanılmaz) ile 10-15 saniyede tamamen çözünür.',
             diluent: 'Koruyucusuz Steril Distile Su (5 mL)',
-            timeToPrepare: '70 kg hasta için TEK 1 FLAKON yeterlidir ve 1 dakikadan kısa sürede IV puşe edilebilir. Kriz anında zaman kazandırır.'
+            timeToPrepare: '70 kg hasta için TEK 1 FLAKON yeterlidir ve 1 dakikadan kısa sürede IV puşe edilebilir (TR’de mevcut değildir; Türkiye’de rutin stok klasik 20 mg Dantrium® / yeni 120 mg Agilus® üzerindendir).'
           }
         ],
         preparationWarning: 'Dantrolen flakonlarını ASLA %0.9 NaCl (SF), Dengeli Sıvılar, %5 Dekstroz veya bakteriyostatik su ile sulandırmayın; çökelti oluşturur ve çözünmez! SADECE KORUYUCUSUZ STERİL SAF ENJEKSİYONLUK SU (preservative-free sterile water / AQUA) kullanılmalıdır.'
@@ -868,7 +868,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       },
       hyperkalemiaProtocol: [
         'Kalsiyum Klorür (%10): 10 mg/kg IV (veya Ca Glukonat 30 mg/kg) - EKG ritmini korur.',
-        'Regüler İnsülin + Dekstroz: 10 IU Kristalize İnsülin + 50 mL %50 Dekstroz IV 15-30 dakikada infüzyon.',
+        'Regüler İnsülin + Dekstroz: 10 IU Kristalize İnsülin + 25 g Dekstroz IV (TR’de mevcut: %20 Dekstroz 125 mL, %30 Dekstroz 80–100 mL veya %10 Dekstroz 250 mL; %50 Dekstroz 50 mL [TR’de nadir]) 15–30 dakikada infüzyon.',
         'Sodyum Bikarbonat (%8.4): 1-2 mEq/kg IV puşe (K+ hücre içine sokar ve asidozu düzeltir).',
         'Refrakter olgularda: İnhale Albuterol / Salbutamol (10-20 mg nebül) ve acil hemodiyaliz hazırlığı.'
       ],
@@ -956,10 +956,10 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       ],
       cartTitle: 'Malign Hipertermi Acil Arabası (MH Cart) Asgari Donanım Listesi:',
       cartChecklist: [
-        'En az 36 flakon klasik Dantrolen (Dantrium / Revonto, 20 mg) VEYA en az 3 flakon Ryanodex (250 mg).',
+        'En az 36 flakon klasik Dantrolen (20 mg Dantrium® / Revonto) VEYA yeni 120 mg Agilus® eşdeğeri (Ryanodex 250 mg TR’de mevcut değil — Türkiye’de rutin stok klasik 20 mg Dantrium® / yeni 120 mg Agilus® üzerindendir).',
         'En az 2000-3000 mL Steril Enjeksiyonluk Su (Aqua ad iniectabilia, flakon sulandırmak için).',
         'Buzdolabında hazır bekleyen 4°C soğuk %0.9 NaCl (SF) torbaları (en az 3-4 litre).',
-        'Sodyum Bikarbonat (%8.4), Kalsiyum Klorür (%10), Regüler İnsülin, %50 Dekstroz ampulleri.',
+        'Sodyum Bikarbonat (%8.4), Kalsiyum Klorür (%10), Regüler İnsülin ve hiperkalemi için %20 Dekstroz (125 mL) / %30 Dekstroz (80–100 mL) / %10 Dekstroz (250 mL) [veya varsa %50 Dekstroz — TR’de nadir].',
         'Amiodaron ve Lidokain ampulleri.',
         'Yüzeyel buz torbaları, nazogastrik tüpler, foley kateter ve idrar ölçüm seti.',
         'Kan gazı enjektörleri ve laktat/potasyum analiz kartuşları.'
@@ -6811,8 +6811,8 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         'Hava Yolu & %100 Oksijen: Derhal %100 O₂ balon-valf-maske desteği → apne, desatürasyon, ses/yutma kaybı veya bilinç depresyonunda gecikmeden hızlı seri entübasyon (RSI) + kapnografi (EtCO₂)',
         'Erken Vazopressör & Kronotropi (Kardiyak Kollapsı Önle!): Ciddi bradikardi + hipotansiyonda Atropin (0,5–1 mg IV) / Efedrin (10–25 mg IV) yetmezse SANİYELER kaybetmeden düşük doz IV Adrenalin (10–50 mcg → gerekirse 100 mcg; arrestte 1 mg ACLS) + Noradrenalin infüzyonu',
         'Preload & Güvenli Pozisyon: 500–1000 mL (10–20 mL/kg) hızlı dengeli kristaloid + yalnızca bacakların kaldırılması (Pasif Bacak Kaldırma — baş/gövde hafif nötral/10–15° yukarı) + gebede Manuel Sol Uterin Deplasman (LUD)',
-        'Farkındalık (Awareness) Önleme: Total spinalde hasta hareketsiz ve apneik ama BİLİNCİ AÇIK olabilir! Hemodinami stabilize edilir edilmez düşük doz titre amnestik/hipnotik (Midazolam 1–2 mg IV, Ketamin 0,5–1 mg/kg veya düşük doz volatil 0,5–0,7 MAC)',
-        'KESİN KAÇINILACAKLAR: Hiperbarik lokal anestezik sonrası dik baş-aşağı (Trendelenburg) pozisyonu, kardiyovasküler kollapsta standart tam doz Propofol bolusu (2 mg/kg) ve derin bradikardide tek başına yüksek doz Fenilefrin'
+        'Farkındalık (Awareness) Önleme: Total spinalde hasta hareketsiz ve apneik ama BİLİNCİ AÇIK olabilir! Hemodinami stabilize edilir edilmez düşük doz titre amnestik/hipnotik (Midazolam 1–2 mg IV, titre Ketamin 10–25 mg [veya 0,25–0,5 mg/kg IBW/LBW, tavan 50 mg — tam sempatektomide katekolamin rezervi tükendiği için yüksek/hızlı Ketamin direkt miyokard depresyonu ve ağır hipotansiyon yapabilir!] veya düşük doz volatil 0,5–0,7 MAC)',
+        'KESİN KAÇINILACAKLAR: Hiperbarik lokal anestezik sonrası dik baş-aşağı (Trendelenburg) pozisyonu, kardiyovasküler kollapsta standart tam doz Propofol bolusu (2 mg/kg), yüksek/hızlı Ketamin bolusu (>50 mg) ve derin bradikardide tek başına yüksek doz Fenilefrin'
       ],
       mortalityStats: 'Total spinal lokal anesteziğin geçici ve tamamen geri dönüşlü (1–4 saat) farmakolojik bir bloğudur; beyin hasarı veya ölümün nedeni ilacın kendisi değil gecikmiş ventilasyon (hipoksik arrest) ve düzeltilmemiş dolaşım kollapsıdır. Erken entübasyon ve agresif vazopressörle mortalite sıfıra yakındır.',
       clinicalUrgency: 'Spinal veya epidural bolus sonrası hastada el parmaklarında uyuşma/el sıkma güçsüzlüğü, fısıltı ses, göğüste “nefes alamıyorum” hissi, ani bulantı + bradikardi + derin hipotansiyon başladığı anda KRİZ İLAN EDİLMELİ ve havayolu + adrenalin saniyeler içinde hazırlanmalıdır.'
@@ -6876,7 +6876,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           stepNumber: 2,
           title: 'ERKEN HAVAYOLU GÜVENLİĞİ (ENTÜBASYON) — FARKINDALIK TUZAĞINA DİKKAT!',
           action: 'Apne, hipoventilasyon (↑EtCO₂ / ↓SpO₂), ses/yutma/öksürük kaybı veya bilinç kaybı varsa derhal endotrakeal entübasyon yapın (gebede ve tok hastada hızlı seri entübasyon — videolaringoskop + küçük çaplı ETT 6,5–7,0 mm).',
-          criticalNote: 'KRİTİK UYARI: Hasta tamamen paralize ve apneik olsa bile BİLİNCİ AÇIK olabilir! Ancak derin hipotansiyonda tam doz Propofol (2 mg/kg) ölümcül arrest yapar. İndüksiyon için hemodinamiye göre düşük doz Ketamin (0,5–1 mg/kg) veya Etomidat (0,15–0,2 mg/kg) ± düşük doz Midazolam (1–2 mg) tercih edin; gerekirse Rokuronyum/Süksinilkolin ekleyin.',
+          criticalNote: 'KRİTİK UYARI: Hasta tamamen paralize ve apneik olsa bile BİLİNCİ AÇIK olabilir! Ancak derin hipotansiyonda tam doz Propofol (2 mg/kg) ölümcül arrest yapar. İndüksiyon için hemodinamiye göre titre Ketamin 10–25 mg (veya 0,25–0,5 mg/kg IBW/LBW, tavan 50 mg) veya Etomidat (0,15–0,2 mg/kg) ± düşük doz Midazolam (1–2 mg) tercih edin; gerekirse Rokuronyum/Süksinilkolin ekleyin. DİKKAT: Tam sempatektomi gelişmiş total spinal şokta katekolamin rezervleri yanıt veremeyebileceğinden yüksek/hızlı doz Ketamin direkt miyokard depresyonu ve daha derin hipotansiyon yapabilir!',
           priority: 'CRITICAL'
         },
         {
@@ -6926,7 +6926,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
             level: 'T4 – T6',
             anatomicalTarget: 'Torakal Sempatik Zincir & Splanknik Yatak',
             clinicalPresentation: 'Venöz göllenme, hipotansiyon, bulantı-kusma, soğuk terleme; alt interkostal güçsüzlük başlangıcı.',
-            immediateIntervention: 'Hızlı kristaloid + vazopressör (obstetrikte Fenilefrin; bradikardide Efedrin), %100 O₂, seri soğuk/pinprick seviye takibi.',
+            immediateIntervention: 'Hızlı kristaloid + vazopressör (obstetrikte Fenilefrin [TR’de Fenilefrin bulunmayan hastanelerde obstetrik/vazoplejide dilüe Noradrenalin 5–10 mcg push-dose / infüzyon kullanılır]; bradikardide Efedrin), %100 O₂, seri soğuk/pinprick seviye takibi.',
             severity: 'WARNING'
           },
           {
@@ -6947,7 +6947,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
             level: 'C3 – C5',
             anatomicalTarget: 'Frenik Sinir (Diyafram Motor İnnervasyonu)',
             clinicalPresentation: 'Diyafram paralizisi, yüzeyel solunum → AKUT APNE, konuşamama/öksürememe, hızla derinleşen desatürasyon (hasta hâlâ BİLİNÇLİ olabilir!).',
-            immediateIntervention: 'DERHAL %100 O₂ balon-maske ventilasyonu + düşük doz Ketamin/Etomidat/Midazolam ile RSI endotrakeal entübasyon!',
+            immediateIntervention: 'DERHAL %100 O₂ balon-maske ventilasyonu + titre düşük doz Ketamin (10–25 mg; tavan 50 mg) / Etomidat / Midazolam ile RSI endotrakeal entübasyon!',
             severity: 'CRITICAL'
           },
           {
@@ -6999,9 +6999,9 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
               status: 'AVOID'
             },
             {
-              domain: 'İndüksiyon Ajanı & Propofol Tuzağı',
-              recommendation: 'Entübasyon gerekirse hemodinamiyi koruyan düşük doz Ketamin (0,5–1 mg/kg) veya Etomidat (0,15–0,2 mg/kg) ± düşük doz Midazolam (1–2 mg) kullan.',
-              rationaleAndTrap: 'Sempatik tonusun tamamen silindiği total spinal hastasına standart tam doz Propofol (2 mg/kg) puşelemek geri dönüşsüz kardiyak arrest tetikleyebilir!',
+              domain: 'İndüksiyon Ajanı, Propofol & Yüksek Doz Ketamin Tuzağı',
+              recommendation: 'Entübasyon gerekirse hemodinamiyi koruyan titre Ketamin 10–25 mg (veya 0,25–0,5 mg/kg IBW/LBW, tavan 50 mg) veya Etomidat (0,15–0,2 mg/kg) ± düşük doz Midazolam (1–2 mg) kullan.',
+              rationaleAndTrap: 'Sempatik tonusun tamamen silindiği total spinal hastasına standart tam doz Propofol (2 mg/kg) puşelemek geri dönüşsüz kardiyak arrest tetikleyebilir! Aynı şekilde tam sempatektomili şokta katekolamin rezervleri yanıt veremeyebileceğinden yüksek/hızlı doz Ketamin direkt miyokard depresyonu ve ağır hipotansiyon yapar — daima düşük titre et ve 50 mg tavanını aşma!',
               status: 'CAUTION'
             },
             {
@@ -7022,7 +7022,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
           title: 'Obstetrik Özel Yönetim & Yüksek Blok Önleme Kontrol Listesi',
           obstetricRule: 'Gebelikte (>20 hafta) Yüksek/Total Spinal: (1) Derhal Manuel Sol Uterin Deplasman (LUD) başlat; (2) Anneyi stabilize etmeden bebeğe odaklanma — anne perfüzyonu düzelince fetal kalp hızı çoğunlukla normale döner; (3) Kardiyak arrestte 4. dakikada ROSC yoksa 5. dakikada doğumu sağlayacak şekilde yatak başında Resüsitatif Histerotomi (Perimortem Sezaryen) uygula!',
           preventionChecks: [
-            'Epidural Kateter Test Dozu (Altın Standart): Her kateter yerleşimi sonrası negatif aspirasyon + 3 mL %1,5 Lidokain + 1:200.000 Adrenalin (45 mg Lidokain + 15 mcg Adrenalin) — 3–5 dk içinde hızlı motor/duyusal blok (intratekal!) ve 1–2 dk’da HR ≥+10–20/dk artış (intravasküler!) tara.',
+            'Epidural Kateter Test Dozu (TR Pratiği & Obstetrik Tuzağı!): Klasik test dozu negatif aspirasyon + 3 mL %1,5 Lidokain + 1:200.000 Adrenalin (45 mg Lidokain + 15 mcg Adrenalin) olup 3–5 dk’da hızlı motor/duyusal blok (intratekal!) ve 1–2 dk’da HR ≥+10–20/dk artışı (intravasküler!) tarar. ANCAK TR’de hazır %1,5 Lidokain + 1:200.000 Adrenalin ampulü mevcut değildir (pratikte %2 Lidokain’den seyreltilerek veya 3 mL %2 Lidokain + ayrı 15 mcg Adrenalin ile hazırlanır). KRİTİK OBSTETRİK NOT: Aktif doğum eyleminde uterin kontraksiyon ağrısına bağlı maternal taşikardi nedeniyle adrenalin test dozu sık yalancı pozitif verir — kontraksiyonlar arası dönem + bazal HR izlenmeli; alternatif olarak nazik aspirasyon + fraksiyone dozlama / düşük doz fentanil testi kullanılır!',
             'Fraksiyone Epidural Top-Up: Sezaryen için epidural yükseltirken 15–20 mL’yi tek seferde ASLA basma; 5 mL’lik bölünmüş dozlar halinde her doz öncesi nazik aspirasyon ve 2–3 dk klinik gözlemle ver.',
             'Başarısız Epidural Sonrası Spinal (“Failed Epidural → Rescue Spinal”) Tuzağı: Son 30–60 dk içinde yüksek hacimli epidural bolus/top-up almış hastada dural kese sıkışmıştır! Kurtarma spinali yapılacaksa dozu %20–30 azalt, oturur pozisyonda yavaş enjekte et, dik baş-aşağı pozisyondan kaçın veya mümkünse epidurali yenile / genel anesteziyi seç.',
             'Kısa Boy (<150 cm), Morbid Obezite ve Gebelikte Doz Optimizasyonu: Hiperbarik Bupivakain dozunu hasta boyu/gebelik fizyolojisine göre dikkatle titre et (sezaryende genellikle 9–11 mg + intratekal opioid).'
@@ -7101,7 +7101,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
         title: 'Güvenli Nöroaksiyel Uygulama & Erken Tanı Protokolü',
         steps: [
           'İşlem öncesi sürekli EKG, SpO₂ ve 1–2 dk aralıklı NIBP monitörizasyonu + çalışan geniş çaplı IV damar yolu teyit edilmelidir.',
-          'Epidural kateter yerleşiminde her zaman nazik aspirasyon + standart test dozu (3 mL %1,5 Lidokain + 1:200.000 Adrenalin) uygulanmalı ve en az 3–5 dk motor/duyusal/HR yanıtı izlenmelidir.',
+          'Epidural kateter yerleşiminde her zaman nazik aspirasyon + test dozu (TR’de hazır %1,5 Lidokain + 1:200.000 Adrenalin ampulü yoktur → pratikte %2 Lidokain’den seyreltilerek veya 3 mL %2 Lidokain + ayrı 15 mcg Adrenalin ile hazırlanır) uygulanmalı ve en az 3–5 dk motor/duyusal/HR yanıtı izlenmelidir. Aktif doğum eyleminde uterin kontraksiyon ağrısı adrenalin testinde sık yalancı pozitif taşikardi yaptığından kontraksiyonlar arası dönem + bazal HR izlenmeli; alternatif olarak nazik aspirasyon + fraksiyone dozlama / düşük doz fentanil testi kullanılmalıdır.',
           'Epidural top-up dozları 5 mL’lik fraksiyone porsiyonlar halinde, her bolus öncesi aspirasyon ve konuşma/el sıkma kontrolü yapılarak verilmelidir.',
           'Spinal enjeksiyon sonrası ilk 20 dakikada seri dermatomal seviye (soğuk/pinprick), el sıkma gücü (C8–T1) ve ses tonu sorgulanmalıdır.'
         ]
@@ -7109,15 +7109,15 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       cleanAnesthesiaProtocol: [
         'Hiperbarik lokal anestezik (ağır Bupivakain) uygulanan hastalarda ilk 15–20 dakikada dik baş-aşağı (Trendelenburg) pozisyonundan kesinlikle kaçınılması',
         'Epidural ve intratekal setlerin/enjektörlerin net renkli etiketlenmesi (NR-Fit / luer karışıklığını ve yüksek hacimli ilaç hatasını önlemek için)',
-        'Gebe hastalarda spinal/epidural sonrasında derhal sol lateral tilt veya manuel sol uterin deplasman uygulanması ve profilaktik vazopressör (Fenilefrin infüzyonu) hazır tutulması'
+        'Gebe hastalarda spinal/epidural sonrasında derhal sol lateral tilt veya manuel sol uterin deplasman uygulanması ve profilaktik vazopressörün (Fenilefrin infüzyonu — TR’de Fenilefrin bulunmayan hastanelerde obstetrik/vazoplejide dilüe Noradrenalin [5–10 mcg push-dose / infüzyon] veya bradikardide Efedrin kullanılır) hazır tutulması'
       ],
       cartTitle: 'Yüksek / Total Spinal Acil Müdahale & Havayolu Hazırlık Listesi:',
       cartChecklist: [
         'Oksijen Kaynağı, Balon-Valf-Maske (Ambu), Oral Airway & Videolaringoskop + ETT (6,5–7,5 mm) + Kapnografi (EtCO₂)',
-        'Çekili Vazopressörler: Adrenalin (10 mcg/mL push-dose + 1 mg ampul), Efedrin (5 mg/mL), Fenilefrin (50–100 mcg/mL) ve Atropin (0,5–1 mg)',
+        'Çekili Vazopressörler: Adrenalin (10 mcg/mL push-dose + 1 mg ampul), Efedrin (5 mg/mL), dilüe Noradrenalin (5–10 mcg push-dose / infüzyon), varsa Fenilefrin (50–100 mcg/mL — TR’de Fenilefrin bulunmayan hastanelerde obstetrik/vazoplejide dilüe Noradrenalin, bradikardide Efedrin kullanılır) ve Atropin (0,5–1 mg)',
         'Noradrenalin İnfüzyon Pompası (santral: 4 mg/50 mL; acil periferik: 4 mg/250 mL = 16 mcg/mL)',
         'Hızlı İV Dengeli Kristaloid (2 × 1000 mL) + Basınçlı İnfüzyon Torbası',
-        'Hemodinami Dostu İndüksiyon & Sedasyon: Ketamin, Etomidat, Midazolam + Rokuronyum / Süksinilkolin',
+        'Hemodinami Dostu İndüksiyon & Sedasyon: Ketamin (titre 10–25 mg, tavan 50 mg!), Etomidat, Midazolam + Rokuronyum / Süksinilkolin',
         'Obstetrik Ünitede: Resüsitatif Histerotomi (Perimortem Sezaryen) Bistüri/Acil Seti + %20 Lipid Emülsiyonu (LAST dışlaması için)'
       ]
     },
@@ -7173,7 +7173,7 @@ export const ANESTHESIA_EMERGENCIES_DATA: Record<string, EmergencyProtocol> = {
       },
       {
         title: 'Total Spinalde Hasta Hareketsiz & Apneik Ama UYANIK Olabilir!',
-        takeaway: 'C3–C5 paralizisinde hasta konuşamaz ve kıpırdayamaz ancak serebral perfüzyon korunuyorsa bilinci açıktır. Yine de şoktaki hastaya 2 mg/kg Propofol vermek arrest yapar: Hemodinamiyi koruyan düşük doz Ketamin/Etomidat veya dolaşım toparlanınca titre Midazolam/düşük MAC volatil ile farkındalığı önleyin.',
+        takeaway: 'C3–C5 paralizisinde hasta konuşamaz ve kıpırdayamaz ancak serebral perfüzyon korunuyorsa bilinci açıktır. Yine de şoktaki hastaya 2 mg/kg Propofol vermek arrest yapar; tam sempatektomide yüksek/hızlı Ketamin de direkt miyokard depresyonuyla hipotansiyonu derinleştirir! Hemodinamiyi koruyan titre düşük doz Ketamin (10–25 mg; tavan 50 mg) / Etomidat veya dolaşım toparlanınca titre Midazolam/düşük MAC volatil ile farkındalığı önleyin.',
         category: 'Tuzak'
       },
       {
