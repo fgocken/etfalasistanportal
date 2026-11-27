@@ -3255,6 +3255,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'sodium-bicarbonate',
     popular: true
   },
+  {
+    id: 'treatment-paracetamol-protocol',
+    title: 'Parasetamol / Asetaminofen (Parol® / Perfalgan® 10 mg/mL IV) Analjezi, Ateş & NAC Antidot',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Analjezik & Antipiretik · 1000 mg IV · ERAS / HEAT / NAC',
+    description: 'Non-opioid temel analjezik ve antipiretik; ERAS multimodal analjezi (opioid-sparing), <50 kg & KC risk tavanları, pediatrik 10× mg/mL hata koruması, 24 saat kümülatif doz denetleyici ve 2-torbalı SNAP / 3-torbalı NAC antidot hesaplayıcısı.',
+    keywords: [
+      'parasetamol', 'paracetamol', 'asetaminofen', 'acetaminophen', 'parol', 'perfalgan', 'partemol',
+      'minoset', 'tylol', 'analjezik', 'antipiretik', 'ateş düşürücü', 'ağrı kesici', 'multimodal analjezi',
+      'eras', 'heat', 'nac', 'n-asetilsistein', 'napqi', '5-oksoprolin', 'pda'
+    ],
+    tabId: 'treatments',
+    subId: 'paracetamol',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

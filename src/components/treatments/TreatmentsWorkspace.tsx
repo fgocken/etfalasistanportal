@@ -17,7 +17,9 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
-  Wind
+  Wind,
+  Flame,
+  HeartPulse
 } from 'lucide-react';
 import { parseHashRoute, updateHashRoute } from '../../utils/deepLink';
 import { MagnesiumCalculator } from './MagnesiumCalculator';
@@ -58,6 +60,7 @@ import { SodiumNitroprussideProtocol } from './SodiumNitroprussideProtocol';
 import { PheniramineProtocol } from './PheniramineProtocol';
 import { PantoprazoleProtocol } from './PantoprazoleProtocol';
 import { SodiumBicarbonateProtocol } from './SodiumBicarbonateProtocol';
+import { ParacetamolProtocol } from './ParacetamolProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -66,7 +69,7 @@ interface Props {
   initialProtocolId?: string | null;
 }
 
-type TreatmentCategory = 'medications' | 'general_anesthetics' | 'antihypertensives' | 'antibiotics' | 'sedation' | 'antidotes' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
+type TreatmentCategory = 'medications' | 'general_anesthetics' | 'analgesics' | 'antipyretics' | 'antihypertensives' | 'antibiotics' | 'sedation' | 'antidotes' | 'diuretics' | 'electrolyte' | 'vasoactive' | 'hemostasis';
 type MagnesiumViewMode = 'all' | 'calc' | 'infographic';
 type PotassiumViewMode = 'all' | 'calc' | 'infographic';
 type SodiumViewMode = 'all' | 'calc' | 'infographic';
@@ -236,7 +239,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'dexmedetomidine',
     category: 'medications',
-    categories: ['medications', 'sedation'],
+    categories: ['medications', 'sedation', 'analgesics'],
     categoryLabel: 'Sedoanaljezi',
     badge: 'Precedex · Alfa-2 Agonist',
     title: 'Deksmedetomidin',
@@ -283,7 +286,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'remifentanil',
     category: 'medications',
-    categories: ['medications', 'sedation'],
+    categories: ['medications', 'sedation', 'analgesics'],
     categoryLabel: 'Sedoanaljezi',
     badge: 'Ultiva · Ultra-Kısa Opioid',
     title: 'Remifentanil',
@@ -330,7 +333,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'fentanyl',
     category: 'medications',
-    categories: ['medications', 'sedation'],
+    categories: ['medications', 'sedation', 'analgesics'],
     categoryLabel: 'Sedoanaljezi',
     badge: 'TALINAT · FENTAVER · DUROGESIC',
     title: 'Fentanil',
@@ -476,7 +479,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'lidocaine',
     category: 'medications',
-    categories: ['medications'],
+    categories: ['medications', 'analgesics'],
     categoryLabel: 'Lokal / Antiaritmik',
     badge: 'Aritmal · Jetokain · Sınıf Ib',
     title: 'Lidokain',
@@ -527,7 +530,7 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
   {
     id: 'ketamine',
     category: 'medications',
-    categories: ['medications', 'general_anesthetics', 'sedation'],
+    categories: ['medications', 'general_anesthetics', 'sedation', 'analgesics'],
     categoryLabel: 'Genel Anestezik / Sedoanaljezi',
     badge: 'Ketalar · NMDA Antagonisti',
     title: 'Ketamin',
@@ -1844,6 +1847,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'paracetamol',
+    category: 'medications',
+    categories: ['medications', 'analgesics', 'antipyretics'],
+    categoryLabel: 'Analjezik & Antipiretik (Non-Opioid · IV / PO)',
+    badge: 'Parol® / Perfalgan® 10 mg/mL · ERAS / HEAT / NAC',
+    title: 'Parasetamol / Asetaminofen (Parol® · Perfalgan® · Partemol®)',
+    shortDesc: 'Santral POX/AM404 etkili temel analjezik ve antipiretik; ERAS multimodal opioid-tasarruflu analjezi, <50 kg & KC risk tavanları, pediatrik 10× mg/mL hata koruması, YBÜ IV hipotansiyon uyarısı ve 2-torbalı SNAP / 3-torbalı NAC antidot hesaplayıcısı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'teal',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Erişkin IV (≥50 kg vs <50 kg)',
+        value: '1000 mg q6sa (Maks 4 g/gün)',
+        subtext: '<50 kg: 15 mg/kg · Riskli: ≤2 g',
+        tooltip: '100 mL (10 mg/mL) şişe ≥15 dk IV infüze edilir; <50 kg erişkinde 15 mg/kg (maks 60 mg/kg/gün), alkolizm/malnütrisyon/Child A–B’de ≤2 g/gün!',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Pediatri 10× Hata Koruması',
+        value: '10 mg/mL → Ayrı Enjektör!',
+        subtext: '≥2y: 15 · YD: 7,5 mg/kg IV',
+        tooltip: '1000 mg / 100 mL şişeyi ASLA doğrudan çocuğa takma — hesaplanan mL ayrı enjektöre çekilerek 15 dk infüze edilir (150 mg = 15 mL!)',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Organ & Gebelik Güvenliği',
+        value: 'KBY · Gebelik · Hemostaz 1. Tercih',
+        subtext: 'Child-Pugh C’de IV KONTRENDİKE',
+        tooltip: 'Trombosit, GİS ve renal prostaglandinleri bozmaz; ancak ağır/aktif karaciğer yetmezliğinde IV parasetamol kontrendikedir',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'YBÜ Hipotansiyon & Antidot',
+        value: 'MAP ↓ Riski · Antidot: NAC',
+        subtext: '2-Torba SNAP (200→100 mg/kg)',
+        tooltip: 'Kritik/septik hastada IV infüzyondan 15–60 dk sonra MAP −10–15 mmHg düşebilir; aşırı dozda ilk 8 saatte N-Asetilsistein hayat kurtarıcıdır',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -1912,6 +1966,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
 
   const medCount = getCategoryCount('medications');
   const generalAnestheticsCount = getCategoryCount('general_anesthetics');
+  const analgesicsCount = getCategoryCount('analgesics');
+  const antipyreticsCount = getCategoryCount('antipyretics');
   const antihypertensivesCount = getCategoryCount('antihypertensives');
   const antibioticsCount = getCategoryCount('antibiotics');
   const sedationCount = getCategoryCount('sedation');
@@ -2015,6 +2071,14 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     nahco3: 'sodium-bicarbonate',
     bicarb: 'sodium-bicarbonate',
     'molar-bikarbonat': 'sodium-bicarbonate',
+    parasetamol: 'paracetamol',
+    asetaminofen: 'paracetamol',
+    acetaminophen: 'paracetamol',
+    parol: 'paracetamol',
+    perfalgan: 'paracetamol',
+    partemol: 'paracetamol',
+    minoset: 'paracetamol',
+    tylol: 'paracetamol',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -2149,6 +2213,48 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
               <span>Sedoanaljezi &amp; Nöromüsküler</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 font-mono font-bold">
                 {sedationCount} İlaç
+              </span>
+            </button>
+
+            {/* Analjezikler & Opioidler */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('analgesics')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'analgesics'
+                  ? isDark
+                    ? 'bg-pink-500/20 text-pink-300 border border-pink-500/50 shadow-xs'
+                    : 'bg-pink-50 text-pink-800 border border-pink-400 shadow-xs'
+                  : isDark
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent'
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <HeartPulse className="w-3.5 h-3.5 text-pink-500" />
+              <span>Analjezikler &amp; Opioidler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-pink-500/20 text-pink-700 dark:text-pink-300 font-mono font-bold">
+                {analgesicsCount} İlaç
+              </span>
+            </button>
+
+            {/* Antipiretikler */}
+            <button
+              type="button"
+              onClick={() => setActiveCategory('antipyretics')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                activeCategory === 'antipyretics'
+                  ? isDark
+                    ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50 shadow-xs'
+                    : 'bg-orange-50 text-orange-800 border border-orange-400 shadow-xs'
+                  : isDark
+                    ? 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent'
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <Flame className="w-3.5 h-3.5 text-orange-500" />
+              <span>Antipiretikler</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-700 dark:text-orange-300 font-mono font-bold">
+                {antipyreticsCount} İlaç
               </span>
             </button>
 
@@ -2776,7 +2882,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <SodiumBicarbonateProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 37–53: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 37: PARASETAMOL / ASETAMİNOFEN MONOGRAFİSİ & ERİŞKİN / PEDİATRİK / KÜMÜLATİF / NAC HESAPLAYICISI */}
+      {normalizedProtocolId === 'paracetamol' && (
+        <ParacetamolProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 38–54: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}
@@ -2791,6 +2902,8 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
           </div>
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
             {activeCategory === 'general_anesthetics' && 'Genel Anestezikler (İnhalasyon & IV)'}
+            {activeCategory === 'analgesics' && 'Analjezikler & Opioidler'}
+            {activeCategory === 'antipyretics' && 'Antipiretikler'}
             {activeCategory === 'antihypertensives' && 'Anti-hipertansifler'}
             {activeCategory === 'antibiotics' && 'Antibiyotikler & Antifungaller'}
             {activeCategory === 'antidotes' && 'Antidotlar'}

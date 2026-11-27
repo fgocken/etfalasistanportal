@@ -8,6 +8,7 @@ export type StandaloneOrganPart2Id =
   | 'nicardipine'
   | 'norepinephrine'
   | 'pantoprazole'
+  | 'paracetamol'
   | 'pheniramine'
   | 'sevoflurane'
   | 'sodium-bicarbonate'
@@ -946,5 +947,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     dualOrganNote:
       'Hepatorenal sendromda (Child-Pugh C + oligo-anürik ABH) yüksek sodyum yükü ile metabolik alkalozun birleşimi hem akut akciğer ödemini hem de hiperamonyemik ensefalopatiyi hızla derinleştirir; bu hastalarda ağır refrakter asidozda (pH <7,15–7,20) bikarbonat tamponlu CRRT en kontrollü çözümdür.',
   },
+
+  paracetamol: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (Maks 4 g/gün)',
+        tone: 'emerald',
+        note: '≥50 kg sağlıklı erişkinde 1000 mg IV/PO q6sa (maks 4 g/gün); <50 kg erişkinde 15 mg/kg q6sa (maks 60 mg/kg/gün). NSAİİ’lerden farklı olarak renal prostaglandinleri bozmaz — böbrek güvenliği yüksektir.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: '%100 Standart · KBY’de 1. Tercih Analjezik!',
+        tone: 'emerald',
+        note: 'KBY’de NSAİİ’lerin aksine akut böbrek hasarı ve hiperkalemi yapmadığından 1. basamak analjezik/antipiretiktir. Standart 1000 mg q6sa (uzun süreli kronik kullanımda maks 3 g/gün) güvenle kullanılır.',
+      },
+      {
+        stage: 'Ağır KBY / ESRD (eGFR < 30 mL/dk)',
+        doseBadge: 'Aralığı Uzat: q8sa (Maks 2–3 g/gün)',
+        tone: 'amber',
+        note: 'Ana ilaç karaciğerde glukuronid/sülfat konjugatlarına çevrilir; ancak bu suda çözünür konjugatlar böbrekle atıldığından eGFR <30 mL/dk’da (özellikle <10 mL/dk) belirgin birikir. Doz aralığını en az 6–8 saate (eGFR <30’da q8sa; maks 2–3 g/gün) uzatın ve malnütrisyonda 5-oksoprolin asidozunu izleyin.',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'q8sa · Orta Diyalizlenebilir (~%40–50)',
+        tone: 'sky',
+        note: 'Düşük molekül ağırlığı (151 Da) ve düşük protein bağlanması (~%10–25) nedeniyle parasetamol ve metabolitleri hemodiyalizle orta-yüksek oranda (~%40–50) temizlenir. Analjezi için q8sa (maks 2–3 g/gün; gerekirse bir dozu HD sonrasına denk getirin). Masif toksisitede (EXTRIP 2014: >900–1000 mg/L + laktik asidoz/koma) acil IHD hayat kurtarıcıdır!',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'q8sa (Maks 2–3 g/gün)',
+        tone: 'sky',
+        note: 'Periton diyalizi ile parasetamol klirensi düşüktür; ağır KBY rejimi (en az 8 saat ara, maks 2–3 g/gün) uygulanır ve ek doz gerekmez.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: '1000 mg q6–8sa (Maks 3–4 g/gün · KC’ye Göre)',
+        tone: 'indigo',
+        note: 'CRRT konjugat metabolitlerini ve ana ilacı orta düzeyde temizler. Karaciğer fonksiyonu normalse 1000 mg q6–8sa (maks 3–4 g/gün); sepsis + malnütrisyon veya eşlik eden karaciğer hasarında tavanı ≤2 g/gün ile sınırlayın ve IV infüzyona bağlı hipotansiyona (MAP düşüşü!) dikkat edin.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: 'Maks 2–3 g/gün (Kronikte ≤2 g/gün)',
+        tone: 'emerald',
+        detail:
+          'Kompanse sirozda kısa süreli analjezi için NSAİİ’lerden çok daha güvenlidir (GİS kanama ve HRS riski yok!). Kısa süreli maks 2–3 g/gün, kronik kullanımda ≤2 g/gün ve alkolden kesin kaçınma önerilir.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Maks ≤2 g/gün (500–650 mg q6–8sa / 1 g q12sa)',
+        tone: 'amber',
+        detail:
+          'Glukuronidasyon kapasitesi azalır ve plazma t½ 2–4 saatten 4–6 saate uzar. Günlük toplam dozu KESİNLİKLE ≤2 g/gün ile sınırlayın; aktif alkol alımı veya malnütrisyon varsa kaçının ve ALT/AST/INR izleyin.',
+      },
+      {
+        childPugh: 'Child-Pugh C / Akut KC Yetmezliği (10–15)',
+        badge: 'IV KONTRENDİKE! (Ağır/Aktif KC Hastalığı)',
+        tone: 'rose',
+        detail:
+          'Şiddetli hepatoselüler yetmezlikte, aktif ilerleyici karaciğer hastalığında veya ağır hepatik ensefalopatide IV Parasetamol KONTRENDİKEDİR (FDA/EMA & TR KÜB)! Glutatyon (GSH) depoları tükenmiş olduğundan terapötik dozlarda dahi toksik NAPQI metaboliti birikerek fulminan hepatik nekrozu tetikleyebilir.',
+      },
+    ],
+    dualOrganNote:
+      'Eş zamanlı malnütrisyon + böbrek yetmezliği (eGFR <30) + kronik parasetamol (± Flukloksasilin / sepsis) varlığında hepatik glutatyon tükenmesiyle nadir ama ölümcül 5-Oksoprolin (Piroglutamik Asit) Yüksek Anyon Açıklı Metabolik Asidozu (HAGMA) gelişebilir — açıklanamayan HAGMA’da parasetamolu derhal kesin ve NAC düşünün!',
+  },
 };
+
 
