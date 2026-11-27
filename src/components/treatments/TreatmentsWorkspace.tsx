@@ -62,6 +62,7 @@ import { PantoprazoleProtocol } from './PantoprazoleProtocol';
 import { SodiumBicarbonateProtocol } from './SodiumBicarbonateProtocol';
 import { ParacetamolProtocol } from './ParacetamolProtocol';
 import { IbuprofenProtocol } from './IbuprofenProtocol';
+import { MetamizoleProtocol } from './MetamizoleProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -1950,6 +1951,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'metamizole',
+    category: 'medications',
+    categories: ['medications', 'analgesics', 'antipyretics'],
+    categoryLabel: 'Pirazolon · Analjezik, Antipiretik & Spazmolitik (IV / PO)',
+    badge: 'Novalgin® 1 g/2 mL IV · Andolor® · Adepiron® · EMA PRAC 2024',
+    title: 'Metamizol Sodyum / Dipiron (Novalgin® · Andolor® · Adepiron®)',
+    shortDesc: 'Güçlü santral/periferik non-opioid analjezik, antipiretik ve spazmolitik; perioperatif multimodal analjezi, renal/biliyer kolik, dirençli ateş, 15–30 dk yavaş IV hipotansiyon koruması, pediatrik damla (25 mg/damla)/IV hesabı ve EMA PRAC 2024 agranülositoz & DILI triyajı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Yavaş IV İnfüzyon (Hipotansiyon!)',
+        value: '500–1000 mg · ≥15–30 dk IV',
+        subtext: 'Hızlı puşe YASAK (≤1 mL/dk) · Maks 4 g/gün',
+        tooltip: 'Novalgin® 1 g/2 mL (500 mg/mL) ampulü 50–100 mL SF/%5D içinde 15–30 dk yavaş infüze edin; hasta supin ve KB izlemli olmalıdır — hızlı IV puşe ciddi vazodilatatör şok tetikler!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Spazmolitik & Düşük GİS Riski',
+        value: 'Kolik & Visseral Ağrı 1. Tercih',
+        subtext: 'Parasetamol ile sinerjik kombine',
+        tooltip: 'Renal/biliyer kolik ve postoperatif visseral ağrıda düz kas spazmolizi sağlar; klasik NSAİİ’lere göre GİS ülser/kanama ve perioperatif ABH riski belirgin düşüktür.',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Pediatri (EMA 2018)',
+        value: '8–16 mg/kg q6–8sa (≥3 Ay)',
+        subtext: '<1 yaş IV YASAK · Damla 25 mg/damla',
+        tooltip: '<3 ay (<5 kg) tüm yollar kontrendike; 3–11 ay (<9 kg) IV kontrendike (sadece PO damla/şurup); ≥1 yaşta 500 mg/mL ampulden hassas çekilip 25–50 mL SF içinde ≥20 dk infüze edilir.',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      },
+      {
+        label: 'EMA PRAC 2024 Agranülositoz & DILI',
+        value: 'Ateş / Boğaz Ağrısı / Ülser → KES!',
+        subtext: '3. Trimester & Aspirin (<30 dk) Uyarı',
+        tooltip: 'Agranülositoz dozdan/süreden bağımsızdır — uyarı bulgusu çıkarsa derhal kesip acil CBC (ANC) alın! Gebelik 3. trimesterde yasak; düşük doz Aspirin’den ≥30 dk SONRA verin.',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2142,6 +2194,14 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     ibufen: 'ibuprofen',
     pedea: 'ibuprofen',
     caldolor: 'ibuprofen',
+    metamizol: 'metamizole',
+    dipiron: 'metamizole',
+    dipyrone: 'metamizole',
+    novalgin: 'metamizole',
+    andolor: 'metamizole',
+    adepiron: 'metamizole',
+    devaljin: 'metamizole',
+    baralgin: 'metamizole',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -2955,7 +3015,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <IbuprofenProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 39–55: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 39: METAMİZOL SODYUM (DİPİRON) MONOGRAFİSİ & IV İNFÜZYON / PEDİATRİ / AGRANÜLOSİTOZ TRİYAJ HESAPLAYICISI */}
+      {normalizedProtocolId === 'metamizole' && (
+        <MetamizoleProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 40–56: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

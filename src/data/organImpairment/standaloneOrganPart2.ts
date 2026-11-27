@@ -4,6 +4,7 @@ export type StandaloneOrganPart2Id =
   | 'ibuprofen'
   | 'ketamine'
   | 'lidocaine'
+  | 'metamizole'
   | 'methylprednisolone'
   | 'naloxone'
   | 'nicardipine'
@@ -1079,6 +1080,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Siroz + böbrek yetmezliği (Hepatorenal Sendrom) veya hipoalbuminemi (<2,5 g/dL) varlığında İbuprofen’in serbest aktif fraksiyonu hızla yükselir, renal PG blokajıyla GFR çöker ve GİS/varis kanaması ölümcül seyreder — tüm NSAİİ’ler kesinlikle yasaktır!',
+  },
+
+  metamizole: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (≤4 g/gün)',
+        tone: 'emerald',
+        note: 'Aktif 4-MAA ve 4-AA ile inaktif metabolitlerinin ~%90’ı idrarla atılır. Klasik NSAİİ’lere göre renal prostaglandin blokajı çok daha hafif olduğundan perioperatif analjezide avantajlıdır; ancak yine de hidrasyonu koruyun ve IV’yi yavaş infüze edin.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: 'Kısa Süreli Tek Doz %100 · Tekrarlı ≤2 g/gün',
+        tone: 'amber',
+        note: 'Kısa süreli (tek veya birkaç doz) perioperatif uygulamada genellikle doz azaltımı gerekmez; ancak 4-MAA/4-AA ve konjugatların eliminasyonu yavaşladığından tekrarlayan yüksek dozlardan (>2–3 g/gün) kaçının ve aralığı q8–12sa uzatın.',
+      },
+      {
+        stage: 'Ağır KBY / ABH (eGFR < 30 mL/dk)',
+        doseBadge: 'Tekrarlı Yüksek Dozdan KAÇIN (≤1–2 g/gün)',
+        tone: 'rose',
+        note: 'Metabolit eliminasyonu belirgin yavaşlar (t½ 2–3 kat uzar) ve yüksek dozlarda renal PG inhibisyonu/ABH derinleşmesi ile hipotansiyon riski artar. Sadece kısa süreli tek/düşük doz (500–1000 mg q12sa) veya Parasetamol tercih edin.',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'Diyalizlenebilir · Post-HD Tek Doz (500–1000 mg)',
+        tone: 'sky',
+        note: '4-MAA (%58) ve 4-AA (%48) orta düzeyde proteine bağlandığı ve düşük molekül ağırlıklı olduğu için hemodiyalizle anlamlı ölçüde temizlenir. Kısa süreli/tek doz (500–1000 mg) diyaliz sonrası verilebilir; uzun süreli tekrarlayan yüksek dozlardan ve intradiyalitik hipotansiyon tetiklemesinden kaçının.',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'Tekrarlı Yüksek Dozdan KAÇIN (≤1–2 g/gün)',
+        tone: 'sky',
+        note: 'Periton diyalizi ile metabolit klirensi sınırlıdır. Kısa süreli düşük doz (500 mg q8–12sa) tercih edilebilir; rezidüel renal fonksiyonu korumak için kronik/yüksek doz uygulamadan kaçının.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'Kısmen Temizlenir · ≤2 g/gün · KB İzle!',
+        tone: 'indigo',
+        note: 'Aktif 4-MAA ve 4-AA metabolitleri CRRT membranından kısmen geçer; ancak septik/vazopresör bağımlı CRRT hastasında IV metamizol belirgin vazodilatatör hipotansiyon tetikleyebilir! Zorunluysa 500–1000 mg q8–12sa, ≥30 dk yavaş infüzyon ve yakın MAP izlemiyle verin.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: 'Kısa Süre %100 · Tekrarlı ≤2–3 g/gün',
+        tone: 'amber',
+        detail:
+          '4-MAA’nın hepatik demetilasyon (CYP2B6/2C19/3A4) ve NAT2 asetilasyon klirensi hafif azalır. Kısa süreli perioperatif analjezide tek 1 g doz güvenle kullanılabilir; uzun süreli yüksek doz uygulamadan kaçının ve DILI belirtilerini izleyin.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Tekrarlı Yüksek Dozdan KAÇIN (≤1–2 g/gün)',
+        tone: 'rose',
+        detail:
+          'Sirozda aktif 4-MAA yarı ömrü ~3 kat (≥10 saate) uzar! Metabolit birikimi, vazodilatatör hipotansiyon ve EMA 2020 uyarılı ilaca bağlı karaciğer hasarı (DILI) riski nedeniyle tekrarlayan yüksek dozlardan kaçının; gerekirse tek doz 500 mg ile sınırlayın.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'KAÇININ! (DILI & Ağır Metabolit Birikimi)',
+        tone: 'rose',
+        detail:
+          'Ağır hepatoselüler yetmezlikte 4-MAA eliminasyonu ciddi biçimde çöker, splanik vazodilatasyon hipotansiyonu derinleştirir ve olası bir DILI atağı akut-kronik karaciğer yetmezliğini (ACLF) ölümcül tetikleyebilir. Rutin kullanımdan kaçının.',
+      },
+    ],
+    dualOrganNote:
+      'Kombine hepatorenal yetmezlikte hem 4-MAA’nın hepatik klirensi hem de tüm aktif/inaktif metabolitlerin (%90 renal) atılımı eşzamanlı durur; ayrıca sirotik/septik hipotansiyon riski yüksektir. Tekrarlayan dozlardan kesinlikle kaçının ve olası DILI/agranülositoz tablosunu yakından izleyin.',
   },
 };
 

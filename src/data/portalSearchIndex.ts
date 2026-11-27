@@ -3286,6 +3286,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'ibuprofen',
     popular: true
   },
+  {
+    id: 'treatment-metamizole-protocol',
+    title: 'Metamizol Sodyum / Dipiron (Novalgin® 1 g/2 mL IV · Andolor® · Adepiron®) Analjezik, Antipiretik & Spazmolitik',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Pirazolon · Analjezik, Antipiretik & Spazmolitik · EMA PRAC 2024',
+    description: 'Güçlü non-opioid analjezik, antipiretik ve spazmolitik; perioperatif multimodal analjezi, renal/biliyer kolik, dirençli yüksek ateş, 15–30 dk yavaş IV infüzyon hipotansiyon koruması, pediatrik damla (25 mg/damla)/şurup/IV hesabı, EMA PRAC 2024 agranülositoz & DILI triyajı.',
+    keywords: [
+      'metamizol', 'metamizole', 'dipiron', 'dipyrone', 'novalgin', 'andolor', 'adepiron', 'devaljin',
+      'baralgin', 'pirazolon', 'analjezik', 'antipiretik', 'spazmolitik', 'ateş düşürücü', 'ağrı kesici',
+      'renal kolik', 'biliyer kolik', 'agranülositoz', 'dili', '4-maa', 'multimodal analjezi', 'kounis'
+    ],
+    tabId: 'treatments',
+    subId: 'metamizole',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,
