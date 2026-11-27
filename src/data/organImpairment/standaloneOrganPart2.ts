@@ -16,6 +16,7 @@ export type StandaloneOrganPart2Id =
   | 'sodium-bicarbonate'
   | 'sodium-nitroprusside'
   | 'sugammadex'
+  | 'tenoxicam'
   | 'thiopental'
   | 'tranexamic-acid';
 
@@ -1146,6 +1147,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Kombine hepatorenal yetmezlikte hem 4-MAA’nın hepatik klirensi hem de tüm aktif/inaktif metabolitlerin (%90 renal) atılımı eşzamanlı durur; ayrıca sirotik/septik hipotansiyon riski yüksektir. Tekrarlayan dozlardan kesinlikle kaçının ve olası DILI/agranülositoz tablosunu yakından izleyin.',
+  },
+
+  tenoxicam: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal · Övolemik)',
+        doseBadge: '%100 Standart (20 mg q24sa)',
+        tone: 'emerald',
+        note: 'Tamamen hepatik CYP2C9 ile inaktif 5’-hidroksitenoksikama metabolize olur (~2/3 idrar, ~1/3 safra/feçes; <%1 değişmeden). Övolemik, Triple Whammy olmayan hastada 20 mg günde 1 kez güvenle uygulanır.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: 'KAÇININ! (~72 sa t½ → Uzamış ABH Riski)',
+        tone: 'amber',
+        note: 'Kısa yarı ömürlü NSAİİ’lerden farklı olarak ~72 saatlik yarı ömrü nedeniyle afferent arteriyol PG blokajı günlerce sürer! Önce Parasetamol tercih edin; zorunluysa tek 20 mg perioperatif dozdan fazlasını vermeyin ve 48–72 sa içinde Cr/K⁺ izleyin.',
+      },
+      {
+        stage: 'Ağır KBY / ABH (eGFR < 30 mL/dk)',
+        doseBadge: 'MUTLAK KONTRENDİKE / KAÇININ!',
+        tone: 'rose',
+        note: 'Renal prostaglandin bağımlı glomerüler filtrasyonu günlerce bloke ederek geri dönüşsüz ABH, ağır hiperkalemi, sıvı retansiyonu ve üremik GİS kanamasını şiddetle tetikler!',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'KONTRENDİKE / KAÇININ! (Diyalizlenmez)',
+        tone: 'rose',
+        note: '>%99 albumin bağlı olduğu için hemodiyalizle ASLA temizlenmez! Rezidüel renal fonksiyonu yok eder ve üremik trombosit disfonksiyonu üzerine eklenerek ağır GİS/vasküler erişim kanaması yapar.',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'KONTRENDİKE / KAÇININ! (Diyalizlenmez)',
+        tone: 'rose',
+        note: 'Periton diyaliziyle temizlenmez; rezidüel idrar çıkışını (PD başarısının ana belirleyicisi!) günlerce süren PG blokajıyla kalıcı olarak kaybetme riski nedeniyle kullanılmamalıdır.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'KONTRENDİKE / KAÇININ! (Diyalizlenmez)',
+        tone: 'rose',
+        note: '>%99 protein bağlanması nedeniyle CRRT ile uzaklaştırılamaz; kritik/septik hastada renal iyileşmeyi durdurur, stres ülseri kanaması ve hiperkalemi riskini ağırlaştırır.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: 'KAÇININ / En Kısa Süre (Parasetamol Tercih)',
+        tone: 'amber',
+        detail:
+          'CYP2C9 hepatik klirensi yavaşlar ve hipoalbuminemiye bağlı serbest fraksiyon artar; ~72 saatlik yarı ömrü nedeniyle sirotik böbrek perfüzyonu ve portal gastropati açısından kısa etkili Parasetamol (≤2–3 g/gün) çok daha güvenlidir.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'KAÇININ! (HRS & Masif Varis Kanaması)',
+        tone: 'rose',
+        detail:
+          'Sirozda böbrek perfüzyonu kompansatuvar renal PG’lere bağımlıdır. Tenoksikamın ~72 saat süren COX blokajı Hepatorenal Sendrom (HRS-AKI), refrakter asit ve özofagus varis kanamasını günlerce tetikler!',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'MUTLAK KONTRENDİKE!',
+        tone: 'rose',
+        detail:
+          'EASL / AASLD: Ağır siroz ve asitte tüm NSAİİ’ler — özellikle ultra-uzun yarı ömürlü oksikamlar (>%99 albumin bağlı, t½ ~72 sa!) — kesinlikle kontrendikedir. Tek bir doz bile ölümcül HRS ve varis kanaması tetikleyebilir.',
+      },
+    ],
+    dualOrganNote:
+      'Tenoksikamın >%99 albumin bağlanması ve ~72 saatlik yarı ömrü nedeniyle hepatorenal yetmezlikte veya hipoalbuminemide (<2,5 g/dL) serbest ilaç hızla yükselir, diyalizle temizlenemez ve renal/GİS toksisitesi 10–15 gün boyunca devam eder — KESİNLİKLE YASAKTIR!',
   },
 };
 

@@ -63,6 +63,7 @@ import { SodiumBicarbonateProtocol } from './SodiumBicarbonateProtocol';
 import { ParacetamolProtocol } from './ParacetamolProtocol';
 import { IbuprofenProtocol } from './IbuprofenProtocol';
 import { MetamizoleProtocol } from './MetamizoleProtocol';
+import { TenoxicamProtocol } from './TenoxicamProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2002,6 +2003,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'tenoxicam',
+    category: 'medications',
+    categories: ['medications', 'analgesics'],
+    categoryLabel: 'Oksikam NSAİİ · Uzun Etkili Analjezik & Antiinflamatuar (IV / IM / PO)',
+    badge: 'Oksamen-L® · Tilcotil® 20 mg · q24sa · t½ ~72 sa',
+    title: 'Tenoksikam (Oksamen-L® · Tilcotil® · Tenoktil® 20 mg)',
+    shortDesc: 'Ultra-uzun yarı ömürlü (~72 saat) oksikam NSAİİ; ameliyathanede tek doz 20 mg IV multimodal analjezi, osteoartrit/RA/gut, 2 mL WFI sulandırma & yavaş IV bolus kuralı, 72sa birikim/washout simülatörü, Triple Whammy, AGS Beers & OR analjezik kıyaslayıcı.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Standart Doz & IV Kuralı',
+        value: '20 mg q24sa · ≥15–30 sn IV',
+        subtext: 'ASLA q8/q12sa verme · Sürekli inf. YASAK',
+        tooltip: '20 mg sarı liyofilize flakon yalnızca kutudaki 2 mL steril enjeksiyonluk su ile sulandırılıp HEMEN ≥15–30 sn yavaş IV bolus veya derin IM uygulanır; parenteral maks 1–2 gün!',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Ultra-Uzun Yarı Ömür (PK)',
+        value: 't½ ≈ 72 Saat (~3 Gün)',
+        subtext: 'Kararlı durum 10–15g · >%99 Albumin',
+        tooltip: 'Tam eliminasyon ~12–15 gün sürer ve hemodiyaliz/CRRT ile temizlenmez; serviste aynı gün başka NSAİİ eklenmemesine (çift NSAİİ!) dikkat edin.',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Akut Gut & PO Eşdeğerlik',
+        value: 'Gut: 40 mg ×2g → 20 mg ×5g',
+        subtext: 'PO biyoyararlanım ~%100 · <18y YOK',
+        tooltip: 'Oral emilimi ~%100 olduğundan oral alabilen hastada IV forma üstünlüğü yoktur; <18 yaş pediatride önerilmez.',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      },
+      {
+        label: 'Oksikam Kırmızı Çizgileri',
+        value: '>65y · KBY · CABG · SJS/TEN',
+        subtext: 'Emzirme & 3. Trimester & Çift NSAİİ YASAK',
+        tooltip: 'Oksikam sınıfı yüksek üst GİS kanama ve SJS/TEN riski taşır; >65 yaşta (AGS Beers 2023), KBY’de, emzirmede ve Triple Whammy’de kaçının; riskli hastada Pantoprazol 40 mg/gün ekleyin.',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2202,6 +2254,13 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     adepiron: 'metamizole',
     devaljin: 'metamizole',
     baralgin: 'metamizole',
+    tenoksikam: 'tenoxicam',
+    oksamen: 'tenoxicam',
+    'oksamen-l': 'tenoxicam',
+    tilcotil: 'tenoxicam',
+    tenoktil: 'tenoxicam',
+    viena: 'tenoxicam',
+    tenox: 'tenoxicam',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3020,7 +3079,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <MetamizoleProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 40–56: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 40: TENOKSİKAM (OKSİKAM NSAİİ) MONOGRAFİSİ & 72SA WASHOUT / TRIPLE WHAMMY / OR KIYAS HESAPLAYICISI */}
+      {normalizedProtocolId === 'tenoxicam' && (
+        <TenoxicamProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 41–57: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

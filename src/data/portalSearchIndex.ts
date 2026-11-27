@@ -3301,6 +3301,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'metamizole',
     popular: true
   },
+  {
+    id: 'treatment-tenoxicam-protocol',
+    title: 'Tenoksikam (Oksamen-L® · Tilcotil® 20 mg IV/IM/PO) Uzun Etkili Oksikam NSAİİ Analjezik',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Oksikam NSAİİ · 20 mg q24sa · t½ ~72 sa · Perioperatif Tek Doz',
+    description: 'Ultra-uzun yarı ömürlü (~72 saat) non-selektif oksikam NSAİİ; perioperatif tek doz 20 mg IV multimodal analjezi, osteoartrit/RA/gut, 2 mL WFI sulandırma & yavaş IV bolus kuralı, 72 sa birikim/washout simülatörü, Triple Whammy & PPI denetleyici.',
+    keywords: [
+      'tenoksikam', 'tenoxicam', 'oksamen', 'oksamen-l', 'tilcotil', 'tenoktil', 'viena', 'tenox',
+      'oksikam', 'oxicam', 'nsaii', 'nsaid', 'analjezik', 'antiinflamatuar', 'ağrı kesici',
+      'multimodal analjezi', 'gut', 'dismenore', 'osteoartrit', 'triple whammy', '72 saat'
+    ],
+    tabId: 'treatments',
+    subId: 'tenoxicam',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,
