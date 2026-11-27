@@ -65,6 +65,7 @@ import { IbuprofenProtocol } from './IbuprofenProtocol';
 import { MetamizoleProtocol } from './MetamizoleProtocol';
 import { TenoxicamProtocol } from './TenoxicamProtocol';
 import { AcetylsalicylicAcidProtocol } from './AcetylsalicylicAcidProtocol';
+import { ClopidogrelProtocol } from './ClopidogrelProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2106,6 +2107,57 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'clopidogrel',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Geri Dönüşsüz P2Y₁₂ İnhibitörü (Tiyenopiridin · PO)',
+    badge: 'Plavix® · Pingel® · Karum® 75 mg · CYP2C19 · ASRA 5–7g',
+    title: 'Klopidogrel (Plavix® · Pingel® · Karum® · Planor® 75 mg)',
+    shortDesc: 'İki basamaklı CYP2C19 ön-ilacı P2Y₁₂ antiplatelet; AKS/PCI 600 mg, STEMI fibrinoliz (>75y yükleme yok), minör inme/TIA 21 gün DAPT, AF+PCI (DOAC ile 1. tercih), ASRA 5–7g kesme & acil trombosit transfüzyonu (>4–6 sa), Omeprazol vs Pantoprazol & P2Y₁₂ kıyaslama.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'Yükleme & İdame (ESC 2023)',
+        value: '300–600 mg → 75 mg/gün',
+        subtext: 'Fibrinoliz >75y: Yükleme YOK!',
+        tooltip: 'PCI/HBR AKS’de 600 mg yükleme (2–4 sa etki); STEMI fibrinolizinde ≤75 yaş 300 mg, >75 yaş yüklemesiz 75 mg/gün; minör inme/TIA’da 21 gün DAPT!',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'Cerrahi & ASRA 2018 Kesme',
+        value: 'Cerrahi 5g · Nöraksiyel 5–7g',
+        subtext: 'Taze stentte (<1 ay) ERTELE!',
+        tooltip: 'Spinal/epidural ponksiyon ve derin blok için 5–7 gün, elektif cerrahi/KABG için 5 gün önceden kesilir (Aspirin 75–100 mg sürdürülür!).',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'CYP2C19 & Doğru PPI',
+        value: 'Pantoprazol ✅ · Omeprazol ❌',
+        subtext: 'Repaglinid (CYP2C8) = Ağır Hipoglisemi',
+        tooltip: 'Omeprazol/Esomeprazol CYP2C19’u bloke ederek stent trombozu riskini artırır — DAPT’ta daima Pantoprazol 40 mg/gün seçin!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Acil Kanama & Özel Roller',
+        value: '2 Ü Aferez Plt (>4–6 sa)',
+        subtext: 'AF+DOAC 1. P2Y₁₂ · TTP (İlk 2 hf)',
+        tooltip: 'Aktif metabolit plazmada ~30 dk’da temizlendiği için son dozdan ≥4–6 sa sonra verilen trombosit transfüzyonu etkindir (Tikagrelordan farkı!).',
+        colorClass: 'text-indigo-700 dark:text-indigo-300',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'border-indigo-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2322,6 +2374,15 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     'aspirin-protect': 'aspirin',
     dispril: 'aspirin',
     salisilat: 'aspirin',
+    klopidogrel: 'clopidogrel',
+    plavix: 'clopidogrel',
+    pingel: 'clopidogrel',
+    karum: 'clopidogrel',
+    planor: 'clopidogrel',
+    atervix: 'clopidogrel',
+    baclan: 'clopidogrel',
+    klogel: 'clopidogrel',
+    duoplavin: 'clopidogrel',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3171,7 +3232,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <AcetylsalicylicAcidProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 42–58: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 42: KLOPİDOGREL (P2Y12 İNHİBİTÖRÜ) MONOGRAFİSİ & ESC / ASRA 2018 / CYP2C19-PPI / P2Y12 KIYAS HESAPLAYICISI */}
+      {normalizedProtocolId === 'clopidogrel' && (
+        <ClopidogrelProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 43–59: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

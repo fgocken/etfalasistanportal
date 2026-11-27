@@ -3332,6 +3332,21 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'aspirin',
     popular: true
   },
+  {
+    id: 'treatment-clopidogrel-protocol',
+    title: 'Klopidogrel (Plavix® · Pingel® · Karum® · Planor® 75 mg) Antitrombotik · P2Y₁₂ İnhibitörü',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'Antitrombotik (P2Y₁₂) · CYP2C19 · ASRA 5–7g · ESC 2022/2023',
+    description: 'Geri dönüşsüz P2Y₁₂ antiplatelet (ön-ilaç, CYP2C19); AKS/PCI 600 mg yükleme, STEMI fibrinoliz (>75y yükleme yok), minör inme/TIA 21 gün DAPT, AF+PCI (DOAC ile 1. tercih), ASRA 2018 5–7 gün kesme & acil trombosit transfüzyonu (>4–6 sa), Omeprazol vs Pantoprazol denetleyici.',
+    keywords: [
+      'klopidogrel', 'clopidogrel', 'plavix', 'pingel', 'karum', 'planor', 'atervix', 'baclan', 'klogel',
+      'duoplavin', 'antitrombotik', 'antiplatelet', 'antiagregan', 'p2y12', 'cyp2c19', 'stent', 'dapt',
+      'asra', 'omeprazol', 'pantoprazol', 'repaglinid', 'ttp', 'fibrinoliz', 'chance', 'point', 'augustus'
+    ],
+    tabId: 'treatments',
+    subId: 'clopidogrel',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

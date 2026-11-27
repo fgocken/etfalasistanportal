@@ -2,6 +2,7 @@ import type { OrganImpairmentMatrixPayload } from '../../components/treatments/s
 
 export type StandaloneOrganPart2Id =
   | 'aspirin'
+  | 'clopidogrel'
   | 'ibuprofen'
   | 'ketamine'
   | 'lidocaine'
@@ -1280,6 +1281,72 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Ağır hepatorenal yetmezlikte veya hipoalbuminemide salisilatın hem hepatik konjugasyonu hem de renal atılımı bozulur; yüksek doz salisilat toksisitesi, metabolik asidoz ve varis/GİS kanaması ölümcül seyreder — yüksek doz ASA kesinlikle yasaktır!',
+  },
+
+  clopidogrel: {
+    renalMatrix: [
+      {
+        stage: 'eGFR ≥ 60 mL/dk (Normal)',
+        doseBadge: '%100 Standart (75 mg/gün)',
+        tone: 'emerald',
+        note: 'Karaciğerde %85 CES1 ile inaktif karboksilik aside, %15 CYP2C19 (iki basamaklı) ile aktif tiyol metabolite dönüşür; metabolitler ~%50 idrar ve ~%46 feçesle atılır. Standart doz uygulanır.',
+      },
+      {
+        stage: 'Orta KBY (eGFR 30–59 mL/dk)',
+        doseBadge: '%100 Standart (75 mg/gün · Doz Azaltılmaz)',
+        tone: 'emerald',
+        note: 'Doz ayarlaması gerekmez; ancak orta KBY’de hem kanama riski hem de trombosit direnci (HTPR) hafif artabileceğinden DAPT’ta mutlaka Pantoprazol 40 mg/gün ekleyin.',
+      },
+      {
+        stage: 'Ağır KBY / ABH (eGFR < 30 mL/dk)',
+        doseBadge: '75 mg/gün (Doz Ayarı Yok · Yüksek Kanama/Direnç İzle)',
+        tone: 'amber',
+        note: 'SmPC’de doz azaltımı yoktur; ancak ileri KBY’de üremik trombosit disfonksiyonu nedeniyle majör kanama riski artarken paradoksal olarak klopidogrel yanıtı da bir miktar azalabilir. GİS kanama izlemi + Pantoprazol şarttır.',
+      },
+      {
+        stage: 'İntermittan Hemodiyaliz (IHD)',
+        doseBadge: '75 mg/gün · Diyalizlenmez (Ek Doz Yok)',
+        tone: 'sky',
+        note: 'Ana ilaç (%98) ve inaktif karboksilik asit metaboliti (%94) yüksek protein bağlıdır; aktif tiyol metaboliti ise trombosit P2Y₁₂’ye kovalent bağlandığından hemodiyalizle temizlenmez — post-HD ek doz gerekmez. AV fistül kanama süresini ve GİS kanamasını yakından izleyin!',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: '75 mg/gün (Doz Ayarı Yok · Kanama İzle)',
+        tone: 'sky',
+        note: 'Periton diyalizinde standart 75 mg/gün uygulanır; aktif kanama ve peritonit/kateter çıkış yeri kanaması açısından takip edilir.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: '75 mg/gün · CRRT İle Temizlenmez',
+        tone: 'indigo',
+        note: 'Kovalent trombosit bağlanması ve yüksek protein bağlanması nedeniyle CRRT ile uzaklaştırılmaz. Taze koroner stent/AKS varsa 75 mg/gün (NG/PO) + IV Pantoprazol ile sürdürülür; aktif YBÜ kanamasında dikkatle değerlendirilir.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (75 mg/gün)',
+        tone: 'emerald',
+        detail:
+          'Hafif karaciğer bozukluğunda CYP2C19 aracılı aktif metabolit üretimi ve trombosit inhibisyonu klinik olarak korunur; standart 75 mg/gün (+ Pantoprazol) güvenle verilir.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'Dikkatle 75 mg/gün · Varis Kanama Riski!',
+        tone: 'amber',
+        detail:
+          'Orta sirozda bioaktivasyon görece korunmakla birlikte portal hipertansiyon, trombositopeni ve özofagus varis kanaması riski belirgin artar; endoskopik varis değerlendirmesi ve Pantoprazol önerilir.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'KONTRENDİKE (EMA / TR SmPC!)',
+        tone: 'rose',
+        detail:
+          'Ağır karaciğer yetmezliğinde hem CYP2C19 biyoaktivasyonu ciddi biçimde bozulur hem de koagülopati/varis kanaması ölümcül risk taşır — EMA ve TR kısa ürün bilgisine göre ağır karaciğer yetmezliğinde KONTRENDİKEDİR!',
+      },
+    ],
+    dualOrganNote:
+      'Kombine ağır karaciğer yetmezliği (Child-Pugh C) + böbrek yetmezliğinde (HRS/üremi) hem pıhtılaşma faktör eksikliği hem üremik trombosit disfonksiyonu birleşerek masif kanama yaratır — Klopidogrel kontrendikedir!',
   },
 };
 
