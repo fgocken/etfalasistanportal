@@ -72,6 +72,8 @@ import { UnfractionatedHeparinProtocol } from './UnfractionatedHeparinProtocol';
 import { EnoxaparinProtocol } from './EnoxaparinProtocol';
 import { FondaparinuxProtocol } from './FondaparinuxProtocol';
 import { WarfarinProtocol } from './WarfarinProtocol';
+import { ApixabanProtocol } from './ApixabanProtocol';
+import { RivaroxabanProtocol } from './RivaroxabanProtocol';
 import { AntimicrobialMonographView } from './AntimicrobialMonographView';
 import { ALL_ANTIMICROBIALS, ANTIMICROBIAL_ALIAS_MAP, ANTIMICROBIAL_MAP } from '../../data/antimicrobials';
 
@@ -2470,6 +2472,108 @@ const PROTOCOL_CARDS: ProtocolCardItem[] = [
       }
     ]
   },
+  {
+    id: 'apixaban',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Oral Direkt Faktör Xa İnhibitörü (DOAC)',
+    badge: 'Eliquis® 2,5 / 5 mg · ABC (≥2/3) · PAUSE 1–2g · %27 Renal',
+    title: 'Apiksaban (Eliquis® 2,5 mg · 5 mg)',
+    shortDesc: 'Oral direkt FXa inhibitörü (yemek şartı yok, en düşük %27 renal atılım); NVAF ABC (≥2/3: Yaş ≥80, Kilo ≤60, Cr ≥1,5) doz hesaplayıcısı, Akut DVT/PE (10 mg × 7g → 5 mg), CARAVAGGIO kanser VTE, PAUSE köprülemesiz perioperatif kesme, ASRA 72 sa nöraksiyel & 4F-PCC/Andeksanet reversal.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'cyan',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'NVAF & ABC (≥2/3) Kuralı',
+        value: '5 mg q12sa · ≥2/3: 2,5 mg',
+        subtext: 'Yaş ≥80 · Kilo ≤60 · Cr ≥1,5 (Tek kriter YETMEZ!)',
+        tooltip: 'ARISTOTLE: Standart 5 mg PO q12sa; yalnızca ≥2/3 ABC kriteri veya EMA CrCl 15–29 mL/dk varsa 2,5 mg q12sa! Tek kriterle 2,5 mg vermek inmeyi artırır.',
+        colorClass: 'text-sky-700 dark:text-sky-300',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30'
+      },
+      {
+        label: 'Akut DVT/PE & Kanser VTE',
+        value: '10 mg × 7g → 5 mg q12sa',
+        subtext: 'Heparin ön tedavisi YOK · Uzatma 2,5 mg q12sa',
+        tooltip: 'AMPLIFY & CARAVAGGIO: İlk 7 gün 10 mg q12sa, sonra 5 mg q12sa (NVAF ABC azaltımı VTE’de geçerli değildir!). ≥6 ay sonrası sekonder profilaksi 2,5 mg q12sa.',
+        colorClass: 'text-emerald-700 dark:text-emerald-300',
+        bgClass: 'bg-emerald-500/10',
+        borderClass: 'border-emerald-500/30'
+      },
+      {
+        label: 'PAUSE & ASRA Nöraksiyel',
+        value: 'Cerrahi 1–2g · Blok 72 sa',
+        subtext: 'Perioperatif köprüleme YOK · Kateter ❌',
+        tooltip: 'PAUSE: Düşük risk cerrahi 1 gün, yüksek risk 2 gün kes (köprüleme yapılmaz!). ASRA/ESAIC: Terapötik blok öncesi 72 saat bekle; normal PT/aPTT ilacı dışlamaz!',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      },
+      {
+        label: 'Acil Reversal & Renal (%27)',
+        value: '4F-PCC 50 IU/kg / Andeksanet',
+        subtext: 'Protamin & K1 %0 · Mekanik kapak ❌',
+        tooltip: 'Majör kanamada Andeksanet Alfa veya TR 1. basamak 4F-PCC (50 IU/kg / sabit 2.000 IU) + ≤4 sa aktif kömür 50 g. Mekanik kapak, mitral darlık ve APS’de kontrendike!',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      }
+    ]
+  },
+  {
+    id: 'rivaroxaban',
+    category: 'medications',
+    categories: ['medications', 'antithrombotics'],
+    categoryLabel: 'Antitrombotik · Oral Direkt Faktör Xa İnhibitörü (DOAC)',
+    badge: 'Xarelto® 2,5–20 mg · 15/20 mg TOK! · COMPASS · PAUSE',
+    title: 'Rivaroksaban (Xarelto® 2,5 · 10 · 15 · 20 mg)',
+    shortDesc: 'Günde tek doz (q24sa) oral direkt FXa inhibitörü; NVAF (20 mg · CrCl <50: 15 mg YEMEKLE!), Akut DVT/PE (15 mg q12sa × 21g → 20 mg), Uzatma (10 mg), COMPASS/VOYAGER KAH-PAH (2,5 mg q12sa + ASA), PAUSE 1–2g kesme, ASRA 72 sa nöraksiyel & 4F-PCC/Andeksanet reversal.',
+    status: 'active',
+    hasStandaloneHeader: true,
+    accentColor: 'rose',
+    highlightsHeader: 'Protokol Temel Parametreleri:',
+    highlights: [
+      {
+        label: 'NVAF & Yemek Zorunluluğu',
+        value: '20 mg · CrCl <50: 15 mg q24sa',
+        subtext: '🍽️ 15 & 20 mg MUTLAKA YEMEKLE! (Aç %66)',
+        tooltip: 'ROCKET-AF: Tek azaltım kriteri CrCl <50 mL/dk! 15 mg ve 20 mg tabletler yemekle alınmazsa emilim %39 düşer; 2,5 ve 10 mg aç/tok alınabilir.',
+        colorClass: 'text-rose-700 dark:text-rose-300',
+        bgClass: 'bg-rose-500/10',
+        borderClass: 'border-rose-500/30'
+      },
+      {
+        label: 'Akut VTE & Uzatılmış Profilaksi',
+        value: '15 mg q12sa × 21g → 20 mg',
+        subtext: 'Uzatma (≥6 ay): 10 mg q24sa · Ortopedi 10 mg',
+        tooltip: 'EINSTEIN-DVT/PE: İlk 21 gün 15 mg q12sa, 22. günden itibaren 20 mg q24sa (heparin ön tedavisi yok!). EINSTEIN-CHOICE: 10 mg q24sa.',
+        colorClass: 'text-sky-700 dark:text-sky-300',
+        bgClass: 'bg-sky-500/10',
+        borderClass: 'border-sky-500/30'
+      },
+      {
+        label: 'KAH / PAH (COMPASS & VOYAGER)',
+        value: '2,5 mg q12sa + ASA 100 mg',
+        subtext: 'Dual Pathway · AF/VTE koruması SAĞLAMAZ!',
+        tooltip: 'COMPASS & VOYAGER-PAD: Stabil KAH/PAH ve revaskülarizasyon sonrası MACE −%24, amputasyon −%70! Düşük vasküler doz NVAF/VTE’de kullanılmaz.',
+        colorClass: 'text-teal-700 dark:text-teal-300',
+        bgClass: 'bg-teal-500/10',
+        borderClass: 'border-teal-500/30'
+      },
+      {
+        label: 'PAUSE · ASRA · Reversal',
+        value: 'Cerrahi 1–2g · Blok 72 sa',
+        subtext: '4F-PCC 50 IU/kg · Child-Pugh B–C ❌',
+        tooltip: 'PAUSE: Köprüleme yapılmaz! Terapötik blok öncesi 72 sa bekle; normal PT ilacı dışlamaz! Child-Pugh B–C, mekanik kapak, APS ve jejunostomide kullanılmaz.',
+        colorClass: 'text-amber-700 dark:text-amber-300',
+        bgClass: 'bg-amber-500/10',
+        borderClass: 'border-amber-500/30'
+      }
+    ]
+  },
   ...ALL_ANTIMICROBIALS.map<ProtocolCardItem>((abx) => ({
     id: abx.id,
     category: 'antibiotics',
@@ -2730,6 +2834,12 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
     kumadin: 'warfarin',
     orfarin: 'warfarin',
     vka: 'warfarin',
+    apiksaban: 'apixaban',
+    eliquis: 'apixaban',
+    eliqus: 'apixaban',
+    rivaroksaban: 'rivaroxaban',
+    xarelto: 'rivaroxaban',
+    riva: 'rivaroxaban',
     ...ANTIMICROBIAL_ALIAS_MAP
   };
   const normalizedProtocolId = activeProtocolId ? (aliasMap[activeProtocolId.toLowerCase()] || activeProtocolId) : null;
@@ -3614,7 +3724,17 @@ export const TreatmentsWorkspace: React.FC<Props> = ({ isDark, initialProtocolId
         <WarfarinProtocol isDark={isDark} />
       )}
 
-      {/* GÖRÜNÜM 49–65: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
+      {/* GÖRÜNÜM 49: APİKSABAN (Eliquis®) MONOGRAFİSİ & ABC (≥2/3) / PAUSE / 4F-PCC HESAPLAYICISI */}
+      {normalizedProtocolId === 'apixaban' && (
+        <ApixabanProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 50: RİVAROKSABAN (Xarelto®) MONOGRAFİSİ & CrCl / COMPASS / PAUSE / 4F-PCC HESAPLAYICISI */}
+      {normalizedProtocolId === 'rivaroxaban' && (
+        <RivaroxabanProtocol isDark={isDark} />
+      )}
+
+      {/* GÖRÜNÜM 51–67: 17 YBÜ & PERİOPERATİF ANTİMİKROBİYAL (ANTİBİYOTİKLER & ANTİFUNGAL) MONOGRAFİLERİ */}
       {activeAntimicrobial && (
         <AntimicrobialMonographView data={activeAntimicrobial} isDark={isDark} />
       )}

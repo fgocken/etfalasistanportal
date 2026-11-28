@@ -3440,6 +3440,38 @@ export const PORTAL_SEARCH_ITEMS: PortalSearchItem[] = [
     subId: 'warfarin',
     popular: true
   },
+  {
+    id: 'treatment-apixaban-protocol',
+    title: 'Apiksaban (Eliquis® 2,5 mg · 5 mg) Antitrombotik · Oral Direkt Faktör Xa İnhibitörü (DOAC)',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'DOAC · ABC (≥2/3) · PAUSE 1–2g · ASRA 72 sa · %27 Renal',
+    description: 'Oral direkt FXa inhibitörü (yemek şartı yok, en düşük %27 renal atılım); NVAF ABC (≥2/3: Yaş ≥80, Kilo ≤60, Cr ≥1,5) doz hesaplayıcısı, Akut DVT/PE (10 mg × 7g → 5 mg), CARAVAGGIO kanser VTE, PAUSE köprülemesiz perioperatif kesme, ASRA 72 sa nöraksiyel & 4F-PCC/Andeksanet reversal.',
+    keywords: [
+      'apiksaban', 'apixaban', 'eliquis', 'eliqus', 'doac', 'noac', 'yoak', 'faktör xa', 'anti-xa',
+      'aristotle', 'amplify', 'caravaggio', 'augustus', 'pause', 'abc kuralı', 'andeksanet', 'andexanet',
+      '4f-pcc', 'antitrombotik', 'antikoagülan', 'atriyal fibrilasyon', 'nvaf', 'dvt', 'pulmoner emboli',
+      'nöraksiyel', '72 saat', 'asra', 'esaic'
+    ],
+    tabId: 'treatments',
+    subId: 'apixaban',
+    popular: true
+  },
+  {
+    id: 'treatment-rivaroxaban-protocol',
+    title: 'Rivaroksaban (Xarelto® 2,5 · 10 · 15 · 20 mg) Antitrombotik · Oral Direkt Faktör Xa İnhibitörü (DOAC)',
+    category: 'Tedaviler & İlaçlar',
+    badge: 'DOAC · 15/20 mg TOK ZORUNLU! · COMPASS 2,5 mg · PAUSE · ASRA 72 sa',
+    description: 'Günde tek doz (q24sa) oral direkt FXa inhibitörü; NVAF (20 mg · CrCl <50: 15 mg YEMEKLE!), Akut DVT/PE (15 mg q12sa × 21g → 20 mg), Uzatma (10 mg), COMPASS/VOYAGER KAH-PAH (2,5 mg q12sa + ASA), PAUSE 1–2g kesme, ASRA 72 sa nöraksiyel & 4F-PCC/Andeksanet reversal.',
+    keywords: [
+      'rivaroksaban', 'rivaroxaban', 'xarelto', 'riva', 'doac', 'noac', 'yoak', 'faktör xa', 'anti-xa',
+      'rocket-af', 'einstein', 'compass', 'voyager', 'pioneer', 'pause', 'andeksanet', 'andexanet',
+      '4f-pcc', 'antitrombotik', 'antikoagülan', 'atriyal fibrilasyon', 'nvaf', 'dvt', 'pulmoner emboli',
+      'periferik arter', 'pah', 'yemekle', 'nöraksiyel', '72 saat', 'asra', 'esaic'
+    ],
+    tabId: 'treatments',
+    subId: 'rivaroxaban',
+    popular: true
+  },
   ...ALL_ANTIMICROBIALS.map<PortalSearchItem>((abx) => ({
     id: `treatment-${abx.id}-protocol`,
     title: abx.cardTitle,

@@ -1,6 +1,7 @@
 import type { OrganImpairmentMatrixPayload } from '../../components/treatments/shared/DrugMonographBlocks';
 
 export type StandaloneOrganPart2Id =
+  | 'apixaban'
   | 'aspirin'
   | 'clopidogrel'
   | 'enoxaparin'
@@ -18,6 +19,7 @@ export type StandaloneOrganPart2Id =
   | 'paracetamol'
   | 'pheniramine'
   | 'prasugrel'
+  | 'rivaroxaban'
   | 'sevoflurane'
   | 'sodium-bicarbonate'
   | 'sodium-nitroprusside'
@@ -1749,6 +1751,138 @@ export const STANDALONE_ORGAN_PART2: Record<StandaloneOrganPart2Id, OrganImpairm
     ],
     dualOrganNote:
       'Kombine hepatorenal yetmezlik ve hipoalbüminemide (<2,5 g/dL) Varfarin’in hem serbest fraksiyonu artar hem de CYP2C9 klirensi ile faktör sentezi eşzamanlı çöker — kontrolsüz INR yükselmesi ve ölümcül kanama riski nedeniyle kullanılmamalıdır!',
+  },
+
+  apixaban: {
+    renalMatrix: [
+      {
+        stage: 'CrCl ≥ 50 mL/dk (Normal / Hafif)',
+        doseBadge: '%100 Standart (NVAF 5 mg q12sa · ≥2/3 ABC ise 2,5 mg)',
+        tone: 'emerald',
+        note: 'DOAC’lar içinde en düşük renal atılıma (~%27) sahiptir (~%73 hepatik CYP3A4 + biliyer/fekal). NVAF’de yalnızca ≥2/3 ABC kriteri (Yaş ≥80, Kilo ≤60 kg, Cr ≥1,5) varsa 2,5 mg q12sa’ya düşülür.',
+      },
+      {
+        stage: 'Orta KBY (CrCl 30–49 mL/dk)',
+        doseBadge: '%100 Standart (NVAF: ≥2/3 ABC varsa 2,5 mg q12sa)',
+        tone: 'emerald',
+        note: 'Tek başına CrCl 30–49 mL/dk doz azaltımı gerektirmez! Ancak serum kreatinin ≥1,5 mg/dL + (Yaş ≥80 veya Kilo ≤60 kg) birlikteliği varsa 2,5 mg q12sa verilir. ARISTOTLE’da orta KBY’de Varfarine kıyasla majör kanamayı en çok azaltan ajandır.',
+      },
+      {
+        stage: 'Ağır KBY (CrCl 15–29 mL/dk)',
+        doseBadge: 'EMA/ESC NVAF: 2,5 mg q12sa · Akut DVT/PE: Çok Dikkat!',
+        tone: 'amber',
+        note: 'EMA/ESC 2021 kılavuzu CrCl 15–29 mL/dk’da NVAF için doğrudan 2,5 mg PO q12sa önerir (FDA etiketinde ≥2/3 ABC kuralı sürer ancak klinik pratikte 2,5 mg q12sa tercih edilir). Akut DVT/PE yüklemesinde (10 mg q12sa) AMPLIFY verisi CrCl <25’te sınırlıdır — kanama takibi veya UFH/Varfarin düşünün!',
+      },
+      {
+        stage: 'ESRD / CrCl <15 & İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'EMA/TİTCK: ÖNERİLMEZ · FDA (Stabil HD + NVAF): 5 mg (≥80y / ≤60kg: 2,5 mg)',
+        tone: 'amber',
+        note: 'Plazma protein bağlanması (%87) nedeniyle hemodiyalizle anlamlı TEMİZLENMEZ (~%14). EMA/TİTCK CrCl <15 mL/dk ve HD’de önermez; FDA ise stabil HD’de NVAF için 5 mg q12sa (Yaş ≥80 veya Kilo ≤60 kg ise 2,5 mg q12sa) seçeneği tanır (RENAL-AF & AXADIA-AFNET 8: yüksek kanama riski — bireyselleştirilmiş karar!).',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'ÖNERİLMEZ (Yetersiz Veri · Diyalizlenmez)',
+        tone: 'rose',
+        note: 'Periton diyalizi hastalarında PK/güvenlik verisi çok sınırlıdır; EMA/TİTCK önermez (çoğu merkezde UFH/Varfarin tercih edilir).',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'KAÇININ / ÖNERİLMEZ → IV UFH Tercih Edin',
+        tone: 'rose',
+        note: 'Kritik ABH/CRRT hastasında oral emilim ve klirens öngörülemez, diyalizle temizlenmez ve acil girişimlerde uzun etki süresi risklidir — YBÜ’de IV UFH kullanın.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (Doz Ayarı Gerekmez)',
+        tone: 'emerald',
+        detail:
+          'Kompanse sirozda PK profili belirgin değişmez; ancak başlangıçta AST/ALT/bilirubin ve koagülasyon paneli (bazal koagülopati/varis) kontrol edilmelidir.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'DİKKATLE KULLANIM (Sınırlı Veri · Kanama & Varis İzlemi)',
+        tone: 'amber',
+        detail:
+          '~%73 non-renal/hepatik metabolizma nedeniyle orta sirozda plazma maruziyeti değişkenlik gösterebilir ve portal hipertansiyon/varis kanaması riski artar — çok dikkatli kullanım veya kısa etkili DMAH/UFH değerlendirin.',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'MUTLAK KONTRENDİKE / KULLANMAYIN!',
+        tone: 'rose',
+        detail:
+          'Ağır hepatik yetmezlikte CYP3A4 + biliyer atılım çöker ve intrinsik koagülopati eşlik eder — EMA ve FDA tarafından kesinlikle önerilmez / kontrendikedir!',
+      },
+    ],
+    dualOrganNote:
+      'Kombine karaciğer + böbrek yetmezliğinde (Child-Pugh B–C + CrCl <30) hem ~%73 hepatik hem ~%27 renal eliminasyon yolu eşzamanlı kapanarak ağır ilaç birikimi ve geri çevrilmesi güç majör kanama oluşur — kesinlikle kullanmayın (UFH seçin)!',
+  },
+
+  rivaroxaban: {
+    renalMatrix: [
+      {
+        stage: 'CrCl ≥ 50 mL/dk (Normal / Hafif)',
+        doseBadge: '%100 Standart (NVAF 20 mg · VTE 15 mg q12sa × 21g → 20 mg · YEMEKLE!)',
+        tone: 'emerald',
+        note: 'Dozun ~%36’sı değişmeden aktif renal (P-gp/BCRP sekresyonu), ~%30’u hepatik CYP3A4/2J2 sonrası inaktif renal, ~%34’ü fekal yolla atılır. CrCl ≥50’de tüm endikasyonlarda tam doz uygulanır.',
+      },
+      {
+        stage: 'Orta KBY (CrCl 30–49 mL/dk)',
+        doseBadge: 'NVAF: 15 mg q24sa (TOK!) · Akut VTE: 15 mg q12sa → 20 mg · COMPASS: 2,5 mg q12sa',
+        tone: 'amber',
+        note: 'ROCKET-AF: NVAF’de tek doz azaltım kriteri CrCl <50 mL/dk’dır → 15 mg PO q24sa (akşam yemeğiyle)! Orta CYP3A4/P-gp inhibitörleriyle (Amiodaron, Diltiazem, Klaritromisin) aditif birikim riskine dikkat edin.',
+      },
+      {
+        stage: 'Ağır KBY (CrCl 15–29 mL/dk)',
+        doseBadge: 'NVAF: 15 mg q24sa (ÇOK DİKKAT!) · Akut VTE & Ortopedi: FDA Kaçının!',
+        tone: 'rose',
+        note: 'Plazma maruziyeti (AUC) ~%64 artar! EMA/ESC NVAF’de 15 mg q24sa’yı çok dikkatle izlemle tanır (akut VTE’de 22. günden sonra yüksek kanama riskinde 15 mg q24sa düşünülebilir); ancak FDA CrCl <30’da akut DVT/PE ve ortopedik profilaksiden kaçınmayı önerir — bu evrede Apiksaban veya UFH/Varfarin daha güvenlidir!',
+      },
+      {
+        stage: 'ESRD / CrCl <15 & İntermittan Hemodiyaliz (IHD)',
+        doseBadge: 'KAÇININ / ÖNERİLMEZ! (Diyalizlenmez · %92–95 Protein Bağlı)',
+        tone: 'rose',
+        note: 'EMA/TİTCK CrCl <15 mL/dk ve HD’de kesinlikle önermez! %92–95 albümine bağlı olduğu için hemodiyalizle TEMİZLENMEZ ve ağır kanama birikimi yapar → UFH, Varfarin veya (FDA NVAF’de) Apiksaban değerlendirilir.',
+      },
+      {
+        stage: 'Periton Diyalizi (CAPD / APD)',
+        doseBadge: 'ÖNERİLMEZ (Diyalizlenmez · Birikim Riski)',
+        tone: 'rose',
+        note: 'Periton diyaliziyle temizlenmez ve yüksek kanama riski taşır; kullanmayın.',
+      },
+      {
+        stage: 'CRRT (CVVH / CVVHD / CVVHDF)',
+        doseBadge: 'KONTRENDİKE / KAÇININ → IV UFH Tercih Edin',
+        tone: 'rose',
+        note: 'CRRT ile uzaklaştırılamaz ve kritik ABH hastasında öngörülemez birikime yol açar — YBÜ’de kısa etkili IV UFH seçin.',
+      },
+    ],
+    hepaticMatrix: [
+      {
+        childPugh: 'Child-Pugh A (Hafif · 5–6)',
+        badge: '%100 Standart (Koagülopati & Varis İzle)',
+        tone: 'emerald',
+        detail:
+          'Hafif kompanse sirozda AUC artışı minimaldir (~%15); bazal koagülasyon ve özofagus varis riski değerlendirilerek standart dozda kullanılabilir.',
+      },
+      {
+        childPugh: 'Child-Pugh B (Orta · 7–9)',
+        badge: 'KONTRENDİKE / KAÇININ! (AUC 2,27 Kat Artar!)',
+        tone: 'rose',
+        detail:
+          'Apiksabandan farklı olarak Rivaroksaban Child-Pugh B orta sirozda plazma maruziyetini 2,27 kat (%127) artırdığı ve belirgin koagülasyon bozukluğu yaptığı için FDA ve EMA tarafından KAÇINILMALIDIR / KONTRENDİKEDİR!',
+      },
+      {
+        childPugh: 'Child-Pugh C (Şiddetli · 10–15)',
+        badge: 'MUTLAK KONTRENDİKE! (Fatal Kanama Riski)',
+        tone: 'rose',
+        detail:
+          'Ağır karaciğer yetmezliğinde hepatik CYP3A4/2J2 klirensi ve faktör sentezi çöker — kesinlikle kullanılmamalıdır!',
+      },
+    ],
+    dualOrganNote:
+      'Kombine hepatorenal yetmezlikte (Child-Pugh B–C + CrCl <30) Rivaroksaban hem hepatik hem aktif renal sekresyon yolunu kaybederek hızla toksik düzeye çıkar ve diyalizle temizlenemez — kesinlikle KONTRENDİKEDİR (UFH seçin)!',
   },
 };
 
